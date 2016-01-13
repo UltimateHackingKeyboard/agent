@@ -1,0 +1,31 @@
+{
+  "name": "Split.js",
+  "main": "split.js",
+  "version": "1.0.6",
+  "homepage": "https://github.com/nathancahill/Split.js",
+  "authors": [
+    "Nathan Cahill <nathan@nathancahill.com>"
+  ],
+  "description": "A lightweight utility for creating adjustable split views",
+  "keywords": [
+    "css"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "1.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.6",
+    "commit": "2b2563f7ca8ed0ddf732e9c8677db727559fab22"
+  },
+  "_source": "git://github.com/nathancahill/Split.js.git",
+  "_target": "~1.0.6",
+  "_originalSource": "Split.js",
+  "_direct": true
+}
