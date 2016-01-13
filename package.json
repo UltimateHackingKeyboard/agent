@@ -1,0 +1,7 @@
+{
+  "name": "agent-mockup",
+  "dependencies": {
+    "browser-sync": "^2.11.0",
+    "gulp": "^3.9.0"
+  }
+}
