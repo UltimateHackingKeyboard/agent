@@ -7,13 +7,13 @@ They serve a double purpose:
 2. test some basic interaction patterns by clicking around the main UI elements.
 
 ## See it!
-* [Key action editor](#)
-* [Macro editor](#)
+* [Key action editor](http://ultimatehackingkeyboard.github.io/agent-mockup/index.html)
+* [Macro editor](http://ultimatehackingkeyboard.github.io/agent-mockup/macro.html)
 
 ## Try it!
 If you want to see it on your screen follow this guide:
 
-Clone this repository:
+Clone this repository
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent-mockup.git
 cd agent-mockup
