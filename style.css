@@ -102,7 +102,7 @@ h1 {
 }
 
 .global-key-setup.disabled {
-  opacity: .15;
+  opacity: 0;
 }
 
 .global-key-setup.disabled .setting-label,
