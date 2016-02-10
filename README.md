@@ -9,6 +9,7 @@ They serve a double purpose:
 ## See it!
 * [Key action editor](http://ultimatehackingkeyboard.github.io/agent-mockup/index.html)
 * [Macro editor](http://ultimatehackingkeyboard.github.io/agent-mockup/macro.html)
+* [Application UI](http://ultimatehackingkeyboard.github.io/agent-mockup/app.html)
 
 ## Try it!
 If you want to see it on your screen follow this guide:
