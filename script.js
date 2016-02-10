@@ -252,7 +252,7 @@ $(function() {
       },
       {
         type: 'default',
-        icon: 'fa-times',
+        icon: 'fa-ban',
         title: 'None',
         content: 'none'
       }
