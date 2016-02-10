@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ultimate Hacking Keyboard Configurator</title>
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="bower_components/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="bower_components/owl.carousel/dist/assets/owl.carousel.css" rel="stylesheet" type="text/css" />
+    <link href="bower_components/owl.carousel/dist/assets/owl.theme.default.css" rel="stylesheet" type="text/css" />
+    <link href="app.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="sidebar-menu" class="split split-horizontal" style=""></div>
+    <div id="main-content" class="split split-horizontal container" style="">
+      <div class="keymap keymap--qwerty">
+        <div class="row">
+          <h1 class="col-xs-12 pane-title">
+            <i class="fa fa-keyboard-o"></i>
+            <span class="keymap__name">QWERTY</span> keymap (<span class="keymap__abbrev">QTY</span>)
+            <i class="fa fa-star-o fa-star keymap__is-default"></i>
+          </h1>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row unk--wrapper">
+          <div class="col-xs-12 text-center">
+            <div class="" role="" style="margin-bottom: 2rem;">
+              <button type="button" class="btn btn-primary btn-lg">Base</button>
+              <button type="button" class="btn btn-default btn-lg">Mod</button>
+              <button type="button" class="btn btn-default btn-lg">Fn</button>
+              <button type="button" class="btn btn-default btn-lg">Mouse</button>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div id="owl-example" class="owl-carousel owl-theme">
+              <div class="item col-xs-12">
+                <img src="./images/base-layer.svg" class="uhk uhk--base-layer" alt="">
+              </div>
+              <div class="item col-xs-12">
+                <img src="./images/base-layer.svg" class="uhk uhk--base-layer" alt="">
+              </div>
+              <div class="item col-xs-12">
+                <img src="./images/base-layer.svg" class="uhk uhk--base-layer" alt="">
+              </div>
+              <div class="item col-xs-12">
+                <img src="./images/base-layer.svg" class="uhk uhk--base-layer" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script type="text/javascript" src="./bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="./bower_components/Split.js/split.js"></script>
+    <script type="text/javascript" src="bower_components/owl.carousel/dist/owl.carousel.js"></script>
+    <script type="text/javascript" src="./app.js"></script>
+
+    <script type="text/x-handlebars-template" id="sidebar-menu--source">
+      <ul>
+        {{#each menu}}
+          <li><i class='fa fa-{{icon}}'></i> {{name}}
+            {{#if children}}
+              <ul>
+                {{#each children}}
+                  <li><i class="fa fa-{{icon}}"></i> {{name}}</li>
+                {{/each}}
+              </ul>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </script>
+  </body>
+</html>
