@@ -310,35 +310,39 @@ $(function() {
     var contentTemplate = Handlebars.compile(contentSource);
     $('#key-editor-content__target').html(contentTemplate(contentContext[tplName]));
     initSelect2items();
+    _keypress_event_handlers();
   });
 
-  $('.modifiers').on('click', 'button', function() {
-    $(this).toggleClass('btn-primary').blur();
-  });
 
-  $('.btn--capture-keystroke').on('click', function(e) {
-    $('.btn--capture-keystroke').toggle();
-    _toggleScancodeForm();
-  });
+  var _keypress_event_handlers = function() {
+    $('.modifiers').on('click', 'button', function() {
+      $(this).toggleClass('btn-primary').blur();
+    });
 
-  $('.layer-action--buttons').on('click', '.layer-key', function(e) {
-    console.log('helllo');
-    $this = $(this);
-    $('.layer-key.btn-primary', '.layer-action--buttons').removeClass('btn-primary');
-    $this.addClass('btn-primary').blur();
-    if ($this.hasClass('layer-key--disabled')) {
-      // Enable all form controls in .global-key-setup
-      $('button, select', '.global-key-setup').prop('disabled', false);
-      $('.global-key-setup').removeClass('disabled');
-      $('.disabled-state--text').hide();
-    }
-    else {
-      // Disable all form controls in .global-key-setup
-      $('button, select', '.global-key-setup').prop('disabled', true);
-      $('.global-key-setup').addClass('disabled');
-      $('.disabled-state--text').show();
-    }
-  });
+    $('.btn--capture-keystroke').on('click', function(e) {
+      $('.btn--capture-keystroke').toggle();
+      _toggleScancodeForm();
+    });
+
+    $('.layer-action--buttons').on('click', '.layer-key', function(e) {
+      $this = $(this);
+      $('.layer-key.btn-primary', '.layer-action--buttons').removeClass('btn-primary');
+      $this.addClass('btn-primary').blur();
+      if ($this.hasClass('layer-key--disabled')) {
+        // Enable all form controls in .global-key-setup
+        $('button, select', '.global-key-setup').prop('disabled', false);
+        $('.global-key-setup').removeClass('disabled');
+        $('.disabled-state--text').hide();
+      }
+      else {
+        // Disable all form controls in .global-key-setup
+        $('button, select', '.global-key-setup').prop('disabled', true);
+        $('.global-key-setup').addClass('disabled');
+        $('.disabled-state--text').show();
+      }
+    });
+  };
+  _keypress_event_handlers();
 });
 
 
