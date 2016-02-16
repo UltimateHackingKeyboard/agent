@@ -1,10 +1,4 @@
 $(function() {
-  Split(["#sidebar-menu", "#main-content"], {
-    gutterSize: 8,
-    sizes: [5, 95],
-    minSize: 250
-  });
-
   // Handlebars template for Sidebar menu.
   var sidebarMenuSource = $('#sidebar-menu--source').html();
   var sidebarMenuTemplate = Handlebars.compile(sidebarMenuSource);
