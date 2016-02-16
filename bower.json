@@ -6,7 +6,6 @@
   ],
   "dependencies": {
     "jquery": "~2.1.4",
-    "Split.js": "~1.0.6",
     "bootstrap": "~3.3.6",
     "font-awesome": "fontawesome#~4.5.0",
     "handlebars": "~4.0.5",
