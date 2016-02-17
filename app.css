@@ -7,12 +7,43 @@
 }
 
 #sidebar-menu ul {
-  padding-left: 15px;
+  padding: 0;
+  margin: 0;
 }
 
 #sidebar-menu ul li {
   list-style: none;
   padding: 0;
+}
+
+.sidebar__level-1, .sidebar__level-2 {
+  padding-left: 15px;
+}
+
+.sidebar__level-2 {
+  margin-left: 15px;
+}
+
+.sidebar__level-1 {
+  background-color: #ccc;
+  font-size: 2rem;
+  line-height: 3rem;
+  margin-top: 2rem;
+}
+
+.menu--top .sidebar__level-1:first-child {
+  margin: 0;
+}
+
+.menu--bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.menu--bottom .sidebar__level-1 {
+  background-color: transparent;
 }
 
 #main-content {
@@ -60,6 +91,11 @@
 
 .uhk {
   max-width: 100%;
+}
+
+.owl-carousel {
+  max-width: 991px;
+  margin: auto;
 }
 
 .owl-carousel .item img {

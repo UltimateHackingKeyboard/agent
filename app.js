@@ -106,7 +106,9 @@ var menuObject = {
           'name': 'Trackpoing'
         }
       ]
-    },
+    }
+  ],
+  menuBottom: [
     {
       'icon': 'gear',
       'name': 'Settings'

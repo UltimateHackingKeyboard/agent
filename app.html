@@ -59,19 +59,32 @@
     <script type="text/javascript" src="./app.js"></script>
 
     <script type="text/x-handlebars-template" id="sidebar-menu--source">
-      <ul>
-        {{#each menu}}
-          <li><i class='fa fa-{{icon}}'></i> {{name}}
-            {{#if children}}
-              <ul>
-                {{#each children}}
-                  <li><i class="fa fa-{{icon}}"></i> {{name}}</li>
-                {{/each}}
-              </ul>
-            {{/if}}
-          </li>
-        {{/each}}
-      </ul>
+      {{#if menu}}
+        <ul class="menu--top">
+          {{#each menu}}
+            <li><div class="sidebar__level-1"><i class='fa fa-{{icon}}'></i> {{name}}</div>
+              {{#if children}}
+                <ul>
+                  {{#each children}}
+                    <li>
+                      <div class="sidebar__level-2">
+                        <i class="fa fa-{{icon}}"></i> {{name}}
+                      </div>
+                    </li>
+                  {{/each}}
+                </ul>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if menuBottom}}
+        <ul class="menu--bottom">
+          {{#each menuBottom}}
+            <li><div class="sidebar__level-1"><i class='fa fa-{{icon}}'></i> {{name}}</div>
+          {{/each}}
+        </ul>
+      {{/if}}
     </script>
   </body>
 </html>
