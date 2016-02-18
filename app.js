@@ -27,19 +27,19 @@ var menuObject = {
   menu: [
     {
       icon: 'keyboard-o',
-      name: 'Keyboard',
+      name: 'Keymaps',
+      hasDefaults: true,
+      expandable: true,
       children: [
         {
-          icon: 'plus-circle',
-          name: 'Add new keymap'
+          icon: '',
+          name: 'Factory keymap',
+          isDefault: true
         },
         {
           icon: '',
-          name: 'Factory keymap'
-        },
-        {
-          icon: '',
-          name: 'QWERTY'
+          name: 'QWERTY',
+          classes: 'active'
         },
         {
           icon: '',
@@ -56,17 +56,20 @@ var menuObject = {
         {
           icon: '',
           name: 'Mortal Kombat X'
-        },
-      ]
+        }
+      ],
+      // actions: [
+      //   {
+      //     icon: 'plus',
+      //     name: 'Add new keymap'
+      //   }
+      // ]
     },
     {
       icon: 'play',
       name: 'Macros',
+      expandable: true,
       children: [
-        {
-          icon: 'plus-circle',
-          name: 'Add new macro'
-        },
         {
           icon: '',
           name: 'Macro1'
@@ -82,8 +85,14 @@ var menuObject = {
         {
           icon: '',
           name: 'Macro4'
-        },
-      ]
+        }
+      ],
+      // actions: [
+      //   {
+      //     icon: 'plus',
+      //     name: 'Add new macro'
+      //   }
+      // ]
     },
     {
       'icon': 'puzzle-piece',

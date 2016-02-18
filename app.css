@@ -1,19 +1,24 @@
 #sidebar-menu {
-  background-color: #eee;
+  background-color: #f5f5f5;
+  border-right: 1px solid #ccc;
   position: fixed;
   overflow-y: scroll;
   width: 250px;
   height: 100%;
 }
 
-#sidebar-menu ul {
+ul {
   padding: 0;
   margin: 0;
 }
 
-#sidebar-menu ul li {
+li {
   list-style: none;
   padding: 0;
+}
+
+.sidebar__level-1 {
+  padding: .5rem 1rem;
 }
 
 .sidebar__level-1, .sidebar__level-2 {
@@ -24,15 +29,69 @@
   margin-left: 15px;
 }
 
-.sidebar__level-1 {
-  background-color: #ccc;
-  font-size: 2rem;
-  line-height: 3rem;
-  margin-top: 2rem;
+.sidebar__level-1:hover,
+.sidebar__level-2--item:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.menu--top .sidebar__level-1:first-child {
+#sidebar-menu .sidebar__level-2--item {
+  padding: 0 20px 0 0;
+}
+
+#sidebar-menu .sidebar__level-2--item .fa.pull-right {
+  position: relative;
+  top: 2px;
+}
+
+#sidebar-menu .fa-star-o {
+  color: #f5f5f5;
+}
+
+#sidebar-menu .sidebar__level-2--item:hover .fa-star-o {
+  color: #000;
+}
+
+#sidebar-menu .sidebar__level-2--item .fa-star-o:hover {
+  color: #000;
+}
+
+#sidebar-menu .fa-star {
+  color: #666;
+}
+
+.sidebar__level-1 {
+  font-size: 2rem;
+  line-height: 3rem;
+}
+
+.sidebar__level-1--item {
+  margin-top: 0;
+}
+
+.sidebar__level-1--item:nth-child(1) {
   margin: 0;
+}
+
+#sidebar-menu .sidebar__actions--list {
+  margin-top: 1rem;
+}
+
+.sidebar__action--item {
+  text-align: center;
+}
+
+.sidebar__action {
+  width: 80%;
+}
+
+.sidebar__level-2--item.active {
+  background-color: #555;
+  color: #fff;
+}
+
+.sidebar__level-2--item.active i {
+  display: none;
 }
 
 .menu--bottom {
@@ -44,6 +103,7 @@
 
 .menu--bottom .sidebar__level-1 {
   background-color: transparent;
+  padding: 1rem;
 }
 
 #main-content {
@@ -85,10 +145,6 @@
   cursor: pointer;
 }
 
-.unk--wrapper {
-  /*margin-top: 10rem;*/
-}
-
 .uhk {
   max-width: 100%;
 }
@@ -104,6 +160,14 @@
   height: auto;
 }
 
-.btn:not(.btn-primary) {
-  border: none;
+.sidebar__level-1 .fa.fa-chevron-down {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  position: relative;
+  top: .5rem;
+  display: none;
+}
+
+.sidebar__level-1:hover .fa.fa-chevron-down {
+  display: inline-block;
 }
