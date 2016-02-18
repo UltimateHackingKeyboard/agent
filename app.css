@@ -133,15 +133,15 @@ li {
 }
 
 .keymap__is-default.fa-star {
-  color: #ffd700;
+  color: #333;
 }
 
 .keymap__is-default.fa-star-o {
-  color: #000;
+  color: #333;
 }
 
 .keymap__is-default:hover {
-  color: #ffd700;
+  color: #555;
   cursor: pointer;
 }
 
