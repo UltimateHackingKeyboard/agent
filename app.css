@@ -2,7 +2,7 @@
   background-color: #f5f5f5;
   border-right: 1px solid #ccc;
   position: fixed;
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 250px;
   height: 100%;
 }
