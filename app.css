@@ -160,7 +160,8 @@ li {
   height: auto;
 }
 
-.sidebar__level-1 .fa.fa-chevron-down {
+.sidebar__level-1 .fa.fa-chevron-down,
+.sidebar__level-1 .fa.fa-chevron-up {
   margin-right: 1rem;
   font-size: 1.5rem;
   position: relative;
@@ -168,6 +169,7 @@ li {
   display: none;
 }
 
-.sidebar__level-1:hover .fa.fa-chevron-down {
+.sidebar__level-1:hover .fa.fa-chevron-down,
+.sidebar__level-1:hover .fa.fa-chevron-up {
   display: inline-block;
 }
