@@ -117,15 +117,17 @@ li {
 .keymap__name.active,
 .keymap__abbrev.active {
   box-shadow: 0 0 0px 1px #ccc, 0 0 5px 0px #ccc;
-  padding: 0 .5rem;
-  margin: 0 -.5rem;
+  border-color: transparent;
 }
 
 .keymap__name,
 .keymap__abbrev {
+  border: none;
   border-bottom: 2px dotted #999;
 }
 
+.keymap__name,
+.keymap__name.active,
 .keymap__abbrev,
 .keymap__abbrev.active {
   padding: 0 .5rem;
