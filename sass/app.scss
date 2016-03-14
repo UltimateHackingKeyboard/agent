@@ -114,18 +114,22 @@ li {
   margin-bottom: 1em;
 }
 
+.macro__name.active,
 .keymap__name.active,
 .keymap__abbrev.active {
   box-shadow: 0 0 0px 1px #ccc, 0 0 5px 0px #ccc;
   border-color: transparent;
 }
 
+.macro__name,
 .keymap__name,
 .keymap__abbrev {
   border: none;
   border-bottom: 2px dotted #999;
 }
 
+.macro__name,
+.macro__name.active,
 .keymap__name,
 .keymap__name.active,
 .keymap__abbrev,

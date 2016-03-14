@@ -7,9 +7,13 @@ $(function() {
   // ========================
   // Keymap related settings.
   // ========================
-  $('.keymap__name, .keymap__abbrev').on('mouseover', function() {
+  $('.keymap__name, .keymap__abbrev, .macro__name').on('mouseover', function() {
     $(this).addClass('active');
   }).on('mouseout', function() {
+    if (!$(this).is(':focus')) {
+      $(this).removeClass('active');
+    }
+  }).on('focusout', function() {
     $(this).removeClass('active');
   });
 
