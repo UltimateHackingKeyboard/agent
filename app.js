@@ -105,13 +105,7 @@ var menuObject = {
           name: 'Mortal Kombat X',
           abbrev: 'MKX',
         }
-      ],
-      // actions: [
-      //   {
-      //     icon: 'plus',
-      //     name: 'Add new keymap'
-      //   }
-      // ]
+      ]
     },
     {
       icon: 'play',
@@ -135,13 +129,7 @@ var menuObject = {
           icon: '',
           name: 'Macro4'
         }
-      ],
-      // actions: [
-      //   {
-      //     icon: 'plus',
-      //     name: 'Add new macro'
-      //   }
-      // ]
+      ]
     },
     {
       'icon': 'puzzle-piece',
