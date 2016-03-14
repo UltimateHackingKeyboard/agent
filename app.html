@@ -159,7 +159,7 @@
               {{#if children}}
                 <ul>
                   {{#each children}}
-                    <li class="sidebar__level-2--item {{classes}}">
+                    <li class="sidebar__level-2--item {{classes}}" data-name="{{name}}" data-content="{{menuValue.dataContent}}" data-abbrev="{{abbrev}}">
                       <div class="sidebar__level-2">
                         {{name}}
                         {{#if menuValue.hasDefaults}}

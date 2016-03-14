@@ -39,32 +39,39 @@ var menuObject = {
       name: 'Keymaps',
       hasDefaults: true,
       expandable: true,
+      dataContent: '.keymap--edit',
       children: [
         {
           icon: '',
           name: 'Factory keymap',
+          abbrev: 'FTY',
           isDefault: true
         },
         {
           icon: '',
           name: 'QWERTY',
+          abbrev: 'QTY',
           classes: 'active'
         },
         {
           icon: '',
-          name: 'Dvorak'
+          name: 'Dvorak',
+          abbrev: 'DVR',
         },
         {
           icon: '',
-          name: 'Colemak'
+          name: 'Colemak',
+          abbrev: 'COL',
         },
         {
           icon: '',
-          name: 'VIM'
+          name: 'VIM',
+          abbrev: 'VIM',
         },
         {
           icon: '',
-          name: 'Mortal Kombat X'
+          name: 'Mortal Kombat X',
+          abbrev: 'MKX',
         }
       ],
       // actions: [
@@ -78,6 +85,7 @@ var menuObject = {
       icon: 'play',
       name: 'Macros',
       expandable: true,
+      dataContent: '.macro--edit',
       children: [
         {
           icon: '',
