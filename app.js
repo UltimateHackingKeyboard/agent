@@ -4,6 +4,38 @@ $(function() {
   var sidebarMenuTemplate = Handlebars.compile(sidebarMenuSource);
   $('#sidebar-menu').html(sidebarMenuTemplate(menuObject));
 
+  // =======================
+  // Menu-item functionality
+  // =======================
+  $('.sidebar__level-2--item').on('click', function() {
+    var _this = $(this);
+
+    var dataContent = _this.data('content');
+    var dataAbbrev = _this.data('abbrev');
+    var dataName = _this.data('name');
+    console.log(dataContent, dataAbbrev, dataName);
+
+    var _currentView = $('.main-content__inner:visible');
+    // This can be the same as _currentView.
+    var _newView = $(dataContent);
+
+    // Switch to the corresponding view.
+    _currentView.hide();
+    _newView.show();
+
+    // Fill pane title based on data attributes.
+    if (dataName != '') {
+      _newView.find('.pane-title__name').text(dataName);
+    }
+    if (dataAbbrev != '') {
+      _newView.find('.pane-title__abbrev').text(dataAbbrev);
+    }
+
+    // Change .active class in the sidebar.
+    $('.sidebar__level-2--item.active').removeClass('active');
+    _this.addClass('active');
+  });
+
   // ========================
   // Keymap related settings.
   // ========================
