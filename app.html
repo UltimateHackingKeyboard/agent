@@ -29,7 +29,7 @@
         <div class="row">
           <h1 class="col-xs-12 pane-title">
             <i class="fa fa-keyboard-o"></i>
-            <span class="keymap__name" contenteditable="true">QWERTY</span> keymap (<span class="keymap__abbrev" contenteditable="true">QTY</span>)
+            <span class="keymap__name pane-title__name" contenteditable="true">QWERTY</span> keymap (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">QTY</span>)
             <i class="fa fa-star-o fa-star keymap__is-default"></i>
           </h1>
         </div>
@@ -67,7 +67,7 @@
         <div class="row">
           <h1 class="col-xs-12 pane-title">
             <i class="fa fa-play"></i>
-            <span class="macro__name" contenteditable="true">Macro1</span> <i class="fa"></i>
+            <span class="macro__name pane-title__name" contenteditable="true">Macro1</span> <i class="fa"></i>
           </h1>
         </div>
         <div class="row">
@@ -175,6 +175,7 @@
                 </ul>
               {{/if}}
               {{#if actions}}
+                <!-- Most probably this "actions" section will be removed. -->
                 <ul class="sidebar__actions--list">
                   {{#each actions}}
                     <li class="sidebar__action--item">
