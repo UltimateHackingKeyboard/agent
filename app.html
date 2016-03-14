@@ -24,7 +24,8 @@
 
     <div id="sidebar-menu" class="split split-horizontal" style=""></div>
     <div id="main-content" class="split split-horizontal container-fluid" style="">
-      <div class="keymap keymap--qwerty">
+
+      <div class="keymap keymap--qwerty" style="display: none;">
         <div class="row">
           <h1 class="col-xs-12 pane-title">
             <i class="fa fa-keyboard-o"></i>
@@ -60,8 +61,80 @@
             </div>
           </div>
         </div>
-
       </div>
+
+      <div class="macro--edit">
+        <div class="row">
+          <h1 class="col-xs-12 pane-title">
+            <i class="fa fa-play"></i>
+            <span class="macro__name" contenteditable="true">Macro1</span> <i class="fa"></i>
+          </h1>
+        </div>
+        <div class="row">
+          <div id="listWithHandle" class="list-group col-xs-10 col-xs-offset-1">
+            <div class="list-group-item action--item">
+              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+              <i class="fa fa-mouse-pointer"></i> Move pointer by 100px leftwards
+              <i class="glyphicon glyphicon-pencil action--edit"></i>
+              <i class="glyphicon glyphicon-trash action--trash"></i>
+            </div>
+            <div class="list-group-item macro-settings" style="display: none;">
+              <div class="helper"></div>
+              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+              <div class="row">
+                <div class="col-sm-12 flex-button-wrapper">
+                  <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
+                  <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
+                </div>
+              </div>
+            </div>
+            <div class="list-group-item action--item">
+              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+              <i class="fa fa-square"></i> Press letter A
+              <i class="glyphicon glyphicon-pencil action--edit"></i>
+              <i class="glyphicon glyphicon-trash action--trash"></i>
+            </div>
+            <div class="list-group-item action--item">
+              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+              <i class="fa fa-square"></i> Press Alt+Tab
+              <i class="glyphicon glyphicon-pencil action--edit"></i>
+              <i class="glyphicon glyphicon-trash action--trash"></i>
+            </div>
+            <div class="list-group-item action--item">
+              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+              <i class="fa fa-clock-o"></i> Delay of 235ms
+              <i class="glyphicon glyphicon-pencil action--edit"></i>
+              <i class="glyphicon glyphicon-trash action--trash"></i>
+            </div>
+            <div class="list-group-item action--item">
+              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+              <i class="fa fa-mouse-pointer"></i> Press button 1
+              <i class="glyphicon glyphicon-pencil action--edit"></i>
+              <i class="glyphicon glyphicon-trash action--trash"></i>
+            </div>
+            <div class="list-group-item action--item">
+              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+              <i class="fa fa-mouse-pointer"></i> Scroll by 150px downdward
+              <i class="glyphicon glyphicon-pencil action--edit"></i>
+              <i class="glyphicon glyphicon-trash action--trash"></i>
+            </div>
+            <div class="list-group-item action--item add-new__action-item no-reorder">
+              <a href="#" class="add-new__action-item--link"><i class="fa fa-plus"></i> Add new action item</a>
+            </div>
+            <div class="list-group-item new-macro-settings">
+              <div class="helper"></div>
+              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+              <div class="row">
+                <div class="col-sm-12 flex-button-wrapper">
+                  <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
+                  <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <script type="text/javascript" src="./bower_components/jquery/dist/jquery.min.js"></script>
