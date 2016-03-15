@@ -1,3 +1,6 @@
+#main-content {
+  margin-left: 250px; }
+
 #sidebar-menu {
   background-color: #f5f5f5;
   border-right: 1px solid #ccc;
@@ -5,110 +8,86 @@
   overflow-y: auto;
   width: 250px;
   height: 100%; }
-
-ul {
-  padding: 0;
-  margin: 0; }
-
-li {
-  list-style: none;
-  padding: 0; }
+  #sidebar-menu ul {
+    padding: 0;
+    margin: 0; }
+    #sidebar-menu ul li {
+      list-style: none;
+      padding: 0; }
 
 .sidebar__level-1 {
-  padding: .5rem 1rem; }
+  padding: .5rem 1rem;
+  font-size: 2rem;
+  line-height: 3rem; }
+  .sidebar__level-1--item {
+    margin-top: 0; }
+    .sidebar__level-1--item:nth-child(1) {
+      margin: 0; }
+  .sidebar__level-1 .fa-chevron-up,
+  .sidebar__level-1 .fa-chevron-down {
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    position: relative;
+    top: .5rem;
+    display: none; }
+  .sidebar__level-1:hover .fa-chevron-up,
+  .sidebar__level-1:hover .fa-chevron-down {
+    display: inline-block; }
 
 .sidebar__level-1, .sidebar__level-2 {
   padding-left: 15px; }
 
 .sidebar__level-2 {
   margin-left: 15px; }
+  .sidebar__level-2--item {
+    padding: 0 20px 0 0; }
+    .sidebar__level-2--item.active {
+      background-color: #555;
+      color: #fff; }
+      .sidebar__level-2--item.active .fa-star,
+      .sidebar__level-2--item.active .fa-star-o {
+        display: none; }
+      .sidebar__level-2--item.active:hover {
+        background-color: #555; }
+        .sidebar__level-2--item.active:hover .fa-star,
+        .sidebar__level-2--item.active:hover .fa-star-o {
+          display: block;
+          color: #fff; }
+    .sidebar__level-2--item:hover .fa-star-o {
+      color: #000; }
+      .sidebar__level-2--item:hover .fa-star-o:hover {
+        color: #000; }
+    .sidebar__level-2--item .fa.pull-right {
+      position: relative;
+      top: 2px; }
+    .sidebar__level-2--item .fa-star-o {
+      color: #f5f5f5; }
+    .sidebar__level-2--item .fa-star {
+      color: #666; }
 
-.sidebar__level-1:hover,
-.sidebar__level-2--item:hover {
+.sidebar__level-1:hover, .sidebar__level-2--item:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.05); }
-
-#sidebar-menu .sidebar__level-2--item {
-  padding: 0 20px 0 0; }
-
-#sidebar-menu .sidebar__level-2--item .fa.pull-right {
-  position: relative;
-  top: 2px; }
-
-#sidebar-menu .fa-star-o {
-  color: #f5f5f5; }
-
-#sidebar-menu .sidebar__level-2--item:hover .fa-star-o {
-  color: #000; }
-
-#sidebar-menu .sidebar__level-2--item .fa-star-o:hover {
-  color: #000; }
-
-#sidebar-menu .fa-star {
-  color: #666; }
-
-.sidebar__level-1 {
-  font-size: 2rem;
-  line-height: 3rem; }
-
-.sidebar__level-1--item {
-  margin-top: 0; }
-
-.sidebar__level-1--item:nth-child(1) {
-  margin: 0; }
-
-#sidebar-menu .sidebar__actions--list {
-  margin-top: 1rem; }
-
-.sidebar__action--item {
-  text-align: center; }
-
-.sidebar__action {
-  width: 80%; }
-
-.sidebar__level-2--item.active {
-  background-color: #555;
-  color: #fff; }
-
-.sidebar__level-2--item.active i {
-  display: none; }
 
 .menu--bottom {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%; }
-
-.menu--bottom .sidebar__level-1 {
-  background-color: transparent;
-  padding: 1rem; }
-
-#main-content {
-  margin-left: 250px; }
+  .menu--bottom .sidebar__level-1 {
+    background-color: transparent;
+    padding: 1rem; }
 
 .pane-title {
   margin-bottom: 1em; }
-
-.macro__name.active,
-.keymap__name.active,
-.keymap__abbrev.active {
-  box-shadow: 0 0 0px 1px #ccc, 0 0 5px 0px #ccc;
-  border-color: transparent; }
-
-.macro__name,
-.keymap__name,
-.keymap__abbrev {
-  border: none;
-  border-bottom: 2px dotted #999; }
-
-.macro__name,
-.macro__name.active,
-.keymap__name,
-.keymap__name.active,
-.keymap__abbrev,
-.keymap__abbrev.active {
-  padding: 0 .5rem;
-  margin: 0 .25rem; }
+  .pane-title__name, .pane-title__abbrev {
+    border: none;
+    border-bottom: 2px dotted #999;
+    padding: 0 .5rem;
+    margin: 0 .25rem; }
+    .pane-title__name.active, .pane-title__abbrev.active {
+      box-shadow: 0 0 0px 1px #ccc, 0 0 5px 0px #ccc;
+      border-color: transparent; }
 
 .keymap__is-default.fa-star {
   color: #333; }
@@ -131,15 +110,3 @@ li {
   display: block;
   width: 100%;
   height: auto; }
-
-.sidebar__level-1 .fa.fa-chevron-down,
-.sidebar__level-1 .fa.fa-chevron-up {
-  margin-right: 1rem;
-  font-size: 1.5rem;
-  position: relative;
-  top: .5rem;
-  display: none; }
-
-.sidebar__level-1:hover .fa.fa-chevron-down,
-.sidebar__level-1:hover .fa.fa-chevron-up {
-  display: inline-block; }
