@@ -53,10 +53,6 @@ $(function() {
     $(this).toggleClass('fa-star-o');
   });
 
-  $("#owl-example").owlCarousel({
-    items: 1
-  });
-
   $('.sidebar__level-1', '.sidebar__level-1--item').on('click', function() {
     $(this).parents('.sidebar__level-1--item').find('ul').slideToggle();
     $(this).find('.fa-chevron-down, .fa-chevron-up').toggleClass('fa-chevron-down fa-chevron-up')
