@@ -7,9 +7,9 @@ They serve a double purpose:
 2. test some basic interaction patterns by clicking around the main UI elements.
 
 ## See it!
-* [Key action editor](http://ultimatehackingkeyboard.github.io/agent-mockup/index.html)
+* [Key action editor](http://ultimatehackingkeyboard.github.io/agent-mockup/popup.html)
 * [Macro editor](http://ultimatehackingkeyboard.github.io/agent-mockup/macro.html)
-* [Application UI](http://ultimatehackingkeyboard.github.io/agent-mockup/app.html)
+* [Application UI](http://ultimatehackingkeyboard.github.io/agent-mockup/index.html)
 
 ## Try it!
 If you want to see it on your screen follow this guide:

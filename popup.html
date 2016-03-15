@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="bower_components/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8">
+  <title>Ultimate Hacking Keyboard - Agent mockups</title>
+</head>
+<body style="padding:50px">
+
+<!-- Google Tag Manager -->
+<!-- <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PQLCXB"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQLCXB');</script> -->
+<!-- End Google Tag Manager -->
+
+<h1>Ultimate Hacking Keyboard &ndash; Agent mockups</h1>
+<ul class="nav nav-pills">
+  <li role="presentation" class="active"><a href="index.html">Key action editor</a></li>
+  <li role="presentation"><a href="macro.html">Macro editor</a></li>
+</ul>
+
+<!--
+  Basic structure of the popover to be used with the Handlebars templates.
+-->
+<div class="popover bottom" style="display: inline-block; min-width: 541px; margin: 50px; position: relative;">
+  <div class="arrow"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div id="key-editor-top__target"></div>
+    </div>
+    <div class="row">
+      <div id="key-editor-content__target"></div>
+    </div>
+    <div class="row">
+      <div id="key-editor-bottom__target"></div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/handlebars/handlebars.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/select2/dist/js/select2.min.js"></script>
+<script type="text/javascript" src="script.js"></script>
+
+<!--
+  Handlebars templates for the common parts of the popover.
+-->
+
+<!-- Popover titlebar (where the tabs resides). -->
+<script id="key-editor-top__source" type="text/x-handlebars-template">
+  <div class="popover-title menu-button-group">
+    Action:
+    <div class="btn-group popover-menu" role="group" aria-label="...">
+      {{#each buttons}}
+        <button class="btn btn-sm btn-{{type}}" data-content="{{content}}" type="button"><i class="fa {{icon}}"></i> {{title}}</button>
+      {{/each}}
+    </div>
+  </div>
+  <div class="popover-title menu-tabs">
+    <ul class="nav nav-tabs popover-menu">
+      {{#each buttons}}
+        <li role="presentation"><a href="#" class="menu-tabs--item" data-content="{{content}}"><i class="fa {{icon}}"></i> {{title}}</a></li>
+      {{/each}}
+    </ul>
+  </div>
+</script>
+
+<!-- Popover footer. -->
+<script id="key-editor-bottom__source" type="text/x-handlebars-template">
+  <div class="popover-actions">
+    <button class="btn btn-sm btn-default" type="button">Cancel</button>
+    <button class="btn btn-sm btn-primary" type="button">Remap key</button>
+  </div>
+</script>
+
+<!--
+  Handlebars templates for the contents of the popover tabs.
+-->
+
+<!-- Keypress action. -->
+<script id="key-editor-content__source--keypress" type="text/x-handlebars-template">
+  <div class="popover-content" style="margin-bottom:2px">
+      <!-- Layer selection. -->
+      <div style="margin-bottom: 10px;">
+        <b class="setting-label">Layer action:</b>
+        <div class="btn-group btn-group-sm layer-action--buttons">
+          {{#each layers}}
+            <button type="button" class="btn btn-default {{primary}} {{class}}">{{name}}</button>
+          {{/each}}
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="global-key-setup--wrapper">
+        <div class="global-key-setup">
+          <!-- Primary action setup: scancode+modifiers. -->
+          <div class="scancode-options">
+            <b class="setting-label" style="position:relative; top:-9px; margin-right:4px;">Modifiers:</b>
+            <div class="btn-toolbar modifiers" style="display:inline-block">
+              <div class="btn-group btn-group-sm modifiers__left">
+                {{#each modifiers.left}}
+                  <button type="button" class="btn btn-default {{primary}}">{{name}}</button>
+                {{/each}}
+              </div>
+              <div class="btn-group btn-group-sm modifiers__right">
+                {{#each modifiers.right}}
+                  <button type="button" class="btn btn-default {{primary}}">{{name}}</button>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          <div class="scancode-options" style="margin-bottom:10px; margin-top:2px">
+            <b class="setting-label" style="position:relative; top:2px;">Scancode:</b>
+            <select class="scancode" style="width: 200px">
+              {{#each scancode}}
+                <optgroup label="{{groupName}}">
+                  {{#each groupValues}}
+                    <option value="{{value}}" data-explanation="{{dataExplanation}}">{{label}}</option>
+                  {{/each}}
+                </optgroup>
+              {{/each}}
+            </select>
+            <!-- bof optional -->
+              <!-- Icon for switching the keyboard layout preview when capturing. -->
+              <!-- <i class="fa fa-eye pull-right" style="margin: 0 0 0 2rem; position: relative; top: 0.65rem;" data-toggle="tooltip" data-placement="bottom" title="Show preview keyboard."></i> -->
+            <!-- eof optional -->
+            <button style="display: block; margin: 0 0 0 2rem;" type="button" class="btn btn-sm btn-default pull-right btn--capture-keystroke btn--capture-keystroke__start">
+              <i class="fa fa-circle" style="color:#c00"></i> Capture keystroke
+            </button>
+            <button style="display: none; margin: 0 0 0 2rem;" type="button" class="btn btn-sm btn-info pull-right btn--capture-keystroke btn--capture-keystroke__stop">
+              <i class="fa fa-square"></i> Stop capturing
+            </button>
+          </div>
+          <!-- bof optional -->
+            <!-- Keyboard layout preview to be shown in capturing mode. -->
+            <!--
+              <div class="preview-wrapper">
+                <img src="images/base-layer.svg" />
+              </div>
+            -->
+          <!-- eof optional -->
+
+          <!-- Secondary action setup: long press action. -->
+          <div style="margin-top: 3rem;">
+            <b class="setting-label" style="position:relative;">Long press action:</b>
+            <select class="secondary-role" style="width:135px">
+              {{#each secondaryRole}}
+                <option value="{{name}}">{{name}}</option>
+              {{/each}}
+            </select>
+            <i class="fa fa-question-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="right" title="When you press and hold the key."></i>
+          </div>
+        </div>
+
+
+        <!-- Informational text to display when a layer action is selected. -->
+        <div class="disabled-state--text" style="display: none; color: #31708f; padding-right: 40px;">
+          <i class="fa fa-info-circle" style="font-size: 2.6rem; float: left; padding: 1rem 1.5rem 2rem;"></i>
+          When a key is configured as layer switcher key, you can't assign other functions to it.
+          To assign a scancode to the key, set the <em>Layer action</em> to <em>None</em>.
+        </div>
+      </div>
+    </div>
+</script>
+
+<!-- Mouse action. -->
+<script id="key-editor-content__source--mouse" type="text/x-handlebars-template">
+  <div class="popover-content" style="margin-bottom:2px">
+    <div class="row" style="padding-bottom: 1rem;">
+      <div class="col-xs-6 mouse-action__card" style="">
+        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Move</b>
+        <div class="buttons-row row">
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-up"></i></button>
+        </div>
+        <div class="buttons-row row">
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-3"><i class="fa  fa-arrow-left"></i></button>
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-right"></i></button><br>
+        </div>
+        <div class="buttons-row row">
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-down"></i></button>
+        </div>
+      </div>
+      <div class="col-xs-6 mouse-action__card">
+        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Scroll</b>
+        <div class="buttons-row row">
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-up"></i></button>
+        </div>
+        <div class="buttons-row row">
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-3"><i class="fa  fa-arrow-left"></i></button>
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-right"></i></button><br>
+        </div>
+        <div class="buttons-row row">
+          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-down"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 1rem;">
+      <div class="col-xs-6 mouse-action__card" style="">
+        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Click</b>
+        <div class="btn-group col-xs-12" role="group">
+          <button type="button" class="btn btn-default col-xs-4">Left</button>
+          <button type="button" class="btn btn-default col-xs-4">Middle</button>
+          <button type="button" class="btn btn-default col-xs-4">Right</button>
+        </div>
+      </div>
+      <div class="col-xs-6 mouse-action__card">
+        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Speed</b>
+        <div class="btn-group col-xs-12" role="group">
+          <button type="button" class="btn btn-default col-xs-6"><i class="fa  fa-angle-double-down"></i> decelerate</button>
+          <button type="button" class="btn btn-default col-xs-6">accelerate <i class="fa  fa-angle-double-up"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- Macro action. -->
+<script id="key-editor-content__source--macro" type="text/x-handlebars-template">
+  <div class="popover-content" style="margin-bottom:2px">
+    <div style="margin-bottom:0px; margin-top:2px">
+      <b style="">Macro:</b>
+      <select class="macro-selector" style="width:402px">
+        {{#each macros}}
+          <option value="{{value}}" data-abbrev="{{abbrev}}" data-abbrev-image="{{dataAbbrevImage}}" data-image="{{dataImage}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="macro-preview" style="opacity: .35;">
+      <div class="list-group" style="margin-top: 20px;">
+        <div class="list-group-item action--item">
+          <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+          <i class="fa fa-square"></i> Press a key
+          <i class="glyphicon glyphicon-pencil action--edit pull-right"></i>
+          <i class="glyphicon glyphicon-trash action--trash pull-right" style="margin-right: 1rem;"></i>
+        </div>
+        <div class="list-group-item action--item">
+          <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+          <i class="fa fa-clock-o"></i> Wait some time
+          <i class="glyphicon glyphicon-pencil action--edit pull-right"></i>
+          <i class="glyphicon glyphicon-trash action--trash pull-right" style="margin-right: 1rem;"></i>
+        </div>
+        <div class="list-group-item action--item">
+          <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+          <i class="fa fa-mouse-pointer"></i> Move mouse
+          <i class="glyphicon glyphicon-pencil action--edit pull-right"></i>
+          <i class="glyphicon glyphicon-trash action--trash pull-right" style="margin-right: 1rem;"></i>
+        </div>
+        <div class="list-group-item action--item">
+          <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+          <i class="fa fa-square"></i> Press and hold a key
+          <i class="glyphicon glyphicon-pencil action--edit pull-right"></i>
+          <i class="glyphicon glyphicon-trash action--trash pull-right" style="margin-right: 1rem;"></i>
+        </div>
+        <div class="list-group-item action--item">
+          <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+          <i class="fa fa-mouse-pointer"></i> Click with mouse
+          <i class="glyphicon glyphicon-pencil action--edit pull-right"></i>
+          <i class="glyphicon glyphicon-trash action--trash pull-right" style="margin-right: 1rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- Change keymap action. -->
+<script id="key-editor-content__source--changeKeymap" type="text/x-handlebars-template">
+  <div class="popover-content" style="margin-bottom:2px">
+    <div style="margin-bottom:0px; margin-top:2px">
+      <b style="">Keymap:</b>
+      <select class="layout-switcher" style="width:402px">
+        {{#each layouts}}
+          <option value="{{value}}" data-abbrev="{{abbrev}}" data-abbrev-image="{{dataAbbrevImage}}" data-image="{{dataImage}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="layout-preview">
+      <img src="images/base-layer--blank.svg" />
+    </div>
+  </div>
+</script>
+
+<!-- None action. -->
+<script id="key-editor-content__source--none" type="text/x-handlebars-template">
+  <div class="key-editor--none__description col-sm-12">
+    <i class="icon fa fa-ban"></i>
+    <p class="col-sm-12">This key will be unassigned and will have no functionality at all.</p>
+  </div>
+</script>
+</body>
+</html>
