@@ -171,6 +171,29 @@ ul {
   max-width: 100%;
 }
 
+.grip {
+  position: relative;
+
+  &:before {
+    content: '';
+    display: none;
+    width: 5px;
+    height: 20px;
+    background-image: url(../images/grips/vertical_dark.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    margin-top: -10px;
+  }
+
+  &:hover {
+    &:before {
+      display: block;
+    }
+  }
+}
+
 // BOF: These styles will be deleted when removing OWL carousel.
 .owl-carousel {
   max-width: 991px;
