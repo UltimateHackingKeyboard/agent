@@ -103,6 +103,22 @@ ul {
 .uhk {
   max-width: 100%; }
 
+.grip {
+  position: relative; }
+  .grip:before {
+    content: '';
+    display: none;
+    width: 5px;
+    height: 20px;
+    background-image: url(../images/grips/vertical_dark.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    margin-top: -10px; }
+  .grip:hover:before {
+    display: block; }
+
 .owl-carousel {
   max-width: 991px;
   margin: auto; }
