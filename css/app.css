@@ -8,12 +8,13 @@
   overflow-y: auto;
   width: 250px;
   height: 100%; }
-  #sidebar-menu ul {
-    padding: 0;
-    margin: 0; }
-    #sidebar-menu ul li {
-      list-style: none;
-      padding: 0; }
+
+ul {
+  padding: 0;
+  margin: 0; }
+  ul li {
+    list-style: none;
+    padding: 0; }
 
 .sidebar__level-1 {
   padding: .5rem 1rem;

@@ -9,16 +9,16 @@
   overflow-y: auto;
   width: 250px;
   height: 100%;
+}
 
-  // General list styles for the sidebar-menu.
-  ul {
+// General list styles for the sidebar-menu.
+ul {
+  padding: 0;
+  margin: 0;
+
+  li {
+    list-style: none;
     padding: 0;
-    margin: 0;
-
-    li {
-      list-style: none;
-      padding: 0;
-    }
   }
 }
 
