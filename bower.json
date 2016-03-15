@@ -10,7 +10,6 @@
     "font-awesome": "fontawesome#~4.5.0",
     "handlebars": "~4.0.5",
     "select2": "~4.0.1",
-    "Sortable": "~1.4.2",
-    "owl.carousel": "OwlCarousel2#^2.0.0-beta.3"
+    "Sortable": "~1.4.2"
   }
 }
