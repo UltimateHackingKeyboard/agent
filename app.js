@@ -13,7 +13,6 @@ $(function() {
     var dataContent = _this.data('content');
     var dataAbbrev = _this.data('abbrev');
     var dataName = _this.data('name');
-    console.log(dataContent, dataAbbrev, dataName);
 
     var _currentView = $('.main-content__inner:visible');
     // This can be the same as _currentView.
