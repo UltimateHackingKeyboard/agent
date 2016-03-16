@@ -3,6 +3,7 @@ $(function() {
   var sidebarMenuSource = $('#sidebar-menu--source').html();
   var sidebarMenuTemplate = Handlebars.compile(sidebarMenuSource);
   $('#sidebar-menu').html(sidebarMenuTemplate(menuObject));
+  _init('.keymap--edit');
 
   // =======================
   // Menu-item functionality
@@ -33,6 +34,7 @@ $(function() {
     // Change .active class in the sidebar.
     $('.sidebar__level-2--item.active').removeClass('active');
     _this.addClass('active');
+    _init(dataContent);
   });
 
   // ========================
@@ -58,6 +60,15 @@ $(function() {
   });
 
 });
+
+function _init(view) {
+  switch (view) {
+    case '.keymap--edit':
+      var h = $('.uhk--base-layer').height();
+      $('.keyboard-slider').height(h + 'px');
+      break;
+  }
+}
 
 var menuObject = {
   menu: [
