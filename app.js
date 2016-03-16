@@ -59,6 +59,49 @@ $(function() {
     $(this).find('.fa-chevron-down, .fa-chevron-up').toggleClass('fa-chevron-down fa-chevron-up')
   });
 
+  $('button.uhk__layer-switcher').on('click', function(e) {
+    var button = $(this),
+        layerOrder = ['base', 'mod', 'fn', 'mouse'],
+        currentButton = $('button.uhk__layer-switcher.current'),
+        slideLayer = button.data('layer'),
+        slideNumber = layerOrder.indexOf(slideLayer),
+        currentSlideLayer = currentButton.data('layer'),
+        currentSlideNumber = layerOrder.indexOf(currentSlideLayer),
+        slide = $('.uhk__layer-wrapper--' + slideLayer),
+        currentSlide = $('.uhk__layer-wrapper.current'),
+        slideWidth = currentSlide.width() + 'px';
+
+    if (slideNumber < currentSlideNumber) {
+      // From left to right
+      currentSlide.css('left', 0);
+      slide.css('left', '-' + slideWidth);
+
+      currentSlide.animate({left: slideWidth}, function() {
+        $(this).removeClass('current');
+      });
+      slide.animate({left: 0}, function() {
+        $(this).addClass('current');
+      });
+
+      currentButton.removeClass('current btn-primary').addClass('btn-default');
+      button.addClass('current btn-primary').removeClass('btn-default').blur();
+    } else if (slideNumber != currentSlideNumber) {
+      // From right to left
+      currentSlide.css({left: 0});
+      slide.css({left: slideWidth});
+
+      currentSlide.animate({left: '-' + slideWidth}, function() {
+        $(this).removeClass('current');
+      });
+      slide.animate({left: 0}, function() {
+        $(this).addClass('current');
+      });
+
+      currentButton.removeClass('current btn-primary').addClass('btn-default');
+      button.addClass('current btn-primary').addClass('btn-default').blur();
+    }
+  });
+
 });
 
 function _init(view) {
