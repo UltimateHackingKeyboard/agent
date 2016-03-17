@@ -134,8 +134,22 @@ $(function() {
             // Replace image with new SVG
             $img.replaceWith($svg);
 
+            // Quick fix as jQuery 2.1.4 addClass() method is not working on SVG elements.
+            var finalClasses = $svg.attr('class');
+
+            console.log(imgSelector);
             $('#left-parts rect, #right-parts rect', imgSelector).on('click', function() {
-              console.log('hello');
+              var _popup = $('.key-editor__popup'),
+                  rectB7 = $('rect#b7', $svg);
+              if (_popup.is(':hidden')) {
+                $svg.attr('class', finalClasses + ' faded');
+                _popup.show();
+                rectB7.attr('class', 'active');
+              } else {
+                $svg.attr('class', finalClasses);
+                _popup.hide();
+                rectB7.attr('class', '');
+              }
             });
 
         }, 'xml');
