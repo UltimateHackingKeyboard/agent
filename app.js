@@ -133,6 +133,7 @@ $(function() {
 
             // Replace image with new SVG
             $img.replaceWith($svg);
+            $('.keyboard-slider').height($svg.height());
 
             // Quick fix as jQuery 2.1.4 addClass() method is not working on SVG elements.
             var finalClasses = $svg.attr('class');
