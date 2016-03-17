@@ -8,6 +8,13 @@
     <link href="bower_components/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
     <link href="css/app.css" rel="stylesheet" type="text/css" />
     <link href="css/macro.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+      // This js function is here to make sure it loads before any iframe content on the page.
+      function resizeIframe(ifr) {
+        ifr.style.height = ifr.contentWindow.document.body.scrollHeight + 'px';
+        ifr.style.width = ifr.contentWindow.document.body.scrollWidth + 'px';
+      }
+    </script>
   </head>
   <body>
 
@@ -58,6 +65,7 @@
                 <img src="./images/base-layer.svg" class="uhk uhk--mouse-layer" alt="">
               </div>
             </div>
+            <iframe src="popup__iframe.html" class="key-editor__popup" frameborder="0" scrolling="no" onload="resizeIframe(this)" style="display: none;"></iframe>
           </div>
         </div>
       </div>
