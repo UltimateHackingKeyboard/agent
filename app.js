@@ -251,7 +251,7 @@ var menuObject = {
         },
         {
           'icon': '',
-          'name': 'Trackpoing'
+          'name': 'Trackpoint'
         }
       ]
     }
