@@ -11,7 +11,7 @@
     <script type="text/javascript">
       // This js function is here to make sure it loads before any iframe content on the page.
       function resizeIframe(ifr) {
-        ifr.style.height = ifr.contentWindow.document.body.scrollHeight + 'px';
+        ifr.style.height = (ifr.contentWindow.document.body.scrollHeight + 300) + 'px';
         ifr.style.width = ifr.contentWindow.document.body.scrollWidth + 'px';
       }
     </script>
