@@ -137,7 +137,6 @@ $(function() {
             // Quick fix as jQuery 2.1.4 addClass() method is not working on SVG elements.
             var finalClasses = $svg.attr('class');
 
-            console.log(imgSelector);
             $('#left-parts rect, #right-parts rect', imgSelector).on('click', function() {
               var _popup = $('.key-editor__popup'),
                   rectB7 = $('rect#b7', $svg);
