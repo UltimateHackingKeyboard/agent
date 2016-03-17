@@ -134,3 +134,21 @@ ul {
     background-image: url(../images/grips/vertical.png); }
   .grip:hover:before {
     display: block; }
+
+.key-editor__popup {
+  border: none;
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  top: 215px;
+  left: 50%;
+  margin-left: -310px; }
+
+svg.uhk.faded #left-case,
+svg.uhk.faded #right-case {
+  fill: #555; }
+
+svg.uhk.faded rect {
+  fill: #666; }
+  svg.uhk.faded rect.active {
+    fill: #000; }

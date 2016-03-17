@@ -219,3 +219,32 @@ ul {
     }
   }
 }
+
+.key-editor__popup {
+  border: none;
+  width: 0px;
+  height: 0px;
+
+  // Static setting for quick portotyping.
+  position: absolute;
+  top: 215px;
+  left: 50%;
+  margin-left: -310px;
+}
+
+svg.uhk {
+  &.faded {
+    #left-case,
+    #right-case {
+      fill: #555;
+    }
+
+    rect {
+      fill: #666;
+
+      &.active {
+        fill: #000;
+      }
+    }
+  }
+}
