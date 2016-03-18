@@ -1,0 +1,132 @@
+{
+    "hardwareId": "UHK60",
+    "dataModelVersion": 0,
+    "moduleConfigurations": {
+        "keyClusterLeft": {
+            "acceleration": 5,
+            "maxSpeed": 200
+        }
+    },
+    "keymaps": {
+        "QWERTY": {
+            "isDefault": true,
+            "abbreviation": "QTY",
+            "modules": {
+                "uhkLeft": {
+                    "baseLayer": {
+                        "pointerRole": "move",
+                        "keyActions": [
+                            {
+                                "actionType": "key",
+                                "scancode": 120,
+                                "modifierMask": 16
+                            },
+                            {
+                                "actionType": "dualRoleKey",
+                                "scancode": 111,
+                                "longPressAction": "mod"
+                            },
+                            {
+                                "actionType": "mouse",
+                                "mouseAction": "scrollDown"
+                            },
+                            {
+                                "actionType": "playMacro",
+                                "macro": "My address"
+                            },
+                            {
+                                "actionType": "switchKeymap",
+                                "keymap": "Dvorak"
+                            }
+                        ]
+                    },
+                    "modLayer": {},
+                    "fnLayer": {},
+                    "mouseLayer": {}
+                },
+                "uhkRight": {},
+                "keyClusterLeft": {
+                    "baseLayer": {
+                        "pointerRole": "scroll",
+                        "keyActions": []
+                    },
+                    "modLayer": {},
+                    "fnLayer": {},
+                    "mouseLayer": {}
+                },
+                "trackballRight": {
+                    "baseLayer": {
+                        "pointerRole": "move",
+                        "keyActions": []
+                    },
+                    "modLayer": {},
+                    "fnLayer": {},
+                    "mouseLayer": {}
+                }
+            }
+        },
+        "Dvorak": {}
+    },
+    "macros": {
+        "My address": {
+            "isPrivate": true,
+            "isLooped": false,
+            "macroActions": [
+                {
+                    "actionType": "pressKey",
+                    "scancode": 111
+                },
+                {
+                    "actionType": "holdKey",
+                    "scancode": 111
+                },
+                {
+                    "actionType": "releaseKey",
+                    "scancode": 111
+                },
+                {
+                    "actionType": "pressModifiers",
+                    "modifierMask": 111
+                },
+                {
+                    "actionType": "holdModifiers",
+                    "modifierMask": 111
+                },
+                {
+                    "actionType": "releaseModifiers",
+                    "modifierMask": 111
+                },
+                {
+                    "actionType": "pressMouseButtons",
+                    "mouseButtonsMask": 9
+                },
+                {
+                    "actionType": "holdMouseButtons",
+                    "mouseButtonsMask": 9
+                },
+                {
+                    "actionType": "releaseMouseButtons",
+                    "mouseButtonsMask": 9
+                },
+                {
+                    "actionType": "moveMouse",
+                    "x": 123,
+                    "y": 123
+                },
+                {
+                    "actionType": "scrollMouse",
+                    "x": 123,
+                    "y": 123
+                },
+                {
+                    "actionType": "delay",
+                    "delay": "1000"
+                },
+                {
+                    "actionType": "text",
+                    "text": "this is a text"
+                }
+            ]
+        }
+    }
+}
