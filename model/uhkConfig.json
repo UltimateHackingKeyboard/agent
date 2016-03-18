@@ -1,74 +1,90 @@
 {
     "hardwareId": "UHK60",
     "dataModelVersion": 0,
-    "moduleConfigurations": {
-        "keyClusterLeft": {
+    "moduleConfigurations": [
+        {
+            "moduleName": "keyClusterLeft",
             "acceleration": 5,
             "maxSpeed": 200
         }
-    },
-    "keymaps": {
-        "QWERTY": {
+    ],
+    "keymaps": [
+        {
+            "name": "QWERTY",
             "isDefault": true,
             "abbreviation": "QTY",
-            "modules": {
-                "uhkLeft": {
-                    "baseLayer": {
-                        "pointerRole": "move",
-                        "keyActions": [
-                            {
-                                "actionType": "key",
-                                "scancode": 120,
-                                "modifierMask": 16
-                            },
-                            {
-                                "actionType": "dualRoleKey",
-                                "scancode": 111,
-                                "longPressAction": "mod"
-                            },
-                            {
-                                "actionType": "mouse",
-                                "mouseAction": "scrollDown"
-                            },
-                            {
-                                "actionType": "playMacro",
-                                "macro": "My address"
-                            },
-                            {
-                                "actionType": "switchKeymap",
-                                "keymap": "Dvorak"
-                            }
-                        ]
-                    },
+            "modules": [
+                {
+                    "name": "uhkLeft",
+                    "layers": [
+                        {
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "actionType": "key",
+                                    "scancode": 120,
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "actionType": "dualRoleKey",
+                                    "scancode": 111,
+                                    "longPressAction": "mod"
+                                },
+                                {
+                                    "actionType": "mouse",
+                                    "mouseAction": "scrollDown"
+                                },
+                                {
+                                    "actionType": "playMacro",
+                                    "macro": "My address"
+                                },
+                                {
+                                    "actionType": "switchKeymap",
+                                    "keymap": "Dvorak"
+                                }
+                            ]
+                        },
+                        {},
+                        {},
+                        {}
+                    ]
+                },
+                {
+                    "name": "uhkRight"
+                },
+                {
+                    "name": "keyClusterLeft",
+                    "layers": [
+                        {
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        }
+                    ],
                     "modLayer": {},
                     "fnLayer": {},
                     "mouseLayer": {}
                 },
-                "uhkRight": {},
-                "keyClusterLeft": {
-                    "baseLayer": {
-                        "pointerRole": "scroll",
-                        "keyActions": []
-                    },
-                    "modLayer": {},
-                    "fnLayer": {},
-                    "mouseLayer": {}
-                },
-                "trackballRight": {
-                    "baseLayer": {
-                        "pointerRole": "move",
-                        "keyActions": []
-                    },
+                {
+                    "name": "trackballRight",
+                    "layers": [
+                        {
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ],
                     "modLayer": {},
                     "fnLayer": {},
                     "mouseLayer": {}
                 }
-            }
+            ]
         },
-        "Dvorak": {}
-    },
-    "macros": {
-        "My address": {
+        {
+            "name": "Dvorak"
+        }
+    ],
+    "macros": [
+        {
+            "name": "My address",
             "isPrivate": true,
             "isLooped": false,
             "macroActions": [
@@ -128,5 +144,5 @@
                 }
             ]
         }
-    }
+    ]
 }
