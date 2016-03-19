@@ -194,7 +194,7 @@ $(function() {
         },
       ]
     },
-    changeKeymap: {
+    switchKeymap: {
       layouts: [
         {
           value: 'Select keymap',
@@ -247,8 +247,8 @@ $(function() {
       {
         type: 'default',
         icon: 'fa-keyboard-o',
-        title: 'Change keymap',
-        content: 'changeKeymap'
+        title: 'Switch keymap',
+        content: 'switchKeymap'
       },
       {
         type: 'default',
