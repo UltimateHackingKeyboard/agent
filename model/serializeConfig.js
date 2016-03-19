@@ -42,7 +42,7 @@ var MOUSE_ACTION_ID_SCROLL_DOWN  = 8;
 var MOUSE_ACTION_ID_SCROLL_LEFT  = 9;
 var MOUSE_ACTION_ID_SCROLL_RIGHT = 10;
 var MOUSE_ACTION_ID_ACCELERATE   = 11;
-var MOUSE_ACTION_ID_DEELERATE    = 12;
+var MOUSE_ACTION_ID_DECELERATE   = 12;
 
 function serializeKeyActions(keyActions) {
     keyActions.forEach(function(keyAction) {
@@ -118,7 +118,7 @@ function serializeMouseAction(mouseAction) {
         scrollLeft : MOUSE_ACTION_ID_SCROLL_LEFT,
         scrollRight: MOUSE_ACTION_ID_SCROLL_RIGHT,
         accelerate : MOUSE_ACTION_ID_ACCELERATE,
-        decelerate : MOUSE_ACTION_ID_DEELERATE
+        decelerate : MOUSE_ACTION_ID_DECELERATE
     }[mouseAction.mouseAction]);
 }
 
