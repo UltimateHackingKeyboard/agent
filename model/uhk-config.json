@@ -1,5 +1,8 @@
 {
-    "hardwareId": "UHK60",
+    "signature": "UHK"
+    "prologue": 1234678
+    "hardwareId": 0,
+    "brandId": 0,
     "dataModelVersion": 0,
     "moduleConfigurations": [
         {
@@ -146,5 +149,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "epilogue": 1234678
 }

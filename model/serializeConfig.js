@@ -9,7 +9,7 @@ var writer = BufferWriter(buffer);
 
 var uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 var keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
-console.log(keyActions)
+
 var ARRAY_LAST_ELEMENT_ID = 0;
 
 var KEY_ACTION_ID_KEYSTROKE_SCANCODE_FIRST        = 1;
