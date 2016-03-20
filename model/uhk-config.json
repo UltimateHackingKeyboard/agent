@@ -38,7 +38,8 @@
                                 },
                                 {
                                     "actionType": "switchLayer",
-                                    "layer": "fn"
+                                    "layer": "fn",
+                                    "toggle": false
                                 },
                                 {
                                     "actionType": "dualRoleKeystroke",
