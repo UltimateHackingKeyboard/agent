@@ -1,5 +1,5 @@
 {
-    "isKeyboardSplit": true,
+    "isKeyboardMerged": false,
     "moduleSlots": [
         {
             "id": true,
