@@ -10,6 +10,7 @@
     ],
     "keymaps": [
         {
+            "id": 0,
             "name": "QWERTY",
             "isDefault": true,
             "abbreviation": "QTY",
@@ -21,12 +22,15 @@
                             "pointerRole": "move",
                             "keyActions": [
                                 {
-                                    "actionType": "key",
+                                    "actionType": "none"
+                                },
+                                {
+                                    "actionType": "keystroke",
                                     "scancode": 120,
                                     "modifierMask": 16
                                 },
                                 {
-                                    "actionType": "dualRoleKey",
+                                    "actionType": "dualRoleKeystroke",
                                     "scancode": 111,
                                     "longPressAction": "mod"
                                 },
@@ -36,11 +40,11 @@
                                 },
                                 {
                                     "actionType": "playMacro",
-                                    "macro": "My address"
+                                    "macroId": 0
                                 },
                                 {
                                     "actionType": "switchKeymap",
-                                    "keymap": "Dvorak"
+                                    "keymapId": 1
                                 }
                             ]
                         },
@@ -79,11 +83,13 @@
             ]
         },
         {
+            "id": 1,
             "name": "Dvorak"
         }
     ],
     "macros": [
         {
+            "id": 0,
             "name": "My address",
             "isPrivate": true,
             "isLooped": false,
