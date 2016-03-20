@@ -10,7 +10,8 @@ var writer = BufferWriter(buffer);
 var uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 var keyActions = uhkConfig.keymaps[0].modules[0].layers[0].keyActions;
 
-var KEY_ACTION_ID_NONE                            = 0;
+var ARRAY_LAST_ELEMENT_ID = 0;
+
 var KEY_ACTION_ID_KEYSTROKE_SCANCODE_FIRST        = 1;
 var KEY_ACTION_ID_KEYSTROKE_SCANCODE_LAST         = 231;
 var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOD         = 232;
@@ -27,6 +28,7 @@ var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER = 242;
 var KEY_ACTION_ID_MOUSE                           = 243;
 var KEY_ACTION_ID_PLAY_MACRO                      = 244;
 var KEY_ACTION_ID_SWITCH_KEYMAP                   = 245;
+var KEY_ACTION_ID_NONE                            = 255;
 
 var NONE_ACTION_PADDING = 0;
 
@@ -48,10 +50,10 @@ function serializeKeyActions(keyActions) {
     keyActions.forEach(function(keyAction) {
         serializeKeyAction(keyAction);
     });
+    writer.uint8(ARRAY_LAST_ELEMENT_ID);
 }
 
 function serializeKeyAction(keyAction) {
-    console.log(keyAction);
     switch (keyAction.actionType) {
         case 'none':
             serializeNoneAction();
@@ -132,9 +134,5 @@ function serializeSwitchKeymapAction(switchKeymapAction) {
     writer.uint8(switchKeymapAction.keymapId);
 }
 
-writer.uint8(0x66);
-writer.uint16(0x1122);
-writer.string("Hi there!");
-writer.uint8(0x66);
 serializeKeyActions(keyActions);
 fs.writeFileSync('uhk-config.bin', buffer);
