@@ -30,6 +30,10 @@
                                     "modifierMask": 16
                                 },
                                 {
+                                    "actionType": "switchLayer",
+                                    "layer": "fn"
+                                },
+                                {
                                     "actionType": "dualRoleKeystroke",
                                     "scancode": 111,
                                     "longPressAction": "mod"
