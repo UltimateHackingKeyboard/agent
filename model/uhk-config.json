@@ -14,12 +14,14 @@
             "name": "QWERTY",
             "isDefault": true,
             "abbreviation": "QTY",
-            "modules": [
+            "layers": [
                 {
-                    "name": "uhkLeft",
-                    "layers": [
+                    "modules": [
                         {
-                            "pointerRole": "move",
+                            "id": 0,
+                            "pointerRoles": [
+                                "move"
+                            ],
                             "keyActions": [
                                 {
                                     "actionType": "none"
@@ -52,38 +54,28 @@
                                 }
                             ]
                         },
-                        {},
-                        {},
-                        {}
+                        {
+                            "id": 1
+                        },
+                        {
+                            "id": 2,
+                            "pointerRoles": [
+                                "scroll"
+                            ],
+                            "keyActions": []
+                        },
+                        {
+                            "id": 3,
+                            "pointerRoles": [
+                                "move"
+                            ],
+                            "keyActions": []
+                        }
                     ]
                 },
-                {
-                    "name": "uhkRight"
-                },
-                {
-                    "name": "keyClusterLeft",
-                    "layers": [
-                        {
-                            "pointerRole": "scroll",
-                            "keyActions": []
-                        }
-                    ],
-                    "modLayer": {},
-                    "fnLayer": {},
-                    "mouseLayer": {}
-                },
-                {
-                    "name": "trackballRight",
-                    "layers": [
-                        {
-                            "pointerRole": "move",
-                            "keyActions": []
-                        }
-                    ],
-                    "modLayer": {},
-                    "fnLayer": {},
-                    "mouseLayer": {}
-                }
+                {},
+                {},
+                {}
             ]
         },
         {

@@ -8,8 +8,8 @@ buffer.fill(0);
 var writer = BufferWriter(buffer);
 
 var uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
-var keyActions = uhkConfig.keymaps[0].modules[0].layers[0].keyActions;
-
+var keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
+console.log(keyActions)
 var ARRAY_LAST_ELEMENT_ID = 0;
 
 var KEY_ACTION_ID_KEYSTROKE_SCANCODE_FIRST        = 1;
@@ -61,10 +61,10 @@ function serializeKeyAction(keyAction) {
         case 'none':
             serializeNoneAction();
             break;
-        case 'key':
+        case 'keystroke':
             serializeKeystrokeAction(keyAction);
             break;
-        case 'dualRoleKey':
+        case 'dualRoleKeystroke':
             serializeDualRoleKeyAction(keyAction);
             break;
         case 'mouse':
@@ -76,8 +76,11 @@ function serializeKeyAction(keyAction) {
         case 'switchKeymap':
             serializeSwitchKeymapAction(keyAction);
             break;
+        case 'switchLayer':
+            serializeSwitchLayerAction(keyAction);
+            break;
         default:
-            throw "KeyAction doesn't have a valid actionType property!";
+            throw "KeyAction doesn't have a valid actionType property: " + keyAction.actionType;
     }
 }
 
@@ -135,6 +138,15 @@ function serializeMacroAction(macroAction) {
 function serializeSwitchKeymapAction(switchKeymapAction) {
     writer.uint8(KEY_ACTION_ID_SWITCH_KEYMAP);
     writer.uint8(switchKeymapAction.keymapId);
+}
+
+function serializeSwitchLayerAction(switchLayerAction) {
+    writer.uint8({
+        mod  : KEY_ACTION_ID_SWITCH_LAYER_MOD,
+        fn   : KEY_ACTION_ID_SWITCH_LAYER_FN,
+        mouse: KEY_ACTION_ID_SWITCH_LAYER_MOUSE
+    }[switchLayerAction]);
+    writer.uint8(0);
 }
 
 serializeKeyActions(keyActions);
