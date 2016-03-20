@@ -1,0 +1,21 @@
+{
+    "isKeyboardSplit": true,
+    "moduleSlots": [
+        {
+            "id": true,
+            "name": "keycluster-left",
+            "factoryKeymap": {
+                "layers": [
+                    {
+                        "pointerRoles": [],
+                        "keyStates": []
+                    }
+                ]
+            }
+        },
+        {},
+        {},
+        {},
+        {}
+    ]
+}
