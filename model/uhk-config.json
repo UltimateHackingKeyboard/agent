@@ -6,7 +6,8 @@
     "dataModelVersion": 0,
     "moduleConfigurations": [
         {
-            "moduleName": "keyClusterLeft",
+            "id": 1,
+            "initialSpeed": 1,
             "acceleration": 5,
             "maxSpeed": 200
         }
@@ -14,8 +15,8 @@
     "keymaps": [
         {
             "id": 0,
-            "name": "QWERTY",
             "isDefault": true,
+            "name": "QWERTY",
             "abbreviation": "QTY",
             "layers": [
                 {
