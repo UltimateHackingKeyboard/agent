@@ -1,34 +1,32 @@
-# Ultimate Hacking Keyboard - Agent mockups
+# Ultimate Hacking Keyboard Agent
 
-Contains HTML, CSS and JS source of the Agent mockups.
+Agent is the configuration application of the [Ultimate Hacking Keyboard](https://ultimatehackingkeyboard.com/).
 
-They serve a double purpose:
-1. easy and flexible usage of the actual Bootstrap components
-2. test some basic interaction patterns by clicking around the main UI elements.
+Right now, Agent is in a mockup state, which basically means that you can click around and most interactions will loosely work but the application in whole is not production ready yet. We're experimenting with the UI and UX until the imminent Angular 2 port.
 
-## See it!
-* [Key action editor](http://ultimatehackingkeyboard.github.io/agent-mockup/popup.html)
-* [Macro editor](http://ultimatehackingkeyboard.github.io/agent-mockup/macro.html)
-* [Application UI](http://ultimatehackingkeyboard.github.io/agent-mockup/index.html)
+What are you waiting for? [Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent-mockup/popup.html)
 
-## Try it!
-If you want to see it on your screen follow this guide:
+## Set up instructions
 
-Clone this repository
+Clone this repository:
+
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent-mockup.git
 cd agent-mockup
 ```
 
-Install bower
+Install bower:
+
 ```
 npm install -g bower
 ```
 
-Get libraries used by the project
+Get libraries used by the project:
+
 ```
 bower install
 ```
 
 ### Additional information
-In the repository you find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up our prototyping process. If you want to use it just run `npm install` in the project directory, then you can fire it up with `gulp serve`.
+
+In the repository you find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up our development process. If you want to use it just run `npm install` in the project directory, then you can fire it up with `gulp serve`.
