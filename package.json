@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "jquery": "^2.2.2"
+    "jquery": "^2.2.2",
+    "select2": "^4.0.2"
   }
 }
