@@ -8,25 +8,10 @@ Agent is in a preliminary state. You can click around, and most interactions wil
 
 ## Set up instructions
 
-Clone this repository:
-
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent-mockup.git
 cd agent-mockup
+npm install
 ```
 
-Install bower:
-
-```
-npm install -g bower
-```
-
-Get libraries used by the project:
-
-```
-bower install
-```
-
-### Additional information
-
-In the repository you find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up our development process. If you want to use it just run `npm install` in the project directory, then you can fire it up with `gulp serve`.
+In the repository you can find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up the development process. You can fire it up with `gulp serve`.
