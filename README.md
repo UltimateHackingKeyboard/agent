@@ -2,9 +2,9 @@
 
 Agent is the configuration application of the [Ultimate Hacking Keyboard](https://ultimatehackingkeyboard.com/).
 
-Right now, Agent is in a mockup state, which basically means that you can click around and most interactions will loosely work but the application in whole is not production ready yet. We're experimenting with the UI and UX until the imminent Angular 2 port.
+Right now, Agent is in a mockup state, which basically means that you can click around and most interactions will loosely work but the application is not production ready yet. We're experimenting with the UI and UX until the imminent Angular 2 port.
 
-What are you waiting for? [Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent-mockup/popup.html)
+What are you waiting for? [Give it a whirl](http://ultimatehackingkeyboard.github.io/agent-mockup/popup.html)!
 
 ## Set up instructions
 
