@@ -1,6 +1,16 @@
 {
-  "name": "agent-mockup",
-  "dependencies": {
+  "name": "uhk-agent",
+  "version": "0.0.1",
+  "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UltimateHackingKeyboard/agent-mockup.git"
+  },
+  "license": {
+    "type": "GPL-3.0",
+    "url": "http://www.gnu.org/licenses/gpl-3.0.en.html"
+  },
+  "devDependencies": {
     "browser-sync": "^2.11.0",
     "gulp": "^3.9.0",
     "gulp-if": "^2.0.0",
