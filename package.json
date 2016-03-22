@@ -16,6 +16,7 @@
     "yargs": "^4.2.0"
   },
   "dependencies": {
+    "bootstrap": "^3.3.6",
     "jquery": "^2.2.2"
   }
 }
