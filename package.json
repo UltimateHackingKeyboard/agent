@@ -6,10 +6,7 @@
     "type": "git",
     "url": "git@github.com:UltimateHackingKeyboard/agent-mockup.git"
   },
-  "license": {
-    "type": "GPL-3.0",
-    "url": "http://www.gnu.org/licenses/gpl-3.0.en.html"
-  },
+  "license": "GPL-3.0",
   "devDependencies": {
     "browser-sync": "^2.11.0",
     "gulp": "^3.9.0",
@@ -17,5 +14,8 @@
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
     "yargs": "^4.2.0"
+  },
+  "dependencies": {
+    "jquery": "^2.2.2"
   }
 }
