@@ -20,6 +20,7 @@
     "font-awesome": "^4.5.0",
     "handlebars": "^4.0.5",
     "jquery": "^2.2.2",
-    "select2": "^4.0.2"
+    "select2": "^4.0.2",
+    "sortablejs": "^1.4.2"
   }
 }
