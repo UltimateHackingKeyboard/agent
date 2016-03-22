@@ -20,7 +20,6 @@
             "abbreviation": "QTY",
             "layers": [
                 {
-                    "priority": 0,
                     "modules": [
                         {
                             "id": 0,
