@@ -1,4 +1,4 @@
-# Ultimate Hacking Keyboard Agent
+![Agent logo & text](https://raw.githubusercontent.com/UltimateHackingKeyboard/agent-mockup/master/images/agent-logo-with-text.png)
 
 Agent is the configuration application of the [Ultimate Hacking Keyboard](https://ultimatehackingkeyboard.com/).
 
