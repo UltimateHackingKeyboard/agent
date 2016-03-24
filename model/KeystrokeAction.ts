@@ -20,7 +20,7 @@ class KeystrokeAction implements Serializable {
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUint8(this.scancode);
-        buffer.writeUint8(this.modifierMask);
+        buffer.writeUInt8(this.scancode);
+        buffer.writeUInt8(this.modifierMask);
     } 
 }
