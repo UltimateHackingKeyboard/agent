@@ -1,5 +1,6 @@
-var fs = require('fs');
+/// <reference path="UhkBuffer.ts" />
 
+var fs = require('fs');
 var buffer = new Buffer(1000);
 buffer.fill(0);
 var writer = new UhkBuffer(buffer);
