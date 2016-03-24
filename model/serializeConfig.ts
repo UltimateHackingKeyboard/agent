@@ -1,11 +1,8 @@
-#!/usr/bin/env node
-
 var fs = require('fs');
-var BufferWriter = require('./BufferWriter');
 
 var buffer = new Buffer(1000);
 buffer.fill(0);
-var writer = BufferWriter(buffer);
+var writer = new UhkBuffer(buffer);
 
 var uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 var keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
@@ -87,7 +84,7 @@ function serializeKeyAction(keyAction) {
     }
 }
 
-function serializeNoneAction(keystrokeAction) {
+function serializeNoneAction() {
     writer.uint8(KEY_ACTION_ID_NONE);
     writer.uint8(NONE_ACTION_PADDING);
 }

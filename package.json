@@ -21,6 +21,7 @@
     "handlebars": "^4.0.5",
     "jquery": "^2.2.2",
     "select2": "^4.0.2",
-    "sortablejs": "^1.4.2"
+    "sortablejs": "^1.4.2",
+    "typescript": "^1.8.9"
   }
 }

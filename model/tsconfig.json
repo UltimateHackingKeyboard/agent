@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "out": "serializeConfig.js"
+    },
+    "files": [
+        "typings/main.d.ts",
+        "UhkBuffer.ts",
+        "serializeConfig.ts"
+    ]
+}
