@@ -2,7 +2,7 @@
 /// <reference path="KeystrokeAction.ts" />
 
 var fs = require('fs');
-var buffer = new Buffer(1000);
+var buffer:Buffer = new Buffer(1000);
 buffer.fill(0);
 var writer = new UhkBuffer(buffer);
 
@@ -55,7 +55,7 @@ function serializeKeyActions(keyActions) {
     keyActions.forEach(function(keyAction) {
         serializeKeyAction(keyAction);
     });
-    writer.uint8(ARRAY_LAST_ELEMENT_ID);
+    writer.writeUint8(ARRAY_LAST_ELEMENT_ID);
 }
 
 function serializeKeyAction(keyAction) {
@@ -87,17 +87,17 @@ function serializeKeyAction(keyAction) {
 }
 
 function serializeNoneAction() {
-    writer.uint8(KEY_ACTION_ID_NONE);
-    writer.uint8(NONE_ACTION_PADDING);
+    writer.writeUint8(KEY_ACTION_ID_NONE);
+    writer.writeUint8(NONE_ACTION_PADDING);
 }
 
 function serializeKeystrokeAction(keystrokeAction) {
-    writer.uint8(keystrokeAction.scancode);
-    writer.uint8(keystrokeAction.modifiers);
+    writer.writeUint8(keystrokeAction.scancode);
+    writer.writeUint8(keystrokeAction.modifiers);
 }
 
 function serializeDualRoleKeyAction(dualRoleKeyAction) {
-    writer.uint8({
+    writer.writeUint8({
         mod         : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOD,
         fn          : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_FN,
         mouse       : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOUSE,
@@ -110,12 +110,12 @@ function serializeDualRoleKeyAction(dualRoleKeyAction) {
         rightAlt    : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_ALT,
         rightSuper  : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER
     }[dualRoleKeyAction.longPressAction]);
-    writer.uint8(dualRoleKeyAction.scancode);
+    writer.writeUint8(dualRoleKeyAction.scancode);
 }
 
 function serializeMouseAction(mouseAction) {
-    writer.uint8(KEY_ACTION_ID_MOUSE);
-    writer.uint8({
+    writer.writeUint8(KEY_ACTION_ID_MOUSE);
+    writer.writeUint8({
         leftClick  : MOUSE_ACTION_ID_LEFT_CLICK,
         middleClick: MOUSE_ACTION_ID_MIDDLE_CLICK,
         rightClick : MOUSE_ACTION_ID_RIGHT_CLICK,
@@ -133,18 +133,18 @@ function serializeMouseAction(mouseAction) {
 }
 
 function serializeMacroAction(macroAction) {
-    writer.uint8(KEY_ACTION_ID_PLAY_MACRO);
-    writer.uint8(macroAction.macroId);
+    writer.writeUint8(KEY_ACTION_ID_PLAY_MACRO);
+    writer.writeUint8(macroAction.macroId);
 }
 
 function serializeSwitchKeymapAction(switchKeymapAction) {
-    writer.uint8(KEY_ACTION_ID_SWITCH_KEYMAP);
-    writer.uint8(switchKeymapAction.keymapId);
+    writer.writeUint8(KEY_ACTION_ID_SWITCH_KEYMAP);
+    writer.writeUint8(switchKeymapAction.keymapId);
 }
 
 function serializeSwitchLayerAction(switchLayerAction) {
-    writer.uint8(KEY_ACTION_ID_SWITCH_LAYER);
-    writer.uint8({
+    writer.writeUint8(KEY_ACTION_ID_SWITCH_LAYER);
+    writer.writeUint8({
         mod  : SWITCH_LAYER_MOD,
         fn   : SWITCH_LAYER_FN,
         mouse: SWITCH_LAYER_MOD

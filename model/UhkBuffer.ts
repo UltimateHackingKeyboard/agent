@@ -7,39 +7,39 @@ class UhkBuffer {
         this.buffer = buffer;
     }
 
-    int8(value) {
+    writeInt8(value) {
         this.buffer.writeInt8(value, this.offset);
         this.offset += 1;
     }
 
-    uint8(value) {
+    writeUint8(value) {
         this.buffer.writeUInt8(value, this.offset);
         this.offset += 1;
     }
 
-    int16(value) {
+    writeInt16(value) {
         this.buffer.writeInt16LE(value, this.offset);
         this.offset += 2;
     }
 
-    uint16(value) {
+    writeUint16(value) {
         this.buffer.writeUInt16LE(value, this.offset);
         this.offset += 2;
     }
 
-    int32(value) {
+    writeInt32(value) {
         this.buffer.writeInt32LE(value, this.offset);
         this.offset += 4;
     }
 
-    uint32(value) {
+    writeUint32(value) {
         this.buffer.writeUInt32LE(value, this.offset);
         this.offset += 4;
     }
 
-    string(string) {
+    writeString(string) {
         this.buffer.write(string, this.offset, string.length, 'ascii');
         this.offset += string.length;
-        this.uint8(0);
+        this.writeUint8(0);
     }
 }
