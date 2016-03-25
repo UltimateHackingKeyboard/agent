@@ -9,8 +9,6 @@ let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
 
 let ARRAY_LAST_ELEMENT_ID = 0;
 
-let KEY_ACTION_ID_KEYSTROKE_SCANCODE_FIRST        = 1;
-let KEY_ACTION_ID_KEYSTROKE_SCANCODE_LAST         = 231;
 let KEY_ACTION_ID_SWITCH_LAYER                    = 232;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOD         = 233;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_FN          = 234;
