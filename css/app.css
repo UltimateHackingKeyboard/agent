@@ -115,11 +115,5 @@ ul {
   left: 50%;
   margin-left: -310px; }
 
-svg.uhk.faded #left-case,
-svg.uhk.faded #right-case {
-  fill: #555; }
-
-svg.uhk.faded rect {
-  fill: #666; }
-  svg.uhk.faded rect.active {
-    fill: #000; }
+svg.uhk rect.active {
+  fill: #337ab7; }
