@@ -1,8 +1,7 @@
-h1 {
-  margin-bottom: 3rem; }
-
 .popover {
   padding: 0; }
+  .popover.bottom > .arrow:after {
+    border-bottom-color: #f7f7f7; }
 
 .popover-content {
   padding: 10px 24px; }
@@ -17,9 +16,6 @@ h1 {
 .popover-title.menu-tabs .nav-tabs {
   position: relative;
   top: 1px; }
-
-.popover.bottom > .arrow:after {
-  border-bottom-color: #f7f7f7; }
 
 .popover-actions {
   padding: 8px 14px;
@@ -69,31 +65,29 @@ h1 {
 .select2-item {
   position: relative;
   font-size: 1.5rem; }
-
-.select2-item.keymap-name--wrapper {
-  padding-left: 50px; }
-
-.select2-item .layout-segment-code {
-  height: 2rem;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  margin-top: -1rem; }
+  .select2-item.keymap-name--wrapper {
+    padding-left: 50px; }
+  .select2-item .layout-segment-code {
+    height: 2rem;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -1rem; }
 
 .preview-wrapper img {
   max-width: 100%; }
 
 .global-key-setup.disabled {
   opacity: 0; }
+  .global-key-setup.disabled .setting-label {
+    color: #999; }
 
-.global-key-setup.disabled .setting-label,
 .setting-label.disabled {
   color: #999; }
 
 .global-key-setup--wrapper {
   position: relative; }
-
-.global-key-setup--wrapper .disabled-state--text {
-  position: absolute;
-  top: 50%;
-  margin-top: -4rem; }
+  .global-key-setup--wrapper .disabled-state--text {
+    position: absolute;
+    top: 50%;
+    margin-top: -4rem; }
