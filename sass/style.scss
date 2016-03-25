@@ -3,6 +3,8 @@
 
   &.bottom {
     > .arrow {
+      border-bottom-color: #000;
+
       &:after {
         border-bottom-color: #f7f7f7;
       }

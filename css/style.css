@@ -1,7 +1,9 @@
 .popover {
   padding: 0; }
-  .popover.bottom > .arrow:after {
-    border-bottom-color: #f7f7f7; }
+  .popover.bottom > .arrow {
+    border-bottom-color: #000; }
+    .popover.bottom > .arrow:after {
+      border-bottom-color: #f7f7f7; }
 
 .popover-content {
   padding: 10px 24px; }
