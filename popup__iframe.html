@@ -87,21 +87,6 @@
       <div class="global-key-setup--wrapper">
         <div class="global-key-setup">
           <!-- Primary action setup: scancode+modifiers. -->
-          <div class="scancode-options">
-            <b class="setting-label" style="position:relative; top:-9px; margin-right:4px;">Modifiers:</b>
-            <div class="btn-toolbar modifiers" style="display:inline-block">
-              <div class="btn-group btn-group-sm modifiers__left">
-                {{#each modifiers.left}}
-                  <button type="button" class="btn btn-default {{primary}}">{{name}}</button>
-                {{/each}}
-              </div>
-              <div class="btn-group btn-group-sm modifiers__right">
-                {{#each modifiers.right}}
-                  <button type="button" class="btn btn-default {{primary}}">{{name}}</button>
-                {{/each}}
-              </div>
-            </div>
-          </div>
           <div class="scancode-options" style="margin-bottom:10px; margin-top:2px">
             <b class="setting-label" style="position:relative; top:2px;">Scancode:</b>
             <select class="scancode" style="width: 200px">
@@ -123,6 +108,21 @@
             <button style="display: none; margin: 0 0 0 2rem;" type="button" class="btn btn-sm btn-info pull-right btn--capture-keystroke btn--capture-keystroke__stop">
               <i class="fa fa-square"></i> Stop capturing
             </button>
+          </div>
+          <div class="scancode-options">
+            <b class="setting-label" style="position:relative; top:-9px; margin-right:4px;">Modifiers:</b>
+            <div class="btn-toolbar modifiers" style="display:inline-block">
+              <div class="btn-group btn-group-sm modifiers__left">
+                {{#each modifiers.left}}
+                  <button type="button" class="btn btn-default {{primary}}">{{name}}</button>
+                {{/each}}
+              </div>
+              <div class="btn-group btn-group-sm modifiers__right">
+                {{#each modifiers.right}}
+                  <button type="button" class="btn btn-default {{primary}}">{{name}}</button>
+                {{/each}}
+              </div>
+            </div>
           </div>
           <!-- bof optional -->
             <!-- Keyboard layout preview to be shown in capturing mode. -->
