@@ -2,9 +2,7 @@
 /// <reference path="KeystrokeAction.ts" />
 
 let fs = require('fs');
-let buffer: Buffer = new Buffer(1000);
-buffer.fill(0);
-let writer = new UhkBuffer(buffer);
+let writer = new UhkBuffer();
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
@@ -153,4 +151,4 @@ function serializeSwitchLayerAction(switchLayerAction) {
 
 new KeystrokeAction();
 serializeKeyActions(keyActions);
-fs.writeFileSync('uhk-config.bin', buffer);
+fs.writeFileSync('uhk-config.bin', writer.buffer);

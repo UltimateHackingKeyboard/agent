@@ -1,5 +1,6 @@
 
 class UhkBuffer {
+    private static eepromSize = 32 * 1024;
     private static maxStringByteLength = 0xFFFF;
     private static longStringPrefix = 0xFF;
     private static stringEncoding = 'utf8';
@@ -7,9 +8,10 @@ class UhkBuffer {
     buffer: Buffer;
     offset: number;
 
-    constructor(buffer: Buffer) {
+    constructor() {
         this.offset = 0;
-        this.buffer = buffer;
+        this.buffer = new Buffer(UhkBuffer.eepromSize);
+        this.buffer.fill(0);
     }
 
     readInt8(): number {

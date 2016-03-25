@@ -33,7 +33,10 @@
             true,
             "spaces"
         ],
-        "max-line-length": [true, 100],
+        "max-line-length": [
+            true,
+            100
+        ],
         "no-trailing-whitespace": true,
         "trailing-comma": [
             true, {
