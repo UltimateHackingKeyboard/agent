@@ -5,18 +5,23 @@ class KeystrokeAction implements Serializable {
     private static firstValidScancode = 1;
     private static lastValidScancode = 231;
 
-    scancode: number;
+    _scancode: number;
     modifierMask: number;
+
+    get scancode() {
+        return this._scancode;
+    }
+
+    set scancode(value) {
+        if (!KeystrokeAction.isScancodeValid(value)) {
+            throw 'Scancode ${scancode} is invalid!';
+        }
+        this._scancode = value;
+    }
 
     static isScancodeValid(scancode) {
         return KeystrokeAction.firstValidScancode <= scancode &&
                scancode <= KeystrokeAction.lastValidScancode;
-    }
-
-    private static checkScancode(scancode) {
-        if (!KeystrokeAction.isScancodeValid(scancode)) {
-            throw 'Scancode ${scancode} is invalid';
-        }
     }
 
     fromJsObject(jsObject: any) {
@@ -33,7 +38,6 @@ class KeystrokeAction implements Serializable {
 
     fromBinary(buffer: UhkBuffer) {
         this.scancode = buffer.readUInt8();
-        KeystrokeAction.checkScancode(this.scancode);
         this.modifierMask = buffer.readUInt8();
     }
 
