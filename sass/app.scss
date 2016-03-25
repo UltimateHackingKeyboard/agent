@@ -183,18 +183,10 @@ ul {
 }
 
 svg.uhk {
-  &.faded {
-    #left-case,
-    #right-case {
-      fill: #555;
-    }
-
-    rect {
-      fill: #666;
-
-      &.active {
-        fill: #000;
-      }
+  rect {
+    &.active {
+      //TODO: use a color variable instead of the declaration below.
+      fill: #337ab7;
     }
   }
 }
