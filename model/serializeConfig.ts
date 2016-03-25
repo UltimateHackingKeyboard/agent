@@ -1,12 +1,12 @@
 /// <reference path="UhkBuffer.ts" />
 /// <reference path="KeystrokeAction.ts" />
 
-let fs = require("fs");
+let fs = require('fs');
 let buffer: Buffer = new Buffer(1000);
 buffer.fill(0);
 let writer = new UhkBuffer(buffer);
 
-let uhkConfig = JSON.parse(fs.readFileSync("uhk-config.json"));
+let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
 
 let ARRAY_LAST_ELEMENT_ID = 0;
@@ -51,8 +51,8 @@ let MOUSE_ACTION_ID_SCROLL_RIGHT = 10;
 let MOUSE_ACTION_ID_ACCELERATE   = 11;
 let MOUSE_ACTION_ID_DECELERATE   = 12;
 
-function serializeKeyActions(keyActions) {
-    keyActions.forEach(function(keyAction) {
+function serializeKeyActions(keyActionsParam) {
+    keyActionsParam.forEach(function(keyAction) {
         serializeKeyAction(keyAction);
     });
     writer.writeUInt8(ARRAY_LAST_ELEMENT_ID);
@@ -60,29 +60,29 @@ function serializeKeyActions(keyActions) {
 
 function serializeKeyAction(keyAction) {
     switch (keyAction.actionType) {
-        case "none":
+        case 'none':
             serializeNoneAction();
             break;
-        case "keystroke":
+        case 'keystroke':
             serializeKeystrokeAction(keyAction);
             break;
-        case "dualRoleKeystroke":
+        case 'dualRoleKeystroke':
             serializeDualRoleKeyAction(keyAction);
             break;
-        case "mouse":
+        case 'mouse':
             serializeMouseAction(keyAction);
             break;
-        case "playMacro":
+        case 'playMacro':
             serializeMacroAction(keyAction);
             break;
-        case "switchKeymap":
+        case 'switchKeymap':
             serializeSwitchKeymapAction(keyAction);
             break;
-        case "switchLayer":
+        case 'switchLayer':
             serializeSwitchLayerAction(keyAction);
             break;
         default:
-            throw "KeyAction doesn't have a valid actionType property: " + keyAction.actionType;
+            throw 'KeyAction doesn\'t have a valid actionType property: ' + keyAction.actionType;
     }
 }
 
@@ -153,4 +153,4 @@ function serializeSwitchLayerAction(switchLayerAction) {
 
 new KeystrokeAction();
 serializeKeyActions(keyActions);
-fs.writeFileSync("uhk-config.bin", buffer);
+fs.writeFileSync('uhk-config.bin', buffer);

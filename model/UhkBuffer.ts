@@ -1,11 +1,11 @@
 
 class UhkBuffer {
-    buffer: Buffer;
-    offset: number;
-
     private static maxStringByteLength = 0xFFFF;
     private static longStringPrefix = 0xFF;
-    private static stringEncoding = "utf8";
+    private static stringEncoding = 'utf8';
+
+    buffer: Buffer;
+    offset: number;
 
     constructor(buffer: Buffer) {
         this.offset = 0;
@@ -94,8 +94,8 @@ class UhkBuffer {
         let stringByteLength = Buffer.byteLength(str, UhkBuffer.stringEncoding);
 
         if (stringByteLength > UhkBuffer.maxStringByteLength) {
-            throw "Cannot serialize string: ${stringByteLength} bytes is larger " +
-                  "than the maximum allowed length of ${UhkBuffer.maxStringByteLength} bytes";
+            throw 'Cannot serialize string: ${stringByteLength} bytes is larger ' +
+                  'than the maximum allowed length of ${UhkBuffer.maxStringByteLength} bytes';
         }
 
         if (stringByteLength >= UhkBuffer.longStringPrefix) {
