@@ -117,24 +117,6 @@ ul {
       max-width: 100%;
       width: 98%; }
 
-.grip {
-  position: relative; }
-  .grip:before {
-    content: '';
-    display: none;
-    width: 5px;
-    height: 20px;
-    background-image: url(../images/grips/vertical_dark.png);
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 50%;
-    left: 7px;
-    margin-top: -10px; }
-  .grip.btn-primary:before {
-    background-image: url(../images/grips/vertical.png); }
-  .grip:hover:before {
-    display: block; }
-
 .key-editor__popup {
   border: none;
   width: 0px;
