@@ -1,7 +1,7 @@
 /// <reference path="Serializable.ts" />
 
 class KeystrokeAction implements Serializable {
-    scancode: number; 
+    scancode: number;
     modifierMask: number;
 
     fromJsObject(jsObject: any) {
@@ -22,5 +22,5 @@ class KeystrokeAction implements Serializable {
     toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(this.scancode);
         buffer.writeUInt8(this.modifierMask);
-    } 
+    }
 }

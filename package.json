@@ -13,6 +13,7 @@
     "gulp-if": "^2.0.0",
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
+    "tslint": "^3.6.0",
     "yargs": "^4.2.0"
   },
   "dependencies": {

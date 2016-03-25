@@ -1,55 +1,55 @@
 /// <reference path="UhkBuffer.ts" />
 /// <reference path="KeystrokeAction.ts" />
 
-var fs = require('fs');
-var buffer:Buffer = new Buffer(1000);
+let fs = require("fs");
+let buffer: Buffer = new Buffer(1000);
 buffer.fill(0);
-var writer = new UhkBuffer(buffer);
+let writer = new UhkBuffer(buffer);
 
-var uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
-var keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
+let uhkConfig = JSON.parse(fs.readFileSync("uhk-config.json"));
+let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
 
-var ARRAY_LAST_ELEMENT_ID = 0;
+let ARRAY_LAST_ELEMENT_ID = 0;
 
-var KEY_ACTION_ID_KEYSTROKE_SCANCODE_FIRST        = 1;
-var KEY_ACTION_ID_KEYSTROKE_SCANCODE_LAST         = 231;
-var KEY_ACTION_ID_SWITCH_LAYER                    = 232;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOD         = 233;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_FN          = 234;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOUSE       = 235;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_CTRL   = 236;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_SHIFT  = 237;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_ALT    = 238;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_SUPER  = 239;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_CTRL  = 240;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SHIFT = 241;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_ALT   = 242;
-var KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER = 243;
-var KEY_ACTION_ID_MOUSE                           = 244;
-var KEY_ACTION_ID_PLAY_MACRO                      = 245;
-var KEY_ACTION_ID_SWITCH_KEYMAP                   = 246;
-var KEY_ACTION_ID_NONE                            = 255;
+let KEY_ACTION_ID_KEYSTROKE_SCANCODE_FIRST        = 1;
+let KEY_ACTION_ID_KEYSTROKE_SCANCODE_LAST         = 231;
+let KEY_ACTION_ID_SWITCH_LAYER                    = 232;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOD         = 233;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_FN          = 234;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_MOUSE       = 235;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_CTRL   = 236;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_SHIFT  = 237;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_ALT    = 238;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_LEFT_SUPER  = 239;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_CTRL  = 240;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SHIFT = 241;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_ALT   = 242;
+let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER = 243;
+let KEY_ACTION_ID_MOUSE                           = 244;
+let KEY_ACTION_ID_PLAY_MACRO                      = 245;
+let KEY_ACTION_ID_SWITCH_KEYMAP                   = 246;
+let KEY_ACTION_ID_NONE                            = 255;
 
-var SWITCH_LAYER_MOD    = 0;
-var SWITCH_LAYER_FN     = 1;
-var SWITCH_LAYER_MOUSE  = 2;
-var SWITCH_LAYER_TOGGLE = 0x80;
+let SWITCH_LAYER_MOD    = 0;
+let SWITCH_LAYER_FN     = 1;
+let SWITCH_LAYER_MOUSE  = 2;
+let SWITCH_LAYER_TOGGLE = 0x80;
 
-var NONE_ACTION_PADDING = 0;
+let NONE_ACTION_PADDING = 0;
 
-var MOUSE_ACTION_ID_LEFT_CLICK   = 0;
-var MOUSE_ACTION_ID_MIDDLE_CLICK = 1;
-var MOUSE_ACTION_ID_RIGHT_CLICK  = 2;
-var MOUSE_ACTION_ID_MOVE_UP      = 3;
-var MOUSE_ACTION_ID_MOVE_DOWN    = 4;
-var MOUSE_ACTION_ID_MOVE_LEFT    = 5;
-var MOUSE_ACTION_ID_MOVE_RIGHT   = 6;
-var MOUSE_ACTION_ID_SCROLL_UP    = 7;
-var MOUSE_ACTION_ID_SCROLL_DOWN  = 8;
-var MOUSE_ACTION_ID_SCROLL_LEFT  = 9;
-var MOUSE_ACTION_ID_SCROLL_RIGHT = 10;
-var MOUSE_ACTION_ID_ACCELERATE   = 11;
-var MOUSE_ACTION_ID_DECELERATE   = 12;
+let MOUSE_ACTION_ID_LEFT_CLICK   = 0;
+let MOUSE_ACTION_ID_MIDDLE_CLICK = 1;
+let MOUSE_ACTION_ID_RIGHT_CLICK  = 2;
+let MOUSE_ACTION_ID_MOVE_UP      = 3;
+let MOUSE_ACTION_ID_MOVE_DOWN    = 4;
+let MOUSE_ACTION_ID_MOVE_LEFT    = 5;
+let MOUSE_ACTION_ID_MOVE_RIGHT   = 6;
+let MOUSE_ACTION_ID_SCROLL_UP    = 7;
+let MOUSE_ACTION_ID_SCROLL_DOWN  = 8;
+let MOUSE_ACTION_ID_SCROLL_LEFT  = 9;
+let MOUSE_ACTION_ID_SCROLL_RIGHT = 10;
+let MOUSE_ACTION_ID_ACCELERATE   = 11;
+let MOUSE_ACTION_ID_DECELERATE   = 12;
 
 function serializeKeyActions(keyActions) {
     keyActions.forEach(function(keyAction) {
@@ -60,25 +60,25 @@ function serializeKeyActions(keyActions) {
 
 function serializeKeyAction(keyAction) {
     switch (keyAction.actionType) {
-        case 'none':
+        case "none":
             serializeNoneAction();
             break;
-        case 'keystroke':
+        case "keystroke":
             serializeKeystrokeAction(keyAction);
             break;
-        case 'dualRoleKeystroke':
+        case "dualRoleKeystroke":
             serializeDualRoleKeyAction(keyAction);
             break;
-        case 'mouse':
+        case "mouse":
             serializeMouseAction(keyAction);
             break;
-        case 'playMacro':
+        case "playMacro":
             serializeMacroAction(keyAction);
             break;
-        case 'switchKeymap':
+        case "switchKeymap":
             serializeSwitchKeymapAction(keyAction);
             break;
-        case 'switchLayer':
+        case "switchLayer":
             serializeSwitchLayerAction(keyAction);
             break;
         default:
@@ -153,4 +153,4 @@ function serializeSwitchLayerAction(switchLayerAction) {
 
 new KeystrokeAction();
 serializeKeyActions(keyActions);
-fs.writeFileSync('uhk-config.bin', buffer);
+fs.writeFileSync("uhk-config.bin", buffer);
