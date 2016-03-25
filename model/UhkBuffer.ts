@@ -1,6 +1,11 @@
+
 class UhkBuffer {
     buffer: Buffer;
     offset: number;
+
+    private static maxStringByteLength = 0xFFFF;
+    private static longStringPrefix = 0xFF;
+    private static stringEncoding = 'utf8';
 
     constructor(buffer:Buffer) {
         this.offset = 0;
@@ -73,13 +78,34 @@ class UhkBuffer {
         this.offset += 4;
     }
 
-    readString(string:string):void {
-        // to be implemented
+    readString():string {
+        let stringByteLength = this.readUInt8();
+        
+        if (stringByteLength == UhkBuffer.longStringPrefix) {
+            stringByteLength += this.readUInt8() << 8;
+        }
+        
+        let string = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, stringByteLength);
+        this.offset += stringByteLength;
+        return string;
     }
 
     writeString(string:string):void {
-        this.buffer.write(string, this.offset, string.length, 'ascii');
-        this.offset += string.length;
-        this.writeUInt8(0);
+        let stringByteLength = Buffer.byteLength(string, UhkBuffer.stringEncoding);
+
+        if (stringByteLength > UhkBuffer.maxStringByteLength) {
+            throw 'Cannot serialize string: ${stringByteLength} bytes is larger ' +
+                  'than the maximum allowed length of ${UhkBuffer.maxStringByteLength} bytes';
+        }
+
+        if (stringByteLength >= UhkBuffer.longStringPrefix) {
+            this.writeUInt8(UhkBuffer.longStringPrefix);
+            this.writeUInt16(stringByteLength);
+        } else {
+            this.writeUInt8(stringByteLength);
+        }
+
+        this.buffer.write(string, this.offset, stringByteLength, UhkBuffer.stringEncoding);
+        this.offset += stringByteLength;
     }
 }
