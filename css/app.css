@@ -45,24 +45,13 @@ ul {
     .sidebar__level-2--item.active {
       background-color: #555;
       color: #fff; }
-      .sidebar__level-2--item.active .fa-star,
-      .sidebar__level-2--item.active .fa-star-o {
-        display: none; }
+      .sidebar__level-2--item.active .fa-star {
+        color: #fff; }
       .sidebar__level-2--item.active:hover {
         background-color: #555; }
-        .sidebar__level-2--item.active:hover .fa-star,
-        .sidebar__level-2--item.active:hover .fa-star-o {
-          display: block;
-          color: #fff; }
-    .sidebar__level-2--item:hover .fa-star-o {
-      color: #000; }
-      .sidebar__level-2--item:hover .fa-star-o:hover {
-        color: #000; }
     .sidebar__level-2--item .fa.pull-right {
       position: relative;
       top: 2px; }
-    .sidebar__level-2--item .fa-star-o {
-      color: #f5f5f5; }
     .sidebar__level-2--item .fa-star {
       color: #666; }
 
@@ -117,24 +106,6 @@ ul {
       max-width: 100%;
       width: 98%; }
 
-.grip {
-  position: relative; }
-  .grip:before {
-    content: '';
-    display: none;
-    width: 5px;
-    height: 20px;
-    background-image: url(../images/grips/vertical_dark.png);
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 50%;
-    left: 7px;
-    margin-top: -10px; }
-  .grip.btn-primary:before {
-    background-image: url(../images/grips/vertical.png); }
-  .grip:hover:before {
-    display: block; }
-
 .key-editor__popup {
   border: none;
   width: 0px;
@@ -144,11 +115,5 @@ ul {
   left: 50%;
   margin-left: -310px; }
 
-svg.uhk.faded #left-case,
-svg.uhk.faded #right-case {
-  fill: #555; }
-
-svg.uhk.faded rect {
-  fill: #666; }
-  svg.uhk.faded rect.active {
-    fill: #000; }
+svg.uhk rect.active {
+  fill: #337ab7; }
