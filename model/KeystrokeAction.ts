@@ -1,9 +1,10 @@
+/// <reference path="KeyAction.ts" />
 /// <reference path="Serializable.ts" />
 
-class KeystrokeAction implements Serializable {
+class KeystrokeAction extends KeyAction implements Serializable {
 
-    private static firstValidScancode = 1;
-    private static lastValidScancode = 231;
+    static firstValidScancode = 1;
+    static lastValidScancode = 231;
 
     _scancode: number;
     modifierMask: number;

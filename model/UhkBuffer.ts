@@ -7,16 +7,19 @@ class UhkBuffer {
 
     buffer: Buffer;
     offset: number;
+    bytesToBacktrack: number;
 
     constructor() {
         this.offset = 0;
+        this.bytesToBacktrack = 0;
         this.buffer = new Buffer(UhkBuffer.eepromSize);
         this.buffer.fill(0);
     }
 
     readInt8(): number {
         let value = this.buffer.readInt8(this.offset);
-        this.offset += 1;
+        this.bytesToBacktrack = 1;
+        this.offset += this.bytesToBacktrack;
         return value;
     }
 
@@ -27,7 +30,8 @@ class UhkBuffer {
 
     readUInt8(): number {
         let value = this.buffer.readUInt8(this.offset);
-        this.offset += 1;
+        this.bytesToBacktrack = 1;
+        this.offset += this.bytesToBacktrack;
         return value;
     }
 
@@ -38,7 +42,8 @@ class UhkBuffer {
 
     readInt16(): number {
         let value = this.buffer.readInt16LE(this.offset);
-        this.offset += 2;
+        this.bytesToBacktrack = 2;
+        this.offset += this.bytesToBacktrack;
         return value;
     }
 
@@ -49,7 +54,8 @@ class UhkBuffer {
 
     readUInt16(): number {
         let value = this.buffer.readUInt16LE(this.offset);
-        this.offset += 2;
+        this.bytesToBacktrack = 2;
+        this.offset += this.bytesToBacktrack;
         return value;
     }
 
@@ -60,7 +66,8 @@ class UhkBuffer {
 
     readInt32(): number {
         let value = this.buffer.readInt32LE(this.offset);
-        this.offset += 4;
+        this.bytesToBacktrack = 4;
+        this.offset += this.bytesToBacktrack;
         return value;
     }
 
@@ -71,7 +78,8 @@ class UhkBuffer {
 
     readUInt32(): number {
         let value = this.buffer.readUInt32LE(this.offset);
-        this.offset += 4;
+        this.bytesToBacktrack = 4;
+        this.offset += this.bytesToBacktrack;
         return value;
     }
 
@@ -88,6 +96,7 @@ class UhkBuffer {
         }
 
         let str = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, stringByteLength);
+        this.bytesToBacktrack = stringByteLength;
         this.offset += stringByteLength;
         return str;
     }
@@ -109,5 +118,10 @@ class UhkBuffer {
 
         this.buffer.write(str, this.offset, stringByteLength, UhkBuffer.stringEncoding);
         this.offset += stringByteLength;
+    }
+
+    backtrack(): void {
+        this.offset -= this.bytesToBacktrack;
+        this.bytesToBacktrack = 0;
     }
 }

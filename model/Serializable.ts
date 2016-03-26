@@ -2,7 +2,7 @@
 
 interface Serializable {
     fromJsObject(jsObject: any);
-    toJsObject(): any;
     fromBinary(buffer: UhkBuffer);
+    toJsObject(): any;
     toBinary(buffer: UhkBuffer);
 }
