@@ -5,11 +5,11 @@ class KeyAction {
 
     static fromJsObject(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
-            case 'none':
+            case KeystrokeAction.actionTypeString:
                 let keyActionNone = new KeyActionNone();
                 keyActionNone.fromJsObject(jsObject);
                 return keyActionNone;
-            case 'keyStroke':
+            case KeystrokeAction.actionTypeString:
                 let keystrokeAction = new KeystrokeAction();
                 keystrokeAction.fromJsObject(jsObject);
                 return keystrokeAction;

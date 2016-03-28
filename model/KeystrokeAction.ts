@@ -3,6 +3,7 @@
 
 class KeystrokeAction extends KeyAction implements Serializable {
 
+    static actionTypeString = 'keyStroke';
     static firstValidScancode = 1;
     static lastValidScancode = 231;
 
