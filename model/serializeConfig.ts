@@ -59,12 +59,6 @@ function serializeKeyActions(keyActionsParam) {
 
 function serializeKeyAction(keyAction) {
     switch (keyAction.actionType) {
-        case 'none':
-            serializeNoneAction();
-            break;
-        case 'keystroke':
-            serializeKeystrokeAction(keyAction);
-            break;
         case 'dualRoleKeystroke':
             serializeDualRoleKeyAction(keyAction);
             break;
@@ -83,16 +77,6 @@ function serializeKeyAction(keyAction) {
         default:
             throw 'KeyAction doesn\'t have a valid actionType property: ' + keyAction.actionType;
     }
-}
-
-function serializeNoneAction() {
-    writer.writeUInt8(KEY_ACTION_ID_NONE);
-    writer.writeUInt8(NONE_ACTION_PADDING);
-}
-
-function serializeKeystrokeAction(keystrokeAction) {
-    writer.writeUInt8(keystrokeAction.scancode);
-    writer.writeUInt8(keystrokeAction.modifiers);
 }
 
 function serializeDualRoleKeyAction(dualRoleKeyAction) {
