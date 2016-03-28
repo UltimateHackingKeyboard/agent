@@ -6,30 +6,22 @@ class KeyAction {
     static fromJsObject(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
             case KeystrokeAction.actionTypeString:
-                let keyActionNone = new KeyActionNone();
-                keyActionNone.fromJsObject(jsObject);
-                return keyActionNone;
+                return new KeyActionNone().fromJsObject(jsObject);
             case KeystrokeAction.actionTypeString:
-                let keystrokeAction = new KeystrokeAction();
-                keystrokeAction.fromJsObject(jsObject);
-                return keystrokeAction;
+                return new KeystrokeAction().fromJsObject(jsObject);
             default:
                 throw 'Unknown KeyAction actionType "${jsObject.actionType}"';
         }
     }
 
-    static fromBinary(buffer: UhkBuffer) {
+    static fromBinary(buffer: UhkBuffer): KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
         if (KeystrokeAction.isScancodeValid(keyActionFirstByte)) {
-            let keystrokeAction = new KeystrokeAction();
-            keystrokeAction.fromBinary(buffer);
-            return keystrokeAction;
+            return new KeystrokeAction().fromBinary(buffer);
         } else if (keyActionFirstByte === KeyActionNone.keyActionNoneId) {
-            let keyActionNone = new KeyActionNone();
-            keyActionNone.fromBinary(buffer);
-            return keyActionNone;
+            return new KeyActionNone().fromBinary(buffer);
         } else {
             throw 'Unknown KeyAction first byte "${keyActionFirstByte}"';
         }

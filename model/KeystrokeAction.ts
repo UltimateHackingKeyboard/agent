@@ -1,9 +1,9 @@
 /// <reference path="KeyAction.ts" />
 /// <reference path="Serializable.ts" />
 
-class KeystrokeAction extends KeyAction implements Serializable {
+class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction> {
 
-    static actionTypeString = 'keyStroke';
+    static actionTypeString = 'keystroke';
     static firstValidScancode = 1;
     static lastValidScancode = 231;
 
@@ -26,22 +26,24 @@ class KeystrokeAction extends KeyAction implements Serializable {
                scancode <= KeystrokeAction.lastValidScancode;
     }
 
-    fromJsObject(jsObject: any) {
+    fromJsObject(jsObject: any): KeystrokeAction {
         this.scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
+        return this;
     }
 
     toJsObject(): any {
         return {
-            keyActionType: 'keystroke',
+            keyActionType: KeystrokeAction.actionTypeString,
             scancode: this.scancode,
             modifierMask: this.modifierMask
         };
     }
 
-    fromBinary(buffer: UhkBuffer) {
+    fromBinary(buffer: UhkBuffer): KeystrokeAction {
         this.scancode = buffer.readUInt8();
         this.modifierMask = buffer.readUInt8();
+        return this;
     }
 
     toBinary(buffer: UhkBuffer) {

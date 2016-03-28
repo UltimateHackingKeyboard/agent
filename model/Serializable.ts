@@ -1,8 +1,8 @@
 /// <reference path="UhkBuffer.ts" />
 
-interface Serializable {
-    fromJsObject(jsObject: any);
-    fromBinary(buffer: UhkBuffer);
+interface Serializable<T> {
+    fromJsObject(jsObject: any): T;
+    fromBinary(buffer: UhkBuffer): T;
     toJsObject(): any;
     toBinary(buffer: UhkBuffer);
 }
