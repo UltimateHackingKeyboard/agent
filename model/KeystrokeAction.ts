@@ -16,7 +16,7 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
 
     set scancode(value) {
         if (!KeystrokeAction.isScancodeValid(value)) {
-            throw 'Scancode ${scancode} is invalid!';
+            throw 'Invalid KeystrokeAction.scancode: ${scancode}';
         }
         this._scancode = value;
     }
@@ -32,18 +32,18 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
         return this;
     }
 
+    fromBinary(buffer: UhkBuffer): KeystrokeAction {
+        this.scancode = buffer.readUInt8();
+        this.modifierMask = buffer.readUInt8();
+        return this;
+    }
+
     toJsObject(): any {
         return {
             keyActionType: KeystrokeAction.actionTypeString,
             scancode: this.scancode,
             modifierMask: this.modifierMask
         };
-    }
-
-    fromBinary(buffer: UhkBuffer): KeystrokeAction {
-        this.scancode = buffer.readUInt8();
-        this.modifierMask = buffer.readUInt8();
-        return this;
     }
 
     toBinary(buffer: UhkBuffer) {
