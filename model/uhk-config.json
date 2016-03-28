@@ -28,33 +28,33 @@
                             ],
                             "keyActions": [
                                 {
-                                    "actionType": "none"
+                                    "keyActionType": "none"
                                 },
                                 {
-                                    "actionType": "keystroke",
+                                    "keyActionType": "keystroke",
                                     "scancode": 120,
                                     "modifierMask": 16
                                 },
                                 {
-                                    "actionType": "switchLayer",
+                                    "keyActionType": "switchLayer",
                                     "layer": "fn",
                                     "toggle": false
                                 },
                                 {
-                                    "actionType": "dualRoleKeystroke",
+                                    "keyActionType": "dualRoleKeystroke",
                                     "scancode": 111,
                                     "longPressAction": "mod"
                                 },
                                 {
-                                    "actionType": "mouse",
+                                    "keyActionType": "mouse",
                                     "mouseAction": "scrollDown"
                                 },
                                 {
-                                    "actionType": "playMacro",
+                                    "keyActionType": "playMacro",
                                     "macroId": 0
                                 },
                                 {
-                                    "actionType": "switchKeymap",
+                                    "keyActionType": "switchKeymap",
                                     "keymapId": 1
                                 }
                             ]
@@ -96,57 +96,57 @@
             "isLooped": false,
             "macroActions": [
                 {
-                    "actionType": "pressKey",
+                    "macroActionType": "pressKey",
                     "scancode": 111
                 },
                 {
-                    "actionType": "holdKey",
+                    "macroActionType": "holdKey",
                     "scancode": 111
                 },
                 {
-                    "actionType": "releaseKey",
+                    "macroActionType": "releaseKey",
                     "scancode": 111
                 },
                 {
-                    "actionType": "pressModifiers",
+                    "macroActionType": "pressModifiers",
                     "modifierMask": 111
                 },
                 {
-                    "actionType": "holdModifiers",
+                    "macroActionType": "holdModifiers",
                     "modifierMask": 111
                 },
                 {
-                    "actionType": "releaseModifiers",
+                    "macroActionType": "releaseModifiers",
                     "modifierMask": 111
                 },
                 {
-                    "actionType": "pressMouseButtons",
+                    "macroActionType": "pressMouseButtons",
                     "mouseButtonsMask": 9
                 },
                 {
-                    "actionType": "holdMouseButtons",
+                    "macroActionType": "holdMouseButtons",
                     "mouseButtonsMask": 9
                 },
                 {
-                    "actionType": "releaseMouseButtons",
+                    "macroActionType": "releaseMouseButtons",
                     "mouseButtonsMask": 9
                 },
                 {
-                    "actionType": "moveMouse",
+                    "macroActionType": "moveMouse",
                     "x": 123,
                     "y": 123
                 },
                 {
-                    "actionType": "scrollMouse",
+                    "macroActionType": "scrollMouse",
                     "x": 123,
                     "y": 123
                 },
                 {
-                    "actionType": "delay",
+                    "macroActionType": "delay",
                     "delay": "1000"
                 },
                 {
-                    "actionType": "text",
+                    "macroActionType": "text",
                     "text": "this is a text"
                 }
             ]

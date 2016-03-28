@@ -32,6 +32,7 @@ class KeystrokeAction extends KeyAction implements Serializable {
 
     toJsObject(): any {
         return {
+            keyActionType: 'keystroke',
             scancode: this.scancode,
             modifierMask: this.modifierMask
         };

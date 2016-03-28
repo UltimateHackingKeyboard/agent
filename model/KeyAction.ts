@@ -4,7 +4,7 @@
 class KeyAction {
 
     static fromJsObject(jsObject: any): KeyAction {
-        switch (jsObject.actionType) {
+        switch (jsObject.keyActionType) {
             case 'none':
                 let keyActionNone = new KeyActionNone();
                 keyActionNone.fromJsObject(jsObject);
