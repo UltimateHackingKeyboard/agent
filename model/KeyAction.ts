@@ -1,16 +1,13 @@
-/// <reference path="KeyActionNone.ts" />
-/// <reference path="KeystrokeAction.ts" />
-
 class KeyAction {
 
     static fromJsObject(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
             case KeystrokeAction.actionTypeString:
-                return new KeyActionNone().fromJsObject(jsObject);
-            case KeystrokeAction.actionTypeString:
                 return new KeystrokeAction().fromJsObject(jsObject);
+            case KeyActionNone.actionTypeString:
+                return new KeyActionNone().fromJsObject(jsObject);
             default:
-                throw 'Unknown KeyAction actionType "${jsObject.actionType}"';
+                throw 'Invalid KeyAction.keyActionType: "${jsObject.actionType}"';
         }
     }
 
@@ -23,7 +20,7 @@ class KeyAction {
         } else if (keyActionFirstByte === KeyActionNone.keyActionNoneId) {
             return new KeyActionNone().fromBinary(buffer);
         } else {
-            throw 'Unknown KeyAction first byte "${keyActionFirstByte}"';
+            throw 'Invalid KeyAction first byte "${keyActionFirstByte}"';
         }
     }
 }

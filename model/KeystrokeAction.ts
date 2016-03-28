@@ -1,6 +1,3 @@
-/// <reference path="KeyAction.ts" />
-/// <reference path="Serializable.ts" />
-
 class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction> {
 
     static actionTypeString = 'keystroke';

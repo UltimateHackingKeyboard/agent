@@ -1,5 +1,8 @@
+/// <reference path="Serializable.ts" />
 /// <reference path="UhkBuffer.ts" />
+/// <reference path="KeyAction.ts" />
 /// <reference path="KeystrokeAction.ts" />
+/// <reference path="KeyActionNone.ts" />
 
 let fs = require('fs');
 let writer = new UhkBuffer();
@@ -147,6 +150,5 @@ function serializeSwitchLayerAction(switchLayerAction) {
     }[switchLayerAction] | switchLayerAction.toggle ? SWITCH_LAYER_TOGGLE : 0);
 }
 
-new KeystrokeAction();
-serializeKeyActions(keyActions);
+//serializeKeyActions(keyActions);
 fs.writeFileSync('uhk-config.bin', writer.buffer);

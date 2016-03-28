@@ -1,6 +1,3 @@
-/// <reference path="KeyAction.ts" />
-/// <reference path="Serializable.ts" />
-
 class KeyActionNone extends KeyAction implements Serializable<KeyActionNone> {
 
     static actionTypeString = 'none';
