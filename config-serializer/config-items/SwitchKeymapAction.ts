@@ -10,14 +10,10 @@ class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapA
     }
 
     set keymapId(value) {
-        if (!SwitchKeymapAction.isKeymapIdValid(value)) {
+        if (!TypeChecker.isUInt8Valid(value)) {
             throw 'Invalid SwitchKeymapAction.keymapId: ${value}';
         }
         this._keymapId = value;
-    }
-
-    static isKeymapIdValid(keymapId) {
-        return 0 <= keymapId && keymapId <= 255;
     }
 
     fromJsObject(jsObject: any): SwitchKeymapAction {

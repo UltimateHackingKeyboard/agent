@@ -1,3 +1,4 @@
+/// <reference path="TypeChecker.ts" />
 /// <reference path="Serializable.ts" />
 /// <reference path="UhkBuffer.ts" />
 /// <reference path="config-items/config-items.ts" />

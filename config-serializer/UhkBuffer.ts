@@ -1,4 +1,3 @@
-
 class UhkBuffer {
     private static eepromSize = 32 * 1024;
     private static maxStringByteLength = 0xFFFF;

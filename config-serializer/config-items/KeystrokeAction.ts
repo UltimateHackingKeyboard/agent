@@ -1,8 +1,6 @@
 class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction> {
 
     static keyActionTypeString = 'keystroke';
-    static firstValidScancode = 1;
-    static lastValidScancode = 231;
 
     modifierMask: number;
 
@@ -13,15 +11,10 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
     }
 
     set scancode(value) {
-        if (!KeystrokeAction.isScancodeValid(value)) {
+        if (!TypeChecker.isScancodeValid(value)) {
             throw 'Invalid KeystrokeAction.scancode: ${scancode}';
         }
         this._scancode = value;
-    }
-
-    static isScancodeValid(scancode) {
-        return KeystrokeAction.firstValidScancode <= scancode &&
-               scancode <= KeystrokeAction.lastValidScancode;
     }
 
     fromJsObject(jsObject: any): KeystrokeAction {

@@ -10,14 +10,10 @@ class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction>
     }
 
     set macroId(value) {
-        if (!PlayMacroAction.isMacroIdValid(value)) {
+        if (!TypeChecker.isUInt8Valid(value)) {
             throw 'Invalid PlayMacroAction.macroId: ${value}';
         }
         this._macroId = value;
-    }
-
-    static isMacroIdValid(macroId) {
-        return 0 <= macroId && macroId <= 255;
     }
 
     fromJsObject(jsObject: any): PlayMacroAction {

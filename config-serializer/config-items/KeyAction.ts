@@ -17,7 +17,7 @@ class KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
-        if (KeystrokeAction.isScancodeValid(keyActionFirstByte)) {
+        if (TypeChecker.isScancodeValid(keyActionFirstByte)) {
             return new KeystrokeAction().fromBinary(buffer);
         } else if (keyActionFirstByte === MouseAction.keyActionId) {
             return new MouseAction().fromBinary(buffer);
