@@ -22,7 +22,6 @@ let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_CTRL  = 240;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SHIFT = 241;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_ALT   = 242;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER = 243;
-let KEY_ACTION_ID_MOUSE                           = 244;
 let KEY_ACTION_ID_PLAY_MACRO                      = 245;
 let KEY_ACTION_ID_SWITCH_KEYMAP                   = 246;
 let KEY_ACTION_ID_NONE                            = 255;
@@ -34,19 +33,6 @@ let SWITCH_LAYER_TOGGLE = 0x80;
 
 let NONE_ACTION_PADDING = 0;
 
-let MOUSE_ACTION_ID_LEFT_CLICK   = 0;
-let MOUSE_ACTION_ID_MIDDLE_CLICK = 1;
-let MOUSE_ACTION_ID_RIGHT_CLICK  = 2;
-let MOUSE_ACTION_ID_MOVE_UP      = 3;
-let MOUSE_ACTION_ID_MOVE_DOWN    = 4;
-let MOUSE_ACTION_ID_MOVE_LEFT    = 5;
-let MOUSE_ACTION_ID_MOVE_RIGHT   = 6;
-let MOUSE_ACTION_ID_SCROLL_UP    = 7;
-let MOUSE_ACTION_ID_SCROLL_DOWN  = 8;
-let MOUSE_ACTION_ID_SCROLL_LEFT  = 9;
-let MOUSE_ACTION_ID_SCROLL_RIGHT = 10;
-let MOUSE_ACTION_ID_ACCELERATE   = 11;
-let MOUSE_ACTION_ID_DECELERATE   = 12;
 
 function serializeKeyActions(keyActionsParam) {
     keyActionsParam.forEach(function(keyAction) {
@@ -59,9 +45,6 @@ function serializeKeyAction(keyAction) {
     switch (keyAction.actionType) {
         case 'dualRoleKeystroke':
             serializeDualRoleKeyAction(keyAction);
-            break;
-        case 'mouse':
-            serializeMouseAction(keyAction);
             break;
         case 'playMacro':
             serializeMacroAction(keyAction);
@@ -92,25 +75,6 @@ function serializeDualRoleKeyAction(dualRoleKeyAction) {
         rightSuper  : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER
     }[dualRoleKeyAction.longPressAction]);
     writer.writeUInt8(dualRoleKeyAction.scancode);
-}
-
-function serializeMouseAction(mouseAction) {
-    writer.writeUInt8(KEY_ACTION_ID_MOUSE);
-    writer.writeUInt8({
-        leftClick  : MOUSE_ACTION_ID_LEFT_CLICK,
-        middleClick: MOUSE_ACTION_ID_MIDDLE_CLICK,
-        rightClick : MOUSE_ACTION_ID_RIGHT_CLICK,
-        moveUp     : MOUSE_ACTION_ID_MOVE_UP,
-        moveDown   : MOUSE_ACTION_ID_MOVE_DOWN,
-        moveLeft   : MOUSE_ACTION_ID_MOVE_LEFT,
-        moveRight  : MOUSE_ACTION_ID_MOVE_RIGHT,
-        scrollUp   : MOUSE_ACTION_ID_SCROLL_UP,
-        scrollDown : MOUSE_ACTION_ID_SCROLL_DOWN,
-        scrollLeft : MOUSE_ACTION_ID_SCROLL_LEFT,
-        scrollRight: MOUSE_ACTION_ID_SCROLL_RIGHT,
-        accelerate : MOUSE_ACTION_ID_ACCELERATE,
-        decelerate : MOUSE_ACTION_ID_DECELERATE
-    }[mouseAction.mouseAction]);
 }
 
 function serializeMacroAction(macroAction) {

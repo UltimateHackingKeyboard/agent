@@ -1,11 +1,11 @@
 class KeyActionNone extends KeyAction implements Serializable<KeyActionNone> {
 
-    static actionTypeString = 'none';
-    static keyActionNoneId = 0;
+    static keyActionTypeString = 'none';
+    static keyActionId = 0;
     static keyActionNoneParam = 0;
 
     fromJsObject(jsObject: any): KeyActionNone {
-        if (jsObject.keyActionType !== KeyActionNone.actionTypeString) {
+        if (jsObject.keyActionType !== KeyActionNone.keyActionTypeString) {
             throw 'Invalid KeyActionNone.keyActionType: "${jsObject.keyActionType}"';
         }
         return this;
@@ -13,7 +13,7 @@ class KeyActionNone extends KeyAction implements Serializable<KeyActionNone> {
 
     fromBinary(buffer: UhkBuffer): KeyActionNone {
         let keyActionId = buffer.readUInt8();
-        if (keyActionId !== KeyActionNone.keyActionNoneId) {
+        if (keyActionId !== KeyActionNone.keyActionId) {
             throw 'Invalid KeyActionNone.id: ${keyActionId}';
         }
 
@@ -27,12 +27,12 @@ class KeyActionNone extends KeyAction implements Serializable<KeyActionNone> {
 
     toJsObject(): any {
         return {
-            keyActionType: KeyActionNone.actionTypeString
+            keyActionType: KeyActionNone.keyActionTypeString
         };
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(KeyActionNone.keyActionNoneId);
+        buffer.writeUInt8(KeyActionNone.keyActionId);
         buffer.writeUInt8(KeyActionNone.keyActionNoneParam);
     }
 }

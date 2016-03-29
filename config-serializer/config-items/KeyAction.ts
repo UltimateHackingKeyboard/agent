@@ -2,9 +2,11 @@ class KeyAction {
 
     static fromJsObject(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
-            case KeystrokeAction.actionTypeString:
+            case KeystrokeAction.keyActionTypeString:
                 return new KeystrokeAction().fromJsObject(jsObject);
-            case KeyActionNone.actionTypeString:
+            case MouseAction.keyActionTypeString:
+                return new MouseAction().fromJsObject(jsObject);
+            case KeyActionNone.keyActionTypeString:
                 return new KeyActionNone().fromJsObject(jsObject);
             default:
                 throw 'Invalid KeyAction.keyActionType: "${jsObject.actionType}"';
@@ -17,7 +19,9 @@ class KeyAction {
 
         if (KeystrokeAction.isScancodeValid(keyActionFirstByte)) {
             return new KeystrokeAction().fromBinary(buffer);
-        } else if (keyActionFirstByte === KeyActionNone.keyActionNoneId) {
+        } else if (keyActionFirstByte === MouseAction.keyActionId) {
+            return new MouseAction().fromBinary(buffer);
+        } else if (keyActionFirstByte === KeyActionNone.keyActionId) {
             return new KeyActionNone().fromBinary(buffer);
         } else {
             throw 'Invalid KeyAction first byte "${keyActionFirstByte}"';

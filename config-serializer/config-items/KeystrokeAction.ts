@@ -1,13 +1,13 @@
 class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction> {
 
-    static actionTypeString = 'keystroke';
+    static keyActionTypeString = 'keystroke';
     static firstValidScancode = 1;
     static lastValidScancode = 231;
 
     _scancode: number;
     modifierMask: number;
 
-    get scancode() {
+    get scancode(): number {
         return this._scancode;
     }
 
@@ -37,7 +37,7 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
 
     toJsObject(): any {
         return {
-            keyActionType: KeystrokeAction.actionTypeString,
+            keyActionType: KeystrokeAction.keyActionTypeString,
             scancode: this.scancode,
             modifierMask: this.modifierMask
         };
