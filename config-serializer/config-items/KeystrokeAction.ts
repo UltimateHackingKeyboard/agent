@@ -4,8 +4,9 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
     static firstValidScancode = 1;
     static lastValidScancode = 231;
 
-    private _scancode: number;
     modifierMask: number;
+
+    private _scancode: number;
 
     get scancode(): number {
         return this._scancode;
