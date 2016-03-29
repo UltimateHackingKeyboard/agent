@@ -1,24 +1,24 @@
-class KeyActionNone extends KeyAction implements Serializable<KeyActionNone> {
+class NoneAction extends KeyAction implements Serializable<NoneAction> {
 
     static keyActionTypeString = 'none';
     static keyActionId = 0;
     static keyActionNoneParam = 0;
 
-    fromJsObject(jsObject: any): KeyActionNone {
-        if (jsObject.keyActionType !== KeyActionNone.keyActionTypeString) {
+    fromJsObject(jsObject: any): NoneAction {
+        if (jsObject.keyActionType !== NoneAction.keyActionTypeString) {
             throw 'Invalid KeyActionNone.keyActionType: "${jsObject.keyActionType}"';
         }
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): KeyActionNone {
+    fromBinary(buffer: UhkBuffer): NoneAction {
         let keyActionId = buffer.readUInt8();
-        if (keyActionId !== KeyActionNone.keyActionId) {
+        if (keyActionId !== NoneAction.keyActionId) {
             throw 'Invalid KeyActionNone.id: ${keyActionId}';
         }
 
         let keyActionParam = buffer.readUInt8();
-        if (keyActionParam !== KeyActionNone.keyActionNoneParam) {
+        if (keyActionParam !== NoneAction.keyActionNoneParam) {
             throw 'Invalid KeyActionNone.param: ${keyActionParam}';
         }
 
@@ -27,12 +27,12 @@ class KeyActionNone extends KeyAction implements Serializable<KeyActionNone> {
 
     toJsObject(): any {
         return {
-            keyActionType: KeyActionNone.keyActionTypeString
+            keyActionType: NoneAction.keyActionTypeString
         };
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(KeyActionNone.keyActionId);
-        buffer.writeUInt8(KeyActionNone.keyActionNoneParam);
+        buffer.writeUInt8(NoneAction.keyActionId);
+        buffer.writeUInt8(NoneAction.keyActionNoneParam);
     }
 }
