@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts" />
 /// <reference path="UhkBuffer.ts" />
-/// <reference path="KeyAction.ts" />
-/// <reference path="KeystrokeAction.ts" />
-/// <reference path="KeyActionNone.ts" />
+/// <reference path="config-items/config-items.ts" />
 
 let fs = require('fs');
 let writer = new UhkBuffer();
