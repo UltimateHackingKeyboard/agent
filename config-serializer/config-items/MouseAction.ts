@@ -18,7 +18,7 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
     static keyActionTypeString = 'mouse';
     static keyActionId = 244;
 
-    _mouseAction: MouseActionParam;
+    private _mouseAction: MouseActionParam;
 
     get mouseAction(): number {
         return this._mouseAction;

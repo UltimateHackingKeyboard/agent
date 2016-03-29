@@ -22,7 +22,6 @@ let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_CTRL  = 240;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SHIFT = 241;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_ALT   = 242;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER = 243;
-let KEY_ACTION_ID_PLAY_MACRO                      = 245;
 let KEY_ACTION_ID_SWITCH_KEYMAP                   = 246;
 let KEY_ACTION_ID_NONE                            = 255;
 
@@ -45,9 +44,6 @@ function serializeKeyAction(keyAction) {
     switch (keyAction.actionType) {
         case 'dualRoleKeystroke':
             serializeDualRoleKeyAction(keyAction);
-            break;
-        case 'playMacro':
-            serializeMacroAction(keyAction);
             break;
         case 'switchKeymap':
             serializeSwitchKeymapAction(keyAction);
@@ -75,11 +71,6 @@ function serializeDualRoleKeyAction(dualRoleKeyAction) {
         rightSuper  : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER
     }[dualRoleKeyAction.longPressAction]);
     writer.writeUInt8(dualRoleKeyAction.scancode);
-}
-
-function serializeMacroAction(macroAction) {
-    writer.writeUInt8(KEY_ACTION_ID_PLAY_MACRO);
-    writer.writeUInt8(macroAction.macroId);
 }
 
 function serializeSwitchKeymapAction(switchKeymapAction) {
