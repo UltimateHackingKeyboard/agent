@@ -22,7 +22,6 @@ let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_CTRL  = 240;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SHIFT = 241;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_ALT   = 242;
 let KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER = 243;
-let KEY_ACTION_ID_SWITCH_KEYMAP                   = 246;
 let KEY_ACTION_ID_NONE                            = 255;
 
 let SWITCH_LAYER_MOD    = 0;
@@ -44,9 +43,6 @@ function serializeKeyAction(keyAction) {
     switch (keyAction.actionType) {
         case 'dualRoleKeystroke':
             serializeDualRoleKeyAction(keyAction);
-            break;
-        case 'switchKeymap':
-            serializeSwitchKeymapAction(keyAction);
             break;
         case 'switchLayer':
             serializeSwitchLayerAction(keyAction);
@@ -71,11 +67,6 @@ function serializeDualRoleKeyAction(dualRoleKeyAction) {
         rightSuper  : KEY_ACTION_ID_DUAL_ROLE_KEYSTROKE_RIGHT_SUPER
     }[dualRoleKeyAction.longPressAction]);
     writer.writeUInt8(dualRoleKeyAction.scancode);
-}
-
-function serializeSwitchKeymapAction(switchKeymapAction) {
-    writer.writeUInt8(KEY_ACTION_ID_SWITCH_KEYMAP);
-    writer.writeUInt8(switchKeymapAction.keymapId);
 }
 
 function serializeSwitchLayerAction(switchLayerAction) {
