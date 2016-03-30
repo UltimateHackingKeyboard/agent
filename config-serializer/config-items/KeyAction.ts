@@ -45,9 +45,9 @@ class KeyAction {
 
         if (TypeChecker.isScancodeValid(keyActionFirstByte)) {
             return new KeystrokeAction().fromBinary(buffer);
-        } else if (keyActionFirstByte === MouseAction.keyActionId) {
+        } else if (keyActionFirstByte === KeyActionId.MouseAction) {
             return new MouseAction().fromBinary(buffer);
-        } else if (keyActionFirstByte === NoneAction.keyActionId) {
+        } else if (keyActionFirstByte === KeyActionId.NoneAction) {
             return new NoneAction().fromBinary(buffer);
         } else {
             throw 'Invalid KeyAction first byte "${keyActionFirstByte}"';

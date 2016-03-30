@@ -1,7 +1,6 @@
 class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapAction> {
 
     static keyActionTypeString = 'switchKeymap';
-    static keyActionId = 246;
 
     private _keymapId: number;
 
@@ -34,7 +33,7 @@ class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapA
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(SwitchKeymapAction.keyActionId);
+        buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
         buffer.writeUInt8(this.keymapId);
     }
 }

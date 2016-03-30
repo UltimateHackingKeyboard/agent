@@ -1,5 +1,5 @@
 enum LongPressActionId {
-    leftCtrl = 233,
+    leftCtrl = 236, // KeyActionId.DualRoleActionLeftCtrl
     leftShift,
     leftAlt,
     leftSuper,

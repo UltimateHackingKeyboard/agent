@@ -16,7 +16,6 @@ enum MouseActionParam {
 
 class MouseAction extends KeyAction implements Serializable<MouseAction> {
     static keyActionTypeString = 'mouse';
-    static keyActionId = 244;
 
     private _mouseAction: MouseActionParam;
 
@@ -42,12 +41,12 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
 
     fromBinary(buffer: UhkBuffer): MouseAction {
         let keyActionId = buffer.readUInt8();
-        if (keyActionId !== MouseAction.keyActionId) {
+        if (keyActionId !== KeyActionId.MouseAction) {
             throw 'Invalid MouseAction.id: ${keyActionId}';
         }
 
-        let keyActionParam = buffer.readUInt8();
-        if (!MouseAction.isMouseActionValid(keyActionParam)) {
+        this.mouseAction = buffer.readUInt8();
+        if (!MouseAction.isMouseActionValid(this.mouseAction)) {
             throw 'Invalid MouseAction.param: ${keyActionParam}';
         }
 
@@ -62,7 +61,7 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MouseAction.keyActionId);
+        buffer.writeUInt8(KeyActionId.MouseAction);
         buffer.writeUInt8(this.mouseAction);
     }
 }

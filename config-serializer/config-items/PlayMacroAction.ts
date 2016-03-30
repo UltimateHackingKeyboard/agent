@@ -1,7 +1,6 @@
 class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction> {
 
     static keyActionTypeString = 'playMacro';
-    static keyActionId = 245;
 
     private _macroId: number;
 
@@ -17,11 +16,20 @@ class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction>
     }
 
     fromJsObject(jsObject: any): PlayMacroAction {
+        if (jsObject.keyActionType !== PlayMacroAction.keyActionTypeString) {
+            throw 'Invalid PlayMacroAction.keyActionType: "${jsObject.keyActionType}"';
+        }
+
         this.macroId = jsObject.macroId;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): PlayMacroAction {
+        let keyActionId = buffer.readUInt8();
+        if (keyActionId !== KeyActionId.PlayMacroAction) {
+            throw 'Invalid PlayMacroAction.keyActionId: ${keyActionId}';
+        }
+
         this.macroId = buffer.readUInt8();
         return this;
     }
@@ -34,7 +42,7 @@ class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction>
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(PlayMacroAction.keyActionId);
+        buffer.writeUInt8(KeyActionId.PlayMacroAction);
         buffer.writeUInt8(this.macroId);
     }
 }
