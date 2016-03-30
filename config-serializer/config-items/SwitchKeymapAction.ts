@@ -1,8 +1,17 @@
+enum Layer {
+    mod,
+    fn,
+    mouse
+}
+
 class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAction> {
 
     static keyActionTypeString = 'switchLayer';
+    static toggleFlag = 0x80;
 
-    private _layer: number;
+    isLayerToggleable: boolean;
+
+    private _layer: Layer;
 
     get layer(): number {
         return this._layer;
@@ -15,27 +24,35 @@ class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAct
         this._layer = value;
     }
 
+    getToggleFlag() {
+        return this.isLayerToggleable ? SwitchLayerAction.toggleFlag : 0;
+    }
+
     fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject, SwitchLayerAction.keyActionTypeString, 'SwitchLayerAction');
         this.layer = jsObject.keymapId;
+        this.isLayerToggleable = jsObject.toggle;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchLayerAction, 'SwitchLayerAction');
         this.layer = buffer.readUInt8();
+        this.isLayerToggleable = (this.layer & SwitchLayerAction.toggleFlag) !== 0;
+        this.layer &= ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
         return this;
     }
 
     toJsObject(): any {
         return {
             keyActionType: SwitchLayerAction.keyActionTypeString,
-            layer: this.layer
+            layer: this.layer,
+            toggle: this.isLayerToggleable
         };
     }
 
     toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchLayerAction);
-        buffer.writeUInt8(this.layer);
+        buffer.writeUInt8(this.layer | this.getToggleFlag());
     }
 }
