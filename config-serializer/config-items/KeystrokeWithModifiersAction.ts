@@ -12,7 +12,7 @@ class KeystrokeWithModifiersAction extends KeyAction implements Serializable<Key
 
     set scancode(value) {
         if (!TypeChecker.isScancodeValid(value)) {
-            throw 'Invalid KeystrokeWithModifiersAction.scancode: ${scancode}';
+            throw `Invalid KeystrokeWithModifiersAction.scancode: ${value}`;
         }
         this._scancode = value;
     }

@@ -10,7 +10,7 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
 
     set scancode(value) {
         if (!TypeChecker.isScancodeValid(value)) {
-            throw 'Invalid KeystrokeAction.scancode: ${scancode}';
+            throw `Invalid KeystrokeAction.scancode: ${value}`;
         }
         this._scancode = value;
     }

@@ -25,7 +25,7 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
 
     set longPressAction(value) {
         if (!DualRoleKeystrokeAction.isDualRoleKeystrokeActionValid(value)) {
-            throw 'Invalid DualRoleKeystrokeAction.longPressAction: ${value}';
+            throw `Invalid DualRoleKeystrokeAction.longPressAction: ${value}`;
         }
         this._longPressAction = value;
     }

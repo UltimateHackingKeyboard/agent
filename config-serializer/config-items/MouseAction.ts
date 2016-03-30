@@ -25,7 +25,7 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
 
     set mouseAction(mouseAction) {
         if (!MouseAction.isMouseActionValid(mouseAction)) {
-            throw 'Invalid MouseAction.mouseAction: ${mouseAction}';
+            throw `Invalid MouseAction.mouseAction: ${mouseAction}`;
         }
         this._mouseAction = mouseAction;
     }
@@ -45,7 +45,7 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
 
         this.mouseAction = buffer.readUInt8();
         if (!MouseAction.isMouseActionValid(this.mouseAction)) {
-            throw 'Invalid MouseAction.param: ${keyActionParam}';
+            throw `Invalid MouseAction.param: ${this.mouseAction}`;
         }
 
         return this;

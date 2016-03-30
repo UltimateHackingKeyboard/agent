@@ -23,7 +23,7 @@ class KeyAction {
             case NoneAction.keyActionTypeString:
                 return new NoneAction().fromJsObject(jsObject);
             default:
-                throw 'Invalid KeyAction.keyActionType: "${jsObject.actionType}"';
+                throw `Invalid KeyAction.keyActionType: "${jsObject.actionType}"`;
         }
     }
 
@@ -39,20 +39,20 @@ class KeyAction {
             case KeyActionId.NoneAction:
                 return new NoneAction().fromBinary(buffer);
             default:
-                throw 'Invalid KeyAction first byte "${keyActionFirstByte}"';
+                throw `Invalid KeyAction first byte "${keyActionFirstByte}"`;
         }
     }
 
     assertKeyActionType(jsObject: any, keyActionTypeString: string, classname: string) {
         if (jsObject.keyActionType !== keyActionTypeString) {
-            throw 'Invalid ${classname}.id: ${jsObject.keyActionType}';
+            throw `Invalid ${classname}.keyActionType: ${jsObject.keyActionType}`;
         }
     }
 
     readAndAssertKeyActionId(buffer: UhkBuffer, keyActionIdParam: KeyActionId, classname: string) {
         let readKeyActionId = buffer.readUInt8();
         if (readKeyActionId !== keyActionIdParam) {
-            throw 'Invalid ${classname} first byte: ${keyActionId}';
+            throw `Invalid ${classname} first byte: ${readKeyActionId}`;
         }
     }
 }

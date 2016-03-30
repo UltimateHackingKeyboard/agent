@@ -13,7 +13,7 @@ class NoneAction extends KeyAction implements Serializable<NoneAction> {
 
         let keyActionParam = buffer.readUInt8();
         if (keyActionParam !== NoneAction.noneActionParam) {
-            throw 'Invalid NoneAction.param: ${keyActionParam}';
+            throw `Invalid NoneAction.param: ${keyActionParam}`;
         }
 
         return this;
