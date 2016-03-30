@@ -16,20 +16,13 @@ class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction>
     }
 
     fromJsObject(jsObject: any): PlayMacroAction {
-        if (jsObject.keyActionType !== PlayMacroAction.keyActionTypeString) {
-            throw 'Invalid PlayMacroAction.keyActionType: "${jsObject.keyActionType}"';
-        }
-
+        this.assertKeyActionType(jsObject, PlayMacroAction.keyActionTypeString, 'PlayMacroAction');
         this.macroId = jsObject.macroId;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): PlayMacroAction {
-        let keyActionId = buffer.readUInt8();
-        if (keyActionId !== KeyActionId.PlayMacroAction) {
-            throw 'Invalid PlayMacroAction.keyActionId: ${keyActionId}';
-        }
-
+        this.readAndAssertKeyActionId(buffer, KeyActionId.PlayMacroAction, 'PlayMacroAction');
         this.macroId = buffer.readUInt8();
         return this;
     }

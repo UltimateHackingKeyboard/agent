@@ -16,11 +16,13 @@ class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapA
     }
 
     fromJsObject(jsObject: any): SwitchKeymapAction {
+        this.assertKeyActionType(jsObject, SwitchKeymapAction.keyActionTypeString, 'SwitchKeymapAction');
         this.keymapId = jsObject.keymapId;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
+        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchKeymapAction, 'SwitchKeymapAction');
         this.keymapId = buffer.readUInt8();
         return this;
     }

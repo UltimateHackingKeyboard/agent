@@ -4,17 +4,12 @@ class NoneAction extends KeyAction implements Serializable<NoneAction> {
     static noneActionParam = 0;
 
     fromJsObject(jsObject: any): NoneAction {
-        if (jsObject.keyActionType !== NoneAction.keyActionTypeString) {
-            throw 'Invalid NoneAction.keyActionType: "${jsObject.keyActionType}"';
-        }
+        this.assertKeyActionType(jsObject, NoneAction.keyActionTypeString, 'NoneAction');
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): NoneAction {
-        let keyActionId = buffer.readUInt8();
-        if (keyActionId !== KeyActionId.NoneAction) {
-            throw 'Invalid NoneAction.id: ${keyActionId}';
-        }
+        this.readAndAssertKeyActionId(buffer, KeyActionId.NoneAction, 'NoneAction');
 
         let keyActionParam = buffer.readUInt8();
         if (keyActionParam !== NoneAction.noneActionParam) {
@@ -32,6 +27,5 @@ class NoneAction extends KeyAction implements Serializable<NoneAction> {
 
     toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.NoneAction);
-        buffer.writeUInt8(NoneAction.noneActionParam);
     }
 }

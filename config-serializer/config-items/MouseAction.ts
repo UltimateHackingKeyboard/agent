@@ -35,15 +35,13 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
     }
 
     fromJsObject(jsObject: any): MouseAction {
+        this.assertKeyActionType(jsObject, MouseAction.keyActionTypeString, 'MouseAction');
         this.mouseAction = jsObject.mouseAction;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): MouseAction {
-        let keyActionId = buffer.readUInt8();
-        if (keyActionId !== KeyActionId.MouseAction) {
-            throw 'Invalid MouseAction.id: ${keyActionId}';
-        }
+        this.readAndAssertKeyActionId(buffer, KeyActionId.MouseAction, 'MouseAction');
 
         this.mouseAction = buffer.readUInt8();
         if (!MouseAction.isMouseActionValid(this.mouseAction)) {

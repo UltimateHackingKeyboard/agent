@@ -1,5 +1,6 @@
 /// <reference path="KeyAction.ts" />
 /// <reference path="KeystrokeAction.ts" />
+/// <reference path="KeystrokeWithModifiersAction.ts" />
 /// <reference path="DualRoleKeystrokeAction.ts" />
 /// <reference path="MouseAction.ts" />
 /// <reference path="PlayMacroAction.ts" />

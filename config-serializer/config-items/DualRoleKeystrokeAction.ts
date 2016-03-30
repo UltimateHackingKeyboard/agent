@@ -1,9 +1,23 @@
+enum LongPressAction {
+    leftCtrl,
+    leftShift,
+    leftAlt,
+    leftSuper,
+    rightCtrl,
+    rightShift,
+    rightAlt,
+    rightSuper,
+    mod,
+    fn,
+    mouse
+}
+
 class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRoleKeystrokeAction> {
     static keyActionTypeString = 'dualRoleKeystroke';
 
     public scancode;
 
-    private _longPressAction: KeyActionId;
+    private _longPressAction: LongPressAction;
 
     get longPressAction(): number {
         return this._longPressAction;
@@ -17,32 +31,34 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
     }
 
     static isDualRoleKeystrokeActionValid(keyActionIdParam): boolean {
-        return KeyActionId.DualRoleActionLeftCtrlLongPressAction <= keyActionIdParam &&
-               keyActionIdParam <= KeyActionId.DualRoleActionMouseLongPressAction;
+        return MouseActionParam[keyActionIdParam] !== undefined;
     }
 
     fromJsObject(jsObject: any): DualRoleKeystrokeAction {
-        this.longPressAction = jsObject.longPressAction;
+        this.assertKeyActionType(jsObject, DualRoleKeystrokeAction.keyActionTypeString, 'DualRoleKeystrokeAction');
         this.scancode = jsObject.scancode;
+        this.longPressAction = jsObject.longPressAction;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): DualRoleKeystrokeAction {
-        this.longPressAction = buffer.readUInt8();
+        this.readAndAssertKeyActionId(buffer, KeyActionId.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
         this.scancode = buffer.readUInt8();
+        this.longPressAction = buffer.readUInt8();
         return this;
     }
 
     toJsObject(): any {
         return {
             keyActionType: DualRoleKeystrokeAction.keyActionTypeString,
-            longPressAction: KeyActionId[this.longPressAction],
-            scancode: this.scancode
+            scancode: this.scancode,
+            longPressAction: KeyActionId[this.longPressAction]
         };
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(this.longPressAction);
+        buffer.writeUInt8(KeyActionId.DualRoleKeystrokeAction);
         buffer.writeUInt8(this.scancode);
+        buffer.writeUInt8(this.longPressAction);
     }
 }
