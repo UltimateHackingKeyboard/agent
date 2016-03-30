@@ -2,25 +2,25 @@
 // Id denotes the subclass of the KeyAction and param is subclass-specific.
 
 enum KeyActionId {
-    NoneAction                = 0,
-    KeyStrokeActionFirst      = TypeChecker.firstValidScancode, // 1
-    // Intermediary scancodes = 2 to 230
-    KeyStrokeActionLast       = TypeChecker.lastValidScancode,   // 231
-    SwitchLayerAction         = 232,
-    SwitchKeymapAction        = 233,
-    MouseAction               = 234,
-    PlayMacroAction           = 235,
-    DualRoleActionLeftCtrl    = 236,
-    DualRoleActionLeftShift   = 237,
-    DualRoleActionLeftAlt     = 238,
-    DualRoleActionLeftSuper   = 239,
-    DualRoleActionRightCtrl   = 240,
-    DualRoleActionRightShift  = 241,
-    DualRoleActionRightAlt    = 242,
-    DualRoleActionRightSuper  = 243,
-    DualRoleActionMod         = 244,
-    DualRoleActionFn          = 245,
-    DualRoleActionMouse       = 246
+    NoneAction                               = 0,
+    KeyStrokeActionFirst                     = TypeChecker.firstValidScancode, // 1
+    // Intermediary scancodes                = 2 to 230
+    KeyStrokeActionLast                      = TypeChecker.lastValidScancode,  // 231
+    SwitchLayerAction                        = 232,
+    SwitchKeymapAction                       = 233,
+    MouseAction                              = 234,
+    PlayMacroAction                          = 235,
+    DualRoleActionLeftCtrlLongPressAction    = 236,
+    DualRoleActionLeftShiftLongPressAction   = 237,
+    DualRoleActionLeftAltLongPressAction     = 238,
+    DualRoleActionLeftSuperLongPressAction   = 239,
+    DualRoleActionRightCtrlLongPressAction   = 240,
+    DualRoleActionRightShiftLongPressAction  = 241,
+    DualRoleActionRightAltLongPressAction    = 242,
+    DualRoleActionRightSuperLongPressAction  = 243,
+    DualRoleActionModLongPressAction         = 244,
+    DualRoleActionFnLongPressAction          = 245,
+    DualRoleActionMouseLongPressAction       = 246
     // Let's leave space for further layers - additional actions should descend from 255
 }
 

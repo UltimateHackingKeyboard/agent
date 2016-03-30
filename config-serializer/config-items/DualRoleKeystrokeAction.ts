@@ -1,23 +1,9 @@
-enum LongPressActionId {
-    leftCtrl = 236, // KeyActionId.DualRoleActionLeftCtrl
-    leftShift,
-    leftAlt,
-    leftSuper,
-    rightCtrl,
-    rightShift,
-    rightAlt,
-    rightSuper,
-    mod,
-    fn,
-    mouse,
-}
-
 class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRoleKeystrokeAction> {
     static keyActionTypeString = 'dualRoleKeystroke';
 
     public scancode;
 
-    private _longPressAction: LongPressActionId;
+    private _longPressAction: KeyActionId;
 
     get longPressAction(): number {
         return this._longPressAction;
@@ -30,8 +16,9 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
         this._longPressAction = value;
     }
 
-    static isDualRoleKeystrokeActionValid(keyActionId): boolean {
-        return LongPressActionId[keyActionId] !== undefined;
+    static isDualRoleKeystrokeActionValid(keyActionIdParam): boolean {
+        return KeyActionId.DualRoleActionLeftCtrlLongPressAction <= keyActionIdParam &&
+               keyActionIdParam <= KeyActionId.DualRoleActionMouseLongPressAction;
     }
 
     fromJsObject(jsObject: any): DualRoleKeystrokeAction {
@@ -49,7 +36,7 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
     toJsObject(): any {
         return {
             keyActionType: DualRoleKeystrokeAction.keyActionTypeString,
-            longPressAction: LongPressActionId[this.longPressAction],
+            longPressAction: KeyActionId[this.longPressAction],
             scancode: this.scancode
         };
     }
