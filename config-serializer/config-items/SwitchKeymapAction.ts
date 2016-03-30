@@ -1,41 +1,41 @@
-class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapAction> {
+class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAction> {
 
-    static keyActionTypeString = 'switchKeymap';
+    static keyActionTypeString = 'switchLayer';
 
-    private _keymapId: number;
+    private _layer: number;
 
-    get keymapId(): number {
-        return this._keymapId;
+    get layer(): number {
+        return this._layer;
     }
 
-    set keymapId(value) {
+    set layer(value) {
         if (!TypeChecker.isUInt8Valid(value)) {
-            throw 'Invalid SwitchKeymapAction.keymapId: ${value}';
+            throw 'Invalid SwitchLayerAction.layerId: ${value}';
         }
-        this._keymapId = value;
+        this._layer = value;
     }
 
-    fromJsObject(jsObject: any): SwitchKeymapAction {
-        this.assertKeyActionType(jsObject, SwitchKeymapAction.keyActionTypeString, 'SwitchKeymapAction');
-        this.keymapId = jsObject.keymapId;
+    fromJsObject(jsObject: any): SwitchLayerAction {
+        this.assertKeyActionType(jsObject, SwitchLayerAction.keyActionTypeString, 'SwitchLayerAction');
+        this.layer = jsObject.keymapId;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchKeymapAction, 'SwitchKeymapAction');
-        this.keymapId = buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer): SwitchLayerAction {
+        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchLayerAction, 'SwitchLayerAction');
+        this.layer = buffer.readUInt8();
         return this;
     }
 
     toJsObject(): any {
         return {
-            keyActionType: SwitchKeymapAction.keyActionTypeString,
-            keymapId: this.keymapId
+            keyActionType: SwitchLayerAction.keyActionTypeString,
+            layer: this.layer
         };
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
-        buffer.writeUInt8(this.keymapId);
+        buffer.writeUInt8(KeyActionId.SwitchLayerAction);
+        buffer.writeUInt8(this.layer);
     }
 }
