@@ -1,7 +1,7 @@
 class UhkBuffer {
     private static eepromSize = 32 * 1024;
-    private static maxStringByteLength = 0xFFFF;
-    private static longStringPrefix = 0xFF;
+    private static maxCompactLength = 0xFFFF;
+    private static longCompactLengthPrefix = 0xFF;
     private static stringEncoding = 'utf8';
 
     buffer: Buffer;
@@ -87,13 +87,25 @@ class UhkBuffer {
         this.offset += 4;
     }
 
-    readString(): string {
-        let stringByteLength = this.readUInt8();
-
-        if (stringByteLength === UhkBuffer.longStringPrefix) {
-            stringByteLength += this.readUInt8() << 8;
+    readCompactLength(): number {
+        let length = this.readUInt8();
+        if (length === UhkBuffer.longCompactLengthPrefix) {
+            length += this.readUInt8() << 8;
         }
+        return length;
+    }
 
+    writeCompactLength(length: number) {
+        if (length >= UhkBuffer.longCompactLengthPrefix) {
+            this.writeUInt8(UhkBuffer.longCompactLengthPrefix);
+            this.writeUInt16(length);
+        } else {
+            this.writeUInt8(length);
+        }
+    }
+
+    readString(): string {
+        let stringByteLength = this.readCompactLength();
         let str = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, stringByteLength);
         this.bytesToBacktrack = stringByteLength;
         this.offset += stringByteLength;
@@ -103,18 +115,12 @@ class UhkBuffer {
     writeString(str: string): void {
         let stringByteLength = Buffer.byteLength(str, UhkBuffer.stringEncoding);
 
-        if (stringByteLength > UhkBuffer.maxStringByteLength) {
+        if (stringByteLength > UhkBuffer.maxCompactLength) {
             throw 'Cannot serialize string: ${stringByteLength} bytes is larger ' +
                   'than the maximum allowed length of ${UhkBuffer.maxStringByteLength} bytes';
         }
 
-        if (stringByteLength >= UhkBuffer.longStringPrefix) {
-            this.writeUInt8(UhkBuffer.longStringPrefix);
-            this.writeUInt16(stringByteLength);
-        } else {
-            this.writeUInt8(stringByteLength);
-        }
-
+        this.writeCompactLength(stringByteLength);
         this.buffer.write(str, this.offset, stringByteLength, UhkBuffer.stringEncoding);
         this.offset += stringByteLength;
     }
