@@ -26,6 +26,7 @@
     "typescript": "^1.8.9"
   },
   "scripts": {
+      "postinstall": "typings install",
       "lint": "tslint **/*.ts"
   }
 }
