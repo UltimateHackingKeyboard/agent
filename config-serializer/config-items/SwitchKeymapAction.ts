@@ -1,99 +1,41 @@
-function assertUInt8(target: any, key: string) {
-    let val = this[key];
-    if (delete this[key]) {
-        Object.defineProperty(target, key, {
-            get: function () {
-                return val;
-            },
-            set: function (newVal) {
-                if (newVal < 0 || newVal > 255) {
-                    throw `Invalid ${target.constructor.name}.${key}: ${newVal} is not uint8`;
-                }
-                val = newVal;
-            },
-            enumerable: true,
-            configurable: true
-        });
-    }
-}
+class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapAction> {
 
-function assertEnum<E>(enumerated: E) {
-    return function(target: any, key: string) {
-        let val = this[key];
-        if (delete this[key]) {
-            Object.defineProperty(target, key, {
-                get: function () {
-                    return val;
-                },
-                set: function (newVal) {
-                    if (enumerated[newVal] === undefined) {
-                        throw `Invalid ${target.constructor.name}.${key}: ${newVal} is not enum`;
-                    }
-                    val = newVal;
-                },
-                enumerable: true,
-                configurable: true
-            });
-        }
-    }
-}
+    static keyActionTypeString = 'switchKeymap';
 
-enum Layer {
-    mod,
-    fn,
-    mouse
-}
+    private _keymapId: number;
 
-class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAction> {
-
-    static keyActionTypeString = 'switchLayer';
-    static toggleFlag = 0x80;
-
-    isLayerToggleable: boolean;
-
-    @assertEnum(Layer)
-    private layer: Layer;
-/*
-    get layer(): number {
-        return this._layer;
+    get keymapId(): number {
+        return this._keymapId;
     }
 
-    set layer(value) {
+    set keymapId(value) {
         if (!TypeChecker.isUInt8Valid(value)) {
-            throw 'Invalid SwitchLayerAction.layerId: ${value}';
+            throw `Invalid SwitchKeymapAction.keymapId: ${value}`;
         }
-        this._layer = value;
-    }
-*/
-    getToggleFlag() {
-        return this.isLayerToggleable ? SwitchLayerAction.toggleFlag : 0;
+        this._keymapId = value;
     }
 
-    fromJsObject(jsObject: any): SwitchLayerAction {
-        this.assertKeyActionType(jsObject, SwitchLayerAction.keyActionTypeString, 'SwitchLayerAction');
-        this.layer = jsObject.layerId;
-        this.isLayerToggleable = jsObject.toggle;
+    fromJsObject(jsObject: any): SwitchKeymapAction {
+        this.assertKeyActionType(jsObject, SwitchKeymapAction.keyActionTypeString, 'SwitchKeymapAction');
+        this.keymapId = jsObject.keymapId;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): SwitchLayerAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchLayerAction, 'SwitchLayerAction');
-        this.layer = buffer.readUInt8();
-        this.isLayerToggleable = (this.layer & SwitchLayerAction.toggleFlag) !== 0;
-        this.layer &= ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
+    fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
+        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchKeymapAction, 'SwitchKeymapAction');
+        this.keymapId = buffer.readUInt8();
         return this;
     }
 
     toJsObject(): any {
         return {
-            keyActionType: SwitchLayerAction.keyActionTypeString,
-            layer: this.layer,
-            toggle: this.isLayerToggleable
+            keyActionType: SwitchKeymapAction.keyActionTypeString,
+            keymapId: this.keymapId
         };
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(KeyActionId.SwitchLayerAction);
-        buffer.writeUInt8(this.layer | this.getToggleFlag());
+        buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
+        buffer.writeUInt8(this.keymapId);
     }
 }
