@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "out": "serializeConfig.js",
-        "target": "es5"
+        "target": "es5",
+        "experimentalDecorators": true
     },
     "files": [
         "typings/main.d.ts",

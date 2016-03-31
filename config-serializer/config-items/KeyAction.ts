@@ -45,6 +45,7 @@ class KeyAction {
 
     assertKeyActionType(jsObject: any, keyActionTypeString: string, classname: string) {
         if (jsObject.keyActionType !== keyActionTypeString) {
+            console.log(arguments.callee.prototype.name);
             throw `Invalid ${classname}.keyActionType: ${jsObject.keyActionType}`;
         }
     }

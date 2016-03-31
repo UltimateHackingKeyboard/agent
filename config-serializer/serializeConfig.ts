@@ -9,4 +9,9 @@ let writer = new UhkBuffer();
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
 
+new SwitchLayerAction().fromJsObject({
+    keyActionType: 'switchLayer',
+    layerId: 10022
+});
+
 fs.writeFileSync('uhk-config.bin', writer.buffer);
