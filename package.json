@@ -24,5 +24,8 @@
     "select2": "^4.0.2",
     "sortablejs": "^1.4.2",
     "typescript": "^1.8.9"
+  },
+  "scripts": {
+      "lint": "tslint **/*.ts"
   }
 }
