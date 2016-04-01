@@ -4,9 +4,9 @@ class UhkBuffer {
     private static longCompactLengthPrefix = 0xFF;
     private static stringEncoding = 'utf8';
 
-    buffer: Buffer;
-    offset: number;
-    bytesToBacktrack: number;
+    private buffer: Buffer;
+    private offset: number;
+    private bytesToBacktrack: number;
 
     constructor() {
         this.offset = 0;
@@ -128,5 +128,9 @@ class UhkBuffer {
     backtrack(): void {
         this.offset -= this.bytesToBacktrack;
         this.bytesToBacktrack = 0;
+    }
+
+    getBufferContent(): Buffer {
+        return this.buffer.slice(0, this.offset);
     }
 }
