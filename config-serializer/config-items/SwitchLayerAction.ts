@@ -30,23 +30,24 @@ class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAct
 
     fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject, KeyActionType.SwitchLayerAction, 'SwitchLayerAction');
-        this.layer = jsObject.layer;
+        this.layer = Layer[<string>jsObject.layer];
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchLayerAction, 'SwitchLayerAction');
-        this.layer = buffer.readUInt8();
-        this.isLayerToggleable = (this.layer & SwitchLayerAction.toggleFlag) !== 0;
-        this.layer &= ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
+        let layer = buffer.readUInt8();
+        this.isLayerToggleable = (layer & SwitchLayerAction.toggleFlag) !== 0;
+        layer &= ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
+        this.layer = layer;
         return this;
     }
 
     toJsObject(): any {
         return {
             keyActionType: KeyActionType.SwitchLayerAction,
-            layer: this.layer,
+            layer: Layer[this.layer],
             toggle: this.isLayerToggleable
         };
     }
