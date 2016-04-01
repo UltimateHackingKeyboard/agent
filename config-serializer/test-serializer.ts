@@ -6,10 +6,8 @@
 
 let fs = require('fs');
 let writer = new UhkBuffer();
-
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
-console.log(keyActions);
 let keyActionObjects: KeyActions = new KeyActions().fromJsObject(keyActions);
 keyActionObjects.toBinary(writer);
 fs.writeFileSync('uhk-config.bin', writer.buffer);

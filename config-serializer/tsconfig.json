@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "out": "serializeConfig.js",
+        "out": "test-serializer.js",
         "target": "es5",
         "experimentalDecorators": true
     },
     "files": [
         "../typings/main.d.ts",
-        "serializeConfig.ts"
+        "test-serializer.ts"
     ]
 }
