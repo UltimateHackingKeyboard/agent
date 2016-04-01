@@ -1,6 +1,6 @@
 class KeyActions implements Serializable<KeyActions> {
 
-    keyActions: Serializable<KeyAction>[];
+    keyActions: Serializable<KeyAction>[] = [];
 
     fromJsObject(jsObjects: any): KeyActions {
         for (let jsObject of jsObjects) {
