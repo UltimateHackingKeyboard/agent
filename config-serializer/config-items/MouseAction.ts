@@ -17,24 +17,25 @@ enum MouseActionParam {
 class MouseAction extends KeyAction implements Serializable<MouseAction> {
     private _mouseAction: MouseActionParam;
 
-    get mouseAction(): number {
+    get mouseAction(): MouseActionParam {
         return this._mouseAction;
     }
 
     set mouseAction(mouseAction) {
-        if (!this.isMouseActionValid(mouseAction)) {
-            throw `Invalid MouseAction.mouseAction: ${mouseAction}`;
-        }
+//        if (!this.isMouseActionValid(mouseAction)) {
+//            throw `Invalid MouseAction.mouseAction: ${mouseAction}`;
+//        }
         this._mouseAction = mouseAction;
     }
 
-    isMouseActionValid(keyActionParam): boolean {
-        return MouseActionParam[keyActionParam] !== undefined;
-    }
+//    isMouseActionValid(keyActionParam): boolean {
+//        return MouseActionParam[<string>keyActionParam] !== undefined;
+//    }
 
     fromJsObject(jsObject: any): MouseAction {
         this.assertKeyActionType(jsObject, KeyActionType.MouseAction, 'MouseAction');
-        this.mouseAction = jsObject.mouseAction;
+        console.log(jsObject.mouseAction)
+        this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
         return this;
     }
 
@@ -42,9 +43,9 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
         this.readAndAssertKeyActionId(buffer, KeyActionId.MouseAction, 'MouseAction');
 
         this.mouseAction = buffer.readUInt8();
-        if (!this.isMouseActionValid(this.mouseAction)) {
-            throw `Invalid MouseAction.param: ${this.mouseAction}`;
-        }
+  //      if (!this.isMouseActionValid(this.mouseAction)) {
+  //          throw `Invalid MouseAction.param: ${this.mouseAction}`;
+  //      }
 
         return this;
     }
