@@ -9,8 +9,8 @@ Agent is in a preliminary state. You can click around, and most interactions wil
 ## Set up instructions
 
 ```
-git clone git@github.com:UltimateHackingKeyboard/agent-mockup.git
-cd agent-mockup
+git clone git@github.com:UltimateHackingKeyboard/agent.git
+cd agent
 npm install
 ```
 
