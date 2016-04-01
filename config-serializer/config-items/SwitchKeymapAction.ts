@@ -1,7 +1,5 @@
 class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapAction> {
 
-    static keyActionTypeString = 'switchKeymap';
-
     private _keymapId: number;
 
     get keymapId(): number {
@@ -16,7 +14,7 @@ class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapA
     }
 
     fromJsObject(jsObject: any): SwitchKeymapAction {
-        this.assertKeyActionType(jsObject, SwitchKeymapAction.keyActionTypeString, 'SwitchKeymapAction');
+        this.assertKeyActionType(jsObject, KeyActionType.SwitchKeymapAction, 'SwitchKeymapAction');
         this.keymapId = jsObject.keymapId;
         return this;
     }
@@ -29,7 +27,7 @@ class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapA
 
     toJsObject(): any {
         return {
-            keyActionType: SwitchKeymapAction.keyActionTypeString,
+            keyActionType: KeyActionType.SwitchKeymapAction,
             keymapId: this.keymapId
         };
     }

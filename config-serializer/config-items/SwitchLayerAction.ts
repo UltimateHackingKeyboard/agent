@@ -6,7 +6,6 @@ enum Layer {
 
 class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAction> {
 
-    static keyActionTypeString = 'switchLayer';
     static toggleFlag = 0x80;
 
     isLayerToggleable: boolean;
@@ -30,8 +29,8 @@ class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAct
     }
 
     fromJsObject(jsObject: any): SwitchLayerAction {
-        this.assertKeyActionType(jsObject, SwitchLayerAction.keyActionTypeString, 'SwitchLayerAction');
-        this.layer = jsObject.layerId;
+        this.assertKeyActionType(jsObject, KeyActionType.SwitchLayerAction, 'SwitchLayerAction');
+        this.layer = jsObject.layer;
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }
@@ -46,7 +45,7 @@ class SwitchLayerAction extends KeyAction implements Serializable<SwitchLayerAct
 
     toJsObject(): any {
         return {
-            keyActionType: SwitchLayerAction.keyActionTypeString,
+            keyActionType: KeyActionType.SwitchLayerAction,
             layer: this.layer,
             toggle: this.isLayerToggleable
         };

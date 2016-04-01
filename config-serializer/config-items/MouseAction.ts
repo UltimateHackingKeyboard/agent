@@ -15,8 +15,6 @@ enum MouseActionParam {
 }
 
 class MouseAction extends KeyAction implements Serializable<MouseAction> {
-    static keyActionTypeString = 'mouse';
-
     private _mouseAction: MouseActionParam;
 
     get mouseAction(): number {
@@ -24,18 +22,18 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
     }
 
     set mouseAction(mouseAction) {
-        if (!MouseAction.isMouseActionValid(mouseAction)) {
+        if (!this.isMouseActionValid(mouseAction)) {
             throw `Invalid MouseAction.mouseAction: ${mouseAction}`;
         }
         this._mouseAction = mouseAction;
     }
 
-    static isMouseActionValid(keyActionParam): boolean {
+    isMouseActionValid(keyActionParam): boolean {
         return MouseActionParam[keyActionParam] !== undefined;
     }
 
     fromJsObject(jsObject: any): MouseAction {
-        this.assertKeyActionType(jsObject, MouseAction.keyActionTypeString, 'MouseAction');
+        this.assertKeyActionType(jsObject, KeyActionType.MouseAction, 'MouseAction');
         this.mouseAction = jsObject.mouseAction;
         return this;
     }
@@ -44,7 +42,7 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
         this.readAndAssertKeyActionId(buffer, KeyActionId.MouseAction, 'MouseAction');
 
         this.mouseAction = buffer.readUInt8();
-        if (!MouseAction.isMouseActionValid(this.mouseAction)) {
+        if (!this.isMouseActionValid(this.mouseAction)) {
             throw `Invalid MouseAction.param: ${this.mouseAction}`;
         }
 
@@ -53,7 +51,7 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
 
     toJsObject(): any {
         return {
-            keyActionType: MouseAction.keyActionTypeString,
+            keyActionType: KeyActionType.MouseAction,
             mouseAction: MouseActionParam[this.mouseAction]
         };
     }

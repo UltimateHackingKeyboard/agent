@@ -1,10 +1,9 @@
 class NoneAction extends KeyAction implements Serializable<NoneAction> {
 
-    static keyActionTypeString = 'none';
     static noneActionParam = 0;
 
     fromJsObject(jsObject: any): NoneAction {
-        this.assertKeyActionType(jsObject, NoneAction.keyActionTypeString, 'NoneAction');
+        this.assertKeyActionType(jsObject, KeyActionType.NoneAction, 'NoneAction');
         return this;
     }
 
@@ -21,7 +20,7 @@ class NoneAction extends KeyAction implements Serializable<NoneAction> {
 
     toJsObject(): any {
         return {
-            keyActionType: NoneAction.keyActionTypeString
+            keyActionType: KeyActionId.NoneAction
         };
     }
 

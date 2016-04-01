@@ -12,6 +12,17 @@ enum KeyActionId {
     PlayMacroAction              = 7
 }
 
+let KeyActionType = {
+    NoneAction                   : 'none',
+    KeystrokeAction              : 'keystroke',
+    KeystrokeWithModifiersAction : 'keystrokeWithModifiers',
+    DualRoleKeystrokeAction      : 'dualRoleKeystroke',
+    SwitchLayerAction            : 'switchLayer',
+    SwitchKeymapAction           : 'switchKeymap',
+    MouseAction                  : 'mouse',
+    PlayMacroAction              : 'playMacro'
+}
+
 abstract class KeyAction implements Serializable<KeyAction> {
     abstract fromJsObject(jsObject: any): KeyAction;
     abstract fromBinary(buffer: UhkBuffer): KeyAction;

@@ -13,7 +13,6 @@ enum LongPressAction {
 }
 
 class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRoleKeystrokeAction> {
-    static keyActionTypeString = 'dualRoleKeystroke';
 
     public scancode;
 
@@ -24,18 +23,18 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
     }
 
     set longPressAction(value) {
-        if (!DualRoleKeystrokeAction.isDualRoleKeystrokeActionValid(value)) {
+        if (!this.isDualRoleKeystrokeActionValid(value)) {
             throw `Invalid DualRoleKeystrokeAction.longPressAction: ${value}`;
         }
         this._longPressAction = value;
     }
 
-    static isDualRoleKeystrokeActionValid(keyActionIdParam): boolean {
-        return MouseActionParam[keyActionIdParam] !== undefined;
+    isDualRoleKeystrokeActionValid(keyActionIdParam): boolean {
+        return LongPressAction[keyActionIdParam] !== undefined;
     }
 
     fromJsObject(jsObject: any): DualRoleKeystrokeAction {
-        this.assertKeyActionType(jsObject, DualRoleKeystrokeAction.keyActionTypeString, 'DualRoleKeystrokeAction');
+        this.assertKeyActionType(jsObject, KeyActionType.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
         this.scancode = jsObject.scancode;
         this.longPressAction = jsObject.longPressAction;
         return this;
@@ -50,7 +49,7 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
 
     toJsObject(): any {
         return {
-            keyActionType: DualRoleKeystrokeAction.keyActionTypeString,
+            keyActionType: KeyActionType.DualRoleKeystrokeAction,
             scancode: this.scancode,
             longPressAction: KeyActionId[this.longPressAction]
         };

@@ -2,20 +2,22 @@ class KeyActionFactory {
 
     static fromJsObject(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
-            case NoneAction.keyActionTypeString:
+            case KeyActionType.NoneAction:
                 return new NoneAction().fromJsObject(jsObject);
-            case KeystrokeAction.keyActionTypeString:
+            case KeyActionType.KeystrokeAction:
                 return new KeystrokeAction().fromJsObject(jsObject);
-            case KeystrokeWithModifiersAction.keyActionTypeString:
+            case KeyActionType.KeystrokeWithModifiersAction:
                 return new KeystrokeWithModifiersAction().fromJsObject(jsObject);
-            case DualRoleKeystrokeAction.keyActionTypeString:
+            case KeyActionType.DualRoleKeystrokeAction:
                 return new DualRoleKeystrokeAction().fromJsObject(jsObject);
-            case SwitchLayerAction.keyActionTypeString:
+            case KeyActionType.SwitchLayerAction:
                 return new SwitchLayerAction().fromJsObject(jsObject);
-            case SwitchKeymapAction.keyActionTypeString:
+            case KeyActionType.SwitchKeymapAction:
                 return new SwitchKeymapAction().fromJsObject(jsObject);
-            case MouseAction.keyActionTypeString:
+            case KeyActionType.MouseAction:
                 return new MouseAction().fromJsObject(jsObject);
+            case KeyActionType.PlayMacroAction:
+                return new PlayMacroAction().fromJsObject(jsObject);
             default:
                 throw `Invalid KeyAction.keyActionType: "${jsObject.actionType}"`;
         }
@@ -40,6 +42,8 @@ class KeyActionFactory {
                 return new SwitchKeymapAction().fromBinary(buffer);
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer);
+            case KeyActionId.PlayMacroAction:
+                return new PlayMacroAction().fromBinary(buffer);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }

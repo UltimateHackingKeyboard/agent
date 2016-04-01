@@ -1,7 +1,5 @@
 class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction> {
 
-    static keyActionTypeString = 'playMacro';
-
     private _macroId: number;
 
     get macroId(): number {
@@ -16,7 +14,7 @@ class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction>
     }
 
     fromJsObject(jsObject: any): PlayMacroAction {
-        this.assertKeyActionType(jsObject, PlayMacroAction.keyActionTypeString, 'PlayMacroAction');
+        this.assertKeyActionType(jsObject, KeyActionType.PlayMacroAction, 'PlayMacroAction');
         this.macroId = jsObject.macroId;
         return this;
     }
@@ -29,7 +27,7 @@ class PlayMacroAction extends KeyAction implements Serializable<PlayMacroAction>
 
     toJsObject(): any {
         return {
-            keyActionType: PlayMacroAction.keyActionTypeString,
+            keyActionType: KeyActionType.PlayMacroAction,
             macroId: this.macroId
         };
     }

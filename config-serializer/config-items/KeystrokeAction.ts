@@ -1,7 +1,5 @@
 class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction> {
 
-    static keyActionTypeString = 'keystroke';
-
     private _scancode: number;
 
     get scancode(): number {
@@ -16,7 +14,7 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
     }
 
     fromJsObject(jsObject: any): KeystrokeAction {
-        this.assertKeyActionType(jsObject, KeystrokeAction.keyActionTypeString, 'KeystrokeAction');
+        this.assertKeyActionType(jsObject, KeyActionType.KeystrokeAction, 'KeystrokeAction');
         this.scancode = jsObject.scancode;
         return this;
     }
@@ -29,8 +27,8 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
 
     toJsObject(): any {
         return {
-            keyActionType: KeystrokeAction.keyActionTypeString,
-            scancode: this.scancode,
+            keyActionType: KeyActionType.KeystrokeAction,
+            scancode: this.scancode
         };
     }
 

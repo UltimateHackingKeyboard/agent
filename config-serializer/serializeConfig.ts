@@ -9,7 +9,7 @@ let writer = new UhkBuffer();
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
-
+console.log(keyActions);
 let keyActionObjects: KeyActions = new KeyActions().fromJsObject(keyActions);
 
 fs.writeFileSync('uhk-config.bin', writer.buffer);
