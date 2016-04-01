@@ -36,7 +36,7 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
     fromJsObject(jsObject: any): DualRoleKeystrokeAction {
         this.assertKeyActionType(jsObject, KeyActionType.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
         this.scancode = jsObject.scancode;
-        this.longPressAction = jsObject.longPressAction;
+        this.longPressAction = LongPressAction[<string>jsObject.longPressAction];
         return this;
     }
 
@@ -51,7 +51,7 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
         return {
             keyActionType: KeyActionType.DualRoleKeystrokeAction,
             scancode: this.scancode,
-            longPressAction: KeyActionId[this.longPressAction]
+            longPressAction: LongPressAction[this.longPressAction]
         };
     }
 

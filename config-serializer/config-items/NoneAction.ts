@@ -12,7 +12,7 @@ class NoneAction extends KeyAction implements Serializable<NoneAction> {
 
     toJsObject(): any {
         return {
-            keyActionType: KeyActionId.NoneAction
+            keyActionType: KeyActionType.NoneAction
         };
     }
 

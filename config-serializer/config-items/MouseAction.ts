@@ -34,7 +34,6 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
 
     fromJsObject(jsObject: any): MouseAction {
         this.assertKeyActionType(jsObject, KeyActionType.MouseAction, 'MouseAction');
-        console.log(jsObject.mouseAction)
         this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
         return this;
     }
