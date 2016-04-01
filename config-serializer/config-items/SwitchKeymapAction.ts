@@ -1,4 +1,4 @@
-class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapAction> {
+class SwitchKeymapAction extends KeyAction {
 
     private _keymapId: number;
 
@@ -13,27 +13,31 @@ class SwitchKeymapAction extends KeyAction implements Serializable<SwitchKeymapA
         this._keymapId = value;
     }
 
-    fromJsObject(jsObject: any): SwitchKeymapAction {
+    _fromJsObject(jsObject: any): SwitchKeymapAction {
         this.assertKeyActionType(jsObject, KeyActionType.SwitchKeymapAction, 'SwitchKeymapAction');
         this.keymapId = jsObject.keymapId;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
+    _fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchKeymapAction, 'SwitchKeymapAction');
         this.keymapId = buffer.readUInt8();
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         return {
             keyActionType: KeyActionType.SwitchKeymapAction,
             keymapId: this.keymapId
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
         buffer.writeUInt8(this.keymapId);
+    }
+
+    toString(): string {
+        return `<SwitchKeymapAction keymapId="${this.keymapId}">`;
     }
 }

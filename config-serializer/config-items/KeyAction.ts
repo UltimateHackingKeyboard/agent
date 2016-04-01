@@ -23,12 +23,7 @@ let KeyActionType = {
     PlayMacroAction              : 'playMacro'
 }
 
-abstract class KeyAction implements Serializable<KeyAction> {
-    abstract fromJsObject(jsObject: any): KeyAction;
-    abstract fromBinary(buffer: UhkBuffer): KeyAction;
-    abstract toJsObject(): any;
-    abstract toBinary(buffer: UhkBuffer);
-
+abstract class KeyAction extends Serializable<KeyAction> {
     assertKeyActionType(jsObject: any, keyActionTypeString: string, classname: string) {
         if (jsObject.keyActionType !== keyActionTypeString) {
             console.log(arguments.callee.prototype.name);
@@ -42,4 +37,9 @@ abstract class KeyAction implements Serializable<KeyAction> {
             throw `Invalid ${classname} first byte: ${readKeyActionId}`;
         }
     }
+
+    abstract _fromJsObject(jsObject: any): KeyAction;
+    abstract _fromBinary(buffer: UhkBuffer): KeyAction;
+    abstract _toJsObject(): any;
+    abstract _toBinary(buffer: UhkBuffer): void;
 }

@@ -1,4 +1,4 @@
-class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction> {
+class KeystrokeAction extends KeyAction {
 
     private _scancode: number;
 
@@ -13,27 +13,31 @@ class KeystrokeAction extends KeyAction implements Serializable<KeystrokeAction>
         this._scancode = value;
     }
 
-    fromJsObject(jsObject: any): KeystrokeAction {
+    _fromJsObject(jsObject: any): KeystrokeAction {
         this.assertKeyActionType(jsObject, KeyActionType.KeystrokeAction, 'KeystrokeAction');
         this.scancode = jsObject.scancode;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): KeystrokeAction {
+    _fromBinary(buffer: UhkBuffer): KeystrokeAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.KeystrokeAction, 'KeystrokeAction');
         this.scancode = buffer.readUInt8();
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         return {
             keyActionType: KeyActionType.KeystrokeAction,
             scancode: this.scancode
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.KeystrokeAction);
         buffer.writeUInt8(this.scancode);
+    }
+
+    toString(): string {
+        return `<KeystrokeAction scancode="${this.scancode}">`;
     }
 }

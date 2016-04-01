@@ -14,7 +14,7 @@ enum MouseActionParam {
     decelerate
 }
 
-class MouseAction extends KeyAction implements Serializable<MouseAction> {
+class MouseAction extends KeyAction {
     private _mouseAction: MouseActionParam;
 
     get mouseAction(): MouseActionParam {
@@ -32,13 +32,13 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
 //        return MouseActionParam[<string>keyActionParam] !== undefined;
 //    }
 
-    fromJsObject(jsObject: any): MouseAction {
+    _fromJsObject(jsObject: any): MouseAction {
         this.assertKeyActionType(jsObject, KeyActionType.MouseAction, 'MouseAction');
         this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): MouseAction {
+    _fromBinary(buffer: UhkBuffer): MouseAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.MouseAction, 'MouseAction');
 
         this.mouseAction = buffer.readUInt8();
@@ -49,15 +49,19 @@ class MouseAction extends KeyAction implements Serializable<MouseAction> {
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         return {
             keyActionType: KeyActionType.MouseAction,
             mouseAction: MouseActionParam[this.mouseAction]
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.MouseAction);
         buffer.writeUInt8(this.mouseAction);
+    }
+
+    toString(): string {
+        return `<MouseAction mouseAction="${this.mouseAction}">`;
     }
 }

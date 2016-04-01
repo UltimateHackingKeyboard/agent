@@ -1,4 +1,4 @@
-class KeystrokeWithModifiersAction extends KeyAction implements Serializable<KeystrokeWithModifiersAction> {
+class KeystrokeWithModifiersAction extends KeyAction {
 
     static keyActionTypeString = 'keystrokeWithModifiers';
 
@@ -17,7 +17,7 @@ class KeystrokeWithModifiersAction extends KeyAction implements Serializable<Key
         this._scancode = value;
     }
 
-    fromJsObject(jsObject: any): KeystrokeWithModifiersAction {
+    _fromJsObject(jsObject: any): KeystrokeWithModifiersAction {
         this.assertKeyActionType(
             jsObject, KeystrokeWithModifiersAction.keyActionTypeString, 'KeystrokeWithModifiersAction');
         this.scancode = jsObject.scancode;
@@ -25,14 +25,14 @@ class KeystrokeWithModifiersAction extends KeyAction implements Serializable<Key
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): KeystrokeWithModifiersAction {
+    _fromBinary(buffer: UhkBuffer): KeystrokeWithModifiersAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.KeystrokeWithModifiersAction, 'KeystrokeWithModifiersAction');
         this.scancode = buffer.readUInt8();
         this.modifierMask = buffer.readUInt8();
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         return {
             keyActionType: KeystrokeWithModifiersAction.keyActionTypeString,
             scancode: this.scancode,
@@ -40,9 +40,13 @@ class KeystrokeWithModifiersAction extends KeyAction implements Serializable<Key
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.KeystrokeWithModifiersAction);
         buffer.writeUInt8(this.scancode);
         buffer.writeUInt8(this.modifierMask);
+    }
+
+    toString(): string {
+        return `<KeystrokeWithModifiersAction scancode="${this.scancode}" modifierMask="${this.modifierMask}">`;
     }
 }

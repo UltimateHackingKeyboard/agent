@@ -1,15 +1,15 @@
-class KeyActions implements Serializable<KeyActions> {
+class KeyActions extends Serializable<KeyActions> {
 
     keyActions: Serializable<KeyAction>[] = [];
 
-    fromJsObject(jsObjects: any): KeyActions {
+    _fromJsObject(jsObjects: any): KeyActions {
         for (let jsObject of jsObjects) {
             this.keyActions.push(KeyActionFactory.fromJsObject(jsObject));
         }
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): KeyActions {
+    _fromBinary(buffer: UhkBuffer): KeyActions {
         let arrayLength = buffer.readCompactLength();
         for (let i = 0; i < arrayLength; i++) {
             this.keyActions.push(KeyActionFactory.fromBinary(buffer));
@@ -17,7 +17,7 @@ class KeyActions implements Serializable<KeyActions> {
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         let array = [];
         for (let keyAction of this.keyActions) {
             array.push(keyAction.toJsObject());
@@ -25,10 +25,14 @@ class KeyActions implements Serializable<KeyActions> {
         return array;
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer) {
         buffer.writeCompactLength(this.keyActions.length);
         for (let keyAction of this.keyActions) {
             keyAction.toBinary(buffer);
         }
+    }
+
+    toString(): string {
+        return `<KeyActions length="${this.keyActions.length}">`;
     }
 }

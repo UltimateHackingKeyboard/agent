@@ -12,7 +12,7 @@ enum LongPressAction {
     mouse
 }
 
-class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRoleKeystrokeAction> {
+class DualRoleKeystrokeAction extends KeyAction {
 
     public scancode;
 
@@ -33,21 +33,21 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
         return LongPressAction[keyActionIdParam] !== undefined;
     }
 
-    fromJsObject(jsObject: any): DualRoleKeystrokeAction {
+    _fromJsObject(jsObject: any): DualRoleKeystrokeAction {
         this.assertKeyActionType(jsObject, KeyActionType.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
         this.scancode = jsObject.scancode;
         this.longPressAction = LongPressAction[<string>jsObject.longPressAction];
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): DualRoleKeystrokeAction {
+    _fromBinary(buffer: UhkBuffer): DualRoleKeystrokeAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
         this.scancode = buffer.readUInt8();
         this.longPressAction = buffer.readUInt8();
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         return {
             keyActionType: KeyActionType.DualRoleKeystrokeAction,
             scancode: this.scancode,
@@ -55,9 +55,13 @@ class DualRoleKeystrokeAction extends KeyAction implements Serializable<DualRole
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(KeyActionId.DualRoleKeystrokeAction);
         buffer.writeUInt8(this.scancode);
         buffer.writeUInt8(this.longPressAction);
+    }
+
+    toString(): string {
+        return `<DualRoleKeystrokeAction scancode="${this.scancode}" longPressAction="${this.longPressAction}">`;
     }
 }

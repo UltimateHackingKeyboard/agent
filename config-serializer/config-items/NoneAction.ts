@@ -1,22 +1,26 @@
-class NoneAction extends KeyAction implements Serializable<NoneAction> {
+class NoneAction extends KeyAction {
 
-    fromJsObject(jsObject: any): NoneAction {
+    _fromJsObject(jsObject: any): NoneAction {
         this.assertKeyActionType(jsObject, KeyActionType.NoneAction, 'NoneAction');
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): NoneAction {
+    _fromBinary(buffer: UhkBuffer): NoneAction {
         this.readAndAssertKeyActionId(buffer, KeyActionId.NoneAction, 'NoneAction');
         return this;
     }
 
-    toJsObject(): any {
+    _toJsObject(): any {
         return {
             keyActionType: KeyActionType.NoneAction
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.NoneAction);
+    }
+
+    toString(): string {
+        return '<NoneAction>';
     }
 }
