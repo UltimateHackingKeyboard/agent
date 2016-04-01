@@ -20,7 +20,7 @@ class KeyActions implements Serializable<KeyActions> {
     toJsObject(): any {
         let array = [];
         for (let keyAction of this.keyActions) {
-            keyAction.toJsObject();
+            array.push(keyAction.toJsObject());
         }
         return array;
     }

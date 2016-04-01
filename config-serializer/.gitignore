@@ -1,3 +1,4 @@
 typings
 uhk-config.bin
+uhk-config-serialized.json
 test-serializer.js

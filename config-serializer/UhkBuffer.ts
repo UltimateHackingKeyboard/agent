@@ -4,8 +4,9 @@ class UhkBuffer {
     private static longCompactLengthPrefix = 0xFF;
     private static stringEncoding = 'utf8';
 
+    offset: number;
+
     private buffer: Buffer;
-    private offset: number;
     private bytesToBacktrack: number;
 
     constructor() {

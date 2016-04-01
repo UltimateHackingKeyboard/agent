@@ -11,3 +11,6 @@ let keyActions = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
 let keyActionObjects: KeyActions = new KeyActions().fromJsObject(keyActions);
 keyActionObjects.toBinary(buffer);
 fs.writeFileSync('uhk-config.bin', buffer.getBufferContent());
+buffer.offset = 0;
+let serializedKeyActions = JSON.stringify(new KeyActions().fromBinary(buffer).toJsObject(), undefined, 4);
+fs.writeFileSync('uhk-config-serialized.json', serializedKeyActions);
