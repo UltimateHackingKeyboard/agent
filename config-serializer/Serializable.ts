@@ -8,11 +8,14 @@ abstract class Serializable<T> {
 
     fromJsObject(jsObject: any): T {
         let identation = new Array(Serializable.depth + 1).join('    ');
-        process.stdout.write(`${identation}* ${this.constructor.name}.fromJsObject(${JSON.stringify(jsObject)}) => `);
+        let isArray = this instanceof UhkArray;
+        process.stdout.write(`${identation}* ${this.constructor.name}.fromJsObject(${JSON.stringify(jsObject)}) ` + (isArray ? ':\n' : `=> `));
         Serializable.depth++;
         let value = this._fromJsObject(jsObject);
         Serializable.depth--;
-        process.stdout.write(`${value.toString()}\n`);
+        if (!isArray) {
+            process.stdout.write(`${value.toString()}\n`);
+        }
         return value;
     }
 

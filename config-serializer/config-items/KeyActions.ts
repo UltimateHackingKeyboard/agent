@@ -1,4 +1,4 @@
-class KeyActions extends Serializable<KeyActions> {
+class KeyActions extends UhkArray<KeyActions> {
 
     keyActions: Serializable<KeyAction>[] = [];
 
