@@ -7,20 +7,34 @@ abstract class Serializable<T> {
     private static depth = 0;
 
     fromJsObject(jsObject: any): T {
-        let identation = new Array(Serializable.depth + 1).join('    ');
+        let indentation = new Array(Serializable.depth + 1).join('    ');
         let isArray = this instanceof UhkArray;
-        process.stdout.write(`${identation}* ${this.constructor.name}.fromJsObject(${JSON.stringify(jsObject)}) ` + (isArray ? ':\n' : `=> `));
+        process.stdout.write(`${indentation}${this.constructor.name}.fromJsObject: ${JSON.stringify(jsObject)}` + (isArray ? '\n' : ` => `));
         Serializable.depth++;
         let value = this._fromJsObject(jsObject);
         Serializable.depth--;
         if (!isArray) {
-            process.stdout.write(`${value.toString()}\n`);
+            process.stdout.write(`${value}\n`);
         }
         return value;
     }
 
     fromBinary(buffer: UhkBuffer): T {
-        return this._fromBinary(buffer);
+        let indentation = new Array(Serializable.depth + 1).join('    ');
+        let isArray = this instanceof UhkArray;
+        process.stdout.write(`${indentation}${this.constructor.name}.fromBinary: `);
+        if (isArray) {
+            process.stdout.write('\n');
+        }
+        Serializable.depth++;
+        buffer.enableDump = !isArray;
+        let value = this._fromBinary(buffer);
+        buffer.enableDump = false;
+        Serializable.depth--;
+        if (!isArray) {
+            process.stdout.write(`=> ${value}\n`);
+        }
+        return value;
     }
 
     toJsObject(): any {

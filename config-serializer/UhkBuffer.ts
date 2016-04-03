@@ -5,6 +5,7 @@ class UhkBuffer {
     private static stringEncoding = 'utf8';
 
     offset: number;
+    enableDump = false;
 
     private buffer: Buffer;
     private bytesToBacktrack: number;
@@ -32,12 +33,14 @@ class UhkBuffer {
         let value = this.buffer.readUInt8(this.offset);
         this.bytesToBacktrack = 1;
         this.offset += this.bytesToBacktrack;
+        this.dump(`uint8(${value}) `);
         return value;
     }
 
     writeUInt8(value: number): void {
         this.buffer.writeUInt8(value, this.offset);
         this.offset += 1;
+        this.dump(`uint8(${value}) `);
     }
 
     readInt16(): number {
@@ -133,5 +136,11 @@ class UhkBuffer {
 
     getBufferContent(): Buffer {
         return this.buffer.slice(0, this.offset);
+    }
+
+    dump(value) {
+        if (this.enableDump) {
+            process.stdout.write(value);
+        }
     }
 }
