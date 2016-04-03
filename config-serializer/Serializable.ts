@@ -48,7 +48,18 @@ abstract class Serializable<T> {
     }
 
     toBinary(buffer: UhkBuffer): void {
-        this._toBinary(buffer);
+        let indentation = new Array(Serializable.depth + 1).join('    ');
+        let isArray = this instanceof UhkArray;
+        process.stdout.write(`${indentation}${this.constructor.name}.fromBinary: ${this}` + (isArray ? '\n' : ' => ['));
+        Serializable.depth++;
+        buffer.enableDump = !isArray;
+        let value = this._toBinary(buffer);
+        buffer.enableDump = false;
+        Serializable.depth--;
+        if (!isArray) {
+            process.stdout.write(`]\n`);
+        }
+        return value;
     }
 
     abstract _fromJsObject(jsObject: any): T;

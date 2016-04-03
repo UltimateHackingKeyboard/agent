@@ -6,7 +6,7 @@ class UhkBuffer {
     private static isFirstElementToDump = false;
 
     offset: number;
-    enableDump = false;
+    private _enableDump = false;
 
     private buffer: Buffer;
     private bytesToBacktrack: number;
@@ -137,6 +137,15 @@ class UhkBuffer {
 
     getBufferContent(): Buffer {
         return this.buffer.slice(0, this.offset);
+    }
+
+    get enableDump() {
+        return this._enableDump;
+    }
+
+    set enableDump(value) {
+        UhkBuffer.isFirstElementToDump = true;
+        this._enableDump = value;
     }
 
     dump(value) {
