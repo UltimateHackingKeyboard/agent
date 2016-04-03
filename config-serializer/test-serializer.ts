@@ -1,7 +1,7 @@
 /// <reference path="assert.ts" />
 /// <reference path="TypeChecker.ts" />
 /// <reference path="Serializable.ts" />
-/// <reference path="UhkArray.ts" />
+/// <reference path="ClassArray.ts" />
 /// <reference path="UhkBuffer.ts" />
 /// <reference path="config-items/config-items.ts" />
 
@@ -11,7 +11,7 @@ let fs = require('fs');
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 
 let keyActions1Js = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
-let keyActions1Ts: KeyActions = new KeyActions().fromJsObject(keyActions1Js);
+let keyActions1Ts: Serializable<KeyActions> = new KeyActions().fromJsObject(keyActions1Js);
 let keyActions1Buffer = new UhkBuffer();
 keyActions1Ts.toBinary(keyActions1Buffer);
 let keyActions1BufferContent = keyActions1Buffer.getBufferContent();

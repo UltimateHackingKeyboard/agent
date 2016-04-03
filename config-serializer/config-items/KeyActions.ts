@@ -1,38 +1,51 @@
-class KeyActions extends UhkArray<KeyActions> {
+class KeyActions extends ClassArray<KeyAction> {
 
-    keyActions: Serializable<KeyAction>[] = [];
-
-    _fromJsObject(jsObjects: any): KeyActions {
-        for (let jsObject of jsObjects) {
-            this.keyActions.push(KeyActionFactory.fromJsObject(jsObject));
-        }
-        return this;
-    }
-
-    _fromBinary(buffer: UhkBuffer): KeyActions {
-        let arrayLength = buffer.readCompactLength();
-        for (let i = 0; i < arrayLength; i++) {
-            this.keyActions.push(KeyActionFactory.fromBinary(buffer));
-        }
-        return this;
-    }
-
-    _toJsObject(): any {
-        let array = [];
-        for (let keyAction of this.keyActions) {
-            array.push(keyAction.toJsObject());
-        }
-        return array;
-    }
-
-    _toBinary(buffer: UhkBuffer) {
-        buffer.writeCompactLength(this.keyActions.length);
-        for (let keyAction of this.keyActions) {
-            keyAction.toBinary(buffer);
+    jsObjectToClass(jsObject: any): Serializable<KeyAction> {
+        switch (jsObject.keyActionType) {
+            case KeyActionType.NoneAction:
+                return new NoneAction().fromJsObject(jsObject);
+            case KeyActionType.KeystrokeAction:
+                return new KeystrokeAction().fromJsObject(jsObject);
+            case KeyActionType.KeystrokeWithModifiersAction:
+                return new KeystrokeWithModifiersAction().fromJsObject(jsObject);
+            case KeyActionType.DualRoleKeystrokeAction:
+                return new DualRoleKeystrokeAction().fromJsObject(jsObject);
+            case KeyActionType.SwitchLayerAction:
+                return new SwitchLayerAction().fromJsObject(jsObject);
+            case KeyActionType.SwitchKeymapAction:
+                return new SwitchKeymapAction().fromJsObject(jsObject);
+            case KeyActionType.MouseAction:
+                return new MouseAction().fromJsObject(jsObject);
+            case KeyActionType.PlayMacroAction:
+                return new PlayMacroAction().fromJsObject(jsObject);
+            default:
+                throw `Invalid KeyAction.keyActionType: "${jsObject.actionType}"`;
         }
     }
 
-    toString(): string {
-        return `<KeyActions length="${this.keyActions.length}">`;
+    binaryToClass(buffer: UhkBuffer): Serializable<KeyAction> {
+        let keyActionFirstByte = buffer.readUInt8();
+        buffer.backtrack();
+
+        switch (keyActionFirstByte) {
+            case KeyActionId.NoneAction:
+                return new NoneAction().fromBinary(buffer);
+            case KeyActionId.KeystrokeAction:
+                return new KeystrokeAction().fromBinary(buffer);
+            case KeyActionId.KeystrokeWithModifiersAction:
+                return new KeystrokeWithModifiersAction().fromBinary(buffer);
+            case KeyActionId.DualRoleKeystrokeAction:
+                return new DualRoleKeystrokeAction().fromBinary(buffer);
+            case KeyActionId.SwitchLayerAction:
+                return new SwitchLayerAction().fromBinary(buffer);
+            case KeyActionId.SwitchKeymapAction:
+                return new SwitchKeymapAction().fromBinary(buffer);
+            case KeyActionId.MouseAction:
+                return new MouseAction().fromBinary(buffer);
+            case KeyActionId.PlayMacroAction:
+                return new PlayMacroAction().fromBinary(buffer);
+            default:
+                throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
+        }
     }
 }

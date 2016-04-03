@@ -1,6 +1,6 @@
-class KeyActionFactory {
+class KeyActionFactory implements SubclassFactory<KeyAction> {
 
-    static fromJsObject(jsObject: any): KeyAction {
+    fromJsObject(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
             case KeyActionType.NoneAction:
                 return new NoneAction().fromJsObject(jsObject);
@@ -23,7 +23,7 @@ class KeyActionFactory {
         }
     }
 
-    static fromBinary(buffer: UhkBuffer): KeyAction {
+    fromBinary(buffer: UhkBuffer): KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
