@@ -142,7 +142,7 @@ class UhkBuffer {
     dump(value) {
         if (this.enableDump) {
             if (!UhkBuffer.isFirstElementToDump) {
-                process.stdout.write(' ');
+                process.stdout.write(', ');
             }
             process.stdout.write(value);
             if (UhkBuffer.isFirstElementToDump) {
