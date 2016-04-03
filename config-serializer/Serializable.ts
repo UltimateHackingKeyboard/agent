@@ -5,11 +5,19 @@ interface Function {
 abstract class Serializable<T> {
 
     private static depth = 0;
+    private static maxDisplayedJsonLength = 160;
+
+    strintifyJsObject(jsObject: any): string {
+        let json = JSON.stringify(jsObject);
+        return json.length > Serializable.maxDisplayedJsonLength
+            ? json.substr(0, Serializable.maxDisplayedJsonLength) + '...'
+            : json;
+    }
 
     fromJsObject(jsObject: any): T {
         let indentation = new Array(Serializable.depth + 1).join('    ');
         let isArray = this instanceof UhkArray;
-        process.stdout.write(`${indentation}${this.constructor.name}.fromJsObject: ${JSON.stringify(jsObject)}` + (isArray ? '\n' : ` => `));
+        process.stdout.write(`${indentation}${this.constructor.name}.fromJsObject: ${this.strintifyJsObject(jsObject)}` + (isArray ? '\n' : ` => `));
         Serializable.depth++;
         let value = this._fromJsObject(jsObject);
         Serializable.depth--;
@@ -42,7 +50,7 @@ abstract class Serializable<T> {
         let value = this._toJsObject();
         Serializable.depth--;
         if (!isArray) {
-            process.stdout.write(`${JSON.stringify(value)}\n`);
+            process.stdout.write(`${this.strintifyJsObject(value)}\n`);
         }
         return value;
     }
