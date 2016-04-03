@@ -22,7 +22,7 @@ abstract class Serializable<T> {
     fromBinary(buffer: UhkBuffer): T {
         let indentation = new Array(Serializable.depth + 1).join('    ');
         let isArray = this instanceof UhkArray;
-        process.stdout.write(`${indentation}${this.constructor.name}.fromBinary: `);
+        process.stdout.write(`${indentation}${this.constructor.name}.fromBinary: [`);
         if (isArray) {
             process.stdout.write('\n');
         }
@@ -32,7 +32,7 @@ abstract class Serializable<T> {
         buffer.enableDump = false;
         Serializable.depth--;
         if (!isArray) {
-            process.stdout.write(`=> ${value}\n`);
+            process.stdout.write(`] => ${value}\n`);
         }
         return value;
     }

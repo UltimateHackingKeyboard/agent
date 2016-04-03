@@ -3,6 +3,7 @@ class UhkBuffer {
     private static maxCompactLength = 0xFFFF;
     private static longCompactLengthPrefix = 0xFF;
     private static stringEncoding = 'utf8';
+    private static isFirstElementToDump = false;
 
     offset: number;
     enableDump = false;
@@ -33,14 +34,14 @@ class UhkBuffer {
         let value = this.buffer.readUInt8(this.offset);
         this.bytesToBacktrack = 1;
         this.offset += this.bytesToBacktrack;
-        this.dump(`uint8(${value}) `);
+        this.dump(`u8(${value})`);
         return value;
     }
 
     writeUInt8(value: number): void {
         this.buffer.writeUInt8(value, this.offset);
         this.offset += 1;
-        this.dump(`uint8(${value}) `);
+        this.dump(`u8(${value})`);
     }
 
     readInt16(): number {
@@ -140,7 +141,15 @@ class UhkBuffer {
 
     dump(value) {
         if (this.enableDump) {
+            if (!UhkBuffer.isFirstElementToDump) {
+                process.stdout.write(' ');
+            }
             process.stdout.write(value);
+            if (UhkBuffer.isFirstElementToDump) {
+                UhkBuffer.isFirstElementToDump = false;
+            }
+        } else {
+            UhkBuffer.isFirstElementToDump = true;
         }
     }
 }
