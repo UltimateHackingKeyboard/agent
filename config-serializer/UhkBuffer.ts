@@ -41,9 +41,9 @@ class UhkBuffer {
     }
 
     writeUInt8(value: number): void {
+        this.dump(`u8(${value})`);
         this.buffer.writeUInt8(value, this.offset);
         this.offset += 1;
-        this.dump(`u8(${value})`);
     }
 
     readInt16(): number {

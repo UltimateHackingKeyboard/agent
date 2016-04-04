@@ -4,17 +4,19 @@
 enum KeyActionId {
     NoneAction                   = 0,
     KeystrokeAction              = 1,
-    KeystrokeWithModifiersAction = 2,
-    DualRoleKeystrokeAction      = 3,
-    SwitchLayerAction            = 4,
-    SwitchKeymapAction           = 5,
-    MouseAction                  = 6,
-    PlayMacroAction              = 7
+    KeystrokeModifiersAction     = 2,
+    KeystrokeWithModifiersAction = 3,
+    DualRoleKeystrokeAction      = 4,
+    SwitchLayerAction            = 5,
+    SwitchKeymapAction           = 6,
+    MouseAction                  = 7,
+    PlayMacroAction              = 8
 }
 
 let KeyActionType = {
     NoneAction                   : 'none',
     KeystrokeAction              : 'keystroke',
+    KeystrokeModifiersAction     : 'keystrokeModifiers',
     KeystrokeWithModifiersAction : 'keystrokeWithModifiers',
     DualRoleKeystrokeAction      : 'dualRoleKeystroke',
     SwitchLayerAction            : 'switchLayer',

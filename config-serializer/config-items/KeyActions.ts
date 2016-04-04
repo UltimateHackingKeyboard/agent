@@ -6,6 +6,8 @@ class KeyActions extends ClassArray<KeyAction> {
                 return new NoneAction().fromJsObject(jsObject);
             case KeyActionType.KeystrokeAction:
                 return new KeystrokeAction().fromJsObject(jsObject);
+            case KeyActionType.KeystrokeModifiersAction:
+                return new KeystrokeModifiersAction().fromJsObject(jsObject);
             case KeyActionType.KeystrokeWithModifiersAction:
                 return new KeystrokeWithModifiersAction().fromJsObject(jsObject);
             case KeyActionType.DualRoleKeystrokeAction:
@@ -27,11 +29,18 @@ class KeyActions extends ClassArray<KeyAction> {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
+        if (buffer.enableDump) {
+            process.stdout.write(']\n');
+            buffer.enableDump = false;
+        }
+
         switch (keyActionFirstByte) {
             case KeyActionId.NoneAction:
                 return new NoneAction().fromBinary(buffer);
             case KeyActionId.KeystrokeAction:
                 return new KeystrokeAction().fromBinary(buffer);
+            case KeyActionId.KeystrokeModifiersAction:
+                return new KeystrokeModifiersAction().fromBinary(buffer);
             case KeyActionId.KeystrokeWithModifiersAction:
                 return new KeystrokeWithModifiersAction().fromBinary(buffer);
             case KeyActionId.DualRoleKeystrokeAction:

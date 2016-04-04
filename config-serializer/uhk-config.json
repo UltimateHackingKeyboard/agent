@@ -35,6 +35,10 @@
                                     "scancode": 110
                                 },
                                 {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask":33
+                                },
+                                {
                                     "keyActionType": "keystrokeWithModifiers",
                                     "scancode": 120,
                                     "modifierMask": 16
