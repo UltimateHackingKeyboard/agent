@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Ultimate Hacking Keyboard Configurator</title>
     <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -8,139 +9,154 @@
     <link href="node_modules/select2/dist/css/select2.min.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
     <link href="css/macro.css" rel="stylesheet">
+
     <script>
-      // This js function is here to make sure it loads before any iframe content on the page.
+        // This js function is here to make sure it loads before any iframe content on the page.
       function resizeIframe(ifr) {
         ifr.style.height = (ifr.contentWindow.document.body.scrollHeight + 300) + 'px';
         ifr.style.width = ifr.contentWindow.document.body.scrollWidth + 'px';
       }
     </script>
-  </head>
-  <body>
+</head>
+
+<body>
 
     <!-- Google Tag Manager -->
-    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PQLCXB"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-PQLCXB" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PQLCXB');</script>
+    })(window,document,'script','dataLayer','GTM-PQLCXB');
+    </script>
     <!-- End Google Tag Manager -->
 
     <div id="sidebar-menu" class="split split-horizontal" style=""></div>
     <div id="main-content" class="split split-horizontal container-fluid" style="">
 
-      <div class="keymap--edit keymap--qwerty main-content__inner" style="display: block;">
-        <div class="row">
-          <h1 class="col-xs-12 pane-title">
+        <div class="keymap--edit keymap--qwerty main-content__inner" style="display: block;">
+            <div class="row">
+                <h1 class="col-xs-12 pane-title">
             <i class="fa fa-keyboard-o"></i>
             <span class="keymap__name pane-title__name" contenteditable="true">QWERTY</span> keymap (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">QTY</span>)
             <i class="fa fa-star-o fa-star keymap__is-default"></i>
           </h1>
-        </div>
-        <div class="row">
-        </div>
-        <div class="row unk--wrapper">
-          <div class="col-xs-12 text-center">
-            <div class="" role="" style="margin-bottom: 2rem;">
-              <button type="button" data-layer="base" class="uhk__layer-switcher btn btn-primary btn-lg current">Base</button>
-              <button type="button" data-layer="mod" class="uhk__layer-switcher btn btn-default btn-lg">Mod</button>
-              <button type="button" data-layer="fn" class="uhk__layer-switcher btn btn-default btn-lg">Fn</button>
-              <button type="button" data-layer="mouse" class="uhk__layer-switcher btn btn-default btn-lg">Mouse</button>
             </div>
-          </div>
-          <div class="col-xs-12">
-            <div class="keyboard-slider">
-              <div class="item uhk__layer-wrapper uhk__layer-wrapper--base current">
-                <img src="./images/base-layer.svg" class="uhk uhk--base-layer" alt="">
-              </div>
-              <div class="item uhk__layer-wrapper uhk__layer-wrapper--mod">
-                <img src="./images/base-layer--blank.svg" class="uhk uhk--mod-layer" alt="">
-              </div>
-              <div class="item uhk__layer-wrapper uhk__layer-wrapper--fn">
-                <img src="./images/base-layer--dvorak.svg" class="uhk uhk--fn-layer" alt="">
-              </div>
-              <div class="item uhk__layer-wrapper uhk__layer-wrapper--mouse">
-                <img src="./images/base-layer.svg" class="uhk uhk--mouse-layer" alt="">
-              </div>
+            <div class="row">
             </div>
-            <iframe src="popup__iframe.html" class="key-editor__popup" frameborder="0" scrolling="no" onload="resizeIframe(this)" style="display: none;"></iframe>
-          </div>
+            <div class="row unk--wrapper">
+                <div class="col-xs-12 text-center">
+                    <div class="" role="" style="margin-bottom: 2rem;">
+                        <button type="button" data-layer="base" class="uhk__layer-switcher btn btn-primary btn-lg current">Base</button>
+                        <button type="button" data-layer="mod" class="uhk__layer-switcher btn btn-default btn-lg">Mod</button>
+                        <button type="button" data-layer="fn" class="uhk__layer-switcher btn btn-default btn-lg">Fn</button>
+                        <button type="button" data-layer="mouse" class="uhk__layer-switcher btn btn-default btn-lg">Mouse</button>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="keyboard-slider">
+                        <div class="item uhk__layer-wrapper uhk__layer-wrapper--base current">
+                            <img src="./images/base-layer.svg" class="uhk uhk--base-layer" alt="">
+                        </div>
+                        <div class="item uhk__layer-wrapper uhk__layer-wrapper--mod">
+                            <img src="./images/base-layer--blank.svg" class="uhk uhk--mod-layer" alt="">
+                        </div>
+                        <div class="item uhk__layer-wrapper uhk__layer-wrapper--fn">
+                            <img src="./images/base-layer--dvorak.svg" class="uhk uhk--fn-layer" alt="">
+                        </div>
+                        <div class="item uhk__layer-wrapper uhk__layer-wrapper--mouse">
+                            <img src="./images/base-layer.svg" class="uhk uhk--mouse-layer" alt="">
+                        </div>
+                    </div>
+                    <iframe src="popup__iframe.html" class="key-editor__popup" frameborder="0" scrolling="no" onload="resizeIframe(this)" style="display: none;"></iframe>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="macro--edit main-content__inner" style="display: none;">
-        <div class="row">
-          <h1 class="col-xs-12 pane-title">
+        <div class="keymap--edit-ng2 main-content__inner" style="display: none;">
+            <main-app></main-app>
+        </div>
+
+        <div class="macro--edit main-content__inner" style="display: none;">
+            <div class="row">
+                <h1 class="col-xs-12 pane-title">
             <i class="fa fa-play"></i>
             <span class="macro__name pane-title__name" contenteditable="true">Macro1</span> <i class="fa"></i>
           </h1>
-        </div>
-        <div class="row">
-          <div id="listWithHandle" class="list-group col-xs-10 col-xs-offset-1">
-            <div class="list-group-item action--item">
-              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
-              <i class="fa fa-mouse-pointer"></i> Move pointer by 100px leftward
-              <i class="glyphicon glyphicon-pencil action--edit"></i>
-              <i class="glyphicon glyphicon-trash action--trash"></i>
             </div>
-            <div class="list-group-item macro-settings" style="display: none;">
-              <div class="helper"></div>
-              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-              <div class="row">
-                <div class="col-sm-12 flex-button-wrapper">
-                  <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
-                  <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
+            <div class="row">
+                <div id="listWithHandle" class="list-group col-xs-10 col-xs-offset-1">
+                    <div class="list-group-item action--item">
+                        <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+                        <i class="fa fa-mouse-pointer"></i> Move pointer by 100px leftward
+                        <i class="glyphicon glyphicon-pencil action--edit"></i>
+                        <i class="glyphicon glyphicon-trash action--trash"></i>
+                    </div>
+                    <div class="list-group-item macro-settings" style="display: none;">
+                        <div class="helper"></div>
+                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                            sit amet.</p>
+                        <div class="row">
+                            <div class="col-sm-12 flex-button-wrapper">
+                                <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
+                                <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item action--item">
+                        <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+                        <i class="fa fa-square"></i> Press letter A
+                        <i class="glyphicon glyphicon-pencil action--edit"></i>
+                        <i class="glyphicon glyphicon-trash action--trash"></i>
+                    </div>
+                    <div class="list-group-item action--item">
+                        <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+                        <i class="fa fa-square"></i> Press Alt+Tab
+                        <i class="glyphicon glyphicon-pencil action--edit"></i>
+                        <i class="glyphicon glyphicon-trash action--trash"></i>
+                    </div>
+                    <div class="list-group-item action--item">
+                        <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+                        <i class="fa fa-clock-o"></i> Delay of 235ms
+                        <i class="glyphicon glyphicon-pencil action--edit"></i>
+                        <i class="glyphicon glyphicon-trash action--trash"></i>
+                    </div>
+                    <div class="list-group-item action--item">
+                        <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+                        <i class="fa fa-mouse-pointer"></i> Press button 1
+                        <i class="glyphicon glyphicon-pencil action--edit"></i>
+                        <i class="glyphicon glyphicon-trash action--trash"></i>
+                    </div>
+                    <div class="list-group-item action--item">
+                        <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
+                        <i class="fa fa-mouse-pointer"></i> Scroll by 150px downward
+                        <i class="glyphicon glyphicon-pencil action--edit"></i>
+                        <i class="glyphicon glyphicon-trash action--trash"></i>
+                    </div>
+                    <div class="list-group-item action--item add-new__action-item no-reorder">
+                        <a href="#" class="add-new__action-item--link"><i class="fa fa-plus"></i> Add new action item</a>
+                    </div>
+                    <div class="list-group-item new-macro-settings">
+                        <div class="helper"></div>
+                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                            sit amet.</p>
+                        <div class="row">
+                            <div class="col-sm-12 flex-button-wrapper">
+                                <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
+                                <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="list-group-item action--item">
-              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
-              <i class="fa fa-square"></i> Press letter A
-              <i class="glyphicon glyphicon-pencil action--edit"></i>
-              <i class="glyphicon glyphicon-trash action--trash"></i>
-            </div>
-            <div class="list-group-item action--item">
-              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
-              <i class="fa fa-square"></i> Press Alt+Tab
-              <i class="glyphicon glyphicon-pencil action--edit"></i>
-              <i class="glyphicon glyphicon-trash action--trash"></i>
-            </div>
-            <div class="list-group-item action--item">
-              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
-              <i class="fa fa-clock-o"></i> Delay of 235ms
-              <i class="glyphicon glyphicon-pencil action--edit"></i>
-              <i class="glyphicon glyphicon-trash action--trash"></i>
-            </div>
-            <div class="list-group-item action--item">
-              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
-              <i class="fa fa-mouse-pointer"></i> Press button 1
-              <i class="glyphicon glyphicon-pencil action--edit"></i>
-              <i class="glyphicon glyphicon-trash action--trash"></i>
-            </div>
-            <div class="list-group-item action--item">
-              <span class="glyphicon glyphicon-option-vertical move-handle" aria-hidden="true"></span>
-              <i class="fa fa-mouse-pointer"></i> Scroll by 150px downward
-              <i class="glyphicon glyphicon-pencil action--edit"></i>
-              <i class="glyphicon glyphicon-trash action--trash"></i>
-            </div>
-            <div class="list-group-item action--item add-new__action-item no-reorder">
-              <a href="#" class="add-new__action-item--link"><i class="fa fa-plus"></i> Add new action item</a>
-            </div>
-            <div class="list-group-item new-macro-settings">
-              <div class="helper"></div>
-              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-              <div class="row">
-                <div class="col-sm-12 flex-button-wrapper">
-                  <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
-                  <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
 
     </div>
 
@@ -150,50 +166,48 @@
     <script src="node_modules/handlebars/dist/handlebars.js"></script>
     <script src="app.js"></script>
     <script src="macro.js"></script>
+    <script src="bundle/uhk.js"></script>
 
     <script type="text/x-handlebars-template" id="sidebar-menu--source">
-      {{#if menu}}
+        {{#if menu}}
         <ul class="menu--top">
-          {{#each menu as |menuValue menuKey|}}
+            {{#each menu as |menuValue menuKey|}}
             <li class="sidebar__level-1--item">
-              <div class="sidebar__level-1">
-                <i class='fa fa-{{icon}}'></i> {{name}} <!--<span class="small-text">collapse</span>-->
-                {{#if expandable}}
-                  <a href="#" class="btn btn-default pull-right btn-sm">
-                    <i class="fa fa-plus"></i>
-                  </a>
-                {{/if}}
-                <i class="fa fa-chevron-up pull-right" style=""></i>
-              </div>
-              {{#if children}}
+                <div class="sidebar__level-1">
+                    <i class='fa fa-{{icon}}'></i> {{name}}
+                    <!--<span class="small-text">collapse</span>-->
+                    {{#if expandable}}
+                    <a href="#" class="btn btn-default pull-right btn-sm">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                    {{/if}}
+                    <i class="fa fa-chevron-up pull-right" style=""></i>
+                </div>
+                {{#if children}}
                 <ul>
-                  {{#each children}}
+                    {{#each children}}
                     <li class="sidebar__level-2--item {{classes}}" data-name="{{name}}" data-content="{{menuValue.dataContent}}" data-abbrev="{{abbrev}}">
-                      <div class="sidebar__level-2">
-                        {{name}}
-                        {{#if menuValue.hasDefaults}}
-                          {{#if isDefault}}
-                            <i class="fa fa-star pull-right"></i>
-                          {{/if}}
-                        {{/if}}
-                      </div>
+                        <div class="sidebar__level-2">
+                            {{name}} {{#if menuValue.hasDefaults}} {{#if isDefault}}
+                            <i class="fa fa-star pull-right"></i> {{/if}} {{/if}}
+                        </div>
                     </li>
-                  {{/each}}
+                    {{/each}}
                 </ul>
-              {{/if}}
+                {{/if}}
             </li>
-          {{/each}}
+            {{/each}}
         </ul>
-      {{/if}}
-      {{#if menuBottom}}
+        {{/if}} {{#if menuBottom}}
         <ul class="menu--bottom">
-          {{#each menuBottom}}
+            {{#each menuBottom}}
             <li class="sidebar__level-1--item">
-              <div class="sidebar__level-1"><i class='fa fa-{{icon}}'></i> {{name}}</div>
+                <div class="sidebar__level-1"><i class='fa fa-{{icon}}'></i> {{name}}</div>
             </li>
-          {{/each}}
+            {{/each}}
         </ul>
-      {{/if}}
+        {{/if}}
     </script>
-  </body>
+</body>
+
 </html>

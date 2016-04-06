@@ -210,6 +210,21 @@ var menuObject = {
       ]
     },
     {
+      icon: 'keyboard-o',
+      name: 'Keymaps-ng2',
+      hasDefaults: true,
+      expandable: true,
+      dataContent: '.keymap--edit-ng2',
+      children: [
+        {
+          icon: '',
+          name: 'Factory keymap',
+          abbrev: 'FTY',
+          isDefault: true
+        }
+      ]
+    },
+    {
       icon: 'play',
       name: 'Macros',
       expandable: true,
