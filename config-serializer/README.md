@@ -18,8 +18,8 @@ The **binary representation** is meant to be written to, and read from the EEPRO
 
 Each configuration item belongs to a specific type. The following types are available:
 
-**Primitive types** are integers and string.
+**Primitive types** are integers of different sizes, and string. See [UhkBuffer](UhkBuffer.ts) which implements all the primitive types.
 
-**Compound types** are composed of primitive types, and/or compound types.
+**Compound types** are composed of primitive types, and/or compound types. All compound types must descend from the [Serializable](Serializable.ts) class, and saved into the [config-items](config-items) directory.
 
-**Array type** is a special compound type which is composed of a sequency of items of a specific type.
+**Array type** is a special compound type which is composed of a sequence of items of a specific type. Array items must descend from the [ClassArray](ClassArray.ts) class.
