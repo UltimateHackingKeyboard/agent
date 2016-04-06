@@ -8,8 +8,18 @@ The configuration of the UHK is unusually complex for a keyboard, composed of a 
 
 There are 3 different representations of the configuration, each filling a specific purpose.
 
-The **JavaScript representation** is optimally suited to be serialized as JSON on a hard drive, or transmitted over the network. As a plaintext format, it's also human-readable and easily editable. 
+The **JavaScript representation** is optimally suited to be serialized as JSON, and saved to the file system, or transmitted over the network. As a plaintext format, it's human-readable and easily editable. 
 
-The **TypeScript representation** is structurally similar to the JavaScript representation, but it features strongly typed TypeScript objects instead of typeless JavaScript objects. It's meant to be used within Agent. Extensive validation is taking place when constructing the TypeScript objects, ensuring the integrity of the configuration.
+The **TypeScript representation** is structurally similar to the JavaScript representation, but it features strongly typed TypeScript objects instead of typeless JavaScript objects. It's meant to be used by Agent. Extensive validation is taking place upon constructing the TypeScript objects, ensuring the integrity of the configuration.
 
 The **binary representation** is meant to be written to, and read from the EEPROM of the UHK. It's supposed to be very compact in order to maximize the use of the 32kbyte EEPROM space.
+
+## Data types
+
+Each configuration item belongs to a specific type. The following types are available:
+
+**Primitive types** are integers and string.
+
+**Compound types** are composed of primitive types, and/or compound types.
+
+**Array type** is a special compound type which is composed of a sequency of items of a specific type.
