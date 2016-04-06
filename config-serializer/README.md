@@ -2,7 +2,7 @@
 
 This directory contains the configuration serializer of Agent. 
 
-The configuration of the UHK is unusually complex for a keyboard, composed of a number of items of different types, including keymaps, layers, macros, and the like. This is a supposed to be a short guide for the aspiring hacker. Let's get right into it!
+The configuration of the UHK is unusually complex for a keyboard, and is composed of a number of items of different types, including keymaps, layers, macros, and the like. This is a supposed to be a short guide for the aspiring hacker. Let's get right into it!
 
 ## Configuration representations
 
@@ -14,7 +14,7 @@ The **TypeScript representation** is structurally similar to the JavaScript repr
 
 The **binary representation** is meant to be written to, and read from the EEPROM of the UHK. It's designed to be very compact in order to maximize the use of the 32kbyte EEPROM space.
 
-## Configuration types
+## Configuration item types
 
 Each configuration item belongs to a specific type. The following types are available:
 
