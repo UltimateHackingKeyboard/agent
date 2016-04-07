@@ -30,9 +30,9 @@ abstract class Serializable<T> {
     fromBinary(buffer: UhkBuffer): Serializable<T> {
         let indentation = new Array(Serializable.depth + 1).join('    ');
         let isArray = this instanceof ClassArray;
-        process.stdout.write(`${indentation}${this.constructor.name}.fromBinary:` + (isArray ? '\n' : ' ['));
+        process.stdout.write(`${indentation}${this.constructor.name}.fromBinary: [`);
         Serializable.depth++;
-        buffer.enableDump = !isArray;
+        buffer.enableDump = true;
         let value = this._fromBinary(buffer);
         buffer.enableDump = false;
         Serializable.depth--;

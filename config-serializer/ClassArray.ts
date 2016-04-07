@@ -11,6 +11,12 @@ abstract class ClassArray<T> extends Serializable<T> {
 
     _fromBinary(buffer: UhkBuffer): Serializable<T> {
         let arrayLength = buffer.readCompactLength();
+
+        if (buffer.enableDump) {
+            process.stdout.write(']\n');
+            buffer.enableDump = false;
+        }
+
         for (let i = 0; i < arrayLength; i++) {
             this.elements.push(this.binaryToClass(buffer));
         }
