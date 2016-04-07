@@ -107,12 +107,10 @@ class UhkBuffer {
         if (length === UhkBuffer.longCompactLengthPrefix) {
             length += this.readUInt8() << 8;
         }
-        this.dump(`cl(${length})`);
         return length;
     }
 
     writeCompactLength(length: number) {
-        this.dump(`cl(${length})`);
         if (length >= UhkBuffer.longCompactLengthPrefix) {
             this.writeUInt8(UhkBuffer.longCompactLengthPrefix);
             this.writeUInt16(length);
