@@ -7,9 +7,6 @@ class KeystrokeAction extends KeyAction {
     }
 
     set scancode(value) {
-        if (!TypeChecker.isScancodeValid(value)) {
-            throw `Invalid KeystrokeAction.scancode: ${value}`;
-        }
         this._scancode = value;
     }
 

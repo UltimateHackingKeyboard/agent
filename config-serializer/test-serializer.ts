@@ -1,5 +1,4 @@
 /// <reference path="assert.ts" />
-/// <reference path="TypeChecker.ts" />
 /// <reference path="Serializable.ts" />
 /// <reference path="ClassArray.ts" />
 /// <reference path="UhkBuffer.ts" />

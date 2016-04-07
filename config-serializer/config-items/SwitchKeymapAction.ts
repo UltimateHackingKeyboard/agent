@@ -7,9 +7,6 @@ class SwitchKeymapAction extends KeyAction {
     }
 
     set keymapId(value) {
-        if (!TypeChecker.isUInt8Valid(value)) {
-            throw `Invalid SwitchKeymapAction.keymapId: ${value}`;
-        }
         this._keymapId = value;
     }
 

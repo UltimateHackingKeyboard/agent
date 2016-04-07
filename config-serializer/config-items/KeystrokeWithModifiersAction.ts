@@ -9,9 +9,6 @@ class KeystrokeWithModifiersAction extends KeyAction {
     }
 
     set scancode(value) {
-        if (!TypeChecker.isScancodeValid(value)) {
-            throw `Invalid KeystrokeWithModifiersAction.scancode: ${value}`;
-        }
         this._scancode = value;
     }
 
