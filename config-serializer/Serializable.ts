@@ -8,13 +8,6 @@ abstract class Serializable<T> {
     private static maxDisplayedJsonLength = 160;
     private static enableDump = true;
 
-    strintifyJsObject(jsObject: any): string {
-        let json = JSON.stringify(jsObject);
-        return json.length > Serializable.maxDisplayedJsonLength
-            ? json.substr(0, Serializable.maxDisplayedJsonLength) + '...'
-            : json;
-    }
-
     fromJsObject(jsObject: any): Serializable<T> {
         let isArray = this instanceof ClassArray;
         this.dumpMethodName('fromJsObject');
@@ -85,5 +78,12 @@ abstract class Serializable<T> {
     private dumpMethodName(methodName: string) {
         let indentation = new Array(Serializable.depth + 1).join('    ');
         this.dump(`${indentation}${this.constructor.name}.${methodName}: `);
+    }
+
+    private strintifyJsObject(jsObject: any): string {
+        let json = JSON.stringify(jsObject);
+        return json.length > Serializable.maxDisplayedJsonLength
+            ? json.substr(0, Serializable.maxDisplayedJsonLength) + '...'
+            : json;
     }
 }
