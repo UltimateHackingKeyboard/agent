@@ -1,7 +1,7 @@
 class NoneAction extends KeyAction {
 
     _fromJsObject(jsObject: any): NoneAction {
-        this.assertKeyActionType(jsObject, KeyActionType.NoneAction, 'NoneAction');
+        this.assertKeyActionType(jsObject, keyActionType.NoneAction, 'NoneAction');
         return this;
     }
 
@@ -12,7 +12,7 @@ class NoneAction extends KeyAction {
 
     _toJsObject(): any {
         return {
-            keyActionType: KeyActionType.NoneAction
+            keyActionType: keyActionType.NoneAction
         };
     }
 

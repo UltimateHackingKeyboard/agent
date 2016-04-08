@@ -13,7 +13,7 @@ enum KeyActionId {
     PlayMacroAction              = 8
 }
 
-let KeyActionType = {
+let keyActionType = {
     NoneAction                   : 'none',
     KeystrokeAction              : 'keystroke',
     KeystrokeModifiersAction     : 'keystrokeModifiers',

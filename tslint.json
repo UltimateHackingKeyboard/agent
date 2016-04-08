@@ -21,7 +21,8 @@
         "no-unused-expression": true,
         "no-unused-variable": [
             true,
-            "check-parameters"
+            "check-parameters",
+            {"ignore-pattern": "assert.*|keyActionType"}
         ],
         "no-use-before-declare": true,
         "no-var-keyword": true,
