@@ -4,13 +4,13 @@ class SwitchKeymapAction extends KeyAction {
     keymapId: number;
 
     _fromJsObject(jsObject: any): SwitchKeymapAction {
-        this.assertKeyActionType(jsObject, keyActionType.SwitchKeymapAction, 'SwitchKeymapAction');
+        this.assertKeyActionType(jsObject);
         this.keymapId = jsObject.keymapId;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchKeymapAction, 'SwitchKeymapAction');
+        this.readAndAssertKeyActionId(buffer);
         this.keymapId = buffer.readUInt8();
         return this;
     }

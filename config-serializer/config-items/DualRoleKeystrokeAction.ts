@@ -21,14 +21,14 @@ class DualRoleKeystrokeAction extends KeyAction {
     private longPressAction: LongPressAction;
 
     _fromJsObject(jsObject: any): DualRoleKeystrokeAction {
-        this.assertKeyActionType(jsObject, keyActionType.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
+        this.assertKeyActionType(jsObject);
         this.scancode = jsObject.scancode;
         this.longPressAction = LongPressAction[<string> jsObject.longPressAction];
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): DualRoleKeystrokeAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
+        this.readAndAssertKeyActionId(buffer);
         this.scancode = buffer.readUInt8();
         this.longPressAction = buffer.readUInt8();
         return this;

@@ -4,13 +4,13 @@ class PlayMacroAction extends KeyAction {
     macroId: number;
 
     _fromJsObject(jsObject: any): PlayMacroAction {
-        this.assertKeyActionType(jsObject, keyActionType.PlayMacroAction, 'PlayMacroAction');
+        this.assertKeyActionType(jsObject);
         this.macroId = jsObject.macroId;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): PlayMacroAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.PlayMacroAction, 'PlayMacroAction');
+        this.readAndAssertKeyActionId(buffer);
         this.macroId = buffer.readUInt8();
         return this;
     }

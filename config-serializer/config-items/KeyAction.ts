@@ -26,16 +26,19 @@ let keyActionType = {
 };
 
 abstract class KeyAction extends Serializable<KeyAction> {
-    assertKeyActionType(jsObject: any, keyActionTypeString: string, classname: string) {
+    assertKeyActionType(jsObject: any) {
+        let keyActionClassname = this.constructor.name;
+        let keyActionTypeString = keyActionType[keyActionClassname]
         if (jsObject.keyActionType !== keyActionTypeString) {
-            console.log(arguments.callee.prototype.name);
-            throw `Invalid ${classname}.keyActionType: ${jsObject.keyActionType}`;
+            throw `Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`;
         }
     }
 
-    readAndAssertKeyActionId(buffer: UhkBuffer, keyActionIdParam: KeyActionId, classname: string) {
+    readAndAssertKeyActionId(buffer: UhkBuffer) {
+        let classname = this.constructor.name;
         let readKeyActionId = buffer.readUInt8();
-        if (readKeyActionId !== keyActionIdParam) {
+        let keyActionId = KeyActionId[<string> classname];
+        if (readKeyActionId !== keyActionId) {
             throw `Invalid ${classname} first byte: ${readKeyActionId}`;
         }
     }

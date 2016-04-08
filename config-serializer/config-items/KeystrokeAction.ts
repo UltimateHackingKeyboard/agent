@@ -4,13 +4,13 @@ class KeystrokeAction extends KeyAction {
     scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeAction {
-        this.assertKeyActionType(jsObject, keyActionType.KeystrokeAction, 'KeystrokeAction');
+        this.assertKeyActionType(jsObject);
         this.scancode = jsObject.scancode;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): KeystrokeAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.KeystrokeAction, 'KeystrokeAction');
+        this.readAndAssertKeyActionId(buffer);
         this.scancode = buffer.readUInt8();
         return this;
     }

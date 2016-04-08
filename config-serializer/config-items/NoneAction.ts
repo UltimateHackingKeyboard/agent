@@ -1,12 +1,12 @@
 class NoneAction extends KeyAction {
 
     _fromJsObject(jsObject: any): NoneAction {
-        this.assertKeyActionType(jsObject, keyActionType.NoneAction, 'NoneAction');
+        this.assertKeyActionType(jsObject);
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): NoneAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.NoneAction, 'NoneAction');
+        this.readAndAssertKeyActionId(buffer);
         return this;
     }
 

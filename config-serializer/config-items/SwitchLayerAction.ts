@@ -18,14 +18,14 @@ class SwitchLayerAction extends KeyAction {
     }
 
     _fromJsObject(jsObject: any): SwitchLayerAction {
-        this.assertKeyActionType(jsObject, keyActionType.SwitchLayerAction, 'SwitchLayerAction');
+        this.assertKeyActionType(jsObject);
         this.layer = Layer[<string> jsObject.layer];
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): SwitchLayerAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.SwitchLayerAction, 'SwitchLayerAction');
+        this.readAndAssertKeyActionId(buffer);
         let layer = buffer.readUInt8();
         this.isLayerToggleable = (layer & SwitchLayerAction.toggleFlag) !== 0;
         layer &= ~SwitchLayerAction.toggleFlag; // Clear toggle bit.

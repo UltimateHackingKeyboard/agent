@@ -21,7 +21,7 @@ class KeyActions extends ClassArray<KeyAction> {
             case keyActionType.PlayMacroAction:
                 return new PlayMacroAction().fromJsObject(jsObject);
             default:
-                throw `Invalid KeyAction.keyActionType: "${jsObject.actionType}"`;
+                throw `Invalid KeyAction.keyActionType: "${jsObject.keyActionType}"`;
         }
     }
 

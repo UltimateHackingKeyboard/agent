@@ -4,14 +4,13 @@ class KeystrokeModifiersAction extends KeyAction {
     modifierMask: number;
 
     _fromJsObject(jsObject: any): KeystrokeModifiersAction {
-        this.assertKeyActionType(
-            jsObject, keyActionType.KeystrokeModifiersAction, 'KeystrokeModifiersAction');
+        this.assertKeyActionType(jsObject);
         this.modifierMask = jsObject.modifierMask;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): KeystrokeModifiersAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.KeystrokeModifiersAction, 'KeystrokeModifiersAction');
+        this.readAndAssertKeyActionId(buffer);
         this.modifierMask = buffer.readUInt8();
         return this;
     }

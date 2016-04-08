@@ -7,15 +7,14 @@ class KeystrokeWithModifiersAction extends KeyAction {
     scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeWithModifiersAction {
-        this.assertKeyActionType(
-            jsObject, keyActionType.KeystrokeWithModifiersAction, 'KeystrokeWithModifiersAction');
+        this.assertKeyActionType(jsObject);
         this.scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): KeystrokeWithModifiersAction {
-        this.readAndAssertKeyActionId(buffer, KeyActionId.KeystrokeWithModifiersAction, 'KeystrokeWithModifiersAction');
+        this.readAndAssertKeyActionId(buffer);
         this.scancode = buffer.readUInt8();
         this.modifierMask = buffer.readUInt8();
         return this;
