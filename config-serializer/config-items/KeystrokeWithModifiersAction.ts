@@ -8,7 +8,7 @@ class KeystrokeWithModifiersAction extends KeyAction {
 
     _fromJsObject(jsObject: any): KeystrokeWithModifiersAction {
         this.assertKeyActionType(
-            jsObject, KeyActionType.KeystrokeWithModifiersAction, 'KeystrokeWithModifiersAction');
+            jsObject, keyActionType.KeystrokeWithModifiersAction, 'KeystrokeWithModifiersAction');
         this.scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
         return this;
@@ -23,7 +23,7 @@ class KeystrokeWithModifiersAction extends KeyAction {
 
     _toJsObject(): any {
         return {
-            keyActionType: KeyActionType.KeystrokeWithModifiersAction,
+            keyActionType: keyActionType.KeystrokeWithModifiersAction,
             scancode: this.scancode,
             modifierMask: this.modifierMask
         };

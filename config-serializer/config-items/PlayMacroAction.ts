@@ -4,7 +4,7 @@ class PlayMacroAction extends KeyAction {
     macroId: number;
 
     _fromJsObject(jsObject: any): PlayMacroAction {
-        this.assertKeyActionType(jsObject, KeyActionType.PlayMacroAction, 'PlayMacroAction');
+        this.assertKeyActionType(jsObject, keyActionType.PlayMacroAction, 'PlayMacroAction');
         this.macroId = jsObject.macroId;
         return this;
     }
@@ -17,7 +17,7 @@ class PlayMacroAction extends KeyAction {
 
     _toJsObject(): any {
         return {
-            keyActionType: KeyActionType.PlayMacroAction,
+            keyActionType: keyActionType.PlayMacroAction,
             macroId: this.macroId
         };
     }

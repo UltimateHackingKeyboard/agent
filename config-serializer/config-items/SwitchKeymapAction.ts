@@ -4,7 +4,7 @@ class SwitchKeymapAction extends KeyAction {
     keymapId: number;
 
     _fromJsObject(jsObject: any): SwitchKeymapAction {
-        this.assertKeyActionType(jsObject, KeyActionType.SwitchKeymapAction, 'SwitchKeymapAction');
+        this.assertKeyActionType(jsObject, keyActionType.SwitchKeymapAction, 'SwitchKeymapAction');
         this.keymapId = jsObject.keymapId;
         return this;
     }
@@ -17,7 +17,7 @@ class SwitchKeymapAction extends KeyAction {
 
     _toJsObject(): any {
         return {
-            keyActionType: KeyActionType.SwitchKeymapAction,
+            keyActionType: keyActionType.SwitchKeymapAction,
             keymapId: this.keymapId
         };
     }

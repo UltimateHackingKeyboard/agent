@@ -2,23 +2,23 @@ class KeyActions extends ClassArray<KeyAction> {
 
     jsObjectToClass(jsObject: any): Serializable<KeyAction> {
         switch (jsObject.keyActionType) {
-            case KeyActionType.NoneAction:
+            case keyActionType.NoneAction:
                 return new NoneAction().fromJsObject(jsObject);
-            case KeyActionType.KeystrokeAction:
+            case keyActionType.KeystrokeAction:
                 return new KeystrokeAction().fromJsObject(jsObject);
-            case KeyActionType.KeystrokeModifiersAction:
+            case keyActionType.KeystrokeModifiersAction:
                 return new KeystrokeModifiersAction().fromJsObject(jsObject);
-            case KeyActionType.KeystrokeWithModifiersAction:
+            case keyActionType.KeystrokeWithModifiersAction:
                 return new KeystrokeWithModifiersAction().fromJsObject(jsObject);
-            case KeyActionType.DualRoleKeystrokeAction:
+            case keyActionType.DualRoleKeystrokeAction:
                 return new DualRoleKeystrokeAction().fromJsObject(jsObject);
-            case KeyActionType.SwitchLayerAction:
+            case keyActionType.SwitchLayerAction:
                 return new SwitchLayerAction().fromJsObject(jsObject);
-            case KeyActionType.SwitchKeymapAction:
+            case keyActionType.SwitchKeymapAction:
                 return new SwitchKeymapAction().fromJsObject(jsObject);
-            case KeyActionType.MouseAction:
+            case keyActionType.MouseAction:
                 return new MouseAction().fromJsObject(jsObject);
-            case KeyActionType.PlayMacroAction:
+            case keyActionType.PlayMacroAction:
                 return new PlayMacroAction().fromJsObject(jsObject);
             default:
                 throw `Invalid KeyAction.keyActionType: "${jsObject.actionType}"`;

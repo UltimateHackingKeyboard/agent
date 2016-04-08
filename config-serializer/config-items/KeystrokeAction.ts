@@ -4,7 +4,7 @@ class KeystrokeAction extends KeyAction {
     scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeAction {
-        this.assertKeyActionType(jsObject, KeyActionType.KeystrokeAction, 'KeystrokeAction');
+        this.assertKeyActionType(jsObject, keyActionType.KeystrokeAction, 'KeystrokeAction');
         this.scancode = jsObject.scancode;
         return this;
     }
@@ -17,7 +17,7 @@ class KeystrokeAction extends KeyAction {
 
     _toJsObject(): any {
         return {
-            keyActionType: KeyActionType.KeystrokeAction,
+            keyActionType: keyActionType.KeystrokeAction,
             scancode: this.scancode
         };
     }
