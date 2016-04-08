@@ -21,7 +21,7 @@ class MouseAction extends KeyAction {
 
     _fromJsObject(jsObject: any): MouseAction {
         this.assertKeyActionType(jsObject, KeyActionType.MouseAction, 'MouseAction');
-        this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
+        this.mouseAction = MouseActionParam[<string> jsObject.mouseAction];
         return this;
     }
 

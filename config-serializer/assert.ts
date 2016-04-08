@@ -23,7 +23,7 @@ function assertInt32(target: any, key: string) {
 }
 
 function assertCompactLength(target: any, key: string) {
-    return assertUInt16(target, key)
+    return assertUInt16(target, key);
 }
 
 function assertInteger(target: any, key: string, min: number, max: number) {
@@ -64,5 +64,5 @@ function assertEnum<E>(enumerated: E) {
                 configurable: true
             });
         }
-    }
+    };
 }

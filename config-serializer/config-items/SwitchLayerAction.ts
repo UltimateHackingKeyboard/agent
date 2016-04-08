@@ -19,7 +19,7 @@ class SwitchLayerAction extends KeyAction {
 
     _fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject, KeyActionType.SwitchLayerAction, 'SwitchLayerAction');
-        this.layer = Layer[<string>jsObject.layer];
+        this.layer = Layer[<string> jsObject.layer];
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }

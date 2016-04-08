@@ -23,7 +23,7 @@ let KeyActionType = {
     SwitchKeymapAction           : 'switchKeymap',
     MouseAction                  : 'mouse',
     PlayMacroAction              : 'playMacro'
-}
+};
 
 abstract class KeyAction extends Serializable<KeyAction> {
     assertKeyActionType(jsObject: any, keyActionTypeString: string, classname: string) {

@@ -23,7 +23,7 @@ class DualRoleKeystrokeAction extends KeyAction {
     _fromJsObject(jsObject: any): DualRoleKeystrokeAction {
         this.assertKeyActionType(jsObject, KeyActionType.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');
         this.scancode = jsObject.scancode;
-        this.longPressAction = LongPressAction[<string>jsObject.longPressAction];
+        this.longPressAction = LongPressAction[<string> jsObject.longPressAction];
         return this;
     }
 
