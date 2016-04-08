@@ -12,18 +12,7 @@ class SwitchLayerAction extends KeyAction {
 
     @assertEnum(Layer)
     private layer: Layer;
-/*
-    get layer(): number {
-        return this._layer;
-    }
 
-    set layer(value) {
-        if (!TypeChecker.isUInt8Valid(value)) {
-            throw 'Invalid SwitchLayerAction.layerId: ${value}';
-        }
-        this._layer = value;
-    }
-*/
     getToggleFlag() {
         return this.isLayerToggleable ? SwitchLayerAction.toggleFlag : 0;
     }

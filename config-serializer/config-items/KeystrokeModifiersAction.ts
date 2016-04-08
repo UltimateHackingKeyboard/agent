@@ -1,5 +1,6 @@
 class KeystrokeModifiersAction extends KeyAction {
 
+    @assertUInt8
     modifierMask: number;
 
     _fromJsObject(jsObject: any): KeystrokeModifiersAction {

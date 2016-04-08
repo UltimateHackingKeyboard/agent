@@ -1,14 +1,7 @@
 class PlayMacroAction extends KeyAction {
 
-    private _macroId: number;
-
-    get macroId(): number {
-        return this._macroId;
-    }
-
-    set macroId(value) {
-        this._macroId = value;
-    }
+    @assertUInt8
+    macroId: number;
 
     _fromJsObject(jsObject: any): PlayMacroAction {
         this.assertKeyActionType(jsObject, KeyActionType.PlayMacroAction, 'PlayMacroAction');

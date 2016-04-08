@@ -14,24 +14,11 @@ enum LongPressAction {
 
 class DualRoleKeystrokeAction extends KeyAction {
 
-    public scancode;
+    @assertUInt8
+    scancode: number;
 
-    private _longPressAction: LongPressAction;
-
-    get longPressAction(): number {
-        return this._longPressAction;
-    }
-
-    set longPressAction(value) {
-        if (!this.isDualRoleKeystrokeActionValid(value)) {
-            throw `Invalid DualRoleKeystrokeAction.longPressAction: ${value}`;
-        }
-        this._longPressAction = value;
-    }
-
-    isDualRoleKeystrokeActionValid(keyActionIdParam): boolean {
-        return LongPressAction[keyActionIdParam] !== undefined;
-    }
+    @assertEnum(LongPressAction)
+    private longPressAction: LongPressAction;
 
     _fromJsObject(jsObject: any): DualRoleKeystrokeAction {
         this.assertKeyActionType(jsObject, KeyActionType.DualRoleKeystrokeAction, 'DualRoleKeystrokeAction');

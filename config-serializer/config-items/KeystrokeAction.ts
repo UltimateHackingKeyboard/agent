@@ -1,14 +1,7 @@
 class KeystrokeAction extends KeyAction {
 
-    private _scancode: number;
-
-    get scancode(): number {
-        return this._scancode;
-    }
-
-    set scancode(value) {
-        this._scancode = value;
-    }
+    @assertUInt8
+    scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeAction {
         this.assertKeyActionType(jsObject, KeyActionType.KeystrokeAction, 'KeystrokeAction');

@@ -1,16 +1,10 @@
 class KeystrokeWithModifiersAction extends KeyAction {
 
+    @assertUInt8
     modifierMask: number;
 
-    private _scancode: number;
-
-    get scancode(): number {
-        return this._scancode;
-    }
-
-    set scancode(value) {
-        this._scancode = value;
-    }
+    @assertUInt8
+    scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeWithModifiersAction {
         this.assertKeyActionType(
