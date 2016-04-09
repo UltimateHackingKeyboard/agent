@@ -3,6 +3,9 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 
 import { MainAppComponent } from './main-app.component';
 
+import {DataProviderService} from './services/data-provider.service';
+
 bootstrap(MainAppComponent, [
-    HTTP_PROVIDERS
+    HTTP_PROVIDERS,
+    DataProviderService
 ]).catch(err => console.error(err));
