@@ -1,6 +1,3 @@
-// A KeyAction is composed of 3 bytes in the RAM and up to 3 bytes in the EEPROM of the UHK.
-// The first byte denotes the subclass of the KeyAction and its length in the EEPROM.
-
 enum KeyActionId {
     NoneAction                   = 0,
     KeystrokeAction              = 1,
