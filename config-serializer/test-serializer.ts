@@ -1,3 +1,4 @@
+/// <reference path="Function.d.ts" />
 /// <reference path="assert.ts" />
 /// <reference path="Serializable.ts" />
 /// <reference path="ClassArray.ts" />

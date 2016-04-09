@@ -1,7 +1,3 @@
-interface Function {
-    name: string;
-}
-
 abstract class Serializable<T> {
 
     private static depth = 0;
