@@ -10,7 +10,7 @@ There are 3 different representations of the configuration, each filling a speci
 
 The **JavaScript representation** is optimally suited to be serialized as JSON, and saved to the file system, or transmitted over the network. As a plaintext format, it's human-readable and easily editable. See [uhk-config.json](uhk-config.json) for an example configuration. 
 
-The **TypeScript representation** is structurally similar to the JavaScript representation, but it features strongly typed TypeScript objects instead of typeless JavaScript objects. This representation is meant to be used by Agent. Extensive validation takes place upon initializing the TypeScript objects to ensure the integrity of the configuration.
+The **TypeScript representation** is structurally similar to the JavaScript representation, but it features strongly typed TypeScript objects instead of typeless JavaScript objects. This representation is meant to be used by Agent. Extensive, per-property [assertion](assert.ts) takes place upon initializing the TypeScript objects to ensure the integrity of the configuration.
 
 The **binary representation** is meant to be written to, and read from the EEPROM of the UHK. It's designed to be very compact in order to maximize the use of the 32kbyte EEPROM space.
 
