@@ -2,7 +2,7 @@
 
 Agent is the configuration application of the [Ultimate Hacking Keyboard](https://ultimatehackingkeyboard.com/).
 
-Agent is in a preliminary state. You can click around, and most interactions will loosely work, but the application is not production ready yet. We're experimenting with the UI, and UX until the imminent Angular 2 port.
+Agent is in a preliminary state. You can click around, and most interactions will loosely work, but the application is not production ready yet. Agent is being ported to Angular 2 after which its features will actually fully work as expected.
 
 [Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent/)
 
