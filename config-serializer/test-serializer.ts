@@ -34,4 +34,4 @@ try {
 }
 
 let buffersContentsAreEqual = Buffer.compare(keyActions1BufferContent, keyActions2BufferContent) === 0;
-console.log('Binary configurations ' + (buffersContentsAreEqual ? 'are identical' : 'differ' + '.'));
+console.log('Binary configurations ' + (buffersContentsAreEqual ? 'are identical' : 'differ') + '.');
