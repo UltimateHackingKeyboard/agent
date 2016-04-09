@@ -15,3 +15,7 @@ npm install
 ```
 
 In the repository you can find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up the development process. You can fire it up with `gulp serve`.
+
+## Contribute
+
+Contributions are most welcome! Please always try to be as consistent as possible. Always run `npm run lint` and resolve lint warnings before every commit.
