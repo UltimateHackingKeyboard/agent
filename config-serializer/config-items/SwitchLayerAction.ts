@@ -13,10 +13,6 @@ class SwitchLayerAction extends KeyAction {
     @assertEnum(Layer)
     private layer: Layer;
 
-    getToggleFlag() {
-        return this.isLayerToggleable ? SwitchLayerAction.toggleFlag : 0;
-    }
-
     _fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject);
         this.layer = Layer[<string> jsObject.layer];
@@ -28,8 +24,7 @@ class SwitchLayerAction extends KeyAction {
         this.readAndAssertKeyActionId(buffer);
         let layer = buffer.readUInt8();
         this.isLayerToggleable = (layer & SwitchLayerAction.toggleFlag) !== 0;
-        layer &= ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
-        this.layer = layer;
+        this.layer = layer & ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
         return this;
     }
 
@@ -48,5 +43,9 @@ class SwitchLayerAction extends KeyAction {
 
     toString(): string {
         return `<SwitchLayerAction layer="${this.layer}" toggle="${this.isLayerToggleable}">`;
+    }
+
+    private getToggleFlag() {
+        return this.isLayerToggleable ? SwitchLayerAction.toggleFlag : 0;
     }
 }
