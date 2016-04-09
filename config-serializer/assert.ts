@@ -1,25 +1,25 @@
 function assertUInt8(target: any, key: string) {
-    return assertInteger(target, key, 0, 255);
+    return assertInteger(target, key, 0, 0xFF);
 }
 
 function assertInt8(target: any, key: string) {
-    return assertInteger(target, key, -128, 127);
+    return assertInteger(target, key, -0x80, 0x7F);
 }
 
 function assertUInt16(target: any, key: string) {
-    return assertInteger(target, key, 0, 65535);
+    return assertInteger(target, key, 0, 0xFFFF);
 }
 
 function assertInt16(target: any, key: string) {
-    return assertInteger(target, key, -32768, 32767);
+    return assertInteger(target, key, -0x8000, 0x7FFF);
 }
 
 function assertUInt32(target: any, key: string) {
-    return assertInteger(target, key, 0, 4294967295);
+    return assertInteger(target, key, 0, 0xFFFFFFFF);
 }
 
 function assertInt32(target: any, key: string) {
-    return assertInteger(target, key, -2147483648, 2147483647);
+    return assertInteger(target, key, -0x80000000, 0x7FFFFFFF);
 }
 
 function assertCompactLength(target: any, key: string) {
