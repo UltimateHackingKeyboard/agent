@@ -71,3 +71,13 @@ KeyActions.toJsObject: <KeyActions length="9">
     SwitchKeymapAction.toJsObject: <SwitchKeymapAction keymapId="1"> => {"keyActionType":"switchKeymap","keymapId":1}
 ```
 
+## Testing the serializer
+
+[test-serializer.ts](test-serializer.ts) is designed to test the serializer by taking [uhk-config.json](uhk-config.json), and transforming it to TypeScript representation, then to binary representation, then finally back to JavaScript representation. This should exercise every major code path.
+
+If the testing is successful the following should be displayed:
+
+```
+JSON configurations are identical.
+Binary configurations are identical.
+```
