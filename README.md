@@ -4,7 +4,7 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 
 Agent is in a preliminary state. You can click around, and most interactions will loosely work, but the application is not production ready yet. We're experimenting with the UI, and UX until the imminent Angular 2 port.
 
-[Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent-mockup/)
+[Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent/)
 
 ## Set up instructions
 
