@@ -4,6 +4,10 @@ This directory contains the configuration serializer of Agent.
 
 The configuration of the UHK is unusually complex for a keyboard, and is composed of a number of items of different types, including keymaps, layers, macros, and the like. This is a supposed to be a short guide for the aspiring hacker. Let's get right into it!
 
+## Setup
+
+Given that the development dependencies are installed on your system you should be able to build the configuration serializer by executing `tsc` in this directory, then test it with `node test-serializer.js`.
+
 ## Configuration representations
 
 There are 3 different representations of the configuration, each filling a specific purpose.
