@@ -23,9 +23,7 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRoles": [
-                                "move"
-                            ],
+                            "pointerRole": "move",
                             "keyActions": [
                                 {
                                     "keyActionType": "none"
@@ -69,16 +67,12 @@
                         },
                         {
                             "id": 1,
-                            "pointerRoles": [
-                                "scroll"
-                            ],
+                            "pointerRole": "scroll",
                             "keyActions": []
                         },
                         {
                             "id": 2,
-                            "pointerRoles": [
-                                "move"
-                            ],
+                            "pointerRole": "move",
                             "keyActions": []
                         }
                     ]
