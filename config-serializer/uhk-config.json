@@ -1,9 +1,9 @@
 {
     "signature": "UHK",
+    "dataModelVersion": 0,
     "prologue": 1234678,
     "hardwareId": 0,
     "brandId": 0,
-    "dataModelVersion": 0,
     "moduleConfigurations": [
         {
             "id": 1,
@@ -16,8 +16,8 @@
         {
             "id": 0,
             "isDefault": true,
-            "name": "QWERTY",
             "abbreviation": "QTY",
+            "name": "QWERTY",
             "layers": [
                 {
                     "modules": [
@@ -68,17 +68,14 @@
                             ]
                         },
                         {
-                            "id": 1
-                        },
-                        {
-                            "id": 2,
+                            "id": 1,
                             "pointerRoles": [
                                 "scroll"
                             ],
                             "keyActions": []
                         },
                         {
-                            "id": 3,
+                            "id": 2,
                             "pointerRoles": [
                                 "move"
                             ],
@@ -99,9 +96,9 @@
     "macros": [
         {
             "id": 0,
-            "name": "My address",
-            "isPrivate": true,
             "isLooped": false,
+            "isPrivate": true,
+            "name": "My address",
             "macroActions": [
                 {
                     "macroActionType": "pressKey",
