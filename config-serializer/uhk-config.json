@@ -7,9 +7,9 @@
     "moduleConfigurations": [
         {
             "id": 1,
-            "initialSpeed": 1,
-            "acceleration": 5,
-            "maxSpeed": 200
+            "initialPointerSpeed": 1,
+            "pointerAcceleration": 5,
+            "maxPointerSpeed": 200
         }
     ],
     "keymaps": [
