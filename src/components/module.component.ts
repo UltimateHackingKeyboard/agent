@@ -30,26 +30,24 @@ export class ModuleComponent implements OnInit {
 
     ngOnInit() {
         this.getButtonGroups().forEach(buttonGroup => {
-            this.dcl.loadIntoLocation(KeyboardButtonGroupComponent, this.elementRef, "row").then((bttnComponentRef: ComponentRef) => {
-                var group: KeyboardButtonGroupComponent = bttnComponentRef.instance;
-                group.keyboardButtons = buttonGroup;
-                //  console.log(keyboardButtonComponent);
-            });
+            this.dcl.loadIntoLocation(KeyboardButtonGroupComponent, this.elementRef, 'row')
+                .then((bttnComponentRef: ComponentRef) => {
+                    let group: KeyboardButtonGroupComponent = bttnComponentRef.instance;
+                    group.keyboardButtons = buttonGroup;
+                });
         });
     }
 
-
     private getButtonGroups(): KeyboardButton[][] {
-        var buttonGroups: KeyboardButton[][] = [];
-        var buttonGroup: KeyboardButton[] = [];
-        this.keyboardButtons.forEach((keyboardButton, index) => {
+        let buttonGroups: KeyboardButton[][] = [];
+        let buttonGroup: KeyboardButton[] = [];
+        this.keyboardButtons.forEach(keyboardButton => {
             if (buttonGroup.length > 0 && buttonGroup[buttonGroup.length - 1].y !== keyboardButton.y) {
                 buttonGroups.push(buttonGroup);
                 buttonGroup = [];
             }
             buttonGroup.push(keyboardButton);
         });
-        //console.log(buttonGroups, buttonGroup, this.keyboardButtons);
         return buttonGroups;
     }
 

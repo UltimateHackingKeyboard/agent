@@ -13,7 +13,7 @@ import { Component, OnInit, Input } from 'angular2/core';
         :host {
            display: flex;
         }
-    `],
+    `]
 })
 export class KeyboardButtonComponent implements OnInit {
     @Input() id: string;
