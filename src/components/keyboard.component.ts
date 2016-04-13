@@ -7,36 +7,42 @@ import {Module, ModuleComponent} from './module';
     selector: 'keyboard',
     template:
     `
-        <module *ngIf="modules.length > 0"
-                [case]="modules[0].case"
-                [keyboardButtons]="modules[0].keyboardButtons"
-                [fill]="modules[0].fill">
-        </module>
+        <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="viewBox" height="100%" width="100%">
+            <svg:g [attr.transform]="transform">
+                <svg:g uhk-module *ngFor="#module of modules"
+                        [case]="module.case"
+                        [keyboardKeys]="module.keyboardKeys"
+                        [fill]="module.fill"
+                        [attr.transform]="module.attributes.transform"
+                />
+            </svg:g>
+        </svg>
     `,
     styles:
     [`
         :host {
             display: flex;
-            height: 100%;
             width: 100%;
+            height: 100%;
         }
     `],
     directives: [ModuleComponent]
 })
 export class KeyboardComponent implements OnInit {
+    private viewBox: string;
     private modules: Module[];
+    private svg: any;
+    private transform: string;
 
     constructor(private dps: DataProviderService) {
         this.modules = [];
     }
 
     ngOnInit() {
-        this.loadKeyboardModules();
-    }
-
-    private loadKeyboardModules(): void {
-        let svg: any = this.dps.getBaseLayer();
-        this.modules = svg.g[0].g.map(obj => new Module(obj, svg.g[0].$.fill));
+        this.svg = this.dps.getBaseLayer();
+        this.viewBox = this.svg.$.viewBox;
+        this.transform = this.svg.g[0].$.transform;
+        this.modules = this.svg.g[0].g.map(obj => new Module(obj, this.svg.g[0].$.fill));
     }
 
 }
