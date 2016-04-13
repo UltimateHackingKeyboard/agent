@@ -5,6 +5,7 @@ abstract class ClassArray<T> extends Serializable<T> {
     _fromJsObject(jsObjects: any): Serializable<T> {
         for (let jsObject of jsObjects) {
             this.elements.push(this.jsObjectToClass(jsObject));
+            console.log("Elements: " + this.elements);
         }
         return this;
     }

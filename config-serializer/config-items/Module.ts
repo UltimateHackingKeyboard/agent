@@ -15,9 +15,13 @@ class Module extends Serializable<Module> {
     keyActions: Serializable<KeyActions>;
 
     _fromJsObject(jsObject: any): Module {
-        this.moduleId = jsObject.id;
+        this.moduleId = jsObject.moduleId;
         this.role = PointerRole[<string> jsObject.pointerRole];
         this.keyActions = new KeyActions().fromJsObject(jsObject.keyActions);
+        /*
+        console.log("ModuleId: "+this.moduleId);
+        console.log("PointerRole:"+PointerRole[this.role]);
+        */
         return this;
     }
 
@@ -30,7 +34,7 @@ class Module extends Serializable<Module> {
 
     _toJsObject(): any {
         return {
-            id: this.moduleId,
+            moduleId: this.moduleId,
             pointerRole: PointerRole[this.role],
             keyActions: this.keyActions.toJsObject()
         }
@@ -43,7 +47,7 @@ class Module extends Serializable<Module> {
     }
 
     toString(): string {
-        return `<Module id="${this.moduleId}">`;
+        return `<Module moduleId="${this.moduleId}" role="${this.role}">`;
     }
 
 }
