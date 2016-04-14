@@ -25,7 +25,7 @@ let keyActionType = {
 abstract class KeyAction extends Serializable<KeyAction> {
     assertKeyActionType(jsObject: any) {
         let keyActionClassname = this.constructor.name;
-        let keyActionTypeString = keyActionType[keyActionClassname]
+        let keyActionTypeString = keyActionType[keyActionClassname];
         if (jsObject.keyActionType !== keyActionTypeString) {
             throw `Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`;
         }

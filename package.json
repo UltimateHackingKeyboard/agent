@@ -37,7 +37,7 @@
   },
   "scripts": {
     "postinstall": "typings install",
-    "lint": "tslint **/*.ts",
+    "lint": "tslint 'src/**/*.ts' 'config-serializer/**/*.ts'",
     "typings": "typings",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server"

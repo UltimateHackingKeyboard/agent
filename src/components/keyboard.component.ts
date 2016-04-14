@@ -7,7 +7,11 @@ import {Module, ModuleComponent} from './module';
     selector: 'keyboard',
     template:
     `
-        <module *ngIf="modules.length > 0" [case]="modules[0].case" [keyboardButtons]="modules[0].keyboardButtons" [fill]="modules[0].fill"></module>
+        <module *ngIf="modules.length > 0"
+                [case]="modules[0].case"
+                [keyboardButtons]="modules[0].keyboardButtons"
+                [fill]="modules[0].fill">
+        </module>
     `,
     styles:
     [`
@@ -31,7 +35,7 @@ export class KeyboardComponent implements OnInit {
     }
 
     private loadKeyboardModules(): void {
-        var svg: any = this.dps.getBaseLayer();
+        let svg: any = this.dps.getBaseLayer();
         this.modules = svg.g[0].g.map(obj => new Module(obj, svg.g[0].$.fill));
     }
 
