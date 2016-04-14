@@ -13,7 +13,6 @@ abstract class ClassArray<T> extends Serializable<T> {
         let arrayLength = buffer.readCompactLength();
 
         if (buffer.enableDump) {
-            process.stdout.write(']\n');
             buffer.enableDump = false;
         }
 
@@ -35,7 +34,6 @@ abstract class ClassArray<T> extends Serializable<T> {
         buffer.writeCompactLength(this.elements.length);
 
         if (buffer.enableDump) {
-            process.stdout.write(']\n');
             buffer.enableDump = false;
         }
 

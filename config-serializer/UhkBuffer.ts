@@ -1,4 +1,5 @@
 class UhkBuffer {
+
     private static eepromSize = 32 * 1024;
     private static maxCompactLength = 0xFFFF;
     private static longCompactLengthPrefix = 0xFF;
@@ -156,21 +157,25 @@ class UhkBuffer {
     }
 
     set enableDump(value) {
-        UhkBuffer.isFirstElementToDump = true;
+        if (value) {
+            UhkBuffer.isFirstElementToDump = true;
+        }
         this._enableDump = value;
     }
 
     dump(value) {
-        if (this.enableDump) {
-            if (!UhkBuffer.isFirstElementToDump) {
-                process.stdout.write(', ');
-            }
-            process.stdout.write(value);
-            if (UhkBuffer.isFirstElementToDump) {
-                UhkBuffer.isFirstElementToDump = false;
-            }
-        } else {
-            UhkBuffer.isFirstElementToDump = true;
+        if (!this.enableDump) {
+            return;
+        }
+
+        if (!UhkBuffer.isFirstElementToDump) {
+            process.stdout.write(', ');
+        }
+
+        process.stdout.write(value);
+
+        if (UhkBuffer.isFirstElementToDump) {
+            UhkBuffer.isFirstElementToDump = false;
         }
     }
 }

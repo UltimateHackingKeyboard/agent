@@ -18,7 +18,9 @@ let keyActions1BufferContent = keyActions1Buffer.getBufferContent();
 fs.writeFileSync('uhk-config.bin', keyActions1BufferContent);
 
 keyActions1Buffer.offset = 0;
+console.log();
 let keyActions2Ts = new KeyActions().fromBinary(keyActions1Buffer);
+console.log('\n');
 let keyActions2Js = keyActions2Ts.toJsObject();
 let keyActions2Buffer = new UhkBuffer();
 keyActions2Ts.toBinary(keyActions2Buffer);
@@ -26,6 +28,7 @@ fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(keyActions2Js, und
 let keyActions2BufferContent = keyActions1Buffer.getBufferContent();
 fs.writeFileSync('uhk-config-serialized.bin', keyActions2BufferContent);
 
+console.log('\n');
 try {
     assert.deepEqual(keyActions1Js, keyActions2Js);
     console.log('JSON configurations are identical.');
