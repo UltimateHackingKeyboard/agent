@@ -5,58 +5,43 @@ abstract class Serializable<T> {
     private static enableDump = true;
 
     fromJsObject(jsObject: any): Serializable<T> {
-        let isArray = this instanceof ClassArray;
-        this.dumpMethodName('fromJsObject');
-        this.dump(`${this.strintifyJsObject(jsObject)}` + (isArray ? '\n' : ` => `));
+        this.dump(`${this.getIndentation()}${this.constructor.name}.fromJsObject: ` +
+                  `${this.strintifyJsObject(jsObject)}\n`);
         Serializable.depth++;
         let value = this._fromJsObject(jsObject);
         Serializable.depth--;
-        if (!isArray) {
-            this.dump(`${value}\n`);
-        }
+        this.dump(`${this.getIndentation()}=> ${value}\n`);
         return value;
     }
 
     fromBinary(buffer: UhkBuffer): Serializable<T> {
-        let isArray = this instanceof ClassArray;
-        this.dumpMethodName('fromBinary');
-        this.dump('[');
+        this.dump(`\n${this.getIndentation()}${this.constructor.name}.fromBinary: [`);
         Serializable.depth++;
         buffer.enableDump = Serializable.enableDump;
         let value = this._fromBinary(buffer);
         buffer.enableDump = false;
         Serializable.depth--;
-        if (!isArray) {
-            this.dump(`] => ${value}\n`);
-        }
+        this.dump(`]\n${this.getIndentation()}=> ${value}`);
         return value;
     }
 
     toJsObject(): any {
-        let isArray = this instanceof ClassArray;
-        this.dumpMethodName('toJsObject');
-        this.dump(`${this}` + (isArray ? '\n' : ` => `));
+        this.dump(`${this.getIndentation()}${this.constructor.name}.toJsObject: ${this}\n`);
         Serializable.depth++;
         let value = this._toJsObject();
         Serializable.depth--;
-        if (!isArray) {
-            this.dump(`${this.strintifyJsObject(value)}\n`);
-        }
+        this.dump(`${this.getIndentation()}=> ${this.strintifyJsObject(value)}\n`);
         return value;
     }
 
     toBinary(buffer: UhkBuffer): void {
-        let isArray = this instanceof ClassArray;
-        this.dumpMethodName('toBinary');
-        this.dump(`${this} => ['`);
+        this.dump(`\n${this.getIndentation()}${this.constructor.name}.toBinary: ${this} [`);
         Serializable.depth++;
         buffer.enableDump = Serializable.enableDump;
         let value = this._toBinary(buffer);
         buffer.enableDump = false;
         Serializable.depth--;
-        if (!isArray) {
-            this.dump(`]\n`);
-        }
+        this.dump(`]`);
         return value;
     }
 
@@ -71,9 +56,8 @@ abstract class Serializable<T> {
         }
     }
 
-    private dumpMethodName(methodName: string) {
-        let indentation = new Array(Serializable.depth + 1).join('    ');
-        this.dump(`${indentation}${this.constructor.name}.${methodName}: `);
+    private getIndentation() {
+        return new Array(Serializable.depth + 1).join('    ');
     }
 
     private strintifyJsObject(jsObject: any): string {
