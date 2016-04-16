@@ -4,7 +4,7 @@ var SvgStore = require('webpack-svgstore-plugin');
 module.exports = {
     entry: ['reflect-metadata', 'zone.js', 'es6-shim', "./src/boot.ts"],
     output: {
-        path: __dirname + "/bundle",
+        path: __dirname + "/build",
         filename: "uhk.js"
     },
     devtool: 'source-map',
