@@ -9,7 +9,7 @@ import {KeyboardKeyComponent} from './keyboard-key.component';
     `
         <svg:path *ngFor="#path of coverages" [attr.d]="path.$.d"/>
         <svg:g uhk-keyboard-key *ngFor="#key of keyboardKeys"
-                [id]="key.id" [fill]="key.fill"
+                [id]="key.id"
                 [rx]="key.rx" [ry]="key.ry"
                 [width]="key.width" [height]="key.height"
                 [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
@@ -20,7 +20,6 @@ import {KeyboardKeyComponent} from './keyboard-key.component';
 export class ModuleComponent implements OnInit {
     @Input() coverages: any[];
     @Input() keyboardKeys: KeyboardKey[];
-    @Input() fill: string;
 
     constructor() {
         this.keyboardKeys = [];

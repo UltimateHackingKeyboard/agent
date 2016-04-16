@@ -16,7 +16,6 @@ export class KeyboardKeyComponent implements OnInit {
     @Input() ry: string;
     @Input() height: string;
     @Input() width: string;
-    @Input() fill: string;
 
     constructor() { }
 

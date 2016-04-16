@@ -6,5 +6,4 @@ export interface KeyboardKey {
     ry: string;
     height: string;
     width: string;
-    fill: string;
 }
