@@ -36,7 +36,7 @@ let modules1Buffer = new UhkBuffer();
 modules1Ts.toBinary(modules1Buffer);
 let modules1BufferContent = modules1Buffer.getBufferContent();
 fs.writeFileSync('uhk-config.bin', modules1BufferContent);
-fs.writeFileSync('uhk-config-test.json',JSON.stringify(modules1Js,undefined,4));
+fs.writeFileSync('uhk-config-test.json', JSON.stringify(modules1Js, undefined, 4));
 
 modules1Buffer.offset = 0;
 let modules2Ts = new Modules().fromBinary(modules1Buffer);

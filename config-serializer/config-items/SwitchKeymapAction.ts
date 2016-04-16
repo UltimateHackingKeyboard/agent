@@ -1,6 +1,6 @@
 class SwitchKeymapAction extends KeyAction {
 
-    @assertUInt8
+    // @assertUInt8
     keymapId: number;
 
     _fromJsObject(jsObject: any): SwitchKeymapAction {

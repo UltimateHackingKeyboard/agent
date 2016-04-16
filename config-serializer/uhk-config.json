@@ -22,7 +22,7 @@
                 {
                     "modules": [
                         {
-                            "moduleId": 0,
+                            "id": 0,
                             "pointerRole": "move",
                             "keyActions": [
                                 {
@@ -74,12 +74,12 @@
                             ]
                         },
                         {
-                            "moduleId": 1,
+                            "id": 1,
                             "pointerRole": "scroll",
                             "keyActions": []
                         },
                         {
-                            "moduleId": 2,
+                            "id": 2,
                             "pointerRole": "none",
                             "keyActions": []
                         }

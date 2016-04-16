@@ -11,7 +11,7 @@ enum KeyModifiers {
 
 class KeystrokeModifiersAction extends KeyAction {
 
-    @assertUInt8
+    // @assertUInt8
     modifierMask: number;
 
     _fromJsObject(jsObject: any): KeystrokeModifiersAction {

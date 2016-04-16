@@ -6,48 +6,44 @@ enum PointerRole {
 
 class Module extends Serializable<Module> {
 
-    @assertEnum(PointerRole)
-    private role: PointerRole;
-
-    @assertUInt8
-    moduleId: number;
+    // @assertUInt8
+    id: number;
 
     keyActions: Serializable<KeyActions>;
 
+    // @assertEnum(PointerRole)
+    private pointerRole: PointerRole;
+
     _fromJsObject(jsObject: any): Module {
-        this.moduleId = jsObject.moduleId;
-        this.role = PointerRole[<string> jsObject.pointerRole];
+        this.id = jsObject.id;
+        this.pointerRole = PointerRole[<string> jsObject.pointerRole];
         this.keyActions = new KeyActions().fromJsObject(jsObject.keyActions);
-        /*
-        console.log("ModuleId: "+this.moduleId);
-        console.log("PointerRole:"+PointerRole[this.role]);
-        */
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): Module {
-        this.moduleId = buffer.readUInt8();
-        this.role = buffer.readUInt8();
+        this.id = buffer.readUInt8();
+        this.pointerRole = buffer.readUInt8();
         this.keyActions = new KeyActions().fromBinary(buffer);
         return this;
     }
 
     _toJsObject(): any {
         return {
-            moduleId: this.moduleId,
-            pointerRole: PointerRole[this.role],
+            id: this.id,
+            pointerRole: PointerRole[this.pointerRole],
             keyActions: this.keyActions.toJsObject()
-        }
+        };
     }
 
     _toBinary(buffer: UhkBuffer): void {
-        buffer.writeUInt8(this.moduleId);
-        buffer.writeUInt8(this.role);
+        buffer.writeUInt8(this.id);
+        buffer.writeUInt8(this.pointerRole);
         this.keyActions.toBinary(buffer);
     }
 
     toString(): string {
-        return `<Module moduleId="${this.moduleId}" role="${this.role}">`;
+        return `<Module id="${this.id}" pointerRole="${this.pointerRole}">`;
     }
 
 }

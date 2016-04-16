@@ -1,6 +1,6 @@
 class PlayMacroAction extends KeyAction {
 
-    @assertUInt8
+    // @assertUInt8
     macroId: number;
 
     _fromJsObject(jsObject: any): PlayMacroAction {
