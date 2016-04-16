@@ -33,16 +33,8 @@
                                     "scancode": 110
                                 },
                                 {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 87
-                                },
-                                {
                                     "keyActionType": "keystrokeModifiers",
                                     "modifierMask":33
-                                },
-                                {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 97
                                 },
                                 {
                                     "keyActionType": "keystrokeWithModifiers",
@@ -80,7 +72,7 @@
                         },
                         {
                             "id": 2,
-                            "pointerRole": "none",
+                            "pointerRole": "move",
                             "keyActions": []
                         }
                     ]

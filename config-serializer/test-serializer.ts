@@ -9,25 +9,6 @@ let assert = require('assert');
 let fs = require('fs');
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
-/*
-let keyActions1Js = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
-let keyActions1Ts: Serializable<KeyActions> = new KeyActions().fromJsObject(keyActions1Js);
-let keyActions1Buffer = new UhkBuffer();
-keyActions1Ts.toBinary(keyActions1Buffer);
-let keyActions1BufferContent = keyActions1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config.bin', keyActions1BufferContent);
-
-keyActions1Buffer.offset = 0;
-console.log();
-let keyActions2Ts = new KeyActions().fromBinary(keyActions1Buffer);
-console.log('\n');
-let keyActions2Js = keyActions2Ts.toJsObject();
-let keyActions2Buffer = new UhkBuffer();
-keyActions2Ts.toBinary(keyActions2Buffer);
-fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(keyActions2Js, undefined, 4));
-let keyActions2BufferContent = keyActions1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config-serialized.bin', keyActions2BufferContent);
-*/
 
 let modulesbaseJs = uhkConfig.keymaps[0].layers[0].modules;
 let modules1Ts: Serializable<Modules> = new Modules().fromJsObject(modulesbaseJs);
