@@ -1,12 +1,13 @@
-import {KeyboardButton} from './keyboard-button.model';
+import {KeyboardKey} from './keyboard-key.model';
 
 export class Module {
-    private case: any;
-    private keyboardButtons: KeyboardButton[];
+    private coverages: any[];
+    private keyboardKeys: KeyboardKey[];
+    private attributes: any;
 
-    constructor(obj: { rect: any[], path: any[] }, fill?: string) {
-        this.keyboardButtons = obj.rect.map(rect => rect.$);
-        this.keyboardButtons.forEach(keyboardButton => keyboardButton.fill = fill ? fill : 'black');
-        this.case = obj.path[0].$;
+    constructor(obj: { rect: any[], path: any[], $: Object }) {
+        this.keyboardKeys = obj.rect.map(rect => rect.$);
+        this.coverages = obj.path;
+        this.attributes = obj.$;
     }
 }

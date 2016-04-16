@@ -1,54 +1,32 @@
-import { Component, OnInit, Input, DynamicComponentLoader, ElementRef, ComponentRef } from 'angular2/core';
+import { Component, OnInit, Input} from 'angular2/core';
 
-import {KeyboardButton} from './keyboard-button.model';
-import {KeyboardButtonGroupComponent} from './keyboard-button-group.component';
+import {KeyboardKey} from './keyboard-key.model';
+import {KeyboardKeyComponent} from './keyboard-key.component';
 
 @Component({
-    selector: 'module',
+    selector: 'g[uhk-module]',
     template:
     `
-        <div #row></div>
+        <svg:path *ngFor="#path of coverages" [attr.d]="path.$.d"/>
+        <svg:g uhk-keyboard-key *ngFor="#key of keyboardKeys"
+                [id]="key.id"
+                [rx]="key.rx" [ry]="key.ry"
+                [width]="key.width" [height]="key.height"
+                [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
+        />
     `,
-    styles:
-    [`
-        :host {
-            display: flex;
-            height: 100%;
-            width: 100%;
-            flex-direction: column;
-        }
-    `]
+    directives: [KeyboardKeyComponent]
 })
 export class ModuleComponent implements OnInit {
-    @Input() case: any;
-    @Input() keyboardButtons: KeyboardButton[];
-    @Input() fill: string;
+    @Input() coverages: any[];
+    @Input() keyboardKeys: KeyboardKey[];
 
-    constructor(private dcl: DynamicComponentLoader, private elementRef: ElementRef) {
-        this.keyboardButtons = [];
+    constructor() {
+        this.keyboardKeys = [];
     }
 
     ngOnInit() {
-        this.getButtonGroups().forEach(buttonGroup => {
-            this.dcl.loadIntoLocation(KeyboardButtonGroupComponent, this.elementRef, 'row')
-                .then((bttnComponentRef: ComponentRef) => {
-                    let group: KeyboardButtonGroupComponent = bttnComponentRef.instance;
-                    group.keyboardButtons = buttonGroup;
-                });
-        });
-    }
 
-    private getButtonGroups(): KeyboardButton[][] {
-        let buttonGroups: KeyboardButton[][] = [];
-        let buttonGroup: KeyboardButton[] = [];
-        this.keyboardButtons.forEach(keyboardButton => {
-            if (buttonGroup.length > 0 && buttonGroup[buttonGroup.length - 1].y !== keyboardButton.y) {
-                buttonGroups.push(buttonGroup);
-                buttonGroup = [];
-            }
-            buttonGroup.push(keyboardButton);
-        });
-        return buttonGroups;
     }
 
 }

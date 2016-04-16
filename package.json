@@ -8,7 +8,7 @@
   },
   "license": "GPL-3.0",
   "devDependencies": {
-    "angular2": "2.0.0-beta.13",
+    "angular2": "2.0.0-beta.15",
     "browser-sync": "^2.11.0",
     "es6-shim": "^0.35.0",
     "gulp": "^3.9.0",
@@ -17,14 +17,14 @@
     "gulp-sourcemaps": "^1.6.0",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
-    "ts-loader": "^0.8.1",
+    "ts-loader": "^0.8.2",
     "tslint": "^3.6.0",
     "typings": "^0.7.12",
-    "webpack": "^1.12.14",
+    "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",
     "xml-loader": "^1.1.0",
     "yargs": "^4.2.0",
-    "zone.js": "^0.6.9"
+    "zone.js": "^0.6.11"
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
@@ -33,7 +33,7 @@
     "jquery": "^2.2.2",
     "select2": "^4.0.2",
     "sortablejs": "^1.4.2",
-    "typescript": "^1.8.9"
+    "typescript": "^1.8.10"
   },
   "scripts": {
     "postinstall": "typings install",

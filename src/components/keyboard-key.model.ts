@@ -1,4 +1,4 @@
-export interface KeyboardButton {
+export interface KeyboardKey {
     id: string;
     x: string;
     y: string;
@@ -6,5 +6,4 @@ export interface KeyboardButton {
     ry: string;
     height: string;
     width: string;
-    fill: string;
 }
