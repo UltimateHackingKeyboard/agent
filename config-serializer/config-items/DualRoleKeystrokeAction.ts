@@ -14,10 +14,10 @@ enum LongPressAction {
 
 class DualRoleKeystrokeAction extends KeyAction {
 
-    @assertUInt8
+    // @assertUInt8
     scancode: number;
 
-    @assertEnum(LongPressAction)
+    // @assertEnum(LongPressAction)
     private longPressAction: LongPressAction;
 
     _fromJsObject(jsObject: any): DualRoleKeystrokeAction {

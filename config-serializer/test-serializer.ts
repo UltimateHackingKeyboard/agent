@@ -10,31 +10,31 @@ let fs = require('fs');
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 
-let keyActions1Js = uhkConfig.keymaps[0].layers[0].modules[0].keyActions;
-let keyActions1Ts: Serializable<KeyActions> = new KeyActions().fromJsObject(keyActions1Js);
-let keyActions1Buffer = new UhkBuffer();
-keyActions1Ts.toBinary(keyActions1Buffer);
-let keyActions1BufferContent = keyActions1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config.bin', keyActions1BufferContent);
+let modules1Js = uhkConfig.keymaps[0].layers[0].modules;
+let modules1Ts: Serializable<Modules> = new Modules().fromJsObject(modules1Js);
+let modules1Buffer = new UhkBuffer();
+modules1Ts.toBinary(modules1Buffer);
+let modules1BufferContent = modules1Buffer.getBufferContent();
+fs.writeFileSync('uhk-config.bin', modules1BufferContent);
 
-keyActions1Buffer.offset = 0;
+modules1Buffer.offset = 0;
 console.log();
-let keyActions2Ts = new KeyActions().fromBinary(keyActions1Buffer);
+let modules2Ts = new Modules().fromBinary(modules1Buffer);
 console.log('\n');
-let keyActions2Js = keyActions2Ts.toJsObject();
-let keyActions2Buffer = new UhkBuffer();
-keyActions2Ts.toBinary(keyActions2Buffer);
-fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(keyActions2Js, undefined, 4));
-let keyActions2BufferContent = keyActions1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config-serialized.bin', keyActions2BufferContent);
+let modules2Js = modules2Ts.toJsObject();
+let modules2Buffer = new UhkBuffer();
+modules2Ts.toBinary(modules2Buffer);
+fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(modules2Js, undefined, 4));
+let modules2BufferContent = modules1Buffer.getBufferContent();
+fs.writeFileSync('uhk-config-serialized.bin', modules2BufferContent);
 
 console.log('\n');
 try {
-    assert.deepEqual(keyActions1Js, keyActions2Js);
+    assert.deepEqual(modules1Js, modules2Js);
     console.log('JSON configurations are identical.');
 } catch (error) {
     console.log('JSON configurations differ.');
 }
 
-let buffersContentsAreEqual = Buffer.compare(keyActions1BufferContent, keyActions2BufferContent) === 0;
+let buffersContentsAreEqual = Buffer.compare(modules1BufferContent, modules2BufferContent) === 0;
 console.log('Binary configurations ' + (buffersContentsAreEqual ? 'are identical' : 'differ') + '.');

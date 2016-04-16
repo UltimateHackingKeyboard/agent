@@ -1,6 +1,6 @@
 class KeystrokeAction extends KeyAction {
 
-    @assertUInt8
+    // @assertUInt8
     scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeAction {

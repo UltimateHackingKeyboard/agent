@@ -9,3 +9,5 @@
 /// <reference path="SwitchLayerAction.ts" />
 /// <reference path="SwitchKeymapAction.ts" />
 /// <reference path="NoneAction.ts" />
+/// <reference path="Module.ts" />
+/// <reference path="Modules.ts" />

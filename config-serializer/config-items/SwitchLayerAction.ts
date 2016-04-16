@@ -10,7 +10,7 @@ class SwitchLayerAction extends KeyAction {
 
     isLayerToggleable: boolean;
 
-    @assertEnum(Layer)
+    // @assertEnum(Layer)
     private layer: Layer;
 
     _fromJsObject(jsObject: any): SwitchLayerAction {

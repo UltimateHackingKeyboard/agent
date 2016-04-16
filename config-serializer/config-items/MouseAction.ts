@@ -16,7 +16,7 @@ enum MouseActionParam {
 
 class MouseAction extends KeyAction {
 
-    @assertUInt8
+    // @assertUInt8
     mouseAction: MouseActionParam;
 
     _fromJsObject(jsObject: any): MouseAction {
