@@ -22,6 +22,7 @@
     "typings": "^0.7.12",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",
+    "webpack-svgstore-plugin": "^2.1.5",
     "xml-loader": "^1.1.0",
     "yargs": "^4.2.0",
     "zone.js": "^0.6.11"

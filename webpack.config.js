@@ -1,4 +1,5 @@
 // var webpack = require("webpack");
+var SvgStore = require('webpack-svgstore-plugin');
 
 module.exports = {
     entry: ['reflect-metadata', 'zone.js', 'es6-shim', "./src/boot.ts"],
@@ -21,9 +22,24 @@ module.exports = {
         loaders: [
             { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ }
         ]
-    }/*,
+    },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({ minimize: true })
-    ]*/
+        //   new webpack.optimize.UglifyJsPlugin({ minimize: true })
+        new SvgStore(
+            [
+                'images/icons/**/*.svg'
+            ],
+            './',
+            {
+                name: 'compiled_sprite.svg',
+                chunk: 'app',
+                svgoOptions: {
+                    plugins: [
+                        { removeTitle: true }
+                    ]
+                }
+            }
+        )
+    ]
 
 }
