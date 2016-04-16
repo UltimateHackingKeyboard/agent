@@ -10,17 +10,17 @@ let fs = require('fs');
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 
-let modulesbaseJs = uhkConfig.keymaps[0].layers[0].modules;
-let modules1Ts: Serializable<Modules> = new Modules().fromJsObject(modulesbaseJs);
-let modules1Js = modules1Ts.toJsObject();
+let modules1Js = uhkConfig.keymaps[0].layers[0].modules;
+let modules1Ts: Serializable<Modules> = new Modules().fromJsObject(modules1Js);
 let modules1Buffer = new UhkBuffer();
 modules1Ts.toBinary(modules1Buffer);
 let modules1BufferContent = modules1Buffer.getBufferContent();
 fs.writeFileSync('uhk-config.bin', modules1BufferContent);
-fs.writeFileSync('uhk-config-test.json', JSON.stringify(modules1Js, undefined, 4));
 
 modules1Buffer.offset = 0;
+console.log();
 let modules2Ts = new Modules().fromBinary(modules1Buffer);
+console.log('\n');
 let modules2Js = modules2Ts.toJsObject();
 let modules2Buffer = new UhkBuffer();
 modules2Ts.toBinary(modules2Buffer);
@@ -30,8 +30,6 @@ fs.writeFileSync('uhk-config-serialized.bin', modules2BufferContent);
 
 console.log('\n');
 try {
-    /* wanted to also compare class->json & class->binary->class->json with original json */
-    assert.deepEqual(modulesbaseJs, modules1Js);
     assert.deepEqual(modules1Js, modules2Js);
     console.log('JSON configurations are identical.');
 } catch (error) {
