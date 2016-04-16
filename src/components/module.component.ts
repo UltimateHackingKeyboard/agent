@@ -7,6 +7,7 @@ import {KeyboardKeyComponent} from './keyboard-key.component';
     selector: 'g[uhk-module]',
     template:
     `
+        <svg:path *ngFor="#path of coverages" [attr.d]="path.$.d"/>
         <svg:g uhk-keyboard-key *ngFor="#key of keyboardKeys"
                 [id]="key.id" [fill]="key.fill"
                 [rx]="key.rx" [ry]="key.ry"
@@ -17,7 +18,7 @@ import {KeyboardKeyComponent} from './keyboard-key.component';
     directives: [KeyboardKeyComponent]
 })
 export class ModuleComponent implements OnInit {
-    @Input() case: any;
+    @Input() coverages: any[];
     @Input() keyboardKeys: KeyboardKey[];
     @Input() fill: string;
 

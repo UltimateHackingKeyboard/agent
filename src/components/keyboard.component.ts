@@ -10,7 +10,7 @@ import {Module, ModuleComponent} from './module';
         <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="viewBox" height="100%" width="100%">
             <svg:g [attr.transform]="transform">
                 <svg:g uhk-module *ngFor="#module of modules"
-                        [case]="module.case"
+                        [coverages]="module.coverages"
                         [keyboardKeys]="module.keyboardKeys"
                         [fill]="module.fill"
                         [attr.transform]="module.attributes.transform"
