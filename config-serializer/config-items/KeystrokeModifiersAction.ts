@@ -1,4 +1,4 @@
-export enum KeyModifiers {
+enum KeyModifiers {
     leftCtrl   = 1 << 0,
     leftShift  = 1 << 1,
     leftAlt    = 1 << 2,

@@ -1,5 +1,3 @@
-import {KeyModifiers} from './KeystrokeModifiersAction';
-
 class KeystrokeWithModifiersAction extends KeyAction {
 
     // @assertUInt8
