@@ -73,13 +73,77 @@
                         {
                             "id": 2,
                             "pointerRole": "move",
-                            "keyActions": []
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
                         }
                     ]
                 },
-                {},
-                {},
-                {}
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "none",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 32
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask":33
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystrokeWithModifiers",
+                                    "scancode": 121,
+                                    "modifierMask": 13
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "leftClick"
+                                },
+                                {
+                                    "keyActionType": "playMacro",
+                                    "macroId": 0
+                                },
+                                {
+                                    "keyActionType": "switchKeymap",
+                                    "keymapId": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "none",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        }
+                    ]
+                }
             ]
         },
         {
