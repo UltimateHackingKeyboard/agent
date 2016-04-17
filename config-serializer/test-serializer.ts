@@ -10,31 +10,31 @@ let fs = require('fs');
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 
-let modules1Js = uhkConfig.keymaps[0].layers[0].modules;
-let modules1Ts: Serializable<Modules> = new Modules().fromJsObject(modules1Js);
-let modules1Buffer = new UhkBuffer();
-modules1Ts.toBinary(modules1Buffer);
-let modules1BufferContent = modules1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config.bin', modules1BufferContent);
+let config1Js = uhkConfig.keymaps[0].layers;
+let config1Ts: Serializable<Layers> = new Layers().fromJsObject(config1Js);
+let config1Buffer = new UhkBuffer();
+config1Ts.toBinary(config1Buffer);
+let config1BufferContent = config1Buffer.getBufferContent();
+fs.writeFileSync('uhk-config.bin', config1BufferContent);
 
-modules1Buffer.offset = 0;
+config1Buffer.offset = 0;
 console.log();
-let modules2Ts = new Modules().fromBinary(modules1Buffer);
+let config2Ts = new Layers().fromBinary(config1Buffer);
 console.log('\n');
-let modules2Js = modules2Ts.toJsObject();
-let modules2Buffer = new UhkBuffer();
-modules2Ts.toBinary(modules2Buffer);
-fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(modules2Js, undefined, 4));
-let modules2BufferContent = modules1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config-serialized.bin', modules2BufferContent);
+let config2Js = config2Ts.toJsObject();
+let config2Buffer = new UhkBuffer();
+config2Ts.toBinary(config2Buffer);
+fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(config2Js, undefined, 4));
+let config2BufferContent = config1Buffer.getBufferContent();
+fs.writeFileSync('uhk-config-serialized.bin', config2BufferContent);
 
 console.log('\n');
 try {
-    assert.deepEqual(modules1Js, modules2Js);
+    assert.deepEqual(config1Js, config2Js);
     console.log('JSON configurations are identical.');
 } catch (error) {
     console.log('JSON configurations differ.');
 }
 
-let buffersContentsAreEqual = Buffer.compare(modules1BufferContent, modules2BufferContent) === 0;
+let buffersContentsAreEqual = Buffer.compare(config1BufferContent, config2BufferContent) === 0;
 console.log('Binary configurations ' + (buffersContentsAreEqual ? 'are identical' : 'differ') + '.');

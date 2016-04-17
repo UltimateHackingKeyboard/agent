@@ -1,4 +1,4 @@
-enum Layer {
+enum KeyLayer {
     mod,
     fn,
     mouse
@@ -10,12 +10,12 @@ class SwitchLayerAction extends KeyAction {
 
     isLayerToggleable: boolean;
 
-    // @assertEnum(Layer)
-    private layer: Layer;
+    // @assertEnum(KeyLayer)
+    private layer: KeyLayer;
 
     _fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject);
-        this.layer = Layer[<string> jsObject.layer];
+        this.layer = KeyLayer[<string> jsObject.layer];
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }
@@ -31,7 +31,7 @@ class SwitchLayerAction extends KeyAction {
     _toJsObject(): any {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
-            layer: Layer[this.layer],
+            layer: KeyLayer[this.layer],
             toggle: this.isLayerToggleable
         };
     }

@@ -11,3 +11,5 @@
 /// <reference path="NoneAction.ts" />
 /// <reference path="Module.ts" />
 /// <reference path="Modules.ts" />
+/// <reference path="Layer.ts" />
+/// <reference path="Layers.ts" />
