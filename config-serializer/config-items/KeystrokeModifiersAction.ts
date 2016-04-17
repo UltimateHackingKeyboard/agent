@@ -1,4 +1,4 @@
-enum KeyModifiers {
+export enum KeyModifiers {
     leftCtrl   = 1 << 0,
     leftShift  = 1 << 1,
     leftAlt    = 1 << 2,
@@ -40,5 +40,9 @@ class KeystrokeModifiersAction extends KeyAction {
 
     toString(): string {
         return `<KeystrokeModifiersAction modifierMask="${this.modifierMask}">`;
+    }
+
+    isModifierActive(modifier: KeyModifiers): boolean {
+        return (this.modifierMask & modifier) > 0;
     }
 }

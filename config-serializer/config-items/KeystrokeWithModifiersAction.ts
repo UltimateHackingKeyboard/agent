@@ -1,3 +1,5 @@
+import {KeyModifiers} from './KeystrokeModifiersAction';
+
 class KeystrokeWithModifiersAction extends KeyAction {
 
     // @assertUInt8
@@ -36,5 +38,9 @@ class KeystrokeWithModifiersAction extends KeyAction {
 
     toString(): string {
         return `<KeystrokeWithModifiersAction scancode="${this.scancode}" modifierMask="${this.modifierMask}">`;
+    }
+
+    isModifierActive(modifier: KeyModifiers): boolean {
+        return (this.modifierMask & modifier) > 0;
     }
 }
