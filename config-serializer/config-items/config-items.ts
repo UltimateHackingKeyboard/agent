@@ -13,3 +13,5 @@
 /// <reference path="Modules.ts" />
 /// <reference path="Layer.ts" />
 /// <reference path="Layers.ts" />
+/// <reference path="KeyMap.ts" />
+/// <reference path="KeyMaps.ts" />

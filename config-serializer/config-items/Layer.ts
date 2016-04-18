@@ -22,4 +22,8 @@ class Layer extends Serializable<Layer> {
         this.modules.toBinary(buffer);
     }
 
+    toString(): string {
+        return `<Layer>`;
+    }
+
 }
