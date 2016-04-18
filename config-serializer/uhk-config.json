@@ -254,6 +254,35 @@
                     "text": "this is a text"
                 }
             ]
+        },
+        {
+            "id": 1,
+            "isLooped": true,
+            "isPrivate": true,
+            "name": "Blah Blah blah",
+            "macroActions": [
+                {
+                    "macroActionType": "pressKey",
+                    "scancode": 111
+                },
+                {
+                    "macroActionType": "releaseMouseButtons",
+                    "mouseButtonsMask": 104
+                },
+                {
+                    "macroActionType": "scrollMouse",
+                    "x": 0,
+                    "y": -20000
+                },
+                {
+                    "macroActionType": "delay",
+                    "delay": 40000
+                },
+                {
+                    "macroActionType": "text",
+                    "text": "blahhhhhhh"
+                }
+            ]
         }
     ],
     "epilogue": 1234678
