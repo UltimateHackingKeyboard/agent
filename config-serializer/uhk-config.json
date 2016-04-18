@@ -134,7 +134,7 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRole": "none",
+                            "pointerRole": "move",
                             "keyActions": []
                         },
                         {
