@@ -122,7 +122,7 @@ class UhkBuffer {
 
     readString(): string {
         let stringByteLength = this.readCompactLength();
-        let str = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, this.offset+stringByteLength);
+        let str = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, this.offset + stringByteLength);
         this.dump(`${UhkBuffer.stringEncoding}(${str})`);
         this.bytesToBacktrack = stringByteLength;
         this.offset += stringByteLength;
