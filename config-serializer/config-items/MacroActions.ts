@@ -2,28 +2,28 @@ class MacroActions extends ClassArray<MacroAction> {
 
     jsObjectToClass(jsObject: any): Serializable<MacroAction> {
         switch (jsObject.macroActionType) {
-            case macroActionType.PressKeyAction:
-                return new PressKeyAction().fromJsObject(jsObject);
-            case macroActionType.HoldKeyAction:
-                return new HoldKeyAction().fromJsObject(jsObject);
-            case macroActionType.ReleaseKeyAction:
-                return new ReleaseKeyAction().fromJsObject(jsObject);
-            case macroActionType.PressModifiersAction:
-                return new PressModifiersAction().fromJsObject(jsObject);
-            case macroActionType.HoldModifiersAction:
-                return new HoldModifiersAction().fromJsObject(jsObject);
-            case macroActionType.ReleaseModifiersAction:
-                return new ReleaseModifiersAction().fromJsObject(jsObject);
-            case macroActionType.PressMouseButtonsAction:
-                return new PressMouseButtonsAction().fromJsObject(jsObject);
-            case macroActionType.HoldMouseButtonsAction:
-                return new HoldMouseButtonsAction().fromJsObject(jsObject);
-            case macroActionType.ReleaseMouseButtonsAction:
-                return new ReleaseMouseButtonsAction().fromJsObject(jsObject);
-            case macroActionType.MoveMouseAction:
-                return new MoveMouseAction().fromJsObject(jsObject);
-            case macroActionType.ScrollMouseAction:
-                return new ScrollMouseAction().fromJsObject(jsObject);
+            case macroActionType.PressKeyMacroAction:
+                return new PressKeyMacroAction().fromJsObject(jsObject);
+            case macroActionType.HoldKeyMacroAction:
+                return new HoldKeyMacroAction().fromJsObject(jsObject);
+            case macroActionType.ReleaseKeyMacroAction:
+                return new ReleaseKeyMacroAction().fromJsObject(jsObject);
+            case macroActionType.PressModifiersMacroAction:
+                return new PressModifiersMacroAction().fromJsObject(jsObject);
+            case macroActionType.HoldModifiersMacroAction:
+                return new HoldModifiersMacroAction().fromJsObject(jsObject);
+            case macroActionType.ReleaseModifiersMacroAction:
+                return new ReleaseModifiersMacroAction().fromJsObject(jsObject);
+            case macroActionType.PressMouseButtonsMacroAction:
+                return new PressMouseButtonsMacroAction().fromJsObject(jsObject);
+            case macroActionType.HoldMouseButtonsMacroAction:
+                return new HoldMouseButtonsMacroAction().fromJsObject(jsObject);
+            case macroActionType.ReleaseMouseButtonsMacroAction:
+                return new ReleaseMouseButtonsMacroAction().fromJsObject(jsObject);
+            case macroActionType.MoveMouseMacroAction:
+                return new MoveMouseMacroAction().fromJsObject(jsObject);
+            case macroActionType.ScrollMouseMacroAction:
+                return new ScrollMouseMacroAction().fromJsObject(jsObject);
             default:
                 throw `Invalid MacroAction.macroActionType: "${jsObject.macroActionType}"`;
         }
@@ -39,28 +39,28 @@ class MacroActions extends ClassArray<MacroAction> {
         }
 
         switch (macroActionFirstByte) {
-            case MacroActionId.PressKeyAction:
-                return new PressKeyAction().fromBinary(buffer);
-            case MacroActionId.HoldKeyAction:
-                return new HoldKeyAction().fromBinary(buffer);
-            case MacroActionId.ReleaseKeyAction:
-                return new ReleaseKeyAction().fromBinary(buffer);
-            case MacroActionId.PressModifiersAction:
-                return new PressModifiersAction().fromBinary(buffer);
-            case MacroActionId.HoldModifiersAction:
-                return new HoldModifiersAction().fromBinary(buffer);
-            case MacroActionId.ReleaseModifiersAction:
-                return new ReleaseModifiersAction().fromBinary(buffer);
-            case MacroActionId.PressMouseButtonsAction:
-                return new PressMouseButtonsAction().fromBinary(buffer);
-            case MacroActionId.HoldMouseButtonsAction:
-                return new HoldMouseButtonsAction().fromBinary(buffer);
-            case MacroActionId.ReleaseMouseButtonsAction:
-                return new ReleaseMouseButtonsAction().fromBinary(buffer);
-            case MacroActionId.MoveMouseAction:
-                return new MoveMouseAction().fromBinary(buffer);
-            case MacroActionId.ScrollMouseAction:
-                return new ScrollMouseAction().fromBinary(buffer);
+            case MacroActionId.PressKeyMacroAction:
+                return new PressKeyMacroAction().fromBinary(buffer);
+            case MacroActionId.HoldKeyMacroAction:
+                return new HoldKeyMacroAction().fromBinary(buffer);
+            case MacroActionId.ReleaseKeyMacroAction:
+                return new ReleaseKeyMacroAction().fromBinary(buffer);
+            case MacroActionId.PressModifiersMacroAction:
+                return new PressModifiersMacroAction().fromBinary(buffer);
+            case MacroActionId.HoldModifiersMacroAction:
+                return new HoldModifiersMacroAction().fromBinary(buffer);
+            case MacroActionId.ReleaseModifiersMacroAction:
+                return new ReleaseModifiersMacroAction().fromBinary(buffer);
+            case MacroActionId.PressMouseButtonsMacroAction:
+                return new PressMouseButtonsMacroAction().fromBinary(buffer);
+            case MacroActionId.HoldMouseButtonsMacroAction:
+                return new HoldMouseButtonsMacroAction().fromBinary(buffer);
+            case MacroActionId.ReleaseMouseButtonsMacroAction:
+                return new ReleaseMouseButtonsMacroAction().fromBinary(buffer);
+            case MacroActionId.MoveMouseMacroAction:
+                return new MoveMouseMacroAction().fromBinary(buffer);
+            case MacroActionId.ScrollMouseMacroAction:
+                return new ScrollMouseMacroAction().fromBinary(buffer);
             default:
                 throw `Invalid MacroAction first byte: ${macroActionFirstByte}`;
         }

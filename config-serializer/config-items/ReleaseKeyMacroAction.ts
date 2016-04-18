@@ -1,15 +1,15 @@
-class ReleaseKeyAction extends MacroAction {
+class ReleaseKeyMacroAction extends MacroAction {
 
     // @assertUInt8
     scancode: number;
 
-    _fromJsObject(jsObject: any): ReleaseKeyAction {
+    _fromJsObject(jsObject: any): ReleaseKeyMacroAction {
         this.assertMacroActionType(jsObject);
         this.scancode = jsObject.scancode;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ReleaseKeyAction {
+    _fromBinary(buffer: UhkBuffer): ReleaseKeyMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.scancode = buffer.readUInt8();
         return this;
@@ -17,17 +17,17 @@ class ReleaseKeyAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.ReleaseKeyAction,
+            macroActionType: macroActionType.ReleaseKeyMacroAction,
             scancode: this.scancode
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.ReleaseKeyAction);
+        buffer.writeUInt8(MacroActionId.ReleaseKeyMacroAction);
         buffer.writeUInt8(this.scancode);
     }
 
     toString(): string {
-        return `<ReleaseKeyAction scancode="${this.scancode}">`;
+        return `<ReleaseKeyMacroAction scancode="${this.scancode}">`;
     }
 }

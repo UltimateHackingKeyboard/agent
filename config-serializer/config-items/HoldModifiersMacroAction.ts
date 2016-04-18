@@ -1,15 +1,15 @@
-class HoldModifiersAction extends MacroAction {
+class HoldModifiersMacroAction extends MacroAction {
 
     // @assertUInt8
     modifierMask: number;
 
-    _fromJsObject(jsObject: any): HoldModifiersAction {
+    _fromJsObject(jsObject: any): HoldModifiersMacroAction {
         this.assertMacroActionType(jsObject);
         this.modifierMask = jsObject.modifierMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): HoldModifiersAction {
+    _fromBinary(buffer: UhkBuffer): HoldModifiersMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.modifierMask = buffer.readUInt8();
         return this;
@@ -17,17 +17,17 @@ class HoldModifiersAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.HoldModifiersAction,
+            macroActionType: macroActionType.HoldModifiersMacroAction,
             modifierMask: this.modifierMask
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.HoldModifiersAction);
+        buffer.writeUInt8(MacroActionId.HoldModifiersMacroAction);
         buffer.writeUInt8(this.modifierMask);
     }
 
     toString(): string {
-        return `<HoldModifiersAction modifierMask="${this.modifierMask}">`;
+        return `<HoldModifiersMacroAction modifierMask="${this.modifierMask}">`;
     }
 }

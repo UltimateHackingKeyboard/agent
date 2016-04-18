@@ -1,15 +1,15 @@
-class HoldKeyAction extends MacroAction {
+class HoldKeyMacroAction extends MacroAction {
 
     // @assertUInt8
     scancode: number;
 
-    _fromJsObject(jsObject: any): HoldKeyAction {
+    _fromJsObject(jsObject: any): HoldKeyMacroAction {
         this.assertMacroActionType(jsObject);
         this.scancode = jsObject.scancode;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): HoldKeyAction {
+    _fromBinary(buffer: UhkBuffer): HoldKeyMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.scancode = buffer.readUInt8();
         return this;
@@ -17,17 +17,17 @@ class HoldKeyAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.HoldKeyAction,
+            macroActionType: macroActionType.HoldKeyMacroAction,
             scancode: this.scancode
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.HoldKeyAction);
+        buffer.writeUInt8(MacroActionId.HoldKeyMacroAction);
         buffer.writeUInt8(this.scancode);
     }
 
     toString(): string {
-        return `<HoldKeyAction scancode="${this.scancode}">`;
+        return `<HoldKeyMacroAction scancode="${this.scancode}">`;
     }
 }

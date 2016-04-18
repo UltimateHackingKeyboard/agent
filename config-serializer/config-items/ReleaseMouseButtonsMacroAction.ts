@@ -1,15 +1,15 @@
-class ReleaseMouseButtonsAction extends MacroAction {
+class ReleaseMouseButtonsMacroAction extends MacroAction {
 
     // @assertUInt8
     mouseButtonsMask: number;
 
-    _fromJsObject(jsObject: any): ReleaseMouseButtonsAction {
+    _fromJsObject(jsObject: any): ReleaseMouseButtonsMacroAction {
         this.assertMacroActionType(jsObject);
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ReleaseMouseButtonsAction {
+    _fromBinary(buffer: UhkBuffer): ReleaseMouseButtonsMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.mouseButtonsMask = buffer.readUInt8();
         return this;
@@ -17,17 +17,17 @@ class ReleaseMouseButtonsAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.ReleaseMouseButtonsAction,
+            macroActionType: macroActionType.ReleaseMouseButtonsMacroAction,
             mouseButtonsMask: this.mouseButtonsMask
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.ReleaseMouseButtonsAction);
+        buffer.writeUInt8(MacroActionId.ReleaseMouseButtonsMacroAction);
         buffer.writeUInt8(this.mouseButtonsMask);
     }
 
     toString(): string {
-        return `<ReleaseMouseButtonsAction mouseButtonsMask="${this.mouseButtonsMask}">`;
+        return `<ReleaseMouseButtonsMacroAction mouseButtonsMask="${this.mouseButtonsMask}">`;
     }
 }

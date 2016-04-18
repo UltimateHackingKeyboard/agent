@@ -1,15 +1,15 @@
-class PressMouseButtonsAction extends MacroAction {
+class PressMouseButtonsMacroAction extends MacroAction {
 
     // @assertUInt8
     mouseButtonsMask: number;
 
-    _fromJsObject(jsObject: any): PressMouseButtonsAction {
+    _fromJsObject(jsObject: any): PressMouseButtonsMacroAction {
         this.assertMacroActionType(jsObject);
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): PressMouseButtonsAction {
+    _fromBinary(buffer: UhkBuffer): PressMouseButtonsMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.mouseButtonsMask = buffer.readUInt8();
         return this;
@@ -17,17 +17,17 @@ class PressMouseButtonsAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.PressMouseButtonsAction,
+            macroActionType: macroActionType.PressMouseButtonsMacroAction,
             mouseButtonsMask: this.mouseButtonsMask
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.PressMouseButtonsAction);
+        buffer.writeUInt8(MacroActionId.PressMouseButtonsMacroAction);
         buffer.writeUInt8(this.mouseButtonsMask);
     }
 
     toString(): string {
-        return `<PressMouseButtonsAction mouseButtonsMask="${this.mouseButtonsMask}">`;
+        return `<PressMouseButtonsMacroAction mouseButtonsMask="${this.mouseButtonsMask}">`;
     }
 }

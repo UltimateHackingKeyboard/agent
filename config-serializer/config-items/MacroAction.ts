@@ -1,33 +1,33 @@
 enum MacroActionId {
-    PressKeyAction              =  0,
-    HoldKeyAction               =  1,
-    ReleaseKeyAction            =  2,
-    PressModifiersAction        =  3,
-    HoldModifiersAction         =  4,
-    ReleaseModifiersAction      =  5,
-    PressMouseButtonsAction     =  6,
-    HoldMouseButtonsAction      =  7,
-    ReleaseMouseButtonsAction   =  8,
-    MoveMouseAction             =  9,
-    ScrollMouseAction           = 10,
-    DelayAction                 = 11,
-    TextAction                  = 12
+    PressKeyMacroAction              =  0,
+    HoldKeyMacroAction               =  1,
+    ReleaseKeyMacroAction            =  2,
+    PressModifiersMacroAction        =  3,
+    HoldModifiersMacroAction         =  4,
+    ReleaseModifiersMacroAction      =  5,
+    PressMouseButtonsMacroAction     =  6,
+    HoldMouseButtonsMacroAction      =  7,
+    ReleaseMouseButtonsMacroAction   =  8,
+    MoveMouseMacroAction             =  9,
+    ScrollMouseMacroAction           = 10,
+    DelayMacroAction                 = 11,
+    TextMacroAction                  = 12
 }
 
 let macroActionType = {
-    PressKeyAction              : 'pressKey',
-    HoldKeyAction               : 'holdKey',
-    ReleaseKeyAction            : 'releaseKey',
-    PressModifiersAction        : 'pressModifiers',
-    HoldModifiersAction         : 'holdModifiers',
-    ReleaseModifiersAction      : 'releaseModifiers',
-    PressMouseButtonsAction     : 'pressMouseButtons',
-    HoldMouseButtonsAction      : 'holdMouseButtons',
-    ReleaseMouseButtonsAction   : 'releaseMouseButtons',
-    MoveMouseAction             : 'moveMouse',
-    ScrollMouseAction           : 'scrollMouse',
-    DelayAction                 : 'delay',
-    TextAction                  : 'text'
+    PressKeyMacroAction              : 'pressKey',
+    HoldKeyMacroAction               : 'holdKey',
+    ReleaseKeyMacroAction            : 'releaseKey',
+    PressModifiersMacroAction        : 'pressModifiers',
+    HoldModifiersMacroAction         : 'holdModifiers',
+    ReleaseModifiersMacroAction      : 'releaseModifiers',
+    PressMouseButtonsMacroAction     : 'pressMouseButtons',
+    HoldMouseButtonsMacroAction      : 'holdMouseButtons',
+    ReleaseMouseButtonsMacroAction   : 'releaseMouseButtons',
+    MoveMouseMacroAction             : 'moveMouse',
+    ScrollMouseMacroAction           : 'scrollMouse',
+    DelayMacroAction                 : 'delay',
+    TextMacroAction                  : 'text'
 };
 
 abstract class MacroAction extends Serializable<MacroAction> {

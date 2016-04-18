@@ -1,4 +1,4 @@
-class ScrollMouseAction extends MacroAction {
+class ScrollMouseMacroAction extends MacroAction {
 
     // @assertInt16
     x: number;
@@ -6,14 +6,14 @@ class ScrollMouseAction extends MacroAction {
     // @assertInt16
     y: number;
 
-    _fromJsObject(jsObject: any): ScrollMouseAction {
+    _fromJsObject(jsObject: any): ScrollMouseMacroAction {
         this.assertMacroActionType(jsObject);
         this.x = jsObject.x;
         this.y = jsObject.y;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ScrollMouseAction {
+    _fromBinary(buffer: UhkBuffer): ScrollMouseMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.x = buffer.readInt16();
         this.y = buffer.readInt16();
@@ -22,19 +22,19 @@ class ScrollMouseAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.ScrollMouseAction,
+            macroActionType: macroActionType.ScrollMouseMacroAction,
             x: this.x,
             y: this.y
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.ScrollMouseAction);
+        buffer.writeUInt8(MacroActionId.ScrollMouseMacroAction);
         buffer.writeInt16(this.x);
         buffer.writeInt16(this.y);
     }
 
     toString(): string {
-        return `<ScrollMouseAction pos="(${this.x},${this.y})">`;
+        return `<ScrollMouseMacroAction pos="(${this.x},${this.y})">`;
     }
 }
