@@ -205,23 +205,23 @@
                 },
                 {
                     "macroActionType": "holdKey",
-                    "scancode": 111
+                    "scancode": 83
                 },
                 {
                     "macroActionType": "releaseKey",
-                    "scancode": 111
+                    "scancode": 112
                 },
                 {
                     "macroActionType": "pressModifiers",
-                    "modifierMask": 111
+                    "modifierMask": 93
                 },
                 {
                     "macroActionType": "holdModifiers",
-                    "modifierMask": 111
+                    "modifierMask": 101
                 },
                 {
                     "macroActionType": "releaseModifiers",
-                    "modifierMask": 111
+                    "modifierMask": 133
                 },
                 {
                     "macroActionType": "pressMouseButtons",
@@ -229,29 +229,58 @@
                 },
                 {
                     "macroActionType": "holdMouseButtons",
-                    "mouseButtonsMask": 9
+                    "mouseButtonsMask": 12
                 },
                 {
                     "macroActionType": "releaseMouseButtons",
-                    "mouseButtonsMask": 9
+                    "mouseButtonsMask": 104
                 },
                 {
                     "macroActionType": "moveMouse",
-                    "x": 123,
-                    "y": 123
+                    "x": -1920,
+                    "y": 220
                 },
                 {
                     "macroActionType": "scrollMouse",
-                    "x": 123,
-                    "y": 123
+                    "x": 0,
+                    "y": 20000
                 },
                 {
                     "macroActionType": "delay",
-                    "delay": "1000"
+                    "delay": 40000
                 },
                 {
                     "macroActionType": "text",
                     "text": "this is a text"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "isLooped": true,
+            "isPrivate": true,
+            "name": "Blah Blah blah",
+            "macroActions": [
+                {
+                    "macroActionType": "pressKey",
+                    "scancode": 111
+                },
+                {
+                    "macroActionType": "releaseMouseButtons",
+                    "mouseButtonsMask": 104
+                },
+                {
+                    "macroActionType": "scrollMouse",
+                    "x": 0,
+                    "y": -20000
+                },
+                {
+                    "macroActionType": "delay",
+                    "delay": 40000
+                },
+                {
+                    "macroActionType": "text",
+                    "text": "blahhhhhhh"
                 }
             ]
         }
