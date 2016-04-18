@@ -202,56 +202,6 @@
                 {
                     "macroActionType": "pressKey",
                     "scancode": 111
-                },
-                {
-                    "macroActionType": "holdKey",
-                    "scancode": 111
-                },
-                {
-                    "macroActionType": "releaseKey",
-                    "scancode": 111
-                },
-                {
-                    "macroActionType": "pressModifiers",
-                    "modifierMask": 111
-                },
-                {
-                    "macroActionType": "holdModifiers",
-                    "modifierMask": 111
-                },
-                {
-                    "macroActionType": "releaseModifiers",
-                    "modifierMask": 111
-                },
-                {
-                    "macroActionType": "pressMouseButtons",
-                    "mouseButtonsMask": 9
-                },
-                {
-                    "macroActionType": "holdMouseButtons",
-                    "mouseButtonsMask": 9
-                },
-                {
-                    "macroActionType": "releaseMouseButtons",
-                    "mouseButtonsMask": 9
-                },
-                {
-                    "macroActionType": "moveMouse",
-                    "x": 123,
-                    "y": 123
-                },
-                {
-                    "macroActionType": "scrollMouse",
-                    "x": 123,
-                    "y": 123
-                },
-                {
-                    "macroActionType": "delay",
-                    "delay": "1000"
-                },
-                {
-                    "macroActionType": "text",
-                    "text": "this is a text"
                 }
             ]
         }

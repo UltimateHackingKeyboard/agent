@@ -15,3 +15,6 @@
 /// <reference path="Layers.ts" />
 /// <reference path="KeyMap.ts" />
 /// <reference path="KeyMaps.ts" />
+/// <reference path="MacroAction.ts" />
+/// <reference path="MacroActions.ts" />
+/// <reference path="PressKeyAction.ts" />
