@@ -26,3 +26,5 @@
 /// <reference path="PressMouseButtonsAction.ts" />
 /// <reference path="HoldMouseButtonsAction.ts" />
 /// <reference path="ReleaseMouseButtonsAction.ts" />
+/// <reference path="MoveMouseAction.ts" />
+/// <reference path="ScrollMouseAction.ts" />

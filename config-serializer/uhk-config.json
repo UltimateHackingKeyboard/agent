@@ -234,6 +234,16 @@
                 {
                     "macroActionType": "releaseMouseButtons",
                     "mouseButtonsMask": 104
+                },
+                {
+                    "macroActionType": "moveMouse",
+                    "x": 123,
+                    "y": 123
+                },
+                {
+                    "macroActionType": "scrollMouse",
+                    "x": 123,
+                    "y": 123
                 }
             ]
         }
