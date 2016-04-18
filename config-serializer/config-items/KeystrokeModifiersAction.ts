@@ -41,4 +41,8 @@ class KeystrokeModifiersAction extends KeyAction {
     toString(): string {
         return `<KeystrokeModifiersAction modifierMask="${this.modifierMask}">`;
     }
+
+    isModifierActive(modifier: KeyModifiers): boolean {
+        return (this.modifierMask & modifier) > 0;
+    }
 }
