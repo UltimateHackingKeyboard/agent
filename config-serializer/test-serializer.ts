@@ -10,8 +10,8 @@ let fs = require('fs');
 
 let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
 
-let config1Js = uhkConfig.keymaps[0].layers;
-let config1Ts: Serializable<Layers> = new Layers().fromJsObject(config1Js);
+let config1Js = uhkConfig.keymaps;
+let config1Ts: Serializable<KeyMaps> = new KeyMaps().fromJsObject(config1Js);
 let config1Buffer = new UhkBuffer();
 config1Ts.toBinary(config1Buffer);
 let config1BufferContent = config1Buffer.getBufferContent();
@@ -19,7 +19,7 @@ fs.writeFileSync('uhk-config.bin', config1BufferContent);
 
 config1Buffer.offset = 0;
 console.log();
-let config2Ts = new Layers().fromBinary(config1Buffer);
+let config2Ts = new KeyMaps().fromBinary(config1Buffer);
 console.log('\n');
 let config2Js = config2Ts.toJsObject();
 let config2Buffer = new UhkBuffer();

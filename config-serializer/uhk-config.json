@@ -148,7 +148,48 @@
         },
         {
             "id": 1,
-            "name": "Dvorak"
+            "isDefault": false,
+            "abbreviation": "VIM",
+            "name": "VIM",
+            "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "scrollDown"
+                                },
+                                {
+                                    "keyActionType": "playMacro",
+                                    "macroId": 0
+                                },
+                                {
+                                    "keyActionType": "switchKeymap",
+                                    "keymapId": 1
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 2,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "macros": [
