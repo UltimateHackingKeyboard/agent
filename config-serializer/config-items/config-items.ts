@@ -28,3 +28,5 @@
 /// <reference path="ReleaseMouseButtonsMacroAction.ts" />
 /// <reference path="MoveMouseMacroAction.ts" />
 /// <reference path="ScrollMouseMacroAction.ts" />
+/// <reference path="DelayMacroAction.ts" />
+/// <reference path="TextMacroAction.ts" />

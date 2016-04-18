@@ -24,6 +24,10 @@ class MacroActions extends ClassArray<MacroAction> {
                 return new MoveMouseMacroAction().fromJsObject(jsObject);
             case macroActionType.ScrollMouseMacroAction:
                 return new ScrollMouseMacroAction().fromJsObject(jsObject);
+            case macroActionType.DelayMacroAction:
+                return new DelayMacroAction().fromJsObject(jsObject);
+            case macroActionType.TextMacroAction:
+                return new TextMacroAction().fromJsObject(jsObject);
             default:
                 throw `Invalid MacroAction.macroActionType: "${jsObject.macroActionType}"`;
         }
@@ -61,6 +65,10 @@ class MacroActions extends ClassArray<MacroAction> {
                 return new MoveMouseMacroAction().fromBinary(buffer);
             case MacroActionId.ScrollMouseMacroAction:
                 return new ScrollMouseMacroAction().fromBinary(buffer);
+            case MacroActionId.DelayMacroAction:
+                return new DelayMacroAction().fromBinary(buffer);
+            case MacroActionId.TextMacroAction:
+                return new TextMacroAction().fromBinary(buffer);
             default:
                 throw `Invalid MacroAction first byte: ${macroActionFirstByte}`;
         }

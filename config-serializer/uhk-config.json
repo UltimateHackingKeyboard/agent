@@ -244,6 +244,14 @@
                     "macroActionType": "scrollMouse",
                     "x": 0,
                     "y": 20000
+                },
+                {
+                    "macroActionType": "delay",
+                    "delay": 40000
+                },
+                {
+                    "macroActionType": "text",
+                    "text": "this is a text"
                 }
             ]
         }
