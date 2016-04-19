@@ -22,7 +22,7 @@ class KeyMap extends Serializable<KeyMap> {
 
     _fromBinary(buffer: UhkBuffer): KeyMap {
         this.id = buffer.readUInt8();
-        this.isDefault = this.binToBool(buffer.readUInt8());
+        this.isDefault = buffer.readBoolean();
         this.abbreviation = buffer.readString();
         this.name = buffer.readString();
         this.layers = new Layers().fromBinary(buffer);
@@ -41,7 +41,7 @@ class KeyMap extends Serializable<KeyMap> {
 
     _toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
-        buffer.writeUInt8(this.boolToBin(this.isDefault));
+        buffer.writeBoolean(this.isDefault);
         buffer.writeString(this.abbreviation);
         buffer.writeString(this.name);
         this.layers.toBinary(buffer);

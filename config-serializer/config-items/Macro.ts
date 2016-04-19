@@ -22,8 +22,8 @@ class Macro extends Serializable<Macro> {
 
     _fromBinary(buffer: UhkBuffer): Macro {
         this.id = buffer.readUInt8();
-        this.isLooped = this.binToBool(buffer.readUInt8());
-        this.isPrivate = this.binToBool(buffer.readUInt8());
+        this.isLooped = buffer.readBoolean();
+        this.isPrivate = buffer.readBoolean();
         this.name = buffer.readString();
         this.macroActions = new MacroActions().fromBinary(buffer);
         return this;
@@ -41,8 +41,8 @@ class Macro extends Serializable<Macro> {
 
     _toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
-        buffer.writeUInt8(this.boolToBin(this.isLooped));
-        buffer.writeUInt8(this.boolToBin(this.isPrivate));
+        buffer.writeBoolean(this.isLooped);
+        buffer.writeBoolean(this.isPrivate);
         buffer.writeString(this.name);
         this.macroActions.toBinary(buffer);
     }

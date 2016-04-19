@@ -21,7 +21,7 @@ class SwitchLayerAction extends KeyAction {
     _fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer);
         this.layer = buffer.readUInt8();
-        this.isLayerToggleable = this.binToBool(buffer.readUInt8());
+        this.isLayerToggleable = buffer.readBoolean();
         return this;
     }
 
@@ -36,7 +36,7 @@ class SwitchLayerAction extends KeyAction {
     _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchLayerAction);
         buffer.writeUInt8(this.layer);
-        buffer.writeUInt8(this.boolToBin(this.isLayerToggleable));
+        buffer.writeBoolean(this.isLayerToggleable);
     }
 
     toString(): string {

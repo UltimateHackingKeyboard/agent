@@ -1,6 +1,5 @@
 abstract class Serializable<T> {
 
-    static boolFlag = 0x80;
     private static depth = 0;
     private static maxDisplayedJsonLength = 160;
     private static enableDump = true;
@@ -44,15 +43,6 @@ abstract class Serializable<T> {
         Serializable.depth--;
         this.dump(`]`);
         return value;
-    }
-
-    /* should have assert uint8? */
-    binToBool(bin: number) {
-        return (bin & Serializable.boolFlag) !== 0;
-    }
-
-    boolToBin(bool: boolean) {
-        return bool ? Serializable.boolFlag : 0;
     }
 
     abstract _fromJsObject(jsObject: any): Serializable<T>;

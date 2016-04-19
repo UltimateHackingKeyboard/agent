@@ -143,6 +143,14 @@ class UhkBuffer {
         this.offset += stringByteLength;
     }
 
+    readBoolean(): boolean {
+        return this.readUInt8() !== 0;
+    }
+
+    writeBoolean(bool: boolean) {
+        this.writeUInt8(bool ? 1 : 0);
+    }
+
     backtrack(): void {
         this.offset -= this.bytesToBacktrack;
         this.bytesToBacktrack = 0;
