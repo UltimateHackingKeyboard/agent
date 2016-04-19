@@ -12,7 +12,7 @@
             "maxPointerSpeed": 200
         }
     ],
-    "keymaps": [
+    "keyMaps": [
         {
             "id": 0,
             "isDefault": true,
