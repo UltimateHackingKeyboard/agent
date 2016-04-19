@@ -1,4 +1,7 @@
-class ReleaseKeyMacroAction extends MacroAction {
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class ReleaseKeyMacroAction extends MacroAction {
 
     // @assertUInt8
     scancode: number;

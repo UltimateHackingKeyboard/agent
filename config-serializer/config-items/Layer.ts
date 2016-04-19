@@ -1,4 +1,8 @@
-class Layer extends Serializable<Layer> {
+import {Serializable} from '../Serializable';
+import {Modules} from './Modules';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class Layer extends Serializable<Layer> {
 
     modules: Serializable<Modules>;
 

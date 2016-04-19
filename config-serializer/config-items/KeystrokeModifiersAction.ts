@@ -1,4 +1,7 @@
-enum KeyModifiers {
+import {UhkBuffer} from '../UhkBuffer';
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+
+export enum KeyModifiers {
     leftCtrl   = 1 << 0,
     leftShift  = 1 << 1,
     leftAlt    = 1 << 2,
@@ -9,7 +12,7 @@ enum KeyModifiers {
     rightGui   = 1 << 7
 }
 
-class KeystrokeModifiersAction extends KeyAction {
+export class KeystrokeModifiersAction extends KeyAction {
 
     // @assertUInt8
     modifierMask: number;

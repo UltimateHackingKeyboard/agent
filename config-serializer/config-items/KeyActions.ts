@@ -1,4 +1,18 @@
-class KeyActions extends ClassArray<KeyAction> {
+import {ClassArray} from '../ClassArray';
+import {UhkBuffer} from '../UhkBuffer';
+import {Serializable} from '../Serializable';
+import {DualRoleKeystrokeAction} from './DualRoleKeystrokeAction';
+import {NoneAction} from './NoneAction';
+import {KeystrokeAction} from './KeystrokeAction';
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {KeystrokeModifiersAction} from './KeystrokeModifiersAction';
+import {KeystrokeWithModifiersAction} from './KeystrokeWithModifiersAction';
+import {SwitchLayerAction} from './SwitchLayerAction';
+import {SwitchKeymapAction} from './SwitchKeymapAction';
+import {MouseAction} from './MouseAction';
+import {PlayMacroAction} from './PlayMacroAction';
+
+export class KeyActions extends ClassArray<KeyAction> {
 
     jsObjectToClass(jsObject: any): Serializable<KeyAction> {
         switch (jsObject.keyActionType) {

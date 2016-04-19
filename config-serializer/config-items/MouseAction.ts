@@ -1,3 +1,6 @@
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {UhkBuffer} from '../UhkBuffer';
+
 enum MouseActionParam {
     leftClick,
     middleClick,
@@ -14,7 +17,7 @@ enum MouseActionParam {
     decelerate
 }
 
-class MouseAction extends KeyAction {
+export class MouseAction extends KeyAction {
 
     // @assertUInt8
     mouseAction: MouseActionParam;

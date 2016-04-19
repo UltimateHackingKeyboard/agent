@@ -1,4 +1,7 @@
-class NoneAction extends KeyAction {
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class NoneAction extends KeyAction {
 
     _fromJsObject(jsObject: any): NoneAction {
         this.assertKeyActionType(jsObject);

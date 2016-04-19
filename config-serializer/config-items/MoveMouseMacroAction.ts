@@ -1,4 +1,7 @@
-class MoveMouseMacroAction extends MacroAction {
+import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class MoveMouseMacroAction extends MacroAction {
 
     // @assertInt16
     x: number;

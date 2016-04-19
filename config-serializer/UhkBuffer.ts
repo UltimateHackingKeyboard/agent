@@ -1,4 +1,4 @@
-class UhkBuffer {
+export class UhkBuffer {
 
     private static eepromSize = 32 * 1024;
     private static maxCompactLength = 0xFFFF;

@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "out": "test-serializer.js",
         "target": "es5",
+        "module": "commonjs",
         "experimentalDecorators": true
     },
-    "files": [
-        "../typings/main.d.ts",
-        "test-serializer.ts"
+    "exclude": [
+        "../src",
+        "../node_modules",
+        "../typings/main",
+        "../typings/main.d.ts"
     ]
 }

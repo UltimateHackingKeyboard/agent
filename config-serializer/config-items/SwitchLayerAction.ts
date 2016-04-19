@@ -1,10 +1,13 @@
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {UhkBuffer} from '../UhkBuffer';
+
 enum LayerName {
     mod,
     fn,
     mouse
 }
 
-class SwitchLayerAction extends KeyAction {
+export class SwitchLayerAction extends KeyAction {
 
     isLayerToggleable: boolean;
 

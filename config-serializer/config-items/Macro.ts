@@ -1,4 +1,8 @@
-class Macro extends Serializable<Macro> {
+import {Serializable} from '../Serializable';
+import {UhkBuffer} from '../UhkBuffer';
+import {MacroActions} from './MacroActions';
+
+export class Macro extends Serializable<Macro> {
 
     // @assertUInt8
     id: number;

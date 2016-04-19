@@ -1,4 +1,7 @@
-class HoldMouseButtonsMacroAction extends MacroAction {
+import {UhkBuffer} from '../UhkBuffer';
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+
+export class HoldMouseButtonsMacroAction extends MacroAction {
 
     // @assertUInt8
     mouseButtonsMask: number;

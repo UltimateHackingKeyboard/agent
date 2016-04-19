@@ -1,4 +1,7 @@
-class ReleaseModifiersMacroAction extends MacroAction {
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class ReleaseModifiersMacroAction extends MacroAction {
 
     // @assertUInt8
     modifierMask: number;

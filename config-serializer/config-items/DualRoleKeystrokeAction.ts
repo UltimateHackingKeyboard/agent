@@ -1,3 +1,6 @@
+import {UhkBuffer} from '../UhkBuffer';
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+
 enum LongPressAction {
     leftCtrl,
     leftShift,
@@ -12,7 +15,7 @@ enum LongPressAction {
     mouse
 }
 
-class DualRoleKeystrokeAction extends KeyAction {
+export class DualRoleKeystrokeAction extends KeyAction {
 
     // @assertUInt8
     scancode: number;

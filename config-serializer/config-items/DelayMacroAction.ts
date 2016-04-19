@@ -1,4 +1,7 @@
-class DelayMacroAction extends MacroAction {
+import {UhkBuffer} from '../UhkBuffer';
+import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
+
+export class DelayMacroAction extends MacroAction {
 
     // @assertUInt16
     delay: number;

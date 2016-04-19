@@ -1,4 +1,7 @@
-class PlayMacroAction extends KeyAction {
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class PlayMacroAction extends KeyAction {
 
     // @assertUInt8
     macroId: number;

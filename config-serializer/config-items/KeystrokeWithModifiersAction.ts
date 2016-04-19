@@ -1,4 +1,8 @@
-class KeystrokeWithModifiersAction extends KeyAction {
+import {UhkBuffer} from '../UhkBuffer';
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {KeyModifiers} from './KeystrokeModifiersAction';
+
+export class KeystrokeWithModifiersAction extends KeyAction {
 
     // @assertUInt8
     modifierMask: number;

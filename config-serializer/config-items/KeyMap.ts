@@ -1,4 +1,8 @@
-class KeyMap extends Serializable<KeyMap> {
+import {Serializable} from '../Serializable';
+import {UhkBuffer} from '../UhkBuffer';
+import {Layers} from './Layers';
+
+export class KeyMap extends Serializable<KeyMap> {
 
     // @assertUInt8
     id: number;

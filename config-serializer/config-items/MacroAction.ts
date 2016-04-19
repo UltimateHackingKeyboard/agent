@@ -1,4 +1,7 @@
-enum MacroActionId {
+import {Serializable} from '../Serializable';
+import {UhkBuffer} from '../UhkBuffer';
+
+export enum MacroActionId {
     PressKeyMacroAction              =  0,
     HoldKeyMacroAction               =  1,
     ReleaseKeyMacroAction            =  2,
@@ -14,7 +17,7 @@ enum MacroActionId {
     TextMacroAction                  = 12
 }
 
-let macroActionType = {
+export let macroActionType = {
     PressKeyMacroAction              : 'pressKey',
     HoldKeyMacroAction               : 'holdKey',
     ReleaseKeyMacroAction            : 'releaseKey',
@@ -30,7 +33,7 @@ let macroActionType = {
     TextMacroAction                  : 'text'
 };
 
-abstract class MacroAction extends Serializable<MacroAction> {
+export abstract class MacroAction extends Serializable<MacroAction> {
     assertMacroActionType(jsObject: any) {
         let macroActionClassname = this.constructor.name;
         let macroActionTypeString = macroActionType[macroActionClassname];

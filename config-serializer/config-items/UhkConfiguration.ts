@@ -1,4 +1,10 @@
-class UhkConfiguration extends Serializable<UhkConfiguration> {
+import {Serializable} from '../Serializable';
+import {ModuleConfigurations} from './ModuleConfigurations';
+import {KeyMaps} from './KeyMaps';
+import {Macros} from './Macros';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     signature: string;
 

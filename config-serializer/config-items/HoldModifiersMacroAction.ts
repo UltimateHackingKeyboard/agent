@@ -1,4 +1,7 @@
-class HoldModifiersMacroAction extends MacroAction {
+import {UhkBuffer} from '../UhkBuffer';
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+
+export class HoldModifiersMacroAction extends MacroAction {
 
     // @assertUInt8
     modifierMask: number;

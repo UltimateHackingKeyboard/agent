@@ -1,10 +1,14 @@
+import {Serializable} from '../Serializable';
+import {KeyActions} from './KeyActions';
+import {UhkBuffer} from '../UhkBuffer';
+
 enum PointerRole {
     none,
     move,
     scroll
 }
 
-class Module extends Serializable<Module> {
+export class Module extends Serializable<Module> {
 
     // @assertUInt8
     id: number;

@@ -1,4 +1,7 @@
-class PressModifiersMacroAction extends MacroAction {
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class PressModifiersMacroAction extends MacroAction {
 
     // @assertUInt8
     modifierMask: number;

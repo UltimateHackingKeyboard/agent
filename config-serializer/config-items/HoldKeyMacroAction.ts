@@ -1,4 +1,7 @@
-class HoldKeyMacroAction extends MacroAction {
+import {UhkBuffer} from '../UhkBuffer';
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+
+export class HoldKeyMacroAction extends MacroAction {
 
     // @assertUInt8
     scancode: number;

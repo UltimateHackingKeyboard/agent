@@ -1,4 +1,7 @@
-class ModuleConfiguration extends Serializable<ModuleConfiguration> {
+import {Serializable} from '../Serializable';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
 
     /*
      * module id enumeration is a separate story

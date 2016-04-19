@@ -1,4 +1,22 @@
-class MacroActions extends ClassArray<MacroAction> {
+import {ClassArray} from '../ClassArray';
+import {Serializable} from '../Serializable';
+import {UhkBuffer} from '../UhkBuffer';
+import {DelayMacroAction} from './DelayMacroAction';
+import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
+import {HoldKeyMacroAction} from './HoldKeyMacroAction';
+import {HoldModifiersMacroAction} from './HoldModifiersMacroAction';
+import {HoldMouseButtonsMacroAction} from './HoldMouseButtonsMacroAction';
+import {MoveMouseMacroAction} from './MoveMouseMacroAction';
+import {PressKeyMacroAction} from './PressKeyMacroAction';
+import {PressModifiersMacroAction} from './PressModifiersMacroAction';
+import {PressMouseButtonsMacroAction} from './PressMouseButtonsMacroAction';
+import {ReleaseKeyMacroAction} from './ReleaseKeyMacroAction';
+import {ReleaseModifiersMacroAction} from './ReleaseModifiersMacroAction';
+import {ReleaseMouseButtonsMacroAction} from './ReleaseMouseButtonsMacroAction';
+import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
+import {TextMacroAction} from './TextMacroAction';
+
+export class MacroActions extends ClassArray<MacroAction> {
 
     jsObjectToClass(jsObject: any): Serializable<MacroAction> {
         switch (jsObject.macroActionType) {

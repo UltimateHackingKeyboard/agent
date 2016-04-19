@@ -1,4 +1,7 @@
-class KeystrokeAction extends KeyAction {
+import {UhkBuffer} from '../UhkBuffer';
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+
+export class KeystrokeAction extends KeyAction {
 
     // @assertUInt8
     scancode: number;

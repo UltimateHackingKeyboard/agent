@@ -1,4 +1,7 @@
-class TextMacroAction extends MacroAction {
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class TextMacroAction extends MacroAction {
 
     text: string;
 

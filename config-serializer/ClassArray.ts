@@ -1,4 +1,7 @@
-abstract class ClassArray<T> extends Serializable<T> {
+import {Serializable} from './Serializable';
+import {UhkBuffer} from './UhkBuffer';
+
+export abstract class ClassArray<T> extends Serializable<T> {
 
     elements: Serializable<T>[] = [];
 

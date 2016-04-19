@@ -1,4 +1,7 @@
-class SwitchKeymapAction extends KeyAction {
+import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {UhkBuffer} from '../UhkBuffer';
+
+export class SwitchKeymapAction extends KeyAction {
 
     // @assertUInt8
     keymapId: number;

@@ -1,9 +1,8 @@
-/// <reference path="Function.d.ts" />
-/// <reference path="assert.ts" />
-/// <reference path="Serializable.ts" />
-/// <reference path="ClassArray.ts" />
-/// <reference path="UhkBuffer.ts" />
-/// <reference path="config-items/config-items.ts" />
+/// <reference path="../typings/main/ambient/node/index.d.ts" />
+
+import {Serializable} from './Serializable';
+import {UhkBuffer} from './UhkBuffer';
+import {UhkConfiguration} from './config-items/UhkConfiguration';
 
 let assert = require('assert');
 let fs = require('fs');

@@ -1,4 +1,8 @@
-abstract class Serializable<T> {
+/// <references path="Function.d.ts">
+
+import {UhkBuffer} from './UhkBuffer';
+
+export abstract class Serializable<T> {
 
     private static depth = 0;
     private static maxDisplayedJsonLength = 160;

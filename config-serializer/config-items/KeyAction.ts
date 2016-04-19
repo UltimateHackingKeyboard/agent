@@ -1,4 +1,9 @@
-enum KeyActionId {
+/// <reference path="../Function.d.ts" />
+
+import {Serializable} from '../Serializable';
+import {UhkBuffer} from '../UhkBuffer';
+
+export enum KeyActionId {
     NoneAction                   = 0,
     KeystrokeAction              = 1,
     KeystrokeModifiersAction     = 2,
@@ -10,7 +15,7 @@ enum KeyActionId {
     PlayMacroAction              = 8
 }
 
-let keyActionType = {
+export let keyActionType = {
     NoneAction                   : 'none',
     KeystrokeAction              : 'keystroke',
     KeystrokeModifiersAction     : 'keystrokeModifiers',
@@ -22,7 +27,7 @@ let keyActionType = {
     PlayMacroAction              : 'playMacro'
 };
 
-abstract class KeyAction extends Serializable<KeyAction> {
+export abstract class KeyAction extends Serializable<KeyAction> {
     assertKeyActionType(jsObject: any) {
         let keyActionClassname = this.constructor.name;
         let keyActionTypeString = keyActionType[keyActionClassname];
