@@ -32,3 +32,6 @@
 /// <reference path="ScrollMouseMacroAction.ts" />
 /// <reference path="DelayMacroAction.ts" />
 /// <reference path="TextMacroAction.ts" />
+/// <reference path="ModuleConfiguration.ts" />
+/// <reference path="ModuleConfigurations.ts" />
+/// <reference path="UhkConfiguration.ts" />
