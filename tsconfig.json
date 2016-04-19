@@ -12,6 +12,7 @@
   "exclude": [
     "node_modules",
     "typings/main",
-    "typings/main.d.ts"
+    "typings/main.d.ts",
+    "config-serializer"
   ]
 }
