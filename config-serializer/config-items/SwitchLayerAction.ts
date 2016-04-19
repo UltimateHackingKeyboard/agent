@@ -6,8 +6,6 @@ enum LayerName {
 
 class SwitchLayerAction extends KeyAction {
 
-    static toggleFlag = 0x80;
-
     isLayerToggleable: boolean;
 
     // @assertEnum(LayerName)
@@ -22,9 +20,8 @@ class SwitchLayerAction extends KeyAction {
 
     _fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer);
-        let layer = buffer.readUInt8();
-        this.isLayerToggleable = (layer & SwitchLayerAction.toggleFlag) !== 0;
-        this.layer = layer & ~SwitchLayerAction.toggleFlag; // Clear toggle bit.
+        this.layer = buffer.readUInt8();
+        this.isLayerToggleable = buffer.readBoolean();
         return this;
     }
 
@@ -38,14 +35,11 @@ class SwitchLayerAction extends KeyAction {
 
     _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchLayerAction);
-        buffer.writeUInt8(this.layer | this.getToggleFlag());
+        buffer.writeUInt8(this.layer);
+        buffer.writeBoolean(this.isLayerToggleable);
     }
 
     toString(): string {
         return `<SwitchLayerAction layer="${this.layer}" toggle="${this.isLayerToggleable}">`;
-    }
-
-    private getToggleFlag() {
-        return this.isLayerToggleable ? SwitchLayerAction.toggleFlag : 0;
     }
 }
