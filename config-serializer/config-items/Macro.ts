@@ -1,8 +1,5 @@
 class Macro extends Serializable<Macro> {
 
-    static loopedFlag  = 0x80;
-    static privateFlag = 0x08;
-
     // @assertUInt8
     id: number;
 
@@ -25,10 +22,8 @@ class Macro extends Serializable<Macro> {
 
     _fromBinary(buffer: UhkBuffer): Macro {
         this.id = buffer.readUInt8();
-        let bools = buffer.readUInt8();
-        /* saves almost a byte but limits number of keymaps... */
-        this.isLooped = (bools & Macro.loopedFlag) !== 0;
-        this.isPrivate = (bools & Macro.privateFlag) !== 0;
+        this.isLooped = this.binToBool(buffer.readUInt8());
+        this.isPrivate = this.binToBool(buffer.readUInt8());
         this.name = buffer.readString();
         this.macroActions = new MacroActions().fromBinary(buffer);
         return this;
@@ -46,20 +41,13 @@ class Macro extends Serializable<Macro> {
 
     _toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
-        buffer.writeUInt8(this.getLoopedFlag() | this.getPrivateFlag());
+        buffer.writeUInt8(this.boolToBin(this.isLooped));
+        buffer.writeUInt8(this.boolToBin(this.isPrivate));
         buffer.writeString(this.name);
         this.macroActions.toBinary(buffer);
     }
 
     toString(): string {
         return `<Macro id="${this.id}" name="${this.name}">`;
-    }
-
-    private getLoopedFlag() {
-        return this.isLooped ? Macro.loopedFlag : 0;
-    }
-
-    private getPrivateFlag() {
-        return this.isPrivate ? Macro.privateFlag : 0;
     }
 }
