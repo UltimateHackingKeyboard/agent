@@ -1094,27 +1094,12 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">QTY</tspan></text>
   <g
      id="g4499"
-     transform="translate(1.792322,1.7346672)">
+     transform="matrix(1.1999997,0,0,1.1999997,-110.86135,-60.39058)">
     <path
        style="fill:#ffffff;fill-opacity:1"
        inkscape:connector-curvature="0"
        d="m 666.48308,309.37709 -11.81102,0 c -0.406,0 -0.73819,0.33219 -0.73819,0.73819 l 0,7.38189 c 0,0.406 0.33219,0.73819 0.73819,0.73819 l 11.81102,0 c 0.40601,0 0.73819,-0.33219 0.73819,-0.73819 l 0,-7.38189 c 0,-0.406 -0.33218,-0.73819 -0.73819,-0.73819 z m -5.16732,1.47638 1.47638,0 0,1.47638 -1.47638,0 0,-1.47638 z m 2.21457,2.21457 0,1.47638 -1.47638,0 0,-1.47638 1.47638,0 z m -4.42914,-2.21457 1.47638,0 0,1.47638 -1.47638,0 0,-1.47638 z m 2.21457,2.21457 0,1.47638 -1.47638,0 0,-1.47638 1.47638,0 z m -4.42913,-2.21457 1.47637,0 0,1.47638 -1.47637,0 0,-1.47638 z m 2.21456,2.21457 0,1.47638 -1.47638,0 0,-1.47638 1.47638,0 z m -3.69094,-2.21457 0.73819,0 0,1.47638 -0.73819,0 0,-1.47638 z m 0,2.21457 1.47638,0 0,1.47638 -1.47638,0 0,-1.47638 z m 0.73819,3.69094 -0.73819,0 0,-1.47638 0.73819,0 0,1.47638 z m 6.6437,0 -5.90551,0 0,-1.47638 5.90551,0 0,1.47638 z m 2.95275,0 -2.21456,0 0,-1.47638 2.21456,0 0,1.47638 z m 0,-2.21456 -1.47637,0 0,-1.47638 1.47637,0 0,1.47638 z m 0,-2.21457 -2.21456,0 0,-1.47638 2.21456,0 0,1.47638 z"
        id="path4279-1" />
-    <g
-       id="g4495">
-      <text
-         y="312.42017"
-         x="689.46338"
-         font-size="19"
-         id="SvgjsText1172-6-0-2-5-9-0-1-5-2-0-0-2"
-         style="font-size:9.27567291px;font-family:Helvetica;text-align:center;writing-mode:lr-tb;text-anchor:middle;overflow:visible;fill:#ffffff;stroke:none">Switch</text>
-      <text
-         y="321.2811"
-         x="689.14447"
-         font-size="19"
-         id="SvgjsText1172-6-0-2-5-9-0-1-5-2-0-0-2-3"
-         style="font-size:9.43245602px;font-family:Helvetica;text-align:center;writing-mode:lr-tb;text-anchor:middle;overflow:visible;fill:#ffffff;stroke:none">Keymap</text>
-    </g>
   </g>
   <text
      xml:space="preserve"
@@ -1128,4 +1113,48 @@
        x="681.40076"
        y="344.36215"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">DVR</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;overflow:visible;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="545.33771"
+     y="344.36215"
+     id="text4550-1-3-5-5-0-9-2-7"
+     sodipodi:linespacing="125%"><tspan
+       id="tspan5212-5-5-71-6-5-3"
+       sodipodi:role="line"
+       x="545.33771"
+       y="344.36215"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">COL</tspan></text>
+  <path
+     id="path4360"
+     d="m 553.44565,310.86184 -15.35433,0 c -0.6496,0 -1.1811,0.53149 -1.1811,1.1811 l 0,8.26772 c 0,0.6496 0.5315,1.1811 1.1811,1.1811 l 15.35433,0 c 0.64961,0 1.18111,-0.5315 1.18111,-1.1811 l 0,-8.26772 c 0,-0.64961 -0.5315,-1.1811 -1.18111,-1.1811 z m 0,9.44646 c -10e-4,0.001 -10e-4,0.001 -0.002,0.002 l -15.34961,0 c -10e-4,-10e-4 -10e-4,-10e-4 -0.002,-0.002 l 0,-8.263 c 10e-4,-10e-4 10e-4,-10e-4 0.002,-0.002 l 15.34961,0 c 10e-4,0.001 10e-4,0.001 0.002,0.002 l 0,8.263 z m -11.81102,-2.35985 8.26772,0 0,1.18111 -8.26772,0 z m 8.26772,-2.3622 1.1811,0 0,1.1811 -1.1811,0 z m -2.36221,0 1.1811,0 0,1.1811 -1.1811,0 z m -2.3622,0 1.1811,0 0,1.1811 -1.1811,0 z m -2.36221,0 1.1811,0 0,1.1811 -1.1811,0 z m -2.3622,0 1.1811,0 0,1.1811 -1.1811,0 z m 8.26771,-2.36221 1.18111,0 0,1.18111 -1.18111,0 z m 2.36221,0 1.1811,0 0,1.18111 -1.1811,0 z m -4.72441,0 1.1811,0 0,1.18111 -1.1811,0 z m -2.36221,0 1.18111,0 0,1.18111 -1.18111,0 z m -2.3622,0 1.1811,0 0,1.18111 -1.1811,0 z m -2.36221,0 1.18111,0 0,1.18111 -1.18111,0 z"
+     inkscape:connector-curvature="0"
+     style="fill:#ffffff;fill-opacity:1" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;overflow:visible;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="478.01471"
+     y="344.36136"
+     id="text4550-1-3-5-5-0-9-2-7-8"
+     sodipodi:linespacing="125%"><tspan
+       id="tspan5212-5-5-71-6-5-3-5"
+       sodipodi:role="line"
+       x="478.01471"
+       y="344.36136"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">COL</tspan></text>
+  <g
+     id="g4420"
+     transform="translate(-1.8656397,0.44295403)">
+    <path
+       style="overflow:visible;fill:#ffffff;fill-opacity:1"
+       inkscape:connector-curvature="0"
+       d="m 464.96464,310.54786 -12.28343,0 c -0.51969,0 -0.94489,0.42519 -0.94489,0.9449 l 0,6.61413 c 0,0.51969 0.4252,0.94489 0.94489,0.94489 l 12.28343,0 c 0.51971,0 0.94491,-0.4252 0.94491,-0.94489 l 0,-6.61413 c 0,-0.51971 -0.4252,-0.9449 -0.94491,-0.9449 z m 0,7.55716 c -8e-4,8e-4 -8e-4,8e-4 -0.002,0.002 l -12.27968,0 c -8e-4,-8e-4 -8e-4,-8e-4 -0.002,-0.002 l 0,-6.6104 c 8e-4,-8e-4 8e-4,-8e-4 0.002,-0.002 l 12.27968,0 c 8e-4,8e-4 8e-4,8e-4 0.002,0.002 l 0,6.6104 z m -9.44881,-1.88786 6.61421,0 0,0.94483 -6.61421,0 z m 6.61421,-1.88979 0.94488,0 0,0.9449 -0.94488,0 z m -1.8898,0 0.94489,0 0,0.9449 -0.94489,0 z m -1.88972,0 0.94482,0 0,0.9449 -0.94482,0 z m -1.88979,0 0.94489,0 0,0.9449 -0.94489,0 z m -1.88979,0 0.94489,0 0,0.9449 -0.94489,0 z m 6.61419,-1.88979 0.94491,0 0,0.9449 -0.94491,0 z m 1.88979,0 0.94483,0 0,0.9449 -0.94483,0 z m -3.77958,0 0.9449,0 0,0.9449 -0.9449,0 z m -1.88972,0 0.9449,0 0,0.9449 -0.9449,0 z m -1.88979,0 0.9449,0 0,0.9449 -0.9449,0 z m -1.88972,0 0.94483,0 0,0.9449 -0.94483,0 z"
+       id="path4360-3" />
+    <text
+       y="318.53098"
+       x="489.14938"
+       font-size="19"
+       id="SvgjsText1172-6-0-2-5-9-0-1-5-2-0-0-4"
+       style="font-size:10.9507761px;font-family:Helvetica;text-align:center;text-anchor:middle;overflow:visible;fill:#ffffff;stroke:none">Keymap</text>
+  </g>
 </svg>
