@@ -1,5 +1,4 @@
 import {ClassArray} from '../ClassArray';
-import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
 import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
@@ -18,7 +17,7 @@ import {TextMacroAction} from './TextMacroAction';
 
 export class MacroActions extends ClassArray<MacroAction> {
 
-    jsObjectToClass(jsObject: any): Serializable<MacroAction> {
+    jsObjectToClass(jsObject: any): MacroAction {
         switch (jsObject.macroActionType) {
             case macroActionType.PressKeyMacroAction:
                 return new PressKeyMacroAction().fromJsObject(jsObject);
@@ -51,7 +50,7 @@ export class MacroActions extends ClassArray<MacroAction> {
         }
     }
 
-    binaryToClass(buffer: UhkBuffer): Serializable<MacroAction> {
+    binaryToClass(buffer: UhkBuffer): MacroAction {
         let macroActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 

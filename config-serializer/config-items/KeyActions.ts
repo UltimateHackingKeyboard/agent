@@ -1,6 +1,5 @@
 import {ClassArray} from '../ClassArray';
 import {UhkBuffer} from '../UhkBuffer';
-import {Serializable} from '../Serializable';
 import {DualRoleKeystrokeAction} from './DualRoleKeystrokeAction';
 import {NoneAction} from './NoneAction';
 import {KeystrokeAction} from './KeystrokeAction';
@@ -14,7 +13,7 @@ import {PlayMacroAction} from './PlayMacroAction';
 
 export class KeyActions extends ClassArray<KeyAction> {
 
-    jsObjectToClass(jsObject: any): Serializable<KeyAction> {
+    jsObjectToClass(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {
             case keyActionType.NoneAction:
                 return new NoneAction().fromJsObject(jsObject);
@@ -39,7 +38,7 @@ export class KeyActions extends ClassArray<KeyAction> {
         }
     }
 
-    binaryToClass(buffer: UhkBuffer): Serializable<KeyAction> {
+    binaryToClass(buffer: UhkBuffer): KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 

@@ -1,18 +1,18 @@
 import {Serializable} from './Serializable';
 import {UhkBuffer} from './UhkBuffer';
 
-export abstract class ClassArray<T> extends Serializable<T> {
+export abstract class ClassArray<T extends Serializable<T>> extends Serializable<ClassArray<T>> {
 
-    elements: Serializable<T>[] = [];
+    elements: T[] = [];
 
-    _fromJsObject(jsObjects: any): Serializable<T> {
+    _fromJsObject(jsObjects: any): ClassArray<T> {
         for (let jsObject of jsObjects) {
             this.elements.push(this.jsObjectToClass(jsObject));
         }
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): Serializable<T> {
+    _fromBinary(buffer: UhkBuffer): ClassArray<T> {
         let arrayLength = buffer.readCompactLength();
 
         if (buffer.enableDump) {
@@ -49,6 +49,6 @@ export abstract class ClassArray<T> extends Serializable<T> {
         return `<${this.constructor.name} length="${this.elements.length}">`;
     }
 
-    abstract jsObjectToClass(jsObject: any): Serializable<T>;
-    abstract binaryToClass(buffer: UhkBuffer): Serializable<T>;
+    abstract jsObjectToClass(jsObject: any): T;
+    abstract binaryToClass(buffer: UhkBuffer): T;
 }

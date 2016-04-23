@@ -20,11 +20,11 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
     // @assertUInt8
     brandId: number;
 
-    moduleConfigurations: Serializable<ModuleConfigurations>;
+    moduleConfigurations: ModuleConfigurations;
 
-    keyMaps: Serializable<KeyMaps>;
+    keyMaps: KeyMaps;
 
-    macros: Serializable<Macros>;
+    macros: Macros;
 
     // @assertUInt32
     epilogue: number;

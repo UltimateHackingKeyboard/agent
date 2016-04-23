@@ -1,15 +1,14 @@
 import {ClassArray} from '../ClassArray';
-import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
 import {KeyMap} from './KeyMap';
 
 export class KeyMaps extends ClassArray<KeyMap> {
 
-    jsObjectToClass(jsObject: any): Serializable<KeyMap> {
+    jsObjectToClass(jsObject: any): KeyMap {
         return new KeyMap().fromJsObject(jsObject);
     }
 
-    binaryToClass(buffer: UhkBuffer): Serializable<KeyMap> {
+    binaryToClass(buffer: UhkBuffer): KeyMap {
         return new KeyMap().fromBinary(buffer);
     }
 

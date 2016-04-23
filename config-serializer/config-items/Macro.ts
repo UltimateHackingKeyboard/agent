@@ -13,7 +13,7 @@ export class Macro extends Serializable<Macro> {
 
     name: string;
 
-    macroActions: Serializable<MacroActions>;
+    macroActions: MacroActions;
 
     _fromJsObject(jsObject: any): Macro {
         this.id = jsObject.id;

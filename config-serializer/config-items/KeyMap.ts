@@ -13,7 +13,7 @@ export class KeyMap extends Serializable<KeyMap> {
 
     isDefault: boolean;
 
-    layers: Serializable<Layers>;
+    layers: Layers;
 
     _fromJsObject(jsObject: any): KeyMap {
         this.id = jsObject.id;

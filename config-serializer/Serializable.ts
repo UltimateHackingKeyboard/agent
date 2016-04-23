@@ -8,7 +8,7 @@ export abstract class Serializable<T> {
     private static maxDisplayedJsonLength = 160;
     private static enableDump = true;
 
-    fromJsObject(jsObject: any): Serializable<T> {
+    fromJsObject(jsObject: any): T {
         this.dump(`${this.getIndentation()}${this.constructor.name}.fromJsObject: ` +
                   `${this.strintifyJsObject(jsObject)}\n`);
         Serializable.depth++;
@@ -18,7 +18,7 @@ export abstract class Serializable<T> {
         return value;
     }
 
-    fromBinary(buffer: UhkBuffer): Serializable<T> {
+    fromBinary(buffer: UhkBuffer): T {
         this.dump(`\n${this.getIndentation()}${this.constructor.name}.fromBinary: [`);
         Serializable.depth++;
         buffer.enableDump = Serializable.enableDump;
@@ -38,6 +38,7 @@ export abstract class Serializable<T> {
         return value;
     }
 
+    // TODO: remove parameter and return the buffer
     toBinary(buffer: UhkBuffer): void {
         this.dump(`\n${this.getIndentation()}${this.constructor.name}.toBinary: ${this} [`);
         Serializable.depth++;
@@ -49,8 +50,8 @@ export abstract class Serializable<T> {
         return value;
     }
 
-    abstract _fromJsObject(jsObject: any): Serializable<T>;
-    abstract _fromBinary(buffer: UhkBuffer): Serializable<T>;
+    abstract _fromJsObject(jsObject: any): T;
+    abstract _fromBinary(buffer: UhkBuffer): T;
     abstract _toJsObject(): any;
     abstract _toBinary(buffer: UhkBuffer): void;
 

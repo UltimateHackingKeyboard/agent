@@ -4,7 +4,7 @@ import {UhkBuffer} from '../UhkBuffer';
 
 export class Layer extends Serializable<Layer> {
 
-    modules: Serializable<Modules>;
+    modules: Modules;
 
     _fromJsObject(jsObject: any): Layer {
         this.modules = new Modules().fromJsObject(jsObject.modules);

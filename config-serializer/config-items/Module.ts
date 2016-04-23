@@ -13,7 +13,7 @@ export class Module extends Serializable<Module> {
     // @assertUInt8
     id: number;
 
-    keyActions: Serializable<KeyActions>;
+    keyActions: KeyActions;
 
     // @assertEnum(PointerRole)
     private pointerRole: PointerRole;
