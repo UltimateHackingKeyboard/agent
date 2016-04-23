@@ -5,6 +5,8 @@ import { MainAppComponent } from './main-app.component';
 
 import {DataProviderService} from './services/data-provider.service';
 
+process.stdout = require('browser-stdout')();
+
 bootstrap(MainAppComponent, [
     HTTP_PROVIDERS,
     DataProviderService
