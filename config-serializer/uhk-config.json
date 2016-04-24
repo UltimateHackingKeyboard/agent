@@ -26,20 +26,231 @@
                             "pointerRole": "move",
                             "keyActions": [
                                 {
-                                    "keyActionType": "none"
+                                    "keyActionType": "keystroke",
+                                    "scancode": 36
                                 },
                                 {
                                     "keyActionType": "keystroke",
-                                    "scancode": 110
+                                    "scancode": 37
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 38
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 39
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 45
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 46
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 42
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 28
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 24
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 12
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 18
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 19
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 47
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 48
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 49
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 11
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 13
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 14
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 15
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 51
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 52
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 40
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 17
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 16
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 54
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 55
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 56
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 53
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 30
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 31
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 32
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 33
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 34
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 35
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 43
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 20
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 26
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 21
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 23
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 4
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 22
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 7
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 9
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 10
                                 },
                                 {
                                     "keyActionType": "keystrokeModifiers",
-                                    "modifierMask":33
+                                    "modifierMask": 2
                                 },
                                 {
-                                    "keyActionType": "keystrokeWithModifiers",
-                                    "scancode": 120,
-                                    "modifierMask": 16
+                                    "keyActionType": "keystroke",
+                                    "scancode": 29
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 27
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 6
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 25
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 5
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 4
                                 },
                                 {
                                     "keyActionType": "switchLayer",
@@ -47,38 +258,20 @@
                                     "toggle": false
                                 },
                                 {
-                                    "keyActionType": "dualRoleKeystroke",
-                                    "scancode": 111,
-                                    "longPressAction": "mod"
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
                                 },
                                 {
-                                    "keyActionType": "mouse",
-                                    "mouseAction": "scrollDown"
-                                },
-                                {
-                                    "keyActionType": "playMacro",
-                                    "macroId": 0
-                                },
-                                {
-                                    "keyActionType": "switchKeymap",
-                                    "keymapId": 1
+                                    "keyActionType": "keystroke",
+                                    "scancode": 44
                                 }
                             ]
-                        },
-                        {
-                            "id": 1,
-                            "pointerRole": "scroll",
-                            "keyActions": []
                         },
                         {
                             "id": 2,
-                            "pointerRole": "move",
-                            "keyActions": [
-                                {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 111
-                                }
-                            ]
+                            "pointerRole": "scroll",
+                            "keyActions": []
                         }
                     ]
                 },
@@ -97,7 +290,7 @@
                                 },
                                 {
                                     "keyActionType": "keystrokeModifiers",
-                                    "modifierMask":33
+                                    "modifierMask": 33
                                 },
                                 {
                                     "keyActionType": "switchLayer",
