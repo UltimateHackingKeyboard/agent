@@ -8,6 +8,19 @@ import { Component, OnInit, Input } from 'angular2/core';
                             [attr.height]="height"  [attr.width]="width"
                             [attr.fill]="fill"
         />
+         <svg:text
+            [attr.x]="0"
+            [attr.y]="height/2"
+            [attr.text-anchor]="start"
+            [attr.font-size]="19"
+            [attr.font-family]="Helvetica"
+            fill="#ffffff"
+            *ngIf="asciiCode && asciiCode.length > 0">
+                <tspan
+                    x="0"
+                    dy="0"
+                    id="SvgjsTspan1180">{{asciiCode[0]}}</tspan>
+         </svg:text>
      `
 })
 export class SvgKeyboardKeyComponent implements OnInit {
@@ -16,8 +29,11 @@ export class SvgKeyboardKeyComponent implements OnInit {
     @Input() ry: string;
     @Input() height: string;
     @Input() width: string;
+    @Input() asciiCode: string[];
 
-    constructor() { }
+    constructor() {
+        this.asciiCode = [];
+    }
 
     ngOnInit() { }
 
