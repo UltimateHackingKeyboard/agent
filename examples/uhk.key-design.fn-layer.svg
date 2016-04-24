@@ -73,6 +73,15 @@
      style="fill:#333333;stroke:none"
      rx="3.5433071"
      ry="3.5433071"
+     x="26.673855"
+     y="92.947655"
+     height="63.779526"
+     width="63.779526"
+     id="a1" />
+  <rect
+     style="fill:#333333;stroke:none"
+     rx="3.5433071"
+     ry="3.5433071"
      x="345.07544"
      y="227.59335"
      height="63.779526"
@@ -312,15 +321,6 @@
      height="63.779526"
      width="63.779526"
      id="a4" />
-  <rect
-     style="fill:#333333;stroke:none"
-     rx="3.5433071"
-     ry="3.5433071"
-     x="26.673855"
-     y="92.947655"
-     height="63.779526"
-     width="63.779526"
-     id="a1" />
   <rect
      style="fill:#333333;stroke:none"
      rx="3.5433071"
@@ -2039,4 +2039,117 @@
        d="m 397.02318,726.64884 0,-0.38756 1.80488,0 1.80487,0 0,0.38756 0,0.38755 -1.80487,0 -1.80488,0 0,-0.38755 z m -1.12942,3.84227 -1.72739,-3.45472 -1.19585,0 -1.19586,0 0,-0.38755 0,-0.38756 1.50589,0 1.50589,0 1.7274,3.45473 1.72739,3.45473 1.19586,0 1.19584,0 0,0.38755 0,0.38755 -1.50589,0 -1.50589,0 -1.72739,-3.45473 z"
        inkscape:connector-curvature="0" />
   </g>
+  <g
+     id="g4712"
+     transform="translate(0.6541062,-7.0866198)">
+    <path
+       style="overflow:visible;fill:#ffffff;fill-opacity:1"
+       inkscape:connector-curvature="0"
+       d="m 31.390677,105.34924 8.858268,5.31496 -8.858268,5.31496 z"
+       id="path4611" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4708"
+       y="115.83512"
+       x="43.20499"
+       style="font-style:normal;font-weight:normal;font-size:14.7493763px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="115.83512"
+         x="43.20499"
+         id="tspan4710"
+         sodipodi:role="line">Macro</tspan></text>
+  </g>
+  <text
+     sodipodi:linespacing="125%"
+     id="text4708-8"
+     y="127.5975"
+     x="28.274849"
+     style="font-style:normal;font-weight:normal;font-size:13.8503027px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;overflow:visible;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="127.5975"
+       x="28.274849"
+       id="tspan4710-4"
+       sodipodi:role="line"
+       style="font-style:italic">Long mac</tspan><tspan
+       y="144.91039"
+       x="28.274849"
+       sodipodi:role="line"
+       id="tspan4735"
+       style="font-style:italic">ro name...</tspan></text>
+  <g
+     style="overflow:visible"
+     id="g4712-9"
+     transform="translate(68.43319,-7.0866249)">
+    <text
+       sodipodi:linespacing="125%"
+       id="text4708-7"
+       y="115.83512"
+       x="43.20499"
+       style="font-style:normal;font-weight:normal;font-size:14.7493763px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="115.83512"
+         x="43.20499"
+         id="tspan4710-1"
+         sodipodi:role="line">Macro</tspan></text>
+    <path
+       id="path4633"
+       d="m 33.135669,107.34235 -1.32874,-1.32874 -0.66437,0 0,0.66437 1.32874,1.32874 z m 0.66437,-1.99311 0.66437,0 0,1.32874 -0.66437,0 z m 2.65748,3.32185 1.32874,0 0,0.66437 -1.32874,0 z m 0.66437,-1.99311 0,-0.66437 -0.66437,0 -1.32874,1.32874 0.66437,0.66437 z m -6.6437,1.99311 1.32874,0 0,0.66437 -1.32874,0 z m 3.32185,2.65748 0.66437,0 0,1.32874 -0.66437,0 z m -2.65748,0 0,0.66437 0.66437,0 1.32874,-1.32874 -0.66437,-0.66437 z m 9.82005,3.17635 -6.60317,-6.60317 c -0.194,-0.194 -0.5109,-0.194 -0.7049,0 l -0.62384,0.62384 c -0.194,0.194 -0.194,0.5109 0,0.7049 l 6.60317,6.60317 c 0.194,0.194 0.5109,0.194 0.7049,0 l 0.62384,-0.62384 c 0.194,-0.194 0.194,-0.5109 0,-0.7049 z m -5.50164,-3.50854 -1.99311,-1.99311 0.66437,-0.66437 1.99311,1.99311 -0.66437,0.66437 z"
+       inkscape:connector-curvature="0"
+       style="overflow:visible;fill:#ffffff;fill-opacity:1" />
+  </g>
+  <text
+     sodipodi:linespacing="125%"
+     id="text4708-8-2"
+     y="127.5975"
+     x="95.597687"
+     style="font-style:normal;font-weight:normal;font-size:13.8503027px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;overflow:visible;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="127.5975"
+       x="95.597687"
+       id="tspan4710-4-1"
+       sodipodi:role="line"
+       style="font-style:italic">Long mac</tspan><tspan
+       y="144.91039"
+       x="95.597687"
+       sodipodi:role="line"
+       id="tspan4735-3"
+       style="font-style:italic">ro name...</tspan></text>
+  <g
+     style="overflow:visible"
+     id="g4712-7"
+     transform="translate(136.211,-7.0866249)">
+    <text
+       sodipodi:linespacing="125%"
+       id="text4708-0"
+       y="115.83512"
+       x="43.20499"
+       style="font-style:normal;font-weight:normal;font-size:14.7493763px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="115.83512"
+         x="43.20499"
+         id="tspan4710-5"
+         sodipodi:role="line">Macro</tspan></text>
+    <path
+       id="path4622"
+       d="m 36.876287,106.01361 -3.32185,3.32185 -1.99311,0 -1.99311,2.65748 c 0,0 2.11137,-0.58797 3.34311,-0.31226 l -3.34311,4.29848 4.37953,-3.40623 c 0.61055,1.39784 -0.39331,3.40623 -0.39331,3.40623 l 2.65748,-1.99311 0,-1.99311 3.32185,-3.32185 0.66437,-3.32185 -3.32185,0.66437 z"
+       inkscape:connector-curvature="0"
+       style="overflow:visible;fill:#ffffff;fill-opacity:1" />
+  </g>
+  <text
+     sodipodi:linespacing="125%"
+     id="text4708-8-4"
+     y="127.59751"
+     x="162.92052"
+     style="font-style:normal;font-weight:normal;font-size:13.8503027px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;overflow:visible;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="127.59751"
+       x="162.92052"
+       id="tspan4710-4-13"
+       sodipodi:role="line"
+       style="font-style:italic">Long mac</tspan><tspan
+       y="144.91039"
+       x="162.92052"
+       sodipodi:role="line"
+       id="tspan4735-1"
+       style="font-style:italic">ro name...</tspan></text>
 </svg>
