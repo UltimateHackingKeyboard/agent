@@ -1,4 +1,4 @@
-export interface KeyboardKey {
+export interface SvgKeyboardKey {
     id: string;
     x: string;
     y: string;

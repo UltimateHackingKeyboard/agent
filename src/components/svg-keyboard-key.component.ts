@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from 'angular2/core';
 
 @Component({
-    selector: 'g[uhk-keyboard-key]',
+    selector: 'g[svg-keyboard-key]',
     template:
     `
         <svg:rect [id]="id" [attr.rx]="rx"          [attr.ry]="ry"
@@ -10,7 +10,7 @@ import { Component, OnInit, Input } from 'angular2/core';
         />
      `
 })
-export class KeyboardKeyComponent implements OnInit {
+export class SvgKeyboardKeyComponent implements OnInit {
     @Input() id: string;
     @Input() rx: string;
     @Input() ry: string;

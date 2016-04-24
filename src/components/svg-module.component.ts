@@ -1,25 +1,25 @@
 import { Component, OnInit, Input} from 'angular2/core';
 
-import {KeyboardKey} from './keyboard-key.model';
-import {KeyboardKeyComponent} from './keyboard-key.component';
+import {SvgKeyboardKey} from './svg-keyboard-key.model';
+import {SvgKeyboardKeyComponent} from './svg-keyboard-key.component';
 
 @Component({
-    selector: 'g[uhk-module]',
+    selector: 'g[svg-module]',
     template:
     `
         <svg:path *ngFor="#path of coverages" [attr.d]="path.$.d"/>
-        <svg:g uhk-keyboard-key *ngFor="#key of keyboardKeys"
+        <svg:g svg-keyboard-key *ngFor="#key of keyboardKeys"
                 [id]="key.id"
                 [rx]="key.rx" [ry]="key.ry"
                 [width]="key.width" [height]="key.height"
                 [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
         />
     `,
-    directives: [KeyboardKeyComponent]
+    directives: [SvgKeyboardKeyComponent]
 })
-export class ModuleComponent implements OnInit {
+export class SvgModuleComponent implements OnInit {
     @Input() coverages: any[];
-    @Input() keyboardKeys: KeyboardKey[];
+    @Input() keyboardKeys: SvgKeyboardKey[];
 
     constructor() {
         this.keyboardKeys = [];

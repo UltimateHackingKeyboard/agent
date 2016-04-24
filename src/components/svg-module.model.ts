@@ -1,8 +1,8 @@
-import {KeyboardKey} from './keyboard-key.model';
+import {SvgKeyboardKey} from './svg-keyboard-key.model';
 
-export class Module {
+export class SvgModule {
     private coverages: any[];
-    private keyboardKeys: KeyboardKey[];
+    private keyboardKeys: SvgKeyboardKey[];
     private attributes: any;
 
     constructor(obj: { rect: any[], path: any[], $: Object }) {
