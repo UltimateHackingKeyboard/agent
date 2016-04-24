@@ -9,4 +9,8 @@ export class DataProviderService {
         return require('xml!../../images/base-layer.svg').svg;
     }
 
+    getUHKConfig(): any {
+        return require('json!../../config-serializer/uhk-config.json');
+    }
+
 }
