@@ -13,7 +13,7 @@ import {UhkConfiguration} from '../../config-serializer/config-items/UhkConfigur
     `
         <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="viewBox" height="100%" width="100%">
             <svg:g [attr.transform]="transform" [attr.fill]="fill">
-                <svg:g svg-module *ngFor="#module of modules; #i = index"
+                <svg:g svg-module *ngFor="let module of modules; let i = index"
                         [coverages]="module.coverages"
                         [keyboardKeys]="module.keyboardKeys"
                         [attr.transform]="module.attributes.transform"

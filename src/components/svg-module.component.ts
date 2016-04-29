@@ -10,8 +10,8 @@ import {Mapper} from '../utils/mapper';
     selector: 'g[svg-module]',
     template:
     `
-        <svg:path *ngFor="#path of coverages" [attr.d]="path.$.d"/>
-        <svg:g svg-keyboard-key *ngFor="#key of keyboardKeys; #i = index"
+        <svg:path *ngFor="let path of coverages" [attr.d]="path.$.d"/>
+        <svg:g svg-keyboard-key *ngFor="let key of keyboardKeys; let i = index"
                 [id]="key.id"
                 [rx]="key.rx" [ry]="key.ry"
                 [width]="key.width" [height]="key.height"
