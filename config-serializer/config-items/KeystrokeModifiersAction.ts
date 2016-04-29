@@ -48,4 +48,8 @@ export class KeystrokeModifiersAction extends KeyAction {
     isModifierActive(modifier: KeyModifiers): boolean {
         return (this.modifierMask & modifier) > 0;
     }
+
+    isOnlyOneModifierActive(): boolean {
+        return this.modifierMask !== 0 && !(this.modifierMask & this.modifierMask - 1);
+    }
 }

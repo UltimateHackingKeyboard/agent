@@ -11,15 +11,16 @@ import { Component, OnInit, Input } from 'angular2/core';
          <svg:text
             [attr.x]="0"
             [attr.y]="height/2"
-            [attr.text-anchor]="start"
+            [attr.text-anchor]="'middle'"
             [attr.font-size]="19"
-            [attr.font-family]="Helvetica"
-            fill="#ffffff"
-            *ngIf="asciiCode && asciiCode.length > 0">
+            [attr.font-family]="'Helvetica'"
+            [attr.fill]="'#ffffff'"
+            [attr.style]="'dominant-baseline: central'"
+            *ngIf="labels && labels.length > 0">
                 <tspan
-                    x="0"
+                    [attr.x]="width / 2"
                     dy="0"
-                    id="SvgjsTspan1180">{{asciiCode[0]}}</tspan>
+                    id="SvgjsTspan1180">{{ labels[0] }}</tspan>
          </svg:text>
      `
 })
@@ -29,10 +30,10 @@ export class SvgKeyboardKeyComponent implements OnInit {
     @Input() ry: string;
     @Input() height: string;
     @Input() width: string;
-    @Input() asciiCode: string[];
+    @Input() labels: string[];
 
     constructor() {
-        this.asciiCode = [];
+        this.labels = [];
     }
 
     ngOnInit() { }

@@ -4,6 +4,8 @@ import {SvgKeyboardKey} from './svg-keyboard-key.model';
 import {SvgKeyboardKeyComponent} from './svg-keyboard-key.component';
 import {KeyAction} from '../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';
+import {KeystrokeModifiersAction, KeyModifiers} from '../../config-serializer/config-items/KeystrokeModifiersAction';
+import {SwitchLayerAction, LayerName}  from '../../config-serializer/config-items/SwitchLayerAction';
 import {Mapper} from '../utils/mapper';
 
 @Component({
@@ -16,7 +18,7 @@ import {Mapper} from '../utils/mapper';
                 [rx]="key.rx" [ry]="key.ry"
                 [width]="key.width" [height]="key.height"
                 [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
-                [asciiCode]="asciiCodes[i]"
+                [labels]="labels[i]"
         />
     `,
     directives: [SvgKeyboardKeyComponent]
@@ -25,40 +27,78 @@ export class SvgModuleComponent implements OnInit, OnChanges {
     @Input() coverages: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
-    private asciiCodes: string[][];
+    private labels: string[][];
 
     constructor() {
         this.keyboardKeys = [];
-        this.asciiCodes = [];
+        this.labels = [];
     }
 
     ngOnInit() {
-        this.setAsciiCodes();
+        this.setLabels();
         console.log(this);
     }
 
     ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
         /* tslint:disable:no-string-literal */
         if (changes['keyActions']) {
-            this.setAsciiCodes();
+            this.setLabels();
         }
         /* tslint:enable:no-string-literal */
 
     }
 
-    private setAsciiCodes(): void {
+    private setLabels(): void {
         if (!this.keyActions) {
             return;
         }
-        let newAsciiCodes: string[][] = [];
+        let newLabels: string[][] = [];
         this.keyActions.forEach((keyAction: KeyAction) => {
-            if (keyAction instanceof KeystrokeAction) {
-                newAsciiCodes.push(Mapper.scanCodeToText((keyAction as KeystrokeAction).scancode));
+            if (keyAction instanceof KeystrokeModifiersAction) {
+                if (keyAction.isOnlyOneModifierActive()) {
+                    switch (keyAction.modifierMask) {
+                        case KeyModifiers.leftCtrl:
+                        case KeyModifiers.rightCtrl:
+                            newLabels.push(['Ctrl']);
+                            break;
+                        case KeyModifiers.leftShift:
+                        case KeyModifiers.rightShift:
+                            newLabels.push(['Shift']);
+                            break;
+                        case KeyModifiers.leftAlt:
+                        case KeyModifiers.rightAlt:
+                            newLabels.push(['Alt']);
+                            break;
+                        case KeyModifiers.leftGui:
+                        case KeyModifiers.rightGui:
+                            newLabels.push(['Super']);
+                            break;
+                        default:
+                            newLabels.push(['Undefined']);
+                            break;
+                    }
+                }
+            } else if (keyAction instanceof KeystrokeAction) {
+                newLabels.push(Mapper.scanCodeToText((keyAction as KeystrokeAction).scancode));
+            } else if (keyAction instanceof SwitchLayerAction) {
+                switch (keyAction.layer) {
+                    case LayerName.mod:
+                        newLabels.push(['Mod']);
+                        break;
+                    case LayerName.fn:
+                        newLabels.push(['Fn']);
+                        break;
+                    case LayerName.mouse:
+                        newLabels.push(['Mouse']);
+                        break;
+                    default:
+                        break;
+                }
             } else {
-                newAsciiCodes.push([]);
+                newLabels.push([]);
             }
         });
-        this.asciiCodes = newAsciiCodes;
+        this.labels = newLabels;
     }
 
 }

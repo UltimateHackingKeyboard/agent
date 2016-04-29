@@ -132,6 +132,36 @@
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 56
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 32
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 44
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
                                 }
                             ]
                         },
