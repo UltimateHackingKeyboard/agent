@@ -350,6 +350,11 @@
                                     "keymapId": 1
                                 }
                             ]
+                        },
+                         {
+                            "id": 1,
+                            "pointerRole": "none",
+                            "keyActions": []
                         }
                     ]
                 },

@@ -36,7 +36,6 @@ export class SvgModuleComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.setLabels();
-        console.log(this);
     }
 
     ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
