@@ -17,10 +17,20 @@ import { Component, OnInit, Input } from 'angular2/core';
             [attr.fill]="'#ffffff'"
             [attr.style]="'dominant-baseline: central'"
             *ngIf="labels && labels.length > 0">
-                <tspan
+                 <tspan
+                    *ngIf="labels.length === 1"
                     [attr.x]="width / 2"
                     dy="0"
-                    id="SvgjsTspan1180">{{ labels[0] }}</tspan>
+                    id="SvgjsTspan1180"
+                    >{{ labels[0] }}</tspan>
+                <tspan
+                    *ngIf="labels.length === 2"
+                    *ngFor="let label of labels; let index = index"
+                    [attr.x]="width / 2"
+                    [attr.y]="(0.75 - index * 0.5) * height"
+                    dy="0"
+                    id="SvgjsTspan1180"
+                    >{{ label }}</tspan>
          </svg:text>
      `
 })
