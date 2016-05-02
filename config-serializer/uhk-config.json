@@ -312,46 +312,126 @@
                             "pointerRole": "none",
                             "keyActions": [
                                 {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
                                     "keyActionType": "keystroke",
-                                    "scancode": 32
+                                    "scancode": 75
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 74
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 82
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 77
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 78
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 80
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 81
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 79
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
                                 },
                                 {
                                     "keyActionType": "none"
                                 },
                                 {
                                     "keyActionType": "keystrokeModifiers",
-                                    "modifierMask": 33
+                                    "modifierMask": 32
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 16
                                 },
                                 {
                                     "keyActionType": "switchLayer",
                                     "layer": "mod",
                                     "toggle": false
-                                },
-                                {
-                                    "keyActionType": "keystrokeWithModifiers",
-                                    "scancode": 121,
-                                    "modifierMask": 13
-                                },
-                                {
-                                    "keyActionType": "switchLayer",
-                                    "layer": "mouse",
-                                    "toggle": true
-                                },
-                                {
-                                    "keyActionType": "mouse",
-                                    "mouseAction": "leftClick"
-                                },
-                                {
-                                    "keyActionType": "playMacro",
-                                    "macroId": 0
-                                },
-                                {
-                                    "keyActionType": "switchKeymap",
-                                    "keymapId": 1
                                 }
                             ]
                         },
-                         {
+                        {
                             "id": 1,
                             "pointerRole": "none",
                             "keyActions": []
