@@ -4,10 +4,12 @@ import { HTTP_PROVIDERS } from 'angular2/http';
 import { MainAppComponent } from './main-app.component';
 
 import {DataProviderService} from './services/data-provider.service';
+import {MapperService} from './services/mapper.service';
 
 process.stdout = require('browser-stdout')();
 
 bootstrap(MainAppComponent, [
     HTTP_PROVIDERS,
-    DataProviderService
+    DataProviderService,
+    MapperService
 ]).catch(err => console.error(err));
