@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from 'angular2/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange } from 'angular2/core';
+
+import {KeyAction} from '../../config-serializer/config-items/KeyAction';
+import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';
+import {KeystrokeModifiersAction, KeyModifiers} from '../../config-serializer/config-items/KeystrokeModifiersAction';
+import {SwitchLayerAction, LayerName}  from '../../config-serializer/config-items/SwitchLayerAction';
+import {Mapper} from '../utils/mapper';
 
 @Component({
     selector: 'g[svg-keyboard-key]',
@@ -32,18 +38,81 @@ import { Component, OnInit, Input } from 'angular2/core';
          </svg:text>
      `
 })
-export class SvgKeyboardKeyComponent implements OnInit {
+export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
     @Input() id: string;
     @Input() rx: string;
     @Input() ry: string;
     @Input() height: string;
     @Input() width: string;
-    @Input() labels: string[];
+    @Input() keyAction: KeyAction;
 
-    constructor() {
-        this.labels = [];
+    private labels: any[];
+
+    constructor() { }
+
+    ngOnInit() {
+        this.setLabels();
     }
 
-    ngOnInit() { }
+    ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
+        /* tslint:disable:no-string-literal */
+        if (changes['keyAction']) {
+            this.setLabels();
+        }
+        /* tslint:enable:no-string-literal */
+
+    }
+
+    private setLabels(): void {
+        if (!this.keyAction) {
+            return;
+        }
+        let newLabels: string[] = [];
+        if (this.keyAction instanceof KeystrokeModifiersAction) {
+            let keyAction: KeystrokeModifiersAction = <KeystrokeModifiersAction> this.keyAction;
+            if (keyAction.isOnlyOneModifierActive()) {
+                switch (keyAction.modifierMask) {
+                    case KeyModifiers.leftCtrl:
+                    case KeyModifiers.rightCtrl:
+                        newLabels.push('Ctrl');
+                        break;
+                    case KeyModifiers.leftShift:
+                    case KeyModifiers.rightShift:
+                        newLabels.push('Shift');
+                        break;
+                    case KeyModifiers.leftAlt:
+                    case KeyModifiers.rightAlt:
+                        newLabels.push('Alt');
+                        break;
+                    case KeyModifiers.leftGui:
+                    case KeyModifiers.rightGui:
+                        newLabels.push('Super');
+                        break;
+                    default:
+                        newLabels.push('Undefined');
+                        break;
+                }
+            }
+        } else if (this.keyAction instanceof KeystrokeAction) {
+            let keyAction: KeystrokeAction = <KeystrokeAction> this.keyAction;
+            newLabels = Mapper.scanCodeToText((keyAction as KeystrokeAction).scancode);
+        } else if (this.keyAction instanceof SwitchLayerAction) {
+            let keyAction: SwitchLayerAction = <SwitchLayerAction> this.keyAction;
+            switch (keyAction.layer) {
+                case LayerName.mod:
+                    newLabels.push('Mod');
+                    break;
+                case LayerName.fn:
+                    newLabels.push('Fn');
+                    break;
+                case LayerName.mouse:
+                    newLabels.push('Mouse');
+                    break;
+                default:
+                    break;
+            }
+        }
+        this.labels = newLabels;
+    }
 
 }
