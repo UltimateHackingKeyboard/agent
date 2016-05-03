@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Renderer, ViewChildren, QueryList, ElementRef} from 'angular2/core';
+import { Component, OnInit, AfterViewInit, Renderer, ViewChildren, QueryList, ElementRef} from '@angular/core';
 
 import {UhkConfiguration} from '../config-serializer/config-items/UhkConfiguration';
 import {Layers} from '../config-serializer/config-items/Layers';

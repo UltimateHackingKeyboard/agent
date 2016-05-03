@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from 'angular2/core';
+import { Component, OnInit, Input} from '@angular/core';
 
 import {Module} from '../../config-serializer/config-items/Module';
 import {SvgModule} from './svg-module.model';

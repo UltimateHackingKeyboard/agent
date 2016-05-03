@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChange } from 'angular2/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
 
 import {KeyAction} from '../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';

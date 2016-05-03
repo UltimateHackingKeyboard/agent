@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from 'angular2/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import {SvgKeyboardKey} from './svg-keyboard-key.model';
 import {SvgKeyboardKeyComponent} from './svg-keyboard-key.component';
