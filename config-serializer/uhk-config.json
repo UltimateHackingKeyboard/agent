@@ -398,7 +398,8 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "none"
+                                    "keyActionType": "keystroke",
+                                    "scancode": 118
                                 },
                                 {
                                     "keyActionType": "keystrokeModifiers",
@@ -434,7 +435,111 @@
                         {
                             "id": 1,
                             "pointerRole": "none",
-                            "keyActions": []
+                            "keyActions": [
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 2
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 4
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "none"
+                                }
+                            ]
                         }
                     ]
                 },

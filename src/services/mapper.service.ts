@@ -96,9 +96,6 @@ export class MapperService {
     }
 
     public scanCodeToText(scanCode: number): string[] {
-        if (this.scanCodeTextMap.length < scanCode) {
-            return [];
-        }
         return this.scanCodeTextMap[scanCode];
     }
 
@@ -116,6 +113,7 @@ export class MapperService {
         this.scanCodeFileName[80] = 'icon-kbd__mod--arrow-left';
         this.scanCodeFileName[81] = 'icon-kbd__mod--arrow-down';
         this.scanCodeFileName[82] = 'icon-kbd__mod--arrow-up';
+        this.scanCodeFileName[118] = 'icon-kbd__mod--menu';
     }
 
 }
