@@ -229,7 +229,7 @@ $(function() {
       {
         type: 'primary',
         icon: 'fa-keyboard-o',
-        title: 'Keypress',
+        title: 'Keycode',
         content: 'keypress'
       },
       {
@@ -253,7 +253,7 @@ $(function() {
       {
         type: 'default',
         icon: 'fa-keyboard-o',
-        title: 'Switch keymap',
+        title: 'Keymap',
         content: 'switchKeymap'
       },
       {
