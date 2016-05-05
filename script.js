@@ -234,6 +234,12 @@ $(function() {
       },
       {
         type: 'default',
+        icon: 'fa-clone', // The icon for the tab will be a layer icon in svg. But for the mockup it was easier to just use something similar from fontawesome.
+        title: 'Layer',
+        content: 'layer'
+      },
+      {
+        type: 'default',
         icon: 'fa-mouse-pointer',
         title: 'Mouse',
         content: 'mouse'
