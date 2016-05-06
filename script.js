@@ -229,7 +229,7 @@ $(function() {
       {
         type: 'primary',
         icon: 'fa-keyboard-o',
-        title: 'Keycode',
+        title: 'Keypress',
         content: 'keypress'
       },
       {
