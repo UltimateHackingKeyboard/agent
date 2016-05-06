@@ -26,7 +26,7 @@ enum LabelTypes {
             [attr.font-size]="19"
             [attr.font-family]="'Helvetica'"
             [attr.fill]="'#ffffff'"
-            [attr.style]="'dominant-baseline: central'"
+            style="dominant-baseline: central"
             *ngIf="(labelType === enumLabelTypes.Text) && labelSource && labelSource.length > 0">
                  <tspan
                     *ngIf="labelSource.length === 1"
