@@ -33,13 +33,14 @@ enum LabelTypes {
                     [attr.x]="width / 2"
                     dy="0"
                     >{{ labelSource[0] }}</tspan>
-                <tspan
-                    *ngIf="labelSource.length === 2"
-                    *ngFor="let label of labelSource; let index = index"
-                    [attr.x]="width / 2"
-                    [attr.y]="(0.75 - index * 0.5) * height"
-                    dy="0"
-                    >{{ label }}</tspan>
+                <template [ngIf]="labelSource.length === 2">
+                    <tspan
+                        *ngFor="let label of labelSource; let index = index"
+                        [attr.x]="width / 2"
+                        [attr.y]="(0.75 - index * 0.5) * height"
+                        dy="0"
+                        >{{ label }}</tspan>
+                </template>
          </svg:text>
          <svg:use [attr.xlink:href]="labelSource"
                 [attr.width]="width / 3" [attr.height]="height / 3"
