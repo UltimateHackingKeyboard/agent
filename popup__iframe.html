@@ -51,7 +51,11 @@
   <div class="popover-title menu-tabs">
     <ul class="nav nav-tabs popover-menu">
       {{#each buttons}}
-        <li role="presentation"><a href="#" class="menu-tabs--item" data-content="{{content}}"><i class="fa {{icon}}"></i> {{title}}</a></li>
+        <li role="presentation">
+          <a href="#" class="menu-tabs--item" title="{{titleHelp}}" data-content="{{content}}">
+            <i class="fa {{icon}}"></i> {{title}}
+          </a>
+        </li>
       {{/each}}
     </ul>
   </div>
