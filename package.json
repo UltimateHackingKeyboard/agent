@@ -46,6 +46,8 @@
     "postinstall": "typings install",
     "lint": "tslint 'src/**/*.ts' 'config-serializer/**/*.ts'",
     "typings": "typings",
+    "build": "webpack",
+    "build:test": "webpack --config 'config-serializer/webpack.config.js'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server"
   }

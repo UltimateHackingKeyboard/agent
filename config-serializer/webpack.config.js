@@ -2,7 +2,7 @@
 
 module.exports = {
     entry: {
-        main: './test-serializer.ts'
+        main: __dirname + '/test-serializer.ts'
     },
     target: 'node',
     output: {

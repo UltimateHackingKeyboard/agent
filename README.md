@@ -12,6 +12,7 @@ Agent is in a preliminary state. You can click around, and most interactions wil
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
 npm install
+npm run build
 ```
 
 In the repository you can find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up the development process. You can fire it up with `gulp serve`.

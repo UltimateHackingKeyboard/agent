@@ -6,7 +6,7 @@ The configuration of the UHK is unusually complex for a keyboard, and is compose
 
 ## Setup
 
-Given that the development dependencies are installed on your system you should be able to build the configuration serializer by executing `tsc` in this directory, then test it with `node test-serializer.js`.
+Given that the development dependencies are installed on your system you should be able to build the configuration serializer tester by executing `npm run build:test` in this directory, then start the test with running `node test-serializer.js`.
 
 ## Configuration representations
 
