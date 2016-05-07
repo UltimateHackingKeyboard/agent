@@ -1,9 +1,10 @@
 import {UhkBuffer} from '../UhkBuffer';
 import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {assertUInt8} from '../assert';
 
 export class KeystrokeAction extends KeyAction {
 
-    // @assertUInt8
+    @assertUInt8
     scancode: number;
 
     _fromJsObject(jsObject: any): KeystrokeAction {

@@ -1,9 +1,10 @@
 import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../assert';
 
 export class PlayMacroAction extends KeyAction {
 
-    // @assertUInt8
+    @assertUInt8
     macroId: number;
 
     _fromJsObject(jsObject: any): PlayMacroAction {

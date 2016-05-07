@@ -1,10 +1,11 @@
 import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
 import {MacroActions} from './MacroActions';
+import {assertUInt8} from '../assert';
 
 export class Macro extends Serializable<Macro> {
 
-    // @assertUInt8
+    @assertUInt8
     id: number;
 
     isLooped: boolean;

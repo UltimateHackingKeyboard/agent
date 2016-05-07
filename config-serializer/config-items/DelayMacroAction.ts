@@ -1,9 +1,10 @@
 import {UhkBuffer} from '../UhkBuffer';
 import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
+import {assertUInt16} from '../assert';
 
 export class DelayMacroAction extends MacroAction {
 
-    // @assertUInt16
+    @assertUInt16
     delay: number;
 
     _fromJsObject(jsObject: any): DelayMacroAction {

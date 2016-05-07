@@ -1,6 +1,7 @@
 import {Serializable} from '../Serializable';
 import {KeyActions} from './KeyActions';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8, assertEnum} from '../assert';
 
 enum PointerRole {
     none,
@@ -10,12 +11,12 @@ enum PointerRole {
 
 export class Module extends Serializable<Module> {
 
-    // @assertUInt8
+    @assertUInt8
     id: number;
 
     keyActions: KeyActions;
 
-    // @assertEnum(PointerRole)
+    @assertEnum(PointerRole)
     private pointerRole: PointerRole;
 
     _fromJsObject(jsObject: any): Module {

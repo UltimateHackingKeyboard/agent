@@ -1,5 +1,6 @@
 import {UhkBuffer} from '../UhkBuffer';
 import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {assertUInt8, assertEnum} from '../assert';
 
 enum LongPressAction {
     leftCtrl,
@@ -17,10 +18,10 @@ enum LongPressAction {
 
 export class DualRoleKeystrokeAction extends KeyAction {
 
-    // @assertUInt8
+    @assertUInt8
     scancode: number;
 
-    // @assertEnum(LongPressAction)
+    @assertEnum(LongPressAction)
     private longPressAction: LongPressAction;
 
     _fromJsObject(jsObject: any): DualRoleKeystrokeAction {

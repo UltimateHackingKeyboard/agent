@@ -1,9 +1,10 @@
 import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../assert';
 
 export class SwitchKeymapAction extends KeyAction {
 
-    // @assertUInt8
+    @assertUInt8
     keymapId: number;
 
     _fromJsObject(jsObject: any): SwitchKeymapAction {

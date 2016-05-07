@@ -1,9 +1,10 @@
 import {UhkBuffer} from '../UhkBuffer';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {assertUInt8} from '../assert';
 
 export class HoldModifiersMacroAction extends MacroAction {
 
-    // @assertUInt8
+    @assertUInt8
     modifierMask: number;
 
     _fromJsObject(jsObject: any): HoldModifiersMacroAction {
