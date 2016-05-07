@@ -151,6 +151,14 @@
 <!-- Layer modifier/togge action. -->
 <script id="key-editor-content__source--layer" type="text/x-Handlebars-template">
   <div class="popover-content" style="margin-bottom:2px">
+  <div class="alert alert-info alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    If you select the <b>Layer</b> tab you can activate or toggle a layer.
+    <div class="key-editor__help--wrapper" style="margin-bottom: -15px; margin-top: 10px;">
+      <input type="checkbox" name="key-editor__help--show" id="keyeditor__help--show" checked />
+      <label style="font-weight: normal; color: #000; opacity: .4;" for="keyeditor__help-show">Show help messages in the key editor</label>
+    </div>
+  </div>
     <div style="margin-bottom:0px; margin-top:2px">
       <b style="">Activate layer</b>
       <select class="layout-switcher" style="width: 100px">
