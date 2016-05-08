@@ -50,19 +50,7 @@
 .key-editor--none__description p {
   padding: 2rem 0;
   margin: 0;
-  text-align: center;
-  font-style: italic;
-  color: #999; }
-
-.key-editor--none__description .icon {
-  font-size: 5rem;
-  color: #feefef;
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  margin-left: -2.5rem;
-  top: 50%;
-  margin-top: -2.5rem; }
+  text-align: center; }
 
 .select2-item {
   position: relative;
