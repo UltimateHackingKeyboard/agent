@@ -230,42 +230,36 @@ $(function() {
         type: 'primary',
         icon: 'fa-keyboard-o',
         title: 'Keypress',
-        titleHelp: 'Send a scancode with optional modifiers to the host',
         content: 'keypress'
       },
       {
         type: 'default',
         icon: 'fa-clone', // The icon for the tab will be a layer icon in svg. But for the mockup it was easier to just use something similar from fontawesome.
         title: 'Layer',
-        titleHelp: 'Activate or toggle the layers',
         content: 'layer'
       },
       {
         type: 'default',
         icon: 'fa-mouse-pointer',
         title: 'Mouse',
-        titleHelp: 'Set up mouse movement, clicking, and scrolling',
         content: 'mouse'
       },
       {
         type: 'default',
         icon: 'fa-play',
         title: 'Macro',
-        titleHelp: 'Play a macro',
         content: 'macro'
       },
       {
         type: 'default',
         icon: 'fa-keyboard-o',
         title: 'Keymap',
-        titleHelp: 'Switch to an other keymap',
         content: 'switchKeymap'
       },
       {
         type: 'default',
         icon: 'fa-ban',
         title: 'None',
-        titleHelp: 'Do nothing when this key is pressed',
         content: 'none'
       }
     ]
