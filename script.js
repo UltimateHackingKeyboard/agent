@@ -356,9 +356,15 @@ $(function() {
 // Select2 related functions.
 // ==========================
 
-function initSelect2items() {
+function initSelect2items(noSearch) {
+  var noSearch = typeof noSearch !== 'undefined' ?  noSearch : false,
+      noSearchValue = 0;
+  if (noSearch) {
+    var noSearchValue = Infinity;
+  }
   $('select').select2({
-    templateResult: formatState
+    templateResult: formatState,
+    minimumResultsForSearch: noSearchValue
   });
 
   $('select').on('select2:select', function(e) {
