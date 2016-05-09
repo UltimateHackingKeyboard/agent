@@ -378,6 +378,10 @@ function initSelect2items(noSearch) {
     $('img', '.layout-preview').attr('src', 'images/' + image);
   });
 
+  $('.layer-toggle').on('select2:select', function(e) {
+    $('.layer-help').toggle();
+  });
+
   $('.layout-switcher').on('select2:open', function(e) {
     $('.layout-preview').css('opacity', '0.1');
   }).on('select2:close', function(e) {
