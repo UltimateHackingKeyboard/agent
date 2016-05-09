@@ -315,7 +315,11 @@ $(function() {
     var contentSource = $('#key-editor-content__source--' + tplName).html();
     var contentTemplate = Handlebars.compile(contentSource);
     $('#key-editor-content__target').html(contentTemplate(contentContext[tplName]));
-    initSelect2items();
+    var noSearch = false;
+    if (tplName == "layer") {
+      noSearch = true;
+    }
+    initSelect2items(noSearch);
     _keypress_event_handlers();
   });
 
