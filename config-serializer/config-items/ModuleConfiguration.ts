@@ -1,5 +1,6 @@
 import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../assert';
 
 export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
 
@@ -7,16 +8,16 @@ export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
      * module id enumeration is a separate story
      */
 
-    // @assertUInt8
+    @assertUInt8
     id: number;
 
-    // @assertUInt8
+    @assertUInt8
     initialPointerSpeed: number;
 
-    // @assertUInt8
+    @assertUInt8
     pointerAcceleration: number;
 
-    // @assertUInt8
+    @assertUInt8
     maxPointerSpeed: number;
 
     _fromJsObject(jsObject: any): ModuleConfiguration {

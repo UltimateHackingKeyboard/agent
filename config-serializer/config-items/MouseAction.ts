@@ -1,5 +1,6 @@
 import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertEnum} from '../assert';
 
 enum MouseActionParam {
     leftClick,
@@ -19,7 +20,7 @@ enum MouseActionParam {
 
 export class MouseAction extends KeyAction {
 
-    // @assertUInt8
+    @assertEnum(MouseActionParam)
     mouseAction: MouseActionParam;
 
     _fromJsObject(jsObject: any): MouseAction {

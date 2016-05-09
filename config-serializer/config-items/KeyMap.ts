@@ -1,10 +1,11 @@
 import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
 import {Layers} from './Layers';
+import {assertUInt8} from '../assert';
 
 export class KeyMap extends Serializable<KeyMap> {
 
-    // @assertUInt8
+    @assertUInt8
     id: number;
 
     name: string;

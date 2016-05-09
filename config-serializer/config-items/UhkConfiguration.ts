@@ -3,21 +3,22 @@ import {ModuleConfigurations} from './ModuleConfigurations';
 import {KeyMaps} from './KeyMaps';
 import {Macros} from './Macros';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8, assertUInt32} from '../assert';
 
 export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     signature: string;
 
-    // @assertUInt8
+    @assertUInt8
     dataModelVersion: number;
 
-    // @assertUInt32
+    @assertUInt32
     prologue: number;
 
-    // @assertUInt8
+    @assertUInt8
     hardwareId: number;
 
-    // @assertUInt8
+    @assertUInt8
     brandId: number;
 
     moduleConfigurations: ModuleConfigurations;
@@ -26,7 +27,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     macros: Macros;
 
-    // @assertUInt32
+    @assertUInt32
     epilogue: number;
 
     _fromJsObject(jsObject: any): UhkConfiguration {

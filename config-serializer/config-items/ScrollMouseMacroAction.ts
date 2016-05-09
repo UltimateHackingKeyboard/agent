@@ -1,12 +1,13 @@
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertInt16} from '../assert';
 
 export class ScrollMouseMacroAction extends MacroAction {
 
-    // @assertInt16
+    @assertInt16
     x: number;
 
-    // @assertInt16
+    @assertInt16
     y: number;
 
     _fromJsObject(jsObject: any): ScrollMouseMacroAction {

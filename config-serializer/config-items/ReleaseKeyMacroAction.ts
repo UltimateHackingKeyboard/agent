@@ -1,9 +1,10 @@
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../assert';
 
 export class ReleaseKeyMacroAction extends MacroAction {
 
-    // @assertUInt8
+    @assertUInt8
     scancode: number;
 
     _fromJsObject(jsObject: any): ReleaseKeyMacroAction {

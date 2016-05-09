@@ -1,5 +1,6 @@
 import {UhkBuffer} from '../UhkBuffer';
 import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
+import {assertUInt8} from '../assert';
 
 export enum KeyModifiers {
     leftCtrl   = 1 << 0,
@@ -14,7 +15,7 @@ export enum KeyModifiers {
 
 export class KeystrokeModifiersAction extends KeyAction {
 
-    // @assertUInt8
+    @assertUInt8
     modifierMask: number;
 
     _fromJsObject(jsObject: any): KeystrokeModifiersAction {
