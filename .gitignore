@@ -2,3 +2,4 @@ node_modules
 typings
 .vscode
 build
+bundle
