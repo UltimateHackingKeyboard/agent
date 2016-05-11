@@ -169,51 +169,17 @@
 
 <!-- Mouse action. -->
 <script id="key-editor-content__source--mouse" type="text/x-handlebars-template">
-  <div class="popover-content" style="margin-bottom:2px">
+  <div class="popover-content mouse" style="margin-bottom:2px">
     <div class="row" style="padding-bottom: 1rem;">
-      <div class="col-xs-6 mouse-action__card" style="">
-        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Move</b>
-        <div class="buttons-row row">
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-up"></i></button>
-        </div>
-        <div class="buttons-row row">
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-3"><i class="fa  fa-arrow-left"></i></button>
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-right"></i></button><br>
-        </div>
-        <div class="buttons-row row">
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-down"></i></button>
-        </div>
+      <div class="col-xs-4 mouse__action--type">
+        <ul class="nav nav-pills nav-stacked">
+          <li role="presentation" class="active"><a href="#">Move</a></li>
+          <li role="presentation"><a href="#">Scroll</a></li>
+          <li role="presentation"><a href="#">Click</a></li>
+          <li role="presentation"><a href="#">Speed</a></li>
+        </ul>
       </div>
-      <div class="col-xs-6 mouse-action__card">
-        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Scroll</b>
-        <div class="buttons-row row">
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-up"></i></button>
-        </div>
-        <div class="buttons-row row">
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-3"><i class="fa  fa-arrow-left"></i></button>
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-right"></i></button><br>
-        </div>
-        <div class="buttons-row row">
-          <button type="button" class="btn btn-default col-xs-2 col-xs-push-5"><i class="fa  fa-arrow-down"></i></button>
-        </div>
-      </div>
-    </div>
-    <div class="row" style="margin-top: 1rem;">
-      <div class="col-xs-6 mouse-action__card" style="">
-        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Click</b>
-        <div class="btn-group col-xs-12" role="group">
-          <button type="button" class="btn btn-default col-xs-4">Left</button>
-          <button type="button" class="btn btn-default col-xs-4">Middle</button>
-          <button type="button" class="btn btn-default col-xs-4">Right</button>
-        </div>
-      </div>
-      <div class="col-xs-6 mouse-action__card">
-        <b class="col-xs-12 text-center" style="margin-bottom: .5rem;">Speed</b>
-        <div class="btn-group col-xs-12" role="group">
-          <button type="button" class="btn btn-default col-xs-6"><i class="fa  fa-angle-double-down"></i> decelerate</button>
-          <button type="button" class="btn btn-default col-xs-6">accelerate <i class="fa  fa-angle-double-up"></i></button>
-        </div>
-      </div>
+      <div class="col-xs-8 mouse__action--config"></div>
     </div>
   </div>
 </script>
