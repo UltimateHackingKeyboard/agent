@@ -81,3 +81,6 @@
     position: absolute;
     top: 50%;
     margin-top: -4rem; }
+
+.mouse__action--type {
+  border-right: 1px solid #000; }
