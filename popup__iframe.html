@@ -173,13 +173,27 @@
     <div class="row" style="padding-bottom: 1rem;">
       <div class="col-xs-4 mouse__action--type">
         <ul class="nav nav-pills nav-stacked">
-          <li role="presentation" class="active"><a href="#">Move</a></li>
-          <li role="presentation"><a href="#">Scroll</a></li>
-          <li role="presentation"><a href="#">Click</a></li>
-          <li role="presentation"><a href="#">Speed</a></li>
+          <li role="presentation" class="active"><a href="#" data-config="move">Move</a></li>
+          <li role="presentation"><a href="#" data-config="scroll">Scroll</a></li>
+          <li role="presentation"><a href="#" data-config="click">Click</a></li>
+          <li role="presentation"><a href="#" data-config="speed">Speed</a></li>
         </ul>
       </div>
-      <div class="col-xs-8 mouse__action--config"></div>
+      <div class="col-xs-8 mouse__action--config">
+        <div class="mouse__config mouse__config--move">
+        </div>
+        <div style="display: none;" class="mouse__config mouse__config--scroll">
+        </div>
+        <div style="display: none;" class="mouse__config mouse__config--click">
+          <div class="btn-group col-xs-12" role="group">
+            <button type="button" class="btn btn-default col-xs-4">Left</button>
+            <button type="button" class="btn btn-default col-xs-4">Middle</button>
+            <button type="button" class="btn btn-default col-xs-4">Right</button>
+          </div>
+        </div>
+        <div style="display: none;" class="mouse__config mouse__config--speed">
+        </div>
+      </div>
     </div>
   </div>
 </script>
