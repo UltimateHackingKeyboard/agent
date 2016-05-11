@@ -123,3 +123,11 @@
     margin-top: -4rem;
   }
 }
+
+.mouse {
+  &__action {
+    &--type {
+      border-right: 1px solid #000;
+    }
+  }
+}
