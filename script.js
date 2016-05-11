@@ -353,6 +353,17 @@ $(function() {
     });
   };
   _keypress_event_handlers();
+
+  var _mouse_event_handlers = function() {
+    $('.mouse__action--type').on('click', 'a', function(e) {
+      var _this = $(this),
+          _mouse_config_name = _this.data('config');
+      $('.mouse__config').hide();
+      $('.mouse__config--' + _mouse_config_name).show();
+      $('.mouse__action--type li').removeClass('active');
+      _this.parents('li').addClass('active');
+    });
+  }
 });
 
 
