@@ -18,6 +18,7 @@
     "typings": "^0.8.1",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",
+    "webpack-stream": "^3.2.0",
     "webpack-svgstore-plugin": "^2.1.5",
     "yargs": "^4.2.0"
   },
@@ -46,7 +47,7 @@
     "postinstall": "typings install",
     "lint": "tslint 'src/**/*.ts' 'config-serializer/**/*.ts'",
     "typings": "typings",
-    "build": "webpack",
+    "build": "gulp",
     "build:test": "webpack --config 'config-serializer/webpack.config.js'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server"
