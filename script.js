@@ -316,11 +316,19 @@ $(function() {
     var contentTemplate = Handlebars.compile(contentSource);
     $('#key-editor-content__target').html(contentTemplate(contentContext[tplName]));
     var noSearch = false;
-    if (tplName == "layer") {
-      noSearch = true;
+    switch (tplName) {
+      case 'layer':
+        noSearch = true;
+
+      case 'keypress':
+        _keypress_event_handlers();
+
+      case 'mouse':
+        _mouse_event_handlers();
+
+      default:
+        initSelect2items(noSearch);
     }
-    initSelect2items(noSearch);
-    _keypress_event_handlers();
   });
 
 
