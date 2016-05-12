@@ -20,7 +20,12 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ }
+            { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ },
+            {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                loaders: ['raw-loader', 'sass-loader']
+            }
         ]
     },
     plugins: [
