@@ -129,5 +129,11 @@
     &--type {
       border-right: 1px solid #000;
     }
+
+    &--config {
+      .btn-placeholder {
+        visibility: hidden;
+      }
+    }
   }
 }
