@@ -86,39 +86,7 @@ import {NoneTabComponent} from './tab/none-tab.component';
             </div>
         </div>
     `,
-    styles:
-    [`
-        :host {
-            display: flex;
-            flex-direction: column;
-            min-width: 577px;
-            padding: 0;
-        }
-
-        .popover-action {
-            padding: 8px 14px;
-            margin: 0;
-            font-size: 14px;
-            background-color: #f7f7f7;
-            border-top: 1px solid #ebebeb;
-            border-radius: 0 0 5px 5px;
-            text-align: right;
-        }
-
-        .popover-title.menu-tabs {
-            padding: .5rem .5rem 0;
-            display: block;
-        }
-
-        .popover-title.menu-tabs .nav-tabs {
-            position: relative;
-            top: 1px;
-        }
-
-        .popover-content {
-            padding: 10px 24px;
-        }
-    `],
+    styles: [ require('./popover.component.scss') ],
     host: { 'class': 'popover' },
     directives:
     [

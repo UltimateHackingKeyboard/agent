@@ -16,21 +16,7 @@ import { Component, OnInit } from '@angular/core';
         <div class="details">
         </div>
     `,
-    styles:
-    [`
-        :host {
-            display: flex;
-        }
-
-        .mouse-action {
-            flex: 1;
-            border-right: 1px solid black;
-        }
-
-        .details {
-            flex: 2;
-        }
-    `]
+    styles: [ require('./mouse-tab.component.scss') ]
 })
 export class MouseTabComponent implements OnInit {
     constructor() { }
