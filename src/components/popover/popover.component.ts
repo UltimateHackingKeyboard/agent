@@ -13,7 +13,12 @@ import {
 
 import {NgSwitch, NgSwitchWhen} from '@angular/common';
 
-import {KeypressEditComponent} from './keypress-edit.component';
+import {KeypressTabComponent} from './tab/keypress-tab.component';
+import {LayerTabComponent} from './tab/layer-tab.component';
+import {MouseTabComponent} from './tab/mouse-tab.component';
+import {MacroTabComponent} from './tab/macro-tab.component';
+import {KeymapTabComponent} from './tab/keymap-tab.component';
+import {NoneTabComponent} from './tab/none-tab.component';
 
 @Component({
     moduleId: module.id,
@@ -65,12 +70,12 @@ import {KeypressEditComponent} from './keypress-edit.component';
             </div>
             <div class="row" [ngSwitch]="activeListItemIndex">
                 <div class="popover-content">
-                    <keypress-edit *ngSwitchWhen="0"></keypress-edit>
-                    <div *ngSwitchWhen="1"> Layer </div>
-                    <div *ngSwitchWhen="2"> Mouse </div>
-                    <div *ngSwitchWhen="3"> Macro </div>
-                    <div *ngSwitchWhen="4"> Keymap </div>
-                    <div *ngSwitchWhen="5"> None </div>
+                    <keypress-tab *ngSwitchWhen="0"></keypress-tab>
+                    <layer-tab *ngSwitchWhen="1"></layer-tab>
+                    <mouse-tab *ngSwitchWhen="2"></mouse-tab>
+                    <macro-tab *ngSwitchWhen="3"></macro-tab>
+                    <keymap-tab *ngSwitchWhen="4"></keymap-tab>
+                    <none-tab *ngSwitchWhen="5"></none-tab>
                 </div>
             </div>
             <div class="row">
@@ -115,7 +120,17 @@ import {KeypressEditComponent} from './keypress-edit.component';
         }
     `],
     host: { 'class': 'popover' },
-    directives: [NgSwitch, NgSwitchWhen, KeypressEditComponent]
+    directives:
+    [
+        NgSwitch,
+        NgSwitchWhen,
+        KeypressTabComponent,
+        LayerTabComponent,
+        MouseTabComponent,
+        MacroTabComponent,
+        KeymapTabComponent,
+        NoneTabComponent
+    ]
 })
 export class PopoverComponent implements OnInit, AfterViewInit {
     @Output() cancel = new EventEmitter<any>();

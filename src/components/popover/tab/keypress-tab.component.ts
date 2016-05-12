@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import {CaptureKeystrokeButtonComponent} from './capture-keystroke-button.component';
+import { CaptureKeystrokeButtonComponent } from '../widgets/capture-keystroke-button.component';
+
+import { KeystrokeAction } from '../../../../config-serializer/config-items/KeystrokeAction';
+import { KeystrokeModifiersAction } from '../../../../config-serializer/config-items/KeystrokeModifiersAction';
+import { KeystrokeWithModifiersAction } from '../../../../config-serializer/config-items/KeystrokeWithModifiersAction';
 
 @Component({
     moduleId: module.id,
-    selector: 'keypress-edit',
+    selector: 'keypress-tab',
     template:
     `
         <div class="scancode-options" style="margin-bottom:10px; margin-top:2px">
@@ -41,9 +45,12 @@ import {CaptureKeystrokeButtonComponent} from './capture-keystroke-button.compon
     `,
     directives: [CaptureKeystrokeButtonComponent]
 })
-export class KeypressEditComponent implements OnInit {
+export class KeypressTabComponent implements OnInit {
     private leftModifiers: string[];
     private rightModifiers: string[];
+
+    private leftModifierSelects: boolean[];
+    private rightModifierSelects: boolean[];
 
     constructor() {
         this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
@@ -51,5 +58,9 @@ export class KeypressEditComponent implements OnInit {
     }
 
     ngOnInit() { }
+
+    getKeyAction(): KeystrokeAction | KeystrokeModifiersAction | KeystrokeWithModifiersAction {
+        return;
+    }
 
 }
