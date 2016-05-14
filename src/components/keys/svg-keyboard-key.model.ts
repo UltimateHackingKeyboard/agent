@@ -4,6 +4,6 @@ export interface SvgKeyboardKey {
     y: string;
     rx: string;
     ry: string;
-    height: string;
-    width: string;
+    height: number;
+    width: number;
 }

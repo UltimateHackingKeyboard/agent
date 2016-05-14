@@ -1,14 +1,22 @@
 import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
+import {NgSwitch, NgSwitchWhen} from '@angular/common';
 
-import {KeyAction} from '../../config-serializer/config-items/KeyAction';
-import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';
-import {KeystrokeModifiersAction, KeyModifiers} from '../../config-serializer/config-items/KeystrokeModifiersAction';
-import {SwitchLayerAction, LayerName}  from '../../config-serializer/config-items/SwitchLayerAction';
-import {MapperService} from '../services/mapper.service';
+import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
+import {KeystrokeAction} from '../../../config-serializer/config-items/KeystrokeAction';
+import {KeystrokeModifiersAction, KeyModifiers} from '../../../config-serializer/config-items/KeystrokeModifiersAction';
+import {SwitchLayerAction, LayerName}  from '../../../config-serializer/config-items/SwitchLayerAction';
+import {MapperService} from '../../services/mapper.service';
+
+import {SvgOneLineTextKeyComponent} from './svg-one-line-text-key.component';
+import {SvgTwoLineTextKeyComponent} from './svg-two-line-text-key.component';
+import {SvgSingleIconKeyComponent} from './svg-single-icon-key.component';
+import {SvgTextIconKeyComponent} from './svg-text-icon-key.component';
 
 enum LabelTypes {
-    Text,
-    Path
+    OneLineText,
+    TwoLineText,
+    TextIcon,
+    SingleIcon
 }
 
 @Component({
@@ -19,43 +27,46 @@ enum LabelTypes {
                             [attr.height]="height"  [attr.width]="width"
                             [attr.fill]="fill"
         />
-         <svg:text
-            [attr.x]="0"
-            [attr.y]="height/2"
-            [attr.text-anchor]="'middle'"
-            [attr.font-size]="19"
-            [attr.font-family]="'Helvetica'"
-            [attr.fill]="'#ffffff'"
-            style="dominant-baseline: central"
-            *ngIf="(labelType === enumLabelTypes.Text) && labelSource && labelSource.length > 0">
-                 <tspan
-                    *ngIf="labelSource.length === 1"
-                    [attr.x]="width / 2"
-                    dy="0"
-                    >{{ labelSource[0] }}</tspan>
-                <template [ngIf]="labelSource.length === 2">
-                    <tspan
-                        *ngFor="let label of labelSource; let index = index"
-                        [attr.x]="width / 2"
-                        [attr.y]="(0.75 - index * 0.5) * height"
-                        dy="0"
-                        >{{ label }}</tspan>
-                </template>
-         </svg:text>
-         <svg:use [attr.xlink:href]="labelSource"
-                [attr.width]="width / 3" [attr.height]="height / 3"
-                [attr.x]="width / 3" [attr.y]="height / 3"
-                fill="white"
-                *ngIf="(labelType === enumLabelTypes.Path) && labelSource">
-         </svg:use>
-     `
+        <svg:g [ngSwitch]="labelType">
+            <svg:g svg-one-line-text-key *ngSwitchWhen="enumLabelTypes.OneLineText"
+                    [height]="height"
+                    [width]="width"
+                    [text]="labelSource">
+            </svg:g>
+            <svg:g svg-two-line-text-key *ngSwitchWhen="enumLabelTypes.TwoLineText"
+                    [height]="height"
+                    [width]="width"
+                    [texts]="labelSource">
+            </svg:g>
+            <svg:g svg-text-icon-key *ngSwitchWhen="enumLabelTypes.TextIcon"
+                    [height]="height"
+                    [width]="width"
+                    [text]="labelSource.text"
+                    [icon]="labelSource.icon">
+            </svg:g>
+            <svg:g svg-single-icon-key *ngSwitchWhen="enumLabelTypes.SingleIcon"
+                    [height]="height"
+                    [width]="width"
+                    [icon]="labelSource">
+            </svg:g>
+        </svg:g>
+     `,
+    directives:
+    [
+        NgSwitch,
+        NgSwitchWhen,
+        SvgOneLineTextKeyComponent,
+        SvgTwoLineTextKeyComponent,
+        SvgSingleIconKeyComponent,
+        SvgTextIconKeyComponent
+    ]
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
     @Input() id: string;
     @Input() rx: string;
     @Input() ry: string;
-    @Input() height: string;
-    @Input() width: string;
+    @Input() height: number;
+    @Input() width: number;
     @Input() keyAction: KeyAction;
 
     /* tslint:disable:no-unused-variable */
@@ -85,7 +96,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
             return;
         }
 
-        this.labelType = LabelTypes.Text;
+        this.labelType = LabelTypes.OneLineText;
 
         if (this.keyAction instanceof KeystrokeModifiersAction) {
             let keyAction: KeystrokeModifiersAction = this.keyAction as KeystrokeModifiersAction;
@@ -118,28 +129,45 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
             let scancode: number = (this.keyAction as KeystrokeAction).scancode;
             let newLabelSource: string[] = this.mapperService.scanCodeToText(scancode);
             if (newLabelSource) {
-                this.labelSource = newLabelSource;
+                if (newLabelSource.length === 1) {
+                    this.labelSource = newLabelSource[0];
+                    this.labelType = LabelTypes.OneLineText;
+                } else {
+                    this.labelSource = newLabelSource;
+                    this.labelType = LabelTypes.TwoLineText;
+                }
             } else {
                 this.labelSource = this.mapperService.scanCodeToSvgImagePath(scancode);
-                this.labelType = LabelTypes.Path;
+                this.labelType = LabelTypes.SingleIcon;
             }
         } else if (this.keyAction instanceof SwitchLayerAction) {
             let keyAction: SwitchLayerAction = this.keyAction as SwitchLayerAction;
-            let newLabelSource: string[] = [];
+            let newLabelSource: string;
             switch (keyAction.layer) {
                 case LayerName.mod:
-                    newLabelSource.push('Mod');
+                    newLabelSource = 'Mod';
                     break;
                 case LayerName.fn:
-                    newLabelSource.push('Fn');
+                    newLabelSource = 'Fn';
                     break;
                 case LayerName.mouse:
-                    newLabelSource.push('Mouse');
+                    newLabelSource = 'Mouse';
                     break;
                 default:
                     break;
             }
-            this.labelSource = newLabelSource;
+
+            if (keyAction.isLayerToggleable) {
+                this.labelType = LabelTypes.TextIcon;
+                this.labelSource = {
+                    text: newLabelSource,
+                    icon: this.mapperService.getIcon('toggle')
+                };
+                console.log(keyAction, this.labelSource);
+            } else {
+                this.labelType = LabelTypes.OneLineText;
+                this.labelSource = newLabelSource;
+            }
         }
 
     }

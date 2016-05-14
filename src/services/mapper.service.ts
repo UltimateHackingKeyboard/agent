@@ -90,9 +90,11 @@ export class MapperService {
     ];
 
     private scanCodeFileName: Map<number, string>;
+    private nameToFileName: Map<string, string>;
 
     constructor() {
         this.initScanCodeFileName();
+        this.initNameToFileNames();
     }
 
     public scanCodeToText(scanCode: number): string[] {
@@ -107,6 +109,10 @@ export class MapperService {
         return undefined;
     }
 
+    public getIcon(iconName: string): string {
+        return 'build/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
+    }
+
     private initScanCodeFileName(): void {
         this.scanCodeFileName = new Map<number, string>();
         this.scanCodeFileName[79] = 'icon-kbd__mod--arrow-right';
@@ -115,5 +121,11 @@ export class MapperService {
         this.scanCodeFileName[82] = 'icon-kbd__mod--arrow-up';
         this.scanCodeFileName[118] = 'icon-kbd__mod--menu';
     }
+
+    private initNameToFileNames(): void {
+        this.nameToFileName = new Map<string, string>();
+        this.nameToFileName.set('toggle', 'icon-kbd__fn--toggle');
+    }
+
 
 }
