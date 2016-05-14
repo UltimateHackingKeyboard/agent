@@ -548,12 +548,233 @@
                         {
                             "id": 0,
                             "pointerRole": "move",
-                            "keyActions": []
+                            "keyActions": [
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 32
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": true
+                                }
+                            ]
                         },
                         {
                             "id": 1,
                             "pointerRole": "scroll",
-                            "keyActions": []
+                            "keyActions": [
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 2
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystrokeModifiers",
+                                    "modifierMask": 4
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "none"
+                                }
+                            ]
                         }
                     ]
                 }
