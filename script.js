@@ -371,6 +371,18 @@ $(function() {
       $('.mouse__action--type li').removeClass('active');
       _this.parents('li').addClass('active');
     });
+
+    $('.mouse__action--config').on('click', '.btn', function(e) {
+      var _buttons = $('.mouse__action--config .btn'),
+          _mouseActionTypes = $('.mouse__action--type a'),
+          _currentMouseAction = $('.mouse__action--type li.active a'),
+          _this = $(this);
+
+      _buttons.removeClass('btn-primary');
+      _this.addClass('btn-primary');
+      _mouseActionTypes.removeClass('selected');
+      _currentMouseAction.addClass('selected');
+    });
   }
 });
 

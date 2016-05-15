@@ -134,10 +134,18 @@
           a {
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+
+            &.selected {
+              font-style: italic;
+            }
           }
 
           &.active {
             a {
+              &.selected {
+                font-style: normal;
+              }
+
               &:after {
                   content: '';
                   display: block;
