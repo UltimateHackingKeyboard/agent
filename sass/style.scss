@@ -125,6 +125,12 @@
 }
 
 .mouse {
+  &.popover-content {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+
   &__action {
     &--type {
       .nav {
