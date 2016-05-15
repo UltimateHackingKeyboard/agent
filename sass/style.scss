@@ -130,22 +130,26 @@
       .nav {
         border-right: 1px solid #ccc;
 
-        li.active {
+        li {
           a {
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+          }
 
-            &:after {
-                content: '';
-                display: block;
-                position: absolute;
-                width: 0;
-                height: 0;
-                top: 0;
-                right: -4rem;
-                border-color: transparent transparent transparent #337ab7;
-                border-style: solid;
-                border-width: 2rem;
+          &.active {
+            a {
+              &:after {
+                  content: '';
+                  display: block;
+                  position: absolute;
+                  width: 0;
+                  height: 0;
+                  top: 0;
+                  right: -4rem;
+                  border-color: transparent transparent transparent #337ab7;
+                  border-style: solid;
+                  border-width: 2rem;
+              }
             }
           }
         }
