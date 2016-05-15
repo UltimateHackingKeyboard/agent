@@ -169,55 +169,53 @@
 
 <!-- Mouse action. -->
 <script id="key-editor-content__source--mouse" type="text/x-handlebars-template">
-  <div class="popover-content mouse" style="margin-bottom:2px">
-    <div class="row" style="padding-bottom: 1rem;">
-      <div class="col-xs-4 mouse__action--type">
-        <ul class="nav nav-pills nav-stacked">
-          <li role="presentation" class="active"><a href="#" data-config="move">Move</a></li>
-          <li role="presentation"><a href="#" data-config="scroll">Scroll</a></li>
-          <li role="presentation"><a href="#" data-config="click">Click</a></li>
-          <li role="presentation"><a href="#" data-config="speed">Speed</a></li>
-        </ul>
+  <div class="popover-content mouse row" style="margin-bottom:2px">
+    <div class="col-xs-4 mouse__action--type">
+      <ul class="nav nav-pills nav-stacked">
+        <li role="presentation" class="active"><a href="#" data-config="move">Move</a></li>
+        <li role="presentation"><a href="#" data-config="scroll">Scroll</a></li>
+        <li role="presentation"><a href="#" data-config="click">Click</a></li>
+        <li role="presentation"><a href="#" data-config="speed">Speed</a></li>
+      </ul>
+    </div>
+    <div class="col-xs-8 mouse__action--config">
+      <div class="mouse__config mouse__config--move text-center">
+        <div class="row">
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-up"></i></button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-left"></i></button>
+          <button type="button" class="btn btn-default btn-lg btn-placeholder"><i class="fa fa-square"></i></button>
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-right"></i></button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-down"></i></button>
+        </div>
       </div>
-      <div class="col-xs-8 mouse__action--config">
-        <div class="mouse__config mouse__config--move text-center">
-          <div class="row">
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-up"></i></button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-left"></i></button>
-            <button type="button" class="btn btn-default btn-lg btn-placeholder"><i class="fa fa-square"></i></button>
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-right"></i></button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-arrow-down"></i></button>
-          </div>
+      <div style="display: none;" class="mouse__config mouse__config--scroll text-center">
+        <div class="row">
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-up"></i></button>
         </div>
-        <div style="display: none;" class="mouse__config mouse__config--scroll text-center">
-          <div class="row">
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-up"></i></button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-left"></i></button>
-            <button type="button" class="btn btn-default btn-lg btn-placeholder"><i class="fa fa-square"></i></button>
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-right"></i></button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-down"></i></button>
-          </div>
+        <div class="row">
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-left"></i></button>
+          <button type="button" class="btn btn-default btn-lg btn-placeholder"><i class="fa fa-square"></i></button>
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-right"></i></button>
         </div>
-        <div style="display: none;" class="mouse__config mouse__config--click">
-          <div class="btn-group col-xs-12" role="group">
-            <button type="button" class="btn btn-default col-xs-4">Left</button>
-            <button type="button" class="btn btn-default col-xs-4">Middle</button>
-            <button type="button" class="btn btn-default col-xs-4">Right</button>
-          </div>
+        <div class="row">
+          <button type="button" class="btn btn-default btn-lg"><i class="fa fa-angle-double-down"></i></button>
         </div>
-        <div style="display: none;" class="mouse__config mouse__config--speed text-center">
-          <div class="btn-group btn-group-lg" role="group">
-            <button type="button" class="btn btn-default">-</button>
-            <button type="button" class="btn btn-default">+</button>
-          </div>
+      </div>
+      <div style="display: none;" class="mouse__config mouse__config--click">
+        <div class="btn-group col-xs-12" role="group">
+          <button type="button" class="btn btn-default col-xs-4">Left</button>
+          <button type="button" class="btn btn-default col-xs-4">Middle</button>
+          <button type="button" class="btn btn-default col-xs-4">Right</button>
+        </div>
+      </div>
+      <div style="display: none;" class="mouse__config mouse__config--speed text-center">
+        <div class="btn-group btn-group-lg" role="group">
+          <button type="button" class="btn btn-default">-</button>
+          <button type="button" class="btn btn-default">+</button>
         </div>
       </div>
     </div>
