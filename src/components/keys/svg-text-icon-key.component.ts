@@ -32,8 +32,6 @@ export class SvgTextIconKeyComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() {
-        console.log(this);
-    }
+    ngOnInit() { }
 
 }

@@ -1,6 +1,7 @@
 import {Serializable} from '../Serializable';
 import {ModuleConfigurations} from './ModuleConfigurations';
 import {KeyMaps} from './KeyMaps';
+import {KeyMap} from './KeyMap';
 import {Macros} from './Macros';
 import {UhkBuffer} from '../UhkBuffer';
 import {assertUInt8, assertUInt32} from '../assert';
@@ -84,5 +85,14 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     toString(): string {
         return `<UhkConfiguration signature="${this.signature}">`;
+    }
+
+    getKeymap(keymapId: number): KeyMap {
+        let keyMaps: KeyMap[] = this.keyMaps.elements;
+        for (let i = 0; i < keyMaps.length; ++i) {
+            if (keymapId === keyMaps[i].id) {
+                return keyMaps[i];
+            }
+        }
     }
 }

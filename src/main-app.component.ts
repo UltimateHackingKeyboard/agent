@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, Renderer, ViewChildren, QueryList, ElementRef} from '@angular/core';
 
-import {UhkConfiguration} from '../config-serializer/config-items/UhkConfiguration';
 import {Layers} from '../config-serializer/config-items/Layers';
 
 import {SvgKeyboardComponent} from './components/svg-keyboard.component';
 import {SvgModule} from './components/svg-module.model';
 
 import {DataProviderService} from './services/data-provider.service';
+import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @Component({
     selector: 'main-app',
@@ -96,7 +96,8 @@ import {DataProviderService} from './services/data-provider.service';
         }
 
     `],
-    directives: [SvgKeyboardComponent]
+    directives: [SvgKeyboardComponent],
+    providers: [UhkConfigurationService]
 })
 export class MainAppComponent implements OnInit, AfterViewInit {
     @ViewChildren('baseButton,modButton,fnButton,mouseButton')
@@ -115,7 +116,11 @@ export class MainAppComponent implements OnInit, AfterViewInit {
 
     private numAnimationInProgress: number;
 
-    constructor(private renderer: Renderer, private dps: DataProviderService) {
+    constructor(
+        private renderer: Renderer,
+        private dps: DataProviderService,
+        private uhkConfigurationService: UhkConfigurationService
+    ) {
         this.buttons = [];
         this.keyboards = [];
         this.selectedLayerIndex = -1;
@@ -132,9 +137,7 @@ export class MainAppComponent implements OnInit, AfterViewInit {
         this.modules = svg.g[0].g.map(obj => new SvgModule(obj));
         this.modules = [this.modules[1], this.modules[0]]; // TODO: remove if the svg will be correct
 
-        let uhkConfig: UhkConfiguration = new UhkConfiguration();
-        uhkConfig.fromJsObject(this.dps.getUHKConfig());
-        this.layers = uhkConfig.keyMaps.elements[0].layers;
+        this.layers = this.uhkConfigurationService.getUhkConfiguration().keyMaps.elements[0].layers;
 
     }
 

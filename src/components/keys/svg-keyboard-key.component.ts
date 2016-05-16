@@ -6,17 +6,22 @@ import {KeystrokeAction} from '../../../config-serializer/config-items/Keystroke
 import {KeystrokeModifiersAction, KeyModifiers} from '../../../config-serializer/config-items/KeystrokeModifiersAction';
 import {SwitchLayerAction, LayerName}  from '../../../config-serializer/config-items/SwitchLayerAction';
 import {MapperService} from '../../services/mapper.service';
+import {SwitchKeymapAction} from '../../../config-serializer/config-items/SwitchKeymapAction';
+import {UhkConfiguration} from '../../../config-serializer/config-items/UhkConfiguration';
+import {UhkConfigurationService} from '../../services/uhk-configuration.service';
 
 import {SvgOneLineTextKeyComponent} from './svg-one-line-text-key.component';
 import {SvgTwoLineTextKeyComponent} from './svg-two-line-text-key.component';
 import {SvgSingleIconKeyComponent} from './svg-single-icon-key.component';
 import {SvgTextIconKeyComponent} from './svg-text-icon-key.component';
+import {SvgSwitchKeymapKeyComponent} from './svg-switch-keymap-key.component';
 
 enum LabelTypes {
     OneLineText,
     TwoLineText,
     TextIcon,
-    SingleIcon
+    SingleIcon,
+    SwitchKeymap
 }
 
 @Component({
@@ -49,6 +54,11 @@ enum LabelTypes {
                     [width]="width"
                     [icon]="labelSource">
             </svg:g>
+            <svg:g svg-switch-keymap-key *ngSwitchWhen="enumLabelTypes.SwitchKeymap"
+                    [height]="height"
+                    [width]="width"
+                    [abbreviation]="labelSource">
+            </svg:g>
         </svg:g>
      `,
     directives:
@@ -58,7 +68,8 @@ enum LabelTypes {
         SvgOneLineTextKeyComponent,
         SvgTwoLineTextKeyComponent,
         SvgSingleIconKeyComponent,
-        SvgTextIconKeyComponent
+        SvgTextIconKeyComponent,
+        SvgSwitchKeymapKeyComponent
     ]
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
@@ -77,7 +88,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
     private labelSource: any;
     private labelType: LabelTypes;
 
-    constructor(private mapperService: MapperService) { }
+    constructor(private mapperService: MapperService, private uhkConfigurationService: UhkConfigurationService) { }
 
     ngOnInit() {
         this.setLabels();
@@ -163,11 +174,15 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
                     text: newLabelSource,
                     icon: this.mapperService.getIcon('toggle')
                 };
-                console.log(keyAction, this.labelSource);
             } else {
                 this.labelType = LabelTypes.OneLineText;
                 this.labelSource = newLabelSource;
             }
+        } else if (this.keyAction instanceof SwitchKeymapAction) {
+            let keyAction: SwitchKeymapAction = this.keyAction as SwitchKeymapAction;
+            this.labelType = LabelTypes.SwitchKeymap;
+            let uhkConfiguration: UhkConfiguration = this.uhkConfigurationService.getUhkConfiguration();
+            this.labelSource = uhkConfiguration.getKeymap(keyAction.keymapId).abbreviation;
         }
 
     }

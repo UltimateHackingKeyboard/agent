@@ -392,7 +392,8 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "none"
+                                    "keyActionType": "switchKeymap",
+                                    "keymapId": 2
                                 },
                                 {
                                     "keyActionType": "none"
@@ -820,6 +821,28 @@
                                     "scancode": 111
                                 }
                             ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "isDefault": false,
+            "abbreviation": "DVR",
+            "name": "DVR",
+            "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
                         }
                     ]
                 }
