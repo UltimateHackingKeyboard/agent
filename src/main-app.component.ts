@@ -9,6 +9,7 @@ import {DataProviderService} from './services/data-provider.service';
 import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @Component({
+    moduleId: module.id,
     selector: 'main-app',
     template:
     `   <div>
@@ -35,67 +36,7 @@ import {UhkConfigurationService} from './services/uhk-configuration.service';
             </svg-keyboard>
         </div>
     `,
-    styles:
-    [`
-        :host {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        :host > div:first-child {
-            display: flex;
-            flex: 1;
-            align-items: center;
-            justify-content: center;
-        }
-
-        button {
-            margin: 2px;
-        }
-
-        :host > div:last-child {
-            display: flex;
-            flex: 5;
-            position: relative;
-        }
-
-       :host > div:last-child > svg-keyboard {
-           width: 80%;
-           position: absolute;
-           left: 50%;
-           transform: translateX(-50%);
-           animation-duration: 0.75s;
-           animation-timing-function: ease-in-out;
-       }
-
-        @keyframes animate-center-left {
-            0% {
-                transform: translateX(-50%);
-                left: 50%;
-            }
-            100% {
-                transform: translateX(-100%);
-                left: 0%;
-            }
-        }
-
-        @keyframes animate-center-right {
-            0% {
-                transform: translateX(-50%);
-                left: 50%;
-            }
-            100% {
-                transform: translateX(0%);
-                left: 100%;
-            }
-        }
-
-        [hidden] {
-            display: none
-        }
-
-    `],
+    styles: [require('./main-app.component.scss')],
     directives: [SvgKeyboardComponent],
     providers: [UhkConfigurationService]
 })
