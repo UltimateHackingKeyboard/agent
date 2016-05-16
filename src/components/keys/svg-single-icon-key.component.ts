@@ -7,8 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
     `
         <svg:use [attr.xlink:href]="icon"
                 [attr.width]="width / 3" [attr.height]="height / 3"
-                [attr.x]="width / 3" [attr.y]="height / 3"
-                fill="white">
+                [attr.x]="width / 3" [attr.y]="height / 3">
         </svg:use>
     `
 })

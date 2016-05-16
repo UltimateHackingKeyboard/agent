@@ -8,11 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
          <svg:text
             [attr.x]="0"
             [attr.y]="height / 2"
-            [attr.text-anchor]="'middle'"
-            [attr.font-size]="19"
-            [attr.font-family]="'Helvetica'"
-            [attr.fill]="'#ffffff'"
-            style="dominant-baseline: central">
+            [attr.text-anchor]="'middle'">
                 <tspan
                     [attr.x]="width / 2"
                     dy="0"

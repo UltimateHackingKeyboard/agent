@@ -11,17 +11,12 @@ import {MapperService} from '../../services/mapper.service';
                 [attr.width]="width / 4"
                 [attr.height]="height / 4"
                 [attr.x]="width * 3 / 8"
-                [attr.y]="height / 5"
-                fill="white">
+                [attr.y]="height / 5">
         </svg:use>
         <svg:text
             [attr.x]="0"
             [attr.y]="height * 2 / 3"
-            [attr.text-anchor]="'middle'"
-            [attr.font-size]="19"
-            [attr.font-family]="'Helvetica'"
-            [attr.fill]="'#ffffff'"
-            style="dominant-baseline: central">
+            [attr.text-anchor]="'middle'">
                 <tspan [attr.x]="width / 2">{{ abbreviation }}</tspan>
         </svg:text>
     `

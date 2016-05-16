@@ -32,7 +32,11 @@ enum LabelTypes {
                             [attr.height]="height"  [attr.width]="width"
                             [attr.fill]="fill"
         />
-        <svg:g [ngSwitch]="labelType">
+        <svg:g [ngSwitch]="labelType"
+                [attr.font-size]="19"
+                [attr.font-family]="'Helvetica'"
+                [attr.fill]="'white'"
+                style="dominant-baseline: central">
             <svg:g svg-one-line-text-key *ngSwitchWhen="enumLabelTypes.OneLineText"
                     [height]="height"
                     [width]="width"
