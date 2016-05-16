@@ -1,0 +1,99 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "UHK Configuration",
+    "description": "UHK Configuration",
+    "type": "object",
+    "properties": {
+        "prologue": {
+            "description": "Prologue",
+            "type": "integer"
+        },
+        "keyMaps": {
+            "description": "Array of keyMaps",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Id of the keymap",
+                        "type": "integer"
+                    },
+                    "isDefault": {
+                        "type": "boolean"
+                    },
+                    "layers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "modules": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "keyActions": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "keyActionType": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "none",
+                                                                "keystroke",
+                                                                "keystrokeModifiers",
+                                                                "switchLayer",
+                                                                "switchKeymap",
+                                                                "playMacro",
+                                                                "mouse"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "oneOf": [
+                                                        {
+                                                            "properties": {
+                                                                "keyActionType": {
+                                                                    "type": "string",
+                                                                    "pattern": "^keystroke$"
+                                                                },
+                                                                "scancode": {
+                                                                    "type": "integer"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "properties": {
+                                                                "keyActionType": {
+                                                                    "type": "string",
+                                                                    "pattern": "^switchLayer$"
+                                                                },
+                                                                "layer": {
+                                                                    "type": "string"
+                                                                },
+                                                                "toggle": {
+                                                                    "type": "boolean"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "properties": {
+                                                                "keyActionType": {
+                                                                    "type": "string",
+                                                                    "pattern": "^none$"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
