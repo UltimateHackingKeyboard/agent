@@ -125,7 +125,7 @@ export class MapperService {
     private initNameToFileNames(): void {
         this.nameToFileName = new Map<string, string>();
         this.nameToFileName.set('toggle', 'icon-kbd__fn--toggle');
-        this.nameToFileName.set('switch-keymap', 'icon-kbd__mod--switch-layout');
+        this.nameToFileName.set('switch-keymap', 'icon-kbd__mod--switch-keymap');
     }
 
 }
