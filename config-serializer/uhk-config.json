@@ -577,7 +577,16 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "none"
+                                    "keyActionType": "keystroke",
+                                    "scancode": 232
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 237
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 233
                                 },
                                 {
                                     "keyActionType": "none"
@@ -595,7 +604,16 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "none"
+                                    "keyActionType": "keystroke",
+                                    "scancode": 234
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 238
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 235
                                 },
                                 {
                                     "keyActionType": "none"
@@ -613,19 +631,8 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "none"
-                                },
-                                {
-                                    "keyActionType": "none"
-                                },
-                                {
-                                    "keyActionType": "none"
-                                },
-                                {
-                                    "keyActionType": "none"
-                                },
-                                {
-                                    "keyActionType": "none"
+                                    "keyActionType": "keystroke",
+                                    "scancode": 239
                                 },
                                 {
                                     "keyActionType": "none"

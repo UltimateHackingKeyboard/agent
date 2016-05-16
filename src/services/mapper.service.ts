@@ -93,6 +93,7 @@ export class MapperService {
     private nameToFileName: Map<string, string>;
 
     constructor() {
+        this.initScanCodeTextMap();
         this.initScanCodeFileName();
         this.initNameToFileNames();
     }
@@ -111,6 +112,21 @@ export class MapperService {
 
     public getIcon(iconName: string): string {
         return 'build/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
+    }
+
+    private initScanCodeTextMap(): void {
+        this.scanCodeTextMap[232] = ['Play'];
+        this.scanCodeTextMap[233] = ['Stop'];
+        this.scanCodeTextMap[234] = ['Prev'];
+        this.scanCodeTextMap[235] = ['Next'];
+        this.scanCodeTextMap[236] = ['Eject'];
+        this.scanCodeTextMap[237] = ['Vol +'];
+        this.scanCodeTextMap[238] = ['Vol -'];
+        this.scanCodeTextMap[239] = ['Mute'];
+        this.scanCodeTextMap[240] = ['WWW'];
+        this.scanCodeTextMap[241] = ['Bckwrd'];
+        this.scanCodeTextMap[242] = ['Frwrd'];
+        this.scanCodeTextMap[243] = ['Cancel'];
     }
 
     private initScanCodeFileName(): void {
