@@ -169,20 +169,20 @@ $(function() {
               label: 'LAlt'
             },
             {
-              value: 'RAlt',
-              label: 'RAlt'
-            },
-            {
-              value: 'RSuper',
-              label: 'RSuper'
+              value: 'RShift',
+              label: 'RShift'
             },
             {
               value: 'RCtrl',
               label: 'RCtrl'
             },
             {
-              value: 'RShift',
-              label: 'RShift'
+              value: 'RSuper',
+              label: 'RSuper'
+            },
+            {
+              value: 'RAlt',
+              label: 'RAlt'
             }
           ]
         },
