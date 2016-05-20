@@ -130,7 +130,15 @@
             <b class="setting-label" style="position:relative;">Long press action:</b>
             <select class="secondary-role" style="width:135px">
               {{#each secondaryRole}}
-                <option value="{{name}}">{{name}}</option>
+                {{#if groupName}}
+                  <optgroup label="{{groupName}}">
+                {{/if}}
+                {{#each groupValues}}
+                  <option value="{{value}}">{{label}}</option>
+                {{/each}}
+                {{#if groupName}}
+                  </optgroup>
+                {{/if}}
               {{/each}}
             </select>
             <i class="fa fa-question-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="right" title="This action happens when the key is being held along with another key."></i>

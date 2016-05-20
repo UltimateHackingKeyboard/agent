@@ -141,41 +141,68 @@ $(function() {
       ],
       secondaryRole: [
         {
-          name: 'None'
+          groupName: '',
+          groupValues: [
+            {
+              value: 'None',
+              label: 'None',
+            }
+          ]
         },
         {
-          name: 'LShift'
+          groupName: 'Modifiers',
+          groupValues: [
+            {
+              value: 'LShift',
+              label: 'LShift'
+            },
+            {
+              value: 'LCtrl',
+              label: 'LCtrl'
+            },
+            {
+              value: 'LSuper',
+              label: 'LSuper'
+            },
+            {
+              value: 'LAlt',
+              label: 'LAlt'
+            },
+            {
+              value: 'RAlt',
+              label: 'RAlt'
+            },
+            {
+              value: 'RSuper',
+              label: 'RSuper'
+            },
+            {
+              value: 'RCtrl',
+              label: 'RCtrl'
+            },
+            {
+              value: 'RShift',
+              label: 'RShift'
+            }
+          ]
         },
         {
-          name: 'LCtrl'
-        },
-        {
-          name: 'LSuper'
-        },
-        {
-          name: 'LAlt'
-        },
-        {
-          name: 'RAlt'
-        },
-        {
-          name: 'RSuper'
-        },
-        {
-          name: 'RCtrl'
-        },
-        {
-          name: 'RShift'
-        },
-        {
-          name: 'Mod'
-        },
-        {
-          name: 'Mouse'
-        },
-        {
-          name: 'Fn'
-        },
+          groupName: 'Layer Switcher',
+          groupValues: [
+            {
+              value: 'Mod',
+              label: 'Mod'
+            },
+            {
+              value: 'Mouse',
+              label: 'Mouse'
+            },
+            {
+              value: 'Fn',
+              label: 'Fn'
+            }
+          ]
+        }
       ]
     },
     macro: {
