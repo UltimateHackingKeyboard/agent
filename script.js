@@ -64,7 +64,7 @@ $(function() {
       },
       scancode: [
         {
-          groupName: 'Letters',
+          groupName: 'Alphabet',
           groupValues: [
             {
               value: 'A',
@@ -80,26 +80,206 @@ $(function() {
               value: 'C',
               dataExplanation: '',
               label: 'C'
+            },
+            {
+              value: 'D',
+              dataExplanation: '',
+              label: 'D'
+            },
+            {
+              value: 'E',
+              dataExplanation: '',
+              label: 'E'
+            },
+            {
+              value: 'F',
+              dataExplanation: '',
+              label: 'F'
+            },
+            {
+              value: 'G',
+              dataExplanation: '',
+              label: 'G'
+            },
+            {
+              value: 'H',
+              dataExplanation: '',
+              label: 'H'
+            },
+            {
+              value: 'I',
+              dataExplanation: '',
+              label: 'I'
+            },
+            {
+              value: 'J',
+              dataExplanation: '',
+              label: 'J'
+            },
+            {
+              value: 'K',
+              dataExplanation: '',
+              label: 'K'
+            },
+            {
+              value: 'L',
+              dataExplanation: '',
+              label: 'L'
+            },
+            {
+              value: 'M',
+              dataExplanation: '',
+              label: 'M'
+            },
+            {
+              value: 'N',
+              dataExplanation: '',
+              label: 'N'
+            },
+            {
+              value: 'O',
+              dataExplanation: '',
+              label: 'O'
+            },
+            {
+              value: 'P',
+              dataExplanation: '',
+              label: 'P'
+            },
+            {
+              value: 'Q',
+              dataExplanation: '',
+              label: 'Q'
+            },
+            {
+              value: 'R',
+              dataExplanation: '',
+              label: 'R'
+            },
+            {
+              value: 'S',
+              dataExplanation: '',
+              label: 'S'
+            },
+            {
+              value: 'T',
+              dataExplanation: '',
+              label: 'T'
+            },
+            {
+              value: 'U',
+              dataExplanation: '',
+              label: 'U'
+            },
+            {
+              value: 'V',
+              dataExplanation: '',
+              label: 'V'
+            },
+            {
+              value: 'W',
+              dataExplanation: '',
+              label: 'W'
+            },
+            {
+              value: 'X',
+              dataExplanation: '',
+              label: 'X'
+            },
+            {
+              value: 'Y',
+              dataExplanation: '',
+              label: 'Y'
+            },
+            {
+              value: 'Z',
+              dataExplanation: '',
+              label: 'Z'
             }
           ]
         },
         {
-          groupName: 'Numbers',
+          groupName: 'Number Row',
           groupValues: [
             {
-              value: '1',
+              value: '1_exclamation',
               dataExplanation: '',
-              label: '1'
+              label: '1 !'
             },
             {
-              value: '2',
+              value: '2_at',
               dataExplanation: '',
-              label: '2'
+              label: '2 @'
             },
             {
-              value: '3',
+              value: '3_hashmark',
               dataExplanation: '',
-              label: '3'
+              label: '3 #'
+            },
+            {
+              value: '4_dollar',
+              dataExplanation: '',
+              label: '4 $'
+            },
+            {
+              value: '5_percent',
+              dataExplanation: '',
+              label: '5 %'
+            },
+            {
+              value: '6_caret',
+              dataExplanation: '',
+              label: '6 ^'
+            },
+            {
+              value: '7_ampersand',
+              dataExplanation: '',
+              label: '7 &'
+            },
+            {
+              value: '8_asterisk',
+              dataExplanation: '',
+              label: '8 *'
+            },
+            {
+              value: '9_left-parenthesis',
+              dataExplanation: '',
+              label: '9 ('
+            },
+            {
+              value: '0_right-parenthesis',
+              dataExplanation: '',
+              label: '0 )'
+            }
+          ]
+        },
+        {
+          groupName: 'Whitespace',
+          groupValues: [
+            {
+              value: 'Return',
+              dataExplanation: 'Enter',
+              label: 'Return'
+            },
+            {
+              value: 'Esc',
+              dataExplanation: 'Esc',
+              label: 'Escape'
+            },
+            {
+              value: 'Backspace',
+              dataExplanation: '',
+              label: 'Backspace'
+            },
+            {
+              value: 'Tab',
+              dataExplanation: '',
+              label: 'Tab'
+            },
+            {
+              value: 'Spacebar',
+              dataExplanation: '',
+              label: 'Spacebar'
             }
           ]
         },
@@ -107,34 +287,59 @@ $(function() {
           groupName: 'Punctuation',
           groupValues: [
             {
-              value: '.',
-              dataExplanation: 'dot',
-              label: '.'
-            },
-            {
-              value: ',',
-              dataExplanation: 'comma',
-              label: ','
-            },
-            {
-              value: '!',
-              dataExplanation: 'exclamation mark',
-              label: '!'
-            }
-          ]
-        },
-        {
-          groupName: 'Other',
-          groupValues: [
-            {
-              value: 'Tab',
+              value: 'dash_underscore',
               dataExplanation: '',
-              label: 'Tab'
+              label: '- _'
             },
             {
-              value: 'Enter',
+              value: 'equal_plus',
               dataExplanation: '',
-              label: 'Enter'
+              label: '= +'
+            },
+            {
+              value: 'left-bracket_left-brace',
+              dataExplanation: '',
+              label: '[ {'
+            },
+            {
+              value: 'right-bracket_right-brace',
+              dataExplanation: '',
+              label: '] }'
+            },
+            {
+              value: 'backsalsh_pipe',
+              dataExplanation: '',
+              label: '\ |'
+            },
+            {
+              value: 'semicolon_colon',
+              dataExplanation: '',
+              label: '; :'
+            },
+            {
+              value: 'single-quote_double-quote',
+              dataExplanation: '',
+              label: '\' "'
+            },
+            {
+              value: 'grave-accent_tilde',
+              dataExplanation: '',
+              label: '` ~'
+            },
+            {
+              value: 'comma_less-than',
+              dataExplanation: '',
+              label: ', <'
+            },
+            {
+              value: 'period_greater-than',
+              dataExplanation: '',
+              label: '. >'
+            },
+            {
+              value: 'slash_question',
+              dataExplanation: '',
+              label: '/ ?'
             }
           ]
         }
