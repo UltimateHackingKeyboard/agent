@@ -4,6 +4,7 @@ import {Module} from '../../config-serializer/config-items/Module';
 import {SvgModule} from './svg-module.model';
 import {SvgModuleComponent} from './svg-module.component';
 import {PopoverComponent} from './popover/popover.component';
+import {DataProviderService} from '../services/data-provider.service';
 
 @Component({
     selector: 'svg-keyboard',
@@ -34,17 +35,20 @@ import {PopoverComponent} from './popover/popover.component';
     directives: [SvgModuleComponent, PopoverComponent]
 })
 export class SvgKeyboardComponent implements OnInit {
-    @Input() svgAttributes: { viewBox: string, transform: string, fill: string };
-    @Input() modules: SvgModule[];
     @Input() moduleConfig: Module[];
 
+    private modules: SvgModule[];
     private popoverEnabled: boolean;
+    private svgAttributes: { viewBox: string, transform: string, fill: string };
 
-    constructor() {
+    constructor(private dps: DataProviderService) {
         this.modules = [];
+        this.svgAttributes = this.dps.getKeyboardSvgAttributes();
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.modules = this.dps.getSvgModules();
+    }
 
     onEditKeyActionRequest(moduleId: number, keyId: number): void {
         this.showPopover();

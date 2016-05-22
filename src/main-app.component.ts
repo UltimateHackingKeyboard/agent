@@ -3,9 +3,6 @@ import { Component, OnInit, AfterViewInit, Renderer, ViewChildren, QueryList, El
 import {Layers} from '../config-serializer/config-items/Layers';
 
 import {SvgKeyboardComponent} from './components/svg-keyboard.component';
-import {SvgModule} from './components/svg-module.model';
-
-import {DataProviderService} from './services/data-provider.service';
 import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @Component({
@@ -28,8 +25,6 @@ import {UhkConfigurationService} from './services/uhk-configuration.service';
         </div>
         <div>
             <svg-keyboard *ngFor="let layer of layers.elements"
-                            [svgAttributes]="svgAttributes"
-                            [modules]="modules"
                             [moduleConfig]="layer.modules.elements"
                             (animationend)="onKeyboardAnimationEnd($event)"
                             hidden>
@@ -51,15 +46,12 @@ export class MainAppComponent implements OnInit, AfterViewInit {
     private keyboards: ElementRef[];
     private selectedLayerIndex: number;
 
-    private svgAttributes: { viewBox: string, transform: string, fill: string };
-    private modules: SvgModule[];
     private layers: Layers;
 
     private numAnimationInProgress: number;
 
     constructor(
         private renderer: Renderer,
-        private dps: DataProviderService,
         private uhkConfigurationService: UhkConfigurationService
     ) {
         this.buttons = [];
@@ -69,17 +61,7 @@ export class MainAppComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        let svg: any = this.dps.getBaseLayer();
-        this.svgAttributes = {
-            viewBox: svg.$.viewBox,
-            transform: svg.g[0].$.transform,
-            fill: svg.g[0].$.fill
-        };
-        this.modules = svg.g[0].g.map(obj => new SvgModule(obj));
-        this.modules = [this.modules[1], this.modules[0]]; // TODO: remove if the svg will be correct
-
         this.layers = this.uhkConfigurationService.getUhkConfiguration().keyMaps.elements[0].layers;
-
     }
 
     ngAfterViewInit() {
