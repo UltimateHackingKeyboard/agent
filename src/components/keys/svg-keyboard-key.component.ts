@@ -108,6 +108,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
 
     private setLabels(): void {
         if (!this.keyAction) {
+            this.labelSource = undefined;
+            this.labelType = LabelTypes.OneLineText;
             return;
         }
 
@@ -187,6 +189,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
             this.labelType = LabelTypes.SwitchKeymap;
             let uhkConfiguration: UhkConfiguration = this.uhkConfigurationService.getUhkConfiguration();
             this.labelSource = uhkConfiguration.getKeymap(keyAction.keymapId).abbreviation;
+        } else {
+            this.labelSource = undefined;
         }
 
     }

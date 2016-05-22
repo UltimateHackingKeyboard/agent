@@ -1,0 +1,23 @@
+:host {
+    margin-top: 2px;
+
+    > div {
+        display: flex;
+
+        b {
+            padding-right: 10px;
+        }
+        select {
+            flex: 1;
+        }
+    }
+
+    > div:last-child {
+        margin-top: 10px;
+
+        img {
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+}
