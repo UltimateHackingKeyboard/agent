@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, Renderer, ViewChildren, QueryList, El
 
 import {Layers} from '../config-serializer/config-items/Layers';
 
-import {SvgKeyboardComponent} from './components/svg-keyboard.component';
+import {SvgKeyboardPopoverComponent} from './components/svg-keyboard-popover.component';
 import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @Component({
@@ -24,22 +24,22 @@ import {UhkConfigurationService} from './services/uhk-configuration.service';
             </button>
         </div>
         <div>
-            <svg-keyboard *ngFor="let layer of layers.elements"
+            <svg-keyboard-popover *ngFor="let layer of layers.elements"
                             [moduleConfig]="layer.modules.elements"
                             (animationend)="onKeyboardAnimationEnd($event)"
                             hidden>
-            </svg-keyboard>
+            </svg-keyboard-popover>
         </div>
     `,
     styles: [require('./main-app.component.scss')],
-    directives: [SvgKeyboardComponent],
+    directives: [SvgKeyboardPopoverComponent],
     providers: [UhkConfigurationService]
 })
 export class MainAppComponent implements OnInit, AfterViewInit {
     @ViewChildren('baseButton,modButton,fnButton,mouseButton')
     buttonsQueryList: QueryList<ElementRef>;
 
-    @ViewChildren(SvgKeyboardComponent, { read: ElementRef })
+    @ViewChildren(SvgKeyboardPopoverComponent, { read: ElementRef })
     keyboardsQueryList: QueryList<ElementRef>;
 
     private buttons: ElementRef[];
