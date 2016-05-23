@@ -4,10 +4,7 @@
         "module": "commonjs",
         "experimentalDecorators": true
     },
-    "exclude": [
-        "../src",
-        "../node_modules",
-        "../typings/main",
-        "../typings/main.d.ts"
+    "files": [
+        "../typings/index.d.ts"
     ]
 }
