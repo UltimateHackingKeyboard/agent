@@ -61,7 +61,7 @@ export class MainAppComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.layers = this.uhkConfigurationService.getUhkConfiguration().keyMaps.elements[0].layers;
+        this.layers = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[0].layers;
     }
 
     ngAfterViewInit() {

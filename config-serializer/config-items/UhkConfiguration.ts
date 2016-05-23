@@ -1,7 +1,7 @@
 import {Serializable} from '../Serializable';
 import {ModuleConfigurations} from './ModuleConfigurations';
-import {KeyMaps} from './KeyMaps';
-import {KeyMap} from './KeyMap';
+import {Keymaps} from './Keymaps';
+import {Keymap} from './Keymap';
 import {Macros} from './Macros';
 import {UhkBuffer} from '../UhkBuffer';
 import {assertUInt8, assertUInt32} from '../assert';
@@ -24,7 +24,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     moduleConfigurations: ModuleConfigurations;
 
-    keyMaps: KeyMaps;
+    keymaps: Keymaps;
 
     macros: Macros;
 
@@ -38,7 +38,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         this.hardwareId = jsObject.hardwareId;
         this.brandId = jsObject.brandId;
         this.moduleConfigurations = new ModuleConfigurations().fromJsObject(jsObject.moduleConfigurations);
-        this.keyMaps = new KeyMaps().fromJsObject(jsObject.keyMaps);
+        this.keymaps = new Keymaps().fromJsObject(jsObject.keymaps);
         this.macros = new Macros().fromJsObject(jsObject.macros);
         this.epilogue = jsObject.epilogue;
         return this;
@@ -51,7 +51,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         this.hardwareId = buffer.readUInt8();
         this.brandId = buffer.readUInt8();
         this.moduleConfigurations = new ModuleConfigurations().fromBinary(buffer);
-        this.keyMaps = new KeyMaps().fromBinary(buffer);
+        this.keymaps = new Keymaps().fromBinary(buffer);
         this.macros = new Macros().fromBinary(buffer);
         this.epilogue = buffer.readUInt32();
         return this;
@@ -65,7 +65,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
             hardwareId: this.hardwareId,
             brandId: this.brandId,
             moduleConfigurations: this.moduleConfigurations.toJsObject(),
-            keyMaps: this.keyMaps.toJsObject(),
+            keymaps: this.keymaps.toJsObject(),
             macros: this.macros.toJsObject(),
             epilogue: this.epilogue
         };
@@ -78,7 +78,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         buffer.writeUInt8(this.hardwareId);
         buffer.writeUInt8(this.brandId);
         this.moduleConfigurations.toBinary(buffer);
-        this.keyMaps.toBinary(buffer);
+        this.keymaps.toBinary(buffer);
         this.macros.toBinary(buffer);
         buffer.writeUInt32(this.epilogue);
     }
@@ -87,11 +87,11 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         return `<UhkConfiguration signature="${this.signature}">`;
     }
 
-    getKeymap(keymapId: number): KeyMap {
-        let keyMaps: KeyMap[] = this.keyMaps.elements;
-        for (let i = 0; i < keyMaps.length; ++i) {
-            if (keymapId === keyMaps[i].id) {
-                return keyMaps[i];
+    getKeymap(keymapId: number): Keymap {
+        let keymaps: Keymap[] = this.keymaps.elements;
+        for (let i = 0; i < keymaps.length; ++i) {
+            if (keymapId === keymaps[i].id) {
+                return keymaps[i];
             }
         }
     }

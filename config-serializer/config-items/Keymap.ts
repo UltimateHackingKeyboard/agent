@@ -3,7 +3,7 @@ import {UhkBuffer} from '../UhkBuffer';
 import {Layers} from './Layers';
 import {assertUInt8} from '../assert';
 
-export class KeyMap extends Serializable<KeyMap> {
+export class Keymap extends Serializable<Keymap> {
 
     @assertUInt8
     id: number;
@@ -16,7 +16,7 @@ export class KeyMap extends Serializable<KeyMap> {
 
     layers: Layers;
 
-    _fromJsObject(jsObject: any): KeyMap {
+    _fromJsObject(jsObject: any): Keymap {
         this.id = jsObject.id;
         this.isDefault = jsObject.isDefault;
         this.abbreviation = jsObject.abbreviation;
@@ -25,7 +25,7 @@ export class KeyMap extends Serializable<KeyMap> {
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): KeyMap {
+    _fromBinary(buffer: UhkBuffer): Keymap {
         this.id = buffer.readUInt8();
         this.isDefault = buffer.readBoolean();
         this.abbreviation = buffer.readString();
@@ -53,6 +53,6 @@ export class KeyMap extends Serializable<KeyMap> {
     }
 
     toString(): string {
-        return `<KeyMap id="${this.id}" name="${this.name}">`;
+        return `<Keymap id="${this.id}" name="${this.name}">`;
     }
 }

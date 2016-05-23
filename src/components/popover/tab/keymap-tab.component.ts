@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {UhkConfigurationService} from '../../../services/uhk-configuration.service';
-import {KeyMap} from '../../../../config-serializer/config-items/KeyMap';
+import {Keymap} from '../../../../config-serializer/config-items/Keymap';
 import {SvgKeyboardComponent} from '../../svg-keyboard.component';
 
 @Component({
@@ -30,12 +30,12 @@ import {SvgKeyboardComponent} from '../../svg-keyboard.component';
 })
 export class KeymapTabComponent implements OnInit {
 
-    private keymaps: KeyMap[];
+    private keymaps: Keymap[];
     private selectedKeymapIndex: number;
 
     constructor(uhkConfigurationService: UhkConfigurationService) {
         this.selectedKeymapIndex = -1;
-        this.keymaps = uhkConfigurationService.getUhkConfiguration().keyMaps.elements;
+        this.keymaps = uhkConfigurationService.getUhkConfiguration().keymaps.elements;
     }
 
     ngOnInit() { }

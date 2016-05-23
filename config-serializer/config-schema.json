@@ -8,8 +8,8 @@
             "description": "Prologue",
             "type": "integer"
         },
-        "keyMaps": {
-            "description": "Array of keyMaps",
+        "keymaps": {
+            "description": "Array of keymaps",
             "type": "array",
             "items": {
                 "type": "object",
