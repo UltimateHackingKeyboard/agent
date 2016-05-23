@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { CaptureKeystrokeButtonComponent } from '../widgets/capture-keystroke-button.component';
 
+import { KeyAction } from '../../../../config-serializer/config-items/KeyAction';
 import { KeystrokeAction } from '../../../../config-serializer/config-items/KeystrokeAction';
 import { KeystrokeModifiersAction } from '../../../../config-serializer/config-items/KeystrokeModifiersAction';
 import { KeystrokeWithModifiersAction } from '../../../../config-serializer/config-items/KeystrokeWithModifiersAction';
+import { KeyActionSaver } from '../key-action-saver';
 
 @Component({
     moduleId: module.id,
@@ -45,7 +47,7 @@ import { KeystrokeWithModifiersAction } from '../../../../config-serializer/conf
     `,
     directives: [CaptureKeystrokeButtonComponent]
 })
-export class KeypressTabComponent implements OnInit {
+export class KeypressTabComponent implements OnInit, KeyActionSaver {
     private leftModifiers: string[];
     private rightModifiers: string[];
 
@@ -63,4 +65,11 @@ export class KeypressTabComponent implements OnInit {
         return;
     }
 
+    keyActionValid(): boolean {
+        return false;
+    }
+
+    toKeyAction(): KeyAction {
+        return undefined;
+    }
 }

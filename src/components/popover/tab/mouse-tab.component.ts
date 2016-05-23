@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { KeyActionSaver } from '../key-action-saver';
+import { KeyAction } from '../../../../config-serializer/config-items/KeyAction';
+
 @Component({
     moduleId: module.id,
     selector: 'mouse-tab',
@@ -16,11 +19,19 @@ import { Component, OnInit } from '@angular/core';
         <div class="details">
         </div>
     `,
-    styles: [ require('./mouse-tab.component.scss') ]
+    styles: [require('./mouse-tab.component.scss')]
 })
-export class MouseTabComponent implements OnInit {
+export class MouseTabComponent implements OnInit, KeyActionSaver {
     constructor() { }
 
     ngOnInit() { }
+
+    keyActionValid(): boolean {
+        return false;
+    }
+
+    toKeyAction(): KeyAction {
+        return undefined;
+    }
 
 }

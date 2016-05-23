@@ -4,6 +4,7 @@ import {
     AfterViewInit,
     Output,
     EventEmitter,
+    ViewChild,
     ViewChildren,
     ElementRef,
     Renderer,
@@ -13,12 +14,16 @@ import {
 
 import {NgSwitch, NgSwitchWhen} from '@angular/common';
 
+import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
+
 import {KeypressTabComponent} from './tab/keypress-tab.component';
 import {LayerTabComponent} from './tab/layer-tab.component';
 import {MouseTabComponent} from './tab/mouse-tab.component';
 import {MacroTabComponent} from './tab/macro-tab.component';
 import {KeymapTabComponent} from './tab/keymap-tab.component';
 import {NoneTabComponent} from './tab/none-tab.component';
+
+import {KeyActionSaver} from './key-action-saver';
 
 @Component({
     moduleId: module.id,
@@ -70,12 +75,12 @@ import {NoneTabComponent} from './tab/none-tab.component';
             </div>
             <div class="row" [ngSwitch]="activeListItemIndex">
                 <div class="popover-content">
-                    <keypress-tab *ngSwitchWhen="0"></keypress-tab>
-                    <layer-tab *ngSwitchWhen="1"></layer-tab>
-                    <mouse-tab *ngSwitchWhen="2"></mouse-tab>
-                    <macro-tab *ngSwitchWhen="3"></macro-tab>
-                    <keymap-tab *ngSwitchWhen="4"></keymap-tab>
-                    <none-tab *ngSwitchWhen="5"></none-tab>
+                    <keypress-tab #tab *ngSwitchWhen="0"></keypress-tab>
+                    <layer-tab #tab *ngSwitchWhen="1"></layer-tab>
+                    <mouse-tab #tab *ngSwitchWhen="2"></mouse-tab>
+                    <macro-tab #tab *ngSwitchWhen="3"></macro-tab>
+                    <keymap-tab #tab *ngSwitchWhen="4"></keymap-tab>
+                    <none-tab #tab *ngSwitchWhen="5"></none-tab>
                 </div>
             </div>
             <div class="row">
@@ -86,7 +91,7 @@ import {NoneTabComponent} from './tab/none-tab.component';
             </div>
         </div>
     `,
-    styles: [ require('./popover.component.scss') ],
+    styles: [require('./popover.component.scss')],
     host: { 'class': 'popover' },
     directives:
     [
@@ -101,8 +106,12 @@ import {NoneTabComponent} from './tab/none-tab.component';
     ]
 })
 export class PopoverComponent implements OnInit, AfterViewInit {
+
     @Output() cancel = new EventEmitter<any>();
+    @Output() remap = new EventEmitter<KeyAction>();
+
     @ViewChildren('keypress,layer,mouse,macro,keymap,none') liElementRefs: QueryList<ElementRef>;
+    @ViewChild('tab') selectedTab: KeyActionSaver;
 
     private activeListItemIndex: number;
 
@@ -122,7 +131,13 @@ export class PopoverComponent implements OnInit, AfterViewInit {
     }
 
     onRemapKey(): void {
-
+        try {
+            let keyAction = this.selectedTab.toKeyAction();
+            this.remap.emit(keyAction);
+        } catch (e) {
+            // TODO: show error dialog
+            console.error(e);
+        }
     }
 
     onListItemClick(index: number): void {

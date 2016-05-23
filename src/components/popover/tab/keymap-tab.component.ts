@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import {UhkConfigurationService} from '../../../services/uhk-configuration.service';
 import {Keymap} from '../../../../config-serializer/config-items/Keymap';
 import {SvgKeyboardComponent} from '../../svg-keyboard.component';
+import {KeyActionSaver} from '../key-action-saver';
+import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
 
 @Component({
     moduleId: module.id,
@@ -28,7 +30,7 @@ import {SvgKeyboardComponent} from '../../svg-keyboard.component';
     styles: [require('./keymap-tab.component.scss')],
     directives: [SvgKeyboardComponent]
 })
-export class KeymapTabComponent implements OnInit {
+export class KeymapTabComponent implements OnInit, KeyActionSaver {
 
     private keymaps: Keymap[];
     private selectedKeymapIndex: number;
@@ -39,5 +41,18 @@ export class KeymapTabComponent implements OnInit {
     }
 
     ngOnInit() { }
+
+    keyActionValid(): boolean {
+        return this.selectedKeymapIndex !== -1;
+    }
+
+    toKeyAction(): SwitchKeymapAction {
+        if (!this.keyActionValid()) {
+            throw new Error('KeyAction is not valid. No selected keymap!');
+        }
+        let keymapAction = new SwitchKeymapAction();
+        keymapAction.keymapId = this.keymaps[this.selectedKeymapIndex].id;
+        return keymapAction;
+    }
 
 }
