@@ -13,18 +13,18 @@ export class SwitchLayerAction extends KeyAction {
     isLayerToggleable: boolean;
 
     @assertEnum(LayerName)
-    private _layer: LayerName;
+    layer: LayerName;
 
     _fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject);
-        this._layer = LayerName[<string> jsObject.layer];
+        this.layer = LayerName[<string> jsObject.layer];
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer);
-        this._layer = buffer.readUInt8();
+        this.layer = buffer.readUInt8();
         this.isLayerToggleable = buffer.readBoolean();
         return this;
     }
@@ -47,7 +47,4 @@ export class SwitchLayerAction extends KeyAction {
         return `<SwitchLayerAction layer="${this.layer}" toggle="${this.isLayerToggleable}">`;
     }
 
-    get layer() {
-        return this._layer;
-    }
 }
