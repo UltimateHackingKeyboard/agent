@@ -67,132 +67,132 @@ $(function() {
           groupName: 'Alphabet',
           groupValues: [
             {
-              value: 'A',
+              scancode: '4',
               alternateName: '',
               label: 'A'
             },
             {
-              value: 'B',
+              scancode: '5',
               alternateName: '',
               label: 'B'
             },
             {
-              value: 'C',
+              scancode: '6',
               alternateName: '',
               label: 'C'
             },
             {
-              value: 'D',
+              scancode: '7',
               alternateName: '',
               label: 'D'
             },
             {
-              value: 'E',
+              scancode: '8',
               alternateName: '',
               label: 'E'
             },
             {
-              value: 'F',
+              scancode: '9',
               alternateName: '',
               label: 'F'
             },
             {
-              value: 'G',
+              scancode: '10',
               alternateName: '',
               label: 'G'
             },
             {
-              value: 'H',
+              scancode: '11',
               alternateName: '',
               label: 'H'
             },
             {
-              value: 'I',
+              scancode: '12',
               alternateName: '',
               label: 'I'
             },
             {
-              value: 'J',
+              scancode: '13',
               alternateName: '',
               label: 'J'
             },
             {
-              value: 'K',
+              scancode: '14',
               alternateName: '',
               label: 'K'
             },
             {
-              value: 'L',
+              scancode: '15',
               alternateName: '',
               label: 'L'
             },
             {
-              value: 'M',
+              scancode: '16',
               alternateName: '',
               label: 'M'
             },
             {
-              value: 'N',
+              scancode: '17',
               alternateName: '',
               label: 'N'
             },
             {
-              value: 'O',
+              scancode: '18',
               alternateName: '',
               label: 'O'
             },
             {
-              value: 'P',
+              scancode: '19',
               alternateName: '',
               label: 'P'
             },
             {
-              value: 'Q',
+              scancode: '20',
               alternateName: '',
               label: 'Q'
             },
             {
-              value: 'R',
+              scancode: '21',
               alternateName: '',
               label: 'R'
             },
             {
-              value: 'S',
+              scancode: '22',
               alternateName: '',
               label: 'S'
             },
             {
-              value: 'T',
+              scancode: '23',
               alternateName: '',
               label: 'T'
             },
             {
-              value: 'U',
+              scancode: '24',
               alternateName: '',
               label: 'U'
             },
             {
-              value: 'V',
+              scancode: '25',
               alternateName: '',
               label: 'V'
             },
             {
-              value: 'W',
+              scancode: '26',
               alternateName: '',
               label: 'W'
             },
             {
-              value: 'X',
+              scancode: '27',
               alternateName: '',
               label: 'X'
             },
             {
-              value: 'Y',
+              scancode: '28',
               alternateName: '',
               label: 'Y'
             },
             {
-              value: 'Z',
+              scancode: '29',
               alternateName: '',
               label: 'Z'
             }
@@ -202,52 +202,52 @@ $(function() {
           groupName: 'Number Row',
           groupValues: [
             {
-              value: '1_exclamation',
+              scancode: '30',
               alternateName: '',
               label: '1 !'
             },
             {
-              value: '2_at',
+              scancode: '31',
               alternateName: '',
               label: '2 @'
             },
             {
-              value: '3_hashmark',
+              scancode: '32',
               alternateName: '',
               label: '3 #'
             },
             {
-              value: '4_dollar',
+              scancode: '33',
               alternateName: '',
               label: '4 $'
             },
             {
-              value: '5_percent',
+              scancode: '34',
               alternateName: '',
               label: '5 %'
             },
             {
-              value: '6_caret',
+              scancode: '35',
               alternateName: '',
               label: '6 ^'
             },
             {
-              value: '7_ampersand',
+              scancode: '36',
               alternateName: '',
               label: '7 &'
             },
             {
-              value: '8_asterisk',
+              scancode: '37',
               alternateName: '',
               label: '8 *'
             },
             {
-              value: '9_left-parenthesis',
+              scancode: '38',
               alternateName: '',
               label: '9 ('
             },
             {
-              value: '0_right-parenthesis',
+              scancode: '39',
               alternateName: '',
               label: '0 )'
             }
@@ -257,27 +257,27 @@ $(function() {
           groupName: 'Whitespace',
           groupValues: [
             {
-              value: 'Return',
+              scancode: '40',
               alternateName: 'Enter',
               label: 'Return'
             },
             {
-              value: 'Esc',
-              alternateName: 'Esc',
+              scancode: '41',
+              alternateName: '',
               label: 'Escape'
             },
             {
-              value: 'Backspace',
+              scancode: '42',
               alternateName: '',
               label: 'Backspace'
             },
             {
-              value: 'Tab',
+              scancode: '43',
               alternateName: '',
               label: 'Tab'
             },
             {
-              value: 'Spacebar',
+              scancode: '44',
               alternateName: '',
               label: 'Spacebar'
             }
@@ -287,57 +287,57 @@ $(function() {
           groupName: 'Punctuation',
           groupValues: [
             {
-              value: 'dash_underscore',
+              scancode: '45',
               alternateName: '',
               label: '- _'
             },
             {
-              value: 'equal_plus',
+              scancode: '46',
               alternateName: '',
               label: '= +'
             },
             {
-              value: 'left-bracket_left-brace',
+              scancode: '47',
               alternateName: '',
               label: '[ {'
             },
             {
-              value: 'right-bracket_right-brace',
+              scancode: '48',
               alternateName: '',
               label: '] }'
             },
             {
-              value: 'backsalsh_pipe',
+              scancode: '49',
               alternateName: '',
               label: '\ |'
             },
             {
-              value: 'semicolon_colon',
+              scancode: '51',
               alternateName: '',
               label: '; :'
             },
             {
-              value: 'single-quote_double-quote',
+              scancode: '52',
               alternateName: '',
               label: '\' "'
             },
             {
-              value: 'grave-accent_tilde',
+              scancode: '53',
               alternateName: '',
               label: '` ~'
             },
             {
-              value: 'comma_less-than',
+              scancode: '54',
               alternateName: '',
               label: ', <'
             },
             {
-              value: 'period_greater-than',
+              scancode: '55',
               alternateName: '',
               label: '. >'
             },
             {
-              value: 'slash_question',
+              scancode: '56',
               alternateName: '',
               label: '/ ?'
             }
