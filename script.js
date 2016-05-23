@@ -342,6 +342,71 @@ $(function() {
               label: '/ ?'
             }
           ]
+        },
+        {
+          groupName: 'Function keys',
+          groupValues: [
+            {
+              scancode: '58',
+              alternateName: '',
+              label: 'F1'
+            },
+            {
+              scancode: '59',
+              alternateName: '',
+              label: 'F2'
+            },
+            {
+              scancode: '60',
+              alternateName: '',
+              label: 'F3'
+            },
+            {
+              scancode: '61',
+              alternateName: '',
+              label: 'F4'
+            },
+            {
+              scancode: '62',
+              alternateName: '',
+              label: 'F5'
+            },
+            {
+              scancode: '63',
+              alternateName: '',
+              label: 'F6'
+            },
+            {
+              scancode: '64',
+              alternateName: '',
+              label: 'F7'
+            },
+            {
+              scancode: '65',
+              alternateName: '',
+              label: 'F8'
+            },
+            {
+              scancode: '66',
+              alternateName: '',
+              label: 'F9'
+            },
+            {
+              scancode: '67',
+              alternateName: '',
+              label: 'F10'
+            },
+            {
+              scancode: '68',
+              alternateName: '',
+              label: 'F11'
+            },
+            {
+              scancode: '69',
+              alternateName: '',
+              label: 'F12'
+            }
+          ]
         }
       ],
       secondaryRole: [
