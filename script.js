@@ -68,132 +68,132 @@ $(function() {
           groupValues: [
             {
               value: 'A',
-              dataExplanation: '',
+              alternateName: '',
               label: 'A'
             },
             {
               value: 'B',
-              dataExplanation: '',
+              alternateName: '',
               label: 'B'
             },
             {
               value: 'C',
-              dataExplanation: '',
+              alternateName: '',
               label: 'C'
             },
             {
               value: 'D',
-              dataExplanation: '',
+              alternateName: '',
               label: 'D'
             },
             {
               value: 'E',
-              dataExplanation: '',
+              alternateName: '',
               label: 'E'
             },
             {
               value: 'F',
-              dataExplanation: '',
+              alternateName: '',
               label: 'F'
             },
             {
               value: 'G',
-              dataExplanation: '',
+              alternateName: '',
               label: 'G'
             },
             {
               value: 'H',
-              dataExplanation: '',
+              alternateName: '',
               label: 'H'
             },
             {
               value: 'I',
-              dataExplanation: '',
+              alternateName: '',
               label: 'I'
             },
             {
               value: 'J',
-              dataExplanation: '',
+              alternateName: '',
               label: 'J'
             },
             {
               value: 'K',
-              dataExplanation: '',
+              alternateName: '',
               label: 'K'
             },
             {
               value: 'L',
-              dataExplanation: '',
+              alternateName: '',
               label: 'L'
             },
             {
               value: 'M',
-              dataExplanation: '',
+              alternateName: '',
               label: 'M'
             },
             {
               value: 'N',
-              dataExplanation: '',
+              alternateName: '',
               label: 'N'
             },
             {
               value: 'O',
-              dataExplanation: '',
+              alternateName: '',
               label: 'O'
             },
             {
               value: 'P',
-              dataExplanation: '',
+              alternateName: '',
               label: 'P'
             },
             {
               value: 'Q',
-              dataExplanation: '',
+              alternateName: '',
               label: 'Q'
             },
             {
               value: 'R',
-              dataExplanation: '',
+              alternateName: '',
               label: 'R'
             },
             {
               value: 'S',
-              dataExplanation: '',
+              alternateName: '',
               label: 'S'
             },
             {
               value: 'T',
-              dataExplanation: '',
+              alternateName: '',
               label: 'T'
             },
             {
               value: 'U',
-              dataExplanation: '',
+              alternateName: '',
               label: 'U'
             },
             {
               value: 'V',
-              dataExplanation: '',
+              alternateName: '',
               label: 'V'
             },
             {
               value: 'W',
-              dataExplanation: '',
+              alternateName: '',
               label: 'W'
             },
             {
               value: 'X',
-              dataExplanation: '',
+              alternateName: '',
               label: 'X'
             },
             {
               value: 'Y',
-              dataExplanation: '',
+              alternateName: '',
               label: 'Y'
             },
             {
               value: 'Z',
-              dataExplanation: '',
+              alternateName: '',
               label: 'Z'
             }
           ]
@@ -203,52 +203,52 @@ $(function() {
           groupValues: [
             {
               value: '1_exclamation',
-              dataExplanation: '',
+              alternateName: '',
               label: '1 !'
             },
             {
               value: '2_at',
-              dataExplanation: '',
+              alternateName: '',
               label: '2 @'
             },
             {
               value: '3_hashmark',
-              dataExplanation: '',
+              alternateName: '',
               label: '3 #'
             },
             {
               value: '4_dollar',
-              dataExplanation: '',
+              alternateName: '',
               label: '4 $'
             },
             {
               value: '5_percent',
-              dataExplanation: '',
+              alternateName: '',
               label: '5 %'
             },
             {
               value: '6_caret',
-              dataExplanation: '',
+              alternateName: '',
               label: '6 ^'
             },
             {
               value: '7_ampersand',
-              dataExplanation: '',
+              alternateName: '',
               label: '7 &'
             },
             {
               value: '8_asterisk',
-              dataExplanation: '',
+              alternateName: '',
               label: '8 *'
             },
             {
               value: '9_left-parenthesis',
-              dataExplanation: '',
+              alternateName: '',
               label: '9 ('
             },
             {
               value: '0_right-parenthesis',
-              dataExplanation: '',
+              alternateName: '',
               label: '0 )'
             }
           ]
@@ -258,27 +258,27 @@ $(function() {
           groupValues: [
             {
               value: 'Return',
-              dataExplanation: 'Enter',
+              alternateName: 'Enter',
               label: 'Return'
             },
             {
               value: 'Esc',
-              dataExplanation: 'Esc',
+              alternateName: 'Esc',
               label: 'Escape'
             },
             {
               value: 'Backspace',
-              dataExplanation: '',
+              alternateName: '',
               label: 'Backspace'
             },
             {
               value: 'Tab',
-              dataExplanation: '',
+              alternateName: '',
               label: 'Tab'
             },
             {
               value: 'Spacebar',
-              dataExplanation: '',
+              alternateName: '',
               label: 'Spacebar'
             }
           ]
@@ -288,57 +288,57 @@ $(function() {
           groupValues: [
             {
               value: 'dash_underscore',
-              dataExplanation: '',
+              alternateName: '',
               label: '- _'
             },
             {
               value: 'equal_plus',
-              dataExplanation: '',
+              alternateName: '',
               label: '= +'
             },
             {
               value: 'left-bracket_left-brace',
-              dataExplanation: '',
+              alternateName: '',
               label: '[ {'
             },
             {
               value: 'right-bracket_right-brace',
-              dataExplanation: '',
+              alternateName: '',
               label: '] }'
             },
             {
               value: 'backsalsh_pipe',
-              dataExplanation: '',
+              alternateName: '',
               label: '\ |'
             },
             {
               value: 'semicolon_colon',
-              dataExplanation: '',
+              alternateName: '',
               label: '; :'
             },
             {
               value: 'single-quote_double-quote',
-              dataExplanation: '',
+              alternateName: '',
               label: '\' "'
             },
             {
               value: 'grave-accent_tilde',
-              dataExplanation: '',
+              alternateName: '',
               label: '` ~'
             },
             {
               value: 'comma_less-than',
-              dataExplanation: '',
+              alternateName: '',
               label: ', <'
             },
             {
               value: 'period_greater-than',
-              dataExplanation: '',
+              alternateName: '',
               label: '. >'
             },
             {
               value: 'slash_question',
-              dataExplanation: '',
+              alternateName: '',
               label: '/ ?'
             }
           ]
@@ -654,12 +654,12 @@ function initSelect2items(noSearch) {
 
 function formatState(state) {
    if (!state.id) { return state.text; }
-   var dataExplanation = $(state.element).data('explanation');
+   var alternateName = $(state.element).data('alternate-name');
    var dataAbbrev = $(state.element).data('abbrev');
    var dataAbbrevImage = $(state.element).data('abbrev-image');
    var $state = $('<span class="select2-item">' + state.text + '</span>')
-   if (dataExplanation != '' && typeof dataExplanation != 'undefined') {
-     $('<span class="scancode--explanation"> (' + dataExplanation + ')</span>').appendTo($state);
+   if (alternateName != '' && typeof alternateName != 'undefined') {
+     $('<span class="scancode--alternate-name"> (' + alternateName + ')</span>').appendTo($state);
    }
    if (dataAbbrevImage != '' && typeof dataAbbrevImage != 'undefined') {
      $('<img />')
