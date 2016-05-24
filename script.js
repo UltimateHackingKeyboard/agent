@@ -407,6 +407,61 @@ $(function() {
               label: 'F12'
             }
           ]
+        },
+        {
+          groupName: 'Navigation',
+          groupValues: [
+            {
+              scancode: '73',
+              alternateName: '',
+              label: 'Insert'
+            },
+            {
+              scancode: '74',
+              alternateName: '',
+              label: 'Home'
+            },
+            {
+              scancode: '75',
+              alternateName: 'PgUp pageup',
+              label: 'Page Up'
+            },
+            {
+              scancode: '76',
+              alternateName: 'Delete Forawrd',
+              label: 'Delete'
+            },
+            {
+              scancode: '77',
+              alternateName: '',
+              label: 'End'
+            },
+            {
+              scancode: '78',
+              alternateName: 'PgDn pagedown',
+              label: 'Page Down'
+            },
+            {
+              scancode: '79',
+              alternateName: 'ArrowRight',
+              label: 'Right Arrow'
+            },
+            {
+              scancode: '80',
+              alternateName: 'ArrowLeft',
+              label: 'Left Arrow'
+            },
+            {
+              scancode: '81',
+              alternateName: 'ArrowDown',
+              label: 'Down Arrow'
+            },
+            {
+              scancode: '82',
+              alternateName: 'ArrowUp',
+              label: 'Up Arrow'
+            }
+          ]
         }
       ],
       secondaryRole: [
