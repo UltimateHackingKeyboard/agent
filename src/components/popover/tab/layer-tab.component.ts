@@ -21,7 +21,8 @@ import { KeyActionSaver } from '../key-action-saver';
         <span>
         layer by holding this key.
         </span>
-    `
+    `,
+    styles: [require('./layer-tab.component.scss')]
 })
 export class LayerTabComponent implements OnInit, KeyActionSaver {
     private toggle: boolean;

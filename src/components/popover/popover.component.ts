@@ -74,14 +74,12 @@ import {KeyActionSaver} from './key-action-saver';
                 </div>
             </div>
             <div class="row" [ngSwitch]="activeListItemIndex">
-                <div class="popover-content">
-                    <keypress-tab #tab *ngSwitchWhen="0"></keypress-tab>
-                    <layer-tab #tab *ngSwitchWhen="1"></layer-tab>
-                    <mouse-tab #tab *ngSwitchWhen="2"></mouse-tab>
-                    <macro-tab #tab *ngSwitchWhen="3"></macro-tab>
-                    <keymap-tab #tab *ngSwitchWhen="4"></keymap-tab>
-                    <none-tab #tab *ngSwitchWhen="5"></none-tab>
-                </div>
+                <keypress-tab #tab *ngSwitchWhen="0" class="popover-content"></keypress-tab>
+                <layer-tab #tab *ngSwitchWhen="1" class="popover-content"></layer-tab>
+                <mouse-tab #tab *ngSwitchWhen="2" class="popover-content"></mouse-tab>
+                <macro-tab #tab *ngSwitchWhen="3" class="popover-content"></macro-tab>
+                <keymap-tab #tab *ngSwitchWhen="4" class="popover-content"></keymap-tab>
+                <none-tab #tab *ngSwitchWhen="5" class="popover-content"></none-tab>
             </div>
             <div class="row">
                 <div class="popover-action">

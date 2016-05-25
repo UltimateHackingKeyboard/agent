@@ -45,6 +45,7 @@ import { KeyActionSaver } from '../key-action-saver';
             </i>
         </div>
     `,
+    styles: [require('./keypress-tab.component.scss')],
     directives: [CaptureKeystrokeButtonComponent]
 })
 export class KeypressTabComponent implements OnInit, KeyActionSaver {
