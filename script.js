@@ -557,7 +557,7 @@ $(function() {
           groupName: 'Misc',
           groupValues: [
             {
-              scancode: '',
+              scancode: '70',
               searchTerm: '',
               label: 'Print Screen'
             },
@@ -567,12 +567,12 @@ $(function() {
               label: 'Caps Lock'
             },
             {
-              scancode: '',
+              scancode: '71',
               searchTerm: '',
               label: 'Scroll Lock'
             },
             {
-              scancode: '',
+              scancode: '72',
               searchTerm: '',
               label: 'Pause'
             }
