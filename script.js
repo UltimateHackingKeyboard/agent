@@ -552,6 +552,31 @@ $(function() {
               label: ','
             }
           ]
+        },
+        {
+          groupName: 'Misc',
+          groupValues: [
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Print Screen'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Caps Lock'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Scroll Lock'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Pause'
+            }
+          ]
         }
       ],
       secondaryRole: [
