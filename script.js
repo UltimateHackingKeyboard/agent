@@ -462,6 +462,96 @@ $(function() {
               label: 'Up Arrow'
             }
           ]
+        },
+        {
+          groupName: 'Number Pad',
+          groupValues: [
+            {
+              scancode: '83',
+              searchTerm: '',
+              label: 'NumLock'
+            },
+            {
+              scancode: '84',
+              searchTerm: 'slash',
+              label: '/'
+            },
+            {
+              scancode: '85',
+              searchTerm: 'asterisk',
+              label: '*'
+            },
+            {
+              scancode: '86',
+              searchTerm: 'minus',
+              label: '-'
+            },
+            {
+              scancode: '87',
+              searchTerm: 'plus',
+              label: '+'
+            },
+            {
+              scancode: '88',
+              searchTerm: '',
+              label: 'Enter'
+            },
+            {
+              scancode: '89',
+              searchTerm: 'one',
+              label: '1'
+            },
+            {
+              scancode: '90',
+              searchTerm: 'two',
+              label: '2'
+            },
+            {
+              scancode: '91',
+              searchTerm: 'three',
+              label: '3'
+            },
+            {
+              scancode: '92',
+              searchTerm: 'four',
+              label: '4'
+            },
+            {
+              scancode: '93',
+              searchTerm: 'five',
+              label: '5'
+            },
+            {
+              scancode: '94',
+              searchTerm: 'six',
+              label: '6'
+            },
+            {
+              scancode: '95',
+              searchTerm: 'seven',
+              label: '7'
+            },
+            {
+              scancode: '96',
+              searchTerm: 'eight',
+              label: '8'
+            },
+            {
+              scancode: '97',
+              searchTerm: 'nine',
+              label: '9'
+            },
+            {
+              scancode: '98',
+              searchTerm: 'zero',
+              label: '0'
+            },
+            {
+              scancode: '99',
+              searchTerm: 'Period',
+              label: ','
+            }
+          ]
         }
       ],
       secondaryRole: [
