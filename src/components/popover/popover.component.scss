@@ -28,3 +28,9 @@
 .popover-content {
     padding: 10px 24px;
 }
+
+mouse-tab.popover-content{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}

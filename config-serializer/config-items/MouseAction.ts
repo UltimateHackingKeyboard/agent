@@ -2,7 +2,7 @@ import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
 import {UhkBuffer} from '../UhkBuffer';
 import {assertEnum} from '../assert';
 
-enum MouseActionParam {
+export enum MouseActionParam {
     leftClick,
     middleClick,
     rightClick,

@@ -1,12 +1,38 @@
 :host {
     display: flex;
-}
 
-.mouse-action {
-    flex: 1;
-    border-right: 1px solid black;
-}
+    .mouse-action {
+        flex: 1;
+        ul{
+            border-right: 1px solid #ccc;
+            li {
+                a {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
 
-.details {
-    flex: 2;
+                &.active {
+                    a:after {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        top: 0;
+                        right: -4rem;
+                        border-color: transparent transparent transparent #337ab7;
+                        border-style: solid;
+                        border-width: 2rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .details {
+        flex: 2;
+        .btn-placeholder {
+            visibility: hidden;
+        }
+    }
 }
