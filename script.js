@@ -562,7 +562,7 @@ $(function() {
               label: 'Print Screen'
             },
             {
-              scancode: '',
+              scancode: '57',
               searchTerm: '',
               label: 'Caps Lock'
             },
