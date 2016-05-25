@@ -68,132 +68,132 @@ $(function() {
           groupValues: [
             {
               scancode: '4',
-              alternateName: '',
+              searchTerm: '',
               label: 'A'
             },
             {
               scancode: '5',
-              alternateName: '',
+              searchTerm: '',
               label: 'B'
             },
             {
               scancode: '6',
-              alternateName: '',
+              searchTerm: '',
               label: 'C'
             },
             {
               scancode: '7',
-              alternateName: '',
+              searchTerm: '',
               label: 'D'
             },
             {
               scancode: '8',
-              alternateName: '',
+              searchTerm: '',
               label: 'E'
             },
             {
               scancode: '9',
-              alternateName: '',
+              searchTerm: '',
               label: 'F'
             },
             {
               scancode: '10',
-              alternateName: '',
+              searchTerm: '',
               label: 'G'
             },
             {
               scancode: '11',
-              alternateName: '',
+              searchTerm: '',
               label: 'H'
             },
             {
               scancode: '12',
-              alternateName: '',
+              searchTerm: '',
               label: 'I'
             },
             {
               scancode: '13',
-              alternateName: '',
+              searchTerm: '',
               label: 'J'
             },
             {
               scancode: '14',
-              alternateName: '',
+              searchTerm: '',
               label: 'K'
             },
             {
               scancode: '15',
-              alternateName: '',
+              searchTerm: '',
               label: 'L'
             },
             {
               scancode: '16',
-              alternateName: '',
+              searchTerm: '',
               label: 'M'
             },
             {
               scancode: '17',
-              alternateName: '',
+              searchTerm: '',
               label: 'N'
             },
             {
               scancode: '18',
-              alternateName: '',
+              searchTerm: '',
               label: 'O'
             },
             {
               scancode: '19',
-              alternateName: '',
+              searchTerm: '',
               label: 'P'
             },
             {
               scancode: '20',
-              alternateName: '',
+              searchTerm: '',
               label: 'Q'
             },
             {
               scancode: '21',
-              alternateName: '',
+              searchTerm: '',
               label: 'R'
             },
             {
               scancode: '22',
-              alternateName: '',
+              searchTerm: '',
               label: 'S'
             },
             {
               scancode: '23',
-              alternateName: '',
+              searchTerm: '',
               label: 'T'
             },
             {
               scancode: '24',
-              alternateName: '',
+              searchTerm: '',
               label: 'U'
             },
             {
               scancode: '25',
-              alternateName: '',
+              searchTerm: '',
               label: 'V'
             },
             {
               scancode: '26',
-              alternateName: '',
+              searchTerm: '',
               label: 'W'
             },
             {
               scancode: '27',
-              alternateName: '',
+              searchTerm: '',
               label: 'X'
             },
             {
               scancode: '28',
-              alternateName: '',
+              searchTerm: '',
               label: 'Y'
             },
             {
               scancode: '29',
-              alternateName: '',
+              searchTerm: '',
               label: 'Z'
             }
           ]
@@ -203,52 +203,52 @@ $(function() {
           groupValues: [
             {
               scancode: '30',
-              alternateName: '',
+              searchTerm: '',
               label: '1 !'
             },
             {
               scancode: '31',
-              alternateName: '',
+              searchTerm: '',
               label: '2 @'
             },
             {
               scancode: '32',
-              alternateName: '',
+              searchTerm: '',
               label: '3 #'
             },
             {
               scancode: '33',
-              alternateName: '',
+              searchTerm: '',
               label: '4 $'
             },
             {
               scancode: '34',
-              alternateName: '',
+              searchTerm: '',
               label: '5 %'
             },
             {
               scancode: '35',
-              alternateName: '',
+              searchTerm: '',
               label: '6 ^'
             },
             {
               scancode: '36',
-              alternateName: '',
+              searchTerm: '',
               label: '7 &'
             },
             {
               scancode: '37',
-              alternateName: '',
+              searchTerm: '',
               label: '8 *'
             },
             {
               scancode: '38',
-              alternateName: '',
+              searchTerm: '',
               label: '9 ('
             },
             {
               scancode: '39',
-              alternateName: '',
+              searchTerm: '',
               label: '0 )'
             }
           ]
@@ -258,27 +258,27 @@ $(function() {
           groupValues: [
             {
               scancode: '40',
-              alternateName: 'Enter',
+              searchTerm: 'Enter',
               label: 'Return'
             },
             {
               scancode: '41',
-              alternateName: '',
+              searchTerm: '',
               label: 'Escape'
             },
             {
               scancode: '42',
-              alternateName: '',
+              searchTerm: '',
               label: 'Backspace'
             },
             {
               scancode: '43',
-              alternateName: '',
+              searchTerm: '',
               label: 'Tab'
             },
             {
               scancode: '44',
-              alternateName: '',
+              searchTerm: '',
               label: 'Spacebar'
             }
           ]
@@ -288,57 +288,57 @@ $(function() {
           groupValues: [
             {
               scancode: '45',
-              alternateName: '',
+              searchTerm: '',
               label: '- _'
             },
             {
               scancode: '46',
-              alternateName: '',
+              searchTerm: '',
               label: '= +'
             },
             {
               scancode: '47',
-              alternateName: '',
+              searchTerm: '',
               label: '[ {'
             },
             {
               scancode: '48',
-              alternateName: '',
+              searchTerm: '',
               label: '] }'
             },
             {
               scancode: '49',
-              alternateName: '',
+              searchTerm: '',
               label: '\ |'
             },
             {
               scancode: '51',
-              alternateName: '',
+              searchTerm: '',
               label: '; :'
             },
             {
               scancode: '52',
-              alternateName: '',
+              searchTerm: '',
               label: '\' "'
             },
             {
               scancode: '53',
-              alternateName: '',
+              searchTerm: '',
               label: '` ~'
             },
             {
               scancode: '54',
-              alternateName: '',
+              searchTerm: '',
               label: ', <'
             },
             {
               scancode: '55',
-              alternateName: '',
+              searchTerm: '',
               label: '. >'
             },
             {
               scancode: '56',
-              alternateName: '',
+              searchTerm: '',
               label: '/ ?'
             }
           ]
@@ -348,62 +348,62 @@ $(function() {
           groupValues: [
             {
               scancode: '58',
-              alternateName: '',
+              searchTerm: '',
               label: 'F1'
             },
             {
               scancode: '59',
-              alternateName: '',
+              searchTerm: '',
               label: 'F2'
             },
             {
               scancode: '60',
-              alternateName: '',
+              searchTerm: '',
               label: 'F3'
             },
             {
               scancode: '61',
-              alternateName: '',
+              searchTerm: '',
               label: 'F4'
             },
             {
               scancode: '62',
-              alternateName: '',
+              searchTerm: '',
               label: 'F5'
             },
             {
               scancode: '63',
-              alternateName: '',
+              searchTerm: '',
               label: 'F6'
             },
             {
               scancode: '64',
-              alternateName: '',
+              searchTerm: '',
               label: 'F7'
             },
             {
               scancode: '65',
-              alternateName: '',
+              searchTerm: '',
               label: 'F8'
             },
             {
               scancode: '66',
-              alternateName: '',
+              searchTerm: '',
               label: 'F9'
             },
             {
               scancode: '67',
-              alternateName: '',
+              searchTerm: '',
               label: 'F10'
             },
             {
               scancode: '68',
-              alternateName: '',
+              searchTerm: '',
               label: 'F11'
             },
             {
               scancode: '69',
-              alternateName: '',
+              searchTerm: '',
               label: 'F12'
             }
           ]
@@ -413,52 +413,52 @@ $(function() {
           groupValues: [
             {
               scancode: '73',
-              alternateName: '',
+              searchTerm: '',
               label: 'Insert'
             },
             {
               scancode: '74',
-              alternateName: '',
+              searchTerm: '',
               label: 'Home'
             },
             {
               scancode: '75',
-              alternateName: 'PgUp pageup',
+              searchTerm: 'PgUp pageup',
               label: 'Page Up'
             },
             {
               scancode: '76',
-              alternateName: 'Delete Forward',
+              searchTerm: 'Delete Forward',
               label: 'Delete'
             },
             {
               scancode: '77',
-              alternateName: '',
+              searchTerm: '',
               label: 'End'
             },
             {
               scancode: '78',
-              alternateName: 'PgDn pagedown',
+              searchTerm: 'PgDn pagedown',
               label: 'Page Down'
             },
             {
               scancode: '79',
-              alternateName: 'ArrowRight',
+              searchTerm: 'ArrowRight',
               label: 'Right Arrow'
             },
             {
               scancode: '80',
-              alternateName: 'ArrowLeft',
+              searchTerm: 'ArrowLeft',
               label: 'Left Arrow'
             },
             {
               scancode: '81',
-              alternateName: 'ArrowDown',
+              searchTerm: 'ArrowDown',
               label: 'Down Arrow'
             },
             {
               scancode: '82',
-              alternateName: 'ArrowUp',
+              searchTerm: 'ArrowUp',
               label: 'Up Arrow'
             }
           ]
@@ -774,12 +774,12 @@ function initSelect2items(noSearch) {
 
 function formatState(state) {
    if (!state.id) { return state.text; }
-   var alternateName = $(state.element).data('alternate-name');
+   var searchTerm = $(state.element).data('searchterm');
    var dataAbbrev = $(state.element).data('abbrev');
    var dataAbbrevImage = $(state.element).data('abbrev-image');
    var $state = $('<span class="select2-item">' + state.text + '</span>')
-   if (alternateName != '' && typeof alternateName != 'undefined') {
-     $('<span class="scancode--alternate-name"> (' + alternateName + ')</span>').appendTo($state);
+   if (searchTerm != '' && typeof searchTerm != 'undefined') {
+     $('<span class="scancode--searchterm"> (' + searchTerm + ')</span>').appendTo($state);
    }
    if (dataAbbrevImage != '' && typeof dataAbbrevImage != 'undefined') {
      $('<img />')
