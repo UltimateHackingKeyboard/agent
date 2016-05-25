@@ -428,7 +428,7 @@ $(function() {
             },
             {
               scancode: '76',
-              alternateName: 'Delete Forawrd',
+              alternateName: 'Delete Forward',
               label: 'Delete'
             },
             {
