@@ -577,6 +577,26 @@ $(function() {
               label: 'Pause'
             }
           ]
+        },
+        {
+          groupName: 'Media Keys',
+          groupValues: [
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Mute'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Volume Up'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Volume Down'
+            }
+          ]
         }
       ],
       secondaryRole: [
