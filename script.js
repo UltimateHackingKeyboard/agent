@@ -582,17 +582,17 @@ $(function() {
           groupName: 'Media Keys',
           groupValues: [
             {
-              scancode: '',
+              scancode: '127',
               searchTerm: '',
               label: 'Mute'
             },
             {
-              scancode: '',
+              scancode: '128',
               searchTerm: '',
               label: 'Volume Up'
             },
             {
-              scancode: '',
+              scancode: '129',
               searchTerm: '',
               label: 'Volume Down'
             }
