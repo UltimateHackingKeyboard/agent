@@ -550,6 +550,16 @@ $(function() {
               scancode: '99',
               searchTerm: 'Period',
               label: ','
+            },
+            {
+              scancode: '176',
+              searchTerm: 'Double zero',
+              label: '00'
+            },
+            {
+              scancode: '177',
+              searchTerm: 'Triple zero',
+              label: '000'
             }
           ]
         },
