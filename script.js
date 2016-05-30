@@ -605,6 +605,26 @@ $(function() {
               scancode: '129',
               searchTerm: '',
               label: 'Volume Down'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Next Track'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Previous Track'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Stop'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Play/Pause'
             }
           ]
         }
