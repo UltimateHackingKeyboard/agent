@@ -625,6 +625,11 @@ $(function() {
               scancode: '',
               searchTerm: '',
               label: 'Play/Pause'
+            },
+            {
+              scancode: '',
+              searchTerm: '',
+              label: 'Eject' // Adding this as can be part of shortcuts on Mac.
             }
           ]
         }
