@@ -152,7 +152,7 @@ ul {
       position: relative;
 
       &:before {
-        content: 'Layers: ';
+        content: attr(data-title);
         display: inline-block;
         position: absolute;
         bottom: -0.3em;
