@@ -12,7 +12,7 @@ import {SwitchKeymapAction} from '../../../../config-serializer/config-items/Swi
     template:
     `
         <div>
-            <b style="">Switch to keymap:</b>
+            <b>Switch to keymap:</b>
             <select class="layout-switcher" [(ngModel)]="selectedKeymapIndex">
                 <option [ngValue]="-1"> Select keymap </option>
                 <option *ngFor="let keymap of keymaps; let index=index" [ngValue]="index"> {{ keymap.name }} </option>
@@ -35,12 +35,14 @@ export class KeymapTabComponent implements OnInit, KeyActionSaver {
     private keymaps: Keymap[];
     private selectedKeymapIndex: number;
 
-    constructor(uhkConfigurationService: UhkConfigurationService) {
+    constructor(private uhkConfigurationService: UhkConfigurationService) {
         this.selectedKeymapIndex = -1;
-        this.keymaps = uhkConfigurationService.getUhkConfiguration().keymaps.elements;
+        this.keymaps = [];
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.keymaps = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements;
+    }
 
     keyActionValid(): boolean {
         return this.selectedKeymapIndex !== -1;
