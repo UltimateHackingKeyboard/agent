@@ -38,7 +38,22 @@ import { KeyActionSaver } from '../key-action-saver';
         <div style="margin-top: 3rem;">
             <b class="setting-label" style="position:relative;">Long press action:</b>
             <select class="secondary-role" style="width:135px">
-
+                    <option> None </option>
+                    <optgroup label="Modifiers">
+                        <option> LShift </option>
+                        <option> LCtrl </option>
+                        <option> LSuper </option>
+                        <option> LAlt </option>
+                        <option> RShift </option>
+                        <option> RCtrl </option>
+                        <option> RSuper </option>
+                        <option> RAlt </option>
+                     </optgroup>
+                     <optgroup label="Layer switcher">
+                        <option> Mod </option>
+                        <option> Mouse </option>
+                        <option> Fn </option>
+                     </optgroup>
             </select>
             <i class="fa fa-question-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="right"
                     title="This action happens when the key is being held along with another key.">
