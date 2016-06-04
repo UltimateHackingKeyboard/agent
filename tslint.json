@@ -36,7 +36,7 @@
         ],
         "max-line-length": [
             true,
-            120
+            130
         ],
         "no-trailing-whitespace": true,
         "trailing-comma": [
