@@ -1,3 +1,4 @@
+import {KeyModifiers} from './KeystrokeModifiersAction';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 import {UhkBuffer} from '../UhkBuffer';
 import {assertUInt8} from '../assert';
@@ -33,5 +34,9 @@ export class ReleaseModifiersMacroAction extends MacroAction {
 
     toString(): string {
         return `<ReleaseModifiersMacroAction modifierMask="${this.modifierMask}">`;
+    }
+
+    isModifierActive(modifier: KeyModifiers): boolean {
+        return (this.modifierMask & modifier) > 0;
     }
 }
