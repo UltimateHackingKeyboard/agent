@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    flex-shrink: 0;
+    
+    icon {
+        margin: 0 5px;
+    }
+    
+    div {
+        display: flex;
+        flex: 1;
+    }
+    
+}
