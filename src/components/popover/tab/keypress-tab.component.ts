@@ -8,6 +8,8 @@ import { KeystrokeModifiersAction } from '../../../../config-serializer/config-i
 import { KeystrokeWithModifiersAction } from '../../../../config-serializer/config-items/KeystrokeWithModifiersAction';
 import { KeyActionSaver } from '../key-action-saver';
 
+import {IconComponent} from '../widgets/icon.component';
+
 @Component({
     moduleId: module.id,
     selector: 'keypress-tab',
@@ -35,9 +37,9 @@ import { KeyActionSaver } from '../key-action-saver';
                 </div>
             </div>
         </div>
-        <div style="margin-top: 3rem;">
+        <div class="long-press-container">
             <b class="setting-label" style="position:relative;">Long press action:</b>
-            <select class="secondary-role" style="width:135px">
+            <select class="secondary-role">
                     <option> None </option>
                     <optgroup label="Modifiers">
                         <option> LShift </option>
@@ -55,13 +57,11 @@ import { KeyActionSaver } from '../key-action-saver';
                         <option> Fn </option>
                      </optgroup>
             </select>
-            <i class="fa fa-question-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="right"
-                    title="This action happens when the key is being held along with another key.">
-            </i>
+            <icon name="question-circle" title="This action happens when the key is being held along with another key."></icon>
         </div>
     `,
     styles: [require('./keypress-tab.component.scss')],
-    directives: [CaptureKeystrokeButtonComponent]
+    directives: [CaptureKeystrokeButtonComponent, IconComponent]
 })
 export class KeypressTabComponent implements OnInit, KeyActionSaver {
     private leftModifiers: string[];

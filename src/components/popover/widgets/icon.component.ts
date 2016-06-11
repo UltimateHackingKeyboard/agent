@@ -13,6 +13,7 @@ import { NgSwitch, NgSwitchWhen } from '@angular/common';
             <i *ngSwitchWhen="'clock'" class="fa fa-clock-o"></i>
             <i *ngSwitchWhen="'trash'" class="glyphicon glyphicon-trash action--trash"></i>
             <i *ngSwitchWhen="'pencil'" class="glyphicon glyphicon-pencil action--edit"></i>
+            <i *ngSwitchWhen="'question-circle'" class ="fa fa-question-circle"></i>
         </div>
     `,
     directives: [NgSwitch, NgSwitchWhen],

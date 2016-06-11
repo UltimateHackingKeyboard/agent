@@ -1,4 +1,17 @@
 :host {
     display: flex;
     flex-direction: column;
+    .long-press-container {
+        display: flex;
+        margin-top: 3rem;
+        b {
+            margin-right: 0.6em;
+        }
+        .secondary-role {
+             width: 135px;
+        }
+        icon {
+            margin-left: 0.6em;
+        }
+    }
 }
