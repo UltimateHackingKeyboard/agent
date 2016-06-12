@@ -131,18 +131,20 @@ ul {
   }
 }
 
-.keymap__is-default {
-  &.fa-star {
-    color: #333;
-  }
+.keymap {
+  &__is-default {
+    &.fa-star {
+      color: #333;
+    }
 
-  &.fa-star-o {
-    color: #333;
-  }
+    &.fa-star-o {
+      color: #333;
+    }
 
-  &:hover {
-    color: #555;
-    cursor: pointer;
+    &:hover {
+      color: #555;
+      cursor: pointer;
+    }
   }
 }
 
