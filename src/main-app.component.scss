@@ -2,13 +2,13 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-}
 
-:host > div:first-child {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+    > div:first-child {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 button {
@@ -53,6 +53,6 @@ button {
 }
 
 [hidden] {
-    display: none
+    display: none;
 }
 

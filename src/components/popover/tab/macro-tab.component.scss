@@ -1,28 +1,29 @@
 :host {
     display: flex;
     flex-direction: column;
+
     .macro-selector {
         display: flex;
         margin-top: 2px;
-        
+
         b {
             margin-right: 7px;
         }
-        
+
         select {
             flex: 1;
         }
     }
-    
+
     .macro-action-container {
         display: flex;
         flex-direction: column;
         min-height: 200px;
         max-height: 300px;
-        margin: 20px 0px;
+        margin: 20px 0;
         overflow-x: hidden;
         overflow-y: auto;
-        
+
         macro-item {
             border: 1px solid #ddd;
             padding: 10px;
