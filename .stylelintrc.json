@@ -15,6 +15,12 @@
     "number-zero-length-no-unit": true,
     "number-max-precision": 4,
 
+    "no-duplicate-selectors": true,
+    "no-eol-whitespace": true,
+    "no-missing-eof-newline": true,
+    "max-empty-lines": 1,
+    "indentation": 4,
+
     "string-no-newline": true,
     "string-quotes": "single",
 
@@ -46,7 +52,7 @@
     "block-closing-brace-newline-after": "always",
     "block-closing-brace-newline-before": "always",
     "block-no-empty": true,
-    "block-opening-brace-newline-before": "never",
+    "block-opening-brace-newline-before": ["never-single-line", "never-multi-line"],
     "block-opening-brace-newline-after": "always",
     "block-opening-brace-space-before": "always",
 
