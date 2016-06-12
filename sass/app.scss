@@ -221,14 +221,16 @@ svg.uhk {
     right: -50px;
     bottom: 40px;
     z-index: 999999;
-    -webkit-transform:  rotate(-45deg);
-    -moz-transform:     rotate(-45deg);
-    -ms-transform:      rotate(-45deg);
-    -o-transform:       rotate(-45deg);
-    transform:          rotate(-45deg);
+    /* stylelint-disable indentation */
+     -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+         -ms-transform: rotate(-45deg);
+          -o-transform: rotate(-45deg);
+             transform: rotate(-45deg);
     -webkit-box-shadow: 0 0 10px #888;
-    -moz-box-shadow:    0 0 10px #888;
-    box-shadow:         0 0 10px #888;
+       -moz-box-shadow: 0 0 10px #888;
+            box-shadow: 0 0 10px #888;
+    /* stylelint-enable indentation */
 
     a {
         border: 1px solid #faa;
