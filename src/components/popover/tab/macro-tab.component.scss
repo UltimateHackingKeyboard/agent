@@ -7,10 +7,12 @@
         margin-top: 2px;
 
         b {
+            display: flex;
+            align-items: center;
             margin-right: 7px;
         }
 
-        select {
+        select2 {
             flex: 1;
         }
     }

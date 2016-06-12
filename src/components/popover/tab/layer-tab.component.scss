@@ -1,7 +1,11 @@
 :host {
     display: flex;
+    margin: 0 -5px;
 
-    span {
+    > span,
+    > select2 {
         margin: 0 5px;
+        display: flex;
+        align-items: center;
     }
 }

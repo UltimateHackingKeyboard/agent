@@ -5,3 +5,5 @@ typings
 build
 bundle
 css
+.idea
+*.iml

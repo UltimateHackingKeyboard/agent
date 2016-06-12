@@ -1,6 +1,7 @@
 {
   "globalDependencies": {
-    "node": "registry:dt/node#4.0.0+20160319033040",
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654"
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "node": "registry:dt/node#4.0.0+20160319033040"
   }
 }

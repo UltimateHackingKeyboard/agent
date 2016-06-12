@@ -7,17 +7,16 @@ import { PlayMacroAction } from '../../../../config-serializer/config-items/Play
 import { KeyActionSaver } from '../key-action-saver';
 import { MacroItemComponent } from './macro-item.component';
 
+import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
+import {OptionData} from 'ng2-select2/dist/select2';
+
 @Component({
     moduleId: module.id,
     selector: 'macro-tab',
-    template:
-    `
+    template: `
         <div class="macro-selector">
             <b> Play macro: </b>
-            <select [(ngModel)]="selectedMacroIndex">
-                <option [ngValue]="-1"> Select macro </option>
-                <option *ngFor="let macro of macros; let index=index" [ngValue]="index"> {{ macro.name }} </option>
-            </select>
+            <select2 [data]="macrosOptions" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
         </div>
         <div class="macro-action-container">
             <template [ngIf]="selectedMacroIndex >= 0">
@@ -28,11 +27,12 @@ import { MacroItemComponent } from './macro-item.component';
         </div>
     `,
     styles: [require('./macro-tab.component.scss')],
-    directives: [MacroItemComponent]
+    directives: [MacroItemComponent, SELECT2_DIRECTIVES]
 })
 export class MacroTabComponent implements OnInit, KeyActionSaver {
 
     private macros: Macro[];
+    private macrosOptions: Array<OptionData> = [];
     private selectedMacroIndex: number;
 
     constructor(private uhkConfigurationService: UhkConfigurationService) {
@@ -42,6 +42,22 @@ export class MacroTabComponent implements OnInit, KeyActionSaver {
 
     ngOnInit() {
         this.macros = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
+
+        this.macrosOptions.push({
+            id: '-1',
+            text: 'Select macro'
+        });
+
+        this.macrosOptions = this.macrosOptions.concat(this.macros.map(function(macro: Macro): OptionData {
+            return {
+                id: macro.id.toString(),
+                text: macro.name
+            };
+        }));
+    }
+
+    onChange(event) {
+        this.selectedMacroIndex = event.value;
     }
 
     keyActionValid(): boolean {
@@ -52,6 +68,7 @@ export class MacroTabComponent implements OnInit, KeyActionSaver {
         if (!this.keyActionValid()) {
             throw new Error('KeyAction is not valid. No selected macro!');
         }
+
         let keymapAction = new PlayMacroAction();
         keymapAction.macroId = this.macros[this.selectedMacroIndex].id;
         return keymapAction;

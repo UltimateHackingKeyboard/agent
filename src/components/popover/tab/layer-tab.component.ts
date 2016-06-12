@@ -1,32 +1,58 @@
 import { Component, OnInit } from '@angular/core';
 
+import {NgSwitch, NgSwitchWhen, NgSwitchDefault } from '@angular/common';
+
 import { LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/SwitchLayerAction';
 import { KeyActionSaver } from '../key-action-saver';
+
+import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
+import {OptionData} from 'ng2-select2/dist/select2';
 
 @Component({
     moduleId: module.id,
     selector: 'layer-tab',
     template:
     `
-        <select [(ngModel)]="toggle">
-            <option [ngValue]="false"> Activate </option>
-            <option [ngValue]="true"> Toggle </option>
-        </select>
+        <select2 [data]="toggleData" (valueChanged)="toggleChanged($event)"></select2>
         <span>the</span>
-        <select [(ngModel)]="layer">
-            <option [ngValue]="0"> Mod </option>
-            <option [ngValue]="1"> Fn </option>
-            <option [ngValue]="2"> Mouse </option>
-        </select>
-        <span>
-        layer by holding this key.
+        <select2 [data]="layerData" (valueChanged)="layerChanged($event)"></select2>
+        <span [ngSwitch]="toggle">
+             <template ngSwitchWhen="true">layer by pressing this key.</template>
+             <template ngSwitchDefault="false">layer by holding this key.</template>
         </span>
     `,
-    styles: [require('./layer-tab.component.scss')]
+    styles: [require('./layer-tab.component.scss')],
+    directives: [SELECT2_DIRECTIVES, NgSwitch, NgSwitchWhen, NgSwitchDefault]
 })
 export class LayerTabComponent implements OnInit, KeyActionSaver {
     private toggle: boolean;
     private layer: LayerName;
+
+    private toggleData: Array<OptionData> = [
+        {
+            id: 'false',
+            text: 'Activate'
+        },
+        {
+            id: 'true',
+            text: 'Toggle'
+        }
+    ];
+
+    private layerData: Array<OptionData> = [
+        {
+            id: '0',
+            text: 'Mod'
+        },
+        {
+            id: '1',
+            text: 'Fn'
+        },
+        {
+            id: '2',
+            text: 'Mouse'
+        }
+    ];
 
     constructor() {
         this.toggle = false;
@@ -46,4 +72,11 @@ export class LayerTabComponent implements OnInit, KeyActionSaver {
         return keyAction;
     }
 
+    private toggleChanged(event) {
+        this.toggle = event.value;
+    }
+
+    private layerChanged(event) {
+        this.layer = event.value;
+    }
 }
