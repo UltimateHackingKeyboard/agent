@@ -40,6 +40,10 @@ $(function() {
     // ========================
     // Keymap related settings.
     // ========================
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
     $('.pane-title__name, .pane-title__abbrev').on('mouseover', function() {
         $(this).addClass('active');
     }).on('mouseout', function() {
