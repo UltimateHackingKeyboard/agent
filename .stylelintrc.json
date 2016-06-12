@@ -49,7 +49,6 @@
     "block-opening-brace-newline-before": "never",
     "block-opening-brace-newline-after": "always",
     "block-opening-brace-space-before": "always",
-    "block-opening-brace-space-after": "never",
 
     "selector-attribute-brackets-space-inside": "never",
     "selector-attribute-operator-space-after": "never",
