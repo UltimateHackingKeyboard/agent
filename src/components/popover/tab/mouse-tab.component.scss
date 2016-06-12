@@ -28,6 +28,16 @@
         }
     }
 
+    .help-text--mouse-speed {
+        margin-bottom: 2rem;
+        font-size: 0.9em;
+        color: #666;
+
+        p {
+            margin: 0;
+        }
+    }
+
     .details {
         .btn-placeholder {
             visibility: hidden;

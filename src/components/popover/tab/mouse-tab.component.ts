@@ -83,6 +83,10 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
                 </div>
             </div>
             <div *ngSwitchWhen="3" class="mouse__config mouse__config--speed text-center">
+                <div class="help-text--mouse-speed text-left">
+                    <p>Press this key along with mouse movement/scrolling to accelerate/decelerate the speed of the action.</p>
+                    <p>You can set the multiplier in <a href="#" title="link to the setting">link to setting</a>.</p>
+                </div>
                 <div class="btn-group btn-group-lg" role="group">
                     <button type="button" class="btn btn-default"
                         (click)="onMouseActionClick($event.target, MouseActionParam.decelerate)">-</button>
