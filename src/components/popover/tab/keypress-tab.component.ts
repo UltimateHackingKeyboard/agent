@@ -18,7 +18,11 @@ import {IconComponent} from '../widgets/icon.component';
         <div class="scancode-options" style="margin-bottom:10px; margin-top:2px">
             <b class="setting-label" style="position:relative; top:2px;">Scancode:</b>
             <select class="scancode" style="width: 200px">
-
+                    <optgroup *ngFor="let group of scancodeGroups" [label]="group.groupName">
+                        <option *ngFor="let item of group.groupValues">
+                            {{ item.label }}
+                        </option>
+                    </optgroup>
             </select>
             <capture-keystroke-button></capture-keystroke-button>
         </div>
@@ -70,9 +74,15 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
     private leftModifierSelects: boolean[];
     private rightModifierSelects: boolean[];
 
+    private scancodeGroups: {
+        groupName: string;
+        groupValues: any[];
+    }[];
+
     constructor() {
         this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
         this.rightModifiers = ['RShift', 'RCtrl', 'RSuper', 'RAlt'];
+        this.scancodeGroups = require('json!./scancodes.json');
     }
 
     ngOnInit() { }
