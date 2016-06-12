@@ -9,7 +9,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
     selector: 'mouse-tab',
     template:
     `
-        <div class="mouse-action">
+        <div class="mouse-action col-sm-4">
             <ul class="nav nav-pills nav-stacked">
                 <li (click)="changePage(0)" [ngClass]="{active: selectedIndex===0}"><a>     Move    </a></li>
                 <li (click)="changePage(1)" [ngClass]="{active: selectedIndex===1}"><a>     Scroll  </a></li>
@@ -17,7 +17,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
                 <li (click)="changePage(3)" [ngClass]="{active: selectedIndex===3}"><a>     Speed   </a></li>
             </ul>
         </div>
-        <div class="details" [ngSwitch]="selectedIndex">
+        <div class="details col-sm-8" [ngSwitch]="selectedIndex">
             <div *ngSwitchWhen="0" class="mouse__config mouse__config--move text-center">
                 <div class="row">
                     <button type="button" class="btn btn-default btn-lg"

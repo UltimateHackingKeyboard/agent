@@ -2,7 +2,6 @@
     display: flex;
 
     .mouse-action {
-        flex: 1;
         ul{
             border-right: 1px solid #ccc;
             li {
@@ -30,7 +29,6 @@
     }
 
     .details {
-        flex: 2;
         .btn-placeholder {
             visibility: hidden;
         }
