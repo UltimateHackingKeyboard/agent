@@ -18,19 +18,17 @@
 
 .popover-title {
     &.menu-tabs {
-        padding: .5rem .5rem 0;
+        padding: 0.5rem 0.5rem 0;
         display: block;
-    }
 
-    &.menu-button-group {
-        display: none;
-    }
-
-    &.menu-tabs {
         .nav-tabs {
             position: relative;
             top: 1px;
         }
+    }
+
+    &.menu-button-group {
+        display: none;
     }
 }
 
@@ -55,11 +53,11 @@
 
 .layout-abbreviation {
     font-weight: bold;
-    color: #FFF;
+    color: #fff;
     background: #333;
     padding: 4px 8px;
     font-family: monospace;
-    margin-right: .5em;
+    margin-right: 0.5em;
 }
 
 .layout-preview img {
@@ -181,7 +179,7 @@
 .help-text {
     &--mouse-speed {
         margin-bottom: 2rem;
-        font-size: .9em;
+        font-size: 0.9em;
         color: #666;
 
         p {
