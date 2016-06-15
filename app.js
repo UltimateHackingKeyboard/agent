@@ -106,6 +106,10 @@ $(function() {
         }
     });
 
+    $('.notification').on('click', '.notification__dismiss', function(e) {
+        $('.notification').hide();
+    });
+
     // Based on: http://stackoverflow.com/a/24933495
     $('img.uhk').each(function(){
         var $img = $(this);
