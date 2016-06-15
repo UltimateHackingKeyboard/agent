@@ -23,6 +23,18 @@ $(function() {
         _currentView.hide();
         _newView.show();
 
+        // Modify name for Factory keymap.
+        if (dataAbbrev == 'FTY') {
+            dataName = 'Factory';
+            _newView.find('.pane-title__name').attr('contenteditable', false);
+            _newView.find('.pane-title__abbrev').attr('contenteditable', false);
+            _newView.find('.keymap__remove').hide();
+        } else {
+            _newView.find('.pane-title__name').attr('contenteditable', true);
+            _newView.find('.pane-title__abbrev').attr('contenteditable', true);
+            _newView.find('.keymap__remove').show();
+        }
+
         // Fill pane title based on data attributes.
         if (dataName != '') {
             _newView.find('.pane-title__name').text(dataName);
