@@ -35,6 +35,9 @@ $(function() {
             _newView.find('.keymap__remove').show();
         }
 
+        // Hide (undo) notification if any was shown.
+        $('.notification').hide();
+
         // Fill pane title based on data attributes.
         if (dataName != '') {
             _newView.find('.pane-title__name').text(dataName);
@@ -119,6 +122,10 @@ $(function() {
     });
 
     $('.keymap__remove').on('click', function(e) {
+        // Mimic the removal of a keymap with undo option.
+        $('.sidebar__level-2--item:hidden').remove();
+        $('.sidebar__level-2--item.active').hide();
+
         // Show the factory keymap after removal of a keymap.
         $('.sidebar__level-2--item:first').click();
         $('.notification').show();
@@ -126,7 +133,10 @@ $(function() {
 
     $('.notification').on('click', '.notification__dismiss', function(e) {
         $('.notification').hide();
-    });
+    }).on('click', '.notification__action--undo', function(e) {
+        $('.notification').hide();
+        $('.sidebar__level-2--item:hidden').show().click();
+    });;
 
     // Based on: http://stackoverflow.com/a/24933495
     $('img.uhk').each(function(){
