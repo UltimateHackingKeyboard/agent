@@ -178,6 +178,8 @@ ul {
         text-transform: uppercase;
         font-weight: bold;
 
+        &:focus,
+        &:active,
         &:hover {
             text-decoration: none;
             color: #5bc0de;
