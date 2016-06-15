@@ -118,6 +118,12 @@ $(function() {
         }
     });
 
+    $('.keymap__remove').on('click', function(e) {
+        // Show the factory keymap after removal of a keymap.
+        $('.sidebar__level-2--item:first').click();
+        $('.notification').show();
+    });
+
     $('.notification').on('click', '.notification__dismiss', function(e) {
         $('.notification').hide();
     });
