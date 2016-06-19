@@ -12,7 +12,7 @@
 
     "number-leading-zero": "always",
     "number-no-trailing-zeros": true,
-    "number-zero-length-no-unit": true,
+    "length-zero-no-unit": true,
     "number-max-precision": 4,
 
     "no-duplicate-selectors": true,
