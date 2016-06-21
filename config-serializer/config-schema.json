@@ -41,7 +41,6 @@
                                                             "enum": [
                                                                 "none",
                                                                 "keystroke",
-                                                                "keystrokeModifiers",
                                                                 "switchLayer",
                                                                 "switchKeymap",
                                                                 "playMacro",

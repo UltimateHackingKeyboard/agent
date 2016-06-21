@@ -4,8 +4,6 @@ import { CaptureKeystrokeButtonComponent } from '../widgets/capture-keystroke-bu
 
 import { KeyAction } from '../../../../config-serializer/config-items/KeyAction';
 import { KeystrokeAction } from '../../../../config-serializer/config-items/KeystrokeAction';
-import { KeystrokeModifiersAction } from '../../../../config-serializer/config-items/KeystrokeModifiersAction';
-import { KeystrokeWithModifiersAction } from '../../../../config-serializer/config-items/KeystrokeWithModifiersAction';
 import { KeyActionSaver } from '../key-action-saver';
 
 import {IconComponent} from '../widgets/icon.component';
@@ -87,8 +85,8 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
 
     ngOnInit() { }
 
-    getKeyAction(): KeystrokeAction | KeystrokeModifiersAction | KeystrokeWithModifiersAction {
-        return;
+    getKeyAction(): KeystrokeAction {
+        return undefined;
     }
 
     keyActionValid(): boolean {

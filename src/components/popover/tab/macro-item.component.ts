@@ -18,7 +18,7 @@ import {TextMacroAction} from '../../../../config-serializer/config-items/TextMa
 
 import {IconComponent} from '../widgets/icon.component';
 
-import {KeyModifiers}  from '../../../../config-serializer/config-items/KeystrokeModifiersAction';
+import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModifiers';
 
 @Component({
     moduleId: module.id,
