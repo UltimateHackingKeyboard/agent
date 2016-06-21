@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer} from '@angular/core';
-import {NgSwitch, NgSwitchWhen, NgSwitchDefault} from '@angular/common';
+import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 
 import { KeyActionSaver } from '../key-action-saver';
 import {MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/MouseAction';
@@ -18,7 +18,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
             </ul>
         </div>
         <div class="details col-sm-8" [ngSwitch]="selectedIndex">
-            <div *ngSwitchWhen="0" class="mouse__config mouse__config--move text-center">
+            <div *ngSwitchCase="0" class="mouse__config mouse__config--move text-center">
                 <div class="row">
                     <button type="button" class="btn btn-default btn-lg"
                             (click)="onMouseActionClick($event.target, MouseActionParam.moveUp)">
@@ -45,7 +45,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
                     </button>
                 </div>
             </div>
-            <div *ngSwitchWhen="1" class="mouse__config mouse__config--scroll text-center">
+            <div *ngSwitchCase="1" class="mouse__config mouse__config--scroll text-center">
                 <div class="row">
                     <button type="button" class="btn btn-default btn-lg"
                             (click)="onMouseActionClick($event.target, MouseActionParam.scrollUp)">
@@ -72,7 +72,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
                     </button>
                 </div>
             </div>
-            <div *ngSwitchWhen="2" class="mouse__config mouse__config--click">
+            <div *ngSwitchCase="2" class="mouse__config mouse__config--click">
                 <div class="btn-group col-xs-12" role="group">
                     <button type="button" class="btn btn-default col-xs-4"
                             (click)="onMouseActionClick($event.target, MouseActionParam.leftClick)">Left</button>
@@ -82,7 +82,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
                             (click)="onMouseActionClick($event.target, MouseActionParam.rightClick)">Right</button>
                 </div>
             </div>
-            <div *ngSwitchWhen="3" class="mouse__config mouse__config--speed text-center">
+            <div *ngSwitchCase="3" class="mouse__config mouse__config--speed text-center">
                 <div class="help-text--mouse-speed text-left">
                     <p>Press this key along with mouse movement/scrolling to accelerate/decelerate the speed of the action.</p>
                     <p>You can set the multiplier in <a href="#" title="link to the setting">link to setting</a>.</p>
@@ -99,7 +99,7 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
         </div>
     `,
     styles: [require('./mouse-tab.component.scss')],
-    directives: [NgSwitch, NgSwitchWhen, NgSwitchDefault]
+    directives: [NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
 export class MouseTabComponent implements OnInit, KeyActionSaver {
     private mouseActionParam: MouseActionParam;
