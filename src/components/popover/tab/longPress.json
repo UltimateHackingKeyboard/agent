@@ -1,0 +1,60 @@
+[
+    {
+        "id": "none",
+        "text": "None"
+    },
+    {
+        "text": "Modifiers",
+        "children": [
+            {
+                "id": "LShift",
+                "text": "LShift"
+            },
+            {
+                "id": "LCtrl",
+                "text": "LCtrl"
+            },
+            {
+                "id": "LSuper",
+                "text": "LSuper"
+            },
+            {
+                "id": "LAlt",
+                "text": "LAlt"
+            },
+            {
+                "id": "RShift",
+                "text": "RShift"
+            },
+            {
+                "id": "RCtrl",
+                "text": "RCtrl"
+            },
+            {
+                "id": "RSuper",
+                "text": "RSuper"
+            },
+            {
+                "id": "RAlt",
+                "text": "RAlt"
+            }
+        ]
+    },
+    {
+        "text": "Layer switcher",
+        "children": [
+            {
+                "id": "Mod",
+                "text": "Mod"
+            },
+            {
+                "id": "Mouse",
+                "text": "Mouse"
+            },
+            {
+                "id": "Fn",
+                "text": "Fn"
+            }
+        ]
+    }
+]

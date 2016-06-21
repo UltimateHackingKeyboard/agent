@@ -1,15 +1,18 @@
 :host {
     display: flex;
     flex-direction: column;
-    margin-top: 2px;
 
     > div {
         display: flex;
+        margin-top: 2px;
 
         b {
-            padding-right: 10px;
+            display: flex;
+            align-items: center;
+            margin-right: 7px;
         }
-        select {
+
+        select2 {
             flex: 1;
         }
     }

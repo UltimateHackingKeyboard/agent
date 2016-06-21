@@ -102,7 +102,6 @@ import {MouseAction, MouseActionParam} from '../../../../config-serializer/confi
     directives: [NgSwitch, NgSwitchWhen, NgSwitchDefault]
 })
 export class MouseTabComponent implements OnInit, KeyActionSaver {
-    private MouseActionParam = MouseActionParam;
     private mouseActionParam: MouseActionParam;
     private selectedIndex: number;
     private selectedButton: HTMLButtonElement;

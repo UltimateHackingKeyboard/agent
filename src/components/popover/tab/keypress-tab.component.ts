@@ -10,6 +10,9 @@ import { KeyActionSaver } from '../key-action-saver';
 
 import {IconComponent} from '../widgets/icon.component';
 
+import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
+import {OptionData} from 'ng2-select2/dist/select2';
+
 @Component({
     moduleId: module.id,
     selector: 'keypress-tab',
@@ -17,13 +20,7 @@ import {IconComponent} from '../widgets/icon.component';
     `
         <div class="scancode-options" style="margin-bottom:10px; margin-top:2px">
             <b class="setting-label" style="position:relative; top:2px;">Scancode:</b>
-            <select class="scancode" style="width: 200px">
-                    <optgroup *ngFor="let group of scancodeGroups" [label]="group.groupName">
-                        <option *ngFor="let item of group.groupValues">
-                            {{ item.label }}
-                        </option>
-                    </optgroup>
-            </select>
+            <select2 [data]="scanCodeGroups" [templateResult]="scanCodeTemplateResult" [width]="200"></select2>
             <capture-keystroke-button></capture-keystroke-button>
         </div>
         <div class="scancode-options">
@@ -43,29 +40,12 @@ import {IconComponent} from '../widgets/icon.component';
         </div>
         <div class="long-press-container">
             <b class="setting-label" style="position:relative;">Long press action:</b>
-            <select class="secondary-role">
-                    <option> None </option>
-                    <optgroup label="Modifiers">
-                        <option> LShift </option>
-                        <option> LCtrl </option>
-                        <option> LSuper </option>
-                        <option> LAlt </option>
-                        <option> RShift </option>
-                        <option> RCtrl </option>
-                        <option> RSuper </option>
-                        <option> RAlt </option>
-                     </optgroup>
-                     <optgroup label="Layer switcher">
-                        <option> Mod </option>
-                        <option> Mouse </option>
-                        <option> Fn </option>
-                     </optgroup>
-            </select>
+            <select2 [data]="longPressGroups" [width]="140"></select2>
             <icon name="question-circle" title="This action happens when the key is being held along with another key."></icon>
         </div>
     `,
     styles: [require('./keypress-tab.component.scss')],
-    directives: [CaptureKeystrokeButtonComponent, IconComponent]
+    directives: [CaptureKeystrokeButtonComponent, IconComponent, SELECT2_DIRECTIVES]
 })
 export class KeypressTabComponent implements OnInit, KeyActionSaver {
     private leftModifiers: string[];
@@ -74,15 +54,14 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
     private leftModifierSelects: boolean[];
     private rightModifierSelects: boolean[];
 
-    private scancodeGroups: {
-        groupName: string;
-        groupValues: any[];
-    }[];
+    private scanCodeGroups: Array<OptionData>;
+    private longPressGroups: Array<OptionData>;
 
     constructor() {
         this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
         this.rightModifiers = ['RShift', 'RCtrl', 'RSuper', 'RAlt'];
-        this.scancodeGroups = require('json!./scancodes.json');
+        this.scanCodeGroups = require('json!./scancodes.json');
+        this.longPressGroups = require('json!./longPress.json');
     }
 
     ngOnInit() { }
@@ -97,5 +76,23 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
 
     toKeyAction(): KeyAction {
         return undefined;
+    }
+
+    scanCodeTemplateResult: Function = (state: any) => {
+        if (!state.id) {
+            return state.text;
+        }
+
+        if (state.additional && state.additional.explanation) {
+            return jQuery(
+                '<span class="select2-item">'
+                + state.text
+                + '<span class="scancode--searchterm"> '
+                + state.additional.explanation
+                + '</span></span>'
+            );
+        } else {
+            return jQuery('<span class="select2-item">' + state.text + '</span>');
+        }
     }
 }

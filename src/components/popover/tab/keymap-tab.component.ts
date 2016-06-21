@@ -6,6 +6,9 @@ import {SvgKeyboardComponent} from '../../svg-keyboard.component';
 import {KeyActionSaver} from '../key-action-saver';
 import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
 
+import {OptionData} from 'ng2-select2/dist/select2';
+import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
+
 @Component({
     moduleId: module.id,
     selector: 'keymap-tab',
@@ -13,10 +16,7 @@ import {SwitchKeymapAction} from '../../../../config-serializer/config-items/Swi
     `
         <div>
             <b>Switch to keymap:</b>
-            <select class="layout-switcher" [(ngModel)]="selectedKeymapIndex">
-                <option [ngValue]="-1"> Select keymap </option>
-                <option *ngFor="let keymap of keymaps; let index=index" [ngValue]="index"> {{ keymap.name }} </option>
-            </select>
+            <select2 [data]="keymapOptions" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
         </div>
         <div>
             <div>
@@ -28,11 +28,12 @@ import {SwitchKeymapAction} from '../../../../config-serializer/config-items/Swi
         </div>
     `,
     styles: [require('./keymap-tab.component.scss')],
-    directives: [SvgKeyboardComponent]
+    directives: [SvgKeyboardComponent, SELECT2_DIRECTIVES]
 })
 export class KeymapTabComponent implements OnInit, KeyActionSaver {
 
     private keymaps: Keymap[];
+    private keymapOptions: Array<OptionData> = [];
     private selectedKeymapIndex: number;
 
     constructor(private uhkConfigurationService: UhkConfigurationService) {
@@ -42,6 +43,22 @@ export class KeymapTabComponent implements OnInit, KeyActionSaver {
 
     ngOnInit() {
         this.keymaps = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements;
+
+        this.keymapOptions.push({
+            id: '-1',
+            text: 'Switch to keymap'
+        });
+
+        this.keymapOptions = this.keymapOptions.concat(this.keymaps.map(function(keymap: Keymap): OptionData {
+            return {
+                id: keymap.id.toString(),
+                text: keymap.name
+            };
+        }));
+    }
+
+    onChange(event) {
+        this.selectedKeymapIndex = parseInt(event.value, 10);
     }
 
     keyActionValid(): boolean {
@@ -56,5 +73,4 @@ export class KeymapTabComponent implements OnInit, KeyActionSaver {
         keymapAction.keymapId = this.keymaps[this.selectedKeymapIndex].id;
         return keymapAction;
     }
-
 }

@@ -1,571 +1,541 @@
 [
     {
-        "groupName": "Alphabet",
-        "groupValues": [
+        "text": "Alphabet",
+        "children": [
             {
-                "scancode": "4",
-                "searchTerm": "",
-                "label": "A"
+                "id": "4",
+                "text": "A"
             },
             {
-                "scancode": "5",
-                "searchTerm": "",
-                "label": "B"
+                "id": "5",
+                "text": "B"
             },
             {
-                "scancode": "6",
-                "searchTerm": "",
-                "label": "C"
+                "id": "6",
+                "text": "C"
             },
             {
-                "scancode": "7",
-                "searchTerm": "",
-                "label": "D"
+                "id": "7",
+                "text": "D"
             },
             {
-                "scancode": "8",
-                "searchTerm": "",
-                "label": "E"
+                "id": "8",
+                "text": "E"
             },
             {
-                "scancode": "9",
-                "searchTerm": "",
-                "label": "F"
+                "id": "9",
+                "text": "F"
             },
             {
-                "scancode": "10",
-                "searchTerm": "",
-                "label": "G"
+                "id": "10",
+                "text": "G"
             },
             {
-                "scancode": "11",
-                "searchTerm": "",
-                "label": "H"
+                "id": "11",
+                "text": "H"
             },
             {
-                "scancode": "12",
-                "searchTerm": "",
-                "label": "I"
+                "id": "12",
+                "text": "I"
             },
             {
-                "scancode": "13",
-                "searchTerm": "",
-                "label": "J"
+                "id": "13",
+                "text": "J"
             },
             {
-                "scancode": "14",
-                "searchTerm": "",
-                "label": "K"
+                "id": "14",
+                "text": "K"
             },
             {
-                "scancode": "15",
-                "searchTerm": "",
-                "label": "L"
+                "id": "15",
+                "text": "L"
             },
             {
-                "scancode": "16",
-                "searchTerm": "",
-                "label": "M"
+                "id": "16",
+                "text": "M"
             },
             {
-                "scancode": "17",
-                "searchTerm": "",
-                "label": "N"
+                "id": "17",
+                "text": "N"
             },
             {
-                "scancode": "18",
-                "searchTerm": "",
-                "label": "O"
+                "id": "18",
+                "text": "O"
             },
             {
-                "scancode": "19",
-                "searchTerm": "",
-                "label": "P"
+                "id": "19",
+                "text": "P"
             },
             {
-                "scancode": "20",
-                "searchTerm": "",
-                "label": "Q"
+                "id": "20",
+                "text": "Q"
             },
             {
-                "scancode": "21",
-                "searchTerm": "",
-                "label": "R"
+                "id": "21",
+                "text": "R"
             },
             {
-                "scancode": "22",
-                "searchTerm": "",
-                "label": "S"
+                "id": "22",
+                "text": "S"
             },
             {
-                "scancode": "23",
-                "searchTerm": "",
-                "label": "T"
+                "id": "23",
+                "text": "T"
             },
             {
-                "scancode": "24",
-                "searchTerm": "",
-                "label": "U"
+                "id": "24",
+                "text": "U"
             },
             {
-                "scancode": "25",
-                "searchTerm": "",
-                "label": "V"
+                "id": "25",
+                "text": "V"
             },
             {
-                "scancode": "26",
-                "searchTerm": "",
-                "label": "W"
+                "id": "26",
+                "text": "W"
             },
             {
-                "scancode": "27",
-                "searchTerm": "",
-                "label": "X"
+                "id": "27",
+                "text": "X"
             },
             {
-                "scancode": "28",
-                "searchTerm": "",
-                "label": "Y"
+                "id": "28",
+                "text": "Y"
             },
             {
-                "scancode": "29",
-                "searchTerm": "",
-                "label": "Z"
+                "id": "29",
+                "text": "Z"
             }
         ]
     },
     {
-        "groupName": "Number Row",
-        "groupValues": [
+        "text": "Number Row",
+        "children": [
             {
-                "scancode": "30",
-                "searchTerm": "",
-                "label": "1 !"
+                "id": "30",
+                "text": "1 !"
             },
             {
-                "scancode": "31",
-                "searchTerm": "",
-                "label": "2 @"
+                "id": "31",
+                "text": "2 @"
             },
             {
-                "scancode": "32",
-                "searchTerm": "",
-                "label": "3 #"
+                "id": "32",
+                "text": "3 #"
             },
             {
-                "scancode": "33",
-                "searchTerm": "",
-                "label": "4 $"
+                "id": "33",
+                "text": "4 $"
             },
             {
-                "scancode": "34",
-                "searchTerm": "",
-                "label": "5 %"
+                "id": "34",
+                "text": "5 %"
             },
             {
-                "scancode": "35",
-                "searchTerm": "",
-                "label": "6 ^"
+                "id": "35",
+                "text": "6 ^"
             },
             {
-                "scancode": "36",
-                "searchTerm": "",
-                "label": "7 &"
+                "id": "36",
+                "text": "7 &"
             },
             {
-                "scancode": "37",
-                "searchTerm": "",
-                "label": "8 *"
+                "id": "37",
+                "text": "8 *"
             },
             {
-                "scancode": "38",
-                "searchTerm": "",
-                "label": "9 ("
+                "id": "38",
+                "text": "9 ("
             },
             {
-                "scancode": "39",
-                "searchTerm": "",
-                "label": "0 )"
+                "id": "39",
+                "text": "0 )"
             }
         ]
     },
     {
-        "groupName": "Whitespace",
-        "groupValues": [
+        "text": "Whitespace",
+        "children": [
             {
-                "scancode": "40",
-                "searchTerm": "Enter",
-                "label": "Return"
+                "id": "40",
+                "additional": {
+                    "explanation": "Enter"
+                },
+                "text": "Return"
             },
             {
-                "scancode": "41",
-                "searchTerm": "",
-                "label": "Escape"
+                "id": "41",
+                "text": "Escape"
             },
             {
-                "scancode": "42",
-                "searchTerm": "",
-                "label": "Backspace"
+                "id": "42",
+                "text": "Backspace"
             },
             {
-                "scancode": "43",
-                "searchTerm": "",
-                "label": "Tab"
+                "id": "43",
+                "text": "Tab"
             },
             {
-                "scancode": "44",
-                "searchTerm": "",
-                "label": "Spacebar"
+                "id": "44",
+                "text": "Spacebar"
             }
         ]
     },
     {
-        "groupName": "Punctuation",
-        "groupValues": [
+        "text": "Punctuation",
+        "children": [
             {
-                "scancode": "45",
-                "searchTerm": "",
-                "label": "- _"
+                "id": "45",
+                "text": "- _"
             },
             {
-                "scancode": "46",
-                "searchTerm": "",
-                "label": "= +"
+                "id": "46",
+                "text": "= +"
             },
             {
-                "scancode": "47",
-                "searchTerm": "",
-                "label": "[ {"
+                "id": "47",
+                "text": "[ {"
             },
             {
-                "scancode": "48",
-                "searchTerm": "",
-                "label": "] }"
+                "id": "48",
+                "text": "] }"
             },
             {
-                "scancode": "49",
-                "searchTerm": "",
-                "label": "\\ |"
+                "id": "49",
+                "text": "\\ |"
             },
             {
-                "scancode": "51",
-                "searchTerm": "",
-                "label": "; :"
+                "id": "51",
+                "text": "; :"
             },
             {
-                "scancode": "52",
-                "searchTerm": "",
-                "label": "' \""
+                "id": "52",
+                "text": "' \""
             },
             {
-                "scancode": "53",
-                "searchTerm": "",
-                "label": "` ~"
+                "id": "53",
+                "text": "` ~"
             },
             {
-                "scancode": "54",
-                "searchTerm": "",
-                "label": ", <"
+                "id": "54",
+                "text": ", <"
             },
             {
-                "scancode": "55",
-                "searchTerm": "",
-                "label": ". >"
+                "id": "55",
+                "text": ". >"
             },
             {
-                "scancode": "56",
-                "searchTerm": "",
-                "label": "/ ?"
+                "id": "56",
+                "text": "/ ?"
             }
         ]
     },
     {
-        "groupName": "Functionkeys",
-        "groupValues": [
+        "text": "Functionkeys",
+        "children": [
             {
-                "scancode": "58",
-                "searchTerm": "",
-                "label": "F1"
+                "id": "58",
+                "text": "F1"
             },
             {
-                "scancode": "59",
-                "searchTerm": "",
-                "label": "F2"
+                "id": "59",
+                "text": "F2"
             },
             {
-                "scancode": "60",
-                "searchTerm": "",
-                "label": "F3"
+                "id": "60",
+                "text": "F3"
             },
             {
-                "scancode": "61",
-                "searchTerm": "",
-                "label": "F4"
+                "id": "61",
+                "text": "F4"
             },
             {
-                "scancode": "62",
-                "searchTerm": "",
-                "label": "F5"
+                "id": "62",
+                "text": "F5"
             },
             {
-                "scancode": "63",
-                "searchTerm": "",
-                "label": "F6"
+                "id": "63",
+                "text": "F6"
             },
             {
-                "scancode": "64",
-                "searchTerm": "",
-                "label": "F7"
+                "id": "64",
+                "text": "F7"
             },
             {
-                "scancode": "65",
-                "searchTerm": "",
-                "label": "F8"
+                "id": "65",
+                "text": "F8"
             },
             {
-                "scancode": "66",
-                "searchTerm": "",
-                "label": "F9"
+                "id": "66",
+                "text": "F9"
             },
             {
-                "scancode": "67",
-                "searchTerm": "",
-                "label": "F10"
+                "id": "67",
+                "text": "F10"
             },
             {
-                "scancode": "68",
-                "searchTerm": "",
-                "label": "F11"
+                "id": "68",
+                "text": "F11"
             },
             {
-                "scancode": "69",
-                "searchTerm": "",
-                "label": "F12"
+                "id": "69",
+                "text": "F12"
             }
         ]
     },
     {
-        "groupName": "Navigation",
-        "groupValues": [
+        "text": "Navigation",
+        "children": [
             {
-                "scancode": "73",
-                "searchTerm": "",
-                "label": "Insert"
+                "id": "73",
+                "text": "Insert"
             },
             {
-                "scancode": "74",
-                "searchTerm": "",
-                "label": "Home"
+                "id": "74",
+                "text": "Home"
             },
             {
-                "scancode": "75",
-                "searchTerm": "PgUp pageup",
-                "label": "Page Up"
+                "id": "75",
+                "additional": {
+                    "explanation": "PgUp pageup"
+                },
+                "text": "Page Up"
             },
             {
-                "scancode": "76",
-                "searchTerm": "Delete Forward",
-                "label": "Delete"
+                "id": "76",
+                "additional": {
+                    "explanation": "Delete Forward"
+                },
+                "text": "Delete"
             },
             {
-                "scancode": "77",
-                "searchTerm": "",
-                "label": "End"
+                "id": "77",
+                "text": "End"
             },
             {
-                "scancode": "78",
-                "searchTerm": "PgDn pagedown",
-                "label": "Page Down"
+                "id": "78",
+                "additional": {
+                    "explanation": "PgDn pagedown"
+                },
+                "text": "Page Down"
             },
             {
-                "scancode": "79",
-                "searchTerm": "ArrowRight",
-                "label": "Right Arrow"
+                "id": "79",
+                "additional": {
+                    "explanation": "ArrowRight"
+                },
+                "text": "Right Arrow"
             },
             {
-                "scancode": "80",
-                "searchTerm": "ArrowLeft",
-                "label": "Left Arrow"
+                "id": "80",
+                "additional": {
+                    "explanation": "ArrowLeft"
+                },
+                "text": "Left Arrow"
             },
             {
-                "scancode": "81",
-                "searchTerm": "ArrowDown",
-                "label": "Down Arrow"
+                "id": "81",
+                "additional": {
+                    "explanation": "ArrowDown"
+                },
+                "text": "Down Arrow"
             },
             {
-                "scancode": "82",
-                "searchTerm": "ArrowUp",
-                "label": "Up Arrow"
+                "id": "82",
+                "additional": {
+                    "explanation": "ArrowUp"
+                },
+                "text": "Up Arrow"
             }
         ]
     },
     {
-        "groupName": "NumberPad",
-        "groupValues": [
+        "text": "NumberPad",
+        "children": [
             {
-                "scancode": "83",
-                "searchTerm": "",
-                "label": "NumLock"
+                "id": "83",
+                "text": "NumLock"
             },
             {
-                "scancode": "84",
-                "searchTerm": "slash",
-                "label": "/"
+                "id": "84",
+                "additional": {
+                    "explanation": "slash"
+                },
+                "text": "/"
             },
             {
-                "scancode": "85",
-                "searchTerm": "asterisk",
-                "label": "*"
+                "id": "85",
+                "additional": {
+                    "explanation": "asterisk"
+                },
+                "text": "*"
             },
             {
-                "scancode": "86",
-                "searchTerm": "minus",
-                "label": "-"
+                "id": "86",
+                "additional": {
+                    "explanation": "minus"
+                },
+                "text": "-"
             },
             {
-                "scancode": "87",
-                "searchTerm": "plus",
-                "label": "+"
+                "id": "87",
+                "additional": {
+                    "explanation": "plus"
+                },
+                "text": "+"
             },
             {
-                "scancode": "88",
-                "searchTerm": "",
-                "label": "Enter"
+                "id": "88",
+                "text": "Enter"
             },
             {
-                "scancode": "89",
-                "searchTerm": "one",
-                "label": "1"
+                "id": "89",
+                "additional": {
+                    "explanation": "one"
+                },
+                "text": "1"
             },
             {
-                "scancode": "90",
-                "searchTerm": "two",
-                "label": "2"
+                "id": "90",
+                "additional": {
+                    "explanation": "two"
+                },
+                "text": "2"
             },
             {
-                "scancode": "91",
-                "searchTerm": "three",
-                "label": "3"
+                "id": "91",
+                "additional": {
+                    "explanation": "three"
+                },
+                "text": "3"
             },
             {
-                "scancode": "92",
-                "searchTerm": "four",
-                "label": "4"
+                "id": "92",
+                "additional": {
+                    "explanation": "four"
+                },
+                "text": "4"
             },
             {
-                "scancode": "93",
-                "searchTerm": "five",
-                "label": "5"
+                "id": "93",
+                "additional": {
+                    "explanation": "five"
+                },
+                "text": "5"
             },
             {
-                "scancode": "94",
-                "searchTerm": "six",
-                "label": "6"
+                "id": "94",
+                "additional": {
+                    "explanation": "six"
+                },
+                "text": "6"
             },
             {
-                "scancode": "95",
-                "searchTerm": "seven",
-                "label": "7"
+                "id": "95",
+                "additional": {
+                    "explanation": "seven"
+                },
+                "text": "7"
             },
             {
-                "scancode": "96",
-                "searchTerm": "eight",
-                "label": "8"
+                "id": "96",
+                "additional": {
+                    "explanation": "eight"
+                },
+                "text": "8"
             },
             {
-                "scancode": "97",
-                "searchTerm": "nine",
-                "label": "9"
+                "id": "97",
+                "additional": {
+                    "explanation": "nine"
+                },
+                "text": "9"
             },
             {
-                "scancode": "98",
-                "searchTerm": "zero",
-                "label": "0"
+                "id": "98",
+                "additional": {
+                    "explanation": "zero"
+                },
+                "text": "0"
             },
             {
-                "scancode": "99",
-                "searchTerm": "Period",
-                "label": ","
+                "id": "99",
+                "additional": {
+                    "explanation": "Period"
+                },
+                "text": ","
             },
             {
-                "scancode": "176",
-                "searchTerm": "Doublezero",
-                "label": "00"
+                "id": "176",
+                "additional": {
+                    "explanation": "Doublezero"
+                },
+                "text": "00"
             },
             {
-                "scancode": "177",
-                "searchTerm": "Triplezero",
-                "label": "000"
+                "id": "177",
+                "additional": {
+                    "explanation": "Triplezero"
+                },
+                "text": "000"
             }
         ]
     },
     {
-        "groupName": "Misc",
-        "groupValues": [
+        "text": "Misc",
+        "children": [
             {
-                "scancode": "70",
-                "searchTerm": "",
-                "label": "PrintScreen"
+                "id": "70",
+                "text": "PrintScreen"
             },
             {
-                "scancode": "57",
-                "searchTerm": "",
-                "label": "CapsLock"
+                "id": "57",
+                "text": "CapsLock"
             },
             {
-                "scancode": "71",
-                "searchTerm": "",
-                "label": "ScrollLock"
+                "id": "71",
+                "text": "ScrollLock"
             },
             {
-                "scancode": "72",
-                "searchTerm": "",
-                "label": "Pause"
+                "id": "72",
+                "text": "Pause"
             }
         ]
     },
     {
-        "groupName": "MediaKeys",
-        "groupValues": [
+        "text": "MediaKeys",
+        "children": [
             {
-                "scancode": "127",
-                "searchTerm": "",
-                "label": "Mute"
+                "id": "127",
+                "text": "Mute"
             },
             {
-                "scancode": "128",
-                "searchTerm": "",
-                "label": "Volume Up"
+                "id": "128",
+                "text": "Volume Up"
             },
             {
-                "scancode": "129",
-                "searchTerm": "",
-                "label": "Volume Down"
+                "id": "129",
+                "text": "Volume Down"
             },
             {
-                "scancode": "",
-                "searchTerm": "",
-                "label": "Next Track"
+                "id": "",
+                "text": "Next Track"
             },
             {
-                "scancode": "",
-                "searchTerm": "",
-                "label": "Previous Track"
+                "id": "",
+                "text": "Previous Track"
             },
             {
-                "scancode": "",
-                "searchTerm": "",
-                "label": "Stop"
+                "id": "",
+                "text": "Stop"
             },
             {
-                "scancode": "",
-                "searchTerm": "",
-                "label": "Play/Pause"
+                "id": "",
+                "text": "Play/Pause"
             },
             {
-                "scancode": "",
-                "searchTerm": "",
-                "label": "Eject"
+                "id": "",
+                "text": "Eject"
             }
         ]
     }
