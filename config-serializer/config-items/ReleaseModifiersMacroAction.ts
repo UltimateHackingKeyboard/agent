@@ -1,5 +1,5 @@
-import {KeyModifiers} from './KeystrokeModifiersAction';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {KeyModifiers} from './KeyModifiers';
 import {UhkBuffer} from '../UhkBuffer';
 import {assertUInt8} from '../assert';
 

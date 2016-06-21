@@ -3,7 +3,7 @@ import {NgSwitch, NgSwitchWhen} from '@angular/common';
 
 import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../../config-serializer/config-items/KeystrokeAction';
-import {KeystrokeModifiersAction, KeyModifiers} from '../../../config-serializer/config-items/KeystrokeModifiersAction';
+import {KeyModifiers} from '../../../config-serializer/config-items/KeyModifiers';
 import {SwitchLayerAction, LayerName}  from '../../../config-serializer/config-items/SwitchLayerAction';
 import {MapperService} from '../../services/mapper.service';
 import {SwitchKeymapAction} from '../../../config-serializer/config-items/SwitchKeymapAction';
@@ -115,10 +115,27 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
 
         this.labelType = LabelTypes.OneLineText;
 
-        if (this.keyAction instanceof KeystrokeModifiersAction) {
-            let keyAction: KeystrokeModifiersAction = this.keyAction as KeystrokeModifiersAction;
-            let newLabelSource: string[] = [];
-            if (keyAction.isOnlyOneModifierActive()) {
+        if (this.keyAction instanceof KeystrokeAction) {
+            let keyAction: KeystrokeAction = this.keyAction as KeystrokeAction;
+            let newLabelSource: string[];
+
+            if (keyAction.hasScancode()) {
+                let scancode: number = keyAction.scancode;
+                newLabelSource = this.mapperService.scanCodeToText(scancode);
+                if (newLabelSource) {
+                    if (newLabelSource.length === 1) {
+                        this.labelSource = newLabelSource[0];
+                        this.labelType = LabelTypes.OneLineText;
+                    } else {
+                        this.labelSource = newLabelSource;
+                        this.labelType = LabelTypes.TwoLineText;
+                    }
+                } else {
+                    this.labelSource = this.mapperService.scanCodeToSvgImagePath(scancode);
+                    this.labelType = LabelTypes.SingleIcon;
+                }
+            } else if (keyAction.hasOnlyOneActiveModifier()) {
+                newLabelSource = [];
                 switch (keyAction.modifierMask) {
                     case KeyModifiers.leftCtrl:
                     case KeyModifiers.rightCtrl:
@@ -140,22 +157,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
                         newLabelSource.push('Undefined');
                         break;
                 }
-            }
-            this.labelSource = newLabelSource;
-        } else if (this.keyAction instanceof KeystrokeAction) {
-            let scancode: number = (this.keyAction as KeystrokeAction).scancode;
-            let newLabelSource: string[] = this.mapperService.scanCodeToText(scancode);
-            if (newLabelSource) {
-                if (newLabelSource.length === 1) {
-                    this.labelSource = newLabelSource[0];
-                    this.labelType = LabelTypes.OneLineText;
-                } else {
-                    this.labelSource = newLabelSource;
-                    this.labelType = LabelTypes.TwoLineText;
-                }
-            } else {
-                this.labelSource = this.mapperService.scanCodeToSvgImagePath(scancode);
-                this.labelType = LabelTypes.SingleIcon;
+                this.labelSource = newLabelSource;
             }
         } else if (this.keyAction instanceof SwitchLayerAction) {
             let keyAction: SwitchLayerAction = this.keyAction as SwitchLayerAction;

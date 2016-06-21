@@ -134,7 +134,7 @@
                                     "scancode": 56
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 32
                                 },
                                 {
@@ -147,15 +147,15 @@
                                     "toggle": false
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 64
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 128
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 16
                                 },
                                 {
@@ -247,7 +247,7 @@
                                     "scancode": 10
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 2
                                 },
                                 {
@@ -271,15 +271,15 @@
                                     "scancode": 5
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 1
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 8
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 4
                                 },
                                 {
@@ -403,7 +403,7 @@
                                     "scancode": 118
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 32
                                 },
                                 {
@@ -415,15 +415,15 @@
                                     "toggle": false
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 64
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 128
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 16
                                 },
                                 {
@@ -497,7 +497,7 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 2
                                 },
                                 {
@@ -516,15 +516,15 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 1
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 8
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 4
                                 },
                                 {
@@ -641,7 +641,7 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 32
                                 },
                                 {
@@ -653,15 +653,15 @@
                                     "toggle": false
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 64
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 128
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 16
                                 },
                                 {
@@ -739,7 +739,7 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 2
                                 },
                                 {
@@ -758,15 +758,15 @@
                                     "keyActionType": "none"
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 1
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 8
                                 },
                                 {
-                                    "keyActionType": "keystrokeModifiers",
+                                    "keyActionType": "keystroke",
                                     "modifierMask": 4
                                 },
                                 {

@@ -6,21 +6,23 @@ import {UhkBuffer} from '../UhkBuffer';
 export enum KeyActionId {
     NoneAction                   = 0,
     KeystrokeAction              = 1,
-    KeystrokeModifiersAction     = 2,
-    KeystrokeWithModifiersAction = 3,
-    DualRoleKeystrokeAction      = 4,
-    SwitchLayerAction            = 5,
-    SwitchKeymapAction           = 6,
-    MouseAction                  = 7,
-    PlayMacroAction              = 8
+    /*
+        1 - 7 are reserved for KeystrokeAction
+        3 bits:
+            1: Do we have scancode?
+            2: Do we have modifiers?
+            3: Do we have longpress?
+    */
+    LastKeystrokeAction          = 7, // TODO: remove this after refactoring the keyActionId check
+    SwitchLayerAction            = 8,
+    SwitchKeymapAction           = 9,
+    MouseAction                  = 10,
+    PlayMacroAction              = 11
 }
 
 export let keyActionType = {
     NoneAction                   : 'none',
     KeystrokeAction              : 'keystroke',
-    KeystrokeModifiersAction     : 'keystrokeModifiers',
-    KeystrokeWithModifiersAction : 'keystrokeWithModifiers',
-    DualRoleKeystrokeAction      : 'dualRoleKeystroke',
     SwitchLayerAction            : 'switchLayer',
     SwitchKeymapAction           : 'switchKeymap',
     MouseAction                  : 'mouse',
@@ -28,21 +30,27 @@ export let keyActionType = {
 };
 
 export abstract class KeyAction extends Serializable<KeyAction> {
-    assertKeyActionType(jsObject: any) {
-        let keyActionClassname = this.constructor.name;
-        let keyActionTypeString = keyActionType[keyActionClassname];
+
+    assertKeyActionType(jsObject: any): void {
+        let keyActionClassname: string = this.constructor.name;
+        let keyActionTypeString: string = keyActionType[keyActionClassname];
         if (jsObject.keyActionType !== keyActionTypeString) {
             throw `Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`;
         }
     }
 
-    readAndAssertKeyActionId(buffer: UhkBuffer) {
-        let classname = this.constructor.name;
-        let readKeyActionId = buffer.readUInt8();
-        let keyActionId = KeyActionId[<string> classname];
-        if (readKeyActionId !== keyActionId) {
+    readAndAssertKeyActionId(buffer: UhkBuffer): KeyActionId {
+        let classname: string = this.constructor.name;
+        let readKeyActionId: number = buffer.readUInt8();
+        let keyActionId: number = KeyActionId[classname];
+        if (keyActionId === KeyActionId.KeystrokeAction) {
+            if (readKeyActionId < KeyActionId.KeystrokeAction || readKeyActionId > KeyActionId.LastKeystrokeAction) {
+                 throw `Invalid ${classname} first byte: ${readKeyActionId}`;
+            }
+        } else if (readKeyActionId !== keyActionId) {
             throw `Invalid ${classname} first byte: ${readKeyActionId}`;
         }
+        return readKeyActionId;
     }
 
     abstract _fromJsObject(jsObject: any): KeyAction;
