@@ -6,7 +6,7 @@ $(function() {
   var newMacroHtml = $('.new-macro-settings');
 
   // List with handle
-  Sortable.create(listWithHandle, {
+  Sortable.create(document.getElementById('listWithHandle'), {
     handle: '.move-handle',
     filter: '.no-reorder',
     draggable: '.list-group-item',
