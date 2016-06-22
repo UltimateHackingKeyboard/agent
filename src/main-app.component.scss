@@ -8,6 +8,10 @@
     > .row {
         height: 100%;
     }
+
+    .uhk--wrapper {
+        height: calc(100% - 95px);
+    }
 }
 
 .uhk__layer-switcher--wrapper {
@@ -29,7 +33,7 @@ svg-keyboard-popover {
 }
 
 .keyboard-slider {
-    height: calc(100% - 100px);
+    height: calc(100% - 45px);
 }
 
 @keyframes animate-center-left {

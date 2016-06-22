@@ -4,48 +4,53 @@ import {Layers} from '../config-serializer/config-items/Layers';
 
 import {SvgKeyboardPopoverComponent} from './components/svg-keyboard-popover.component';
 import {UhkConfigurationService} from './services/uhk-configuration.service';
+import {LegacyLoaderComponent} from "./components/legacy/legacy-loader.component";
 
 @Component({
     moduleId: module.id,
     selector: 'main-app',
     template:
     `   
-        <div class="row">
-            <h1 class="col-xs-12 pane-title">
-                <i class="fa fa-keyboard-o"></i>
-                <span class="keymap__name pane-title__name" contenteditable="true">QWERTY</span> keymap (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">QTY</span>)
-                <i class="fa fa-star-o fa-star keymap__is-default"></i>
-                <i class="glyphicon glyphicon-trash keymap__remove pull-right" title="" data-toggle="tooltip" data-placement="left" data-original-title="Remove keymap"></i>
-            </h1>
-        </div>
-        <div class="row uhk--wrapper">
-            <div class="col-xs-12 text-center">
-                <span class="uhk__layer-switcher--wrapper" data-title="Layers: ">
-                    <button #baseButton type="button" class="btn btn-default btn-lg btn-primary" (click)="selectLayer(0)">
-                        Base
-                    </button>
-                    <button #modButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(1)">
-                        Mod
-                    </button>
-                    <button #fnButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(2)">
-                        Fn
-                    </button>
-                    <button #mouseButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(3)">
-                        Mouse
-                    </button>
-                </span>
+        <div class="keymap--edit-ng2 main-content__inner" style="height: 100%; width: 100%;">
+            <div class="row">
+                <h1 class="col-xs-12 pane-title">
+                    <i class="fa fa-keyboard-o"></i>
+                    <span class="keymap__name pane-title__name" contenteditable="true">QWERTY</span> keymap (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">QTY</span>)
+                    <i class="fa fa-star-o fa-star keymap__is-default"></i>
+                    <i class="glyphicon glyphicon-trash keymap__remove pull-right" title="" data-toggle="tooltip" data-placement="left" data-original-title="Remove keymap"></i>
+                </h1>
             </div>
-            <div class="keyboard-slider">
-                <svg-keyboard-popover *ngFor="let layer of layers.elements"
-                                [moduleConfig]="layer.modules.elements"
-                                (animationend)="onKeyboardAnimationEnd($event)"
-                                hidden>
-                </svg-keyboard-popover>
+            <div class="row uhk--wrapper">
+                <div class="col-xs-12 text-center">
+                    <span class="uhk__layer-switcher--wrapper" data-title="Layers: ">
+                        <button #baseButton type="button" class="btn btn-default btn-lg btn-primary" (click)="selectLayer(0)">
+                            Base
+                        </button>
+                        <button #modButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(1)">
+                            Mod
+                        </button>
+                        <button #fnButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(2)">
+                            Fn
+                        </button>
+                        <button #mouseButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(3)">
+                            Mouse
+                        </button>
+                    </span>
+                </div>
+                <div class="keyboard-slider">
+                    <svg-keyboard-popover *ngFor="let layer of layers.elements"
+                                    [moduleConfig]="layer.modules.elements"
+                                    (animationend)="onKeyboardAnimationEnd($event)"
+                                    hidden>
+                    </svg-keyboard-popover>
+                </div>
             </div>
-        </div>
+       </div>
+       <legacy [link]="'keymapLegacy.html'" [class]="'keymap-legacy--edit'"></legacy>
+       <legacy [link]="'macroLegacy.html'" [class]="'macro-legacy--edit'"></legacy>
     `,
     styles: [require('./main-app.component.scss')],
-    directives: [SvgKeyboardPopoverComponent],
+    directives: [SvgKeyboardPopoverComponent, LegacyLoaderComponent],
     providers: [UhkConfigurationService]
 })
 export class MainAppComponent implements OnInit, AfterViewInit {
