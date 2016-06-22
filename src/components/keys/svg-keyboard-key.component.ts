@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
-import {NgSwitch, NgSwitchWhen} from '@angular/common';
+import {NgSwitch, NgSwitchCase} from '@angular/common';
 
 import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../../config-serializer/config-items/KeystrokeAction';
@@ -37,28 +37,28 @@ enum LabelTypes {
                 [attr.font-family]="'Helvetica'"
                 [attr.fill]="'white'"
                 style="dominant-baseline: central">
-            <svg:g svg-one-line-text-key *ngSwitchWhen="enumLabelTypes.OneLineText"
+            <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
                     [height]="height"
                     [width]="width"
                     [text]="labelSource">
             </svg:g>
-            <svg:g svg-two-line-text-key *ngSwitchWhen="enumLabelTypes.TwoLineText"
+            <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
                     [height]="height"
                     [width]="width"
                     [texts]="labelSource">
             </svg:g>
-            <svg:g svg-text-icon-key *ngSwitchWhen="enumLabelTypes.TextIcon"
+            <svg:g svg-text-icon-key *ngSwitchCase="enumLabelTypes.TextIcon"
                     [height]="height"
                     [width]="width"
                     [text]="labelSource.text"
                     [icon]="labelSource.icon">
             </svg:g>
-            <svg:g svg-single-icon-key *ngSwitchWhen="enumLabelTypes.SingleIcon"
+            <svg:g svg-single-icon-key *ngSwitchCase="enumLabelTypes.SingleIcon"
                     [height]="height"
                     [width]="width"
                     [icon]="labelSource">
             </svg:g>
-            <svg:g svg-switch-keymap-key *ngSwitchWhen="enumLabelTypes.SwitchKeymap"
+            <svg:g svg-switch-keymap-key *ngSwitchCase="enumLabelTypes.SwitchKeymap"
                     [height]="height"
                     [width]="width"
                     [abbreviation]="labelSource">
@@ -68,7 +68,7 @@ enum LabelTypes {
     directives:
     [
         NgSwitch,
-        NgSwitchWhen,
+        NgSwitchCase,
         SvgOneLineTextKeyComponent,
         SvgTwoLineTextKeyComponent,
         SvgSingleIconKeyComponent,

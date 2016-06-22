@@ -12,7 +12,7 @@ import {
     ChangeDetectorRef
 } from '@angular/core';
 
-import {NgSwitch, NgSwitchWhen} from '@angular/common';
+import {NgSwitch, NgSwitchCase} from '@angular/common';
 
 import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
 
@@ -74,12 +74,12 @@ import {KeyActionSaver} from './key-action-saver';
                 </div>
             </div>
             <div class="row" [ngSwitch]="activeListItemIndex">
-                <keypress-tab #tab *ngSwitchWhen="0" class="popover-content"></keypress-tab>
-                <layer-tab #tab *ngSwitchWhen="1" class="popover-content"></layer-tab>
-                <mouse-tab #tab *ngSwitchWhen="2" class="popover-content"></mouse-tab>
-                <macro-tab #tab *ngSwitchWhen="3" class="popover-content"></macro-tab>
-                <keymap-tab #tab *ngSwitchWhen="4" class="popover-content"></keymap-tab>
-                <none-tab #tab *ngSwitchWhen="5" class="popover-content"></none-tab>
+                <keypress-tab #tab *ngSwitchCase="0" class="popover-content"></keypress-tab>
+                <layer-tab #tab *ngSwitchCase="1" class="popover-content"></layer-tab>
+                <mouse-tab #tab *ngSwitchCase="2" class="popover-content"></mouse-tab>
+                <macro-tab #tab *ngSwitchCase="3" class="popover-content"></macro-tab>
+                <keymap-tab #tab *ngSwitchCase="4" class="popover-content"></keymap-tab>
+                <none-tab #tab *ngSwitchCase="5" class="popover-content"></none-tab>
             </div>
             <div class="row">
                 <div class="popover-action">
@@ -94,7 +94,7 @@ import {KeyActionSaver} from './key-action-saver';
     directives:
     [
         NgSwitch,
-        NgSwitchWhen,
+        NgSwitchCase,
         KeypressTabComponent,
         LayerTabComponent,
         MouseTabComponent,

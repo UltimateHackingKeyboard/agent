@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {NgSwitch, NgSwitchWhen, NgSwitchDefault } from '@angular/common';
+import {NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 
 import { LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/SwitchLayerAction';
 import { KeyActionSaver } from '../key-action-saver';
@@ -17,12 +17,12 @@ import {OptionData} from 'ng2-select2/dist/select2';
         <span>the</span>
         <select2 [data]="layerData" (valueChanged)="layerChanged($event)"></select2>
         <span [ngSwitch]="toggle">
-             <template ngSwitchWhen="true">layer by pressing this key.</template>
+             <template ngSwitchCase="true">layer by pressing this key.</template>
              <template ngSwitchDefault="false">layer by holding this key.</template>
         </span>
     `,
     styles: [require('./layer-tab.component.scss')],
-    directives: [SELECT2_DIRECTIVES, NgSwitch, NgSwitchWhen, NgSwitchDefault]
+    directives: [SELECT2_DIRECTIVES, NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
 export class LayerTabComponent implements OnInit, KeyActionSaver {
     private toggle: boolean;
