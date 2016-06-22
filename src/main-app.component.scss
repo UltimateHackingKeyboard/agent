@@ -1,33 +1,35 @@
 :host {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    width: 100%;
     overflow: hidden;
 
-    > div:first-child {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
+    > .row {
+        height: 100%;
     }
+}
+
+.uhk__layer-switcher--wrapper {
+    margin-bottom: 2rem;
 }
 
 button {
     margin: 2px;
 }
 
-:host > div:last-child {
-    display: flex;
-    flex: 5;
-    position: relative;
-}
-
-:host > div:last-child > svg-keyboard-popover {
-    width: 80%;
+svg-keyboard-popover {
+    width: 95%;
+    max-width: 1400px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     animation-duration: 400ms;
     animation-timing-function: ease-in-out;
+}
+
+.keyboard-slider {
+    height: calc(100% - 100px);
 }
 
 @keyframes animate-center-left {
