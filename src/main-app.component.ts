@@ -4,7 +4,7 @@ import {Layers} from '../config-serializer/config-items/Layers';
 
 import {SvgKeyboardPopoverComponent} from './components/svg-keyboard-popover.component';
 import {UhkConfigurationService} from './services/uhk-configuration.service';
-import {LegacyLoaderComponent} from "./components/legacy/legacy-loader.component";
+import {LegacyLoaderComponent} from './components/legacy/legacy-loader.component';
 
 @Component({
     moduleId: module.id,
@@ -15,9 +15,11 @@ import {LegacyLoaderComponent} from "./components/legacy/legacy-loader.component
             <div class="row">
                 <h1 class="col-xs-12 pane-title">
                     <i class="fa fa-keyboard-o"></i>
-                    <span class="keymap__name pane-title__name" contenteditable="true">QWERTY</span> keymap (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">QTY</span>)
+                    <span class="keymap__name pane-title__name" contenteditable="true">QWERTY</span> keymap
+                    (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">QTY</span>)
                     <i class="fa fa-star-o fa-star keymap__is-default"></i>
-                    <i class="glyphicon glyphicon-trash keymap__remove pull-right" title="" data-toggle="tooltip" data-placement="left" data-original-title="Remove keymap"></i>
+                    <i class="glyphicon glyphicon-trash keymap__remove pull-right" title="" 
+                        data-toggle="tooltip" data-placement="left" data-original-title="Remove keymap"></i>
                 </h1>
             </div>
             <div class="row uhk--wrapper">

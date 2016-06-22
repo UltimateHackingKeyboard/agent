@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {DomSanitizationService, SafeResourceUrl} from "@angular/platform-browser";
+import {DomSanitizationService, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
     selector: 'legacy',
@@ -8,7 +8,7 @@ import {DomSanitizationService, SafeResourceUrl} from "@angular/platform-browser
          <div class="{{class}} main-content__inner" style="display: none; height: 100%; width: 100%;">
             <iframe [src]="safeLink" frameborder="0" scrolling="no" style="height: 100vh; width: 100%;"></iframe>
         </div>
-    `,
+    `
 })
 export class LegacyLoaderComponent {
     @Input() link: string;
