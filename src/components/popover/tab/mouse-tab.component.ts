@@ -105,6 +105,7 @@ export class MouseTabComponent implements OnInit, KeyActionSaver {
     private mouseActionParam: MouseActionParam;
     private selectedIndex: number;
     private selectedButton: HTMLButtonElement;
+    private MouseActionParam = MouseActionParam;
 
     constructor(private renderer: Renderer) {
         this.selectedIndex = 0;
