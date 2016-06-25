@@ -1,7 +1,8 @@
 import {Serializable} from '../Serializable';
 import {ModuleConfigurations} from './ModuleConfigurations';
-import {Keymaps} from './Keymaps';
 import {Keymap} from './Keymap';
+import {Keymaps} from './Keymaps';
+import {Macro} from './Macro';
 import {Macros} from './Macros';
 import {UhkBuffer} from '../UhkBuffer';
 import {assertUInt8, assertUInt32} from '../assert';
@@ -94,5 +95,9 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
                 return keymaps[i];
             }
         }
+    }
+
+    getMacro(macroId: number): Macro {
+        return this.macros.elements.find(macro => macroId === macro.id);
     }
 }
