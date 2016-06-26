@@ -7,7 +7,7 @@ import { DomSanitizationService, SafeResourceUrl } from '@angular/platform-brows
         `
          <iframe [src]="safeLink" frameborder="0" scrolling="no"></iframe>
     `,
-    styles: [require('./legacy-loader.component.scss')],
+    styles: [require('./legacy-loader.component.scss')]
 })
 export class LegacyLoaderComponent {
     @Input() link: string;
