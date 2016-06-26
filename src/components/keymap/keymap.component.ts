@@ -4,14 +4,14 @@ import { Layers } from '../../../config-serializer/config-items/Layers';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
 @Component({
-    selector: 'key-map',
-    templateUrl: 'src/components/keymap/key-map.component.html',
-    styles: [require('./key-map.component.scss')],
+    selector: 'keymap',
+    templateUrl: 'src/components/keymap/keymap.component.html',
+    styles: [require('./keymap.component.scss')],
     directives: [SvgKeyboardPopoverComponent],
     providers: [UhkConfigurationService]
 })
-export class KeyMapComponent implements OnInit, AfterViewInit {
-    @Input() keyMapId: string;
+export class KeymapComponent implements OnInit, AfterViewInit {
+    @Input() keymapId: string;
 
     @ViewChildren('baseButton,modButton,fnButton,mouseButton')
     buttonsQueryList: QueryList<ElementRef>;

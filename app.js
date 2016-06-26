@@ -37,7 +37,7 @@ $(function() {
     $('body').on('click', '.menu--top.legacy .sidebar__level-2--item', function() {
         var dataContent = $(this).data('content');
 
-        $('legacy, key-map').hide();
+        $('legacy, keymap').hide();
         $(dataContent).show();
     });
 
