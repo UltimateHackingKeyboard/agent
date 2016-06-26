@@ -77,6 +77,6 @@ export class LayerTabComponent implements OnInit, KeyActionSaver {
     }
 
     private layerChanged(event) {
-        this.layer = event.value;
+        this.layer = +event.value;
     }
 }
