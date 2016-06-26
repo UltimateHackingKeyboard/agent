@@ -26,7 +26,7 @@ export abstract class ClassArray<T extends Serializable<T>> extends Serializable
     }
 
     _toJsObject(): any {
-        let array = [];
+        let array: any[] = [];
         for (let element of this.elements) {
             array.push(element.toJsObject());
         }

@@ -57,7 +57,8 @@ export class KeymapTabComponent implements OnInit, KeyActionSaver {
         }));
     }
 
-    onChange(event) {
+    // TODO: change to the correct type when the wrapper has added it.
+    onChange(event: any) {
         this.selectedKeymapIndex = parseInt(event.value, 10);
     }
 

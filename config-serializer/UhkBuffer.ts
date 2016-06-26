@@ -171,7 +171,7 @@ export class UhkBuffer {
         this._enableDump = value;
     }
 
-    dump(value) {
+    dump(value: any) {
         if (!this.enableDump) {
             return;
         }

@@ -72,11 +72,13 @@ export class LayerTabComponent implements OnInit, KeyActionSaver {
         return keyAction;
     }
 
-    private toggleChanged(event) {
+    // TODO: change to the correct type when the wrapper has added it.
+    private toggleChanged(event: any) {
         this.toggle = event.value;
     }
 
-    private layerChanged(event) {
+    // TODO: change to the correct type when the wrapper has added it.
+    private layerChanged(event: any) {
         this.layer = +event.value;
     }
 }
