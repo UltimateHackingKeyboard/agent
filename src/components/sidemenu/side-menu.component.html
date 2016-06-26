@@ -1,3 +1,67 @@
+<ul class="menu--top angular">
+    <li class="sidebar__level-1--item">
+        <div class="sidebar__level-1">
+            <i class="fa fa-keyboard-o"></i> Keymaps
+            <a href="#" class="btn btn-default pull-right btn-sm">
+                <i class="fa fa-plus"></i>
+            </a>
+            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, keymapElement)"></i>
+        </div>
+        <ul *ngIf="keymaps" #keymapElement>
+            <li *ngFor="let keymap of keymaps" class="sidebar__level-2--item">
+                <div class="sidebar__level-2">
+                    <a [routerLink]="['/keymap', keymap.id]">{{keymap.name}}</a>
+                    <i class="fa fa-star pull-right"></i>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li class="sidebar__level-1--item">
+        <div class="sidebar__level-1">
+            <i class="fa fa-play"></i> Macros
+            <a href="#" class="btn btn-default pull-right btn-sm">
+                <i class="fa fa-plus"></i>
+            </a>
+            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, macroElement)"></i>
+        </div>
+        <ul *ngIf="macros" #macroElement>
+            <li *ngFor="let macro of macros" class="sidebar__level-2--item">
+                <div class="sidebar__level-2">
+                    <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
+                    <i class="fa fa-star pull-right"></i>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li class="sidebar__level-1--item">
+        <div class="sidebar__level-1">
+            <i class="fa fa-puzzle-piece"></i> Add-on modules
+            <i class="fa fa-chevron-up pull-right"></i>
+        </div>
+        <ul #addonElement>
+            <li class="sidebar__level-2--item" data-name="Key cluster" data-content="" data-abbrev="">
+                <div class="sidebar__level-2">
+                    Key cluster
+                </div>
+            </li>
+            <li class="sidebar__level-2--item" data-name="Trackball" data-content="" data-abbrev="">
+                <div class="sidebar__level-2">
+                    Trackball
+                </div>
+            </li>
+            <li class="sidebar__level-2--item" data-name="Toucpad" data-content="" data-abbrev="">
+                <div class="sidebar__level-2">
+                    Toucpad
+                </div>
+            </li>
+            <li class="sidebar__level-2--item" data-name="Trackpoint" data-content="" data-abbrev="">
+                <div class="sidebar__level-2">
+                    Trackpoint
+                </div>
+            </li>
+        </ul>
+    </li>
+</ul>
 <ul class="menu--top legacy">
     <li class="sidebar__level-1--item">
         <div class="sidebar__level-1">
@@ -5,11 +69,6 @@
             <i class="fa fa-chevron-up pull-right" style=""></i>
         </div>
         <ul>
-            <li class="sidebar__level-2--item" data-name="Keymap" data-content="keymap" data-abbrev="QTY">
-                <div class="sidebar__level-2">
-                    Keymap Angular
-                </div>
-            </li>
             <li class="sidebar__level-2--item" data-name="Keymap" data-content=".keymap-legacy--edit" data-abbrev="QTY">
                 <div class="sidebar__level-2">
                     Keymap HTML
@@ -21,5 +80,10 @@
                 </div>
             </li>
         </ul>
+    </li>
+</ul>
+<ul class="menu--bottom">
+    <li class="sidebar__level-1--item">
+        <div class="sidebar__level-1"><i class="fa fa-gear"></i> Settings</div>
     </li>
 </ul>

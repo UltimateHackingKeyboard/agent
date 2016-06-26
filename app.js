@@ -15,11 +15,6 @@ $(function() {
     // =======================
     // Menu-item functionality LEGACY TODO remove
     // =======================
-    $('.sidebar__level-1', '.sidebar__level-1--item').on('click', function() {
-        $(this).parents('.sidebar__level-1--item').find('ul').slideToggle();
-        $(this).find('.fa-chevron-down, .fa-chevron-up').toggleClass('fa-chevron-down fa-chevron-up')
-    });
-
     $('.pane-title__name, .pane-title__abbrev').on('mouseover', function() {
         $(this).addClass('active');
     }).on('mouseout', function() {
@@ -39,6 +34,11 @@ $(function() {
 
         $('legacy, keymap').hide();
         $(dataContent).show();
+    });
+
+    $('body').on('click', '.menu--top.angular .sidebar__level-2--item', function() {
+        $('legacy').hide();
+        $('keymap').show();
     });
 
     // ========================
