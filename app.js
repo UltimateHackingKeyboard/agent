@@ -149,7 +149,6 @@ $(function() {
 
             }, 'xml');
     });
-
 });
 
 function _init(view) {

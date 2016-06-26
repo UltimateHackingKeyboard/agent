@@ -10,7 +10,7 @@
         <ul *ngIf="keymaps" #keymapElement>
             <li *ngFor="let keymap of keymaps" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
-                    <a [routerLink]="['/keymap', keymap.id]">{{keymap.name}}</a>
+                    <a [routerLink]="['keymap', keymap.id]">{{keymap.name}}</a>
                     <i class="fa fa-star pull-right"></i>
                 </div>
             </li>
@@ -27,7 +27,7 @@
         <ul *ngIf="macros" #macroElement>
             <li *ngFor="let macro of macros" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
-                    <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
+                    <a [routerLink]="['macro', macro.id]">{{macro.name}}</a>
                     <i class="fa fa-star pull-right"></i>
                 </div>
             </li>
@@ -66,7 +66,7 @@
     <li class="sidebar__level-1--item">
         <div class="sidebar__level-1">
             <i class="fa fa-exclamation-triangle "></i> Legacy
-            <i class="fa fa-chevron-up pull-right" style=""></i>
+            <i class="fa fa-chevron-up pull-right"></i>
         </div>
         <ul>
             <li class="sidebar__level-2--item" data-name="Keymap" data-content=".keymap-legacy--edit" data-abbrev="QTY">

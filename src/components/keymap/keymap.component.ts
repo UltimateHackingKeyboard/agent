@@ -1,4 +1,6 @@
-import { Component, Input, ViewChildren, QueryList, ElementRef, OnInit, AfterViewInit, Renderer } from '@angular/core';
+import { Component, ViewChildren, QueryList, ElementRef, OnInit, AfterViewInit, Renderer } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { SvgKeyboardPopoverComponent } from '../svg-keyboard-popover.component';
 import { Layers } from '../../../config-serializer/config-items/Layers';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
@@ -11,8 +13,6 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
     providers: [UhkConfigurationService]
 })
 export class KeymapComponent implements OnInit, AfterViewInit {
-    @Input() keymapId: string;
-
     @ViewChildren('baseButton,modButton,fnButton,mouseButton')
     buttonsQueryList: QueryList<ElementRef>;
 
@@ -22,6 +22,7 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     private buttons: ElementRef[];
     private keyboards: ElementRef[];
     private selectedLayerIndex: number;
+    private keymapId: number = 0;
 
     private layers: Layers;
 
@@ -29,7 +30,8 @@ export class KeymapComponent implements OnInit, AfterViewInit {
 
     constructor(
         private renderer: Renderer,
-        private uhkConfigurationService: UhkConfigurationService
+        private uhkConfigurationService: UhkConfigurationService,
+        private router: Router
     ) {
         this.buttons = [];
         this.keyboards = [];

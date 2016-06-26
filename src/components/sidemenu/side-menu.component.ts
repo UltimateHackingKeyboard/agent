@@ -13,13 +13,12 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
     directives: [ROUTER_DIRECTIVES]
 })
 export class SideMenuComponent implements OnInit {
-    private keymaps: Keymap[];
-    private macros: Macro[];
-
-
     @ViewChild('keymapElement') keymapElement: ElementRef;
     @ViewChild('macroElement') macroElement: ElementRef;
     @ViewChild('addonElement') addonElement: ElementRef;
+
+    private keymaps: Keymap[];
+    private macros: Macro[];
 
     constructor(private uhkConfigurationService: UhkConfigurationService) {
     }
@@ -30,26 +29,26 @@ export class SideMenuComponent implements OnInit {
     }
 
     private toggleHide(event: Event, view: ElementRef) {
-        let classesToggle: string[] = event.srcElement.className.split(" ");
-        let classesView: string[] = view.nativeElement.className.split(" ");
-        let position: number = classesToggle.indexOf("fa-chevron-up");
+        let classesToggle: string[] = event.srcElement.className.split(' ');
+        let classesView: string[] = view.nativeElement.className.split(' ');
+        let position: number = classesToggle.indexOf('fa-chevron-up');
 
-        // slide up
-        if(position > -1) {
+        // Slide up
+        if (position > -1) {
             classesToggle.splice(position, 1);
-            classesToggle.push("fa-chevron-down");
-            classesView.push("slide-up");
+            classesToggle.push('fa-chevron-down');
+            classesView.push('slide-up');
         }
-        // slide down
+        // Slide down
         else {
-            classesToggle.splice(classesToggle.indexOf("fa-chevron-down"), 1);
-            classesToggle.push("fa-chevron-up");
+            classesToggle.splice(classesToggle.indexOf('fa-chevron-down'), 1);
+            classesToggle.push('fa-chevron-up');
 
-            let positionView: number = classesView.indexOf("slide-up");
+            let positionView: number = classesView.indexOf('slide-up');
             classesView.splice(positionView, 1);
         }
 
-        event.srcElement.className = classesToggle.join(" ");
-        view.nativeElement.className = classesView.join(" ");
+        event.srcElement.className = classesToggle.join(' ');
+        view.nativeElement.className = classesView.join(' ');
     }
 }
