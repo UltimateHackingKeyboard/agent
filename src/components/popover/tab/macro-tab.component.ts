@@ -56,7 +56,8 @@ export class MacroTabComponent implements OnInit, KeyActionSaver {
         }));
     }
 
-    onChange(event) {
+    // TODO: change to the correct type when the wrapper has added it.
+    onChange(event: any) {
         this.selectedMacroIndex = event.value;
     }
 

@@ -21,7 +21,7 @@ export class DataProviderService {
     }
 
     getSvgModules(): SvgModule[] {
-        let modules = this.getBaseLayer().g[0].g.map(obj => new SvgModule(obj));
+        let modules = this.getBaseLayer().g[0].g.map((obj: any) => new SvgModule(obj));
         return [modules[1], modules[0]]; // TODO: remove if the svg will be correct
     }
 

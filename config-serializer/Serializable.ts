@@ -55,7 +55,7 @@ export abstract class Serializable<T> {
     abstract _toJsObject(): any;
     abstract _toBinary(buffer: UhkBuffer): void;
 
-    private dump(value) {
+    private dump(value: any) {
         if (Serializable.enableDump) {
             process.stdout.write(value);
         }
