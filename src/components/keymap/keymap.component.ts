@@ -5,7 +5,7 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
 
 @Component({
     selector: 'keymap',
-    templateUrl: 'src/components/keymap/keymap.component.html',
+    template: require('./keymap.component.html'),
     styles: [require('./keymap.component.scss')],
     directives: [SvgKeyboardPopoverComponent],
     providers: [UhkConfigurationService]

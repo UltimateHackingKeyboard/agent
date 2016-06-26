@@ -7,7 +7,7 @@ import { KeymapComponent } from './components/keymap/keymap.component';
 @Component({
     moduleId: module.id,
     selector: 'main-app',
-    templateUrl: 'src/main-app.component.html',
+    template: require('./main-app.component.html'),
     styles: [require('./main-app.component.scss')],
     directives: [LegacyLoaderComponent, SideMenuComponent, KeymapComponent]
 })
