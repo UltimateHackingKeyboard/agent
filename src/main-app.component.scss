@@ -1,64 +1,10 @@
 :host {
-    display: flex;
-    flex-direction: column;
+    display: block;
     height: 100vh;
     width: 100%;
     overflow: hidden;
-
-    > .row {
-        height: 100%;
-    }
-
-    .uhk--wrapper {
-        height: calc(100% - 95px);
-    }
 }
 
-.uhk__layer-switcher--wrapper {
-    margin-bottom: 2rem;
+#main-content {
+    height: 100%;
 }
-
-button {
-    margin: 2px;
-}
-
-svg-keyboard-popover {
-    width: 95%;
-    max-width: 1400px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    animation-duration: 400ms;
-    animation-timing-function: ease-in-out;
-}
-
-.keyboard-slider {
-    height: calc(100% - 45px);
-}
-
-@keyframes animate-center-left {
-    0% {
-        transform: translateX(-50%);
-        left: 50%;
-    }
-    100% {
-        transform: translateX(-100%);
-        left: 0%;
-    }
-}
-
-@keyframes animate-center-right {
-    0% {
-        transform: translateX(-50%);
-        left: 50%;
-    }
-    100% {
-        transform: translateX(0%);
-        left: 100%;
-    }
-}
-
-[hidden] {
-    display: none;
-}
-

@@ -16,7 +16,6 @@
         <div class="github-fork-ribbon">
             <a class="" href="https://github.com/UltimateHackingKeyboard/agent" title="Fork me on GitHub">Fork me on GitHub</a>
         </div>
-
         <!-- Google Tag Manager -->
         <noscript>
             <iframe src="//www.googletagmanager.com/ns.html?id=GTM-PQLCXB" height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -30,38 +29,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </script>
         <!-- End Google Tag Manager -->
 
-        <div id="sidebar-menu" class="split split-horizontal sidebar-menu" style="">
-            <ul class="menu--top legacy">
-                <li class="sidebar__level-1--item">
-                    <div class="sidebar__level-1">
-                        <i class="fa fa-exclamation-triangle "></i> Legacy
-                        <i class="fa fa-chevron-up pull-right" style=""></i>
-                    </div>
-                    <ul>
-                        <li class="sidebar__level-2--item" data-name="Keymap" data-content=".keymap-legacy--edit" data-abbrev="QTY">
-                            <div class="sidebar__level-2">
-                                Keymap
-                            </div>
-                        </li>
-                        <li class="sidebar__level-2--item " data-name="Macro" data-content=".macro-legacy--edit" data-abbrev="DVR">
-                            <div class="sidebar__level-2">
-                                Macro
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <!-- TODO move to component -->
+        <div class="notification" style="display: none">
+            <span class="notificatin__text">Keymap removed</span>
+            <a href="#" class="notification__action notification__action--undo">Undo</a>
+            <span class="notification__dismiss">&times;</span>
         </div>
 
-        <div id="main-content" class="split split-horizontal container-fluid main-content" style="">
-            <div class="notification" style="display: none">
-                <span class="notificatin__text">Keymap removed</span>
-                <a href="#" class="notification__action notification__action--undo">Undo</a>
-                <span class="notification__dismiss">&times;</span>
-            </div>
-
-            <main-app></main-app>
-        </div>
+        <main-app></main-app>
 
         <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script> <!-- TODO remove in near future -->
         <script src="node_modules/sortablejs/Sortable.js"></script>

@@ -34,16 +34,11 @@ $(function() {
         $(this).toggleClass('fa-star-o');
     });
 
-    $('.sidebar__level-2--item', '.menu--top.legacy').on('click', function() {
-        var _this = $(this);
-        var dataContent = _this.data('content');
-        var _currentView = $('.main-content__inner:visible');
-        // This can be the same as _currentView.
-        var _newView = $(dataContent);
+    $('body').on('click', '.menu--top.legacy .sidebar__level-2--item', function() {
+        var dataContent = $(this).data('content');
 
-        // Switch to the corresponding view.
-        _currentView.hide();
-        _newView.show();
+        $('legacy, key-map').hide();
+        $(dataContent).show();
     });
 
     // ========================

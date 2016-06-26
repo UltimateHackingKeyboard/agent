@@ -21,6 +21,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ },
+            { test: /\.html$/, loader: 'html' },
             {
                 test: /\.scss$/,
                 exclude: /node_modules/,
