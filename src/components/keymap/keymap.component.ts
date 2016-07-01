@@ -1,5 +1,5 @@
 import { Component, ViewChildren, QueryList, ElementRef, OnInit, AfterViewInit, Renderer } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, ActivatedRoute, UrlTree} from '@angular/router';
 
 import { SvgKeyboardPopoverComponent } from '../svg-keyboard-popover.component';
 import { Layers } from '../../../config-serializer/config-items/Layers';
@@ -31,16 +31,34 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     constructor(
         private renderer: Renderer,
         private uhkConfigurationService: UhkConfigurationService,
-        private router: Router
+        private route: ActivatedRoute,
+        router: Router
     ) {
         this.buttons = [];
         this.keyboards = [];
         this.selectedLayerIndex = -1;
         this.numAnimationInProgress = 0;
+
+        const url: string = router.url;
+
+        console.log(url);
+
+        const tree: UrlTree = router.parseUrl(url);
+
+        console.log(tree);
     }
 
     ngOnInit() {
-        this.layers = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[0].layers;
+        this.route.params.subscribe(params => {
+            let id = +params['id'];
+            console.log(params);
+            console.log(id);
+            if(!isNaN(id)) {
+                this.keymapId = id;
+            }
+
+            this.layers = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[this.keymapId].layers;
+        });
     }
 
     ngAfterViewInit() {

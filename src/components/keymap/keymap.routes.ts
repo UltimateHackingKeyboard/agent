@@ -5,14 +5,14 @@ export const keymapRoutes: RouterConfig = [
     {
         path: '',
         redirectTo: '/keymap',
-        terminal: true
+        pathMatch: 'full'
     },
     {
         path: 'keymap',
-        component: KeymapComponent,
-        children: [
-            { path: ':id',  component: KeymapComponent },
-            { path: '',     component: KeymapComponent }
-        ]
+        component: KeymapComponent
+    },
+    {
+        path: 'keymap/:id',
+        component: KeymapComponent
     }
 ];

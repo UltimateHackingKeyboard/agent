@@ -10,22 +10,12 @@ import { DomSanitizationService, SafeResourceUrl } from '@angular/platform-brows
     styles: [require('./legacy-loader.component.scss')]
 })
 export class LegacyLoaderComponent {
-    @Input() link: string;
-    @Input() class: string;
-
-    private _class: string;
     private safeLink: SafeResourceUrl;
-
-    @HostBinding('class')
-    get inputClass() {
-        return this._class;
-    }
 
     constructor(private sanitationService: DomSanitizationService) {
     }
 
     ngOnInit() {
-        this.safeLink = this.sanitationService.bypassSecurityTrustResourceUrl(this.link);
-        this._class = this.class;
+        this.safeLink = this.sanitationService.bypassSecurityTrustResourceUrl("keymapLegacy.html");
     }
 }
