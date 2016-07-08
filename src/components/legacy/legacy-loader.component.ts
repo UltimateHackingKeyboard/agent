@@ -1,5 +1,6 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 import { DomSanitizationService, SafeResourceUrl } from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'legacy',
@@ -12,10 +13,14 @@ import { DomSanitizationService, SafeResourceUrl } from '@angular/platform-brows
 export class LegacyLoaderComponent {
     private safeLink: SafeResourceUrl;
 
-    constructor(private sanitationService: DomSanitizationService) {
+    constructor(private sanitationService: DomSanitizationService, private route: ActivatedRoute) {
     }
 
     ngOnInit() {
-        this.safeLink = this.sanitationService.bypassSecurityTrustResourceUrl("keymapLegacy.html");
+        this.route.params.subscribe(params => {
+            if (params['id']) {
+                this.safeLink = this.sanitationService.bypassSecurityTrustResourceUrl(params['id'] + 'Legacy.html');
+            }
+        });
     }
 }

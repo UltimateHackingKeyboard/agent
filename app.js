@@ -29,18 +29,6 @@ $(function() {
         $(this).toggleClass('fa-star-o');
     });
 
-    $('body').on('click', '.menu--top.legacy .sidebar__level-2--item', function() {
-        var dataContent = $(this).data('content');
-
-        $('legacy, keymap').hide();
-        $(dataContent).show();
-    });
-
-    $('body').on('click', '.menu--top.angular .sidebar__level-2--item', function() {
-        $('legacy').hide();
-        $('keymap').show();
-    });
-
     // ========================
     // Keymap related settings.
     // ========================

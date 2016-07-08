@@ -1,5 +1,5 @@
 import { Component, ViewChildren, QueryList, ElementRef, OnInit, AfterViewInit, Renderer } from '@angular/core';
-import {Router, ActivatedRoute, UrlTree} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { SvgKeyboardPopoverComponent } from '../svg-keyboard-popover.component';
 import { Layers } from '../../../config-serializer/config-items/Layers';
@@ -25,39 +25,32 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     private keymapId: number = 0;
 
     private layers: Layers;
+    private keymap: any;
 
     private numAnimationInProgress: number;
+    private sub: any;
 
     constructor(
         private renderer: Renderer,
         private uhkConfigurationService: UhkConfigurationService,
-        private route: ActivatedRoute,
-        router: Router
+        private route: ActivatedRoute
     ) {
         this.buttons = [];
         this.keyboards = [];
         this.selectedLayerIndex = -1;
         this.numAnimationInProgress = 0;
-
-        const url: string = router.url;
-
-        console.log(url);
-
-        const tree: UrlTree = router.parseUrl(url);
-
-        console.log(tree);
     }
 
     ngOnInit() {
-        this.route.params.subscribe(params => {
-            let id = +params['id'];
-            console.log(params);
-            console.log(id);
-            if(!isNaN(id)) {
+        this.sub = this.route.params.subscribe(params => {
+            let id: number = +params['id'];
+
+            if (!isNaN(id)) {
                 this.keymapId = id;
             }
 
-            this.layers = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[this.keymapId].layers;
+            this.keymap = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[this.keymapId];
+            this.layers = this.keymap.layers;
         });
     }
 
@@ -66,6 +59,10 @@ export class KeymapComponent implements OnInit, AfterViewInit {
         this.keyboards = this.keyboardsQueryList.toArray();
         this.selectedLayerIndex = 0;
         this.renderer.setElementAttribute(this.keyboards[0].nativeElement, 'hidden', undefined);
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     /* tslint:disable:no-unused-variable */

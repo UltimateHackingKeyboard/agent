@@ -1,5 +1,5 @@
 import { RouterConfig } from '@angular/router';
-import {LegacyLoaderComponent} from "./legacy-loader.component";
+import {LegacyLoaderComponent} from './legacy-loader.component';
 
 export const legacyRoutes: RouterConfig = [
     {
