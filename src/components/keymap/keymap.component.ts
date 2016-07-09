@@ -58,6 +58,7 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.buttons = this.buttonsQueryList.toArray();
         this.afterView();
 
         this.subQuery = this.keyboardsQueryList.changes.subscribe(() => {
@@ -71,7 +72,6 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     }
 
     private afterView(){
-        this.buttons = this.buttonsQueryList.toArray();
         this.keyboards = this.keyboardsQueryList.toArray();
         this.selectedLayerIndex = 0;
         this.renderer.setElementAttribute(this.keyboards[0].nativeElement, 'hidden', undefined);
