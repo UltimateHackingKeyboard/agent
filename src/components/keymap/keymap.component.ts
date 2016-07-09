@@ -28,7 +28,8 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     private keymap: any;
 
     private numAnimationInProgress: number;
-    private sub: any;
+    private subParams: any;
+    private subQuery: any;
 
     constructor(
         private renderer: Renderer,
@@ -42,7 +43,7 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
+        this.subParams = this.route.params.subscribe(params => {
             let id: number = +params['id'];
 
             if (!isNaN(id)) {
@@ -52,17 +53,28 @@ export class KeymapComponent implements OnInit, AfterViewInit {
             this.keymap = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[this.keymapId];
             this.layers = this.keymap.layers;
         });
+
+
     }
 
     ngAfterViewInit() {
+        this.afterView();
+
+        this.subQuery = this.keyboardsQueryList.changes.subscribe(() => {
+            this.afterView();
+        });
+    }
+
+    ngOnDestroy() {
+        this.subParams.unsubscribe();
+        this.subQuery.unsubscribe();
+    }
+
+    private afterView(){
         this.buttons = this.buttonsQueryList.toArray();
         this.keyboards = this.keyboardsQueryList.toArray();
         this.selectedLayerIndex = 0;
         this.renderer.setElementAttribute(this.keyboards[0].nativeElement, 'hidden', undefined);
-    }
-
-    ngOnDestroy() {
-        this.sub.unsubscribe();
     }
 
     /* tslint:disable:no-unused-variable */
