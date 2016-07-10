@@ -38,7 +38,7 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     ) {
         this.buttons = [];
         this.keyboards = [];
-        this.selectedLayerIndex = -1;
+        this.selectedLayerIndex = 0;
         this.numAnimationInProgress = 0;
     }
 
@@ -73,8 +73,10 @@ export class KeymapComponent implements OnInit, AfterViewInit {
 
     private afterView(){
         this.keyboards = this.keyboardsQueryList.toArray();
-        this.selectedLayerIndex = 0;
         this.renderer.setElementAttribute(this.keyboards[0].nativeElement, 'hidden', undefined);
+        this.renderer.setElementClass(this.buttons[this.selectedLayerIndex].nativeElement, 'btn-primary', false);
+        this.renderer.setElementClass(this.buttons[0].nativeElement, 'btn-primary', true);
+        this.selectedLayerIndex = 0;
     }
 
     /* tslint:disable:no-unused-variable */
