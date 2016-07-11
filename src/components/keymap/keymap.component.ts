@@ -5,7 +5,7 @@ import { SvgKeyboardPopoverComponent } from '../svg-keyboard-popover.component';
 import { Layers } from '../../../config-serializer/config-items/Layers';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'keymap',
