@@ -1,0 +1,57 @@
+:host {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.uhk--wrapper {
+    height: calc(100% - 95px);
+}
+
+button {
+    margin: 2px;
+}
+
+svg-keyboard-popover {
+    width: 95%;
+    max-width: 1400px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-duration: 400ms;
+    animation-timing-function: ease-in-out;
+}
+
+.keyboard-slider {
+    height: calc(100% - 45px);
+}
+
+.uhk__layer-switcher--wrapper {
+    margin-bottom: 2rem;
+}
+
+@keyframes animate-center-left {
+    0% {
+        transform: translateX(-50%);
+        left: 50%;
+    }
+    100% {
+        transform: translateX(-100%);
+        left: 0;
+    }
+}
+
+@keyframes animate-center-right {
+    0% {
+        transform: translateX(-50%);
+        left: 50%;
+    }
+    100% {
+        transform: translateX(0%);
+        left: 100%;
+    }
+}
+
+[hidden] {
+    display: none;
+}

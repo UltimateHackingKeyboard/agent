@@ -1,64 +1,20 @@
 $(function() {
-    // Handlebars template for Sidebar menu.
-    var sidebarMenuSource = $('#sidebar-menu--source').html();
-    var sidebarMenuTemplate = Handlebars.compile(sidebarMenuSource);
-    $('#sidebar-menu').html(sidebarMenuTemplate(menuObject));
     _init('.keymap--edit');
 
-    // =======================
-    // Menu-item functionality
-    // =======================
-    $('.sidebar__level-2--item').on('click', function() {
-        var _this = $(this);
-
-        var dataContent = _this.data('content');
-        var dataAbbrev = _this.data('abbrev');
-        var dataName = _this.data('name');
-
-        var _currentView = $('.main-content__inner:visible');
-        // This can be the same as _currentView.
-        var _newView = $(dataContent);
-
-        // Switch to the corresponding view.
-        _currentView.hide();
-        _newView.show();
-
-        // Modify name for Factory keymap.
-        if (dataAbbrev == 'FTY') {
-            dataName = 'Factory';
-            _newView.find('.pane-title__name').attr('contenteditable', false);
-            _newView.find('.pane-title__abbrev').attr('contenteditable', false);
-            _newView.find('.keymap__remove').hide();
-        } else {
-            _newView.find('.pane-title__name').attr('contenteditable', true);
-            _newView.find('.pane-title__abbrev').attr('contenteditable', true);
-            _newView.find('.keymap__remove').show();
-        }
-
-        // Hide (undo) notification if any was shown.
+    $('.notification').on('click', '.notification__dismiss', function(e) {
         $('.notification').hide();
+    }).on('click', '.notification__action--undo', function(e) {
+        $('.notification').hide();
+        $('.sidebar__level-2--item:hidden').show().click();
+    });;
 
-        // Fill pane title based on data attributes.
-        if (dataName != '') {
-            _newView.find('.pane-title__name').text(dataName);
-        }
-        if (dataAbbrev != '') {
-            _newView.find('.pane-title__abbrev').text(dataAbbrev);
-        }
-
-        // Change .active class in the sidebar.
-        $('.sidebar__level-2--item.active').removeClass('active');
-        _this.addClass('active');
-        _init(dataContent);
-    });
-
-    // ========================
-    // Keymap related settings.
-    // ========================
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
 
+    // =======================
+    // Menu-item functionality LEGACY TODO remove
+    // =======================
     $('.pane-title__name, .pane-title__abbrev').on('mouseover', function() {
         $(this).addClass('active');
     }).on('mouseout', function() {
@@ -73,11 +29,9 @@ $(function() {
         $(this).toggleClass('fa-star-o');
     });
 
-    $('.sidebar__level-1', '.sidebar__level-1--item').on('click', function() {
-        $(this).parents('.sidebar__level-1--item').find('ul').slideToggle();
-        $(this).find('.fa-chevron-down, .fa-chevron-up').toggleClass('fa-chevron-down fa-chevron-up')
-    });
-
+    // ========================
+    // Keymap related settings.
+    // ========================
     $('button.uhk__layer-switcher').on('click', function(e) {
         var button = $(this),
         layerOrder = ['base', 'mod', 'fn', 'mouse'],
@@ -131,13 +85,6 @@ $(function() {
         $('.notification').show();
     });
 
-    $('.notification').on('click', '.notification__dismiss', function(e) {
-        $('.notification').hide();
-    }).on('click', '.notification__action--undo', function(e) {
-        $('.notification').hide();
-        $('.sidebar__level-2--item:hidden').show().click();
-    });;
-
     // Based on: http://stackoverflow.com/a/24933495
     $('img.uhk').each(function(){
         var $img = $(this);
@@ -190,7 +137,6 @@ $(function() {
 
             }, 'xml');
     });
-
 });
 
 function _init(view) {
@@ -201,116 +147,3 @@ function _init(view) {
             break;
     }
 }
-
-var menuObject = {
-    menu: [
-    {
-        icon: 'keyboard-o',
-        name: 'Keymaps',
-        hasDefaults: true,
-        expandable: true,
-        dataContent: '.keymap--edit',
-        children: [
-        {
-            icon: '',
-            name: 'Factory keymap',
-            abbrev: 'FTY',
-            isDefault: true
-        },
-        {
-            icon: '',
-            name: 'QWERTY',
-            abbrev: 'QTY',
-            classes: 'active'
-        },
-        {
-            icon: '',
-            name: 'Dvorak',
-            abbrev: 'DVR',
-        },
-        {
-            icon: '',
-            name: 'Colemak',
-            abbrev: 'COL',
-        },
-        {
-            icon: '',
-            name: 'VIM',
-            abbrev: 'VIM',
-        },
-        {
-            icon: '',
-            name: 'Mortal Kombat X',
-            abbrev: 'MKX',
-        }
-        ]
-    },
-    {
-        icon: 'keyboard-o',
-        name: 'Keymaps-ng2',
-        hasDefaults: true,
-        expandable: true,
-        dataContent: '.keymap--edit-ng2',
-        children: [
-        {
-            icon: '',
-            name: 'Factory keymap',
-            abbrev: 'FTY',
-            isDefault: true
-        }
-        ]
-    },
-    {
-        icon: 'play',
-        name: 'Macros',
-        expandable: true,
-        dataContent: '.macro--edit',
-        children: [
-        {
-            icon: '',
-            name: 'Macro1'
-        },
-        {
-            icon: '',
-            name: 'Macro2'
-        },
-        {
-            icon: '',
-            name: 'Macro3'
-        },
-        {
-            icon: '',
-            name: 'Macro4'
-        }
-        ]
-    },
-    {
-        'icon': 'puzzle-piece',
-        'name': 'Add-on modules',
-        'children': [
-        {
-            'icon': '',
-            'name': 'Key cluster'
-        },
-        {
-            'icon': '',
-            'name': 'Trackball'
-        },
-        {
-            'icon': '',
-            'name': 'Toucpad'
-        },
-        {
-            'icon': '',
-            'name': 'Trackpoint'
-        }
-        ]
-    }
-    ],
-    menuBottom: [
-    {
-        'icon': 'gear',
-        'name': 'Settings'
-    }
-    ]
-};
