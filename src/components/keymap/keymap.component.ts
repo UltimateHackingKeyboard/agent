@@ -71,7 +71,7 @@ export class KeymapComponent implements OnInit, AfterViewInit {
         this.subQuery.unsubscribe();
     }
 
-    private afterView(){
+    private afterView() {
         this.keyboards = this.keyboardsQueryList.toArray();
         this.renderer.setElementAttribute(this.keyboards[0].nativeElement, 'hidden', undefined);
         this.renderer.setElementClass(this.buttons[this.selectedLayerIndex].nativeElement, 'btn-primary', false);

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
@@ -25,10 +25,10 @@ export class SideMenuComponent implements OnInit {
     }
 
     private toggleHide(event: Event, view: Element) {
-        let header: DOMTokenList = (<Element>event.target).classList;
+        let header: DOMTokenList = (<Element> event.target).classList;
 
-        view.classList.toggle("slide-up");
-        header.toggle("fa-chevron-up");
-        header.toggle("fa-chevron-down");
+        view.classList.toggle('slide-up');
+        header.toggle('fa-chevron-up');
+        header.toggle('fa-chevron-down');
     }
 }
