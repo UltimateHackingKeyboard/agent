@@ -13,10 +13,6 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
     directives: [ROUTER_DIRECTIVES]
 })
 export class SideMenuComponent implements OnInit {
-    @ViewChild('keymapElement') keymapElement: ElementRef;
-    @ViewChild('macroElement') macroElement: ElementRef;
-    @ViewChild('addonElement') addonElement: ElementRef;
-
     private keymaps: Keymap[];
     private macros: Macro[];
 
@@ -28,27 +24,11 @@ export class SideMenuComponent implements OnInit {
         this.macros = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
     }
 
-    private toggleHide(event: Event, view: ElementRef) {
-        let classesToggle: string[] = event.srcElement.className.split(' ');
-        let classesView: string[] = view.nativeElement.className.split(' ');
-        let position: number = classesToggle.indexOf('fa-chevron-up');
+    private toggleHide(event: Event, view: Element) {
+        let header: DOMTokenList = (<Element>event.target).classList;
 
-        // Slide up
-        if (position > -1) {
-            classesToggle.splice(position, 1);
-            classesToggle.push('fa-chevron-down');
-            classesView.push('slide-up');
-        }
-        // Slide down
-        else {
-            classesToggle.splice(classesToggle.indexOf('fa-chevron-down'), 1);
-            classesToggle.push('fa-chevron-up');
-
-            let positionView: number = classesView.indexOf('slide-up');
-            classesView.splice(positionView, 1);
-        }
-
-        event.srcElement.className = classesToggle.join(' ');
-        view.nativeElement.className = classesView.join(' ');
+        view.classList.toggle("slide-up");
+        header.toggle("fa-chevron-up");
+        header.toggle("fa-chevron-down");
     }
 }

@@ -7,7 +7,7 @@
             </a>
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, keymapElement)"></i>
         </div>
-        <ul *ngIf="keymaps" #keymapElement>
+        <ul #keymapElement>
             <li *ngFor="let keymap of keymaps" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
                     <a [routerLink]="['/keymap', keymap.id]">{{keymap.name}}</a>
@@ -24,7 +24,7 @@
             </a>
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, macroElement)"></i>
         </div>
-        <ul *ngIf="macros" #macroElement>
+        <ul #macroElement>
             <li *ngFor="let macro of macros" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
                     <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
@@ -36,7 +36,7 @@
     <li class="sidebar__level-1--item">
         <div class="sidebar__level-1">
             <i class="fa fa-puzzle-piece"></i> Add-on modules
-            <i class="fa fa-chevron-up pull-right"></i>
+            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, addonElement)"></i>
         </div>
         <ul #addonElement>
             <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
@@ -64,9 +64,9 @@
     <li class="sidebar__level-1--item">
         <div class="sidebar__level-1">
             <i class="fa fa-exclamation-triangle "></i> Legacy
-            <i class="fa fa-chevron-up pull-right"></i>
+            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, legacyElement)"></i>
         </div>
-        <ul>
+        <ul #legacyElement>
             <li class="sidebar__level-2--item" data-name="Keymap legacy" data-abbrev="QTY">
                 <div class="sidebar__level-2">
                     <a [routerLink]="['/legacy', 'keymap']">Keymap HTML</a>

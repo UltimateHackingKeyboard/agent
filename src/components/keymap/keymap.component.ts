@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { SvgKeyboardPopoverComponent } from '../svg-keyboard-popover.component';
 import { Layers } from '../../../config-serializer/config-items/Layers';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
+import { Keymap } from '../../../config-serializer/config-items/Keymap';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
     selector: 'keymap',
@@ -25,11 +27,11 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     private keymapId: number = 0;
 
     private layers: Layers;
-    private keymap: any;
+    private keymap: Keymap;
 
     private numAnimationInProgress: number;
-    private subParams: any;
-    private subQuery: any;
+    private subParams: Subscription;
+    private subQuery: Subscription;
 
     constructor(
         private renderer: Renderer,
@@ -53,8 +55,6 @@ export class KeymapComponent implements OnInit, AfterViewInit {
             this.keymap = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[this.keymapId];
             this.layers = this.keymap.layers;
         });
-
-
     }
 
     ngAfterViewInit() {
