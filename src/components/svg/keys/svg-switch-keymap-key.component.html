@@ -1,12 +1,12 @@
 <svg:use [attr.xlink:href]="icon"
-        [attr.width]="width / 4"
-        [attr.height]="height / 4"
-        [attr.x]="width * 3 / 8"
-        [attr.y]="height / 5">
+        [attr.width]="useWidth"
+        [attr.height]="useHeight"
+        [attr.x]="useX"
+        [attr.y]="useY">
 </svg:use>
 <svg:text
     [attr.x]="0"
-    [attr.y]="height * 2 / 3"
+    [attr.y]="textY"
     [attr.text-anchor]="'middle'">
-        <tspan [attr.x]="width / 2">{{ abbreviation }}</tspan>
+        <tspan [attr.x]="spanX">{{ abbreviation }}</tspan>
 </svg:text>

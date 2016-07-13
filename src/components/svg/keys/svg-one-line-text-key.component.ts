@@ -10,7 +10,13 @@ export class SvgOneLineTextKeyComponent implements OnInit {
     @Input() width: number;
     @Input() text: string;
 
+    private textY: number;
+    private spanX: number;
+
     constructor() { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.textY = this.height / 2;
+        this.spanX = this.width / 2;
+    }
 }

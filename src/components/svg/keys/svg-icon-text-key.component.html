@@ -1,13 +1,13 @@
 <svg:use [attr.xlink:href]="icon"
-        [attr.width]="width / 3"
-        [attr.height]="height / 3"
-        [attr.x]="width > 2*height ? 0 : width / 3"
-        [attr.y]="width > 2*height ? height / 3 : height / 10">
+        [attr.width]="useWidth"
+        [attr.height]="useHeight"
+        [attr.x]="useX"
+        [attr.y]="useY">
 </svg:use>
 <svg:text
     [attr.x]="0"
-    [attr.y]="width > 2*height? height / 2 : height * 0.6"
+    [attr.y]="textY"
     [attr.text-anchor]="'middle'"
     [attr.font-size]="11">
-        <tspan [attr.x]="width > 2*height ? width * 0.6 : width / 2">{{ text }}</tspan>
+        <tspan [attr.x]="spanX">{{ text }}</tspan>
 </svg:text>

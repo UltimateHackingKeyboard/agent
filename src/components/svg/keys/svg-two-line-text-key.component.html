@@ -1,11 +1,11 @@
 <svg:text
     [attr.x]="0"
-    [attr.y]="height/2"
+    [attr.y]="textY"
     [attr.text-anchor]="'middle'">
          <tspan
                 *ngFor="let text of texts; let index = index"
-                [attr.x]="width / 2"
-                [attr.y]="(0.75 - index * 0.5) * height"
+                [attr.x]="spanX"
+                [attr.y]="spanY(index)"
                 dy="0"
                 >{{ text }}</tspan>
  </svg:text>

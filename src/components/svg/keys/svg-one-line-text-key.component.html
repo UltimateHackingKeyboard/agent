@@ -1,9 +1,6 @@
  <svg:text
     [attr.x]="0"
-    [attr.y]="height / 2"
+    [attr.y]="textY"
     [attr.text-anchor]="'middle'">
-        <tspan
-            [attr.x]="width / 2"
-            dy="0"
-            >{{ text }}</tspan>
+        <tspan [attr.x]="spanX" dy="0">{{ text }}</tspan>
  </svg:text>
