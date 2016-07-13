@@ -6,15 +6,8 @@ import { NoneAction } from '../../../../config-serializer/config-items/NoneActio
 @Component({
     moduleId: module.id,
     selector: 'none-tab',
-    template: `This key is unassigned and has no functionality.`,
-    styles:
-    [`
-        :host {
-            display: flex;
-            justify-content: center;
-            padding: 2rem 0;
-        }
-    `]
+    template: require('./none-tab.component.html'),
+    styles: [require('./none-tab.component.scss')]
 })
 export class NoneTabComponent implements OnInit, KeyActionSaver {
     constructor() { }

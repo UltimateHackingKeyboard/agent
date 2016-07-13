@@ -7,22 +7,8 @@ import {PopoverComponent} from './popover/popover.component';
 
 @Component({
     selector: 'svg-keyboard-popover',
-    template:
-    `
-        <svg-keyboard [moduleConfig]="moduleConfig"
-                    (keyClick)="onKeyClick($event.moduleId, $event.keyId)">
-        </svg-keyboard>
-        <popover *ngIf="popoverEnabled" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
-    `,
-    styles:
-    [`
-        :host {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-    `],
+    template: require('./svg-keyboard-popover.component.html'),
+    styles: [require('./svg-keyboard-popover.component.scss')],
     directives: [SvgKeyboardComponent, PopoverComponent]
 })
 export class SvgKeyboardPopoverComponent implements OnInit {

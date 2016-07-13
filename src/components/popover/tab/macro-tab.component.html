@@ -1,0 +1,11 @@
+<div class="macro-selector">
+    <b> Play macro: </b>
+    <select2 [data]="macrosOptions" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
+</div>
+<div class="macro-action-container">
+    <template [ngIf]="selectedMacroIndex >= 0">
+        <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions.elements"
+                    [macroAction]="macroAction">
+        </macro-item>
+    </template>
+</div>

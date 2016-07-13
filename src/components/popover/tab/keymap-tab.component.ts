@@ -12,21 +12,7 @@ import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
 @Component({
     moduleId: module.id,
     selector: 'keymap-tab',
-    template:
-    `
-        <div>
-            <b>Switch to keymap:</b>
-            <select2 [data]="keymapOptions" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
-        </div>
-        <div>
-            <div>
-                <img *ngIf="selectedKeymapIndex === -1" src="images/base-layer--blank.svg">
-            </div>
-            <svg-keyboard *ngIf="selectedKeymapIndex !== -1"
-                        [moduleConfig]="keymaps[selectedKeymapIndex].layers.elements[0].modules.elements">
-            </svg-keyboard>
-        </div>
-    `,
+    template: require('./keymap-tab.component.html'),
     styles: [require('./keymap-tab.component.scss')],
     directives: [SvgKeyboardComponent, SELECT2_DIRECTIVES]
 })

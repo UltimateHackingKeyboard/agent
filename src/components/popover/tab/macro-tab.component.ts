@@ -13,19 +13,7 @@ import {OptionData} from 'ng2-select2/dist/select2';
 @Component({
     moduleId: module.id,
     selector: 'macro-tab',
-    template: `
-        <div class="macro-selector">
-            <b> Play macro: </b>
-            <select2 [data]="macrosOptions" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
-        </div>
-        <div class="macro-action-container">
-            <template [ngIf]="selectedMacroIndex >= 0">
-                <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions.elements"
-                            [macroAction]="macroAction">
-                </macro-item>
-            </template>
-        </div>
-    `,
+    template: require('./macro-tab.component.html'),
     styles: [require('./macro-tab.component.scss')],
     directives: [MacroItemComponent, SELECT2_DIRECTIVES]
 })

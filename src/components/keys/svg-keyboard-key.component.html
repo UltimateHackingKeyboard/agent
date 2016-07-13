@@ -1,0 +1,42 @@
+<svg:rect [id]="id" [attr.rx]="rx"          [attr.ry]="ry"
+                    [attr.height]="height"  [attr.width]="width"
+                    [attr.fill]="fill"
+/>
+<svg:g [ngSwitch]="labelType"
+        [attr.font-size]="19"
+        [attr.font-family]="'Helvetica'"
+        [attr.fill]="'white'"
+        style="dominant-baseline: central">
+    <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
+            [height]="height"
+            [width]="width"
+            [text]="labelSource">
+    </svg:g>
+    <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
+            [height]="height"
+            [width]="width"
+            [texts]="labelSource">
+    </svg:g>
+    <svg:g svg-text-icon-key *ngSwitchCase="enumLabelTypes.TextIcon"
+            [height]="height"
+            [width]="width"
+            [text]="labelSource.text"
+            [icon]="labelSource.icon">
+    </svg:g>
+    <svg:g svg-icon-text-key *ngSwitchCase="enumLabelTypes.IconText"
+            [height]="height"
+            [width]="width"
+            [icon]="labelSource.icon"
+            [text]="labelSource.text">
+    </svg:g>
+    <svg:g svg-single-icon-key *ngSwitchCase="enumLabelTypes.SingleIcon"
+            [height]="height"
+            [width]="width"
+            [icon]="labelSource">
+    </svg:g>
+    <svg:g svg-switch-keymap-key *ngSwitchCase="enumLabelTypes.SwitchKeymap"
+            [height]="height"
+            [width]="width"
+            [abbreviation]="labelSource">
+    </svg:g>
+</svg:g>

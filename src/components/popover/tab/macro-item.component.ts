@@ -22,14 +22,7 @@ import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModif
 @Component({
     moduleId: module.id,
     selector: 'macro-item',
-    template:
-    `
-         <icon *ngIf="moveable" name="option-vertical"></icon>
-         <icon [name]="iconName"></icon>
-         <div> {{ title }} </div>
-         <icon *ngIf="deletable" name="trash"></icon>
-         <icon *ngIf="editable" name="pencil"></icon>
-    `,
+    template: require('./macro-item.component.html'),
     styles: [require('./macro-item.component.scss')],
     directives: [IconComponent]
 })

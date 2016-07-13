@@ -7,29 +7,8 @@ import {DataProviderService} from '../services/data-provider.service';
 
 @Component({
     selector: 'svg-keyboard',
-    template:
-    `
-        <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="svgAttributes.viewBox" height="100%" width="100%">
-            <svg:g [attr.transform]="svgAttributes.transform" [attr.fill]="svgAttributes.fill">
-                <svg:g svg-module *ngFor="let module of modules; let i = index"
-                        [coverages]="module.coverages"
-                        [keyboardKeys]="module.keyboardKeys"
-                        [attr.transform]="module.attributes.transform"
-                        [keyActions]="moduleConfig[i].keyActions.elements"
-                        (editKeyActionRequest)="onEditKeyActionRequest(i, $event)"
-                />
-            </svg:g>
-        </svg>
-    `,
-    styles:
-    [`
-        :host {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-    `],
+    template: require('./svg-keyboard.component.html'),
+    styles: [require('./svg-keyboard.component.scss')],
     directives: [SvgModuleComponent]
 })
 export class SvgKeyboardComponent implements OnInit {

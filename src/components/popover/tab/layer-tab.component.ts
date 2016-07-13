@@ -11,16 +11,7 @@ import {OptionData} from 'ng2-select2/dist/select2';
 @Component({
     moduleId: module.id,
     selector: 'layer-tab',
-    template:
-    `
-        <select2 [data]="toggleData" (valueChanged)="toggleChanged($event)"></select2>
-        <span>the</span>
-        <select2 [data]="layerData" (valueChanged)="layerChanged($event)"></select2>
-        <span [ngSwitch]="toggle">
-             <template ngSwitchCase="true">layer by pressing this key.</template>
-             <template ngSwitchDefault="false">layer by holding this key.</template>
-        </span>
-    `,
+    template: require('./layer-tab.component.html'),
     styles: [require('./layer-tab.component.scss')],
     directives: [SELECT2_DIRECTIVES, NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
