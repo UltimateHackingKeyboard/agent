@@ -1,8 +1,8 @@
 import { Component, OnInit, Renderer} from '@angular/core';
 import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 
-import { KeyActionSaver } from '../key-action-saver';
-import {MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/MouseAction';
+import { KeyActionSaver } from '../../key-action-saver';
+import {MouseAction, MouseActionParam} from '../../../../../config-serializer/config-items/MouseAction';
 
 @Component({
     moduleId: module.id,

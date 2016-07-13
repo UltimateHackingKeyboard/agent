@@ -1,4 +1,4 @@
-import {SvgKeyboardKey} from './keys/svg-keyboard-key.model';
+import {SvgKeyboardKey} from '../keys/svg-keyboard-key.model';
 
 export class SvgModule {
     private coverages: any[];

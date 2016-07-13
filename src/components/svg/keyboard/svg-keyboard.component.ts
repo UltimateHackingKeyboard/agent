@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
-import {Module} from '../../config-serializer/config-items/Module';
-import {SvgModule} from './svg-module.model';
-import {SvgModuleComponent} from './svg-module.component';
-import {DataProviderService} from '../services/data-provider.service';
+import {Module} from '../../../../config-serializer/config-items/Module';
+import {SvgModule} from '../module/svg-module.model';
+import {SvgModuleComponent} from '../module/svg-module.component';
+import {DataProviderService} from '../../../services/data-provider.service';
 
 @Component({
     selector: 'svg-keyboard',

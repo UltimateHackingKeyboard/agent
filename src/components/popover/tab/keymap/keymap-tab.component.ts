@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import {UhkConfigurationService} from '../../../services/uhk-configuration.service';
-import {Keymap} from '../../../../config-serializer/config-items/Keymap';
-import {SvgKeyboardComponent} from '../../svg-keyboard.component';
-import {KeyActionSaver} from '../key-action-saver';
-import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
+import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
+import {Keymap} from '../../../../../config-serializer/config-items/Keymap';
+import {SvgKeyboardComponent} from '../../../svg/keyboard/svg-keyboard.component';
+import {KeyActionSaver} from '../../key-action-saver';
+import {SwitchKeymapAction} from '../../../../../config-serializer/config-items/SwitchKeymapAction';
 
 import {OptionData} from 'ng2-select2/dist/select2';
 import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';

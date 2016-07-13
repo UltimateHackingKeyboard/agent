@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import {NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 
-import { LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/SwitchLayerAction';
-import { KeyActionSaver } from '../key-action-saver';
+import { LayerName, SwitchLayerAction } from '../../../../../config-serializer/config-items/SwitchLayerAction';
+import { KeyActionSaver } from '../../key-action-saver';
 
 import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
 import {OptionData} from 'ng2-select2/dist/select2';

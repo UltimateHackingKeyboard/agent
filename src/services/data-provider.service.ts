@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {SvgModule} from '../components/svg-module.model';
+import {SvgModule} from '../components/svg/module/svg-module.model';
 
 @Injectable()
 export class DataProviderService {

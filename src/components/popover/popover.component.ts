@@ -16,12 +16,12 @@ import {NgSwitch, NgSwitchCase} from '@angular/common';
 
 import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
 
-import {KeypressTabComponent} from './tab/keypress-tab.component';
-import {LayerTabComponent} from './tab/layer-tab.component';
-import {MouseTabComponent} from './tab/mouse-tab.component';
-import {MacroTabComponent} from './tab/macro-tab.component';
-import {KeymapTabComponent} from './tab/keymap-tab.component';
-import {NoneTabComponent} from './tab/none-tab.component';
+import {KeypressTabComponent} from './tab/keypress/keypress-tab.component';
+import {LayerTabComponent} from './tab/layer/layer-tab.component';
+import {MouseTabComponent} from './tab/mouse/mouse-tab.component';
+import {MacroTabComponent} from './tab/macro/macro-tab.component';
+import {KeymapTabComponent} from './tab/keymap/keymap-tab.component';
+import {NoneTabComponent} from './tab/none/none-tab.component';
 
 import {KeyActionSaver} from './key-action-saver';
 

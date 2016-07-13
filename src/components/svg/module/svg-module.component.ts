@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import {SvgKeyboardKey} from './keys/svg-keyboard-key.model';
-import {SvgKeyboardKeyComponent} from './keys/svg-keyboard-key.component';
-import {KeyAction} from '../../config-serializer/config-items/KeyAction';
+import {SvgKeyboardKey} from '../keys/svg-keyboard-key.model';
+import {SvgKeyboardKeyComponent} from '../keys/svg-keyboard-key.component';
+import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
 
 @Component({
     selector: 'g[svg-module]',

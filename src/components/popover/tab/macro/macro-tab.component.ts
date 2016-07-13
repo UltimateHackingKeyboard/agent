@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UhkConfigurationService } from '../../../services/uhk-configuration.service';
-import { Macro } from '../../../../config-serializer/config-items/Macro';
-import { PlayMacroAction } from '../../../../config-serializer/config-items/PlayMacroAction';
+import { UhkConfigurationService } from '../../../../services/uhk-configuration.service';
+import { Macro } from '../../../../../config-serializer/config-items/Macro';
+import { PlayMacroAction } from '../../../../../config-serializer/config-items/PlayMacroAction';
 
-import { KeyActionSaver } from '../key-action-saver';
+import { KeyActionSaver } from '../../key-action-saver';
 import { MacroItemComponent } from './macro-item.component';
 
 import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';

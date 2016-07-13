@@ -2,16 +2,16 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
     moduleId: module.id,
-    selector: 'g[svg-single-icon-key]',
-    template: require('./svg-single-icon-key.component.html')
+    selector: 'g[svg-text-icon-key]',
+    template: require('./svg-text-icon-key.component.html')
 })
-export class SvgSingleIconKeyComponent implements OnInit {
+export class SvgTextIconKeyComponent implements OnInit {
     @Input() width: number;
     @Input() height: number;
+    @Input() text: string;
     @Input() icon: string;
 
     constructor() { }
 
     ngOnInit() { }
-
 }

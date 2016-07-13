@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { KeyActionSaver } from '../key-action-saver';
-import { NoneAction } from '../../../../config-serializer/config-items/NoneAction';
+import { KeyActionSaver } from '../../key-action-saver';
+import { NoneAction } from '../../../../../config-serializer/config-items/NoneAction';
 
 @Component({
     moduleId: module.id,

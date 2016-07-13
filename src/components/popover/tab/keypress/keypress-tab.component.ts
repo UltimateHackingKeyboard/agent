@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CaptureKeystrokeButtonComponent } from '../widgets/capture-keystroke-button.component';
+import { CaptureKeystrokeButtonComponent } from '../../widgets/capture-keystroke/capture-keystroke-button.component';
 
-import { KeyAction } from '../../../../config-serializer/config-items/KeyAction';
-import { KeystrokeAction } from '../../../../config-serializer/config-items/KeystrokeAction';
-import { KeyActionSaver } from '../key-action-saver';
+import { KeyAction } from '../../../../../config-serializer/config-items/KeyAction';
+import { KeystrokeAction } from '../../../../../config-serializer/config-items/KeystrokeAction';
+import { KeyActionSaver } from '../../key-action-saver';
 
-import {IconComponent} from '../widgets/icon.component';
+import {IconComponent} from '../../widgets/icon/icon.component';
 
 import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
 import {OptionData} from 'ng2-select2/dist/select2';

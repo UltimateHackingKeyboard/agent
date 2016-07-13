@@ -2,16 +2,15 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
     moduleId: module.id,
-    selector: 'g[svg-one-line-text-key]',
-    template: require('./svg-one-line-text-key.component.html')
+    selector: 'g[svg-two-line-text-key]',
+    template: require('./svg-two-line-text-key.component.html')
 })
-export class SvgOneLineTextKeyComponent implements OnInit {
+export class SvgTwoLineTextKeyComponent implements OnInit {
     @Input() height: number;
     @Input() width: number;
-    @Input() text: string;
+    @Input() texts: string[];
 
     constructor() { }
 
     ngOnInit() { }
-
 }
