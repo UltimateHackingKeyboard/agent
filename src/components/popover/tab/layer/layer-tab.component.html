@@ -1,0 +1,7 @@
+<select2 [data]="toggleData" (valueChanged)="toggleChanged($event)"></select2>
+<span>the</span>
+<select2 [data]="layerData" (valueChanged)="layerChanged($event)"></select2>
+<span [ngSwitch]="toggle">
+     <template ngSwitchCase="true">layer by pressing this key.</template>
+     <template ngSwitchDefault="false">layer by holding this key.</template>
+</span>

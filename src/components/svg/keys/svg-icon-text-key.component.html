@@ -1,0 +1,13 @@
+<svg:use [attr.xlink:href]="icon"
+        [attr.width]="useWidth"
+        [attr.height]="useHeight"
+        [attr.x]="useX"
+        [attr.y]="useY">
+</svg:use>
+<svg:text
+    [attr.x]="0"
+    [attr.y]="textY"
+    [attr.text-anchor]="'middle'"
+    [attr.font-size]="11">
+        <tspan [attr.x]="spanX">{{ text }}</tspan>
+</svg:text>
