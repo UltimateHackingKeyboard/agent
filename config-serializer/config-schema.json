@@ -48,12 +48,46 @@
                                                             ]
                                                         }
                                                     },
+                                                    "required": [
+                                                        "keyActionType"
+                                                    ],
                                                     "oneOf": [
                                                         {
                                                             "properties": {
                                                                 "keyActionType": {
                                                                     "type": "string",
-                                                                    "pattern": "^keystroke$"
+                                                                    "enum": [
+                                                                        "mouse"
+                                                                    ]
+                                                                },
+                                                                "mouseAction": {
+                                                                    "type": "string",
+                                                                    "enum": [
+                                                                        "leftClick",
+                                                                        "middleClick",
+                                                                        "rightClick",
+                                                                        "moveUp",
+                                                                        "moveDown",
+                                                                        "moveLeft",
+                                                                        "moveRight",
+                                                                        "scrollUp",
+                                                                        "scrollDown",
+                                                                        "scrollLeft",
+                                                                        "scrollRight",
+                                                                        "accelerate",
+                                                                        "decelerate"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "keyActionType": {
+                                                                    "type": "string",
+                                                                    "enum": [
+                                                                        "keystroke"
+                                                                    ]
                                                                 },
                                                                 "scancode": {
                                                                     "type": "integer"
@@ -61,10 +95,13 @@
                                                             }
                                                         },
                                                         {
+                                                            "type": "object",
                                                             "properties": {
                                                                 "keyActionType": {
                                                                     "type": "string",
-                                                                    "pattern": "^switchLayer$"
+                                                                    "enum": [
+                                                                        "switchLayer"
+                                                                    ]
                                                                 },
                                                                 "layer": {
                                                                     "type": "string"
@@ -75,10 +112,39 @@
                                                             }
                                                         },
                                                         {
+                                                            "type": "object",
                                                             "properties": {
                                                                 "keyActionType": {
                                                                     "type": "string",
-                                                                    "pattern": "^none$"
+                                                                    "enum": [
+                                                                        "switchKeymap"
+                                                                    ]
+                                                                },
+                                                                "keymapId": {
+                                                                    "type": "integer"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "properties": {
+                                                                "keyActionType": {
+                                                                    "type": "string",
+                                                                    "enum": [
+                                                                        "playMacro"
+                                                                    ]
+                                                                },
+                                                                "macroId": {
+                                                                    "type": "integer"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "properties": {
+                                                                "keyActionType": {
+                                                                    "type": "string",
+                                                                    "enum": [
+                                                                        "none"
+                                                                    ]
                                                                 }
                                                             }
                                                         }
