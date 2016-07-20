@@ -15,22 +15,26 @@
     text-align: right;
 }
 
-.popover-title.menu-tabs {
-    padding: 0.5rem 0.5rem 0;
-    display: block;
-}
+.popover-title {
+    &.menu-tabs {
+        padding: 0.5rem 0.5rem 0;
+        display: block;
 
-.popover-title.menu-tabs .nav-tabs {
-    position: relative;
-    top: 1px;
+        .nav-tabs {
+            position: relative;
+            top: 1px;
+        }
+    }
 }
 
 .popover-content {
     padding: 10px 24px;
 }
 
-mouse-tab.popover-content {
-    padding: 10px;
-    display: flex;
-    align-items: center;
+mouse-tab {
+    &.popover-content {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
 }
