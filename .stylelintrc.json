@@ -17,7 +17,7 @@
 
     "no-duplicate-selectors": true,
     "no-eol-whitespace": true,
-    "no-missing-eof-newline": true,
+    "no-missing-end-of-source-newline": true,
     "max-empty-lines": 1,
     "indentation": 4,
 
