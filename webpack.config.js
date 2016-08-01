@@ -5,6 +5,7 @@ module.exports = {
     entry: ['es6-shim', 'zone.js', 'reflect-metadata', './src/boot.ts'],
     output: {
         path: __dirname + "/build",
+        publicPath: "/build/",
         filename: "uhk.js"
     },
     devtool: 'source-map',
