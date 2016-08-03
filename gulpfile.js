@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var browserSync = require('browser-sync').create();
 var args = require('yargs').argv;
 var gulpif = require('gulp-if');
 var sass = require('gulp-sass');
@@ -10,16 +9,6 @@ var paths = {
   sassAll: 'sass/**/*.scss',
   cssDest: 'css'
 }
-
-gulp.task('serve', function () {
-  browserSync.init({
-    server: {
-      baseDir: "./"
-    },
-  });
-
-  gulp.watch(['*.html', '*.css', '*.js']).on('change', browserSync.reload);
-});
 
 gulp.task('sass', function () {
   return gulp.src(paths.sassAll)

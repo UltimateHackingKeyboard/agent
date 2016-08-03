@@ -8,14 +8,18 @@ Agent is in a preliminary state. You can click around, and most interactions wil
 
 ## Set up instructions
 
+Prerequisite: Install Node.js <br/>
+Verify that you are running at least node v4.x.x and npm 3.x.x by running node -v and npm -v in a terminal/console window. Older versions produce errors.
+
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
 npm install
 npm run build
+npm run webpack-dev-server
 ```
 
-In the repository you can find a `gulpfile.js` for running [browsersync](https://www.browsersync.io/), which speeds up the development process. You can fire it up with `gulp serve`.
+The agent will be hosted on `localhost:8080`.
 
 ## Contribute
 
