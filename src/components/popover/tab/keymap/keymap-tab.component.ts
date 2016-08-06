@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
 import {Keymap} from '../../../../../config-serializer/config-items/Keymap';
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {SvgKeyboardComponent} from '../../../svg/keyboard/svg-keyboard.component';
-import {KeyActionSaver} from '../../key-action-saver';
+import {Tab} from '../tab';
 import {SwitchKeymapAction} from '../../../../../config-serializer/config-items/SwitchKeymapAction';
 
 import {OptionData} from 'ng2-select2/dist/select2';
@@ -16,15 +17,17 @@ import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
     styles: [require('./keymap-tab.component.scss')],
     directives: [SvgKeyboardComponent, SELECT2_DIRECTIVES]
 })
-export class KeymapTabComponent implements OnInit, KeyActionSaver {
+export class KeymapTabComponent implements OnInit, Tab {
+    @Input() defaultKeyAction: KeyAction;
 
     private keymaps: Keymap[];
-    private keymapOptions: Array<OptionData> = [];
+    private keymapOptions: Array<OptionData>;
     private selectedKeymapIndex: number;
 
     constructor(private uhkConfigurationService: UhkConfigurationService) {
-        this.selectedKeymapIndex = -1;
         this.keymaps = [];
+        this.keymapOptions = [];
+        this.selectedKeymapIndex = -1;
     }
 
     ngOnInit() {
@@ -35,21 +38,32 @@ export class KeymapTabComponent implements OnInit, KeyActionSaver {
             text: 'Switch to keymap'
         });
 
-        this.keymapOptions = this.keymapOptions.concat(this.keymaps.map(function(keymap: Keymap): OptionData {
+        this.keymapOptions = this.keymapOptions.concat(this.keymaps.map(function (keymap: Keymap): OptionData {
             return {
                 id: keymap.id.toString(),
                 text: keymap.name
             };
         }));
+
+        this.fromKeyAction(this.defaultKeyAction);
     }
 
     // TODO: change to the correct type when the wrapper has added it.
     onChange(event: any) {
-        this.selectedKeymapIndex = parseInt(event.value, 10);
+        this.selectedKeymapIndex = +event.value;
     }
 
     keyActionValid(): boolean {
-        return this.selectedKeymapIndex !== -1;
+        return this.selectedKeymapIndex >= 0;
+    }
+
+    fromKeyAction(keyAction: KeyAction): boolean {
+        if (!(keyAction instanceof SwitchKeymapAction)) {
+            return false;
+        }
+        let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
+        this.selectedKeymapIndex = this.keymaps.findIndex(keymap => switchKeymapAction.keymapId === keymap.id);
+        return true;
     }
 
     toKeyAction(): SwitchKeymapAction {

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 
-import { KeyActionSaver } from '../../key-action-saver';
-import { NoneAction } from '../../../../../config-serializer/config-items/NoneAction';
+import {Tab} from '../tab';
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
+import {NoneAction} from '../../../../../config-serializer/config-items/NoneAction';
 
 @Component({
     moduleId: module.id,
@@ -9,13 +10,17 @@ import { NoneAction } from '../../../../../config-serializer/config-items/NoneAc
     template: require('./none-tab.component.html'),
     styles: [require('./none-tab.component.scss')]
 })
-export class NoneTabComponent implements OnInit, KeyActionSaver {
+export class NoneTabComponent implements OnInit, Tab {
     constructor() { }
 
     ngOnInit() { }
 
     keyActionValid(): boolean {
         return true;
+    }
+
+    fromKeyAction(keyAction: KeyAction): boolean {
+        return false;
     }
 
     toKeyAction(): NoneAction {

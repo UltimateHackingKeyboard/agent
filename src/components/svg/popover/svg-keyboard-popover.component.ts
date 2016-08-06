@@ -16,6 +16,7 @@ export class SvgKeyboardPopoverComponent implements OnInit {
 
     private popoverEnabled: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
+    private popoverInitKeyAction: KeyAction;
 
     constructor() {
         this.keyEditConfig = {
@@ -32,7 +33,9 @@ export class SvgKeyboardPopoverComponent implements OnInit {
                 moduleId,
                 keyId
             };
-            this.showPopover();
+
+            let keyActionToEdit: KeyAction = this.moduleConfig[moduleId].keyActions.elements[keyId];
+            this.showPopover(keyActionToEdit);
         }
     }
 
@@ -41,12 +44,14 @@ export class SvgKeyboardPopoverComponent implements OnInit {
         this.hidePopover();
     }
 
-    showPopover(): void {
+    showPopover(keyAction?: KeyAction): void {
+        this.popoverInitKeyAction = keyAction;
         this.popoverEnabled = true;
     }
 
     hidePopover(): void {
         this.popoverEnabled = false;
+        this.popoverInitKeyAction = undefined;
     }
 
     changeKeyAction(keyAction: KeyAction): void {

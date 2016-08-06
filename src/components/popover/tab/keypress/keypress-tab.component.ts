@@ -1,17 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { CaptureKeystrokeButtonComponent } from '../../widgets/capture-keystroke/capture-keystroke-button.component';
-
-import { KeyAction } from '../../../../../config-serializer/config-items/KeyAction';
-import { KeyModifiers } from '../../../../../config-serializer/config-items/KeyModifiers';
-import { KeystrokeAction } from '../../../../../config-serializer/config-items/KeystrokeAction';
-import { LongPressAction } from '../../../../../config-serializer/config-items/LongPressAction';
-import { KeyActionSaver } from '../../key-action-saver';
-
-import {IconComponent} from '../../widgets/icon/icon.component';
+import {Component, OnInit, Input} from '@angular/core';
 
 import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
 import {OptionData} from 'ng2-select2/dist/select2';
+
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
+import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
+
+import {IconComponent} from '../../widgets/icon/icon.component';
+import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke/capture-keystroke-button.component';
+import {Tab} from '../tab';
 
 @Component({
     moduleId: module.id,
@@ -20,11 +17,8 @@ import {OptionData} from 'ng2-select2/dist/select2';
     styles: [require('./keypress-tab.component.scss')],
     directives: [CaptureKeystrokeButtonComponent, IconComponent, SELECT2_DIRECTIVES]
 })
-export class KeypressTabComponent implements OnInit, KeyActionSaver {
-
-    // TODO(@Nejc): We need a type for select2 component instead of any
-    @ViewChild('scanCodeSelect') scanCodeSelect: any;
-    @ViewChild('longPressSelect') longPressSelect: any;
+export class KeypressTabComponent implements OnInit, Tab {
+    @Input() defaultKeyAction: KeyAction;
 
     private leftModifiers: string[];
     private rightModifiers: string[];
@@ -34,6 +28,9 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
 
     private scanCodeGroups: Array<OptionData>;
     private longPressGroups: Array<OptionData>;
+
+    private scanCode: number;
+    private selectedLongPressIndex: number;
 
     constructor() {
         this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
@@ -46,9 +43,12 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
         this.longPressGroups = require('json!./longPress.json');
         this.leftModifierSelects = Array(4).fill(false);
         this.rightModifierSelects = Array(4).fill(false);
+        this.selectedLongPressIndex = -1;
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.fromKeyAction(this.defaultKeyAction);
+    }
 
     keyActionValid(keystrokeAction?: KeystrokeAction): boolean {
         if (!keystrokeAction) {
@@ -57,46 +57,46 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
         return keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0;
     }
 
+    fromKeyAction(keyAction: KeyAction): boolean {
+        if (!(keyAction instanceof KeystrokeAction)) {
+            return false;
+        }
+        let keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
+        // Restore scancode
+        this.scanCode = keystrokeAction.scancode || 0;
+
+        // Restore modifiers
+        for (let i = 0; i < this.leftModifierSelects.length; ++i) {
+            this.leftModifierSelects[this.modifierMapper(i)] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
+        }
+        for (let i = 4; i < 4 + this.rightModifierSelects.length; ++i) {
+            this.rightModifierSelects[this.modifierMapper(i) - 4] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
+        }
+
+        // Restore longPressAction
+        if (keystrokeAction.longPressAction !== undefined) {
+            this.selectedLongPressIndex = this.modifierMapper(keystrokeAction.longPressAction);
+        }
+
+        return true;
+    }
+
     toKeyAction(): KeystrokeAction {
         let keystrokeAction: KeystrokeAction = new KeystrokeAction();
-        keystrokeAction.scancode = +this.scanCodeSelect.selector.nativeElement.value;
+        keystrokeAction.scancode = this.scanCode;
 
-        let mapper = (x: number) => {
-            if (x < 8) {
-                return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
-            } else {
-                return x;
-            }
-        };
         keystrokeAction.modifierMask = 0;
         let modifiers = this.leftModifierSelects.concat(this.rightModifierSelects).map(x => x ? 1 : 0);
         for (let i = 0; i < modifiers.length; ++i) {
-            keystrokeAction.modifierMask |= modifiers[i] << mapper(i);
-        }
-        let selectedLongPressIndex = 0;
-        let tempIndex: number;
-        const selectedValue: string = this.longPressSelect.selector.nativeElement.value;
-        for (let i = 0; i < this.longPressGroups.length; ++i) {
-            if (this.longPressGroups[i].children) {
-                tempIndex = this.longPressGroups[i].children.findIndex(x => x.id === selectedValue);
-                if (tempIndex >= 0) {
-                    selectedLongPressIndex += tempIndex;
-                    break;
-                } else {
-                    selectedLongPressIndex += this.longPressGroups[i].children.length;
-                }
-            } else {
-                if (this.longPressGroups[i].id === selectedValue) {
-                    break;
-                } else {
-                    ++selectedLongPressIndex;
-                }
-            }
+            keystrokeAction.modifierMask |= modifiers[i] << this.modifierMapper(i);
         }
 
-        keystrokeAction.longPressAction = selectedLongPressIndex === 0 ? undefined : mapper(selectedLongPressIndex - 1);
+        keystrokeAction.longPressAction = this.selectedLongPressIndex === -1
+            ? undefined
+            : this.modifierMapper(this.selectedLongPressIndex);
+
         if (!this.keyActionValid(keystrokeAction)) {
-           throw new Error('KeyAction is invalid!');
+            throw new Error('KeyAction is invalid!');
         }
 
         return keystrokeAction;
@@ -124,4 +124,22 @@ export class KeypressTabComponent implements OnInit, KeyActionSaver {
         let modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
         modifierSelects[index] = !modifierSelects[index];
     }
+
+    // TODO: change to the correct type when the wrapper has added it.
+    private onLongpressChange(event: any) {
+        this.selectedLongPressIndex = +event.value;
+    }
+
+    // TODO: change to the correct type when the wrapper has added it.
+    private onScancodeChange(event: any) {
+        this.scanCode = +event.value;
+    }
+
+    private modifierMapper(x: number) {
+        if (x < 8) {
+            return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
+        } else {
+            return x;
+        }
+    };
 }

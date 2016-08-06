@@ -2,37 +2,37 @@
     <div class="row">
         <div class="popover-title menu-tabs">
             <ul class="nav nav-tabs popover-menu">
-                <li #keypress (click)="onListItemClick(0)">
+                <li #keypress [class.active]="activeTabIndex === 0" (click)="selectTab(0)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-keyboard-o"></i>
                         <span>Keypress</span>
                     </a>
                 </li>
-                <li #layer (click)="onListItemClick(1)">
+                <li #layer [class.active]="activeTabIndex === 1" (click)="selectTab(1)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-clone"></i>
                         <span>Layer</span>
                     </a>
                 </li>
-                <li #mouse (click)="onListItemClick(2)">
+                <li #mouse [class.active]="activeTabIndex === 2" (click)="selectTab(2)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-mouse-pointer"></i>
                         <span>Mouse</span>
                     </a>
                 </li>
-                <li #macro (click)="onListItemClick(3)">
+                <li #macro [class.active]="activeTabIndex === 3" (click)="selectTab(3)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-play"></i>
                         <span>Macro</span>
                     </a>
                 </li>
-                <li #keymap (click)="onListItemClick(4)">
+                <li #keymap [class.active]="activeTabIndex === 4" (click)="selectTab(4)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-keyboard-o"></i>
                         <span>Keymap</span>
                     </a>
                 </li>
-                <li #none (click)="onListItemClick(5)">
+                <li #none [class.active]="activeTabIndex === 5" (click)="selectTab(5)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-ban"></i>
                         <span>None</span>
@@ -41,13 +41,13 @@
             </ul>
         </div>
     </div>
-    <div class="row" [ngSwitch]="activeListItemIndex">
-        <keypress-tab #tab *ngSwitchCase="0" class="popover-content"></keypress-tab>
-        <layer-tab #tab *ngSwitchCase="1" class="popover-content"></layer-tab>
-        <mouse-tab #tab *ngSwitchCase="2" class="popover-content"></mouse-tab>
-        <macro-tab #tab *ngSwitchCase="3" class="popover-content"></macro-tab>
-        <keymap-tab #tab *ngSwitchCase="4" class="popover-content"></keymap-tab>
-        <none-tab #tab *ngSwitchCase="5" class="popover-content"></none-tab>
+    <div class="row" [ngSwitch]="activeTabIndex">
+        <keypress-tab #tab *ngSwitchCase="0" class="popover-content" [defaultKeyAction]="defaultKeyAction"></keypress-tab>
+        <layer-tab #tab *ngSwitchCase="1" class="popover-content" [defaultKeyAction]="defaultKeyAction"></layer-tab>
+        <mouse-tab #tab *ngSwitchCase="2" class="popover-content" [defaultKeyAction]="defaultKeyAction"></mouse-tab>
+        <macro-tab #tab *ngSwitchCase="3" class="popover-content" [defaultKeyAction]="defaultKeyAction"></macro-tab>
+        <keymap-tab #tab *ngSwitchCase="4" class="popover-content" [defaultKeyAction]="defaultKeyAction"></keymap-tab>
+        <none-tab #tab *ngSwitchCase="5" class="popover-content" [defaultKeyAction]="defaultKeyAction"></none-tab>
     </div>
     <div class="row">
         <div class="popover-action">

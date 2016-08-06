@@ -1,17 +1,4 @@
-import {
-    Component,
-    OnInit,
-    AfterViewInit,
-    Output,
-    EventEmitter,
-    ViewChild,
-    ViewChildren,
-    ElementRef,
-    Renderer,
-    QueryList,
-    ChangeDetectorRef
-} from '@angular/core';
-
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {NgSwitch, NgSwitchCase} from '@angular/common';
 
 import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
@@ -23,7 +10,12 @@ import {MacroTabComponent} from './tab/macro/macro-tab.component';
 import {KeymapTabComponent} from './tab/keymap/keymap-tab.component';
 import {NoneTabComponent} from './tab/none/none-tab.component';
 
-import {KeyActionSaver} from './key-action-saver';
+import {Tab} from './tab/tab';
+import {KeystrokeAction} from '../../../config-serializer/config-items/KeystrokeAction';
+import {SwitchLayerAction} from '../../../config-serializer/config-items/SwitchLayerAction';
+import {MouseAction} from '../../../config-serializer/config-items/MouseAction';
+import {PlayMacroAction} from '../../../config-serializer/config-items/PlayMacroAction';
+import {SwitchKeymapAction} from '../../../config-serializer/config-items/SwitchKeymapAction';
 
 @Component({
     moduleId: module.id,
@@ -43,25 +35,36 @@ import {KeyActionSaver} from './key-action-saver';
         NoneTabComponent
     ]
 })
-export class PopoverComponent implements OnInit, AfterViewInit {
+export class PopoverComponent implements OnInit {
+    @Input() defaultKeyAction: KeyAction;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyAction>();
 
-    @ViewChildren('keypress,layer,mouse,macro,keymap,none') liElementRefs: QueryList<ElementRef>;
-    @ViewChild('tab') selectedTab: KeyActionSaver;
+    @ViewChild('tab') selectedTab: Tab;
 
-    private activeListItemIndex: number;
+    private activeTabIndex: number;
 
-    constructor(private renderer: Renderer, private changeDetectorRef: ChangeDetectorRef) {
-        this.activeListItemIndex = -1;
+    constructor() {
+        this.activeTabIndex = -1;
     }
 
-    ngOnInit() { }
-
-    ngAfterViewInit() {
-        this.onListItemClick(0);
-        this.changeDetectorRef.detectChanges();
+    ngOnInit() {
+        let tabIndex: number;
+        if (this.defaultKeyAction instanceof KeystrokeAction) {
+            tabIndex = 0;
+        } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
+            tabIndex = 1;
+        } else if (this.defaultKeyAction instanceof MouseAction) {
+            tabIndex = 2;
+        } else if (this.defaultKeyAction instanceof PlayMacroAction) {
+            tabIndex = 3;
+        } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
+            tabIndex = 4;
+        } else {
+            tabIndex = 5;
+        }
+        this.selectTab(tabIndex);
     }
 
     onCancelClick(): void {
@@ -78,13 +81,8 @@ export class PopoverComponent implements OnInit, AfterViewInit {
         }
     }
 
-    onListItemClick(index: number): void {
-        let listItems: HTMLLIElement[] = this.liElementRefs.toArray().map(liElementRef => liElementRef.nativeElement);
-        if (this.activeListItemIndex >= 0) {
-            this.renderer.setElementClass(listItems[this.activeListItemIndex], 'active', false);
-        }
-        this.renderer.setElementClass(listItems[index], 'active', true);
-        this.activeListItemIndex = index;
+    selectTab(index: number): void {
+        this.activeTabIndex = index;
     }
 
 }

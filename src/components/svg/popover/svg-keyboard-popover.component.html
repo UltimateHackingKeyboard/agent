@@ -1,4 +1,4 @@
 <svg-keyboard [moduleConfig]="moduleConfig"
             (keyClick)="onKeyClick($event.moduleId, $event.keyId)">
 </svg-keyboard>
-<popover *ngIf="popoverEnabled" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+<popover *ngIf="popoverEnabled" [defaultKeyAction]="popoverInitKeyAction" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>

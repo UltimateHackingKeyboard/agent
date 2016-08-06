@@ -1,7 +1,8 @@
-import { Component, OnInit, Renderer} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 
-import { KeyActionSaver } from '../../key-action-saver';
+import {Tab} from '../tab';
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {MouseAction, MouseActionParam} from '../../../../../config-serializer/config-items/MouseAction';
 
 @Component({
@@ -11,20 +12,61 @@ import {MouseAction, MouseActionParam} from '../../../../../config-serializer/co
     styles: [require('./mouse-tab.component.scss')],
     directives: [NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
-export class MouseTabComponent implements OnInit, KeyActionSaver {
+export class MouseTabComponent implements OnInit, Tab {
+    @Input() defaultKeyAction: KeyAction;
+
     private mouseActionParam: MouseActionParam;
-    private selectedIndex: number;
-    private selectedButton: HTMLButtonElement;
+    private selectedPageIndex: number;
     private MouseActionParam = MouseActionParam;
 
-    constructor(private renderer: Renderer) {
-        this.selectedIndex = 0;
+    constructor() {
+        this.selectedPageIndex = 0;
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.fromKeyAction(this.defaultKeyAction);
+    }
 
     keyActionValid(): boolean {
-        return !!this.mouseActionParam;
+        return this.mouseActionParam !== undefined;
+    }
+
+    fromKeyAction(keyAction: KeyAction): boolean {
+        if (!(keyAction instanceof MouseAction)) {
+            return false;
+        }
+        let mouseAction: MouseAction = <MouseAction>keyAction;
+        this.mouseActionParam = mouseAction.mouseAction;
+
+        if (mouseAction.mouseAction === MouseActionParam.moveUp) {
+            this.selectedPageIndex = 0;
+        }
+        switch (mouseAction.mouseAction) {
+            case MouseActionParam.moveDown:
+            case MouseActionParam.moveUp:
+            case MouseActionParam.moveLeft:
+            case MouseActionParam.moveRight:
+                this.selectedPageIndex = 0;
+                break;
+            case MouseActionParam.scrollDown:
+            case MouseActionParam.scrollUp:
+            case MouseActionParam.scrollLeft:
+            case MouseActionParam.scrollRight:
+                this.selectedPageIndex = 1;
+                break;
+            case MouseActionParam.leftClick:
+            case MouseActionParam.middleClick:
+            case MouseActionParam.rightClick:
+                this.selectedPageIndex = 2;
+                break;
+            case MouseActionParam.decelerate:
+            case MouseActionParam.accelerate:
+                this.selectedPageIndex = 3;
+                break;
+            default:
+                return false;
+        }
+        return true;
     }
 
     toKeyAction(): MouseAction {
@@ -41,17 +83,11 @@ export class MouseTabComponent implements OnInit, KeyActionSaver {
             console.error(`Invalid index error: ${index}`);
             return;
         }
-        this.selectedIndex = index;
+        this.selectedPageIndex = index;
         this.mouseActionParam = undefined;
-        this.selectedButton = undefined;
     }
 
-    onMouseActionClick(target: HTMLButtonElement, mouseActionParam: MouseActionParam) {
-        if (this.selectedButton) {
-            this.renderer.setElementClass(this.selectedButton, 'btn-primary', false);
-        }
-        this.selectedButton = target;
-        this.renderer.setElementClass(target, 'btn-primary', true);
+    setMouseActionParam(mouseActionParam: MouseActionParam) {
         this.mouseActionParam = mouseActionParam;
     }
 

@@ -124,6 +124,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
                         break;
                 }
                 this.labelSource = newLabelSource;
+            } else {
+                this.labelSource = undefined;
             }
         } else if (this.keyAction instanceof SwitchLayerAction) {
             let keyAction: SwitchLayerAction = this.keyAction as SwitchLayerAction;

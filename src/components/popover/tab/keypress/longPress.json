@@ -1,41 +1,41 @@
 [
     {
-        "id": "none",
+        "id": "-1",
         "text": "None"
     },
     {
         "text": "Modifiers",
         "children": [
             {
-                "id": "LShift",
+                "id": "0",
                 "text": "LShift"
             },
             {
-                "id": "LCtrl",
+                "id": "1",
                 "text": "LCtrl"
             },
             {
-                "id": "LSuper",
+                "id": "2",
                 "text": "LSuper"
             },
             {
-                "id": "LAlt",
+                "id": "3",
                 "text": "LAlt"
             },
             {
-                "id": "RShift",
+                "id": "4",
                 "text": "RShift"
             },
             {
-                "id": "RCtrl",
+                "id": "5",
                 "text": "RCtrl"
             },
             {
-                "id": "RSuper",
+                "id": "6",
                 "text": "RSuper"
             },
             {
-                "id": "RAlt",
+                "id": "7",
                 "text": "RAlt"
             }
         ]
@@ -44,15 +44,15 @@
         "text": "Layer switcher",
         "children": [
             {
-                "id": "Mod",
+                "id": "8",
                 "text": "Mod"
             },
             {
-                "id": "Mouse",
+                "id": "9",
                 "text": "Mouse"
             },
             {
-                "id": "Fn",
+                "id": "10",
                 "text": "Fn"
             }
         ]

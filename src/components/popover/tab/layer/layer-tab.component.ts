@@ -1,21 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 
-import {NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+import {LayerName, SwitchLayerAction} from '../../../../../config-serializer/config-items/SwitchLayerAction';
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 
-import { LayerName, SwitchLayerAction } from '../../../../../config-serializer/config-items/SwitchLayerAction';
-import { KeyActionSaver } from '../../key-action-saver';
-
-import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
+import {Select2Component} from 'ng2-select2/dist/select2/select2.component';
 import {OptionData} from 'ng2-select2/dist/select2';
+
+import {Tab} from '../tab';
 
 @Component({
     moduleId: module.id,
     selector: 'layer-tab',
     template: require('./layer-tab.component.html'),
     styles: [require('./layer-tab.component.scss')],
-    directives: [SELECT2_DIRECTIVES, NgSwitch, NgSwitchCase, NgSwitchDefault]
+    directives: [Select2Component, NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
-export class LayerTabComponent implements OnInit, KeyActionSaver {
+export class LayerTabComponent implements OnInit, Tab {
+    @Input() defaultKeyAction: KeyAction;
+    @ViewChild('toggleSelect') toggleSelect2: Select2Component;
+    @ViewChild('layerSelect') layerSelect2: Select2Component;
+
     private toggle: boolean;
     private layer: LayerName;
 
@@ -50,9 +55,21 @@ export class LayerTabComponent implements OnInit, KeyActionSaver {
         this.layer = LayerName.mod;
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.fromKeyAction(this.defaultKeyAction);
+    }
 
     keyActionValid(): boolean {
+        return true;
+    }
+
+    fromKeyAction(keyAction: KeyAction): boolean {
+        if (!(keyAction instanceof SwitchLayerAction)) {
+            return false;
+        }
+        let switchLayerAction: SwitchLayerAction = <SwitchLayerAction>keyAction;
+        this.toggle = switchLayerAction.isLayerToggleable;
+        this.layer = switchLayerAction.layer;
         return true;
     }
 
