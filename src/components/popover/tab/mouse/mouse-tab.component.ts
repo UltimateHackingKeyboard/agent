@@ -19,8 +19,11 @@ export class MouseTabComponent implements OnInit, Tab {
     private selectedPageIndex: number;
     private MouseActionParam = MouseActionParam;
 
+    private pages: string[];
+
     constructor() {
         this.selectedPageIndex = 0;
+        this.pages = ['Move', 'Scroll', 'Click', 'Speed'];
     }
 
     ngOnInit() {

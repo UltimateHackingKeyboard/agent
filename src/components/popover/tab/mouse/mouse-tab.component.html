@@ -1,9 +1,8 @@
 <div class="mouse-action col-sm-4">
     <ul class="nav nav-pills nav-stacked">
-        <li (click)="changePage(0)" [class.active]="selectedPageIndex === 0"><a>     Move    </a></li>
-        <li (click)="changePage(1)" [class.active]="selectedPageIndex === 1"><a>     Scroll  </a></li>
-        <li (click)="changePage(2)" [class.active]="selectedPageIndex === 2"><a>     Click   </a></li>
-        <li (click)="changePage(3)" [class.active]="selectedPageIndex === 3"><a>     Speed   </a></li>
+        <li *ngFor="let page of pages; let i = index" [class.active]="selectedPageIndex === i" (click)="changePage(i)">
+            <a> {{ page }}</a>
+        </li>
     </ul>
 </div>
 <div class="details col-sm-8" [ngSwitch]="selectedPageIndex">
