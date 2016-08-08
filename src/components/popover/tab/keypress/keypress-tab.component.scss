@@ -2,11 +2,32 @@
     display: flex;
     flex-direction: column;
 
+    .scancode-options {
+        margin-bottom: 10px;
+        margin-top: 2px;
+        > b {
+            position: relative;
+            top: 2px;
+        }
+    }
+
+    .modifier-options {
+        > b {
+            position: relative;
+            top: -9px;
+            margin-right: 4px;
+        }
+
+        .btn-toolbar {
+            display: inline-block;
+        }
+    }
+
     .long-press-container {
         display: flex;
         margin-top: 3rem;
 
-        b {
+        > b {
             margin-right: 0.6em;
             align-items: center;
             display: flex;
