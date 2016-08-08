@@ -17,6 +17,15 @@ import {MouseAction} from '../../../config-serializer/config-items/MouseAction';
 import {PlayMacroAction} from '../../../config-serializer/config-items/PlayMacroAction';
 import {SwitchKeymapAction} from '../../../config-serializer/config-items/SwitchKeymapAction';
 
+enum TabName {
+    Keypress,
+    Layer,
+    Mouse,
+    Macro,
+    Keymap,
+    None
+}
+
 @Component({
     moduleId: module.id,
     selector: 'popover',
@@ -43,28 +52,27 @@ export class PopoverComponent implements OnInit {
 
     @ViewChild('tab') selectedTab: Tab;
 
-    private activeTabIndex: number;
+    private TabName = TabName;
+    private activeTab: TabName;
 
-    constructor() {
-        this.activeTabIndex = -1;
-    }
+    constructor() { }
 
     ngOnInit() {
-        let tabIndex: number;
+        let tab: TabName;
         if (this.defaultKeyAction instanceof KeystrokeAction) {
-            tabIndex = 0;
+            tab = TabName.Keypress;
         } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
-            tabIndex = 1;
+            tab = TabName.Layer;
         } else if (this.defaultKeyAction instanceof MouseAction) {
-            tabIndex = 2;
+            tab = TabName.Mouse;
         } else if (this.defaultKeyAction instanceof PlayMacroAction) {
-            tabIndex = 3;
+            tab = TabName.Macro;
         } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
-            tabIndex = 4;
+            tab = TabName.Keymap;
         } else {
-            tabIndex = 5;
+            tab = TabName.None;
         }
-        this.selectTab(tabIndex);
+        this.selectTab(tab);
     }
 
     onCancelClick(): void {
@@ -81,8 +89,8 @@ export class PopoverComponent implements OnInit {
         }
     }
 
-    selectTab(index: number): void {
-        this.activeTabIndex = index;
+    selectTab(tab: TabName): void {
+        this.activeTab = tab;
     }
 
 }
