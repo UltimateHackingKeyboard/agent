@@ -41,8 +41,8 @@ export class KeypressTabComponent implements OnInit, Tab {
         }];
         this.scanCodeGroups = this.scanCodeGroups.concat(require('json!./scancodes.json'));
         this.longPressGroups = require('json!./longPress.json');
-        this.leftModifierSelects = Array(4).fill(false);
-        this.rightModifierSelects = Array(4).fill(false);
+        this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
+        this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.selectedLongPressIndex = -1;
     }
 
@@ -65,12 +65,17 @@ export class KeypressTabComponent implements OnInit, Tab {
         // Restore scancode
         this.scanCode = keystrokeAction.scancode || 0;
 
+
+        let leftModifiersLength: number = this.leftModifiers.length;
+
         // Restore modifiers
-        for (let i = 0; i < this.leftModifierSelects.length; ++i) {
+        for (let i = 0; i < leftModifiersLength; ++i) {
             this.leftModifierSelects[this.modifierMapper(i)] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
         }
-        for (let i = 4; i < 4 + this.rightModifierSelects.length; ++i) {
-            this.rightModifierSelects[this.modifierMapper(i) - 4] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
+
+        for (let i = leftModifiersLength; i < leftModifiersLength + this.rightModifierSelects.length; ++i) {
+            let index: number = this.modifierMapper(i) - leftModifiersLength;
+            this.rightModifierSelects[index] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
         }
 
         // Restore longPressAction
