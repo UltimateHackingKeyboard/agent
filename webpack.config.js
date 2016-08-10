@@ -20,6 +20,17 @@ module.exports = {
         ]
     },
     module: {
+        preLoaders: [
+            {
+                test: /(.js|.ts)$/,
+                loader: 'string-replace-loader',
+                query: {
+                    search: 'moduleId: module.id,',
+                    replace: '',
+                    flags: 'g'
+                }
+            }
+        ],
         loaders: [
             { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ },
             { test: /\.html$/, loader: 'html-loader' },
