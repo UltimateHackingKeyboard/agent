@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import {SELECT2_DIRECTIVES, Select2OptionData} from 'ng2-select2/ng2-select2';
+import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
@@ -14,7 +14,7 @@ import {Tab} from '../tab';
     selector: 'keypress-tab',
     template: require('./keypress-tab.component.html'),
     styles: [require('./keypress-tab.component.scss')],
-    directives: [CaptureKeystrokeButtonComponent, IconComponent, SELECT2_DIRECTIVES]
+    directives: [CaptureKeystrokeButtonComponent, IconComponent, Select2Component]
 })
 export class KeypressTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;

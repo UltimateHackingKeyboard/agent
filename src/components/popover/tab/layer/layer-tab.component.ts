@@ -4,7 +4,7 @@ import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {LayerName, SwitchLayerAction} from '../../../../../config-serializer/config-items/SwitchLayerAction';
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 
-import {SELECT2_DIRECTIVES, Select2OptionData} from 'ng2-select2/ng2-select2';
+import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 import {Tab} from '../tab';
 
@@ -13,12 +13,12 @@ import {Tab} from '../tab';
     selector: 'layer-tab',
     template: require('./layer-tab.component.html'),
     styles: [require('./layer-tab.component.scss')],
-    directives: [SELECT2_DIRECTIVES, NgSwitch, NgSwitchCase, NgSwitchDefault]
+    directives: [Select2Component, NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
 export class LayerTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
-    @ViewChild('toggleSelect') toggleSelect2: SELECT2_DIRECTIVES;
-    @ViewChild('layerSelect') layerSelect2: SELECT2_DIRECTIVES;
+    @ViewChild('toggleSelect') toggleSelect2: Select2Component;
+    @ViewChild('layerSelect') layerSelect2: Select2Component;
 
     private toggle: boolean;
     private layer: LayerName;

@@ -7,14 +7,14 @@ import {SvgKeyboardComponent} from '../../../svg/keyboard/svg-keyboard.component
 import {Tab} from '../tab';
 import {SwitchKeymapAction} from '../../../../../config-serializer/config-items/SwitchKeymapAction';
 
-import {SELECT2_DIRECTIVES, Select2OptionData} from 'ng2-select2/ng2-select2';
+import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 @Component({
     moduleId: module.id,
     selector: 'keymap-tab',
     template: require('./keymap-tab.component.html'),
     styles: [require('./keymap-tab.component.scss')],
-    directives: [SvgKeyboardComponent, SELECT2_DIRECTIVES]
+    directives: [SvgKeyboardComponent, Select2Component]
 })
 export class KeymapTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
