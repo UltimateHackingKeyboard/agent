@@ -1,6 +1,6 @@
 <div class="macro-selector">
     <b> Play macro: </b>
-    <select2 [data]="macroOptions" [selectedValue]="macroOptions[selectedMacroIndex + 1].id" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
+    <select2 [data]="macroOptions" [value]="macroOptions[selectedMacroIndex + 1].id" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
 </div>
 <div class="macro-action-container">
     <template [ngIf]="selectedMacroIndex >= 0">

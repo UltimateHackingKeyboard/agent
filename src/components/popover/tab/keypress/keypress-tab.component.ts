@@ -1,7 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
-import {OptionData} from 'ng2-select2/dist/select2';
+import {SELECT2_DIRECTIVES, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
@@ -26,8 +25,8 @@ export class KeypressTabComponent implements OnInit, Tab {
     private leftModifierSelects: boolean[];
     private rightModifierSelects: boolean[];
 
-    private scanCodeGroups: Array<OptionData>;
-    private longPressGroups: Array<OptionData>;
+    private scanCodeGroups: Array<Select2OptionData>;
+    private longPressGroups: Array<Select2OptionData>;
 
     private scanCode: number;
     private selectedLongPressIndex: number;
