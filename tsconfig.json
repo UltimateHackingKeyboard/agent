@@ -8,12 +8,17 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "baseUrl": "./src",
+    "types": [
+      "node",
+      "jquery",
+      "es6-shim",
+      "select2"
+    ]
   },
   "exclude": [
     "node_modules",
-    "typings/main",
-    "typings/main.d.ts",
     "config-serializer"
   ]
 }
