@@ -1,10 +1,15 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "experimentalDecorators": true
-    },
-    "files": [
-        "../typings/index.d.ts"
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "es6-shim"
     ]
+  }
 }

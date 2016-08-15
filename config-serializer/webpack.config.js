@@ -6,6 +6,7 @@ module.exports = {
     },
     target: 'node',
     output: {
+        path: __dirname,
         filename: "test-serializer.js"
     },
     resolve: {
