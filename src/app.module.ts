@@ -11,7 +11,7 @@ import { MainAppComponent }  from './main-app.component';
 import { KeymapComponent } from './components/keymap/keymap.component';
 import { MacroComponent } from './components/macro/macro.component';
 import { LegacyLoaderComponent } from './components/legacy/legacy-loader.component';
-import {NotificationComponent} from "./components/notification/notification.component";
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
     declarations: [MainAppComponent, KeymapComponent, MacroComponent, LegacyLoaderComponent, NotificationComponent],
