@@ -1,4 +1,5 @@
 // var webpack = require("webpack");
+var webpackFailPlugin = require('webpack-fail-plugin');
 
 module.exports = {
     entry: {
@@ -24,7 +25,8 @@ module.exports = {
         ]
     },
     plugins: [
-        //   new webpack.optimize.UglifyJsPlugin({ minimize: true })
+        //   new webpack.optimize.UglifyJsPlugin({ minimize: true }),
+        webpackFailPlugin
     ],
     node: {
         fs: "empty"

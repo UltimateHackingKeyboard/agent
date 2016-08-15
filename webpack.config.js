@@ -1,5 +1,6 @@
 // var webpack = require("webpack");
 var SvgStore = require('webpack-svgstore-plugin');
+var webpackFailPlugin = require('webpack-fail-plugin');
 
 module.exports = {
     entry: ['es6-shim', 'zone.js', 'reflect-metadata', './src/boot.ts'],
@@ -57,7 +58,8 @@ module.exports = {
                     ]
                 }
             }
-        )
+        ),
+        webpackFailPlugin
     ]
 
 }

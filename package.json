@@ -22,6 +22,7 @@
     "tslint": "^3.14.0",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
+    "webpack-fail-plugin": "^1.0.5",
     "webpack-stream": "^3.2.0",
     "webpack-svgstore-plugin": "^2.2.2",
     "yargs": "^4.8.1"

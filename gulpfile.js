@@ -24,7 +24,11 @@ gulp.task('watch', function () {
 
 gulp.task('webpack', function () {
   return gulp.src('./src/boot.ts')
-    .pipe(webpackStream(require('./webpack.config.js')))
+    .pipe(webpackStream(require('./webpack.config.js'))
+      .on('error', function (error) {
+        // console.error(error.message);
+        this.emit('end');
+      }))
     .pipe(gulp.dest('build/'));
 });
 
