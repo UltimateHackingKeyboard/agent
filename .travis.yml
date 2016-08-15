@@ -1,0 +1,20 @@
+language: node_js
+sudo: false
+
+node_js:
+  - '5.10.0'
+
+install:
+  - npm install
+
+before_script:
+  - npm run build
+  - npm run build:test
+
+script:
+  - cd ./config-serializer
+  - node ./test-serializer.js
+
+cache:
+  directories:
+    - node_modules
