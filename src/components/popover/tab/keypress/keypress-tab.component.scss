@@ -1,6 +1,7 @@
 :host {
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .scancode-options {
         margin-bottom: 10px;
@@ -39,6 +40,39 @@
 
         icon {
             margin-left: 0.6em;
+        }
+    }
+
+    .setting-label {
+        &.disabled {
+            color: #999;
+        }
+    }
+
+    .disabled-state--text {
+        display: none;
+        position: absolute;
+        top: 50%;
+        margin-top: -4rem;
+        color: #31708f;
+        padding-right: 40px;
+
+        .fa {
+            font-size: 2.6rem;
+            float: left;
+            padding: 1rem 1.5rem 2rem;
+        }
+    }
+
+    &.disabled {
+        .scancode-options,
+        .modifier-options,
+        .long-press-container {
+            visibility: hidden;
+        }
+
+        .disabled-state--text {
+            display: block;
         }
     }
 }

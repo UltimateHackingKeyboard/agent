@@ -28,6 +28,7 @@
             .menu-tabs--item {
                 display: flex;
                 align-items: center;
+                cursor: pointer;
 
                 i {
                     margin-right: 0.25em;
@@ -41,10 +42,19 @@
     padding: 10px 24px;
 }
 
-mouse-tab {
-    &.popover-content {
-        padding: 10px;
-        display: flex;
-        align-items: center;
+.select2-item {
+    position: relative;
+    font-size: 1.5rem;
+
+    &.keymap-name--wrapper {
+        padding-left: 50px;
+    }
+
+    .layout-segment-code {
+        height: 2rem;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-top: -1rem;
     }
 }
