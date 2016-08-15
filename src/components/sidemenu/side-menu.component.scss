@@ -11,13 +11,128 @@ a {
     color: #333;
 }
 
+.sidebar__fav {
+    position: absolute;
+    right: 0;
+    top: 3px;
+}
+
 ul ul {
     max-height: 200px;
-    transition: max-height 0.5s ease-in;
+    transition: max-height 500ms ease-in;
     overflow: hidden;
 }
 
 ul ul.slide-up {
     max-height: 0;
-    transition: max-height 0.5s ease-out;
+    transition: max-height 500ms ease-out;
+}
+
+// General list styles for the sidebar-menu.
+ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style: none;
+        padding: 0;
+    }
+}
+
+.sidebar {
+    &__level-1 {
+        padding: 0.5rem 1rem;
+        font-size: 2rem;
+        line-height: 3rem;
+
+        &:hover {
+            .fa-chevron-up,
+            .fa-chevron-down {
+                display: inline-block;
+            }
+        }
+
+        &--item {
+            margin-top: 0;
+
+            &:nth-child(1) {
+                margin: 0;
+            }
+        }
+
+        .sidebar__name {
+            width: 100%;
+            display: block;
+        }
+
+        .fa-chevron-up,
+        .fa-chevron-down {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            position: relative;
+            top: 0.5rem;
+            display: none;
+        }
+    }
+
+    // General spacing of level-1 and level-2 elements.
+    &__level-1,
+    &__level-2 {
+        padding-left: 15px;
+    }
+
+    &__level-2 {
+        margin-left: 15px;
+        position: relative;
+
+        &--item {
+            padding: 0 20px 0 0;
+
+            &.active {
+                background-color: #555;
+                color: #fff;
+
+                .fa-star {
+                    color: #fff;
+                }
+
+                &:hover {
+                    background-color: #555;
+                }
+            }
+
+            // General "right side" icon theming.
+            .fa.pull-right {
+                position: relative;
+                top: 2px;
+            }
+
+            .fa-star {
+                color: #666;
+            }
+        }
+    }
+
+    // General hover over menu items.
+    &__level-1,
+    &__level-2--item {
+        &:hover {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+}
+
+.menu--bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    .sidebar {
+        &__level-1 {
+            background-color: transparent;
+            padding: 1rem;
+        }
+    }
 }

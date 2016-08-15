@@ -10,8 +10,8 @@
         <ul #keymapElement>
             <li *ngFor="let keymap of keymaps" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
-                    <a [routerLink]="['/keymap', keymap.id]">{{keymap.name}}</a>
-                    <i class="fa fa-star pull-right"></i>
+                    <a [routerLink]="['/keymap', keymap.id]" class="sidebar__name">{{keymap.name}}</a>
+                    <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav"></i>
                 </div>
             </li>
         </ul>
@@ -28,7 +28,6 @@
             <li *ngFor="let macro of macros" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
                     <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
-                    <i class="fa fa-star pull-right"></i>
                 </div>
             </li>
         </ul>
