@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { SideMenuComponent } from './components/sidemenu/side-menu.component';
@@ -9,7 +9,8 @@ import { NotificationComponent } from './components/notification/notification.co
     selector: 'main-app',
     template: require('./main-app.component.html'),
     styles: [require('./main-app.component.scss')],
-    directives: [SideMenuComponent, ROUTER_DIRECTIVES, NotificationComponent]
+    directives: [SideMenuComponent, ROUTER_DIRECTIVES, NotificationComponent],
+    encapsulation: ViewEncapsulation.None
 })
 export class MainAppComponent  {
     constructor() {

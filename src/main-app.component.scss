@@ -1,4 +1,4 @@
-:host {
+main-app {
     display: block;
     height: 100vh;
     width: 100%;
@@ -9,6 +9,20 @@
 .main-content {
     height: 100%;
     margin-left: 250px;
+}
+
+.select2 {
+    &-container {
+        z-index: 100000;
+    }
+
+    &-results {
+        text-align: center;
+    }
+}
+
+.select2-selection__rendered {
+    line-height: 26px !important;
 }
 
 /* GitHub ribbon */
