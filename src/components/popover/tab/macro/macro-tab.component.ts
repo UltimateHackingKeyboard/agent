@@ -8,21 +8,20 @@ import {PlayMacroAction} from '../../../../../config-serializer/config-items/Pla
 import {Tab} from '../tab';
 import {MacroItemComponent} from './macro-item.component';
 
-import {SELECT2_DIRECTIVES} from 'ng2-select2/dist/ng2-select2';
-import {OptionData} from 'ng2-select2/dist/select2';
+import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 @Component({
     moduleId: module.id,
     selector: 'macro-tab',
     template: require('./macro-tab.component.html'),
     styles: [require('./macro-tab.component.scss')],
-    directives: [MacroItemComponent, SELECT2_DIRECTIVES]
+    directives: [MacroItemComponent, Select2Component]
 })
 export class MacroTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
 
     private macros: Macro[];
-    private macroOptions: Array<OptionData>;
+    private macroOptions: Array<Select2OptionData>;
     private selectedMacroIndex: number;
 
     constructor(private uhkConfigurationService: UhkConfigurationService) {
@@ -39,7 +38,7 @@ export class MacroTabComponent implements OnInit, Tab {
             text: 'Select macro'
         });
 
-        this.macroOptions = this.macroOptions.concat(this.macros.map(function (macro: Macro): OptionData {
+        this.macroOptions = this.macroOptions.concat(this.macros.map(function (macro: Macro): Select2OptionData {
             return {
                 id: macro.id.toString(),
                 text: macro.name

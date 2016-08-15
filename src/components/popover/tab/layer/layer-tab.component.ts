@@ -4,8 +4,7 @@ import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {LayerName, SwitchLayerAction} from '../../../../../config-serializer/config-items/SwitchLayerAction';
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 
-import {Select2Component} from 'ng2-select2/dist/select2/select2.component';
-import {OptionData} from 'ng2-select2/dist/select2';
+import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 import {Tab} from '../tab';
 
@@ -24,7 +23,7 @@ export class LayerTabComponent implements OnInit, Tab {
     private toggle: boolean;
     private layer: LayerName;
 
-    private toggleData: Array<OptionData> = [
+    private toggleData: Array<Select2OptionData> = [
         {
             id: 'false',
             text: 'Activate'
@@ -35,7 +34,7 @@ export class LayerTabComponent implements OnInit, Tab {
         }
     ];
 
-    private layerData: Array<OptionData> = [
+    private layerData: Array<Select2OptionData> = [
         {
             id: '0',
             text: 'Mod'
