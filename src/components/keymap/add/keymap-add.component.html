@@ -1,1 +1,47 @@
-add keymap
+<h1>
+    <i class="fa fa-keyboard-o"></i>
+    <span>Add new keymap</span>
+</h1>
+<div class="keymap__search clearfix">
+    <div class="input-group">
+        <span class="input-group-addon" id="sizing-addon1">
+            <i class="fa fa-search"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="Search ..." (input)="term = $event.target.value">
+    </div>
+    <div class="keymap__search_amount">
+        x / {{ keymaps.length }} keymaps shown
+    </div>
+</div>
+<div class="keymap__list">
+    <div class="keymap__list_item" *ngFor="let keymap of keymaps | search: term">
+        <h2>{{ keymap.name }}</h2>
+        <p class="keymap__description">
+            {{ keymap.description }}
+        </p>
+        <div class="row uhk--wrapper">
+            <div class="text-center">
+            <span class="uhk__layer-switcher--wrapper clearfix" data-title="Layers: ">
+                <button #baseButton type="button" class="btn btn-default btn-lg btn-primary">
+                    Base
+                </button>
+                <button #modButton type="button" class="btn btn-default btn-lg">
+                    Mod
+                </button>
+                <button #fnButton type="button" class="btn btn-default btn-lg">
+                    Fn
+                </button>
+                <button #mouseButton type="button" class="btn btn-default btn-lg">
+                    Mouse
+                </button>
+            </span>
+            </div>
+            <div class="keyboard-slider" *ngIf="keymap.layers">
+                <svg-keyboard *ngFor="let layer of keymap.layers.elements" [moduleConfig]="layer.modules.elements"></svg-keyboard>
+            </div>
+        </div>
+        <div class="btn-group btn-group-lg">
+            <button class="btn btn-default">Add keymap</button>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@
             "isDefault": true,
             "abbreviation": "QTY",
             "name": "QWERTY",
-            "description": "",
+            "description": "Maecenas sem dui, ullamcorper consequat pellentesque ut, mattis at velit. Duis scelerisque eleifend gravida. Aenean at mauris rhoncus, dictum mi vitae, semper eros. Quisque maximus est elit, at condimentum ligula consectetur vel. Aenean lorem felis, molestie id ex suscipit, sagittis mollis dui. Phasellus in felis in libero bibendum ornare. Duis vestibulum dolor sed diam tempor vulputate. Curabitur scelerisque pretium ipsum. Phasellus non orci vestibulum, vehicula lectus sit amet, lacinia velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In diam lacus, cursus at pretium vel, ullamcorper at ante.",
             "layers": [
                 {
                     "modules": [
@@ -781,7 +781,7 @@
             "isDefault": false,
             "abbreviation": "VIM",
             "name": "VIM",
-            "description": "",
+            "description": "Phasellus egestas ac tellus id tincidunt. Ut non nisl turpis. Morbi molestie diam elit, et cursus nibh tempus vel. Vestibulum mattis arcu nec nisi dictum, quis facilisis augue rutrum. Fusce vel tristique metus. Nullam pretium elit et enim maximus ornare. Praesent ultrices ligula ut mi convallis, quis ultrices enim venenatis. Aenean interdum odio aliquam quam vestibulum, vel bibendum elit ornare. Morbi leo enim, ullamcorper a bibendum sit amet, ultrices vitae ligula. Etiam consectetur et massa a convallis. Nullam non nisi aliquet, suscipit nulla a, tempor odio. Praesent eu turpis euismod, pellentesque mauris ut, imperdiet felis. Pellentesque vehicula luctus purus, et mattis ante volutpat eu. Quisque venenatis porta odio.",
             "layers": [
                 {
                     "modules": [
@@ -827,7 +827,7 @@
             "isDefault": false,
             "abbreviation": "DVR",
             "name": "DVR",
-            "description": "",
+            "description": "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean dictum sollicitudin massa, ut lacinia ipsum. Ut bibendum ipsum ac pulvinar vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat lobortis lacus, id viverra nisl varius eu. Aliquam vitae eros a augue fermentum ultricies. Nam tempus dui sed ante ultricies bibendum. In ligula velit, aliquet a felis vitae, gravida tincidunt ante. Proin euismod velit odio, at pretium lacus porta egestas. Suspendisse aliquam, lacus accumsan dapibus elementum, orci felis egestas leo, non vulputate lorem turpis nec risus. Curabitur id volutpat orci. Sed aliquet finibus iaculis. In venenatis neque ac dolor posuere, vel vestibulum augue posuere.",
             "layers": [
                 {
                     "modules": [
