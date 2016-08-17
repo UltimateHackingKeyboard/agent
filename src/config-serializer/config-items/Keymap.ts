@@ -10,6 +10,8 @@ export class Keymap extends Serializable<Keymap> {
 
     name: string;
 
+    description: string;
+
     abbreviation: string;
 
     isDefault: boolean;
@@ -21,6 +23,7 @@ export class Keymap extends Serializable<Keymap> {
         this.isDefault = jsObject.isDefault;
         this.abbreviation = jsObject.abbreviation;
         this.name = jsObject.name;
+        this.description = jsObject.description;
         this.layers = new Layers().fromJsObject(jsObject.layers);
         return this;
     }
@@ -30,6 +33,7 @@ export class Keymap extends Serializable<Keymap> {
         this.isDefault = buffer.readBoolean();
         this.abbreviation = buffer.readString();
         this.name = buffer.readString();
+        this.description = buffer.readString();
         this.layers = new Layers().fromBinary(buffer);
         return this;
     }
@@ -40,6 +44,7 @@ export class Keymap extends Serializable<Keymap> {
             isDefault: this.isDefault,
             abbreviation: this.abbreviation,
             name: this.name,
+            description: this.description,
             layers: this.layers.toJsObject()
         };
     }
@@ -49,6 +54,7 @@ export class Keymap extends Serializable<Keymap> {
         buffer.writeBoolean(this.isDefault);
         buffer.writeString(this.abbreviation);
         buffer.writeString(this.name);
+        buffer.writeString(this.description);
         this.layers.toBinary(buffer);
     }
 
