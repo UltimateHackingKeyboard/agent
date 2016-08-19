@@ -42,6 +42,7 @@ export class KeypressTabComponent implements OnInit, Tab {
         this.longPressGroups = require('json!./longPress.json');
         this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
+        this.scanCode = 0;
         this.selectedLongPressIndex = -1;
     }
 
