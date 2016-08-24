@@ -45,8 +45,8 @@ export class KeymapComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.subParams = this.route.params.subscribe(params => {
-            let id: number = +params['id'];
+        this.subParams = this.route.params.subscribe((params: { id: string }) => {
+            let id: number = +params.id;
 
             if (!isNaN(id)) {
                 this.keymapId = id;
@@ -125,7 +125,7 @@ export class KeymapComponent implements OnInit, AfterViewInit {
         let animationNameTokens: string[] = event.animationName.split('-');
         let animationFrom: string = animationNameTokens[1];
         let animationTo: string = animationNameTokens[2];
-        if ((<HTMLElement> event.target).style.animationDirection === 'reverse') {
+        if ((<HTMLElement>event.target).style.animationDirection === 'reverse') {
             animationFrom = animationNameTokens[2];
             animationTo = animationNameTokens[1];
             this.renderer.setElementStyle(event.target, 'animation-direction', undefined);

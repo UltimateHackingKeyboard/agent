@@ -11,7 +11,6 @@ export class SvgTextIconKeyComponent implements OnInit {
     @Input() text: string;
     @Input() icon: string;
 
-
     private useWidth: number;
     private useHeight: number;
     private useX: number;

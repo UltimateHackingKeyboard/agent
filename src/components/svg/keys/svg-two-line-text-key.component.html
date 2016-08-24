@@ -5,7 +5,7 @@
          <tspan
                 *ngFor="let text of texts; let index = index"
                 [attr.x]="spanX"
-                [attr.y]="spanY(index)"
+                [attr.y]="spanYs[index]"
                 dy="0"
                 >{{ text }}</tspan>
  </svg:text>

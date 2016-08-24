@@ -65,7 +65,6 @@ export class KeypressTabComponent implements OnInit, Tab {
         // Restore scancode
         this.scanCode = keystrokeAction.scancode || 0;
 
-
         let leftModifiersLength: number = this.leftModifiers.length;
 
         // Restore modifiers
@@ -131,12 +130,16 @@ export class KeypressTabComponent implements OnInit, Tab {
     }
 
     // TODO: change to the correct type when the wrapper has added it.
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private onLongpressChange(event: any) {
+        /* tslint:enable:no-unused-variable: */
         this.selectedLongPressIndex = +event.value;
     }
 
     // TODO: change to the correct type when the wrapper has added it.
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private onScancodeChange(event: any) {
+        /* tslint:enable:no-unused-variable */
         this.scanCode = +event.value;
     }
 

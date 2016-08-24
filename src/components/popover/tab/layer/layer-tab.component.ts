@@ -23,6 +23,7 @@ export class LayerTabComponent implements OnInit, Tab {
     private toggle: boolean;
     private layer: LayerName;
 
+    /* tslint:disable:no-unused-variable: They're used in the template */
     private toggleData: Array<Select2OptionData> = [
         {
             id: 'false',
@@ -48,6 +49,7 @@ export class LayerTabComponent implements OnInit, Tab {
             text: 'Mouse'
         }
     ];
+    /* tslint:enable:no-unused-variable */
 
     constructor() {
         this.toggle = false;
@@ -80,12 +82,16 @@ export class LayerTabComponent implements OnInit, Tab {
     }
 
     // TODO: change to the correct type when the wrapper has added it.
+    /* tslint:disable:no-unused-variable: This function is used in the template */
     private toggleChanged(event: any) {
+        /* tslint:enable:no-unused-variable */
         this.toggle = event.value;
     }
 
     // TODO: change to the correct type when the wrapper has added it.
+    /* tslint:disable:no-unused-variable: This function is used in the template  */
     private layerChanged(event: any) {
+        /* tslint:enable:no-unused-variable */
         this.layer = +event.value;
     }
 }

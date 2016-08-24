@@ -16,7 +16,6 @@ import { SvgKeystrokeKeyComponent } from './components/svg/keys/svg-keystroke-ke
 import { SvgOneLineTextKeyComponent } from './components/svg/keys/svg-one-line-text-key.component';
 import { SvgTwoLineTextKeyComponent } from './components/svg/keys/svg-two-line-text-key.component';
 
-
 @NgModule({
     declarations: [
         MainAppComponent,

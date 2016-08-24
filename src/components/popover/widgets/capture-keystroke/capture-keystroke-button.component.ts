@@ -13,11 +13,11 @@ export class CaptureKeystrokeButtonComponent implements OnInit {
 
     ngOnInit() { }
 
-    private start(): void {
+    start(): void {
         this.record = true;
     }
 
-    private stop(): void {
+    stop(): void {
         this.record = false;
     }
 

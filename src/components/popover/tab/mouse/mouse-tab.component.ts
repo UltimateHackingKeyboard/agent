@@ -17,7 +17,10 @@ export class MouseTabComponent implements OnInit, Tab {
 
     private mouseActionParam: MouseActionParam;
     private selectedPageIndex: number;
+    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private MouseActionParam = MouseActionParam;
+    /* tslint:enable:no-unused-variable tslint:enable:variable-name */
 
     private pages: string[];
 

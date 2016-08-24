@@ -12,15 +12,17 @@ export class SvgTwoLineTextKeyComponent implements OnInit {
 
     private textY: number;
     private spanX: number;
+    private spanYs: number[];
 
-    constructor() { }
+    constructor() {
+        this.spanYs = [];
+    }
 
     ngOnInit() {
         this.textY = this.height / 2;
         this.spanX = this.width / 2;
-    }
-
-    private spanY(index: number) {
-        return (0.75 - index * 0.5) * this.height;
+        for (let i = 0; i < this.texts.length; ++i) {
+            this.spanYs.push((0.75 - i * 0.5) * this.height);
+        }
     }
 }
