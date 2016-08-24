@@ -7,6 +7,11 @@
         [attr.font-family]="'Helvetica'"
         [attr.fill]="'white'"
         style="dominant-baseline: central">
+    <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
+            [height]="height"
+            [width]="width"
+            [keystrokeAction]="labelSource">
+    </svg:g>
     <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
             [height]="height"
             [width]="width"
