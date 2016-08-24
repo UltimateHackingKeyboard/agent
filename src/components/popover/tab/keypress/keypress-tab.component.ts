@@ -5,8 +5,8 @@ import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
 
-import {IconComponent} from '../../widgets/icon/icon.component';
-import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke/capture-keystroke-button.component';
+import {IconComponent} from '../../widgets/icon';
+import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke';
 import {Tab} from '../tab';
 
 @Component({

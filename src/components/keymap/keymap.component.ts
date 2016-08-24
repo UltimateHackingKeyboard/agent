@@ -1,7 +1,7 @@
 import { Component, ViewChildren, QueryList, ElementRef, OnInit, AfterViewInit, Renderer } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { SvgKeyboardPopoverComponent } from '../svg/popover/svg-keyboard-popover.component';
+import { SvgKeyboardPopoverComponent } from '../svg/popover';
 import { Layers } from '../../../config-serializer/config-items/Layers';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 import { Keymap } from '../../../config-serializer/config-items/Keymap';

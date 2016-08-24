@@ -9,7 +9,7 @@ import {ReleaseModifiersMacroAction} from '../../../../../config-serializer/conf
 import {ScrollMouseMacroAction} from '../../../../../config-serializer/config-items/ScrollMouseMacroAction';
 import {TextMacroAction} from '../../../../../config-serializer/config-items/TextMacroAction';
 
-import {IconComponent} from '../../widgets/icon/icon.component';
+import {IconComponent} from '../../widgets/icon';
 
 import {KeyModifiers}  from '../../../../../config-serializer/config-items/KeyModifiers';
 
