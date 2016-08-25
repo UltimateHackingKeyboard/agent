@@ -2,8 +2,8 @@ import { Component, OnInit, Input} from '@angular/core';
 
 import {Module} from '../../../../config-serializer/config-items/Module';
 import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {SvgKeyboardComponent} from '../keyboard/svg-keyboard.component';
-import {PopoverComponent} from '../../popover/popover.component';
+import {SvgKeyboardComponent} from '../keyboard';
+import {PopoverComponent} from '../../popover';
 
 @Component({
     selector: 'svg-keyboard-popover',

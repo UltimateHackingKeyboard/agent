@@ -16,15 +16,16 @@ export class SideMenuComponent implements OnInit {
     private keymaps: Keymap[];
     private macros: Macro[];
 
-    constructor(private uhkConfigurationService: UhkConfigurationService) {
-    }
+    constructor(private uhkConfigurationService: UhkConfigurationService) { }
 
     ngOnInit() {
         this.keymaps = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements;
         this.macros = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
     }
 
+    /* tslint:disable:no-unused-variable: This function is used in the template */
     private toggleHide(event: Event, view: Element) {
+        /* tslint:enable:no-unused-variable */
         let header: DOMTokenList = (<Element> event.target).classList;
 
         view.classList.toggle('slide-up');

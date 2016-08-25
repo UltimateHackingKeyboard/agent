@@ -52,7 +52,10 @@ export class PopoverComponent implements OnInit {
 
     @ViewChild('tab') selectedTab: Tab;
 
+    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private TabName = TabName;
+    /* tslint:enable:no-unused-variable tslint:enable:variable-name */
     private activeTab: TabName;
 
     constructor() { }

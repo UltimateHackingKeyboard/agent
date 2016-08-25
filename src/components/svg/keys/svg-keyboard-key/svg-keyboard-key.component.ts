@@ -1,19 +1,19 @@
 import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
 
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {KeystrokeAction} from '../../../../config-serializer/config-items/KeystrokeAction';
-import {KeyModifiers} from '../../../../config-serializer/config-items/KeyModifiers';
-import {PlayMacroAction} from '../../../../config-serializer/config-items/PlayMacroAction';
-import {SwitchLayerAction, LayerName}  from '../../../../config-serializer/config-items/SwitchLayerAction';
-import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
-import {UhkConfiguration} from '../../../../config-serializer/config-items/UhkConfiguration';
-import {UhkConfigurationService} from '../../../services/uhk-configuration.service';
-import {MapperService} from '../../../services/mapper.service';
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
+import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
+import {KeyModifiers} from '../../../../../config-serializer/config-items/KeyModifiers';
+import {PlayMacroAction} from '../../../../../config-serializer/config-items/PlayMacroAction';
+import {SwitchLayerAction, LayerName}  from '../../../../../config-serializer/config-items/SwitchLayerAction';
+import {SwitchKeymapAction} from '../../../../../config-serializer/config-items/SwitchKeymapAction';
+import {UhkConfiguration} from '../../../../../config-serializer/config-items/UhkConfiguration';
+import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
+import {MapperService} from '../../../../services/mapper.service';
 
-import {SvgSingleIconKeyComponent} from './svg-single-icon-key.component';
-import {SvgTextIconKeyComponent} from './svg-text-icon-key.component';
-import {SvgIconTextKeyComponent} from './svg-icon-text-key.component';
-import {SvgSwitchKeymapKeyComponent} from './svg-switch-keymap-key.component';
+import {SvgSingleIconKeyComponent} from '../svg-single-icon-key';
+import {SvgTextIconKeyComponent} from '../svg-text-icon-key';
+import {SvgIconTextKeyComponent} from '../svg-icon-text-key';
+import {SvgSwitchKeymapKeyComponent} from '../svg-switch-keymap-key';
 
 enum LabelTypes {
     KeystrokeKey,

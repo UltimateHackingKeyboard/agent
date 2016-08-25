@@ -5,8 +5,8 @@ import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
 
-import {IconComponent} from '../../widgets/icon/icon.component';
-import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke/capture-keystroke-button.component';
+import {IconComponent} from '../../widgets/icon';
+import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke';
 import {Tab} from '../tab';
 
 @Component({
@@ -64,7 +64,6 @@ export class KeypressTabComponent implements OnInit, Tab {
         let keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
         // Restore scancode
         this.scanCode = keystrokeAction.scancode || 0;
-
 
         let leftModifiersLength: number = this.leftModifiers.length;
 
@@ -131,12 +130,16 @@ export class KeypressTabComponent implements OnInit, Tab {
     }
 
     // TODO: change to the correct type when the wrapper has added it.
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private onLongpressChange(event: any) {
+        /* tslint:enable:no-unused-variable: */
         this.selectedLongPressIndex = +event.value;
     }
 
     // TODO: change to the correct type when the wrapper has added it.
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private onScancodeChange(event: any) {
+        /* tslint:enable:no-unused-variable */
         this.scanCode = +event.value;
     }
 

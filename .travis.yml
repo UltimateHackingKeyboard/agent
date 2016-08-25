@@ -10,10 +10,10 @@ install:
 before_script:
   - npm run build
   - npm run build:test
+  - npm run lint
 
 script:
-  - cd ./config-serializer
-  - node ./test-serializer.js
+  - cd ./config-serializer && node ./test-serializer.js
 
 cache:
   directories:

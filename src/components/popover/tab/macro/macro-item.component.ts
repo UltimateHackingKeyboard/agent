@@ -2,20 +2,14 @@ import { Component, OnInit, OnChanges, Input } from '@angular/core';
 
 import {MacroAction} from '../../../../../config-serializer/config-items/MacroAction';
 import {DelayMacroAction} from '../../../../../config-serializer/config-items/DelayMacroAction';
-import {HoldKeyMacroAction} from '../../../../../config-serializer/config-items/HoldKeyMacroAction';
 import {HoldModifiersMacroAction} from '../../../../../config-serializer/config-items/HoldModifiersMacroAction';
-import {HoldMouseButtonsMacroAction} from '../../../../../config-serializer/config-items/HoldMouseButtonsMacroAction';
 import {MoveMouseMacroAction} from '../../../../../config-serializer/config-items/MoveMouseMacroAction';
-import {PressKeyMacroAction} from '../../../../../config-serializer/config-items/PressKeyMacroAction';
 import {PressModifiersMacroAction} from '../../../../../config-serializer/config-items/PressModifiersMacroAction';
-import {PressMouseButtonsMacroAction} from '../../../../../config-serializer/config-items/PressMouseButtonsMacroAction';
-import {ReleaseKeyMacroAction} from '../../../../../config-serializer/config-items/ReleaseKeyMacroAction';
 import {ReleaseModifiersMacroAction} from '../../../../../config-serializer/config-items/ReleaseModifiersMacroAction';
-import {ReleaseMouseButtonsMacroAction} from '../../../../../config-serializer/config-items/ReleaseMouseButtonsMacroAction';
 import {ScrollMouseMacroAction} from '../../../../../config-serializer/config-items/ScrollMouseMacroAction';
 import {TextMacroAction} from '../../../../../config-serializer/config-items/TextMacroAction';
 
-import {IconComponent} from '../../widgets/icon/icon.component';
+import {IconComponent} from '../../widgets/icon';
 
 import {KeyModifiers}  from '../../../../../config-serializer/config-items/KeyModifiers';
 
