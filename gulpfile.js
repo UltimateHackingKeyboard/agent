@@ -6,8 +6,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var webpackStream = require('webpack-stream');
 
 var paths = {
-  sassAll: 'sass/**/*.scss',
-  cssDest: 'css'
+  sassAll: 'src/sass/**/*.scss',
+  cssDest: 'dist/css'
 }
 
 gulp.task('sass', function () {
@@ -24,12 +24,12 @@ gulp.task('watch', function () {
 
 gulp.task('webpack', function () {
   return gulp.src('./src/boot.ts')
-    .pipe(webpackStream(require('./webpack.config.js'))
+    .pipe(webpackStream(require('./src/webpack.config.js'))
       .on('error', function (error) {
         // console.error(error.message);
         this.emit('end');
       }))
-    .pipe(gulp.dest('build/'));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('default', ['sass', 'webpack']);

@@ -3,7 +3,7 @@ var SvgStore = require('webpack-svgstore-plugin');
 var webpackFailPlugin = require('webpack-fail-plugin');
 
 module.exports = {
-    entry: ['es6-shim', 'zone.js', 'reflect-metadata', './src/boot.ts'],
+    entry: ['es6-shim', 'zone.js', 'reflect-metadata', './boot.ts'],
     output: {
         path: __dirname + "/build",
         publicPath: "/build/",

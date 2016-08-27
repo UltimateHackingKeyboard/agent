@@ -54,12 +54,11 @@
     "zone.js": "^0.6.12"
   },
   "scripts": {
-    "tslint": "tslint \"src/**/*.ts\" \"config-serializer/**/*.ts\"",
-    "stylelint": "stylelint \"src/**/*.scss\" \"sass/**/*.scss\" --syntax scss",
+    "tslint": "tslint \"src/**/*.ts\" \"test-serializer/**/*.ts\"",
+    "stylelint": "stylelint \"src/**/*.scss\" --syntax scss",
     "lint": "run-s -scn tslint stylelint",
     "build": "gulp",
-    "build:test": "webpack --config \"config-serializer/webpack.config.js\"",
-    "webpack": "webpack",
-    "webpack-dev-server": "webpack-dev-server"
+    "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
+    "dev": "webpack-dev-server --config \"src/webpack.config.js\""
   }
 }
