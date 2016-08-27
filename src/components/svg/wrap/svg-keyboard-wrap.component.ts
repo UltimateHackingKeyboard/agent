@@ -44,7 +44,7 @@ import { Layer } from '../../../../config-serializer/config-items/Layer';
                 style({
                     opacity: 1
                 }),
-                animate('500ms ease-in')
+                animate('400ms ease-out')
             ]),
             transition('* => none', [
                 style({
@@ -65,14 +65,14 @@ import { Layer } from '../../../../config-serializer/config-items/Layer';
                 style({
                     opacity: 1
                 }),
-                animate('500ms ease-in')
+                animate('400ms ease-out')
             ]),
             transition(
                 'leftIn => leftOut,' +
                 'rightIn => rightOut,' +
                 'leftIn <=> rightOut,' +
                 'rightIn <=> leftOut',
-                animate('500ms ease-in')
+                animate('400ms ease-out')
             )
         ])
     ]
