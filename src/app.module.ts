@@ -13,6 +13,10 @@ import { MacroComponent } from './components/macro';
 import { LegacyLoaderComponent } from './components/legacy-loader';
 import { NotificationComponent } from './components/notification';
 import { SvgKeystrokeKeyComponent, SvgOneLineTextKeyComponent, SvgTwoLineTextKeyComponent } from './components/svg/keys';
+import {SvgKeyboardWrapComponent} from './components/svg/wrap/svg-keyboard-wrap.component';
+import {LayersComponent} from './components/layers/layers.component';
+import {SvgKeyboardComponent} from './components/svg/keyboard/svg-keyboard.component';
+import {PopoverComponent} from './components/popover/popover.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +27,11 @@ import { SvgKeystrokeKeyComponent, SvgOneLineTextKeyComponent, SvgTwoLineTextKey
         NotificationComponent,
         SvgKeystrokeKeyComponent,
         SvgOneLineTextKeyComponent,
-        SvgTwoLineTextKeyComponent
+        SvgTwoLineTextKeyComponent,
+        SvgKeyboardWrapComponent,
+        LayersComponent,
+        PopoverComponent,
+        SvgKeyboardComponent
     ],
     imports: [BrowserModule],
     providers: [

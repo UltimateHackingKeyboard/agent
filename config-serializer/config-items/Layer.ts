@@ -1,11 +1,12 @@
-import {Serializable} from '../Serializable';
-import {Modules} from './Modules';
-import {UhkBuffer} from '../UhkBuffer';
+import { Serializable } from '../Serializable';
+import { Modules } from './Modules';
+import { UhkBuffer } from '../UhkBuffer';
+import { AnimationKeyboard } from '../../src/components/svg/wrap/animation';
 
 export class Layer extends Serializable<Layer> {
 
     modules: Modules;
-    animation: string = 'none';
+    animation: AnimationKeyboard = 'none';
 
     _fromJsObject(jsObject: any): Layer {
         this.modules = new Modules().fromJsObject(jsObject.modules);

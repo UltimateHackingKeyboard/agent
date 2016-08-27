@@ -4,8 +4,6 @@ import {
 } from '@angular/core';
 
 import { KeyAction } from '../../../../config-serializer/config-items/KeyAction';
-import { SvgKeyboardComponent } from '../keyboard';
-import { PopoverComponent } from '../../popover';
 import { Module } from '../../../../config-serializer/config-items/Module';
 import { Layer } from '../../../../config-serializer/config-items/Layer';
 
@@ -13,7 +11,6 @@ import { Layer } from '../../../../config-serializer/config-items/Layer';
     selector: 'svg-keyboard-wrap',
     template: require('./svg-keyboard-wrap.component.html'),
     styles: [require('./svg-keyboard-wrap.component.scss')],
-    directives: [SvgKeyboardComponent, PopoverComponent],
     animations: [
         trigger('layerState', [
             /* Right -> Left animation*/
@@ -103,8 +100,14 @@ export class SvgKeyboardWrapComponent implements OnInit {
 
     ngOnChanges() {
         this.currentLayer = 0;
-        this.layers.map((layer: Layer) => layer.animation = 'none');
-        this.layers[0].animation = 'leftIn';
+        if (this.layers.length > 0) {
+            this.layers.forEach((element) => {
+                element.animation = 'none';
+
+                return element;
+            });
+            this.layers[0].animation = 'leftIn';
+        }
     }
 
     onKeyClick(moduleId: number, keyId: number, module: Module[]): void {

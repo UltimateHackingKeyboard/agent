@@ -3,7 +3,8 @@
     flex-direction: column;
     max-width: none;
     padding: 0;
-    left: calc(50% - 285px);
+    left: 50%;
+    transform: translateX(-50%);
     top: 100px;
 }
 
