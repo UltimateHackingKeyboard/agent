@@ -12,13 +12,7 @@ module.exports = {
     devtool: 'source-map',
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
-        alias: {
-
-        },
-        modulesDirectories: [
-            'node_modules',
-            'bower_components'
-        ]
+        modulesDirectories: [ '/node_modules' ]
     },
     module: {
         preLoaders: [
