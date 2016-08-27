@@ -1,6 +1,6 @@
-import {Serializable} from './Serializable';
-import {UhkBuffer} from './UhkBuffer';
-import {UhkConfiguration} from './config-items/UhkConfiguration';
+import {Serializable} from '../src/config-serializer/Serializable';
+import {UhkBuffer} from '../src/config-serializer/UhkBuffer';
+import {UhkConfiguration} from '../src/config-serializer/config-items/UhkConfiguration';
 
 let assert = require('assert');
 let fs = require('fs');
