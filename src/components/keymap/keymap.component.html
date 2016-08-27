@@ -10,22 +10,7 @@
         </h1>
     </div>
     <div class="row uhk--wrapper">
-        <div class="col-xs-12 text-center">
-            <span class="uhk__layer-switcher--wrapper" data-title="Layers: ">
-                <button #baseButton type="button" class="btn btn-default btn-lg btn-primary" (click)="selectLayer(0)">
-                    Base
-                </button>
-                <button #modButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(1)">
-                    Mod
-                </button>
-                <button #fnButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(2)">
-                    Fn
-                </button>
-                <button #mouseButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(3)">
-                    Mouse
-                </button>
-            </span>
-        </div>
+        <layers (selected)="selectLayer($event.oldIndex, $event.index)" [len]="layers.elements.length"></layers>
         <div class="keyboard-slider" *ngIf="layers">
             <svg-keyboard-popover *ngFor="let layer of layers.elements"
                                   [moduleConfig]="layer.modules.elements"

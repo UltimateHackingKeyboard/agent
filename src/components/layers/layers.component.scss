@@ -1,0 +1,23 @@
+button {
+    margin: 2px;
+}
+
+.uhk {
+    &__layer-switcher {
+        &--wrapper {
+            position: relative;
+            margin-bottom: 2rem;
+
+            &:before {
+                content: attr(data-title);
+                display: inline-block;
+                position: absolute;
+                bottom: -0.3em;
+                right: 100%;
+                font-size: 2.4rem;
+                padding-right: 0.25em;
+                margin: 0;
+            }
+        }
+    }
+}

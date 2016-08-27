@@ -4,10 +4,6 @@
     display: block;
 }
 
-button {
-    margin: 2px;
-}
-
 svg-keyboard-popover {
     width: 95%;
     max-width: 1400px;
@@ -74,24 +70,6 @@ svg-keyboard-popover {
 .uhk {
     &--wrapper {
         height: calc(100% - 95px);
-    }
-
-    &__layer-switcher {
-        &--wrapper {
-            position: relative;
-            margin-bottom: 2rem;
-
-            &:before {
-                content: attr(data-title);
-                display: inline-block;
-                position: absolute;
-                bottom: -0.3em;
-                right: 100%;
-                font-size: 2.4rem;
-                padding-right: 0.25em;
-                margin: 0;
-            }
-        }
     }
 }
 

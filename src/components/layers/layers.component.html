@@ -1,0 +1,16 @@
+<div class="col-xs-12 text-center">
+    <span class="uhk__layer-switcher--wrapper" data-title="Layers: ">
+        <button *ngIf="len > 0" #baseButton type="button" class="btn btn-default btn-lg btn-primary" (click)="selectLayer(0)">
+            Base
+        </button>
+        <button *ngIf="len > 1" #modButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(1)">
+            Mod
+        </button>
+        <button *ngIf="len > 2" #fnButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(2)">
+            Fn
+        </button>
+        <button *ngIf="len > 3" #mouseButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(3)">
+            Mouse
+        </button>
+    </span>
+</div>
