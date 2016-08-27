@@ -785,6 +785,25 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -849,6 +868,44 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -858,6 +915,48 @@
             "abbreviation": "DVR",
             "name": "DVR",
             "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
                 {
                     "modules": [
                         {

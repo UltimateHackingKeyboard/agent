@@ -8,7 +8,6 @@ import {
     styles: [require('./layers.component.scss')]
 })
 export class LayersComponent {
-    @Input() len: number;
     @Input() current: number;
     @Output() selected = new EventEmitter();
 

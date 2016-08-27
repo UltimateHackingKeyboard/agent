@@ -88,8 +88,6 @@ export class SvgKeyboardWrapComponent implements OnInit {
     private module: Module[];
     private currentLayer: number;
 
-    private layersLength: number;
-
     constructor() {
         this.keyEditConfig = {
             moduleId: undefined,
@@ -101,14 +99,12 @@ export class SvgKeyboardWrapComponent implements OnInit {
 
     ngOnInit() {
         this.layers[0].animation = 'leftIn';
-        this.layersLength = this.layers.length;
     }
 
     ngOnChanges() {
         this.currentLayer = 0;
         this.layers.map((layer: Layer) => layer.animation = 'none');
         this.layers[0].animation = 'leftIn';
-        this.layersLength = this.layers.length;
     }
 
     onKeyClick(moduleId: number, keyId: number, module: Module[]): void {
