@@ -9,14 +9,5 @@
                data-toggle="tooltip" data-placement="left" data-original-title="Remove keymap"></i>
         </h1>
     </div>
-    <div class="row uhk--wrapper">
-        <layers (selected)="selectLayer($event.oldIndex, $event.index)" [len]="layers.elements.length"></layers>
-        <div class="keyboard-slider" *ngIf="layers">
-            <svg-keyboard-popover *ngFor="let layer of layers.elements"
-                                  [moduleConfig]="layer.modules.elements"
-                                  (animationend)="onKeyboardAnimationEnd($event)"
-                                  hidden>
-            </svg-keyboard-popover>
-        </div>
-    </div>
+    <svg-keyboard-wrap [layers]="layers.elements"></svg-keyboard-wrap>
 </template>

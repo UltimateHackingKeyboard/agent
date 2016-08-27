@@ -830,6 +830,25 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },

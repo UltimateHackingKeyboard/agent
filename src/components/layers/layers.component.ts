@@ -1,4 +1,6 @@
-import {Component, Output, EventEmitter, ElementRef, QueryList, ViewChildren, Renderer, Input} from '@angular/core';
+import {
+    Component, Output, EventEmitter, ElementRef, QueryList, ViewChildren, Renderer, Input
+} from '@angular/core';
 
 @Component({
     selector: 'layers',
@@ -7,7 +9,9 @@ import {Component, Output, EventEmitter, ElementRef, QueryList, ViewChildren, Re
 })
 export class LayersComponent {
     @Input() len: number;
+    @Input() current: number;
     @Output() selected = new EventEmitter();
+
     @ViewChildren('baseButton,modButton,fnButton,mouseButton')
     buttonsQueryList: QueryList<ElementRef>;
 
@@ -19,8 +23,17 @@ export class LayersComponent {
         this.selectedLayerIndex = 0;
     }
 
-    /* tslint:disable:no-unused-variable */
-    private selectLayer(index: number) {
+    ngOnChanges() {
+        if (this.buttons.length > 0 && this.current !== this.selectedLayerIndex) {
+            this.buttons.forEach((button: ElementRef) => {
+                this.renderer.setElementClass(button.nativeElement, 'btn-primary', false);
+            });
+            this.renderer.setElementClass(this.buttons[this.current].nativeElement, 'btn-primary', true);
+            this.selectedLayerIndex = 0;
+        }
+    }
+
+    selectLayer(index: number) {
         if (index === this.selectedLayerIndex) {
             return;
         }
