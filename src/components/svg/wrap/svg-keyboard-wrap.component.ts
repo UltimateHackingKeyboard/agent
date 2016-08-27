@@ -4,7 +4,6 @@ import {
 } from '@angular/core';
 
 import { KeyAction } from '../../../../config-serializer/config-items/KeyAction';
-import { Module } from '../../../../config-serializer/config-items/Module';
 import { Layer } from '../../../../config-serializer/config-items/Layer';
 
 @Component({
@@ -82,16 +81,13 @@ export class SvgKeyboardWrapComponent implements OnInit {
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
-    private module: Module[];
-    private currentLayer: number;
+    private currentLayer: number = 0;
 
     constructor() {
         this.keyEditConfig = {
             moduleId: undefined,
             keyId: undefined
         };
-
-        this.currentLayer = 0;
     }
 
     ngOnInit() {
@@ -110,16 +106,14 @@ export class SvgKeyboardWrapComponent implements OnInit {
         }
     }
 
-    onKeyClick(moduleId: number, keyId: number, module: Module[]): void {
+    onKeyClick(moduleId: number, keyId: number): void {
         if (!this.popoverShown) {
             this.keyEditConfig = {
                 moduleId,
                 keyId
             };
 
-            this.module = module;
-
-            let keyActionToEdit: KeyAction = module[moduleId].keyActions.elements[keyId];
+            let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId];
             this.showPopover(keyActionToEdit);
         }
     }
@@ -142,7 +136,7 @@ export class SvgKeyboardWrapComponent implements OnInit {
     changeKeyAction(keyAction: KeyAction): void {
         let moduleId = this.keyEditConfig.moduleId;
         let keyId = this.keyEditConfig.keyId;
-        this.module[moduleId].keyActions.elements[keyId] = keyAction;
+        this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId] = keyAction;
     }
 
     selectLayer(oldIndex: number, index: number): void {

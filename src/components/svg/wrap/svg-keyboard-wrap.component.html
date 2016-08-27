@@ -4,7 +4,7 @@
         <svg-keyboard *ngFor="let layer of layers"
                       [@layerState]="layer.animation"
                       [moduleConfig]="layer.modules.elements"
-                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, layer.modules.elements)"
+                      (keyClick)="onKeyClick($event.moduleId, $event.keyId)"
         >
         </svg-keyboard>
     </div>
