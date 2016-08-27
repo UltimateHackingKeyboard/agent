@@ -9,7 +9,9 @@
     "removeComments": false,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": "./src",
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
     "types": [
       "node",
       "jquery",

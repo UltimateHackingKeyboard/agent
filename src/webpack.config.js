@@ -1,18 +1,26 @@
 // var webpack = require("webpack");
 var SvgStore = require('webpack-svgstore-plugin');
 var webpackFailPlugin = require('webpack-fail-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var path = require('path');
+
+
+
+var rootDir = path.resolve(__dirname, '../'); 
+console.log(__dirname, rootDir);
 
 module.exports = {
-    entry: ['es6-shim', 'zone.js', 'reflect-metadata', './boot.ts'],
+    entry: ['es6-shim', 'zone.js', 'reflect-metadata', './src/boot.ts'],
     output: {
-        path: __dirname + "/build",
-        publicPath: "/build/",
+        path: rootDir + "/build",
+        publicPath: rootDir + "/build/",
         filename: "uhk.js"
     },
     devtool: 'source-map',
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
-        modulesDirectories: [ '/node_modules' ]
+        modulesDirectories: ['node_modules']
     },
     module: {
         preLoaders: [
@@ -40,11 +48,11 @@ module.exports = {
         //   new webpack.optimize.UglifyJsPlugin({ minimize: true })
         new SvgStore(
             [
-                'images/icons/**/*.svg'
+                rootDir + '/images/icons/**/*.svg'
             ],
             './',
             {
-                name: 'compiled_sprite.svg',
+                name: 'assets/compiled_sprite.svg',
                 chunk: 'app',
                 svgoOptions: {
                     plugins: [
@@ -53,7 +61,16 @@ module.exports = {
                 }
             }
         ),
-        webpackFailPlugin
+        webpackFailPlugin,
+        new CleanWebpackPlugin(['build'], {
+            root: rootDir
+        }),
+        new CopyWebpackPlugin([
+            { from: './src/*.html', flatten: true },
+            { from: './src/*.js', flatten: true }
+        ], {
+            ignore: ['*.config.js']
+        })
     ]
 
 }

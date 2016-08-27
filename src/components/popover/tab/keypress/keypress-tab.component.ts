@@ -2,8 +2,8 @@ import {Component, OnInit, Input} from '@angular/core';
 
 import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
-import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
-import {KeystrokeAction} from '../../../../../config-serializer/config-items/KeystrokeAction';
+import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
+import {KeystrokeAction} from '../../../../config-serializer/config-items/KeystrokeAction';
 
 import {IconComponent} from '../../widgets/icon';
 import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke';
