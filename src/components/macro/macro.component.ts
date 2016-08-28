@@ -30,8 +30,6 @@ export class MacroComponent implements OnInit, OnDestroy {
     @ViewChild('macroNameInput') nameInput: ElementRef;
     @ViewChild('macroPopover') macroPopover: MacroPopoverComponent;
 
-    private isMacroNameEditable: boolean;
-
     private macro: Macro;
     private currentMacroAction: MacroAction;
     private currentMacroActionIndex: number;
@@ -46,7 +44,6 @@ export class MacroComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.isMacroNameEditable = false;
         this.sub = this.route.params.subscribe(params => {
             const id = +params['id']; // (+) converts string 'id' to a number
             const macros: Macro[] = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
@@ -87,11 +84,8 @@ export class MacroComponent implements OnInit, OnDestroy {
         this.currentMacroAction = null;
     }
 
-    toggleMacroNameEditable() {
-        this.isMacroNameEditable = !this.isMacroNameEditable;
-        if (this.isMacroNameEditable) {
-            this.renderer.invokeElementMethod(this.nameInput.nativeElement, 'focus');
-        }
+    focusMacroName() {
+        this.renderer.invokeElementMethod(this.nameInput.nativeElement, 'focus');
     }
 
     ngOnDestroy() {

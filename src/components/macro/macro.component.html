@@ -4,9 +4,10 @@
             <i class="fa fa-play"></i>
             <span class="macro__name pane-title__name" 
                   #macroNameInput
-                  contenteditable="isMacroNameEditable" 
+                  contenteditable="true" 
+                  [contenteditableUpdateOnEnter]="true"
                   [contenteditableModel]="macro.name"
-                  (contenteditableModelChange)="saveMacro()">{{macro.name}}</span> <i class="fa fa-pencil" (click)="toggleMacroNameEditable()"></i>
+                  (contenteditableModelChange)="saveMacro()">{{macro.name}}</span> <i class="fa fa-pencil" (click)="focusMacroName()"></i>
         </h1>
     </div>
     <div class="row">
