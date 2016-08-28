@@ -1,16 +1,8 @@
 <div class="text-center">
     <span class="uhk__layer-switcher--wrapper" data-title="Layers: ">
-        <button #baseButton type="button" class="btn btn-default btn-lg btn-primary" (click)="selectLayer(0)">
-            Base
-        </button>
-        <button #modButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(1)">
-            Mod
-        </button>
-        <button #fnButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(2)">
-            Fn
-        </button>
-        <button #mouseButton type="button" class="btn btn-default btn-lg" (click)="selectLayer(3)">
-            Mouse
+        <button type="button" class="btn btn-default btn-lg" *ngFor="let button of buttons; let index = index" (click)="selectLayer(index)"
+            [class.btn-primary]="index === current">
+            {{ button }}
         </button>
     </span>
 </div>
