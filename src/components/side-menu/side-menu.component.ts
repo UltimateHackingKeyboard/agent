@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 import { Macro } from '../../../config-serializer/config-items/Macro';
+import { MacroActions } from '../../../config-serializer/config-items/MacroActions';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
@@ -31,5 +32,18 @@ export class SideMenuComponent implements OnInit {
         view.classList.toggle('slide-up');
         header.toggle('fa-chevron-up');
         header.toggle('fa-chevron-down');
+    }
+
+    private addMacro() {
+        // @todo Too naive approach, should add new macro via UhkConfigurationService so it can be loaded in macro component
+        const macroObj = {
+            id: this.macros.length,
+            name: 'New Macro',
+            isLooped: false,
+            isPrivate: false,
+            macroActions: new MacroActions
+        };
+        const newMacro = new Macro().fromJsObject(macroObj);
+        this.macros.push(newMacro);
     }
 }
