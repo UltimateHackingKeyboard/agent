@@ -1,5 +1,4 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import {NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 
 import {Tab} from '../../popover/tab/tab';
 
@@ -30,9 +29,6 @@ enum TabName {
     ],
     host: { 'class': 'popover macro-action' },
     directives: [
-        NgIf,
-        NgSwitch,
-        NgSwitchCase,
         KeypressTabComponent,
         MouseTabComponent,
         MacroTextTabComponent,

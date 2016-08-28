@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, Renderer, ViewChild, ElementRef } from '@angular/core';
-import { NgIf, NgFor } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -19,8 +18,6 @@ import { ContenteditableModel } from '../directives/contenteditable.component';
     styles: [require('./macro.component.scss')],
     providers: [UhkConfigurationService],
     directives: [
-        NgIf,
-        NgFor,
         MacroPopoverComponent,
         MacroItemComponent,
         ContenteditableModel
