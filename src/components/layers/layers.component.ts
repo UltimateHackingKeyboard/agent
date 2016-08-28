@@ -17,6 +17,10 @@ export class LayersComponent {
     }
 
     selectLayer(index: number) {
+        if (this.current === index) {
+            return;
+        }
+
         this.select.emit({
             oldIndex: this.current,
             index: index
