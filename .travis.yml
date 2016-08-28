@@ -13,7 +13,7 @@ before_script:
   - npm run lint
 
 script:
-  - cd ./config-serializer && node ./test-serializer.js
+  - cd ./test-serializer && node ./test-serializer.js
 
 cache:
   directories:

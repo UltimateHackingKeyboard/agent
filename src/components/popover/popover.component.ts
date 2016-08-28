@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {NgSwitch, NgSwitchCase} from '@angular/common';
 
-import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
+import {KeyAction} from '../../config-serializer/config-items/KeyAction';
 
 import {KeypressTabComponent} from './tab/keypress/keypress-tab.component';
 import {LayerTabComponent} from './tab/layer/layer-tab.component';
@@ -11,11 +11,11 @@ import {KeymapTabComponent} from './tab/keymap/keymap-tab.component';
 import {NoneTabComponent} from './tab/none/none-tab.component';
 
 import {Tab} from './tab/tab';
-import {KeystrokeAction} from '../../../config-serializer/config-items/KeystrokeAction';
-import {SwitchLayerAction} from '../../../config-serializer/config-items/SwitchLayerAction';
-import {MouseAction} from '../../../config-serializer/config-items/MouseAction';
-import {PlayMacroAction} from '../../../config-serializer/config-items/PlayMacroAction';
-import {SwitchKeymapAction} from '../../../config-serializer/config-items/SwitchKeymapAction';
+import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';
+import {SwitchLayerAction} from '../../config-serializer/config-items/SwitchLayerAction';
+import {MouseAction} from '../../config-serializer/config-items/MouseAction';
+import {PlayMacroAction} from '../../config-serializer/config-items/PlayMacroAction';
+import {SwitchKeymapAction} from '../../config-serializer/config-items/SwitchKeymapAction';
 
 enum TabName {
     Keypress,

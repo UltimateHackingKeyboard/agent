@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
-import {Module} from '../../../../config-serializer/config-items/Module';
+import {Module} from '../../../config-serializer/config-items/Module';
 import {SvgModule, SvgModuleComponent} from '../module';
 import {DataProviderService} from '../../../services/data-provider.service';
 

@@ -8,7 +8,7 @@ export class DataProviderService {
     constructor() { }
 
     getUHKConfig(): any {
-        return require('json!../../config-serializer/uhk-config.json');
+        return require('json!../config-serializer/uhk-config.json');
     }
 
     getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {

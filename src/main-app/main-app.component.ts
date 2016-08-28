@@ -1,7 +1,7 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
-import { SideMenuComponent } from './components/side-menu';
+import { SideMenuComponent } from '../components/side-menu';
 
 @Component({
     moduleId: module.id,

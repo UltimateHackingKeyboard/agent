@@ -2,12 +2,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
-import { APP_ROUTER_PROVIDERS } from './main-app.routes';
-
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 
-import { MainAppComponent }  from './main-app.component';
+import { MainAppComponent, APP_ROUTER_PROVIDERS }  from './main-app';
 import { KeymapComponent } from './components/keymap';
 import { MacroComponent } from './components/macro';
 import { LegacyLoaderComponent } from './components/legacy-loader';
