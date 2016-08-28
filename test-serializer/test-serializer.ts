@@ -5,7 +5,7 @@ import {UhkConfiguration} from '../src/config-serializer/config-items/UhkConfigu
 let assert = require('assert');
 let fs = require('fs');
 
-let uhkConfig = JSON.parse(fs.readFileSync('uhk-config.json'));
+let uhkConfig = JSON.parse(fs.readFileSync('../src/config-serializer/uhk-config.json'));
 
 let config1Js = uhkConfig;
 let config1Ts: Serializable<UhkConfiguration> = new UhkConfiguration().fromJsObject(config1Js);

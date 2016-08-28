@@ -7,7 +7,7 @@ var webpackStream = require('webpack-stream');
 
 var paths = {
   sassAll: 'src/sass/**/*.scss',
-  cssDest: 'build/css'
+  cssDest: 'dist/css'
 }
 
 gulp.task('sass', function () {
@@ -29,7 +29,7 @@ gulp.task('webpack', function () {
         // console.error(error.message);
         this.emit('end');
       }))
-    .pipe(gulp.dest('build/'));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('default', ['sass', 'webpack']);

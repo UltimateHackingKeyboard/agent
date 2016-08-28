@@ -1,20 +1,18 @@
 // var webpack = require("webpack");
 var SvgStore = require('webpack-svgstore-plugin');
 var webpackFailPlugin = require('webpack-fail-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require('path');
 
 
 
-var rootDir = path.resolve(__dirname, '../'); 
+var rootDir = path.resolve(__dirname, '../');
 console.log(__dirname, rootDir);
 
 module.exports = {
     entry: ['es6-shim', 'zone.js', 'reflect-metadata', './src/boot.ts'],
     output: {
-        path: rootDir + "/build",
-        publicPath: rootDir + "/build/",
+        path: rootDir + "/dist",
         filename: "uhk.js"
     },
     devtool: 'source-map',
@@ -62,15 +60,45 @@ module.exports = {
             }
         ),
         webpackFailPlugin,
-        new CleanWebpackPlugin(['build'], {
-            root: rootDir
-        }),
         new CopyWebpackPlugin([
             { from: './src/*.html', flatten: true },
-            { from: './src/*.js', flatten: true }
+            { from: './src/*.js', flatten: true },
+            {
+                from: 'node_modules/font-awesome/css/font-awesome.min.css',
+                to: 'vendors/font-awesome/css/font-awesome.min.css'
+            },
+            {
+                from: 'node_modules/font-awesome/fonts',
+                to: 'vendors/font-awesome/fonts'
+            },
+            {
+                from: 'node_modules/bootstrap/dist',
+                to: 'vendors/bootstrap'
+            },
+            {
+                from: 'node_modules/jquery/dist/jquery.min.*',
+                to: 'vendors/jquery',
+                flatten: true
+            },
+            {
+                from: 'node_modules/sortablejs/Sortable.min.js',
+                to: 'vendors/sortablejs/Sortable.min.js'
+            },
+            {
+                from: 'node_modules/select2/dist',
+                to: 'vendors/select2'
+            },
+            {
+                from: 'images',
+                to: 'images'
+            },
+            {
+                from: 'node_modules/handlebars/dist/handlebars.min.js',
+                to: 'vendors/handlebars/handlebars.min.js'
+            },
         ], {
-            ignore: ['*.config.js']
-        })
+                ignore: ['*.config.js']
+            })
     ]
 
 }

@@ -1,7 +1,7 @@
 import { Serializable } from '../Serializable';
 import { Modules } from './Modules';
 import { UhkBuffer } from '../UhkBuffer';
-import { AnimationKeyboard } from '../../src/components/svg/wrap';
+import { AnimationKeyboard } from '../../components/svg/wrap';
 
 export class Layer extends Serializable<Layer> {
 
