@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 
 import {MacroAction} from '../../../../../config-serializer/config-items/MacroAction';
 import {DelayMacroAction} from '../../../../../config-serializer/config-items/DelayMacroAction';
@@ -26,6 +26,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() editable: boolean;
     @Input() deletable: boolean;
     @Input() moveable: boolean;
+
+    @Output() edit = new EventEmitter<any>();
 
     private iconName: string;
     private title: string;
@@ -117,6 +119,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
             }
         }
         // TODO: finish for all MacroAction
+    }
+
+    editAction() {
+        this.edit.emit();
     }
 
 }
