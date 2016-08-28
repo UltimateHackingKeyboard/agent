@@ -4,10 +4,7 @@ var webpackFailPlugin = require('webpack-fail-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require('path');
 
-
-
 var rootDir = path.resolve(__dirname, '../');
-console.log(__dirname, rootDir);
 
 module.exports = {
     entry: ['es6-shim', 'zone.js', 'reflect-metadata', './src/boot.ts'],
