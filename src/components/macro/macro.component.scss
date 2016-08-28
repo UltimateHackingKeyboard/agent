@@ -6,33 +6,44 @@ h1 {
     margin-bottom: 3rem;
 }
 
-.action--item {
-    padding-left: 8px;
-}
+.action {
+    &--edit__form {
+        background-color: #fff;
+        margin-left: -0.5rem;
+        margin-right: -15px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;
+    }
 
-.action--item.active,
-.action--item.active:hover {
-    background-color: white;
-    font-weight: bold;
-    color: black;
-    border-color: black;
-    z-index: 10;
+    &--item {
+        padding-left: 8px;
+
+        &.active,
+        &.active:hover {
+            background-color: white;
+            font-weight: bold;
+            color: black;
+            border-color: black;
+            z-index: 10;
+        }
+    }
 }
 
 .macro-settings {
     border: 1px solid black;
     border-top-color: #999;
     z-index: 100;
-}
 
-.macro-settings .helper {
-    position: absolute;
-    display: block;
-    height: 13px;
-    background: #fff;
-    width: 100%;
-    left: 0;
-    top: -14px;
+    .helper {
+        position: absolute;
+        display: block;
+        height: 13px;
+        background: #fff;
+        width: 100%;
+        left: 0;
+        top: -14px;
+    }
 }
 
 .action--item.active.callout,
@@ -44,34 +55,6 @@ h1 {
     cursor: move;
 }
 
-.action--edit {
-    float: right;
-}
-
-.action--edit:hover {
-    color: #337ab7;
-    cursor: pointer;
-}
-
-.action--trash {
-    float: right;
-    margin-right: 1rem;
-}
-
-.action--trash:hover {
-    color: #d9534f;
-    cursor: pointer;
-}
-
-.action--edit__form {
-    background-color: #fff;
-    margin-left: -0.5rem;
-    margin-right: -15px;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
-}
-
 .flex-button-wrapper {
     display: flex;
     flex-direction: row-reverse;
@@ -81,13 +64,15 @@ h1 {
     align-self: flex-end;
 }
 
-.add-new__action-item:hover {
-    cursor: pointer;
-}
+.add-new__action-item {
+    &:hover {
+        cursor: pointer;
+    }
 
-.add-new__action-item--link,
-.add-new__action-item--link:active,
-.add-new__action-item--link:hover {
-    text-decoration: none;
-    color: #337ab7;
+    &--link,
+    &--link:active,
+    &--link:hover {
+        text-decoration: none;
+        color: #337ab7;
+    }
 }
