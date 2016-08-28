@@ -81,14 +81,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() tooltipEnabled: boolean = false;
 
     private popoverShown: boolean;
-    private keyEditConfig: { moduleId: number, keyId: number };
+    private keyEditConfig: { keyActions: KeyAction[], keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
     private tooltipData: { posTop: number, posLeft: number, content: {name: string, value: string}[], shown: boolean };
 
     constructor() {
         this.keyEditConfig = {
-            moduleId: undefined,
+            keyActions: undefined,
             keyId: undefined
         };
 
@@ -107,11 +107,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     ngOnChanges() {
         this.currentLayer = 0;
         if (this.layers.length > 0) {
-            this.layers.forEach((element) => {
-                element.animation = 'none';
-
-                return element;
-            });
+            this.layers.forEach(element => element.animation = 'none');
             this.layers[0].animation = 'leftIn';
         }
     }
@@ -119,11 +115,11 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     onKeyClick(moduleId: number, keyId: number): void {
         if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
-                moduleId,
+                keyActions: this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements,
                 keyId
             };
 
-            let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId];
+            let keyActionToEdit: KeyAction = this.keyEditConfig.keyActions[keyId];
             this.showPopover(keyActionToEdit);
         }
     }
@@ -206,9 +202,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     changeKeyAction(keyAction: KeyAction): void {
-        let moduleId = this.keyEditConfig.moduleId;
         let keyId = this.keyEditConfig.keyId;
-        this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId] = keyAction;
+        this.keyEditConfig.keyActions[keyId] = keyAction;
     }
 
     selectLayer(oldIndex: number, index: number): void {
