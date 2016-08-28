@@ -62,28 +62,28 @@ module.exports = {
             { from: './src/*.js', flatten: true },
             {
                 from: 'node_modules/font-awesome/css/font-awesome.min.css',
-                to: 'vendors/font-awesome/css/font-awesome.min.css'
+                to: 'vendor/font-awesome/css/font-awesome.min.css'
             },
             {
                 from: 'node_modules/font-awesome/fonts',
-                to: 'vendors/font-awesome/fonts'
+                to: 'vendor/font-awesome/fonts'
             },
             {
                 from: 'node_modules/bootstrap/dist',
-                to: 'vendors/bootstrap'
+                to: 'vendor/bootstrap'
             },
             {
                 from: 'node_modules/jquery/dist/jquery.min.*',
-                to: 'vendors/jquery',
+                to: 'vendor/jquery',
                 flatten: true
             },
             {
                 from: 'node_modules/sortablejs/Sortable.min.js',
-                to: 'vendors/sortablejs/Sortable.min.js'
+                to: 'vendor/sortablejs/Sortable.min.js'
             },
             {
                 from: 'node_modules/select2/dist',
-                to: 'vendors/select2'
+                to: 'vendor/select2'
             },
             {
                 from: 'images',
@@ -91,7 +91,7 @@ module.exports = {
             },
             {
                 from: 'node_modules/handlebars/dist/handlebars.min.js',
-                to: 'vendors/handlebars/handlebars.min.js'
+                to: 'vendor/handlebars/handlebars.min.js'
             },
         ], {
                 ignore: ['*.config.js']
