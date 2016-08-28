@@ -1,6 +1,6 @@
 import {
     Component, Input, OnInit, style,
-    state, animate, transition, trigger
+    state, animate, transition, trigger, OnChanges
 } from '@angular/core';
 
 import { KeyAction } from '../../../config-serializer/config-items/KeyAction';
@@ -18,7 +18,7 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
                 left: '50%'
             })),
             state('leftOut', style({
-                transform: 'translateX(-100%)',
+                transform: 'translateX(-101%)',
                 left: '0'
             })),
             /* Right -> Left animation */
@@ -28,14 +28,14 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
             })),
             state('rightOut', style({
                 transform: 'translateX(0%)',
-                left: '100%'
+                left: '101%'
             })),
             /* Transitions */
             transition('none => leftIn, leftOut => leftIn', [
                 style({
                     opacity: 0,
                     transform: 'translateX(0%)',
-                    left: '100%'
+                    left: '101%'
                 }),
                 style({
                     opacity: 1
@@ -45,7 +45,7 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
             transition('* => none', [
                 style({
                     opacity: 0,
-                    transform: 'translateX(-100%)',
+                    transform: 'translateX(-101%)',
                     left: '0'
                 }),
                 style({
@@ -55,7 +55,7 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
             transition('none => rightIn, rightOut => rightIn', [
                 style({
                     opacity: 0,
-                    transform: 'translateX(-100%)',
+                    transform: 'translateX(-101%)',
                     left: '0'
                 }),
                 style({
@@ -73,10 +73,10 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
         ])
     ]
 })
-export class SvgKeyboardWrapComponent implements OnInit {
+export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() layers: Layer[];
     @Input() popoverEnabled: boolean = true;
-    @Input() animationEnabled: boolean = true;
+    @Input() tooltipEnabled: boolean = true;
 
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
@@ -149,5 +149,4 @@ export class SvgKeyboardWrapComponent implements OnInit {
         }
 
         this.currentLayer = index;
-    }
 }

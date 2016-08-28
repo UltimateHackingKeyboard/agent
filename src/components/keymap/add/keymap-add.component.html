@@ -19,27 +19,12 @@
         <p class="keymap__description">
             {{ keymap.description }}
         </p>
-        <div class="row uhk--wrapper">
-            <div class="text-center">
-            <span class="uhk__layer-switcher--wrapper clearfix" data-title="Layers: ">
-                <button #baseButton type="button" class="btn btn-default btn-lg btn-primary">
-                    Base
-                </button>
-                <button #modButton type="button" class="btn btn-default btn-lg">
-                    Mod
-                </button>
-                <button #fnButton type="button" class="btn btn-default btn-lg">
-                    Fn
-                </button>
-                <button #mouseButton type="button" class="btn btn-default btn-lg">
-                    Mouse
-                </button>
-            </span>
-            </div>
-            <div class="keyboard-slider" *ngIf="keymap.layers">
-                <svg-keyboard *ngFor="let layer of keymap.layers.elements" [moduleConfig]="layer.modules.elements"></svg-keyboard>
-            </div>
-        </div>
+        <svg-keyboard-wrap
+                [layers]="keymap.layers.elements"
+                [popoverEnabled]="false"
+                [tooltipEnabled]="true"
+        >
+        </svg-keyboard-wrap>
         <div class="btn-group btn-group-lg">
             <button class="btn btn-default">Add keymap</button>
         </div>

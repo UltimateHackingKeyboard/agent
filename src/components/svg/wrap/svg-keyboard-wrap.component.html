@@ -1,5 +1,5 @@
 <template ngIf="layers">
-    <layers (select)="selectLayer($event.oldIndex, $event.index)" [current]="currentLayer"></layers>
+    <layers *ngIf="layers.length > 1" (select)="selectLayer($event.oldIndex, $event.index)" [current]="currentLayer"></layers>
     <div class="keyboard-slider" >
         <svg-keyboard *ngFor="let layer of layers"
                       [@layerState]="layer.animation"

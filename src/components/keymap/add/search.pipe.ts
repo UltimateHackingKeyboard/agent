@@ -6,7 +6,7 @@ import { Keymap } from '../../../../config-serializer/config-items/Keymap';
 })
 export class SearchPipe implements PipeTransform {
     transform(value: Keymap[], term: string)  {
-        if(term === undefined) {
+        if (term === undefined) {
             return value;
         }
 

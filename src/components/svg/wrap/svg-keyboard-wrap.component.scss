@@ -10,12 +10,13 @@ svg-keyboard {
     max-width: 1400px;
     position: absolute;
     left: 0;
-    transform: translateX(-100%);
+    transform: translateX(-101%);
 }
 
 .keyboard-slider {
-    height: calc(100% - 145px);
     position: relative;
     overflow: hidden;
-    width: 100%;
+    /* TODO create dynamic */
+    height: 500px;
+    margin-top: 30px;
 }

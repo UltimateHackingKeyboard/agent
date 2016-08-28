@@ -773,6 +773,20 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
                 }
             ]
         },
@@ -819,6 +833,48 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
                 }
             ]
         },
@@ -829,6 +885,48 @@
             "name": "DVR",
             "description": "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean dictum sollicitudin massa, ut lacinia ipsum. Ut bibendum ipsum ac pulvinar vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat lobortis lacus, id viverra nisl varius eu. Aliquam vitae eros a augue fermentum ultricies. Nam tempus dui sed ante ultricies bibendum. In ligula velit, aliquet a felis vitae, gravida tincidunt ante. Proin euismod velit odio, at pretium lacus porta egestas. Suspendisse aliquam, lacus accumsan dapibus elementum, orci felis egestas leo, non vulputate lorem turpis nec risus. Curabitur id volutpat orci. Sed aliquet finibus iaculis. In venenatis neque ac dolor posuere, vel vestibulum augue posuere.",
             "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
                 {
                     "modules": [
                         {
