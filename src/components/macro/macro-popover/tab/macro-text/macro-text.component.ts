@@ -24,13 +24,9 @@ export class MacroTextTabComponent implements OnInit, AfterViewInit {
     @Input() macroAction: TextMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
-    private text: string;
-
     constructor(private renderer: Renderer) {}
 
     ngOnInit() {
-        console.log('faa', this.macroAction);
-        this.text = this.macroAction.text;
     }
 
     ngAfterViewInit() {
