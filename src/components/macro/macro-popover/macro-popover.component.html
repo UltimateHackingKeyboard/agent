@@ -1,0 +1,44 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="popover-title menu-tabs">
+            <ul class="nav nav-tabs popover-menu">
+                <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
+                    <a class="menu-tabs--item">
+                        <i class="fa fa-keyboard-o"></i>
+                        <span>Keypress</span>
+                    </a>
+                </li>
+                <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
+                    <a class="menu-tabs--item">
+                        <i class="fa fa-font"></i>
+                        <span>Text</span>
+                    </a>
+                </li>
+                <li #macroMouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
+                    <a class="menu-tabs--item">
+                        <i class="fa fa-mouse-pointer"></i>
+                        <span>Mouse</span>
+                    </a>
+                </li>
+                <li #macroDelay [class.active]="activeTab === TabName.Delay" (click)="selectTab(TabName.Delay)">
+                    <a class="menu-tabs--item">
+                        <i class="fa fa-clock-o"></i>
+                        <span>Delay</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row" [ngSwitch]="activeTab">
+        <keypress-tab #tab *ngSwitchCase="TabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction"></keypress-tab>
+        <macro-text-tab #tab *ngSwitchCase="TabName.Text" class="popover-content" [macroAction]="editableMacroAction"></macro-text-tab>
+        <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" class="popover-content"></macro-mouse-tab>
+        <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" class="popover-content"></macro-delay-tab>
+    </div>
+    <div class="row">
+        <div class="popover-action">
+            <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel </button>
+            <button class="btn btn-sm btn-primary" type="button" (click)="onSaveClick()"> Save </button>
+        </div>
+    </div>
+</div>
