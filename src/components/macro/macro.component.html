@@ -18,6 +18,7 @@
                         [deletable]="true"
                         [moveable]="true"
                         (edit)="editAction(macroAction, macroActionIndex)"
+                        (delete)="deleteAction(macroActionIndex)"
                         class="list-group-item action--item"></macro-item>
             <div class="list-group-item action--item add-new__action-item no-reorder">
                 <a class="add-new__action-item--link" (click)="addAction()"><i class="fa fa-plus"></i> Add new action item</a>

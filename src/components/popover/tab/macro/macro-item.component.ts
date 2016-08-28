@@ -28,6 +28,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() moveable: boolean;
 
     @Output() edit = new EventEmitter<any>();
+    @Output() delete = new EventEmitter<any>();
 
     private iconName: string;
     private title: string;
@@ -123,6 +124,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     editAction() {
         this.edit.emit();
+    }
+
+    deleteAction() {
+        this.delete.emit();
     }
 
 }

@@ -76,8 +76,10 @@ export class MacroComponent implements OnInit, OnDestroy {
         this.currentMacroActionIndex = null;
     }
 
-    removeAction(action:MacroAction) {
-
+    deleteAction(index:number) {
+        // @ todo show confirm action dialog
+        this.macro.macroActions.elements.splice(index, 1);
+        this.saveMacro();
     }
 
     hidePopover() {
