@@ -14,8 +14,8 @@ First up, make sure that Node.js 4.x.x is installed on your system.
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
 npm install
-npm run build
-npm run webpack-dev-server
+npm run build sass
+npm run dev
 ```
 
 Webpack dev server exposes Agent at `localhost:8080`
