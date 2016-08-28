@@ -6,3 +6,4 @@ bundle
 css
 .idea
 *.iml
+*.sublime-project
