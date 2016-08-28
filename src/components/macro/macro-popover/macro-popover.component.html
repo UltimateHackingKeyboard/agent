@@ -33,7 +33,7 @@
         <keypress-tab #tab *ngSwitchCase="TabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction"></keypress-tab>
         <macro-text-tab #tab *ngSwitchCase="TabName.Text" class="popover-content" [macroAction]="editableMacroAction"></macro-text-tab>
         <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" class="popover-content"></macro-mouse-tab>
-        <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" class="popover-content"></macro-delay-tab>
+        <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" class="popover-content" [macroAction]="editableMacroAction"></macro-delay-tab>
     </div>
     <div class="row">
         <div class="popover-action">

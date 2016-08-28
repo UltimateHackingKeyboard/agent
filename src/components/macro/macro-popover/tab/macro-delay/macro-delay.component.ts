@@ -6,10 +6,10 @@ import {
     EventEmitter, 
     ElementRef, 
     ViewChild, 
-    Renderer, 
-    AfterViewInit
+    Renderer
 } from '@angular/core';
 import { Ng2SliderComponent } from 'ng2-slider-component/ng2-slider.component';
+import { DelayMacroAction } from '../../../../../../config-serializer/config-items/DelayMacroAction'
 
 @Component({
     moduleId: module.id,
@@ -23,19 +23,15 @@ import { Ng2SliderComponent } from 'ng2-slider-component/ng2-slider.component';
         Ng2SliderComponent
     ]
 })
-export class MacroDelayTabComponent implements OnInit, AfterViewInit {
-    private delay: number;
+export class MacroDelayTabComponent implements OnInit {
+    @Input() macroAction: DelayMacroAction;
 
     constructor(private renderer: Renderer) {}
 
     ngOnInit() {
     }
 
-    ngAfterViewInit() {
-        
-    }
-
     setDelay(event:any) {
-        this.delay = event.startValue;
+        this.macroAction.delay = event.startValue;
     }
 }
