@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {NgSwitch, NgSwitchCase} from '@angular/common';
+import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import {NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 
 import {Tab} from '../../popover/tab/tab';
 
@@ -30,6 +30,7 @@ enum TabName {
     ],
     host: { 'class': 'popover macro-action' },
     directives: [
+        NgIf,
         NgSwitch,
         NgSwitchCase,
         KeypressTabComponent,
@@ -38,7 +39,7 @@ enum TabName {
         MacroDelayTabComponent
     ]
 })
-export class MacroPopoverComponent implements OnInit {
+export class MacroPopoverComponent implements OnInit, OnChanges {
     @Input() macroAction: MacroAction;
 
     @Output() cancel = new EventEmitter<any>();
@@ -46,6 +47,7 @@ export class MacroPopoverComponent implements OnInit {
 
     @ViewChild('tab') selectedTab: Tab;
 
+    public isEnabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
     private editableMacroAction: MacroAction;
     private TabName = TabName;
     private activeTab: TabName;
@@ -54,18 +56,27 @@ export class MacroPopoverComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.editableMacroAction = this.macroAction.clone();
-        let tab: TabName = this.getTabName(this.macroAction);
-        this.selectTab(tab);
+
+    }
+
+    ngOnChanges(changes: any) {
+        if (this.isEnabled) {
+            // Make an editable clone of macro action so original isn't changed
+            this.editableMacroAction = this.macroAction.clone();
+            let tab: TabName = this.getTabName(this.macroAction);
+            this.selectTab(tab); 
+        }
     }
 
     onCancelClick(): void {
+        this.isEnabled = false;
         this.cancel.emit(undefined);
     }
 
     onSaveClick(): void {
         try {
-            this.save.emit(this.macroAction);
+            this.save.emit(this.editableMacroAction);
+            this.isEnabled = false;
         } catch (e) {
             // TODO: show error dialog
             console.error(e);

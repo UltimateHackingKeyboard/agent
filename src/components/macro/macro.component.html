@@ -2,17 +2,21 @@
     <div class="row">
         <h1 class="col-xs-12 pane-title">
             <i class="fa fa-play"></i>
-            <span class="macro__name pane-title__name" contenteditable="true">{{macro.name}}</span> <i class="fa fa-pencil"></i>
+            <span class="macro__name pane-title__name" 
+                  #macroNameInput
+                  contenteditable="isMacroNameEditable" 
+                  [contenteditableModel]="macro.name"
+                  (contenteditableModelChange)="saveMacro()">{{macro.name}}</span> <i class="fa fa-pencil" (click)="toggleMacroNameEditable()"></i>
         </h1>
     </div>
     <div class="row">
         <div id="listWithHandle" class="list-group col-xs-10 col-xs-offset-1">
-            <macro-item *ngFor="let macroAction of macro.macroActions.elements" 
+            <macro-item *ngFor="let macroAction of macro.macroActions.elements; let macroActionIndex = index" 
                         [macroAction]="macroAction"
                         [editable]="true"
                         [deletable]="true"
                         [moveable]="true"
-                        (edit)="editAction(macroAction)"
+                        (edit)="editAction(macroAction, macroActionIndex)"
                         class="list-group-item action--item"></macro-item>
             <div class="list-group-item action--item add-new__action-item no-reorder">
                 <a class="add-new__action-item--link" (click)="addAction()"><i class="fa fa-plus"></i> Add new action item</a>
@@ -33,4 +37,4 @@
         </div>
     </div>
 </div>
-<macro-popover *ngIf="popoverEnabled" (cancel)="hidePopover()" [macroAction]="currentMacroAction"></macro-popover>
+<macro-popover #macroPopover (cancel)="hidePopover()" [macroAction]="currentMacroAction" (save)="saveEditedAction($event)"></macro-popover>

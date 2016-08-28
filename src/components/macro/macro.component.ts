@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer, ViewChild, ElementRef } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -11,6 +11,8 @@ import { MacroAction } from '../../../config-serializer/config-items/MacroAction
 import { PressKeyMacroAction } from '../../../config-serializer/config-items/PressKeyMacroAction';
 import { MacroItemComponent } from '../popover/tab/macro/macro-item.component';
 
+import { ContenteditableModel } from '../directives/contenteditable.component';
+
 @Component({
     selector: 'macro',
     template: require('./macro.component.html'),
@@ -20,21 +22,31 @@ import { MacroItemComponent } from '../popover/tab/macro/macro-item.component';
         NgIf,
         NgFor,
         MacroPopoverComponent,
-        MacroItemComponent
+        MacroItemComponent,
+        ContenteditableModel
     ]
 })
 export class MacroComponent implements OnInit, OnDestroy {
+    @ViewChild('macroNameInput') nameInput: ElementRef;
+    @ViewChild('macroPopover') macroPopover: MacroPopoverComponent;
 
-    private popoverEnabled: boolean;
+    private isMacroNameEditable: boolean;
+
     private macro: Macro;
     private currentMacroAction: MacroAction;
+    private currentMacroActionIndex: number;
+
     private sub: Subscription;
 
-    constructor(private uhkConfigurationService: UhkConfigurationService, private route: ActivatedRoute) {
+    constructor(
+        private uhkConfigurationService: UhkConfigurationService, 
+        private route: ActivatedRoute,
+        private renderer: Renderer
+    ) {
     }
 
     ngOnInit() {
-        this.popoverEnabled = false;
+        this.isMacroNameEditable = false;
         this.sub = this.route.params.subscribe(params => {
             const id = +params['id']; // (+) converts string 'id' to a number
             const macros: Macro[] = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
@@ -42,15 +54,29 @@ export class MacroComponent implements OnInit, OnDestroy {
        });
     }
 
+    saveMacro() {
+        // @todo Save macro to keyboard
+    }
+
     addAction() {
         const newAction = new PressKeyMacroAction();
         this.currentMacroAction = newAction;
-        this.popoverEnabled = true;
+        this.currentMacroActionIndex = this.macro.macroActions.elements.length;
+        this.macroPopover.isEnabled = true;
     }
 
-    editAction(macroAction: MacroAction) {
+    editAction(macroAction: MacroAction, index: number) {
         this.currentMacroAction = macroAction;
-        this.popoverEnabled = true;
+        this.currentMacroActionIndex = index;
+        this.macroPopover.isEnabled = true;
+    }
+
+    saveEditedAction(macroAction: MacroAction) {
+        // @todo save this to keyboard
+        console.log('saved action', macroAction);
+        this.macro.macroActions.elements[this.currentMacroActionIndex] = macroAction;
+        this.currentMacroAction = null;
+        this.currentMacroActionIndex = null;
     }
 
     removeAction(action:MacroAction) {
@@ -59,10 +85,17 @@ export class MacroComponent implements OnInit, OnDestroy {
 
     hidePopover() {
         this.currentMacroAction = null;
-        this.popoverEnabled = false;
+    }
+
+    toggleMacroNameEditable() {
+        this.isMacroNameEditable = !this.isMacroNameEditable;
+        if (this.isMacroNameEditable) {
+            this.renderer.invokeElementMethod(this.nameInput.nativeElement, 'focus');
+        }
     }
 
     ngOnDestroy() {
         this.sub.unsubscribe();
     }
+
 }
