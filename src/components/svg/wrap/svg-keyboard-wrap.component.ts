@@ -5,6 +5,7 @@ import {
 
 import { KeyAction } from '../../../config-serializer/config-items/KeyAction';
 import { Layer } from '../../../config-serializer/config-items/Layer';
+import {NoneAction} from '../../../config-serializer/config-items/NoneAction';
 
 @Component({
     selector: 'svg-keyboard-wrap',
@@ -149,6 +150,11 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
+
+        if (keyAction instanceof NoneAction || keyAction === undefined) {
+            return;
+        }
+
         let el: Element = event.target as Element || event.srcElement;
         let position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
@@ -158,8 +164,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             posLeft = position.left + (position.width / 2);
             posTop = position.top;
         }
-
-        console.log(keyAction);
 
         this.tooltipData = {
             posLeft: posLeft,
