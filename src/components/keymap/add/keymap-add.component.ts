@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { Keymaps } from '../../../config-serializer/config-items/Keymaps';
-import { SvgKeyboardComponent } from '../../svg/keyboard/svg-keyboard.component';
 
 @Component({
-    directives: [SvgKeyboardComponent],
     selector: 'keymap-add',
-    styles: [require('./keymap-add.component.scss')],
-    template: require('./keymap-add.component.html')
+    template: require('./keymap-add.component.html'),
+    styles: [require('./keymap-add.component.scss')]
 })
 export class KeymapAddComponent {
     private keymaps: Keymap[];
