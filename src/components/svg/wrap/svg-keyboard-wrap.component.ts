@@ -11,6 +11,7 @@ import { NoneAction } from '../../../config-serializer/config-items/NoneAction';
     selector: 'svg-keyboard-wrap',
     template: require('./svg-keyboard-wrap.component.html'),
     styles: [require('./svg-keyboard-wrap.component.scss')],
+    // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
             /* Right -> Left animation*/
@@ -83,7 +84,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
-    private tooltipData: { posTop: number, posLeft: number, content: string, shown: boolean };
+    private tooltipData: { posTop: number, posLeft: number, content: {name: string, value: string}[], shown: boolean };
 
     constructor() {
         this.keyEditConfig = {
@@ -94,7 +95,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.tooltipData = {
             posTop: 0,
             posLeft: 0,
-            content: '',
+            content: [],
             shown: false
         };
     }
@@ -159,7 +160,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         let position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
         let posTop: number = this.tooltipData.posTop;
-        let content = '';
 
         if (el.tagName === 'rect') {
             posLeft = position.left + (position.width / 2);
@@ -178,14 +178,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             }
         ];
 
-        dummyData.forEach((item) => {
-            content += item.name + ': ' + item.value + '<br>';
-        });
-
         this.tooltipData = {
             posLeft: posLeft,
             posTop:  posTop,
-            content: content,
+            content: dummyData,
             shown: true
         };
     }

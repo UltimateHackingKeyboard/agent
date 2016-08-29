@@ -29,6 +29,14 @@ svg-keyboard {
         color: #000;
         box-shadow: 0 1px 5px #000;
         text-align: left;
+
+        p {
+            margin-bottom: 2px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
     }
 
     &.top {

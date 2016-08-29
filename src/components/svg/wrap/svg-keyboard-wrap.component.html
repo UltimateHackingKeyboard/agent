@@ -16,6 +16,10 @@
          [style.left.px]="tooltipData.posLeft"
     >
         <div class="tooltip-arrow"></div>
-        <div class="tooltip-inner" [innerHTML]="tooltipData.content"></div>
+        <div class="tooltip-inner">
+            <p *ngFor="let item of tooltipData.content">
+                {{ item.name }}: {{ item.value }}
+            </p>
+        </div>
     </div>
 </template>
