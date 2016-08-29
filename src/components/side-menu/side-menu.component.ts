@@ -9,7 +9,6 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
     selector: 'side-menu',
     template: require('./side-menu.component.html'),
     styles: [require('./side-menu.component.scss')],
-    providers: [UhkConfigurationService],
     directives: [ROUTER_DIRECTIVES]
 })
 export class SideMenuComponent implements OnInit {

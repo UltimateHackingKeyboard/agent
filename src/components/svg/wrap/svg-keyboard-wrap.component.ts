@@ -5,7 +5,7 @@ import {
 
 import { KeyAction } from '../../../config-serializer/config-items/KeyAction';
 import { Layer } from '../../../config-serializer/config-items/Layer';
-import {NoneAction} from '../../../config-serializer/config-items/NoneAction';
+import { NoneAction } from '../../../config-serializer/config-items/NoneAction';
 
 @Component({
     selector: 'svg-keyboard-wrap',
@@ -159,16 +159,33 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         let position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
         let posTop: number = this.tooltipData.posTop;
+        let content = '';
 
         if (el.tagName === 'rect') {
             posLeft = position.left + (position.width / 2);
             posTop = position.top;
         }
 
+        // TODO connect with real data
+        let dummyData = [
+            {
+                name: 'Key action',
+                value: 'o'
+            },
+            {
+                name: 'Scancode',
+                value: '55'
+            }
+        ];
+
+        dummyData.forEach((item) => {
+            content += item.name + ': ' + item.value + '<br>';
+        });
+
         this.tooltipData = {
             posLeft: posLeft,
             posTop:  posTop,
-            content: 'Key action: <br>Scancode: <br>Modifiers: <br>Long press action:',
+            content: content,
             shown: true
         };
     }

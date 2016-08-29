@@ -18,6 +18,7 @@ import { LayersComponent } from './components/layers';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import { PopoverComponent } from './components/popover';
 import { KeymapAddComponent } from './components/keymap';
+import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { KeymapAddComponent } from './components/keymap';
     imports: [BrowserModule],
     providers: [
         DataProviderService,
+        UhkConfigurationService,
         MapperService,
         APP_ROUTER_PROVIDERS,
         { provide: LocationStrategy, useClass: HashLocationStrategy }

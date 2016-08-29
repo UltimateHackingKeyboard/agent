@@ -9,8 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
     selector: 'keymap',
     template: require('./keymap.component.html'),
-    styles: [require('./keymap.component.scss')],
-    providers: [UhkConfigurationService]
+    styles: [require('./keymap.component.scss')]
 })
 export class KeymapComponent implements OnInit {
     private keymapId: number = 0;
