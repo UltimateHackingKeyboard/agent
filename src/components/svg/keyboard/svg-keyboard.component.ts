@@ -27,14 +27,14 @@ export class SvgKeyboardComponent implements OnInit {
         this.modules = this.dps.getSvgModules();
     }
 
-    onClickKeyActionRequest(moduleId: number, keyId: number): void {
+    onKeyClick(moduleId: number, keyId: number): void {
         this.keyClick.emit({
             moduleId,
             keyId
         });
     }
 
-    onHoverKeyActionRequest(keyId: number, event: MouseEvent, over: boolean, moduleId: number): void {
+    onKeyHover(keyId: number, event: MouseEvent, over: boolean, moduleId: number): void {
         this.keyHover.emit({
             moduleId,
             event,

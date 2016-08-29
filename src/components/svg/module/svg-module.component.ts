@@ -13,19 +13,19 @@ export class SvgModuleComponent {
     @Input() coverages: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
-    @Output() clickKeyActionRequest = new EventEmitter<number>();
-    @Output() hoverKeyActionRequest = new EventEmitter();
+    @Output() keyClick = new EventEmitter<number>();
+    @Output() keyHover = new EventEmitter();
 
     constructor() {
         this.keyboardKeys = [];
     }
 
     onKeyClick(index: number): void {
-        this.clickKeyActionRequest.emit(index);
+        this.keyClick.emit(index);
     }
 
     onKeyHover(index: number, event: MouseEvent, over: boolean): void {
-        this.hoverKeyActionRequest.emit({
+        this.keyHover.emit({
             index,
             event,
             over
