@@ -813,6 +813,7 @@
             "isDefault": false,
             "abbreviation": "VIM",
             "name": "VIM",
+            "description": "",
             "layers": [
                 {
                     "modules": [
