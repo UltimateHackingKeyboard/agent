@@ -1,24 +1,11 @@
 {
-    "signature": "UHK",
-    "dataModelVersion": 0,
-    "prologue": 1234678,
-    "hardwareId": 0,
-    "brandId": 0,
-    "moduleConfigurations": [
-        {
-            "id": 1,
-            "initialPointerSpeed": 1,
-            "pointerAcceleration": 5,
-            "maxPointerSpeed": 200
-        }
-    ],
     "keymaps": [
         {
             "id": 0,
             "isDefault": true,
             "abbreviation": "QTY",
             "name": "QWERTY",
-            "description": "",
+            "description": "Maecenas sem dui, ullamcorper consequat pellentesque ut, mattis at velit. Duis scelerisque eleifend gravida. Aenean at mauris rhoncus, dictum mi vitae, semper eros. Quisque maximus est elit, at condimentum ligula consectetur vel. Aenean lorem felis, molestie id ex suscipit, sagittis mollis dui. Phasellus in felis in libero bibendum ornare. Duis vestibulum dolor sed diam tempor vulputate. Curabitur scelerisque pretium ipsum. Phasellus non orci vestibulum, vehicula lectus sit amet, lacinia velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In diam lacus, cursus at pretium vel, ullamcorper at ante.",
             "layers": [
                 {
                     "modules": [
@@ -791,18 +778,13 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRole": "scroll",
+                            "pointerRole": "move",
                             "keyActions": []
                         },
                         {
                             "id": 1,
                             "pointerRole": "move",
-                            "keyActions": [
-                                {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 111
-                                }
-                            ]
+                            "keyActions": []
                         }
                     ]
                 }
@@ -813,7 +795,7 @@
             "isDefault": false,
             "abbreviation": "VIM",
             "name": "VIM",
-            "description": "",
+            "description": "Phasellus egestas ac tellus id tincidunt. Ut non nisl turpis. Morbi molestie diam elit, et cursus nibh tempus vel. Vestibulum mattis arcu nec nisi dictum, quis facilisis augue rutrum. Fusce vel tristique metus. Nullam pretium elit et enim maximus ornare. Praesent ultrices ligula ut mi convallis, quis ultrices enim venenatis. Aenean interdum odio aliquam quam vestibulum, vel bibendum elit ornare. Morbi leo enim, ullamcorper a bibendum sit amet, ultrices vitae ligula. Etiam consectetur et massa a convallis. Nullam non nisi aliquet, suscipit nulla a, tempor odio. Praesent eu turpis euismod, pellentesque mauris ut, imperdiet felis. Pellentesque vehicula luctus purus, et mattis ante volutpat eu. Quisque venenatis porta odio.",
             "layers": [
                 {
                     "modules": [
@@ -856,18 +838,13 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRole": "scroll",
+                            "pointerRole": "move",
                             "keyActions": []
                         },
                         {
                             "id": 1,
                             "pointerRole": "move",
-                            "keyActions": [
-                                {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 111
-                                }
-                            ]
+                            "keyActions": []
                         }
                     ]
                 },
@@ -875,18 +852,13 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRole": "scroll",
+                            "pointerRole": "move",
                             "keyActions": []
                         },
                         {
                             "id": 1,
                             "pointerRole": "move",
-                            "keyActions": [
-                                {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 111
-                                }
-                            ]
+                            "keyActions": []
                         }
                     ]
                 },
@@ -894,18 +866,13 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRole": "scroll",
+                            "pointerRole": "move",
                             "keyActions": []
                         },
                         {
                             "id": 1,
                             "pointerRole": "move",
-                            "keyActions": [
-                                {
-                                    "keyActionType": "keystroke",
-                                    "scancode": 111
-                                }
-                            ]
+                            "keyActions": []
                         }
                     ]
                 }
@@ -916,7 +883,7 @@
             "isDefault": false,
             "abbreviation": "DVR",
             "name": "DVR",
-            "description": "",
+            "description": "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean dictum sollicitudin massa, ut lacinia ipsum. Ut bibendum ipsum ac pulvinar vehicula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat lobortis lacus, id viverra nisl varius eu. Aliquam vitae eros a augue fermentum ultricies. Nam tempus dui sed ante ultricies bibendum. In ligula velit, aliquet a felis vitae, gravida tincidunt ante. Proin euismod velit odio, at pretium lacus porta egestas. Suspendisse aliquam, lacus accumsan dapibus elementum, orci felis egestas leo, non vulputate lorem turpis nec risus. Curabitur id volutpat orci. Sed aliquet finibus iaculis. In venenatis neque ac dolor posuere, vel vestibulum augue posuere.",
             "layers": [
                 {
                     "modules": [
@@ -976,99 +943,5 @@
                 }
             ]
         }
-    ],
-    "macros": [
-        {
-            "id": 0,
-            "isLooped": false,
-            "isPrivate": true,
-            "name": "My address",
-            "macroActions": [
-                {
-                    "macroActionType": "pressKey",
-                    "scancode": 111
-                },
-                {
-                    "macroActionType": "holdKey",
-                    "scancode": 83
-                },
-                {
-                    "macroActionType": "releaseKey",
-                    "scancode": 112
-                },
-                {
-                    "macroActionType": "pressModifiers",
-                    "modifierMask": 93
-                },
-                {
-                    "macroActionType": "holdModifiers",
-                    "modifierMask": 101
-                },
-                {
-                    "macroActionType": "releaseModifiers",
-                    "modifierMask": 133
-                },
-                {
-                    "macroActionType": "pressMouseButtons",
-                    "mouseButtonsMask": 9
-                },
-                {
-                    "macroActionType": "holdMouseButtons",
-                    "mouseButtonsMask": 12
-                },
-                {
-                    "macroActionType": "releaseMouseButtons",
-                    "mouseButtonsMask": 104
-                },
-                {
-                    "macroActionType": "moveMouse",
-                    "x": -1920,
-                    "y": 220
-                },
-                {
-                    "macroActionType": "scrollMouse",
-                    "x": 0,
-                    "y": 20000
-                },
-                {
-                    "macroActionType": "delay",
-                    "delay": 40000
-                },
-                {
-                    "macroActionType": "text",
-                    "text": "this is a text"
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "isLooped": true,
-            "isPrivate": true,
-            "name": "Blah Blah blah",
-            "macroActions": [
-                {
-                    "macroActionType": "pressKey",
-                    "scancode": 111
-                },
-                {
-                    "macroActionType": "releaseMouseButtons",
-                    "mouseButtonsMask": 104
-                },
-                {
-                    "macroActionType": "scrollMouse",
-                    "x": 0,
-                    "y": -20000
-                },
-                {
-                    "macroActionType": "delay",
-                    "delay": 40000
-                },
-                {
-                    "macroActionType": "text",
-                    "text": "blahhhhhhh"
-                }
-            ]
-        }
-    ],
-    "epilogue": 1234678
+    ]
 }

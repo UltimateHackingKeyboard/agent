@@ -1,0 +1,32 @@
+<h1>
+    <i class="fa fa-keyboard-o"></i>
+    <span>Add new keymap</span>
+</h1>
+<div class="keymap__search clearfix">
+    <div class="input-group">
+        <span class="input-group-addon" id="sizing-addon1">
+            <i class="fa fa-search"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="Search ..." (input)="filterKeyboards($event.target.value)">
+    </div>
+    <div class="keymap__search_amount">
+        {{ keymaps.length }} / {{ keymapsAll.length }} keymaps shown
+    </div>
+</div>
+<div class="keymap__list">
+    <div #keyboard class="keymap__list_item" *ngFor="let keymap of keymaps">
+        <h2>{{ keymap.name }}</h2>
+        <p class="keymap__description">
+            {{ keymap.description }}
+        </p>
+        <svg-keyboard-wrap
+                [layers]="keymap.layers.elements"
+                [popoverEnabled]="false"
+                [tooltipEnabled]="true"
+        >
+        </svg-keyboard-wrap>
+        <div class="btn-group btn-group-lg">
+            <button class="btn btn-default">Add keymap</button>
+        </div>
+    </div>
+</div>

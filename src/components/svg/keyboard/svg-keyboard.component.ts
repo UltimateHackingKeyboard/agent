@@ -13,6 +13,7 @@ import {DataProviderService} from '../../../services/data-provider.service';
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];
     @Output() keyClick = new EventEmitter();
+    @Output() keyHover = new EventEmitter();
 
     private modules: SvgModule[];
     private svgAttributes: { viewBox: string, transform: string, fill: string };
@@ -26,9 +27,18 @@ export class SvgKeyboardComponent implements OnInit {
         this.modules = this.dps.getSvgModules();
     }
 
-    onEditKeyActionRequest(moduleId: number, keyId: number): void {
+    onKeyClick(moduleId: number, keyId: number): void {
         this.keyClick.emit({
             moduleId,
+            keyId
+        });
+    }
+
+    onKeyHover(keyId: number, event: MouseEvent, over: boolean, moduleId: number): void {
+        this.keyHover.emit({
+            moduleId,
+            event,
+            over,
             keyId
         });
     }

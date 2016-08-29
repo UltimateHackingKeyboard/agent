@@ -10,11 +10,15 @@ import { KeymapComponent } from './components/keymap';
 import { MacroComponent } from './components/macro';
 import { LegacyLoaderComponent } from './components/legacy-loader';
 import { NotificationComponent } from './components/notification';
-import { SvgKeystrokeKeyComponent, SvgOneLineTextKeyComponent, SvgTwoLineTextKeyComponent } from './components/svg/keys';
-import {SvgKeyboardWrapComponent} from './components/svg/wrap/svg-keyboard-wrap.component';
-import {LayersComponent} from './components/layers/layers.component';
-import {SvgKeyboardComponent} from './components/svg/keyboard/svg-keyboard.component';
-import {PopoverComponent} from './components/popover/popover.component';
+import {
+    SvgKeystrokeKeyComponent, SvgOneLineTextKeyComponent, SvgTwoLineTextKeyComponent
+} from './components/svg/keys';
+import { SvgKeyboardWrapComponent } from './components/svg/wrap';
+import { LayersComponent } from './components/layers';
+import { SvgKeyboardComponent } from './components/svg/keyboard';
+import { PopoverComponent } from './components/popover';
+import { KeymapAddComponent } from './components/keymap';
+import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @NgModule({
     declarations: [
@@ -29,11 +33,13 @@ import {PopoverComponent} from './components/popover/popover.component';
         SvgKeyboardWrapComponent,
         LayersComponent,
         PopoverComponent,
-        SvgKeyboardComponent
+        SvgKeyboardComponent,
+        KeymapAddComponent
     ],
     imports: [BrowserModule],
     providers: [
         DataProviderService,
+        UhkConfigurationService,
         MapperService,
         APP_ROUTER_PROVIDERS,
         { provide: LocationStrategy, useClass: HashLocationStrategy }
