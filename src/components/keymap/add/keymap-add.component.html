@@ -7,14 +7,14 @@
         <span class="input-group-addon" id="sizing-addon1">
             <i class="fa fa-search"></i>
         </span>
-        <input type="text" class="form-control" placeholder="Search ..." (input)="term = $event.target.value">
+        <input type="text" class="form-control" placeholder="Search ..." (input)="filterKeyboards($event.target.value)">
     </div>
     <div class="keymap__search_amount">
-        x / {{ keymaps.length }} keymaps shown
+        {{ keymaps.length }} / {{ keymapsAll.length }} keymaps shown
     </div>
 </div>
 <div class="keymap__list">
-    <div class="keymap__list_item" *ngFor="let keymap of keymaps | search: term">
+    <div #keyboard class="keymap__list_item" *ngFor="let keymap of keymaps">
         <h2>{{ keymap.name }}</h2>
         <p class="keymap__description">
             {{ keymap.description }}

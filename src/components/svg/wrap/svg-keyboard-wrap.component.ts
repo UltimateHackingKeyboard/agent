@@ -76,17 +76,25 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() layers: Layer[];
     @Input() popoverEnabled: boolean = true;
-    @Input() tooltipEnabled: boolean = true;
+    @Input() tooltipEnabled: boolean = false;
 
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
+    private tooltipData: { posTop: number, posLeft: number, content: string, shown: boolean };
 
     constructor() {
         this.keyEditConfig = {
             moduleId: undefined,
             keyId: undefined
+        };
+
+        this.tooltipData = {
+            posTop: 0,
+            posLeft: 0,
+            content: '',
+            shown: false
         };
     }
 
@@ -107,7 +115,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     onKeyClick(moduleId: number, keyId: number): void {
-        if (!this.popoverShown) {
+        if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
                 moduleId,
                 keyId
@@ -115,6 +123,18 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
             let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId];
             this.showPopover(keyActionToEdit);
+        }
+    }
+
+    onKeyHover(moduleId: number, event: MouseEvent, over: boolean, keyId: number): void {
+        let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId];
+
+        if (this.tooltipEnabled) {
+            if (over) {
+                this.showTooltip(keyActionToEdit, event);
+            } else {
+                this.hideTooltip();
+            }
         }
     }
 
@@ -126,6 +146,25 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     showPopover(keyAction?: KeyAction): void {
         this.popoverInitKeyAction = keyAction;
         this.popoverShown = true;
+    }
+
+    showTooltip(keyAction: KeyAction, event: MouseEvent): void {
+        console.log(keyAction);
+
+        let el: Element = event.target as Element || event.srcElement;
+        let position: ClientRect = el.getBoundingClientRect();
+
+        this.tooltipData = {
+            posLeft: position.left + (position.width / 2),
+            posTop:  position.top,
+            content: 'working',
+            shown: true
+        };
+    }
+
+    hideTooltip() {
+        this.tooltipData.shown = false;
+
     }
 
     hidePopover(): void {
@@ -149,4 +188,5 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         }
 
         this.currentLayer = index;
+    }
 }

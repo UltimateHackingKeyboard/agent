@@ -5,8 +5,19 @@
                       [@layerState]="layer.animation"
                       [moduleConfig]="layer.modules.elements"
                       (keyClick)="onKeyClick($event.moduleId, $event.keyId)"
+                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
         >
         </svg-keyboard>
     </div>
-    <popover *ngIf="popoverShown && popoverEnabled" [defaultKeyAction]="popoverInitKeyAction" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+    <popover *ngIf="popoverShown" [defaultKeyAction]="popoverInitKeyAction" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+    <div class="tooltip top fade" role="tooltip"
+         [class.in]="tooltipData.shown"
+         [style.top.px]="tooltipData.posTop"
+         [style.left.px]="tooltipData.posLeft"
+    >
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-inner">
+            {{ tooltipData.content }}
+        </div>
+    </div>
 </template>
