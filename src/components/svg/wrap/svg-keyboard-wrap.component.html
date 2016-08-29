@@ -1,6 +1,6 @@
 <template ngIf="layers">
     <layers *ngIf="layers.length > 1" (select)="selectLayer($event.oldIndex, $event.index)" [current]="currentLayer"></layers>
-    <div class="keyboard-slider" >
+    <div class="keyboard-slider" (mouseout)="hideTooltip($event)">
         <svg-keyboard *ngFor="let layer of layers"
                       [@layerState]="layer.animation"
                       [moduleConfig]="layer.modules.elements"
@@ -16,8 +16,6 @@
          [style.left.px]="tooltipData.posLeft"
     >
         <div class="tooltip-arrow"></div>
-        <div class="tooltip-inner">
-            {{ tooltipData.content }}
-        </div>
+        <div class="tooltip-inner" [innerHTML]="tooltipData.content"></div>
     </div>
 </template>

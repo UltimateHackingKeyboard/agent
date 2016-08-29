@@ -17,7 +17,7 @@ export class KeymapAddComponent {
     private currentKeyboards: number;
 
     constructor() {
-        let json: any = require('json!../../../../config-serializer/all-keymaps.json');
+        let json: any = require('json!../../../config-serializer/all-keymaps.json');
         let all: Keymaps = new Keymaps().fromJsObject(json.keymaps);
         this.keymaps = all.elements;
         this.keymapsAll = this.keymaps.slice(0);
