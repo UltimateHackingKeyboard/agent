@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { StoreModule } from '@ngrx/store';
+
+import { DataProviderService } from './services/data-provider.service';
+import { MapperService } from './services/mapper.service';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Component } from 'ng2-select2/ng2-select2';
@@ -45,11 +50,16 @@ import {
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
+import { LayersComponent } from './components/layers';
+import { SvgKeyboardComponent } from './components/svg/keyboard';
+import { PopoverComponent } from './components/popover';
+import { KeymapAddComponent } from './components/keymap';
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';
+import { Storage, storeConfig } from './store';
 
 @NgModule({
     declarations: [
@@ -96,6 +106,10 @@ import { UhkConfigurationService } from './services/uhk-configuration.service';
         FormsModule,
         DragulaModule,
         routing
+    ],
+    imports: [
+        BrowserModule,
+        StoreModule.provideStore(storeConfig, Storage.initialState())
     ],
     providers: [
         DataProviderService,
