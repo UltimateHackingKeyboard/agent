@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { Keymaps } from '../../../config-serializer/config-items/Keymaps';
+import {DataProviderService} from '../../../services/data-provider.service';
 
 @Component({
     selector: 'keymap-add',
@@ -12,8 +13,8 @@ export class KeymapAddComponent {
     private keymapsAll: Keymap[];
     private currentKeyboards: number;
 
-    constructor() {
-        let json: any = require('json!../../../config-serializer/all-keymaps.json');
+    constructor(data: DataProviderService) {
+        let json: any = data.getDefaultKeymaps();
         let all: Keymaps = new Keymaps().fromJsObject(json.keymaps);
         this.keymaps = all.elements;
         this.keymapsAll = this.keymaps.slice(0);

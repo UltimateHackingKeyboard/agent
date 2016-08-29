@@ -11,6 +11,10 @@ export class DataProviderService {
         return require('json!../config-serializer/uhk-config.json');
     }
 
+    getDefaultKeymaps(): any {
+        return require('json!../config-serializer/default-keymaps.json');
+    }
+
     getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {
         let svg: any = this.getBaseLayer();
         return {
