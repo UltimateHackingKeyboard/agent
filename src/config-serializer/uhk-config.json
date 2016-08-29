@@ -18,6 +18,7 @@
             "isDefault": true,
             "abbreviation": "QTY",
             "name": "QWERTY",
+            "description": "",
             "layers": [
                 {
                     "modules": [
@@ -914,6 +915,7 @@
             "isDefault": false,
             "abbreviation": "DVR",
             "name": "DVR",
+            "description": "",
             "layers": [
                 {
                     "modules": [

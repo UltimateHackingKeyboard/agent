@@ -149,14 +149,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
-        //console.log(keyAction);
-
         let el: Element = event.target as Element || event.srcElement;
         let position: ClientRect = el.getBoundingClientRect();
+        let posLeft: number = this.tooltipData.posLeft;
+        let posTop: number = this.tooltipData.posTop;
+
+        if (el.tagName === 'rect') {
+            posLeft = position.left + (position.width / 2);
+            posTop = position.top;
+        }
+
+        console.log(keyAction);
 
         this.tooltipData = {
-            posLeft: position.left + (position.width / 2),
-            posTop:  position.top,
+            posLeft: posLeft,
+            posTop:  posTop,
             content: 'Key action: <br>Scancode: <br>Modifiers: <br>Long press action:',
             shown: true
         };
@@ -164,14 +171,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     hideTooltip(event: MouseEvent) {
         let target: HTMLElement = event.relatedTarget as HTMLElement;
-        if(target === null) {
+        if (!target) {
             this.tooltipData.shown = false;
             return;
         }
 
         // Check if we are hovering tooltip
         let list: DOMTokenList = target.classList;
-        if(!list.contains('tooltip') && !list.contains('tooltip-inner')) {
+        if (!list.contains('tooltip') && !list.contains('tooltip-inner')) {
             this.tooltipData.shown = false;
         }
     }

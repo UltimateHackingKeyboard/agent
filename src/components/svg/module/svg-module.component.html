@@ -6,6 +6,6 @@
         [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
         [keyAction]="keyActions[i]"
         (click)="onKeyClick(i)"
-        (mouseenter)="onKeyHover(i, $event, true)"
+        (mouseover)="onKeyHover(i, $event, true)"
         (mouseleave)="onKeyHover(i, $event, false)"
 />
