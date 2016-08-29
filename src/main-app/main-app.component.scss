@@ -17,10 +17,20 @@ main-app {
 .select2 {
     &-container {
         z-index: 1100;
+
+        .scancode--searchterm {
+            text-align: right;
+            color: #b7b7b7;
+        }
+    }
+
+    &-item {
+        display: flex;
+        justify-content: space-between;
     }
 
     &-results {
-        text-align: center;
+        text-align: left;
     }
 }
 

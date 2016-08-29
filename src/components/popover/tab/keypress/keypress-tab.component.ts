@@ -110,10 +110,11 @@ export class KeypressTabComponent implements OnChanges, Tab {
         if (state.additional && state.additional.explanation) {
             return jQuery(
                 '<span class="select2-item">'
-                + state.text
-                + '<span class="scancode--searchterm"> '
-                + state.additional.explanation
-                + '</span></span>'
+                    + '<span>' + state.text + '</span>'
+                    + '<span class="scancode--searchterm"> '
+                    + state.additional.explanation
+                    + '</span>' +
+                '</span>'
             );
         } else {
             return jQuery('<span class="select2-item">' + state.text + '</span>');
