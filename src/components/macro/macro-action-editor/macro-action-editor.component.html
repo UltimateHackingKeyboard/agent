@@ -31,7 +31,7 @@
         <div class="col-xs-8 has-border" [ngSwitch]="activeTab">
             <keypress-tab #tab *ngSwitchCase="TabName.Keypress" [defaultKeyAction]="defaultKeyAction"></keypress-tab>
             <macro-text-tab #tab *ngSwitchCase="TabName.Text" [macroAction]="editableMacroAction"></macro-text-tab>
-            <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse"></macro-mouse-tab>
+            <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" [macroAction]="editableMacroAction"></macro-mouse-tab>
             <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" [macroAction]="editableMacroAction"></macro-delay-tab>
             <div class="editor__actions-container">
                 <div class="editor__actions">

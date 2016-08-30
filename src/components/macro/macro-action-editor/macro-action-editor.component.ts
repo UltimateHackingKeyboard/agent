@@ -3,7 +3,6 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angul
 import {Tab} from '../../popover/tab/tab';
 
 import {KeypressTabComponent} from '../../popover/tab/keypress/keypress-tab.component';
-import {MouseTabComponent} from '../../popover/tab/mouse/mouse-tab.component';
 
 import {MacroTextTabComponent} from './tab/macro-text/macro-text.component';
 import {MacroDelayTabComponent} from './tab/macro-delay/macro-delay.component';
@@ -27,7 +26,7 @@ enum TabName {
     host: { 'class': 'macro-action-editor' },
     directives: [
         KeypressTabComponent,
-        MouseTabComponent,
+        MacroMouseTabComponent,
         MacroTextTabComponent,
         MacroDelayTabComponent
     ]
@@ -99,6 +98,7 @@ export class MacroActionEditorComponent implements OnInit {
             case macroActionType.ReleaseModifiersMacroAction:
                 return TabName.Keypress;
             // Mouse actions
+            case macroActionType.PressMouseButtonsMacroAction:
             case macroActionType.HoldMouseButtonsMacroAction:
             case macroActionType.ReleaseMouseButtonsMacroAction:
             case macroActionType.MoveMouseMacroAction:
