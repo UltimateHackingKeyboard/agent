@@ -1,0 +1,45 @@
+<div class="list-group-item action--editor" *ngIf="isEnabled">
+    <div class="row">
+        <div class="col-xs-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
+                    <a>
+                        <i class="fa fa-keyboard-o"></i>
+                        <span>Keypress</span>
+                    </a>
+                </li>
+                <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
+                    <a>
+                        <i class="fa fa-font"></i>
+                        <span>Text</span>
+                    </a>
+                </li>
+                <li #macroMouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
+                    <a>
+                        <i class="fa fa-mouse-pointer"></i>
+                        <span>Mouse</span>
+                    </a>
+                </li>
+                <li #macroDelay [class.active]="activeTab === TabName.Delay" (click)="selectTab(TabName.Delay)">
+                    <a>
+                        <i class="fa fa-clock-o"></i>
+                        <span>Delay</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-8 has-border" [ngSwitch]="activeTab">
+            <keypress-tab #tab *ngSwitchCase="TabName.Keypress" [defaultKeyAction]="defaultKeyAction"></keypress-tab>
+            <macro-text-tab #tab *ngSwitchCase="TabName.Text" [macroAction]="editableMacroAction"></macro-text-tab>
+            <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse"></macro-mouse-tab>
+            <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" [macroAction]="editableMacroAction"></macro-delay-tab>
+            <div class="editor__actions-container">
+                <div class="editor__actions">
+                    <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel </button>
+                    <button class="btn btn-sm btn-primary" type="button" (click)="onSaveClick()"> Save </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

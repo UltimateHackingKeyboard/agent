@@ -1,14 +1,4 @@
-import {
-    Component, 
-    OnInit, 
-    Input, 
-    Output, 
-    EventEmitter, 
-    ElementRef, 
-    ViewChild, 
-    Renderer
-} from '@angular/core';
-import { Ng2SliderComponent } from 'ng2-slider-component/ng2-slider.component';
+import { Component, OnInit, Input } from '@angular/core';
 import { DelayMacroAction } from '../../../../../../config-serializer/config-items/DelayMacroAction'
 
 const INITIAL_DELAY = 0.5; // 0.5 seconds
@@ -20,23 +10,20 @@ const INITIAL_DELAY = 0.5; // 0.5 seconds
     styles: [
         require('./macro-delay.component.scss')
     ],
-    host: { 'class': 'macro__delay' },
-    directives: [
-        Ng2SliderComponent
-    ]
+    host: { 'class': 'macro__delay' }
 })
 export class MacroDelayTabComponent implements OnInit {
     @Input() macroAction: DelayMacroAction;
     private delay: number;
 
-    constructor(private renderer: Renderer) {}
+    constructor() {}
 
     ngOnInit() {
        this.delay = this.macroAction.delay > 0 ? this.macroAction.delay / 1000 : INITIAL_DELAY;
     }
 
-    setDelay(event:any) {
-        this.delay = event.startValue;
+    setDelay(value: any) {
+        this.delay = value;
         this.macroAction.delay = this.delay * 1000;
     }
 }

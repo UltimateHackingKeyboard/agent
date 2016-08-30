@@ -3,3 +3,9 @@
     flex-direction: column;
     position: relative;
 }
+
+.macro-delay {
+  &__presets {
+    margin-top: 1rem;
+  }
+}

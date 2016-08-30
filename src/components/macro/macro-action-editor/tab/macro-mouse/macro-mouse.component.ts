@@ -19,11 +19,15 @@ import {MacroAction, macroActionType} from '../../../../../../config-serializer/
     host: { 'class': 'macro__mouse' },
     directives: [ FORM_DIRECTIVES ]
 })
-export class MacroMouseTabComponent extends MouseTabComponent {
+export class MacroMouseTabComponent implements OnInit {
     @ViewChild('macroDirectionX') directionX: ElementRef;
     @ViewChild('macroDirectionY') directionY: ElementRef;
-    private text: string;
+ 
     private macroAction: MacroAction;
+
+    constructor() {
+        
+    }
 
     ngOnInit() {
     }

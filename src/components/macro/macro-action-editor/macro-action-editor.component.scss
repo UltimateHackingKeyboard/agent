@@ -1,0 +1,50 @@
+.nav {
+
+    li {
+        a {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+
+            &.selected {
+                font-style: italic;
+            }
+        }
+
+        &.active {
+            z-index: 2;
+
+            a {
+                &.selected {
+                    font-style: normal;
+                }
+
+                &:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    top: 0;
+                    right: -4rem;
+                    border-color: transparent transparent transparent #337ab7;
+                    border-style: solid;
+                    border-width: 2rem;
+                }
+            }
+        }
+    }
+}
+
+.has-border {
+    border-left: 1px solid #ccc;
+    margin-left: -1.6rem;
+    padding-left: 3rem;
+}
+
+.editor__actions {
+    float: right;
+
+    &-container {
+        padding: 1rem 0 0;
+    }
+}

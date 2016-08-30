@@ -9,7 +9,6 @@ import {
     Renderer, 
     AfterViewInit
 } from '@angular/core';
-import { FORM_DIRECTIVES } from '@angular/forms';
 import { TextMacroAction } from '../../../../../../config-serializer/config-items/TextMacroAction'
 
 @Component({
@@ -17,8 +16,7 @@ import { TextMacroAction } from '../../../../../../config-serializer/config-item
     selector: 'macro-text-tab',
     template: require('./macro-text.component.html'),
     styles: [require('./macro-text.component.scss')],
-    host: { 'class': 'macro__text' },
-    directives: [ FORM_DIRECTIVES ]
+    host: { 'class': 'macro__text' }
 })
 export class MacroTextTabComponent implements OnInit, AfterViewInit {
     @Input() macroAction: TextMacroAction;

@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import {Tab} from '../../popover/tab/tab';
 
@@ -9,7 +9,7 @@ import {MacroTextTabComponent} from './tab/macro-text/macro-text.component';
 import {MacroDelayTabComponent} from './tab/macro-delay/macro-delay.component';
 import {MacroMouseTabComponent} from './tab/macro-mouse/macro-mouse.component';
 
-import {MacroItemComponent} from '../../popover/tab/macro/macro-item.component';
+import {MacroItemComponent} from '../macro-item/macro-item.component';
 import {MacroAction, macroActionType} from '../../../../config-serializer/config-items/MacroAction';
 
 enum TabName {
@@ -21,13 +21,10 @@ enum TabName {
 
 @Component({
     moduleId: module.id,
-    selector: 'macro-popover',
-    template: require('./macro-popover.component.html'),
-    styles: [
-        require('../../popover/popover.component.scss'),
-        require('./macro-popover.component.scss')
-    ],
-    host: { 'class': 'popover macro-action' },
+    selector: 'macro-action-editor',
+    template: require('./macro-action-editor.component.html'),
+    styles: [ require('./macro-action-editor.component.scss') ],
+    host: { 'class': 'macro-action-editor' },
     directives: [
         KeypressTabComponent,
         MouseTabComponent,
@@ -35,11 +32,11 @@ enum TabName {
         MacroDelayTabComponent
     ]
 })
-export class MacroPopoverComponent implements OnInit, OnChanges {
+export class MacroActionEditorComponent implements OnInit {
     @Input() macroAction: MacroAction;
 
-    @Output() cancel = new EventEmitter<any>();
     @Output() save = new EventEmitter<any>();
+    @Output() cancel = new EventEmitter<any>();
 
     @ViewChild('tab') selectedTab: Tab;
 
@@ -55,11 +52,12 @@ export class MacroPopoverComponent implements OnInit, OnChanges {
 
     }
 
-    ngOnChanges(changes: any) {
+    toggleEnabled(state: boolean) {
+        this.isEnabled = state;
         if (this.isEnabled) {
             // Make an editable clone of macro action so original isn't changed
             this.editableMacroAction = this.macroAction.clone();
-            let tab: TabName = this.getTabName(this.macroAction);
+            let tab: TabName = this.getTabName(this.editableMacroAction);
             this.selectTab(tab); 
         }
     }
