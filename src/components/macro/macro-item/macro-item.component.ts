@@ -1,28 +1,30 @@
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 
-import {MacroAction} from '../../../../../config-serializer/config-items/MacroAction';
+import {MacroAction} from '../../../../config-serializer/config-items/MacroAction';
 
-import {DelayMacroAction} from '../../../../../config-serializer/config-items/DelayMacroAction';
-import {TextMacroAction} from '../../../../../config-serializer/config-items/TextMacroAction';
+import {DelayMacroAction} from '../../../../config-serializer/config-items/DelayMacroAction';
+import {TextMacroAction} from '../../../../config-serializer/config-items/TextMacroAction';
 
-import {PressMouseButtonsMacroAction} from '../../../../../config-serializer/config-items/PressMouseButtonsMacroAction';
-import {HoldMouseButtonsMacroAction} from '../../../../../config-serializer/config-items/HoldMouseButtonsMacroAction';
-import {ReleaseMouseButtonsMacroAction} from '../../../../../config-serializer/config-items/ReleaseMouseButtonsMacroAction';
+import {PressMouseButtonsMacroAction} from '../../../../config-serializer/config-items/PressMouseButtonsMacroAction';
+import {HoldMouseButtonsMacroAction} from '../../../../config-serializer/config-items/HoldMouseButtonsMacroAction';
+import {ReleaseMouseButtonsMacroAction} from '../../../../config-serializer/config-items/ReleaseMouseButtonsMacroAction';
 
-import {MoveMouseMacroAction} from '../../../../../config-serializer/config-items/MoveMouseMacroAction';
-import {ScrollMouseMacroAction} from '../../../../../config-serializer/config-items/ScrollMouseMacroAction';
+import {MoveMouseMacroAction} from '../../../../config-serializer/config-items/MoveMouseMacroAction';
+import {ScrollMouseMacroAction} from '../../../../config-serializer/config-items/ScrollMouseMacroAction';
 
-import {PressKeyMacroAction} from '../../../../../config-serializer/config-items/PressKeyMacroAction';
-import {HoldKeyMacroAction} from '../../../../../config-serializer/config-items/HoldKeyMacroAction';
-import {ReleaseKeyMacroAction} from '../../../../../config-serializer/config-items/ReleaseKeyMacroAction';
+import {PressKeyMacroAction} from '../../../../config-serializer/config-items/PressKeyMacroAction';
+import {HoldKeyMacroAction} from '../../../../config-serializer/config-items/HoldKeyMacroAction';
+import {ReleaseKeyMacroAction} from '../../../../config-serializer/config-items/ReleaseKeyMacroAction';
 
-import {PressModifiersMacroAction} from '../../../../../config-serializer/config-items/PressModifiersMacroAction';
-import {HoldModifiersMacroAction} from '../../../../../config-serializer/config-items/HoldModifiersMacroAction';
-import {ReleaseModifiersMacroAction} from '../../../../../config-serializer/config-items/ReleaseModifiersMacroAction';
+import {PressModifiersMacroAction} from '../../../../config-serializer/config-items/PressModifiersMacroAction';
+import {HoldModifiersMacroAction} from '../../../../config-serializer/config-items/HoldModifiersMacroAction';
+import {ReleaseModifiersMacroAction} from '../../../../config-serializer/config-items/ReleaseModifiersMacroAction';
 
-import {IconComponent} from '../../widgets/icon';
+import {IconComponent} from '../../popover/widgets/icon';
 
-import {KeyModifiers}  from '../../../../../config-serializer/config-items/KeyModifiers';
+import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModifiers';
+
+import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
 
 @Component({
     moduleId: module.id,
@@ -38,8 +40,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() deletable: boolean;
     @Input() moveable: boolean;
 
+    @Output() save = new EventEmitter<any>();
     @Output() edit = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
+
+    @ViewChild('macroActionEditor') actionEditor: MacroActionEditorComponent;
 
     private iconName: string;
     private title: string;
@@ -50,10 +55,32 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.updateView();
     }
 
-    ngOnChanges() {
-        // TODO: check if macroAction changed
-        this.updateView();
+    ngOnChanges(changes: any) {
+        if (changes.macroAction) {
+            this.updateView();    
+        }
     }
+
+    saveEditedAction(macroAction: MacroAction) {
+        // @todo save this to keyboard
+        console.log('Saved action', macroAction);
+        this.macroAction = macroAction;
+        this.updateView();
+        this.save.emit();
+    }
+
+    editAction() {
+        this.actionEditor.toggleEnabled(true);
+        this.edit.emit();
+    }
+
+    hideEditor() {
+    }
+
+    deleteAction() {
+        this.delete.emit();
+    }
+
 
     private updateView(): void {
 
@@ -107,7 +134,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
             // Delay
             this.iconName = 'clock';
             let action: DelayMacroAction = this.macroAction as DelayMacroAction;
-            this.title = `Delay of ${action.delay}ms`;
+            const delay = action.delay > 0 ? action.delay / 1000 : 0;
+            this.title = `Delay of ${delay}s`;
         } else if (this.macroAction instanceof TextMacroAction) {
             // Write text
             let action: TextMacroAction = this.macroAction as TextMacroAction;
@@ -175,14 +203,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
             }
         }
         // TODO: finish for all MacroAction
-    }
-
-    editAction() {
-        this.edit.emit();
-    }
-
-    deleteAction() {
-        this.delete.emit();
     }
 
 }
