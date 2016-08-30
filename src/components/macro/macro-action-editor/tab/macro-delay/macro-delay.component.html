@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-3">
+        <div class="col-xs-4">
           <input type="number" 
                  min="0" 
                  max="1000" 
@@ -18,14 +18,8 @@
     </div>
     <div class="row macro-delay__presets">
         <div class="col-xs-12">
-          <button class="btn btn-sm btn-default" (click)="setDelay(0.3)">0.3s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(0.5)">0.5s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(0.8)">0.8s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(1)">1s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(2)">2s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(3)">3s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(3)">4s</button>
-          <button class="btn btn-sm btn-default" (click)="setDelay(3)">5s</button>
+          <h6>Choose a preset</h6>
+          <button *ngFor="let delay of presets" class="btn btn-sm btn-default"(click)="setDelay(delay)">{{delay}}s</button>
         </div>
     </div>
 </div>

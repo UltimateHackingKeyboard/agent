@@ -15,6 +15,7 @@ const INITIAL_DELAY = 0.5; // 0.5 seconds
 export class MacroDelayTabComponent implements OnInit {
     @Input() macroAction: DelayMacroAction;
     private delay: number;
+    private presets: number[] = [0.3, 0.5, 0.8, 1, 2, 3, 4, 5];
 
     constructor() {}
 
