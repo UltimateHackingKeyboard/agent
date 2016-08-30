@@ -1,0 +1,68 @@
+<div class="col-xs-12">
+    <div class="col-xs-4">
+        <ul class="nav nav-pills nav-stacked">
+            <li #mouseMove [class.active]="activeTab === TabName.Move" (click)="selectTab(TabName.Move)">
+                <a>
+                    <i class="fa fa-arrows"></i>
+                    <span>Move</span>
+                </a>
+            </li>
+            <li #mouseScroll [class.active]="activeTab === TabName.Scroll" (click)="selectTab(TabName.Scroll)">
+                <a>
+                    <i class="fa fa-arrows-v"></i>
+                    <span>Scroll</span>
+                </a>
+            </li>
+            <li #mouseClick [class.active]="activeTab === TabName.Click" (click)="selectTab(TabName.Click)">
+                <a>
+                    <i class="fa fa-mouse-pointer"></i>
+                    <span>Click button</span>
+                </a>
+            </li>
+            <li #mouseHold [class.active]="activeTab === TabName.Hold" (click)="selectTab(TabName.Hold)">
+                <a>
+                    <i class="fa fa-hand-rock-o"></i>
+                    <span>Hold button</span>
+                </a>
+            </li>
+            <li #mouseRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
+                <a>
+                    <i class="fa fa-hand-paper-o"></i>
+                    <span>Release button</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-8 has-border" [ngSwitch]="activeTab">
+        <div #tab *ngSwitchCase="TabName.Move">
+            <h4>Move cursor</h4>
+            <p>Use negative values to move down or right from current cursor position</p>
+            <label>Left/right</label>
+            <input type="number" class="form-control" [(ngModel)]="macroAction.x">
+            <label>Up/down</label>
+            <input type="number" class="form-control" [(ngModel)]="macroAction.y">
+        </div>
+        <div #tab *ngSwitchCase="TabName.Scroll">
+            <h4>Scroll</h4>
+            <p>Use negative values to move down or right from current cursor position</p>
+            <label>Left/right</label>
+            <input type="number" class="form-control" [(ngModel)]="macroAction.x">
+            <label>Up/down</label>
+            <input type="number" class="form-control" [(ngModel)]="macroAction.y">
+        </div>
+        <div #tab *ngIf="activeTab === TabName.Click || activeTab === TabName.Hold || activeTab === TabName.Release">
+            <h4 *ngIf="activeTab === TabName.Click">Click mouse button</h4>
+            <h4 *ngIf="activeTab === TabName.Hold">Hold mouse button</h4>
+            <h4 *ngIf="activeTab === TabName.Release">Release mouse button</h4>
+            <div class="button-group">
+                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(0)" (click)="setMouseClick(0)">Left</button>
+                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(2)" (click)="setMouseClick(2)">Middle</button>
+                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(1)" (click)="setMouseClick(1)">Right</button>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(3)" (click)="setMouseClick(3)">Button 4</button>
+                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(4)" (click)="setMouseClick(4)">Button 5</button>
+            </div>
+        </div>
+    </div>
+</div>
