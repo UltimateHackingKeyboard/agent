@@ -7,7 +7,7 @@
                   contenteditable="true" 
                   [contenteditableUpdateOnEnter]="true"
                   [contenteditableModel]="macro.name"
-                  (contenteditableModelChange)="saveMacro()">{{macro.name}}</span> <i class="fa fa-pencil" (click)="focusMacroName()"></i>
+                  (contenteditableModelChange)="saveMacro()">{{macro.name}}</span>
         </h1>
     </div>
     <div class="row">
@@ -17,9 +17,8 @@
                         [editable]="true"
                         [deletable]="true"
                         [moveable]="true"
-                        (edit)="editAction(macroAction, macroActionIndex)"
-                        (delete)="deleteAction(macroActionIndex)"
-                        class="list-group-item action--item"></macro-item>
+                        (edit)="onEditAction(macroActionIndex)"
+                        (delete)="onDeleteAction(macroActionIndex)"></macro-item>
             <div class="list-group-item action--item add-new__action-item no-reorder">
                 <a class="add-new__action-item--link" (click)="addAction()"><i class="fa fa-plus"></i> Add new action item</a>
             </div>
@@ -39,4 +38,3 @@
         </div>
     </div>
 </div>
-<macro-popover #macroPopover (cancel)="hidePopover()" [macroAction]="currentMacroAction" (save)="saveEditedAction($event)"></macro-popover>

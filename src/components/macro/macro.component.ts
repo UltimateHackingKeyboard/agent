@@ -1,14 +1,13 @@
-import { Component, OnInit, OnDestroy, Renderer, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
-import { MacroPopoverComponent } from './macro-popover/macro-popover.component';
 import { Macro } from '../../../config-serializer/config-items/Macro';
 import { MacroAction } from '../../../config-serializer/config-items/MacroAction';
 import { PressKeyMacroAction } from '../../../config-serializer/config-items/PressKeyMacroAction';
-import { MacroItemComponent } from '../popover/tab/macro/macro-item.component';
+import { MacroItemComponent } from './macro-item/macro-item.component';
 
 import { ContenteditableModel } from '../directives/contenteditable.component';
 
@@ -16,29 +15,21 @@ import { ContenteditableModel } from '../directives/contenteditable.component';
     selector: 'macro',
     template: require('./macro.component.html'),
     styles: [require('./macro.component.scss')],
-    providers: [UhkConfigurationService],
-    directives: [
-        MacroPopoverComponent,
-        MacroItemComponent,
-        ContenteditableModel
-    ]
+    providers: [UhkConfigurationService]
 })
-export class MacroComponent implements OnInit, OnDestroy {
-    @ViewChild('macroNameInput') nameInput: ElementRef;
-    @ViewChild('macroPopover') macroPopover: MacroPopoverComponent;
-
+export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
+    @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>; 
+    
     private macro: Macro;
-    private currentMacroAction: MacroAction;
-    private currentMacroActionIndex: number;
 
     private sub: Subscription;
+    private macroItemsSub: Subscription;
+    private addedNewAction: boolean = false;
 
     constructor(
         private uhkConfigurationService: UhkConfigurationService, 
         private route: ActivatedRoute,
-        private renderer: Renderer
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
@@ -48,47 +39,53 @@ export class MacroComponent implements OnInit, OnDestroy {
        });
     }
 
+    ngAfterViewInit() {
+       this.macroItemsSub = this.macroItems.changes.subscribe((data:any) => {
+           if (this.addedNewAction) {
+               // Open editor for newly added action
+               // Rather cludge way to do this, basically macroItems have to be updated before the editor can be opened
+               setTimeout(() => {
+                   let newAction = data.last;
+                   data.last.actionEditor.toggleEnabled(true);
+                   this.hideOtherActionEditors(data.length - 1);
+                   this.addedNewAction = false;
+               });
+           }
+       });
+    }
+
     saveMacro() {
         // @todo Save macro to keyboard
     }
 
     addAction() {
         const newAction = new PressKeyMacroAction();
-        this.currentMacroAction = newAction;
-        this.currentMacroActionIndex = this.macro.macroActions.elements.length;
-        this.macroPopover.isEnabled = true;
+        this.macro.macroActions.elements.push(newAction);
+        this.addedNewAction = true;
     }
 
-    editAction(macroAction: MacroAction, index: number) {
-        this.currentMacroAction = macroAction;
-        this.currentMacroActionIndex = index;
-        this.macroPopover.isEnabled = true;
+    hideOtherActionEditors(index: number) {
+        this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
+            if (idx !== index) {
+                macroItem.actionEditor.toggleEnabled(false);
+            }
+        });
     }
 
-    saveEditedAction(macroAction: MacroAction) {
-        // @todo save this to keyboard
-        console.log('saved action', macroAction);
-        this.macro.macroActions.elements[this.currentMacroActionIndex] = macroAction;
-        this.currentMacroAction = null;
-        this.currentMacroActionIndex = null;
+    onEditAction(index: number) {
+        // Hide other editors when clicking edit button of a macro action
+        this.hideOtherActionEditors(index);
     }
 
-    deleteAction(index:number) {
+    onDeleteAction(index:number) {
         // @ todo show confirm action dialog
         this.macro.macroActions.elements.splice(index, 1);
         this.saveMacro();
     }
 
-    hidePopover() {
-        this.currentMacroAction = null;
-    }
-
-    focusMacroName() {
-        this.renderer.invokeElementMethod(this.nameInput.nativeElement, 'focus');
-    }
-
     ngOnDestroy() {
         this.sub.unsubscribe();
+        this.macroItemsSub.unsubscribe();
     }
 
 }
