@@ -38,6 +38,10 @@ main-app {
     cursor: pointer;
 }
 
+.select2-container--default .select2-dropdown--below .select2-results > .select2-results__options {
+    max-height: 300px;
+}
+
 /* GitHub ribbon */
 .github-fork-ribbon {
     background-color: #a00;
