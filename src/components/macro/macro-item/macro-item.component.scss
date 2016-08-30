@@ -1,15 +1,24 @@
 :host {
-  .action--item {
-    display: flex;
-    flex-shrink: 0;
-
-    icon {
-        margin: 0 5px;
+    &.macro-item:first-of-type {
+        .list-group-item {
+            border-radius: 4px 4px 0 0;
+        }
     }
-
-    > div {
+    .action--item {
         display: flex;
-        flex: 1;
+        flex-shrink: 0;
+
+        icon {
+            margin: 0 5px;
+        }
+
+        > div {
+            display: flex;
+            flex: 1;
+        }
+
+        &:first-child {
+            border-radius: 0;
+        }
     }
-  }
 }

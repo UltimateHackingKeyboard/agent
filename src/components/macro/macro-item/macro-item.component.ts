@@ -31,6 +31,7 @@ import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-
     selector: 'macro-item',
     template: require('./macro-item.component.html'),
     styles: [require('./macro-item.component.scss')],
+    host: { 'class': 'macro-item' },
     directives: [IconComponent]
 })
 export class MacroItemComponent implements OnInit, OnChanges {
