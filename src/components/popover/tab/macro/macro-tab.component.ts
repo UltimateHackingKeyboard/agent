@@ -6,7 +6,7 @@ import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction
 import {PlayMacroAction} from '../../../../../config-serializer/config-items/PlayMacroAction';
 
 import {Tab} from '../tab';
-import {MacroItemComponent} from './macro-item.component';
+import {MacroItemComponent} from '../../../macro/macro-item/macro-item.component';
 
 import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
