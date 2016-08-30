@@ -2,22 +2,22 @@
     <div class="row">
         <div class="col-xs-4">
             <ul class="nav nav-pills nav-stacked">
-                <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
-                    <a>
-                        <i class="fa fa-keyboard-o"></i>
-                        <span>Keypress</span>
-                    </a>
-                </li>
                 <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
                     <a>
                         <i class="fa fa-font"></i>
                         <span>Text</span>
                     </a>
                 </li>
+                <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
+                    <a>
+                        <i class="fa fa-keyboard-o"></i>
+                        <span>Key action</span>
+                    </a>
+                </li>
                 <li #macroMouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
                     <a>
                         <i class="fa fa-mouse-pointer"></i>
-                        <span>Mouse</span>
+                        <span>Mouse action</span>
                     </a>
                 </li>
                 <li #macroDelay [class.active]="activeTab === TabName.Delay" (click)="selectTab(TabName.Delay)">
