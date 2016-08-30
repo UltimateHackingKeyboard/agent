@@ -1,3 +1,9 @@
+.action--editor {
+    padding-bottom: 0;
+    border-radius: 0;
+    border-bottom: 0;
+}
+
 .nav {
 
     li {
@@ -7,6 +13,10 @@
 
             &.selected {
                 font-style: italic;
+            }
+
+            &:hover {
+                cursor: pointer;
             }
         }
 
@@ -45,6 +55,17 @@
     float: right;
 
     &-container {
-        padding: 1rem 0 0;
+        background: #f5f5f5;
+        border-top: 1px solid #ccc;
+        padding: 1rem 1.5rem;
     }
+}
+
+.flex-button-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.flex-button {
+    align-self: flex-end;
 }
