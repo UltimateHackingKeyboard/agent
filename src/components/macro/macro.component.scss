@@ -30,6 +30,12 @@ h1 {
     }
 }
 
+.macro__name {
+    border-bottom: 2px dotted #999;
+    padding: 0 0.5rem;
+    margin: 0 0.25rem;
+}
+
 .macro-settings {
     border: 1px solid black;
     border-top-color: #999;
