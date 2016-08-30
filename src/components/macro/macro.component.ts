@@ -6,7 +6,7 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
 
 import { Macro } from '../../../config-serializer/config-items/Macro';
 import { MacroAction } from '../../../config-serializer/config-items/MacroAction';
-import { PressKeyMacroAction } from '../../../config-serializer/config-items/PressKeyMacroAction';
+import { TextMacroAction } from '../../../config-serializer/config-items/TextMacroAction';
 import { MacroItemComponent } from './macro-item/macro-item.component';
 
 import { ContenteditableModel } from '../directives/contenteditable.component';
@@ -59,7 +59,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     addAction() {
-        const newAction = new PressKeyMacroAction();
+        const newAction = new TextMacroAction();
+        newAction.text = '';
         this.macro.macroActions.elements.push(newAction);
         this.addedNewAction = true;
     }
