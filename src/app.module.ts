@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { FORM_DIRECTIVES } from '@angular/forms';
 
 import { APP_ROUTER_PROVIDERS } from './main-app.routes';
 
@@ -13,9 +14,12 @@ import { MacroComponent } from './components/macro';
 import { LegacyLoaderComponent } from './components/legacy-loader';
 import { NotificationComponent } from './components/notification';
 import { SvgKeystrokeKeyComponent, SvgOneLineTextKeyComponent, SvgTwoLineTextKeyComponent } from './components/svg/keys';
+import { ContenteditableModel } from './components/directives/contenteditable.component';
+import { MacroActionEditorComponent } from './components/macro/macro-action-editor/macro-action-editor.component';
 
 @NgModule({
     declarations: [
+        FORM_DIRECTIVES,
         MainAppComponent,
         KeymapComponent,
         MacroComponent,
@@ -23,7 +27,9 @@ import { SvgKeystrokeKeyComponent, SvgOneLineTextKeyComponent, SvgTwoLineTextKey
         NotificationComponent,
         SvgKeystrokeKeyComponent,
         SvgOneLineTextKeyComponent,
-        SvgTwoLineTextKeyComponent
+        SvgTwoLineTextKeyComponent,
+        ContenteditableModel,
+        MacroActionEditorComponent
     ],
     imports: [BrowserModule],
     providers: [
