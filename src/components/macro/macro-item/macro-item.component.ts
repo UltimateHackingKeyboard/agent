@@ -116,19 +116,19 @@ export class MacroItemComponent implements OnInit, OnChanges {
             // Press mouse buttons
             let action: PressMouseButtonsMacroAction = this.macroAction as PressMouseButtonsMacroAction;
             this.iconName = 'mouse-pointer';
-            this.title = 'Press: <some mouse button>';
+            this.title = 'Click mouse button: <some mouse button>';
             // @todo COMPLETE THIS
         } else if (this.macroAction instanceof HoldMouseButtonsMacroAction) {
             // Hold mouse buttons
             let action: HoldMouseButtonsMacroAction = this.macroAction as HoldMouseButtonsMacroAction;
             this.iconName = 'hand-rock';
-            this.title = 'Hold: <some mouse button>';
+            this.title = 'Hold mouse button: <some mouse button>';
             // @todo COMPLETE THIS
         } else if (this.macroAction instanceof ReleaseMouseButtonsMacroAction) {
             // Release mouse buttons
             let action: ReleaseMouseButtonsMacroAction = this.macroAction as ReleaseMouseButtonsMacroAction;
             this.iconName = 'hand-paper';
-            this.title = 'Release: <some mouse button>';
+            this.title = 'Release mouse button: <some mouse button>';
             // @todo COMPLETE THIS
         } else if (this.macroAction instanceof DelayMacroAction) {
             // Delay
@@ -145,19 +145,19 @@ export class MacroItemComponent implements OnInit, OnChanges {
             // Press key
             let action: PressKeyMacroAction = this.macroAction as PressKeyMacroAction;
             this.iconName = 'hand-pointer';
-            this.title = 'Press: ' + action.scancode;
+            this.title = 'Press key: ' + action.scancode;
             // @todo COMPLETE THIS
         } else if (this.macroAction instanceof HoldKeyMacroAction) {
             // Press key
             let action: HoldKeyMacroAction = this.macroAction as HoldKeyMacroAction;
             this.iconName = 'hand-rock';
-            this.title = 'Hold: ' + action.scancode;
+            this.title = 'Hold key: ' + action.scancode;
             // @todo COMPLETE THIS
         } else if (this.macroAction instanceof ReleaseKeyMacroAction) {
             // Release key
             let action: ReleaseKeyMacroAction = this.macroAction as ReleaseKeyMacroAction;
             this.iconName = 'hand-paper';
-            this.title = 'Release: ' + action.scancode;
+            this.title = 'Release key: ' + action.scancode;
             // @todo COMPLETE THIS
         } else if (this.macroAction instanceof PressModifiersMacroAction) {
             // Press modifiers
@@ -167,7 +167,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
                 this.title = 'Invalid PressModifiersMacroAction!';
                 return;
             }
-            this.title = 'Press: ';
+            this.title = 'Press modifier: ';
             for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightCtrl; i <<= 1) {
                 if (action.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
@@ -181,7 +181,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
                 this.title = 'Invalid HoldModifiersMacroAction!';
                 return;
             }
-            this.title = 'Hold: ';
+            this.title = 'Hold modifier: ';
             for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightCtrl; i <<= 1) {
                 if (action.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
@@ -195,7 +195,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
                 this.title = 'Invalid ReleaseModifiersMacroAction!';
                 return;
             }
-            this.title = 'Release: ';
+            this.title = 'Release modifier: ';
             for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightCtrl; i <<= 1) {
                 if (action.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
