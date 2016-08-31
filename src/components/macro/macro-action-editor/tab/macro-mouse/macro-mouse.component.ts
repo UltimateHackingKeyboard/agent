@@ -7,7 +7,7 @@ import {
     ElementRef, 
     ViewChild
 } from '@angular/core';
-import { FORM_DIRECTIVES } from '@angular/forms';
+
 import {Tab} from '../../../../popover/tab/tab';
 import {MacroAction, macroActionType} from '../../../../../../config-serializer/config-items/MacroAction';
 
@@ -31,8 +31,7 @@ enum TabName {
         require('../../macro-action-editor.component.scss'),
         require('./macro-mouse.component.scss')
     ],
-    host: { 'class': 'macro__mouse' },
-    directives: [ FORM_DIRECTIVES ]
+    host: { 'class': 'macro__mouse' }
 })
 export class MacroMouseTabComponent implements OnInit {
     @Input() macroAction: MacroAction;
