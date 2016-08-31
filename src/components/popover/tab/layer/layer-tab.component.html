@@ -1,10 +1,10 @@
-<select #toggleSelect (change)="toggleChanged($event.target.value)">
+<select (change)="toggleChanged($event.target.value)">
     <option *ngFor="let item of toggleData" [value]="item.id" [selected]="toggle === item.id">
         {{ item.text }}
     </option>
 </select>
 <span>the</span>
-<select #layerSelect (change)="layerChanged($event.target.value)">
+<select (change)="layerChanged($event.target.value)">
     <option *ngFor="let item of layerData" [value]="item.id" [selected]="layer === item.id">
         {{ item.text }}
     </option>

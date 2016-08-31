@@ -159,9 +159,9 @@
             {
                 "id": "40",
                 "additional": {
-                    "explanation": "Enter"
+                    "explanation": "Return"
                 },
-                "text": "Return"
+                "text": "Enter"
             },
             {
                 "id": "41",
@@ -177,7 +177,7 @@
             },
             {
                 "id": "44",
-                "text": "Spacebar"
+                "text": "Space"
             }
         ]
     },
@@ -350,7 +350,7 @@
         ]
     },
     {
-        "text": "NumberPad",
+        "text": "Numpad",
         "children": [
             {
                 "id": "83",
@@ -503,7 +503,7 @@
         ]
     },
     {
-        "text": "MediaKeys",
+        "text": "Media Keys",
         "children": [
             {
                 "id": "127",

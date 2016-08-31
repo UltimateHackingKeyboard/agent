@@ -1,8 +1,6 @@
-import { Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
-
-import { Select2Component, Select2OptionData } from 'ng2-select2/ng2-select2';
 
 import { Tab } from '../tab';
 
@@ -14,11 +12,7 @@ import { Tab } from '../tab';
 export class LayerTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
 
-    private toggle: boolean;
-    private layer: LayerName;
-
-    /* tslint:disable:no-unused-variable: They're used in the template */
-    private toggleData: {id: boolean, text: string}[] = [
+    toggleData: {id: boolean, text: string}[] = [
         {
             id: false,
             text: 'Activate'
@@ -29,7 +23,7 @@ export class LayerTabComponent implements OnChanges, Tab {
         }
     ];
 
-    private layerData: {id: number, text: string}[] = [
+    layerData: {id: number, text: string}[] = [
         {
             id: 0,
             text: 'Mod'
@@ -43,7 +37,9 @@ export class LayerTabComponent implements OnChanges, Tab {
             text: 'Mouse'
         }
     ];
-    /* tslint:enable:no-unused-variable */
+
+    private toggle: boolean;
+    private layer: LayerName;
 
     constructor() {
         this.toggle = false;
@@ -62,6 +58,7 @@ export class LayerTabComponent implements OnChanges, Tab {
         if (!(keyAction instanceof SwitchLayerAction)) {
             return false;
         }
+
         let switchLayerAction: SwitchLayerAction = <SwitchLayerAction>keyAction;
         this.toggle = switchLayerAction.isLayerToggleable;
         this.layer = switchLayerAction.layer;
@@ -75,11 +72,11 @@ export class LayerTabComponent implements OnChanges, Tab {
         return keyAction;
     }
 
-    toggleChanged(value: boolean) {
-        this.toggle = value;
+    toggleChanged(value: string) {
+        this.toggle = value === 'true';
     }
 
     layerChanged(value: number) {
-        this.layer = value;
+        this.layer = +value;
     }
 }
