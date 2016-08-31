@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { FORM_DIRECTIVES } from '@angular/forms';
+import { FormsModule }   from '@angular/forms';
 
 import { APP_ROUTER_PROVIDERS } from './main-app.routes';
 
+import { UhkConfigurationService } from './services/uhk-configuration.service';
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 
@@ -19,7 +20,6 @@ import { MacroActionEditorComponent } from './components/macro/macro-action-edit
 
 @NgModule({
     declarations: [
-        FORM_DIRECTIVES,
         MainAppComponent,
         KeymapComponent,
         MacroComponent,
@@ -31,8 +31,9 @@ import { MacroActionEditorComponent } from './components/macro/macro-action-edit
         ContenteditableModel,
         MacroActionEditorComponent
     ],
-    imports: [BrowserModule],
+    imports: [BrowserModule, FormsModule],
     providers: [
+        UhkConfigurationService,
         DataProviderService,
         MapperService,
         APP_ROUTER_PROVIDERS,
