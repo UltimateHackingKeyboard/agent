@@ -14,8 +14,7 @@ import { ContenteditableModel } from '../directives/contenteditable.component';
 @Component({
     selector: 'macro',
     template: require('./macro.component.html'),
-    styles: [require('./macro.component.scss')],
-    providers: [UhkConfigurationService]
+    styles: [require('./macro.component.scss')]
 })
 export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>; 
