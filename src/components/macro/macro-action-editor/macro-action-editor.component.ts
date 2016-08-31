@@ -2,10 +2,9 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angul
 
 import {Tab} from '../../popover/tab/tab';
 
-import {KeypressTabComponent} from '../../popover/tab/keypress/keypress-tab.component';
-
 import {MacroTextTabComponent} from './tab/macro-text/macro-text.component';
 import {MacroDelayTabComponent} from './tab/macro-delay/macro-delay.component';
+import {MacroKeyTabComponent} from './tab/macro-key/macro-key.component';
 import {MacroMouseTabComponent} from './tab/macro-mouse/macro-mouse.component';
 
 import {MacroItemComponent} from '../macro-item/macro-item.component';
@@ -25,9 +24,9 @@ enum TabName {
     styles: [ require('./macro-action-editor.component.scss') ],
     host: { 'class': 'macro-action-editor' },
     directives: [
-        KeypressTabComponent,
-        MacroMouseTabComponent,
         MacroTextTabComponent,
+        MacroKeyTabComponent,
+        MacroMouseTabComponent,
         MacroDelayTabComponent
     ]
 })
@@ -63,7 +62,7 @@ export class MacroActionEditorComponent implements OnInit {
 
     onCancelClick(): void {
         this.isEnabled = false;
-        this.cancel.emit(undefined);
+        this.cancel.emit();
     }
 
     onSaveClick(): void {
