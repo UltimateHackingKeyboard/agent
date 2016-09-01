@@ -6,7 +6,7 @@
                   #macroNameInput
                   contenteditable="true" 
                   [contenteditableUpdateOnEnter]="true"
-                  [contenteditableModel]="macro.name"
+                  [(contenteditableModel)]="macro.name"
                   (contenteditableModelChange)="saveMacro()">{{macro.name}}</span>
         </h1>
     </div>
