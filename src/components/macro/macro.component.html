@@ -11,13 +11,18 @@
         </h1>
     </div>
     <div class="row">
-        <div id="macro-actions-list" class="list-group col-xs-10 col-xs-offset-1">
+        <div id="macro-actions-list" 
+             class="list-group col-xs-10 col-xs-offset-1" 
+             [dragula]="'macroActions'" 
+             [dragulaModel]="macro.macroActions.elements">
             <macro-item *ngFor="let macroAction of macro.macroActions.elements; let macroActionIndex = index" 
                         [macroAction]="macroAction"
                         [editable]="true"
                         [deletable]="true"
-                        [moveable]="true"
+                        [moveable]="dragEnabled"
+                        (save)="onSaveAction()"
                         (edit)="onEditAction(macroActionIndex)"
+                        (cancel)="onCancelEditAction()"
                         (delete)="onDeleteAction(macroActionIndex)"></macro-item>
             <div class="list-group-item action--item add-new__action-item no-reorder">
                 <a class="add-new__action-item--link" (click)="addAction()"><i class="fa fa-plus"></i> Add new action item</a>

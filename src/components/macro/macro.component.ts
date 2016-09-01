@@ -11,10 +11,14 @@ import { MacroItemComponent } from './macro-item/macro-item.component';
 
 import { ContenteditableModel } from '../directives/contenteditable.component';
 
+import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
+
 @Component({
     selector: 'macro',
     template: require('./macro.component.html'),
-    styles: [require('./macro.component.scss')]
+    styles: [require('./macro.component.scss')],
+    directives: [Dragula],
+    viewProviders: [DragulaService]
 })
 export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>; 
@@ -24,11 +28,19 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     private sub: Subscription;
     private macroItemsSub: Subscription;
     private addedNewAction: boolean = false;
+    private dragEnabled: boolean = true;
 
     constructor(
         private uhkConfigurationService: UhkConfigurationService, 
         private route: ActivatedRoute,
-    ) {}
+        private dragulaService: DragulaService
+    ) {
+      dragulaService.setOptions('macroActions', {
+        moves: function (el:any, container:any, handle:any) {
+          return handle.className.indexOf('action--movable') !== -1;
+        }
+      });
+    }
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
@@ -75,6 +87,15 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     onEditAction(index: number) {
         // Hide other editors when clicking edit button of a macro action
         this.hideOtherActionEditors(index);
+        this.dragEnabled = false;
+    }
+
+    onCancelEditAction() {
+      this.dragEnabled = true;
+    }
+
+    onSaveAction() {
+      this.dragEnabled = true;
     }
 
     onDeleteAction(index:number) {
