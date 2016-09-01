@@ -42,6 +42,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() moveable: boolean;
 
     @Output() save = new EventEmitter<any>();
+    @Output() cancel = new EventEmitter<any>();
     @Output() edit = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
 
@@ -78,7 +79,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.edit.emit();
     }
 
-    hideEditor() {
+    cancelEdit() {
+        this.isEditing = false;
+        this.cancel.emit();
     }
 
     deleteAction() {

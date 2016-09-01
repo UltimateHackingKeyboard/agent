@@ -9,5 +9,5 @@
     #macroActionEditor
     *ngIf="editable" 
     [macroAction]="macroAction"
-    (cancel)="hideEditor()"
+    (cancel)="cancelEdit()"
     (save)="saveEditedAction($event)"></macro-action-editor>
