@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
+import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Layers } from '../../config-serializer/config-items/Layers';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
-import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'keymap',

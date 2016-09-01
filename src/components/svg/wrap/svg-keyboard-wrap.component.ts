@@ -1,6 +1,6 @@
 import {
-    Component, Input, OnInit, style,
-    state, animate, transition, trigger, OnChanges
+    Component, Input, OnChanges, OnInit, animate,
+    state, style, transition, trigger
 } from '@angular/core';
 
 import { KeyAction } from '../../../config-serializer/config-items/KeyAction';

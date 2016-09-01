@@ -1,12 +1,12 @@
 import {ClassArray} from '../ClassArray';
 import {UhkBuffer} from '../UhkBuffer';
-import {NoneAction} from './NoneAction';
+import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
 import {KeystrokeAction} from './KeystrokeAction';
-import {keyActionType, KeyActionId, KeyAction} from './KeyAction';
-import {SwitchLayerAction} from './SwitchLayerAction';
-import {SwitchKeymapAction} from './SwitchKeymapAction';
 import {MouseAction} from './MouseAction';
+import {NoneAction} from './NoneAction';
 import {PlayMacroAction} from './PlayMacroAction';
+import {SwitchKeymapAction} from './SwitchKeymapAction';
+import {SwitchLayerAction} from './SwitchLayerAction';
 
 export class KeyActions extends ClassArray<KeyAction> {
 

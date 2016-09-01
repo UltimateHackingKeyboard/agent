@@ -1,13 +1,14 @@
 import { ModuleWithProviders } from '@angular/core';
-import { Routes, RouterModule }  from '@angular/router';
+import { RouterModule, Routes }  from '@angular/router';
+
 import { keymapRoutes } from '../components/keymap';
-import { macroRoutes } from '../components/macro';
 import { legacyRoutes } from '../components/legacy-loader';
+import { macroRoutes } from '../components/macro';
 
 const appRoutes: Routes = [
     ...keymapRoutes,
-    ...macroRoutes,
-    ...legacyRoutes
+    ...legacyRoutes,
+    ...macroRoutes
 ];
 
 export const appRoutingProviders: any[] = [ ];

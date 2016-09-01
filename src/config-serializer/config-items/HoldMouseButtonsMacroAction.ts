@@ -1,6 +1,6 @@
+import {assertUInt8} from '../assert';
 import {UhkBuffer} from '../UhkBuffer';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
-import {assertUInt8} from '../assert';
 
 export class HoldMouseButtonsMacroAction extends MacroAction {
 

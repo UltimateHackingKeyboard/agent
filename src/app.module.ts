@@ -3,15 +3,27 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { Select2Component } from 'ng2-select2/ng2-select2';
 
-import { DataProviderService } from './services/data-provider.service';
-import { MapperService } from './services/mapper.service';
-import {UhkConfigurationService} from './services/uhk-configuration.service';
-
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
-import { KeymapComponent } from './components/keymap';
-import { MacroComponent } from './components/macro';
+
+import { KeymapAddComponent, KeymapComponent } from './components/keymap';
+import { LayersComponent } from './components/layers';
 import { LegacyLoaderComponent } from './components/legacy-loader';
+import { MacroComponent } from './components/macro';
 import { NotificationComponent } from './components/notification';
+import { PopoverComponent } from './components/popover';
+import {
+    KeymapTabComponent,
+    KeypressTabComponent,
+    LayerTabComponent,
+    MacroTabComponent,
+    MouseTabComponent,
+    NoneTabComponent
+} from './components/popover/tab';
+import { MacroItemComponent } from './components/popover/tab/macro';
+import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
+import { IconComponent } from './components/popover/widgets/icon';
+import { SideMenuComponent } from './components/side-menu';
+import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
     SvgIconTextKeyComponent,
     SvgKeyboardKeyComponent,
@@ -22,24 +34,12 @@ import {
     SvgTextIconKeyComponent,
     SvgTwoLineTextKeyComponent
 } from './components/svg/keys';
-import { SvgKeyboardWrapComponent } from './components/svg/wrap';
-import { LayersComponent } from './components/layers';
-import { SvgKeyboardComponent } from './components/svg/keyboard';
 import { SvgModuleComponent } from './components/svg/module';
-import { PopoverComponent } from './components/popover';
-import { KeymapAddComponent } from './components/keymap';
-import { MacroItemComponent } from './components/popover/tab/macro';
-import { SideMenuComponent } from './components/side-menu';
-import {
-    KeypressTabComponent,
-    KeymapTabComponent,
-    LayerTabComponent,
-    MacroTabComponent,
-    MouseTabComponent,
-    NoneTabComponent
-} from './components/popover/tab';
-import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
-import { IconComponent } from './components/popover/widgets/icon';
+import { SvgKeyboardWrapComponent } from './components/svg/wrap';
+
+import { DataProviderService } from './services/data-provider.service';
+import { MapperService } from './services/mapper.service';
+import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 @NgModule({
     declarations: [

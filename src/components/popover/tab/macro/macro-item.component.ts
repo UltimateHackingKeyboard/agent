@@ -1,8 +1,8 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
-import {MacroAction} from '../../../../config-serializer/config-items/MacroAction';
 import {DelayMacroAction} from '../../../../config-serializer/config-items/DelayMacroAction';
 import {HoldModifiersMacroAction} from '../../../../config-serializer/config-items/HoldModifiersMacroAction';
+import {MacroAction} from '../../../../config-serializer/config-items/MacroAction';
 import {MoveMouseMacroAction} from '../../../../config-serializer/config-items/MoveMouseMacroAction';
 import {PressModifiersMacroAction} from '../../../../config-serializer/config-items/PressModifiersMacroAction';
 import {ReleaseModifiersMacroAction} from '../../../../config-serializer/config-items/ReleaseModifiersMacroAction';

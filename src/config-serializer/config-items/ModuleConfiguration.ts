@@ -1,6 +1,6 @@
+import {assertUInt8} from '../assert';
 import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
-import {assertUInt8} from '../assert';
 
 export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
 

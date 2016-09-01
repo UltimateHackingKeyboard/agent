@@ -1,7 +1,7 @@
+import {assertEnum, assertUInt8} from '../assert';
 import {Serializable} from '../Serializable';
-import {KeyActions} from './KeyActions';
 import {UhkBuffer} from '../UhkBuffer';
-import {assertUInt8, assertEnum} from '../assert';
+import {KeyActions} from './KeyActions';
 
 enum PointerRole {
     none,

@@ -1,10 +1,10 @@
 import {ClassArray} from '../ClassArray';
 import {UhkBuffer} from '../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
-import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
 import {HoldKeyMacroAction} from './HoldKeyMacroAction';
 import {HoldModifiersMacroAction} from './HoldModifiersMacroAction';
 import {HoldMouseButtonsMacroAction} from './HoldMouseButtonsMacroAction';
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {PressKeyMacroAction} from './PressKeyMacroAction';
 import {PressModifiersMacroAction} from './PressModifiersMacroAction';

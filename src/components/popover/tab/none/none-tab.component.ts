@@ -1,7 +1,7 @@
 import {Component, OnInit } from '@angular/core';
 
-import {Tab} from '../tab';
 import {NoneAction} from '../../../../config-serializer/config-items/NoneAction';
+import {Tab} from '../tab';
 
 @Component({
     selector: 'none-tab',

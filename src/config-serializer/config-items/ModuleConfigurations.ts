@@ -1,6 +1,6 @@
 import {ClassArray} from '../ClassArray';
-import {ModuleConfiguration} from './ModuleConfiguration';
 import {UhkBuffer} from '../UhkBuffer';
+import {ModuleConfiguration} from './ModuleConfiguration';
 
 export class ModuleConfigurations extends ClassArray<ModuleConfiguration> {
 

@@ -1,12 +1,13 @@
-import {Component, OnInit, Input} from '@angular/core';
-
-import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
-import {Keymap} from '../../../../config-serializer/config-items/Keymap';
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {Tab} from '../tab';
-import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
+import {Component, Input, OnInit } from '@angular/core';
 
 import {Select2OptionData} from 'ng2-select2/ng2-select2';
+
+import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
+import {Keymap} from '../../../../config-serializer/config-items/Keymap';
+import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
+import {Tab} from '../tab';
+
+import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
 
 @Component({
     selector: 'keymap-tab',

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 import { Macro } from '../../config-serializer/config-items/Macro';
+
+import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
 @Component({
     selector: 'side-menu',

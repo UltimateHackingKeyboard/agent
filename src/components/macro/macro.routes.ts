@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { MacroComponent } from './macro.component';
 
 export const macroRoutes: Routes = [
