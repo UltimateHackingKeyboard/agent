@@ -8,7 +8,7 @@ import {MacroKeyTabComponent} from './tab/macro-key/macro-key.component';
 import {MacroMouseTabComponent} from './tab/macro-mouse/macro-mouse.component';
 
 import {MacroItemComponent} from '../macro-item/macro-item.component';
-import {MacroAction, macroActionType} from '../../../../config-serializer/config-items/MacroAction';
+import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
 
 enum TabName {
     Keypress,

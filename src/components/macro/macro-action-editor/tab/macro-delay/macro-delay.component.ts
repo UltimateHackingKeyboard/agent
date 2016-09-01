@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DelayMacroAction } from '../../../../../../config-serializer/config-items/DelayMacroAction'
+import { DelayMacroAction } from '../../../../../config-serializer/config-items/DelayMacroAction'
 
 const INITIAL_DELAY = 0.5; // 0.5 seconds
 

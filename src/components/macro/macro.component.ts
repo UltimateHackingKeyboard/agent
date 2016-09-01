@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
-import { Macro } from '../../../config-serializer/config-items/Macro';
-import { MacroAction } from '../../../config-serializer/config-items/MacroAction';
-import { TextMacroAction } from '../../../config-serializer/config-items/TextMacroAction';
+import { Macro } from '../../config-serializer/config-items/Macro';
+import { MacroAction } from '../../config-serializer/config-items/MacroAction';
+import { TextMacroAction } from '../../config-serializer/config-items/TextMacroAction';
 import { MacroItemComponent } from './macro-item/macro-item.component';
 
 import { ContenteditableModel } from '../directives/contenteditable.component';

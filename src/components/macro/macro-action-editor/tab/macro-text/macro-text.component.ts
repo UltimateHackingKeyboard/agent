@@ -9,7 +9,7 @@ import {
     Renderer, 
     AfterViewInit
 } from '@angular/core';
-import { TextMacroAction } from '../../../../../../config-serializer/config-items/TextMacroAction'
+import { TextMacroAction } from '../../../../../config-serializer/config-items/TextMacroAction'
 
 @Component({
     moduleId: module.id,

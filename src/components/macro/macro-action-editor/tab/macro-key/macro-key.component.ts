@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 
 import {Tab} from '../../../../popover/tab/tab';
-import {MacroAction, macroActionType} from '../../../../../../config-serializer/config-items/MacroAction';
+import {MacroAction, macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
 
-import { PressKeyMacroAction } from '../../../../../../config-serializer/config-items/PressKeyMacroAction';
-import { HoldKeyMacroAction } from '../../../../../../config-serializer/config-items/HoldKeyMacroAction';
-import { ReleaseKeyMacroAction } from '../../../../../../config-serializer/config-items/ReleaseKeyMacroAction';
+import { PressKeyMacroAction } from '../../../../../config-serializer/config-items/PressKeyMacroAction';
+import { HoldKeyMacroAction } from '../../../../../config-serializer/config-items/HoldKeyMacroAction';
+import { ReleaseKeyMacroAction } from '../../../../../config-serializer/config-items/ReleaseKeyMacroAction';
 
 import {KeypressTabComponent} from '../../../../popover/tab/keypress/keypress-tab.component';
 

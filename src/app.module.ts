@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { DataProviderService } from './services/data-provider.service';
@@ -18,7 +19,10 @@ import { LayersComponent } from './components/layers';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import { PopoverComponent } from './components/popover';
 import { KeymapAddComponent } from './components/keymap';
-import {UhkConfigurationService} from './services/uhk-configuration.service';
+import { UhkConfigurationService } from './services/uhk-configuration.service';
+
+import { ContenteditableModel } from './components/directives/contenteditable.component';
+import { MacroActionEditorComponent } from './components/macro/macro-action-editor/macro-action-editor.component';
 
 @NgModule({
     declarations: [
@@ -34,9 +38,11 @@ import {UhkConfigurationService} from './services/uhk-configuration.service';
         LayersComponent,
         PopoverComponent,
         SvgKeyboardComponent,
-        KeymapAddComponent
+        KeymapAddComponent,
+        ContenteditableModel,
+        MacroActionEditorComponent
     ],
-    imports: [BrowserModule],
+    imports: [BrowserModule, FormsModule],
     providers: [
         DataProviderService,
         UhkConfigurationService,
