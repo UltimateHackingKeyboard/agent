@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Action} from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
 @Injectable()
 export class KeymapActions {
@@ -11,7 +11,7 @@ export class KeymapActions {
         };
     }
 
-    static GET_SINGLE = '[Keymap] Get single keymap';
+    /*static GET_SINGLE = '[Keymap] Get single keymap';
     getKeymap(id: string): Action {
         return {
             type: KeymapActions.GET_SINGLE,
@@ -24,5 +24,5 @@ export class KeymapActions {
         return {
             type: KeymapActions.GET_ALL
         };
-    }
+    }*/
 }

@@ -8,5 +8,9 @@
 </div>
 
 <div *ngFor="let keymap of keymaps | async">
-    {{ keymap.name }}
+    Keymap: {{ keymap.name }}
+</div>
+
+<div *ngFor="let macro of macros | async">
+    Macro: {{ macro.name }}
 </div>

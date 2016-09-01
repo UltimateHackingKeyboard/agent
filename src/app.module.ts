@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ReflectiveInjector  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -59,7 +59,13 @@ import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';
-import { Storage, storeConfig } from './store';
+import { storeConfig } from './store';
+import { DataStorage } from './store/storage';
+
+// Create DataStorage dependency injection
+const storageProvider = ReflectiveInjector.resolve([DataStorage]);
+const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
+const storageService: DataStorage = storageInjector.get(DataStorage);
 
 @NgModule({
     declarations: [
@@ -109,13 +115,14 @@ import { Storage, storeConfig } from './store';
     ],
     imports: [
         BrowserModule,
-        StoreModule.provideStore(storeConfig, Storage.initialState())
+        StoreModule.provideStore(storeConfig, storageService.initialState())
     ],
     providers: [
         DataProviderService,
         UhkConfigurationService,
         MapperService,
-        appRoutingProviders
+        APP_ROUTER_PROVIDERS,
+        { provide: DataStorage, useValue: storageService }
     ],
     bootstrap: [MainAppComponent]
 })
