@@ -47,7 +47,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     private iconName: string;
     private title: string;
     private customTitle: string;
-    private isEditing: boolean = false;
+    private editing: boolean = false;
 
     constructor() { }
 
@@ -65,19 +65,19 @@ export class MacroItemComponent implements OnInit, OnChanges {
         // @todo save this to keyboard
         console.log('Saved action', editedAction);
         this.macroAction = editedAction;
-        this.isEditing = false;
+        this.editing = false;
         this.updateView();
         this.save.emit();
     }
 
     editAction() {
         this.actionEditor.toggleEnabled(true);
-        this.isEditing = true;
+        this.editing = true;
         this.edit.emit();
     }
 
     cancelEdit() {
-        this.isEditing = false;
+        this.editing = false;
         this.cancel.emit();
     }
 

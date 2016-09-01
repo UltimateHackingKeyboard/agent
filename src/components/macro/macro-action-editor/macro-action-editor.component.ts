@@ -30,7 +30,7 @@ export class MacroActionEditorComponent implements OnInit {
 
     @ViewChild('tab') selectedTab: Tab;
 
-    public isEnabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
+    public enabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
     private editableMacroAction: MacroAction;
     private tabName = TabName;
     private activeTab: TabName;
@@ -43,8 +43,8 @@ export class MacroActionEditorComponent implements OnInit {
     }
 
     toggleEnabled(state: boolean) {
-        this.isEnabled = state;
-        if (this.isEnabled) {
+        this.enabled = state;
+        if (this.enabled) {
             // Make an editable clone of macro action so original isn't changed
             this.editableMacroAction = this.macroAction.clone();
             let tab: TabName = this.getTabName(this.editableMacroAction);
@@ -53,14 +53,14 @@ export class MacroActionEditorComponent implements OnInit {
     }
 
     onCancelClick(): void {
-        this.isEnabled = false;
+        this.enabled = false;
         this.cancel.emit();
     }
 
     onSaveClick(): void {
         try {
             this.save.emit(this.editableMacroAction);
-            this.isEnabled = false;
+            this.enabled = false;
         } catch (e) {
             // TODO: show error dialog
             console.error(e);
