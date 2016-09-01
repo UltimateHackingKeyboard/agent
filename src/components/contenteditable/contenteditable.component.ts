@@ -1,5 +1,4 @@
 import {Directive, ElementRef, Input, Output, EventEmitter, OnChanges} from '@angular/core';
-import {isPropertyUpdated} from '@angular/forms/src/directives/shared';
 
 const KEY_ENTER = 13;
 
@@ -20,7 +19,7 @@ export class ContenteditableModel implements OnChanges {
   constructor(private elRef: ElementRef) {}
 
   ngOnChanges(changes: any) {
-    if (isPropertyUpdated(changes, this.lastViewModel)) {
+    if (changes[this.lastViewModel]) {
       this.lastViewModel = this.model;
       this.refreshView();
     }
