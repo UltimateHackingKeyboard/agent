@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, Renderer, ElementRef } from '@angular/core';
 import { DelayMacroAction } from '../../../../../config-serializer/config-items/DelayMacroAction';
 
 const INITIAL_DELAY = 0.5; // 0.5 seconds
@@ -11,12 +11,13 @@ const INITIAL_DELAY = 0.5; // 0.5 seconds
     ],
     host: { 'class': 'macro__delay' }
 })
-export class MacroDelayTabComponent implements OnInit {
+export class MacroDelayTabComponent implements OnInit, AfterViewInit {
     @Input() macroAction: DelayMacroAction;
+    @ViewChild('macroDelayInput') input: ElementRef;
     private delay: number;
     private presets: number[] = [0.3, 0.5, 0.8, 1, 2, 3, 4, 5];
 
-    constructor() {}
+    constructor(private renderer: Renderer) {}
 
     ngOnInit() {
        this.delay = this.macroAction.delay > 0 ? this.macroAction.delay / 1000 : INITIAL_DELAY;
@@ -25,5 +26,9 @@ export class MacroDelayTabComponent implements OnInit {
     setDelay(value: any) {
         this.delay = value;
         this.macroAction.delay = this.delay * 1000;
+    }
+
+    ngAfterViewInit() {
+        this.renderer.invokeElementMethod(this.input.nativeElement, 'focus');
     }
 }
