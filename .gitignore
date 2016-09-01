@@ -1,9 +1,7 @@
 node_modules
 npm-debug.log
 .vscode
-build
-bundle
-css
+dist
 .idea
 *.iml
 *.sublime-project

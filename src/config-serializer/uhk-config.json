@@ -18,6 +18,7 @@
             "isDefault": true,
             "abbreviation": "QTY",
             "name": "QWERTY",
+            "description": "",
             "layers": [
                 {
                     "modules": [
@@ -785,6 +786,25 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -793,6 +813,7 @@
             "isDefault": false,
             "abbreviation": "VIM",
             "name": "VIM",
+            "description": "",
             "layers": [
                 {
                     "modules": [
@@ -830,6 +851,63 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -838,7 +916,50 @@
             "isDefault": false,
             "abbreviation": "DVR",
             "name": "DVR",
+            "description": "",
             "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": []
+                        }
+                    ]
+                },
                 {
                     "modules": [
                         {

@@ -3,6 +3,9 @@
     flex-direction: column;
     max-width: none;
     padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100px;
 }
 
 .popover-action {

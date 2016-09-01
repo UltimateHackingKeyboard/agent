@@ -1,0 +1,25 @@
+<template ngIf="layers">
+    <layers (select)="selectLayer($event.oldIndex, $event.index)" [current]="currentLayer"></layers>
+    <div class="keyboard-slider" (mouseout)="hideTooltip($event)">
+        <svg-keyboard *ngFor="let layer of layers"
+                      [@layerState]="layer.animation"
+                      [moduleConfig]="layer.modules.elements"
+                      (keyClick)="onKeyClick($event.moduleId, $event.keyId)"
+                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
+        >
+        </svg-keyboard>
+    </div>
+    <popover *ngIf="popoverShown" [defaultKeyAction]="popoverInitKeyAction" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+    <div class="tooltip top fade" role="tooltip"
+         [class.in]="tooltipData.shown"
+         [style.top.px]="tooltipData.posTop"
+         [style.left.px]="tooltipData.posLeft"
+    >
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-inner">
+            <p *ngFor="let item of tooltipData.content">
+                {{ item.name }}: {{ item.value }}
+            </p>
+        </div>
+    </div>
+</template>

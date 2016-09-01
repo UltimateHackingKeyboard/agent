@@ -4,27 +4,6 @@
     display: block;
 }
 
-button {
-    margin: 2px;
-}
-
-svg-keyboard-popover {
-    width: 95%;
-    max-width: 1400px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    animation-duration: 400ms;
-    animation-timing-function: ease-in-out;
-}
-
-.keyboard-slider {
-    height: calc(100% - 45px);
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-}
-
 .keymap {
     &__is-default {
         &.fa-star {
@@ -69,54 +48,4 @@ svg-keyboard-popover {
             }
         }
     }
-}
-
-.uhk {
-    &--wrapper {
-        height: calc(100% - 95px);
-    }
-
-    &__layer-switcher {
-        &--wrapper {
-            position: relative;
-            margin-bottom: 2rem;
-
-            &:before {
-                content: attr(data-title);
-                display: inline-block;
-                position: absolute;
-                bottom: -0.3em;
-                right: 100%;
-                font-size: 2.4rem;
-                padding-right: 0.25em;
-                margin: 0;
-            }
-        }
-    }
-}
-
-@keyframes animate-center-left {
-    0% {
-        transform: translateX(-50%);
-        left: 50%;
-    }
-    100% {
-        transform: translateX(-100%);
-        left: 0;
-    }
-}
-
-@keyframes animate-center-right {
-    0% {
-        transform: translateX(-50%);
-        left: 50%;
-    }
-    100% {
-        transform: translateX(0%);
-        left: 100%;
-    }
-}
-
-[hidden] {
-    display: none;
 }

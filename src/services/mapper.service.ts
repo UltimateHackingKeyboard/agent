@@ -105,13 +105,13 @@ export class MapperService {
     public scanCodeToSvgImagePath(scanCode: number): string {
         let fileName: string = this.scanCodeFileName[scanCode];
         if (fileName) {
-            return 'build/compiled_sprite.svg#' + fileName;
+            return 'assets/compiled_sprite.svg#' + fileName;
         }
         return undefined;
     }
 
     public getIcon(iconName: string): string {
-        return 'build/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
+        return 'assets/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
     }
 
     private initScanCodeTextMap(): void {

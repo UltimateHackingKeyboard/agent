@@ -1,0 +1,8 @@
+<div class="text-center">
+    <span class="uhk__layer-switcher--wrapper" data-title="Layers: ">
+        <button type="button" class="btn btn-default btn-lg" *ngFor="let button of buttons; let index = index" (click)="selectLayer(index)"
+            [class.btn-primary]="index === current">
+            {{ button }}
+        </button>
+    </span>
+</div>

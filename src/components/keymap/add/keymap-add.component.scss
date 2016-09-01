@@ -1,0 +1,61 @@
+:host {
+    overflow-y: auto;
+    display: block;
+    height: 100%;
+}
+
+.uhk__layer-switcher--wrapper {
+    position: relative;
+
+    &:before {
+        content: attr(data-title);
+        display: inline-block;
+        position: absolute;
+        bottom: -0.3em;
+        right: 100%;
+        font-size: 2.4rem;
+        padding-right: 0.25em;
+        margin: 0;
+    }
+}
+
+.keymap {
+    &__search {
+        margin-top: 10px;
+
+        .input-group {
+            width: 100%;
+            max-width: 350px;
+            float: left;
+        }
+
+        &_amount {
+            float: left;
+            margin: 7px 0 0 20px;
+        }
+    }
+
+    &__description {
+        margin-bottom: 20px;
+    }
+
+    &__list {
+        margin-top: 40px;
+
+        &_item {
+            margin-bottom: 50px;
+        }
+
+        .btn-group-lg {
+            margin: 30px 0 0;
+            width: 100%;
+            text-align: center;
+
+            .btn {
+                float: none;
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+        }
+    }
+}

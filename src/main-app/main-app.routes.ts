@@ -1,7 +1,7 @@
 import { provideRouter, RouterConfig }  from '@angular/router';
-import { keymapRoutes } from './components/keymap';
-import { macroRoutes } from './components/macro';
-import { legacyRoutes } from './components/legacy-loader';
+import { keymapRoutes } from '../components/keymap';
+import { macroRoutes } from '../components/macro';
+import { legacyRoutes } from '../components/legacy-loader';
 
 export const routes: RouterConfig = [
     ...keymapRoutes,
