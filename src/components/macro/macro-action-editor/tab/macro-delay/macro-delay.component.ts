@@ -4,7 +4,6 @@ import { DelayMacroAction } from '../../../../../config-serializer/config-items/
 const INITIAL_DELAY = 0.5; // 0.5 seconds
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-delay-tab',
     template: require('./macro-delay.component.html'),
     styles: [

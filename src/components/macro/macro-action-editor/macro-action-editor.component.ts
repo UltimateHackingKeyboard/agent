@@ -17,17 +17,10 @@ enum TabName {
 };
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-action-editor',
     template: require('./macro-action-editor.component.html'),
     styles: [ require('./macro-action-editor.component.scss') ],
-    host: { 'class': 'macro-action-editor' },
-    directives: [
-        MacroTextTabComponent,
-        MacroKeyTabComponent,
-        MacroMouseTabComponent,
-        MacroDelayTabComponent
-    ]
+    host: { 'class': 'macro-action-editor' }
 })
 export class MacroActionEditorComponent implements OnInit {
     @Input() macroAction: MacroAction;

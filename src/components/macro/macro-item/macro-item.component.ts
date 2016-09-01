@@ -26,15 +26,11 @@ import {KeyModifiers}  from '../../../config-serializer/config-items/KeyModifier
 
 import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
 
-import {Dragula} from 'ng2-dragula/ng2-dragula';
-
 @Component({
-    moduleId: module.id,
     selector: 'macro-item',
     template: require('./macro-item.component.html'),
     styles: [require('./macro-item.component.scss')],
-    host: { 'class': 'macro-item' },
-    directives: [IconComponent, Dragula]
+    host: { 'class': 'macro-item' }
 })
 export class MacroItemComponent implements OnInit, OnChanges {
 

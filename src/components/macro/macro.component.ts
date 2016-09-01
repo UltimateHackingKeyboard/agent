@@ -14,7 +14,6 @@ import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
     selector: 'macro',
     template: require('./macro.component.html'),
     styles: [require('./macro.component.scss')],
-    directives: [Dragula],
     viewProviders: [DragulaService]
 })
 export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {

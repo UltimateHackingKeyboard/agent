@@ -10,7 +10,6 @@ import {
 import { TextMacroAction } from '../../../../../config-serializer/config-items/TextMacroAction';
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-text-tab',
     template: require('./macro-text.component.html'),
     styles: [require('./macro-text.component.scss')],

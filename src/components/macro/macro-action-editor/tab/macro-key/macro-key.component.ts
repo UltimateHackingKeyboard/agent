@@ -21,7 +21,6 @@ enum TabName {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-key-tab',
     template: require('./macro-key.component.html'),
     styles: [

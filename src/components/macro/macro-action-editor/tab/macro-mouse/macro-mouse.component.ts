@@ -21,7 +21,6 @@ enum TabName {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-mouse-tab',
     template: require('./macro-mouse.component.html'),
     styles: [
