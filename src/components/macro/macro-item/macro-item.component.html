@@ -1,7 +1,12 @@
 <div class="list-group-item action--item" [class.is-editing]="isEditing">
   <span *ngIf="moveable" class="glyphicon glyphicon-option-vertical action--movable" aria-hidden="true"></span>
   <icon [name]="iconName"></icon>
-  <div> {{ title }} </div>
+  <div class="action--title action--title-editable" 
+       *ngIf="editable"
+       [(contenteditableModel)]="customTitle" 
+       [contenteditableUpdateOnEnter]="true"
+       contenteditable="true">{{ customTitle || title }}</div>
+  <div class="action--title" *ngIf="!editable">{{ customTitle || title }}</div>
   <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
   <icon *ngIf="editable" name="pencil" (click)="editAction()"></icon>
 </div>

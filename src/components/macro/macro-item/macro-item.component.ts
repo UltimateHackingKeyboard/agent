@@ -52,6 +52,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     private iconName: string;
     private title: string;
+    private customTitle: string;
     private isEditing: boolean = false;
 
     constructor() { }
@@ -91,8 +92,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private updateView(): void {
-
         this.title = this.macroAction.constructor.name;
+
         if (this.macroAction instanceof MoveMouseMacroAction) {
             // Mouse moved
             this.iconName = 'mouse-pointer';
