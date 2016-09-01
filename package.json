@@ -50,7 +50,7 @@
     "rxjs": "5.0.0-beta.11",
     "select2": "^4.0.3",
     "sortablejs": "^1.4.2",
-    "typescript": "2.0.0",
+    "typescript": "2.0.2",
     "xml-loader": "^1.1.0",
     "zone.js": "^0.6.12"
   },
