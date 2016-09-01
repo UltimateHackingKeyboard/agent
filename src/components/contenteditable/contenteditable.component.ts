@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {Directive, ElementRef, Input, Output, EventEmitter, OnChanges, Renderer } from '@angular/core';
 
 const KEY_ENTER = 13;
 
@@ -16,7 +16,7 @@ export class ContenteditableModel implements OnChanges {
 
   private lastViewModel: any;
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef, private renderer: Renderer) {}
 
   ngOnChanges(changes: any) {
     if (changes[this.lastViewModel]) {
@@ -28,7 +28,7 @@ export class ContenteditableModel implements OnChanges {
   onKeypress(event: any) {
     if (this.updateOnEnter && (event.which === KEY_ENTER)) {
       // Finish editing when Enter pressed
-      this.elRef.nativeElement.blur();
+      this.renderer.invokeElementMethod(this.elRef.nativeElement, 'blur');
       return false;
     }
   }
