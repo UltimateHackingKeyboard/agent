@@ -9,7 +9,7 @@
     ],
     "types": [
       "node",
-      "es6-shim"
+      "core-js"
     ]
   }
 }
