@@ -32,8 +32,10 @@ export class MacroActionEditorComponent implements OnInit {
 
     public enabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
     private editableMacroAction: MacroAction;
-    private tabName = TabName;
     private activeTab: TabName;
+    /* tslint:disable:no-unused-variable: It is used in the template. */
+    private tabName = TabName;
+    /* tslint:enable:no-unused-variable */
 
     constructor() {
     }

@@ -34,8 +34,10 @@ export class MacroMouseTabComponent implements OnInit {
     @ViewChild('tab') selectedTab: Tab;
 
     private activeTab: TabName;
-    private tabName = TabName;
     private buttons: Number[] = [];
+    /* tslint:disable:no-unused-variable: It is used in the template. */
+    private tabName = TabName;
+    /* tslint:enable:no-unused-variable */
 
     constructor() {}
 

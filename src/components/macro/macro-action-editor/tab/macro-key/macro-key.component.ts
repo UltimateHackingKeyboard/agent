@@ -34,7 +34,9 @@ export class MacroKeyTabComponent implements OnInit {
     @ViewChild('tab') selectedTab: Tab;
 
     private activeTab: TabName;
+    /* tslint:disable:no-unused-variable: It is used in the template. */
     private tabName = TabName;
+    /* tslint:enable:no-unused-variable */
 
     constructor() {}
 

@@ -56,7 +56,9 @@ export abstract class MacroAction extends Serializable<MacroAction> {
      * @param {any} [obj] Object attribute to clone, should be left empty
      * @return {any}
      */
+    /* tslint:disable:no-unused-variable */
     clone(obj: any = undefined): any {
+         /* tslint:enable:no-unused-variable */
         let cloneObj = new (<any>this.constructor)();
         for (let attribute in this) {
             if (typeof this[attribute] === 'object') {

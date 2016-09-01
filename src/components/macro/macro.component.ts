@@ -31,11 +31,13 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         private route: ActivatedRoute,
         private dragulaService: DragulaService
     ) {
+        /* tslint:disable:no-unused-variable: Used by Dragula. */
         dragulaService.setOptions('macroActions', {
             moves: function (el: any, container: any, handle: any) {
                 return handle.className.indexOf('action--movable') !== -1;
             }
         });
+        /* tslint:enable:no-unused-variable */
     }
 
     ngOnInit() {
