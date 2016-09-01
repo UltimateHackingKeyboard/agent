@@ -1,14 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {NgSwitch, NgSwitchCase} from '@angular/common';
 
 import {KeyAction} from '../../config-serializer/config-items/KeyAction';
-
-import {KeypressTabComponent} from './tab/keypress/keypress-tab.component';
-import {LayerTabComponent} from './tab/layer/layer-tab.component';
-import {MouseTabComponent} from './tab/mouse/mouse-tab.component';
-import {MacroTabComponent} from './tab/macro/macro-tab.component';
-import {KeymapTabComponent} from './tab/keymap/keymap-tab.component';
-import {NoneTabComponent} from './tab/none/none-tab.component';
 
 import {Tab} from './tab/tab';
 import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';
@@ -27,22 +19,10 @@ enum TabName {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'popover',
     template: require('./popover.component.html'),
     styles: [require('./popover.component.scss')],
-    host: { 'class': 'popover' },
-    directives:
-    [
-        NgSwitch,
-        NgSwitchCase,
-        KeypressTabComponent,
-        LayerTabComponent,
-        MouseTabComponent,
-        MacroTabComponent,
-        KeymapTabComponent,
-        NoneTabComponent
-    ]
+    host: { 'class': 'popover' }
 })
 export class PopoverComponent implements OnInit {
     @Input() defaultKeyAction: KeyAction;

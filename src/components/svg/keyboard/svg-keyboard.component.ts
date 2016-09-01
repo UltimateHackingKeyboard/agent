@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {Module} from '../../../config-serializer/config-items/Module';
-import {SvgModule, SvgModuleComponent} from '../module';
+import {SvgModule} from '../module';
 import {DataProviderService} from '../../../services/data-provider.service';
 
 @Component({
     selector: 'svg-keyboard',
     template: require('./svg-keyboard.component.html'),
-    styles: [require('./svg-keyboard.component.scss')],
-    directives: [SvgModuleComponent]
+    styles: [require('./svg-keyboard.component.scss')]
 })
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];

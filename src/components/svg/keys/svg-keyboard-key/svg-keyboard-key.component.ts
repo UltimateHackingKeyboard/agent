@@ -10,11 +10,6 @@ import {UhkConfiguration} from '../../../../config-serializer/config-items/UhkCo
 import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
 import {MapperService} from '../../../../services/mapper.service';
 
-import {SvgSingleIconKeyComponent} from '../svg-single-icon-key';
-import {SvgTextIconKeyComponent} from '../svg-text-icon-key';
-import {SvgIconTextKeyComponent} from '../svg-icon-text-key';
-import {SvgSwitchKeymapKeyComponent} from '../svg-switch-keymap-key';
-
 enum LabelTypes {
     KeystrokeKey,
     OneLineText,
@@ -27,14 +22,7 @@ enum LabelTypes {
 
 @Component({
     selector: 'g[svg-keyboard-key]',
-    template: require('./svg-keyboard-key.component.html'),
-    directives:
-    [
-        SvgSingleIconKeyComponent,
-        SvgTextIconKeyComponent,
-        SvgIconTextKeyComponent,
-        SvgSwitchKeymapKeyComponent
-    ]
+    template: require('./svg-keyboard-key.component.html')
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
     @Input() id: string;

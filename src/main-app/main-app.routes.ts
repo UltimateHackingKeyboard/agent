@@ -1,14 +1,15 @@
-import { provideRouter, RouterConfig }  from '@angular/router';
+import { ModuleWithProviders } from '@angular/core';
+import { Routes, RouterModule }  from '@angular/router';
 import { keymapRoutes } from '../components/keymap';
 import { macroRoutes } from '../components/macro';
 import { legacyRoutes } from '../components/legacy-loader';
 
-export const routes: RouterConfig = [
+const appRoutes: Routes = [
     ...keymapRoutes,
     ...macroRoutes,
     ...legacyRoutes
 ];
 
-export const APP_ROUTER_PROVIDERS = [
-    provideRouter(routes)
-];
+export const appRoutingProviders: any[] = [ ];
+
+export const routing: ModuleWithProviders =  RouterModule.forRoot(appRoutes, { useHash: true });

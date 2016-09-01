@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DomSanitizationService, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -13,12 +13,12 @@ import {ActivatedRoute} from '@angular/router';
 export class LegacyLoaderComponent {
     private safeLink: SafeResourceUrl;
 
-    constructor(private sanitationService: DomSanitizationService, private route: ActivatedRoute) { }
+    constructor(private domSanitizer: DomSanitizer, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.route.params.subscribe((params: { id: string }) => {
             if (params.id) {
-                this.safeLink = this.sanitationService.bypassSecurityTrustResourceUrl(params.id + 'Legacy.html');
+                this.safeLink = this.domSanitizer.bypassSecurityTrustResourceUrl(params.id + 'Legacy.html');
             }
         });
     }

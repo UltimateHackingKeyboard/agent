@@ -3,13 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
     selector: 'side-menu',
     template: require('./side-menu.component.html'),
-    styles: [require('./side-menu.component.scss')],
-    directives: [ROUTER_DIRECTIVES]
+    styles: [require('./side-menu.component.scss')]
 })
 export class SideMenuComponent implements OnInit {
     private keymaps: Keymap[];

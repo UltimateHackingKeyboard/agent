@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
     selector: 'g[svg-single-icon-key]',
     template: require('./svg-single-icon-key.component.html')
 })

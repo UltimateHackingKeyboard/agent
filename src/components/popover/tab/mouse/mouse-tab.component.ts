@@ -1,16 +1,13 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 
 import {Tab} from '../tab';
 import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
 import {MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/MouseAction';
 
 @Component({
-    moduleId: module.id,
     selector: 'mouse-tab',
     template: require('./mouse-tab.component.html'),
-    styles: [require('./mouse-tab.component.scss')],
-    directives: [NgSwitch, NgSwitchCase, NgSwitchDefault]
+    styles: [require('./mouse-tab.component.scss')]
 })
 export class MouseTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;

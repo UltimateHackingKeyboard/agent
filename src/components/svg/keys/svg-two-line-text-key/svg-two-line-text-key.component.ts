@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
     selector: 'g[svg-two-line-text-key]',
     template: require('./svg-two-line-text-key.component.html')
 })
