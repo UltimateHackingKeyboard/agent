@@ -40,8 +40,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
-            const id = +params['id']; // (+) converts string 'id' to a number
+        this.sub = this.route.params.subscribe((params: any) => {
+            const id: string = params.id;
             const macros: Macro[] = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
             this.macro = macros[id];
        });
