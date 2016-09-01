@@ -56,10 +56,10 @@ export abstract class MacroAction extends Serializable<MacroAction> {
      * @param {any} [obj] Object attribute to clone, should be left empty
      * @return {any}
      */
-    clone(obj: any = undefined): any {
+    clone(obj: any): any {
         let cloneObj = new (<any>this.constructor)();
         for (let attribute in this) {
-            if (typeof this[attribute] === "object") {
+            if (typeof this[attribute] === 'object') {
                 cloneObj[attribute] = this.clone(this[attribute]);
             } else {
                 cloneObj[attribute] = this[attribute];

@@ -2,25 +2,25 @@
     <div class="row">
         <div class="col-xs-4 editor__tab-links">
             <ul class="nav nav-pills nav-stacked">
-                <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
+                <li #macroText [class.active]="activeTab === tabName.Text" (click)="selectTab(tabName.Text)">
                     <a>
                         <i class="fa fa-font"></i>
                         <span>Type text</span>
                     </a>
                 </li>
-                <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
+                <li #macroKeypress [class.active]="activeTab === tabName.Keypress" (click)="selectTab(tabName.Keypress)">
                     <a>
                         <i class="fa fa-keyboard-o"></i>
                         <span>Key action</span>
                     </a>
                 </li>
-                <li #macroMouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
+                <li #macroMouse [class.active]="activeTab === tabName.Mouse" (click)="selectTab(tabName.Mouse)">
                     <a>
                         <i class="fa fa-mouse-pointer"></i>
                         <span>Mouse action</span>
                     </a>
                 </li>
-                <li #macroDelay [class.active]="activeTab === TabName.Delay" (click)="selectTab(TabName.Delay)">
+                <li #macroDelay [class.active]="activeTab === tabName.Delay" (click)="selectTab(tabName.Delay)">
                     <a>
                         <i class="fa fa-clock-o"></i>
                         <span>Delay</span>
@@ -29,10 +29,10 @@
             </ul>
         </div>
         <div class="col-xs-8 editor__tabs" [ngSwitch]="activeTab">
-            <macro-text-tab #tab *ngSwitchCase="TabName.Text" [macroAction]="editableMacroAction"></macro-text-tab>
-            <macro-key-tab #tab *ngSwitchCase="TabName.Keypress" [macroAction]="editableMacroAction"></macro-key-tab>
-            <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" [macroAction]="editableMacroAction"></macro-mouse-tab>
-            <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" [macroAction]="editableMacroAction"></macro-delay-tab>
+            <macro-text-tab #tab *ngSwitchCase="tabName.Text" [macroAction]="editableMacroAction"></macro-text-tab>
+            <macro-key-tab #tab *ngSwitchCase="tabName.Keypress" [macroAction]="editableMacroAction"></macro-key-tab>
+            <macro-mouse-tab #tab *ngSwitchCase="tabName.Mouse" [macroAction]="editableMacroAction"></macro-mouse-tab>
+            <macro-delay-tab #tab *ngSwitchCase="tabName.Delay" [macroAction]="editableMacroAction"></macro-delay-tab>
         </div>
     </div>
     <div class="row">

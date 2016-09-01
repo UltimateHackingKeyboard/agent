@@ -5,11 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { MacroAction } from '../../config-serializer/config-items/MacroAction';
 import { TextMacroAction } from '../../config-serializer/config-items/TextMacroAction';
 import { MacroItemComponent } from './macro-item/macro-item.component';
-
-import { ContenteditableModel } from '../directives/contenteditable.component';
 
 import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
@@ -21,8 +18,8 @@ import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
     viewProviders: [DragulaService]
 })
 export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>; 
-    
+    @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>;
+
     private macro: Macro;
 
     private sub: Subscription;
@@ -31,15 +28,15 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     private dragEnabled: boolean = true;
 
     constructor(
-        private uhkConfigurationService: UhkConfigurationService, 
+        private uhkConfigurationService: UhkConfigurationService,
         private route: ActivatedRoute,
         private dragulaService: DragulaService
     ) {
-      dragulaService.setOptions('macroActions', {
-        moves: function (el:any, container:any, handle:any) {
-          return handle.className.indexOf('action--movable') !== -1;
-        }
-      });
+        dragulaService.setOptions('macroActions', {
+            moves: function (el: any, container: any, handle: any) {
+                return handle.className.indexOf('action--movable') !== -1;
+            }
+        });
     }
 
     ngOnInit() {
@@ -51,13 +48,13 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-       this.macroItemsSub = this.macroItems.changes.subscribe((data:any) => {
+       this.macroItemsSub = this.macroItems.changes.subscribe((data: any) => {
            if (this.addedNewAction) {
                // Open editor for newly added action
                // Rather cludge way to do this, basically macroItems have to be updated before the editor can be opened
                setTimeout(() => {
                    let newAction = data.last;
-                   data.last.actionEditor.toggleEnabled(true);
+                   newAction.actionEditor.toggleEnabled(true);
                    this.hideOtherActionEditors(data.length - 1);
                    this.addedNewAction = false;
                });
@@ -98,7 +95,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
       this.dragEnabled = true;
     }
 
-    onDeleteAction(index:number) {
+    onDeleteAction(index: number) {
         // @ todo show confirm action dialog
         this.macro.macroActions.elements.splice(index, 1);
         this.saveMacro();

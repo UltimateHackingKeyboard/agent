@@ -62,7 +62,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: any) {
         if (changes.macroAction) {
-            this.updateView();    
+            this.updateView();
         }
     }
 
@@ -89,7 +89,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
     deleteAction() {
         this.delete.emit();
     }
-
 
     private updateView(): void {
 

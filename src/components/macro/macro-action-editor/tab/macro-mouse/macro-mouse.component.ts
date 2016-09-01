@@ -1,10 +1,10 @@
 import {
-    Component, 
-    OnInit, 
-    Input, 
-    Output, 
-    EventEmitter, 
-    ElementRef, 
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    ElementRef,
     ViewChild
 } from '@angular/core';
 
@@ -36,14 +36,12 @@ enum TabName {
 export class MacroMouseTabComponent implements OnInit {
     @Input() macroAction: MacroAction;
     @ViewChild('tab') selectedTab: Tab;
- 
+
     private activeTab: TabName;
-    private TabName = TabName;
+    private tabName = TabName;
     private buttons: Number[] = [];
 
-    constructor() {
-        
-    }
+    constructor() {}
 
     ngOnInit() {
         this.selectTab(this.getTabName(this.macroAction));
@@ -56,7 +54,7 @@ export class MacroMouseTabComponent implements OnInit {
     setMouseClick(id: number) {
         // @ todo set the correct mask
         const action = this.macroAction as PressMouseButtonsMacroAction;
-        let idx = this.buttons.indexOf(id)
+        let idx = this.buttons.indexOf(id);
         if (idx !== -1) {
             // Deselect button
             this.buttons.splice(idx, 1);

@@ -7,7 +7,6 @@ import {MacroDelayTabComponent} from './tab/macro-delay/macro-delay.component';
 import {MacroKeyTabComponent} from './tab/macro-key/macro-key.component';
 import {MacroMouseTabComponent} from './tab/macro-mouse/macro-mouse.component';
 
-import {MacroItemComponent} from '../macro-item/macro-item.component';
 import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
 
 enum TabName {
@@ -40,7 +39,7 @@ export class MacroActionEditorComponent implements OnInit {
 
     public isEnabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
     private editableMacroAction: MacroAction;
-    private TabName = TabName;
+    private tabName = TabName;
     private activeTab: TabName;
 
     constructor() {
@@ -56,7 +55,7 @@ export class MacroActionEditorComponent implements OnInit {
             // Make an editable clone of macro action so original isn't changed
             this.editableMacroAction = this.macroAction.clone();
             let tab: TabName = this.getTabName(this.editableMacroAction);
-            this.selectTab(tab); 
+            this.selectTab(tab);
         }
     }
 

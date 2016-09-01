@@ -1,31 +1,31 @@
 <div class="col-xs-12 macro-mouse__container">
     <div class="col-xs-4 macro-mouse__types">
         <ul class="nav nav-pills nav-stacked">
-            <li #mouseMove [class.active]="activeTab === TabName.Move" (click)="selectTab(TabName.Move)">
+            <li #mouseMove [class.active]="activeTab === tabName.Move" (click)="selectTab(tabName.Move)">
                 <a>
                     <i class="fa fa-arrows"></i>
                     <span>Move pointer</span>
                 </a>
             </li>
-            <li #mouseScroll [class.active]="activeTab === TabName.Scroll" (click)="selectTab(TabName.Scroll)">
+            <li #mouseScroll [class.active]="activeTab === tabName.Scroll" (click)="selectTab(tabName.Scroll)">
                 <a>
                     <i class="fa fa-arrows-v"></i>
                     <span>Scroll</span>
                 </a>
             </li>
-            <li #mouseClick [class.active]="activeTab === TabName.Click" (click)="selectTab(TabName.Click)">
+            <li #mouseClick [class.active]="activeTab === tabName.Click" (click)="selectTab(tabName.Click)">
                 <a>
                     <i class="fa fa-mouse-pointer"></i>
                     <span>Click button</span>
                 </a>
             </li>
-            <li #mouseHold [class.active]="activeTab === TabName.Hold" (click)="selectTab(TabName.Hold)">
+            <li #mouseHold [class.active]="activeTab === tabName.Hold" (click)="selectTab(tabName.Hold)">
                 <a>
                     <i class="fa fa-hand-rock-o"></i>
                     <span>Hold button</span>
                 </a>
             </li>
-            <li #mouseRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
+            <li #mouseRelease [class.active]="activeTab === tabName.Release" (click)="selectTab(tabName.Release)">
                 <a>
                     <i class="fa fa-hand-paper-o"></i>
                     <span>Release button</span>
@@ -34,7 +34,7 @@
         </ul>
     </div>
     <div class="col-xs-8 macro-mouse__actions" [ngSwitch]="activeTab">
-        <div #tab *ngSwitchCase="TabName.Move">
+        <div #tab *ngSwitchCase="tabName.Move">
             <h4>Move pointer</h4>
             <p>Use negative values to move down or left from current position.</p>
             <div class="form-horizontal">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div #tab *ngSwitchCase="TabName.Scroll">
+        <div #tab *ngSwitchCase="tabName.Scroll">
             <h4>Scroll</h4>
             <p>Use negative values to move down or left from current position.</p>
             <div class="form-horizontal">
@@ -62,10 +62,10 @@
                 </div>
             </div>
         </div>
-        <div #tab *ngIf="activeTab === TabName.Click || activeTab === TabName.Hold || activeTab === TabName.Release">
-            <h4 *ngIf="activeTab === TabName.Click">Click mouse button</h4>
-            <h4 *ngIf="activeTab === TabName.Hold">Hold mouse button</h4>
-            <h4 *ngIf="activeTab === TabName.Release">Release mouse button</h4>
+        <div #tab *ngIf="activeTab === tabName.Click || activeTab === tabName.Hold || activeTab === tabName.Release">
+            <h4 *ngIf="activeTab === tabName.Click">Click mouse button</h4>
+            <h4 *ngIf="activeTab === tabName.Hold">Hold mouse button</h4>
+            <h4 *ngIf="activeTab === tabName.Release">Release mouse button</h4>
             <div class="button-group">
                 <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(0)" (click)="setMouseClick(0)">Left</button>
                 <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(2)" (click)="setMouseClick(2)">Middle</button>

@@ -1,10 +1,7 @@
 import {
-    Component, 
-    OnInit, 
-    Input, 
-    Output, 
-    EventEmitter, 
-    ElementRef, 
+    Component,
+    OnInit,
+    Input,
     ViewChild
 } from '@angular/core';
 
@@ -36,14 +33,11 @@ enum TabName {
 export class MacroKeyTabComponent implements OnInit {
     @Input() macroAction: MacroAction;
     @ViewChild('tab') selectedTab: Tab;
- 
-    private activeTab: TabName;
-    private TabName = TabName;
-    private buttons: Number[] = [];
 
-    constructor() {
-        
-    }
+    private activeTab: TabName;
+    private tabName = TabName;
+
+    constructor() {}
 
     ngOnInit() {
         this.selectTab(this.getTabName(this.macroAction));
@@ -71,7 +65,7 @@ export class MacroKeyTabComponent implements OnInit {
             // Release mouse buttons
             case macroActionType.ReleaseKeyMacroAction:
                 return TabName.Release;
-            
+
             default:
                 return TabName.Keypress;
         }

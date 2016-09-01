@@ -1,15 +1,13 @@
 import {
-    Component, 
-    OnInit, 
-    Input, 
-    Output, 
-    EventEmitter, 
-    ElementRef, 
-    ViewChild, 
-    Renderer, 
+    Component,
+    OnInit,
+    Input,
+    ElementRef,
+    ViewChild,
+    Renderer,
     AfterViewInit
 } from '@angular/core';
-import { TextMacroAction } from '../../../../../config-serializer/config-items/TextMacroAction'
+import { TextMacroAction } from '../../../../../config-serializer/config-items/TextMacroAction';
 
 @Component({
     moduleId: module.id,
@@ -24,8 +22,7 @@ export class MacroTextTabComponent implements OnInit, AfterViewInit {
 
     constructor(private renderer: Renderer) {}
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     ngAfterViewInit() {
         this.renderer.invokeElementMethod(this.input.nativeElement, 'focus');
