@@ -53,6 +53,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
                // Rather cludge way to do this, basically macroItems have to be updated before the editor can be opened
                setTimeout(() => {
                    let newAction = data.last;
+                   newAction.title = 'New macro action';
                    newAction.actionEditor.toggleEnabled(true);
                    this.hideOtherActionEditors(data.length - 1);
                    this.addedNewAction = false;
@@ -67,7 +68,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
 
     addAction() {
         const newAction = new TextMacroAction();
-        newAction.text = 'New macro action';
+        newAction.text = '';
         this.macro.macroActions.elements.push(newAction);
         this.addedNewAction = true;
     }
