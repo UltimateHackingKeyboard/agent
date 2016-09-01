@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { Select2Component } from 'ng2-select2/ng2-select2';
 
@@ -9,7 +10,15 @@ import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 import { KeymapComponent } from './components/keymap';
-import { MacroComponent } from './components/macro';
+import { 
+    MacroComponent, 
+    MacroItemComponent, 
+    MacroActionEditorComponent,
+    MacroDelayTabComponent,
+    MacroKeyTabComponent,
+    MacroMouseTabComponent,
+    MacroTextTabComponent
+} from './components/macro';
 import { LegacyLoaderComponent } from './components/legacy-loader';
 import { NotificationComponent } from './components/notification';
 import {
@@ -28,7 +37,6 @@ import { SvgKeyboardComponent } from './components/svg/keyboard';
 import { SvgModuleComponent } from './components/svg/module';
 import { PopoverComponent } from './components/popover';
 import { KeymapAddComponent } from './components/keymap';
-import { MacroItemComponent } from './components/popover/tab/macro';
 import { SideMenuComponent } from './components/side-menu';
 import {
     KeypressTabComponent,
@@ -40,6 +48,8 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
+import { ContenteditableModel } from './components/contenteditable';
+import {Dragula} from 'ng2-dragula/ng2-dragula';
 
 @NgModule({
     declarations: [
@@ -73,10 +83,18 @@ import { IconComponent } from './components/popover/widgets/icon';
         NoneTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
-        MacroItemComponent
+        MacroItemComponent, 
+        MacroActionEditorComponent,
+        MacroDelayTabComponent,
+        MacroKeyTabComponent,
+        MacroMouseTabComponent,
+        MacroTextTabComponent,
+        ContenteditableModel,
+        Dragula
     ],
     imports: [
         BrowserModule,
+        FormsModule,
         routing
     ],
     providers: [
