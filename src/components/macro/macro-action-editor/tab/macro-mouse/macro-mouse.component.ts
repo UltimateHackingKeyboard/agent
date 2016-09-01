@@ -8,10 +8,6 @@ import {
 import {Tab} from '../../../../popover/tab/tab';
 import {MacroAction, macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
 
-import { PressMouseButtonsMacroAction } from '../../../../../config-serializer/config-items/PressMouseButtonsMacroAction';
-import { HoldMouseButtonsMacroAction } from '../../../../../config-serializer/config-items/HoldMouseButtonsMacroAction';
-import { ReleaseMouseButtonsMacroAction } from '../../../../../config-serializer/config-items/ReleaseMouseButtonsMacroAction';
-
 enum TabName {
     Move,
     Scroll,

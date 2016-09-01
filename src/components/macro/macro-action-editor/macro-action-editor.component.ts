@@ -2,11 +2,6 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angul
 
 import {Tab} from '../../popover/tab/tab';
 
-import {MacroTextTabComponent} from './tab/macro-text/macro-text.component';
-import {MacroDelayTabComponent} from './tab/macro-delay/macro-delay.component';
-import {MacroKeyTabComponent} from './tab/macro-key/macro-key.component';
-import {MacroMouseTabComponent} from './tab/macro-mouse/macro-mouse.component';
-
 import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
 
 enum TabName {
