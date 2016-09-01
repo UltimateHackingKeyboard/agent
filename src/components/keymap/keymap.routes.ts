@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 import { KeymapComponent } from './keymap.component';
 import { KeymapAddComponent } from './add/keymap-add.component';
 
-export const keymapRoutes: RouterConfig = [
+export const keymapRoutes: Routes = [
     {
         path: '',
         redirectTo: '/keymap',

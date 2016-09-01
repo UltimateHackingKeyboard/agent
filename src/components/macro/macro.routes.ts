@@ -1,7 +1,7 @@
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 import { MacroComponent } from './macro.component';
 
-export const macroRoutes: RouterConfig = [
+export const macroRoutes: Routes = [
     {
         path: 'macro',
         component: MacroComponent

@@ -3,17 +3,15 @@ import {Component, OnInit, Input} from '@angular/core';
 import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
 import {Keymap} from '../../../../config-serializer/config-items/Keymap';
 import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {SvgKeyboardComponent} from '../../../svg/keyboard';
 import {Tab} from '../tab';
 import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
 
-import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
+import {Select2OptionData} from 'ng2-select2/ng2-select2';
 
 @Component({
     selector: 'keymap-tab',
     template: require('./keymap-tab.component.html'),
-    styles: [require('./keymap-tab.component.scss')],
-    directives: [SvgKeyboardComponent, Select2Component]
+    styles: [require('./keymap-tab.component.scss')]
 })
 export class KeymapTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;

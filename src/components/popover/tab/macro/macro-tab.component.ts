@@ -6,15 +6,13 @@ import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
 import {PlayMacroAction} from '../../../../config-serializer/config-items/PlayMacroAction';
 
 import {Tab} from '../tab';
-import {MacroItemComponent} from './macro-item.component';
 
-import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
+import {Select2OptionData} from 'ng2-select2/ng2-select2';
 
 @Component({
     selector: 'macro-tab',
     template: require('./macro-tab.component.html'),
-    styles: [require('./macro-tab.component.scss')],
-    directives: [MacroItemComponent, Select2Component]
+    styles: [require('./macro-tab.component.scss')]
 })
 export class MacroTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;

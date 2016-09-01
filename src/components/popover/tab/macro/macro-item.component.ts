@@ -9,15 +9,12 @@ import {ReleaseModifiersMacroAction} from '../../../../config-serializer/config-
 import {ScrollMouseMacroAction} from '../../../../config-serializer/config-items/ScrollMouseMacroAction';
 import {TextMacroAction} from '../../../../config-serializer/config-items/TextMacroAction';
 
-import {IconComponent} from '../../widgets/icon';
-
 import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModifiers';
 
 @Component({
     selector: 'macro-item',
     template: require('./macro-item.component.html'),
-    styles: [require('./macro-item.component.scss')],
-    directives: [IconComponent]
+    styles: [require('./macro-item.component.scss')]
 })
 export class MacroItemComponent implements OnInit, OnChanges {
 
