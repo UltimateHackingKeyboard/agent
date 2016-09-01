@@ -14,7 +14,6 @@ import {IconComponent} from '../../widgets/icon';
 import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModifiers';
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-item',
     template: require('./macro-item.component.html'),
     styles: [require('./macro-item.component.scss')],

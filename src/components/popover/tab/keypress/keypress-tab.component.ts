@@ -10,7 +10,6 @@ import {CaptureKeystrokeButtonComponent} from '../../widgets/capture-keystroke';
 import {Tab} from '../tab';
 
 @Component({
-    moduleId: module.id,
     selector: 'keypress-tab',
     template: require('./keypress-tab.component.html'),
     styles: [require('./keypress-tab.component.scss')],

@@ -6,7 +6,6 @@ import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
 import {MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/MouseAction';
 
 @Component({
-    moduleId: module.id,
     selector: 'mouse-tab',
     template: require('./mouse-tab.component.html'),
     styles: [require('./mouse-tab.component.scss')],

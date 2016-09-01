@@ -27,7 +27,6 @@ enum TabName {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'popover',
     template: require('./popover.component.html'),
     styles: [require('./popover.component.scss')],

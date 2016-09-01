@@ -11,7 +11,6 @@ import {MacroItemComponent} from './macro-item.component';
 import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 @Component({
-    moduleId: module.id,
     selector: 'macro-tab',
     template: require('./macro-tab.component.html'),
     styles: [require('./macro-tab.component.scss')],

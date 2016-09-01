@@ -9,7 +9,6 @@ import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 import {Tab} from '../tab';
 
 @Component({
-    moduleId: module.id,
     selector: 'layer-tab',
     template: require('./layer-tab.component.html'),
     styles: [require('./layer-tab.component.scss')],

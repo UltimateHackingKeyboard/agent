@@ -10,7 +10,6 @@ import {SwitchKeymapAction} from '../../../../config-serializer/config-items/Swi
 import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 
 @Component({
-    moduleId: module.id,
     selector: 'keymap-tab',
     template: require('./keymap-tab.component.html'),
     styles: [require('./keymap-tab.component.scss')],

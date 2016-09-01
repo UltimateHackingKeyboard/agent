@@ -4,7 +4,6 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 import { SideMenuComponent } from '../components/side-menu';
 
 @Component({
-    moduleId: module.id,
     selector: 'main-app',
     template: require('./main-app.component.html'),
     styles: [require('./main-app.component.scss')],
