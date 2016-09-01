@@ -14,19 +14,19 @@
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
     "html-loader": "0.4.3",
-    "npm-run-all": "^2.3.0",
+    "npm-run-all": "3.1.0",
     "path": "^0.12.7",
     "raw-loader": "^0.5.1",
     "sass-loader": "^4.0.0",
     "stylelint": "^7.0.3",
     "ts-loader": "^0.8.2",
-    "tslint": "^3.14.0",
+    "tslint": "3.15.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-fail-plugin": "^1.0.5",
     "webpack-stream": "^3.2.0",
     "webpack-svgstore-plugin": "^2.2.2",
-    "yargs": "^4.8.1"
+    "yargs": "5.0.0"
   },
   "dependencies": {
     "@angular/common": "2.0.0-rc.6",
@@ -52,7 +52,7 @@
     "sortablejs": "^1.4.2",
     "typescript": "2.0.2",
     "xml-loader": "^1.1.0",
-    "zone.js": "^0.6.12"
+    "zone.js": "0.6.17"
   },
   "scripts": {
     "tslint": "tslint \"src/**/*.ts\" \"test-serializer/**/*.ts\"",
