@@ -1,14 +1,14 @@
 .macro-key {
-  &__container {
+    &__container {
         padding: 0;
-  }
+    }
   
-  &__types {
+    &__types {
         margin-left: 0;
         padding: 0 0 1rem;
-  }
+    }
 
-  &__action {
+    &__action {
         &-container {
             margin-top: -1rem;
             padding-top: 1rem;
@@ -17,7 +17,7 @@
         
         padding-left: 3rem;
         padding-bottom: 1rem;
-  }
+    }
 }
 
 .fa {

@@ -1,20 +1,20 @@
 .macro-mouse {
-  &__container {
-    padding: 0;
-  }
-  
-  &__types {
-    border-right: 1px solid #ccc;
-    border-left: 0;
-    margin-top: -1rem;
-    margin-left: 0;
-    padding: 1rem 0 1rem;
-  }
+    &__container {
+        padding: 0;
+    }
 
-  &__actions {
-    padding-left: 3rem;
-    padding-bottom: 1rem;
-  }
+    &__types {
+        border-right: 1px solid #ccc;
+        border-left: 0;
+        margin-top: -1rem;
+        margin-left: 0;
+        padding: 1rem 0 1rem;
+    }
+
+    &__actions {
+        padding-left: 3rem;
+        padding-bottom: 1rem;
+    }
 }
 
 .button-group {
@@ -26,17 +26,17 @@
 }
 
 .form-horizontal {
-  .form-group {
-    margin: 0 0 .5rem;
-  }
+    .form-group {
+        margin: 0 0 .5rem;
+    }
 
-  label {
-    display: inline-block;
-    margin-right: .5rem;
-  }
+    label {
+        display: inline-block;
+        margin-right: .5rem;
+    }
 
-  .form-control {
-    display: inline-block;
-    width: 80%;
-  }
+    .form-control {
+        display: inline-block;
+        width: 80%;
+    }
 }
