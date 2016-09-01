@@ -59,7 +59,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
 
     addAction() {
         const newAction = new TextMacroAction();
-        newAction.text = '';
+        newAction.text = 'New macro action';
         this.macro.macroActions.elements.push(newAction);
         this.addedNewAction = true;
     }
