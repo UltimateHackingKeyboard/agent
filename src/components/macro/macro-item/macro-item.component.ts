@@ -101,11 +101,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
             let action: MoveMouseMacroAction = this.macroAction as MoveMouseMacroAction;
             let needAnd: boolean;
             if (Math.abs(action.x) > 0) {
-                this.title += ` by ${Math.abs(action.x)}px ${action.x > 0 ? 'left' : 'right'}ward`;
+                this.title += ` by ${Math.abs(action.x)}px ${action.x > 0 ? 'left' : 'right'}`;
                 needAnd = true;
             }
             if (Math.abs(action.y) > 0) {
-                this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(action.y)}px ${action.y > 0 ? 'down' : 'up'}ward`;
+                this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(action.y)}px ${action.y > 0 ? 'down' : 'up'}`;
             }
         } else if (this.macroAction instanceof ScrollMouseMacroAction) {
             // Scroll mouse
@@ -114,11 +114,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
             let action: ScrollMouseMacroAction = this.macroAction as ScrollMouseMacroAction;
             let needAnd: boolean;
             if (Math.abs(action.x) > 0) {
-                this.title += ` by ${Math.abs(action.x)}px ${action.x > 0 ? 'left' : 'right'}ward`;
+                this.title += ` by ${Math.abs(action.x)}px ${action.x > 0 ? 'left' : 'right'}`;
                 needAnd = true;
             }
             if (Math.abs(action.y) > 0) {
-                this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(action.y)}px ${action.y > 0 ? 'down' : 'up'}ward`;
+                this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(action.y)}px ${action.y > 0 ? 'down' : 'up'}`;
             }
         } else if (this.macroAction instanceof PressMouseButtonsMacroAction) {
             // Press mouse buttons
