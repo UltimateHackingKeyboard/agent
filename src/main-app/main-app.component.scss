@@ -17,7 +17,7 @@ main-app {
 
 .select2 {
     &-container {
-        z-index: 1;
+        z-index: 1100;
     }
 
     &-results {
@@ -33,7 +33,7 @@ main-app {
     position: fixed;
     right: -50px;
     bottom: 40px;
-    z-index: 999999;
+    z-index: 2000;
     /* stylelint-disable indentation */
     -webkit-transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
