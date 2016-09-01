@@ -49,6 +49,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     private iconName: string;
     private title: string;
+    private isEditing: boolean = false;
 
     constructor() { }
 
@@ -62,16 +63,18 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
     }
 
-    saveEditedAction(macroAction: MacroAction) {
+    saveEditedAction(editedAction: MacroAction) {
         // @todo save this to keyboard
-        console.log('Saved action', macroAction);
-        this.macroAction = macroAction;
+        console.log('Saved action', editedAction);
+        this.macroAction = editedAction;
+        this.isEditing = false;
         this.updateView();
         this.save.emit();
     }
 
     editAction() {
         this.actionEditor.toggleEnabled(true);
+        this.isEditing = true;
         this.edit.emit();
     }
 

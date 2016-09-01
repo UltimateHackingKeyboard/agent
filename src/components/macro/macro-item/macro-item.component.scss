@@ -20,5 +20,9 @@
         &:first-child {
             border-radius: 0;
         }
+
+        &.is-editing {
+            background: #f5f5f5;
+        }
     }
 }

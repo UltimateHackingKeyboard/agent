@@ -1,4 +1,4 @@
-<div class="list-group-item action--item">
+<div class="list-group-item action--item" [class.is-editing]="isEditing">
   <icon *ngIf="moveable" name="option-vertical"></icon>
   <icon [name]="iconName"></icon>
   <div> {{ title }} </div>
