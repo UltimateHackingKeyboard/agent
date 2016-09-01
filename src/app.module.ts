@@ -10,9 +10,9 @@ import {UhkConfigurationService} from './services/uhk-configuration.service';
 
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 import { KeymapComponent } from './components/keymap';
-import { 
-    MacroComponent, 
-    MacroItemComponent, 
+import {
+    MacroComponent,
+    MacroItemComponent,
     MacroActionEditorComponent,
     MacroDelayTabComponent,
     MacroKeyTabComponent,
@@ -83,7 +83,7 @@ import {Dragula} from 'ng2-dragula/ng2-dragula';
         NoneTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
-        MacroItemComponent, 
+        MacroItemComponent,
         MacroActionEditorComponent,
         MacroDelayTabComponent,
         MacroKeyTabComponent,

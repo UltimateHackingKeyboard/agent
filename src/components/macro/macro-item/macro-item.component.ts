@@ -20,8 +20,6 @@ import {PressModifiersMacroAction} from '../../../config-serializer/config-items
 import {HoldModifiersMacroAction} from '../../../config-serializer/config-items/HoldModifiersMacroAction';
 import {ReleaseModifiersMacroAction} from '../../../config-serializer/config-items/ReleaseModifiersMacroAction';
 
-import {IconComponent} from '../../popover/widgets/icon';
-
 import {KeyModifiers}  from '../../../config-serializer/config-items/KeyModifiers';
 
 import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';

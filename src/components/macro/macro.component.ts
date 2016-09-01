@@ -8,7 +8,7 @@ import { Macro } from '../../config-serializer/config-items/Macro';
 import { TextMacroAction } from '../../config-serializer/config-items/TextMacroAction';
 import { MacroItemComponent } from './macro-item/macro-item.component';
 
-import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 @Component({
     selector: 'macro',
