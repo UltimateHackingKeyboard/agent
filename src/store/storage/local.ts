@@ -22,8 +22,8 @@ export class Local {
             preset = presetAll.elements;
 
             // Save to local storage
-            localStorage.setItem('config', JSON.stringify(config._toJsObject()));
-            localStorage.setItem('preset', JSON.stringify(presetAll._toJsObject()));
+            localStorage.setItem('config', JSON.stringify(config.toJsObject()));
+            localStorage.setItem('preset', JSON.stringify(presetAll.toJsObject()));
         }
         // Load data from local storage
         else {
