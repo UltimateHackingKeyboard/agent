@@ -1,7 +1,6 @@
-import { NgModule, ReflectiveInjector  } from '@angular/core';
+import { NgModule, ReflectiveInjector } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 
 import { DataProviderService } from './services/data-provider.service';
@@ -121,8 +120,7 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         DataProviderService,
         UhkConfigurationService,
         MapperService,
-        APP_ROUTER_PROVIDERS,
-        { provide: DataStorage, useValue: storageService }
+        appRoutingProviders
     ],
     bootstrap: [MainAppComponent]
 })

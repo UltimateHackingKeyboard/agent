@@ -1,27 +1,48 @@
 import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
+import { Keymaps } from '../../config-serializer/config-items/Keymaps';
 import { AppState } from '../index';
 
 export class Local {
     initialState(): AppState {
         let keymap: Keymap[];
         let macro: Macro[];
+        let preset: Keymap[];
 
-        if (!localStorage.getItem('keymap')) {
-            const json: JSON = require('json!../../config-serializer/uhk-config.json');
-            const config: UhkConfiguration = new UhkConfiguration().fromJsObject(json);
+        // Load data from json
+        if (!localStorage.getItem('config')) {
+            const jsonUser: JSON = require('json!../../config-serializer/uhk-config.json');
+            const jsonPreset: any = require('json!../../config-serializer/preset-keymaps.json');
+            const config: UhkConfiguration = new UhkConfiguration().fromJsObject(jsonUser);
+            const presetAll: Keymaps = new Keymaps().fromJsObject(jsonPreset.keymaps);
 
             keymap = config.keymaps.elements;
             macro = config.macros.elements;
-        } else {
-            keymap = JSON.parse(localStorage.getItem('keymap'));
-            macro = JSON.parse(localStorage.getItem('macro'));
+            preset = presetAll.elements;
+
+            // Save to local storage
+            localStorage.setItem('config', JSON.stringify(config._toJsObject()));
+            localStorage.setItem('preset', JSON.stringify(presetAll._toJsObject()));
+        }
+        // Load data from local storage
+        else {
+            const config: UhkConfiguration = new UhkConfiguration().fromJsObject(
+                JSON.parse(localStorage.getItem('config'))
+            );
+            const presetAll: Keymaps = new Keymaps().fromJsObject(
+                JSON.parse(localStorage.getItem('preset'))
+            );
+
+            keymap = config.keymaps.elements;
+            macro = config.macros.elements;
+            preset = presetAll.elements;
         }
 
         return {
             keymap: keymap,
-            macro: macro
+            macro: macro,
+            preset: preset
         };
     }
 }

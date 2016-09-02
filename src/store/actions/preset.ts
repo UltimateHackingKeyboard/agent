@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
 @Injectable()
-export class MacroActions {
-    static GET_ALL = '[Macro] Get all macros';
+export class PresetActions {
+    static GET_ALL = '[Preset] Get all macros';
     getAll(): Action {
         return {
-            type: MacroActions.GET_ALL
+            type: PresetActions.GET_ALL
         };
     }
 }
