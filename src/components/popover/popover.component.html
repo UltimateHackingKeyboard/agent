@@ -42,7 +42,7 @@
         </div>
     </div>
     <div class="row" [ngSwitch]="activeTab">
-        <keypress-tab #tab *ngSwitchCase="TabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction"></keypress-tab>
+        <keypress-tab #tab *ngSwitchCase="TabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction" [longPressEnabled]="true"></keypress-tab>
         <layer-tab #tab *ngSwitchCase="TabName.Layer" class="popover-content" [defaultKeyAction]="defaultKeyAction"></layer-tab>
         <mouse-tab #tab *ngSwitchCase="TabName.Mouse" class="popover-content" [defaultKeyAction]="defaultKeyAction"></mouse-tab>
         <macro-tab #tab *ngSwitchCase="TabName.Macro" class="popover-content" [defaultKeyAction]="defaultKeyAction"></macro-tab>
