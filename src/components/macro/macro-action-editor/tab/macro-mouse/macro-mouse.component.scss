@@ -15,10 +15,11 @@
         padding-left: 3rem;
         padding-bottom: 1rem;
     }
-}
 
-.button-group {
-    margin-bottom: 1rem;
+    &__buttons {
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+    }
 }
 
 .fa {

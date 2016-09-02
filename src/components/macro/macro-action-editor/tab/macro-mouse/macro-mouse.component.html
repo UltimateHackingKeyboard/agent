@@ -66,9 +66,9 @@
             <h4 *ngIf="activeTab === TabName.Click">Click mouse button</h4>
             <h4 *ngIf="activeTab === TabName.Hold">Hold mouse button</h4>
             <h4 *ngIf="activeTab === TabName.Release">Release mouse button</h4>
-            <div class="button-group">
+            <div class="btn-group macro-mouse__buttons">
                 <button *ngFor="let buttonLabel of buttonLabels; let buttonIndex = index"
-                        class="btn btn-sm btn-default" 
+                        class="btn btn-default" 
                         [class.btn-primary]="hasButton(buttonIndex)" 
                         (click)="setMouseClick(buttonIndex)">{{buttonLabel}}</button>
             </div>
