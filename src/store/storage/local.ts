@@ -1,7 +1,7 @@
-import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Macro } from '../../config-serializer/config-items/Macro';
 import { Keymaps } from '../../config-serializer/config-items/Keymaps';
+import { Macro } from '../../config-serializer/config-items/Macro';
+import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
 import { AppState } from '../index';
 
 export class Local {

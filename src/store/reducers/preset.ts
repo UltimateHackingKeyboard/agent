@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { PresetActions } from '../actions';
 

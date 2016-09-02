@@ -60,6 +60,8 @@ import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';
 import { storeConfig } from './store';
 import { DataStorage } from './store/storage';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
 // Create DataStorage dependency injection
 const storageProvider = ReflectiveInjector.resolve([DataStorage]);
@@ -111,10 +113,14 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         FormsModule,
         DragulaModule,
         routing
-    ],
-    imports: [
-        BrowserModule,
-        StoreModule.provideStore(storeConfig, storageService.initialState())
+        StoreModule.provideStore(storeConfig, storageService.initialState()),
+        StoreDevtoolsModule.instrumentStore({
+            monitor: useLogMonitor({
+                visible: false,
+                position: 'right'
+            })
+        }),
+        StoreLogMonitorModule
     ],
     providers: [
         DataProviderService,

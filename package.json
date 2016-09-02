@@ -8,6 +8,8 @@
   },
   "license": "GPL-3.0",
   "devDependencies": {
+    "@ngrx/store-devtools": "3.0.1",
+    "@ngrx/store-log-monitor": "3.0.1",
     "@types/core-js": "^0.9.32",
     "@types/jquery": "1.10.31",
     "@types/node": "6.0.38",

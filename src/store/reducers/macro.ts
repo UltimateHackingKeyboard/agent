@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { MacroActions } from '../actions';
 

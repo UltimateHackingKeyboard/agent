@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Local } from './local';
+
 import { Electron } from './electron';
+import { Local } from './local';
 
 @Injectable()
 export class DataStorage {
