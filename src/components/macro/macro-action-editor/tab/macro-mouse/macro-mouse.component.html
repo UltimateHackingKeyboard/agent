@@ -67,13 +67,10 @@
             <h4 *ngIf="activeTab === TabName.Hold">Hold mouse button</h4>
             <h4 *ngIf="activeTab === TabName.Release">Release mouse button</h4>
             <div class="button-group">
-                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(0)" (click)="setMouseClick(0)">Left</button>
-                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(2)" (click)="setMouseClick(2)">Middle</button>
-                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(1)" (click)="setMouseClick(1)">Right</button>
-            </div>
-            <div class="button-group">
-                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(3)" (click)="setMouseClick(3)">Button 4</button>
-                <button class="btn btn-sm btn-default" [class.btn-primary]="hasButton(4)" (click)="setMouseClick(4)">Button 5</button>
+                <button *ngFor="let buttonLabel of buttonLabels; let buttonIndex = index"
+                        class="btn btn-sm btn-default" 
+                        [class.btn-primary]="hasButton(buttonIndex)" 
+                        (click)="setMouseClick(buttonIndex)">{{buttonLabel}}</button>
             </div>
         </div>
     </div>

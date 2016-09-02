@@ -32,38 +32,36 @@ export class MacroMouseTabComponent implements OnInit {
     @ViewChild('tab') selectedTab: Tab;
 
     private activeTab: TabName;
-    private buttons: Number[] = [];
+    private buttonLabels: string[];
+    private selectedButtons: boolean[];
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     /* tslint:disable:no-unused-variable: It is used in the template. */
     private TabName = TabName;
     /* tslint:enable:no-unused-variable */
     /* tslint:enable:variable-name */
 
-    constructor() {}
+    constructor() {
+        this.buttonLabels = ['Left', 'Middle', 'Right'];
+        this.selectedButtons = Array(this.buttonLabels.length).fill(false);
+    }
 
     ngOnInit() {
-        this.selectTab(this.getTabName(this.macroAction));
+        const tabName = this.getTabName(this.macroAction);
+        this.selectTab(tabName);
     }
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
     }
 
-    setMouseClick(id: number) {
+    setMouseClick(index: number) {
         // @ todo set the correct mask
-        const action = this.macroAction as PressMouseButtonsMacroAction;
-        let idx = this.buttons.indexOf(id);
-        if (idx !== -1) {
-            // Deselect button
-            this.buttons.splice(idx, 1);
-        } else {
-            this.buttons.push(id);
-        }
-        action.mouseButtonsMask = id;
+        this.selectedButtons[index] = !this.selectedButtons[index];
     }
 
-    hasButton(id: number) {
-        return this.buttons.indexOf(id) !== -1;
+    hasButton(index: number) {
+        return this.selectedButtons[index];
+    }
     }
 
     getActionType(action: MacroAction) {
