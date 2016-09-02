@@ -33,9 +33,11 @@ export class MacroMouseTabComponent implements OnInit {
 
     private activeTab: TabName;
     private buttons: Number[] = [];
+    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     /* tslint:disable:no-unused-variable: It is used in the template. */
-    private tabName = TabName;
+    private TabName = TabName;
     /* tslint:enable:no-unused-variable */
+    /* tslint:enable:variable-name */
 
     constructor() {}
 
