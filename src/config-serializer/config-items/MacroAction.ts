@@ -43,9 +43,9 @@ export abstract class MacroAction extends Serializable<MacroAction> {
     }
 
     readAndAssertMacroActionId(buffer: UhkBuffer) {
-        let classname = this.constructor.name;
-        let readMacroActionId = buffer.readUInt8();
-        let macroActionId = MacroActionId[<string> classname];
+        let classname: string = this.constructor.name;
+        let readMacroActionId: number = buffer.readUInt8();
+        let macroActionId: number = MacroActionId[classname];
         if (readMacroActionId !== macroActionId) {
             throw `Invalid ${classname} first byte: ${readMacroActionId}`;
         }
@@ -59,7 +59,7 @@ export abstract class MacroAction extends Serializable<MacroAction> {
     /* tslint:disable:no-unused-variable */
     clone(obj: any = undefined): any {
          /* tslint:enable:no-unused-variable */
-        let cloneObj = new (<any>this.constructor)();
+        let cloneObj: any = new (<any>this.constructor)();
         for (let attribute in this) {
             if (typeof this[attribute] === 'object') {
                 cloneObj[attribute] = this.clone(this[attribute]);
