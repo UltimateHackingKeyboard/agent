@@ -1,9 +1,11 @@
-import { Component, OnInit, Renderer, animate, state, style, transition, trigger } from '@angular/core';
+import { Component, Renderer, animate, state, style, transition, trigger } from '@angular/core';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 
-import { UhkConfigurationService } from '../../services/uhk-configuration.service';
+import { AppState } from '../../store/index';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
     animations: [
@@ -21,22 +23,20 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
     template: require('./side-menu.component.html'),
     styles: [require('./side-menu.component.scss')]
 })
-export class SideMenuComponent implements OnInit {
-    private keymaps: Keymap[];
-    private macros: Macro[];
+export class SideMenuComponentt {
+    private keymaps$: Observable<Keymap[]>;
+    private macros$: Observable<Macro[]>;
     private animation: {[key: string]: 'active' | 'inactive'};
 
-    constructor(private uhkConfigurationService: UhkConfigurationService, private renderer: Renderer) {
+    constructor(private store: Store<AppState>, private renderer: Renderer) {
         this.animation = {
             keymap: 'active',
             macro: 'active',
             addon: 'active'
         };
-    }
 
-    ngOnInit() {
-        this.keymaps = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements;
-        this.macros = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
+		this.keymaps$ = store.select(s => s.keymap);
+        this.macros$ = store.select(s => s.macro);
     }
 
     toggleHide(event: Event, type: string) {

@@ -63,6 +63,10 @@ import { DataStorage } from './store/storage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
+import { MacroActions } from './config-serializer/config-items/MacroActions';
+import { KeymapActions } from './store/actions/keymap';
+import { PresetActions } from './store/actions/preset';
+
 // Create DataStorage dependency injection
 const storageProvider = ReflectiveInjector.resolve([DataStorage]);
 const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
@@ -126,7 +130,10 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         DataProviderService,
         UhkConfigurationService,
         MapperService,
-        appRoutingProviders
+        appRoutingProviders,
+        KeymapActions,
+        PresetActions,
+        MacroActions
     ],
     bootstrap: [MainAppComponent]
 })

@@ -7,8 +7,9 @@ const initialState: Keymap[] = [];
 
 export default function(state = initialState, action: Action): Keymap[] {
     switch (action.type) {
-        case KeymapActions.GET_ALL:
-            break;
+        case KeymapActions.ADD:
+            const newKeymap: Keymap = action.payload;
+            return [...state, newKeymap];
         default: {
             return state;
         }
