@@ -33,12 +33,54 @@ export let macroActionType = {
     TextMacroAction                  : 'text'
 };
 
+let macroActionClassname = {
+    KeyMacroAction: 'KeyMacroAction',
+    MouseButtonMacroAction: 'MouseButtonMacroAction',
+    MoveMouseMacroAction: 'MoveMouseMacroAction',
+    ScrollMouseMacroAction: 'ScrollMouseMacroAction',
+    TextMacroAction: 'TextMacroAction',
+    DelayMacroAction: 'DelayMacroAction'
+};
+
 export abstract class MacroAction extends Serializable<MacroAction> {
+    macroActionType: string;
+
     assertMacroActionType(jsObject: any) {
-        let macroActionClassname = this.constructor.name;
-        let macroActionTypeString = macroActionType[macroActionClassname];
-        if (jsObject.macroActionType !== macroActionTypeString) {
-            throw `Invalid ${macroActionClassname}.macroActionType: ${jsObject.macroActionType}`;
+        const validMacroActionTypes: string[] = this.getValidMacroActionTypes();
+        if (validMacroActionTypes.indexOf(jsObject.macroActionType) === -1) {
+            const classname: string = this.constructor.name;
+            throw `Invalid ${classname}.macroActionType: ${jsObject.macroActionType}`;
+        }
+    }
+
+    getValidMacroActionTypes(): string[] {
+        const classname: string = this.constructor.name;
+        switch (classname) {
+            case macroActionClassname.KeyMacroAction:
+                return [
+                    macroActionType.PressKeyMacroAction,
+                    macroActionType.HoldKeyMacroAction,
+                    macroActionType.ReleaseKeyMacroAction,
+                    macroActionType.PressModifiersMacroAction,
+                    macroActionType.HoldModifiersMacroAction,
+                    macroActionType.ReleaseModifiersMacroAction
+                ];
+            case macroActionClassname.MouseButtonMacroAction:
+                return [
+                    macroActionType.PressMouseButtonsMacroAction,
+                    macroActionType.HoldMouseButtonsMacroAction,
+                    macroActionType.ReleaseMouseButtonsMacroAction
+                ];
+            case macroActionClassname.MoveMouseMacroAction:
+                return [macroActionType.MoveMouseMacroAction];
+            case macroActionClassname.ScrollMouseMacroAction:
+                return [macroActionType.ScrollMouseMacroAction];
+            case macroActionClassname.TextMacroAction:
+                return [macroActionType.TextMacroAction];
+            case macroActionClassname.DelayMacroAction:
+                return [macroActionType.DelayMacroAction];
+            default:
+                throw new Error(`Invalid class name ${macroActionClassname}`);
         }
     }
 

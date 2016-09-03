@@ -10,6 +10,11 @@ export class MoveMouseMacroAction extends MacroAction {
     @assertInt16
     y: number;
 
+    constructor() {
+        super();
+        this.macroActionType = macroActionType.MoveMouseMacroAction;
+    }
+
     _fromJsObject(jsObject: any): MoveMouseMacroAction {
         this.assertMacroActionType(jsObject);
         this.x = jsObject.x;
