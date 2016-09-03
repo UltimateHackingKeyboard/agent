@@ -26,7 +26,7 @@
             <h4 *ngIf="activeTab === TabName.Keypress">Press key</h4>
             <h4 *ngIf="activeTab === TabName.Hold">Hold key</h4>
             <h4 *ngIf="activeTab === TabName.Release">Release key</h4>
-            <keypress-tab [longPressEnabled]="false"></keypress-tab>
+            <keypress-tab #keypressTab [defaultKeyAction]="defaultKeyAction" [longPressEnabled]="false"></keypress-tab>
         </div>
     </div>
 </div>

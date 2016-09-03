@@ -6,7 +6,10 @@ import {
 } from '@angular/core';
 
 import {Tab} from '../../../../popover/tab/tab';
-import {MacroAction, macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
+import {macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
+import {KeyMacroAction} from '../../../../../config-serializer/config-items/KeyMacroAction';
+import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
+import {KeypressTabComponent} from '../../../../popover/tab/keypress';
 
 enum TabName {
     Keypress,
@@ -24,8 +27,11 @@ enum TabName {
     host: { 'class': 'macro__mouse' }
 })
 export class MacroKeyTabComponent implements OnInit {
-    @Input() macroAction: MacroAction;
+    @Input() macroAction: KeyMacroAction;
     @ViewChild('tab') selectedTab: Tab;
+    @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
+
+    private defaultKeyAction: KeyAction;
 
     private activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
@@ -37,6 +43,9 @@ export class MacroKeyTabComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {
+        if (this.macroAction instanceof KeyMacroAction) {
+            this.defaultKeyAction = this.macroAction.toKeyAction();
+        }
         this.selectTab(this.getTabName(this.macroAction));
     }
 
@@ -44,28 +53,28 @@ export class MacroKeyTabComponent implements OnInit {
         this.activeTab = tab;
     }
 
-    getActionType(action: MacroAction) {
-        const data = action.toJsObject();
-        return data.macroActionType;
-    }
-
-    getTabName(action: MacroAction) {
-        const actionType = this.getActionType(action);
-
-        switch (actionType) {
-            // Press mouse buttons
+    getTabName(action: KeyMacroAction) {
+        switch (action.macroActionType) {
+            // Press key
             case macroActionType.PressKeyMacroAction:
+            case macroActionType.PressModifiersMacroAction:
                 return TabName.Keypress;
-            // Hold mouse buttons
+            // Hold key
             case macroActionType.HoldKeyMacroAction:
+            case macroActionType.HoldModifiersMacroAction:
                 return TabName.Hold;
-            // Release mouse buttons
+            // Release key
             case macroActionType.ReleaseKeyMacroAction:
+            case macroActionType.ReleaseModifiersMacroAction:
                 return TabName.Release;
 
             default:
                 return TabName.Keypress;
         }
+    }
+
+    getKeyAction() {
+        return this.keypressTab.toKeyAction();
     }
 
 }

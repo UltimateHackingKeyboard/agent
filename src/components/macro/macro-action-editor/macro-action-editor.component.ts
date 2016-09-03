@@ -1,8 +1,8 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
-import {Tab} from '../../popover/tab/tab';
-
 import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
+import {KeyMacroAction} from '../../../config-serializer/config-items/KeyMacroAction';
+import {MacroKeyTabComponent} from './tab/macro-key';
 
 enum TabName {
     Keypress,
@@ -23,7 +23,7 @@ export class MacroActionEditorComponent implements OnInit {
     @Output() save = new EventEmitter<any>();
     @Output() cancel = new EventEmitter<any>();
 
-    @ViewChild('tab') selectedTab: Tab;
+    @ViewChild('tab') selectedTab: any;
 
     public enabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
     private editableMacroAction: MacroAction;
@@ -58,6 +58,12 @@ export class MacroActionEditorComponent implements OnInit {
 
     onSaveClick(): void {
         try {
+            if (this.editableMacroAction instanceof KeyMacroAction) {
+                // Could updating the saved keys be done in a better way?
+                const action: KeyMacroAction = this.editableMacroAction as KeyMacroAction;
+                const tab = this.selectedTab as MacroKeyTabComponent;
+                action.fromKeyAction(tab.getKeyAction());
+            }
             this.save.emit(this.editableMacroAction);
             this.enabled = false;
         } catch (e) {
@@ -71,8 +77,7 @@ export class MacroActionEditorComponent implements OnInit {
     }
 
     getTabName(action: MacroAction) {
-        const data = action.toJsObject();
-        switch (data.macroActionType) {
+        switch (action.macroActionType) {
             // Delay action
             case macroActionType.DelayMacroAction:
                 return TabName.Delay;
