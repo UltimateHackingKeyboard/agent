@@ -8,7 +8,7 @@ import {
 import {Tab} from '../../../../popover/tab/tab';
 import {MacroAction, macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
 
-import { PressMouseButtonsMacroAction } from '../../../../../config-serializer/config-items/PressMouseButtonsMacroAction';
+import { MouseButtonMacroAction } from '../../../../../config-serializer/config-items/MouseButtonMacroAction';
 
 enum TabName {
     Move,
@@ -48,6 +48,11 @@ export class MacroMouseTabComponent implements OnInit {
     ngOnInit() {
         const tabName = this.getTabName(this.macroAction);
         this.selectTab(tabName);
+        const buttonActions = [TabName.Click, TabName.Hold, TabName.Release];
+        if (buttonActions.indexOf(this.activeTab) !== -1) {
+            const action: MouseButtonMacroAction = this.macroAction as MouseButtonMacroAction;
+            this.selectedButtons = action.bitMaskToBooleans();
+        }
     }
 
     selectTab(tab: TabName): void {
@@ -55,24 +60,17 @@ export class MacroMouseTabComponent implements OnInit {
     }
 
     setMouseClick(index: number) {
-        // @ todo set the correct mask
         this.selectedButtons[index] = !this.selectedButtons[index];
+        const action: MouseButtonMacroAction = this.macroAction as MouseButtonMacroAction;
+        action.setBitmask(this.selectedButtons);
     }
 
     hasButton(index: number) {
         return this.selectedButtons[index];
     }
-    }
-
-    getActionType(action: MacroAction) {
-        const data = action.toJsObject();
-        return data.macroActionType;
-    }
 
     getTabName(action: MacroAction) {
-        const actionType = this.getActionType(action);
-
-        switch (actionType) {
+        switch (action.macroActionType) {
             // Press mouse buttons
             case macroActionType.PressMouseButtonsMacroAction:
                 return TabName.Click;
