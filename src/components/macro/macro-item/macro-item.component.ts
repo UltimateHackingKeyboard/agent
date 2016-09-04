@@ -118,40 +118,35 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private setKeyActionContent(action: KeyMacroAction) {
-        if (action.isKeyAction())  {
-            // Press/hold/release key
-            if (action.scancode === 0) {
-                this.title = 'Invalid keypress';
-                return;
-            } else if (action.macroActionType === macroActionType.PressKeyMacroAction) {
-                this.iconName = 'hand-pointer';
-                this.title = 'Press key: ';
-            } else if (action.macroActionType === macroActionType.HoldKeyMacroAction) {
-                // Press key
-                this.iconName = 'hand-rock';
-                this.title = 'Hold key: ';
-            } else if (action.macroActionType === macroActionType.ReleaseKeyMacroAction) {
-                // Release key
-                this.iconName = 'hand-paper';
-                this.title = 'Release key: ';
-            }
+        if (action.scancode === 0 && !action.modifierMask) {
+            this.title = 'Invalid keypress';
+            return;
+        }
 
+        const actionType = action.macroActionType;
+        if (actionType === macroActionType.PressKeyMacroAction || actionType === macroActionType.PressModifiersMacroAction) {
+            // Press key
+            this.iconName = 'hand-pointer';
+            this.title = 'Press key: ';
+        } else if (actionType === macroActionType.HoldKeyMacroAction || actionType === macroActionType.HoldModifiersMacroAction) {
+            // Hold key
+            this.iconName = 'hand-rock';
+            this.title = 'Hold key: ';
+        } else if (
+            actionType === macroActionType.ReleaseKeyMacroAction ||
+            actionType === macroActionType.ReleaseModifiersMacroAction
+        ) {
+            // Release key
+            this.iconName = 'hand-paper';
+            this.title = 'Release key: ';
+        }
+
+        if (action.scancode) {
             this.title += this.getScancodeLabel(action.scancode);
         }
 
-        if (action.isModifierAction() && action.modifierMask) {
+        if (action.modifierMask) {
             // Press/hold/release modifiers
-            if (action.macroActionType === macroActionType.PressModifiersMacroAction) {
-                this.iconName = 'hand-pointer';
-                this.title = 'Press modifier: ';
-            } else if (action.macroActionType === macroActionType.HoldModifiersMacroAction) {
-                this.iconName = 'hand-rock';
-                this.title = 'Hold modifier: ';
-            } else if (action.macroActionType === macroActionType.ReleaseModifiersMacroAction) {
-                this.iconName = 'hand-paper';
-                this.title = 'Release modifier: ';
-            }
-
             for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
