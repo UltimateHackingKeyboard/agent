@@ -2,7 +2,6 @@
   "name": "uhk-agent",
   "version": "0.0.1",
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
-  "main": "electron/main.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
@@ -62,6 +61,6 @@
     "build": "gulp",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
     "dev": "webpack-dev-server --config \"src/webpack.config.js\" --content-base \"./dist\"",
-    "electron": "electron ."
+    "electron": "electron electron/index.js"
   }
 }
