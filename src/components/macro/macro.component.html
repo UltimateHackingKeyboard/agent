@@ -27,16 +27,13 @@
             <div class="list-group-item action--item add-new__action-item no-reorder">
                 <a class="add-new__action-item--link" (click)="addAction()"><i class="fa fa-plus"></i> Add new action item</a>
             </div>
-            <div class="list-group-item new-macro-settings">
+            <div class="list-group-item new-macro-settings" *ngIf="hasChanges">
                 <div class="helper"></div>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
-                    sit amet.</p>
+                <p>Remember to save your changes!</p>
                 <div class="row">
                     <div class="col-sm-12 flex-button-wrapper">
-                        <button class="btn btn-primary btn-sm pull-right flex-button settings-save">Save</button>
-                        <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;">Cancel</button>
+                        <button class="btn btn-primary btn-sm pull-right flex-button settings-save" (click)="saveMacro()">Save macro</button>
+                        <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;" (click)="discardChanges()">Discard changes</button>
                     </div>
                 </div>
             </div>

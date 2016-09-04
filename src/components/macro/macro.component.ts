@@ -25,7 +25,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     private sub: Subscription;
     private macroItemsSub: Subscription;
     private addedNewAction: boolean = false;
-    private dragEnabled: boolean = true;
+    private hasChanges: boolean = false;
+    private dragEnabled: boolean;
 
     constructor(
         private uhkConfigurationService: UhkConfigurationService,
@@ -84,6 +85,12 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         this.addedNewAction = true;
     }
 
+    discardChanges() {
+        const id: number = this.macro.id;
+        this.macro = this.getMacro(id);
+        this.hasChanges = false;
+    }
+
     hideOtherActionEditors(index: number) {
         this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
             if (idx !== index) {
@@ -104,12 +111,13 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
 
     onSaveAction() {
       this.dragEnabled = true;
+      this.hasChanges = true;
     }
 
     onDeleteAction(index: number) {
         // @ todo show confirm action dialog
         this.macro.macroActions.elements.splice(index, 1);
-        this.saveMacro();
+        this.hasChanges = true;
     }
 
     ngOnDestroy() {
