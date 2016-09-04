@@ -14,6 +14,7 @@ import {KeyMacroAction} from '../../../config-serializer/config-items/KeyMacroAc
 import {KeyModifiers}  from '../../../config-serializer/config-items/KeyModifiers';
 
 import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
+import { find as _find } from 'lodash';
 
 // Flatten scancodes for easier label retrieval
 // @todo Should this be its own importable file?
@@ -142,7 +143,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.scancode) {
-            this.title += this.getScancodeLabel(action.scancode);
+            this.title += _find(scancodes, ['id', action.scancode]) || '';
         }
 
         if (action.modifierMask) {
@@ -153,16 +154,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
                 }
             }
         }
-    }
-
-    private getScancodeLabel(scancode: number): string {
-        const scancodeStr: string = scancode.toString();
-        for (let i = 0, len = scancodes.length; i < len; i++) {
-            if (scancodes[i].id === scancodeStr) {
-                return scancodes[i].text;
-            }
-        }
-        return '';
     }
 
     private setMouseMoveScrollActionContent(action: MacroAction) {
