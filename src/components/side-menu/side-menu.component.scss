@@ -11,17 +11,6 @@ a {
     color: #333;
 }
 
-ul ul {
-    max-height: 200px;
-    transition: max-height 500ms ease-in;
-    overflow: hidden;
-}
-
-ul ul.slide-up {
-    max-height: 0;
-    transition: max-height 500ms ease-out;
-}
-
 // General list styles for the sidebar-menu.
 ul {
     padding: 0;
@@ -30,6 +19,10 @@ ul {
     li {
         list-style: none;
         padding: 0;
+    }
+
+    ul {
+        overflow: hidden;
     }
 }
 
