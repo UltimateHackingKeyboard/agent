@@ -1,5 +1,5 @@
-import {assertUInt8} from '../assert';
-import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
 import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
 
 export class PlayMacroAction extends KeyAction {

@@ -1,6 +1,6 @@
 import {Component, OnInit } from '@angular/core';
 
-import {NoneAction} from '../../../../config-serializer/config-items/NoneAction';
+import {NoneAction} from '../../../../config-serializer/config-items/key-action';
 import {Tab} from '../tab';
 
 @Component({

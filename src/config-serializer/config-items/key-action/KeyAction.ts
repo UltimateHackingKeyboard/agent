@@ -1,7 +1,7 @@
-/// <reference path="../Function.d.ts" />
+/// <reference path="../../Function.d.ts" />
 
-import {Serializable} from '../Serializable';
-import {UhkBuffer} from '../UhkBuffer';
+import {Serializable} from '../../Serializable';
+import {UhkBuffer} from '../../UhkBuffer';
 
 export enum KeyActionId {
     NoneAction                   = 0,

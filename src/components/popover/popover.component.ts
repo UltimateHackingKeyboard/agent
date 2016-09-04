@@ -1,11 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 
-import {KeyAction} from '../../config-serializer/config-items/KeyAction';
-import {KeystrokeAction} from '../../config-serializer/config-items/KeystrokeAction';
-import {MouseAction} from '../../config-serializer/config-items/MouseAction';
-import {PlayMacroAction} from '../../config-serializer/config-items/PlayMacroAction';
-import {SwitchKeymapAction} from '../../config-serializer/config-items/SwitchKeymapAction';
-import {SwitchLayerAction} from '../../config-serializer/config-items/SwitchLayerAction';
+import {
+    KeyAction,
+    KeystrokeAction,
+    MouseAction,
+    PlayMacroAction,
+    SwitchKeymapAction,
+    SwitchLayerAction
+} from '../../config-serializer/config-items/key-action';
 import {Tab} from './tab/tab';
 
 enum TabName {

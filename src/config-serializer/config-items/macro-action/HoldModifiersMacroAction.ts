@@ -1,20 +1,20 @@
-import {assertUInt8} from '../assert';
-import {UhkBuffer} from '../UhkBuffer';
-import {KeyModifiers} from './KeyModifiers';
+import {assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
+import {KeyModifiers} from '../KeyModifiers';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 
-export class ReleaseModifiersMacroAction extends MacroAction {
+export class HoldModifiersMacroAction extends MacroAction {
 
     @assertUInt8
     modifierMask: number;
 
-    _fromJsObject(jsObject: any): ReleaseModifiersMacroAction {
+    _fromJsObject(jsObject: any): HoldModifiersMacroAction {
         this.assertMacroActionType(jsObject);
         this.modifierMask = jsObject.modifierMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ReleaseModifiersMacroAction {
+    _fromBinary(buffer: UhkBuffer): HoldModifiersMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.modifierMask = buffer.readUInt8();
         return this;
@@ -22,18 +22,18 @@ export class ReleaseModifiersMacroAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.ReleaseModifiersMacroAction,
+            macroActionType: macroActionType.HoldModifiersMacroAction,
             modifierMask: this.modifierMask
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.ReleaseModifiersMacroAction);
+        buffer.writeUInt8(MacroActionId.HoldModifiersMacroAction);
         buffer.writeUInt8(this.modifierMask);
     }
 
     toString(): string {
-        return `<ReleaseModifiersMacroAction modifierMask="${this.modifierMask}">`;
+        return `<HoldModifiersMacroAction modifierMask="${this.modifierMask}">`;
     }
 
     isModifierActive(modifier: KeyModifiers): boolean {

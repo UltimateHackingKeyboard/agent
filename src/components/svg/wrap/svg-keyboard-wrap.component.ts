@@ -3,9 +3,8 @@ import {
     state, style, transition, trigger
 } from '@angular/core';
 
-import { KeyAction } from '../../../config-serializer/config-items/KeyAction';
+import { KeyAction, NoneAction } from '../../../config-serializer/config-items/key-action';
 import { Layer } from '../../../config-serializer/config-items/Layer';
-import { NoneAction } from '../../../config-serializer/config-items/NoneAction';
 
 @Component({
     selector: 'svg-keyboard-wrap',

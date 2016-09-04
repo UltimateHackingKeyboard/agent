@@ -1,19 +1,19 @@
-import {assertUInt8} from '../assert';
-import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 
-export class ReleaseMouseButtonsMacroAction extends MacroAction {
+export class PressMouseButtonsMacroAction extends MacroAction {
 
     @assertUInt8
     mouseButtonsMask: number;
 
-    _fromJsObject(jsObject: any): ReleaseMouseButtonsMacroAction {
+    _fromJsObject(jsObject: any): PressMouseButtonsMacroAction {
         this.assertMacroActionType(jsObject);
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ReleaseMouseButtonsMacroAction {
+    _fromBinary(buffer: UhkBuffer): PressMouseButtonsMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.mouseButtonsMask = buffer.readUInt8();
         return this;
@@ -21,17 +21,17 @@ export class ReleaseMouseButtonsMacroAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.ReleaseMouseButtonsMacroAction,
+            macroActionType: macroActionType.PressMouseButtonsMacroAction,
             mouseButtonsMask: this.mouseButtonsMask
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.ReleaseMouseButtonsMacroAction);
+        buffer.writeUInt8(MacroActionId.PressMouseButtonsMacroAction);
         buffer.writeUInt8(this.mouseButtonsMask);
     }
 
     toString(): string {
-        return `<ReleaseMouseButtonsMacroAction mouseButtonsMask="${this.mouseButtonsMask}">`;
+        return `<PressMouseButtonsMacroAction mouseButtonsMask="${this.mouseButtonsMask}">`;
     }
 }

@@ -1,8 +1,8 @@
-import {assertEnum, assertUInt8} from '../assert';
-import {UhkBuffer} from '../UhkBuffer';
+import {assertEnum, assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
+import {KeyModifiers} from '../KeyModifiers';
+import {LongPressAction} from '../LongPressAction';
 import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
-import {KeyModifiers} from './KeyModifiers';
-import {LongPressAction} from './LongPressAction';
 
 export enum KeystrokeActionFlag {
     scancode = 1 << 0,

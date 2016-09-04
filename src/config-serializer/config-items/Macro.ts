@@ -1,7 +1,7 @@
 import {assertUInt8} from '../assert';
 import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
-import {MacroActions} from './MacroActions';
+import {MacroActions} from './macro-action';
 
 export class Macro extends Serializable<Macro> {
 

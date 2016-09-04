@@ -1,11 +1,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
+import {
+    KeyAction,
+    KeystrokeAction,
+    LayerName,
+    PlayMacroAction,
+    SwitchKeymapAction,
+    SwitchLayerAction
+} from '../../../../config-serializer/config-items/key-action';
 import {KeyModifiers} from '../../../../config-serializer/config-items/KeyModifiers';
-import {KeystrokeAction} from '../../../../config-serializer/config-items/KeystrokeAction';
-import {PlayMacroAction} from '../../../../config-serializer/config-items/PlayMacroAction';
-import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
-import {LayerName, SwitchLayerAction}  from '../../../../config-serializer/config-items/SwitchLayerAction';
 import {UhkConfiguration} from '../../../../config-serializer/config-items/UhkConfiguration';
 
 import {MapperService} from '../../../../services/mapper.service';

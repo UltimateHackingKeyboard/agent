@@ -2,9 +2,8 @@ import {Component, Input, OnInit } from '@angular/core';
 
 import {Select2OptionData} from 'ng2-select2/ng2-select2';
 
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
+import {KeyAction, SwitchKeymapAction} from '../../../../config-serializer/config-items/key-action';
 import {Keymap} from '../../../../config-serializer/config-items/Keymap';
-import {SwitchKeymapAction} from '../../../../config-serializer/config-items/SwitchKeymapAction';
 import {Tab} from '../tab';
 
 import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';

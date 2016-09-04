@@ -1,5 +1,5 @@
-import {ClassArray} from '../ClassArray';
-import {UhkBuffer} from '../UhkBuffer';
+import {ClassArray} from '../../ClassArray';
+import {UhkBuffer} from '../../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
 import {HoldKeyMacroAction} from './HoldKeyMacroAction';
 import {HoldModifiersMacroAction} from './HoldModifiersMacroAction';

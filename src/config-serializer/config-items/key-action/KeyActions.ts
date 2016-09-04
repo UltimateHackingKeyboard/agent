@@ -1,5 +1,5 @@
-import {ClassArray} from '../ClassArray';
-import {UhkBuffer} from '../UhkBuffer';
+import {ClassArray} from '../../ClassArray';
+import {UhkBuffer} from '../../UhkBuffer';
 import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
 import {KeystrokeAction} from './KeystrokeAction';
 import {MouseAction} from './MouseAction';

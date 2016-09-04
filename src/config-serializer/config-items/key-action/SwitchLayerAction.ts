@@ -1,5 +1,5 @@
-import {assertEnum} from '../assert';
-import {UhkBuffer} from '../UhkBuffer';
+import {assertEnum} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
 import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
 
 export enum LayerName {

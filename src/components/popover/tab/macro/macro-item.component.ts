@@ -1,15 +1,18 @@
+/// <reference path="../../../../config-serializer/Function.d.ts" />
+
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
-import {DelayMacroAction} from '../../../../config-serializer/config-items/DelayMacroAction';
-import {HoldModifiersMacroAction} from '../../../../config-serializer/config-items/HoldModifiersMacroAction';
-import {MacroAction} from '../../../../config-serializer/config-items/MacroAction';
-import {MoveMouseMacroAction} from '../../../../config-serializer/config-items/MoveMouseMacroAction';
-import {PressModifiersMacroAction} from '../../../../config-serializer/config-items/PressModifiersMacroAction';
-import {ReleaseModifiersMacroAction} from '../../../../config-serializer/config-items/ReleaseModifiersMacroAction';
-import {ScrollMouseMacroAction} from '../../../../config-serializer/config-items/ScrollMouseMacroAction';
-import {TextMacroAction} from '../../../../config-serializer/config-items/TextMacroAction';
-
 import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModifiers';
+import {
+    DelayMacroAction,
+    HoldModifiersMacroAction,
+    MacroAction,
+    MoveMouseMacroAction,
+    PressModifiersMacroAction,
+    ReleaseModifiersMacroAction,
+    ScrollMouseMacroAction,
+    TextMacroAction
+} from '../../../../config-serializer/config-items/macro-action';
 
 @Component({
     selector: 'macro-item',

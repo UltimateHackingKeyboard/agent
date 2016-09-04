@@ -2,9 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {Select2OptionData} from 'ng2-select2/ng2-select2';
 
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
+import {KeyAction, PlayMacroAction} from '../../../../config-serializer/config-items/key-action';
 import {Macro} from '../../../../config-serializer/config-items/Macro';
-import {PlayMacroAction} from '../../../../config-serializer/config-items/PlayMacroAction';
 
 import {Tab} from '../tab';
 

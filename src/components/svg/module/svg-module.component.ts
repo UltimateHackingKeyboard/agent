@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import {KeyAction} from '../../../config-serializer/config-items/KeyAction';
+import { KeyAction } from '../../../config-serializer/config-items/key-action';
 
 import { SvgKeyboardKey } from '../keys';
 

@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/MouseAction';
+import {KeyAction, MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/key-action';
 
 import {Tab} from '../tab';
 
