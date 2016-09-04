@@ -71,7 +71,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         if (macro) {
             return _cloneDeep(macro);
         }
-        return null;
+        // @todo replace with notification
+        throw new Error('Macro not found');
     }
 
     saveMacro() {

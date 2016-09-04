@@ -122,14 +122,14 @@ export class MacroActionEditorComponent implements OnInit {
             return macroActionType.PressKeyMacroAction;
         } else if (tab === TabName.Mouse) {
             return macroActionType.PressMouseButtonsMacroAction;
-        } else if (tab == TabName.Text) {
+        } else if (tab === TabName.Text) {
             return macroActionType.TextMacroAction;
         }
     }
 
     convertToType(actionType: string, action: MacroAction) {
         console.log('converting', action);
-        switch(actionType) {
+        switch (actionType) {
             // Delay action
             case macroActionType.DelayMacroAction:
                 return new DelayMacroAction().fromJsObject(action);
