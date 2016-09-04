@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import 'rxjs/add/operator/count';
 import 'rxjs/add/operator/debounceTime';
 import { Observable } from 'rxjs/Rx';
 
@@ -14,16 +15,16 @@ import { AppState } from '../../../store/index';
     styles: [require('./keymap-add.component.scss')]
 })
 export class KeymapAddComponent {
-    private keymaps$: Observable<Keymap[]>;
-    private keymapsAll$: Observable<Keymap[]>;
+    private presets$: Observable<Keymap[]>;
+    private presetsAll$: Observable<Keymap[]>;
 
     constructor(private store: Store<AppState>, private keymapActions: KeymapActions) {
-        this.keymapsAll$ = store.select(s => s.preset);
-        this.keymaps$ = store.select(s => s.preset);
+        this.presets$ = store.select(s => s.preset);
+        this.presetsAll$ = store.select(s => s.preset);
     }
 
     filterKeyboards(value: string) {
-        this.keymaps$ = this.keymapsAll$
+        this.presets$ = this.presetsAll$
             .map((items: Keymap[]) => items.filter(
                 (item: Keymap) => item.name.toLocaleLowerCase().indexOf(value) !== -1)
             );

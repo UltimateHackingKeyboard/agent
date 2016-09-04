@@ -63,7 +63,6 @@ import { DataStorage } from './store/storage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
-import { MacroActions } from './config-serializer/config-items/MacroActions';
 import { KeymapActions } from './store/actions/keymap';
 import { PresetActions } from './store/actions/preset';
 
@@ -132,8 +131,7 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         MapperService,
         appRoutingProviders,
         KeymapActions,
-        PresetActions,
-        MacroActions
+        PresetActions
     ],
     bootstrap: [MainAppComponent]
 })

@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
     template: require('./side-menu.component.html'),
     styles: [require('./side-menu.component.scss')]
 })
-export class SideMenuComponentt {
+export class SideMenuComponent {
     private keymaps$: Observable<Keymap[]>;
     private macros$: Observable<Macro[]>;
     private animation: {[key: string]: 'active' | 'inactive'};
@@ -35,7 +35,7 @@ export class SideMenuComponentt {
             addon: 'active'
         };
 
-		this.keymaps$ = store.select(s => s.keymap);
+        this.keymaps$ = store.select(s => s.keymap);
         this.macros$ = store.select(s => s.macro);
     }
 
