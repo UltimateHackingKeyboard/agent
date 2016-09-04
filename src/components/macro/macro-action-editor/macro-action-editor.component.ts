@@ -3,6 +3,7 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angul
 import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
 import {KeyMacroAction} from '../../../config-serializer/config-items/KeyMacroAction';
 import {MacroKeyTabComponent} from './tab/macro-key';
+import {cloneDeep as _cloneDeep } from 'lodash';
 
 enum TabName {
     Keypress,

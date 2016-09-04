@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { cloneDeep as _cloneDeep } from 'lodash';
 
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
@@ -42,9 +43,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit() {
         this.sub = this.route.params.subscribe((params: any) => {
-            const id: string = params.id;
-            const macros: Macro[] = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
-            this.macro = macros[id];
+            const id: number = params.id;
+            this.macro = this.getMacro(id);
        });
     }
 
@@ -62,6 +62,15 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
                });
            }
        });
+    }
+
+    getMacro(id: number) {
+        const allMacros: Macro[] = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
+        const macro = allMacros[id];
+        if (macro) {
+            return _cloneDeep(macro);
+        }
+        return null;
     }
 
     saveMacro() {

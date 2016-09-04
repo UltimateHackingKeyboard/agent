@@ -93,25 +93,6 @@ export abstract class MacroAction extends Serializable<MacroAction> {
         }
     }
 
-    /**
-     * Clone MacroAction for editing without changing original
-     * @param {any} [obj] Object attribute to clone, should be left empty
-     * @return {any}
-     */
-    /* tslint:disable:no-unused-variable */
-    clone(obj: any = undefined): any {
-         /* tslint:enable:no-unused-variable */
-        let cloneObj: any = new (<any>this.constructor)();
-        for (let attribute in this) {
-            if (typeof this[attribute] === 'object') {
-                cloneObj[attribute] = this.clone(this[attribute]);
-            } else {
-                cloneObj[attribute] = this[attribute];
-            }
-        }
-        return cloneObj;
-    }
-
     abstract _fromJsObject(jsObject: any): MacroAction;
     abstract _fromBinary(buffer: UhkBuffer): MacroAction;
     abstract _toJsObject(): any;
