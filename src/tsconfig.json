@@ -16,7 +16,8 @@
       "node",
       "jquery",
       "es6-shim",
-      "select2"
+      "select2",
+      "lodash"
     ]
   },
   "exclude": [
