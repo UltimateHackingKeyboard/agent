@@ -43,7 +43,7 @@
     "core-js": "2.4.1",
     "font-awesome": "^4.6.3",
     "handlebars": "^4.0.5",
-    "jquery": "^2.2.2",
+    "jquery": "3.1.0",
     "json-loader": "^0.5.4",
     "ng2-select2": "0.4.2",
     "rxjs": "5.0.0-beta.11",
