@@ -46,7 +46,7 @@ export class MacroActionEditorComponent implements OnInit {
         this.enabled = state;
         if (this.enabled) {
             // Make an editable clone of macro action so original isn't changed
-            this.editableMacroAction = this.macroAction.clone();
+            this.editableMacroAction = _cloneDeep(this.macroAction);
             let tab: TabName = this.getTabName(this.editableMacroAction);
             this.selectTab(tab);
         }
