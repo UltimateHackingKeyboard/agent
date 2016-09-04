@@ -18,13 +18,19 @@ import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-
 // Flatten scancodes for easier label retrieval
 // @todo Should this be its own importable file?
 const scancodesJSON = require('json!../../popover/tab/keypress/scancodes.json');
-let scancodes: any[] = [];
-for (let i = 0, len = scancodesJSON.length; i < len; i++) {
-    const group = scancodesJSON[i];
-    if (group.children.length) {
-        scancodes = scancodes.concat(group.children);
+
+function flattenScancodes(data: any[]) {
+    let output: any[] = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+        const group = data[i];
+        if (group.children.length) {
+            output = output.concat(group.children);
+        }
     }
+    return output;
 }
+
+const scancodes = flattenScancodes(scancodesJSON);
 
 @Component({
     selector: 'macro-item',
