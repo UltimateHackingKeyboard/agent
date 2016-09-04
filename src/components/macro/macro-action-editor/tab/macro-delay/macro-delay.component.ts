@@ -25,7 +25,7 @@ export class MacroDelayTabComponent implements OnInit, AfterViewInit {
        this.delay = this.macroAction.delay > 0 ? this.macroAction.delay / 1000 : INITIAL_DELAY;
     }
 
-    setDelay(value: any) {
+    setDelay(value: number) {
         this.delay = value;
         this.macroAction.delay = this.delay * 1000;
     }
