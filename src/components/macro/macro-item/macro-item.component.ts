@@ -49,9 +49,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
     private iconName: string;
     private title: string;
     private editing: boolean = false;
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private customTitle: string;
-    /* tslint:enable:no-unused-variable */
 
     ngOnInit() {
         this.updateView();
