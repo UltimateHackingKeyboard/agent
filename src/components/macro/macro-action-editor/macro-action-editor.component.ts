@@ -1,15 +1,9 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
+import {EditableMacroAction} from '../../../config-serializer/config-items/EditableMacroAction';
 import {KeyMacroAction} from '../../../config-serializer/config-items/KeyMacroAction';
 import {MacroKeyTabComponent} from './tab/macro-key';
-import {cloneDeep as _cloneDeep } from 'lodash';
-
-import {DelayMacroAction} from '../../../config-serializer/config-items/DelayMacroAction';
-import {MouseButtonMacroAction} from '../../../config-serializer/config-items/MouseButtonMacroAction';
-import {MoveMouseMacroAction} from '../../../config-serializer/config-items/MoveMouseMacroAction';
-import {ScrollMouseMacroAction} from '../../../config-serializer/config-items/ScrollMouseMacroAction';
-import {TextMacroAction} from '../../../config-serializer/config-items/TextMacroAction';
 
 enum TabName {
     Keypress,
@@ -52,7 +46,7 @@ export class MacroActionEditorComponent implements OnInit {
         this.enabled = state;
         if (this.enabled) {
             // Make an editable clone of macro action so original isn't changed
-            this.editableMacroAction = _cloneDeep(this.macroAction);
+            this.editableMacroAction = new EditableMacroAction().fromJsObject(this.macroAction.toJsObject());
             let tab: TabName = this.getTabName(this.editableMacroAction);
             this.activeTab = tab;
         }
@@ -65,16 +59,14 @@ export class MacroActionEditorComponent implements OnInit {
 
     onSaveClick(): void {
         try {
-            if (this.macroAction.macroActionType !== this.editableMacroAction.macroActionType) {
-                this.editableMacroAction = this.convertToType(this.editableMacroAction.macroActionType, this.editableMacroAction);
-            }
-            if (this.editableMacroAction instanceof KeyMacroAction) {
+            const action = this.editableMacroAction as EditableMacroAction;
+            if (action.isKeyAction()) {
                 // Could updating the saved keys be done in a better way?
                 const action: KeyMacroAction = this.editableMacroAction as KeyMacroAction;
                 const tab = this.selectedTab as MacroKeyTabComponent;
                 action.fromKeyAction(tab.getKeyAction());
             }
-            this.save.emit(this.editableMacroAction);
+            this.save.emit(action.toClass());
             this.enabled = false;
         } catch (e) {
             // TODO: show error dialog
@@ -124,37 +116,6 @@ export class MacroActionEditorComponent implements OnInit {
             return macroActionType.PressMouseButtonsMacroAction;
         } else if (tab === TabName.Text) {
             return macroActionType.TextMacroAction;
-        }
-    }
-
-    convertToType(actionType: string, action: MacroAction) {
-        console.log('converting', action);
-        switch (actionType) {
-            // Delay action
-            case macroActionType.DelayMacroAction:
-                return new DelayMacroAction().fromJsObject(action);
-            // Text action
-            case macroActionType.TextMacroAction:
-                return new TextMacroAction().fromJsObject(action);
-            // Keypress actions
-            case macroActionType.PressKeyMacroAction:
-            case macroActionType.HoldKeyMacroAction:
-            case macroActionType.ReleaseKeyMacroAction:
-            case macroActionType.HoldModifiersMacroAction:
-            case macroActionType.PressModifiersMacroAction:
-            case macroActionType.ReleaseModifiersMacroAction:
-                return new KeyMacroAction().fromJsObject(action);
-            // Mouse actions
-            case macroActionType.PressMouseButtonsMacroAction:
-            case macroActionType.HoldMouseButtonsMacroAction:
-            case macroActionType.ReleaseMouseButtonsMacroAction:
-                return new MouseButtonMacroAction().fromJsObject(action);
-            case macroActionType.MoveMouseMacroAction:
-                return new MoveMouseMacroAction().fromJsObject(action);
-            case macroActionType.ScrollMouseMacroAction:
-                return new ScrollMouseMacroAction().fromJsObject(action);
-            default:
-                return action;
         }
     }
 
