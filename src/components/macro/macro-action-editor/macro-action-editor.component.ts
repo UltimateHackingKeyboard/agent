@@ -5,6 +5,12 @@ import {KeyMacroAction} from '../../../config-serializer/config-items/KeyMacroAc
 import {MacroKeyTabComponent} from './tab/macro-key';
 import {cloneDeep as _cloneDeep } from 'lodash';
 
+import {DelayMacroAction} from '../../../config-serializer/config-items/DelayMacroAction';
+import {MouseButtonMacroAction} from '../../../config-serializer/config-items/MouseButtonMacroAction';
+import {MoveMouseMacroAction} from '../../../config-serializer/config-items/MoveMouseMacroAction';
+import {ScrollMouseMacroAction} from '../../../config-serializer/config-items/ScrollMouseMacroAction';
+import {TextMacroAction} from '../../../config-serializer/config-items/TextMacroAction';
+
 enum TabName {
     Keypress,
     Text,
@@ -48,7 +54,7 @@ export class MacroActionEditorComponent implements OnInit {
             // Make an editable clone of macro action so original isn't changed
             this.editableMacroAction = _cloneDeep(this.macroAction);
             let tab: TabName = this.getTabName(this.editableMacroAction);
-            this.selectTab(tab);
+            this.activeTab = tab;
         }
     }
 
@@ -59,6 +65,9 @@ export class MacroActionEditorComponent implements OnInit {
 
     onSaveClick(): void {
         try {
+            if (this.macroAction.macroActionType !== this.editableMacroAction.macroActionType) {
+                this.editableMacroAction = this.convertToType(this.editableMacroAction.macroActionType, this.editableMacroAction);
+            }
             if (this.editableMacroAction instanceof KeyMacroAction) {
                 // Could updating the saved keys be done in a better way?
                 const action: KeyMacroAction = this.editableMacroAction as KeyMacroAction;
@@ -75,6 +84,7 @@ export class MacroActionEditorComponent implements OnInit {
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.editableMacroAction.macroActionType = this.getTabMacroActionType(tab);
     }
 
     getTabName(action: MacroAction) {
@@ -102,6 +112,49 @@ export class MacroActionEditorComponent implements OnInit {
                 return TabName.Mouse;
             default:
                 return TabName.Keypress;
+        }
+    }
+
+    getTabMacroActionType(tab: TabName) {
+        if (tab === TabName.Delay) {
+            return macroActionType.DelayMacroAction;
+        } else if (tab === TabName.Keypress) {
+            return macroActionType.PressKeyMacroAction;
+        } else if (tab === TabName.Mouse) {
+            return macroActionType.PressMouseButtonsMacroAction;
+        } else if (tab == TabName.Text) {
+            return macroActionType.TextMacroAction;
+        }
+    }
+
+    convertToType(actionType: string, action: MacroAction) {
+        console.log('converting', action);
+        switch(actionType) {
+            // Delay action
+            case macroActionType.DelayMacroAction:
+                return new DelayMacroAction().fromJsObject(action);
+            // Text action
+            case macroActionType.TextMacroAction:
+                return new TextMacroAction().fromJsObject(action);
+            // Keypress actions
+            case macroActionType.PressKeyMacroAction:
+            case macroActionType.HoldKeyMacroAction:
+            case macroActionType.ReleaseKeyMacroAction:
+            case macroActionType.HoldModifiersMacroAction:
+            case macroActionType.PressModifiersMacroAction:
+            case macroActionType.ReleaseModifiersMacroAction:
+                return new KeyMacroAction().fromJsObject(action);
+            // Mouse actions
+            case macroActionType.PressMouseButtonsMacroAction:
+            case macroActionType.HoldMouseButtonsMacroAction:
+            case macroActionType.ReleaseMouseButtonsMacroAction:
+                return new MouseButtonMacroAction().fromJsObject(action);
+            case macroActionType.MoveMouseMacroAction:
+                return new MoveMouseMacroAction().fromJsObject(action);
+            case macroActionType.ScrollMouseMacroAction:
+                return new ScrollMouseMacroAction().fromJsObject(action);
+            default:
+                return action;
         }
     }
 

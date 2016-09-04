@@ -51,6 +51,7 @@ export class MacroKeyTabComponent implements OnInit {
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.macroAction.macroActionType = this.getMacroActionType(tab);
     }
 
     getTabName(action: KeyMacroAction) {
@@ -70,6 +71,16 @@ export class MacroKeyTabComponent implements OnInit {
 
             default:
                 return TabName.Keypress;
+        }
+    }
+
+    getMacroActionType(tab: TabName) {
+        if (tab === TabName.Keypress) {
+            return macroActionType.PressKeyMacroAction;
+        } else if (tab === TabName.Hold) {
+            return macroActionType.HoldKeyMacroAction;
+        } else if (tab === TabName.Release) {
+            return macroActionType.ReleaseKeyMacroAction;
         }
     }
 
