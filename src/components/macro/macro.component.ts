@@ -1,15 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
 import { cloneDeep as _cloneDeep } from 'lodash';
-
-import { UhkConfigurationService } from '../../services/uhk-configuration.service';
-
-import { Macro } from '../../config-serializer/config-items/Macro';
-import { TextMacroAction } from '../../config-serializer/config-items/TextMacroAction';
-import { MacroItemComponent } from './macro-item/macro-item.component';
-
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Macro } from '../../config-serializer/config-items/Macro';
+import { MacroItemComponent } from './macro-item/macro-item.component';
+import { Subscription } from 'rxjs/Subscription';
+import { TextMacroAction } from '../../config-serializer/config-items/macro-action/TextMacroAction';
+import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
 @Component({
     selector: 'macro',
