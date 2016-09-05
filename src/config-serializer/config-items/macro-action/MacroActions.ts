@@ -1,16 +1,9 @@
 import {ClassArray} from '../../ClassArray';
 import {UhkBuffer} from '../../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
-<<<<<<< HEAD:src/config-serializer/config-items/MacroActions.ts
 import {MacroAction, macroActionType, MacroActionId} from './MacroAction';
 import {KeyMacroAction} from './KeyMacroAction';
 import {MouseButtonMacroAction} from './MouseButtonMacroAction';
-=======
-import {HoldKeyMacroAction} from './HoldKeyMacroAction';
-import {HoldModifiersMacroAction} from './HoldModifiersMacroAction';
-import {HoldMouseButtonsMacroAction} from './HoldMouseButtonsMacroAction';
-import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
->>>>>>> upstream/master:src/config-serializer/config-items/macro-action/MacroActions.ts
 import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
 import {TextMacroAction} from './TextMacroAction';
