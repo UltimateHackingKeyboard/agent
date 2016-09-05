@@ -100,6 +100,10 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    onNameChange() {
+        this.hasChanges = true;
+    }
+
     onEditAction(index: number) {
         // Hide other editors when clicking edit button of a macro action
         this.hideOtherActionEditors(index);
