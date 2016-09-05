@@ -7,7 +7,7 @@ import {
     Renderer,
     AfterViewInit
 } from '@angular/core';
-import { TextMacroAction } from '../../../../../config-serializer/config-items/TextMacroAction';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/EditableMacroAction';
 
 @Component({
     selector: 'macro-text-tab',
@@ -16,7 +16,7 @@ import { TextMacroAction } from '../../../../../config-serializer/config-items/T
     host: { 'class': 'macro__text' }
 })
 export class MacroTextTabComponent implements OnInit, AfterViewInit {
-    @Input() macroAction: TextMacroAction;
+    @Input() macroAction: EditableMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
     constructor(private renderer: Renderer) {}
