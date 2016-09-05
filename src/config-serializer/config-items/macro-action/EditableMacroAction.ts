@@ -1,8 +1,8 @@
 import {MacroAction, macroActionType} from './MacroAction';
 import {values as _values } from 'lodash';
 
-import {KeyAction, keyActionType} from './KeyAction';
-import {KeystrokeAction} from './KeystrokeAction';
+import {KeyAction, keyActionType} from '../key-action/KeyAction';
+import {KeystrokeAction} from '../key-action/KeystrokeAction';
 import {KeyMacroAction} from './KeyMacroAction';
 import {DelayMacroAction} from './DelayMacroAction';
 import {MouseButtonMacroAction} from './MouseButtonMacroAction';

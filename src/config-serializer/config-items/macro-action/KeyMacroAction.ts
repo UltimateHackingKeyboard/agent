@@ -1,9 +1,9 @@
+import {assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
 import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
-import { KeystrokeAction } from './KeystrokeAction';
-import { KeyAction, keyActionType } from './KeyAction';
-import { KeyModifiers } from './KeyModifiers';
-import {UhkBuffer} from '../UhkBuffer';
-import {assertUInt8} from '../assert';
+import { KeystrokeAction } from '../key-action/KeystrokeAction';
+import { KeyAction, keyActionType } from '../key-action/KeyAction';
+import { KeyModifiers } from '../KeyModifiers';
 
 export class KeyMacroAction extends MacroAction {
     scancode: number;
