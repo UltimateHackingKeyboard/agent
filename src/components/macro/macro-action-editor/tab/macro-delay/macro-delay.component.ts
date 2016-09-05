@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, Renderer, ElementRef } from '@angular/core';
-import { DelayMacroAction } from '../../../../../config-serializer/config-items/DelayMacroAction';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/EditableMacroAction';
 
 const INITIAL_DELAY = 0.5; // 0.5 seconds
 
@@ -12,7 +12,7 @@ const INITIAL_DELAY = 0.5; // 0.5 seconds
     host: { 'class': 'macro__delay' }
 })
 export class MacroDelayTabComponent implements OnInit, AfterViewInit {
-    @Input() macroAction: DelayMacroAction;
+    @Input() macroAction: EditableMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
     private delay: number;
     /* tslint:disable:no-unused-variable: It is used in the template. */
