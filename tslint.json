@@ -66,12 +66,7 @@
             "check-open-brace",
             "check-whitespace"
         ],
-        "ordered-imports": [
-            true,
-            {
-                "named-imports-order": "lowercase-last"
-            }
-        ],
+        "ordered-imports": false,
         "quotemark": [
             true,
             "single"
