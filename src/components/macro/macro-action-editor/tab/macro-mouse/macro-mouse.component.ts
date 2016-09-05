@@ -1,13 +1,7 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    ViewChild
-} from '@angular/core';
-
-import {Tab} from '../../../../popover/tab/tab';
-import {MacroAction, macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
-import {EditableMacroAction} from '../../../../../config-serializer/config-items/EditableMacroAction';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
+import { MacroAction, macroActionType } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
+import { Tab } from '../../../../popover/tab/tab';
 
 enum TabName {
     Move,
