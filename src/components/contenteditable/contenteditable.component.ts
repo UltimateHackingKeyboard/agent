@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, Output, EventEmitter, OnChanges, Renderer } from '@angular/core';
+import {Directive, ElementRef, EventEmitter, Input, OnChanges, Output, Renderer } from '@angular/core';
 
 const KEY_ENTER = 13;
 
