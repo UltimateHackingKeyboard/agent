@@ -3,6 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { Select2Component } from 'ng2-select2/ng2-select2';
+import {
+    MacroComponent,
+    MacroItemComponent,
+    MacroActionEditorComponent,
+    MacroDelayTabComponent,
+    MacroKeyTabComponent,
+    MacroMouseTabComponent,
+    MacroTextTabComponent
+} from './components/macro';
 
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 
@@ -35,16 +44,6 @@ import {
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
-
-import {
-    MacroComponent,
-    MacroItemComponent,
-    MacroActionEditorComponent,
-    MacroDelayTabComponent,
-    MacroKeyTabComponent,
-    MacroMouseTabComponent,
-    MacroTextTabComponent
-} from './components/macro';
 
 import { ContenteditableModel } from './components/contenteditable';
 import { Dragula } from 'ng2-dragula/ng2-dragula';
