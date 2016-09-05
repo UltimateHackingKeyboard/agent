@@ -196,7 +196,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         const buttonLabels: string[] = ['Left', 'Middle', 'Right'];
-        const selectedButtons: boolean[] = action.bitMaskToBooleans();
+        const selectedButtons: boolean[] = action.getMouseButtons();
         const selectedButtonLabels: string[] = [];
         selectedButtons.forEach((isSelected, idx) => {
             if (isSelected && buttonLabels[idx]) {
