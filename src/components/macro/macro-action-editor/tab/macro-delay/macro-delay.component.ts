@@ -1,17 +1,15 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, Renderer, ElementRef } from '@angular/core';
-import { EditableMacroAction } from '../../../../../config-serializer/config-items/EditableMacroAction';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer, ViewChild } from '@angular/core';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
 
 const INITIAL_DELAY = 0.5; // 0.5 seconds
 
 @Component({
     selector: 'macro-delay-tab',
     template: require('./macro-delay.component.html'),
-    styles: [
-        require('./macro-delay.component.scss')
-    ],
+    styles: [ require('./macro-delay.component.scss') ],
     host: { 'class': 'macro__delay' }
 })
-export class MacroDelayTabComponent implements OnInit, AfterViewInit {
+export class MacroDelayTabComponent implements AfterViewInit, OnInit {
     @Input() macroAction: EditableMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
     private delay: number;
