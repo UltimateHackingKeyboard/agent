@@ -1,15 +1,15 @@
-import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
-import {MacroAction, macroActionType} from '../../../config-serializer/config-items/MacroAction';
+import {MacroAction, macroActionType} from '../../../config-serializer/config-items/macro-action/MacroAction';
 
-import {DelayMacroAction} from '../../../config-serializer/config-items/DelayMacroAction';
-import {TextMacroAction} from '../../../config-serializer/config-items/TextMacroAction';
+import {DelayMacroAction} from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
+import {TextMacroAction} from '../../../config-serializer/config-items/macro-action/TextMacroAction';
 
-import {MouseButtonMacroAction} from '../../../config-serializer/config-items/MouseButtonMacroAction';
-import {MoveMouseMacroAction} from '../../../config-serializer/config-items/MoveMouseMacroAction';
-import {ScrollMouseMacroAction} from '../../../config-serializer/config-items/ScrollMouseMacroAction';
+import {MouseButtonMacroAction} from '../../../config-serializer/config-items/macro-action/MouseButtonMacroAction';
+import {MoveMouseMacroAction} from '../../../config-serializer/config-items/macro-action/MoveMouseMacroAction';
+import {ScrollMouseMacroAction} from '../../../config-serializer/config-items/macro-action/ScrollMouseMacroAction';
 
-import {KeyMacroAction} from '../../../config-serializer/config-items/KeyMacroAction';
+import {KeyMacroAction} from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
 
 import {KeyModifiers}  from '../../../config-serializer/config-items/KeyModifiers';
 
