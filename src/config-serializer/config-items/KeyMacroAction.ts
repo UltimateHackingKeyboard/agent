@@ -10,7 +10,7 @@ export class KeyMacroAction extends MacroAction {
     @assertUInt8
     modifierMask: number;
 
-    _fromJsObject(jsObject: any): KeyMacroAction {
+    _fromJsObject(jsObject: any): MacroAction {
         this.assertMacroActionType(jsObject);
         this.macroActionType = jsObject.macroActionType;
         this.scancode = jsObject.scancode;
@@ -18,7 +18,7 @@ export class KeyMacroAction extends MacroAction {
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): KeyMacroAction {
+    _fromBinary(buffer: UhkBuffer): MacroAction {
         this.readAndAssertMacroActionId(buffer);
         if (this.isKeyAction()) {
             this.scancode = buffer.readUInt8();
