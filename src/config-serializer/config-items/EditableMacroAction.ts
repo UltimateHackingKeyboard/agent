@@ -1,7 +1,8 @@
 import {MacroAction, macroActionType} from './MacroAction';
 import {values as _values } from 'lodash';
 
-import {KeyAction} from './KeyAction';
+import {KeyAction, keyActionType} from './KeyAction';
+import {KeystrokeAction} from './KeystrokeAction';
 import {KeyMacroAction} from './KeyMacroAction';
 import {DelayMacroAction} from './DelayMacroAction';
 import {MouseButtonMacroAction} from './MouseButtonMacroAction';
@@ -82,17 +83,6 @@ export class EditableMacroAction extends MacroAction {
         return this;
     }
 
-    _fromBinary(): MacroAction {
-        // Does nothing, just for compatibility with MacroAction
-        return this;
-    }
-
-    fromKeyAction(keyAction: KeyAction) {
-        let data = keyAction.toJsObject();
-        this.scancode = data.scancode;
-        this.modifierMask = data.modifierMask;
-    }
-
     _toJsObject(): any {
         return {
             macroActionType: this.macroActionType,
@@ -112,20 +102,32 @@ export class EditableMacroAction extends MacroAction {
         };
     }
 
+    _fromBinary(): MacroAction {
+        // Does nothing, just for compatibility with MacroAction
+        return this;
+    }
+
     _toBinary() {
         // Does nothing, just for compatibility with MacroAction
     }
 
+    fromKeyAction(keyAction: KeyAction) {
+        let data = keyAction.toJsObject();
+        this.scancode = data.scancode;
+        this.modifierMask = data.modifierMask;
+    }
+
+    toKeyAction() {
+        let data = this.toJsObject();
+        data.keyActionType = keyActionType.KeystrokeAction;
+        return new KeystrokeAction().fromJsObject(data);
+    }
+
     setMouseButtons(buttonStates: boolean[]) {
         let bitmask = 0;
-        buttonStates.forEach((enabled, idx) => {
-            if (enabled) {
-                bitmask |= 1 << idx;
-            } else {
-                bitmask &= ~1 << idx;
-            }
-        });
-        console.log('mouse buttons set', bitmask);
+        for (let i = 0; i < buttonStates.length; i++) {
+            bitmask |= Number(buttonStates[i]) << i;
+        }
         this.mouseButtonsMask = bitmask;
     }
 
