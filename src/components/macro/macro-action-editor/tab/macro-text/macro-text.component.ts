@@ -1,13 +1,13 @@
 import {
+    AfterViewInit,
     Component,
-    OnInit,
-    Input,
     ElementRef,
-    ViewChild,
+    Input,
+    OnInit,
     Renderer,
-    AfterViewInit
+    ViewChild
 } from '@angular/core';
-import { EditableMacroAction } from '../../../../../config-serializer/config-items/EditableMacroAction';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
 
 @Component({
     selector: 'macro-text-tab',
