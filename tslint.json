@@ -8,6 +8,7 @@
         ],
         "no-inferrable-types": true,
         "no-internal-module": true,
+        "class-name": true,
         "curly": true,
         "no-construct": true,
         "no-duplicate-key": true,
@@ -22,7 +23,9 @@
         "no-unused-variable": [
             true,
             "check-parameters",
-            {"ignore-pattern": "assert.*|keyActionType"}
+            {
+                "ignore-pattern": "assert.*|keyActionType"
+            }
         ],
         "no-use-before-declare": true,
         "no-var-keyword": true,
@@ -40,7 +43,8 @@
         ],
         "no-trailing-whitespace": true,
         "trailing-comma": [
-            true, {
+            true,
+            {
                 "multiline": "never",
                 "singleline": "never"
             }
@@ -62,7 +66,12 @@
             "check-open-brace",
             "check-whitespace"
         ],
-
+        "ordered-imports": [
+            true,
+            {
+                "named-imports-order": "lowercase-last"
+            }
+        ],
         "quotemark": [
             true,
             "single"

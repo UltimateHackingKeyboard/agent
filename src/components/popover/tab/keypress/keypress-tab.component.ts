@@ -1,9 +1,8 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 import {Select2OptionData} from 'ng2-select2/ng2-select2';
 
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {KeystrokeAction} from '../../../../config-serializer/config-items/KeystrokeAction';
+import {KeyAction, KeystrokeAction} from '../../../../config-serializer/config-items/key-action';
 
 import {Tab} from '../tab';
 

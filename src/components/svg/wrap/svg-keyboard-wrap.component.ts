@@ -1,11 +1,10 @@
 import {
-    Component, Input, OnInit, style,
-    state, animate, transition, trigger, OnChanges
+    Component, Input, OnChanges, OnInit, animate,
+    state, style, transition, trigger
 } from '@angular/core';
 
-import { KeyAction } from '../../../config-serializer/config-items/KeyAction';
+import { KeyAction, NoneAction } from '../../../config-serializer/config-items/key-action';
 import { Layer } from '../../../config-serializer/config-items/Layer';
-import { NoneAction } from '../../../config-serializer/config-items/NoneAction';
 
 @Component({
     selector: 'svg-keyboard-wrap',

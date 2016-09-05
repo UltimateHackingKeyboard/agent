@@ -15,7 +15,7 @@
     "types": [
       "node",
       "jquery",
-      "es6-shim",
+      "core-js",
       "select2",
       "lodash"
     ]

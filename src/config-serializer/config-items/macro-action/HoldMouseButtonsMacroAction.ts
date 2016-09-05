@@ -1,9 +1,8 @@
-import {MacroActionId, macroActionType} from './MacroAction';
-import {MouseButtonMacroAction} from './MouseButtonMacroAction';
-import {UhkBuffer} from '../UhkBuffer';
-import {assertUInt8} from '../assert';
+import {assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
+import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 
-export class HoldMouseButtonsMacroAction extends MouseButtonMacroAction {
+export class HoldMouseButtonsMacroAction extends MacroAction {
 
     @assertUInt8
     mouseButtonsMask: number;

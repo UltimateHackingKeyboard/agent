@@ -1,11 +1,11 @@
+import {assertUInt32, assertUInt8} from '../assert';
 import {Serializable} from '../Serializable';
-import {ModuleConfigurations} from './ModuleConfigurations';
+import {UhkBuffer} from '../UhkBuffer';
 import {Keymap} from './Keymap';
 import {Keymaps} from './Keymaps';
 import {Macro} from './Macro';
 import {Macros} from './Macros';
-import {UhkBuffer} from '../UhkBuffer';
-import {assertUInt8, assertUInt32} from '../assert';
+import {ModuleConfigurations} from './ModuleConfigurations';
 
 export class UhkConfiguration extends Serializable<UhkConfiguration> {
 

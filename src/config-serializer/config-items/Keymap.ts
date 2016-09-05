@@ -1,7 +1,7 @@
+import {assertUInt8} from '../assert';
 import {Serializable} from '../Serializable';
 import {UhkBuffer} from '../UhkBuffer';
 import {Layers} from './Layers';
-import {assertUInt8} from '../assert';
 
 export class Keymap extends Serializable<Keymap> {
 

@@ -1,13 +1,13 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
-import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
+import {Select2OptionData} from 'ng2-select2/ng2-select2';
+
+import {KeyAction, PlayMacroAction} from '../../../../config-serializer/config-items/key-action';
 import {Macro} from '../../../../config-serializer/config-items/Macro';
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {PlayMacroAction} from '../../../../config-serializer/config-items/PlayMacroAction';
 
 import {Tab} from '../tab';
 
-import {Select2OptionData} from 'ng2-select2/ng2-select2';
+import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
 
 @Component({
     selector: 'macro-tab',

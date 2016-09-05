@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { Keymaps } from '../../../config-serializer/config-items/Keymaps';
 import {DataProviderService} from '../../../services/data-provider.service';

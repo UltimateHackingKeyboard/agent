@@ -1,7 +1,6 @@
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {Component, Input,  OnInit, ViewChild} from '@angular/core';
 
-import {LayerName, SwitchLayerAction} from '../../../../config-serializer/config-items/SwitchLayerAction';
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
+import {KeyAction, LayerName, SwitchLayerAction} from '../../../../config-serializer/config-items/key-action';
 
 import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
 

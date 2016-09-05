@@ -1,8 +1,8 @@
-import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
-import {UhkBuffer} from '../UhkBuffer';
-import {assertInt16} from '../assert';
+import {assertInt16} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
+import {MacroAction, MacroActionId,  macroActionType} from './MacroAction';
 
-export class ScrollMouseMacroAction extends MacroAction {
+export class MoveMouseMacroAction extends MacroAction {
 
     @assertInt16
     x: number;
@@ -12,17 +12,17 @@ export class ScrollMouseMacroAction extends MacroAction {
 
     constructor() {
         super();
-        this.macroActionType = macroActionType.ScrollMouseMacroAction;
+        this.macroActionType = macroActionType.MoveMouseMacroAction;
     }
 
-    _fromJsObject(jsObject: any): ScrollMouseMacroAction {
+    _fromJsObject(jsObject: any): MoveMouseMacroAction {
         this.assertMacroActionType(jsObject);
         this.x = jsObject.x;
         this.y = jsObject.y;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ScrollMouseMacroAction {
+    _fromBinary(buffer: UhkBuffer): MoveMouseMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.x = buffer.readInt16();
         this.y = buffer.readInt16();
@@ -31,19 +31,19 @@ export class ScrollMouseMacroAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.ScrollMouseMacroAction,
+            macroActionType: macroActionType.MoveMouseMacroAction,
             x: this.x,
             y: this.y
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.ScrollMouseMacroAction);
+        buffer.writeUInt8(MacroActionId.MoveMouseMacroAction);
         buffer.writeInt16(this.x);
         buffer.writeInt16(this.y);
     }
 
     toString(): string {
-        return `<ScrollMouseMacroAction pos="(${this.x},${this.y})">`;
+        return `<MoveMouseMacroAction pos="(${this.x},${this.y})">`;
     }
 }

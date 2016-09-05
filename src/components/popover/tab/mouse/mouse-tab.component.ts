@@ -1,8 +1,8 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+
+import {KeyAction, MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/key-action';
 
 import {Tab} from '../tab';
-import {KeyAction} from '../../../../config-serializer/config-items/KeyAction';
-import {MouseAction, MouseActionParam} from '../../../../config-serializer/config-items/MouseAction';
 
 @Component({
     selector: 'mouse-tab',

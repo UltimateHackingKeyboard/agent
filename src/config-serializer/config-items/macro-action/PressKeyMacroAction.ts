@@ -1,19 +1,19 @@
-import {UhkBuffer} from '../UhkBuffer';
+import {assertUInt8} from '../../assert';
+import {UhkBuffer} from '../../UhkBuffer';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
-import {assertUInt8} from '../assert';
 
-export class HoldKeyMacroAction extends MacroAction {
+export class PressKeyMacroAction extends MacroAction {
 
     @assertUInt8
     scancode: number;
 
-    _fromJsObject(jsObject: any): HoldKeyMacroAction {
+    _fromJsObject(jsObject: any): PressKeyMacroAction {
         this.assertMacroActionType(jsObject);
         this.scancode = jsObject.scancode;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): HoldKeyMacroAction {
+    _fromBinary(buffer: UhkBuffer): PressKeyMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.scancode = buffer.readUInt8();
         return this;
@@ -21,17 +21,17 @@ export class HoldKeyMacroAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: macroActionType.HoldKeyMacroAction,
+            macroActionType: macroActionType.PressKeyMacroAction,
             scancode: this.scancode
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.HoldKeyMacroAction);
+        buffer.writeUInt8(MacroActionId.PressKeyMacroAction);
         buffer.writeUInt8(this.scancode);
     }
 
     toString(): string {
-        return `<HoldKeyMacroAction scancode="${this.scancode}">`;
+        return `<PressKeyMacroAction scancode="${this.scancode}">`;
     }
 }
