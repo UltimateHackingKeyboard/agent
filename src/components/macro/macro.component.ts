@@ -46,6 +46,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         this.sub = this.route.params.subscribe((params: any) => {
             const id: number = params.id;
             this.macro = this.getMacro(id);
+            this.dragEnabled = true;
+            this.hasChanges = false;
        });
     }
 
