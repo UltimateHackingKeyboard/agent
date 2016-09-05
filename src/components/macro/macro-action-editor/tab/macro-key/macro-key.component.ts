@@ -7,7 +7,7 @@ import {
 
 import {Tab} from '../../../../popover/tab/tab';
 import {macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
-import {KeyMacroAction} from '../../../../../config-serializer/config-items/KeyMacroAction';
+import {EditableMacroAction} from '../../../../../config-serializer/config-items/EditableMacroAction';
 import {KeyAction} from '../../../../../config-serializer/config-items/KeyAction';
 import {KeypressTabComponent} from '../../../../popover/tab/keypress';
 
@@ -27,7 +27,7 @@ enum TabName {
     host: { 'class': 'macro__mouse' }
 })
 export class MacroKeyTabComponent implements OnInit {
-    @Input() macroAction: KeyMacroAction;
+    @Input() macroAction: EditableMacroAction;
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
 
@@ -43,9 +43,7 @@ export class MacroKeyTabComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {
-        if (this.macroAction instanceof KeyMacroAction) {
-            this.defaultKeyAction = this.macroAction.toKeyAction();
-        }
+        this.defaultKeyAction = this.macroAction.toKeyAction();
         this.selectTab(this.getTabName(this.macroAction));
     }
 
@@ -54,7 +52,7 @@ export class MacroKeyTabComponent implements OnInit {
         this.macroAction.macroActionType = this.getMacroActionType(tab);
     }
 
-    getTabName(action: KeyMacroAction) {
+    getTabName(action: EditableMacroAction) {
         switch (action.macroActionType) {
             // Press key
             case macroActionType.PressKeyMacroAction:
