@@ -7,8 +7,7 @@ import {
 
 import {Tab} from '../../../../popover/tab/tab';
 import {MacroAction, macroActionType} from '../../../../../config-serializer/config-items/MacroAction';
-
-import { MouseButtonMacroAction } from '../../../../../config-serializer/config-items/MouseButtonMacroAction';
+import {EditableMacroAction} from '../../../../../config-serializer/config-items/EditableMacroAction';
 
 enum TabName {
     Move,
@@ -28,7 +27,7 @@ enum TabName {
     host: { 'class': 'macro__mouse' }
 })
 export class MacroMouseTabComponent implements OnInit {
-    @Input() macroAction: MacroAction;
+    @Input() macroAction: EditableMacroAction;
     @ViewChild('tab') selectedTab: Tab;
 
     private activeTab: TabName;
@@ -50,19 +49,18 @@ export class MacroMouseTabComponent implements OnInit {
         this.selectTab(tabName);
         const buttonActions = [TabName.Click, TabName.Hold, TabName.Release];
         if (buttonActions.indexOf(this.activeTab) !== -1) {
-            const action: MouseButtonMacroAction = this.macroAction as MouseButtonMacroAction;
-            this.selectedButtons = action.bitMaskToBooleans();
+            this.selectedButtons = this.macroAction.getMouseButtons();
         }
     }
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.macroAction.macroActionType = this.getMacroActionType(tab);
     }
 
     setMouseClick(index: number) {
         this.selectedButtons[index] = !this.selectedButtons[index];
-        const action: MouseButtonMacroAction = this.macroAction as MouseButtonMacroAction;
-        action.setBitmask(this.selectedButtons);
+        this.macroAction.setMouseButtons(this.selectedButtons);
     }
 
     hasButton(index: number) {
@@ -87,6 +85,20 @@ export class MacroMouseTabComponent implements OnInit {
                 return TabName.Scroll;
             default:
                 return TabName.Move;
+        }
+    }
+
+    getMacroActionType(tab: TabName) {
+        if (tab === TabName.Click) {
+            return macroActionType.PressMouseButtonsMacroAction;
+        } else if (tab === TabName.Hold) {
+            return macroActionType.HoldMouseButtonsMacroAction;
+        } else if (tab === TabName.Release) {
+            return macroActionType.ReleaseMouseButtonsMacroAction;
+        } else if (tab === TabName.Move) {
+            return macroActionType.MoveMouseMacroAction;
+        } else if (tab === TabName.Scroll) {
+            return macroActionType.ScrollMouseMacroAction;
         }
     }
 
