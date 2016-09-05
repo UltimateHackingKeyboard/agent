@@ -37,16 +37,15 @@ export class MouseButtonMacroAction extends MacroAction {
         buffer.writeUInt8(this.mouseButtonsMask);
     }
 
-    setBitmask(values: boolean[]) {
+    setMouseButtons(buttonStates: boolean[]) {
         let bitmask = 0;
-        for (let i = 0; i < values.length; i++) {
-            const value = Number(values[i]);
-            bitmask |= value << i;
+        for (let i = 0; i < buttonStates.length; i++) {
+            bitmask |= Number(buttonStates[i]) << i;
         }
         this.mouseButtonsMask = bitmask;
     }
 
-    bitMaskToBooleans() {
+    getMouseButtons() {
         let enabledMouseButtons: boolean[] = [];
         for (let bitmask = this.mouseButtonsMask; bitmask; bitmask >>>= 1) {
             enabledMouseButtons.push(Boolean(bitmask & 1));
