@@ -21,8 +21,8 @@ enum TabName {
 export class MacroActionEditorComponent implements OnInit {
     @Input() macroAction: MacroAction;
 
-    @Output() save = new EventEmitter<any>();
-    @Output() cancel = new EventEmitter<any>();
+    @Output() save = new EventEmitter<MacroAction>();
+    @Output() cancel = new EventEmitter<void>();
 
     @ViewChild('tab') selectedTab: any;
 
