@@ -5,14 +5,14 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import {KeyModifiers}  from '../../../../config-serializer/config-items/KeyModifiers';
 import {
     DelayMacroAction,
-    HoldModifiersMacroAction,
+    KeyMacroAction,
     MacroAction,
     MoveMouseMacroAction,
-    PressModifiersMacroAction,
-    ReleaseModifiersMacroAction,
     ScrollMouseMacroAction,
     TextMacroAction
 } from '../../../../config-serializer/config-items/macro-action';
+
+import {MapperService} from '../../../../services/mapper.service';
 
 @Component({
     selector: 'macro-item',
@@ -29,7 +29,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     private iconName: string;
     private title: string;
 
-    constructor() { }
+    constructor(private mapper: MapperService) { }
 
     ngOnInit() {
         this.updateView();
@@ -75,42 +75,23 @@ export class MacroItemComponent implements OnInit, OnChanges {
             if (Math.abs(action.y) > 0) {
                 this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(action.y)}px ${action.y > 0 ? 'down' : 'up'}ward`;
             }
-        } else if (this.macroAction instanceof PressModifiersMacroAction) {
+        } else if (this.macroAction instanceof KeyMacroAction) {
+            const keyMacroAction: KeyMacroAction = <KeyMacroAction>this.macroAction;
+            this.title += 'KeyMacroAction: ';
+            if (keyMacroAction.isPressAction()) {
+                this.title = 'Press';
+            } else if (keyMacroAction.isHoldAction()) {
+                this.title = 'Hold';
+            } else {
+                this.title = 'Release';
+            }
+            if (keyMacroAction.hasScancode()) {
+                this.title += ' ' + this.mapper.scanCodeToText(keyMacroAction.scancode).join(' ');
+            }
             this.iconName = 'square';
-            let action: PressModifiersMacroAction = this.macroAction as PressModifiersMacroAction;
-            if (action.modifierMask === 0) {
-                this.title = 'Invalid PressModifiersMacroAction!';
-                return;
-            }
-            this.title = 'Press: ';
+
             for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightCtrl; i <<= 1) {
-                if (action.isModifierActive(i)) {
-                    this.title += ' ' + KeyModifiers[i];
-                }
-            }
-        } else if (this.macroAction instanceof HoldModifiersMacroAction) {
-            this.iconName = 'square';
-            let action: HoldModifiersMacroAction = this.macroAction as HoldModifiersMacroAction;
-            if (action.modifierMask === 0) {
-                this.title = 'Invalid HoldModifiersMacroAction!';
-                return;
-            }
-            this.title = 'Hold: ';
-            for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightCtrl; i <<= 1) {
-                if (action.isModifierActive(i)) {
-                    this.title += ' ' + KeyModifiers[i];
-                }
-            }
-        } else if (this.macroAction instanceof ReleaseModifiersMacroAction) {
-            this.iconName = 'square';
-            let action: ReleaseModifiersMacroAction = this.macroAction as ReleaseModifiersMacroAction;
-            if (action.modifierMask === 0) {
-                this.title = 'Invalid ReleaseModifiersMacroAction!';
-                return;
-            }
-            this.title = 'Release: ';
-            for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightCtrl; i <<= 1) {
-                if (action.isModifierActive(i)) {
+                if (keyMacroAction.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
                 }
             }

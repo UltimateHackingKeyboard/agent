@@ -1,16 +1,11 @@
 import {ClassArray} from '../../ClassArray';
 import {UhkBuffer} from '../../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
-import {HoldKeyMacroAction} from './HoldKeyMacroAction';
-import {HoldModifiersMacroAction} from './HoldModifiersMacroAction';
 import {HoldMouseButtonsMacroAction} from './HoldMouseButtonsMacroAction';
+import {KeyMacroAction} from './KeyMacroAction';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
 import {MoveMouseMacroAction} from './MoveMouseMacroAction';
-import {PressKeyMacroAction} from './PressKeyMacroAction';
-import {PressModifiersMacroAction} from './PressModifiersMacroAction';
 import {PressMouseButtonsMacroAction} from './PressMouseButtonsMacroAction';
-import {ReleaseKeyMacroAction} from './ReleaseKeyMacroAction';
-import {ReleaseModifiersMacroAction} from './ReleaseModifiersMacroAction';
 import {ReleaseMouseButtonsMacroAction} from './ReleaseMouseButtonsMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
 import {TextMacroAction} from './TextMacroAction';
@@ -19,18 +14,8 @@ export class MacroActions extends ClassArray<MacroAction> {
 
     jsObjectToClass(jsObject: any): MacroAction {
         switch (jsObject.macroActionType) {
-            case macroActionType.PressKeyMacroAction:
-                return new PressKeyMacroAction().fromJsObject(jsObject);
-            case macroActionType.HoldKeyMacroAction:
-                return new HoldKeyMacroAction().fromJsObject(jsObject);
-            case macroActionType.ReleaseKeyMacroAction:
-                return new ReleaseKeyMacroAction().fromJsObject(jsObject);
-            case macroActionType.PressModifiersMacroAction:
-                return new PressModifiersMacroAction().fromJsObject(jsObject);
-            case macroActionType.HoldModifiersMacroAction:
-                return new HoldModifiersMacroAction().fromJsObject(jsObject);
-            case macroActionType.ReleaseModifiersMacroAction:
-                return new ReleaseModifiersMacroAction().fromJsObject(jsObject);
+            case macroActionType.KeyMacroAction:
+                return new KeyMacroAction().fromJsObject(jsObject);
             case macroActionType.PressMouseButtonsMacroAction:
                 return new PressMouseButtonsMacroAction().fromJsObject(jsObject);
             case macroActionType.HoldMouseButtonsMacroAction:
@@ -59,19 +44,10 @@ export class MacroActions extends ClassArray<MacroAction> {
             buffer.enableDump = false;
         }
 
+        if (macroActionFirstByte >= MacroActionId.KeyMacroAction && macroActionFirstByte <= MacroActionId.LastKeyMacroAction) {
+            return new KeyMacroAction().fromBinary(buffer);
+        }
         switch (macroActionFirstByte) {
-            case MacroActionId.PressKeyMacroAction:
-                return new PressKeyMacroAction().fromBinary(buffer);
-            case MacroActionId.HoldKeyMacroAction:
-                return new HoldKeyMacroAction().fromBinary(buffer);
-            case MacroActionId.ReleaseKeyMacroAction:
-                return new ReleaseKeyMacroAction().fromBinary(buffer);
-            case MacroActionId.PressModifiersMacroAction:
-                return new PressModifiersMacroAction().fromBinary(buffer);
-            case MacroActionId.HoldModifiersMacroAction:
-                return new HoldModifiersMacroAction().fromBinary(buffer);
-            case MacroActionId.ReleaseModifiersMacroAction:
-                return new ReleaseModifiersMacroAction().fromBinary(buffer);
             case MacroActionId.PressMouseButtonsMacroAction:
                 return new PressMouseButtonsMacroAction().fromBinary(buffer);
             case MacroActionId.HoldMouseButtonsMacroAction:

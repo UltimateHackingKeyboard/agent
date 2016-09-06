@@ -99,7 +99,7 @@ export class MapperService {
     }
 
     public scanCodeToText(scanCode: number): string[] {
-        return this.scanCodeTextMap[scanCode];
+        return this.scanCodeTextMap[scanCode] || [ 'Unkown' ];
     }
 
     public scanCodeToSvgImagePath(scanCode: number): string {

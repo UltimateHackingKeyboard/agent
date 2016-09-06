@@ -985,27 +985,33 @@
             "name": "My address",
             "macroActions": [
                 {
-                    "macroActionType": "pressKey",
+                    "macroActionType": "key",
+                    "action": "press",
                     "scancode": 111
                 },
                 {
-                    "macroActionType": "holdKey",
+                    "macroActionType": "key",
+                    "action": "hold",
                     "scancode": 83
                 },
                 {
-                    "macroActionType": "releaseKey",
+                    "macroActionType": "key",
+                    "action": "release",
                     "scancode": 112
                 },
                 {
-                    "macroActionType": "pressModifiers",
+                    "macroActionType": "key",
+                    "action": "press",
                     "modifierMask": 93
                 },
                 {
-                    "macroActionType": "holdModifiers",
+                    "macroActionType": "key",
+                    "action": "hold",
                     "modifierMask": 101
                 },
                 {
-                    "macroActionType": "releaseModifiers",
+                    "macroActionType": "key",
+                    "action": "release",
                     "modifierMask": 133
                 },
                 {
@@ -1047,7 +1053,8 @@
             "name": "Blah Blah blah",
             "macroActions": [
                 {
-                    "macroActionType": "pressKey",
+                    "macroActionType": "key",
+                    "action": "press",
                     "scancode": 111
                 },
                 {

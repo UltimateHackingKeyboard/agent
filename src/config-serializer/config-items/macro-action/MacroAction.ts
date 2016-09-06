@@ -2,35 +2,38 @@ import {Serializable} from '../../Serializable';
 import {UhkBuffer} from '../../UhkBuffer';
 
 export enum MacroActionId {
-    PressKeyMacroAction              =  0,
-    HoldKeyMacroAction               =  1,
-    ReleaseKeyMacroAction            =  2,
-    PressModifiersMacroAction        =  3,
-    HoldModifiersMacroAction         =  4,
-    ReleaseModifiersMacroAction      =  5,
-    PressMouseButtonsMacroAction     =  6,
-    HoldMouseButtonsMacroAction      =  7,
-    ReleaseMouseButtonsMacroAction   =  8,
-    MoveMouseMacroAction             =  9,
-    ScrollMouseMacroAction           = 10,
-    DelayMacroAction                 = 11,
-    TextMacroAction                  = 12
+    KeyMacroAction                  =  0,
+    /*
+        0 - 8 are reserved for KeyMacroAction
+        PressKeyMacroAction with scancode:                  0
+        PressKeyMacroAction with modifiers:                 1
+        PressKeyMacroAction with scancode and modifiers     2
+        HoldKeyMacroAction with scancode:                   3
+        HoldKeyMacroAction with modifiers:                  4
+        HoldKeyMacroAction with scancode and modifiers      5
+        ReleaseKeyMacroAction with scancode:                6
+        ReleaseKeyMacroAction with modifiers:               7
+        ReleaseKeyMacroAction with scancode and modifiers   8
+    */
+    LastKeyMacroAction              =  8,
+    PressMouseButtonsMacroAction    =  9,
+    HoldMouseButtonsMacroAction     = 10,
+    ReleaseMouseButtonsMacroAction  = 11,
+    MoveMouseMacroAction            = 12,
+    ScrollMouseMacroAction          = 13,
+    DelayMacroAction                = 14,
+    TextMacroAction                 = 15
 }
 
 export let macroActionType = {
-    PressKeyMacroAction              : 'pressKey',
-    HoldKeyMacroAction               : 'holdKey',
-    ReleaseKeyMacroAction            : 'releaseKey',
-    PressModifiersMacroAction        : 'pressModifiers',
-    HoldModifiersMacroAction         : 'holdModifiers',
-    ReleaseModifiersMacroAction      : 'releaseModifiers',
-    PressMouseButtonsMacroAction     : 'pressMouseButtons',
-    HoldMouseButtonsMacroAction      : 'holdMouseButtons',
-    ReleaseMouseButtonsMacroAction   : 'releaseMouseButtons',
-    MoveMouseMacroAction             : 'moveMouse',
-    ScrollMouseMacroAction           : 'scrollMouse',
-    DelayMacroAction                 : 'delay',
-    TextMacroAction                  : 'text'
+    KeyMacroAction                  : 'key',
+    PressMouseButtonsMacroAction    : 'pressMouseButtons',
+    HoldMouseButtonsMacroAction     : 'holdMouseButtons',
+    ReleaseMouseButtonsMacroAction  : 'releaseMouseButtons',
+    MoveMouseMacroAction            : 'moveMouse',
+    ScrollMouseMacroAction          : 'scrollMouse',
+    DelayMacroAction                : 'delay',
+    TextMacroAction                 : 'text'
 };
 
 export abstract class MacroAction extends Serializable<MacroAction> {
@@ -42,13 +45,19 @@ export abstract class MacroAction extends Serializable<MacroAction> {
         }
     }
 
-    readAndAssertMacroActionId(buffer: UhkBuffer) {
-        let classname = this.constructor.name;
-        let readMacroActionId = buffer.readUInt8();
-        let macroActionId = MacroActionId[<string> classname];
-        if (readMacroActionId !== macroActionId) {
+    readAndAssertMacroActionId(buffer: UhkBuffer): MacroActionId {
+        let classname: string = this.constructor.name;
+        let readMacroActionId: MacroActionId = buffer.readUInt8();
+        let macroActionId: MacroActionId = MacroActionId[classname];
+        if (macroActionId === MacroActionId.KeyMacroAction) {
+            if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
+                throw `Invalid ${classname} first byte: ${readMacroActionId}`;
+            }
+        }
+        else if (readMacroActionId !== macroActionId) {
             throw `Invalid ${classname} first byte: ${readMacroActionId}`;
         }
+        return readMacroActionId;
     }
 
     abstract _fromJsObject(jsObject: any): MacroAction;
