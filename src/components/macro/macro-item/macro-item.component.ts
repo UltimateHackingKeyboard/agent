@@ -14,7 +14,6 @@ import {KeyMacroAction} from '../../../config-serializer/config-items/macro-acti
 import {KeyModifiers}  from '../../../config-serializer/config-items/KeyModifiers';
 
 import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
-import { find as _find } from 'lodash';
 
 // Flatten scancodes for easier label retrieval
 // @todo Should this be its own importable file?
@@ -143,7 +142,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.scancode) {
-            const scancode = _find(scancodes, ['id', action.scancode.toString()]);
+            const scancodeStr = action.scancode.toString();
+            const scancode = scancodes.find(item => item.id === scancodeStr);
             if (scancode) {
                 this.title += scancode.text;
             }
