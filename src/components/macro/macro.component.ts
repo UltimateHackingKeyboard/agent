@@ -41,7 +41,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngOnInit() {
         this.sub = this.route.params.subscribe((params: any) => {
-            const id: number = params.id;
+            const id: number = Number(params.id);
             this.macro = this.getMacro(id);
             this.dragEnabled = true;
             this.hasChanges = false;
@@ -65,8 +65,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getMacro(id: number) {
-        const allMacros: Macro[] = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
-        const macro = allMacros[id];
+        const config = this.uhkConfigurationService.getUhkConfiguration();
+        const macro: Macro = config.macros.elements.find(item => item.id === id);
         if (macro) {
             return _cloneDeep(macro);
         }
