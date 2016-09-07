@@ -1,6 +1,6 @@
-import {assertUInt8} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
+import { assertEnum, assertUInt8 } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './MacroAction';
 
 export enum MouseButtons {
     Left = 1 << 0,
@@ -8,13 +8,22 @@ export enum MouseButtons {
     Right = 1 << 2
 };
 
+interface JsObjectMouseButtonMacroAction {
+    macroActionType: string;
+    action: string;
+    mouseButtonsMask?: number;
+}
+
 export class MouseButtonMacroAction extends MacroAction {
+    @assertEnum(MacroSubAction)
+    action: MacroSubAction;
+
     @assertUInt8
     mouseButtonsMask: number;
 
-    _fromJsObject(jsObject: any): MouseButtonMacroAction {
+    _fromJsObject(jsObject: JsObjectMouseButtonMacroAction): MouseButtonMacroAction {
         this.assertMacroActionType(jsObject);
-        this.macroActionType = jsObject.macroActionType;
+        this.action = MacroSubAction[jsObject.action];
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
         return this;
     }
@@ -27,13 +36,14 @@ export class MouseButtonMacroAction extends MacroAction {
 
     _toJsObject(): any {
         return {
-            macroActionType: this.macroActionType,
+            macroActionType: macroActionType.MouseButtonMacroAction,
+            action: MacroSubAction[this.action],
             mouseButtonsMask: this.mouseButtonsMask
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(this.getActionId());
+        buffer.writeUInt8(MacroActionId.MouseButtonMacroAction);
         buffer.writeUInt8(this.mouseButtonsMask);
     }
 
@@ -53,22 +63,23 @@ export class MouseButtonMacroAction extends MacroAction {
         return enabledMouseButtons;
     }
 
-    getActionId() {
-        switch (this.macroActionType) {
-            case macroActionType.HoldMouseButtonsMacroAction:
-                return MacroActionId.HoldMouseButtonsMacroAction;
-
-            case macroActionType.ReleaseMouseButtonsMacroAction:
-                return MacroActionId.ReleaseMouseButtonsMacroAction;
-
-            case macroActionType.PressMouseButtonsMacroAction:
-                return MacroActionId.PressMouseButtonsMacroAction;
-            default:
-                throw new Error(`Invalid macroActionType "${macroActionType}", cannot get macroActionId`);
-        }
+    toString(): string {
+        return `<MouseButtonMacroAction mouseButtonsMask="${this.mouseButtonsMask}">`;
     }
 
-    toString(): string {
-        return `<MouseMacroAction mouseButtonsMask="${this.mouseButtonsMask}">`;
+    hasButtons(): boolean {
+        return this.mouseButtonsMask !== 0;
+    }
+
+    isHoldAction(): boolean {
+        return this.action === MacroSubAction.hold;
+    }
+
+    isPressAction(): boolean {
+        return this.action === MacroSubAction.press;
+    }
+
+    isReleaseAction(): boolean {
+        return this.action === MacroSubAction.release;
     }
 }
