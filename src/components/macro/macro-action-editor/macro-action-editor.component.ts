@@ -27,7 +27,7 @@ export class MacroActionEditorComponent implements OnInit {
     @ViewChild('tab') selectedTab: any;
 
     public enabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
-    private editableMacroAction: MacroAction;
+    private editableMacroAction: EditableMacroAction;
     private activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     /* tslint:disable:no-unused-variable: It is used in the template. */
@@ -62,7 +62,6 @@ export class MacroActionEditorComponent implements OnInit {
             const action = this.editableMacroAction as EditableMacroAction;
             if (action.isKeyAction()) {
                 // Could updating the saved keys be done in a better way?
-                const action: KeyMacroAction = this.editableMacroAction as KeyMacroAction;
                 const tab = this.selectedTab as MacroKeyTabComponent;
                 action.fromKeyAction(tab.getKeyAction());
             }
@@ -79,7 +78,7 @@ export class MacroActionEditorComponent implements OnInit {
         this.editableMacroAction.macroActionType = this.getTabMacroActionType(tab);
     }
 
-    getTabName(action: MacroAction) {
+    getTabName(action: EditableMacroAction) {
         switch (action.macroActionType) {
             // Delay action
             case macroActionType.DelayMacroAction:
@@ -88,17 +87,10 @@ export class MacroActionEditorComponent implements OnInit {
             case macroActionType.TextMacroAction:
                 return TabName.Text;
             // Keypress actions
-            case macroActionType.PressKeyMacroAction:
-            case macroActionType.HoldKeyMacroAction:
-            case macroActionType.ReleaseKeyMacroAction:
-            case macroActionType.HoldModifiersMacroAction:
-            case macroActionType.PressModifiersMacroAction:
-            case macroActionType.ReleaseModifiersMacroAction:
+            case macroActionType.KeyMacroAction:
                 return TabName.Keypress;
             // Mouse actions
-            case macroActionType.PressMouseButtonsMacroAction:
-            case macroActionType.HoldMouseButtonsMacroAction:
-            case macroActionType.ReleaseMouseButtonsMacroAction:
+            case macroActionType.MouseButtonMacroAction:
             case macroActionType.MoveMouseMacroAction:
             case macroActionType.ScrollMouseMacroAction:
                 return TabName.Mouse;
@@ -111,9 +103,9 @@ export class MacroActionEditorComponent implements OnInit {
         if (tab === TabName.Delay) {
             return macroActionType.DelayMacroAction;
         } else if (tab === TabName.Keypress) {
-            return macroActionType.PressKeyMacroAction;
+            return macroActionType.KeyMacroAction;
         } else if (tab === TabName.Mouse) {
-            return macroActionType.PressMouseButtonsMacroAction;
+            return macroActionType.MouseButtonMacroAction;
         } else if (tab === TabName.Text) {
             return macroActionType.TextMacroAction;
         }
