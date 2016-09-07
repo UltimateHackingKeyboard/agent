@@ -1,5 +1,4 @@
-import {MacroAction, macroActionType} from './MacroAction';
-import {values as _values } from 'lodash';
+import {MacroAction, MacroSubAction, macroActionType} from './MacroAction';
 
 import {KeyAction, keyActionType} from '../key-action/KeyAction';
 import {KeystrokeAction} from '../key-action/KeystrokeAction';
@@ -10,31 +9,35 @@ import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
 import {TextMacroAction} from './TextMacroAction';
 
-const macroActionTypeValues = _values(macroActionType);
-const keyActions = [
-    macroActionType.PressKeyMacroAction,
-    macroActionType.HoldKeyMacroAction,
-    macroActionType.ReleaseKeyMacroAction,
-    macroActionType.HoldModifiersMacroAction,
-    macroActionType.PressModifiersMacroAction,
-    macroActionType.ReleaseModifiersMacroAction
-];
-const mouseButtonActions = [
-    macroActionType.PressMouseButtonsMacroAction,
-    macroActionType.HoldMouseButtonsMacroAction,
-    macroActionType.ReleaseMouseButtonsMacroAction
-];
+const macroActionTypeValues = Object.values(macroActionType);
 
-export class EditableMacroAction extends MacroAction {
+interface JsObjectEditableMacroAction {
     macroActionType: string;
+    action?: string;
+    scancode?: number;
+    modifierMask?: number;
+    mouseButtonsMask?: number;
+    x?: number;
+    y?: number;
+    delay?: number;
+    text?: string;
+}
+
+export class EditableMacroAction {
+    macroActionType: string;
+    action: MacroSubAction;
+    // Key macro action properties
     scancode: number;
     modifierMask: number;
+    // Mouse macro action properties
     mouseButtonsMask: number;
     moveX: number;
     moveY: number;
     scrollX: number;
     scrollY: number;
+    // Delay macro action properties
     delay: number;
+    // Text macro action properties
     text: string;
 
     assertMacroActionType(jsObject: any) {
@@ -44,23 +47,18 @@ export class EditableMacroAction extends MacroAction {
         }
     }
 
-    _fromJsObject(jsObject: any): EditableMacroAction {
+    fromJsObject(jsObject: JsObjectEditableMacroAction): EditableMacroAction {
         this.assertMacroActionType(jsObject);
         this.macroActionType = jsObject.macroActionType;
 
         switch (this.macroActionType) {
-            case macroActionType.PressKeyMacroAction:
-            case macroActionType.HoldKeyMacroAction:
-            case macroActionType.ReleaseKeyMacroAction:
-            case macroActionType.PressModifiersMacroAction:
-            case macroActionType.HoldModifiersMacroAction:
-            case macroActionType.ReleaseModifiersMacroAction:
+            case macroActionType.KeyMacroAction:
+                this.action = MacroSubAction[jsObject.action];
                 this.scancode = jsObject.scancode;
                 this.modifierMask = jsObject.modifierMask;
                 break;
-            case macroActionType.PressMouseButtonsMacroAction:
-            case macroActionType.HoldMouseButtonsMacroAction:
-            case macroActionType.ReleaseMouseButtonsMacroAction:
+            case macroActionType.MouseButtonMacroAction:
+                this.action = MacroSubAction[jsObject.action];
                 this.mouseButtonsMask = jsObject.mouseButtonsMask;
                 break;
             case macroActionType.MoveMouseMacroAction:
@@ -83,9 +81,10 @@ export class EditableMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsObject(): any {
+    toJsObject(): any {
         return {
             macroActionType: this.macroActionType,
+            action: this.action,
             delay: this.delay,
             text: this.text,
             scancode: this.scancode,
@@ -100,15 +99,6 @@ export class EditableMacroAction extends MacroAction {
                 y: this.scrollY
             }
         };
-    }
-
-    _fromBinary(): MacroAction {
-        // Does nothing, just for compatibility with MacroAction
-        return this;
-    }
-
-    _toBinary() {
-        // Does nothing, just for compatibility with MacroAction
     }
 
     fromKeyAction(keyAction: KeyAction) {
@@ -153,24 +143,19 @@ export class EditableMacroAction extends MacroAction {
                     macroActionType: this.macroActionType,
                     text: this.text
                 });
-            // Keypress actions
-            case macroActionType.PressKeyMacroAction:
-            case macroActionType.HoldKeyMacroAction:
-            case macroActionType.ReleaseKeyMacroAction:
-            case macroActionType.HoldModifiersMacroAction:
-            case macroActionType.PressModifiersMacroAction:
-            case macroActionType.ReleaseModifiersMacroAction:
+            // Keypress action
+            case macroActionType.KeyMacroAction:
                 return new KeyMacroAction().fromJsObject({
                     macroActionType: this.macroActionType,
+                    action: MacroSubAction[this.action],
                     scancode: this.scancode,
                     modifierMask: this.modifierMask
                 });
             // Mouse actions
-            case macroActionType.PressMouseButtonsMacroAction:
-            case macroActionType.HoldMouseButtonsMacroAction:
-            case macroActionType.ReleaseMouseButtonsMacroAction:
+            case macroActionType.MouseButtonMacroAction:
                 return new MouseButtonMacroAction().fromJsObject({
                     macroActionType: this.macroActionType,
+                    action: MacroSubAction[this.action],
                     mouseButtonsMask: this.mouseButtonsMask
                 });
             case macroActionType.MoveMouseMacroAction:
@@ -191,15 +176,23 @@ export class EditableMacroAction extends MacroAction {
     }
 
     isKeyAction(): boolean {
-        return keyActions.indexOf(this.macroActionType) !== -1;
+        return this.macroActionType === macroActionType.KeyMacroAction;
     }
 
     isMouseButtonAction(): boolean {
-        return mouseButtonActions.indexOf(this.macroActionType) !== -1;
+        return this.macroActionType === macroActionType.MouseButtonMacroAction;
     }
 
-    getActionId(): number {
-        return -1;
+    isHoldAction(): boolean {
+        return this.action === MacroSubAction.hold;
+    }
+
+    isPressAction(): boolean {
+        return this.action === MacroSubAction.press;
+    }
+
+    isReleaseAction(): boolean {
+        return this.action === MacroSubAction.release;
     }
 
 }
