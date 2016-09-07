@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
 import { KeyAction } from '../../../../../config-serializer/config-items/key-action/KeyAction';
 import { KeypressTabComponent } from '../../../../popover/tab/keypress';
-import { macroActionType } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
+import { MacroSubAction, macroActionType } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
 import { Tab } from '../../../../popover/tab/tab';
 
 enum TabName {
@@ -38,41 +38,33 @@ export class MacroKeyTabComponent implements OnInit {
 
     ngOnInit() {
         this.defaultKeyAction = this.macroAction.toKeyAction();
+        console.log('feee', this.macroAction.action);
         this.selectTab(this.getTabName(this.macroAction));
     }
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
-        this.macroAction.macroActionType = this.getMacroActionType(tab);
+        this.macroAction.action = this.getActionType(tab);
+        console.log('fuu', this.macroAction.action);
     }
 
     getTabName(action: EditableMacroAction) {
-        switch (action.macroActionType) {
-            // Press key
-            case macroActionType.PressKeyMacroAction:
-            case macroActionType.PressModifiersMacroAction:
-                return TabName.Keypress;
-            // Hold key
-            case macroActionType.HoldKeyMacroAction:
-            case macroActionType.HoldModifiersMacroAction:
-                return TabName.Hold;
-            // Release key
-            case macroActionType.ReleaseKeyMacroAction:
-            case macroActionType.ReleaseModifiersMacroAction:
-                return TabName.Release;
-
-            default:
-                return TabName.Keypress;
+        if (!action.action || action.isPressAction())
+            return TabName.Keypress;
+        else if (action.isHoldAction()) {
+            return TabName.Hold;
+        } else if (action.isReleaseAction()) {
+            return TabName.Release;
         }
     }
 
-    getMacroActionType(tab: TabName) {
+    getActionType(tab: TabName) {
         if (tab === TabName.Keypress) {
-            return macroActionType.PressKeyMacroAction;
+            return MacroSubAction.press;
         } else if (tab === TabName.Hold) {
-            return macroActionType.HoldKeyMacroAction;
+            return MacroSubAction.hold;
         } else if (tab === TabName.Release) {
-            return macroActionType.ReleaseKeyMacroAction;
+            return MacroSubAction.release;
         }
     }
 
