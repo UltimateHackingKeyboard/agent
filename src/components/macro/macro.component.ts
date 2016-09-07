@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cloneDeep as _cloneDeep } from 'lodash';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { MacroItemComponent } from './macro-item/macro-item.component';
@@ -68,7 +67,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         const config = this.uhkConfigurationService.getUhkConfiguration();
         const macro: Macro = config.macros.elements.find(item => item.id === id);
         if (macro) {
-            return _cloneDeep(macro);
+            // Clone macro for editing
+            return new Macro().fromJsObject(macro.toJsObject());
         }
         // @todo replace with notification
         throw new Error('Macro not found');
