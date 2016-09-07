@@ -1,36 +1,20 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
-import {MacroAction, macroActionType} from '../../../config-serializer/config-items/macro-action/MacroAction';
+import { MacroAction } from '../../../config-serializer/config-items/macro-action/MacroAction';
 
-import {DelayMacroAction} from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
-import {TextMacroAction} from '../../../config-serializer/config-items/macro-action/TextMacroAction';
+import { DelayMacroAction } from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
+import { TextMacroAction } from '../../../config-serializer/config-items/macro-action/TextMacroAction';
 
-import {MouseButtonMacroAction} from '../../../config-serializer/config-items/macro-action/MouseButtonMacroAction';
-import {MoveMouseMacroAction} from '../../../config-serializer/config-items/macro-action/MoveMouseMacroAction';
-import {ScrollMouseMacroAction} from '../../../config-serializer/config-items/macro-action/ScrollMouseMacroAction';
+import { MouseButtonMacroAction } from '../../../config-serializer/config-items/macro-action/MouseButtonMacroAction';
+import { MoveMouseMacroAction } from '../../../config-serializer/config-items/macro-action/MoveMouseMacroAction';
+import { ScrollMouseMacroAction } from '../../../config-serializer/config-items/macro-action/ScrollMouseMacroAction';
 
-import {KeyMacroAction} from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
+import { KeyMacroAction} from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
 
-import {KeyModifiers}  from '../../../config-serializer/config-items/KeyModifiers';
+import { KeyModifiers }  from '../../../config-serializer/config-items/KeyModifiers';
 
 import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
-
-// Flatten scancodes for easier label retrieval
-// @todo Should this be its own importable file?
-const scancodesJSON = require('json!../../popover/tab/keypress/scancodes.json');
-
-function flattenScancodes(data: any[]) {
-    let output: any[] = [];
-    for (let i = 0, len = data.length; i < len; i++) {
-        const group = data[i];
-        if (group.children.length) {
-            output = output.concat(group.children);
-        }
-    }
-    return output;
-}
-
-const scancodes = flattenScancodes(scancodesJSON);
+import { MapperService } from '../../../services/mapper.service';
 
 @Component({
     selector: 'macro-item',
@@ -55,6 +39,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
     private iconName: string;
     private title: string;
     private editing: boolean = false;
+
+    constructor(private mapper: MapperService) {}
 
     ngOnInit() {
         this.updateView();
@@ -118,38 +104,33 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private setKeyActionContent(action: KeyMacroAction) {
-        if (action.scancode === 0 && !action.modifierMask) {
+        if (!action.hasScancode() && !action.hasModifiers()) {
             this.title = 'Invalid keypress';
             return;
         }
 
-        const actionType = action.macroActionType;
-        if (actionType === macroActionType.PressKeyMacroAction || actionType === macroActionType.PressModifiersMacroAction) {
+        if (action.isPressAction()) {
             // Press key
             this.iconName = 'hand-pointer';
             this.title = 'Press key: ';
-        } else if (actionType === macroActionType.HoldKeyMacroAction || actionType === macroActionType.HoldModifiersMacroAction) {
+        } else if (action.isHoldAction()) {
             // Hold key
             this.iconName = 'hand-rock';
             this.title = 'Hold key: ';
-        } else if (
-            actionType === macroActionType.ReleaseKeyMacroAction ||
-            actionType === macroActionType.ReleaseModifiersMacroAction
-        ) {
+        } else if (action.isReleaseAction()) {
             // Release key
             this.iconName = 'hand-paper';
             this.title = 'Release key: ';
         }
 
-        if (action.scancode) {
-            const scancodeStr = action.scancode.toString();
-            const scancode = scancodes.find(item => item.id === scancodeStr);
+        if (action.hasScancode()) {
+            const scancode: string = this.mapper.scanCodeToText(action.scancode).join(' ');
             if (scancode) {
-                this.title += scancode.text;
+                this.title += scancode;
             }
         }
 
-        if (action.modifierMask) {
+        if (action.hasModifiers()) {
             // Press/hold/release modifiers
             for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
@@ -161,7 +142,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     private setMouseMoveScrollActionContent(action: MacroAction) {
         let typedAction: any;
-        if (action.macroActionType === macroActionType.MoveMouseMacroAction) {
+        if (action instanceof MoveMouseMacroAction) {
+            // Move mouse pointer
             this.iconName = 'mouse-pointer';
             this.title = 'Move pointer';
             typedAction = this.macroAction as MoveMouseMacroAction;
@@ -184,13 +166,13 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     private setMouseButtonActionContent(action: MouseButtonMacroAction) {
         // Press/hold/release mouse buttons
-        if (action.macroActionType === macroActionType.PressMouseButtonsMacroAction) {
+        if (action.isPressAction()) {
             this.iconName = 'mouse-pointer';
             this.title = 'Click mouse button: ';
-        } else if (action.macroActionType === macroActionType.HoldMouseButtonsMacroAction) {
+        } else if (action.isHoldAction()) {
             this.iconName = 'hand-rock';
             this.title = 'Hold mouse button: ';
-        } else if (action.macroActionType === macroActionType.ReleaseMouseButtonsMacroAction) {
+        } else if (action.isReleaseAction()) {
             this.iconName = 'hand-paper';
             this.title = 'Release mouse button: ';
         }
