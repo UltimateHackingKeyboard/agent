@@ -46,7 +46,7 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 
 import { ContenteditableModel } from './components/contenteditable';
-import { Dragula } from 'ng2-dragula/ng2-dragula';
+import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
@@ -90,12 +90,12 @@ import { UhkConfigurationService } from './services/uhk-configuration.service';
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableModel,
-        Dragula
+        ContenteditableModel
     ],
     imports: [
         BrowserModule,
         FormsModule,
+        DragulaModule,
         routing
     ],
     providers: [
