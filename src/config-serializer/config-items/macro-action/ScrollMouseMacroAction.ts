@@ -10,11 +10,6 @@ export class ScrollMouseMacroAction extends MacroAction {
     @assertInt16
     y: number;
 
-    constructor() {
-        super();
-        this.macroActionType = macroActionType.ScrollMouseMacroAction;
-    }
-
     _fromJsObject(jsObject: any): ScrollMouseMacroAction {
         this.assertMacroActionType(jsObject);
         this.x = jsObject.x;
