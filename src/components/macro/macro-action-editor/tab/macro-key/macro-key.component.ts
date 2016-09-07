@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
 import { KeyAction } from '../../../../../config-serializer/config-items/key-action/KeyAction';
 import { KeypressTabComponent } from '../../../../popover/tab/keypress';
-import { MacroSubAction, macroActionType } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
+import { MacroSubAction } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
 import { Tab } from '../../../../popover/tab/tab';
 
 enum TabName {
@@ -49,9 +49,9 @@ export class MacroKeyTabComponent implements OnInit {
     }
 
     getTabName(action: EditableMacroAction) {
-        if (!action.action || action.isPressAction())
+        if (!action.action || action.isPressAction()) {
             return TabName.Keypress;
-        else if (action.isHoldAction()) {
+        } else if (action.isHoldAction()) {
             return TabName.Hold;
         } else if (action.isReleaseAction()) {
             return TabName.Release;
