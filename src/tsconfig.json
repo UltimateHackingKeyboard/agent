@@ -16,8 +16,7 @@
       "node",
       "jquery",
       "core-js",
-      "select2",
-      "lodash"
+      "select2"
     ]
   },
   "exclude": [
