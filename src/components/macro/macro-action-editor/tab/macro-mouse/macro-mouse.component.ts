@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
-import { MacroAction, macroActionType } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
+import { MacroAction, MacroSubAction, macroActionType } from '../../../../../config-serializer/config-items/macro-action/MacroAction';
 import { Tab } from '../../../../popover/tab/tab';
 
 enum TabName {
@@ -50,6 +50,9 @@ export class MacroMouseTabComponent implements OnInit {
     selectTab(tab: TabName): void {
         this.activeTab = tab;
         this.macroAction.macroActionType = this.getMacroActionType(tab);
+        if (this.macroAction.macroActionType === macroActionType.MouseButtonMacroAction) {
+            this.macroAction.action = this.getAction(tab);
+        }
     }
 
     setMouseClick(index: number) {
@@ -61,34 +64,36 @@ export class MacroMouseTabComponent implements OnInit {
         return this.selectedButtons[index];
     }
 
-    getTabName(action: MacroAction) {
-        switch (action.macroActionType) {
-            // Press mouse buttons
-            case macroActionType.PressMouseButtonsMacroAction:
-                return TabName.Click;
-            // Hold mouse buttons
-            case macroActionType.HoldMouseButtonsMacroAction:
-                return TabName.Hold;
-            // Release mouse buttons
-            case macroActionType.ReleaseMouseButtonsMacroAction:
-                return TabName.Release;
-            // Move mouse cursor
-            case macroActionType.MoveMouseMacroAction:
-                return TabName.Move;
-            case macroActionType.ScrollMouseMacroAction:
-                return TabName.Scroll;
-            default:
-                return TabName.Move;
+    getAction(tab: TabName) {
+        if (tab === TabName.Click) {
+            return MacroSubAction.press;
+        } else if (tab === TabName.Hold) {
+            return MacroSubAction.hold;
+        } else if (tab === TabName.Release) {
+            return MacroSubAction.release;
         }
     }
 
+    getTabName(action: EditableMacroAction) {
+        if (action.macroActionType === macroActionType.MouseButtonMacroAction) {
+            if (!action.action || action.isPressAction()) {
+                return TabName.Click;
+            } else if (action.isHoldAction()) {
+                return TabName.Hold;
+            } else if (action.isReleaseAction()) {
+                return TabName.Release;
+            }
+        } else if (action.macroActionType === macroActionType.MoveMouseMacroAction) {
+            return TabName.Move;
+        } else if (action.macroActionType === macroActionType.ScrollMouseMacroAction) {
+            return TabName.Scroll;
+        }
+        return TabName.Move;
+    }
+
     getMacroActionType(tab: TabName) {
-        if (tab === TabName.Click) {
-            return macroActionType.PressMouseButtonsMacroAction;
-        } else if (tab === TabName.Hold) {
-            return macroActionType.HoldMouseButtonsMacroAction;
-        } else if (tab === TabName.Release) {
-            return macroActionType.ReleaseMouseButtonsMacroAction;
+        if (tab === TabName.Click || tab === TabName.Hold || tab === TabName.Release) {
+            return macroActionType.MouseButtonMacroAction;
         } else if (tab === TabName.Move) {
             return macroActionType.MoveMouseMacroAction;
         } else if (tab === TabName.Scroll) {
