@@ -1,106 +1,117 @@
-import {assertUInt8} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
-import { KeystrokeAction } from '../key-action/KeystrokeAction';
-import { KeyAction, keyActionType } from '../key-action/KeyAction';
+import { assertEnum, assertUInt8 } from '../../assert';
+import { UhkBuffer} from '../../UhkBuffer';
 import { KeyModifiers } from '../KeyModifiers';
+import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
+
+const NUM_OF_COMBINATIONS = 3; // Cases: scancode, modifer, both
+
+enum Action {
+    press = 0,
+    hold = 1,
+    release = 2
+}
+
+interface JsObjectKeyMacroAction {
+    macroActionType: string;
+    action: string;
+    scancode?: number;
+    modifierMask?: number;
+}
 
 export class KeyMacroAction extends MacroAction {
+
+    @assertEnum(Action)
+    action: Action;
+
+    @assertUInt8
     scancode: number;
+
     @assertUInt8
     modifierMask: number;
 
-    _fromJsObject(jsObject: any): MacroAction {
+    _fromJsObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
         this.assertMacroActionType(jsObject);
-        this.macroActionType = jsObject.macroActionType;
+        this.action = Action[jsObject.action];
         this.scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): MacroAction {
-        this.readAndAssertMacroActionId(buffer);
-        if (this.isKeyAction()) {
+    _fromBinary(buffer: UhkBuffer): KeyMacroAction {
+        let macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
+        let keyMacroType: number = macroActionId - MacroActionId.KeyMacroAction;
+        this.action = Math.floor(keyMacroType / NUM_OF_COMBINATIONS);
+        keyMacroType %= NUM_OF_COMBINATIONS;
+        if (keyMacroType % 2 === 0) {
             this.scancode = buffer.readUInt8();
-        } else {
+        }
+        if (keyMacroType !== 0) {
             this.modifierMask = buffer.readUInt8();
         }
         return this;
     }
 
     _toJsObject(): any {
-        return {
-            macroActionType: this.macroActionType,
-            scancode: this.scancode,
-            modifierMask: this.modifierMask
+        let jsObject: JsObjectKeyMacroAction = {
+            macroActionType: macroActionType.KeyMacroAction,
+            action: Action[this.action]
         };
+
+        if (this.hasScancode()) {
+            jsObject.scancode = this.scancode;
+        }
+
+        if (this.hasModifiers()) {
+            jsObject.modifierMask = this.modifierMask;
+        }
+
+        return jsObject;
     }
 
     _toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(this.getActionId());
-        const value = this.isKeyAction() ? this.scancode : this.modifierMask;
-        buffer.writeUInt8(value);
-    }
+        let keyMacroType: number = MacroActionId.KeyMacroAction;
+        keyMacroType += NUM_OF_COMBINATIONS * this.action;
 
-    getActionId() {
-        switch (this.macroActionType) {
-            case macroActionType.HoldKeyMacroAction:
-                return MacroActionId.HoldKeyMacroAction;
-
-            case macroActionType.ReleaseKeyMacroAction:
-                return MacroActionId.ReleaseKeyMacroAction;
-
-            case macroActionType.PressModifiersMacroAction:
-                return MacroActionId.PressModifiersMacroAction;
-
-            case macroActionType.HoldModifiersMacroAction:
-                return MacroActionId.HoldModifiersMacroAction;
-
-            case macroActionType.ReleaseModifiersMacroAction:
-                return MacroActionId.ReleaseModifiersMacroAction;
-
-            case macroActionType.PressKeyMacroAction:
-                return MacroActionId.PressKeyMacroAction;
-            default:
-                throw new Error(`Invalid macroActionType "${macroActionType}", cannot get macroActionId`);
+        if (this.hasModifiers()) {
+            ++keyMacroType;
+            if (this.hasScancode()) {
+                ++keyMacroType;
+            }
+        }
+        buffer.writeUInt8(keyMacroType);
+        if (this.hasScancode()) {
+            buffer.writeUInt8(this.scancode);
+        }
+        if (this.hasModifiers()) {
+            buffer.writeUInt8(this.modifierMask);
         }
     }
 
-    isKeyAction(): boolean {
-        const keyActions = [
-            macroActionType.PressKeyMacroAction,
-            macroActionType.HoldKeyMacroAction,
-            macroActionType.ReleaseKeyMacroAction
-        ];
-        return keyActions.indexOf(this.macroActionType) !== -1;
-    }
-
-    isModifierAction(): boolean {
-        const modifierActions = [
-            macroActionType.PressModifiersMacroAction,
-            macroActionType.HoldModifiersMacroAction,
-            macroActionType.ReleaseModifiersMacroAction
-        ];
-        return modifierActions.indexOf(this.macroActionType) !== -1;
+    toString(): string {
+        return `<KeyMacroAction action="${this.action}" scancode="${this.scancode}" modifierMask="${this.modifierMask}">`;
     }
 
     isModifierActive(modifier: KeyModifiers): boolean {
         return (this.modifierMask & modifier) > 0;
     }
 
-    toKeyAction() {
-        let data = this.toJsObject();
-        data.keyActionType = keyActionType.KeystrokeAction;
-        return new KeystrokeAction().fromJsObject(data);
+    hasScancode(): boolean {
+        return !!this.scancode;
     }
 
-    fromKeyAction(keyAction: KeyAction) {
-        let data = keyAction.toJsObject();
-        this.scancode = data.scancode;
-        this.modifierMask = data.modifierMask;
+    hasModifiers(): boolean {
+        return !!this.modifierMask;
     }
 
-    toString(): string {
-        return `<KeyMacroAction scancode="${this.scancode}" modifierMask="${this.modifierMask}">`;
+    isHoldAction(): boolean {
+        return this.action === Action.hold;
+    }
+
+    isPressAction(): boolean {
+        return this.action === Action.press;
+    }
+
+    isReleaseAction(): boolean {
+        return this.action === Action.release;
     }
 }
