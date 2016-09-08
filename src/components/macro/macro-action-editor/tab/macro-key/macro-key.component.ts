@@ -38,14 +38,12 @@ export class MacroKeyTabComponent implements OnInit {
 
     ngOnInit() {
         this.defaultKeyAction = this.macroAction.toKeyAction();
-        console.log('feee', this.macroAction.action);
         this.selectTab(this.getTabName(this.macroAction));
     }
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
         this.macroAction.action = this.getActionType(tab);
-        console.log('fuu', this.macroAction.action);
     }
 
     getTabName(action: EditableMacroAction) {
