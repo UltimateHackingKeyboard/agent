@@ -9,7 +9,7 @@ import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
 import {TextMacroAction} from './TextMacroAction';
 
-const macroActionTypeValues = Object.values(macroActionType);
+const macroActionTypeValues = Object.keys(macroActionType).map(key => macroActionType[key]);
 
 interface JsObjectEditableMacroAction {
     macroActionType: string;
