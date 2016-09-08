@@ -86,7 +86,8 @@ export class MapperService {
         undefined, // 79 Right arrow
         undefined, // 80 Left arrow
         undefined, // 81 Down arrow
-        undefined // 82 Up arrow
+        undefined, // 82 Up arrow
+        ['Num Lock'] // 83
     ];
 
     private scanCodeFileName: Map<number, string>;
