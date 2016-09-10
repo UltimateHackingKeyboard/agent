@@ -52,7 +52,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-       this.macroItemsSub = this.macroItems.changes.subscribe((data: any) => {
+       this.macroItemsSub = this.macroItems.changes.subscribe((data: QueryList<MacroItemComponent>) => {
            if (this.addedNewAction) {
                // Open editor for newly added action
                // Rather cludge way to do this, basically macroItems have to be updated before the editor can be opened
