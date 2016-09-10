@@ -23,7 +23,6 @@ export class MacroComponent implements OnInit, OnDestroy {
     private macro: Macro;
 
     private routeSubscription: Subscription;
-    private addedNewAction: boolean = false;
     private hasChanges: boolean = false;
     private dragEnabled: boolean;
 
@@ -68,7 +67,6 @@ export class MacroComponent implements OnInit, OnDestroy {
     addAction() {
         this.hideOtherActionEditors(this.macro.macroActions.elements.length);
         this.macro.macroActions.elements.push(undefined);
-        this.addedNewAction = true;
     }
 
     discardChanges() {
