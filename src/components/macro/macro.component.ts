@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { TextMacroAction } from '../../config-serializer/config-items/macro-action/TextMacroAction';
+import { MacroAction } from '../../config-serializer/config-items/macro-action';
 import { MacroItemComponent } from './macro-item/macro-item.component';
 
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
@@ -17,13 +17,12 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
     styles: [require('./macro.component.scss')],
     viewProviders: [DragulaService]
 })
-export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MacroComponent implements OnInit, OnDestroy {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>;
 
     private macro: Macro;
 
-    private sub: Subscription;
-    private macroItemsSub: Subscription;
+    private routeSubscription: Subscription;
     private addedNewAction: boolean = false;
     private hasChanges: boolean = false;
     private dragEnabled: boolean;
@@ -43,28 +42,12 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe((params: {id: string}) => {
+        this.routeSubscription = this.route.params.subscribe((params: { id: string }) => {
             const id: number = Number(params.id);
             this.macro = this.getMacro(id);
             this.dragEnabled = true;
             this.hasChanges = false;
-       });
-    }
-
-    ngAfterViewInit() {
-       this.macroItemsSub = this.macroItems.changes.subscribe((data: QueryList<MacroItemComponent>) => {
-           if (this.addedNewAction) {
-               // Open editor for newly added action
-               // Rather cludge way to do this, basically macroItems have to be updated before the editor can be opened
-               setTimeout(() => {
-                   let newAction = data.last;
-                   newAction.title = 'New macro action';
-                   newAction.actionEditor.toggleEnabled(true);
-                   this.hideOtherActionEditors(data.length - 1);
-                   this.addedNewAction = false;
-               });
-           }
-       });
+        });
     }
 
     getMacro(id: number) {
@@ -83,9 +66,8 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     addAction() {
-        const newAction = new TextMacroAction();
-        newAction.text = '';
-        this.macro.macroActions.elements.push(newAction);
+        this.hideOtherActionEditors(this.macro.macroActions.elements.length);
+        this.macro.macroActions.elements.push(undefined);
         this.addedNewAction = true;
     }
 
@@ -98,7 +80,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     hideOtherActionEditors(index: number) {
         this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
             if (idx !== index) {
-                macroItem.actionEditor.toggleEnabled(false);
+                macroItem.cancelEdit();
             }
         });
     }
@@ -114,12 +96,13 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onCancelEditAction() {
-      this.dragEnabled = true;
+        this.dragEnabled = true;
     }
 
-    onSaveAction() {
-      this.dragEnabled = true;
-      this.hasChanges = true;
+    onSaveAction(macroAction: MacroAction, index: number) {
+        this.dragEnabled = true;
+        this.hasChanges = true;
+        this.macro.macroActions.elements[index] = macroAction;
     }
 
     onDeleteAction(index: number) {
@@ -129,8 +112,7 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
-        this.macroItemsSub.unsubscribe();
+        this.routeSubscription.unsubscribe();
     }
 
 }

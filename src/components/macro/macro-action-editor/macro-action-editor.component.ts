@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
-import {EditableMacroAction} from '../../../config-serializer/config-items/macro-action/EditableMacroAction';
-import {MacroAction, macroActionType} from '../../../config-serializer/config-items/macro-action/MacroAction';
-import {MacroKeyTabComponent} from './tab/macro-key';
+import { MacroAction, TextMacroAction, macroActionType } from '../../../config-serializer/config-items/macro-action';
+import { EditableMacroAction } from '../../../config-serializer/config-items/macro-action/EditableMacroAction';
+import { MacroKeyTabComponent } from './tab/macro-key';
 
 enum TabName {
     Keypress,
@@ -14,10 +14,10 @@ enum TabName {
 @Component({
     selector: 'macro-action-editor',
     template: require('./macro-action-editor.component.html'),
-    styles: [ require('./macro-action-editor.component.scss') ],
+    styles: [require('./macro-action-editor.component.scss')],
     host: { 'class': 'macro-action-editor' }
 })
-export class MacroActionEditorComponent {
+export class MacroActionEditorComponent implements OnInit {
     @Input() macroAction: MacroAction;
 
     @Output() save = new EventEmitter<MacroAction>();
@@ -25,7 +25,6 @@ export class MacroActionEditorComponent {
 
     @ViewChild('tab') selectedTab: any;
 
-    public enabled: boolean;
     private editableMacroAction: EditableMacroAction;
     private activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
@@ -34,31 +33,26 @@ export class MacroActionEditorComponent {
     /* tslint:enable:no-unused-variable */
     /* tslint:enable:variable-name */
 
-    toggleEnabled(state: boolean) {
-        this.enabled = state;
-        if (this.enabled) {
-            // Make an editable clone of macro action so original isn't changed
-            this.editableMacroAction = new EditableMacroAction().fromJsObject(this.macroAction.toJsObject());
-            let tab: TabName = this.getTabName(this.editableMacroAction);
-            this.activeTab = tab;
-        }
+    ngOnInit() {
+        let macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
+        this.editableMacroAction = new EditableMacroAction(macroAction.toJsObject());
+        let tab: TabName = this.getTabName(this.editableMacroAction);
+        this.activeTab = tab;
     }
 
     onCancelClick(): void {
-        this.enabled = false;
         this.cancel.emit();
     }
 
     onSaveClick(): void {
         try {
-            const action = this.editableMacroAction as EditableMacroAction;
+            const action = this.editableMacroAction;
             if (action.isKeyAction()) {
                 // Could updating the saved keys be done in a better way?
                 const tab = this.selectedTab as MacroKeyTabComponent;
                 action.fromKeyAction(tab.getKeyAction());
             }
             this.save.emit(action.toClass());
-            this.enabled = false;
         } catch (e) {
             // TODO: show error dialog
             console.error(e);

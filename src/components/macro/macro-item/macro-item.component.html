@@ -7,7 +7,7 @@
 </div>
 <macro-action-editor 
     #macroActionEditor
-    *ngIf="editable" 
+    *ngIf="editable && editing"
     [macroAction]="macroAction"
     (cancel)="cancelEdit()"
     (save)="saveEditedAction($event)"></macro-action-editor>
