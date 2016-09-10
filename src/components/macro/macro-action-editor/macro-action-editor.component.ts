@@ -17,7 +17,7 @@ enum TabName {
     styles: [ require('./macro-action-editor.component.scss') ],
     host: { 'class': 'macro-action-editor' }
 })
-export class MacroActionEditorComponent implements OnInit {
+export class MacroActionEditorComponent {
     @Input() macroAction: MacroAction;
 
     @Output() save = new EventEmitter<MacroAction>();
@@ -33,13 +33,6 @@ export class MacroActionEditorComponent implements OnInit {
     private TabName = TabName;
     /* tslint:enable:no-unused-variable */
     /* tslint:enable:variable-name */
-
-    constructor() {
-    }
-
-    ngOnInit() {
-
-    }
 
     toggleEnabled(state: boolean) {
         this.enabled = state;
