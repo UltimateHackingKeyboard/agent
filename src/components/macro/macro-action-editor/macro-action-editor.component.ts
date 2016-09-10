@@ -25,7 +25,7 @@ export class MacroActionEditorComponent {
 
     @ViewChild('tab') selectedTab: any;
 
-    public enabled: boolean; // Can be controlled from MacroComponent via local variable interaction (#macroPopover)
+    public enabled: boolean;
     private editableMacroAction: EditableMacroAction;
     private activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
