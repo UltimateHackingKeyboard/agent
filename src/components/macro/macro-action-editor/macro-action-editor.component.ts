@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import {EditableMacroAction} from '../../../config-serializer/config-items/macro-action/EditableMacroAction';
 import {MacroAction, macroActionType} from '../../../config-serializer/config-items/macro-action/MacroAction';
