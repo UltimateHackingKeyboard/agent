@@ -44,8 +44,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.updateView();
     }
 
-    ngOnChanges(changes: any) {
-        if (changes.macroAction) {
+    ngOnChanges(changes: SimpleChanges) {
+         /* tslint:disable:no-string-literal */
+        if (changes['macroAction']) {
+        /* tslint:enable:no-string-literal */
             this.updateView();
         }
     }
