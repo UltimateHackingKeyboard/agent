@@ -1,15 +1,12 @@
-
-import {KeyAction, keyActionType} from '../key-action/KeyAction';
-import {KeystrokeAction} from '../key-action/KeystrokeAction';
-import {DelayMacroAction} from './DelayMacroAction';
-import {KeyMacroAction} from './KeyMacroAction';
-import {MacroAction, MacroSubAction, macroActionType} from './MacroAction';
-import {MouseButtonMacroAction} from './MouseButtonMacroAction';
-import {MoveMouseMacroAction} from './MoveMouseMacroAction';
-import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
-import {TextMacroAction} from './TextMacroAction';
-
-const macroActionTypeValues = Object.keys(macroActionType).map(key => macroActionType[key]);
+import { KeyAction, keyActionType } from '../key-action/KeyAction';
+import { KeystrokeAction } from '../key-action/KeystrokeAction';
+import { DelayMacroAction } from './DelayMacroAction';
+import { KeyMacroAction } from './KeyMacroAction';
+import { MacroAction, MacroSubAction, macroActionType } from './MacroAction';
+import { MouseButtonMacroAction } from './MouseButtonMacroAction';
+import { MoveMouseMacroAction } from './MoveMouseMacroAction';
+import { ScrollMouseMacroAction } from './ScrollMouseMacroAction';
+import { TextMacroAction } from './TextMacroAction';
 
 interface JsObjectEditableMacroAction {
     macroActionType: string;
@@ -40,15 +37,11 @@ export class EditableMacroAction {
     // Text macro action properties
     text: string;
 
-    assertMacroActionType(jsObject: JsObjectEditableMacroAction) {
-        if (!macroActionTypeValues.includes(jsObject.macroActionType)) {
-            const classname: string = this.constructor.name;
-            throw `Invalid ${classname}.macroActionType: ${jsObject.macroActionType}`;
+    constructor(jsObject?: JsObjectEditableMacroAction) {
+        if (!jsObject) {
+            return;
         }
-    }
 
-    fromJsObject(jsObject: JsObjectEditableMacroAction): EditableMacroAction {
-        this.assertMacroActionType(jsObject);
         this.macroActionType = jsObject.macroActionType;
 
         switch (this.macroActionType) {
@@ -78,7 +71,6 @@ export class EditableMacroAction {
             default:
                 break;
         }
-        return this;
     }
 
     toJsObject(): any {
@@ -107,10 +99,10 @@ export class EditableMacroAction {
         this.modifierMask = data.modifierMask;
     }
 
-    toKeyAction() {
+    toKeyAction(): KeystrokeAction {
         let data = this.toJsObject();
         data.keyActionType = keyActionType.KeystrokeAction;
-        return new KeystrokeAction().fromJsObject(data);
+        return <KeystrokeAction>(new KeystrokeAction().fromJsObject(data));
     }
 
     setMouseButtons(buttonStates: boolean[]) {

@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
-import { KeyModifiers }  from '../../../config-serializer/config-items/KeyModifiers';
+import { KeyModifiers } from '../../../config-serializer/config-items/KeyModifiers';
 import { DelayMacroAction } from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
-import { KeyMacroAction} from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
+import { KeyMacroAction } from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
 import { MacroAction } from '../../../config-serializer/config-items/macro-action/MacroAction';
 
 import { MouseButtonMacroAction } from '../../../config-serializer/config-items/macro-action/MouseButtonMacroAction';
@@ -11,7 +11,6 @@ import { ScrollMouseMacroAction } from '../../../config-serializer/config-items/
 import { TextMacroAction } from '../../../config-serializer/config-items/macro-action/TextMacroAction';
 
 import { MapperService } from '../../../services/mapper.service';
-import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
 
 @Component({
     selector: 'macro-item',
@@ -26,22 +25,22 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() deletable: boolean;
     @Input() moveable: boolean;
 
-    @Output() save = new EventEmitter<void>();
+    @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
     @Output() edit = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
 
-    @ViewChild('macroActionEditor') actionEditor: MacroActionEditorComponent;
-
-    title: string;
-
+    private title: string;
     private iconName: string;
-    private editing: boolean = false;
+    private editing: boolean;
 
-    constructor(private mapper: MapperService) {}
+    constructor(private mapper: MapperService) { }
 
     ngOnInit() {
         this.updateView();
+        if (!this.macroAction) {
+            this.editing = true;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -58,11 +57,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.macroAction = editedAction;
         this.editing = false;
         this.updateView();
-        this.save.emit();
+        this.save.emit(editedAction);
     }
 
     editAction() {
-        this.actionEditor.toggleEnabled(true);
         this.editing = true;
         this.edit.emit();
     }
@@ -77,9 +75,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private updateView(): void {
-        this.title = this.macroAction.constructor.name;
 
-        if (this.macroAction instanceof DelayMacroAction) {
+        if (!this.macroAction) {
+            this.title = 'New macro action';
+        } else if (this.macroAction instanceof DelayMacroAction) {
             // Delay
             this.iconName = 'clock';
             let action: DelayMacroAction = this.macroAction as DelayMacroAction;
@@ -98,7 +97,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
             this.setMouseButtonActionContent(action);
         } else if (this.macroAction instanceof MoveMouseMacroAction || this.macroAction instanceof ScrollMouseMacroAction) {
             // Mouse moved or scrolled
-           this.setMouseMoveScrollActionContent(this.macroAction);
+            this.setMouseMoveScrollActionContent(this.macroAction);
+        } else {
+            this.title = this.macroAction.constructor.name;
         }
         // TODO: finish for all MacroAction
     }

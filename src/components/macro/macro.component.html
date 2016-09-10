@@ -20,7 +20,7 @@
                         [editable]="true"
                         [deletable]="true"
                         [moveable]="dragEnabled"
-                        (save)="onSaveAction()"
+                        (save)="onSaveAction($event, index)"
                         (edit)="onEditAction(macroActionIndex)"
                         (cancel)="onCancelEditAction()"
                         (delete)="onDeleteAction(macroActionIndex)"></macro-item>
