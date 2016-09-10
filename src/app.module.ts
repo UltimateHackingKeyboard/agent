@@ -5,7 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Component } from 'ng2-select2/ng2-select2';
 
-import { ContenteditableModel } from './components/contenteditable';
+import { ContenteditableDirective } from './directives/contenteditable';
+
 import { KeymapAddComponent, KeymapComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import { LegacyLoaderComponent } from './components/legacy-loader';
@@ -88,7 +89,7 @@ import { UhkConfigurationService } from './services/uhk-configuration.service';
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableModel
+        ContenteditableDirective
     ],
     imports: [
         BrowserModule,

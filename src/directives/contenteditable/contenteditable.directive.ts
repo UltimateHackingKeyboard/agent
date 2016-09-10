@@ -9,7 +9,7 @@ const KEY_ENTER = 13;
     '(keypress)': 'onKeypress($event)'
   }
 })
-export class ContenteditableModel implements OnChanges {
+export class ContenteditableDirective implements OnChanges {
   @Input('contenteditableModel') model: any;
   @Input('contenteditableUpdateOnEnter') updateOnEnter: boolean;
   @Output('contenteditableModelChange') update = new EventEmitter();
