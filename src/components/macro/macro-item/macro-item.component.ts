@@ -33,8 +33,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     @ViewChild('macroActionEditor') actionEditor: MacroActionEditorComponent;
 
+    title: string;
+
     private iconName: string;
-    private title: string;
     private editing: boolean = false;
 
     constructor(private mapper: MapperService) {}
