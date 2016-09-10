@@ -1,4 +1,4 @@
-import {Directive, ElementRef, EventEmitter, Input, OnChanges, Output, Renderer } from '@angular/core';
+import {Directive, ElementRef, EventEmitter, Input, OnChanges, Output, Renderer, SimpleChanges } from '@angular/core';
 
 const KEY_ENTER = 13;
 
@@ -18,7 +18,7 @@ export class ContenteditableModel implements OnChanges {
 
   constructor(private elRef: ElementRef, private renderer: Renderer) {}
 
-  ngOnChanges(changes: any) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes[this.lastViewModel]) {
       this.lastViewModel = this.model;
       this.refreshView();
