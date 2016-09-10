@@ -1,9 +1,9 @@
-import {MacroAction, MacroSubAction, macroActionType} from './MacroAction';
 
 import {KeyAction, keyActionType} from '../key-action/KeyAction';
 import {KeystrokeAction} from '../key-action/KeystrokeAction';
-import {KeyMacroAction} from './KeyMacroAction';
 import {DelayMacroAction} from './DelayMacroAction';
+import {KeyMacroAction} from './KeyMacroAction';
+import {MacroAction, MacroSubAction, macroActionType} from './MacroAction';
 import {MouseButtonMacroAction} from './MouseButtonMacroAction';
 import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';

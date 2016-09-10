@@ -1,20 +1,18 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
-import { MacroAction } from '../../../config-serializer/config-items/macro-action/MacroAction';
-
+import { KeyModifiers }  from '../../../config-serializer/config-items/KeyModifiers';
 import { DelayMacroAction } from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
-import { TextMacroAction } from '../../../config-serializer/config-items/macro-action/TextMacroAction';
+import { KeyMacroAction} from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
+import { MacroAction } from '../../../config-serializer/config-items/macro-action/MacroAction';
 
 import { MouseButtonMacroAction } from '../../../config-serializer/config-items/macro-action/MouseButtonMacroAction';
 import { MoveMouseMacroAction } from '../../../config-serializer/config-items/macro-action/MoveMouseMacroAction';
 import { ScrollMouseMacroAction } from '../../../config-serializer/config-items/macro-action/ScrollMouseMacroAction';
+import { TextMacroAction } from '../../../config-serializer/config-items/macro-action/TextMacroAction';
 
-import { KeyMacroAction} from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
-
-import { KeyModifiers }  from '../../../config-serializer/config-items/KeyModifiers';
-
-import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
 import { MapperService } from '../../../services/mapper.service';
+import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
+
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'macro-item',

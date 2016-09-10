@@ -1,23 +1,22 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Component } from 'ng2-select2/ng2-select2';
+
+import { ContenteditableModel } from './components/contenteditable';
+import { KeymapAddComponent, KeymapComponent } from './components/keymap';
+import { LayersComponent } from './components/layers';
+import { LegacyLoaderComponent } from './components/legacy-loader';
 import {
-    MacroComponent,
-    MacroItemComponent,
     MacroActionEditorComponent,
+    MacroComponent,
     MacroDelayTabComponent,
+    MacroItemComponent,
     MacroKeyTabComponent,
     MacroMouseTabComponent,
     MacroTextTabComponent
 } from './components/macro';
-
-import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
-
-import { KeymapAddComponent, KeymapComponent } from './components/keymap';
-import { LayersComponent } from './components/layers';
-import { LegacyLoaderComponent } from './components/legacy-loader';
 import { NotificationComponent } from './components/notification';
 import { PopoverComponent } from './components/popover';
 import {
@@ -44,10 +43,7 @@ import {
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
-
-import { ContenteditableModel } from './components/contenteditable';
-import { DragulaModule } from 'ng2-dragula/ng2-dragula';
-
+import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';

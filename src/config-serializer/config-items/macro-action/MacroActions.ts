@@ -3,8 +3,8 @@ import {UhkBuffer} from '../../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
 import {KeyMacroAction} from './KeyMacroAction';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
-import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {MouseButtonMacroAction} from './MouseButtonMacroAction';
+import {MoveMouseMacroAction} from './MoveMouseMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
 import {TextMacroAction} from './TextMacroAction';
 
