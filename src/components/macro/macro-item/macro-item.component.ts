@@ -1,3 +1,4 @@
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 import { KeyModifiers }  from '../../../config-serializer/config-items/KeyModifiers';
 import { DelayMacroAction } from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
@@ -11,8 +12,6 @@ import { TextMacroAction } from '../../../config-serializer/config-items/macro-a
 
 import { MapperService } from '../../../services/mapper.service';
 import { MacroActionEditorComponent } from '../macro-action-editor/macro-action-editor.component';
-
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'macro-item',
