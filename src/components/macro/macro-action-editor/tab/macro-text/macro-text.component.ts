@@ -1,13 +1,13 @@
-import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
 import {
     AfterViewInit,
     Component,
     ElementRef,
     Input,
-    OnInit,
     Renderer,
     ViewChild
 } from '@angular/core';
+
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
 
 @Component({
     selector: 'macro-text-tab',
@@ -15,13 +15,11 @@ import {
     styles: [require('./macro-text.component.scss')],
     host: { 'class': 'macro__text' }
 })
-export class MacroTextTabComponent implements OnInit, AfterViewInit {
+export class MacroTextTabComponent implements AfterViewInit {
     @Input() macroAction: EditableMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
     constructor(private renderer: Renderer) {}
-
-    ngOnInit() {}
 
     ngAfterViewInit() {
         this.renderer.invokeElementMethod(this.input.nativeElement, 'focus');
