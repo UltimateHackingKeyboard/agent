@@ -40,8 +40,8 @@ export class EditableMacroAction {
     // Text macro action properties
     text: string;
 
-    assertMacroActionType(jsObject: any) {
-        if (macroActionTypeValues.indexOf(jsObject.macroActionType) === -1) {
+    assertMacroActionType(jsObject: JsObjectEditableMacroAction) {
+        if (!macroActionTypeValues.includes(jsObject.macroActionType)) {
             const classname: string = this.constructor.name;
             throw `Invalid ${classname}.macroActionType: ${jsObject.macroActionType}`;
         }
