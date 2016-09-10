@@ -36,14 +36,14 @@ export class MacroComponent implements OnInit, OnDestroy, AfterViewInit {
         /* tslint:disable:no-unused-variable: Used by Dragula. */
         dragulaService.setOptions('macroActions', {
             moves: function (el: any, container: any, handle: any) {
-                return handle.className.indexOf('action--movable') !== -1;
+                return handle.className.includes('action--movable');
             }
         });
         /* tslint:enable:no-unused-variable */
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe((params: any) => {
+        this.sub = this.route.params.subscribe((params: {id: string}) => {
             const id: number = Number(params.id);
             this.macro = this.getMacro(id);
             this.dragEnabled = true;
