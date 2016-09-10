@@ -43,7 +43,7 @@ export class MacroMouseTabComponent implements OnInit {
         const tabName = this.getTabName(this.macroAction);
         this.selectTab(tabName);
         const buttonActions = [TabName.Click, TabName.Hold, TabName.Release];
-        if (buttonActions.indexOf(this.activeTab) !== -1) {
+        if (buttonActions.includes(this.activeTab)) {
             this.selectedButtons = this.macroAction.getMouseButtons();
         }
     }
