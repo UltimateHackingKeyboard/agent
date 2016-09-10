@@ -166,13 +166,13 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     private setMouseButtonActionContent(action: MouseButtonMacroAction) {
         // Press/hold/release mouse buttons
-        if (action.isPressAction()) {
+        if (action.isOnlyPressAction()) {
             this.iconName = 'mouse-pointer';
             this.title = 'Click mouse button: ';
-        } else if (action.isHoldAction()) {
+        } else if (action.isOnlyHoldAction()) {
             this.iconName = 'hand-rock';
             this.title = 'Hold mouse button: ';
-        } else if (action.isReleaseAction()) {
+        } else if (action.isOnlyReleaseAction()) {
             this.iconName = 'hand-paper';
             this.title = 'Release mouse button: ';
         }
