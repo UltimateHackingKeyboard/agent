@@ -77,11 +77,11 @@ export class MacroMouseTabComponent implements OnInit {
 
     getTabName(action: EditableMacroAction) {
         if (action.macroActionType === macroActionType.MouseButtonMacroAction) {
-            if (!action.action || action.isPressAction()) {
+            if (!action.action || action.isOnlyPressAction()) {
                 return TabName.Click;
-            } else if (action.isHoldAction()) {
+            } else if (action.isOnlyPressAction()) {
                 return TabName.Hold;
-            } else if (action.isReleaseAction()) {
+            } else if (action.isOnlyReleaseAction()) {
                 return TabName.Release;
             }
         } else if (action.macroActionType === macroActionType.MoveMouseMacroAction) {

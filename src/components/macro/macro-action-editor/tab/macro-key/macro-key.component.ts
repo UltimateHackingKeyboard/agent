@@ -46,11 +46,11 @@ export class MacroKeyTabComponent implements OnInit {
     }
 
     getTabName(action: EditableMacroAction) {
-        if (!action.action || action.isPressAction()) {
+        if (!action.action || action.isOnlyPressAction()) {
             return TabName.Keypress;
-        } else if (action.isHoldAction()) {
+        } else if (action.isOnlyHoldAction()) {
             return TabName.Hold;
-        } else if (action.isReleaseAction()) {
+        } else if (action.isOnlyReleaseAction()) {
             return TabName.Release;
         }
     }
