@@ -61,7 +61,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.save.emit(editedAction);
     }
 
-    editAction() {
+    editAction(): void {
+        if (!this.editable) {
+            return;
+        }
         this.editing = true;
         this.edit.emit();
     }
