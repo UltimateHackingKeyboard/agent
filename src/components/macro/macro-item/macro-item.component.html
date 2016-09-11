@@ -5,9 +5,11 @@
   <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
   <icon *ngIf="editable" name="pencil" (click)="editAction()"></icon>
 </div>
-<macro-action-editor 
-    #macroActionEditor
-    *ngIf="editable && editing"
-    [macroAction]="macroAction"
-    (cancel)="cancelEdit()"
-    (save)="saveEditedAction($event)"></macro-action-editor>
+<div class="list-group-item macro-action-editor__container" *ngIf="editable && editing">
+  <macro-action-editor 
+      #macroActionEditor
+      *ngIf="editable && editing"
+      [macroAction]="macroAction"
+      (cancel)="cancelEdit()"
+      (save)="saveEditedAction($event)"></macro-action-editor>
+</div>

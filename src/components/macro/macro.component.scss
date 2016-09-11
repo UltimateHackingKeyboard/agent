@@ -57,6 +57,15 @@ h1 {
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
 }
 
+.macro-actions-container {
+    overflow: auto;
+    max-height: 85vh;
+    margin-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #ddd;
+    border-bottom: 0;
+}
+
 .list-group-item .move-handle:hover {
     cursor: move;
 }
@@ -70,7 +79,14 @@ h1 {
     align-self: flex-end;
 }
 
+.add-new__action-container {
+    border-top: 1px solid #ddd;
+}
+
 .add-new__action-item {
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+
     &:hover {
         cursor: pointer;
     }

@@ -2,7 +2,7 @@
     <b> Play macro: </b>
     <select2 [data]="macroOptions" [value]="macroOptions[selectedMacroIndex + 1].id" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
 </div>
-<div class="macro-action-container">
+<div class="macro-action-container" [class.inactive]="selectedMacroIndex === -1">
     <template [ngIf]="selectedMacroIndex >= 0">
       <div class="list-group"> 
         <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions.elements"

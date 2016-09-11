@@ -5,11 +5,18 @@
         }
     }
 
+    &.macro-item:last-of-type {
+        .list-group-item {
+            border-bottom: 0;
+        }
+    }
+
     .action {
         &--item {
             display: flex;
             flex-shrink: 0;
-            border-bottom: 0;
+            border: 0;
+            border-bottom: 1px solid #ddd;
 
             icon {
                 margin: 0 5px;
@@ -34,5 +41,13 @@
                 cursor: move;
             }
         }
+    }
+
+    .macro-action-editor__container {
+        padding-top: 0;
+        padding-bottom: 0;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
     }
 }

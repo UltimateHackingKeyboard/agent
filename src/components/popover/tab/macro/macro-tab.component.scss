@@ -25,11 +25,16 @@
         margin: 20px 0;
         overflow-x: hidden;
         overflow-y: auto;
+        border-radius: 4px;
+        border: 1px solid #ddd;
 
-        .macro-item:last-of-type {
-            display: block;
-            border-radius: 0 0 4px 4px;
-            border-bottom: 1px solid #ddd;
+        &.inactive {
+            border: 0;
+        }
+
+        .list-group {
+            margin-bottom: 0;
+            border: 0;
         }
     }
 }

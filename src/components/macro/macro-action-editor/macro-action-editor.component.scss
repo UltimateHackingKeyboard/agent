@@ -2,7 +2,7 @@
     padding-top: 0;
     padding-bottom: 0;
     border-radius: 0;
-    border-bottom: 0;
+    border: 0;
 }
 
 .nav {
@@ -54,7 +54,7 @@
     }
 
     &__tabs {
-        border-left: 1px solid #ccc;
+        border-left: 1px solid #ddd;
         margin-left: -1.6rem;
         padding-left: 3rem;
     }
@@ -64,7 +64,7 @@
 
         &-container {
             background: #f5f5f5;
-            border-top: 1px solid #ccc;
+            border-top: 1px solid #ddd;
             padding: 1rem 1.5rem;
         }
     }
