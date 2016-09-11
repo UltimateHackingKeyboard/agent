@@ -4,8 +4,10 @@
 </div>
 <div class="macro-action-container">
     <template [ngIf]="selectedMacroIndex >= 0">
+      <div class="list-group"> 
         <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions.elements"
                     [macroAction]="macroAction">
         </macro-item>
+      </div>
     </template>
 </div>

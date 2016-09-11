@@ -25,5 +25,11 @@
         margin: 20px 0;
         overflow-x: hidden;
         overflow-y: auto;
+
+        .macro-item:last-of-type {
+            display: block;
+            border-radius: 0 0 4px 4px;
+            border-bottom: 1px solid #ddd;
+        }
     }
 }
