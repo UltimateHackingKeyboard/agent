@@ -52,7 +52,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
     }
 
-    saveEditedAction(editedAction: MacroAction) {
+    saveEditedAction(editedAction: MacroAction): void {
         // @todo save this to keyboard
         console.log('Saved action', editedAction);
         this.macroAction = editedAction;
@@ -69,17 +69,16 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.edit.emit();
     }
 
-    cancelEdit() {
+    cancelEdit(): void {
         this.editing = false;
         this.cancel.emit();
     }
 
-    deleteAction() {
+    deleteAction(): void {
         this.delete.emit();
     }
 
     private updateView(): void {
-
         if (!this.macroAction) {
             this.title = 'New macro action';
         } else if (this.macroAction instanceof DelayMacroAction) {
@@ -109,7 +108,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
     }
 
-    private setKeyActionContent(action: KeyMacroAction) {
+    private setKeyActionContent(action: KeyMacroAction): void {
         if (!action.hasScancode() && !action.hasModifiers()) {
             this.title = 'Invalid keypress';
             return;
@@ -146,7 +145,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
     }
 
-    private setMouseMoveScrollActionContent(action: MacroAction) {
+    private setMouseMoveScrollActionContent(action: MacroAction): void {
         let typedAction: any;
         if (action instanceof MoveMouseMacroAction) {
             // Move mouse pointer
@@ -170,7 +169,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
     }
 
-    private setMouseButtonActionContent(action: MouseButtonMacroAction) {
+    private setMouseButtonActionContent(action: MouseButtonMacroAction): void {
         // Press/hold/release mouse buttons
         if (action.isOnlyPressAction()) {
             this.iconName = 'mouse-pointer';
