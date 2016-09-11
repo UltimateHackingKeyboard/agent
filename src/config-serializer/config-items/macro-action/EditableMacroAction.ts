@@ -92,19 +92,19 @@ export class EditableMacroAction {
         };
     }
 
-    fromKeyAction(keyAction: KeyAction) {
+    fromKeyAction(keyAction: KeyAction): void {
         let data = keyAction.toJsObject();
         this.scancode = data.scancode;
         this.modifierMask = data.modifierMask;
     }
 
-    toKeyAction(): KeystrokeAction {
+    toKeystrokeAction(): KeystrokeAction {
         let data = this.toJsObject();
         data.keyActionType = keyActionType.KeystrokeAction;
         return <KeystrokeAction>(new KeystrokeAction().fromJsObject(data));
     }
 
-    setMouseButtons(buttonStates: boolean[]) {
+    setMouseButtons(buttonStates: boolean[]): void {
         let bitmask = 0;
         for (let i = 0; i < buttonStates.length; i++) {
             bitmask |= Number(buttonStates[i]) << i;
@@ -112,7 +112,7 @@ export class EditableMacroAction {
         this.mouseButtonsMask = bitmask;
     }
 
-    getMouseButtons() {
+    getMouseButtons(): boolean[] {
         let enabledMouseButtons: boolean[] = [];
         for (let bitmask = this.mouseButtonsMask; bitmask; bitmask >>>= 1) {
             enabledMouseButtons.push(Boolean(bitmask & 1));

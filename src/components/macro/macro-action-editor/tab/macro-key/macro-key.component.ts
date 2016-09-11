@@ -35,7 +35,7 @@ export class MacroKeyTabComponent implements OnInit {
     /* tslint:enable:variable-name */
 
     ngOnInit() {
-        this.defaultKeyAction = this.macroAction.toKeyAction();
+        this.defaultKeyAction = this.macroAction.toKeystrokeAction();
         this.selectTab(this.getTabName(this.macroAction));
     }
 
