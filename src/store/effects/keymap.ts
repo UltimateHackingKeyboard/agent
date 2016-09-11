@@ -14,6 +14,15 @@ export class KeymapEffects {
             // // router.navigate(['/keymap']);
         });
 
+    @Effect() editAbbr$: any = this.actions$
+        .ofType(KeymapActions.EDIT_ABBR)
+        .map<string>(action => action.payload.abbr)
+        .map((id: string) => {
+            console.log(id);
+            // Waiting for the fix: https://github.com/angular/angular/issues/10770
+            // // router.navigate(['/keymap', id]);
+        });
+
     constructor(
         private actions$: Actions
     ) {}

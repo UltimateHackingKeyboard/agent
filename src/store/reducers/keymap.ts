@@ -25,6 +25,38 @@ export default function(state = initialState, action: Action): Keymap[] {
 
             return [...state, newKeymap];
 
+        case KeymapActions.EDIT_TITLE:
+            id = action.payload.id;
+            let title: string = action.payload.title;
+
+            return Object.values(
+                Object.assign({}, state.map(
+                    (keymap: Keymap) => {
+                        if (keymap.abbreviation === id) {
+                            keymap.name = title;
+                        }
+
+                        return keymap;
+                    }))
+            );
+
+        case KeymapActions.EDIT_ABBR:
+            id = action.payload.id;
+            let abbr: string = action.payload.abbr;
+
+            abbr = generateAbbr(state, abbr);
+
+            return Object.values(
+                Object.assign({}, state.map(
+                    (keymap: Keymap) => {
+                        if (keymap.abbreviation === id) {
+                            keymap.abbreviation = abbr;
+                        }
+
+                        return keymap;
+                    }))
+            );
+
         case KeymapActions.SET_DEFAULT:
             id = action.payload;
 
@@ -73,7 +105,7 @@ export function getDefault() {
 }
 
 function generateAbbr(state: Keymap[], abbr: string): string {
-    let chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let position = 0;
     let count: number;
 

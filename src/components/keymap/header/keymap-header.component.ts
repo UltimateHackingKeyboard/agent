@@ -32,4 +32,12 @@ export class KeymapHeaderComponent {
     duplicateKeymap(keymap: Keymap) {
         this.store.dispatch(this.keymapActions.duplicateKeymap(keymap));
     }
+
+    editTitleKeymap(id: string, title: string) {
+        this.store.dispatch(this.keymapActions.editTitleKeymap(id, title));
+    }
+
+    editAbbrKeymap(id: string, abbr: string) {
+        this.store.dispatch(this.keymapActions.editAbbrKeymap(id, abbr));
+    }
 }

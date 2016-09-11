@@ -38,16 +38,24 @@
 
     &__name,
     &__abbrev {
-        &[contenteditable=true] {
-            border: none;
-            border-bottom: 2px dotted #999;
-            padding: 0 0.5rem;
-            margin: 0 0.25rem;
+        border: none;
+        border-bottom: 2px dotted #999;
+        padding: 0;
+        margin: 0 0.25rem;
 
-            &.active {
-                box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
-                border-color: transparent;
-            }
+        &:focus {
+            box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
+            border-color: transparent;
         }
+    }
+
+    &__name {
+        width: 330px;
+        text-overflow: ellipsis;
+    }
+
+    &__abbrev {
+        width: 90px;
+        text-align: center;
     }
 }
