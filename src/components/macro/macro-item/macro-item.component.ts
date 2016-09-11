@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { KeyModifiers } from '../../../config-serializer/config-items/KeyModifiers';
-import { DelayMacroAction } from '../../../config-serializer/config-items/macro-action/DelayMacroAction';
-import { KeyMacroAction } from '../../../config-serializer/config-items/macro-action/KeyMacroAction';
-import { MacroAction } from '../../../config-serializer/config-items/macro-action/MacroAction';
-
-import { MouseButtonMacroAction } from '../../../config-serializer/config-items/macro-action/MouseButtonMacroAction';
-import { MoveMouseMacroAction } from '../../../config-serializer/config-items/macro-action/MoveMouseMacroAction';
-import { ScrollMouseMacroAction } from '../../../config-serializer/config-items/macro-action/ScrollMouseMacroAction';
-import { TextMacroAction } from '../../../config-serializer/config-items/macro-action/TextMacroAction';
+import { 
+    DelayMacroAction,
+    KeyMacroAction,
+    MacroAction,
+    MouseButtonMacroAction,
+    MoveMouseMacroAction,
+    ScrollMouseMacroAction,
+    TextMacroAction 
+} from '../../../config-serializer/config-items/macro-action';
 
 import { MapperService } from '../../../services/mapper.service';
 

@@ -7,7 +7,7 @@ import {
     ViewChild
 } from '@angular/core';
 
-import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action';
 
 @Component({
     selector: 'macro-text-tab',

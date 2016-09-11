@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer, ViewChild } from '@angular/core';
 
-import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action/EditableMacroAction';
+import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action';
 
 const INITIAL_DELAY = 0.5; // In seconds
 
