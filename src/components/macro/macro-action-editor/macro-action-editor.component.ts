@@ -84,15 +84,18 @@ export class MacroActionEditorComponent implements OnInit {
         }
     }
 
-    getTabMacroActionType(tab: TabName) {
-        if (tab === TabName.Delay) {
-            return macroActionType.DelayMacroAction;
-        } else if (tab === TabName.Keypress) {
-            return macroActionType.KeyMacroAction;
-        } else if (tab === TabName.Mouse) {
-            return macroActionType.MouseButtonMacroAction;
-        } else if (tab === TabName.Text) {
-            return macroActionType.TextMacroAction;
+    getTabMacroActionType(tab: TabName): string {
+        switch (tab) {
+            case TabName.Delay:
+                return macroActionType.DelayMacroAction;
+            case TabName.Keypress:
+                return macroActionType.KeyMacroAction;
+            case TabName.Mouse:
+                return macroActionType.MouseButtonMacroAction;
+            case TabName.Text:
+                return macroActionType.TextMacroAction;
+            default:
+                throw new Error('Could not get macro action type');
         }
     }
 
