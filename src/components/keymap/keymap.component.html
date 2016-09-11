@@ -1,13 +1,17 @@
-<template [ngIf]="keymap">
+<template [ngIf]="keymap$ | async">
     <div class="row">
         <h1 class="col-xs-12 pane-title">
             <i class="fa fa-keyboard-o"></i>
-            <span class="keymap__name pane-title__name" contenteditable="true">{{keymap.name}}</span> keymap
-            (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">{{keymap.abbreviation}}</span>)
+            <span class="keymap__name pane-title__name" contenteditable="true">{{(keymap$ | async)?.name}}</span> keymap
+            (<span class="keymap__abbrev pane-title__abbrev" contenteditable="true">{{(keymap$ | async)?.abbreviation}}</span>)
             <i class="fa fa-star-o fa-star keymap__is-default"></i>
             <i class="glyphicon glyphicon-trash keymap__remove pull-right" title=""
                data-toggle="tooltip" data-placement="left" data-original-title="Remove keymap"></i>
         </h1>
     </div>
-    <svg-keyboard-wrap [layers]="layers.elements"></svg-keyboard-wrap>
+    <svg-keyboard-wrap [layers]="(keymap$ | async)?.layers.elements"></svg-keyboard-wrap>
 </template>
+
+<div *ngIf="!(keymap$ | async)" class="not-found">
+    Sorry, there is no keymap with this abbreviation.
+</div>

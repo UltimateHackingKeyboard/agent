@@ -10,7 +10,7 @@
         <ul [@toggler]="animation.keymap">
             <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
                 <div class="sidebar__level-2">
-                    <a [routerLink]="['/keymap', keymap.id]">{{keymap.name}}</a>
+                    <a [routerLink]="['/keymap', keymap.abbreviation]">{{keymap.name}}</a>
                     <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav"></i>
                 </div>
             </li>

@@ -1,7 +1,13 @@
+import '@ngrx/core/add/operator/select';
 import { Action } from '@ngrx/store';
+
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { KeymapActions } from '../actions';
+import { AppState } from '../index';
 
 const initialState: Keymap[] = [];
 
@@ -18,6 +24,26 @@ export default function(state = initialState, action: Action): Keymap[] {
             return state;
         }
     }
+}
+
+export function getKeymap(abbr: string) {
+    if (abbr === undefined) {
+        return getDefault();
+    }
+
+    return (state$: Observable<AppState>) => state$
+        .select(s => s.keymap)
+        .map((keymaps: Keymap[]) =>
+            keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
+        );
+}
+
+export function getDefault() {
+    return (state$: Observable<AppState>) => state$
+        .select(s => s.keymap)
+        .map((keymaps: Keymap[]) =>
+            keymaps.find((keymap: Keymap) => keymap.isDefault)
+        );
 }
 
 function generateAbbr(state: Keymap[], abbr: string): string {

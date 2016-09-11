@@ -19,8 +19,8 @@ export class KeymapAddComponent {
     private presetsAll$: Observable<Keymap[]>;
 
     constructor(private store: Store<AppState>, private keymapActions: KeymapActions) {
-        this.presets$ = store.select(s => s.preset);
-        this.presetsAll$ = store.select(s => s.preset);
+        this.presets$ = store.select((s: AppState) => s.preset);
+        this.presetsAll$ = store.select((s: AppState) => s.preset);
     }
 
     filterKeyboards(value: string) {
