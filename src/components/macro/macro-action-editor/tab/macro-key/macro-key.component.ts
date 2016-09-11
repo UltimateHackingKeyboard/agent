@@ -44,7 +44,7 @@ export class MacroKeyTabComponent implements OnInit {
         this.macroAction.action = this.getActionType(tab);
     }
 
-    getTabName(action: EditableMacroAction) {
+    getTabName(action: EditableMacroAction): TabName {
         if (!action.action || action.isOnlyPressAction()) {
             return TabName.Keypress;
         } else if (action.isOnlyHoldAction()) {
@@ -54,17 +54,20 @@ export class MacroKeyTabComponent implements OnInit {
         }
     }
 
-    getActionType(tab: TabName) {
-        if (tab === TabName.Keypress) {
-            return MacroSubAction.press;
-        } else if (tab === TabName.Hold) {
-            return MacroSubAction.hold;
-        } else if (tab === TabName.Release) {
-            return MacroSubAction.release;
+    getActionType(tab: TabName): MacroSubAction {
+        switch (tab) {
+            case TabName.Keypress:
+                return MacroSubAction.press;
+            case TabName.Hold:
+                return MacroSubAction.hold;
+            case TabName.Release:
+                return MacroSubAction.release;
+            default:
+                throw new Error('Invalid tab type');
         }
     }
 
-    getKeyAction() {
+    getKeyAction(): KeyAction {
         return this.keypressTab.toKeyAction();
     }
 
