@@ -63,7 +63,7 @@ export class MacroActionEditorComponent implements OnInit {
         this.editableMacroAction.macroActionType = this.getTabMacroActionType(tab);
     }
 
-    getTabName(action: EditableMacroAction) {
+    getTabName(action: EditableMacroAction): TabName {
         switch (action.macroActionType) {
             // Delay action
             case macroActionType.DelayMacroAction:
