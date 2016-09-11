@@ -2,8 +2,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { KeyAction } from '../../../../../config-serializer/config-items/key-action';
 import { EditableMacroAction, MacroSubAction } from '../../../../../config-serializer/config-items/macro-action';
-import { KeypressTabComponent } from '../../../../popover/tab/keypress';
-import { Tab } from '../../../../popover/tab/tab';
+import { KeypressTabComponent } from '../../../../popover/tab';
+import { Tab } from '../../../../popover/tab';
 
 enum TabName {
     Keypress,
