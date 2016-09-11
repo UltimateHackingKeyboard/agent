@@ -28,4 +28,8 @@ export class KeymapHeaderComponent {
     removeKeymap(id: string) {
         this.store.dispatch(this.keymapActions.removeKeymap(id));
     }
+
+    duplicateKeymap(keymap: Keymap) {
+        this.store.dispatch(this.keymapActions.duplicateKeymap(keymap));
+    }
 }

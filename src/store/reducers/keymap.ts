@@ -16,14 +16,16 @@ export default function(state = initialState, action: Action): Keymap[] {
 
     switch (action.type) {
         case KeymapActions.ADD:
+        case KeymapActions.DUPLICATE:
             let newKeymap: Keymap = Object.assign({}, action.payload);
 
             newKeymap.abbreviation = generateAbbr(state, newKeymap.abbreviation);
             newKeymap.name = generateName(state, newKeymap.name);
+            newKeymap.isDefault = false;
 
             return [...state, newKeymap];
 
-        case KeymapActions.IS_DEFAULT:
+        case KeymapActions.SET_DEFAULT:
             id = action.payload;
 
             return Object.values(
