@@ -94,9 +94,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
             this.iconName = 'font';
             this.title = `Write text: ${action.text}`;
         } else if (this.macroAction instanceof KeyMacroAction) {
+            // Key pressed/held/released
             const action: KeyMacroAction = this.macroAction as KeyMacroAction;
             this.setKeyActionContent(action);
         } else if (this.macroAction instanceof MouseButtonMacroAction) {
+            // Mouse button clicked/held/released
             const action: MouseButtonMacroAction = this.macroAction as MouseButtonMacroAction;
             this.setMouseButtonActionContent(action);
         } else if (this.macroAction instanceof MoveMouseMacroAction || this.macroAction instanceof ScrollMouseMacroAction) {
@@ -105,7 +107,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
         } else {
             this.title = this.macroAction.constructor.name;
         }
-        // TODO: finish for all MacroAction
     }
 
     private setKeyActionContent(action: KeyMacroAction) {
