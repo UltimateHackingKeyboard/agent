@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
-import { EditableMacroAction, MacroAction, TextMacroAction, macroActionType } from '../../../config-serializer/config-items/macro-action';
+import {
+    EditableMacroAction,
+    MacroAction,
+    TextMacroAction,
+    macroActionType
+} from '../../../config-serializer/config-items/macro-action';
 import { MacroKeyTabComponent } from './tab/macro-key';
 
 enum TabName {

@@ -1,4 +1,4 @@
-import { KeyAction, keyActionType, KeystrokeAction } from '../key-action';
+import { KeyAction, KeystrokeAction, keyActionType } from '../key-action';
 import { DelayMacroAction } from './DelayMacroAction';
 import { KeyMacroAction } from './KeyMacroAction';
 import { MacroAction, MacroSubAction, macroActionType } from './MacroAction';
