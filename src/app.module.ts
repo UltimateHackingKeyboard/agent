@@ -1,6 +1,7 @@
 import { NgModule, ReflectiveInjector } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { StoreModule } from '@ngrx/store';
 
 import { DataProviderService } from './services/data-provider.service';
@@ -11,7 +12,7 @@ import { Select2Component } from 'ng2-select2/ng2-select2';
 
 import { ContenteditableDirective } from './directives/contenteditable';
 
-import { KeymapAddComponent, KeymapComponent } from './components/keymap';
+import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import { LegacyLoaderComponent } from './components/legacy-loader';
 import {
@@ -102,14 +103,14 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         NoneTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
-        MacroComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
         MacroDelayTabComponent,
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableDirective
+        ContenteditableDirective,
+        KeymapHeaderComponent
     ],
     imports: [
         BrowserModule,

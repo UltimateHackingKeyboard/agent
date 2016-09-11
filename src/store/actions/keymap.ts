@@ -5,8 +5,9 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 
 @Injectable()
 export class KeymapActions {
-    static IS_DEFAULT = '[Keymap] Set default option';
     static ADD = '[Keymap] Add keymap';
+    static IS_DEFAULT = '[Keymap] Set default option';
+    static REMOVE = '[Keymap] Remove keymap';
 
     add(item: Keymap): Action {
         return {
@@ -15,10 +16,18 @@ export class KeymapActions {
         };
     }
 
-    isDefault(deafult: boolean): Action {
+    setDefault(id: string): Action {
         return {
             type: KeymapActions.IS_DEFAULT,
-            payload: deafult
+            payload: id
         };
+    }
+
+    removeKeymap(id: string): Action {
+        return {
+            type: KeymapActions.REMOVE,
+            payload: id
+        };
+
     }
 }

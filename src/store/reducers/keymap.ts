@@ -12,6 +12,8 @@ import { AppState } from '../index';
 const initialState: Keymap[] = [];
 
 export default function(state = initialState, action: Action): Keymap[] {
+    let id: string;
+
     switch (action.type) {
         case KeymapActions.ADD:
             let newKeymap: Keymap = Object.assign({}, action.payload);
@@ -20,21 +22,43 @@ export default function(state = initialState, action: Action): Keymap[] {
             newKeymap.name = generateName(state, newKeymap.name);
 
             return [...state, newKeymap];
+
+        case KeymapActions.IS_DEFAULT:
+            id = action.payload;
+
+            return Object.values(
+                Object.assign({}, state.map(
+                    (keymap: Keymap) => {
+                        keymap.isDefault = (keymap.abbreviation === id) ? true : false;
+
+                        return keymap;
+                    }))
+            );
+
+        case KeymapActions.REMOVE:
+            id = action.payload;
+
+           return Object.values(
+               Object.assign({}, state.filter(
+                   (keymap: Keymap) => keymap.abbreviation !== id
+               ))
+           );
+
         default: {
             return state;
         }
     }
 }
 
-export function getKeymap(abbr: string) {
-    if (abbr === undefined) {
+export function getKeymap(id: string) {
+    if (id === undefined) {
         return getDefault();
     }
 
     return (state$: Observable<AppState>) => state$
         .select(s => s.keymap)
         .map((keymaps: Keymap[]) =>
-            keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
+            keymaps.find((keymap: Keymap) => keymap.abbreviation === id)
         );
 }
 
