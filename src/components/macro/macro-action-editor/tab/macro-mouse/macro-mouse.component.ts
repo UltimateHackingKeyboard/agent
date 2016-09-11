@@ -55,26 +55,29 @@ export class MacroMouseTabComponent implements OnInit {
         }
     }
 
-    setMouseClick(index: number) {
+    setMouseClick(index: number): void {
         this.selectedButtons[index] = !this.selectedButtons[index];
         this.macroAction.setMouseButtons(this.selectedButtons);
     }
 
-    hasButton(index: number) {
+    hasButton(index: number): boolean {
         return this.selectedButtons[index];
     }
 
-    getAction(tab: TabName) {
-        if (tab === TabName.Click) {
-            return MacroSubAction.press;
-        } else if (tab === TabName.Hold) {
-            return MacroSubAction.hold;
-        } else if (tab === TabName.Release) {
-            return MacroSubAction.release;
+    getAction(tab: TabName): MacroSubAction {
+        switch (tab) {
+            case TabName.Click:
+                return MacroSubAction.press;
+            case TabName.Hold:
+                return MacroSubAction.hold;
+            case TabName.Release:
+                return MacroSubAction.release;
+            default:
+                throw new Error('Invalid tab name');
         }
     }
 
-    getTabName(action: EditableMacroAction) {
+    getTabName(action: EditableMacroAction): TabName {
         if (action.macroActionType === macroActionType.MouseButtonMacroAction) {
             if (!action.action || action.isOnlyPressAction()) {
                 return TabName.Click;
@@ -91,7 +94,7 @@ export class MacroMouseTabComponent implements OnInit {
         return TabName.Move;
     }
 
-    getMacroActionType(tab: TabName) {
+    getMacroActionType(tab: TabName): string {
         if (tab === TabName.Click || tab === TabName.Hold || tab === TabName.Release) {
             return macroActionType.MouseButtonMacroAction;
         } else if (tab === TabName.Move) {
