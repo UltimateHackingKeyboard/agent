@@ -24,12 +24,12 @@ export class MacroDelayTabComponent implements AfterViewInit, OnInit {
         this.delay = this.macroAction.delay > 0 ? this.macroAction.delay / 1000 : INITIAL_DELAY;
     }
 
-    setDelay(value: number) {
-        this.delay = value;
-        this.macroAction.delay = this.delay * 1000;
-    }
-
     ngAfterViewInit() {
         this.renderer.invokeElementMethod(this.input.nativeElement, 'focus');
+    }
+
+    setDelay(value: number): void {
+        this.delay = value;
+        this.macroAction.delay = this.delay * 1000;
     }
 }
