@@ -59,11 +59,19 @@ h1 {
 
 .macro-actions-container {
     overflow: auto;
-    max-height: 85vh;
+    max-height: 70vh;
     margin-bottom: 0;
     border-radius: 4px 4px 0 0;
     border: 1px solid #ddd;
     border-bottom: 0;
+
+    @media screen and (min-height: 1000px) {
+        max-height: 80vh;
+    }
+
+    @media screen and (min-height: 1200px) {
+        max-height: 84vh;
+    }
 }
 
 .list-group-item .move-handle:hover {
