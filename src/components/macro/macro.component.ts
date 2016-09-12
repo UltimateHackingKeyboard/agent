@@ -49,7 +49,7 @@ export class MacroComponent implements OnInit, OnDestroy {
         });
     }
 
-    getMacro(id: number) {
+    getMacro(id: number): Macro {
         const config = this.uhkConfigurationService.getUhkConfiguration();
         const macro: Macro = config.macros.elements.find(item => item.id === id);
         if (macro) {
