@@ -59,18 +59,22 @@ h1 {
 
 .macro-actions-container {
     overflow: auto;
-    max-height: 70vh;
+    max-height: 78vh;
     margin-bottom: 0;
     border-radius: 4px 4px 0 0;
     border: 1px solid #ddd;
     border-bottom: 0;
 
-    @media screen and (min-height: 1000px) {
+     @media screen and (min-height: 730px) {
         max-height: 80vh;
     }
 
+    @media screen and (min-height: 1000px) {
+        max-height: 86vh;
+    }
+
     @media screen and (min-height: 1200px) {
-        max-height: 84vh;
+        max-height: 88vh;
     }
 }
 
