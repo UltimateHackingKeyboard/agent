@@ -1,3 +1,20 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .list-container {
+        display: flex;
+        flex: 1;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+    }
+}
+
 .main-wrapper {
     width: 500px;
 }
@@ -59,23 +76,10 @@ h1 {
 
 .macro-actions-container {
     overflow: auto;
-    max-height: 78vh;
     margin-bottom: 0;
     border-radius: 4px 4px 0 0;
     border: 1px solid #ddd;
     border-bottom: 0;
-
-    @media screen and (min-height: 730px) {
-        max-height: 80vh;
-    }
-
-    @media screen and (min-height: 1000px) {
-        max-height: 86vh;
-    }
-
-    @media screen and (min-height: 1200px) {
-        max-height: 88vh;
-    }
 }
 
 .list-group-item .move-handle:hover {
