@@ -64338,7 +64338,7 @@
 /* 465 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>\r\n    <b>Switch to keymap:</b>\r\n    <select2 [data]=\"keymapOptions\" [value]=\"keymapOptions[selectedKeymapIndex + 1].id\" (valueChanged)=\"onChange($event)\" [width]=\"'100%'\"></select2>\r\n</div>\r\n<div>\r\n    <div *ngIf=\"selectedKeymapIndex === -1\">\r\n        <img src=\"/images/base-layer--blank.svg\">\r\n    </div>\r\n    <svg-keyboard *ngIf=\"selectedKeymapIndex >= 0\"\r\n                [moduleConfig]=\"keymaps[selectedKeymapIndex].layers.elements[0].modules.elements\">\r\n    </svg-keyboard>\r\n</div>";
+	module.exports = "<div>\r\n    <b>Switch to keymap:</b>\r\n    <select2 [data]=\"keymapOptions\" [value]=\"keymapOptions[selectedKeymapIndex + 1].id\" (valueChanged)=\"onChange($event)\" [width]=\"'100%'\"></select2>\r\n</div>\r\n<div>\r\n    <div *ngIf=\"selectedKeymapIndex === -1\">\r\n        <img src=\"./images/base-layer--blank.svg\">\r\n    </div>\r\n    <svg-keyboard *ngIf=\"selectedKeymapIndex >= 0\"\r\n                [moduleConfig]=\"keymaps[selectedKeymapIndex].layers.elements[0].modules.elements\">\r\n    </svg-keyboard>\r\n</div>";
 
 /***/ },
 /* 466 */
