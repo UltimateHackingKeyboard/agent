@@ -13,6 +13,7 @@ import {Tab} from '../tab';
 })
 export class KeypressTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
+    @Input() longPressEnabled: boolean;
 
     private leftModifiers: string[];
     private rightModifiers: string[];

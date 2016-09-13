@@ -1,0 +1,11 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.macro__text-input {
+    width: 100%;
+    min-height: 10rem;
+    margin-bottom: 1rem;
+}

@@ -1,12 +1,10 @@
 import {ClassArray} from '../../ClassArray';
 import {UhkBuffer} from '../../UhkBuffer';
 import {DelayMacroAction} from './DelayMacroAction';
-import {HoldMouseButtonsMacroAction} from './HoldMouseButtonsMacroAction';
 import {KeyMacroAction} from './KeyMacroAction';
 import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import {MouseButtonMacroAction} from './MouseButtonMacroAction';
 import {MoveMouseMacroAction} from './MoveMouseMacroAction';
-import {PressMouseButtonsMacroAction} from './PressMouseButtonsMacroAction';
-import {ReleaseMouseButtonsMacroAction} from './ReleaseMouseButtonsMacroAction';
 import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
 import {TextMacroAction} from './TextMacroAction';
 
@@ -16,12 +14,8 @@ export class MacroActions extends ClassArray<MacroAction> {
         switch (jsObject.macroActionType) {
             case macroActionType.KeyMacroAction:
                 return new KeyMacroAction().fromJsObject(jsObject);
-            case macroActionType.PressMouseButtonsMacroAction:
-                return new PressMouseButtonsMacroAction().fromJsObject(jsObject);
-            case macroActionType.HoldMouseButtonsMacroAction:
-                return new HoldMouseButtonsMacroAction().fromJsObject(jsObject);
-            case macroActionType.ReleaseMouseButtonsMacroAction:
-                return new ReleaseMouseButtonsMacroAction().fromJsObject(jsObject);
+            case macroActionType.MouseButtonMacroAction:
+                return new MouseButtonMacroAction().fromJsObject(jsObject);
             case macroActionType.MoveMouseMacroAction:
                 return new MoveMouseMacroAction().fromJsObject(jsObject);
             case macroActionType.ScrollMouseMacroAction:
@@ -48,12 +42,8 @@ export class MacroActions extends ClassArray<MacroAction> {
             return new KeyMacroAction().fromBinary(buffer);
         }
         switch (macroActionFirstByte) {
-            case MacroActionId.PressMouseButtonsMacroAction:
-                return new PressMouseButtonsMacroAction().fromBinary(buffer);
-            case MacroActionId.HoldMouseButtonsMacroAction:
-                return new HoldMouseButtonsMacroAction().fromBinary(buffer);
-            case MacroActionId.ReleaseMouseButtonsMacroAction:
-                return new ReleaseMouseButtonsMacroAction().fromBinary(buffer);
+            case MacroActionId.MouseButtonMacroAction:
+                return new MouseButtonMacroAction().fromBinary(buffer);
             case MacroActionId.MoveMouseMacroAction:
                 return new MoveMouseMacroAction().fromBinary(buffer);
             case MacroActionId.ScrollMouseMacroAction:

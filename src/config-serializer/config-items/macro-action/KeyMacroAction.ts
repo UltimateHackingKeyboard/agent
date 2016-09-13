@@ -1,15 +1,9 @@
 import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer} from '../../UhkBuffer';
 import { KeyModifiers } from '../KeyModifiers';
-import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
+import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './MacroAction';
 
 const NUM_OF_COMBINATIONS = 3; // Cases: scancode, modifer, both
-
-enum Action {
-    press = 0,
-    hold = 1,
-    release = 2
-}
 
 interface JsObjectKeyMacroAction {
     macroActionType: string;
@@ -20,8 +14,8 @@ interface JsObjectKeyMacroAction {
 
 export class KeyMacroAction extends MacroAction {
 
-    @assertEnum(Action)
-    action: Action;
+    @assertEnum(MacroSubAction)
+    action: MacroSubAction;
 
     @assertUInt8
     scancode: number;
@@ -31,7 +25,7 @@ export class KeyMacroAction extends MacroAction {
 
     _fromJsObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
         this.assertMacroActionType(jsObject);
-        this.action = Action[jsObject.action];
+        this.action = MacroSubAction[jsObject.action];
         this.scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
         return this;
@@ -54,7 +48,7 @@ export class KeyMacroAction extends MacroAction {
     _toJsObject(): any {
         let jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,
-            action: Action[this.action]
+            action: MacroSubAction[this.action]
         };
 
         if (this.hasScancode()) {
@@ -104,14 +98,14 @@ export class KeyMacroAction extends MacroAction {
     }
 
     isHoldAction(): boolean {
-        return this.action === Action.hold;
+        return this.action === MacroSubAction.hold;
     }
 
     isPressAction(): boolean {
-        return this.action === Action.press;
+        return this.action === MacroSubAction.press;
     }
 
     isReleaseAction(): boolean {
-        return this.action === Action.release;
+        return this.action === MacroSubAction.release;
     }
 }

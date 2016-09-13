@@ -21,7 +21,7 @@
         </div>
     </div>
 </div>
-<div class="long-press-container">
+<div class="long-press-container" *ngIf="longPressEnabled">
     <b class="setting-label">Long press action:</b>
     <select2 #longPressSelect [data]="longPressGroups" [value]="selectedLongPressIndex.toString()" (valueChanged)="onLongpressChange($event)"
         [width]="140"></select2>

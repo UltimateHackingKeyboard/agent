@@ -1015,15 +1015,18 @@
                     "modifierMask": 133
                 },
                 {
-                    "macroActionType": "pressMouseButtons",
+                    "macroActionType": "mouseButton",
+                    "action": "press",
                     "mouseButtonsMask": 9
                 },
                 {
-                    "macroActionType": "holdMouseButtons",
+                    "macroActionType": "mouseButton",
+                    "action": "hold",
                     "mouseButtonsMask": 12
                 },
                 {
-                    "macroActionType": "releaseMouseButtons",
+                    "macroActionType": "mouseButton",
+                    "action": "release",
                     "mouseButtonsMask": 104
                 },
                 {
@@ -1058,7 +1061,8 @@
                     "scancode": 111
                 },
                 {
-                    "macroActionType": "releaseMouseButtons",
+                    "macroActionType": "mouseButton",
+                    "action": "release",
                     "mouseButtonsMask": 104
                 },
                 {

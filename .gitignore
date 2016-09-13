@@ -4,3 +4,5 @@ npm-debug.log
 dist
 .idea
 *.iml
+*.sublime-project
+*.sublime-workspace

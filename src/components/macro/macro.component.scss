@@ -1,3 +1,20 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .list-container {
+        display: flex;
+        flex: 1;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+    }
+}
+
 .main-wrapper {
     width: 500px;
 }
@@ -6,33 +23,50 @@ h1 {
     margin-bottom: 3rem;
 }
 
-.action--item {
-    padding-left: 8px;
+.action {
+    &--edit__form {
+        background-color: #fff;
+        margin-left: -0.5rem;
+        margin-right: -15px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;
+    }
+
+    &--item {
+        padding-left: 8px;
+
+        &.active,
+        &.active:hover {
+            background-color: white;
+            font-weight: bold;
+            color: black;
+            border-color: black;
+            z-index: 10;
+        }
+    }
 }
 
-.action--item.active,
-.action--item.active:hover {
-    background-color: white;
-    font-weight: bold;
-    color: black;
-    border-color: black;
-    z-index: 10;
+.macro__name {
+    border-bottom: 2px dotted #999;
+    padding: 0 0.5rem;
+    margin: 0 0.25rem;
 }
 
 .macro-settings {
     border: 1px solid black;
     border-top-color: #999;
     z-index: 100;
-}
 
-.macro-settings .helper {
-    position: absolute;
-    display: block;
-    height: 13px;
-    background: #fff;
-    width: 100%;
-    left: 0;
-    top: -14px;
+    .helper {
+        position: absolute;
+        display: block;
+        height: 13px;
+        background: #fff;
+        width: 100%;
+        left: 0;
+        top: -14px;
+    }
 }
 
 .action--item.active.callout,
@@ -40,36 +74,16 @@ h1 {
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
 }
 
+.macro-actions-container {
+    overflow: auto;
+    margin-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #ddd;
+    border-bottom: 0;
+}
+
 .list-group-item .move-handle:hover {
     cursor: move;
-}
-
-.action--edit {
-    float: right;
-}
-
-.action--edit:hover {
-    color: #337ab7;
-    cursor: pointer;
-}
-
-.action--trash {
-    float: right;
-    margin-right: 1rem;
-}
-
-.action--trash:hover {
-    color: #d9534f;
-    cursor: pointer;
-}
-
-.action--edit__form {
-    background-color: #fff;
-    margin-left: -0.5rem;
-    margin-right: -15px;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
 }
 
 .flex-button-wrapper {
@@ -81,13 +95,22 @@ h1 {
     align-self: flex-end;
 }
 
-.add-new__action-item:hover {
-    cursor: pointer;
+.add-new__action-container {
+    border-top: 1px solid #ddd;
 }
 
-.add-new__action-item--link,
-.add-new__action-item--link:active,
-.add-new__action-item--link:hover {
-    text-decoration: none;
-    color: #337ab7;
+.add-new__action-item {
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &--link,
+    &--link:active,
+    &--link:hover {
+        text-decoration: none;
+        color: #337ab7;
+    }
 }

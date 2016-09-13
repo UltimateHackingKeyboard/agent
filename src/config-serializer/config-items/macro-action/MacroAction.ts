@@ -16,20 +16,29 @@ export enum MacroActionId {
         ReleaseKeyMacroAction with scancode and modifiers   8
     */
     LastKeyMacroAction              =  8,
-    PressMouseButtonsMacroAction    =  9,
-    HoldMouseButtonsMacroAction     = 10,
-    ReleaseMouseButtonsMacroAction  = 11,
+    MouseButtonMacroAction          =  9,
+    /* 
+        9 - 11 are reserved for MouseButtonMacroAction
+        PressMouseButtonsMacroAction    =  9,
+        HoldMouseButtonsMacroAction     = 10,
+        ReleaseMouseButtonsMacroAction  = 11,
+    */
+    LastMouseButtonMacroAction      = 11,
     MoveMouseMacroAction            = 12,
     ScrollMouseMacroAction          = 13,
     DelayMacroAction                = 14,
     TextMacroAction                 = 15
 }
 
+export enum MacroSubAction {
+    press = 0,
+    hold = 1,
+    release = 2
+}
+
 export let macroActionType = {
     KeyMacroAction                  : 'key',
-    PressMouseButtonsMacroAction    : 'pressMouseButtons',
-    HoldMouseButtonsMacroAction     : 'holdMouseButtons',
-    ReleaseMouseButtonsMacroAction  : 'releaseMouseButtons',
+    MouseButtonMacroAction          : 'mouseButton',
     MoveMouseMacroAction            : 'moveMouse',
     ScrollMouseMacroAction          : 'scrollMouse',
     DelayMacroAction                : 'delay',
@@ -53,8 +62,12 @@ export abstract class MacroAction extends Serializable<MacroAction> {
             if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
                 throw `Invalid ${classname} first byte: ${readMacroActionId}`;
             }
-        }
-        else if (readMacroActionId !== macroActionId) {
+        } else if (macroActionId === MacroActionId.MouseButtonMacroAction) {
+            if (readMacroActionId < MacroActionId.MouseButtonMacroAction ||
+                readMacroActionId > MacroActionId.LastMouseButtonMacroAction) {
+                throw `Invalid ${classname} first byte: ${readMacroActionId}`;
+            }
+        } else if (readMacroActionId !== macroActionId) {
             throw `Invalid ${classname} first byte: ${readMacroActionId}`;
         }
         return readMacroActionId;
