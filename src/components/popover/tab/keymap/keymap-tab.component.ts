@@ -1,46 +1,42 @@
-import {Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
-import {Select2OptionData} from 'ng2-select2/ng2-select2';
+import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
-import {KeyAction, SwitchKeymapAction} from '../../../../config-serializer/config-items/key-action';
-import {Keymap} from '../../../../config-serializer/config-items/Keymap';
-import {Tab} from '../tab';
-
-import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
+import { KeyAction, SwitchKeymapAction } from '../../../../config-serializer/config-items/key-action';
+import { Keymap } from '../../../../config-serializer/config-items/Keymap';
+import { Tab } from '../tab';
 
 @Component({
     selector: 'keymap-tab',
     template: require('./keymap-tab.component.html'),
-    styles: [require('./keymap-tab.component.scss')]
+    styles: [require('./keymap-tab.component.scss')],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeymapTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
+    @Input() keymaps: any;
 
-    private keymaps: Keymap[];
-    private selectedKeymap: Keymap;
     private keymapOptions: Array<Select2OptionData>;
+    private selectedKeymap: Keymap;
     private selectedKeymapIndex: string;
 
-    constructor(private uhkConfigurationService: UhkConfigurationService) {
-        this.keymaps = [];
+    constructor() {
         this.keymapOptions = [];
         this.selectedKeymapIndex = '-1';
     }
 
     ngOnInit() {
-        this.keymaps = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements;
-
         this.keymapOptions.push({
             id: '-1',
             text: 'Switch to keymap'
         });
 
-        this.keymapOptions = this.keymapOptions.concat(this.keymaps.map(function (keymap: Keymap): Select2OptionData {
+        this.keymapOptions = this.keymaps.map((keymap: Keymap): Select2OptionData => {
             return {
                 id: keymap.abbreviation,
                 text: keymap.name
             };
-        }));
+        });
 
         this.fromKeyAction(this.defaultKeyAction);
     }
@@ -62,7 +58,6 @@ export class KeymapTabComponent implements OnInit, Tab {
         let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
         this.selectedKeymapIndex = switchKeymapAction.keymapId;
         this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === this.selectedKeymapIndex);
-        return true;
     }
 
     toKeyAction(): SwitchKeymapAction {
