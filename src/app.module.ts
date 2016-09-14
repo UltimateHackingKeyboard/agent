@@ -4,9 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { StoreModule } from '@ngrx/store';
 
-import { DataProviderService } from './services/data-provider.service';
-import { MapperService } from './services/mapper.service';
-
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Component } from 'ng2-select2/ng2-select2';
 
@@ -50,15 +47,12 @@ import {
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
-import { LayersComponent } from './components/layers';
-import { SvgKeyboardComponent } from './components/svg/keyboard';
-import { PopoverComponent } from './components/popover';
-import { KeymapAddComponent } from './components/keymap';
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 
 import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';
+
 import { storeConfig } from './store';
 import { DataStorage } from './store/storage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -103,6 +97,7 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         NoneTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
+        MacroComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
         MacroDelayTabComponent,
@@ -116,12 +111,12 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
         BrowserModule,
         FormsModule,
         DragulaModule,
-        routing
+        routing,
         StoreModule.provideStore(storeConfig, storageService.initialState()),
         StoreDevtoolsModule.instrumentStore({
             monitor: useLogMonitor({
-                visible: false,
-                position: 'right'
+            visible: false,
+            position: 'right'
             })
         }),
         StoreLogMonitorModule
