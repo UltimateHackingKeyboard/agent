@@ -17,13 +17,14 @@ export class KeymapTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
 
     private keymaps: Keymap[];
+    private selectedKeymap: Keymap;
     private keymapOptions: Array<Select2OptionData>;
-    private selectedKeymapIndex: number;
+    private selectedKeymapIndex: string;
 
     constructor(private uhkConfigurationService: UhkConfigurationService) {
         this.keymaps = [];
         this.keymapOptions = [];
-        this.selectedKeymapIndex = -1;
+        this.selectedKeymapIndex = "-1";
     }
 
     ngOnInit() {
@@ -36,7 +37,7 @@ export class KeymapTabComponent implements OnInit, Tab {
 
         this.keymapOptions = this.keymapOptions.concat(this.keymaps.map(function (keymap: Keymap): Select2OptionData {
             return {
-                id: keymap.id.toString(),
+                id: keymap.abbreviation,
                 text: keymap.name
             };
         }));
@@ -46,11 +47,12 @@ export class KeymapTabComponent implements OnInit, Tab {
 
     // TODO: change to the correct type when the wrapper has added it.
     onChange(event: any) {
-        this.selectedKeymapIndex = +event.value;
+        this.selectedKeymapIndex = event.value;
+        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation == this.selectedKeymapIndex);
     }
 
     keyActionValid(): boolean {
-        return this.selectedKeymapIndex >= 0;
+        return this.selectedKeymapIndex !== "-1";
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -58,7 +60,8 @@ export class KeymapTabComponent implements OnInit, Tab {
             return false;
         }
         let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
-        this.selectedKeymapIndex = this.keymaps.findIndex(keymap => switchKeymapAction.keymapId === keymap.id);
+        this.selectedKeymapIndex = switchKeymapAction.keymapId;
+        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation == this.selectedKeymapIndex);
         return true;
     }
 
@@ -67,7 +70,7 @@ export class KeymapTabComponent implements OnInit, Tab {
             throw new Error('KeyAction is not valid. No selected keymap!');
         }
         let keymapAction = new SwitchKeymapAction();
-        keymapAction.keymapId = this.keymaps[this.selectedKeymapIndex].id;
+        keymapAction.keymapId = this.selectedKeymapIndex;
         return keymapAction;
     }
 }

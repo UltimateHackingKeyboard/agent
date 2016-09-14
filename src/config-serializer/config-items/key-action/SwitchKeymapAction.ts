@@ -4,8 +4,7 @@ import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class SwitchKeymapAction extends KeyAction {
 
-    @assertUInt8
-    keymapId: number;
+    keymapId: string;
 
     constructor(other?: SwitchKeymapAction) {
         super();
@@ -23,7 +22,7 @@ export class SwitchKeymapAction extends KeyAction {
 
     _fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
         this.readAndAssertKeyActionId(buffer);
-        this.keymapId = buffer.readUInt8();
+        this.keymapId = buffer.readString();
         return this;
     }
 
@@ -36,7 +35,7 @@ export class SwitchKeymapAction extends KeyAction {
 
     _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
-        buffer.writeUInt8(this.keymapId);
+        buffer.writeString(this.keymapId);
     }
 
     toString(): string {
