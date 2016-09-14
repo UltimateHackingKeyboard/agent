@@ -11,6 +11,7 @@ export class KeymapActions {
     static DUPLICATE = KeymapActions.PREFIX + 'Duplicate keymap';
     static EDIT_ABBR = KeymapActions.PREFIX + 'Edit keymap abbreviation';
     static EDIT_TITLE = KeymapActions.PREFIX + 'Edit keymap title';
+    static SAVE_KEY = KeymapActions.PREFIX + 'Save key action';
     static SET_DEFAULT = KeymapActions.PREFIX + 'Set default option';
     static REMOVE = KeymapActions.PREFIX + 'Remove keymap';
 
@@ -59,6 +60,13 @@ export class KeymapActions {
                 id: id,
                 abbr: abbr
             }
+        };
+    }
+
+    saveKey(keymap: Keymap): Action {
+        return {
+            type: KeymapActions.SAVE_KEY,
+            payload: keymap
         };
     }
 }

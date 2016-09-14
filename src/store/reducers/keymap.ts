@@ -91,6 +91,17 @@ export default function(state = initialState, action: Action): Keymap[] {
 
             return filtered;
 
+        case KeymapActions.SAVE_KEY:
+            let changedKeymap: Keymap = new Keymap;
+
+            return state.map((keymap: Keymap) => {
+                if (keymap.abbreviation === action.payload.abbreviation) {
+                    keymap = Object.assign(changedKeymap, action.payload);
+                }
+
+                return keymap;
+            });
+
         default: {
             return state;
         }

@@ -1,10 +1,17 @@
 import {
-    Component, Input, OnChanges, OnInit, animate,
+    Component, Input, OnInit, animate,
     state, style, transition, trigger
 } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+
+import { Store } from '@ngrx/store';
 
 import { KeyAction, NoneAction } from '../../../config-serializer/config-items/key-action';
+import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { Layer } from '../../../config-serializer/config-items/Layer';
+
+import { KeymapActions } from '../../../store/actions/keymap';
+import { AppState } from '../../../store/index';
 
 @Component({
     selector: 'svg-keyboard-wrap',
@@ -74,8 +81,8 @@ import { Layer } from '../../../config-serializer/config-items/Layer';
         ])
     ]
 })
-export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
-    @Input() layers: Layer[];
+export class SvgKeyboardWrapComponent implements OnInit {
+    @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
 
@@ -84,8 +91,9 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
     private tooltipData: { posTop: number, posLeft: number, content: {name: string, value: string}[], shown: boolean };
+    private layers: Layer[];
 
-    constructor() {
+    constructor(private store: Store<AppState>, private keymapActions: KeymapActions, private route: ActivatedRoute) {
         this.keyEditConfig = {
             keyActions: undefined,
             keyId: undefined
@@ -100,15 +108,11 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.layers[0].animation = 'leftIn';
-    }
+        this.reset();
 
-    ngOnChanges() {
-        this.currentLayer = 0;
-        if (this.layers.length > 0) {
-            this.layers.forEach(element => element.animation = 'none');
-            this.layers[0].animation = 'leftIn';
-        }
+        this.route.params.subscribe(() => {
+            this.reset();
+        });
     }
 
     onKeyClick(moduleId: number, keyId: number): void {
@@ -137,6 +141,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     onRemap(keyAction: KeyAction): void {
         this.changeKeyAction(keyAction);
+        this.store.dispatch(this.keymapActions.saveKey(this.keymap));
         this.hidePopover();
     }
 
@@ -215,5 +220,15 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         }
 
         this.currentLayer = index;
+    }
+
+    reset() {
+        this.layers = this.keymap.layers.elements;
+        this.currentLayer = 0;
+
+        if (this.layers.length > 0) {
+            this.layers.forEach(element => element.animation = 'none');
+            this.layers[0].animation = 'leftIn';
+        }
     }
 }
