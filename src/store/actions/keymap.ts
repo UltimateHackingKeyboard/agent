@@ -5,12 +5,14 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 
 @Injectable()
 export class KeymapActions {
-    static ADD = '[Keymap] Add keymap';
-    static DUPLICATE = '[Keymap] Remove keymap';
-    static EDIT_ABBR = '[Keymap] Edit keymap abbreviation';
-    static EDIT_TITLE = '[Keymap] Edit keymap title';
-    static SET_DEFAULT = '[Keymap] Set default option';
-    static REMOVE = '[Keymap] Remove keymap';
+    static PREFIX = '[Keymap] ';
+
+    static ADD = KeymapActions.PREFIX + 'Add keymap';
+    static DUPLICATE = KeymapActions.PREFIX + 'Duplicate keymap';
+    static EDIT_ABBR = KeymapActions.PREFIX + 'Edit keymap abbreviation';
+    static EDIT_TITLE = KeymapActions.PREFIX + 'Edit keymap title';
+    static SET_DEFAULT = KeymapActions.PREFIX + 'Set default option';
+    static REMOVE = KeymapActions.PREFIX + 'Remove keymap';
 
     add(item: Keymap): Action {
         return {

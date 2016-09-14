@@ -24,7 +24,7 @@ export class KeymapTabComponent implements OnInit, Tab {
     constructor(private uhkConfigurationService: UhkConfigurationService) {
         this.keymaps = [];
         this.keymapOptions = [];
-        this.selectedKeymapIndex = "-1";
+        this.selectedKeymapIndex = '-1';
     }
 
     ngOnInit() {
@@ -48,11 +48,11 @@ export class KeymapTabComponent implements OnInit, Tab {
     // TODO: change to the correct type when the wrapper has added it.
     onChange(event: any) {
         this.selectedKeymapIndex = event.value;
-        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation == this.selectedKeymapIndex);
+        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === this.selectedKeymapIndex);
     }
 
     keyActionValid(): boolean {
-        return this.selectedKeymapIndex !== "-1";
+        return this.selectedKeymapIndex !== '-1';
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -61,7 +61,7 @@ export class KeymapTabComponent implements OnInit, Tab {
         }
         let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
         this.selectedKeymapIndex = switchKeymapAction.keymapId;
-        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation == this.selectedKeymapIndex);
+        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === this.selectedKeymapIndex);
         return true;
     }
 

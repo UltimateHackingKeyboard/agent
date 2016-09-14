@@ -381,7 +381,7 @@
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
-                                    "keymapId": 2
+                                    "keymapId": "VIM"
                                 },
                                 {
                                     "keyActionType": "none"
@@ -813,7 +813,7 @@
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
-                                    "keymapId": 1
+                                    "keymapId": "QTY"
                                 }
                             ]
                         },

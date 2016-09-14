@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 
+import { Action } from '@ngrx/store';
+
+import { AppState } from '../index';
 import { Electron } from './electron';
 import { Local } from './local';
 
@@ -26,5 +29,9 @@ export class DataStorage {
         else {
             this._environment = new Local();
         }
+    }
+
+    saveSate(reducer: any): (state: AppState, action: Action) => AppState {
+        return this._environment.saveSate(reducer);
     }
 }

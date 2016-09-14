@@ -17,7 +17,8 @@ export default function(state = initialState, action: Action): Keymap[] {
     switch (action.type) {
         case KeymapActions.ADD:
         case KeymapActions.DUPLICATE:
-            let newKeymap: Keymap = Object.assign({}, action.payload);
+            let newKeymap: Keymap = new Keymap;
+            newKeymap = Object.assign(newKeymap, action.payload);
 
             newKeymap.abbreviation = generateAbbr(state, newKeymap.abbreviation);
             newKeymap.name = generateName(state, newKeymap.name);
@@ -70,13 +71,25 @@ export default function(state = initialState, action: Action): Keymap[] {
             );
 
         case KeymapActions.REMOVE:
+            let isDefault: boolean;
             id = action.payload;
 
-           return Object.values(
-               Object.assign({}, state.filter(
-                   (keymap: Keymap) => keymap.abbreviation !== id
-               ))
-           );
+            let filtered: Keymap[] = Object.values(Object.assign({}, state.filter(
+                (keymap: Keymap) => {
+                    if (keymap.abbreviation === id) {
+                        isDefault = keymap.isDefault;
+                        return false;
+                    }
+
+                    return true;
+                }
+            )));
+
+            if (isDefault && filtered.length > 0) {
+                filtered[0].isDefault = true;
+            }
+
+            return filtered;
 
         default: {
             return state;

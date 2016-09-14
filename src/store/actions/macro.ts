@@ -3,7 +3,8 @@ import { Action } from '@ngrx/store';
 
 @Injectable()
 export class MacroActions {
-    static GET_ALL = '[Macro] Get all macros';
+    static PREFIX = '[Macro] ';
+    static GET_ALL = MacroActions.PREFIX + 'Get all macros';
     getAll(): Action {
         return {
             type: MacroActions.GET_ALL

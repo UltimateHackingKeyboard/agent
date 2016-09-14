@@ -11,7 +11,8 @@ export class KeymapEffects {
         .ofType(KeymapActions.REMOVE)
         .map(() => {
             // Waiting for the fix: https://github.com/angular/angular/issues/10770
-            // // router.navigate(['/keymap']);
+            // If state is empty router.navigate(['/keymap']);
+            // Else router.navigate(['/keymap']);
         });
 
     @Effect() editAbbr$: any = this.actions$
