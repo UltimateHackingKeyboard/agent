@@ -10,8 +10,8 @@
     </h1>
 </div>
 <div class="row list-container">
-    <div class="col-xs-10 col-xs-offset-1 list-group" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions.elements">
-        <div class="macro-actions-container">
+    <div class="col-xs-10 col-xs-offset-1 list-group">
+        <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions.elements">
             <macro-item *ngFor="let macroAction of macro.macroActions.elements; let macroActionIndex = index"
                         [macroAction]="macroAction"
                         [editable]="true"
