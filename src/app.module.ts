@@ -57,8 +57,6 @@ import { DataStorage } from './store/storage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
-import { KeymapActions } from './store/actions/keymap';
-import { PresetActions } from './store/actions/preset';
 import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
 
 // Create DataStorage dependency injection
@@ -68,9 +66,9 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
 
 // All reducers that are used in application
 const storeConfig = {
-    keymap: storageService.saveSate(keymapReducer),
-    macro: storageService.saveSate(macroReducer),
-    preset: presetReducer
+    keymaps: storageService.saveSate(keymapReducer),
+    macros: storageService.saveSate(macroReducer),
+    presetKeymaps: presetReducer
 };
 
 @NgModule({
@@ -78,6 +76,7 @@ const storeConfig = {
         Select2Component,
         MainAppComponent,
         KeymapComponent,
+        KeymapHeaderComponent,
         LegacyLoaderComponent,
         NotificationComponent,
         SvgIconTextKeyComponent,
@@ -111,8 +110,7 @@ const storeConfig = {
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableDirective,
-        KeymapHeaderComponent
+        ContenteditableDirective
     ],
     imports: [
         BrowserModule,
@@ -122,8 +120,8 @@ const storeConfig = {
         StoreModule.provideStore(storeConfig, storageService.initialState()),
         StoreDevtoolsModule.instrumentStore({
             monitor: useLogMonitor({
-            visible: false,
-            position: 'right'
+                visible: false,
+                position: 'right'
             })
         }),
         StoreLogMonitorModule
@@ -132,9 +130,7 @@ const storeConfig = {
         DataProviderService,
         UhkConfigurationService,
         MapperService,
-        appRoutingProviders,
-        KeymapActions,
-        PresetActions
+        appRoutingProviders
     ],
     bootstrap: [MainAppComponent]
 })

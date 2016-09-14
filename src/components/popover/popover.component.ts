@@ -10,12 +10,12 @@ import {
     SwitchKeymapAction,
     SwitchLayerAction
 } from '../../config-serializer/config-items/key-action';
+import { Keymap } from '../../config-serializer/config-items/Keymap';
 
 import { Tab } from './tab/tab';
 
-import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { AppState } from '../../store/index';
-import { Observable } from 'rxjs';
+import { AppState } from '../../store';
+import { Observable } from 'rxjs/Observable';
 
 enum TabName {
     Keypress,
@@ -48,7 +48,7 @@ export class PopoverComponent implements OnInit {
     private keymaps$: Observable<Keymap[]>;
 
     constructor(private store: Store<AppState>) {
-        this.keymaps$ = store.select((s: AppState) => s.keymap);
+        this.keymaps$ = store.select((appState: AppState) => appState.keymaps);
     }
 
     ngOnInit() {

@@ -5,8 +5,7 @@ import { Keymaps } from '../../config-serializer/config-items/Keymaps';
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
 
-import { KeymapActions } from '../actions/keymap';
-import { MacroActions } from '../actions/macro';
+import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 
 export class Local {
@@ -36,9 +35,9 @@ export class Local {
         }
 
         return {
-            keymap: config.keymaps.elements,
-            macro: config.macros.elements,
-            preset: presetAll.elements
+            keymaps: config.keymaps.elements,
+            macros: config.macros.elements,
+            presetKeymaps: presetAll.elements
         };
     }
 

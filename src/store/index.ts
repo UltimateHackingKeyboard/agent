@@ -3,7 +3,7 @@ import { Macro } from '../config-serializer/config-items/Macro';
 
 // State interface for the application
 export interface AppState {
-    keymap: Keymap[];
-    macro: Macro[];
-    preset: Keymap[];
+    keymaps: Keymap[];
+    macros: Macro[];
+    presetKeymaps: Keymap[];
 }

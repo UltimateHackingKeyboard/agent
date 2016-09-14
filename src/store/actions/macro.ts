@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-@Injectable()
-export class MacroActions {
-    static PREFIX = '[Macro] ';
-    static GET_ALL = MacroActions.PREFIX + 'Get all macros';
-    getAll(): Action {
+export namespace MacroActions {
+    export const PREFIX = '[Macro] ';
+    export const GET_ALL = MacroActions.PREFIX + 'Get all macros';
+
+    export function getAll(): Action {
         return {
             type: MacroActions.GET_ALL
         };

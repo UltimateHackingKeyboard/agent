@@ -3,9 +3,9 @@ import { Component, Renderer, animate, state, style, transition, trigger } from 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 
-import { AppState } from '../../store/index';
+import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     animations: [
@@ -35,8 +35,8 @@ export class SideMenuComponent {
             addon: 'active'
         };
 
-        this.keymaps$ = store.select(s => s.keymap);
-        this.macros$ = store.select(s => s.macro);
+        this.keymaps$ = store.select(appState => appState.keymaps);
+        this.macros$ = store.select(appState => appState.macros);
     }
 
     toggleHide(event: Event, type: string) {

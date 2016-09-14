@@ -12,14 +12,14 @@ export class DataStorage {
     private _environment: Local | Electron;
 
     constructor() {
-        this.detectEnviorment();
+        this.detectEnvironment();
     }
 
     initialState() {
         return this._environment.initialState();
     }
 
-    detectEnviorment() {
+    detectEnvironment() {
         // Electron
         // TODO check if we can remove <any> when electron will be implemented (maybe use process.versions['electron'])
         if (typeof window !== 'undefined' && (<any>window).process && (<any>window).process.type === 'renderer') {

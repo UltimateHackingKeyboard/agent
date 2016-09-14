@@ -20,7 +20,7 @@ export class Keymap extends Serializable<Keymap> {
         if (!keymap) {
             return;
         }
-        this.id = keymap.id;
+
         this.name = keymap.name;
         this.description = keymap.description;
         this.abbreviation = keymap.abbreviation;
@@ -65,6 +65,6 @@ export class Keymap extends Serializable<Keymap> {
     }
 
     toString(): string {
-        return `<Keymap id="${this.abbreviation}" name="${this.name}">`;
+        return `<Keymap abbreviation="${this.abbreviation}" name="${this.name}">`;
     }
 }

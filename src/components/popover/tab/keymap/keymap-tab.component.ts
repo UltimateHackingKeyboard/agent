@@ -14,15 +14,13 @@ import { Tab } from '../tab';
 })
 export class KeymapTabComponent implements OnInit, Tab {
     @Input() defaultKeyAction: KeyAction;
-    @Input() keymaps: any;
+    @Input() keymaps: Keymap[];
 
     private keymapOptions: Array<Select2OptionData>;
     private selectedKeymap: Keymap;
-    private selectedKeymapIndex: string;
 
     constructor() {
         this.keymapOptions = [];
-        this.selectedKeymapIndex = '-1';
     }
 
     ngOnInit() {
@@ -43,12 +41,15 @@ export class KeymapTabComponent implements OnInit, Tab {
 
     // TODO: change to the correct type when the wrapper has added it.
     onChange(event: any) {
-        this.selectedKeymapIndex = event.value;
-        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === this.selectedKeymapIndex);
+        if (event.value === '-1') {
+            this.selectedKeymap = undefined;
+        } else {
+            this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === event.value);
+        }
     }
 
     keyActionValid(): boolean {
-        return this.selectedKeymapIndex !== '-1';
+        return !!this.selectedKeymap;
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -56,16 +57,17 @@ export class KeymapTabComponent implements OnInit, Tab {
             return false;
         }
         let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
-        this.selectedKeymapIndex = switchKeymapAction.keymapId;
-        this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === this.selectedKeymapIndex);
+        this.selectedKeymap = this.keymaps
+            .find((keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation);
     }
 
     toKeyAction(): SwitchKeymapAction {
         if (!this.keyActionValid()) {
             throw new Error('KeyAction is not valid. No selected keymap!');
         }
+
         let keymapAction = new SwitchKeymapAction();
-        keymapAction.keymapId = this.selectedKeymapIndex;
+        keymapAction.keymapAbbreviation = this.selectedKeymap.abbreviation;
         return keymapAction;
     }
 }

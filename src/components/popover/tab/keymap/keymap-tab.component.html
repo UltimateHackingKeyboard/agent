@@ -1,12 +1,17 @@
 <div>
     <b>Switch to keymap:</b>
-    <select2 [data]="keymapOptions" [value]="selectedKeymapIndex" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
+    <select2
+            [data]="keymapOptions"
+            [value]="selectedKeymap?.abbreviation"
+            (valueChanged)="onChange($event)"
+            [width]="'100%'"
+    ></select2>
 </div>
 <div>
-    <div *ngIf="selectedKeymapIndex === -1">
+    <div *ngIf="!selectedKeymap?.abbreviation">
         <img src="./images/base-layer--blank.svg">
     </div>
-    <svg-keyboard *ngIf="selectedKeymapIndex !== '-1'"
+    <svg-keyboard *ngIf="selectedKeymap?.abbreviation"
                 [moduleConfig]="selectedKeymap.layers.elements[0].modules.elements">
     </svg-keyboard>
 </div>

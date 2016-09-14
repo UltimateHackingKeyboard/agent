@@ -3,8 +3,9 @@ import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
-import { KeymapActions } from '../../../store/actions/keymap';
-import { AppState } from '../../../store/index';
+
+import { AppState } from '../../../store';
+import { KeymapActions } from '../../../store/actions';
 
 @Component({
     selector: 'keymap-header',
@@ -15,29 +16,29 @@ export class KeymapHeaderComponent {
     @Input() keymap: Keymap;
 
     constructor(
-        private store: Store<AppState>,
-        private keymapActions: KeymapActions
+        private store: Store<AppState>
     ) { }
 
-    setDefault(id: string) {
+    setDefault() {
         if (!this.keymap.isDefault) {
-            this.store.dispatch(this.keymapActions.setDefault(id));
+            this.store.dispatch(KeymapActions.setDefault(this.keymap.abbreviation));
         }
     }
 
-    removeKeymap(id: string) {
-        this.store.dispatch(this.keymapActions.removeKeymap(id));
+    removeKeymap() {
+        this.store.dispatch(KeymapActions.removeKeymap(this.keymap.abbreviation));
     }
 
-    duplicateKeymap(keymap: Keymap) {
-        this.store.dispatch(this.keymapActions.duplicateKeymap(keymap));
+    duplicateKeymap() {
+        this.store.dispatch(KeymapActions.duplicateKeymap(this.keymap));
     }
 
-    editTitleKeymap(id: string, title: string) {
-        this.store.dispatch(this.keymapActions.editTitleKeymap(id, title));
+    editKeymapName(name: string) {
+        this.store.dispatch(KeymapActions.editKeymapName(this.keymap.abbreviation, name));
     }
 
-    editAbbrKeymap(id: string, abbr: string) {
-        this.store.dispatch(this.keymapActions.editAbbrKeymap(id, abbr));
+    editKeymapAbbr(newAbbr: string) {
+        newAbbr = newAbbr.toUpperCase();
+        this.store.dispatch(KeymapActions.editKeymapAbbr(this.keymap.abbreviation, newAbbr));
     }
 }

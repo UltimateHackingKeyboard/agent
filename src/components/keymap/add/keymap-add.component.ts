@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import 'rxjs/add/operator/count';
-import 'rxjs/add/operator/debounceTime';
-import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/publishReplay';
+import { Observable } from 'rxjs/Observable';
+import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
-import { KeymapActions } from '../../../store/actions/keymap';
-import { AppState } from '../../../store/index';
+import { AppState } from '../../../store';
+import { KeymapActions } from '../../../store/actions';
 
 @Component({
     selector: 'keymap-add',
@@ -18,19 +18,29 @@ export class KeymapAddComponent {
     private presets$: Observable<Keymap[]>;
     private presetsAll$: Observable<Keymap[]>;
 
-    constructor(private store: Store<AppState>, private keymapActions: KeymapActions) {
-        this.presets$ = store.select((s: AppState) => s.preset);
-        this.presetsAll$ = store.select((s: AppState) => s.preset);
+    constructor(private store: Store<AppState>) {
+        let presetConnectable: ConnectableObservable<Keymap[]> = store
+            .select((appState: AppState) => appState.presetKeymaps)
+            .publishReplay();
+
+        this.presets$ = presetConnectable;
+        presetConnectable.connect();
+
+        this.presetsAll$ = store.select((appState: AppState) => appState.presetKeymaps);
     }
 
     filterKeyboards(value: string) {
-        this.presets$ = this.presetsAll$
-            .map((items: Keymap[]) => items.filter(
-                (item: Keymap) => item.name.toLocaleLowerCase().indexOf(value) !== -1)
-            );
+        let presetConnectable: ConnectableObservable<Keymap[]> = this.presetsAll$
+            .map((keymaps: Keymap[]) => keymaps.filter(
+                (keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(value))
+            )
+            .publishReplay();
+
+        this.presets$ = presetConnectable;
+        presetConnectable.connect();
     }
 
-    addKeymap(item: Keymap) {
-        this.store.dispatch(this.keymapActions.add(item));
+    addKeymap(keymap: Keymap) {
+        this.store.dispatch(KeymapActions.addKeymap(keymap));
     }
 }
