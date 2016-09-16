@@ -4,7 +4,7 @@
 </div>
 <div>
     <div *ngIf="selectedKeymapIndex === -1">
-        <img src="/images/base-layer--blank.svg">
+        <img src="./images/base-layer--blank.svg">
     </div>
     <svg-keyboard *ngIf="selectedKeymapIndex >= 0"
                 [moduleConfig]="keymaps[selectedKeymapIndex].layers.elements[0].modules.elements">
