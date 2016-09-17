@@ -1,14 +1,22 @@
-import {ClassArray} from '../../ClassArray';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
-import {KeystrokeAction} from './KeystrokeAction';
-import {MouseAction} from './MouseAction';
-import {NoneAction} from './NoneAction';
-import {PlayMacroAction} from './PlayMacroAction';
-import {SwitchKeymapAction} from './SwitchKeymapAction';
-import {SwitchLayerAction} from './SwitchLayerAction';
+import { ClassArray } from '../../ClassArray';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
+import { KeystrokeAction } from './KeystrokeAction';
+import { MouseAction } from './MouseAction';
+import { NoneAction } from './NoneAction';
+import { PlayMacroAction } from './PlayMacroAction';
+import { SwitchKeymapAction } from './SwitchKeymapAction';
+import { SwitchLayerAction } from './SwitchLayerAction';
 
 export class KeyActions extends ClassArray<KeyAction> {
+
+    constructor(keyActions?: KeyActions) {
+        super();
+        if (!keyActions) {
+            return;
+        }
+        keyActions.elements.forEach(keyaction => this.elements.push(this.jsObjectToClass(keyaction)));
+    }
 
     jsObjectToClass(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {

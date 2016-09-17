@@ -1,7 +1,7 @@
-import {assertUInt8} from '../assert';
-import {Serializable} from '../Serializable';
-import {UhkBuffer} from '../UhkBuffer';
-import {Layers} from './Layers';
+import { assertUInt8 } from '../assert';
+import { Serializable } from '../Serializable';
+import { UhkBuffer } from '../UhkBuffer';
+import { Layers } from './Layers';
 
 export class Keymap extends Serializable<Keymap> {
 
@@ -17,6 +17,19 @@ export class Keymap extends Serializable<Keymap> {
     isDefault: boolean;
 
     layers: Layers;
+
+    constructor(keymap?: Keymap) {
+        super();
+        if (!keymap) {
+            return;
+        }
+        this.id = keymap.id;
+        this.name = keymap.name;
+        this.description = keymap.description;
+        this.abbreviation = keymap.abbreviation;
+        this.isDefault = keymap.isDefault;
+        this.layers = new Layers(keymap.layers);
+    }
 
     _fromJsObject(jsObject: any): Keymap {
         this.id = jsObject.id;
