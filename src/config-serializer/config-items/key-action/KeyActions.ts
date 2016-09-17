@@ -10,12 +10,28 @@ import { SwitchLayerAction } from './SwitchLayerAction';
 
 export class KeyActions extends ClassArray<KeyAction> {
 
-    constructor(keyActions?: KeyActions) {
+    constructor(other?: KeyActions) {
         super();
-        if (!keyActions) {
+        if (!other) {
             return;
         }
-        keyActions.elements.forEach(keyaction => this.elements.push(this.jsObjectToClass(keyaction)));
+        other.elements.forEach(keyAction => {
+            let newKeyAction: KeyAction;
+            if (keyAction instanceof KeystrokeAction) {
+                newKeyAction = new KeystrokeAction(keyAction);
+            } else if (keyAction instanceof SwitchLayerAction) {
+                newKeyAction = new SwitchLayerAction(keyAction);
+            } else if (keyAction instanceof SwitchKeymapAction) {
+                newKeyAction = new SwitchKeymapAction(keyAction);
+            } else if (keyAction instanceof MouseAction) {
+                newKeyAction = new MouseAction(keyAction);
+            } else if (keyAction instanceof PlayMacroAction) {
+                newKeyAction = new PlayMacroAction(keyAction);
+            } else {
+                newKeyAction = new NoneAction();
+            }
+            this.elements.push(newKeyAction);
+        });
     }
 
     jsObjectToClass(jsObject: any): KeyAction {

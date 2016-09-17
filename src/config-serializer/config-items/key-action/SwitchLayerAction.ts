@@ -1,6 +1,6 @@
-import {assertEnum} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
+import { assertEnum } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export enum LayerName {
     mod,
@@ -15,9 +15,18 @@ export class SwitchLayerAction extends KeyAction {
     @assertEnum(LayerName)
     layer: LayerName;
 
+    constructor(other?: SwitchLayerAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.isLayerToggleable = other.isLayerToggleable;
+        this.layer = other.layer;
+    }
+
     _fromJsObject(jsObject: any): SwitchLayerAction {
         this.assertKeyActionType(jsObject);
-        this.layer = LayerName[<string> jsObject.layer];
+        this.layer = LayerName[<string>jsObject.layer];
         this.isLayerToggleable = jsObject.toggle;
         return this;
     }

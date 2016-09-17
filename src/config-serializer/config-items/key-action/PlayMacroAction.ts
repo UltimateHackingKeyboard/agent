@@ -1,11 +1,19 @@
-import {assertUInt8} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
+import { assertUInt8 } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class PlayMacroAction extends KeyAction {
 
     @assertUInt8
     macroId: number;
+
+    constructor(other?: PlayMacroAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.macroId = other.macroId;
+    }
 
     _fromJsObject(jsObject: any): PlayMacroAction {
         this.assertKeyActionType(jsObject);

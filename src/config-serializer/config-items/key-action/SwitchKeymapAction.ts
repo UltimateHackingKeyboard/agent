@@ -1,11 +1,19 @@
-import {assertUInt8} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
+import { assertUInt8 } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class SwitchKeymapAction extends KeyAction {
 
     @assertUInt8
     keymapId: number;
+
+    constructor(other?: SwitchKeymapAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.keymapId = other.keymapId;
+    }
 
     _fromJsObject(jsObject: any): SwitchKeymapAction {
         this.assertKeyActionType(jsObject);
