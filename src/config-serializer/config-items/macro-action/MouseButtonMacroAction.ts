@@ -29,7 +29,8 @@ export class MouseButtonMacroAction extends MacroAction {
     }
 
     _fromBinary(buffer: UhkBuffer): MouseButtonMacroAction {
-        this.readAndAssertMacroActionId(buffer);
+        let macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
+        this.action = macroActionId - MacroActionId.MouseButtonMacroAction;
         this.mouseButtonsMask = buffer.readUInt8();
         return this;
     }
@@ -43,7 +44,7 @@ export class MouseButtonMacroAction extends MacroAction {
     }
 
     _toBinary(buffer: UhkBuffer): void {
-        buffer.writeUInt8(MacroActionId.MouseButtonMacroAction);
+        buffer.writeUInt8(MacroActionId.MouseButtonMacroAction + this.action);
         buffer.writeUInt8(this.mouseButtonsMask);
     }
 
