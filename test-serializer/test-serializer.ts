@@ -1,6 +1,6 @@
-import {UhkConfiguration} from '../src/config-serializer/config-items/UhkConfiguration';
-import {Serializable} from '../src/config-serializer/Serializable';
-import {UhkBuffer} from '../src/config-serializer/UhkBuffer';
+import { UhkConfiguration } from '../src/config-serializer/config-items/UhkConfiguration';
+import { Serializable } from '../src/config-serializer/Serializable';
+import { UhkBuffer } from '../src/config-serializer/UhkBuffer';
 
 let assert = require('assert');
 let fs = require('fs');
@@ -26,13 +26,13 @@ let config2BufferContent = config1Buffer.getBufferContent();
 fs.writeFileSync('uhk-config-serialized.bin', config2BufferContent);
 
 console.log('\n');
-let error: boolean;
+let returnValue = 0;
 try {
     assert.deepEqual(config1Js, config2Js);
     console.log('JSON configurations are identical.');
 } catch (error) {
     console.log('JSON configurations differ.');
-    error = true;
+    returnValue = 1;
 }
 
 const buffersContentsAreEqual: boolean = Buffer.compare(config1BufferContent, config2BufferContent) === 0;
@@ -40,7 +40,7 @@ if (buffersContentsAreEqual) {
     console.log('Binary configurations are identical.');
 } else {
     console.log('Binary configurations differ.');
-    error = true;
+    returnValue += 2;
 }
 
-process.exit(error ? 1 : 0);
+process.exit(returnValue);
