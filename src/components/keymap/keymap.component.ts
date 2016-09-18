@@ -1,42 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+
+import '@ngrx/core/add/operator/select';
+import { Store } from '@ngrx/store';
+
+import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/publishReplay';
+import 'rxjs/add/operator/switchMap';
+import { Observable } from 'rxjs/Observable';
+import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Layers } from '../../config-serializer/config-items/Layers';
-import { UhkConfigurationService } from '../../services/uhk-configuration.service';
+import { AppState } from '../../store';
+import { getKeymap } from '../../store/reducers/keymap';
 
 @Component({
     selector: 'keymap',
     template: require('./keymap.component.html'),
     styles: [require('./keymap.component.scss')]
 })
-export class KeymapComponent implements OnInit {
-    private keymapId: number = 0;
-    private layers: Layers;
-    private keymap: Keymap;
-    private subParams: Subscription;
+export class KeymapComponent {
+    private keymap$: Observable<Keymap>;
 
     constructor(
-        private uhkConfigurationService: UhkConfigurationService,
+        private store: Store<AppState>,
         private route: ActivatedRoute
     ) {
-    }
+        let keymapConnectable: ConnectableObservable<Keymap> = route
+            .params
+            .select<string>('abbr')
+            .switchMap((abbr: string) => store.let(getKeymap(abbr)))
+            .publishReplay();
 
-    ngOnInit() {
-        this.subParams = this.route.params.subscribe((params: { id: string }) => {
-            let id: number = +params.id;
-
-            if (!isNaN(id)) {
-                this.keymapId = id;
-            }
-
-            this.keymap = this.uhkConfigurationService.getUhkConfiguration().keymaps.elements[this.keymapId];
-            this.layers = this.keymap.layers;
-        });
-    }
-
-    ngOnDestroy() {
-        this.subParams.unsubscribe();
+        this.keymap$ = keymapConnectable;
+        keymapConnectable.connect();
     }
 }

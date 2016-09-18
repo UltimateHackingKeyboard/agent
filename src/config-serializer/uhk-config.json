@@ -14,7 +14,6 @@
     ],
     "keymaps": [
         {
-            "id": 0,
             "isDefault": true,
             "abbreviation": "QTY",
             "name": "QWERTY",
@@ -394,7 +393,7 @@
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
-                                    "keymapId": 2
+                                    "keymapAbbreviation": "VIM"
                                 },
                                 {
                                     "keyActionType": "none"
@@ -809,7 +808,6 @@
             ]
         },
         {
-            "id": 1,
             "isDefault": false,
             "abbreviation": "VIM",
             "name": "VIM",
@@ -831,7 +829,7 @@
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
-                                    "keymapId": 1
+                                    "keymapAbbreviation": "QTY"
                                 }
                             ]
                         },
@@ -912,7 +910,6 @@
             ]
         },
         {
-            "id": 2,
             "isDefault": false,
             "abbreviation": "DVR",
             "name": "DVR",

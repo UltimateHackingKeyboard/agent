@@ -1,8 +1,7 @@
 {
     "keymaps": [
         {
-            "id": 0,
-            "isDefault": true,
+            "isDefault": false,
             "abbreviation": "QTY",
             "name": "QWERTY",
             "description": "Maecenas sem dui, ullamcorper consequat pellentesque ut, mattis at velit. Duis scelerisque eleifend gravida. Aenean at mauris rhoncus, dictum mi vitae, semper eros. Quisque maximus est elit, at condimentum ligula consectetur vel. Aenean lorem felis, molestie id ex suscipit, sagittis mollis dui. Phasellus in felis in libero bibendum ornare. Duis vestibulum dolor sed diam tempor vulputate. Curabitur scelerisque pretium ipsum. Phasellus non orci vestibulum, vehicula lectus sit amet, lacinia velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In diam lacus, cursus at pretium vel, ullamcorper at ante.",
@@ -381,7 +380,7 @@
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
-                                    "keymapId": 2
+                                    "keymapAbbreviation": "VIM"
                                 },
                                 {
                                     "keyActionType": "none"
@@ -791,7 +790,6 @@
             ]
         },
         {
-            "id": 1,
             "isDefault": false,
             "abbreviation": "VIM",
             "name": "VIM",
@@ -813,7 +811,7 @@
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
-                                    "keymapId": 1
+                                    "keymapAbbreviation": "QTY"
                                 }
                             ]
                         },
@@ -879,7 +877,6 @@
             ]
         },
         {
-            "id": 2,
             "isDefault": false,
             "abbreviation": "DVR",
             "name": "DVR",

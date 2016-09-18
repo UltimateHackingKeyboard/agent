@@ -12,7 +12,7 @@ export class DataProviderService {
     }
 
     getDefaultKeymaps(): any {
-        return require('json!../config-serializer/default-keymaps.json');
+        return require('json!../config-serializer/preset-keymaps.json');
     }
 
     getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {

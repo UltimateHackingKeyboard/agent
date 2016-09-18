@@ -18,7 +18,7 @@ export const keymapRoutes: Routes = [
         component: KeymapAddComponent
     },
     {
-        path: 'keymap/:id',
+        path: 'keymap/:abbr',
         component: KeymapComponent
     }
 ];

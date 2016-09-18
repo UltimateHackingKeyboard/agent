@@ -1,0 +1,30 @@
+<div class="row">
+    <h1 class="col-xs-12 pane-title">
+        <i class="fa fa-keyboard-o"></i>
+        <input class="keymap__name pane-title__name"
+               value="{{ keymap.name }}"
+               (change)="editKeymapName($event.target.value)"
+        /> keymap
+        (<input class="keymap__abbrev pane-title__abbrev"
+                value="{{ keymap.abbreviation }}"
+                (change)="editKeymapAbbr($event.target.value)"
+                [attr.maxLength]="3"
+        />)
+        <i class="fa keymap__is-default"
+           [ngClass]="{'fa-star-o': !keymap.isDefault, 'fa-star': keymap.isDefault}"
+           (click)="setDefault()"
+        ></i>
+        <i class="glyphicon glyphicon-trash keymap__remove pull-right" title=""
+           data-toggle="tooltip"
+           data-placement="left"
+           data-original-title="Remove keymap"
+           (click)="removeKeymap()"
+        ></i>
+        <i class="fa fa-files-o keymap__duplicate pull-right" title=""
+           data-toggle="tooltip"
+           data-placement="left"
+           data-original-title="Duplicate keymap"
+           (click)="duplicateKeymap()"
+        ></i>
+    </h1>
+</div>

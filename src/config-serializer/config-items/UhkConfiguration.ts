@@ -88,10 +88,10 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         return `<UhkConfiguration signature="${this.signature}">`;
     }
 
-    getKeymap(keymapId: number): Keymap {
+    getKeymap(keymapAbbreviation: string): Keymap {
         let keymaps: Keymap[] = this.keymaps.elements;
         for (let i = 0; i < keymaps.length; ++i) {
-            if (keymapId === keymaps[i].id) {
+            if (keymapAbbreviation === keymaps[i].abbreviation) {
                 return keymaps[i];
             }
         }
