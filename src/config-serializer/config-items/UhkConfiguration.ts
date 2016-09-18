@@ -1,11 +1,11 @@
-import {assertUInt32, assertUInt8} from '../assert';
-import {Serializable} from '../Serializable';
-import {UhkBuffer} from '../UhkBuffer';
-import {Keymap} from './Keymap';
-import {Keymaps} from './Keymaps';
-import {Macro} from './Macro';
-import {Macros} from './Macros';
-import {ModuleConfigurations} from './ModuleConfigurations';
+import { assertUInt32, assertUInt8 } from '../assert';
+import { Serializable } from '../Serializable';
+import { UhkBuffer } from '../UhkBuffer';
+import { Keymap } from './Keymap';
+import { Keymaps } from './Keymaps';
+import { Macro } from './Macro';
+import { Macros } from './Macros';
+import { ModuleConfigurations } from './ModuleConfigurations';
 
 export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
@@ -89,12 +89,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
     }
 
     getKeymap(keymapAbbreviation: string): Keymap {
-        let keymaps: Keymap[] = this.keymaps.elements;
-        for (let i = 0; i < keymaps.length; ++i) {
-            if (keymapAbbreviation === keymaps[i].abbreviation) {
-                return keymaps[i];
-            }
-        }
+        return this.keymaps.elements.find(keymap => keymapAbbreviation === keymap.abbreviation);
     }
 
     getMacro(macroId: number): Macro {
