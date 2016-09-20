@@ -14,6 +14,7 @@ import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
     MacroComponent,
+    MacroAddComponent,
     MacroDelayTabComponent,
     MacroItemComponent,
     MacroKeyTabComponent,
@@ -102,6 +103,7 @@ const storeConfig = {
         CaptureKeystrokeButtonComponent,
         IconComponent,
         MacroComponent,
+        MacroAddComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
         MacroDelayTabComponent,
