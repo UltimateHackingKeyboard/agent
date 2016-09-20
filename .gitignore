@@ -6,3 +6,4 @@ dist
 *.iml
 *.sublime-project
 *.sublime-workspace
+.editorconfig
