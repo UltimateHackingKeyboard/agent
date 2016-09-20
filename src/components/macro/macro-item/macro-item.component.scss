@@ -11,6 +11,14 @@
         }
     }
 
+    &.gu-transit {
+        opacity: 0.2;
+
+        .list-group-item {
+            background: #f5f5f5;
+        }
+    }
+
     .action {
         &--item {
             display: flex;
