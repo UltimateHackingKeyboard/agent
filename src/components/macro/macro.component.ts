@@ -24,7 +24,6 @@ export class MacroComponent implements OnInit, OnDestroy {
 
     private routeSubscription: Subscription;
     private hasChanges: boolean = false;
-    private dragEnabled: boolean;
 
     constructor(
         private uhkConfigurationService: UhkConfigurationService,
@@ -44,7 +43,6 @@ export class MacroComponent implements OnInit, OnDestroy {
         this.routeSubscription = this.route.params.subscribe((params: { id: string }) => {
             const id: number = Number(params.id);
             this.macro = this.getMacro(id);
-            this.dragEnabled = true;
             this.hasChanges = false;
         });
     }
@@ -90,15 +88,9 @@ export class MacroComponent implements OnInit, OnDestroy {
     onEditAction(index: number) {
         // Hide other editors when clicking edit button of a macro action
         this.hideOtherActionEditors(index);
-        this.dragEnabled = false;
-    }
-
-    onCancelEditAction() {
-        this.dragEnabled = true;
     }
 
     onSaveAction(macroAction: MacroAction, index: number) {
-        this.dragEnabled = true;
         this.hasChanges = true;
         this.macro.macroActions.elements[index] = macroAction;
     }
