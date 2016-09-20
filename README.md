@@ -14,7 +14,6 @@ First up, make sure that node >=4.x.x and npm >=3.x.x are installed on your syst
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
 npm install
-npm run build sass
 npm run dev
 ```
 
