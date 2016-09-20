@@ -50,4 +50,12 @@
         border-left: 0;
         border-right: 0;
     }
+
+    &.gu-transit {
+        opacity: 0.2;
+
+        .list-group-item {
+            background: #f5f5f5;
+        }
+    }
 }
