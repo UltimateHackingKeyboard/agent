@@ -8,11 +8,11 @@ import {
     SwitchKeymapAction,
     SwitchLayerAction
 } from '../../../../config-serializer/config-items/key-action';
-import {KeyModifiers} from '../../../../config-serializer/config-items/KeyModifiers';
-import {UhkConfiguration} from '../../../../config-serializer/config-items/UhkConfiguration';
+import { KeyModifiers } from '../../../../config-serializer/config-items/KeyModifiers';
+import { UhkConfiguration } from '../../../../config-serializer/config-items/UhkConfiguration';
 
-import {MapperService} from '../../../../services/mapper.service';
-import {UhkConfigurationService} from '../../../../services/uhk-configuration.service';
+import { MapperService } from '../../../../services/mapper.service';
+import { UhkConfigurationService } from '../../../../services/uhk-configuration.service';
 
 enum LabelTypes {
     KeystrokeKey,

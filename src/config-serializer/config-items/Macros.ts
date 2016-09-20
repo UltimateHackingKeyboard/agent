@@ -1,6 +1,6 @@
-import {ClassArray} from '../ClassArray';
-import {UhkBuffer} from '../UhkBuffer';
-import {Macro} from './Macro';
+import { ClassArray } from '../ClassArray';
+import { UhkBuffer } from '../UhkBuffer';
+import { Macro } from './Macro';
 
 export class Macros extends ClassArray<Macro> {
 

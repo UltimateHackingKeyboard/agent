@@ -1,6 +1,6 @@
-import {ClassArray} from '../ClassArray';
-import {UhkBuffer} from '../UhkBuffer';
-import {Keymap} from './Keymap';
+import { ClassArray } from '../ClassArray';
+import { UhkBuffer } from '../UhkBuffer';
+import { Keymap } from './Keymap';
 
 export class Keymaps extends ClassArray<Keymap> {
 

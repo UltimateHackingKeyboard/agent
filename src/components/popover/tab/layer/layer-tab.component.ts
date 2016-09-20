@@ -1,10 +1,10 @@
-import {Component, Input,  OnInit, ViewChild} from '@angular/core';
+import { Component, Input,  OnInit, ViewChild } from '@angular/core';
 
-import {KeyAction, LayerName, SwitchLayerAction} from '../../../../config-serializer/config-items/key-action';
+import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
 
-import {Select2Component, Select2OptionData} from 'ng2-select2/ng2-select2';
+import { Select2Component, Select2OptionData } from 'ng2-select2/ng2-select2';
 
-import {Tab} from '../tab';
+import { Tab } from '../tab';
 
 @Component({
     selector: 'layer-tab',

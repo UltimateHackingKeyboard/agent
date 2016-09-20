@@ -1,4 +1,4 @@
-import {KeyAction} from '../../../config-serializer/config-items/key-action';
+import { KeyAction } from '../../../config-serializer/config-items/key-action';
 
 export interface Tab {
     keyActionValid(): boolean;

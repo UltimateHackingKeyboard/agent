@@ -1,5 +1,5 @@
-import {Serializable} from '../../Serializable';
-import {UhkBuffer} from '../../UhkBuffer';
+import { Serializable } from '../../Serializable';
+import { UhkBuffer } from '../../UhkBuffer';
 
 export enum MacroActionId {
     KeyMacroAction                  =  0,

@@ -1,5 +1,5 @@
 import { assertEnum, assertUInt8 } from '../../assert';
-import { UhkBuffer} from '../../UhkBuffer';
+import { UhkBuffer } from '../../UhkBuffer';
 import { KeyModifiers } from '../KeyModifiers';
 import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './MacroAction';
 
