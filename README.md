@@ -8,7 +8,7 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 
 ## Set up instructions
 
-First up, make sure that node >=4.x.x and npm >=3.x.x are installed on your system.
+First up, make sure that node >=4.x.x and npm >=3.x.x are installed on your system. Next up:
 
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
@@ -21,4 +21,4 @@ At this point, webpack dev server should expose Agent at `localhost:8080`
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for more info about contributing.
+Wanna contribute? Please let us show you [how]((CONTRIBUTING.md)).
