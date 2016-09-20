@@ -9,12 +9,13 @@ import { Select2Component } from 'ng2-select2/ng2-select2';
 
 import { ContenteditableDirective } from './directives/contenteditable';
 
+import { AddOnComponent } from './components/add-on';
 import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
-    MacroComponent,
     MacroAddComponent,
+    MacroComponent,
     MacroDelayTabComponent,
     MacroItemComponent,
     MacroKeyTabComponent,
@@ -110,7 +111,8 @@ const storeConfig = {
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableDirective
+        ContenteditableDirective,
+        AddOnComponent
     ],
     imports: [
         BrowserModule,

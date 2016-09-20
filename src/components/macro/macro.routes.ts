@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { MacroAddComponent } from './add/macro-add.component';
 import { MacroComponent } from './macro.component';
-import { MacroAddComponent } from "./add/macro-add.component";
 
 export const macroRoutes: Routes = [
     {
