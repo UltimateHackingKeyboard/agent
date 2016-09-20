@@ -118,22 +118,20 @@ h1 {
 // Dragula styles
 .gu {
     &-mirror {
-        position: fixed !important;
-        margin: 0 !important;
-        z-index: 9999 !important;
+        position: fixed;
+        margin: 0;
+        z-index: 9999;
         opacity: 0.8;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-        filter: alpha(opacity=80);
     }
 
     &-hide {
-        display: none !important;
+        display: none;
     }
 
     &-unselectable {
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-        user-select: none !important;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 }
