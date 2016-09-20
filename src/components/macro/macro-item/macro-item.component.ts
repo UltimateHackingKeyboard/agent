@@ -129,7 +129,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.hasScancode()) {
-            const scancode: string = this.mapper.scanCodeToText(action.scancode).join(' ');
+            const scancode: string = (this.mapper.scanCodeToText(action.scancode) || [ 'Unknown' ]).join(' ');
             if (scancode) {
                 this.title += scancode;
             }

@@ -1,7 +1,7 @@
-import {assertEnum, assertUInt8} from '../assert';
-import {Serializable} from '../Serializable';
-import {UhkBuffer} from '../UhkBuffer';
-import {KeyActions} from './key-action';
+import { assertEnum, assertUInt8 } from '../assert';
+import { Serializable } from '../Serializable';
+import { UhkBuffer } from '../UhkBuffer';
+import { KeyActions } from './key-action';
 
 enum PointerRole {
     none,
@@ -19,9 +19,19 @@ export class Module extends Serializable<Module> {
     @assertEnum(PointerRole)
     private pointerRole: PointerRole;
 
+    constructor(moduleI?: Module) {
+        super();
+        if (!moduleI) {
+            return;
+        }
+        this.id = moduleI.id;
+        this.keyActions = new KeyActions(moduleI.keyActions);
+        this.pointerRole = moduleI.pointerRole;
+    }
+
     _fromJsObject(jsObject: any): Module {
         this.id = jsObject.id;
-        this.pointerRole = PointerRole[<string> jsObject.pointerRole];
+        this.pointerRole = PointerRole[<string>jsObject.pointerRole];
         this.keyActions = new KeyActions().fromJsObject(jsObject.keyActions);
         return this;
     }

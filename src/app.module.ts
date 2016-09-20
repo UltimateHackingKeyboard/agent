@@ -1,13 +1,15 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ReflectiveInjector } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+
+import { StoreModule } from '@ngrx/store';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Component } from 'ng2-select2/ng2-select2';
 
 import { ContenteditableDirective } from './directives/contenteditable';
 
-import { KeymapAddComponent, KeymapComponent } from './components/keymap';
+import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import { LegacyLoaderComponent } from './components/legacy-loader';
 import {
@@ -51,11 +53,30 @@ import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';
 
+import { DataStorage } from './store/storage';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
+
+import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
+
+// Create DataStorage dependency injection
+const storageProvider = ReflectiveInjector.resolve([DataStorage]);
+const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
+const storageService: DataStorage = storageInjector.get(DataStorage);
+
+// All reducers that are used in application
+const storeConfig = {
+    keymaps: storageService.saveSate(keymapReducer),
+    macros: storageService.saveSate(macroReducer),
+    presetKeymaps: presetReducer
+};
+
 @NgModule({
     declarations: [
         Select2Component,
         MainAppComponent,
         KeymapComponent,
+        KeymapHeaderComponent,
         LegacyLoaderComponent,
         NotificationComponent,
         SvgIconTextKeyComponent,
@@ -95,7 +116,15 @@ import { UhkConfigurationService } from './services/uhk-configuration.service';
         BrowserModule,
         FormsModule,
         DragulaModule,
-        routing
+        routing,
+        StoreModule.provideStore(storeConfig, storageService.initialState()),
+        StoreDevtoolsModule.instrumentStore({
+            monitor: useLogMonitor({
+                visible: false,
+                position: 'right'
+            })
+        }),
+        StoreLogMonitorModule
     ],
     providers: [
         DataProviderService,

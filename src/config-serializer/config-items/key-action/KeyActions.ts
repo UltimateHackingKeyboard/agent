@@ -1,14 +1,38 @@
-import {ClassArray} from '../../ClassArray';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
-import {KeystrokeAction} from './KeystrokeAction';
-import {MouseAction} from './MouseAction';
-import {NoneAction} from './NoneAction';
-import {PlayMacroAction} from './PlayMacroAction';
-import {SwitchKeymapAction} from './SwitchKeymapAction';
-import {SwitchLayerAction} from './SwitchLayerAction';
+import { ClassArray } from '../../ClassArray';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
+import { KeystrokeAction } from './KeystrokeAction';
+import { MouseAction } from './MouseAction';
+import { NoneAction } from './NoneAction';
+import { PlayMacroAction } from './PlayMacroAction';
+import { SwitchKeymapAction } from './SwitchKeymapAction';
+import { SwitchLayerAction } from './SwitchLayerAction';
 
 export class KeyActions extends ClassArray<KeyAction> {
+
+    constructor(other?: KeyActions) {
+        super();
+        if (!other) {
+            return;
+        }
+        other.elements.forEach(keyAction => {
+            let newKeyAction: KeyAction;
+            if (keyAction instanceof KeystrokeAction) {
+                newKeyAction = new KeystrokeAction(keyAction);
+            } else if (keyAction instanceof SwitchLayerAction) {
+                newKeyAction = new SwitchLayerAction(keyAction);
+            } else if (keyAction instanceof SwitchKeymapAction) {
+                newKeyAction = new SwitchKeymapAction(keyAction);
+            } else if (keyAction instanceof MouseAction) {
+                newKeyAction = new MouseAction(keyAction);
+            } else if (keyAction instanceof PlayMacroAction) {
+                newKeyAction = new PlayMacroAction(keyAction);
+            } else {
+                newKeyAction = new NoneAction();
+            }
+            this.elements.push(newKeyAction);
+        });
+    }
 
     jsObjectToClass(jsObject: any): KeyAction {
         switch (jsObject.keyActionType) {

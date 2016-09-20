@@ -1,8 +1,8 @@
-import {assertEnum, assertUInt8} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyModifiers} from '../KeyModifiers';
-import {LongPressAction} from '../LongPressAction';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
+import { assertEnum, assertUInt8 } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyModifiers } from '../KeyModifiers';
+import { LongPressAction } from '../LongPressAction';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export enum KeystrokeActionFlag {
     scancode = 1 << 0,
@@ -27,6 +27,16 @@ export class KeystrokeAction extends KeyAction {
 
     @assertEnum(LongPressAction)
     longPressAction: LongPressAction;
+
+    constructor(other?: KeystrokeAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.scancode = other.scancode;
+        this.modifierMask = other.modifierMask;
+        this.longPressAction = other.longPressAction;
+    }
 
     _fromJsObject(jsObject: JsObjectKeystrokeAction): KeystrokeAction {
         this.assertKeyActionType(jsObject);

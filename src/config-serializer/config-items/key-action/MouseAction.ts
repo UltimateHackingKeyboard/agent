@@ -1,6 +1,6 @@
-import {assertEnum} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
+import { assertEnum } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export enum MouseActionParam {
     leftClick,
@@ -23,9 +23,17 @@ export class MouseAction extends KeyAction {
     @assertEnum(MouseActionParam)
     mouseAction: MouseActionParam;
 
+    constructor(other?: MouseAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.mouseAction = other.mouseAction;
+    }
+
     _fromJsObject(jsObject: any): MouseAction {
         this.assertKeyActionType(jsObject);
-        this.mouseAction = MouseActionParam[<string> jsObject.mouseAction];
+        this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
         return this;
     }
 

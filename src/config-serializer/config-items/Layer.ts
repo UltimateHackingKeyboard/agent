@@ -6,7 +6,17 @@ import { Modules } from './Modules';
 export class Layer extends Serializable<Layer> {
 
     modules: Modules;
-    animation: AnimationKeyboard = 'none';
+    animation: AnimationKeyboard;
+
+    constructor(layers?: Layer) {
+        super();
+        if (!layers) {
+            this.animation = 'none';
+            return;
+        }
+        this.modules = new Modules(layers.modules);
+        this.animation = layers.animation;
+    }
 
     _fromJsObject(jsObject: any): Layer {
         this.modules = new Modules().fromJsObject(jsObject.modules);

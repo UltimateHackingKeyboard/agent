@@ -26,7 +26,8 @@ enum LabelTypes {
 
 @Component({
     selector: 'g[svg-keyboard-key]',
-    template: require('./svg-keyboard-key.component.html')
+    template: require('./svg-keyboard-key.component.html'),
+    styles: [require('./svg-keyboard-key.component.scss')]
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
     @Input() id: string;
@@ -144,8 +145,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
         } else if (this.keyAction instanceof SwitchKeymapAction) {
             let keyAction: SwitchKeymapAction = this.keyAction as SwitchKeymapAction;
             this.labelType = LabelTypes.SwitchKeymap;
-            let uhkConfiguration: UhkConfiguration = this.uhkConfigurationService.getUhkConfiguration();
-            this.labelSource = uhkConfiguration.getKeymap(keyAction.keymapId).abbreviation;
+            this.labelSource = keyAction.keymapAbbreviation;
         } else if (this.keyAction instanceof PlayMacroAction) {
             let keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
             this.labelType = LabelTypes.IconText;

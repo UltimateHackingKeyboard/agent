@@ -5,8 +5,7 @@
 <svg:g [ngSwitch]="labelType"
         [attr.font-size]="19"
         [attr.font-family]="'Helvetica'"
-        [attr.fill]="'white'"
-        style="dominant-baseline: central">
+        [attr.fill]="'white'">
     <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
             [height]="height"
             [width]="width"

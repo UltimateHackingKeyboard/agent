@@ -10,23 +10,26 @@
         <input type="text" class="form-control" placeholder="Search ..." (input)="filterKeyboards($event.target.value)">
     </div>
     <div class="keymap__search_amount">
-        {{ keymaps.length }} / {{ keymapsAll.length }} keymaps shown
+        {{ (presets$ | async).length }} / {{ (presetsAll$ | async).length }} keymaps shown
     </div>
 </div>
 <div class="keymap__list">
-    <div #keyboard class="keymap__list_item" *ngFor="let keymap of keymaps">
+    <div #keyboard class="keymap__list_item" *ngFor="let keymap of presets$ | async">
         <h2>{{ keymap.name }}</h2>
         <p class="keymap__description">
             {{ keymap.description }}
         </p>
         <svg-keyboard-wrap
-                [layers]="keymap.layers.elements"
+                [keymap]="keymap"
                 [popoverEnabled]="false"
                 [tooltipEnabled]="true"
         >
         </svg-keyboard-wrap>
         <div class="btn-group btn-group-lg">
-            <button class="btn btn-default">Add keymap</button>
+            <button class="btn btn-default" (click)="addKeymap(keymap)">Add keymap</button>
         </div>
     </div>
+</div>
+<div *ngIf="(presets$ | async).length === 0">
+    Sorry, no keyboard found under this search query.
 </div>

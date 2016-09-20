@@ -1,12 +1,12 @@
-import {ClassArray} from '../../ClassArray';
-import {UhkBuffer} from '../../UhkBuffer';
-import {DelayMacroAction} from './DelayMacroAction';
-import {KeyMacroAction} from './KeyMacroAction';
-import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
-import {MouseButtonMacroAction} from './MouseButtonMacroAction';
-import {MoveMouseMacroAction} from './MoveMouseMacroAction';
-import {ScrollMouseMacroAction} from './ScrollMouseMacroAction';
-import {TextMacroAction} from './TextMacroAction';
+import { ClassArray } from '../../ClassArray';
+import { UhkBuffer } from '../../UhkBuffer';
+import { DelayMacroAction } from './DelayMacroAction';
+import { KeyMacroAction } from './KeyMacroAction';
+import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
+import { MouseButtonMacroAction } from './MouseButtonMacroAction';
+import { MoveMouseMacroAction } from './MoveMouseMacroAction';
+import { ScrollMouseMacroAction } from './ScrollMouseMacroAction';
+import { TextMacroAction } from './TextMacroAction';
 
 export class MacroActions extends ClassArray<MacroAction> {
 
@@ -40,10 +40,13 @@ export class MacroActions extends ClassArray<MacroAction> {
 
         if (macroActionFirstByte >= MacroActionId.KeyMacroAction && macroActionFirstByte <= MacroActionId.LastKeyMacroAction) {
             return new KeyMacroAction().fromBinary(buffer);
+        } else if (
+            macroActionFirstByte >= MacroActionId.MouseButtonMacroAction &&
+            macroActionFirstByte <= MacroActionId.LastMouseButtonMacroAction
+        ) {
+            return new MouseButtonMacroAction().fromBinary(buffer);
         }
         switch (macroActionFirstByte) {
-            case MacroActionId.MouseButtonMacroAction:
-                return new MouseButtonMacroAction().fromBinary(buffer);
             case MacroActionId.MoveMouseMacroAction:
                 return new MoveMouseMacroAction().fromBinary(buffer);
             case MacroActionId.ScrollMouseMacroAction:

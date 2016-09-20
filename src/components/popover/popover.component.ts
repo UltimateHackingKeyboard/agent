@@ -1,4 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { Store } from '@ngrx/store';
 
 import {
     KeyAction,
@@ -8,7 +10,12 @@ import {
     SwitchKeymapAction,
     SwitchLayerAction
 } from '../../config-serializer/config-items/key-action';
-import {Tab} from './tab/tab';
+import { Keymap } from '../../config-serializer/config-items/Keymap';
+
+import { Tab } from './tab/tab';
+
+import { AppState } from '../../store';
+import { Observable } from 'rxjs/Observable';
 
 enum TabName {
     Keypress,
@@ -38,11 +45,15 @@ export class PopoverComponent implements OnInit {
     private TabName = TabName;
     /* tslint:enable:no-unused-variable tslint:enable:variable-name */
     private activeTab: TabName;
+    private keymaps$: Observable<Keymap[]>;
 
-    constructor() { }
+    constructor(private store: Store<AppState>) {
+        this.keymaps$ = store.select((appState: AppState) => appState.keymaps);
+    }
 
     ngOnInit() {
         let tab: TabName;
+
         if (this.defaultKeyAction instanceof KeystrokeAction) {
             tab = TabName.Keypress;
         } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
@@ -56,6 +67,7 @@ export class PopoverComponent implements OnInit {
         } else {
             tab = TabName.None;
         }
+
         this.selectTab(tab);
     }
 
@@ -76,5 +88,4 @@ export class PopoverComponent implements OnInit {
     selectTab(tab: TabName): void {
         this.activeTab = tab;
     }
-
 }

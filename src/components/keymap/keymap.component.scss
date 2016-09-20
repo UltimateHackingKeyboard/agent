@@ -4,48 +4,9 @@
     display: block;
 }
 
-.keymap {
-    &__is-default {
-        &.fa-star {
-            color: #333;
-        }
-
-        &.fa-star-o {
-            color: #333;
-        }
-
-        &:hover {
-            color: #555;
-            cursor: pointer;
-        }
-    }
-
-    &__remove {
-        font-size: 0.75em;
-        top: 0.3em;
-
-        &:hover {
-            cursor: pointer;
-            color: #900;
-        }
-    }
+.not-found {
+    margin-top: 30px;
+    font-size: 16px;
+    text-align: center;
 }
 
-.pane-title {
-    margin-bottom: 1em;
-
-    &__name,
-    &__abbrev {
-        &[contenteditable=true] {
-            border: none;
-            border-bottom: 2px dotted #999;
-            padding: 0 0.5rem;
-            margin: 0 0.25rem;
-
-            &.active {
-                box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
-                border-color: transparent;
-            }
-        }
-    }
-}
