@@ -11,7 +11,6 @@ import { ContenteditableDirective } from './directives/contenteditable';
 
 import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
-import { LegacyLoaderComponent } from './components/legacy-loader';
 import {
     MacroActionEditorComponent,
     MacroComponent,
@@ -77,7 +76,6 @@ const storeConfig = {
         MainAppComponent,
         KeymapComponent,
         KeymapHeaderComponent,
-        LegacyLoaderComponent,
         NotificationComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,
