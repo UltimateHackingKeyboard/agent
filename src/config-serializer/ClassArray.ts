@@ -1,5 +1,5 @@
-import {Serializable} from './Serializable';
-import {UhkBuffer} from './UhkBuffer';
+import { Serializable } from './Serializable';
+import { UhkBuffer } from './UhkBuffer';
 
 export abstract class ClassArray<T extends Serializable<T>> extends Serializable<ClassArray<T>> {
 

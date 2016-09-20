@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import {UhkConfiguration} from '../config-serializer/config-items/UhkConfiguration';
+import { UhkConfiguration } from '../config-serializer/config-items/UhkConfiguration';
 
-import {DataProviderService} from './data-provider.service';
+import { DataProviderService } from './data-provider.service';
 
 @Injectable()
 export class UhkConfigurationService {

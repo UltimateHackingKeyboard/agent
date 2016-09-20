@@ -1,6 +1,6 @@
 /// <references path="Function.d.ts">
 
-import {UhkBuffer} from './UhkBuffer';
+import { UhkBuffer } from './UhkBuffer';
 
 export abstract class Serializable<T> {
 

@@ -1,5 +1,5 @@
-import {UhkBuffer} from '../../UhkBuffer';
-import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import { UhkBuffer } from '../../UhkBuffer';
+import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
 
 export class TextMacroAction extends MacroAction {
 

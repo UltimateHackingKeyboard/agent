@@ -1,6 +1,6 @@
-import {assertUInt16} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {MacroAction, MacroActionId, macroActionType} from './MacroAction';
+import { assertUInt16 } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
 
 export class DelayMacroAction extends MacroAction {
 

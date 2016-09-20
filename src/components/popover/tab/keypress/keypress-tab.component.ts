@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {Select2OptionData} from 'ng2-select2/ng2-select2';
+import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
-import {KeyAction, KeystrokeAction} from '../../../../config-serializer/config-items/key-action';
+import { KeyAction, KeystrokeAction } from '../../../../config-serializer/config-items/key-action';
 
-import {Tab} from '../tab';
+import { Tab } from '../tab';
 
 @Component({
     selector: 'keypress-tab',

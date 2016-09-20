@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import {MapperService} from '../../../../services/mapper.service';
+import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-switch-keymap-key]',

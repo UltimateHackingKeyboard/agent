@@ -1,6 +1,13 @@
 import {
-    Component, Input, OnChanges, SimpleChanges, animate,
-    state, style, transition, trigger
+    Component,
+    Input,
+    OnChanges,
+    SimpleChanges,
+    animate,
+    state,
+    style,
+    transition,
+    trigger
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';

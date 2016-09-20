@@ -1,6 +1,6 @@
-import {assertInt16} from '../../assert';
-import {UhkBuffer} from '../../UhkBuffer';
-import {MacroAction, MacroActionId,  macroActionType} from './MacroAction';
+import { assertInt16 } from '../../assert';
+import { UhkBuffer } from '../../UhkBuffer';
+import { MacroAction, MacroActionId,  macroActionType } from './MacroAction';
 
 export class MoveMouseMacroAction extends MacroAction {
 

@@ -1,6 +1,6 @@
 var usb = require('usb');
 var R = require('ramda');
-var s = require('underscore.string')
+var s = require('underscore.string');
 
 var UhkConnection = function(selectedLogLevel) {
     'use strict';

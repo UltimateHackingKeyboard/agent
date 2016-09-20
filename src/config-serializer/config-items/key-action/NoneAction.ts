@@ -1,5 +1,5 @@
-import {UhkBuffer} from '../../UhkBuffer';
-import {KeyAction, KeyActionId, keyActionType} from './KeyAction';
+import { UhkBuffer } from '../../UhkBuffer';
+import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class NoneAction extends KeyAction {
 
