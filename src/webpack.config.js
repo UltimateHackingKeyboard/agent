@@ -67,10 +67,6 @@ module.exports = {
                 flatten: true
             },
             {
-                from: 'node_modules/sortablejs/Sortable.min.js',
-                to: 'vendor/sortablejs/Sortable.min.js'
-            },
-            {
                 from: 'node_modules/select2/dist',
                 to: 'vendor/select2'
             },
