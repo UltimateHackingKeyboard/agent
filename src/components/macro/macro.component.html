@@ -16,10 +16,9 @@
                         [macroAction]="macroAction"
                         [editable]="true"
                         [deletable]="true"
-                        [moveable]="dragEnabled"
+                        [moveable]="true"
                         (save)="onSaveAction($event, index)"
                         (edit)="onEditAction(macroActionIndex)"
-                        (cancel)="onCancelEditAction()"
                         (delete)="onDeleteAction(macroActionIndex)"></macro-item>
         </div>
         <div class="list-group add-new__action-container">
