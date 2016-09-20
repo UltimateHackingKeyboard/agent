@@ -7,7 +7,7 @@ var path = require('path');
 var rootDir = path.resolve(__dirname, '../');
 
 module.exports = {
-    entry: ['core-js', 'zone.js', './src/boot.ts'],
+    entry: ['core-js', 'zone.js', './src/main.ts'],
     output: {
         path: rootDir + "/dist",
         filename: "uhk.js"
