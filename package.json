@@ -53,7 +53,7 @@
     "select2": "^4.0.3",
     "typescript": "2.0.2",
     "xml-loader": "^1.1.0",
-    "zone.js": "0.6.23"
+    "zone.js": "0.6.25"
   },
   "scripts": {
     "tslint": "tslint \"src/**/*.ts\" \"test-serializer/**/*.ts\"",
