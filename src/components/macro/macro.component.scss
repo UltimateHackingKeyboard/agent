@@ -114,3 +114,24 @@ h1 {
         color: #337ab7;
     }
 }
+
+// Dragula styles
+.gu {
+    &-mirror {
+        position: fixed;
+        margin: 0;
+        z-index: 9999;
+        opacity: 0.8;
+    }
+
+    &-hide {
+        display: none;
+    }
+
+    &-unselectable {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}
