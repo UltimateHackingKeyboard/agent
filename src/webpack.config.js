@@ -78,10 +78,6 @@ module.exports = {
                 from: 'images',
                 to: 'images'
             },
-            {
-                from: 'node_modules/handlebars/dist/handlebars.min.js',
-                to: 'vendor/handlebars/handlebars.min.js'
-            },
         ], {
                 ignore: ['*.config.js']
             })
