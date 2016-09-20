@@ -21,4 +21,4 @@ At this point, webpack dev server should expose Agent at `localhost:8080`
 
 ## Contributing
 
-Wanna contribute? Please let us show you [how]((CONTRIBUTING.md)).
+Wanna contribute? Please let us show you [how](CONTRIBUTING.md).
