@@ -31,6 +31,7 @@ ul {
         padding: 0.5rem 1rem;
         font-size: 2rem;
         line-height: 3rem;
+        cursor: default;
 
         &:hover {
             .fa-chevron-up,
@@ -59,6 +60,7 @@ ul {
             position: relative;
             top: 0.5rem;
             display: none;
+            cursor: pointer;
         }
     }
 
@@ -79,6 +81,10 @@ ul {
                 &:hover {
                     background-color: #555;
                 }
+            }
+
+            &:hover {
+                cursor: pointer;
             }
 
             // General "right side" icon theming.
@@ -108,7 +114,6 @@ ul {
     &__level-1,
     &__level-2--item {
         &:hover {
-            cursor: pointer;
             background-color: rgba(0, 0, 0, 0.05);
         }
     }
@@ -128,8 +133,13 @@ ul {
 
     .sidebar {
         &__level-1 {
-            background-color: transparent;
+            display: block;
             padding: 1rem;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 }

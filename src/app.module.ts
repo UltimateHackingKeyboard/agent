@@ -9,10 +9,12 @@ import { Select2Component } from 'ng2-select2/ng2-select2';
 
 import { ContenteditableDirective } from './directives/contenteditable';
 
+import { AddOnComponent } from './components/add-on';
 import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
+    MacroAddComponent,
     MacroComponent,
     MacroDelayTabComponent,
     MacroItemComponent,
@@ -32,6 +34,7 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
+import { SettingsComponent } from './components/settings';
 import { SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
@@ -102,13 +105,16 @@ const storeConfig = {
         CaptureKeystrokeButtonComponent,
         IconComponent,
         MacroComponent,
+        MacroAddComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
         MacroDelayTabComponent,
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableDirective
+        ContenteditableDirective,
+        AddOnComponent,
+        SettingsComponent
     ],
     imports: [
         BrowserModule,

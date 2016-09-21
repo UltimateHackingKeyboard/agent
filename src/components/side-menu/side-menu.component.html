@@ -19,7 +19,7 @@
     <li class="sidebar__level-1--item">
         <div class="sidebar__level-1">
             <i class="fa fa-play"></i> Macros
-            <a class="btn btn-default pull-right btn-sm" (click)="addMacro()">
+            <a [routerLink]="['/macro/add']" class="btn btn-default pull-right btn-sm">
                 <i class="fa fa-plus"></i>
             </a>
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'macro')"></i>
@@ -40,22 +40,22 @@
         <ul [@toggler]="animation.addon">
             <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
                 <div class="sidebar__level-2">
-                    <a href="#">Key cluster</a>
+                    <a [routerLink]="['/add-on', 'Key cluster']">Key cluster</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item" data-name="Trackball" data-abbrev="">
                 <div class="sidebar__level-2">
-                    <a href="#">Trackball</a>
+                    <a [routerLink]="['/add-on', 'Trackball']">Trackball</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item" data-name="Toucpad" data-abbrev="">
                 <div class="sidebar__level-2">
-                    <a href="#">Touchpad</a>
+                    <a [routerLink]="['/add-on', 'Touchpad']">Touchpad</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item" data-name="Trackpoint" data-abbrev="">
                 <div class="sidebar__level-2">
-                    <a href="#">Trackpoint</a>
+                    <a [routerLink]="['/add-on', 'Trackpoint']">Trackpoint</a>
                 </div>
             </li>
         </ul>
@@ -63,6 +63,8 @@
 </ul>
 <ul class="menu--bottom">
     <li class="sidebar__level-1--item">
-        <div class="sidebar__level-1"><i class="fa fa-gear"></i> Settings</div>
+        <a class="sidebar__level-1" [routerLink]="['/settings']">
+            <i class="fa fa-gear"></i> Settings
+        </a>
     </li>
 </ul>
