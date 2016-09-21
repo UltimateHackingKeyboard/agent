@@ -6,7 +6,7 @@ import {
     TextMacroAction,
     macroActionType
 } from '../../../config-serializer/config-items/macro-action';
-import { MacroKeyTabComponent } from './tab/macro-key';
+import { MacroKeyTabComponent } from './tab/key';
 
 enum TabName {
     Keypress,

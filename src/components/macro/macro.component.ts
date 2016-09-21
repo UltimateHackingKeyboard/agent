@@ -7,7 +7,7 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { MacroAction } from '../../config-serializer/config-items/macro-action';
-import { MacroItemComponent } from './macro-item/macro-item.component';
+import { MacroItemComponent } from './item/macro-item.component';
 
 import { UhkConfigurationService } from '../../services/uhk-configuration.service';
 
