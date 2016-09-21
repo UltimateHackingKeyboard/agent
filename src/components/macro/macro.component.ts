@@ -1,15 +1,20 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/publishReplay';
+import { Observable } from 'rxjs/Observable';
+import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { MacroAction } from '../../config-serializer/config-items/macro-action';
 import { MacroItemComponent } from './item/macro-item.component';
 
-import { UhkConfigurationService } from '../../services/uhk-configuration.service';
+import { AppState } from '../../store/index';
+import { getMacro } from '../../store/reducers/macro';
 
 @Component({
     selector: 'macro',
@@ -17,15 +22,13 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
     styles: [require('./macro.component.scss')],
     viewProviders: [DragulaService]
 })
-export class MacroComponent implements OnInit, OnDestroy {
+export class MacroComponent {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>;
-
-    private macro: Macro;
-    private routeSubscription: Subscription;
+    private macro$: Observable<Macro>;
     private hasChanges: boolean = false;
 
     constructor(
-        private uhkConfigurationService: UhkConfigurationService,
+        private store: Store<AppState>,
         private route: ActivatedRoute,
         private dragulaService: DragulaService
     ) {
@@ -35,31 +38,23 @@ export class MacroComponent implements OnInit, OnDestroy {
                 return handle.className.includes('action--movable');
             }
         });
-        /* tslint:enable:no-unused-variable */
+
+        let macroConnectable: ConnectableObservable<Macro> = route
+            .params
+            .select<number>('id')
+            .switchMap((id: number) => store.let(getMacro(id)))
+            .do(() => {
+                this.hasChanges = false;
+            })
+            .publishReplay();
+
+        this.macro$ = macroConnectable;
+        macroConnectable.connect();
     }
 
-    ngOnInit() {
-        this.routeSubscription = this.route.params.subscribe((params: { id: string }) => {
-            const id: number = Number(params.id);
-            this.macro = this.getMacro(id);
-            this.hasChanges = false;
-        });
-    }
-
-    getMacro(id: number): Macro {
-        const config = this.uhkConfigurationService.getUhkConfiguration();
-        const macro: Macro = config.macros.find(item => item.id === id);
-        if (macro) {
-            // Clone macro for editing
-            return new Macro().fromJsObject(macro.toJsObject());
-        }
-        // @todo replace with notification
-        throw new Error('Macro not found');
-    }
-
-    addAction() {
-        this.hideOtherActionEditors(this.macro.macroActions.length);
-        this.macro.macroActions.push(undefined);
+    /*addAction() {
+        this.hideOtherActionEditors(this.macro.macroActions.elements.length);
+        this.macro.macroActions.elements.push(undefined);
     }
 
     discardChanges() {
@@ -90,10 +85,5 @@ export class MacroComponent implements OnInit, OnDestroy {
         // @ todo show confirm action dialog
         this.macro.macroActions.splice(index, 1);
         this.hasChanges = true;
-    }
-
-    ngOnDestroy() {
-        this.routeSubscription.unsubscribe();
-    }
-
+    }*/
 }
