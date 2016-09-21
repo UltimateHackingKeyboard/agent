@@ -1,3 +1,5 @@
+@import '../../../../main-app/global-styles';
+
 :host {
     display: flex;
     align-items: center;
@@ -7,7 +9,7 @@
 
     &--edit {
         &:hover {
-            color: #337ab7;
+            color: $icon-hover;
             cursor: pointer;
         }
     }

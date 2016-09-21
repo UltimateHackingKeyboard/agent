@@ -1,3 +1,5 @@
+@import '../../../main-app/global-styles';
+
 .action--editor {
     padding-top: 0;
     padding-bottom: 0;
@@ -38,7 +40,7 @@
                     height: 0;
                     top: 0;
                     right: -4rem;
-                    border-color: transparent transparent transparent #337ab7;
+                    border-color: transparent transparent transparent $icon-hover;
                     border-style: solid;
                     border-width: 2rem;
                 }

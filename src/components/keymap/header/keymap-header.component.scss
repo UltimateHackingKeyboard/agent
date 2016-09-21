@@ -1,3 +1,5 @@
+@import '../../../main-app/global-styles';
+
 .keymap {
     &__is-default {
 
@@ -28,7 +30,7 @@
 
         &:hover {
             cursor: pointer;
-            color: #900;
+            color: $icon-hover;
         }
     }
 }
