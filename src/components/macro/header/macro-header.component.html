@@ -1,0 +1,21 @@
+<div class="row">
+    <h1 class="col-xs-12 pane-title">
+        <i class="fa fa-play"></i>
+        <input class="pane-title__name"
+               value="{{ macro.name }}"
+               (change)="editMacroName($event.target.value)"
+        />
+        <i class="glyphicon glyphicon-trash macro__remove pull-right" title=""
+           data-toggle="tooltip"
+           data-placement="left"
+           data-original-title="Remove macro"
+           (click)="removeMacro()"
+        ></i>
+        <i class="fa fa-files-o macro__duplicate pull-right" title=""
+           data-toggle="tooltip"
+           data-placement="left"
+           data-original-title="Duplicate macro"
+           (click)="duplicateMacro()"
+        ></i>
+    </h1>
+</div>

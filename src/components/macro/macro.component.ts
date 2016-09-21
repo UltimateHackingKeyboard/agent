@@ -21,7 +21,6 @@ export class MacroComponent implements OnInit, OnDestroy {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>;
 
     private macro: Macro;
-
     private routeSubscription: Subscription;
     private hasChanges: boolean = false;
 
@@ -58,10 +57,6 @@ export class MacroComponent implements OnInit, OnDestroy {
         throw new Error('Macro not found');
     }
 
-    saveMacro() {
-        // @todo Save macro to keyboard
-    }
-
     addAction() {
         this.hideOtherActionEditors(this.macro.macroActions.elements.length);
         this.macro.macroActions.elements.push(undefined);
@@ -79,10 +74,6 @@ export class MacroComponent implements OnInit, OnDestroy {
                 macroItem.cancelEdit();
             }
         });
-    }
-
-    onNameChange() {
-        this.hasChanges = true;
     }
 
     onEditAction(index: number) {

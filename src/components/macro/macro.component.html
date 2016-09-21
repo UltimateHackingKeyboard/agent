@@ -1,14 +1,4 @@
-<div class="row">
-    <h1 class="col-xs-12 pane-title">
-        <i class="fa fa-play"></i>
-        <span class="macro__name pane-title__name"
-                #macroNameInput
-                contenteditable="true"
-                [contenteditableUpdateOnEnter]="true"
-                [(contenteditableModel)]="macro.name"
-                (contenteditableModelChange)="onNameChange()">{{macro.name}}</span>
-    </h1>
-</div>
+<macro-header [macro]="macro"></macro-header>
 <div class="row list-container">
     <div class="col-xs-10 col-xs-offset-1 list-group">
         <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions.elements">

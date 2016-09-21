@@ -7,8 +7,6 @@ import { StoreModule } from '@ngrx/store';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Component } from 'ng2-select2/ng2-select2';
 
-import { ContenteditableDirective } from './directives/contenteditable';
-
 import { AddOnComponent } from './components/add-on';
 import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
@@ -17,6 +15,7 @@ import {
     MacroAddComponent,
     MacroComponent,
     MacroDelayTabComponent,
+    MacroHeaderComponent,
     MacroItemComponent,
     MacroKeyTabComponent,
     MacroMouseTabComponent,
@@ -105,6 +104,7 @@ const storeConfig = {
         CaptureKeystrokeButtonComponent,
         IconComponent,
         MacroComponent,
+        MacroHeaderComponent,
         MacroAddComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
@@ -112,7 +112,6 @@ const storeConfig = {
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
-        ContenteditableDirective,
         AddOnComponent,
         SettingsComponent
     ],
