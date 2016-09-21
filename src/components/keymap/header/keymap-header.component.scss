@@ -7,7 +7,7 @@
             cursor: pointer;
 
             &:hover {
-                color: #b9b6b6;
+                color: $icon-hover;
             }
         }
     }
@@ -18,7 +18,7 @@
 
         &:hover {
             cursor: pointer;
-            color: #900;
+            color: $icon-hover-delete;
         }
     }
 
