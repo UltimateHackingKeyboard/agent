@@ -21,6 +21,15 @@ export class MouseButtonMacroAction extends MacroAction {
     @assertUInt8
     mouseButtonsMask: number;
 
+    constructor(other?: MouseButtonMacroAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.action = other.action;
+        this.mouseButtonsMask = other.mouseButtonsMask;
+    }
+
     _fromJsObject(jsObject: JsObjectMouseButtonMacroAction): MouseButtonMacroAction {
         this.assertMacroActionType(jsObject);
         this.action = MacroSubAction[jsObject.action];

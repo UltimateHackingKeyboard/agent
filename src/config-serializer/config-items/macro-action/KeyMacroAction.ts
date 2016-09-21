@@ -23,6 +23,16 @@ export class KeyMacroAction extends MacroAction {
     @assertUInt8
     modifierMask: number;
 
+    constructor(other?: KeyMacroAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.action = other.action;
+        this.scancode = other.scancode;
+        this.modifierMask = other.modifierMask;
+    }
+
     _fromJsObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
         this.assertMacroActionType(jsObject);
         this.action = MacroSubAction[jsObject.action];

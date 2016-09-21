@@ -1,6 +1,6 @@
 import { assertInt16 } from '../../assert';
 import { UhkBuffer } from '../../UhkBuffer';
-import { MacroAction, MacroActionId,  macroActionType } from './MacroAction';
+import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
 
 export class MoveMouseMacroAction extends MacroAction {
 
@@ -9,6 +9,15 @@ export class MoveMouseMacroAction extends MacroAction {
 
     @assertInt16
     y: number;
+
+    constructor(other?: MoveMouseMacroAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.x = other.x;
+        this.y = other.y;
+    }
 
     _fromJsObject(jsObject: any): MoveMouseMacroAction {
         this.assertMacroActionType(jsObject);

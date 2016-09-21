@@ -5,6 +5,14 @@ export class TextMacroAction extends MacroAction {
 
     text: string;
 
+    constructor(other?: TextMacroAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.text = other.text;
+    }
+
     _fromJsObject(jsObject: any): TextMacroAction {
         this.assertMacroActionType(jsObject);
         this.text = jsObject.text;

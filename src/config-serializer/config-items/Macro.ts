@@ -16,6 +16,18 @@ export class Macro extends Serializable<Macro> {
 
     macroActions: MacroActions;
 
+    constructor(other?: Macro) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.id = other.id;
+        this.isLooped = other.isLooped;
+        this.isPrivate = other.isPrivate;
+        this.name = other.name;
+        this.macroActions = new MacroActions(other.macroActions);
+    }
+
     _fromJsObject(jsObject: any): Macro {
         this.id = jsObject.id;
         this.isLooped = jsObject.isLooped;

@@ -7,6 +7,14 @@ export class DelayMacroAction extends MacroAction {
     @assertUInt16
     delay: number;
 
+    constructor(other?: DelayMacroAction) {
+        super();
+        if (!other) {
+            return;
+        }
+        this.delay = other.delay;
+    }
+
     _fromJsObject(jsObject: any): DelayMacroAction {
         this.assertMacroActionType(jsObject);
         this.delay = jsObject.delay;

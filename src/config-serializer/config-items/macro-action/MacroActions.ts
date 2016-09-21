@@ -10,6 +10,31 @@ import { TextMacroAction } from './TextMacroAction';
 
 export class MacroActions extends ClassArray<MacroAction> {
 
+    constructor(other?: MacroActions) {
+        super();
+        if (!other) {
+            return;
+        }
+        other.elements.forEach(macroAction => {
+            let newMacroAction: MacroAction;
+            if (macroAction instanceof KeyMacroAction) {
+                newMacroAction = new KeyMacroAction(macroAction);
+            } else if (macroAction instanceof MouseButtonMacroAction) {
+                newMacroAction = new MouseButtonMacroAction(macroAction);
+            } else if (macroAction instanceof MoveMouseMacroAction) {
+                newMacroAction = new MoveMouseMacroAction(macroAction);
+            } else if (macroAction instanceof ScrollMouseMacroAction) {
+                newMacroAction = new ScrollMouseMacroAction(macroAction);
+            } else if (macroAction instanceof DelayMacroAction) {
+                newMacroAction = new DelayMacroAction(macroAction);
+            } else if (macroAction instanceof TextMacroAction) {
+                newMacroAction = new TextMacroAction(macroAction);
+            }
+
+            this.elements.push(newMacroAction);
+        });
+    }
+
     jsObjectToClass(jsObject: any): MacroAction {
         switch (jsObject.macroActionType) {
             case macroActionType.KeyMacroAction:
