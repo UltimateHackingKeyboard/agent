@@ -34,6 +34,7 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
+import { SettingsComponent } from './components/settings';
 import { SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
@@ -112,7 +113,8 @@ const storeConfig = {
         MacroMouseTabComponent,
         MacroTextTabComponent,
         ContenteditableDirective,
-        AddOnComponent
+        AddOnComponent,
+        SettingsComponent
     ],
     imports: [
         BrowserModule,
