@@ -133,8 +133,8 @@ export class UhkBuffer {
         let stringByteLength = Buffer.byteLength(str, UhkBuffer.stringEncoding);
 
         if (stringByteLength > UhkBuffer.maxCompactLength) {
-            throw 'Cannot serialize string: ${stringByteLength} bytes is larger ' +
-                  'than the maximum allowed length of ${UhkBuffer.maxStringByteLength} bytes';
+            throw `Cannot serialize string: ${stringByteLength} bytes is larger
+                   than the maximum allowed length of ${UhkBuffer.maxCompactLength} bytes`;
         }
 
         this.writeCompactLength(stringByteLength);
