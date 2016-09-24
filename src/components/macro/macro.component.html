@@ -8,23 +8,21 @@
                             [editable]="true"
                             [deletable]="true"
                             [moveable]="true"
-                            (save)="onSaveAction($event, index)"
-                            (edit)="onEditAction(macroActionIndex)"
-                            (delete)="onDeleteAction(macroActionIndex)"></macro-item>
+                            (save)="saveAction($event, macroActionIndex)"
+                            (edit)="editAction(macroActionIndex)"
+                            (cancel)="cancelAction()"
+                            (delete)="deleteAction(macroActionIndex)"></macro-item>
+
+                <macro-item *ngIf="showNew" [macroAction]="newMacro"
+                            [editable]="true"
+                            [deletable]="false"
+                            [moveable]="false"
+                            (save)="addNewAction($event, macro$.id)"
+                            (cancel)="hideNewAction()"></macro-item>
             </div>
-            <div class="list-group add-new__action-container">
-                <div class="list-group-item action--item add-new__action-item no-reorder">
-                    <a class="add-new__action-item--link" (click)="addAction()"><i class="fa fa-plus"></i> Add new action item</a>
-                </div>
-                <div class="list-group-item new-macro-settings" *ngIf="hasChanges">
-                    <div class="helper"></div>
-                    <p>Remember to save your changes!</p>
-                    <div class="row">
-                        <div class="col-sm-12 flex-button-wrapper">
-                            <button class="btn btn-primary btn-sm pull-right flex-button settings-save" (click)="saveMacro()">Save macro</button>
-                            <button class="btn btn-default btn-sm pull-right flex-button settings-cancel" style="margin-right: .5em;" (click)="discardChanges()">Discard changes</button>
-                        </div>
-                    </div>
+            <div class="list-group add-new__action-container" *ngIf="!showNew">
+                <div class="list-group-item action--item add-new__action-item no-reorder" (click)="showNewAction()">
+                    <a class="add-new__action-item--link"><i class="fa fa-plus"></i> Add new macro action</a>
                 </div>
             </div>
         </div>
