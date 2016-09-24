@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Keymaps } from '../../config-serializer/config-items/Keymaps';
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
 
@@ -11,33 +10,31 @@ import { AppState } from '../index';
 export class Local {
     initialState(): AppState {
         let config: UhkConfiguration;
-        let presetAll: Keymaps;
+        let presetAll: Keymap[];
 
         // Load data from json
         if (!localStorage.getItem('config')) {
             const jsonUser: JSON = require('json!../../config-serializer/uhk-config.json');
-            const jsonPreset: any = require('json!../../config-serializer/preset-keymaps.json');
+            const presets: any[] = require('json!../../config-serializer/preset-keymaps.json');
             config = new UhkConfiguration().fromJsObject(jsonUser);
-            presetAll = new Keymaps().fromJsObject(jsonPreset.keymaps);
+            presetAll = presets.map(keymap => new Keymap().fromJsObject(keymap));
 
             // Save to local storage
             localStorage.setItem('config', JSON.stringify(config.toJsObject()));
-            localStorage.setItem('preset', JSON.stringify(presetAll.toJsObject()));
+            localStorage.setItem('preset', JSON.stringify(presetAll.map(preset => preset.toJsObject())));
         }
         // Load data from local storage
         else {
             config = new UhkConfiguration().fromJsObject(
                 JSON.parse(localStorage.getItem('config'))
             );
-            presetAll = new Keymaps().fromJsObject(
-                JSON.parse(localStorage.getItem('preset'))
-            );
+            presetAll = JSON.parse(localStorage.getItem('preset')).map((keymap: any) => new Keymap().fromJsObject(keymap));
         }
 
         return {
             keymaps: config.keymaps,
             macros: config.macros,
-            presetKeymaps: presetAll.elements
+            presetKeymaps: presetAll
         };
     }
 
