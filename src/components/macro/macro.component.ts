@@ -30,6 +30,7 @@ export class MacroComponent {
     private newMacro: Macro = undefined;
     private activeEdit: number = undefined;
     private currentId: number;
+    private dragIndex: number;
 
     constructor(
         private store: Store<AppState>,
@@ -40,6 +41,20 @@ export class MacroComponent {
         dragulaService.setOptions('macroActions', {
             moves: function (el: any, container: any, handle: any) {
                 return handle.className.includes('action--movable');
+            }
+        });
+
+        dragulaService.drag.subscribe((value: any) => {
+            this.dragIndex = +value[1].getAttribute('data-index');
+        });
+
+        dragulaService.drop.subscribe((value: any) => {
+            if (value[4]) {
+                this.store.dispatch(MacroActions.reorderMacroAction(
+                    this.currentId,
+                    this.dragIndex,
+                    +value[4].getAttribute('data-index')
+                ));
             }
         });
 

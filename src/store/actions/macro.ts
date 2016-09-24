@@ -13,6 +13,7 @@ export namespace MacroActions {
     export const ADD_ACTION = MacroActions.PREFIX + 'Add macro action';
     export const SAVE_ACTION = MacroActions.PREFIX + 'Save macro action';
     export const DELETE_ACTION = MacroActions.PREFIX + 'Delete macro action';
+    export const REORDER_ACTION = MacroActions.PREFIX + 'Reorder macro action';
 
     export function removeMacro(id: number): Action {
         return {
@@ -66,6 +67,17 @@ export namespace MacroActions {
                 id: id,
                 index: index,
                 action: action
+            }
+        };
+    }
+
+    export function reorderMacroAction(id: number, oldIndex: number, newIndex: number): Action {
+        return {
+            type: MacroActions.REORDER_ACTION,
+            payload: {
+                id: id,
+                oldIndex: oldIndex,
+                newIndex: newIndex
             }
         };
     }

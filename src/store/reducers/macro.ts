@@ -73,6 +73,29 @@ export default function(state = initialState, action: Action): Macro[] {
                 return macro;
             });
 
+        case MacroActions.REORDER_ACTION:
+            return state.map((macro: Macro) => {
+                if (macro.id === action.payload.id) {
+                    let newIndex: number = action.payload.newIndex;
+
+                    // We need to reduce the new index for one when we are moving action down
+                    if (newIndex > action.payload.oldIndex) {
+                        --newIndex;
+                    }
+
+                    newMacro = new Macro(macro);
+                    newMacro.macroActions.elements.splice(
+                        newIndex,
+                        0,
+                        newMacro.macroActions.elements.splice(action.payload.oldIndex, 1)[0]
+                    );
+
+                    return newMacro;
+                }
+
+                return macro;
+            });
+
         default: {
             return state;
         }
