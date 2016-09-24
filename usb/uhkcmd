@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var UhkConnection = require('./lib/UhkConnection');
+var UhkConnection = require('./UhkConnection');
 var R = require('ramda');
 var path = require('path');
 
