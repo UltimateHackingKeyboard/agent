@@ -10,11 +10,11 @@
         <input type="text" class="form-control" placeholder="Search ..." (input)="filterKeyboards($event.target.value)">
     </div>
     <div class="keymap__search_amount">
-        {{ (presets$ | async).length }} / {{ (presetsAll$ | async).length }} keymaps shown
+        {{ presets.length }} / {{ (presetsAll$ | async).length }} keymaps shown
     </div>
 </div>
 <div class="keymap__list">
-    <div #keyboard class="keymap__list_item" *ngFor="let keymap of presets$ | async">
+    <div #keyboard class="keymap__list_item" *ngFor="let keymap of presets">
         <h2>{{ keymap.name }}</h2>
         <p class="keymap__description">
             {{ keymap.description }}
@@ -30,6 +30,6 @@
         </div>
     </div>
 </div>
-<div *ngIf="(presets$ | async).length === 0">
+<div *ngIf="presets.length === 0">
     Sorry, no keyboard found under this search query.
 </div>

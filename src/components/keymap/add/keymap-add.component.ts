@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import 'rxjs/add/operator/publishReplay';
+import 'rxjs/add/operator/combineLatest';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store';
@@ -14,30 +15,30 @@ import { KeymapActions } from '../../../store/actions';
     template: require('./keymap-add.component.html'),
     styles: [require('./keymap-add.component.scss')]
 })
-export class KeymapAddComponent {
-    private presets$: Observable<Keymap[]>;
+export class KeymapAddComponent implements OnDestroy {
+    private presets: Keymap[];
     private presetsAll$: Observable<Keymap[]>;
+    private filterExpression$: BehaviorSubject<string>;
+    private subscription: Subscription;
 
     constructor(private store: Store<AppState>) {
-        let presetConnectable: ConnectableObservable<Keymap[]> = store
-            .select((appState: AppState) => appState.presetKeymaps)
-            .publishReplay();
-
-        this.presets$ = presetConnectable;
-        presetConnectable.connect();
-
         this.presetsAll$ = store.select((appState: AppState) => appState.presetKeymaps);
+        this.filterExpression$ = new BehaviorSubject('');
+
+        this.subscription = this.presetsAll$.combineLatest(
+            this.filterExpression$,
+            (keymaps: Keymap[], filterExpression: string) => {
+                return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
+            }
+        ).subscribe(keymaps => this.presets = keymaps);
     }
 
-    filterKeyboards(value: string) {
-        let presetConnectable: ConnectableObservable<Keymap[]> = this.presetsAll$
-            .map((keymaps: Keymap[]) => keymaps.filter(
-                (keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(value))
-            )
-            .publishReplay();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-        this.presets$ = presetConnectable;
-        presetConnectable.connect();
+    filterKeyboards(filterExpression: string) {
+        this.filterExpression$.next(filterExpression);
     }
 
     addKeymap(keymap: Keymap) {
