@@ -2,7 +2,6 @@ export * from './DelayMacroAction';
 export * from './EditableMacroAction';
 export * from './KeyMacroAction';
 export * from './MacroAction';
-export * from './MacroActions';
 export * from './MoveMouseMacroAction';
 export * from './MouseButtonMacroAction';
 export * from './ScrollMouseMacroAction';

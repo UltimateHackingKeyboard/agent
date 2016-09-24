@@ -1,5 +1,4 @@
 export * from './KeyAction';
-export * from './KeyActions';
 export * from './KeystrokeAction';
 export * from './MouseAction';
 export * from './NoneAction';

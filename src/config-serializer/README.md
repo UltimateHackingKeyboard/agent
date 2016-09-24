@@ -26,8 +26,6 @@ Each configuration item belongs to a specific type. The following types are avai
 
 **Compound types** are composed of primitive types, and/or compound types. All compound types must descend from the [Serializable](Serializable.ts) class, and saved into the [config-items](config-items) directory.
 
-**Array type** is a special compound type which is composed of a sequence of items of a specific type. Array items must descend from the [ClassArray](ClassArray.ts) class.
-
 ## Dumping serialization
 
 The serialization of configuration items is a complicated business, and many things can go wrong. That's the exact reason why serialization can be dumped to ease debugging. All you have to do is to set `Serializable.enableDump` to `true`, and you'll see something like the following upon serialization actions:
