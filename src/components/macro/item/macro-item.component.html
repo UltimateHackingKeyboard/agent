@@ -3,7 +3,7 @@
   <icon [name]="iconName"></icon>
   <div class="action--title" [class.cursor]="!editing" (click)="editAction()">{{ title }}</div>
   <icon *ngIf="editable && macroAction && !editing" name="pencil" (click)="editAction()"></icon>
-  <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
+  <icon *ngIf="deletable" name="trash" (click)="deleteAction(macroAction)"></icon>
 </div>
 <div class="list-group-item macro-action-editor__container" *ngIf="editable && editing">
   <macro-action-editor 

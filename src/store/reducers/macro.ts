@@ -12,10 +12,12 @@ import { AppState } from '../index';
 const initialState: Macro[] = [];
 
 export default function(state = initialState, action: Action): Macro[] {
+    let newMacro: Macro;
+
     switch (action.type) {
         case MacroActions.DUPLICATE:
 
-            let newMacro: Macro = new Macro(action.payload);
+            newMacro = new Macro(action.payload);
             newMacro.name = generateName(state, newMacro.name);
             newMacro.id = generateId(state);
 
@@ -34,6 +36,42 @@ export default function(state = initialState, action: Action): Macro[] {
 
         case MacroActions.REMOVE:
             return state.filter((macro: Macro) => macro.id !== action.payload);
+
+        case MacroActions.ADD_ACTION:
+            return state.map((macro: Macro) => {
+                if (macro.id === action.payload.id) {
+                    newMacro = new Macro(macro);
+                    newMacro.macroActions.elements.push(action.payload.action);
+
+                    return newMacro;
+                }
+
+                return macro;
+            });
+
+        case MacroActions.SAVE_ACTION:
+            return state.map((macro: Macro) => {
+                if (macro.id === action.payload.id) {
+                    newMacro = new Macro(macro);
+                    newMacro.macroActions.elements[action.payload.index] = action.payload.action;
+
+                    return newMacro;
+                }
+
+                return macro;
+            });
+
+        case MacroActions.DELETE_ACTION:
+            return state.map((macro: Macro) => {
+                if (macro.id === action.payload.id) {
+                    newMacro = new Macro(macro);
+                    newMacro.macroActions.elements.splice(action.payload.index, 1);
+
+                    return newMacro;
+                }
+
+                return macro;
+            });
 
         default: {
             return state;

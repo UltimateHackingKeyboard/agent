@@ -11,13 +11,13 @@
                             (save)="saveAction($event, macroActionIndex)"
                             (edit)="editAction(macroActionIndex)"
                             (cancel)="cancelAction()"
-                            (delete)="deleteAction(macroActionIndex)"></macro-item>
+                            (delete)="deleteAction($event, macroActionIndex)"></macro-item>
 
                 <macro-item *ngIf="showNew" [macroAction]="newMacro"
                             [editable]="true"
                             [deletable]="false"
                             [moveable]="false"
-                            (save)="addNewAction($event, macro$.id)"
+                            (save)="addNewAction($event)"
                             (cancel)="hideNewAction()"></macro-item>
             </div>
             <div class="list-group add-new__action-container" *ngIf="!showNew">

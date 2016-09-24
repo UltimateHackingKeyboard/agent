@@ -29,7 +29,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
     @Output() edit = new EventEmitter<void>();
-    @Output() delete = new EventEmitter<void>();
+    @Output() delete = new EventEmitter<MacroAction>();
 
     private title: string;
     private iconName: string;
@@ -53,8 +53,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     saveEditedAction(editedAction: MacroAction): void {
-        // @todo save this to keyboard
-        console.log('Saved action', editedAction);
         this.macroAction = editedAction;
         this.editing = false;
         this.updateView();
@@ -74,8 +72,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.cancel.emit();
     }
 
-    deleteAction(): void {
-        this.delete.emit();
+    deleteAction(macroAction: MacroAction): void {
+        this.delete.emit(macroAction);
     }
 
     private updateView(): void {

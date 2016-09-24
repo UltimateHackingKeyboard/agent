@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
+import { MacroAction } from '../../config-serializer/config-items/macro-action/MacroAction';
 
 export namespace MacroActions {
     export const PREFIX = '[Macro] ';
@@ -9,8 +10,9 @@ export namespace MacroActions {
     export const EDIT_NAME = MacroActions.PREFIX + 'Edit macro title';
     export const REMOVE = MacroActions.PREFIX + 'Remove macro';
 
-    export const SAVE_ITEM = MacroActions.PREFIX + 'Save macro item';
-    export const DELETE_ITEM = MacroActions.PREFIX + 'Delete macro item';
+    export const ADD_ACTION = MacroActions.PREFIX + 'Add macro action';
+    export const SAVE_ACTION = MacroActions.PREFIX + 'Save macro action';
+    export const DELETE_ACTION = MacroActions.PREFIX + 'Delete macro action';
 
     export function removeMacro(id: number): Action {
         return {
@@ -36,16 +38,35 @@ export namespace MacroActions {
         };
     }
 
-    export function saveMacroItem(macro: Macro): Action {
+    export function addMacroAction(id: number, action: MacroAction): Action {
         return {
-            type: MacroActions.SAVE_ITEM,
-            payload: macro
+            type: MacroActions.ADD_ACTION,
+            payload: {
+                id: id,
+                action: action
+            }
         };
     }
-    export function deleteMacroItem(macro: Macro): Action {
+
+    export function saveMacroAction(id: number, index: number, action: MacroAction): Action {
         return {
-            type: MacroActions.DELETE_ITEM,
-            payload: macro
+            type: MacroActions.SAVE_ACTION,
+            payload: {
+                id: id,
+                index: index,
+                action: action
+            }
+        };
+    }
+
+    export function deleteMacroAction(id: number, index: number, action: MacroAction): Action {
+        return {
+            type: MacroActions.DELETE_ACTION,
+            payload: {
+                id: id,
+                index: index,
+                action: action
+            }
         };
     }
 }

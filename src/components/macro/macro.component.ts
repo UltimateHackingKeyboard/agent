@@ -14,6 +14,7 @@ import { MacroAction } from '../../config-serializer/config-items/macro-action/M
 import { MacroItemComponent } from './item/macro-item.component';
 
 import { AppState } from '../../store';
+import { MacroActions } from '../../store/actions';
 import { getMacro } from '../../store/reducers/macro';
 
 @Component({
@@ -28,6 +29,7 @@ export class MacroComponent {
     private showNew: boolean = false;
     private newMacro: Macro = undefined;
     private activeEdit: number = undefined;
+    private currentId: number;
 
     constructor(
         private store: Store<AppState>,
@@ -44,7 +46,10 @@ export class MacroComponent {
         let macroConnectable: ConnectableObservable<Macro> = route
             .params
             .select<number>('id')
-            .switchMap((id: number) => store.let(getMacro(id)))
+            .switchMap((id: number) => {
+                this.currentId = +id;
+                return store.let(getMacro(id));
+            })
             .publishReplay(1);
 
         this.macro$ = macroConnectable;
@@ -64,8 +69,10 @@ export class MacroComponent {
         this.showNew = false;
     }
 
-    addNewAction(macroAction: MacroAction, id: number) {
-        // TODO implement add
+    addNewAction(macroAction: MacroAction) {
+        this.store.dispatch(MacroActions.addMacroAction(this.currentId, macroAction));
+        this.newMacro = undefined;
+        this.showNew = false;
     }
 
     editAction(index: number) {
@@ -81,6 +88,16 @@ export class MacroComponent {
         this.activeEdit = undefined;
     }
 
+    saveAction(macroAction: MacroAction, index: number) {
+        this.store.dispatch(MacroActions.saveMacroAction(this.currentId, index, macroAction));
+        this.hideActiveEditor();
+    }
+
+    deleteAction(macroAction: MacroAction, index: number) {
+        this.store.dispatch(MacroActions.deleteMacroAction(this.currentId, index, macroAction));
+        this.hideActiveEditor();
+    }
+
     private hideActiveEditor() {
         this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
             if (idx !== this.activeEdit) {
@@ -88,22 +105,4 @@ export class MacroComponent {
             }
         });
     }
-
-    /*
-
-    discardChanges() {
-        const id: number = this.macro.id;
-        this.macro = this.getMacro(id);
-    }
-
-    saveItem(macroAction: MacroAction, index: number) {
-        this.hasChanges = true;
-        this.macro.macroActions[index] = macroAction;
-    }
-
-    deleteItem(index: number) {
-        // @ todo show confirm action dialog
-        this.macro.macroActions.splice(index, 1);
-        this.hasChanges = true;
-    }*/
 }
