@@ -24,8 +24,13 @@
                 ></macro-item>
             </div>
             <div class="list-group add-new__action-container" *ngIf="!showNew">
-                <div class="list-group-item action--item add-new__action-item no-reorder" (click)="showNewAction()">
-                    <a class="add-new__action-item--link"><i class="fa fa-plus"></i> Add new macro action</a>
+                <div class="list-group-item action--item add-new__action-item no-reorder clearfix">
+                    <a class="add-new__action-item--link" (click)="showNewAction()">
+                        <i class="fa fa-plus"></i> Add new macro action
+                    </a>
+                    <a class="add-new__action-item--link">
+                        <i class="fa fa fa-circle"></i> Add new capture keystroke
+                    </a>
                 </div>
             </div>
         </div>

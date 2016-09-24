@@ -1,3 +1,5 @@
+@import '../../../main-app/global-styles';
+
 :host {
     &.macro-item:first-of-type {
         .list-group-item {
@@ -43,6 +45,22 @@
         &.is-editing {
             background: #f5f5f5;
         }
+
+        &--wrap {
+            justify-content: space-between;
+
+            &.cursor {
+                &:hover {
+                    cursor: pointer;
+                    color: $icon-hover;
+                }
+            }
+        }
+    }
+
+    &--title {
+        display: flex;
+        flex: 1;
     }
 
     &--movable {
@@ -58,8 +76,4 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
-}
-
-.cursor {
-    cursor: pointer;
 }

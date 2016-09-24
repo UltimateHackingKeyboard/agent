@@ -104,16 +104,31 @@ h1 {
 .add-new__action-item {
     border-radius: 0 0 4px 4px;
     border-top: 0;
+    padding: 0;
 
     &:hover {
         cursor: pointer;
     }
 
-    &--link,
-    &--link:active,
-    &--link:hover {
-        text-decoration: none;
+    &--link {
+        width: 50%;
+        float: left;
+        padding: 10px 5px;
+        text-align: center;
         color: $icon-hover;
+
+        &:first-of-type {
+            border-right: 1px solid #ddd;
+        }
+
+        &:hover {
+            text-decoration: none;
+            background: #e6e6e6;
+        }
+    }
+
+    .fa-circle {
+        color: #c00;
     }
 }
 

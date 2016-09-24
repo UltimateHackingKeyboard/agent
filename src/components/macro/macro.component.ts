@@ -2,8 +2,10 @@ import { Component, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/publishReplay';
+import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
@@ -61,9 +63,11 @@ export class MacroComponent {
         let macroConnectable: ConnectableObservable<Macro> = route
             .params
             .select<number>('id')
-            .switchMap((id: number) => {
-                this.currentId = +id;
-                return store.let(getMacro(id));
+            .switchMap((id: number) => store.let(getMacro(id)))
+            .do((macro: Macro) => {
+                if (macro) {
+                    this.currentId = macro.id;
+                }
             })
             .publishReplay(1);
 
@@ -115,7 +119,7 @@ export class MacroComponent {
 
     private hideActiveEditor() {
         this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
-            if (idx !== this.activeEdit) {
+            if (idx === this.activeEdit) {
                 macroItem.cancelEdit();
             }
         });
