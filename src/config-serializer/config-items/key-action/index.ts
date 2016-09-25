@@ -6,3 +6,4 @@ export * from './NoneAction';
 export * from './PlayMacroAction';
 export * from './SwitchKeymapAction';
 export * from './SwitchLayerAction';
+export * from './helper';
