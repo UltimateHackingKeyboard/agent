@@ -12,6 +12,6 @@
         <img src="./images/base-layer--blank.svg">
     </div>
     <svg-keyboard *ngIf="selectedKeymap?.abbreviation"
-                [moduleConfig]="selectedKeymap.layers.elements[0].modules.elements">
+                [moduleConfig]="selectedKeymap.layers[0].modules.elements">
     </svg-keyboard>
 </div>

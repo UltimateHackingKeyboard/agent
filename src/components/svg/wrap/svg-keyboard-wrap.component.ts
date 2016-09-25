@@ -117,7 +117,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap'].previousValue.abbreviation !== changes['keymap'].currentValue.abbreviation) {
-            this.layers = this.keymap.layers.elements;
+            this.layers = this.keymap.layers;
             this.currentLayer = 0;
 
             if (this.layers.length > 0) {
