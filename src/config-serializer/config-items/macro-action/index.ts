@@ -7,3 +7,4 @@ export * from './MoveMouseMacroAction';
 export * from './MouseButtonMacroAction';
 export * from './ScrollMouseMacroAction';
 export * from './TextMacroAction';
+export * from './helper';
