@@ -48,7 +48,7 @@ export class MacroComponent implements OnInit, OnDestroy {
 
     getMacro(id: number): Macro {
         const config = this.uhkConfigurationService.getUhkConfiguration();
-        const macro: Macro = config.macros.elements.find(item => item.id === id);
+        const macro: Macro = config.macros.find(item => item.id === id);
         if (macro) {
             // Clone macro for editing
             return new Macro().fromJsObject(macro.toJsObject());

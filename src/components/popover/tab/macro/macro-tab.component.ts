@@ -28,7 +28,7 @@ export class MacroTabComponent implements OnInit, Tab {
     }
 
     ngOnInit() {
-        this.macros = this.uhkConfigurationService.getUhkConfiguration().macros.elements;
+        this.macros = this.uhkConfigurationService.getUhkConfiguration().macros;
 
         this.macroOptions.push({
             id: '-1',

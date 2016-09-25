@@ -2,10 +2,8 @@ import { assertUInt32, assertUInt8 } from '../assert';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Keymap } from './Keymap';
-import { Keymaps } from './Keymaps';
 import { Macro } from './Macro';
-import { Macros } from './Macros';
-import { ModuleConfigurations } from './ModuleConfigurations';
+import { ModuleConfiguration } from './ModuleConfiguration';
 
 export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
@@ -23,11 +21,11 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
     @assertUInt8
     brandId: number;
 
-    moduleConfigurations: ModuleConfigurations;
+    moduleConfigurations: ModuleConfiguration[];
 
-    keymaps: Keymaps;
+    keymaps: Keymap[];
 
-    macros: Macros;
+    macros: Macro[];
 
     @assertUInt32
     epilogue: number;
@@ -38,9 +36,11 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         this.prologue = jsObject.prologue;
         this.hardwareId = jsObject.hardwareId;
         this.brandId = jsObject.brandId;
-        this.moduleConfigurations = new ModuleConfigurations().fromJsObject(jsObject.moduleConfigurations);
-        this.keymaps = new Keymaps().fromJsObject(jsObject.keymaps);
-        this.macros = new Macros().fromJsObject(jsObject.macros);
+        this.moduleConfigurations = jsObject.moduleConfigurations.map((moduleConfiguration: any) => {
+            return new ModuleConfiguration().fromJsObject(moduleConfiguration);
+        });
+        this.keymaps = jsObject.keymaps.map((keymap: any) => new Keymap().fromJsObject(keymap));
+        this.macros = jsObject.macros.map((macro: any) => new Macro().fromJsObject(macro));
         this.epilogue = jsObject.epilogue;
         return this;
     }
@@ -51,9 +51,9 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         this.prologue = buffer.readUInt32();
         this.hardwareId = buffer.readUInt8();
         this.brandId = buffer.readUInt8();
-        this.moduleConfigurations = new ModuleConfigurations().fromBinary(buffer);
-        this.keymaps = new Keymaps().fromBinary(buffer);
-        this.macros = new Macros().fromBinary(buffer);
+        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(ModuleConfiguration);
+        this.keymaps = buffer.readArray<Keymap>(Keymap);
+        this.macros = buffer.readArray<Macro>(Macro);
         this.epilogue = buffer.readUInt32();
         return this;
     }
@@ -65,9 +65,9 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
             prologue: this.prologue,
             hardwareId: this.hardwareId,
             brandId: this.brandId,
-            moduleConfigurations: this.moduleConfigurations.toJsObject(),
-            keymaps: this.keymaps.toJsObject(),
-            macros: this.macros.toJsObject(),
+            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsObject()),
+            keymaps: this.keymaps.map(keymap => keymap.toJsObject()),
+            macros: this.macros.map(macro => macro.toJsObject()),
             epilogue: this.epilogue
         };
     }
@@ -78,9 +78,9 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         buffer.writeUInt32(this.prologue);
         buffer.writeUInt8(this.hardwareId);
         buffer.writeUInt8(this.brandId);
-        this.moduleConfigurations.toBinary(buffer);
-        this.keymaps.toBinary(buffer);
-        this.macros.toBinary(buffer);
+        buffer.writeArray(this.moduleConfigurations);
+        buffer.writeArray(this.keymaps);
+        buffer.writeArray(this.macros);
         buffer.writeUInt32(this.epilogue);
     }
 
@@ -89,10 +89,10 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
     }
 
     getKeymap(keymapAbbreviation: string): Keymap {
-        return this.keymaps.elements.find(keymap => keymapAbbreviation === keymap.abbreviation);
+        return this.keymaps.find(keymap => keymapAbbreviation === keymap.abbreviation);
     }
 
     getMacro(macroId: number): Macro {
-        return this.macros.elements.find(macro => macroId === macro.id);
+        return this.macros.find(macro => macroId === macro.id);
     }
 }

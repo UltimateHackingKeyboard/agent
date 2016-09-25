@@ -35,8 +35,8 @@ export class Local {
         }
 
         return {
-            keymaps: config.keymaps.elements,
-            macros: config.macros.elements,
+            keymaps: config.keymaps,
+            macros: config.macros,
             presetKeymaps: presetAll.elements
         };
     }
@@ -51,13 +51,13 @@ export class Local {
                 config = new UhkConfiguration().fromJsObject(
                     JSON.parse(localStorage.getItem('config'))
                 );
-                config.keymaps.elements = Object.values(nextState);
+                config.keymaps = Object.values(nextState);
                 localStorage.setItem('config', JSON.stringify(config.toJsObject()));
             } else if (action.type.startsWith(MacroActions.PREFIX) && state.length && state[0] instanceof Macro) {
                 config = new UhkConfiguration().fromJsObject(
                     JSON.parse(localStorage.getItem('config'))
                 );
-                config.macros.elements = Object.values(nextState);
+                config.macros = Object.values(nextState);
                 localStorage.setItem('config', JSON.stringify(config.toJsObject()));
             }
 
