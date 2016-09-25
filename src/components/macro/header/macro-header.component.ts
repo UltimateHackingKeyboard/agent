@@ -1,6 +1,11 @@
 import { Component, Input } from '@angular/core';
 
+import { Store } from '@ngrx/store';
+
 import { Macro } from '../../../config-serializer/config-items/Macro';
+
+import { MacroActions } from '../../../store/actions';
+import { AppState } from '../../../store/index';
 
 @Component({
     selector: 'macro-header',
@@ -10,18 +15,17 @@ import { Macro } from '../../../config-serializer/config-items/Macro';
 export class MacroHeaderComponent {
     @Input() macro: Macro;
 
-    constructor() { }
+    constructor(private store: Store<AppState>) { }
 
     removeMacro() {
-        // TODO implement
+        this.store.dispatch(MacroActions.removeMacro(this.macro.id));
     }
 
     duplicateMacro() {
-        // TODO implement
+        this.store.dispatch(MacroActions.duplicateMacro(this.macro));
     }
 
-    /* tslint:disable:no-unused-variable */
     editMacroName(name: string) {
-        // TODO implement
+        this.store.dispatch(MacroActions.editMacroName(this.macro.id, name));
     }
 }

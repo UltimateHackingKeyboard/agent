@@ -1,6 +1,10 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import '@ngrx/core/add/operator/select';
+import { Store } from '@ngrx/store';
+import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/switchMap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
@@ -9,7 +13,9 @@ import { Macro } from '../../config-serializer/config-items/Macro';
 import { MacroAction } from '../../config-serializer/config-items/macro-action';
 import { MacroItemComponent } from './item/macro-item.component';
 
-import { UhkConfigurationService } from '../../services/uhk-configuration.service';
+import { AppState } from '../../store';
+import { MacroActions } from '../../store/actions';
+import { getMacro } from '../../store/reducers/macro';
 
 @Component({
     selector: 'macro',
@@ -17,15 +23,17 @@ import { UhkConfigurationService } from '../../services/uhk-configuration.servic
     styles: [require('./macro.component.scss')],
     viewProviders: [DragulaService]
 })
-export class MacroComponent implements OnInit, OnDestroy {
+export class MacroComponent implements OnDestroy {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>;
-
     private macro: Macro;
-    private routeSubscription: Subscription;
-    private hasChanges: boolean = false;
+    private showNew: boolean = false;
+    private newMacro: Macro = undefined;
+    private activeEdit: number = undefined;
+    private dragIndex: number;
+    private subscription: Subscription;
 
     constructor(
-        private uhkConfigurationService: UhkConfigurationService,
+        private store: Store<AppState>,
         private route: ActivatedRoute,
         private dragulaService: DragulaService
     ) {
@@ -35,65 +43,75 @@ export class MacroComponent implements OnInit, OnDestroy {
                 return handle.className.includes('action--movable');
             }
         });
-        /* tslint:enable:no-unused-variable */
-    }
 
-    ngOnInit() {
-        this.routeSubscription = this.route.params.subscribe((params: { id: string }) => {
-            const id: number = Number(params.id);
-            this.macro = this.getMacro(id);
-            this.hasChanges = false;
+        dragulaService.drag.subscribe((value: any) => {
+            this.dragIndex = +value[1].getAttribute('data-index');
         });
-    }
 
-    getMacro(id: number): Macro {
-        const config = this.uhkConfigurationService.getUhkConfiguration();
-        const macro: Macro = config.macros.find(item => item.id === id);
-        if (macro) {
-            // Clone macro for editing
-            return new Macro().fromJsObject(macro.toJsObject());
-        }
-        // @todo replace with notification
-        throw new Error('Macro not found');
-    }
-
-    addAction() {
-        this.hideOtherActionEditors(this.macro.macroActions.length);
-        this.macro.macroActions.push(undefined);
-    }
-
-    discardChanges() {
-        const id: number = this.macro.id;
-        this.macro = this.getMacro(id);
-        this.hasChanges = false;
-    }
-
-    hideOtherActionEditors(index: number) {
-        this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
-            if (idx !== index) {
-                macroItem.cancelEdit();
+        dragulaService.drop.subscribe((value: any) => {
+            if (value[4]) {
+                this.store.dispatch(MacroActions.reorderMacroAction(
+                    this.macro.id,
+                    this.dragIndex,
+                    +value[4].getAttribute('data-index')
+                ));
             }
         });
-    }
 
-    onEditAction(index: number) {
-        // Hide other editors when clicking edit button of a macro action
-        this.hideOtherActionEditors(index);
-    }
-
-    onSaveAction(macroAction: MacroAction, index: number) {
-        this.hasChanges = true;
-        this.macro.macroActions[index] = macroAction;
-    }
-
-    onDeleteAction(index: number) {
-        // @ todo show confirm action dialog
-        this.macro.macroActions.splice(index, 1);
-        this.hasChanges = true;
+        this.subscription = route
+            .params
+            .select<string>('id')
+            .switchMap((id: string) => store.let(getMacro(+id)))
+            .subscribe((macro: Macro) => {
+                this.macro = macro;
+            });
     }
 
     ngOnDestroy() {
-        this.routeSubscription.unsubscribe();
+        this.subscription.unsubscribe();
     }
 
+    showNewAction() {
+        this.hideActiveEditor();
+
+        this.newMacro = undefined;
+        this.showNew = true;
+    }
+
+    hideNewAction() {
+        this.showNew = false;
+    }
+
+    addNewAction(macroAction: MacroAction) {
+        this.store.dispatch(MacroActions.addMacroAction(this.macro.id, macroAction));
+        this.newMacro = undefined;
+        this.showNew = false;
+    }
+
+    editAction(index: number) {
+        // Hide other editors when clicking edit button of a macro action
+        this.hideActiveEditor();
+        this.showNew = false;
+        this.activeEdit = index;
+    }
+
+    cancelAction() {
+        this.activeEdit = undefined;
+    }
+
+    saveAction(macroAction: MacroAction, index: number) {
+        this.store.dispatch(MacroActions.saveMacroAction(this.macro.id, index, macroAction));
+        this.hideActiveEditor();
+    }
+
+    deleteAction(macroAction: MacroAction, index: number) {
+        this.store.dispatch(MacroActions.deleteMacroAction(this.macro.id, index, macroAction));
+        this.hideActiveEditor();
+    }
+
+    private hideActiveEditor() {
+        if (this.activeEdit) {
+            this.macroItems.toArray()[this.activeEdit].cancelEdit();
+        }
+    }
 }

@@ -1,3 +1,5 @@
+@import '../../../main-app/global-styles';
+
 :host {
     &.macro-item:first-of-type {
         .list-group-item {
@@ -18,44 +20,60 @@
             background: #f5f5f5;
         }
     }
+}
 
-    .action {
-        &--item {
+.action {
+    &--item {
+        display: flex;
+        flex-shrink: 0;
+        border: 0;
+        border-bottom: 1px solid #ddd;
+
+        icon {
+            margin: 0 5px;
+        }
+
+        > div {
             display: flex;
-            flex-shrink: 0;
-            border: 0;
-            border-bottom: 1px solid #ddd;
-
-            icon {
-                margin: 0 5px;
-            }
-
-            > div {
-                display: flex;
-                flex: 1;
-            }
-
-            &:first-child {
-                border-radius: 0;
-            }
-
-            &.is-editing {
-                background: #f5f5f5;
-            }
+            flex: 1;
         }
 
-        &--movable {
-            &:hover {
-                cursor: move;
+        &:first-child {
+            border-radius: 0;
+        }
+
+        &.is-editing {
+            background: #f5f5f5;
+        }
+
+        &--wrap {
+            justify-content: space-between;
+
+            &.pointer {
+                &:hover {
+                    cursor: pointer;
+                    color: $icon-hover;
+                }
             }
         }
     }
 
-    .macro-action-editor__container {
-        padding-top: 0;
-        padding-bottom: 0;
-        border-radius: 0;
-        border-left: 0;
-        border-right: 0;
+    &--title {
+        display: flex;
+        flex: 1;
     }
+
+    &--movable {
+        &:hover {
+            cursor: move;
+        }
+    }
+}
+
+.macro-action-editor__container {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
 }

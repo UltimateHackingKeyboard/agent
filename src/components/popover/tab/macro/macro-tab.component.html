@@ -6,7 +6,7 @@
     <template [ngIf]="selectedMacroIndex >= 0">
       <div class="list-group"> 
         <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions"
-                    [macroAction]="macroAction">
+                    [macroAction]="macroAction" [editable]="false">
         </macro-item>
       </div>
     </template>

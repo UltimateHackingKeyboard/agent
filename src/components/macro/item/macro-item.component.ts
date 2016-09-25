@@ -53,8 +53,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     saveEditedAction(editedAction: MacroAction): void {
-        // @todo save this to keyboard
-        console.log('Saved action', editedAction);
         this.macroAction = editedAction;
         this.editing = false;
         this.updateView();
@@ -62,7 +60,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     editAction(): void {
-        if (!this.editable) {
+        if (!this.editable || this.editing) {
             return;
         }
         this.editing = true;
