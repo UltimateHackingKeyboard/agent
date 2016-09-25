@@ -1,18 +1,16 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/let';
-import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/switchMap';
-import { Observable } from 'rxjs/Observable';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { MacroAction } from '../../config-serializer/config-items/macro-action/MacroAction';
+import { MacroAction } from '../../config-serializer/config-items/macro-action';
 import { MacroItemComponent } from './item/macro-item.component';
 
 import { AppState } from '../../store';
@@ -25,14 +23,14 @@ import { getMacro } from '../../store/reducers/macro';
     styles: [require('./macro.component.scss')],
     viewProviders: [DragulaService]
 })
-export class MacroComponent {
+export class MacroComponent implements OnDestroy {
     @ViewChildren(MacroItemComponent) macroItems: QueryList<MacroItemComponent>;
-    private macro$: Observable<Macro>;
+    private macro: Macro;
     private showNew: boolean = false;
     private newMacro: Macro = undefined;
     private activeEdit: number = undefined;
-    private currentId: number;
     private dragIndex: number;
+    private subscription: Subscription;
 
     constructor(
         private store: Store<AppState>,
@@ -53,32 +51,28 @@ export class MacroComponent {
         dragulaService.drop.subscribe((value: any) => {
             if (value[4]) {
                 this.store.dispatch(MacroActions.reorderMacroAction(
-                    this.currentId,
+                    this.macro.id,
                     this.dragIndex,
                     +value[4].getAttribute('data-index')
                 ));
             }
         });
 
-        let macroConnectable: ConnectableObservable<Macro> = route
+        this.subscription = route
             .params
-            .select<number>('id')
-            .switchMap((id: number) => store.let(getMacro(id)))
-            .do((macro: Macro) => {
-                if (macro) {
-                    this.currentId = macro.id;
-                }
-            })
-            .publishReplay(1);
+            .select<string>('id')
+            .switchMap((id: string) => store.let(getMacro(+id)))
+            .subscribe((macro: Macro) => {
+                this.macro = macro;
+            });
+    }
 
-        this.macro$ = macroConnectable;
-        macroConnectable.connect();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     showNewAction() {
-        if (this.activeEdit) {
-            this.hideActiveEditor();
-        }
+        this.hideActiveEditor();
 
         this.newMacro = undefined;
         this.showNew = true;
@@ -89,17 +83,15 @@ export class MacroComponent {
     }
 
     addNewAction(macroAction: MacroAction) {
-        this.store.dispatch(MacroActions.addMacroAction(this.currentId, macroAction));
+        this.store.dispatch(MacroActions.addMacroAction(this.macro.id, macroAction));
         this.newMacro = undefined;
         this.showNew = false;
     }
 
     editAction(index: number) {
         // Hide other editors when clicking edit button of a macro action
-        if (this.activeEdit) {
-            this.hideActiveEditor();
-        }
-
+        this.hideActiveEditor();
+        this.showNew = false;
         this.activeEdit = index;
     }
 
@@ -108,20 +100,18 @@ export class MacroComponent {
     }
 
     saveAction(macroAction: MacroAction, index: number) {
-        this.store.dispatch(MacroActions.saveMacroAction(this.currentId, index, macroAction));
+        this.store.dispatch(MacroActions.saveMacroAction(this.macro.id, index, macroAction));
         this.hideActiveEditor();
     }
 
     deleteAction(macroAction: MacroAction, index: number) {
-        this.store.dispatch(MacroActions.deleteMacroAction(this.currentId, index, macroAction));
+        this.store.dispatch(MacroActions.deleteMacroAction(this.macro.id, index, macroAction));
         this.hideActiveEditor();
     }
 
     private hideActiveEditor() {
-        this.macroItems.toArray().forEach((macroItem: MacroItemComponent, idx: number) => {
-            if (idx === this.activeEdit) {
-                macroItem.cancelEdit();
-            }
-        });
+        if (this.activeEdit) {
+            this.macroItems.toArray()[this.activeEdit].cancelEdit();
+        }
     }
 }

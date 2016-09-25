@@ -41,7 +41,7 @@ export default function(state = initialState, action: Action): Macro[] {
             return state.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     newMacro = new Macro(macro);
-                    newMacro.macroActions.elements.push(action.payload.action);
+                    newMacro.macroActions.push(action.payload.action);
 
                     return newMacro;
                 }
@@ -53,7 +53,7 @@ export default function(state = initialState, action: Action): Macro[] {
             return state.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     newMacro = new Macro(macro);
-                    newMacro.macroActions.elements[action.payload.index] = action.payload.action;
+                    newMacro.macroActions[action.payload.index] = action.payload.action;
 
                     return newMacro;
                 }
@@ -65,7 +65,7 @@ export default function(state = initialState, action: Action): Macro[] {
             return state.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     newMacro = new Macro(macro);
-                    newMacro.macroActions.elements.splice(action.payload.index, 1);
+                    newMacro.macroActions.splice(action.payload.index, 1);
 
                     return newMacro;
                 }
@@ -84,10 +84,10 @@ export default function(state = initialState, action: Action): Macro[] {
                     }
 
                     newMacro = new Macro(macro);
-                    newMacro.macroActions.elements.splice(
+                    newMacro.macroActions.splice(
                         newIndex,
                         0,
-                        newMacro.macroActions.elements.splice(action.payload.oldIndex, 1)[0]
+                        newMacro.macroActions.splice(action.payload.oldIndex, 1)[0]
                     );
 
                     return newMacro;
@@ -103,9 +103,6 @@ export default function(state = initialState, action: Action): Macro[] {
 }
 
 export function getMacro(id: number) {
-    // Convert to real number
-    id = +id;
-
     if (isNaN(id)) {
         return (state$: Observable<AppState>) => state$
             .select(appState => appState.macros)

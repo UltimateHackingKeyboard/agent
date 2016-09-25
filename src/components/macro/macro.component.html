@@ -1,9 +1,9 @@
-<template [ngIf]="macro$ | async">
-    <macro-header [macro]="macro$ | async"></macro-header>
+<template [ngIf]="macro">
+    <macro-header [macro]="macro"></macro-header>
     <div class="row list-container">
         <div class="col-xs-10 col-xs-offset-1 list-group">
-            <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="(macro$ | async)?.macroActions.elements">
-                <macro-item *ngFor="let macroAction of (macro$ | async)?.macroActions.elements; let macroActionIndex = index"
+            <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="(macro)?.macroActions">
+                <macro-item *ngFor="let macroAction of (macro)?.macroActions; let macroActionIndex = index"
                             [macroAction]="macroAction"
                             [editable]="true"
                             [deletable]="true"
@@ -11,7 +11,7 @@
                             (save)="saveAction($event, macroActionIndex)"
                             (edit)="editAction(macroActionIndex)"
                             (cancel)="cancelAction()"
-                            (delete)="deleteAction($event, macroActionIndex)"
+                            (delete)="deleteAction(macroAction, macroActionIndex)"
                             [attr.data-index]="macroActionIndex"
                 ></macro-item>
 
@@ -37,6 +37,6 @@
     </div>
 </template>
 
-<div *ngIf="!(macro$ | async)" class="not-found">
+<div *ngIf="!macro" class="not-found">
     Sorry, there is no macro with this id.
 </div>

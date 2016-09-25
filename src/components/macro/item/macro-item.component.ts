@@ -29,7 +29,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
     @Output() edit = new EventEmitter<void>();
-    @Output() delete = new EventEmitter<MacroAction>();
+    @Output() delete = new EventEmitter<void>();
 
     private title: string;
     private iconName: string;
@@ -72,8 +72,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.cancel.emit();
     }
 
-    deleteAction(macroAction: MacroAction): void {
-        this.delete.emit(macroAction);
+    deleteAction(): void {
+        this.delete.emit();
     }
 
     private updateView(): void {

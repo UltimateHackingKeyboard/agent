@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { MacroAction } from '../../config-serializer/config-items/macro-action/MacroAction';
+import { MacroAction } from '../../config-serializer/config-items/macro-action';
 
 export namespace MacroActions {
     export const PREFIX = '[Macro] ';

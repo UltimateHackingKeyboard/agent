@@ -49,7 +49,7 @@
         &--wrap {
             justify-content: space-between;
 
-            &.cursor {
+            &.pointer {
                 &:hover {
                     cursor: pointer;
                     color: $icon-hover;
