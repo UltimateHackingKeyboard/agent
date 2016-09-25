@@ -1,8 +1,8 @@
 <macro-header [macro]="macro"></macro-header>
 <div class="row list-container">
     <div class="col-xs-10 col-xs-offset-1 list-group">
-        <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions.elements">
-            <macro-item *ngFor="let macroAction of macro.macroActions.elements; let macroActionIndex = index"
+        <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions">
+            <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index"
                         [macroAction]="macroAction"
                         [editable]="true"
                         [deletable]="true"

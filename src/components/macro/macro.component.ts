@@ -58,8 +58,8 @@ export class MacroComponent implements OnInit, OnDestroy {
     }
 
     addAction() {
-        this.hideOtherActionEditors(this.macro.macroActions.elements.length);
-        this.macro.macroActions.elements.push(undefined);
+        this.hideOtherActionEditors(this.macro.macroActions.length);
+        this.macro.macroActions.push(undefined);
     }
 
     discardChanges() {
@@ -83,12 +83,12 @@ export class MacroComponent implements OnInit, OnDestroy {
 
     onSaveAction(macroAction: MacroAction, index: number) {
         this.hasChanges = true;
-        this.macro.macroActions.elements[index] = macroAction;
+        this.macro.macroActions[index] = macroAction;
     }
 
     onDeleteAction(index: number) {
         // @ todo show confirm action dialog
-        this.macro.macroActions.elements.splice(index, 1);
+        this.macro.macroActions.splice(index, 1);
         this.hasChanges = true;
     }
 

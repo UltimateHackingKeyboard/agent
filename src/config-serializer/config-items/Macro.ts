@@ -1,7 +1,7 @@
 import { assertUInt8 } from '../assert';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
-import { MacroActions } from './macro-action';
+import { Helper as MacroActionHelper, MacroAction } from './macro-action';
 
 export class Macro extends Serializable<Macro> {
 
@@ -14,7 +14,7 @@ export class Macro extends Serializable<Macro> {
 
     name: string;
 
-    macroActions: MacroActions;
+    macroActions: MacroAction[];
 
     constructor(other?: Macro) {
         super();
@@ -25,7 +25,7 @@ export class Macro extends Serializable<Macro> {
         this.isLooped = other.isLooped;
         this.isPrivate = other.isPrivate;
         this.name = other.name;
-        this.macroActions = new MacroActions(other.macroActions);
+        this.macroActions = other.macroActions.map(macroAction => MacroActionHelper.createMacroAction(macroAction));
     }
 
     _fromJsObject(jsObject: any): Macro {
@@ -33,7 +33,7 @@ export class Macro extends Serializable<Macro> {
         this.isLooped = jsObject.isLooped;
         this.isPrivate = jsObject.isPrivate;
         this.name = jsObject.name;
-        this.macroActions = new MacroActions().fromJsObject(jsObject.macroActions);
+        this.macroActions = jsObject.macroActions.map((macroAction: any) => MacroActionHelper.createMacroAction(macroAction));
         return this;
     }
 
@@ -42,7 +42,11 @@ export class Macro extends Serializable<Macro> {
         this.isLooped = buffer.readBoolean();
         this.isPrivate = buffer.readBoolean();
         this.name = buffer.readString();
-        this.macroActions = new MacroActions().fromBinary(buffer);
+        let macroActionsLength: number = buffer.readCompactLength();
+        this.macroActions = [];
+        for (let i = 0; i < macroActionsLength; ++i) {
+            this.macroActions.push(MacroActionHelper.createMacroAction(buffer));
+        }
         return this;
     }
 
@@ -52,7 +56,7 @@ export class Macro extends Serializable<Macro> {
             isLooped: this.isLooped,
             isPrivate: this.isPrivate,
             name: this.name,
-            macroActions: this.macroActions.toJsObject()
+            macroActions: this.macroActions.map(macroAction => macroAction.toJsObject())
         };
     }
 
@@ -61,7 +65,7 @@ export class Macro extends Serializable<Macro> {
         buffer.writeBoolean(this.isLooped);
         buffer.writeBoolean(this.isPrivate);
         buffer.writeString(this.name);
-        this.macroActions.toBinary(buffer);
+        buffer.writeArray(this.macroActions);
     }
 
     toString(): string {
