@@ -1,11 +1,11 @@
 import { AnimationKeyboard } from '../../components/svg/wrap';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
-import { Modules } from './Modules';
+import { Module } from './Module';
 
 export class Layer extends Serializable<Layer> {
 
-    modules: Modules;
+    modules: Module[];
     animation: AnimationKeyboard;
 
     constructor(layers?: Layer) {
@@ -14,28 +14,28 @@ export class Layer extends Serializable<Layer> {
             this.animation = 'none';
             return;
         }
-        this.modules = new Modules(layers.modules);
+        this.modules = layers.modules.map(module => new Module(module));
         this.animation = layers.animation;
     }
 
     _fromJsObject(jsObject: any): Layer {
-        this.modules = new Modules().fromJsObject(jsObject.modules);
+        this.modules = jsObject.modules.map((module: any) => new Module().fromJsObject(module));
         return this;
     }
 
     _fromBinary(buffer: UhkBuffer): Layer {
-        this.modules = new Modules().fromBinary(buffer);
+        this.modules = buffer.readArray<Module>(Module);
         return this;
     }
 
     _toJsObject(): any {
         return {
-            modules: this.modules.toJsObject()
+            modules: this.modules.map(module => module.toJsObject())
         };
     }
 
     _toBinary(buffer: UhkBuffer): void {
-        this.modules.toBinary(buffer);
+        buffer.writeArray(this.modules);
     }
 
     toString(): string {

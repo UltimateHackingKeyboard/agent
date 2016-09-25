@@ -130,7 +130,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     onKeyClick(moduleId: number, keyId: number): void {
         if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
-                keyActions: this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements,
+                keyActions: this.layers[this.currentLayer].modules[moduleId].keyActions.elements,
                 keyId
             };
 
@@ -140,7 +140,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     }
 
     onKeyHover(moduleId: number, event: MouseEvent, over: boolean, keyId: number): void {
-        let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules.elements[moduleId].keyActions.elements[keyId];
+        let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions.elements[keyId];
 
         if (this.tooltipEnabled) {
             if (over) {
