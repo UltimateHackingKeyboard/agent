@@ -4,7 +4,7 @@
                 [coverages]="module.coverages"
                 [keyboardKeys]="module.keyboardKeys"
                 [attr.transform]="module.attributes.transform"
-                [keyActions]="moduleConfig[i].keyActions.elements"
+                [keyActions]="moduleConfig[i].keyActions"
                 (keyClick)="onKeyClick(i, $event)"
                 (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
         />
