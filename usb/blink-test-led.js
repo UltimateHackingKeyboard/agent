@@ -22,13 +22,19 @@ var endpointOut = usbInterface.endpoints[1];
 var state = 1;
 
 setInterval(function() {
-    console.log('Sending ', state);
     state = state ? 0 : 1
-    console.log(state)
+    console.log('Sending ', state);
     endpointOut.transfer(new Buffer([test_led_command_id, state]), function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
         }
+        endpointIn.transfer(64, function(err2, receivedBuffer) {
+            if (err2) {
+                console.error("USB error: %s", err2);
+                process.exit(2);
+            }
+            console.log('Received', receivedBuffer, receivedBuffer.length);
+        })
     });
 }, 500)
