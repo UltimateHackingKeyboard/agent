@@ -24,7 +24,7 @@ setInterval(function() {
     console.log('Sending ', state);
     state = state ? 0 : 1
     console.log(state)
-    endpointOut.transfer(new Buffer([state]), function(err) {
+    endpointOut.transfer(new Buffer([1, state]), function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
