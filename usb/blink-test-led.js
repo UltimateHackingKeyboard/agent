@@ -5,7 +5,7 @@ var usb = require('usb');
 
 var vid = 0x16d3;
 var pid = 0x05ea;
-var test_led_command_id = 1;
+var test_led_command_id = 2;
 
 var device = usb.findByIds(vid, pid);
 device.open();
