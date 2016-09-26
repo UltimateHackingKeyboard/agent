@@ -5,6 +5,7 @@ var usb = require('usb');
 
 var vid = 0x16d3;
 var pid = 0x05ea;
+var test_led_command_id = 1;
 
 var device = usb.findByIds(vid, pid);
 device.open();
@@ -24,7 +25,7 @@ setInterval(function() {
     console.log('Sending ', state);
     state = state ? 0 : 1
     console.log(state)
-    endpointOut.transfer(new Buffer([1, state]), function(err) {
+    endpointOut.transfer(new Buffer([test_led_command_id, state]), function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
