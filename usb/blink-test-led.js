@@ -2,6 +2,7 @@
 'use strict';
 
 var usb = require('usb');
+var util = require('./util');
 
 var vid = 0x16d3;
 var pid = 0x05ea;
@@ -34,7 +35,7 @@ setInterval(function() {
                 console.error("USB error: %s", err2);
                 process.exit(2);
             }
-            console.log('Received', receivedBuffer, receivedBuffer.length);
+            console.log('Received', util.bufferToString(receivedBuffer));
         })
     });
 }, 500)
