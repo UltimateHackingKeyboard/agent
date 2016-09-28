@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
-import { Select2Component } from 'ng2-select2/ng2-select2';
+import { Select2Module } from 'ng2-select2/ng2-select2';
 
 import { AddOnComponent } from './components/add-on';
 import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
@@ -74,7 +74,6 @@ const storeConfig = {
 
 @NgModule({
     declarations: [
-        Select2Component,
         MainAppComponent,
         KeymapComponent,
         KeymapHeaderComponent,
@@ -127,7 +126,8 @@ const storeConfig = {
                 position: 'right'
             })
         }),
-        StoreLogMonitorModule
+        StoreLogMonitorModule,
+        Select2Module
     ],
     providers: [
         DataProviderService,
