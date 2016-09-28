@@ -32,8 +32,12 @@ export class Local {
         }
 
         return {
-            keymaps: config.keymaps,
-            macros: config.macros,
+            keymaps: {
+                entities: config.keymaps
+            },
+            macros: {
+                entities: config.macros
+            },
             presetKeymaps: presetAll
         };
     }
@@ -44,17 +48,29 @@ export class Local {
             let config: UhkConfiguration;
 
             // Save elements to the UhkConfiguration
-            if (action.type.startsWith(KeymapActions.PREFIX) && state.length && state[0] instanceof Keymap) {
+            if (
+                action.type.startsWith(KeymapActions.PREFIX) &&
+                (
+                    (nextState.entities && nextState.entities.length && nextState.entities[0] instanceof Keymap) ||
+                    (state.entities && state.entities.length && state.entities[0] instanceof Keymap)
+                )
+            ) {
                 config = new UhkConfiguration().fromJsObject(
                     JSON.parse(localStorage.getItem('config'))
                 );
-                config.keymaps = Object.values(nextState);
+                config.keymaps = Object.values(nextState.entities);
                 localStorage.setItem('config', JSON.stringify(config.toJsObject()));
-            } else if (action.type.startsWith(MacroActions.PREFIX) && state.length && state[0] instanceof Macro) {
+            } else if (
+                action.type.startsWith(MacroActions.PREFIX) &&
+                (
+                    (nextState.entities && nextState.entities.length && nextState.entities[0] instanceof Macro) ||
+                    (state.entities && state.entities.length && state.entities[0] instanceof Macro)
+                )
+            ) {
                 config = new UhkConfiguration().fromJsObject(
                     JSON.parse(localStorage.getItem('config'))
                 );
-                config.macros = Object.values(nextState);
+                config.macros = Object.values(nextState.entities);
                 localStorage.setItem('config', JSON.stringify(config.toJsObject()));
             }
 

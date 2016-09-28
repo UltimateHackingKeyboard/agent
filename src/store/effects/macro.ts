@@ -1,21 +1,30 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Actions, Effect } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 
-import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/withLatestFrom';
 
 import { MacroActions } from '../actions';
+import { AppState } from '../index';
 
 @Injectable()
 export class MacroEffects {
 
-    @Effect()remove$: any = this.actions$
+    @Effect({dispatch: false}) remove$: any = this.actions$
         .ofType(MacroActions.REMOVE)
-        .map(() => {
-            // TODO: Waiting for the fix: https://github.com/angular/angular/issues/10770
-            // If state is empty router.navigate(['/macro']);
-            // Else router.navigate(['/macro']);
+        .withLatestFrom(this.store)
+        .do((latest) => {
+            let state: AppState = latest[1];
+
+            if (state.macros.entities.length === 0) {
+                this.router.navigate(['/macro/add']);
+            } else {
+                this.router.navigate(['/macro']);
+            }
         });
 
-    constructor(private actions$: Actions) {}
+    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
 }

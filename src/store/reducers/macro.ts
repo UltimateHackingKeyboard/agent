@@ -7,26 +7,31 @@ import { Observable } from 'rxjs/Observable';
 import { Macro } from '../../config-serializer/config-items/Macro';
 
 import { MacroActions } from '../actions';
-import { AppState } from '../index';
+import { AppState, MacroState } from '../index';
 
-const initialState: Macro[] = [];
+const initialState: MacroState = {
+    entities: []
+};
 
-export default function(state = initialState, action: Action): Macro[] {
+export default function(state = initialState, action: Action): MacroState {
     let newMacro: Macro;
+    let newState: Macro[];
 
     switch (action.type) {
         case MacroActions.DUPLICATE:
 
             newMacro = new Macro(action.payload);
-            newMacro.name = generateName(state, newMacro.name);
-            newMacro.id = generateId(state);
+            newMacro.name = generateName(state.entities, newMacro.name);
+            newMacro.id = generateId(state.entities);
 
-            return [...state, newMacro];
+            return {
+                entities: [...state.entities, newMacro]
+            };
 
         case MacroActions.EDIT_NAME:
-            let name: string = generateName(state, action.payload.name);
+            let name: string = generateName(state.entities, action.payload.name);
 
-            return state.map((macro: Macro) => {
+            newState = state.entities.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     macro.name = name;
                 }
@@ -34,11 +39,19 @@ export default function(state = initialState, action: Action): Macro[] {
                 return macro;
             });
 
+            return {
+                entities: newState
+            };
+
         case MacroActions.REMOVE:
-            return state.filter((macro: Macro) => macro.id !== action.payload);
+            newState = state.entities.filter((macro: Macro) => macro.id !== action.payload);
+
+            return {
+                entities: newState
+            };
 
         case MacroActions.ADD_ACTION:
-            return state.map((macro: Macro) => {
+            newState = state.entities.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     newMacro = new Macro(macro);
                     newMacro.macroActions.push(action.payload.action);
@@ -49,8 +62,12 @@ export default function(state = initialState, action: Action): Macro[] {
                 return macro;
             });
 
+            return {
+                entities: newState
+            };
+
         case MacroActions.SAVE_ACTION:
-            return state.map((macro: Macro) => {
+            newState = state.entities.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     newMacro = new Macro(macro);
                     newMacro.macroActions[action.payload.index] = action.payload.action;
@@ -61,8 +78,12 @@ export default function(state = initialState, action: Action): Macro[] {
                 return macro;
             });
 
+            return {
+                entities: newState
+            };
+
         case MacroActions.DELETE_ACTION:
-            return state.map((macro: Macro) => {
+            newState = state.entities.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     newMacro = new Macro(macro);
                     newMacro.macroActions.splice(action.payload.index, 1);
@@ -73,8 +94,12 @@ export default function(state = initialState, action: Action): Macro[] {
                 return macro;
             });
 
+            return {
+                entities: newState
+            };
+
         case MacroActions.REORDER_ACTION:
-            return state.map((macro: Macro) => {
+            newState = state.entities.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
                     let newIndex: number = action.payload.newIndex;
 
@@ -96,16 +121,24 @@ export default function(state = initialState, action: Action): Macro[] {
                 return macro;
             });
 
-        default: {
+            return {
+                entities: newState
+            };
+
+        default:
             return state;
-        }
     }
+}
+
+export function getMacroEntities(): (state$: Observable<AppState>) => Observable<Macro[]> {
+    return (state$: Observable<AppState>) => state$
+        .select(state => state.macros.entities);
 }
 
 export function getMacro(id: number) {
     if (isNaN(id)) {
         return (state$: Observable<AppState>) => state$
-            .select(appState => appState.macros)
+            .select(appState => appState.macros.entities)
             .map((macros: Macro[]) => {
                 if (macros.length > 0) {
                     return macros[0];
@@ -115,7 +148,7 @@ export function getMacro(id: number) {
             });
     } else {
         return (state$: Observable<AppState>) => state$
-            .select(appState => appState.macros)
+            .select(appState => appState.macros.entities)
             .map((macros: Macro[]) => macros.find((macro: Macro) => macro.id === id));
     }
 }
