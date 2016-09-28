@@ -4,6 +4,7 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 
 import { AppState } from '../../store';
+import { getKeymapEntities, getMacroEntities } from '../../store/reducers';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
@@ -35,8 +36,8 @@ export class SideMenuComponent {
             addon: 'active'
         };
 
-        this.keymaps$ = store.select(appState => appState.keymaps);
-        this.macros$ = store.select(appState => appState.macros);
+        this.keymaps$ = store.let(getKeymapEntities());
+        this.macros$ = store.let(getMacroEntities());
     }
 
     toggleHide(event: Event, type: string) {

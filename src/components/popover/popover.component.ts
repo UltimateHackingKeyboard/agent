@@ -15,6 +15,7 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Tab } from './tab/tab';
 
 import { AppState } from '../../store';
+import { getKeymapEntities } from '../../store/reducers';
 import { Observable } from 'rxjs/Observable';
 
 enum TabName {
@@ -48,7 +49,7 @@ export class PopoverComponent implements OnInit {
     private keymaps$: Observable<Keymap[]>;
 
     constructor(private store: Store<AppState>) {
-        this.keymaps$ = store.select((appState: AppState) => appState.keymaps);
+        this.keymaps$ = store.let(getKeymapEntities());
     }
 
     ngOnInit() {

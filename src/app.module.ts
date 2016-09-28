@@ -2,7 +2,10 @@ import { NgModule, ReflectiveInjector } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
@@ -54,11 +57,9 @@ import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
 import { UhkConfigurationService } from './services/uhk-configuration.service';
 
-import { DataStorage } from './store/storage';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
-
+import { KeymapEffects, MacroEffects } from './store/effects';
 import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
+import { DataStorage } from './store/storage';
 
 // Create DataStorage dependency injection
 const storageProvider = ReflectiveInjector.resolve([DataStorage]);
@@ -127,7 +128,9 @@ const storeConfig = {
             })
         }),
         StoreLogMonitorModule,
-        Select2Module
+        Select2Module,
+        EffectsModule.runAfterBootstrap(KeymapEffects),
+        EffectsModule.runAfterBootstrap(MacroEffects)
     ],
     providers: [
         DataProviderService,

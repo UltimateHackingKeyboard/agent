@@ -6,56 +6,75 @@ import { Observable } from 'rxjs/Observable';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { KeymapActions } from '../actions';
-import { AppState } from '../index';
+import { AppState, KeymapState } from '../index';
 
-const initialState: Keymap[] = [];
+const initialState: KeymapState = {
+    entities: []
+};
 
-export default function(state = initialState, action: Action): Keymap[] {
+export default function(state = initialState, action: Action): KeymapState {
+    let newState: Keymap[];
+
     switch (action.type) {
         case KeymapActions.ADD:
         case KeymapActions.DUPLICATE:
 
             let newKeymap: Keymap = new Keymap(action.payload);
 
-            newKeymap.abbreviation = generateAbbr(state, newKeymap.abbreviation);
-            newKeymap.name = generateName(state, newKeymap.name);
-            newKeymap.isDefault = false;
+            newKeymap.abbreviation = generateAbbr(state.entities, newKeymap.abbreviation);
+            newKeymap.name = generateName(state.entities, newKeymap.name);
+            newKeymap.isDefault = (state.entities.length === 0);
 
-            return [...state, newKeymap];
+            return {
+                entities: [...state.entities, newKeymap]
+            };
 
         case KeymapActions.EDIT_NAME:
-            let name: string = generateName(state, action.payload.name);
+            let name: string = generateName(state.entities, action.payload.name);
 
-            return state.map((keymap: Keymap) => {
-                    if (keymap.abbreviation === action.payload.abbr) {
-                        keymap.name = name;
-                    }
+            newState = state.entities.map((keymap: Keymap) => {
+                if (keymap.abbreviation === action.payload.abbr) {
+                    keymap.name = name;
+                }
 
-                    return keymap;
-                });
+                return keymap;
+            });
+
+            return {
+                entities: newState
+            };
 
         case KeymapActions.EDIT_ABBR:
-            let abbr: string = generateAbbr(state, action.payload.newAbbr);
+            let abbr: string = generateAbbr(state.entities, action.payload.newAbbr);
 
-            return state.map((keymap: Keymap) => {
-                    if (keymap.abbreviation === action.payload.abbr) {
-                        keymap.abbreviation = abbr;
-                    }
+            newState = state.entities.map((keymap: Keymap) => {
+                if (keymap.abbreviation === action.payload.abbr) {
+                    keymap.abbreviation = abbr;
+                }
 
-                    return keymap;
-                });
+                return keymap;
+            });
+
+            return {
+                entities: newState,
+                newAbbr: abbr
+            };
 
         case KeymapActions.SET_DEFAULT:
-            return state.map((keymap: Keymap) => {
-                    keymap.isDefault = (keymap.abbreviation === action.payload);
+            newState = state.entities.map((keymap: Keymap) => {
+                keymap.isDefault = (keymap.abbreviation === action.payload);
 
-                    return keymap;
-                });
+                return keymap;
+            });
+
+            return {
+                entities: newState
+            };
 
         case KeymapActions.REMOVE:
             let isDefault: boolean;
 
-            let filtered: Keymap[] = state.filter((keymap: Keymap) => {
+            let filtered: Keymap[] = state.entities.filter((keymap: Keymap) => {
                     if (keymap.abbreviation === action.payload) {
                         isDefault = keymap.isDefault;
                         return false;
@@ -70,12 +89,14 @@ export default function(state = initialState, action: Action): Keymap[] {
                 filtered[0].isDefault = true;
             }
 
-            return filtered;
+            return {
+                entities: filtered
+            };
 
         case KeymapActions.SAVE_KEY:
             let changedKeymap: Keymap = new Keymap;
 
-            return state.map((keymap: Keymap) => {
+            newState = state.entities.map((keymap: Keymap) => {
                 if (keymap.abbreviation === action.payload.abbreviation) {
                     keymap = Object.assign(changedKeymap, action.payload);
                 }
@@ -83,10 +104,19 @@ export default function(state = initialState, action: Action): Keymap[] {
                 return keymap;
             });
 
+            return {
+                entities: newState
+            };
+
         default: {
             return state;
         }
     }
+}
+
+export function getKeymapEntities(): (state$: Observable<AppState>) => Observable<Keymap[]> {
+    return (state$: Observable<AppState>) => state$
+        .select(state => state.keymaps.entities);
 }
 
 export function getKeymap(abbr: string) {
@@ -95,7 +125,7 @@ export function getKeymap(abbr: string) {
     }
 
     return (state$: Observable<AppState>) => state$
-        .select(appState => appState.keymaps)
+        .select(appState => appState.keymaps.entities)
         .map((keymaps: Keymap[]) =>
             keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
         );
@@ -103,7 +133,7 @@ export function getKeymap(abbr: string) {
 
 export function getDefault() {
     return (state$: Observable<AppState>) => state$
-        .select(appState => appState.keymaps)
+        .select(appState => appState.keymaps.entities)
         .map((keymaps: Keymap[]) =>
             keymaps.find((keymap: Keymap) => keymap.isDefault)
         );
