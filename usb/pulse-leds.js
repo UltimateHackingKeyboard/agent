@@ -71,7 +71,7 @@ function updateLeds() {
         ]),
         (matrixId ? ledsRight : ledsLeft).slice(ledIndex, ledIndex + ledCountToUpdatePerCommand)
     ]);
-    console.log('iter: '+i+' out:', util.bufferToString(buffer))
+    console.log('iter: '+letterIdx+' out:', util.bufferToString(buffer))
     endpointOut.transfer(buffer, function(err) {
         if (err) {
             console.error("USB error: %s", err);
@@ -98,7 +98,7 @@ function updateLeds() {
 
 disableUnusedLeds();
 
-var i = 0;
+var letterIdx = 0;
 
 var lettersLeds = {
     0: [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
@@ -148,22 +148,37 @@ var characterLedsToLedMatrix = [
     [0x69, 0x79, 0x7c, 0x88, 0x89, 0x6a, 0x7a, 0x7b, 0x78, 0x8a, 0x8b, 0x8c, 0x6b, 0x6c]
 ]
 
+function setIcons(iconStates) {
+    for (var i=0; i<iconStates.length; i++) {
+        ledsLeft[iconLedsToLedMatrix[i]] = iconStates[i] ? 0xff : 0;
+    }
+}
+
+function setLayerLed(layerIdx) {
+    for (var i=0; i<layerLedsToLedMatrix.length; i++) {
+        ledsLeft[layerLedsToLedMatrix[i]] = i == layerIdx ? 0xff : 0;
+    }
+}
+
 function setLetter(letterLeds, position) {
     for (var i=0; i<14; i++) {
         ledsLeft[characterLedsToLedMatrix[position][i]] = letterLeds[i] ? 0xff : 0;
     }
 }
 
-setLetter(lettersLeds['A'], 0);
-setLetter(lettersLeds['B'], 1);
-setLetter(lettersLeds['C'], 2);
+var digitsAndLetters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-/*setInterval(function() {
-//    console.log('iter', i);
-    ledsLeft.fill(0);
-    ledsLeft[i] = 0xff;
-    if (++i >= ledMatrixSize) {
-        i = 0;
+setIcons([1, 1, 1]);
+
+var letterIdx = 0;
+var layerLedIdx = 0;
+setInterval(function() {
+    for (var i=0; i<3; i++) {
+        setLetter(lettersLeds[digitsAndLetters[(letterIdx+i) % digitsAndLetters.length]], i);
     }
-}, 100);
-*/
+    setLayerLed(layerLedIdx);
+    if (++letterIdx >= digitsAndLetters.length) {
+        letterIdx = 0;
+    }
+    layerLedIdx = ++layerLedIdx % layerLedsToLedMatrix.length;
+}, 200);
