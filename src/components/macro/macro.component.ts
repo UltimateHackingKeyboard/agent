@@ -110,7 +110,7 @@ export class MacroComponent implements OnDestroy {
     }
 
     private hideActiveEditor() {
-        if (this.activeEdit) {
+        if (this.activeEdit !== undefined) {
             this.macroItems.toArray()[this.activeEdit].cancelEdit();
         }
     }
