@@ -147,6 +147,15 @@ export class MapperService {
         this.nameToFileName.set('shift', 'icon-kbd__default--modifier-shift');
         this.nameToFileName.set('option', 'icon-kbd__default--modifier-option');
         this.nameToFileName.set('command', 'icon-kbd__default--modifier-command');
+        this.nameToFileName.set('mouse', 'icon-kbd__mouse');
+        this.nameToFileName.set('left-arrow', 'icon-kbd__mod--arrow-left');
+        this.nameToFileName.set('right-arrow', 'icon-kbd__mod--arrow-right');
+        this.nameToFileName.set('down-arrow', 'icon-kbd__mod--arrow-down');
+        this.nameToFileName.set('up-arrow', 'icon-kbd__mod--arrow-up');
+        this.nameToFileName.set('scroll-left', 'icon-kbd__mouse--scroll-left');
+        this.nameToFileName.set('scroll-right', 'icon-kbd__mouse--scroll-right');
+        this.nameToFileName.set('scroll-down', 'icon-kbd__mouse--scroll-down');
+        this.nameToFileName.set('scroll-up', 'icon-kbd__mouse--scroll-up');
     }
 
 }

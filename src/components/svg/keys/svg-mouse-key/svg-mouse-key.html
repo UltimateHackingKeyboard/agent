@@ -1,0 +1,6 @@
+<svg:g [ngSwitch]="type">
+        <svg:g *ngSwitchCase="'click'" svg-mouse-click-key [button]="param"></svg:g>
+        <svg:g *ngSwitchCase="'move'" svg-mouse-move-key [direction]="param"></svg:g>
+        <svg:g *ngSwitchCase="'scroll'" svg-mouse-scroll-key [direction]="param"></svg:g>
+        <svg:g *ngSwitchCase="'speed'" svg-mouse-speed-key [plus]="param"></svg:g>
+</svg:g>

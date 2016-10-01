@@ -43,4 +43,9 @@
             [width]="width"
             [abbreviation]="labelSource">
     </svg:g>
+    <svg *ngSwitchCase="enumLabelTypes.MouseKey" [attr.viewBox]="'0 0 100 100'"
+                [attr.width]="width"
+                [attr.height]="height">
+        <svg:g svg-mouse-key [mouseAction]="labelSource"></svg:g>
+    </svg>
 </svg:g>

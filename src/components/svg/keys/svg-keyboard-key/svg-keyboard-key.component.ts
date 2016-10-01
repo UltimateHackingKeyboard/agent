@@ -4,6 +4,7 @@ import {
     KeyAction,
     KeystrokeAction,
     LayerName,
+    MouseAction,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction
@@ -16,6 +17,7 @@ import { UhkConfigurationService } from '../../../../services/uhk-configuration.
 
 enum LabelTypes {
     KeystrokeKey,
+    MouseKey,
     OneLineText,
     TwoLineText,
     TextIcon,
@@ -154,6 +156,9 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
                 icon: this.mapperService.getIcon('macro'),
                 text: uhkConfiguration.getMacro(keyAction.macroId).name
             };
+        } else if (this.keyAction instanceof MouseAction) {
+            this.labelType = LabelTypes.MouseKey;
+            this.labelSource = this.keyAction;
         } else {
             this.labelSource = undefined;
         }

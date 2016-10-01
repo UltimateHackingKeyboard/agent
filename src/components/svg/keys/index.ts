@@ -1,6 +1,11 @@
 export { SvgIconTextKeyComponent } from './svg-icon-text-key';
 export { SvgKeyboardKeyComponent, SvgKeyboardKey } from './svg-keyboard-key';
 export { SvgKeystrokeKeyComponent } from './svg-keystroke-key';
+export { SvgMouseKeyComponent } from './svg-mouse-key';
+export { SvgMouseClickKeyComponent } from './svg-mouse-click-key';
+export { SvgMouseMoveKeyComponent } from './svg-mouse-move-key';
+export { SvgMouseSpeedKeyComponent } from './svg-mouse-speed-key';
+export { SvgMouseScrollKeyComponent } from './svg-mouse-scroll-key';
 export { SvgOneLineTextKeyComponent } from './svg-one-line-text-key';
 export { SvgSingleIconKeyComponent } from './svg-single-icon-key';
 export { SvgSwitchKeymapKeyComponent } from './svg-switch-keymap-key';
