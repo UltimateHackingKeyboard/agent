@@ -34,8 +34,8 @@ ledsRight.fill(0)
 var ledIndex = 0;
 var matrixId = 0;
 
-function disableUnusedLeds() {
-    var buffer = new Buffer([
+var initLedCommands = [
+    [ // only enable the LEDs that are actually in the matrix
         writeLedDriverCommandId,
         leftLedDriverAddress,
         19,
@@ -49,14 +49,29 @@ function disableUnusedLeds() {
         0, 0b00011111,
         0, 0b00011111,
         0, 0b00011111,
-    ]);
+    ],
+    [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xfd, 0x0b], // switch to function page
+    [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xc2, 0xff], // enable the ghost image prevention bit
+    [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xfd, 0x00], // switch to page 0
+]
+
+var ledCommandId = 0;
+
+function initLeds() {
+    var ledCommand = initLedCommands[ledCommandId++];
+    console.log('initLeds', ledCommand);
+    var buffer = new Buffer(ledCommand);
 
     endpointOut.transfer(buffer, function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
         }
-        updateLeds();
+        if (ledCommandId < initLedCommands.length) {
+            initLeds();
+        } else {
+            updateLeds();
+        }
     });
 }
 
@@ -96,7 +111,7 @@ function updateLeds() {
     });
 }
 
-disableUnusedLeds();
+initLeds();
 
 var letterIdx = 0;
 
@@ -168,11 +183,11 @@ function setLetter(letterLeds, position) {
 
 var digitsAndLetters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-setIcons([1, 1, 1]);
 
 var letterIdx = 0;
 var layerLedIdx = 0;
 setInterval(function() {
+setIcons([1, 1, 1]);
     for (var i=0; i<3; i++) {
         setLetter(lettersLeds[digitsAndLetters[(letterIdx+i) % digitsAndLetters.length]], i);
     }
