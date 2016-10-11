@@ -790,16 +790,227 @@
                     "modules": [
                         {
                             "id": 0,
-                            "pointerRole": "scroll",
-                            "keyActions": []
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "scrollUp"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveUp"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "scrollDown"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveLeft"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveDown"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveRight"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "keyActionType": "none"
+                                }
+                            ]
                         },
                         {
                             "id": 1,
                             "pointerRole": "move",
                             "keyActions": [
                                 {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "rightClick"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "middleClick"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "leftClick"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
                                     "keyActionType": "keystroke",
-                                    "scancode": 111
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 4
+                                },
+                                {
+                                    "keyActionType": "none"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "accelerate"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "decelerate"
                                 }
                             ]
                         }
