@@ -1,10 +1,13 @@
+import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
+
 export class Electron {
-    initialState() {
+    getConfig(): UhkConfiguration {
         // TODO implement load logic
+        return;
     }
 
     /* tslint:disable:no-unused-variable */
-    saveSate(reducer: any): any {
+    saveConfig(config: UhkConfiguration): void {
         // TODO implement save logic
     }
 }

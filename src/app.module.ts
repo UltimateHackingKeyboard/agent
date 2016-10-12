@@ -67,14 +67,14 @@ import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
 import { DataStorage } from './store/storage';
 
 // Create DataStorage dependency injection
-const storageProvider = ReflectiveInjector.resolve([DataStorage]);
+const storageProvider = ReflectiveInjector.resolve([DataStorage, DataProviderService]);
 const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
 const storageService: DataStorage = storageInjector.get(DataStorage);
 
 // All reducers that are used in application
 const storeConfig = {
-    keymaps: storageService.saveSate(keymapReducer),
-    macros: storageService.saveSate(macroReducer),
+    keymaps: storageService.saveState(keymapReducer),
+    macros: storageService.saveState(macroReducer),
     presetKeymaps: presetReducer
 };
 
