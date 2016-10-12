@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
 
+import { Keymap } from '../config-serializer/config-items/Keymap';
+import { UhkConfiguration } from '../config-serializer/config-items/UhkConfiguration';
+
 import { SvgModule } from '../components/svg/module/svg-module.model';
 
 @Injectable()
 export class DataProviderService {
 
-    constructor() { }
+    private uhkConfiguration: UhkConfiguration;
 
-    getUHKConfig(): any {
-        return require('json!../config-serializer/uhk-config.json');
+    constructor() {
+        this.uhkConfiguration = new UhkConfiguration().fromJsObject(require('json!../config-serializer/uhk-config.json'));
     }
 
-    getDefaultKeymaps(): any {
-        return require('json!../config-serializer/preset-keymaps.json');
+    getUHKConfig(): UhkConfiguration {
+        return this.uhkConfiguration;
+    }
+
+    getDefaultKeymaps(): Keymap[] {
+        return (<any[]>require('json!../config-serializer/preset-keymaps.json')).map(keymap => new Keymap().fromJsObject(keymap));
     }
 
     getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {
