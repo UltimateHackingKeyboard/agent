@@ -9147,7 +9147,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * @license Angular v2.1.0-rc.0
+	 * @license Angular v2.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
@@ -9158,80 +9158,6 @@
 	}(this, function (exports,_angular_compiler,_angular_core,_angular_platformBrowser) { 'use strict';
 	
 	    var INTERNAL_BROWSER_PLATFORM_PROVIDERS = _angular_platformBrowser.__platform_browser_private__.INTERNAL_BROWSER_PLATFORM_PROVIDERS;
-	
-	    /**
-	     * @license
-	     * Copyright Google Inc. All Rights Reserved.
-	     *
-	     * Use of this source code is governed by an MIT-style license that can be
-	     * found in the LICENSE file at https://angular.io/license
-	     */
-	    var globalScope;
-	    if (typeof window === 'undefined') {
-	        if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-	            // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
-	            globalScope = self;
-	        }
-	        else {
-	            globalScope = global;
-	        }
-	    }
-	    else {
-	        globalScope = window;
-	    }
-	    // Need to declare a new variable for global here since TypeScript
-	    // exports the original value of the symbol.
-	    var global$1 = globalScope;
-	    // TODO: remove calls to assert in production environment
-	    // Note: Can't just export this and import in in other files
-	    // as `assert` is a reserved keyword in Dart
-	    global$1.assert = function assert(condition) {
-	        // TODO: to be fixed properly via #2830, noop for now
-	    };
-	    function isPresent(obj) {
-	        return obj !== undefined && obj !== null;
-	    }
-	    var NumberWrapper = (function () {
-	        function NumberWrapper() {
-	        }
-	        NumberWrapper.toFixed = function (n, fractionDigits) { return n.toFixed(fractionDigits); };
-	        NumberWrapper.equal = function (a, b) { return a === b; };
-	        NumberWrapper.parseIntAutoRadix = function (text) {
-	            var result = parseInt(text);
-	            if (isNaN(result)) {
-	                throw new Error('Invalid integer literal when parsing ' + text);
-	            }
-	            return result;
-	        };
-	        NumberWrapper.parseInt = function (text, radix) {
-	            if (radix == 10) {
-	                if (/^(\-|\+)?[0-9]+$/.test(text)) {
-	                    return parseInt(text, radix);
-	                }
-	            }
-	            else if (radix == 16) {
-	                if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
-	                    return parseInt(text, radix);
-	                }
-	            }
-	            else {
-	                var result = parseInt(text, radix);
-	                if (!isNaN(result)) {
-	                    return result;
-	                }
-	            }
-	            throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
-	        };
-	        Object.defineProperty(NumberWrapper, "NaN", {
-	            get: function () { return NaN; },
-	            enumerable: true,
-	            configurable: true
-	        });
-	        NumberWrapper.isNumeric = function (value) { return !isNaN(value - parseFloat(value)); };
-	        NumberWrapper.isNaN = function (value) { return isNaN(value); };
-	        NumberWrapper.isInteger = function (value) { return Number.isInteger(value); };
-	        return NumberWrapper;
-	    }());
 	
 	    var __extends = (this && this.__extends) || function (d, b) {
 	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -9257,7 +9183,7 @@
 	                // responseText is the old-school way of retrieving response (supported by IE8 & 9)
 	                // response/responseType properties were introduced in ResourceLoader Level2 spec (supported
 	                // by IE10)
-	                var response = isPresent(xhr.response) ? xhr.response : xhr.responseText;
+	                var response = xhr.response || xhr.responseText;
 	                // normalize IE9 bug (http://bugs.jquery.com/ticket/1450)
 	                var status = xhr.status === 1223 ? 204 : xhr.status;
 	                // fix status code when it is 0 (0 status is undocumented).
@@ -9301,6 +9227,77 @@
 	     * Use of this source code is governed by an MIT-style license that can be
 	     * found in the LICENSE file at https://angular.io/license
 	     */
+	    var globalScope;
+	    if (typeof window === 'undefined') {
+	        if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+	            // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
+	            globalScope = self;
+	        }
+	        else {
+	            globalScope = global;
+	        }
+	    }
+	    else {
+	        globalScope = window;
+	    }
+	    // Need to declare a new variable for global here since TypeScript
+	    // exports the original value of the symbol.
+	    var _global = globalScope;
+	    // TODO: remove calls to assert in production environment
+	    // Note: Can't just export this and import in in other files
+	    // as `assert` is a reserved keyword in Dart
+	    _global.assert = function assert(condition) {
+	        // TODO: to be fixed properly via #2830, noop for now
+	    };
+	    var NumberWrapper = (function () {
+	        function NumberWrapper() {
+	        }
+	        NumberWrapper.toFixed = function (n, fractionDigits) { return n.toFixed(fractionDigits); };
+	        NumberWrapper.equal = function (a, b) { return a === b; };
+	        NumberWrapper.parseIntAutoRadix = function (text) {
+	            var result = parseInt(text);
+	            if (isNaN(result)) {
+	                throw new Error('Invalid integer literal when parsing ' + text);
+	            }
+	            return result;
+	        };
+	        NumberWrapper.parseInt = function (text, radix) {
+	            if (radix == 10) {
+	                if (/^(\-|\+)?[0-9]+$/.test(text)) {
+	                    return parseInt(text, radix);
+	                }
+	            }
+	            else if (radix == 16) {
+	                if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
+	                    return parseInt(text, radix);
+	                }
+	            }
+	            else {
+	                var result = parseInt(text, radix);
+	                if (!isNaN(result)) {
+	                    return result;
+	                }
+	            }
+	            throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
+	        };
+	        Object.defineProperty(NumberWrapper, "NaN", {
+	            get: function () { return NaN; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        NumberWrapper.isNumeric = function (value) { return !isNaN(value - parseFloat(value)); };
+	        NumberWrapper.isNaN = function (value) { return isNaN(value); };
+	        NumberWrapper.isInteger = function (value) { return Number.isInteger(value); };
+	        return NumberWrapper;
+	    }());
+	
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
 	    var __extends$1 = (this && this.__extends) || function (d, b) {
 	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	        function __() { this.constructor = d; }
@@ -9317,7 +9314,7 @@
 	        __extends$1(CachedResourceLoader, _super);
 	        function CachedResourceLoader() {
 	            _super.call(this);
-	            this._cache = global$1.$templateCache;
+	            this._cache = _global.$templateCache;
 	            if (this._cache == null) {
 	                throw new Error('CachedResourceLoader: Template cache was not found in $templateCache.');
 	            }
@@ -9343,7 +9340,7 @@
 	     */
 	    var RESOURCE_CACHE_PROVIDER = [{ provide: _angular_compiler.ResourceLoader, useClass: CachedResourceLoader }];
 	    /**
-	     * @experimental API related to bootstrapping are still under review.
+	     * @stable
 	     */
 	    var platformBrowserDynamic = _angular_core.createPlatformFactory(_angular_compiler.platformCoreDynamic, 'browserDynamic', INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS);
 	
@@ -9360,7 +9357,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * @license Angular v2.1.0-rc.0
+	 * @license Angular v2.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
@@ -9377,208 +9374,6 @@
 	   * Use of this source code is governed by an MIT-style license that can be
 	   * found in the LICENSE file at https://angular.io/license
 	   */
-	  var globalScope;
-	  if (typeof window === 'undefined') {
-	      if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-	          // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
-	          globalScope = self;
-	      }
-	      else {
-	          globalScope = global;
-	      }
-	  }
-	  else {
-	      globalScope = window;
-	  }
-	  // Need to declare a new variable for global here since TypeScript
-	  // exports the original value of the symbol.
-	  var global$1 = globalScope;
-	  // TODO: remove calls to assert in production environment
-	  // Note: Can't just export this and import in in other files
-	  // as `assert` is a reserved keyword in Dart
-	  global$1.assert = function assert(condition) {
-	      // TODO: to be fixed properly via #2830, noop for now
-	  };
-	  function isPresent(obj) {
-	      return obj !== undefined && obj !== null;
-	  }
-	  function isBlank(obj) {
-	      return obj === undefined || obj === null;
-	  }
-	  function isString(obj) {
-	      return typeof obj === 'string';
-	  }
-	  function isStringMap(obj) {
-	      return typeof obj === 'object' && obj !== null;
-	  }
-	  var STRING_MAP_PROTO = Object.getPrototypeOf({});
-	  function isStrictStringMap(obj) {
-	      return isStringMap(obj) && Object.getPrototypeOf(obj) === STRING_MAP_PROTO;
-	  }
-	  function isArray(obj) {
-	      return Array.isArray(obj);
-	  }
-	  function stringify(token) {
-	      if (typeof token === 'string') {
-	          return token;
-	      }
-	      if (token === undefined || token === null) {
-	          return '' + token;
-	      }
-	      if (token.overriddenName) {
-	          return token.overriddenName;
-	      }
-	      if (token.name) {
-	          return token.name;
-	      }
-	      var res = token.toString();
-	      var newLineIndex = res.indexOf('\n');
-	      return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
-	  }
-	  var StringWrapper = (function () {
-	      function StringWrapper() {
-	      }
-	      StringWrapper.fromCharCode = function (code) { return String.fromCharCode(code); };
-	      StringWrapper.charCodeAt = function (s, index) { return s.charCodeAt(index); };
-	      StringWrapper.split = function (s, regExp) { return s.split(regExp); };
-	      StringWrapper.equals = function (s, s2) { return s === s2; };
-	      StringWrapper.stripLeft = function (s, charVal) {
-	          if (s && s.length) {
-	              var pos = 0;
-	              for (var i = 0; i < s.length; i++) {
-	                  if (s[i] != charVal)
-	                      break;
-	                  pos++;
-	              }
-	              s = s.substring(pos);
-	          }
-	          return s;
-	      };
-	      StringWrapper.stripRight = function (s, charVal) {
-	          if (s && s.length) {
-	              var pos = s.length;
-	              for (var i = s.length - 1; i >= 0; i--) {
-	                  if (s[i] != charVal)
-	                      break;
-	                  pos--;
-	              }
-	              s = s.substring(0, pos);
-	          }
-	          return s;
-	      };
-	      StringWrapper.replace = function (s, from, replace) {
-	          return s.replace(from, replace);
-	      };
-	      StringWrapper.replaceAll = function (s, from, replace) {
-	          return s.replace(from, replace);
-	      };
-	      StringWrapper.slice = function (s, from, to) {
-	          if (from === void 0) { from = 0; }
-	          if (to === void 0) { to = null; }
-	          return s.slice(from, to === null ? undefined : to);
-	      };
-	      StringWrapper.replaceAllMapped = function (s, from, cb) {
-	          return s.replace(from, function () {
-	              var matches = [];
-	              for (var _i = 0; _i < arguments.length; _i++) {
-	                  matches[_i - 0] = arguments[_i];
-	              }
-	              // Remove offset & string from the result array
-	              matches.splice(-2, 2);
-	              // The callback receives match, p1, ..., pn
-	              return cb(matches);
-	          });
-	      };
-	      StringWrapper.contains = function (s, substr) { return s.indexOf(substr) != -1; };
-	      StringWrapper.compare = function (a, b) {
-	          if (a < b) {
-	              return -1;
-	          }
-	          else if (a > b) {
-	              return 1;
-	          }
-	          else {
-	              return 0;
-	          }
-	      };
-	      return StringWrapper;
-	  }());
-	  var StringJoiner = (function () {
-	      function StringJoiner(parts) {
-	          if (parts === void 0) { parts = []; }
-	          this.parts = parts;
-	      }
-	      StringJoiner.prototype.add = function (part) { this.parts.push(part); };
-	      StringJoiner.prototype.toString = function () { return this.parts.join(''); };
-	      return StringJoiner;
-	  }());
-	  var NumberWrapper = (function () {
-	      function NumberWrapper() {
-	      }
-	      NumberWrapper.toFixed = function (n, fractionDigits) { return n.toFixed(fractionDigits); };
-	      NumberWrapper.equal = function (a, b) { return a === b; };
-	      NumberWrapper.parseIntAutoRadix = function (text) {
-	          var result = parseInt(text);
-	          if (isNaN(result)) {
-	              throw new Error('Invalid integer literal when parsing ' + text);
-	          }
-	          return result;
-	      };
-	      NumberWrapper.parseInt = function (text, radix) {
-	          if (radix == 10) {
-	              if (/^(\-|\+)?[0-9]+$/.test(text)) {
-	                  return parseInt(text, radix);
-	              }
-	          }
-	          else if (radix == 16) {
-	              if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
-	                  return parseInt(text, radix);
-	              }
-	          }
-	          else {
-	              var result = parseInt(text, radix);
-	              if (!isNaN(result)) {
-	                  return result;
-	              }
-	          }
-	          throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
-	      };
-	      Object.defineProperty(NumberWrapper, "NaN", {
-	          get: function () { return NaN; },
-	          enumerable: true,
-	          configurable: true
-	      });
-	      NumberWrapper.isNumeric = function (value) { return !isNaN(value - parseFloat(value)); };
-	      NumberWrapper.isNaN = function (value) { return isNaN(value); };
-	      NumberWrapper.isInteger = function (value) { return Number.isInteger(value); };
-	      return NumberWrapper;
-	  }());
-	  function normalizeBlank(obj) {
-	      return isBlank(obj) ? null : obj;
-	  }
-	  function normalizeBool(obj) {
-	      return isBlank(obj) ? false : obj;
-	  }
-	  function isJsObject(o) {
-	      return o !== null && (typeof o === 'function' || typeof o === 'object');
-	  }
-	  function evalExpression(sourceUrl, expr, declarations, vars) {
-	      var fnBody = declarations + "\nreturn " + expr + "\n//# sourceURL=" + sourceUrl;
-	      var fnArgNames = [];
-	      var fnArgValues = [];
-	      for (var argName in vars) {
-	          fnArgNames.push(argName);
-	          fnArgValues.push(vars[argName]);
-	      }
-	      return new (Function.bind.apply(Function, [void 0].concat(fnArgNames.concat(fnBody))))().apply(void 0, fnArgValues);
-	  }
-	  function isPrimitive(obj) {
-	      return !isJsObject(obj);
-	  }
-	  function escapeRegExp(s) {
-	      return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
-	  }
-	
 	  /**
 	   * A segment of text within the template.
 	   */
@@ -9657,7 +9452,7 @@
 	      };
 	      Object.defineProperty(BoundEventAst.prototype, "fullName", {
 	          get: function () {
-	              if (isPresent(this.target)) {
+	              if (this.target) {
 	                  return this.target + ":" + this.name;
 	              }
 	              else {
@@ -9706,7 +9501,7 @@
 	   * An element declaration in a template.
 	   */
 	  var ElementAst = (function () {
-	      function ElementAst(name, attrs, inputs, outputs, references, directives, providers, hasViewContainer, children, ngContentIndex, sourceSpan) {
+	      function ElementAst(name, attrs, inputs, outputs, references, directives, providers, hasViewContainer, children, ngContentIndex, sourceSpan, endSourceSpan) {
 	          this.name = name;
 	          this.attrs = attrs;
 	          this.inputs = inputs;
@@ -9718,6 +9513,7 @@
 	          this.children = children;
 	          this.ngContentIndex = ngContentIndex;
 	          this.sourceSpan = sourceSpan;
+	          this.endSourceSpan = endSourceSpan;
 	      }
 	      ElementAst.prototype.visit = function (visitor, context) {
 	          return visitor.visitElement(this, context);
@@ -9849,13 +9645,157 @@
 	  function templateVisitAll(visitor, asts, context) {
 	      if (context === void 0) { context = null; }
 	      var result = [];
+	      var visit = visitor.visit ?
+	          function (ast) { return visitor.visit(ast, context) || ast.visit(visitor, context); } :
+	          function (ast) { return ast.visit(visitor, context); };
 	      asts.forEach(function (ast) {
-	          var astResult = ast.visit(visitor, context);
-	          if (isPresent(astResult)) {
+	          var astResult = visit(ast);
+	          if (astResult) {
 	              result.push(astResult);
 	          }
 	      });
 	      return result;
+	  }
+	
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var globalScope;
+	  if (typeof window === 'undefined') {
+	      if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+	          // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
+	          globalScope = self;
+	      }
+	      else {
+	          globalScope = global;
+	      }
+	  }
+	  else {
+	      globalScope = window;
+	  }
+	  // Need to declare a new variable for global here since TypeScript
+	  // exports the original value of the symbol.
+	  var global$1 = globalScope;
+	  // TODO: remove calls to assert in production environment
+	  // Note: Can't just export this and import in in other files
+	  // as `assert` is a reserved keyword in Dart
+	  global$1.assert = function assert(condition) {
+	      // TODO: to be fixed properly via #2830, noop for now
+	  };
+	  function isPresent(obj) {
+	      return obj !== undefined && obj !== null;
+	  }
+	  function isBlank(obj) {
+	      return obj === undefined || obj === null;
+	  }
+	  function isString(obj) {
+	      return typeof obj === 'string';
+	  }
+	  function isStringMap(obj) {
+	      return typeof obj === 'object' && obj !== null;
+	  }
+	  var STRING_MAP_PROTO = Object.getPrototypeOf({});
+	  function isStrictStringMap(obj) {
+	      return isStringMap(obj) && Object.getPrototypeOf(obj) === STRING_MAP_PROTO;
+	  }
+	  function isArray(obj) {
+	      return Array.isArray(obj);
+	  }
+	  function stringify(token) {
+	      if (typeof token === 'string') {
+	          return token;
+	      }
+	      if (token === undefined || token === null) {
+	          return '' + token;
+	      }
+	      if (token.overriddenName) {
+	          return token.overriddenName;
+	      }
+	      if (token.name) {
+	          return token.name;
+	      }
+	      var res = token.toString();
+	      var newLineIndex = res.indexOf('\n');
+	      return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
+	  }
+	  var StringJoiner = (function () {
+	      function StringJoiner(parts) {
+	          if (parts === void 0) { parts = []; }
+	          this.parts = parts;
+	      }
+	      StringJoiner.prototype.add = function (part) { this.parts.push(part); };
+	      StringJoiner.prototype.toString = function () { return this.parts.join(''); };
+	      return StringJoiner;
+	  }());
+	  var NumberWrapper = (function () {
+	      function NumberWrapper() {
+	      }
+	      NumberWrapper.toFixed = function (n, fractionDigits) { return n.toFixed(fractionDigits); };
+	      NumberWrapper.equal = function (a, b) { return a === b; };
+	      NumberWrapper.parseIntAutoRadix = function (text) {
+	          var result = parseInt(text);
+	          if (isNaN(result)) {
+	              throw new Error('Invalid integer literal when parsing ' + text);
+	          }
+	          return result;
+	      };
+	      NumberWrapper.parseInt = function (text, radix) {
+	          if (radix == 10) {
+	              if (/^(\-|\+)?[0-9]+$/.test(text)) {
+	                  return parseInt(text, radix);
+	              }
+	          }
+	          else if (radix == 16) {
+	              if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
+	                  return parseInt(text, radix);
+	              }
+	          }
+	          else {
+	              var result = parseInt(text, radix);
+	              if (!isNaN(result)) {
+	                  return result;
+	              }
+	          }
+	          throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
+	      };
+	      Object.defineProperty(NumberWrapper, "NaN", {
+	          get: function () { return NaN; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      NumberWrapper.isNumeric = function (value) { return !isNaN(value - parseFloat(value)); };
+	      NumberWrapper.isNaN = function (value) { return isNaN(value); };
+	      NumberWrapper.isInteger = function (value) { return Number.isInteger(value); };
+	      return NumberWrapper;
+	  }());
+	  function normalizeBlank(obj) {
+	      return isBlank(obj) ? null : obj;
+	  }
+	  function normalizeBool(obj) {
+	      return isBlank(obj) ? false : obj;
+	  }
+	  function isJsObject(o) {
+	      return o !== null && (typeof o === 'function' || typeof o === 'object');
+	  }
+	  function evalExpression(sourceUrl, expr, declarations, vars) {
+	      var fnBody = declarations + "\nreturn " + expr + "\n//# sourceURL=" + sourceUrl;
+	      var fnArgNames = [];
+	      var fnArgValues = [];
+	      for (var argName in vars) {
+	          fnArgNames.push(argName);
+	          fnArgValues.push(vars[argName]);
+	      }
+	      return new (Function.bind.apply(Function, [void 0].concat(fnArgNames.concat(fnBody))))().apply(void 0, fnArgValues);
+	  }
+	  function isPrimitive(obj) {
+	      return !isJsObject(obj);
+	  }
+	  function escapeRegExp(s) {
+	      return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
 	  }
 	
 	  // Safari and Internet Explorer do not support the iterable parameter to the
@@ -11029,7 +10969,7 @@
 	      __extends$2(WriteVarExpr, _super);
 	      function WriteVarExpr(name, value, type) {
 	          if (type === void 0) { type = null; }
-	          _super.call(this, isPresent(type) ? type : value.type);
+	          _super.call(this, type || value.type);
 	          this.name = name;
 	          this.value = value;
 	      }
@@ -11047,7 +10987,7 @@
 	      __extends$2(WriteKeyExpr, _super);
 	      function WriteKeyExpr(receiver, index, value, type) {
 	          if (type === void 0) { type = null; }
-	          _super.call(this, isPresent(type) ? type : value.type);
+	          _super.call(this, type || value.type);
 	          this.receiver = receiver;
 	          this.index = index;
 	          this.value = value;
@@ -11061,7 +11001,7 @@
 	      __extends$2(WritePropExpr, _super);
 	      function WritePropExpr(receiver, name, value, type) {
 	          if (type === void 0) { type = null; }
-	          _super.call(this, isPresent(type) ? type : value.type);
+	          _super.call(this, type || value.type);
 	          this.receiver = receiver;
 	          this.name = name;
 	          this.value = value;
@@ -11154,7 +11094,7 @@
 	      function ConditionalExpr(condition, trueCase, falseCase, type) {
 	          if (falseCase === void 0) { falseCase = null; }
 	          if (type === void 0) { type = null; }
-	          _super.call(this, isPresent(type) ? type : trueCase.type);
+	          _super.call(this, type || trueCase.type);
 	          this.condition = condition;
 	          this.falseCase = falseCase;
 	          this.trueCase = trueCase;
@@ -11215,7 +11155,7 @@
 	      __extends$2(BinaryOperatorExpr, _super);
 	      function BinaryOperatorExpr(operator, lhs, rhs, type) {
 	          if (type === void 0) { type = null; }
-	          _super.call(this, isPresent(type) ? type : lhs.type);
+	          _super.call(this, type || lhs.type);
 	          this.operator = operator;
 	          this.rhs = rhs;
 	          this.lhs = lhs;
@@ -11315,7 +11255,7 @@
 	          _super.call(this, modifiers);
 	          this.name = name;
 	          this.value = value;
-	          this.type = isPresent(type) ? type : value.type;
+	          this.type = type || value.type;
 	      }
 	      DeclareVarStmt.prototype.visitStatement = function (visitor, context) {
 	          return visitor.visitDeclareVarStmt(this, context);
@@ -11484,7 +11424,7 @@
 	          return new WritePropExpr(expr.receiver.visitExpression(this, context), expr.name, expr.value.visitExpression(this, context));
 	      };
 	      ExpressionTransformer.prototype.visitInvokeMethodExpr = function (ast, context) {
-	          var method = isPresent(ast.builtin) ? ast.builtin : ast.name;
+	          var method = ast.builtin || ast.name;
 	          return new InvokeMethodExpr(ast.receiver.visitExpression(this, context), method, this.visitAllExpressions(ast.args, context), ast.type);
 	      };
 	      ExpressionTransformer.prototype.visitInvokeFunctionExpr = function (ast, context) {
@@ -11522,7 +11462,8 @@
 	      };
 	      ExpressionTransformer.prototype.visitLiteralMapExpr = function (ast, context) {
 	          var _this = this;
-	          return new LiteralMapExpr(ast.entries.map(function (entry) { return [entry[0], entry[1].visitExpression(_this, context)]; }));
+	          var entries = ast.entries.map(function (entry) { return [entry[0], entry[1].visitExpression(_this, context),]; });
+	          return new LiteralMapExpr(entries);
 	      };
 	      ExpressionTransformer.prototype.visitAllExpressions = function (exprs, context) {
 	          var _this = this;
@@ -11750,7 +11691,13 @@
 	  var MODULE_SUFFIX = '';
 	  var CAMEL_CASE_REGEXP = /([A-Z])/g;
 	  function camelCaseToDashCase(input) {
-	      return StringWrapper.replaceAllMapped(input, CAMEL_CASE_REGEXP, function (m) { return '-' + m[1].toLowerCase(); });
+	      return input.replace(CAMEL_CASE_REGEXP, function () {
+	          var m = [];
+	          for (var _i = 0; _i < arguments.length; _i++) {
+	              m[_i - 0] = arguments[_i];
+	          }
+	          return '-' + m[1].toLowerCase();
+	      });
 	  }
 	  function splitAtColon(input, defaultValues) {
 	      return _splitAt(input, ':', defaultValues);
@@ -11765,7 +11712,7 @@
 	      return [input.slice(0, characterIndex).trim(), input.slice(characterIndex + 1).trim()];
 	  }
 	  function sanitizeIdentifier(name) {
-	      return StringWrapper.replaceAll(name, /\W/g, '_');
+	      return name.replace(/\W/g, '_');
 	  }
 	  function visitValue(value, visitor, context) {
 	      if (isArray(value)) {
@@ -12086,7 +12033,7 @@
 	          this.styleUrls = _normalizeArray(styleUrls);
 	          this.externalStylesheets = _normalizeArray(externalStylesheets);
 	          this.animations = isPresent(animations) ? ListWrapper.flatten(animations) : [];
-	          this.ngContentSelectors = isPresent(ngContentSelectors) ? ngContentSelectors : [];
+	          this.ngContentSelectors = ngContentSelectors || [];
 	          if (isPresent(interpolation) && interpolation.length != 2) {
 	              throw new Error("'interpolation' should have a start and an end symbol.");
 	          }
@@ -12277,7 +12224,7 @@
 	      return MapWrapper.values(map);
 	  }
 	  function _normalizeArray(obj) {
-	      return isPresent(obj) ? obj : [];
+	      return obj || [];
 	  }
 	  function isStaticSymbol(value) {
 	      return isStringMap(value) && isPresent(value['name']) && isPresent(value['filePath']);
@@ -12920,7 +12867,7 @@
 	      return Token;
 	  }());
 	  function newCharacterToken(index, code) {
-	      return new Token(index, TokenType.Character, code, StringWrapper.fromCharCode(code));
+	      return new Token(index, TokenType.Character, code, String.fromCharCode(code));
 	  }
 	  function newIdentifierToken(index, text) {
 	      return new Token(index, TokenType.Identifier, 0, text);
@@ -12950,8 +12897,7 @@
 	          this.advance();
 	      }
 	      _Scanner.prototype.advance = function () {
-	          this.peek =
-	              ++this.index >= this.length ? $EOF : StringWrapper.charCodeAt(this.input, this.index);
+	          this.peek = ++this.index >= this.length ? $EOF : this.input.charCodeAt(this.index);
 	      };
 	      _Scanner.prototype.scanToken = function () {
 	          var input = this.input, length = this.length, peek = this.peek, index = this.index;
@@ -12962,7 +12908,7 @@
 	                  break;
 	              }
 	              else {
-	                  peek = StringWrapper.charCodeAt(input, index);
+	                  peek = input.charCodeAt(index);
 	              }
 	          }
 	          this.peek = peek;
@@ -13001,15 +12947,15 @@
 	              case $SLASH:
 	              case $PERCENT:
 	              case $CARET:
-	                  return this.scanOperator(start, StringWrapper.fromCharCode(peek));
+	                  return this.scanOperator(start, String.fromCharCode(peek));
 	              case $QUESTION:
 	                  return this.scanComplexOperator(start, '?', $PERIOD, '.');
 	              case $LT:
 	              case $GT:
-	                  return this.scanComplexOperator(start, StringWrapper.fromCharCode(peek), $EQ, '=');
+	                  return this.scanComplexOperator(start, String.fromCharCode(peek), $EQ, '=');
 	              case $BANG:
 	              case $EQ:
-	                  return this.scanComplexOperator(start, StringWrapper.fromCharCode(peek), $EQ, '=', $EQ, '=');
+	                  return this.scanComplexOperator(start, String.fromCharCode(peek), $EQ, '=', $EQ, '=');
 	              case $AMPERSAND:
 	                  return this.scanComplexOperator(start, '&', $AMPERSAND, '&');
 	              case $BAR:
@@ -13020,7 +12966,7 @@
 	                  return this.scanToken();
 	          }
 	          this.advance();
-	          return this.error("Unexpected character [" + StringWrapper.fromCharCode(peek) + "]", 0);
+	          return this.error("Unexpected character [" + String.fromCharCode(peek) + "]", 0);
 	      };
 	      _Scanner.prototype.scanCharacter = function (start, code) {
 	          this.advance();
@@ -13120,7 +13066,7 @@
 	                      unescapedCode = unescape(this.peek);
 	                      this.advance();
 	                  }
-	                  buffer.add(StringWrapper.fromCharCode(unescapedCode));
+	                  buffer.add(String.fromCharCode(unescapedCode));
 	                  marker = this.index;
 	              }
 	              else if (this.peek == $EOF) {
@@ -13195,9 +13141,10 @@
 	  }
 	
 	  var SplitInterpolation = (function () {
-	      function SplitInterpolation(strings, expressions) {
+	      function SplitInterpolation(strings, expressions, offsets) {
 	          this.strings = strings;
 	          this.expressions = expressions;
+	          this.offsets = offsets;
 	      }
 	      return SplitInterpolation;
 	  }());
@@ -13221,8 +13168,10 @@
 	      Parser.prototype.parseAction = function (input, location, interpolationConfig) {
 	          if (interpolationConfig === void 0) { interpolationConfig = DEFAULT_INTERPOLATION_CONFIG; }
 	          this._checkNoInterpolation(input, location, interpolationConfig);
+	          var sourceToLex = this._stripComments(input);
 	          var tokens = this._lexer.tokenize(this._stripComments(input));
-	          var ast = new _ParseAST(input, location, tokens, true, this.errors).parseChain();
+	          var ast = new _ParseAST(input, location, tokens, sourceToLex.length, true, this.errors, input.length - sourceToLex.length)
+	              .parseChain();
 	          return new ASTWithSource(ast, input, location, this.errors);
 	      };
 	      Parser.prototype.parseBinding = function (input, location, interpolationConfig) {
@@ -13249,8 +13198,10 @@
 	              return quote;
 	          }
 	          this._checkNoInterpolation(input, location, interpolationConfig);
-	          var tokens = this._lexer.tokenize(this._stripComments(input));
-	          return new _ParseAST(input, location, tokens, false, this.errors).parseChain();
+	          var sourceToLex = this._stripComments(input);
+	          var tokens = this._lexer.tokenize(sourceToLex);
+	          return new _ParseAST(input, location, tokens, sourceToLex.length, false, this.errors, input.length - sourceToLex.length)
+	              .parseChain();
 	      };
 	      Parser.prototype._parseQuote = function (input, location) {
 	          if (isBlank(input))
@@ -13266,7 +13217,8 @@
 	      };
 	      Parser.prototype.parseTemplateBindings = function (input, location) {
 	          var tokens = this._lexer.tokenize(input);
-	          return new _ParseAST(input, location, tokens, false, this.errors).parseTemplateBindings();
+	          return new _ParseAST(input, location, tokens, input.length, false, this.errors, 0)
+	              .parseTemplateBindings();
 	      };
 	      Parser.prototype.parseInterpolation = function (input, location, interpolationConfig) {
 	          if (interpolationConfig === void 0) { interpolationConfig = DEFAULT_INTERPOLATION_CONFIG; }
@@ -13275,8 +13227,11 @@
 	              return null;
 	          var expressions = [];
 	          for (var i = 0; i < split.expressions.length; ++i) {
+	              var expressionText = split.expressions[i];
+	              var sourceToLex = this._stripComments(expressionText);
 	              var tokens = this._lexer.tokenize(this._stripComments(split.expressions[i]));
-	              var ast = new _ParseAST(input, location, tokens, false, this.errors).parseChain();
+	              var ast = new _ParseAST(input, location, tokens, sourceToLex.length, false, this.errors, split.offsets[i] + (expressionText.length - sourceToLex.length))
+	                  .parseChain();
 	              expressions.push(ast);
 	          }
 	          return new ASTWithSource(new Interpolation(new ParseSpan(0, isBlank(input) ? 0 : input.length), split.strings, expressions), input, location, this.errors);
@@ -13284,26 +13239,32 @@
 	      Parser.prototype.splitInterpolation = function (input, location, interpolationConfig) {
 	          if (interpolationConfig === void 0) { interpolationConfig = DEFAULT_INTERPOLATION_CONFIG; }
 	          var regexp = _createInterpolateRegExp(interpolationConfig);
-	          var parts = StringWrapper.split(input, regexp);
+	          var parts = input.split(regexp);
 	          if (parts.length <= 1) {
 	              return null;
 	          }
 	          var strings = [];
 	          var expressions = [];
+	          var offsets = [];
+	          var offset = 0;
 	          for (var i = 0; i < parts.length; i++) {
 	              var part = parts[i];
 	              if (i % 2 === 0) {
 	                  // fixed string
 	                  strings.push(part);
+	                  offset += part.length;
 	              }
 	              else if (part.trim().length > 0) {
+	                  offset += interpolationConfig.start.length;
 	                  expressions.push(part);
+	                  offsets.push(offset);
+	                  offset += part.length + interpolationConfig.end.length;
 	              }
 	              else {
 	                  this._reportError('Blank expressions are not allowed in interpolated strings', input, "at column " + this._findInterpolationErrorColumn(parts, i, interpolationConfig) + " in", location);
 	              }
 	          }
-	          return new SplitInterpolation(strings, expressions);
+	          return new SplitInterpolation(strings, expressions, offsets);
 	      };
 	      Parser.prototype.wrapLiteralPrimitive = function (input, location) {
 	          return new ASTWithSource(new LiteralPrimitive(new ParseSpan(0, isBlank(input) ? 0 : input.length), input), input, location, this.errors);
@@ -13315,8 +13276,8 @@
 	      Parser.prototype._commentStart = function (input) {
 	          var outerQuote = null;
 	          for (var i = 0; i < input.length - 1; i++) {
-	              var char = StringWrapper.charCodeAt(input, i);
-	              var nextChar = StringWrapper.charCodeAt(input, i + 1);
+	              var char = input.charCodeAt(i);
+	              var nextChar = input.charCodeAt(i + 1);
 	              if (char === $SLASH && nextChar == $SLASH && isBlank(outerQuote))
 	                  return i;
 	              if (outerQuote === char) {
@@ -13330,7 +13291,7 @@
 	      };
 	      Parser.prototype._checkNoInterpolation = function (input, location, interpolationConfig) {
 	          var regexp = _createInterpolateRegExp(interpolationConfig);
-	          var parts = StringWrapper.split(input, regexp);
+	          var parts = input.split(regexp);
 	          if (parts.length > 1) {
 	              this._reportError("Got interpolation (" + interpolationConfig.start + interpolationConfig.end + ") where expression was expected", input, "at column " + this._findInterpolationErrorColumn(parts, 1, interpolationConfig) + " in", location);
 	          }
@@ -13354,12 +13315,14 @@
 	      return Parser;
 	  }());
 	  var _ParseAST = (function () {
-	      function _ParseAST(input, location, tokens, parseAction, errors) {
+	      function _ParseAST(input, location, tokens, inputLength, parseAction, errors, offset) {
 	          this.input = input;
 	          this.location = location;
 	          this.tokens = tokens;
+	          this.inputLength = inputLength;
 	          this.parseAction = parseAction;
 	          this.errors = errors;
+	          this.offset = offset;
 	          this.rparensExpected = 0;
 	          this.rbracketsExpected = 0;
 	          this.rbracesExpected = 0;
@@ -13376,7 +13339,8 @@
 	      });
 	      Object.defineProperty(_ParseAST.prototype, "inputIndex", {
 	          get: function () {
-	              return (this.index < this.tokens.length) ? this.next.index : this.input.length;
+	              return (this.index < this.tokens.length) ? this.next.index + this.offset :
+	                  this.inputLength + this.offset;
 	          },
 	          enumerable: true,
 	          configurable: true
@@ -13396,7 +13360,7 @@
 	      _ParseAST.prototype.expectCharacter = function (code) {
 	          if (this.optionalCharacter(code))
 	              return;
-	          this.error("Missing expected " + StringWrapper.fromCharCode(code));
+	          this.error("Missing expected " + String.fromCharCode(code));
 	      };
 	      _ParseAST.prototype.optionalOperator = function (op) {
 	          if (this.next.isOperator(op)) {
@@ -13465,7 +13429,7 @@
 	                  while (this.optionalCharacter($COLON)) {
 	                      args.push(this.parseExpression());
 	                  }
-	                  result = new BindingPipe(this.span(result.span.start), result, name, args);
+	                  result = new BindingPipe(this.span(result.span.start - this.offset), result, name, args);
 	              } while (this.optionalOperator('|'));
 	          }
 	          return result;
@@ -14029,10 +13993,11 @@
 	      return ExpansionCase;
 	  }());
 	  var Attribute$1 = (function () {
-	      function Attribute(name, value, sourceSpan) {
+	      function Attribute(name, value, sourceSpan, valueSpan) {
 	          this.name = name;
 	          this.value = value;
 	          this.sourceSpan = sourceSpan;
+	          this.valueSpan = valueSpan;
 	      }
 	      Attribute.prototype.visit = function (visitor, context) { return visitor.visitAttribute(this, context); };
 	      return Attribute;
@@ -14060,8 +14025,11 @@
 	  function visitAll(visitor, nodes, context) {
 	      if (context === void 0) { context = null; }
 	      var result = [];
+	      var visit = visitor.visit ?
+	          function (ast) { return visitor.visit(ast, context) || ast.visit(visitor, context); } :
+	          function (ast) { return ast.visit(visitor, context); };
 	      nodes.forEach(function (ast) {
-	          var astResult = ast.visit(visitor, context);
+	          var astResult = visit(ast);
 	          if (astResult) {
 	              result.push(astResult);
 	          }
@@ -15011,12 +14979,14 @@
 	          var fullName = mergeNsAndName(attrName.parts[0], attrName.parts[1]);
 	          var end = attrName.sourceSpan.end;
 	          var value = '';
+	          var valueSpan;
 	          if (this._peek.type === TokenType$1.ATTR_VALUE) {
 	              var valueToken = this._advance();
 	              value = valueToken.parts[0];
 	              end = valueToken.sourceSpan.end;
+	              valueSpan = valueToken.sourceSpan;
 	          }
-	          return new Attribute$1(fullName, value, new ParseSourceSpan(attrName.sourceSpan.start, end));
+	          return new Attribute$1(fullName, value, new ParseSourceSpan(attrName.sourceSpan.start, end), valueSpan);
 	      };
 	      _TreeBuilder.prototype._getParentElement = function () {
 	          return this._elementStack.length > 0 ? ListWrapper.last(this._elementStack) : null;
@@ -17240,7 +17210,7 @@
 	      });
 	      ProviderElementContext.prototype._addQueryReadsTo = function (token, queryReadTokens) {
 	          this._getQueriesFor(token).forEach(function (query) {
-	              var queryReadToken = isPresent(query.read) ? query.read : token;
+	              var queryReadToken = query.read || token;
 	              if (isBlank(queryReadTokens.get(queryReadToken.reference))) {
 	                  queryReadTokens.set(queryReadToken.reference, true);
 	              }
@@ -17302,12 +17272,12 @@
 	                  }
 	              }
 	              else if (isPresent(provider.useFactory)) {
-	                  var deps = isPresent(provider.deps) ? provider.deps : provider.useFactory.diDeps;
+	                  var deps = provider.deps || provider.useFactory.diDeps;
 	                  transformedDeps =
 	                      deps.map(function (dep) { return _this._getDependency(resolvedProvider.providerType, dep, eager); });
 	              }
 	              else if (isPresent(provider.useClass)) {
-	                  var deps = isPresent(provider.deps) ? provider.deps : provider.useClass.diDeps;
+	                  var deps = provider.deps || provider.useClass.diDeps;
 	                  transformedDeps =
 	                      deps.map(function (dep) { return _this._getDependency(resolvedProvider.providerType, dep, eager); });
 	              }
@@ -17457,12 +17427,12 @@
 	                  }
 	              }
 	              else if (isPresent(provider.useFactory)) {
-	                  var deps = isPresent(provider.deps) ? provider.deps : provider.useFactory.diDeps;
+	                  var deps = provider.deps || provider.useFactory.diDeps;
 	                  transformedDeps =
 	                      deps.map(function (dep) { return _this._getDependency(dep, eager, resolvedProvider.sourceSpan); });
 	              }
 	              else if (isPresent(provider.useClass)) {
-	                  var deps = isPresent(provider.deps) ? provider.deps : provider.useClass.diDeps;
+	                  var deps = provider.deps || provider.useClass.diDeps;
 	                  transformedDeps =
 	                      deps.map(function (dep) { return _this._getDependency(dep, eager, resolvedProvider.sourceSpan); });
 	              }
@@ -17653,8 +17623,12 @@
 	   */
 	  function extractStyleUrls(resolver, baseUrl, cssText) {
 	      var foundUrls = [];
-	      var modifiedCssText = StringWrapper.replaceAllMapped(cssText, _cssImportRe, function (m) {
-	          var url = isPresent(m[1]) ? m[1] : m[2];
+	      var modifiedCssText = cssText.replace(_cssImportRe, function () {
+	          var m = [];
+	          for (var _i = 0; _i < arguments.length; _i++) {
+	              m[_i - 0] = arguments[_i];
+	          }
+	          var url = m[1] || m[2];
 	          if (!isStyleUrlResolvable(url)) {
 	              // Do not attempt to resolve non-package absolute URLs with URI scheme
 	              return m[0];
@@ -17832,19 +17806,11 @@
 	          return result.templateAst;
 	      };
 	      TemplateParser.prototype.tryParse = function (component, template, directives, pipes, schemas, templateUrl) {
-	          var interpolationConfig;
-	          if (component.template) {
-	              interpolationConfig = InterpolationConfig.fromArray(component.template.interpolation);
-	          }
-	          var htmlAstWithErrors = this._htmlParser.parse(template, templateUrl, true, interpolationConfig);
-	          var errors = htmlAstWithErrors.errors;
+	          return this.tryParseHtml(this.expandHtml(this._htmlParser.parse(template, templateUrl, true, this.getInterpolationConfig(component))), component, template, directives, pipes, schemas, templateUrl);
+	      };
+	      TemplateParser.prototype.tryParseHtml = function (htmlAstWithErrors, component, template, directives, pipes, schemas, templateUrl) {
 	          var result;
-	          if (errors.length == 0) {
-	              // Transform ICU messages to angular directives
-	              var expandedHtmlAst = expandNodes(htmlAstWithErrors.rootNodes);
-	              errors.push.apply(errors, expandedHtmlAst.errors);
-	              htmlAstWithErrors = new ParseTreeResult(expandedHtmlAst.nodes, errors);
-	          }
+	          var errors = htmlAstWithErrors.errors;
 	          if (htmlAstWithErrors.rootNodes.length > 0) {
 	              var uniqDirectives = removeIdentifierDuplicates(directives);
 	              var uniqPipes = removeIdentifierDuplicates(pipes);
@@ -17864,6 +17830,22 @@
 	              this.transforms.forEach(function (transform) { result = templateVisitAll(transform, result); });
 	          }
 	          return new TemplateParseResult(result, errors);
+	      };
+	      TemplateParser.prototype.expandHtml = function (htmlAstWithErrors, forced) {
+	          if (forced === void 0) { forced = false; }
+	          var errors = htmlAstWithErrors.errors;
+	          if (errors.length == 0 || forced) {
+	              // Transform ICU messages to angular directives
+	              var expandedHtmlAst = expandNodes(htmlAstWithErrors.rootNodes);
+	              errors.push.apply(errors, expandedHtmlAst.errors);
+	              htmlAstWithErrors = new ParseTreeResult(expandedHtmlAst.nodes, errors);
+	          }
+	          return htmlAstWithErrors;
+	      };
+	      TemplateParser.prototype.getInterpolationConfig = function (component) {
+	          if (component.template) {
+	              return InterpolationConfig.fromArray(component.template.interpolation);
+	          }
 	      };
 	      /** @internal */
 	      TemplateParser.prototype._assertNoReferenceDuplicationOnTemplate = function (result, errors) {
@@ -18089,8 +18071,8 @@
 	          var ngContentIndex = parent.findNgContentIndex(projectionSelector);
 	          var parsedElement;
 	          if (preparsedElement.type === PreparsedElementType.NG_CONTENT) {
-	              if (isPresent(element.children) && element.children.length > 0) {
-	                  this._reportError("<ng-content> element cannot have content. <ng-content> must be immediately followed by </ng-content>", element.sourceSpan);
+	              if (element.children && !element.children.every(_isEmptyTextNode)) {
+	                  this._reportError("<ng-content> element cannot have content.", element.sourceSpan);
 	              }
 	              parsedElement = new NgContentAst(this.ngContentCount++, hasInlineTemplates ? null : ngContentIndex, element.sourceSpan);
 	          }
@@ -18103,7 +18085,7 @@
 	              this._assertElementExists(matchElement, element);
 	              this._assertOnlyOneComponent(directiveAsts, element.sourceSpan);
 	              var ngContentIndex_1 = hasInlineTemplates ? null : parent.findNgContentIndex(projectionSelector);
-	              parsedElement = new ElementAst(nodeName, attrs, elementProps, events, references, providerContext.transformedDirectiveAsts, providerContext.transformProviders, providerContext.transformedHasViewContainer, children, hasInlineTemplates ? null : ngContentIndex_1, element.sourceSpan);
+	              parsedElement = new ElementAst(nodeName, attrs, elementProps, events, references, providerContext.transformedDirectiveAsts, providerContext.transformProviders, providerContext.transformedHasViewContainer, children, hasInlineTemplates ? null : ngContentIndex_1, element.sourceSpan, element.endSourceSpan);
 	              this._findComponentDirectives(directiveAsts)
 	                  .forEach(function (componentDirectiveAst) { return _this._validateElementAnimationInputOutputs(componentDirectiveAst.hostProperties, componentDirectiveAst.hostEvents, componentDirectiveAst.directive.template); });
 	              var componentTemplate = providerContext.viewContext.component.template;
@@ -18597,7 +18579,7 @@
 	          var selector = createElementCssSelector(ast.name, attrNameAndValues);
 	          var ngContentIndex = parent.findNgContentIndex(selector);
 	          var children = visitAll(this, ast.children, EMPTY_ELEMENT_CONTEXT);
-	          return new ElementAst(ast.name, visitAll(this, ast.attrs), [], [], [], [], [], false, children, ngContentIndex, ast.sourceSpan);
+	          return new ElementAst(ast.name, visitAll(this, ast.attrs), [], [], [], [], [], false, children, ngContentIndex, ast.sourceSpan, ast.endSourceSpan);
 	      };
 	      NonBindableVisitor.prototype.visitComment = function (comment, context) { return null; };
 	      NonBindableVisitor.prototype.visitAttribute = function (attribute, context) {
@@ -18701,6 +18683,9 @@
 	  }(RecursiveAstVisitor));
 	  function _isAnimationLabel(name) {
 	      return name[0] == '@';
+	  }
+	  function _isEmptyTextNode(node) {
+	      return node instanceof Text && node.value.trim().length == 0;
 	  }
 	
 	  function unimplemented$1() {
@@ -18971,7 +18956,8 @@
 	              context.isExpectingFirstStyleStep = false;
 	          }
 	          ast.styles.forEach(function (entry) {
-	              stylesArr.push(literalMap(Object.keys(entry).map(function (key) { return [key, literal(entry[key])]; })));
+	              var entries = Object.keys(entry).map(function (key) { return [key, literal(entry[key])]; });
+	              stylesArr.push(literalMap(entries));
 	          });
 	          return importExpr(resolveIdentifier(Identifiers.AnimationStyles)).instantiate([
 	              importExpr(resolveIdentifier(Identifiers.collectAndResolveStyles)).callFn([
@@ -19354,11 +19340,7 @@
 	      var styles = new StylesCollection();
 	      var transitionExprs = [];
 	      var transitionStates = transitionStateMetadata.stateChangeExpr.split(/\s*,\s*/);
-	      transitionStates.forEach(function (expr) {
-	          _parseAnimationTransitionExpr(expr, errors).forEach(function (transExpr) {
-	              transitionExprs.push(transExpr);
-	          });
-	      });
+	      transitionStates.forEach(function (expr) { transitionExprs.push.apply(transitionExprs, _parseAnimationTransitionExpr(expr, errors)); });
 	      var entry = _normalizeAnimationEntry(transitionStateMetadata.steps);
 	      var animation = _normalizeStyleSteps(entry, stateStyles, errors);
 	      var animationAst = _parseTransitionAnimation(animation, 0, styles, stateStyles, errors);
@@ -19558,7 +19540,6 @@
 	      if (doSortKeyframes) {
 	          ListWrapper.sort(rawKeyframes, function (a, b) { return a[0] <= b[0] ? -1 : 1; });
 	      }
-	      var i;
 	      var firstKeyframe = rawKeyframes[0];
 	      if (firstKeyframe[0] != _INITIAL_KEYFRAME) {
 	          ListWrapper.insert(rawKeyframes, 0, firstKeyframe = [_INITIAL_KEYFRAME, {}]);
@@ -19571,7 +19552,7 @@
 	          limit++;
 	      }
 	      var lastKeyframeStyles = lastKeyframe[1];
-	      for (i = 1; i <= limit; i++) {
+	      for (var i = 1; i <= limit; i++) {
 	          var entry = rawKeyframes[i];
 	          var styles = entry[1];
 	          Object.keys(styles).forEach(function (prop) {
@@ -19580,7 +19561,7 @@
 	              }
 	          });
 	      }
-	      var _loop_1 = function() {
+	      var _loop_1 = function(i) {
 	          var entry = rawKeyframes[i];
 	          var styles = entry[1];
 	          Object.keys(styles).forEach(function (prop) {
@@ -19589,8 +19570,8 @@
 	              }
 	          });
 	      };
-	      for (i = limit - 1; i >= 0; i--) {
-	          _loop_1();
+	      for (var i = limit - 1; i >= 0; i--) {
+	          _loop_1(i);
 	      }
 	      return rawKeyframes.map(function (entry) { return new AnimationKeyframeAst(entry[0], new AnimationStylesAst([entry[1]])); });
 	  }
@@ -19829,7 +19810,7 @@
 	      };
 	      CompileMethod.prototype.resetDebugInfoExpr = function (nodeIndex, templateAst) {
 	          var res = this._updateDebugContext(new _DebugState(nodeIndex, templateAst));
-	          return isPresent(res) ? res : NULL_EXPR;
+	          return res || NULL_EXPR;
 	      };
 	      CompileMethod.prototype.resetDebugInfo = function (nodeIndex, templateAst) {
 	          this._newState = new _DebugState(nodeIndex, templateAst);
@@ -19960,7 +19941,7 @@
 	      CompileQuery.prototype._isStatic = function () {
 	          return !this._values.values.some(function (value) { return value instanceof ViewQueryValues; });
 	      };
-	      CompileQuery.prototype.afterChildren = function (targetStaticMethod /** TODO #9100 */, targetDynamicMethod) {
+	      CompileQuery.prototype.afterChildren = function (targetStaticMethod, targetDynamicMethod) {
 	          var values = createQueryValues(this._values);
 	          var updateStmts = [this.queryList.callMethod('reset', [literalArr(values)]).toStmt()];
 	          if (isPresent(this.ownerDirectiveExpression)) {
@@ -20246,12 +20227,12 @@
 	                      return _this._getDependency(resolvedProvider.providerType, new CompileDiDependencyMetadata({ token: provider.useExisting }));
 	                  }
 	                  else if (isPresent(provider.useFactory)) {
-	                      var deps = isPresent(provider.deps) ? provider.deps : provider.useFactory.diDeps;
+	                      var deps = provider.deps || provider.useFactory.diDeps;
 	                      var depsExpr = deps.map(function (dep) { return _this._getDependency(resolvedProvider.providerType, dep); });
 	                      return importExpr(provider.useFactory).callFn(depsExpr);
 	                  }
 	                  else if (isPresent(provider.useClass)) {
-	                      var deps = isPresent(provider.deps) ? provider.deps : provider.useClass.diDeps;
+	                      var deps = provider.deps || provider.useClass.diDeps;
 	                      var depsExpr = deps.map(function (dep) { return _this._getDependency(resolvedProvider.providerType, dep); });
 	                      return importExpr(provider.useClass)
 	                          .instantiate(depsExpr, importType(provider.useClass));
@@ -20483,7 +20464,7 @@
 	  var _QueryWithRead = (function () {
 	      function _QueryWithRead(query, match) {
 	          this.query = query;
-	          this.read = isPresent(query.meta.read) ? query.meta.read : match;
+	          this.read = query.meta.read || match;
 	      }
 	      return _QueryWithRead;
 	  }());
@@ -21143,7 +21124,7 @@
 	          this._actionResultExprs = [];
 	          this._method = new CompileMethod(compileElement.view);
 	          this._methodName =
-	              "_handle_" + santitizeEventName(eventName) + "_" + compileElement.nodeIndex + "_" + listenerIndex;
+	              "_handle_" + sanitizeEventName(eventName) + "_" + compileElement.nodeIndex + "_" + listenerIndex;
 	          this._eventParam = new FnParam(EventHandlerVars.event.name, importType(this.compileElement.view.genConfig.renderTypes.renderEvent));
 	      }
 	      CompileEventListener.getOrCreate = function (compileElement, eventTarget, eventName, eventPhase, targetEventListeners) {
@@ -21165,8 +21146,7 @@
 	              this._hasComponentHostListener = true;
 	          }
 	          this._method.resetDebugInfo(this.compileElement.nodeIndex, hostEvent);
-	          var context = isPresent(directiveInstance) ? directiveInstance :
-	              this.compileElement.view.componentContext;
+	          var context = directiveInstance || this.compileElement.view.componentContext;
 	          var actionStmts = convertCdStatementToIr(this.compileElement.view, context, hostEvent.handler, this.compileElement.nodeIndex);
 	          var lastIndex = actionStmts.length - 1;
 	          if (lastIndex >= 0) {
@@ -21277,8 +21257,8 @@
 	      }
 	      return null;
 	  }
-	  function santitizeEventName(name) {
-	      return StringWrapper.replaceAll(name, /[^a-zA-Z_]/g, '_');
+	  function sanitizeEventName(name) {
+	      return name.replace(/[^a-zA-Z_]/g, '_');
 	  }
 	
 	  var STATE_IS_NEVER_CHECKED = THIS_EXPR.prop('numberOfChecks').identical(new LiteralExpr(0));
@@ -21389,7 +21369,6 @@
 	          view.detectChangesRenderPropertiesMethod.resetDebugInfo(compileElement.nodeIndex, boundProp);
 	          var fieldExpr = createBindFieldExpr(bindingIndex);
 	          var currValExpr = createCurrValueExpr(bindingIndex);
-	          var renderMethod;
 	          var oldRenderValue = sanitizedValue(boundProp, fieldExpr);
 	          var renderValue = sanitizedValue(boundProp, currValExpr);
 	          var updateStmts = [];
@@ -21676,11 +21655,11 @@
 	          if (this._isRootNode(parent)) {
 	              // store appElement as root node only for ViewContainers
 	              if (this.view.viewType !== ViewType.COMPONENT) {
-	                  this.view.rootNodesOrAppElements.push(isPresent(vcAppEl) ? vcAppEl : node.renderNode);
+	                  this.view.rootNodesOrAppElements.push(vcAppEl || node.renderNode);
 	              }
 	          }
 	          else if (isPresent(parent.component) && isPresent(ngContentIndex)) {
-	              parent.addContentNode(ngContentIndex, isPresent(vcAppEl) ? vcAppEl : node.renderNode);
+	              parent.addContentNode(ngContentIndex, vcAppEl || node.renderNode);
 	          }
 	      };
 	      ViewBuilderVisitor.prototype._getParentRenderNode = function (parent) {
@@ -21919,7 +21898,7 @@
 	      Object.keys(data).forEach(function (name) { entryArray.push([name, data[name]]); });
 	      // We need to sort to get a defined output order
 	      // for tests and for caching generated artifacts...
-	      ListWrapper.sort(entryArray, function (entry1, entry2) { return StringWrapper.compare(entry1[0], entry2[0]); });
+	      ListWrapper.sort(entryArray);
 	      return entryArray;
 	  }
 	  function createViewTopLevelStmts(view, targetStatements) {
@@ -22011,7 +21990,9 @@
 	      }
 	      if (view.viewIndex === 0) {
 	          var animationsExpr = literalMap(view.animations.map(function (entry) { return [entry.name, entry.fnExp]; }));
-	          initRenderCompTypeStmts = [new IfStmt(renderCompTypeVar.identical(NULL_EXPR), [renderCompTypeVar
+	          initRenderCompTypeStmts = [
+	              new IfStmt(renderCompTypeVar.identical(NULL_EXPR), [
+	                  renderCompTypeVar
 	                      .set(ViewConstructorVars.viewUtils.callMethod('createRenderComponentType', [
 	                      view.genConfig.genDebugInfo ? literal(templateUrlInfo) : literal(''),
 	                      literal(view.component.template.ngContentSelectors.length),
@@ -22019,10 +22000,14 @@
 	                      view.styles,
 	                      animationsExpr,
 	                  ]))
-	                      .toStmt()])];
+	                      .toStmt(),
+	              ]),
+	          ];
 	      }
-	      return fn(viewFactoryArgs, initRenderCompTypeStmts.concat([new ReturnStatement(variable(viewClass.name)
-	              .instantiate(viewClass.constructorMethod.params.map(function (param) { return variable(param.name); })))]), importType(resolveIdentifier(Identifiers.AppView), [getContextType(view)]))
+	      return fn(viewFactoryArgs, initRenderCompTypeStmts.concat([
+	          new ReturnStatement(variable(viewClass.name)
+	              .instantiate(viewClass.constructorMethod.params.map(function (param) { return variable(param.name); }))),
+	      ]), importType(resolveIdentifier(Identifiers.AppView), [getContextType(view)]))
 	          .toDeclStmt(view.viewFactory.name, [StmtModifier.Final]);
 	  }
 	  function generateCreateMethod(view) {
@@ -22161,11 +22146,26 @@
 	      return SourceModule;
 	  }());
 	  var NgModulesSummary = (function () {
-	      function NgModulesSummary(ngModuleByComponent) {
+	      function NgModulesSummary(ngModuleByComponent, ngModules) {
 	          this.ngModuleByComponent = ngModuleByComponent;
+	          this.ngModules = ngModules;
 	      }
 	      return NgModulesSummary;
 	  }());
+	  function analyzeModules(ngModules, metadataResolver) {
+	      var ngModuleByComponent = new Map();
+	      var modules = [];
+	      ngModules.forEach(function (ngModule) {
+	          var ngModuleMeta = metadataResolver.getNgModuleMetadata(ngModule);
+	          modules.push(ngModuleMeta);
+	          ngModuleMeta.declaredDirectives.forEach(function (dirMeta) {
+	              if (dirMeta.isComponent) {
+	                  ngModuleByComponent.set(dirMeta.type.reference, ngModuleMeta);
+	              }
+	          });
+	      });
+	      return new NgModulesSummary(ngModuleByComponent, modules);
+	  }
 	  var OfflineCompiler = (function () {
 	      function OfflineCompiler(_metadataResolver, _directiveNormalizer, _templateParser, _styleCompiler, _viewCompiler, _ngModuleCompiler, _outputEmitter, _localeId, _translationFormat) {
 	          this._metadataResolver = _metadataResolver;
@@ -22181,17 +22181,7 @@
 	          this._animationCompiler = new AnimationCompiler();
 	      }
 	      OfflineCompiler.prototype.analyzeModules = function (ngModules) {
-	          var _this = this;
-	          var ngModuleByComponent = new Map();
-	          ngModules.forEach(function (ngModule) {
-	              var ngModuleMeta = _this._metadataResolver.getNgModuleMetadata(ngModule);
-	              ngModuleMeta.declaredDirectives.forEach(function (dirMeta) {
-	                  if (dirMeta.isComponent) {
-	                      ngModuleByComponent.set(dirMeta.type.reference, ngModuleMeta);
-	                  }
-	              });
-	          });
-	          return new NgModulesSummary(ngModuleByComponent);
+	          return analyzeModules(ngModules, this._metadataResolver);
 	      };
 	      OfflineCompiler.prototype.clearCache = function () {
 	          this._directiveNormalizer.clearCache();
@@ -22412,8 +22402,8 @@
 	                  resolvedUrl = "asset:" + pathSegements[0] + "/lib/" + pathSegements.slice(1).join('/');
 	              }
 	              else {
-	                  prefix = StringWrapper.stripRight(prefix, '/');
-	                  path = StringWrapper.stripLeft(path, '/');
+	                  prefix = prefix.replace(/\/+$/, '');
+	                  path = path.replace(/^\/+/, '');
 	                  return prefix + "/" + path;
 	              }
 	          }
@@ -22947,6 +22937,13 @@
 	                  else if (a instanceof _angular_core.HostBinding) {
 	                      var hostBinding = a;
 	                      if (hostBinding.hostPropertyName) {
+	                          var startWith = hostBinding.hostPropertyName[0];
+	                          if (startWith === '(') {
+	                              throw new Error("@HostBinding can not bind to events. Use @HostListener instead.");
+	                          }
+	                          else if (startWith === '[') {
+	                              throw new Error("@HostBinding parameter should be a property name, 'class.<name>', or 'attr.<name>'.");
+	                          }
 	                          host[("[" + hostBinding.hostPropertyName + "]")] = propName;
 	                      }
 	                      else {
@@ -23968,12 +23965,12 @@
 	              result = this._getDependency(new CompileDiDependencyMetadata({ token: provider.useExisting }));
 	          }
 	          else if (isPresent(provider.useFactory)) {
-	              var deps = isPresent(provider.deps) ? provider.deps : provider.useFactory.diDeps;
+	              var deps = provider.deps || provider.useFactory.diDeps;
 	              var depsExpr = deps.map(function (dep) { return _this._getDependency(dep); });
 	              result = importExpr(provider.useFactory).callFn(depsExpr);
 	          }
 	          else if (isPresent(provider.useClass)) {
-	              var deps = isPresent(provider.deps) ? provider.deps : provider.useClass.diDeps;
+	              var deps = provider.deps || provider.useClass.diDeps;
 	              var depsExpr = deps.map(function (dep) { return _this._getDependency(dep); });
 	              result =
 	                  importExpr(provider.useClass).instantiate(depsExpr, importType(provider.useClass));
@@ -24394,7 +24391,7 @@
 	          var useNewLine = ast.entries.length > 1;
 	          ctx.print("{", useNewLine);
 	          ctx.incIndent();
-	          this.visitAllObjects(function (entry /** TODO #9100 */) {
+	          this.visitAllObjects(function (entry) {
 	              ctx.print(escapeIdentifier(entry[0], _this._escapeDollarInStrings, false) + ": ");
 	              entry[1].visitExpression(_this, ctx);
 	          }, ast.entries, ctx, ',', useNewLine);
@@ -24405,7 +24402,7 @@
 	      AbstractEmitterVisitor.prototype.visitAllExpressions = function (expressions, ctx, separator, newLine) {
 	          var _this = this;
 	          if (newLine === void 0) { newLine = false; }
-	          this.visitAllObjects(function (expr /** TODO #9100 */) { return expr.visitExpression(_this, ctx); }, expressions, ctx, separator, newLine);
+	          this.visitAllObjects(function (expr) { return expr.visitExpression(_this, ctx); }, expressions, ctx, separator, newLine);
 	      };
 	      AbstractEmitterVisitor.prototype.visitAllObjects = function (handler, expressions, ctx, separator, newLine) {
 	          if (newLine === void 0) { newLine = false; }
@@ -24430,7 +24427,11 @@
 	      if (isBlank(input)) {
 	          return null;
 	      }
-	      var body = StringWrapper.replaceAllMapped(input, _SINGLE_QUOTE_ESCAPE_STRING_RE, function (match /** TODO #9100 */) {
+	      var body = input.replace(_SINGLE_QUOTE_ESCAPE_STRING_RE, function () {
+	          var match = [];
+	          for (var _i = 0; _i < arguments.length; _i++) {
+	              match[_i - 0] = arguments[_i];
+	          }
 	          if (match[0] == '$') {
 	              return escapeDollar ? '\\$' : '$';
 	          }
@@ -24749,7 +24750,7 @@
 	      };
 	      _TsEmitterVisitor.prototype._visitParams = function (params, ctx) {
 	          var _this = this;
-	          this.visitAllObjects(function (param /** TODO #9100 */) {
+	          this.visitAllObjects(function (param) {
 	              ctx.print(param.name);
 	              ctx.print(':');
 	              _this.visitType(param.type, ctx);
@@ -24778,7 +24779,7 @@
 	          }
 	          if (isPresent(typeParams) && typeParams.length > 0) {
 	              ctx.print("<");
-	              this.visitAllObjects(function (type /** TODO #9100 */) { return type.visitType(_this, ctx); }, typeParams, ctx, ',');
+	              this.visitAllObjects(function (type) { return type.visitType(_this, ctx); }, typeParams, ctx, ',');
 	              ctx.print(">");
 	          }
 	      };
@@ -25258,7 +25259,7 @@
 	          return null;
 	      };
 	      AbstractJsEmitterVisitor.prototype._visitParams = function (params, ctx) {
-	          this.visitAllObjects(function (param /** TODO #9100 */) { return ctx.print(param.name); }, params, ctx, ',');
+	          this.visitAllObjects(function (param) { return ctx.print(param.name); }, params, ctx, ',');
 	      };
 	      AbstractJsEmitterVisitor.prototype.getBuiltinMethodName = function (method) {
 	          var name;
@@ -25704,7 +25705,8 @@
 	          _polyfillHostRe.lastIndex = 0;
 	          if (_polyfillHostRe.test(selector)) {
 	              var replaceBy_1 = this.strictStyling ? "[" + hostSelector + "]" : scopeSelector;
-	              return selector.replace(_polyfillHostNoCombinatorRe, function (hnc, selector) { return selector + replaceBy_1; })
+	              return selector
+	                  .replace(_polyfillHostNoCombinatorRe, function (hnc, selector) { return selector[0] === ':' ? replaceBy_1 + selector : selector + replaceBy_1; })
 	                  .replace(_polyfillHostRe, replaceBy_1 + ' ');
 	          }
 	          return scopeSelector + ' ' + selector;
@@ -26992,7 +26994,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * @license Angular v2.1.0-rc.0
+	 * @license Angular v2.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
@@ -27069,74 +27071,6 @@
 	        var newLineIndex = res.indexOf('\n');
 	        return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
 	    }
-	    var StringWrapper = (function () {
-	        function StringWrapper() {
-	        }
-	        StringWrapper.fromCharCode = function (code) { return String.fromCharCode(code); };
-	        StringWrapper.charCodeAt = function (s, index) { return s.charCodeAt(index); };
-	        StringWrapper.split = function (s, regExp) { return s.split(regExp); };
-	        StringWrapper.equals = function (s, s2) { return s === s2; };
-	        StringWrapper.stripLeft = function (s, charVal) {
-	            if (s && s.length) {
-	                var pos = 0;
-	                for (var i = 0; i < s.length; i++) {
-	                    if (s[i] != charVal)
-	                        break;
-	                    pos++;
-	                }
-	                s = s.substring(pos);
-	            }
-	            return s;
-	        };
-	        StringWrapper.stripRight = function (s, charVal) {
-	            if (s && s.length) {
-	                var pos = s.length;
-	                for (var i = s.length - 1; i >= 0; i--) {
-	                    if (s[i] != charVal)
-	                        break;
-	                    pos--;
-	                }
-	                s = s.substring(0, pos);
-	            }
-	            return s;
-	        };
-	        StringWrapper.replace = function (s, from, replace) {
-	            return s.replace(from, replace);
-	        };
-	        StringWrapper.replaceAll = function (s, from, replace) {
-	            return s.replace(from, replace);
-	        };
-	        StringWrapper.slice = function (s, from, to) {
-	            if (from === void 0) { from = 0; }
-	            if (to === void 0) { to = null; }
-	            return s.slice(from, to === null ? undefined : to);
-	        };
-	        StringWrapper.replaceAllMapped = function (s, from, cb) {
-	            return s.replace(from, function () {
-	                var matches = [];
-	                for (var _i = 0; _i < arguments.length; _i++) {
-	                    matches[_i - 0] = arguments[_i];
-	                }
-	                // Remove offset & string from the result array
-	                matches.splice(-2, 2);
-	                // The callback receives match, p1, ..., pn
-	                return cb(matches);
-	            });
-	        };
-	        StringWrapper.contains = function (s, substr) { return s.indexOf(substr) != -1; };
-	        StringWrapper.compare = function (a, b) {
-	            if (a < b) {
-	                return -1;
-	            }
-	            else if (a > b) {
-	                return 1;
-	            }
-	            else {
-	                return 0;
-	            }
-	        };
-	        return StringWrapper;
-	    }());
 	    var NumberWrapper = (function () {
 	        function NumberWrapper() {
 	        }
@@ -27221,8 +27155,9 @@
 	    }
 	
 	    var _nextClassId = 0;
+	    var Reflect = global$1.Reflect;
 	    function extractAnnotation(annotation) {
-	        if (isFunction(annotation) && annotation.hasOwnProperty('annotation')) {
+	        if (typeof annotation === 'function' && annotation.hasOwnProperty('annotation')) {
 	            // it is a decorator, extract annotation
 	            annotation = annotation.annotation;
 	        }
@@ -27233,14 +27168,14 @@
 	            fnOrArray === Number || fnOrArray === Array) {
 	            throw new Error("Can not use native " + stringify(fnOrArray) + " as constructor");
 	        }
-	        if (isFunction(fnOrArray)) {
+	        if (typeof fnOrArray === 'function') {
 	            return fnOrArray;
 	        }
-	        else if (fnOrArray instanceof Array) {
+	        if (Array.isArray(fnOrArray)) {
 	            var annotations = fnOrArray;
 	            var annoLength = annotations.length - 1;
 	            var fn = fnOrArray[annoLength];
-	            if (!isFunction(fn)) {
+	            if (typeof fn !== 'function') {
 	                throw new Error("Last position of Class method array must be Function in key " + key + " was '" + stringify(fn) + "'");
 	            }
 	            if (annoLength != fn.length) {
@@ -27251,12 +27186,12 @@
 	                var paramAnnotations = [];
 	                paramsAnnotations.push(paramAnnotations);
 	                var annotation = annotations[i];
-	                if (annotation instanceof Array) {
+	                if (Array.isArray(annotation)) {
 	                    for (var j = 0; j < annotation.length; j++) {
 	                        paramAnnotations.push(extractAnnotation(annotation[j]));
 	                    }
 	                }
-	                else if (isFunction(annotation)) {
+	                else if (typeof annotation === 'function') {
 	                    paramAnnotations.push(extractAnnotation(annotation));
 	                }
 	                else {
@@ -27266,9 +27201,7 @@
 	            Reflect.defineMetadata('parameters', paramsAnnotations, fn);
 	            return fn;
 	        }
-	        else {
-	            throw new Error("Only Function or Array is supported in Class definition for key '" + key + "' is '" + stringify(fnOrArray) + "'");
-	        }
+	        throw new Error("Only Function or Array is supported in Class definition for key '" + key + "' is '" + stringify(fnOrArray) + "'");
 	    }
 	    /**
 	     * Provides a way for expressing ES6 classes with parameter annotations in ES5.
@@ -27317,7 +27250,7 @@
 	     *
 	     * ```
 	     * var MyService = ng.Class({
-	     *   constructor: [String, [new Query(), QueryList], function(name, queryList) {
+	     *   constructor: [String, [new Optional(), Service], function(name, myService) {
 	     *     ...
 	     *   }]
 	     * });
@@ -27327,7 +27260,7 @@
 	     *
 	     * ```
 	     * class MyService {
-	     *   constructor(name: string, @Query() queryList: QueryList) {
+	     *   constructor(name: string, @Optional() myService: Service) {
 	     *     ...
 	     *   }
 	     * }
@@ -27356,7 +27289,7 @@
 	        var constructor = applyParams(clsDef.hasOwnProperty('constructor') ? clsDef.constructor : undefined, 'constructor');
 	        var proto = constructor.prototype;
 	        if (clsDef.hasOwnProperty('extends')) {
-	            if (isFunction(clsDef.extends)) {
+	            if (typeof clsDef.extends === 'function') {
 	                constructor.prototype = proto =
 	                    Object.create(clsDef.extends.prototype);
 	            }
@@ -27365,7 +27298,7 @@
 	            }
 	        }
 	        for (var key in clsDef) {
-	            if (key != 'extends' && key != 'prototype' && clsDef.hasOwnProperty(key)) {
+	            if (key !== 'extends' && key !== 'prototype' && clsDef.hasOwnProperty(key)) {
 	                proto[key] = applyParams(clsDef[key], key);
 	            }
 	        }
@@ -27378,7 +27311,6 @@
 	        }
 	        return constructor;
 	    }
-	    var Reflect = global$1.Reflect;
 	    function makeDecorator(name, props, parentClass, chainFn) {
 	        if (chainFn === void 0) { chainFn = null; }
 	        var metaCtor = makeMetadataCtor([props]);
@@ -27390,22 +27322,20 @@
 	                metaCtor.call(this, objOrType);
 	                return this;
 	            }
-	            else {
-	                var annotationInstance_1 = new DecoratorFactory(objOrType);
-	                var chainAnnotation = isFunction(this) && this.annotations instanceof Array ? this.annotations : [];
-	                chainAnnotation.push(annotationInstance_1);
-	                var TypeDecorator = function TypeDecorator(cls) {
-	                    var annotations = Reflect.getOwnMetadata('annotations', cls) || [];
-	                    annotations.push(annotationInstance_1);
-	                    Reflect.defineMetadata('annotations', annotations, cls);
-	                    return cls;
-	                };
-	                TypeDecorator.annotations = chainAnnotation;
-	                TypeDecorator.Class = Class;
-	                if (chainFn)
-	                    chainFn(TypeDecorator);
-	                return TypeDecorator;
-	            }
+	            var annotationInstance = new DecoratorFactory(objOrType);
+	            var chainAnnotation = typeof this === 'function' && Array.isArray(this.annotations) ? this.annotations : [];
+	            chainAnnotation.push(annotationInstance);
+	            var TypeDecorator = function TypeDecorator(cls) {
+	                var annotations = Reflect.getOwnMetadata('annotations', cls) || [];
+	                annotations.push(annotationInstance);
+	                Reflect.defineMetadata('annotations', annotations, cls);
+	                return cls;
+	            };
+	            TypeDecorator.annotations = chainAnnotation;
+	            TypeDecorator.Class = Class;
+	            if (chainFn)
+	                chainFn(TypeDecorator);
+	            return TypeDecorator;
 	        }
 	        if (parentClass) {
 	            DecoratorFactory.prototype = Object.create(parentClass.prototype);
@@ -27425,13 +27355,12 @@
 	                var argVal = args[i];
 	                if (Array.isArray(prop)) {
 	                    // plain parameter
-	                    var val = !argVal || argVal === undefined ? prop[1] : argVal;
-	                    _this[prop[0]] = val;
+	                    _this[prop[0]] = !argVal || argVal === undefined ? prop[1] : argVal;
 	                }
 	                else {
 	                    for (var propName in prop) {
-	                        var val = !argVal || argVal[propName] === undefined ? prop[propName] : argVal[propName];
-	                        _this[propName] = val;
+	                        _this[propName] =
+	                            !argVal || argVal[propName] === undefined ? prop[propName] : argVal[propName];
 	                    }
 	                }
 	            });
@@ -27460,8 +27389,7 @@
 	                    parameters.push(null);
 	                }
 	                parameters[index] = parameters[index] || [];
-	                var annotationsForParam = parameters[index];
-	                annotationsForParam.push(annotationInstance);
+	                parameters[index].push(annotationInstance);
 	                Reflect.defineMetadata('parameters', parameters, cls);
 	                return cls;
 	            }
@@ -27485,15 +27413,13 @@
 	                metaCtor.apply(this, args);
 	                return this;
 	            }
-	            else {
-	                var decoratorInstance = new ((_a = PropDecoratorFactory).bind.apply(_a, [void 0].concat(args)))();
-	                return function PropDecorator(target, name) {
-	                    var meta = Reflect.getOwnMetadata('propMetadata', target.constructor) || {};
-	                    meta[name] = meta[name] || [];
-	                    meta[name].unshift(decoratorInstance);
-	                    Reflect.defineMetadata('propMetadata', meta, target.constructor);
-	                };
-	            }
+	            var decoratorInstance = new ((_a = PropDecoratorFactory).bind.apply(_a, [void 0].concat(args)))();
+	            return function PropDecorator(target, name) {
+	                var meta = Reflect.getOwnMetadata('propMetadata', target.constructor) || {};
+	                meta[name] = meta[name] || [];
+	                meta[name].unshift(decoratorInstance);
+	                Reflect.defineMetadata('propMetadata', meta, target.constructor);
+	            };
 	            var _a;
 	        }
 	        if (parentClass) {
@@ -28965,20 +28891,15 @@
 	            this._reflect = reflect || global$1.Reflect;
 	        }
 	        ReflectionCapabilities.prototype.isReflectionEnabled = function () { return true; };
-	        ReflectionCapabilities.prototype.factory = function (t) {
-	            var prototype = t.prototype;
-	            return function () {
-	                var args = [];
-	                for (var _i = 0; _i < arguments.length; _i++) {
-	                    args[_i - 0] = arguments[_i];
-	                }
-	                var instance = Object.create(prototype);
-	                t.apply(instance, args);
-	                return instance;
-	            };
-	        };
+	        ReflectionCapabilities.prototype.factory = function (t) { return function () {
+	            var args = [];
+	            for (var _i = 0; _i < arguments.length; _i++) {
+	                args[_i - 0] = arguments[_i];
+	            }
+	            return new (t.bind.apply(t, [void 0].concat(args)))();
+	        }; };
 	        /** @internal */
-	        ReflectionCapabilities.prototype._zipTypesAndAnnotations = function (paramTypes /** TODO #9100 */, paramAnnotations /** TODO #9100 */) {
+	        ReflectionCapabilities.prototype._zipTypesAndAnnotations = function (paramTypes, paramAnnotations) {
 	            var result;
 	            if (typeof paramTypes === 'undefined') {
 	                result = new Array(paramAnnotations.length);
@@ -28999,42 +28920,40 @@
 	                else {
 	                    result[i] = [];
 	                }
-	                if (isPresent(paramAnnotations) && isPresent(paramAnnotations[i])) {
+	                if (paramAnnotations && isPresent(paramAnnotations[i])) {
 	                    result[i] = result[i].concat(paramAnnotations[i]);
 	                }
 	            }
 	            return result;
 	        };
-	        ReflectionCapabilities.prototype.parameters = function (typeOrFunc) {
+	        ReflectionCapabilities.prototype.parameters = function (type) {
 	            // Prefer the direct API.
-	            if (isPresent(typeOrFunc.parameters)) {
-	                return typeOrFunc.parameters;
+	            if (type.parameters) {
+	                return type.parameters;
 	            }
 	            // API of tsickle for lowering decorators to properties on the class.
-	            if (isPresent(typeOrFunc.ctorParameters)) {
-	                var ctorParameters = typeOrFunc.ctorParameters;
-	                var paramTypes_1 = ctorParameters.map(function (ctorParam /** TODO #9100 */) { return ctorParam && ctorParam.type; });
-	                var paramAnnotations_1 = ctorParameters.map(function (ctorParam /** TODO #9100 */) {
+	            if (type.ctorParameters) {
+	                var ctorParameters = type.ctorParameters;
+	                var paramTypes = ctorParameters.map(function (ctorParam) { return ctorParam && ctorParam.type; });
+	                var paramAnnotations = ctorParameters.map(function (ctorParam) {
 	                    return ctorParam && convertTsickleDecoratorIntoMetadata(ctorParam.decorators);
 	                });
-	                return this._zipTypesAndAnnotations(paramTypes_1, paramAnnotations_1);
+	                return this._zipTypesAndAnnotations(paramTypes, paramAnnotations);
 	            }
 	            // API for metadata created by invoking the decorators.
 	            if (isPresent(this._reflect) && isPresent(this._reflect.getMetadata)) {
-	                var paramAnnotations = this._reflect.getMetadata('parameters', typeOrFunc);
-	                var paramTypes = this._reflect.getMetadata('design:paramtypes', typeOrFunc);
-	                if (isPresent(paramTypes) || isPresent(paramAnnotations)) {
+	                var paramAnnotations = this._reflect.getMetadata('parameters', type);
+	                var paramTypes = this._reflect.getMetadata('design:paramtypes', type);
+	                if (paramTypes || paramAnnotations) {
 	                    return this._zipTypesAndAnnotations(paramTypes, paramAnnotations);
 	                }
 	            }
 	            // The array has to be filled with `undefined` because holes would be skipped by `some`
-	            var parameters = new Array(typeOrFunc.length);
-	            parameters.fill(undefined);
-	            return parameters;
+	            return new Array(type.length).fill(undefined);
 	        };
 	        ReflectionCapabilities.prototype.annotations = function (typeOrFunc) {
 	            // Prefer the direct API.
-	            if (isPresent(typeOrFunc.annotations)) {
+	            if (typeOrFunc.annotations) {
 	                var annotations = typeOrFunc.annotations;
 	                if (isFunction(annotations) && annotations.annotations) {
 	                    annotations = annotations.annotations;
@@ -29042,20 +28961,20 @@
 	                return annotations;
 	            }
 	            // API of tsickle for lowering decorators to properties on the class.
-	            if (isPresent(typeOrFunc.decorators)) {
+	            if (typeOrFunc.decorators) {
 	                return convertTsickleDecoratorIntoMetadata(typeOrFunc.decorators);
 	            }
 	            // API for metadata created by invoking the decorators.
-	            if (isPresent(this._reflect) && isPresent(this._reflect.getMetadata)) {
+	            if (this._reflect && this._reflect.getMetadata) {
 	                var annotations = this._reflect.getMetadata('annotations', typeOrFunc);
-	                if (isPresent(annotations))
+	                if (annotations)
 	                    return annotations;
 	            }
 	            return [];
 	        };
 	        ReflectionCapabilities.prototype.propMetadata = function (typeOrFunc) {
 	            // Prefer the direct API.
-	            if (isPresent(typeOrFunc.propMetadata)) {
+	            if (typeOrFunc.propMetadata) {
 	                var propMetadata = typeOrFunc.propMetadata;
 	                if (isFunction(propMetadata) && propMetadata.propMetadata) {
 	                    propMetadata = propMetadata.propMetadata;
@@ -29063,7 +28982,7 @@
 	                return propMetadata;
 	            }
 	            // API of tsickle for lowering decorators to properties on the class.
-	            if (isPresent(typeOrFunc.propDecorators)) {
+	            if (typeOrFunc.propDecorators) {
 	                var propDecorators_1 = typeOrFunc.propDecorators;
 	                var propMetadata_1 = {};
 	                Object.keys(propDecorators_1).forEach(function (prop) {
@@ -29072,9 +28991,9 @@
 	                return propMetadata_1;
 	            }
 	            // API for metadata created by invoking the decorators.
-	            if (isPresent(this._reflect) && isPresent(this._reflect.getMetadata)) {
+	            if (this._reflect && this._reflect.getMetadata) {
 	                var propMetadata = this._reflect.getMetadata('propMetadata', typeOrFunc);
-	                if (isPresent(propMetadata))
+	                if (propMetadata)
 	                    return propMetadata;
 	            }
 	            return {};
@@ -29185,7 +29104,7 @@
 	         */
 	        Reflector.prototype.listUnusedKeys = function () {
 	            var _this = this;
-	            if (this._usedKeys == null) {
+	            if (!this._usedKeys) {
 	                throw new Error('Usage tracking is disabled');
 	            }
 	            var allTypes = MapWrapper.keys(this._injectableInfo);
@@ -29202,85 +29121,55 @@
 	        Reflector.prototype.registerMethods = function (methods) { _mergeMaps(this._methods, methods); };
 	        Reflector.prototype.factory = function (type) {
 	            if (this._containsReflectionInfo(type)) {
-	                var res = this._getReflectionInfo(type).factory;
-	                return isPresent(res) ? res : null;
+	                return this._getReflectionInfo(type).factory || null;
 	            }
-	            else {
-	                return this.reflectionCapabilities.factory(type);
-	            }
+	            return this.reflectionCapabilities.factory(type);
 	        };
 	        Reflector.prototype.parameters = function (typeOrFunc) {
 	            if (this._injectableInfo.has(typeOrFunc)) {
-	                var res = this._getReflectionInfo(typeOrFunc).parameters;
-	                return isPresent(res) ? res : [];
+	                return this._getReflectionInfo(typeOrFunc).parameters || [];
 	            }
-	            else {
-	                return this.reflectionCapabilities.parameters(typeOrFunc);
-	            }
+	            return this.reflectionCapabilities.parameters(typeOrFunc);
 	        };
 	        Reflector.prototype.annotations = function (typeOrFunc) {
 	            if (this._injectableInfo.has(typeOrFunc)) {
-	                var res = this._getReflectionInfo(typeOrFunc).annotations;
-	                return isPresent(res) ? res : [];
+	                return this._getReflectionInfo(typeOrFunc).annotations || [];
 	            }
-	            else {
-	                return this.reflectionCapabilities.annotations(typeOrFunc);
-	            }
+	            return this.reflectionCapabilities.annotations(typeOrFunc);
 	        };
 	        Reflector.prototype.propMetadata = function (typeOrFunc) {
 	            if (this._injectableInfo.has(typeOrFunc)) {
-	                var res = this._getReflectionInfo(typeOrFunc).propMetadata;
-	                return isPresent(res) ? res : {};
+	                return this._getReflectionInfo(typeOrFunc).propMetadata || {};
 	            }
-	            else {
-	                return this.reflectionCapabilities.propMetadata(typeOrFunc);
-	            }
+	            return this.reflectionCapabilities.propMetadata(typeOrFunc);
 	        };
 	        Reflector.prototype.interfaces = function (type) {
 	            if (this._injectableInfo.has(type)) {
-	                var res = this._getReflectionInfo(type).interfaces;
-	                return isPresent(res) ? res : [];
+	                return this._getReflectionInfo(type).interfaces || [];
 	            }
-	            else {
-	                return this.reflectionCapabilities.interfaces(type);
-	            }
+	            return this.reflectionCapabilities.interfaces(type);
 	        };
 	        Reflector.prototype.hasLifecycleHook = function (type, lcInterface, lcProperty) {
-	            var interfaces = this.interfaces(type);
-	            if (interfaces.indexOf(lcInterface) !== -1) {
+	            if (this.interfaces(type).indexOf(lcInterface) !== -1) {
 	                return true;
 	            }
-	            else {
-	                return this.reflectionCapabilities.hasLifecycleHook(type, lcInterface, lcProperty);
-	            }
+	            return this.reflectionCapabilities.hasLifecycleHook(type, lcInterface, lcProperty);
 	        };
 	        Reflector.prototype.getter = function (name) {
-	            if (this._getters.has(name)) {
-	                return this._getters.get(name);
-	            }
-	            else {
-	                return this.reflectionCapabilities.getter(name);
-	            }
+	            return this._getters.has(name) ? this._getters.get(name) :
+	                this.reflectionCapabilities.getter(name);
 	        };
 	        Reflector.prototype.setter = function (name) {
-	            if (this._setters.has(name)) {
-	                return this._setters.get(name);
-	            }
-	            else {
-	                return this.reflectionCapabilities.setter(name);
-	            }
+	            return this._setters.has(name) ? this._setters.get(name) :
+	                this.reflectionCapabilities.setter(name);
 	        };
 	        Reflector.prototype.method = function (name) {
-	            if (this._methods.has(name)) {
-	                return this._methods.get(name);
-	            }
-	            else {
-	                return this.reflectionCapabilities.method(name);
-	            }
+	            return this._methods.has(name) ? this._methods.get(name) :
+	                this.reflectionCapabilities.method(name);
 	        };
 	        /** @internal */
 	        Reflector.prototype._getReflectionInfo = function (typeOrFunc) {
-	            if (isPresent(this._usedKeys)) {
+	            if (this._usedKeys) {
 	                this._usedKeys.add(typeOrFunc);
 	            }
 	            return this._injectableInfo.get(typeOrFunc);
@@ -30499,7 +30388,7 @@
 	        deps: [],
 	    };
 	    function _randomChar() {
-	        return StringWrapper.fromCharCode(97 + Math.floor(Math.random() * 25));
+	        return String.fromCharCode(97 + Math.floor(Math.random() * 25));
 	    }
 	    /**
 	     * A function that will be executed when a platform is initialized.
@@ -30671,7 +30560,7 @@
 	            // Keeps track of records where custom track by is the same, but item identity has changed
 	            this._identityChangesHead = null;
 	            this._identityChangesTail = null;
-	            this._trackByFn = isPresent(this._trackByFn) ? this._trackByFn : trackByIdentity;
+	            this._trackByFn = this._trackByFn || trackByIdentity;
 	        }
 	        Object.defineProperty(DefaultIterableDiffer.prototype, "collection", {
 	            get: function () { return this._collection; },
@@ -32215,7 +32104,7 @@
 	            if (injector === void 0) { injector = null; }
 	            if (projectableNodes === void 0) { projectableNodes = null; }
 	            var s = this._createComponentInContainerScope();
-	            var contextInjector = isPresent(injector) ? injector : this._element.parentInjector;
+	            var contextInjector = injector || this._element.parentInjector;
 	            var componentRef = componentFactory.create(contextInjector, projectableNodes);
 	            this.insert(componentRef.hostView, index);
 	            return wtfLeave(s, componentRef);
@@ -33076,9 +32965,9 @@
 	            var errorFn = function (err) { return null; };
 	            var completeFn = function () { return null; };
 	            if (generatorOrNext && typeof generatorOrNext === 'object') {
-	                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
+	                schedulerFn = this.__isAsync ? function (value) {
 	                    setTimeout(function () { return generatorOrNext.next(value); });
-	                } : function (value /** TODO #9100 */) { generatorOrNext.next(value); };
+	                } : function (value) { generatorOrNext.next(value); };
 	                if (generatorOrNext.error) {
 	                    errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
 	                        function (err) { generatorOrNext.error(err); };
@@ -33089,9 +32978,8 @@
 	                }
 	            }
 	            else {
-	                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
-	                    setTimeout(function () { return generatorOrNext(value); });
-	                } : function (value /** TODO #9100 */) { generatorOrNext(value); };
+	                schedulerFn = this.__isAsync ? function (value) { setTimeout(function () { return generatorOrNext(value); }); } :
+	                    function (value) { generatorOrNext(value); };
 	                if (error) {
 	                    errorFn =
 	                        this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
@@ -33107,99 +32995,21 @@
 	    }(rxjs_Subject.Subject));
 	
 	    /**
-	     * @license
-	     * Copyright Google Inc. All Rights Reserved.
-	     *
-	     * Use of this source code is governed by an MIT-style license that can be
-	     * found in the LICENSE file at https://angular.io/license
-	     */
-	    var NgZoneImpl = (function () {
-	        function NgZoneImpl(_a) {
-	            var _this = this;
-	            var trace = _a.trace, onEnter = _a.onEnter, onLeave = _a.onLeave, setMicrotask = _a.setMicrotask, setMacrotask = _a.setMacrotask, onError = _a.onError;
-	            this.onEnter = onEnter;
-	            this.onLeave = onLeave;
-	            this.setMicrotask = setMicrotask;
-	            this.setMacrotask = setMacrotask;
-	            this.onError = onError;
-	            if (typeof Zone == 'undefined') {
-	                throw new Error('Angular requires Zone.js prolyfill.');
-	            }
-	            Zone.assertZonePatched();
-	            this.outer = this.inner = Zone.current;
-	            if (Zone['wtfZoneSpec']) {
-	                this.inner = this.inner.fork(Zone['wtfZoneSpec']);
-	            }
-	            if (trace && Zone['longStackTraceZoneSpec']) {
-	                this.inner = this.inner.fork(Zone['longStackTraceZoneSpec']);
-	            }
-	            this.inner = this.inner.fork({
-	                name: 'angular',
-	                properties: { 'isAngularZone': true },
-	                onInvokeTask: function (delegate, current, target, task, applyThis, applyArgs) {
-	                    try {
-	                        _this.onEnter();
-	                        return delegate.invokeTask(target, task, applyThis, applyArgs);
-	                    }
-	                    finally {
-	                        _this.onLeave();
-	                    }
-	                },
-	                onInvoke: function (delegate, current, target, callback, applyThis, applyArgs, source) {
-	                    try {
-	                        _this.onEnter();
-	                        return delegate.invoke(target, callback, applyThis, applyArgs, source);
-	                    }
-	                    finally {
-	                        _this.onLeave();
-	                    }
-	                },
-	                onHasTask: function (delegate, current, target, hasTaskState) {
-	                    delegate.hasTask(target, hasTaskState);
-	                    if (current === target) {
-	                        // We are only interested in hasTask events which originate from our zone
-	                        // (A child hasTask event is not interesting to us)
-	                        if (hasTaskState.change == 'microTask') {
-	                            _this.setMicrotask(hasTaskState.microTask);
-	                        }
-	                        else if (hasTaskState.change == 'macroTask') {
-	                            _this.setMacrotask(hasTaskState.macroTask);
-	                        }
-	                    }
-	                },
-	                onHandleError: function (delegate, current, target, error) {
-	                    delegate.handleError(target, error);
-	                    _this.onError(error);
-	                    return false;
-	                }
-	            });
-	        }
-	        NgZoneImpl.isInAngularZone = function () { return Zone.current.get('isAngularZone') === true; };
-	        NgZoneImpl.prototype.runInner = function (fn) { return this.inner.run(fn); };
-	        ;
-	        NgZoneImpl.prototype.runInnerGuarded = function (fn) { return this.inner.runGuarded(fn); };
-	        ;
-	        NgZoneImpl.prototype.runOuter = function (fn) { return this.outer.run(fn); };
-	        ;
-	        return NgZoneImpl;
-	    }());
-	
-	    /**
 	     * An injectable service for executing work inside or outside of the Angular zone.
 	     *
 	     * The most common use of this service is to optimize performance when starting a work consisting of
 	     * one or more asynchronous tasks that don't require UI updates or error handling to be handled by
-	     * Angular. Such tasks can be kicked off via {@link #runOutsideAngular} and if needed, these tasks
-	     * can reenter the Angular zone via {@link #run}.
+	     * Angular. Such tasks can be kicked off via {@link runOutsideAngular} and if needed, these tasks
+	     * can reenter the Angular zone via {@link run}.
 	     *
 	     * <!-- TODO: add/fix links to:
 	     *   - docs explaining zones and the use of zones in Angular and change-detection
 	     *   - link to runOutsideAngular/run (throughout this file!)
 	     *   -->
 	     *
-	     * ### Example ([live demo](http://plnkr.co/edit/lY9m8HLy7z06vDoUaSN2?p=preview))
+	     * ### Example
 	     * ```
-	     * import {Component, View, NgZone} from '@angular/core';
+	     * import {Component, NgZone} from '@angular/core';
 	     * import {NgIf} from '@angular/common';
 	     *
 	     * @Component({
@@ -33240,7 +33050,6 @@
 	     *     }}));
 	     *   }
 	     *
-	     *
 	     *   _increaseProgress(doneCallback: () => void) {
 	     *     this.progress += 1;
 	     *     console.log(`Current progress: ${this.progress}%`);
@@ -33257,81 +33066,70 @@
 	     */
 	    var NgZone = (function () {
 	        function NgZone(_a) {
-	            var _this = this;
 	            var _b = _a.enableLongStackTrace, enableLongStackTrace = _b === void 0 ? false : _b;
 	            this._hasPendingMicrotasks = false;
 	            this._hasPendingMacrotasks = false;
-	            /** @internal */
 	            this._isStable = true;
-	            /** @internal */
 	            this._nesting = 0;
-	            /** @internal */
 	            this._onUnstable = new EventEmitter(false);
-	            /** @internal */
 	            this._onMicrotaskEmpty = new EventEmitter(false);
-	            /** @internal */
 	            this._onStable = new EventEmitter(false);
-	            /** @internal */
 	            this._onErrorEvents = new EventEmitter(false);
-	            this._zoneImpl = new NgZoneImpl({
-	                trace: enableLongStackTrace,
-	                onEnter: function () {
-	                    // console.log('ZONE.enter', this._nesting, this._isStable);
-	                    _this._nesting++;
-	                    if (_this._isStable) {
-	                        _this._isStable = false;
-	                        _this._onUnstable.emit(null);
-	                    }
-	                },
-	                onLeave: function () {
-	                    _this._nesting--;
-	                    // console.log('ZONE.leave', this._nesting, this._isStable);
-	                    _this._checkStable();
-	                },
-	                setMicrotask: function (hasMicrotasks) {
-	                    _this._hasPendingMicrotasks = hasMicrotasks;
-	                    _this._checkStable();
-	                },
-	                setMacrotask: function (hasMacrotasks) { _this._hasPendingMacrotasks = hasMacrotasks; },
-	                onError: function (error) { return _this._onErrorEvents.emit(error); }
-	            });
+	            if (typeof Zone == 'undefined') {
+	                throw new Error('Angular requires Zone.js prolyfill.');
+	            }
+	            Zone.assertZonePatched();
+	            this.outer = this.inner = Zone.current;
+	            if (Zone['wtfZoneSpec']) {
+	                this.inner = this.inner.fork(Zone['wtfZoneSpec']);
+	            }
+	            if (enableLongStackTrace && Zone['longStackTraceZoneSpec']) {
+	                this.inner = this.inner.fork(Zone['longStackTraceZoneSpec']);
+	            }
+	            this.forkInnerZoneWithAngularBehavior();
 	        }
-	        NgZone.isInAngularZone = function () { return NgZoneImpl.isInAngularZone(); };
+	        NgZone.isInAngularZone = function () { return Zone.current.get('isAngularZone') === true; };
 	        NgZone.assertInAngularZone = function () {
-	            if (!NgZoneImpl.isInAngularZone()) {
+	            if (!NgZone.isInAngularZone()) {
 	                throw new Error('Expected to be in Angular Zone, but it is not!');
 	            }
 	        };
 	        NgZone.assertNotInAngularZone = function () {
-	            if (NgZoneImpl.isInAngularZone()) {
+	            if (NgZone.isInAngularZone()) {
 	                throw new Error('Expected to not be in Angular Zone, but it is!');
 	            }
 	        };
-	        NgZone.prototype._checkStable = function () {
-	            var _this = this;
-	            if (this._nesting == 0) {
-	                if (!this._hasPendingMicrotasks && !this._isStable) {
-	                    try {
-	                        // console.log('ZONE.microtaskEmpty');
-	                        this._nesting++;
-	                        this._onMicrotaskEmpty.emit(null);
-	                    }
-	                    finally {
-	                        this._nesting--;
-	                        if (!this._hasPendingMicrotasks) {
-	                            try {
-	                                // console.log('ZONE.stable', this._nesting, this._isStable);
-	                                this.runOutsideAngular(function () { return _this._onStable.emit(null); });
-	                            }
-	                            finally {
-	                                this._isStable = true;
-	                            }
-	                        }
-	                    }
-	                }
-	            }
-	        };
-	        ;
+	        /**
+	         * Executes the `fn` function synchronously within the Angular zone and returns value returned by
+	         * the function.
+	         *
+	         * Running functions via `run` allows you to reenter Angular zone from a task that was executed
+	         * outside of the Angular zone (typically started via {@link runOutsideAngular}).
+	         *
+	         * Any future tasks or microtasks scheduled from within this function will continue executing from
+	         * within the Angular zone.
+	         *
+	         * If a synchronous error happens it will be rethrown and not reported via `onError`.
+	         */
+	        NgZone.prototype.run = function (fn) { return this.inner.run(fn); };
+	        /**
+	         * Same as `run`, except that synchronous errors are caught and forwarded via `onError` and not
+	         * rethrown.
+	         */
+	        NgZone.prototype.runGuarded = function (fn) { return this.inner.runGuarded(fn); };
+	        /**
+	         * Executes the `fn` function synchronously in Angular's parent zone and returns value returned by
+	         * the function.
+	         *
+	         * Running functions via `runOutsideAngular` allows you to escape Angular's zone and do work that
+	         * doesn't trigger Angular change-detection or is subject to Angular's error handling.
+	         *
+	         * Any future tasks or microtasks scheduled from within this function will continue executing from
+	         * outside of the Angular zone.
+	         *
+	         * Use {@link run} to reenter the Angular zone and do work that updates the application model.
+	         */
+	        NgZone.prototype.runOutsideAngular = function (fn) { return this.outer.run(fn); };
 	        Object.defineProperty(NgZone.prototype, "onUnstable", {
 	            /**
 	             * Notifies when code enters Angular Zone. This gets fired first on VM Turn.
@@ -33370,59 +33168,102 @@
 	        });
 	        Object.defineProperty(NgZone.prototype, "isStable", {
 	            /**
-	             * Whether there are no outstanding microtasks or microtasks.
+	             * Whether there are no outstanding microtasks or macrotasks.
 	             */
 	            get: function () { return this._isStable; },
 	            enumerable: true,
 	            configurable: true
 	        });
 	        Object.defineProperty(NgZone.prototype, "hasPendingMicrotasks", {
-	            /**
-	             * Whether there are any outstanding microtasks.
-	             */
 	            get: function () { return this._hasPendingMicrotasks; },
 	            enumerable: true,
 	            configurable: true
 	        });
 	        Object.defineProperty(NgZone.prototype, "hasPendingMacrotasks", {
-	            /**
-	             * Whether there are any outstanding microtasks.
-	             */
 	            get: function () { return this._hasPendingMacrotasks; },
 	            enumerable: true,
 	            configurable: true
 	        });
-	        /**
-	         * Executes the `fn` function synchronously within the Angular zone and returns value returned by
-	         * the function.
-	         *
-	         * Running functions via `run` allows you to reenter Angular zone from a task that was executed
-	         * outside of the Angular zone (typically started via {@link #runOutsideAngular}).
-	         *
-	         * Any future tasks or microtasks scheduled from within this function will continue executing from
-	         * within the Angular zone.
-	         *
-	         * If a synchronous error happens it will be rethrown and not reported via `onError`.
-	         */
-	        NgZone.prototype.run = function (fn) { return this._zoneImpl.runInner(fn); };
-	        /**
-	         * Same as #run, except that synchronous errors are caught and forwarded
-	         * via `onError` and not rethrown.
-	         */
-	        NgZone.prototype.runGuarded = function (fn) { return this._zoneImpl.runInnerGuarded(fn); };
-	        /**
-	         * Executes the `fn` function synchronously in Angular's parent zone and returns value returned by
-	         * the function.
-	         *
-	         * Running functions via `runOutsideAngular` allows you to escape Angular's zone and do work that
-	         * doesn't trigger Angular change-detection or is subject to Angular's error handling.
-	         *
-	         * Any future tasks or microtasks scheduled from within this function will continue executing from
-	         * outside of the Angular zone.
-	         *
-	         * Use {@link #run} to reenter the Angular zone and do work that updates the application model.
-	         */
-	        NgZone.prototype.runOutsideAngular = function (fn) { return this._zoneImpl.runOuter(fn); };
+	        NgZone.prototype.checkStable = function () {
+	            var _this = this;
+	            if (this._nesting == 0 && !this._hasPendingMicrotasks && !this._isStable) {
+	                try {
+	                    this._nesting++;
+	                    this._onMicrotaskEmpty.emit(null);
+	                }
+	                finally {
+	                    this._nesting--;
+	                    if (!this._hasPendingMicrotasks) {
+	                        try {
+	                            this.runOutsideAngular(function () { return _this._onStable.emit(null); });
+	                        }
+	                        finally {
+	                            this._isStable = true;
+	                        }
+	                    }
+	                }
+	            }
+	        };
+	        NgZone.prototype.forkInnerZoneWithAngularBehavior = function () {
+	            var _this = this;
+	            this.inner = this.inner.fork({
+	                name: 'angular',
+	                properties: { 'isAngularZone': true },
+	                onInvokeTask: function (delegate, current, target, task, applyThis, applyArgs) {
+	                    try {
+	                        _this.onEnter();
+	                        return delegate.invokeTask(target, task, applyThis, applyArgs);
+	                    }
+	                    finally {
+	                        _this.onLeave();
+	                    }
+	                },
+	                onInvoke: function (delegate, current, target, callback, applyThis, applyArgs, source) {
+	                    try {
+	                        _this.onEnter();
+	                        return delegate.invoke(target, callback, applyThis, applyArgs, source);
+	                    }
+	                    finally {
+	                        _this.onLeave();
+	                    }
+	                },
+	                onHasTask: function (delegate, current, target, hasTaskState) {
+	                    delegate.hasTask(target, hasTaskState);
+	                    if (current === target) {
+	                        // We are only interested in hasTask events which originate from our zone
+	                        // (A child hasTask event is not interesting to us)
+	                        if (hasTaskState.change == 'microTask') {
+	                            _this.setHasMicrotask(hasTaskState.microTask);
+	                        }
+	                        else if (hasTaskState.change == 'macroTask') {
+	                            _this.setHasMacrotask(hasTaskState.macroTask);
+	                        }
+	                    }
+	                },
+	                onHandleError: function (delegate, current, target, error) {
+	                    delegate.handleError(target, error);
+	                    _this.triggerError(error);
+	                    return false;
+	                }
+	            });
+	        };
+	        NgZone.prototype.onEnter = function () {
+	            this._nesting++;
+	            if (this._isStable) {
+	                this._isStable = false;
+	                this._onUnstable.emit(null);
+	            }
+	        };
+	        NgZone.prototype.onLeave = function () {
+	            this._nesting--;
+	            this.checkStable();
+	        };
+	        NgZone.prototype.setHasMicrotask = function (hasMicrotasks) {
+	            this._hasPendingMicrotasks = hasMicrotasks;
+	            this.checkStable();
+	        };
+	        NgZone.prototype.setHasMacrotask = function (hasMacrotasks) { this._hasPendingMacrotasks = hasMacrotasks; };
+	        NgZone.prototype.triggerError = function (error) { this._onErrorEvents.emit(error); };
 	        return NgZone;
 	    }());
 	
@@ -35664,6 +35505,22 @@
 	     * ])
 	     * ```
 	     *
+	     * ### Transition Aliases (`:enter` and `:leave`)
+	     *
+	     * Given that enter (insertion) and leave (removal) animations are so common,
+	     * the `transition` function accepts both `:enter` and `:leave` values which
+	     * are aliases for the `void => *` and `* => void` state changes.
+	     *
+	     * ```
+	     * transition(":enter", [
+	     *   style({ opacity: 0 }),
+	     *   animate(500, style({ opacity: 1 }))
+	     * ])
+	     * transition(":leave", [
+	     *   animate(500, style({ opacity: 0 }))
+	     * ])
+	     * ```
+	     *
 	     * ### Example ([live demo](http://plnkr.co/edit/Kez8XGWBxWue7qP7nNvF?p=preview))
 	     *
 	     * {@example core/animation/ts/dsl/animation_example.ts region='Component'}
@@ -37823,7 +37680,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * @license Angular v2.1.0-rc.0
+	 * @license Angular v2.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
@@ -37915,74 +37772,6 @@
 	        var newLineIndex = res.indexOf('\n');
 	        return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
 	    }
-	    var StringWrapper = (function () {
-	        function StringWrapper() {
-	        }
-	        StringWrapper.fromCharCode = function (code) { return String.fromCharCode(code); };
-	        StringWrapper.charCodeAt = function (s, index) { return s.charCodeAt(index); };
-	        StringWrapper.split = function (s, regExp) { return s.split(regExp); };
-	        StringWrapper.equals = function (s, s2) { return s === s2; };
-	        StringWrapper.stripLeft = function (s, charVal) {
-	            if (s && s.length) {
-	                var pos = 0;
-	                for (var i = 0; i < s.length; i++) {
-	                    if (s[i] != charVal)
-	                        break;
-	                    pos++;
-	                }
-	                s = s.substring(pos);
-	            }
-	            return s;
-	        };
-	        StringWrapper.stripRight = function (s, charVal) {
-	            if (s && s.length) {
-	                var pos = s.length;
-	                for (var i = s.length - 1; i >= 0; i--) {
-	                    if (s[i] != charVal)
-	                        break;
-	                    pos--;
-	                }
-	                s = s.substring(0, pos);
-	            }
-	            return s;
-	        };
-	        StringWrapper.replace = function (s, from, replace) {
-	            return s.replace(from, replace);
-	        };
-	        StringWrapper.replaceAll = function (s, from, replace) {
-	            return s.replace(from, replace);
-	        };
-	        StringWrapper.slice = function (s, from, to) {
-	            if (from === void 0) { from = 0; }
-	            if (to === void 0) { to = null; }
-	            return s.slice(from, to === null ? undefined : to);
-	        };
-	        StringWrapper.replaceAllMapped = function (s, from, cb) {
-	            return s.replace(from, function () {
-	                var matches = [];
-	                for (var _i = 0; _i < arguments.length; _i++) {
-	                    matches[_i - 0] = arguments[_i];
-	                }
-	                // Remove offset & string from the result array
-	                matches.splice(-2, 2);
-	                // The callback receives match, p1, ..., pn
-	                return cb(matches);
-	            });
-	        };
-	        StringWrapper.contains = function (s, substr) { return s.indexOf(substr) != -1; };
-	        StringWrapper.compare = function (a, b) {
-	            if (a < b) {
-	                return -1;
-	            }
-	            else if (a > b) {
-	                return 1;
-	            }
-	            else {
-	                return 0;
-	            }
-	        };
-	        return StringWrapper;
-	    }());
 	    var NumberWrapper = (function () {
 	        function NumberWrapper() {
 	        }
@@ -38053,13 +37842,32 @@
 	        obj[parts.shift()] = value;
 	    }
 	
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
 	    var CAMEL_CASE_REGEXP = /([A-Z])/g;
 	    var DASH_CASE_REGEXP = /-([a-z])/g;
 	    function camelCaseToDashCase(input) {
-	        return StringWrapper.replaceAllMapped(input, CAMEL_CASE_REGEXP, function (m) { return '-' + m[1].toLowerCase(); });
+	        return input.replace(CAMEL_CASE_REGEXP, function () {
+	            var m = [];
+	            for (var _i = 0; _i < arguments.length; _i++) {
+	                m[_i - 0] = arguments[_i];
+	            }
+	            return '-' + m[1].toLowerCase();
+	        });
 	    }
 	    function dashCaseToCamelCase(input) {
-	        return StringWrapper.replaceAllMapped(input, DASH_CASE_REGEXP, function (m) { return m[1].toUpperCase(); });
+	        return input.replace(DASH_CASE_REGEXP, function () {
+	            var m = [];
+	            for (var _i = 0; _i < arguments.length; _i++) {
+	                m[_i - 0] = arguments[_i];
+	            }
+	            return m[1].toUpperCase();
+	        });
 	    }
 	
 	    /**
@@ -38265,7 +38073,7 @@
 	    var _$PERIOD = 46;
 	    function _findDimensionalSuffix(value) {
 	        for (var i = 0; i < value.length; i++) {
-	            var c = StringWrapper.charCodeAt(value, i);
+	            var c = value.charCodeAt(i);
 	            if ((c >= _$0 && c <= _$9) || c == _$PERIOD)
 	                continue;
 	            return value.substring(i, value.length);
@@ -39479,11 +39287,10 @@
 	        DomRenderer.prototype.setBindingDebugInfo = function (renderElement, propertyName, propertyValue) {
 	            var dashCasedPropertyName = camelCaseToDashCase(propertyName);
 	            if (getDOM().isCommentNode(renderElement)) {
-	                var existingBindings = StringWrapper.replaceAll(getDOM().getText(renderElement), /\n/g, '')
-	                    .match(TEMPLATE_BINDINGS_EXP);
+	                var existingBindings = getDOM().getText(renderElement).replace(/\n/g, '').match(TEMPLATE_BINDINGS_EXP);
 	                var parsedBindings = Json.parse(existingBindings[1]);
 	                parsedBindings[dashCasedPropertyName] = propertyValue;
-	                getDOM().setText(renderElement, StringWrapper.replace(TEMPLATE_COMMENT_TEXT, '{}', Json.stringify(parsedBindings)));
+	                getDOM().setText(renderElement, TEMPLATE_COMMENT_TEXT.replace('{}', Json.stringify(parsedBindings)));
 	            }
 	            else {
 	                this.setElementAttribute(renderElement, propertyName, propertyValue);
@@ -39549,10 +39356,10 @@
 	    var HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
 	    var CONTENT_ATTR = "_ngcontent-" + COMPONENT_VARIABLE;
 	    function _shimContentAttribute(componentShortId) {
-	        return StringWrapper.replaceAll(CONTENT_ATTR, COMPONENT_REGEX, componentShortId);
+	        return CONTENT_ATTR.replace(COMPONENT_REGEX, componentShortId);
 	    }
 	    function _shimHostAttribute(componentShortId) {
-	        return StringWrapper.replaceAll(HOST_ATTR, COMPONENT_REGEX, componentShortId);
+	        return HOST_ATTR.replace(COMPONENT_REGEX, componentShortId);
 	    }
 	    function _flattenStyles(compId, styles, target) {
 	        for (var i = 0; i < styles.length; i++) {
@@ -39561,7 +39368,7 @@
 	                _flattenStyles(compId, style, target);
 	            }
 	            else {
-	                style = StringWrapper.replaceAll(style, COMPONENT_REGEX, compId);
+	                style = style.replace(COMPONENT_REGEX, compId);
 	                target.push(style);
 	            }
 	        }
@@ -39849,9 +39656,7 @@
 	        KeyEventsPlugin.parseEventName = function (eventName) {
 	            var parts = eventName.toLowerCase().split('.');
 	            var domEventName = parts.shift();
-	            if ((parts.length === 0) ||
-	                !(StringWrapper.equals(domEventName, 'keydown') ||
-	                    StringWrapper.equals(domEventName, 'keyup'))) {
+	            if ((parts.length === 0) || !(domEventName === 'keydown' || domEventName === 'keyup')) {
 	                return null;
 	            }
 	            var key = KeyEventsPlugin._normalizeKey(parts.pop());
@@ -39876,10 +39681,10 @@
 	            var fullKey = '';
 	            var key = getDOM().getEventKey(event);
 	            key = key.toLowerCase();
-	            if (StringWrapper.equals(key, ' ')) {
+	            if (key === ' ') {
 	                key = 'space'; // for readability
 	            }
-	            else if (StringWrapper.equals(key, '.')) {
+	            else if (key === '.') {
 	                key = 'dot'; // because '.' is used as a separator in event names
 	            }
 	            modifierKeys.forEach(function (modifierName) {
@@ -39895,7 +39700,7 @@
 	        };
 	        KeyEventsPlugin.eventCallback = function (element, fullKey, handler, zone) {
 	            return function (event /** TODO #9100 */) {
-	                if (StringWrapper.equals(KeyEventsPlugin.getEventFullKey(event), fullKey)) {
+	                if (KeyEventsPlugin.getEventFullKey(event) === fullKey) {
 	                    zone.runGuarded(function () { return handler(event); });
 	                }
 	            };
@@ -40728,7 +40533,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * @license Angular v2.1.0-rc.0
+	 * @license Angular v2.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
@@ -43996,7 +43801,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license Angular v2.1.0-rc.0
+	 * @license Angular v2.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
@@ -44021,74 +43826,6 @@
 	    function isArray(obj) {
 	        return Array.isArray(obj);
 	    }
-	    var StringWrapper = (function () {
-	        function StringWrapper() {
-	        }
-	        StringWrapper.fromCharCode = function (code) { return String.fromCharCode(code); };
-	        StringWrapper.charCodeAt = function (s, index) { return s.charCodeAt(index); };
-	        StringWrapper.split = function (s, regExp) { return s.split(regExp); };
-	        StringWrapper.equals = function (s, s2) { return s === s2; };
-	        StringWrapper.stripLeft = function (s, charVal) {
-	            if (s && s.length) {
-	                var pos = 0;
-	                for (var i = 0; i < s.length; i++) {
-	                    if (s[i] != charVal)
-	                        break;
-	                    pos++;
-	                }
-	                s = s.substring(pos);
-	            }
-	            return s;
-	        };
-	        StringWrapper.stripRight = function (s, charVal) {
-	            if (s && s.length) {
-	                var pos = s.length;
-	                for (var i = s.length - 1; i >= 0; i--) {
-	                    if (s[i] != charVal)
-	                        break;
-	                    pos--;
-	                }
-	                s = s.substring(0, pos);
-	            }
-	            return s;
-	        };
-	        StringWrapper.replace = function (s, from, replace) {
-	            return s.replace(from, replace);
-	        };
-	        StringWrapper.replaceAll = function (s, from, replace) {
-	            return s.replace(from, replace);
-	        };
-	        StringWrapper.slice = function (s, from, to) {
-	            if (from === void 0) { from = 0; }
-	            if (to === void 0) { to = null; }
-	            return s.slice(from, to === null ? undefined : to);
-	        };
-	        StringWrapper.replaceAllMapped = function (s, from, cb) {
-	            return s.replace(from, function () {
-	                var matches = [];
-	                for (var _i = 0; _i < arguments.length; _i++) {
-	                    matches[_i - 0] = arguments[_i];
-	                }
-	                // Remove offset & string from the result array
-	                matches.splice(-2, 2);
-	                // The callback receives match, p1, ..., pn
-	                return cb(matches);
-	            });
-	        };
-	        StringWrapper.contains = function (s, substr) { return s.indexOf(substr) != -1; };
-	        StringWrapper.compare = function (a, b) {
-	            if (a < b) {
-	                return -1;
-	            }
-	            else if (a > b) {
-	                return 1;
-	            }
-	            else {
-	                return 0;
-	            }
-	        };
-	        return StringWrapper;
-	    }());
 	    var NumberWrapper = (function () {
 	        function NumberWrapper() {
 	        }
@@ -44533,6 +44270,9 @@
 	
 	    var isPromise = _angular_core.__core_private__.isPromise;
 	
+	    function isEmptyInputValue(value) {
+	        return value == null || typeof value === 'string' && value.length === 0;
+	    }
 	    /**
 	     * Providers for validators to be used for {@link FormControl}s in a form.
 	     *
@@ -44576,20 +44316,19 @@
 	         * Validator that requires controls to have a non-empty value.
 	         */
 	        Validators.required = function (control) {
-	            return isBlank(control.value) || (isString(control.value) && control.value == '') ?
-	                { 'required': true } :
-	                null;
+	            return isEmptyInputValue(control.value) ? { 'required': true } : null;
 	        };
 	        /**
 	         * Validator that requires controls to have a value of a minimum length.
 	         */
 	        Validators.minLength = function (minLength) {
 	            return function (control) {
-	                if (isPresent(Validators.required(control)))
-	                    return null;
-	                var v = control.value;
-	                return v.length < minLength ?
-	                    { 'minlength': { 'requiredLength': minLength, 'actualLength': v.length } } :
+	                if (isEmptyInputValue(control.value)) {
+	                    return null; // don't validate empty values to allow optional controls
+	                }
+	                var length = typeof control.value === 'string' ? control.value.length : 0;
+	                return length < minLength ?
+	                    { 'minlength': { 'requiredLength': minLength, 'actualLength': length } } :
 	                    null;
 	            };
 	        };
@@ -44598,11 +44337,9 @@
 	         */
 	        Validators.maxLength = function (maxLength) {
 	            return function (control) {
-	                if (isPresent(Validators.required(control)))
-	                    return null;
-	                var v = control.value;
-	                return v.length > maxLength ?
-	                    { 'maxlength': { 'requiredLength': maxLength, 'actualLength': v.length } } :
+	                var length = typeof control.value === 'string' ? control.value.length : 0;
+	                return length > maxLength ?
+	                    { 'maxlength': { 'requiredLength': maxLength, 'actualLength': length } } :
 	                    null;
 	            };
 	        };
@@ -44611,10 +44348,14 @@
 	         */
 	        Validators.pattern = function (pattern) {
 	            return function (control) {
+	                if (isEmptyInputValue(control.value)) {
+	                    return null; // don't validate empty values to allow optional controls
+	                }
 	                var regex = new RegExp("^" + pattern + "$");
-	                var v = control.value;
-	                return regex.test(v) ? null :
-	                    { 'pattern': { 'requiredPattern': "^" + pattern + "$", 'actualValue': v } };
+	                var value = control.value;
+	                return regex.test(value) ?
+	                    null :
+	                    { 'pattern': { 'requiredPattern': "^" + pattern + "$", 'actualValue': value } };
 	            };
 	        };
 	        /**
@@ -45040,7 +44781,7 @@
 	            return "" + value;
 	        if (!isPrimitive(value))
 	            value = 'Object';
-	        return StringWrapper.slice(id + ": " + value, 0, 50);
+	        return (id + ": " + value).slice(0, 50);
 	    }
 	    function _extractId(valueString) {
 	        return valueString.split(':')[0];
@@ -45215,7 +44956,7 @@
 	            value = "'" + value + "'";
 	        if (!isPrimitive(value))
 	            value = 'Object';
-	        return StringWrapper.slice(id + ": " + value, 0, 50);
+	        return (id + ": " + value).slice(0, 50);
 	    }
 	    function _extractId$1(valueString) {
 	        return valueString.split(':')[0];
@@ -45767,9 +45508,9 @@
 	            var errorFn = function (err) { return null; };
 	            var completeFn = function () { return null; };
 	            if (generatorOrNext && typeof generatorOrNext === 'object') {
-	                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
+	                schedulerFn = this.__isAsync ? function (value) {
 	                    setTimeout(function () { return generatorOrNext.next(value); });
-	                } : function (value /** TODO #9100 */) { generatorOrNext.next(value); };
+	                } : function (value) { generatorOrNext.next(value); };
 	                if (generatorOrNext.error) {
 	                    errorFn = this.__isAsync ? function (err) { setTimeout(function () { return generatorOrNext.error(err); }); } :
 	                        function (err) { generatorOrNext.error(err); };
@@ -45780,9 +45521,8 @@
 	                }
 	            }
 	            else {
-	                schedulerFn = this.__isAsync ? function (value /** TODO #9100 */) {
-	                    setTimeout(function () { return generatorOrNext(value); });
-	                } : function (value /** TODO #9100 */) { generatorOrNext(value); };
+	                schedulerFn = this.__isAsync ? function (value) { setTimeout(function () { return generatorOrNext(value); }); } :
+	                    function (value) { generatorOrNext(value); };
 	                if (error) {
 	                    errorFn =
 	                        this.__isAsync ? function (err) { setTimeout(function () { return error(err); }); } : function (err) { error(err); };
@@ -45837,15 +45577,12 @@
 	            return null;
 	        return path.reduce(function (v, name) {
 	            if (v instanceof FormGroup) {
-	                return isPresent(v.controls[name]) ? v.controls[name] : null;
+	                return v.controls[name] || null;
 	            }
-	            else if (v instanceof FormArray) {
-	                var index = name;
-	                return isPresent(v.at(index)) ? v.at(index) : null;
+	            if (v instanceof FormArray) {
+	                return v.at(name) || null;
 	            }
-	            else {
-	                return null;
-	            }
+	            return null;
 	        }, control);
 	    }
 	    function toObservable(r) {
@@ -47145,7 +46882,8 @@
 	     * sub-groups within the form.
 	     *
 	     * You can listen to the directive's `ngSubmit` event to be notified when the user has
-	     * triggered a form submission.
+	     * triggered a form submission. The `ngSubmit` event will be emitted with the original form
+	     * submission event.
 	     *
 	     * {@example forms/ts/simpleForm/simple_form_example.ts region='Component'}
 	     *
@@ -47236,9 +46974,9 @@
 	            });
 	        };
 	        NgForm.prototype.setValue = function (value) { this.control.setValue(value); };
-	        NgForm.prototype.onSubmit = function () {
+	        NgForm.prototype.onSubmit = function ($event) {
 	            this._submitted = true;
-	            this.ngSubmit.emit(null);
+	            this.ngSubmit.emit($event);
 	            return false;
 	        };
 	        NgForm.prototype.onReset = function () { this.resetForm(); };
@@ -47256,7 +46994,7 @@
 	            { type: _angular_core.Directive, args: [{
 	                        selector: 'form:not([ngNoForm]):not([formGroup]),ngForm,[ngForm]',
 	                        providers: [formDirectiveProvider],
-	                        host: { '(submit)': 'onSubmit()', '(reset)': 'onReset()' },
+	                        host: { '(submit)': 'onSubmit($event)', '(reset)': 'onReset()' },
 	                        outputs: ['ngSubmit'],
 	                        exportAs: 'ngForm'
 	                    },] },
@@ -47773,6 +47511,10 @@
 	     * its {@link AbstractControl.statusChanges} event to be notified when the validation status is
 	     * re-calculated.
 	     *
+	     * Furthermore, you can listen to the directive's `ngSubmit` event to be notified when the user has
+	     * triggered a form submission. The `ngSubmit` event will be emitted with the original form
+	     * submission event.
+	     *
 	     * ### Example
 	     *
 	     * In this example, we create form controls for first name and last name.
@@ -47851,9 +47593,9 @@
 	            var ctrl = this.form.get(dir.path);
 	            ctrl.setValue(value);
 	        };
-	        FormGroupDirective.prototype.onSubmit = function () {
+	        FormGroupDirective.prototype.onSubmit = function ($event) {
 	            this._submitted = true;
-	            this.ngSubmit.emit(null);
+	            this.ngSubmit.emit($event);
 	            return false;
 	        };
 	        FormGroupDirective.prototype.onReset = function () { this.resetForm(); };
@@ -47898,7 +47640,7 @@
 	            { type: _angular_core.Directive, args: [{
 	                        selector: '[formGroup]',
 	                        providers: [formDirectiveProvider$1],
-	                        host: { '(submit)': 'onSubmit()', '(reset)': 'onReset()' },
+	                        host: { '(submit)': 'onSubmit($event)', '(reset)': 'onReset()' },
 	                        exportAs: 'ngForm'
 	                    },] },
 	        ];
@@ -54905,15 +54647,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license Angular v3.1.0-rc.0
+	 * @license Angular v3.1.0
 	 * (c) 2010-2016 Google, Inc. https://angular.io/
 	 * License: MIT
 	 */
 	(function (global, factory) {
-	     true ? factory(exports, __webpack_require__(332), __webpack_require__(313), __webpack_require__(314), __webpack_require__(403), __webpack_require__(407), __webpack_require__(408), __webpack_require__(357), __webpack_require__(345), __webpack_require__(409), __webpack_require__(410), __webpack_require__(315), __webpack_require__(411), __webpack_require__(412), __webpack_require__(413), __webpack_require__(414), __webpack_require__(336), __webpack_require__(415), __webpack_require__(354), __webpack_require__(416), __webpack_require__(370)) :
-	    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/every', 'rxjs/operator/map', 'rxjs/operator/mergeAll', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/operator/first', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/BehaviorSubject', 'rxjs/operator/concatMap', 'rxjs/operator/filter'], factory) :
-	    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx,global.rxjs_operator_concatMap,global.rxjs_operator_filter));
-	}(this, function (exports,_angular_common,_angular_core,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_every,rxjs_operator_map,rxjs_operator_mergeAll,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_operator_first,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_BehaviorSubject,rxjs_operator_concatMap,rxjs_operator_filter) { 'use strict';
+	     true ? factory(exports, __webpack_require__(332), __webpack_require__(313), __webpack_require__(314), __webpack_require__(403), __webpack_require__(407), __webpack_require__(408), __webpack_require__(410), __webpack_require__(357), __webpack_require__(345), __webpack_require__(409), __webpack_require__(411), __webpack_require__(315), __webpack_require__(412), __webpack_require__(413), __webpack_require__(414), __webpack_require__(415), __webpack_require__(336), __webpack_require__(416), __webpack_require__(354), __webpack_require__(370)) :
+	    typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/concatMap', 'rxjs/operator/every', 'rxjs/operator/map', 'rxjs/operator/mergeAll', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/operator/first', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/BehaviorSubject', 'rxjs/operator/filter'], factory) :
+	    (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx.Observable,global.Rx.Observable,global.rxjs_operator_concatMap,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx,global.rxjs_operator_filter));
+	}(this, function (exports,_angular_common,_angular_core,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_map,rxjs_operator_mergeAll,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_operator_first,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_BehaviorSubject,rxjs_operator_filter) { 'use strict';
 	
 	    /**
 	     * @license
@@ -55672,7 +55414,7 @@
 	            });
 	        };
 	        ApplyRedirects.prototype.noMatchError = function (e) {
-	            return new Error("Cannot match any routes: '" + e.segmentGroup + "'");
+	            return new Error("Cannot match any routes. URL Segment: '" + e.segmentGroup + "'");
 	        };
 	        ApplyRedirects.prototype.createUrlTree = function (rootCandidate) {
 	            var root = rootCandidate.segments.length > 0 ?
@@ -55760,7 +55502,15 @@
 	        ApplyRedirects.prototype.matchSegmentAgainstRoute = function (injector, rawSegmentGroup, route, segments) {
 	            var _this = this;
 	            if (route.path === '**') {
-	                return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+	                if (route.loadChildren) {
+	                    return rxjs_operator_map.map.call(this.configLoader.load(injector, route.loadChildren), function (r) {
+	                        route._loadedConfig = r;
+	                        return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+	                    });
+	                }
+	                else {
+	                    return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+	                }
 	            }
 	            else {
 	                var _a = match(rawSegmentGroup, route, segments), matched = _a.matched, consumedSegments_1 = _a.consumedSegments, lastChild = _a.lastChild;
@@ -57651,7 +57401,7 @@
 	            if (this.checks.length === 0)
 	                return rxjs_observable_of.of(null);
 	            var checks$ = rxjs_observable_from.from(this.checks);
-	            var runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (s) {
+	            var runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (s) {
 	                if (s instanceof CanActivate) {
 	                    return _this.runResolve(s.route);
 	                }
@@ -59121,73 +58871,68 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var Subscriber_1 = __webpack_require__(318);
+	var mergeMap_1 = __webpack_require__(409);
 	/**
-	 * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
-	 * @param {function} predicate a function for determining if an item meets a specified condition.
-	 * @param {any} [thisArg] optional object to use for `this` in the callback
-	 * @return {Observable} an Observable of booleans that determines if all items of the source Observable meet the condition specified.
-	 * @method every
+	 * Projects each source value to an Observable which is merged in the output
+	 * Observable, in a serialized fashion waiting for each one to complete before
+	 * merging the next.
+	 *
+	 * <span class="informal">Maps each value to an Observable, then flattens all of
+	 * these inner Observables using {@link concatAll}.</span>
+	 *
+	 * <img src="./img/concatMap.png" width="100%">
+	 *
+	 * Returns an Observable that emits items based on applying a function that you
+	 * supply to each item emitted by the source Observable, where that function
+	 * returns an (so-called "inner") Observable. Each new inner Observable is
+	 * concatenated with the previous inner Observable.
+	 *
+	 * __Warning:__ if source values arrive endlessly and faster than their
+	 * corresponding inner Observables can complete, it will result in memory issues
+	 * as inner Observables amass in an unbounded buffer waiting for their turn to
+	 * be subscribed to.
+	 *
+	 * Note: `concatMap` is equivalent to `mergeMap` with concurrency parameter set
+	 * to `1`.
+	 *
+	 * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var result = clicks.concatMap(ev => Rx.Observable.interval(1000).take(4));
+	 * result.subscribe(x => console.log(x));
+	 *
+	 * @see {@link concat}
+	 * @see {@link concatAll}
+	 * @see {@link concatMapTo}
+	 * @see {@link exhaustMap}
+	 * @see {@link mergeMap}
+	 * @see {@link switchMap}
+	 *
+	 * @param {function(value: T, ?index: number): Observable} project A function
+	 * that, when applied to an item emitted by the source Observable, returns an
+	 * Observable.
+	 * @param {function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any} [resultSelector]
+	 * A function to produce the value on the output Observable based on the values
+	 * and the indices of the source (outer) emission and the inner Observable
+	 * emission. The arguments passed to this function are:
+	 * - `outerValue`: the value that came from the source
+	 * - `innerValue`: the value that came from the projected Observable
+	 * - `outerIndex`: the "index" of the value that came from the source
+	 * - `innerIndex`: the "index" of the value from the projected Observable
+	 * @return {Observable} an observable of values merged from the projected
+	 * Observables as they were subscribed to, one at a time. Optionally, these
+	 * values may have been projected from a passed `projectResult` argument.
+	 * @return {Observable} An Observable that emits the result of applying the
+	 * projection function (and the optional `resultSelector`) to each item emitted
+	 * by the source Observable and taking values from each projected inner
+	 * Observable sequentially.
+	 * @method concatMap
 	 * @owner Observable
 	 */
-	function every(predicate, thisArg) {
-	    return this.lift(new EveryOperator(predicate, thisArg, this));
+	function concatMap(project, resultSelector) {
+	    return this.lift(new mergeMap_1.MergeMapOperator(project, resultSelector, 1));
 	}
-	exports.every = every;
-	var EveryOperator = (function () {
-	    function EveryOperator(predicate, thisArg, source) {
-	        this.predicate = predicate;
-	        this.thisArg = thisArg;
-	        this.source = source;
-	    }
-	    EveryOperator.prototype.call = function (observer, source) {
-	        return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
-	    };
-	    return EveryOperator;
-	}());
-	/**
-	 * We need this JSDoc comment for affecting ESDoc.
-	 * @ignore
-	 * @extends {Ignored}
-	 */
-	var EverySubscriber = (function (_super) {
-	    __extends(EverySubscriber, _super);
-	    function EverySubscriber(destination, predicate, thisArg, source) {
-	        _super.call(this, destination);
-	        this.predicate = predicate;
-	        this.thisArg = thisArg;
-	        this.source = source;
-	        this.index = 0;
-	        this.thisArg = thisArg || this;
-	    }
-	    EverySubscriber.prototype.notifyComplete = function (everyValueMatch) {
-	        this.destination.next(everyValueMatch);
-	        this.destination.complete();
-	    };
-	    EverySubscriber.prototype._next = function (value) {
-	        var result = false;
-	        try {
-	            result = this.predicate.call(this.thisArg, value, this.index++, this.source);
-	        }
-	        catch (err) {
-	            this.destination.error(err);
-	            return;
-	        }
-	        if (!result) {
-	            this.notifyComplete(false);
-	        }
-	    };
-	    EverySubscriber.prototype._complete = function () {
-	        this.notifyComplete(true);
-	    };
-	    return EverySubscriber;
-	}(Subscriber_1.Subscriber));
-	//# sourceMappingURL=every.js.map
+	exports.concatMap = concatMap;
+	//# sourceMappingURL=concatMap.js.map
 
 /***/ },
 /* 409 */
@@ -59367,6 +59112,79 @@
 	};
 	var Subscriber_1 = __webpack_require__(318);
 	/**
+	 * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
+	 * @param {function} predicate a function for determining if an item meets a specified condition.
+	 * @param {any} [thisArg] optional object to use for `this` in the callback
+	 * @return {Observable} an Observable of booleans that determines if all items of the source Observable meet the condition specified.
+	 * @method every
+	 * @owner Observable
+	 */
+	function every(predicate, thisArg) {
+	    return this.lift(new EveryOperator(predicate, thisArg, this));
+	}
+	exports.every = every;
+	var EveryOperator = (function () {
+	    function EveryOperator(predicate, thisArg, source) {
+	        this.predicate = predicate;
+	        this.thisArg = thisArg;
+	        this.source = source;
+	    }
+	    EveryOperator.prototype.call = function (observer, source) {
+	        return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
+	    };
+	    return EveryOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var EverySubscriber = (function (_super) {
+	    __extends(EverySubscriber, _super);
+	    function EverySubscriber(destination, predicate, thisArg, source) {
+	        _super.call(this, destination);
+	        this.predicate = predicate;
+	        this.thisArg = thisArg;
+	        this.source = source;
+	        this.index = 0;
+	        this.thisArg = thisArg || this;
+	    }
+	    EverySubscriber.prototype.notifyComplete = function (everyValueMatch) {
+	        this.destination.next(everyValueMatch);
+	        this.destination.complete();
+	    };
+	    EverySubscriber.prototype._next = function (value) {
+	        var result = false;
+	        try {
+	            result = this.predicate.call(this.thisArg, value, this.index++, this.source);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        if (!result) {
+	            this.notifyComplete(false);
+	        }
+	    };
+	    EverySubscriber.prototype._complete = function () {
+	        this.notifyComplete(true);
+	    };
+	    return EverySubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=every.js.map
+
+/***/ },
+/* 411 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(318);
+	/**
 	 * Applies an accumulator function over the source Observable, and returns the
 	 * accumulated result when the source completes, given an optional seed value.
 	 *
@@ -59473,7 +59291,7 @@
 	//# sourceMappingURL=reduce.js.map
 
 /***/ },
-/* 411 */
+/* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -59543,7 +59361,7 @@
 	//# sourceMappingURL=catch.js.map
 
 /***/ },
-/* 412 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -59597,7 +59415,7 @@
 	//# sourceMappingURL=concatAll.js.map
 
 /***/ },
-/* 413 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -59607,7 +59425,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var Subscriber_1 = __webpack_require__(318);
-	var EmptyError_1 = __webpack_require__(414);
+	var EmptyError_1 = __webpack_require__(415);
 	/**
 	 * Emits only the first value (or the first value that meets some condition)
 	 * emitted by the source Observable.
@@ -59750,7 +59568,7 @@
 	//# sourceMappingURL=first.js.map
 
 /***/ },
-/* 414 */
+/* 415 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -59783,7 +59601,7 @@
 	//# sourceMappingURL=EmptyError.js.map
 
 /***/ },
-/* 415 */
+/* 416 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -59793,7 +59611,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var Subscriber_1 = __webpack_require__(318);
-	var EmptyError_1 = __webpack_require__(414);
+	var EmptyError_1 = __webpack_require__(415);
 	/**
 	 * Returns an Observable that emits only the last item emitted by the source Observable.
 	 * It optionally takes a predicate function as a parameter, in which case, rather than emitting
@@ -59904,74 +59722,6 @@
 	    return LastSubscriber;
 	}(Subscriber_1.Subscriber));
 	//# sourceMappingURL=last.js.map
-
-/***/ },
-/* 416 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var mergeMap_1 = __webpack_require__(409);
-	/**
-	 * Projects each source value to an Observable which is merged in the output
-	 * Observable, in a serialized fashion waiting for each one to complete before
-	 * merging the next.
-	 *
-	 * <span class="informal">Maps each value to an Observable, then flattens all of
-	 * these inner Observables using {@link concatAll}.</span>
-	 *
-	 * <img src="./img/concatMap.png" width="100%">
-	 *
-	 * Returns an Observable that emits items based on applying a function that you
-	 * supply to each item emitted by the source Observable, where that function
-	 * returns an (so-called "inner") Observable. Each new inner Observable is
-	 * concatenated with the previous inner Observable.
-	 *
-	 * __Warning:__ if source values arrive endlessly and faster than their
-	 * corresponding inner Observables can complete, it will result in memory issues
-	 * as inner Observables amass in an unbounded buffer waiting for their turn to
-	 * be subscribed to.
-	 *
-	 * Note: `concatMap` is equivalent to `mergeMap` with concurrency parameter set
-	 * to `1`.
-	 *
-	 * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
-	 * var clicks = Rx.Observable.fromEvent(document, 'click');
-	 * var result = clicks.concatMap(ev => Rx.Observable.interval(1000).take(4));
-	 * result.subscribe(x => console.log(x));
-	 *
-	 * @see {@link concat}
-	 * @see {@link concatAll}
-	 * @see {@link concatMapTo}
-	 * @see {@link exhaustMap}
-	 * @see {@link mergeMap}
-	 * @see {@link switchMap}
-	 *
-	 * @param {function(value: T, ?index: number): Observable} project A function
-	 * that, when applied to an item emitted by the source Observable, returns an
-	 * Observable.
-	 * @param {function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any} [resultSelector]
-	 * A function to produce the value on the output Observable based on the values
-	 * and the indices of the source (outer) emission and the inner Observable
-	 * emission. The arguments passed to this function are:
-	 * - `outerValue`: the value that came from the source
-	 * - `innerValue`: the value that came from the projected Observable
-	 * - `outerIndex`: the "index" of the value that came from the source
-	 * - `innerIndex`: the "index" of the value from the projected Observable
-	 * @return {Observable} an observable of values merged from the projected
-	 * Observables as they were subscribed to, one at a time. Optionally, these
-	 * values may have been projected from a passed `projectResult` argument.
-	 * @return {Observable} An Observable that emits the result of applying the
-	 * projection function (and the optional `resultSelector`) to each item emitted
-	 * by the source Observable and taking values from each projected inner
-	 * Observable sequentially.
-	 * @method concatMap
-	 * @owner Observable
-	 */
-	function concatMap(project, resultSelector) {
-	    return this.lift(new mergeMap_1.MergeMapOperator(project, resultSelector, 1));
-	}
-	exports.concatMap = concatMap;
-	//# sourceMappingURL=concatMap.js.map
 
 /***/ },
 /* 417 */
@@ -68325,16 +68075,227 @@
 						"modules": [
 							{
 								"id": 0,
-								"pointerRole": "scroll",
-								"keyActions": []
+								"pointerRole": "move",
+								"keyActions": [
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "scrollUp"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "moveUp"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "scrollDown"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "moveLeft"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "moveDown"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "moveRight"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "keystroke",
+										"modifierMask": 64
+									},
+									{
+										"keyActionType": "keystroke",
+										"modifierMask": 128
+									},
+									{
+										"keyActionType": "keystroke",
+										"modifierMask": 16
+									},
+									{
+										"keyActionType": "none"
+									}
+								]
 							},
 							{
 								"id": 1,
 								"pointerRole": "move",
 								"keyActions": [
 									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "switchLayer",
+										"layer": "mouse",
+										"toggle": false
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "rightClick"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "middleClick"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "leftClick"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
 										"keyActionType": "keystroke",
-										"scancode": 111
+										"modifierMask": 1
+									},
+									{
+										"keyActionType": "keystroke",
+										"modifierMask": 8
+									},
+									{
+										"keyActionType": "keystroke",
+										"modifierMask": 4
+									},
+									{
+										"keyActionType": "none"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "accelerate"
+									},
+									{
+										"keyActionType": "mouse",
+										"mouseAction": "decelerate"
 									}
 								]
 							}
@@ -69399,12 +69360,228 @@
 						{
 							"id": 0,
 							"pointerRole": "move",
-							"keyActions": []
+							"keyActions": [
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "scrollUp"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "moveUp"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "scrollDown"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "moveLeft"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "moveDown"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "moveRight"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "keystroke",
+									"modifierMask": 64
+								},
+								{
+									"keyActionType": "keystroke",
+									"modifierMask": 128
+								},
+								{
+									"keyActionType": "keystroke",
+									"modifierMask": 16
+								},
+								{
+									"keyActionType": "none"
+								}
+							]
 						},
 						{
 							"id": 1,
 							"pointerRole": "move",
-							"keyActions": []
+							"keyActions": [
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "switchLayer",
+									"layer": "mouse",
+									"toggle": false
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "rightClick"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "middleClick"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "leftClick"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "keystroke",
+									"modifierMask": 1
+								},
+								{
+									"keyActionType": "keystroke",
+									"modifierMask": 8
+								},
+								{
+									"keyActionType": "keystroke",
+									"modifierMask": 4
+								},
+								{
+									"keyActionType": "none"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "accelerate"
+								},
+								{
+									"keyActionType": "mouse",
+									"mouseAction": "decelerate"
+								}
+							]
 						}
 					]
 				}
