@@ -49,6 +49,10 @@ h1 {
     }
 }
 
+.list-group {
+    overflow: auto;
+}
+
 .macro__name {
     border-bottom: 2px dotted #999;
     padding: 0 0.5rem;
@@ -77,9 +81,8 @@ h1 {
 }
 
 .macro-actions-container {
-    overflow: auto;
     margin-bottom: 0;
-    border-radius: 4px 4px 0 0;
+    border-radius: 4px;
     border: 1px solid #ddd;
     border-bottom: 0;
 }
@@ -98,7 +101,8 @@ h1 {
 }
 
 .add-new__action-container {
-    border-top: 1px solid #ddd;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .add-new__action-item {

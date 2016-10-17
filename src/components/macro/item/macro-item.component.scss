@@ -1,6 +1,9 @@
 @import '../../../main-app/global-styles';
 
 :host {
+    overflow: hidden;
+    display: block;
+
     &.macro-item:first-of-type {
         .list-group-item {
             border-radius: 4px 4px 0 0;
@@ -70,10 +73,14 @@
     }
 }
 
+.list-group-item {
+    margin-bottom: 0;
+}
+
 .macro-action-editor__container {
     padding-top: 0;
     padding-bottom: 0;
     border-radius: 0;
-    border-left: 0;
-    border-right: 0;
+    border: none;
+    overflow: hidden;
 }

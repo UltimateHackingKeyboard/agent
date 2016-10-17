@@ -7,7 +7,7 @@
                             [macroAction]="macroAction"
                             [editable]="true"
                             [deletable]="true"
-                            [moveable]="true"
+                            [movable]="true"
                             (save)="saveAction($event, macroActionIndex)"
                             (edit)="editAction(macroActionIndex)"
                             (cancel)="cancelAction()"
@@ -15,15 +15,15 @@
                             [attr.data-index]="macroActionIndex"
                 ></macro-item>
 
-                <macro-item *ngIf="showNew" [macroAction]="newMacro"
+                <macro-item [@toggler]="showNew ? 'active' : 'inactive'" [macroAction]="newMacro"
                             [editable]="true"
                             [deletable]="false"
-                            [moveable]="false"
+                            [movable]="false"
                             (save)="addNewAction($event)"
                             (cancel)="hideNewAction()"
                 ></macro-item>
             </div>
-            <div class="list-group add-new__action-container" *ngIf="!showNew">
+            <div class="list-group add-new__action-container" [@toggler]="(!showNew) ? 'active' : 'inactive'">
                 <div class="list-group-item action--item add-new__action-item no-reorder clearfix">
                     <a class="add-new__action-item--link" (click)="showNewAction()">
                         <i class="fa fa-plus"></i> Add new macro action
