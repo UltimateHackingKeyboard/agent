@@ -28,8 +28,8 @@ var state = 1;
 
 var ledsLeft = new Buffer(ledMatrixSize);
 var ledsRight = new Buffer(ledMatrixSize);
-ledsLeft.fill(0)
-ledsRight.fill(0)
+ledsLeft.fill(0xff)
+ledsRight.fill(0xff)
 
 var ledIndex = 0;
 var matrixId = 0;
@@ -40,15 +40,30 @@ var initLedCommands = [
         leftLedDriverAddress,
         19,
         0,
+        0b00000001, 0b00111111,
         0, 0b00111111,
         0, 0b00111111,
-        0, 0b00111111,
         0, 0b00011111,
         0, 0b00011111,
         0, 0b00011111,
         0, 0b00011111,
         0, 0b00011111,
         0, 0b00011111,
+    ],
+    [ // only enable the LEDs that are actually in the matrix
+        writeLedDriverCommandId,
+        leftLedDriverAddress,
+        19,
+        0,
+        0b00000001, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
+        0, 0,
     ],
     [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xfd, 0x0b], // switch to function page
     [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xc2, 0xff], // enable the ghost image prevention bit
