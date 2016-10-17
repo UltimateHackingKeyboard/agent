@@ -1,4 +1,14 @@
-import { Component, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import {
+    Component,
+    OnDestroy,
+    QueryList,
+    ViewChildren,
+    animate,
+    state,
+    style,
+    transition,
+    trigger
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import '@ngrx/core/add/operator/select';
@@ -18,6 +28,17 @@ import { MacroActions } from '../../store/actions';
 import { getMacro } from '../../store/reducers/macro';
 
 @Component({
+    animations: [
+        trigger('toggler', [
+            state('inactive', style({
+                height: '0px'
+            })),
+            state('active',   style({
+                height: '*'
+            })),
+            transition('inactive <=> active', animate('500ms ease-out'))
+        ])
+    ],
     selector: 'macro',
     template: require('./macro.component.html'),
     styles: [require('./macro.component.scss')],

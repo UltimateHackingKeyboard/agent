@@ -1,4 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    animate,
+    state,
+    style,
+    transition,
+    trigger
+} from '@angular/core';
 
 import { KeyModifiers } from '../../../config-serializer/config-items/KeyModifiers';
 import {
@@ -14,17 +27,27 @@ import {
 import { MapperService } from '../../../services/mapper.service';
 
 @Component({
+    animations: [
+        trigger('toggler', [
+            state('inactive', style({
+                height: '0px'
+            })),
+            state('active',   style({
+                height: '*'
+            })),
+            transition('inactive <=> active', animate('500ms ease-out'))
+        ])
+    ],
     selector: 'macro-item',
     template: require('./macro-item.component.html'),
     styles: [require('./macro-item.component.scss')],
     host: { 'class': 'macro-item' }
 })
 export class MacroItemComponent implements OnInit, OnChanges {
-
     @Input() macroAction: MacroAction;
     @Input() editable: boolean;
     @Input() deletable: boolean;
-    @Input() moveable: boolean;
+    @Input() movable: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
@@ -34,6 +57,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     private title: string;
     private iconName: string;
     private editing: boolean;
+    private newItem: boolean = false;
 
     constructor(private mapper: MapperService) { }
 
@@ -41,6 +65,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.updateView();
         if (!this.macroAction) {
             this.editing = true;
+            this.newItem = true;
         }
     }
 

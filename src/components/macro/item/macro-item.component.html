@@ -1,5 +1,5 @@
 <div class="list-group-item action--item" [class.is-editing]="editing">
-    <span *ngIf="moveable" class="glyphicon glyphicon-option-vertical action--movable" aria-hidden="true"></span>
+    <span *ngIf="movable" class="glyphicon glyphicon-option-vertical action--movable" aria-hidden="true"></span>
     <div class="action--item--wrap" [class.pointer]="!editing && editable" (click)="editAction()">
         <icon [name]="iconName"></icon>
         <div class="action--title">{{ title }}</div>
@@ -7,11 +7,11 @@
     </div>
     <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
 </div>
-<div class="list-group-item macro-action-editor__container" *ngIf="editable && editing">
-  <macro-action-editor 
-      #macroActionEditor
-      *ngIf="editable && editing"
+<div class="list-group-item macro-action-editor__container"
+     [@toggler]="((editable && editing) || newItem) ? 'active' : 'inactive'">
+  <macro-action-editor
       [macroAction]="macroAction"
       (cancel)="cancelEdit()"
-      (save)="saveEditedAction($event)"></macro-action-editor>
+      (save)="saveEditedAction($event)">
+  </macro-action-editor>
 </div>
