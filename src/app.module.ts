@@ -58,16 +58,14 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 
-import { DataProviderService } from './services/data-provider.service';
 import { MapperService } from './services/mapper.service';
-import { UhkConfigurationService } from './services/uhk-configuration.service';
 
 import { KeymapEffects, MacroEffects } from './store/effects';
 import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
 import { DataStorage } from './store/storage';
 
 // Create DataStorage dependency injection
-const storageProvider = ReflectiveInjector.resolve([DataStorage, DataProviderService]);
+const storageProvider = ReflectiveInjector.resolve([DataStorage]);
 const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
 const storageService: DataStorage = storageInjector.get(DataStorage);
 
@@ -143,8 +141,6 @@ const storeConfig = {
         EffectsModule.runAfterBootstrap(MacroEffects)
     ],
     providers: [
-        DataProviderService,
-        UhkConfigurationService,
         MapperService,
         appRoutingProviders
     ],

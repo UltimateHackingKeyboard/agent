@@ -3,8 +3,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Module } from '../../../config-serializer/config-items/Module';
 import { SvgModule } from '../module';
 
-import { DataProviderService } from '../../../services/data-provider.service';
-
 @Component({
     selector: 'svg-keyboard',
     template: require('./svg-keyboard.component.html'),
@@ -18,13 +16,13 @@ export class SvgKeyboardComponent implements OnInit {
     private modules: SvgModule[];
     private svgAttributes: { viewBox: string, transform: string, fill: string };
 
-    constructor(private dps: DataProviderService) {
+    constructor() {
         this.modules = [];
-        this.svgAttributes = this.dps.getKeyboardSvgAttributes();
+        this.svgAttributes = this.getKeyboardSvgAttributes();
     }
 
     ngOnInit() {
-        this.modules = this.dps.getSvgModules();
+        this.modules = this.getSvgModules();
     }
 
     onKeyClick(moduleId: number, keyId: number): void {
@@ -41,6 +39,24 @@ export class SvgKeyboardComponent implements OnInit {
             over,
             keyId
         });
+    }
+
+    private getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {
+        let svg: any = this.getBaseLayer();
+        return {
+            viewBox: svg.$.viewBox,
+            transform: svg.g[0].$.transform,
+            fill: svg.g[0].$.fill
+        };
+    }
+
+    private getSvgModules(): SvgModule[] {
+        let modules = this.getBaseLayer().g[0].g.map((obj: any) => new SvgModule(obj));
+        return [modules[1], modules[0]]; // TODO: remove if the svg will be correct
+    }
+
+    private getBaseLayer(): any {
+        return require('xml!../../../../images/base-layer.svg').svg;
     }
 
 }
