@@ -35,7 +35,7 @@ function readLedJumper() {
             }
             console.log('Received', util.bufferToString(receivedBuffer));
             var isIso = receivedBuffer[1] === 0;
-            console.log('This means that the ISO jumper is ' + (isIso ? 'closed' : 'open') + ' so the detected layout is ' + (isIso ? 'ISO' : 'ANSI'));
+            console.log('ISO jumper is ' + (isIso ? 'closed' : 'open') + ' so the detected layout is ' + (isIso ? 'ISO' : 'ANSI'));
             console.log('Restart the UHK after switching the switch for the change to take effect!');
         })
     });
