@@ -34,6 +34,8 @@ function readLedJumper() {
                 process.exit(2);
             }
             console.log('Received', util.bufferToString(receivedBuffer));
+            var isLedJumperOn = receivedBuffer[1] === 0;
+            console.log('This means that the LED jumper is ' + (isLedJumperOn ? 'on' : 'off'))
             setTimeout(readLedJumper, 500)
         })
     });
