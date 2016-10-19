@@ -37,6 +37,8 @@ function readMergeSensor() {
             }
             console.log('Received', util.bufferToString(receivedBuffer));
             setTimeout(readMergeSensor, 500)
+            var areHalvesMerged = receivedBuffer[1] === 1;
+            console.log('The keyboards halves are ' + (areHalvesMerged ? 'merged' : 'split'))
         })
     });
 }
