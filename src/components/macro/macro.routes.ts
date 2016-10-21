@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { MacroAddComponent } from './add/macro-add.component';
 import { MacroEditComponent } from './edit/macro-edit.component';
 
 export const macroRoutes: Routes = [
@@ -9,11 +8,11 @@ export const macroRoutes: Routes = [
         component: MacroEditComponent
     },
     {
-        path: 'macro/add',
-        component: MacroAddComponent
+        path: 'macro/:id',
+        component: MacroEditComponent
     },
     {
-        path: 'macro/:id',
+        path: 'macro/:id/:empty',
         component: MacroEditComponent
     }
 ];

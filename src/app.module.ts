@@ -15,7 +15,6 @@ import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './co
 import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
-    MacroAddComponent,
     MacroDelayTabComponent,
     MacroEditComponent,
     MacroHeaderComponent,
@@ -115,7 +114,6 @@ const storeConfig = {
         MacroEditComponent,
         MacroListComponent,
         MacroHeaderComponent,
-        MacroAddComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
         MacroDelayTabComponent,

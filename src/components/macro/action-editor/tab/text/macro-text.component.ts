@@ -25,4 +25,8 @@ export class MacroTextTabComponent implements AfterViewInit {
         this.renderer.invokeElementMethod(this.input.nativeElement, 'focus');
     }
 
+    onTextChange() {
+        this.macroAction.text = this.input.nativeElement.value;
+    }
+
 }

@@ -70,9 +70,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-         /* tslint:disable:no-string-literal */
         if (changes['macroAction']) {
-        /* tslint:enable:no-string-literal */
             this.updateView();
         }
     }
@@ -88,6 +86,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         if (!this.editable || this.editing) {
             return;
         }
+
         this.editing = true;
         this.edit.emit();
     }

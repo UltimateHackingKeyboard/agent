@@ -1,5 +1,8 @@
 <template [ngIf]="macro">
-    <macro-header [macro]="macro"></macro-header>
+    <macro-header
+            [macro]="macro"
+            [isNew]="isNew"
+    ></macro-header>
     <macro-list
         [macro]="macro"
         (add)="addAction($event.macroId, $event.action)"

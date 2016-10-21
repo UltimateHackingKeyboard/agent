@@ -1,4 +1,17 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChild, forwardRef } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+    QueryList,
+    ViewChildren,
+    animate,
+    forwardRef,
+    state,
+    style,
+    transition,
+    trigger
+} from '@angular/core';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
@@ -7,6 +20,27 @@ import { MacroAction } from '../../../config-serializer/config-items/macro-actio
 import { MacroItemComponent } from './../index';
 
 @Component({
+    animations: [
+        trigger('toggler', [
+            state('inactive', style({
+                height: '0px'
+            })),
+            state('active', style({
+                height: '*'
+            })),
+            transition('inactive <=> active', animate('500ms ease-out'))
+        ]),
+        trigger('togglerNew', [
+            state('void', style({
+                height: '0px'
+            })),
+            state('active', style({
+                height: '*'
+            })),
+            transition(':enter', animate('500ms ease-out')),
+            transition(':leave', animate('500ms ease-out'))
+        ])
+    ],
     selector: 'macro-list',
     template: require('./macro-list.component.html'),
     styles: [require('./macro-list.component.scss')],
@@ -14,17 +48,17 @@ import { MacroItemComponent } from './../index';
 })
 export class MacroListComponent {
     @Input() macro: Macro;
-    @ViewChild(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
+    @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
     @Output() add = new EventEmitter();
     @Output() edit = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
 
-    private showNew: boolean = false;
     private newMacro: Macro = undefined;
     private activeEdit: number = undefined;
     private dragIndex: number;
+    private showNew: boolean = false;
 
     constructor(private dragulaService: DragulaService) {
         /* tslint:disable:no-unused-variable: Used by Dragula. */

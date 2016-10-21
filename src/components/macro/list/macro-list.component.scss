@@ -8,12 +8,6 @@
     .list-container {
         display: flex;
         flex: 1;
-
-        > div {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
     }
 }
 
@@ -103,6 +97,7 @@ h1 {
 .add-new__action-container {
     overflow: hidden;
     flex-shrink: 0;
+    border-top: 1px solid #ddd;
 }
 
 .add-new__action-item {
