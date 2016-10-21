@@ -52,7 +52,7 @@ var initLedCommands = [
     ],
     [ // only enable the LEDs that are actually in the matrix
         writeLedDriverCommandId,
-        leftLedDriverAddress,
+        rightLedDriverAddress,
         19,
         0,
         0b00000001, 0,
