@@ -4,25 +4,27 @@ import { Action } from '@ngrx/store';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
+import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
+
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { Electron } from './electron';
 import { Local } from './local';
 
-import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
-import { DataProviderService } from '../../services/data-provider.service';
-
 @Injectable()
 export class DataStorage {
 
     private _environment: Local | Electron;
+    private uhkConfiguration: UhkConfiguration;
+    private uhkPresets: Keymap[];
 
-    constructor(private dataProvider: DataProviderService) {
+    constructor() {
+        this.initUHKJson();
         this.detectEnvironment();
     }
 
     initialState(): AppState {
-        let config: UhkConfiguration = this._environment.getConfig() || this.dataProvider.getUHKConfig();
+        let config: UhkConfiguration = this._environment.getConfig() || this.uhkConfiguration;
         return {
             keymaps: {
                 entities: config.keymaps
@@ -30,7 +32,7 @@ export class DataStorage {
             macros: {
                 entities: config.macros
             },
-            presetKeymaps: this.dataProvider.getDefaultKeymaps()
+            presetKeymaps: this.uhkPresets
         };
     }
 
@@ -42,7 +44,7 @@ export class DataStorage {
         }
         // Local storage
         else {
-            this._environment = new Local(this.dataProvider);
+            this._environment = new Local();
         }
     }
 
@@ -60,7 +62,7 @@ export class DataStorage {
                     (state.entities && state.entities.length && state.entities[0] instanceof Keymap)
                 )
             ) {
-                config = this._environment.getConfig();
+                config = this._environment.getConfig() || this.uhkConfiguration;
                 config.keymaps = Object.values(nextState.entities);
                 this._environment.saveConfig(config);
             } else if (
@@ -70,11 +72,17 @@ export class DataStorage {
                     (state.entities && state.entities.length && state.entities[0] instanceof Macro)
                 )
             ) {
-                config = this._environment.getConfig();
+                config = this._environment.getConfig() || this.uhkConfiguration;
                 config.macros = Object.values(nextState.entities);
                 this._environment.saveConfig(config);
             }
             return nextState;
         };
+    }
+
+    initUHKJson() {
+        this.uhkConfiguration = new UhkConfiguration().fromJsObject(require('json!../../config-serializer/uhk-config.json'));
+        this.uhkPresets = (<any[]>require('json!../../config-serializer/preset-keymaps.json'))
+                            .map(keymap => new Keymap().fromJsObject(keymap));
     }
 }
