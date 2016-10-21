@@ -18,6 +18,18 @@ export default function(state = initialState, action: Action): MacroState {
     let newState: Macro[];
 
     switch (action.type) {
+        case MacroActions.ADD:
+            newMacro = new Macro();
+            newMacro.id = generateId(state.entities);
+            newMacro.name = generateName(state.entities, 'New macro');
+            newMacro.isLooped = false;
+            newMacro.isPrivate = true;
+            newMacro.macroActions = [];
+
+            return {
+                entities: [...state.entities, newMacro]
+            };
+
         case MacroActions.DUPLICATE:
 
             newMacro = new Macro(action.payload);

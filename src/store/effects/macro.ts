@@ -26,5 +26,15 @@ export class MacroEffects {
             }
         });
 
+    @Effect({dispatch: false}) add$: any = this.actions$
+        .ofType(MacroActions.ADD)
+        .withLatestFrom(this.store)
+        .do((latest) => {
+            let state: AppState = latest[1];
+            let id: number = state.macros.entities.length - 1;
+
+            this.router.navigate(['/macro', id, 'new']);
+        });
+
     constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
 }

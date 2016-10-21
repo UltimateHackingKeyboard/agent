@@ -4,6 +4,7 @@
         <input class="pane-title__name"
                value="{{ macro.name }}"
                (change)="editMacroName($event.target.value)"
+               #macroName
         />
         <i class="glyphicon glyphicon-trash macro__remove pull-right" title=""
            data-toggle="tooltip"

@@ -1,12 +1,15 @@
 import { Component, Renderer, animate, state, style, transition, trigger } from '@angular/core';
 
+import { Store } from '@ngrx/store';
+
+import { Observable } from 'rxjs/Observable';
+
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 
 import { AppState } from '../../store';
+import { MacroActions } from '../../store/actions';
 import { getKeymapEntities, getMacroEntities } from '../../store/reducers';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
     animations: [
@@ -53,5 +56,9 @@ export class SideMenuComponent {
 
         this.renderer.setElementClass(event.target, 'fa-chevron-up', show);
         this.renderer.setElementClass(event.target, 'fa-chevron-down', !show);
+    }
+
+    addMacro() {
+        this.store.dispatch(MacroActions.addMacro());
     }
 }

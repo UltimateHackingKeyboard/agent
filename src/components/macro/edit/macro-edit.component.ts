@@ -20,6 +20,7 @@ import { getMacro } from '../../../store/reducers/macro';
 export class MacroEditComponent implements OnDestroy {
     private subscription: Subscription;
     private macro: Macro;
+    private isNew: boolean;
 
     constructor(private store: Store<AppState>, private route: ActivatedRoute) {
         this.subscription = route
@@ -29,6 +30,8 @@ export class MacroEditComponent implements OnDestroy {
             .subscribe((macro: Macro) => {
                 this.macro = macro;
             });
+
+        this.isNew = this.route.snapshot.params['empty'] === 'new';
     }
 
     ngOnDestroy() {

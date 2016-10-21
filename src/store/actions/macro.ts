@@ -9,11 +9,18 @@ export namespace MacroActions {
     export const DUPLICATE = MacroActions.PREFIX + 'Duplicate macro';
     export const EDIT_NAME = MacroActions.PREFIX + 'Edit macro title';
     export const REMOVE = MacroActions.PREFIX + 'Remove macro';
+    export const ADD = MacroActions.PREFIX + 'Add macro';
 
     export const ADD_ACTION = MacroActions.PREFIX + 'Add macro action';
     export const SAVE_ACTION = MacroActions.PREFIX + 'Save macro action';
     export const DELETE_ACTION = MacroActions.PREFIX + 'Delete macro action';
     export const REORDER_ACTION = MacroActions.PREFIX + 'Reorder macro action';
+
+    export function addMacro(): Action {
+        return {
+            type: MacroActions.ADD
+        };
+    }
 
     export function removeMacro(id: number): Action {
         return {
