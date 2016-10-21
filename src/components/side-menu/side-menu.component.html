@@ -9,7 +9,7 @@
         </div>
         <ul [@toggler]="animation.keymap">
             <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
-                <div class="sidebar__level-2">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/keymap', keymap.abbreviation]">{{keymap.name}}</a>
                     <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav"></i>
                 </div>
@@ -26,7 +26,7 @@
         </div>
         <ul [@toggler]="animation.macro">
             <li *ngFor="let macro of macros$ | async" class="sidebar__level-2--item">
-                <div class="sidebar__level-2">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
                 </div>
             </li>
@@ -39,22 +39,22 @@
         </div>
         <ul [@toggler]="animation.addon">
             <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
-                <div class="sidebar__level-2">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/add-on', 'Key cluster']">Key cluster</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item" data-name="Trackball" data-abbrev="">
-                <div class="sidebar__level-2">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/add-on', 'Trackball']">Trackball</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item" data-name="Toucpad" data-abbrev="">
-                <div class="sidebar__level-2">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/add-on', 'Touchpad']">Touchpad</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item" data-name="Trackpoint" data-abbrev="">
-                <div class="sidebar__level-2">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/add-on', 'Trackpoint']">Trackpoint</a>
                 </div>
             </li>
@@ -62,7 +62,7 @@
     </li>
 </ul>
 <ul class="menu--bottom">
-    <li class="sidebar__level-1--item">
+    <li class="sidebar__level-1--item" [routerLinkActive]="['active']">
         <a class="sidebar__level-1" [routerLink]="['/settings']">
             <i class="fa fa-gear"></i> Settings
         </a>
