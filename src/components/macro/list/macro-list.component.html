@@ -1,0 +1,35 @@
+<div class="row list-container">
+    <div class="col-xs-10 col-xs-offset-1 list-group">
+        <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions">
+            <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index"
+                        [macroAction]="macroAction"
+                        [editable]="true"
+                        [deletable]="true"
+                        [moveable]="true"
+                        (save)="saveAction($event, macroActionIndex)"
+                        (edit)="editAction(macroActionIndex)"
+                        (cancel)="cancelAction()"
+                        (delete)="deleteAction(macroAction, macroActionIndex)"
+                        [attr.data-index]="macroActionIndex"
+            ></macro-item>
+
+            <macro-item *ngIf="showNew" [macroAction]="newMacro"
+                        [editable]="true"
+                        [deletable]="false"
+                        [moveable]="false"
+                        (save)="addNewAction($event)"
+                        (cancel)="hideNewAction()"
+            ></macro-item>
+        </div>
+        <div class="list-group add-new__action-container" *ngIf="!showNew">
+            <div class="list-group-item action--item add-new__action-item no-reorder clearfix">
+                <a class="add-new__action-item--link" (click)="showNewAction()">
+                    <i class="fa fa-plus"></i> Add new macro action
+                </a>
+                <a class="add-new__action-item--link">
+                    <i class="fa fa fa-circle"></i> Add new capture keystroke
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

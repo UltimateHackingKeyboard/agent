@@ -1,0 +1,14 @@
+<template [ngIf]="macro">
+    <macro-header [macro]="macro"></macro-header>
+    <macro-list
+        [macro]="macro"
+        (add)="addAction($event.macroId, $event.action)"
+        (edit)="editAction($event.macroId, $event.index, $event.action)"
+        (delete)="deleteAction($event.macroId, $event.index, $event.action)"
+        (reorder)="reorderAction($event.macroId, $event.oldIndex, $event.newIndex)"
+    ></macro-list>
+</template>
+
+<div *ngIf="!macro" class="not-found">
+    Sorry, there is no macro with this id.
+</div>

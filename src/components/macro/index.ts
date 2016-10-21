@@ -1,5 +1,6 @@
-export * from './macro.component';
 export * from './add/macro-add.component';
+export * from './edit/macro-edit.component';
+export * from './list/macro-list.component';
 export * from './header/macro-header.component';
 export * from './macro.routes';
 export * from './item';
