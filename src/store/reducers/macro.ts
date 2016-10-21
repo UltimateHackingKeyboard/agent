@@ -155,6 +155,11 @@ export function getMacro(id: number) {
 
 function generateName(macros: Macro[], name: string) {
     let suffix = 2;
+
+    if (name.search(/\(\d\)/) > -1) {
+        name = name.replace(/\(\d\)/, '').trim();
+    }
+
     const oldName: string = name;
 
     while (macros.some((macro: Macro) => macro.name === name)) {

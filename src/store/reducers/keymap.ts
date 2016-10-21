@@ -153,6 +153,11 @@ function generateAbbr(keymaps: Keymap[], abbr: string): string {
 
 function generateName(keymaps: Keymap[], name: string) {
     let suffix = 2;
+
+    if (name.search(/\(\d\)/) > -1) {
+        name = name.replace(/\(\d\)/, '').trim();
+    }
+
     const oldName: string = name;
 
     while (keymaps.some((keymap: Keymap) => keymap.name === name)) {
