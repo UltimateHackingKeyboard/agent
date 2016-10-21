@@ -16,11 +16,12 @@ import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
     MacroAddComponent,
-    MacroComponent,
     MacroDelayTabComponent,
+    MacroEditComponent,
     MacroHeaderComponent,
     MacroItemComponent,
     MacroKeyTabComponent,
+    MacroListComponent,
     MacroMouseTabComponent,
     MacroTextTabComponent
 } from './components/macro';
@@ -111,7 +112,8 @@ const storeConfig = {
         NoneTabComponent,
         CaptureKeystrokeButtonComponent,
         IconComponent,
-        MacroComponent,
+        MacroEditComponent,
+        MacroListComponent,
         MacroHeaderComponent,
         MacroAddComponent,
         MacroItemComponent,
