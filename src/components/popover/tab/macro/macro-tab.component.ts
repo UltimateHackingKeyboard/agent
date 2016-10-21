@@ -1,4 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
@@ -7,29 +11,30 @@ import { Macro } from '../../../../config-serializer/config-items/Macro';
 
 import { Tab } from '../tab';
 
-import { UhkConfigurationService } from '../../../../services/uhk-configuration.service';
+import { AppState } from '../../../../store/index';
+import { getMacroEntities } from '../../../../store/reducers/macro';
 
 @Component({
     selector: 'macro-tab',
     template: require('./macro-tab.component.html'),
     styles: [require('./macro-tab.component.scss')]
 })
-export class MacroTabComponent implements OnInit, Tab {
+export class MacroTabComponent implements OnInit, OnDestroy, Tab {
     @Input() defaultKeyAction: KeyAction;
 
     private macros: Macro[];
     private macroOptions: Array<Select2OptionData>;
     private selectedMacroIndex: number;
+    private subscription: Subscription;
 
-    constructor(private uhkConfigurationService: UhkConfigurationService) {
-        this.macros = [];
+    constructor(private store: Store<AppState>) {
+        this.subscription = store.let(getMacroEntities())
+            .subscribe((macros: Macro[]) => this.macros = macros);
         this.macroOptions = [];
         this.selectedMacroIndex = -1;
     }
 
     ngOnInit() {
-        this.macros = this.uhkConfigurationService.getUhkConfiguration().macros;
-
         this.macroOptions.push({
             id: '-1',
             text: 'Select macro'
@@ -72,4 +77,7 @@ export class MacroTabComponent implements OnInit, Tab {
         return keymapAction;
     }
 
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

@@ -1,4 +1,8 @@
-import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import {
     KeyAction,
@@ -10,10 +14,12 @@ import {
     SwitchLayerAction
 } from '../../../../config-serializer/config-items/key-action';
 import { KeyModifiers } from '../../../../config-serializer/config-items/KeyModifiers';
-import { UhkConfiguration } from '../../../../config-serializer/config-items/UhkConfiguration';
+import { Macro } from '../../../../config-serializer/config-items/Macro';
 
 import { MapperService } from '../../../../services/mapper.service';
-import { UhkConfigurationService } from '../../../../services/uhk-configuration.service';
+
+import { AppState } from '../../../../store/index';
+import { getMacroEntities } from '../../../../store/reducers/macro';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -31,7 +37,7 @@ enum LabelTypes {
     template: require('./svg-keyboard-key.component.html'),
     styles: [require('./svg-keyboard-key.component.scss')]
 })
-export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
+export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() id: string;
     @Input() rx: string;
     @Input() ry: string;
@@ -46,8 +52,13 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
 
     private labelSource: any;
     private labelType: LabelTypes;
+    private macros: Macro[];
+    private subscription: Subscription;
 
-    constructor(private mapperService: MapperService, private uhkConfigurationService: UhkConfigurationService) { }
+    constructor(private mapperService: MapperService, private store: Store<AppState>) {
+        this.subscription = store.let(getMacroEntities())
+            .subscribe((macros: Macro[]) => this.macros = macros);
+    }
 
     ngOnInit() {
         this.setLabels();
@@ -59,6 +70,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
             this.setLabels();
         }
         /* tslint:enable:no-string-literal */
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     private setLabels(): void {
@@ -150,11 +165,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
             this.labelSource = keyAction.keymapAbbreviation;
         } else if (this.keyAction instanceof PlayMacroAction) {
             let keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
+            let macro: Macro = this.macros.find((macro: Macro) => macro.id === keyAction.macroId);
             this.labelType = LabelTypes.IconText;
-            let uhkConfiguration: UhkConfiguration = this.uhkConfigurationService.getUhkConfiguration();
             this.labelSource = {
                 icon: this.mapperService.getIcon('macro'),
-                text: uhkConfiguration.getMacro(keyAction.macroId).name
+                text: macro.name
             };
         } else if (this.keyAction instanceof MouseAction) {
             this.labelType = LabelTypes.MouseKey;
@@ -162,7 +177,5 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges {
         } else {
             this.labelSource = undefined;
         }
-
     }
-
 }
