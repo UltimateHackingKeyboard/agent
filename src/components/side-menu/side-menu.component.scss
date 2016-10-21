@@ -112,9 +112,13 @@ ul {
 
     // General hover over menu items.
     &__level-1,
-    &__level-2--item {
+    &__level-2 {
         &:hover {
             background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &.active {
+            background-color: rgba(0, 0, 0, 0.18);
         }
     }
 
