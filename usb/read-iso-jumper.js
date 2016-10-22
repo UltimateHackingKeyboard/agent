@@ -6,7 +6,7 @@ var util = require('./util');
 
 var vid = 0x16d3;
 var pid = 0x05ea;
-var test_led_command_id = 2;
+var readIsoJumperCommandId = 9;
 
 var device = usb.findByIds(vid, pid);
 device.open();
@@ -20,12 +20,10 @@ usbInterface.claim();
 var endpointIn = usbInterface.endpoints[0];
 var endpointOut = usbInterface.endpoints[1];
 
-var state = 1;
-
-setInterval(function() {
-    state = state ? 0 : 1
-    console.log('Sending ', state);
-    endpointOut.transfer(new Buffer([test_led_command_id, state]), function(err) {
+function readLedJumper() {
+    var payload = new Buffer([readIsoJumperCommandId]);
+    console.log('Sending ', util.bufferToString(payload));
+    endpointOut.transfer(payload, function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
@@ -36,6 +34,11 @@ setInterval(function() {
                 process.exit(2);
             }
             console.log('Received', util.bufferToString(receivedBuffer));
+            var isIso = receivedBuffer[1] === 0;
+            console.log('ISO jumper is ' + (isIso ? 'closed' : 'open') + ' so the detected layout is ' + (isIso ? 'ISO' : 'ANSI'));
+            console.log('Restart the UHK after switching the switch for the change to take effect!');
         })
     });
-}, 500)
+}
+
+readLedJumper();

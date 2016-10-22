@@ -6,7 +6,7 @@ var util = require('./util');
 
 var vid = 0x16d3;
 var pid = 0x05ea;
-var test_led_command_id = 2;
+var readLedJumperCommandId = 8;
 
 var device = usb.findByIds(vid, pid);
 device.open();
@@ -20,12 +20,10 @@ usbInterface.claim();
 var endpointIn = usbInterface.endpoints[0];
 var endpointOut = usbInterface.endpoints[1];
 
-var state = 1;
-
-setInterval(function() {
-    state = state ? 0 : 1
-    console.log('Sending ', state);
-    endpointOut.transfer(new Buffer([test_led_command_id, state]), function(err) {
+function readLedJumper() {
+    var payload = new Buffer([readLedJumperCommandId]);
+    console.log('Sending ', util.bufferToString(payload));
+    endpointOut.transfer(payload, function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
@@ -36,6 +34,11 @@ setInterval(function() {
                 process.exit(2);
             }
             console.log('Received', util.bufferToString(receivedBuffer));
+            var isLedJumperOn = receivedBuffer[1] === 0;
+            console.log('LED jumper is ' + (isLedJumperOn ? 'on' : 'off'))
+            setTimeout(readLedJumper, 500)
         })
     });
-}, 500)
+}
+
+readLedJumper();

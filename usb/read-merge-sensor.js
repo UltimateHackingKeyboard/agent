@@ -6,7 +6,7 @@ var util = require('./util');
 
 var vid = 0x16d3;
 var pid = 0x05ea;
-var test_led_command_id = 2;
+var readMergeSensorCommandId = 7;
 
 var device = usb.findByIds(vid, pid);
 device.open();
@@ -19,13 +19,13 @@ usbInterface.claim();
 
 var endpointIn = usbInterface.endpoints[0];
 var endpointOut = usbInterface.endpoints[1];
+var arg = process.argv[2] || '';
 
-var state = 1;
 
-setInterval(function() {
-    state = state ? 0 : 1
-    console.log('Sending ', state);
-    endpointOut.transfer(new Buffer([test_led_command_id, state]), function(err) {
+function readMergeSensor() {
+    var payload = new Buffer([readMergeSensorCommandId]);
+    console.log('Sending ', util.bufferToString(payload));
+    endpointOut.transfer(payload, function(err) {
         if (err) {
             console.error("USB error: %s", err);
             process.exit(1);
@@ -36,6 +36,11 @@ setInterval(function() {
                 process.exit(2);
             }
             console.log('Received', util.bufferToString(receivedBuffer));
+            setTimeout(readMergeSensor, 500)
+            var areHalvesMerged = receivedBuffer[1] === 1;
+            console.log('The keyboards halves are ' + (areHalvesMerged ? 'merged' : 'split'))
         })
     });
-}, 500)
+}
+
+readMergeSensor();
