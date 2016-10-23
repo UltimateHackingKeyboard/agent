@@ -7,6 +7,8 @@ import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/withLatestFrom';
 
+import { Macro } from '../../config-serializer/config-items/Macro';
+
 import { MacroActions } from '../actions';
 import { AppState } from '../index';
 
@@ -31,9 +33,9 @@ export class MacroEffects {
         .withLatestFrom(this.store)
         .do((latest) => {
             let state: AppState = latest[1];
-            let id: number = state.macros.entities.length - 1;
+            let macro: Macro = state.macros.entities[state.macros.entities.length - 1];
 
-            this.router.navigate(['/macro', id, 'new']);
+            this.router.navigate(['/macro', macro.id, 'new']);
         });
 
     constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
