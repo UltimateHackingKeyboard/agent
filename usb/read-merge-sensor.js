@@ -12,7 +12,10 @@ var device = usb.findByIds(vid, pid);
 device.open();
 
 var usbInterface = device.interface(0);
-if (usbInterface.isKernelDriverActive()) {
+
+// https://github.com/tessel/node-usb/issues/147
+// The function 'isKernelDriverActive' is not available on Windows and not even needed.
+if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
     usbInterface.detachKernelDriver();
 }
 usbInterface.claim();
