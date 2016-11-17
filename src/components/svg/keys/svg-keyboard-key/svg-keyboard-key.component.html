@@ -1,4 +1,6 @@
-<svg:rect [id]="id" [attr.rx]="rx"          [attr.ry]="ry"
+<svg:rect [@change]="animation"
+          (@change.done)="animationDone()"
+          [id]="id" [attr.rx]="rx"          [attr.ry]="ry"
                     [attr.height]="height"  [attr.width]="width"
                     [attr.fill]="fill"
 />
