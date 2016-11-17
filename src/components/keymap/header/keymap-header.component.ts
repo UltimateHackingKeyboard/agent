@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, Renderer, ViewChild } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -14,8 +14,10 @@ import { KeymapActions } from '../../../store/actions';
 })
 export class KeymapHeaderComponent {
     @Input() keymap: Keymap;
+    @ViewChild('name') keymapName: ElementRef;
+    @ViewChild('abbr') keymapAbbr: ElementRef;
 
-    constructor(private store: Store<AppState>) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer) { }
 
     setDefault() {
         if (!this.keymap.isDefault) {
@@ -32,10 +34,20 @@ export class KeymapHeaderComponent {
     }
 
     editKeymapName(name: string) {
+        if (name.length === 0) {
+            this.renderer.setElementProperty(this.keymapName.nativeElement, 'value', this.keymap.name);
+            return;
+        }
+
         this.store.dispatch(KeymapActions.editKeymapName(this.keymap.abbreviation, name));
     }
 
     editKeymapAbbr(newAbbr: string) {
+        if (newAbbr.length !== 3) {
+            this.renderer.setElementProperty(this.keymapAbbr.nativeElement, 'value', this.keymap.abbreviation);
+            return;
+        }
+
         newAbbr = newAbbr.toUpperCase();
         this.store.dispatch(KeymapActions.editKeymapAbbr(this.keymap.abbreviation, newAbbr));
     }

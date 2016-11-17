@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, Renderer, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer,
+    ViewChild
+} from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -13,7 +16,7 @@ import { AppState } from '../../../store/index';
     styles: [require('./macro-header.component.scss')],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MacroHeaderComponent {
+export class MacroHeaderComponent implements OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
     @ViewChild('macroName') macroName: ElementRef;
@@ -35,6 +38,11 @@ export class MacroHeaderComponent {
     }
 
     editMacroName(name: string) {
+        if (name.length === 0) {
+            this.renderer.setElementProperty(this.macroName.nativeElement, 'value', this.macro.name);
+            return;
+        }
+
         this.store.dispatch(MacroActions.editMacroName(this.macro.id, name));
     }
 }
