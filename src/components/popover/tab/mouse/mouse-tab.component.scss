@@ -63,3 +63,18 @@
         }
     }
 }
+
+.mouse__config--speed {
+    .btn-default {
+        font-size: 25px;
+        line-height: 22px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        span {
+            font-size: 13px;
+            display: block;
+            text-align: center;
+        }
+    }
+}
