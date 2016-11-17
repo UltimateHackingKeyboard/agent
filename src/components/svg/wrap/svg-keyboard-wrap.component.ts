@@ -91,7 +91,6 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
-    @Input() deleted: boolean = false;
 
     private popoverShown: boolean;
     private keyEditConfig: { keyActions: KeyAction[], keyId: number };

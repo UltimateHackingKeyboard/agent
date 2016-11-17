@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { KeymapAddComponent } from './add/keymap-add.component';
-import { KeymapComponent } from './edit/keymap-edit.component';
+import { KeymapEditComponent } from './edit/keymap-edit.component';
 
 export const keymapRoutes: Routes = [
     {
@@ -11,7 +11,7 @@ export const keymapRoutes: Routes = [
     },
     {
         path: 'keymap',
-        component: KeymapComponent
+        component: KeymapEditComponent
     },
     {
         path: 'keymap/add',
@@ -19,6 +19,6 @@ export const keymapRoutes: Routes = [
     },
     {
         path: 'keymap/:abbr',
-        component: KeymapComponent
+        component: KeymapEditComponent
     }
 ];
