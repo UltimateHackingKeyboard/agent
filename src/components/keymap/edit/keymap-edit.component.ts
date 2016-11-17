@@ -10,14 +10,14 @@ import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
-import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { AppState } from '../../store';
-import { getKeymap } from '../../store/reducers/keymap';
+import { Keymap } from '../../../config-serializer/config-items/Keymap';
+import { AppState } from '../../../store';
+import { getKeymap } from '../../../store/reducers/keymap';
 
 @Component({
     selector: 'keymap',
-    template: require('./keymap.component.html'),
-    styles: [require('./keymap.component.scss')]
+    template: require('./keymap-edit.component.html'),
+    styles: [require('./keymap-edit.component.scss')]
 })
 export class KeymapComponent {
     private keymap$: Observable<Keymap>;
