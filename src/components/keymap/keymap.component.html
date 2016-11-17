@@ -1,6 +1,6 @@
 <template [ngIf]="keymap$ | async">
-    <keymap-header [keymap]="keymap$ | async"></keymap-header>
-    <svg-keyboard-wrap [keymap]="keymap$ | async"></svg-keyboard-wrap>
+    <keymap-header [keymap]="keymap$ | async" (deleted)="onKeymapDelete($event)"></keymap-header>
+    <svg-keyboard-wrap [keymap]="keymap$ | async" [deleted]="keymapDeleted"></svg-keyboard-wrap>
 </template>
 
 <div *ngIf="!(keymap$ | async)" class="not-found">

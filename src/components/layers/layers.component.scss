@@ -1,5 +1,18 @@
 :host {
     display: block;
+
+    &.disabled {
+        button {
+            cursor: no-drop;
+            background: rgba(#ccc, 0.43);
+            pointer-events: none;
+
+            &.btn-primary {
+                background: #7c7c7c;
+                border-color: #7c7c7c;
+            }
+        }
+    }
 }
 
 button {

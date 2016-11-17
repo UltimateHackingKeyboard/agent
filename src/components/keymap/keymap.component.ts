@@ -21,6 +21,7 @@ import { getKeymap } from '../../store/reducers/keymap';
 })
 export class KeymapComponent {
     private keymap$: Observable<Keymap>;
+    private keymapDeleted: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -34,5 +35,9 @@ export class KeymapComponent {
 
         this.keymap$ = keymapConnectable;
         keymapConnectable.connect();
+    }
+
+    onKeymapDelete() {
+        this.keymapDeleted = true;
     }
 }

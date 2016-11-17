@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -14,10 +14,9 @@ import { KeymapActions } from '../../../store/actions';
 })
 export class KeymapHeaderComponent {
     @Input() keymap: Keymap;
+    @Output() deleted: EventEmitter<boolean> = new EventEmitter();
 
-    constructor(
-        private store: Store<AppState>
-    ) { }
+    constructor(private store: Store<AppState>) { }
 
     setDefault() {
         if (!this.keymap.isDefault) {
@@ -26,6 +25,7 @@ export class KeymapHeaderComponent {
     }
 
     removeKeymap() {
+        this.deleted.emit(false);
         this.store.dispatch(KeymapActions.removeKeymap(this.keymap.abbreviation));
     }
 
