@@ -91,6 +91,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
+    @Input() deleted: boolean = false;
 
     private popoverShown: boolean;
     private keyEditConfig: { keyActions: KeyAction[], keyId: number };
@@ -119,11 +120,14 @@ export class SvgKeyboardWrapComponent implements OnChanges {
         if (changes['keymap'].previousValue.abbreviation !== changes['keymap'].currentValue.abbreviation) {
             this.layers = this.keymap.layers;
             this.currentLayer = 0;
+            this.popoverShown = false;
 
             if (this.layers.length > 0) {
                 this.layers.forEach(element => element.animation = 'none');
                 this.layers[0].animation = 'leftIn';
             }
+        } else if (changes['keymap']) {
+            this.popoverShown = false;
         }
     }
 
