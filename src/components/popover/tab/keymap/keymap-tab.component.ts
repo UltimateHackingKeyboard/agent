@@ -24,17 +24,20 @@ export class KeymapTabComponent implements OnInit, Tab {
     }
 
     ngOnInit() {
-        this.keymapOptions.push({
-            id: '-1',
-            text: 'Switch to keymap'
-        });
-
         this.keymapOptions = this.keymaps.map((keymap: Keymap): Select2OptionData => {
             return {
                 id: keymap.abbreviation,
                 text: keymap.name
             };
         });
+
+        this.keymapOptions = [
+            {
+                id: '-1',
+                text: 'Switch to keymap'
+            },
+            ...this.keymapOptions
+        ];
 
         this.fromKeyAction(this.defaultKeyAction);
     }
@@ -56,6 +59,7 @@ export class KeymapTabComponent implements OnInit, Tab {
         if (!(keyAction instanceof SwitchKeymapAction)) {
             return false;
         }
+
         let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
         this.selectedKeymap = this.keymaps
             .find((keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation);

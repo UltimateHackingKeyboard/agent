@@ -2,13 +2,13 @@
     <b>Switch to keymap:</b>
     <select2
             [data]="keymapOptions"
-            [value]="selectedKeymap?.abbreviation"
+            [value]="selectedKeymap?.abbreviation || -1"
             (valueChanged)="onChange($event)"
             [width]="'100%'"
     ></select2>
 </div>
 <div>
-    <div *ngIf="!selectedKeymap?.abbreviation">
+    <div class="empty" *ngIf="!selectedKeymap?.abbreviation">
         <img src="./images/base-layer--blank.svg">
     </div>
     <svg-keyboard *ngIf="selectedKeymap?.abbreviation"
