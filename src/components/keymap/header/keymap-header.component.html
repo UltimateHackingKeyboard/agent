@@ -1,13 +1,15 @@
 <div class="row">
     <h1 class="col-xs-12 pane-title">
         <i class="fa fa-keyboard-o"></i>
-        <input class="keymap__name pane-title__name"
+        <input #name class="keymap__name pane-title__name"
                value="{{ keymap.name }}"
                (change)="editKeymapName($event.target.value)"
+               (keyup.enter)="name.blur()"
         /> keymap
-        (<input class="keymap__abbrev pane-title__abbrev"
+        (<input #abbr class="keymap__abbrev pane-title__abbrev"
                 value="{{ keymap.abbreviation }}"
                 (change)="editKeymapAbbr($event.target.value)"
+                (keyup.enter)="abbr.blur()"
                 [attr.maxLength]="3"
         />)
         <i class="fa keymap__is-default"
