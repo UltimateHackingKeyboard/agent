@@ -1,4 +1,7 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange } from '@angular/core';
+import {
+    Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange,
+    animate, group, style, transition, trigger
+} from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -33,6 +36,18 @@ enum LabelTypes {
 }
 
 @Component({
+    animations: [
+        trigger('change', [
+            transition('inactive => active', [
+                style({fill: '#fff'}),
+                group([
+                    animate('1s ease-out', style({
+                        fill: '#333'
+                    }))
+                ])
+            ])
+        ])
+    ],
     selector: 'g[svg-keyboard-key]',
     template: require('./svg-keyboard-key.component.html'),
     styles: [require('./svg-keyboard-key.component.scss')]
@@ -45,15 +60,13 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() width: number;
     @Input() keyAction: KeyAction;
 
-    /* tslint:disable:no-unused-variable */
-    /* It is used in the template */
-    private enumLabelTypes = LabelTypes;
-    /* tslint:enable:no-unused-variable */
+    enumLabelTypes = LabelTypes;
 
     private labelSource: any;
     private labelType: LabelTypes;
     private macros: Macro[];
     private subscription: Subscription;
+    private animation: string = 'inactive';
 
     constructor(private mapperService: MapperService, private store: Store<AppState>) {
         this.subscription = store.let(getMacroEntities())
@@ -68,12 +81,17 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         /* tslint:disable:no-string-literal */
         if (changes['keyAction']) {
             this.setLabels();
+            this.animation = 'active';
         }
         /* tslint:enable:no-string-literal */
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    animationDone() {
+        this.animation = 'inactive';
     }
 
     private setLabels(): void {
