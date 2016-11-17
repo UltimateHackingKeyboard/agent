@@ -10,8 +10,19 @@ import 'rxjs/add/operator/withLatestFrom';
 import { KeymapActions } from '../actions';
 import { AppState } from '../index';
 
+import { Keymap } from '../../config-serializer/config-items/Keymap';
+
 @Injectable()
 export class KeymapEffects {
+
+    @Effect({ dispatch: false })add$: any = this.actions$
+        .ofType(KeymapActions.ADD)
+        .withLatestFrom(this.store)
+        .do((latest) => {
+            const state: AppState = latest[1];
+            const entities: Keymap[] = state.keymaps.entities;
+            this.router.navigate(['/keymap', entities[entities.length - 1].abbreviation]);
+        });
 
     @Effect({ dispatch: false })remove$: any = this.actions$
         .ofType(KeymapActions.REMOVE)
