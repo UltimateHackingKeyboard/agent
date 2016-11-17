@@ -28,12 +28,13 @@ export class KeymapEffects {
         .ofType(KeymapActions.REMOVE)
         .withLatestFrom(this.store)
         .do((latest) => {
-            let state: AppState = latest[1];
+            const state: AppState = latest[1];
 
             if (state.keymaps.entities.length === 0) {
                 this.router.navigate(['/keymap/add']);
             } else {
-                this.router.navigate(['/keymap']);
+                let favourite: Keymap = state.keymaps.entities.find(keymap => keymap.isDefault);
+                this.router.navigate(['/keymap', favourite.abbreviation]);
             }
         });
 
@@ -41,7 +42,7 @@ export class KeymapEffects {
         .ofType(KeymapActions.EDIT_ABBR)
         .withLatestFrom(this.store)
         .do((latest) => {
-            let state: AppState = latest[1];
+            const state: AppState = latest[1];
             this.router.navigate(['/keymap', state.keymaps.newAbbr]);
         });
 
