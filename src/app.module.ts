@@ -11,7 +11,7 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
 
 import { AddOnComponent } from './components/add-on';
-import { KeymapAddComponent, KeymapComponent, KeymapHeaderComponent } from './components/keymap';
+import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
@@ -79,7 +79,7 @@ const storeConfig = {
 @NgModule({
     declarations: [
         MainAppComponent,
-        KeymapComponent,
+        KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,
         SvgIconTextKeyComponent,

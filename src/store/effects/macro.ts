@@ -19,12 +19,12 @@ export class MacroEffects {
         .ofType(MacroActions.REMOVE)
         .withLatestFrom(this.store)
         .do((latest) => {
-            let state: AppState = latest[1];
+            const state: AppState = latest[1];
 
             if (state.macros.entities.length === 0) {
                 this.router.navigate(['/macro/add']);
             } else {
-                this.router.navigate(['/macro']);
+                this.router.navigate(['/macro', '0']);
             }
         });
 
@@ -32,8 +32,8 @@ export class MacroEffects {
         .ofType(MacroActions.ADD)
         .withLatestFrom(this.store)
         .do((latest) => {
-            let state: AppState = latest[1];
-            let macro: Macro = state.macros.entities[state.macros.entities.length - 1];
+            const state: AppState = latest[1];
+            const macro: Macro = state.macros.entities[state.macros.entities.length - 1];
 
             this.router.navigate(['/macro', macro.id, 'new']);
         });

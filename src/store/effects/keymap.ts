@@ -33,7 +33,7 @@ export class KeymapEffects {
             if (state.keymaps.entities.length === 0) {
                 this.router.navigate(['/keymap/add']);
             } else {
-                let favourite: Keymap = state.keymaps.entities.find(keymap => keymap.isDefault);
+                const favourite: Keymap = state.keymaps.entities.find(keymap => keymap.isDefault);
                 this.router.navigate(['/keymap', favourite.abbreviation]);
             }
         });

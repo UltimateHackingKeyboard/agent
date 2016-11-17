@@ -15,13 +15,12 @@ import { AppState } from '../../../store';
 import { getKeymap } from '../../../store/reducers/keymap';
 
 @Component({
-    selector: 'keymap',
+    selector: 'keymap-edit',
     template: require('./keymap-edit.component.html'),
     styles: [require('./keymap-edit.component.scss')]
 })
-export class KeymapComponent {
+export class KeymapEditComponent {
     private keymap$: Observable<Keymap>;
-    private keymapDeleted: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -35,9 +34,5 @@ export class KeymapComponent {
 
         this.keymap$ = keymapConnectable;
         keymapConnectable.connect();
-    }
-
-    onKeymapDelete() {
-        this.keymapDeleted = true;
     }
 }
