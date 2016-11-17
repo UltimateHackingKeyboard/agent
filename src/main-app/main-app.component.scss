@@ -25,6 +25,10 @@ main-app {
     }
 }
 
+.nav-pills > li > a {
+    cursor: pointer;
+}
+
 /* GitHub ribbon */
 .github-fork-ribbon {
     background-color: #a00;

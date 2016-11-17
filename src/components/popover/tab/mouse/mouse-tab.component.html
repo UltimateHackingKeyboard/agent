@@ -84,7 +84,6 @@
     <div *ngSwitchCase="3" class="mouse__config mouse__config--speed text-center">
         <div class="help-text--mouse-speed text-left">
             <p>Press this key along with mouse movement/scrolling to accelerate/decelerate the speed of the action.</p>
-            <p>You can set the multiplier in <a [routerLink]="['/settings']" title="the setting">the setting</a>.</p>
         </div>
         <div class="btn-group btn-group-lg" role="group">
             <div class="btn btn-default"
@@ -101,6 +100,9 @@
                 +
                 <span>Accelerate</span>
             </div>
+        </div>
+        <div class="help-text--mouse-speed last-help  text-left">
+            <p>You can set the multiplier in the <a [routerLink]="['/settings']" title="Settings">settings</a>.</p>
         </div>
     </div>
     <div *ngSwitchDefault>
