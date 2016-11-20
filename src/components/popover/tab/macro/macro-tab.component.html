@@ -1,13 +1,16 @@
-<div class="macro-selector">
-    <b> Play macro: </b>
-    <select2 [data]="macroOptions" [value]="macroOptions[selectedMacroIndex + 1].id" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
-</div>
-<div class="macro-action-container" [class.inactive]="selectedMacroIndex === -1">
-    <template [ngIf]="selectedMacroIndex >= 0">
-      <div class="list-group"> 
-        <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions"
-                    [macroAction]="macroAction" [editable]="false">
-        </macro-item>
-      </div>
-    </template>
-</div>
+<template [ngIf]="macroOptions.length === 0">
+    <span> No macros are available to choose from. Create a macro first! </span>
+</template>
+<template [ngIf]="macroOptions.length > 0">
+    <div class="macro-selector">
+        <b> Play macro: </b>
+        <select2 [data]="macroOptions" [value]="macroOptions[selectedMacroIndex].id" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
+    </div>
+    <div class="macro-action-container">
+        <div class="list-group">
+            <macro-item *ngFor="let macroAction of macros[selectedMacroIndex].macroActions"
+                        [macroAction]="macroAction" [editable]="false">
+            </macro-item>
+        </div>
+    </div>
+</template>

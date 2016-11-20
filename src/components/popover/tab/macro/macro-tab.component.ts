@@ -31,21 +31,16 @@ export class MacroTabComponent implements OnInit, OnDestroy, Tab {
         this.subscription = store.let(getMacroEntities())
             .subscribe((macros: Macro[]) => this.macros = macros);
         this.macroOptions = [];
-        this.selectedMacroIndex = -1;
+        this.selectedMacroIndex = 0;
     }
 
     ngOnInit() {
-        this.macroOptions.push({
-            id: '-1',
-            text: 'Select macro'
-        });
-
-        this.macroOptions = this.macroOptions.concat(this.macros.map(function (macro: Macro): Select2OptionData {
+        this.macroOptions = this.macros.map(function (macro: Macro): Select2OptionData {
             return {
                 id: macro.id.toString(),
                 text: macro.name
             };
-        }));
+        });
         this.fromKeyAction(this.defaultKeyAction);
     }
 
