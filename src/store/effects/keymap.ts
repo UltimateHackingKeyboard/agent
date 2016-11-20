@@ -24,6 +24,15 @@ export class KeymapEffects {
             this.router.navigate(['/keymap', entities[entities.length - 1].abbreviation]);
         });
 
+    @Effect({ dispatch: false }) duplicate$: any = this.actions$
+        .ofType(KeymapActions.DUPLICATE)
+        .withLatestFrom(this.store)
+        .do((latest) => {
+            const state: AppState = latest[1];
+            const entities: Keymap[] = state.keymaps.entities;
+            this.router.navigate(['/keymap', entities[entities.length - 1].abbreviation]);
+        });
+
     @Effect({ dispatch: false })remove$: any = this.actions$
         .ofType(KeymapActions.REMOVE)
         .withLatestFrom(this.store)
