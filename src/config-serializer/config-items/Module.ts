@@ -50,7 +50,11 @@ export class Module extends Serializable<Module> {
         return {
             id: this.id,
             pointerRole: PointerRole[this.pointerRole],
-            keyActions: this.keyActions.map(keyAction => keyAction.toJsObject())
+            keyActions: this.keyActions.map(keyAction => {
+                if (keyAction) {
+                    return keyAction.toJsObject();
+                }
+            })
         };
     }
 
