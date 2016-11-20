@@ -31,15 +31,9 @@ export class KeymapTabComponent implements OnInit, Tab {
                     text: keymap.name
                 };
             });
-
-        this.keymapOptions = [
-            {
-                id: '-1',
-                text: 'Switch to keymap'
-            },
-            ...this.keymapOptions
-        ];
-
+        if (this.keymaps.length > 0) {
+            this.selectedKeymap = this.keymaps[0];
+        }
         this.fromKeyAction(this.defaultKeyAction);
     }
 
