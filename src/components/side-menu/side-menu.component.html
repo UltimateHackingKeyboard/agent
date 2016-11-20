@@ -11,7 +11,7 @@
             <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/keymap', keymap.abbreviation]">{{keymap.name}}</a>
-                    <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav"></i>
+                    <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav" title="This is the default keymap which gets activated when powering the keyboard."></i>
                 </div>
             </li>
         </ul>

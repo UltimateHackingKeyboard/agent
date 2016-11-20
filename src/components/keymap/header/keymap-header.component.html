@@ -16,6 +16,7 @@
         />)
         <i class="fa keymap__is-default"
            [ngClass]="{'fa-star-o': !keymap.isDefault, 'fa-star': keymap.isDefault}"
+           [title]="starTitle"
            (click)="setDefault()"
         ></i>
         <i class="glyphicon glyphicon-trash keymap__remove pull-right" title=""

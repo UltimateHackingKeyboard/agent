@@ -62,7 +62,12 @@ export default function(state = initialState, action: Action): KeymapState {
 
         case KeymapActions.SET_DEFAULT:
             newState = state.entities.map((keymap: Keymap) => {
-                keymap.isDefault = (keymap.abbreviation === action.payload);
+                if (keymap.abbreviation === action.payload || keymap.isDefault) {
+                    let newKeymap: Keymap = new Keymap();
+                    Object.assign(newKeymap, keymap);
+                    keymap = newKeymap;
+                    keymap.isDefault = keymap.abbreviation === action.payload;
+                }
 
                 return keymap;
             });
