@@ -66,6 +66,10 @@ export class Helper {
     }
 
     private static fromJSONObject(keyAction: any): KeyAction {
+        if (!keyAction) {
+            return;
+        }
+
         switch (keyAction.keyActionType) {
             case keyActionType.NoneAction:
                 return new NoneAction().fromJsObject(keyAction);
