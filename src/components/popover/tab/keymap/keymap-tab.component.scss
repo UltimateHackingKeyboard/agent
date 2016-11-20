@@ -2,6 +2,10 @@
     display: flex;
     flex-direction: column;
 
+    > span {
+        text-align: center;
+    }
+
     > div {
         display: flex;
         margin-top: 2px;
