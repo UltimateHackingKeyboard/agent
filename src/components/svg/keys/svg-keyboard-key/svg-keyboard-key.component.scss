@@ -1,3 +1,11 @@
-:host /deep/ text {
-    dominant-baseline: central;
+:host {
+    /deep/ text {
+        dominant-baseline: central;
+    }
+
+    cursor: pointer;
+
+    &:hover {
+        fill: #494949;
+    }
 }
