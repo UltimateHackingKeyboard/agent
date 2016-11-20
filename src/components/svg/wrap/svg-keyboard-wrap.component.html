@@ -9,7 +9,7 @@
         >
         </svg-keyboard>
     </div>
-    <popover *ngIf="popoverShown" [defaultKeyAction]="popoverInitKeyAction" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+    <popover *ngIf="popoverShown" [defaultKeyAction]="popoverInitKeyAction" [currentKeymap]="keymap" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
     <div class="tooltip top fade" role="tooltip"
          [class.in]="tooltipData.shown"
          [style.top.px]="tooltipData.posTop"

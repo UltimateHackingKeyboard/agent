@@ -24,12 +24,13 @@ export class KeymapTabComponent implements OnInit, Tab {
     }
 
     ngOnInit() {
-        this.keymapOptions = this.keymaps.map((keymap: Keymap): Select2OptionData => {
-            return {
-                id: keymap.abbreviation,
-                text: keymap.name
-            };
-        });
+        this.keymapOptions = this.keymaps
+            .map((keymap: Keymap): Select2OptionData => {
+                return {
+                    id: keymap.abbreviation,
+                    text: keymap.name
+                };
+            });
 
         this.keymapOptions = [
             {
