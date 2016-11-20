@@ -35,6 +35,7 @@ enum TabName {
 })
 export class PopoverComponent implements OnInit {
     @Input() defaultKeyAction: KeyAction;
+    @Input() currentKeymap: Keymap;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyAction>();
@@ -49,7 +50,10 @@ export class PopoverComponent implements OnInit {
     private keymaps$: Observable<Keymap[]>;
 
     constructor(private store: Store<AppState>) {
-        this.keymaps$ = store.let(getKeymapEntities());
+        this.keymaps$ = store.let(getKeymapEntities())
+            .map((keymaps: Keymap[]) =>
+                keymaps.filter((keymap: Keymap) => this.currentKeymap.abbreviation !== keymap.abbreviation)
+            );
     }
 
     ngOnInit() {
