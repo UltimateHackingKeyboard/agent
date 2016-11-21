@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
-import { Helper as KeyActionHelper } from '../../config-serializer/config-items/key-action';
+import { Helper as KeyActionHelper, KeyAction } from '../../config-serializer/config-items/key-action';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Layer } from '../../config-serializer/config-items/Layer';
 import { Module } from '../../config-serializer/config-items/Module';
@@ -17,6 +17,7 @@ const initialState: KeymapState = {
 
 export default function (state = initialState, action: Action): KeymapState {
     let newState: Keymap[];
+    let changedKeymap: Keymap = new Keymap();
 
     switch (action.type) {
         case KeymapActions.ADD:
@@ -89,22 +90,29 @@ export default function (state = initialState, action: Action): KeymapState {
                 }
 
                 return true;
-            }
-            );
+            });
 
             // If deleted one is default set default keymap to the first on the list of keymaps
             if (isDefault && filtered.length > 0) {
                 filtered[0].isDefault = true;
             }
 
+            // Check for the deleted keymap in other keymaps
+            newState = filtered.map((keymap: Keymap) => {
+                changedKeymap = new Keymap();
+                Object.assign(changedKeymap, keymap);
+                changedKeymap.layers = checkExistence(changedKeymap.layers, 'keymapAbbreviation', action.payload);
+
+                return changedKeymap;
+            });
+
             return {
-                entities: filtered
+                entities: newState
             };
 
         case KeymapActions.SAVE_KEY:
 
             const keymap: Keymap = action.payload.keymap;
-            const changedKeymap: Keymap = new Keymap();
             Object.assign(changedKeymap, keymap);
 
             const layerIndex: number = action.payload.layer;
@@ -128,6 +136,19 @@ export default function (state = initialState, action: Action): KeymapState {
                 }
 
                 return keymap;
+            });
+
+            return {
+                entities: newState
+            };
+
+        case KeymapActions.CHECK_MACRO:
+            newState = state.entities.map((keymap: Keymap) => {
+                changedKeymap = new Keymap();
+                Object.assign(changedKeymap, keymap);
+                changedKeymap.layers = checkExistence(changedKeymap.layers, '_macroId', action.payload);
+
+                return changedKeymap;
             });
 
             return {
@@ -187,4 +208,24 @@ function generateName(keymaps: Keymap[], name: string) {
     }
 
     return name;
+}
+
+function checkExistence(layers: Layer[], property: string, value: string | number) {
+    let newLayers = layers.map((layer) => {
+        let newLayer = new Layer(layer);
+
+        newLayer.modules = layer.modules.map((module: Module) => {
+            module.keyActions.forEach((action: KeyAction, index: number) => {
+                if (action && action.hasOwnProperty(property) && action[property] === value) {
+                    module.keyActions[index] = undefined;
+                }
+            });
+
+            return module;
+        });
+
+        return newLayer;
+    });
+
+    return newLayers;
 }

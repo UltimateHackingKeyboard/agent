@@ -5,11 +5,12 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/withLatestFrom';
 
 import { Macro } from '../../config-serializer/config-items/Macro';
 
-import { MacroActions } from '../actions';
+import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 
 @Injectable()
@@ -17,14 +18,16 @@ export class MacroEffects {
 
     @Effect({dispatch: false}) remove$: any = this.actions$
         .ofType(MacroActions.REMOVE)
+        .map(action => this.store.dispatch(KeymapActions.checkMacro(action.payload)))
         .withLatestFrom(this.store)
         .do((latest) => {
             const state: AppState = latest[1];
+            const macro: Macro[] = state.macros.entities;
 
             if (state.macros.entities.length === 0) {
                 this.router.navigate(['/macro/add']);
             } else {
-                this.router.navigate(['/macro', '0']);
+                this.router.navigate(['/macro', macro[0].id]);
             }
         });
 
