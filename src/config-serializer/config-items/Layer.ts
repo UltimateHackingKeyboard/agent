@@ -11,7 +11,6 @@ export class Layer extends Serializable<Layer> {
     constructor(layers?: Layer) {
         super();
         if (!layers) {
-            this.animation = 'none';
             return;
         }
         this.modules = layers.modules.map(module => new Module(module));
