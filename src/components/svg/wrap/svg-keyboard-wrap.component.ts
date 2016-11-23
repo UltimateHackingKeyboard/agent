@@ -11,10 +11,31 @@ import {
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
-import { KeyAction, NoneAction } from '../../../config-serializer/config-items/key-action';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+
+import { MapperService } from '../../../services/mapper.service';
+
+import {
+    KeyAction,
+    KeystrokeAction,
+    LayerName,
+    MouseAction,
+    MouseActionParam,
+    NoneAction,
+    PlayMacroAction,
+    SwitchKeymapAction,
+    SwitchLayerAction
+} from '../../../config-serializer/config-items/key-action';
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { Layer } from '../../../config-serializer/config-items/Layer';
+import { LongPressAction } from '../../../config-serializer/config-items/LongPressAction';
+import { camelCaseToSentence, capitalizeFirstLetter } from '../../../util';
 
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
@@ -96,12 +117,10 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     private keyEditConfig: { keyActions: KeyAction[], keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
-    private tooltipData: { posTop: number, posLeft: number, content: {name: string, value: string}[], shown: boolean };
+    private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], shown: boolean };
     private layers: Layer[];
 
-    constructor(
-        private store: Store<AppState>
-    ) {
+    constructor(private store: Store<AppState>, private mapper: MapperService) {
         this.keyEditConfig = {
             keyActions: undefined,
             keyId: undefined
@@ -181,22 +200,114 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             posTop = position.top;
         }
 
-        // TODO connect with real data
-        let dummyData = [
-            {
-                name: 'Key action',
-                value: 'o'
-            },
-            {
-                name: 'Scancode',
-                value: '55'
+        let content: {
+            name: string,
+            value: string
+        }[] = [];
+
+        if (keyAction instanceof KeystrokeAction) {
+            const keystrokeAction: KeystrokeAction = keyAction;
+            content.push({
+                name: 'Action type',
+                value: 'Keystroke'
+            });
+
+            if (keystrokeAction.hasScancode()) {
+                let value: string = keystrokeAction.scancode.toString();
+                const scanCodeTexts: string = (this.mapper.scanCodeToText(keystrokeAction.scancode) || []).join(', ');
+                if (scanCodeTexts.length > 0) {
+                    value += ' (' + scanCodeTexts + ')';
+                }
+                content.push({
+                    name: 'Scancode',
+                    value
+                });
             }
-        ];
+
+            if (keystrokeAction.hasActiveModifier()) {
+                content.push({
+                    name: 'Modifiers',
+                    value: keystrokeAction.getModifierList().join(', ')
+                });
+            }
+
+            if (keystrokeAction.hasLongPressAction()) {
+                content.push({
+                    name: 'Long press',
+                    value: LongPressAction[keystrokeAction.longPressAction]
+                });
+            }
+        } else if (keyAction instanceof MouseAction) {
+            const mouseAction: MouseAction = keyAction;
+            content.push({
+                name: 'Action type',
+                value: 'Mouse'
+            });
+            content.push({
+                name: 'Action',
+                value: camelCaseToSentence(MouseActionParam[mouseAction.mouseAction])
+            });
+        } else if (keyAction instanceof PlayMacroAction) {
+            const playMacroAction: PlayMacroAction = keyAction;
+            content.push({
+                name: 'Action type',
+                value: 'Play macro'
+            });
+
+            content.push({
+                name: 'Macro id',
+                value: playMacroAction.macroId.toString()
+            });
+
+            // Replace the macro id with the name
+            this.store
+                .select(appState => appState.macros)
+                .first()
+                .map(macroState => macroState.entities.filter(macro => {
+                    return macro.id === playMacroAction.macroId;
+                })[0].name)
+                .subscribe(name => {
+                    content[1] = {
+                        name: 'Macro name',
+                        value: name
+                    };
+                });
+        } else if (keyAction instanceof SwitchKeymapAction) {
+            const switchKeymapAction: SwitchKeymapAction = keyAction;
+            content.push({
+                name: 'Action type',
+                value: 'Switch keymap'
+            });
+            content.push({
+                name: 'Keymap',
+                value: '...'
+            });
+            this.store
+                .select(appState => appState.keymaps)
+                .first()
+                .switchMap<Keymap>(keymaps => Observable.from(keymaps.entities))
+                .filter(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation)
+                .subscribe(keymap => content[1].value = keymap.name);
+        } else if (keyAction instanceof SwitchLayerAction) {
+            const switchLayerAction: SwitchLayerAction = keyAction;
+            content.push({
+                name: 'Action type',
+                value: 'Switch layer'
+            });
+            content.push({
+                name: 'Layer',
+                value: capitalizeFirstLetter(LayerName[switchLayerAction.layer])
+            });
+            content.push({
+                name: 'Toogle',
+                value: switchLayerAction.isLayerToggleable ? 'On' : 'Off'
+            });
+        }
 
         this.tooltipData = {
             posLeft: posLeft,
-            posTop:  posTop,
-            content: dummyData,
+            posTop: posTop,
+            content,
             shown: true
         };
     }
