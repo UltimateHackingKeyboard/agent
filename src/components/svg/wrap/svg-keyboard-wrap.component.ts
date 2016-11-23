@@ -4,6 +4,7 @@ import {
     OnChanges,
     SimpleChanges,
     animate,
+    keyframes,
     state,
     style,
     transition,
@@ -47,8 +48,7 @@ import { KeymapActions } from '../../../store/actions';
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
-            /* Right -> Left animation*/
-            state('leftIn', style({
+            state('leftIn, rightIn', style({
                 transform: 'translateX(-50%)',
                 left: '50%'
             })),
@@ -56,55 +56,34 @@ import { KeymapActions } from '../../../store/actions';
                 transform: 'translateX(-101%)',
                 left: '0'
             })),
-            /* Right -> Left animation */
-            state('rightIn', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
             state('rightOut', style({
-                transform: 'translateX(0%)',
+                transform: 'translateX(0)',
                 left: '101%'
             })),
-            /* Transitions */
-            transition('none => leftIn, leftOut => leftIn', [
-                style({
-                    opacity: 0,
-                    transform: 'translateX(0%)',
-                    left: '101%'
-                }),
-                style({
-                    opacity: 1
-                }),
-                animate('400ms ease-out')
+            transition('leftOut => leftIn, rightOut => leftIn', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(0%)', left: '101%', offset: 0 }),
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                ]))
             ]),
-            transition('* => none', [
-                style({
-                    opacity: 0,
-                    transform: 'translateX(-101%)',
-                    left: '0'
-                }),
-                style({
-                    opacity: 1
-                })
+            transition('leftIn => leftOut, rightIn => leftOut', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
+                    style({ transform: 'translateX(-101%)', left: '0%', offset: 1 })
+                ]))
             ]),
-            transition('none => rightIn, rightOut => rightIn', [
-                style({
-                    opacity: 0,
-                    transform: 'translateX(-101%)',
-                    left: '0'
-                }),
-                style({
-                    opacity: 1
-                }),
-                animate('400ms ease-out')
+            transition('* => rightIn', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(-101%)', left: '0%', offset: 0 }),
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                ]))
             ]),
-            transition(
-                'leftIn => leftOut,' +
-                'rightIn => rightOut,' +
-                'leftIn <=> rightOut,' +
-                'rightIn <=> leftOut',
-                animate('400ms ease-out')
-            )
+            transition('* => rightOut', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
+                    style({ transform: 'translateX(0%)', left: '101%', offset: 1 })
+                ]))
+            ])
         ])
     ]
 })
@@ -141,7 +120,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             this.popoverShown = false;
 
             if (this.layers.length > 0) {
-                this.layers.forEach(element => element.animation = 'none');
+                this.layers.forEach(element => element.animation = 'leftOut');
                 this.layers[0].animation = 'leftIn';
             }
         } else if (changes['keymap']) {
