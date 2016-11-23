@@ -3,92 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class MapperService {
 
-    private scanCodeTextMap = [
-        [], // 0
-        [], // 1
-        [], // 2
-        [], // 3
-        ['A'], // 4
-        ['B'], // 5
-        ['C'], // 6
-        ['D'], // 7
-        ['E'], // 8
-        ['F'], // 9
-        ['G'], // 10
-        ['H'], // 11
-        ['I'], // 12
-        ['J'], // 13
-        ['K'], // 14
-        ['L'], // 15
-        ['M'], // 16
-        ['N'], // 17
-        ['O'], // 18
-        ['P'], // 19
-        ['Q'], // 20
-        ['R'], // 21
-        ['S'], // 22
-        ['T'], // 23
-        ['U'], // 24
-        ['V'], // 25
-        ['W'], // 26
-        ['X'], // 27
-        ['Y'], // 28
-        ['Z'], // 29
-        ['1', '!'], // 30
-        ['2', '@'], // 31
-        ['3', '#'], // 32
-        ['4', '$'], // 33
-        ['5', '%'], // 34
-        ['6', '^'], // 35
-        ['7', '&'], // 36
-        ['8', '*'], // 37
-        ['9', '('], // 38
-        ['0', ')'], // 39
-        ['Enter'], // 40 - Enter
-        ['Esc'], // 41 - Escape
-        ['←'], // 42 - Backspace
-        ['Tab'], // 43 - Tab
-        ['Space'], // 44 - Space
-        ['-', '_'], // 45
-        ['=', '+'], // 46
-        ['[', '{'], // 47
-        [']', '}'], // 48
-        ['\\', '|'], // 49
-        [], // 50 NON_US_HASHMARK_AND_TILDE
-        [';', ':'], // 51
-        ['\'', '"'], // 52
-        ['`', '~'], // 53
-        [',', '<'], // 54
-        ['.', '>'], // 55
-        ['/', '?'], // 56
-        ['Caps Lock'], // 57
-        ['F1'], // 58
-        ['F2'], // 59
-        ['F3'], // 60
-        ['F4'], // 61
-        ['F5'], // 62
-        ['F6'], // 63
-        ['F7'], // 64
-        ['F8'], // 65
-        ['F9'], // 66
-        ['F10'], // 67
-        ['F11'], // 68
-        ['F12'], // 69
-        ['PrtScn'], // 70 - Print Screen
-        ['Scroll Lock'], // 71
-        ['Pause'], // 72
-        ['Insert'], // 73
-        ['Home'], // 74
-        ['PgUp'], // 75
-        ['Del'], // 76
-        ['End'], // 77
-        ['PgDn'], // 78
-        undefined, // 79 Right arrow
-        undefined, // 80 Left arrow
-        undefined, // 81 Down arrow
-        undefined, // 82 Up arrow
-        ['Num Lock'] // 83
-    ];
+    private scanCodeTextMap: Map<number, string[]>;
 
     private scanCodeFileName: Map<number, string>;
     private nameToFileName: Map<string, string>;
@@ -100,11 +15,15 @@ export class MapperService {
     }
 
     public scanCodeToText(scanCode: number): string[] {
-        return this.scanCodeTextMap[scanCode];
+        return this.scanCodeTextMap.get(scanCode);
+    }
+
+    public hasScancodeIcon(scancode: number): boolean {
+        return this.scanCodeFileName.has(scancode);
     }
 
     public scanCodeToSvgImagePath(scanCode: number): string {
-        let fileName: string = this.scanCodeFileName[scanCode];
+        let fileName: string = this.scanCodeFileName.get(scanCode);
         if (fileName) {
             return 'assets/compiled_sprite.svg#' + fileName;
         }
@@ -115,28 +34,111 @@ export class MapperService {
         return 'assets/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
     }
 
+    // TODO: read the mapping from JSON
     private initScanCodeTextMap(): void {
-        this.scanCodeTextMap[232] = ['Play'];
-        this.scanCodeTextMap[233] = ['Stop'];
-        this.scanCodeTextMap[234] = ['Prev'];
-        this.scanCodeTextMap[235] = ['Next'];
-        this.scanCodeTextMap[236] = ['Eject'];
-        this.scanCodeTextMap[237] = ['Vol +'];
-        this.scanCodeTextMap[238] = ['Vol -'];
-        this.scanCodeTextMap[239] = ['Mute'];
-        this.scanCodeTextMap[240] = ['WWW'];
-        this.scanCodeTextMap[241] = ['Bckwrd'];
-        this.scanCodeTextMap[242] = ['Frwrd'];
-        this.scanCodeTextMap[243] = ['Cancel'];
+        this.scanCodeTextMap = new Map<number, string[]>();
+        this.scanCodeTextMap.set(4, ['A']);
+        this.scanCodeTextMap.set(5, ['B']);
+        this.scanCodeTextMap.set(6, ['C']);
+        this.scanCodeTextMap.set(7, ['D']);
+        this.scanCodeTextMap.set(8, ['E']);
+        this.scanCodeTextMap.set(9, ['F']);
+        this.scanCodeTextMap.set(10, ['G']);
+        this.scanCodeTextMap.set(11, ['H']);
+        this.scanCodeTextMap.set(12, ['I']);
+        this.scanCodeTextMap.set(13, ['J']);
+        this.scanCodeTextMap.set(14, ['K']);
+        this.scanCodeTextMap.set(15, ['L']);
+        this.scanCodeTextMap.set(16, ['M']);
+        this.scanCodeTextMap.set(17, ['N']);
+        this.scanCodeTextMap.set(18, ['O']);
+        this.scanCodeTextMap.set(19, ['P']);
+        this.scanCodeTextMap.set(20, ['Q']);
+        this.scanCodeTextMap.set(21, ['R']);
+        this.scanCodeTextMap.set(22, ['S']);
+        this.scanCodeTextMap.set(23, ['T']);
+        this.scanCodeTextMap.set(24, ['U']);
+        this.scanCodeTextMap.set(25, ['V']);
+        this.scanCodeTextMap.set(26, ['W']);
+        this.scanCodeTextMap.set(27, ['X']);
+        this.scanCodeTextMap.set(28, ['Y']);
+        this.scanCodeTextMap.set(29, ['Z']);
+        this.scanCodeTextMap.set(30, ['1', '!']);
+        this.scanCodeTextMap.set(31, ['2', '@']);
+        this.scanCodeTextMap.set(32, ['3', '#']);
+        this.scanCodeTextMap.set(33, ['4', '$']);
+        this.scanCodeTextMap.set(34, ['5', '%']);
+        this.scanCodeTextMap.set(35, ['6', '^']);
+        this.scanCodeTextMap.set(36, ['7', '&']);
+        this.scanCodeTextMap.set(37, ['8', '*']);
+        this.scanCodeTextMap.set(38, ['9', '(']);
+        this.scanCodeTextMap.set(39, ['0', ')']);
+        this.scanCodeTextMap.set(40, ['Enter']);
+        this.scanCodeTextMap.set(41, ['Esc']);
+        this.scanCodeTextMap.set(42, ['Backspace']);
+        this.scanCodeTextMap.set(43, ['Tab']);
+        this.scanCodeTextMap.set(44, ['Space']);
+        this.scanCodeTextMap.set(45, ['-', '_']);
+        this.scanCodeTextMap.set(46, ['=', '+']);
+        this.scanCodeTextMap.set(47, ['[', '{']);
+        this.scanCodeTextMap.set(48, [']', '}']);
+        this.scanCodeTextMap.set(49, ['\\', '|']);
+        this.scanCodeTextMap.set(50, ['NON_US_HASHMARK_AND_TILDE']);
+        this.scanCodeTextMap.set(51, [';', ':']);
+        this.scanCodeTextMap.set(52, ['\'', '"']);
+        this.scanCodeTextMap.set(53, ['`', '~']);
+        this.scanCodeTextMap.set(54, [',', '<']);
+        this.scanCodeTextMap.set(55, ['.', '>']);
+        this.scanCodeTextMap.set(56, ['/', '?']);
+        this.scanCodeTextMap.set(57, ['Caps Lock']);
+        this.scanCodeTextMap.set(58, ['F1']);
+        this.scanCodeTextMap.set(59, ['F2']);
+        this.scanCodeTextMap.set(60, ['F3']);
+        this.scanCodeTextMap.set(61, ['F4']);
+        this.scanCodeTextMap.set(62, ['F5']);
+        this.scanCodeTextMap.set(63, ['F6']);
+        this.scanCodeTextMap.set(64, ['F7']);
+        this.scanCodeTextMap.set(65, ['F8']);
+        this.scanCodeTextMap.set(66, ['F9']);
+        this.scanCodeTextMap.set(67, ['F10']);
+        this.scanCodeTextMap.set(68, ['F11']);
+        this.scanCodeTextMap.set(69, ['F12']);
+        this.scanCodeTextMap.set(70, ['PrtScn']);
+        this.scanCodeTextMap.set(71, ['Scroll Lock']);
+        this.scanCodeTextMap.set(72, ['Pause']);
+        this.scanCodeTextMap.set(73, ['Insert']);
+        this.scanCodeTextMap.set(74, ['Home']);
+        this.scanCodeTextMap.set(75, ['PgUp']);
+        this.scanCodeTextMap.set(76, ['Del']);
+        this.scanCodeTextMap.set(77, ['End']);
+        this.scanCodeTextMap.set(78, ['PgDn']);
+        this.scanCodeTextMap.set(79, ['Right Arrow']);
+        this.scanCodeTextMap.set(80, ['Left Arrow']);
+        this.scanCodeTextMap.set(81, ['Down Arrow']);
+        this.scanCodeTextMap.set(82, ['Up Arrow']);
+        this.scanCodeTextMap.set(83, ['Num Lock']);
+        this.scanCodeTextMap.set(118, ['Menu']);
+        this.scanCodeTextMap.set(232, ['Play']);
+        this.scanCodeTextMap.set(233, ['Stop']);
+        this.scanCodeTextMap.set(234, ['Prev']);
+        this.scanCodeTextMap.set(235, ['Next']);
+        this.scanCodeTextMap.set(236, ['Eject']);
+        this.scanCodeTextMap.set(237, ['Vol +']);
+        this.scanCodeTextMap.set(238, ['Vol -']);
+        this.scanCodeTextMap.set(239, ['Mute']);
+        this.scanCodeTextMap.set(240, ['WWW']);
+        this.scanCodeTextMap.set(241, ['Bckwrd']);
+        this.scanCodeTextMap.set(242, ['Frwrd']);
+        this.scanCodeTextMap.set(243, ['Cancel']);
     }
 
     private initScanCodeFileName(): void {
         this.scanCodeFileName = new Map<number, string>();
-        this.scanCodeFileName[79] = 'icon-kbd__mod--arrow-right';
-        this.scanCodeFileName[80] = 'icon-kbd__mod--arrow-left';
-        this.scanCodeFileName[81] = 'icon-kbd__mod--arrow-down';
-        this.scanCodeFileName[82] = 'icon-kbd__mod--arrow-up';
-        this.scanCodeFileName[118] = 'icon-kbd__mod--menu';
+        this.scanCodeFileName.set(79, 'icon-kbd__mod--arrow-right');
+        this.scanCodeFileName.set(80, 'icon-kbd__mod--arrow-left');
+        this.scanCodeFileName.set(81, 'icon-kbd__mod--arrow-down');
+        this.scanCodeFileName.set(82, 'icon-kbd__mod--arrow-up');
+        this.scanCodeFileName.set(118, 'icon-kbd__mod--menu');
     }
 
     private initNameToFileNames(): void {

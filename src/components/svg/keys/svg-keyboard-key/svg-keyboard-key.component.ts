@@ -39,7 +39,7 @@ enum LabelTypes {
     animations: [
         trigger('change', [
             transition('inactive => active', [
-                style({fill: '#fff'}),
+                style({ fill: '#fff' }),
                 group([
                     animate('1s ease-out', style({
                         fill: '#333'
@@ -68,7 +68,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     private subscription: Subscription;
     private animation: string = 'inactive';
 
-    constructor(private mapperService: MapperService, private store: Store<AppState>) {
+    constructor(private mapper: MapperService, private store: Store<AppState>) {
         this.subscription = store.let(getMacroEntities())
             .subscribe((macros: Macro[]) => this.macros = macros);
     }
@@ -109,8 +109,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
             if (!keyAction.hasActiveModifier() && keyAction.hasScancode()) {
                 let scancode: number = keyAction.scancode;
-                newLabelSource = this.mapperService.scanCodeToText(scancode);
-                if (newLabelSource) {
+                newLabelSource = this.mapper.scanCodeToText(scancode);
+                if (this.mapper.hasScancodeIcon(scancode)) {
+                    this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode);
+                    this.labelType = LabelTypes.SingleIcon;
+                } else if (newLabelSource !== undefined) {
                     if (newLabelSource.length === 1) {
                         this.labelSource = newLabelSource[0];
                         this.labelType = LabelTypes.OneLineText;
@@ -118,9 +121,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                         this.labelSource = newLabelSource;
                         this.labelType = LabelTypes.TwoLineText;
                     }
-                } else {
-                    this.labelSource = this.mapperService.scanCodeToSvgImagePath(scancode);
-                    this.labelType = LabelTypes.SingleIcon;
                 }
             } else if (keyAction.hasOnlyOneActiveModifier() && !keyAction.hasScancode()) {
                 newLabelSource = [];
@@ -171,7 +171,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.labelType = LabelTypes.TextIcon;
                 this.labelSource = {
                     text: newLabelSource,
-                    icon: this.mapperService.getIcon('toggle')
+                    icon: this.mapper.getIcon('toggle')
                 };
             } else {
                 this.labelType = LabelTypes.OneLineText;
@@ -186,7 +186,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             let macro: Macro = this.macros.find((macro: Macro) => macro.id === keyAction.macroId);
             this.labelType = LabelTypes.IconText;
             this.labelSource = {
-                icon: this.mapperService.getIcon('macro'),
+                icon: this.mapper.getIcon('macro'),
                 text: macro.name
             };
         } else if (this.keyAction instanceof MouseAction) {
