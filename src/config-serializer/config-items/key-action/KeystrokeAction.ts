@@ -17,6 +17,8 @@ interface JsObjectKeystrokeAction {
     longPressAction?: string;
 }
 
+const MODIFIERS = ['LCtrl', 'LShift', 'LAlt',  'LSuper', 'RCtrl', 'RShift', 'RAlt', 'RSuper'];
+
 export class KeystrokeAction extends KeyAction {
 
     @assertUInt8
@@ -139,5 +141,16 @@ export class KeystrokeAction extends KeyAction {
 
     hasOnlyOneActiveModifier(): boolean {
         return this.modifierMask !== 0 && !(this.modifierMask & this.modifierMask - 1);
+    }
+
+    getModifierList(): string[] {
+        let modifierList: string[] = [];
+        let modifierMask = this.modifierMask;
+        for (let i = 0; modifierMask !== 0; ++i, modifierMask >>= 1) {
+            if (modifierMask & 1) {
+                modifierList.push(MODIFIERS[i]);
+            }
+        }
+        return modifierList;
     }
 }
