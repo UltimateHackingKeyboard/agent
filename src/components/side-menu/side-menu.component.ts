@@ -39,8 +39,15 @@ export class SideMenuComponent {
             addon: 'active'
         };
 
-        this.keymaps$ = store.let(getKeymapEntities());
-        this.macros$ = store.let(getMacroEntities());
+        this.keymaps$ = store.let(getKeymapEntities())
+            .map((keymaps: Keymap[]) => {
+                return keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
+            });
+
+        this.macros$ = store.let(getMacroEntities())
+            .map((macros: Macro[]) => {
+                return macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
+            });
     }
 
     toggleHide(event: Event, type: string) {
