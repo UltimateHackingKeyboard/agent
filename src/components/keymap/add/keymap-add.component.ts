@@ -13,7 +13,10 @@ import { KeymapActions } from '../../../store/actions';
 @Component({
     selector: 'keymap-add',
     template: require('./keymap-add.component.html'),
-    styles: [require('./keymap-add.component.scss')]
+    styles: [require('./keymap-add.component.scss')],
+    host: {
+        'class': 'container-fluid'
+    }
 })
 export class KeymapAddComponent implements OnDestroy {
     private presets: Keymap[];
