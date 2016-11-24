@@ -15,7 +15,10 @@ import { getMacro } from '../../../store/reducers/macro';
 @Component({
     selector: 'macro-edit',
     template: require('./macro-edit.component.html'),
-    styles: [require('./macro-edit.component.scss')]
+    styles: [require('./macro-edit.component.scss')],
+    host: {
+        'class': 'container-fluid'
+    }
 })
 export class MacroEditComponent implements OnDestroy {
     private subscription: Subscription;

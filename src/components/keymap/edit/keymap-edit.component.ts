@@ -17,7 +17,10 @@ import { getKeymap } from '../../../store/reducers/keymap';
 @Component({
     selector: 'keymap-edit',
     template: require('./keymap-edit.component.html'),
-    styles: [require('./keymap-edit.component.scss')]
+    styles: [require('./keymap-edit.component.scss')],
+    host: {
+        'class': 'container-fluid'
+    }
 })
 export class KeymapEditComponent {
     private keymap$: Observable<Keymap>;
