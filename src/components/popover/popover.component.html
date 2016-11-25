@@ -1,38 +1,39 @@
+<div class="arrowCustom"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="popover-title menu-tabs">
             <ul class="nav nav-tabs popover-menu">
-                <li #keypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
+                <li #keypress [class.active]="activeTab === tabName.Keypress" (click)="selectTab(tabName.Keypress)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-keyboard-o"></i>
                         <span>Keypress</span>
                     </a>
                 </li>
-                <li #layer [class.active]="activeTab === TabName.Layer" (click)="selectTab(TabName.Layer)">
+                <li #layer [class.active]="activeTab === tabName.Layer" (click)="selectTab(tabName.Layer)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-clone"></i>
                         <span>Layer</span>
                     </a>
                 </li>
-                <li #mouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
+                <li #mouse [class.active]="activeTab === tabName.Mouse" (click)="selectTab(tabName.Mouse)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-mouse-pointer"></i>
                         <span>Mouse</span>
                     </a>
                 </li>
-                <li #macro [class.active]="activeTab === TabName.Macro" (click)="selectTab(TabName.Macro)">
+                <li #macro [class.active]="activeTab === tabName.Macro" (click)="selectTab(tabName.Macro)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-play"></i>
                         <span>Macro</span>
                     </a>
                 </li>
-                <li #keymap [class.active]="activeTab === TabName.Keymap" (click)="selectTab(TabName.Keymap)">
+                <li #keymap [class.active]="activeTab === tabName.Keymap" (click)="selectTab(tabName.Keymap)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-keyboard-o"></i>
                         <span>Keymap</span>
                     </a>
                 </li>
-                <li #none [class.active]="activeTab === TabName.None" (click)="selectTab(TabName.None)">
+                <li #none [class.active]="activeTab === tabName.None" (click)="selectTab(tabName.None)">
                     <a class="menu-tabs--item">
                         <i class="fa fa-ban"></i>
                         <span>None</span>
@@ -42,12 +43,12 @@
         </div>
     </div>
     <div class="row" [ngSwitch]="activeTab">
-        <keypress-tab #tab *ngSwitchCase="TabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction" [longPressEnabled]="true"></keypress-tab>
-        <layer-tab #tab *ngSwitchCase="TabName.Layer" class="popover-content" [defaultKeyAction]="defaultKeyAction"></layer-tab>
-        <mouse-tab #tab *ngSwitchCase="TabName.Mouse" class="popover-content" [defaultKeyAction]="defaultKeyAction"></mouse-tab>
-        <macro-tab #tab *ngSwitchCase="TabName.Macro" class="popover-content" [defaultKeyAction]="defaultKeyAction"></macro-tab>
-        <keymap-tab #tab *ngSwitchCase="TabName.Keymap" class="popover-content" [defaultKeyAction]="defaultKeyAction" [keymaps]="keymaps$ | async"></keymap-tab>
-        <none-tab #tab *ngSwitchCase="TabName.None" class="popover-content"></none-tab>
+        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction" [longPressEnabled]="true"></keypress-tab>
+        <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content" [defaultKeyAction]="defaultKeyAction"></layer-tab>
+        <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content" [defaultKeyAction]="defaultKeyAction"></mouse-tab>
+        <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content" [defaultKeyAction]="defaultKeyAction"></macro-tab>
+        <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content" [defaultKeyAction]="defaultKeyAction" [keymaps]="keymaps$ | async"></keymap-tab>
+        <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"></none-tab>
     </div>
     <div class="row">
         <div class="popover-action">

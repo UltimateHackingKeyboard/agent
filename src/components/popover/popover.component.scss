@@ -1,11 +1,66 @@
 :host {
     display: flex;
     flex-direction: column;
-    max-width: none;
     padding: 0;
+    max-width: 568px;
+    width: 100%;
+    transform: translateX(-50%);
+
+    > .container-fluid {
+        overflow: hidden;
+    }
+
+    &.leftArrow {
+        transform: none;
+
+        .arrowCustom {
+            transform: none;
+            left: 22px;
+        }
+    }
+
+    &.rightArrow {
+        transform: none;
+
+        .arrowCustom {
+            transform: none;
+            right: 22px;
+            left: auto;
+        }
+    }
+}
+
+.arrowCustom {
+    position: absolute;
+    top: -16px;
     left: 50%;
     transform: translateX(-50%);
-    top: 100px;
+    width: 41px;
+    height: 16px;
+
+    &:before {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 21px solid transparent;
+        border-right: 21px solid transparent;
+        border-bottom: 17px solid rgba(0, 0, 0, 0.2);
+        display: block;
+        position: absolute;
+        top: -1px;
+    }
+
+    &:after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 16px solid #f7f7f7;
+        display: block;
+        position: absolute;
+        top: 0;
+    }
 }
 
 .popover-action {

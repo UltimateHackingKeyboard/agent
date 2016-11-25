@@ -1,8 +1,11 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    ElementRef,
+    HostListener,
     Input,
     OnChanges,
+    OnInit,
     SimpleChanges,
     animate,
     keyframes,
@@ -88,7 +91,7 @@ import { KeymapActions } from '../../../store/actions';
         ])
     ]
 })
-export class SvgKeyboardWrapComponent implements OnChanges {
+export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
@@ -99,8 +102,18 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     private currentLayer: number = 0;
     private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], show: boolean };
     private layers: Layer[];
+    private keyPosition: ClientRect;
+    private wrapPosition: ClientRect;
+    private wrapHost: HTMLElement;
+    private keyElement: HTMLElement;
 
-    constructor(private store: Store<AppState>, private mapper: MapperService) {
+    @HostListener('window:resize')
+    onClick() {
+        this.wrapPosition = this.wrapHost.getBoundingClientRect();
+        this.keyPosition = this.keyElement.getBoundingClientRect();
+    }
+
+    constructor(private store: Store<AppState>, private mapper: MapperService, private element: ElementRef) {
         this.keyEditConfig = {
             moduleId: undefined,
             keyId: undefined
@@ -112,6 +125,11 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             content: [],
             show: false
         };
+    }
+
+    ngOnInit() {
+        this.wrapHost = this.element.nativeElement;
+        this.wrapPosition = this.wrapHost.getBoundingClientRect();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -129,7 +147,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
         }
     }
 
-    onKeyClick(moduleId: number, keyId: number): void {
+    onKeyClick(moduleId: number, keyId: number, keyTarget: HTMLElement): void {
         if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
                 moduleId,
@@ -137,6 +155,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             };
 
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
+            this.keyElement = keyTarget;
             this.showPopover(keyActionToEdit);
         }
     }
@@ -165,7 +184,8 @@ export class SvgKeyboardWrapComponent implements OnChanges {
         this.hidePopover();
     }
 
-    showPopover(keyAction?: KeyAction): void {
+    showPopover(keyAction: KeyAction): void {
+        this.keyPosition = this.keyElement.getBoundingClientRect();
         this.popoverInitKeyAction = keyAction;
         this.popoverShown = true;
     }

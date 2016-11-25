@@ -1,5 +1,5 @@
 import {
-    Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange,
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange,
     animate, group, style, transition, trigger
 } from '@angular/core';
 
@@ -59,6 +59,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() height: number;
     @Input() width: number;
     @Input() keyAction: KeyAction;
+    @Output() keyClick = new EventEmitter();
 
     enumLabelTypes = LabelTypes;
 
@@ -68,7 +69,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     private subscription: Subscription;
     private animation: string = 'inactive';
 
-    constructor(private mapper: MapperService, private store: Store<AppState>) {
+    @HostListener('click') onClick() {
+        this.keyClick.emit(this.element.nativeElement);
+    }
+
+    constructor(private mapper: MapperService, private store: Store<AppState>, private element: ElementRef) {
         this.subscription = store.let(getMacroEntities())
             .subscribe((macros: Macro[]) => this.macros = macros);
     }

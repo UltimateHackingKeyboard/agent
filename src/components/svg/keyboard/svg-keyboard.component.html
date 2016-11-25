@@ -5,7 +5,7 @@
                 [keyboardKeys]="module.keyboardKeys"
                 [attr.transform]="module.attributes.transform"
                 [keyActions]="moduleConfig[i].keyActions"
-                (keyClick)="onKeyClick(i, $event)"
+                (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
                 (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
         />
     </svg:g>

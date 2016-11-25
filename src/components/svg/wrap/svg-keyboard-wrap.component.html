@@ -4,12 +4,12 @@
         <svg-keyboard *ngFor="let layer of layers; trackBy: trackKeyboard"
                       [@layerState]="layer.animation"
                       [moduleConfig]="layer.modules"
-                      (keyClick)="onKeyClick($event.moduleId, $event.keyId)"
+                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
                       (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
         >
         </svg-keyboard>
     </div>
-    <popover *ngIf="popoverShown" [defaultKeyAction]="popoverInitKeyAction" [currentKeymap]="keymap" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+    <popover *ngIf="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction" [currentKeymap]="keymap" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
     <div class="tooltip bottom"
          [class.in]="tooltipData.show"
          [style.top.px]="tooltipData.posTop"
