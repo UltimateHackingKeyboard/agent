@@ -25,10 +25,11 @@ export class SvgKeyboardComponent implements OnInit {
         this.modules = this.getSvgModules();
     }
 
-    onKeyClick(moduleId: number, keyId: number): void {
+    onKeyClick(moduleId: number, keyId: number, keyTarget: HTMLElement): void {
         this.keyClick.emit({
             moduleId,
-            keyId
+            keyId,
+            keyTarget
         });
     }
 
