@@ -24,7 +24,7 @@ export class DataStorage {
     }
 
     initialState(): AppState {
-        let config: UhkConfiguration = this._environment.getConfig() || this.uhkConfiguration;
+        const config: UhkConfiguration = this.getConfiguration();
         return {
             keymaps: {
                 entities: config.keymaps
@@ -62,7 +62,7 @@ export class DataStorage {
                     (state.entities && state.entities.length && state.entities[0] instanceof Keymap)
                 )
             ) {
-                config = this._environment.getConfig() || this.uhkConfiguration;
+                config = this.getConfiguration();
                 config.keymaps = Object.values(nextState.entities);
                 this._environment.saveConfig(config);
             } else if (
@@ -72,7 +72,7 @@ export class DataStorage {
                     (state.entities && state.entities.length && state.entities[0] instanceof Macro)
                 )
             ) {
-                config = this._environment.getConfig() || this.uhkConfiguration;
+                config = this.getConfiguration();
                 config.macros = Object.values(nextState.entities);
                 this._environment.saveConfig(config);
             }
@@ -83,6 +83,14 @@ export class DataStorage {
     initUHKJson() {
         this.uhkConfiguration = new UhkConfiguration().fromJsObject(require('json!../../config-serializer/uhk-config.json'));
         this.uhkPresets = (<any[]>require('json!../../config-serializer/preset-keymaps.json'))
-                            .map(keymap => new Keymap().fromJsObject(keymap));
+            .map(keymap => new Keymap().fromJsObject(keymap));
+    }
+
+    getConfiguration(): UhkConfiguration {
+        let config: UhkConfiguration = this._environment.getConfig();
+        if (!config || config.dataModelVersion !== this.uhkConfiguration.dataModelVersion) {
+            config = this.uhkConfiguration;
+        }
+        return config;
     }
 }
