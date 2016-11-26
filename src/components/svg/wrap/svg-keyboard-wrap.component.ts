@@ -28,7 +28,6 @@ import {
     LayerName,
     MouseAction,
     MouseActionParam,
-    NoneAction,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction
@@ -165,7 +164,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
 
-        if (keyAction instanceof NoneAction || keyAction === undefined) {
+        if (keyAction === undefined) {
             return;
         }
 

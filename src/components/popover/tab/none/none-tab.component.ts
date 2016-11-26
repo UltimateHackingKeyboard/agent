@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NoneAction } from '../../../../config-serializer/config-items/key-action';
 import { Tab } from '../tab';
 
 @Component({
@@ -21,8 +20,8 @@ export class NoneTabComponent implements OnInit, Tab {
         return false;
     }
 
-    toKeyAction(): NoneAction {
-        return new NoneAction();
+    toKeyAction(): undefined {
+        return undefined;
     }
 
 }
