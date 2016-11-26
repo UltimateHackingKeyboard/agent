@@ -1,5 +1,5 @@
 <template [ngIf]="keymap$ | async">
-    <keymap-header [keymap]="keymap$ | async"></keymap-header>
+    <keymap-header [keymap]="keymap$ | async" [deletable]="deletable$ | async"></keymap-header>
     <svg-keyboard-wrap [keymap]="keymap$ | async"></svg-keyboard-wrap>
 </template>
 

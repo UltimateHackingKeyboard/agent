@@ -15,6 +15,8 @@ import { KeymapActions } from '../../../store/actions';
 })
 export class KeymapHeaderComponent implements OnChanges {
     @Input() keymap: Keymap;
+    @Input() deletable: boolean;
+
     @ViewChild('name') keymapName: ElementRef;
     @ViewChild('abbr') keymapAbbr: ElementRef;
 

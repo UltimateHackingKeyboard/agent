@@ -12,7 +12,7 @@ import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store';
-import { getKeymap } from '../../../store/reducers/keymap';
+import { getKeymap, getKeymapEntities } from '../../../store/reducers/keymap';
 
 @Component({
     selector: 'keymap-edit',
@@ -24,6 +24,7 @@ import { getKeymap } from '../../../store/reducers/keymap';
 })
 export class KeymapEditComponent {
     private keymap$: Observable<Keymap>;
+    private deletable$: Observable<boolean>;
 
     constructor(
         private store: Store<AppState>,
@@ -37,5 +38,8 @@ export class KeymapEditComponent {
 
         this.keymap$ = keymapConnectable;
         keymapConnectable.connect();
+
+        this.deletable$ = store.let(getKeymapEntities())
+            .map((keymaps: Keymap[]) => keymaps.length > 1);
     }
 }

@@ -22,6 +22,7 @@
            (click)="setDefault()"
         ></i>
         <i class="glyphicon glyphicon-trash keymap__remove pull-right" title=""
+            *ngIf="deletable"
            data-toggle="tooltip"
            data-placement="left"
            data-original-title="Remove keymap"
