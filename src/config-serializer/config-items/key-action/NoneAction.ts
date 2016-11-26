@@ -1,6 +1,12 @@
 import { UhkBuffer } from '../../UhkBuffer';
 import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
+/**
+ * NoneAction is only intended for binary serialization of undefined key actions
+ * DO NOT use it as a real KeyAction
+ *
+ */
+
 export class NoneAction extends KeyAction {
 
     _fromJsObject(jsObject: any): NoneAction {

@@ -1,7 +1,7 @@
 import { assertEnum, assertUInt8 } from '../assert';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
-import { Helper as KeyActionHelper, KeyAction } from './key-action';
+import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
 
 enum PointerRole {
     none,
@@ -61,7 +61,17 @@ export class Module extends Serializable<Module> {
     _toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
         buffer.writeUInt8(this.pointerRole);
-        buffer.writeArray(this.keyActions);
+
+        const noneAction = new NoneAction();
+
+        const keyActions: KeyAction[] = this.keyActions.map(keyAction => {
+            if (keyAction) {
+                return keyAction;
+            }
+            return noneAction;
+        });
+
+        buffer.writeArray(keyActions);
     }
 
     toString(): string {

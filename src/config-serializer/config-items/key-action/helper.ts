@@ -4,7 +4,6 @@ import {
     KeyActionId,
     KeystrokeAction,
     MouseAction,
-    NoneAction,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
@@ -33,7 +32,8 @@ export class Helper {
 
         switch (keyActionFirstByte) {
             case KeyActionId.NoneAction:
-                return new NoneAction().fromBinary(buffer);
+                buffer.readUInt8(); // Read type just to skip it
+                return undefined;
             case KeyActionId.SwitchLayerAction:
                 return new SwitchLayerAction().fromBinary(buffer);
             case KeyActionId.SwitchKeymapAction:
@@ -59,8 +59,6 @@ export class Helper {
             newKeyAction = new MouseAction(keyAction);
         } else if (keyAction instanceof PlayMacroAction) {
             newKeyAction = new PlayMacroAction(keyAction);
-        } else {
-            newKeyAction = new NoneAction();
         }
         return newKeyAction;
     }
@@ -71,8 +69,6 @@ export class Helper {
         }
 
         switch (keyAction.keyActionType) {
-            case keyActionType.NoneAction:
-                return new NoneAction().fromJsObject(keyAction);
             case keyActionType.KeystrokeAction:
                 return new KeystrokeAction().fromJsObject(keyAction);
             case keyActionType.SwitchLayerAction:

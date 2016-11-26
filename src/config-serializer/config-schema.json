@@ -34,12 +34,14 @@
                                             "keyActions": {
                                                 "type": "array",
                                                 "items": {
-                                                    "type": "object",
+                                                    "type": [
+                                                        "null",
+                                                        "object"
+                                                    ],
                                                     "properties": {
                                                         "keyActionType": {
                                                             "type": "string",
                                                             "enum": [
-                                                                "none",
                                                                 "keystroke",
                                                                 "switchLayer",
                                                                 "switchKeymap",
@@ -51,7 +53,7 @@
                                                     "required": [
                                                         "keyActionType"
                                                     ],
-                                                    "oneOf": [
+                                                    "anyOf": [
                                                         {
                                                             "properties": {
                                                                 "keyActionType": {
@@ -135,16 +137,6 @@
                                                                 },
                                                                 "macroId": {
                                                                     "type": "integer"
-                                                                }
-                                                            }
-                                                        },
-                                                        {
-                                                            "properties": {
-                                                                "keyActionType": {
-                                                                    "type": "string",
-                                                                    "enum": [
-                                                                        "none"
-                                                                    ]
                                                                 }
                                                             }
                                                         }
