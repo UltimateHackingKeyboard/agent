@@ -1154,5 +1154,69 @@
                 ]
             }
         ]
+    },
+    {
+        "isDefault": false,
+        "abbreviation": "EMY",
+        "name": "Empty keymap",
+        "description": "None of the keys are bind to any key action. It is ideal if you want to start creating your keymap from the ground up.",
+        "layers": [
+            {
+                "modules": [
+                    {
+                        "id": 0,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    },
+                    {
+                        "id": 1,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    }
+                ]
+            },
+            {
+                "modules": [
+                    {
+                        "id": 0,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    },
+                    {
+                        "id": 1,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    }
+                ]
+            },
+            {
+                "modules": [
+                    {
+                        "id": 0,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    },
+                    {
+                        "id": 1,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    }
+                ]
+            },
+            {
+                "modules": [
+                    {
+                        "id": 0,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    },
+                    {
+                        "id": 1,
+                        "pointerRole": "move",
+                        "keyActions": []
+                    }
+                ]
+            }
+        ]
     }
 ]
