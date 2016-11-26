@@ -1,9 +1,10 @@
 <div class="row">
     <h1 class="col-xs-12 pane-title">
         <i class="fa fa-play"></i>
-        <input #macroName class="pane-title__name"
-               type="text"
-               value="{{ macro.name }}"
+        <input #macroName cancelable
+                class="pane-title__name"
+                type="text"
+                value="{{ macro.name }}"
                (change)="editMacroName($event.target.value)"
                (keyup.enter)="macroName.blur()"
         />

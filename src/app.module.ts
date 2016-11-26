@@ -58,6 +58,8 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
 
+import { CancelableDirective } from './directives';
+
 import { MapperService } from './services/mapper.service';
 
 import { KeymapEffects, MacroEffects } from './store/effects';
@@ -121,7 +123,8 @@ const storeConfig = {
         MacroMouseTabComponent,
         MacroTextTabComponent,
         AddOnComponent,
-        SettingsComponent
+        SettingsComponent,
+        CancelableDirective
     ],
     imports: [
         BrowserModule,
