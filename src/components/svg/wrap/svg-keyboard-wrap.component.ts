@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     Input,
     OnChanges,
@@ -44,6 +45,7 @@ import { KeymapActions } from '../../../store/actions';
     selector: 'svg-keyboard-wrap',
     template: require('./svg-keyboard-wrap.component.html'),
     styles: [require('./svg-keyboard-wrap.component.scss')],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
@@ -92,7 +94,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     @Input() tooltipEnabled: boolean = false;
 
     private popoverShown: boolean;
-    private keyEditConfig: { keyActions: KeyAction[], keyId: number };
+    private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
     private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], shown: boolean };
@@ -100,7 +102,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
 
     constructor(private store: Store<AppState>, private mapper: MapperService) {
         this.keyEditConfig = {
-            keyActions: undefined,
+            moduleId: undefined,
             keyId: undefined
         };
 
@@ -130,11 +132,11 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     onKeyClick(moduleId: number, keyId: number): void {
         if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
-                keyActions: this.layers[this.currentLayer].modules[moduleId].keyActions,
+                moduleId,
                 keyId
             };
 
-            let keyActionToEdit: KeyAction = this.keyEditConfig.keyActions[keyId];
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
             this.showPopover(keyActionToEdit);
         }
     }
@@ -152,8 +154,14 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     }
 
     onRemap(keyAction: KeyAction): void {
-        this.changeKeyAction(keyAction);
-        this.store.dispatch(KeymapActions.saveKey(this.keymap));
+        this.store.dispatch(
+            KeymapActions.saveKey(
+                this.keymap,
+                this.currentLayer,
+                this.keyEditConfig.moduleId,
+                this.keyEditConfig.keyId,
+                keyAction)
+        );
         this.hidePopover();
     }
 
@@ -309,11 +317,6 @@ export class SvgKeyboardWrapComponent implements OnChanges {
         this.popoverInitKeyAction = undefined;
     }
 
-    changeKeyAction(keyAction: KeyAction): void {
-        let keyId = this.keyEditConfig.keyId;
-        this.keyEditConfig.keyActions[keyId] = keyAction;
-    }
-
     selectLayer(oldIndex: number, index: number): void {
         if (index > oldIndex) {
             this.layers[oldIndex].animation = 'leftOut';
@@ -324,5 +327,9 @@ export class SvgKeyboardWrapComponent implements OnChanges {
         }
 
         this.currentLayer = index;
+    }
+
+    trackKeyboard(index: number) {
+        return index;
     }
 }

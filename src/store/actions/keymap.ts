@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 
+import { KeyAction } from '../../config-serializer/config-items/key-action';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 
 export namespace KeymapActions {
@@ -60,10 +61,16 @@ export namespace KeymapActions {
         };
     }
 
-    export function saveKey(keymap: Keymap): Action {
+    export function saveKey(keymap: Keymap, layer: number, module: number, key: number, keyAction: KeyAction): Action {
         return {
             type: KeymapActions.SAVE_KEY,
-            payload: keymap
+            payload: {
+                keymap,
+                layer,
+                module,
+                key,
+                keyAction
+            }
         };
     }
 }
