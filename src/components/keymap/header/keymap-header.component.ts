@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    Renderer,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -21,11 +30,17 @@ export class KeymapHeaderComponent implements OnChanges {
     @ViewChild('abbr') keymapAbbr: ElementRef;
 
     private starTitle: string;
+    private trashTitle: string;
 
     constructor(private store: Store<AppState>, private renderer: Renderer) { }
 
-    ngOnChanges() {
-        this.setTitle();
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['keymap']) {
+            this.setKeymapTitle();
+        }
+        if (changes['deletable']) {
+            this.setTrashTitle();
+        }
     }
 
     setDefault() {
@@ -35,7 +50,9 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     removeKeymap() {
-        this.store.dispatch(KeymapActions.removeKeymap(this.keymap.abbreviation));
+        if (this.deletable) {
+            this.store.dispatch(KeymapActions.removeKeymap(this.keymap.abbreviation));
+        }
     }
 
     duplicateKeymap() {
@@ -61,9 +78,13 @@ export class KeymapHeaderComponent implements OnChanges {
         this.store.dispatch(KeymapActions.editKeymapAbbr(this.keymap.abbreviation, newAbbr));
     }
 
-    setTitle(): void {
+    setKeymapTitle(): void {
         this.starTitle = this.keymap.isDefault
-        ? 'This is the default keymap which gets activated when powering the keyboard.'
-        : 'Makes this keymap the default keymap which gets activated when powering the keyboard.';
+            ? 'This is the default keymap which gets activated when powering the keyboard.'
+            : 'Makes this keymap the default keymap which gets activated when powering the keyboard.';
+    }
+
+    setTrashTitle(): void {
+        this.trashTitle = this.deletable ? '' : 'The last keymap cannot be deleted.';
     }
 }
