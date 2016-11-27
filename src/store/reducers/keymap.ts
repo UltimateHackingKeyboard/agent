@@ -4,7 +4,10 @@ import { Action } from '@ngrx/store';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
+import { Helper as KeyActionHelper } from '../../config-serializer/config-items/key-action';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
+import { Layer } from '../../config-serializer/config-items/Layer';
+import { Module } from '../../config-serializer/config-items/Module';
 import { KeymapActions } from '../actions';
 import { AppState, KeymapState } from '../index';
 
@@ -12,7 +15,7 @@ const initialState: KeymapState = {
     entities: []
 };
 
-export default function(state = initialState, action: Action): KeymapState {
+export default function (state = initialState, action: Action): KeymapState {
     let newState: Keymap[];
 
     switch (action.type) {
@@ -80,13 +83,13 @@ export default function(state = initialState, action: Action): KeymapState {
             let isDefault: boolean;
 
             let filtered: Keymap[] = state.entities.filter((keymap: Keymap) => {
-                    if (keymap.abbreviation === action.payload) {
-                        isDefault = keymap.isDefault;
-                        return false;
-                    }
-
-                    return true;
+                if (keymap.abbreviation === action.payload) {
+                    isDefault = keymap.isDefault;
+                    return false;
                 }
+
+                return true;
+            }
             );
 
             // If deleted one is default set default keymap to the first on the list of keymaps
@@ -99,11 +102,29 @@ export default function(state = initialState, action: Action): KeymapState {
             };
 
         case KeymapActions.SAVE_KEY:
-            let changedKeymap: Keymap = new Keymap;
+
+            const keymap: Keymap = action.payload.keymap;
+            const changedKeymap: Keymap = new Keymap();
+            Object.assign(changedKeymap, keymap);
+
+            const layerIndex: number = action.payload.layer;
+            const layer: Layer = changedKeymap.layers[layerIndex];
+            const changedLayer: Layer = new Layer();
+            Object.assign(changedLayer, layer);
+            changedKeymap.layers[layerIndex] = changedLayer;
+
+            const moduleIndex: number = action.payload.module;
+            const module: Module = changedLayer.modules[moduleIndex];
+            const changedModule: Module = new Module();
+            Object.assign(changedModule, module);
+            changedLayer.modules[moduleIndex] = changedModule;
+
+            const keyIndex: number = action.payload.key;
+            changedModule.keyActions[keyIndex] = KeyActionHelper.createKeyAction(action.payload.keyAction);
 
             newState = state.entities.map((keymap: Keymap) => {
-                if (keymap.abbreviation === action.payload.abbreviation) {
-                    keymap = Object.assign(changedKeymap, action.payload);
+                if (keymap.abbreviation === changedKeymap.abbreviation) {
+                    keymap = changedKeymap;
                 }
 
                 return keymap;
