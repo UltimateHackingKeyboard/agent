@@ -16,9 +16,13 @@
         font-size: 0.75em;
         top: 8px;
 
-        &:hover {
+        &:not(.disabled):hover {
             cursor: pointer;
             color: $icon-hover-delete;
+        }
+
+        &.disabled {
+            opacity: 0.25;
         }
     }
 
