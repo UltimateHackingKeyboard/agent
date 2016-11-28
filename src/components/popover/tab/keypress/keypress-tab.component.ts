@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
@@ -11,7 +11,7 @@ import { Tab } from '../tab';
     template: require('./keypress-tab.component.html'),
     styles: [require('./keypress-tab.component.scss')]
 })
-export class KeypressTabComponent implements OnInit, Tab {
+export class KeypressTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
     @Input() longPressEnabled: boolean;
 
@@ -42,7 +42,7 @@ export class KeypressTabComponent implements OnInit, Tab {
         this.selectedLongPressIndex = -1;
     }
 
-    ngOnInit() {
+    ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
     }
 

@@ -328,7 +328,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     hidePopover(): void {
         this.popoverShown = false;
-        this.popoverInitKeyAction = undefined;
     }
 
     selectLayer(oldIndex: number, index: number): void {

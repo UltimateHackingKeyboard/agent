@@ -1,4 +1,4 @@
-import { Component, Input,  OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 
 import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
 
@@ -11,7 +11,7 @@ import { Tab } from '../tab';
     template: require('./layer-tab.component.html'),
     styles: [require('./layer-tab.component.scss')]
 })
-export class LayerTabComponent implements OnInit, Tab {
+export class LayerTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
     @ViewChild('toggleSelect') toggleSelect2: Select2Component;
     @ViewChild('layerSelect') layerSelect2: Select2Component;
@@ -52,7 +52,7 @@ export class LayerTabComponent implements OnInit, Tab {
         this.layer = LayerName.mod;
     }
 
-    ngOnInit() {
+    ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
     }
 

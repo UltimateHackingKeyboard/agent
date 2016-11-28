@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core';
 
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
@@ -12,7 +12,7 @@ import { Tab } from '../tab';
     styles: [require('./keymap-tab.component.scss')],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KeymapTabComponent implements OnInit, Tab {
+export class KeymapTabComponent implements OnInit, OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
 
@@ -34,6 +34,9 @@ export class KeymapTabComponent implements OnInit, Tab {
         if (this.keymaps.length > 0) {
             this.selectedKeymap = this.keymaps[0];
         }
+    }
+
+    ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
     }
 
