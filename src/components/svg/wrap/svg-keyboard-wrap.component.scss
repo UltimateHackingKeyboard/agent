@@ -9,6 +9,7 @@ svg-keyboard {
     position: absolute;
     left: 0;
     transform: translateX(-101%);
+    user-select: none;
 }
 
 .keyboard-slider {

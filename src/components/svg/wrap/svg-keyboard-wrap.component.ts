@@ -108,9 +108,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private keyElement: HTMLElement;
 
     @HostListener('window:resize')
-    onClick() {
-        this.wrapPosition = this.wrapHost.getBoundingClientRect();
-        this.keyPosition = this.keyElement.getBoundingClientRect();
+    onResize() {
+        if (this.wrapHost) {
+            this.wrapPosition = this.wrapHost.getBoundingClientRect();
+        }
+
+        if (this.keyElement) {
+            this.keyPosition = this.keyElement.getBoundingClientRect();
+        }
     }
 
     constructor(private store: Store<AppState>, private mapper: MapperService, private element: ElementRef) {

@@ -1,5 +1,6 @@
 import {
-    Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild
+    Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, animate, keyframes,
+    state, style, transition, trigger
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -32,7 +33,33 @@ enum TabName {
 @Component({
     selector: 'popover',
     template: require('./popover.component.html'),
-    styles: [require('./popover.component.scss')]
+    styles: [require('./popover.component.scss')],
+    animations: [
+        trigger('popover', [
+            state('closed', style({
+                transform: 'translateY(30px)',
+                visibility: 'hidden',
+                opacity: 0
+            })),
+            state('opened', style({
+                transform: 'translateY(0)',
+                visibility: 'visible',
+                opacity: 1
+            })),
+            transition('opened => closed', [
+                animate('200ms ease-out', keyframes([
+                    style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
+                    style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0 , offset: 1 })
+                ]))
+            ]),
+            transition('closed => opened', [
+                animate('200ms ease-out', keyframes([
+                    style({ transform: 'translateY(30px)', visibility: 'visible', opacity: 0, offset: 0 }),
+                    style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 1 })
+                ]))
+            ])
+        ])
+    ]
 })
 export class PopoverComponent implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -54,8 +81,10 @@ export class PopoverComponent implements OnChanges {
     private rightArrow: boolean = false;
     private topPosition: number = 0;
     private leftPosition: number = 0;
+    private animationState: string;
 
     constructor(private store: Store<AppState>) {
+        this.animationState = 'closed';
         this.keymaps$ = store.let(getKeymapEntities())
             .map((keymaps: Keymap[]) =>
                 keymaps.filter((keymap: Keymap) => this.currentKeymap.abbreviation !== keymap.abbreviation)
@@ -86,6 +115,14 @@ export class PopoverComponent implements OnChanges {
 
             this.selectTab(tab);
         }
+
+        if (change['visible']) {
+            if (change['visible'].currentValue) {
+                this.animationState = 'opened';
+            } else {
+                this.animationState = 'closed';
+            }
+        }
     }
 
     onCancelClick(): void {
@@ -112,15 +149,18 @@ export class PopoverComponent implements OnChanges {
 
     private calculatePosition() {
         const offsetLeft: number = this.wrapPosition.left + 265;
+        const popover: HTMLElement = this.popoverHost.nativeElement;
         let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
 
         this.leftArrow = newLeft <  offsetLeft;
-        this.rightArrow = (newLeft + this.popoverHost.nativeElement.offsetWidth) > offsetLeft + this.wrapPosition.width;
+        this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
 
         if (this.leftArrow) {
             newLeft = this.keyPosition.left;
         } else if (this.rightArrow) {
-            newLeft = this.keyPosition.left - this.popoverHost.nativeElement.offsetWidth + this.keyPosition.width;
+            newLeft = this.keyPosition.left - popover.offsetWidth + this.keyPosition.width;
+        } else {
+            newLeft -= popover.offsetWidth / 2;
         }
 
         this.topPosition = this.keyPosition.top + this.keyPosition.height + 7;
