@@ -1,6 +1,7 @@
 <div class="popover"
      #popover
-     [ngClass]="{'display': visible, 'leftArrow': leftArrow, 'rightArrow': rightArrow}"
+     [@popover]="animationState"
+     [ngClass]="{'leftArrow': leftArrow, 'rightArrow': rightArrow}"
      [style.top.px]="topPosition"
      [style.left.px]="leftPosition"
 >
