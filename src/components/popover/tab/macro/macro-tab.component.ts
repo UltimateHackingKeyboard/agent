@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -19,7 +19,7 @@ import { getMacroEntities } from '../../../../store/reducers/macro';
     template: require('./macro-tab.component.html'),
     styles: [require('./macro-tab.component.scss')]
 })
-export class MacroTabComponent implements OnInit, OnDestroy, Tab {
+export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
     @Input() defaultKeyAction: KeyAction;
 
     private macros: Macro[];
@@ -41,6 +41,9 @@ export class MacroTabComponent implements OnInit, OnDestroy, Tab {
                 text: macro.name
             };
         });
+    }
+
+    ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
     }
 

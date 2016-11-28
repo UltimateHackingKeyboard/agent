@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { KeyAction, MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
 import { Tab } from '../tab';
@@ -8,7 +8,7 @@ import { Tab } from '../tab';
     template: require('./mouse-tab.component.html'),
     styles: [require('./mouse-tab.component.scss')]
 })
-export class MouseTabComponent implements OnInit, Tab {
+export class MouseTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
 
     private mouseActionParam: MouseActionParam;
@@ -25,7 +25,7 @@ export class MouseTabComponent implements OnInit, Tab {
         this.pages = ['Move', 'Scroll', 'Click', 'Speed'];
     }
 
-    ngOnInit() {
+    ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
     }
 
