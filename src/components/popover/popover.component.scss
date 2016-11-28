@@ -1,13 +1,14 @@
-:host {
+.popover {
     display: flex;
     flex-direction: column;
     padding: 0;
     max-width: 568px;
     width: 100%;
     transform: translateX(-50%);
+    visibility: hidden;
 
-    > .container-fluid {
-        overflow: hidden;
+    &.display {
+        visibility: visible;
     }
 
     &.leftArrow {
@@ -27,6 +28,10 @@
             right: 22px;
             left: auto;
         }
+    }
+
+    > .container-fluid {
+        overflow: hidden;
     }
 }
 
@@ -98,6 +103,19 @@
 
 .popover-content {
     padding: 10px 24px;
+}
+
+.popover-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+
+    &.display {
+        display: block;
+    }
 }
 
 .select2-item {

@@ -1,5 +1,5 @@
 import {
-    Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild
+    Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -32,62 +32,59 @@ enum TabName {
 @Component({
     selector: 'popover',
     template: require('./popover.component.html'),
-    styles: [require('./popover.component.scss')],
-    host: { 'class': 'popover' }
+    styles: [require('./popover.component.scss')]
 })
-export class PopoverComponent implements OnInit, OnChanges {
+export class PopoverComponent implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentKeymap: Keymap;
     @Input() keyPosition: ClientRect;
     @Input() wrapPosition: ClientRect;
+    @Input() visible: boolean;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyAction>();
 
     @ViewChild('tab') selectedTab: Tab;
-
-    @HostBinding('style.top.px') topPosition: number;
-    @HostBinding('style.left.px') leftPosition: number;
-    @HostBinding('class.leftArrow') leftArrow: boolean = false;
-    @HostBinding('class.rightArrow') rightArrow: boolean = false;
+    @ViewChild('popover') popoverHost: ElementRef;
 
     public tabName = TabName;
     private activeTab: TabName;
     private keymaps$: Observable<Keymap[]>;
-    private popoverHost: HTMLElement;
+    private leftArrow: boolean = false;
+    private rightArrow: boolean = false;
+    private topPosition: number = 0;
+    private leftPosition: number = 0;
 
-    constructor(private store: Store<AppState>, private element: ElementRef) {
-        this.popoverHost = element.nativeElement;
-
+    constructor(private store: Store<AppState>) {
         this.keymaps$ = store.let(getKeymapEntities())
             .map((keymaps: Keymap[]) =>
                 keymaps.filter((keymap: Keymap) => this.currentKeymap.abbreviation !== keymap.abbreviation)
             );
     }
 
-    ngOnInit() {
-        let tab: TabName;
-
-        if (this.defaultKeyAction instanceof KeystrokeAction) {
-            tab = TabName.Keypress;
-        } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
-            tab = TabName.Layer;
-        } else if (this.defaultKeyAction instanceof MouseAction) {
-            tab = TabName.Mouse;
-        } else if (this.defaultKeyAction instanceof PlayMacroAction) {
-            tab = TabName.Macro;
-        } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
-            tab = TabName.Keymap;
-        } else {
-            tab = TabName.None;
+    ngOnChanges(change: SimpleChanges) {
+        if (this.keyPosition && this.wrapPosition && (change['keyPosition'] || change['wrapPosition'])) {
+            this.calculatePosition();
         }
 
-        this.selectTab(tab);
-    }
+        if (change['defaultKeyAction']) {
+            let tab: TabName;
 
-    ngOnChanges(change: SimpleChanges) {
-        if (change['keyPosition'] || change['wrapPosition']) {
-            this.calculatePosition();
+            if (this.defaultKeyAction instanceof KeystrokeAction) {
+                tab = TabName.Keypress;
+            } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
+                tab = TabName.Layer;
+            } else if (this.defaultKeyAction instanceof MouseAction) {
+                tab = TabName.Mouse;
+            } else if (this.defaultKeyAction instanceof PlayMacroAction) {
+                tab = TabName.Macro;
+            } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
+                tab = TabName.Keymap;
+            } else {
+                tab = TabName.None;
+            }
+
+            this.selectTab(tab);
         }
     }
 
@@ -109,17 +106,21 @@ export class PopoverComponent implements OnInit, OnChanges {
         this.activeTab = tab;
     }
 
+    onOverlay() {
+        this.cancel.emit(undefined);
+    }
+
     private calculatePosition() {
         const offsetLeft: number = this.wrapPosition.left + 265;
         let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
 
         this.leftArrow = newLeft <  offsetLeft;
-        this.rightArrow = (newLeft + this.popoverHost.offsetWidth) > offsetLeft + this.wrapPosition.width;
+        this.rightArrow = (newLeft + this.popoverHost.nativeElement.offsetWidth) > offsetLeft + this.wrapPosition.width;
 
         if (this.leftArrow) {
             newLeft = this.keyPosition.left;
         } else if (this.rightArrow) {
-            newLeft = this.keyPosition.left - this.popoverHost.offsetWidth + this.keyPosition.width;
+            newLeft = this.keyPosition.left - this.popoverHost.nativeElement.offsetWidth + this.keyPosition.width;
         }
 
         this.topPosition = this.keyPosition.top + this.keyPosition.height + 7;
