@@ -22,7 +22,8 @@ svg-keyboard {
 }
 .tooltip {
     position: fixed;
-    transform: translate(-50%, -85%);
+    transform: translate(-50%, -6px);
+    display: none;
 
     &-inner {
         background: #fff;
@@ -39,13 +40,15 @@ svg-keyboard {
         }
     }
 
-    &.top {
+    &.bottom {
         .tooltip-arrow {
-            border-top-color: #fff;
+            border-bottom-color: #fff;
+            top: 1px;
         }
     }
 
     &.in {
+        display: block;
         opacity: 1;
     }
 }

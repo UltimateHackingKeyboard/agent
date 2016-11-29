@@ -97,7 +97,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
-    private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], shown: boolean };
+    private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], show: boolean };
     private layers: Layer[];
 
     constructor(private store: Store<AppState>, private mapper: MapperService) {
@@ -110,7 +110,7 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             posTop: 0,
             posLeft: 0,
             content: [],
-            shown: false
+            show: false
         };
     }
 
@@ -142,13 +142,13 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     }
 
     onKeyHover(moduleId: number, event: MouseEvent, over: boolean, keyId: number): void {
-        let keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
-
         if (this.tooltipEnabled) {
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
+
             if (over) {
                 this.showTooltip(keyActionToEdit, event);
             } else {
-                this.hideTooltip(event);
+                this.hideTooltip();
             }
         }
     }
@@ -171,19 +171,18 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
-
         if (keyAction === undefined) {
             return;
         }
 
-        let el: Element = event.target as Element || event.srcElement;
-        let position: ClientRect = el.getBoundingClientRect();
+        const el: Element = event.target as Element || event.srcElement;
+        const position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
         let posTop: number = this.tooltipData.posTop;
 
-        if (el.tagName === 'rect') {
+        if (el.tagName === 'g') {
             posLeft = position.left + (position.width / 2);
-            posTop = position.top;
+            posTop = position.top + position.height;
         }
 
         let content: {
@@ -294,22 +293,12 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             posLeft: posLeft,
             posTop: posTop,
             content,
-            shown: true
+            show: true
         };
     }
 
-    hideTooltip(event: MouseEvent) {
-        let target: HTMLElement = event.relatedTarget as HTMLElement;
-        if (!target) {
-            this.tooltipData.shown = false;
-            return;
-        }
-
-        // Check if we are hovering tooltip
-        let list: DOMTokenList = target.classList;
-        if (!list.contains('tooltip') && !list.contains('tooltip-inner')) {
-            this.tooltipData.shown = false;
-        }
+    hideTooltip() {
+        this.tooltipData.show = false;
     }
 
     hidePopover(): void {
