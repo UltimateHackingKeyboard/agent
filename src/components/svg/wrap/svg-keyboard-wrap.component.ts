@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
+    HostBinding,
     HostListener,
     Input,
     OnChanges,
@@ -106,6 +107,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private wrapPosition: ClientRect;
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
+
+    @HostBinding('class.space') get space() {
+        return this.popoverEnabled;
+    }
 
     @HostListener('window:resize')
     onResize() {

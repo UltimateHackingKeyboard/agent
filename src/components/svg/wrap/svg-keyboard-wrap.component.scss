@@ -1,6 +1,10 @@
 :host {
     width: 100%;
     display: block;
+
+    &.space {
+        margin-bottom: 405px;
+    }
 }
 
 svg-keyboard {
