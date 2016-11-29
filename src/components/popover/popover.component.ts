@@ -53,9 +53,12 @@ enum TabName {
                 ]))
             ]),
             transition('closed => opened', [
+                style({
+                    visibility: 'visible'
+                }),
                 animate('200ms ease-out', keyframes([
-                    style({ transform: 'translateY(30px)', visibility: 'visible', opacity: 0, offset: 0 }),
-                    style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 1 })
+                    style({ transform: 'translateY(30px)', opacity: 0, offset: 0 }),
+                    style({ transform: 'translateY(0)', opacity: 1, offset: 1 })
                 ]))
             ])
         ])
@@ -148,7 +151,7 @@ export class PopoverComponent implements OnChanges {
     }
 
     private calculatePosition() {
-        const offsetLeft: number = this.wrapPosition.left + 265;
+        const offsetLeft: number = this.wrapPosition.left + 265; // 265 is a width of the side menu with a margin
         const popover: HTMLElement = this.popoverHost.nativeElement;
         let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
 
@@ -163,7 +166,8 @@ export class PopoverComponent implements OnChanges {
             newLeft -= popover.offsetWidth / 2;
         }
 
-        this.topPosition = this.keyPosition.top + this.keyPosition.height + 7;
+        // 7 is a space between a bottom key position and a popover
+        this.topPosition = this.keyPosition.top + this.keyPosition.height + 7 + window.scrollY;
         this.leftPosition = newLeft;
     }
 }

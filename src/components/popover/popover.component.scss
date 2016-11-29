@@ -26,6 +26,10 @@
     }
 }
 
+.nav-tabs > li {
+    overflow: hidden;
+}
+
 .arrowCustom {
     position: absolute;
     top: -16px;

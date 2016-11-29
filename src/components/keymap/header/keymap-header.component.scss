@@ -1,5 +1,9 @@
 @import '../../../main-app/global-styles';
 
+:host {
+    display: block;
+}
+
 .keymap {
     &__is-default {
 
