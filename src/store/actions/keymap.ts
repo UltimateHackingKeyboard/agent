@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { KeyAction } from '../../config-serializer/config-items/key-action';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
+import { Macro } from '../../config-serializer/config-items/Macro';
 
 export namespace KeymapActions {
     export const PREFIX = '[Keymap] ';
@@ -12,6 +13,7 @@ export namespace KeymapActions {
     export const SAVE_KEY = KeymapActions.PREFIX + 'Save key action';
     export const SET_DEFAULT = KeymapActions.PREFIX + 'Set default option';
     export const REMOVE = KeymapActions.PREFIX + 'Remove keymap';
+    export const CHECK_MACRO = KeymapActions.PREFIX + 'Check deleted macro';
 
     export function addKeymap(item: Keymap): Action {
         return {
@@ -71,6 +73,13 @@ export namespace KeymapActions {
                 key,
                 keyAction
             }
+        };
+    }
+
+    export function checkMacro(macro: Macro): Action {
+        return {
+            type: KeymapActions.CHECK_MACRO,
+            payload: macro
         };
     }
 }
