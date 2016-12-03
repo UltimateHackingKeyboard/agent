@@ -153,12 +153,11 @@ export class UhkBuffer {
         this.writeUInt8(bool ? 1 : 0);
     }
 
-    // See: How to create a new object from type parameter in generic class in typescript? http://stackoverflow.com/q/17382143
-    readArray<T extends Serializable<T>>(type: { new (): T }): T[] {
+    readArray<T extends Serializable<T>>(elementReader: (buffer: UhkBuffer) => T): T[] {
         let array: T[] = [];
         let length = this.readCompactLength();
         for (let i = 0; i < length; ++i) {
-            array.push(new type().fromBinary(this));
+            array.push(elementReader(this));
         }
         return array;
     }

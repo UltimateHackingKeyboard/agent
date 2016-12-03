@@ -28,16 +28,16 @@ export class Macro extends Serializable<Macro> {
         this.macroActions = other.macroActions.map(macroAction => MacroActionHelper.createMacroAction(macroAction));
     }
 
-    _fromJsObject(jsObject: any): Macro {
-        this.id = jsObject.id;
-        this.isLooped = jsObject.isLooped;
-        this.isPrivate = jsObject.isPrivate;
-        this.name = jsObject.name;
-        this.macroActions = jsObject.macroActions.map((macroAction: any) => MacroActionHelper.createMacroAction(macroAction));
+    fromJsonObject(jsonObject: any): Macro {
+        this.id = jsonObject.id;
+        this.isLooped = jsonObject.isLooped;
+        this.isPrivate = jsonObject.isPrivate;
+        this.name = jsonObject.name;
+        this.macroActions = jsonObject.macroActions.map((macroAction: any) => MacroActionHelper.createMacroAction(macroAction));
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): Macro {
+    fromBinary(buffer: UhkBuffer): Macro {
         this.id = buffer.readUInt8();
         this.isLooped = buffer.readBoolean();
         this.isPrivate = buffer.readBoolean();
@@ -50,13 +50,13 @@ export class Macro extends Serializable<Macro> {
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             id: this.id,
             isLooped: this.isLooped,
             isPrivate: this.isPrivate,
             name: this.name,
-            macroActions: this.macroActions.map(macroAction => macroAction.toJsObject())
+            macroActions: this.macroActions.map(macroAction => macroAction.toJsonObject())
         };
     }
 

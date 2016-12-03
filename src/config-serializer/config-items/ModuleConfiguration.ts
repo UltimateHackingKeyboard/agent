@@ -20,15 +20,15 @@ export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
     @assertUInt8
     maxPointerSpeed: number;
 
-    _fromJsObject(jsObject: any): ModuleConfiguration {
-        this.id = jsObject.id;
-        this.initialPointerSpeed = jsObject.initialPointerSpeed;
-        this.pointerAcceleration = jsObject.pointerAcceleration;
-        this.maxPointerSpeed = jsObject.maxPointerSpeed;
+    fromJsonObject(jsonObject: any): ModuleConfiguration {
+        this.id = jsonObject.id;
+        this.initialPointerSpeed = jsonObject.initialPointerSpeed;
+        this.pointerAcceleration = jsonObject.pointerAcceleration;
+        this.maxPointerSpeed = jsonObject.maxPointerSpeed;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): ModuleConfiguration {
+    fromBinary(buffer: UhkBuffer): ModuleConfiguration {
         this.id = buffer.readUInt8();
         this.initialPointerSpeed = buffer.readUInt8();
         this.pointerAcceleration = buffer.readUInt8();
@@ -36,7 +36,7 @@ export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             id: this.id,
             initialPointerSpeed: this.initialPointerSpeed,

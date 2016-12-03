@@ -1,6 +1,8 @@
 import { AnimationKeyboard } from '../../components/svg/wrap';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
+import { Keymap } from './Keymap';
+import { Macro } from './Macro';
 import { Module } from './Module';
 
 export class Layer extends Serializable<Layer> {
@@ -8,28 +10,30 @@ export class Layer extends Serializable<Layer> {
     modules: Module[];
     animation: AnimationKeyboard;
 
-    constructor(layers?: Layer) {
+    constructor(layers?: Layer, keymaps?: Keymap[], macros?: Macro[]) {
         super();
         if (!layers) {
             return;
         }
-        this.modules = layers.modules.map(module => new Module(module));
+        this.modules = layers.modules.map(module => new Module(module, keymaps, macros));
         this.animation = layers.animation;
     }
 
-    _fromJsObject(jsObject: any): Layer {
-        this.modules = jsObject.modules.map((module: any) => new Module().fromJsObject(module));
+    fromJsonObject(jsonObject: any, keymaps?: Keymap[], macros?: Macro[]): Layer {
+        this.modules = jsonObject.modules.map((module: any) => new Module().fromJsonObject(module, keymaps, macros));
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): Layer {
-        this.modules = buffer.readArray<Module>(Module);
+    fromBinary(buffer: UhkBuffer, keymaps?: Keymap[], macros?: Macro[]): Layer {
+        this.modules = buffer.readArray<Module>(uhkBuffer => {
+            return new Module().fromBinary(uhkBuffer, keymaps, macros);
+        });
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
-            modules: this.modules.map(module => module.toJsObject())
+            modules: this.modules.map(module => module.toJsonObject())
         };
     }
 

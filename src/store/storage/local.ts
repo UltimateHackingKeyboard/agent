@@ -11,7 +11,7 @@ export class Local {
         if (configJsonString) {
             const configJsonObject = JSON.parse(configJsonString);
             if (configJsonObject.dataModelVersion === this.dataModelVersion) {
-                config = new UhkConfiguration().fromJsObject(configJsonObject);
+                config = new UhkConfiguration().fromJsonObject(configJsonObject);
             }
         }
 
@@ -19,6 +19,6 @@ export class Local {
     }
 
     saveConfig(config: UhkConfiguration): void {
-        localStorage.setItem('config', JSON.stringify(config.toJsObject()));
+        localStorage.setItem('config', JSON.stringify(config.toJsonObject()));
     }
 }

@@ -30,21 +30,21 @@ export class MouseButtonMacroAction extends MacroAction {
         this.mouseButtonsMask = other.mouseButtonsMask;
     }
 
-    _fromJsObject(jsObject: JsObjectMouseButtonMacroAction): MouseButtonMacroAction {
+    fromJsonObject(jsObject: JsObjectMouseButtonMacroAction): MouseButtonMacroAction {
         this.assertMacroActionType(jsObject);
         this.action = MacroSubAction[jsObject.action];
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): MouseButtonMacroAction {
+    fromBinary(buffer: UhkBuffer): MouseButtonMacroAction {
         let macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
         this.action = macroActionId - MacroActionId.MouseButtonMacroAction;
         this.mouseButtonsMask = buffer.readUInt8();
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             macroActionType: macroActionType.MouseButtonMacroAction,
             action: MacroSubAction[this.action],

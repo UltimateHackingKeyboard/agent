@@ -58,9 +58,8 @@ export class KeymapTabComponent implements OnInit, OnChanges, Tab {
             return false;
         }
 
-        let switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
-        this.selectedKeymap = this.keymaps
-            .find((keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation);
+        const switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
+        this.selectedKeymap = switchKeymapAction.keymap;
     }
 
     toKeyAction(): SwitchKeymapAction {
@@ -68,8 +67,8 @@ export class KeymapTabComponent implements OnInit, OnChanges, Tab {
             throw new Error('KeyAction is not valid. No selected keymap!');
         }
 
-        let keymapAction = new SwitchKeymapAction();
-        keymapAction.keymapAbbreviation = this.selectedKeymap.abbreviation;
+        const keymapAction = new SwitchKeymapAction();
+        keymapAction.keymap = this.selectedKeymap;
         return keymapAction;
     }
 }

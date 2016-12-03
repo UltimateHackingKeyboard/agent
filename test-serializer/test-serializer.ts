@@ -8,7 +8,7 @@ let fs = require('fs');
 let uhkConfig = JSON.parse(fs.readFileSync('../src/config-serializer/uhk-config.json'));
 
 let config1Js = uhkConfig;
-let config1Ts: Serializable<UhkConfiguration> = new UhkConfiguration().fromJsObject(config1Js);
+let config1Ts: Serializable<UhkConfiguration> = new UhkConfiguration().fromJsonObject(config1Js);
 let config1Buffer = new UhkBuffer();
 config1Ts.toBinary(config1Buffer);
 let config1BufferContent = config1Buffer.getBufferContent();
@@ -18,7 +18,7 @@ config1Buffer.offset = 0;
 console.log();
 let config2Ts = new UhkConfiguration().fromBinary(config1Buffer);
 console.log('\n');
-let config2Js = config2Ts.toJsObject();
+let config2Js = config2Ts.toJsonObject();
 let config2Buffer = new UhkBuffer();
 config2Ts.toBinary(config2Buffer);
 fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(config2Js, undefined, 4));

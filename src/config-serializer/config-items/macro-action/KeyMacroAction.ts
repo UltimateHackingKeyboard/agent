@@ -33,7 +33,7 @@ export class KeyMacroAction extends MacroAction {
         this.modifierMask = other.modifierMask;
     }
 
-    _fromJsObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
+    fromJsonObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
         this.assertMacroActionType(jsObject);
         this.action = MacroSubAction[jsObject.action];
         this.scancode = jsObject.scancode;
@@ -41,7 +41,7 @@ export class KeyMacroAction extends MacroAction {
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): KeyMacroAction {
+    fromBinary(buffer: UhkBuffer): KeyMacroAction {
         let macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
         let keyMacroType: number = macroActionId - MacroActionId.KeyMacroAction;
         this.action = Math.floor(keyMacroType / NUM_OF_COMBINATIONS);
@@ -55,7 +55,7 @@ export class KeyMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         let jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,
             action: MacroSubAction[this.action]

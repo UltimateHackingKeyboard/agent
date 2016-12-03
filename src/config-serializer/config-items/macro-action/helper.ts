@@ -70,17 +70,17 @@ export class Helper {
     private static fromJSONObject(macroAction: any): MacroAction {
        switch (macroAction.macroActionType) {
             case macroActionType.KeyMacroAction:
-                return new KeyMacroAction().fromJsObject(macroAction);
+                return new KeyMacroAction().fromJsonObject(macroAction);
             case macroActionType.MouseButtonMacroAction:
-                return new MouseButtonMacroAction().fromJsObject(macroAction);
+                return new MouseButtonMacroAction().fromJsonObject(macroAction);
             case macroActionType.MoveMouseMacroAction:
-                return new MoveMouseMacroAction().fromJsObject(macroAction);
+                return new MoveMouseMacroAction().fromJsonObject(macroAction);
             case macroActionType.ScrollMouseMacroAction:
-                return new ScrollMouseMacroAction().fromJsObject(macroAction);
+                return new ScrollMouseMacroAction().fromJsonObject(macroAction);
             case macroActionType.DelayMacroAction:
-                return new DelayMacroAction().fromJsObject(macroAction);
+                return new DelayMacroAction().fromJsonObject(macroAction);
             case macroActionType.TextMacroAction:
-                return new TextMacroAction().fromJsObject(macroAction);
+                return new TextMacroAction().fromJsonObject(macroAction);
             default:
                 throw `Invalid MacroAction.macroActionType: "${macroAction.macroActionType}"`;
         }

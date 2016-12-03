@@ -15,19 +15,19 @@ export class DelayMacroAction extends MacroAction {
         this.delay = other.delay;
     }
 
-    _fromJsObject(jsObject: any): DelayMacroAction {
+    fromJsonObject(jsObject: any): DelayMacroAction {
         this.assertMacroActionType(jsObject);
         this.delay = jsObject.delay;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): DelayMacroAction {
+    fromBinary(buffer: UhkBuffer): DelayMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.delay = buffer.readUInt16();
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             macroActionType: macroActionType.DelayMacroAction,
             delay: this.delay

@@ -1,45 +1,49 @@
-import { assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../UhkBuffer';
+import { Macro } from '../Macro';
 import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class PlayMacroAction extends KeyAction {
 
-    @assertUInt8
-    macroId: number;
+    macro: Macro;
 
-    constructor(other?: PlayMacroAction) {
+    constructor(parameter?: PlayMacroAction | Macro) {
         super();
-        if (!other) {
+        if (!parameter) {
             return;
         }
-        this.macroId = other.macroId;
+        if (parameter instanceof PlayMacroAction) {
+            this.macro = parameter.macro;
+        } else {
+            this.macro = parameter;
+        }
     }
 
-    _fromJsObject(jsObject: any): PlayMacroAction {
-        this.assertKeyActionType(jsObject);
-        this.macroId = jsObject.macroId;
+    fromJsonObject(jsonObject: any, macros: Macro[]): PlayMacroAction {
+        this.assertKeyActionType(jsonObject);
+        this.macro = macros.find(macro => macro.id === jsonObject.macroId);
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): PlayMacroAction {
+    fromBinary(buffer: UhkBuffer, macros: Macro[]): PlayMacroAction {
         this.readAndAssertKeyActionId(buffer);
-        this.macroId = buffer.readUInt8();
+        const macroId = buffer.readUInt8();
+        this.macro = macros.find(macro => macro.id === macroId);
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             keyActionType: keyActionType.PlayMacroAction,
-            macroId: this.macroId
+            macroId: this.macro.id
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.PlayMacroAction);
-        buffer.writeUInt8(this.macroId);
+        buffer.writeUInt8(this.macro.id);
     }
 
     toString(): string {
-        return `<PlayMacroAction macroId="${this.macroId}">`;
+        return `<PlayMacroAction macroId="${this.macro.id}">`;
     }
 }

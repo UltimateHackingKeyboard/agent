@@ -13,19 +13,19 @@ export class TextMacroAction extends MacroAction {
         this.text = other.text;
     }
 
-    _fromJsObject(jsObject: any): TextMacroAction {
+    fromJsonObject(jsObject: any): TextMacroAction {
         this.assertMacroActionType(jsObject);
         this.text = jsObject.text;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): TextMacroAction {
+    fromBinary(buffer: UhkBuffer): TextMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.text = buffer.readString();
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             macroActionType: macroActionType.TextMacroAction,
             text: this.text

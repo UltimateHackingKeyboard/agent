@@ -73,8 +73,6 @@ export abstract class MacroAction extends Serializable<MacroAction> {
         return readMacroActionId;
     }
 
-    abstract _fromJsObject(jsObject: any): MacroAction;
-    abstract _fromBinary(buffer: UhkBuffer): MacroAction;
-    abstract _toJsObject(): any;
+    abstract _toJsonObject(): any;
     abstract _toBinary(buffer: UhkBuffer): void;
 }
