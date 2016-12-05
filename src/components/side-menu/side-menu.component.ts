@@ -2,6 +2,8 @@ import { Component, Renderer, animate, state, style, transition, trigger } from 
 
 import { Store } from '@ngrx/store';
 
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
@@ -17,7 +19,7 @@ import { getKeymapEntities, getMacroEntities } from '../../store/reducers';
             state('inactive', style({
                 height: '0px'
             })),
-            state('active',   style({
+            state('active', style({
                 height: '*'
             })),
             transition('inactive <=> active', animate('500ms ease-out'))
@@ -30,7 +32,7 @@ import { getKeymapEntities, getMacroEntities } from '../../store/reducers';
 export class SideMenuComponent {
     private keymaps$: Observable<Keymap[]>;
     private macros$: Observable<Macro[]>;
-    private animation: {[key: string]: 'active' | 'inactive'};
+    private animation: { [key: string]: 'active' | 'inactive' };
 
     constructor(private store: Store<AppState>, private renderer: Renderer) {
         this.animation = {
@@ -40,18 +42,20 @@ export class SideMenuComponent {
         };
 
         this.keymaps$ = store.let(getKeymapEntities())
-            .map((keymaps: Keymap[]) => {
-                return keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
+            .map(keymaps => keymaps.slice()) // Creating a new array reference, because the sort is working in place
+            .do((keymaps: Keymap[]) => {
+                keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
             });
 
         this.macros$ = store.let(getMacroEntities())
-            .map((macros: Macro[]) => {
-                return macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
+            .map(macros => macros.slice()) // Creating a new array reference, because the sort is working in place
+            .do((macros: Macro[]) => {
+                macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
             });
     }
 
     toggleHide(event: Event, type: string) {
-        let header: DOMTokenList = (<Element> event.target).classList;
+        let header: DOMTokenList = (<Element>event.target).classList;
         let show = false;
 
         if (header.contains('fa-chevron-down')) {
