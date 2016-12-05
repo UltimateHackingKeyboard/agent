@@ -22,6 +22,7 @@ import {
     MacroKeyTabComponent,
     MacroListComponent,
     MacroMouseTabComponent,
+    MacroNotFoundComponent,
     MacroTextTabComponent
 } from './components/macro';
 import { NotificationComponent } from './components/notification';
@@ -122,6 +123,7 @@ const storeConfig = {
         MacroKeyTabComponent,
         MacroMouseTabComponent,
         MacroTextTabComponent,
+        MacroNotFoundComponent,
         AddOnComponent,
         SettingsComponent,
         CancelableDirective

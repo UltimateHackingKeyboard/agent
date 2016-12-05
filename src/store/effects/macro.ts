@@ -25,7 +25,7 @@ export class MacroEffects {
             const macro: Macro[] = state.macros.entities;
 
             if (state.macros.entities.length === 0) {
-                this.router.navigate(['/macro/add']);
+                this.router.navigate(['/macro']);
             } else {
                 this.router.navigate(['/macro', macro[0].id]);
             }
