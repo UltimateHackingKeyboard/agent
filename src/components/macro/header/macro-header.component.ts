@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, Renderer,
+    AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer,
     ViewChild
 } from '@angular/core';
 
@@ -16,12 +16,18 @@ import { AppState } from '../../../store/index';
     styles: [require('./macro-header.component.scss')],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MacroHeaderComponent implements AfterViewInit {
+export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
     @ViewChild('macroName') macroName: ElementRef;
 
     constructor(private store: Store<AppState>, private renderer: Renderer) { }
+
+    ngOnChanges() {
+        if (this.isNew) {
+            this.renderer.invokeElementMethod(this.macroName.nativeElement, 'select', []);
+        }
+    }
 
     ngAfterViewInit() {
         if (this.isNew) {
@@ -45,4 +51,5 @@ export class MacroHeaderComponent implements AfterViewInit {
 
         this.store.dispatch(MacroActions.editMacroName(this.macro.id, name));
     }
+
 }
