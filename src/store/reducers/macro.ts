@@ -1,6 +1,7 @@
 import '@ngrx/core/add/operator/select';
 import { Action } from '@ngrx/store';
 
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
@@ -13,7 +14,7 @@ const initialState: MacroState = {
     entities: []
 };
 
-export default function(state = initialState, action: Action): MacroState {
+export default function (state = initialState, action: Action): MacroState {
     let newMacro: Macro;
     let newState: Macro[];
 
@@ -149,15 +150,7 @@ export function getMacroEntities(): (state$: Observable<AppState>) => Observable
 
 export function getMacro(id: number) {
     if (isNaN(id)) {
-        return (state$: Observable<AppState>) => state$
-            .select(appState => appState.macros.entities)
-            .map((macros: Macro[]) => {
-                if (macros.length > 0) {
-                    return macros[0];
-                } else {
-                    return undefined;
-                }
-            });
+        return () => Observable.of<Macro>(undefined);
     } else {
         return (state$: Observable<AppState>) => state$
             .select(appState => appState.macros.entities)

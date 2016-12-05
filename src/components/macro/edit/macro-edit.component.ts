@@ -25,7 +25,7 @@ export class MacroEditComponent implements OnDestroy {
     private macro: Macro;
     private isNew: boolean;
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute) {
+    constructor(private store: Store<AppState>, public route: ActivatedRoute) {
         this.subscription = route
             .params
             .select<string>('id')

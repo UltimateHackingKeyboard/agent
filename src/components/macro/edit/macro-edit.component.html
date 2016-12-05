@@ -13,5 +13,5 @@
 </template>
 
 <div *ngIf="!macro" class="not-found">
-    Sorry, there is no macro with this id.
+    There is no macro with id {{ route.params.select('id') | async }}.
 </div>
