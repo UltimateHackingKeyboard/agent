@@ -13,6 +13,7 @@ export class SvgModuleComponent {
     @Input() coverages: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
+    @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter<number>();
     @Output() keyHover = new EventEmitter();
 

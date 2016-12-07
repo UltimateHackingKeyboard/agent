@@ -1,4 +1,5 @@
 import {
+    AnimationTransitionEvent,
     ChangeDetectionStrategy,
     Component,
     Input,
@@ -49,11 +50,11 @@ import { KeymapActions } from '../../../store/actions';
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
-            state('leftIn, rightIn', style({
+            state('leftIn, rightIn, in', style({
                 transform: 'translateX(-50%)',
                 left: '50%'
             })),
-            state('leftOut', style({
+            state('leftOut, out', style({
                 transform: 'translateX(-101%)',
                 left: '0'
             })),
@@ -61,13 +62,13 @@ import { KeymapActions } from '../../../store/actions';
                 transform: 'translateX(0)',
                 left: '101%'
             })),
-            transition('leftOut => leftIn, rightOut => leftIn', [
+            transition('leftOut => leftIn, rightOut => leftIn, out => leftIn', [
                 animate('400ms ease-out', keyframes([
                     style({ transform: 'translateX(0%)', left: '101%', offset: 0 }),
                     style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
                 ]))
             ]),
-            transition('leftIn => leftOut, rightIn => leftOut', [
+            transition('leftIn => leftOut, rightIn => leftOut, in => leftOut', [
                 animate('400ms ease-out', keyframes([
                     style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
                     style({ transform: 'translateX(-101%)', left: '0%', offset: 1 })
@@ -85,6 +86,13 @@ import { KeymapActions } from '../../../store/actions';
                     style({ transform: 'translateX(0%)', left: '101%', offset: 1 })
                 ]))
             ])
+        ]),
+        trigger('sliderState', [
+            state('hidden', style({ opacity: 0 })),
+            state('visible', style({ opacity: 1 })),
+            transition('hidden <=> visible', [
+                animate('200ms ease-out')
+            ])
         ])
     ]
 })
@@ -93,12 +101,14 @@ export class SvgKeyboardWrapComponent implements OnChanges {
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
 
+    sliderAnimation: 'hidden' | 'visible';
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private currentLayer: number = 0;
     private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], show: boolean };
     private layers: Layer[];
+    private newLayers: boolean;
 
     constructor(private store: Store<AppState>, private mapper: MapperService) {
         this.keyEditConfig = {
@@ -112,18 +122,13 @@ export class SvgKeyboardWrapComponent implements OnChanges {
             content: [],
             show: false
         };
+        this.sliderAnimation = 'visible';
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap'].previousValue.abbreviation !== changes['keymap'].currentValue.abbreviation) {
-            this.layers = this.keymap.layers;
-            this.currentLayer = 0;
             this.popoverShown = false;
-
-            if (this.layers.length > 0) {
-                this.layers.forEach(element => element.animation = 'leftOut');
-                this.layers[0].animation = 'leftIn';
-            }
+            this.sliderAnimation = 'hidden';
         } else if (changes['keymap']) {
             this.popoverShown = false;
         }
@@ -320,5 +325,20 @@ export class SvgKeyboardWrapComponent implements OnChanges {
 
     trackKeyboard(index: number) {
         return index;
+    }
+
+    onSliderAnimationDone(event: AnimationTransitionEvent): void {
+        if (event.toState === 'hidden') {
+            this.newLayers = true;
+            this.layers = this.keymap.layers;
+            this.currentLayer = 0;
+            if (this.layers.length > 0) {
+                this.layers.forEach(element => element.animation = 'out');
+                this.layers[0].animation = 'in';
+            }
+            this.sliderAnimation = 'visible';
+        } else {
+            this.newLayers = false;
+        }
     }
 }

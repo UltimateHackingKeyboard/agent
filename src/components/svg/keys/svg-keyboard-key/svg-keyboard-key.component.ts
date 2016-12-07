@@ -59,6 +59,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() height: number;
     @Input() width: number;
     @Input() keyAction: KeyAction;
+    @Input() keybindAnimationEnabled: boolean;
 
     enumLabelTypes = LabelTypes;
 
@@ -81,7 +82,9 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         /* tslint:disable:no-string-literal */
         if (changes['keyAction']) {
             this.setLabels();
-            this.animation = 'active';
+            if (this.keybindAnimationEnabled) {
+                this.animation = 'active';
+            }
         }
         /* tslint:enable:no-string-literal */
     }

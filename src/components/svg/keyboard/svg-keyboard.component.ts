@@ -10,6 +10,7 @@ import { SvgModule } from '../module';
 })
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];
+    @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
 
