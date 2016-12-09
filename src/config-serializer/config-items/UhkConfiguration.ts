@@ -46,7 +46,11 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
             return newKeymap;
         });
         for (let i = 0; i < this.keymaps.length; ++i) {
-            this.keymaps[i].fromJsonObject(jsonObject.keymaps[i], this.keymaps, this.macros);
+            this.keymaps[i].fromJsonObject(
+                jsonObject.keymaps[i],
+                abbrevation => this.getKeymap(abbrevation, true),
+                this.getMacro.bind(this)
+            );
         }
         this.epilogue = jsonObject.epilogue;
         return this;
@@ -62,14 +66,9 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
             return new ModuleConfiguration().fromBinary(uhkBuffer);
         });
         this.macros = buffer.readArray<Macro>(uhkBuffer => new Macro().fromBinary(uhkBuffer));
-        let numKeymaps: number = buffer.readCompactLength();
-        const offset = buffer.offset;
-        this.keymaps = new Array<Keymap>(numKeymaps).fill(undefined).map(() => {
-            return new Keymap().fromBinary(buffer);
-        });
-        buffer.offset = offset;
-        this.keymaps = this.keymaps.map(() => {
-            return new Keymap().fromBinary(buffer, this.keymaps, this.macros);
+        this.keymaps = [];
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => {
+            return new Keymap().fromBinary(uhkBuffer, abbrevation => this.getKeymap(abbrevation, true), this.getMacro.bind(this));
         });
         this.epilogue = buffer.readUInt32();
         return this;
@@ -105,11 +104,18 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         return `<UhkConfiguration signature="${this.signature}">`;
     }
 
-    getKeymap(keymapAbbreviation: string): Keymap {
-        return this.keymaps.find(keymap => keymapAbbreviation === keymap.abbreviation);
+    getKeymap(keymapAbbreviation: string, createIfNotExist = false): Keymap {
+        let resultKeymap = this.keymaps.find(keymap => keymapAbbreviation === keymap.abbreviation);
+        if (createIfNotExist && !resultKeymap) {
+            resultKeymap = new Keymap();
+            resultKeymap.abbreviation = keymapAbbreviation;
+            this.keymaps.push(resultKeymap);
+        }
+        return resultKeymap;
     }
 
     getMacro(macroId: number): Macro {
         return this.macros.find(macro => macroId === macro.id);
     }
+
 }

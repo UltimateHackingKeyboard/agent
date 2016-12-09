@@ -10,23 +10,23 @@ export class Layer extends Serializable<Layer> {
     modules: Module[];
     animation: AnimationKeyboard;
 
-    constructor(layers?: Layer, keymaps?: Keymap[], macros?: Macro[]) {
+    constructor(layers?: Layer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro) {
         super();
         if (!layers) {
             return;
         }
-        this.modules = layers.modules.map(module => new Module(module, keymaps, macros));
+        this.modules = layers.modules.map(module => new Module(module, getKeymap, getMacro));
         this.animation = layers.animation;
     }
 
-    fromJsonObject(jsonObject: any, keymaps?: Keymap[], macros?: Macro[]): Layer {
-        this.modules = jsonObject.modules.map((module: any) => new Module().fromJsonObject(module, keymaps, macros));
+    fromJsonObject(jsonObject: any, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Layer {
+        this.modules = jsonObject.modules.map((module: any) => new Module().fromJsonObject(module, getKeymap, getMacro));
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, keymaps?: Keymap[], macros?: Macro[]): Layer {
+    fromBinary(buffer: UhkBuffer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Layer {
         this.modules = buffer.readArray<Module>(uhkBuffer => {
-            return new Module().fromBinary(uhkBuffer, keymaps, macros);
+            return new Module().fromBinary(uhkBuffer, getKeymap, getMacro);
         });
         return this;
     }

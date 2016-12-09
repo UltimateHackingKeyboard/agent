@@ -18,16 +18,16 @@ export class SwitchKeymapAction extends KeyAction {
         }
     }
 
-    fromJsonObject(jsonObject: any, keymaps: Keymap[]): SwitchKeymapAction {
+    fromJsonObject(jsonObject: any, getKeymap: (abbrevation: string) => Keymap): SwitchKeymapAction {
         this.assertKeyActionType(jsonObject);
-        this.keymap = keymaps.find(keymap => keymap.abbreviation === jsonObject.keymapAbbreviation);
+        this.keymap = getKeymap(jsonObject.keymapAbbreviation);
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, keymaps: Keymap[]): SwitchKeymapAction {
+    fromBinary(buffer: UhkBuffer, getKeymap: (abbrevation: string) => Keymap): SwitchKeymapAction {
         this.readAndAssertKeyActionId(buffer);
         const keymapAbbreviation = buffer.readString();
-        this.keymap = keymaps.find(keymap => keymap.abbreviation === keymapAbbreviation);
+        this.keymap = getKeymap(keymapAbbreviation);
         return this;
     }
 

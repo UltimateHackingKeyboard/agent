@@ -18,16 +18,16 @@ export class PlayMacroAction extends KeyAction {
         }
     }
 
-    fromJsonObject(jsonObject: any, macros: Macro[]): PlayMacroAction {
+    fromJsonObject(jsonObject: any, getMacro: (macroId: number) => Macro): PlayMacroAction {
         this.assertKeyActionType(jsonObject);
-        this.macro = macros.find(macro => macro.id === jsonObject.macroId);
+        this.macro = getMacro(jsonObject.macroId);
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros: Macro[]): PlayMacroAction {
+    fromBinary(buffer: UhkBuffer, getMacro: (macroId: number) => Macro): PlayMacroAction {
         this.readAndAssertKeyActionId(buffer);
         const macroId = buffer.readUInt8();
-        this.macro = macros.find(macro => macro.id === macroId);
+        this.macro = getMacro(macroId);
         return this;
     }
 

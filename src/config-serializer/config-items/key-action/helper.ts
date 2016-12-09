@@ -15,17 +15,25 @@ import { Macro } from '../Macro';
 
 export class Helper {
 
-    static createKeyAction(source: KeyAction | UhkBuffer | any, keymaps?: Keymap[], macros?: Macro[]): KeyAction {
+    static createKeyAction(
+        source: KeyAction | UhkBuffer | any,
+        getKeymap?: (abbrevation: string) => Keymap,
+        getMacro?: (macroId: number) => Macro
+    ): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {
-            return Helper.fromUhkBuffer(source, keymaps, macros);
+            return Helper.fromUhkBuffer(source, getKeymap, getMacro);
         } else {
-            return Helper.fromJSONObject(source, keymaps, macros);
+            return Helper.fromJSONObject(source, getKeymap, getMacro);
         }
     }
 
-    private static fromUhkBuffer(buffer: UhkBuffer, keymaps: Keymap[], macros: Macro[]): KeyAction {
+    private static fromUhkBuffer(
+        buffer: UhkBuffer,
+        getKeymap?: (abbrevation: string) => Keymap,
+        getMacro?: (macroId: number) => Macro
+    ): KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
@@ -40,11 +48,11 @@ export class Helper {
             case KeyActionId.SwitchLayerAction:
                 return new SwitchLayerAction().fromBinary(buffer);
             case KeyActionId.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromBinary(buffer, keymaps);
+                return new SwitchKeymapAction().fromBinary(buffer, getKeymap);
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer);
             case KeyActionId.PlayMacroAction:
-                return new PlayMacroAction().fromBinary(buffer, macros);
+                return new PlayMacroAction().fromBinary(buffer, getMacro);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }
@@ -66,7 +74,11 @@ export class Helper {
         return newKeyAction;
     }
 
-    private static fromJSONObject(keyAction: any, keymaps: Keymap[], macros: Macro[]): KeyAction {
+    private static fromJSONObject(
+        keyAction: any,
+        getKeymap?: (abbrevation: string) => Keymap,
+        getMacro?: (macroId: number) => Macro
+    ): KeyAction {
         if (!keyAction) {
             return;
         }
@@ -77,11 +89,11 @@ export class Helper {
             case keyActionType.SwitchLayerAction:
                 return new SwitchLayerAction().fromJsonObject(keyAction);
             case keyActionType.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromJsonObject(keyAction, keymaps);
+                return new SwitchKeymapAction().fromJsonObject(keyAction, getKeymap);
             case keyActionType.MouseAction:
                 return new MouseAction().fromJsonObject(keyAction);
             case keyActionType.PlayMacroAction:
-                return new PlayMacroAction().fromJsonObject(keyAction, macros);
+                return new PlayMacroAction().fromJsonObject(keyAction, getMacro);
             default:
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }

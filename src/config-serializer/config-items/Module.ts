@@ -21,32 +21,32 @@ export class Module extends Serializable<Module> {
     @assertEnum(PointerRole)
     pointerRole: PointerRole;
 
-    constructor(other?: Module, keymaps?: Keymap[], macros?: Macro[]) {
+    constructor(other?: Module, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro) {
         super();
         if (!other) {
             return;
         }
         this.id = other.id;
-        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction, keymaps, macros));
+        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction, getKeymap, getMacro));
         this.pointerRole = other.pointerRole;
     }
 
-    fromJsonObject(jsonObject: any, keymaps?: Keymap[], macros?: Macro[]): Module {
+    fromJsonObject(jsonObject: any, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Module {
         this.id = jsonObject.id;
         this.pointerRole = PointerRole[<string>jsonObject.pointerRole];
         this.keyActions = jsonObject.keyActions.map((keyAction: any) => {
-           return KeyActionHelper.createKeyAction(keyAction, keymaps, macros);
+           return KeyActionHelper.createKeyAction(keyAction, getKeymap, getMacro);
         });
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, keymaps?: Keymap[], macros?: Macro[]): Module {
+    fromBinary(buffer: UhkBuffer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Module {
         this.id = buffer.readUInt8();
         this.pointerRole = buffer.readUInt8();
         let keyActionsLength: number = buffer.readCompactLength();
         this.keyActions = [];
         for (let i = 0; i < keyActionsLength; ++i) {
-            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, keymaps, macros));
+            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, getKeymap, getMacro));
         }
         return this;
     }
