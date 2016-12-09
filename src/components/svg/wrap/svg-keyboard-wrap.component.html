@@ -1,9 +1,10 @@
 <template ngIf="layers">
     <layers [class.disabled]="popoverShown" (select)="selectLayer($event.oldIndex, $event.index)" [current]="currentLayer"></layers>
-    <div class="keyboard-slider">
+    <div class="keyboard-slider" [@sliderState]="sliderAnimation" (@sliderState.done)="onSliderAnimationDone($event)">
         <svg-keyboard *ngFor="let layer of layers; trackBy: trackKeyboard"
                       [@layerState]="layer.animation"
                       [moduleConfig]="layer.modules"
+                      [keybindAnimationEnabled]="!newLayers"
                       (keyClick)="onKeyClick($event.moduleId, $event.keyId)"
                       (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
         >
