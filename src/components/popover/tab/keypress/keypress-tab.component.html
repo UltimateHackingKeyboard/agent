@@ -8,14 +8,20 @@
     <b class="setting-label">Modifiers:</b>
     <div class="btn-toolbar modifiers">
         <div class="btn-group btn-group-sm modifiers__left">
-            <button type="button" class="btn btn-default" *ngFor="let modifier of leftModifiers; let index = index" [class.btn-primary]="leftModifierSelects[index]"
-                (click)="toggleModifier(false, index)">
+            <button type="button" class="btn btn-default"
+                    *ngFor="let modifier of leftModifiers; let index = index"
+                    [class.btn-primary]="leftModifierSelects[index]"
+                    (click)="toggleModifier(false, index)"
+            >
                 {{modifier}}
             </button>
         </div>
         <div class="btn-group btn-group-sm modifiers__right">
-            <button type="button" class="btn btn-default" *ngFor="let modifier of rightModifiers; let index = index" [class.btn-primary]="rightModifierSelects[index]"
-                (click)="toggleModifier(true, index)">
+            <button type="button" class="btn btn-default"
+                    *ngFor="let modifier of rightModifiers; let index = index"
+                    [class.btn-primary]="rightModifierSelects[index]"
+                    (click)="toggleModifier(true, index)"
+            >
                 {{modifier}}
             </button>
         </div>
@@ -23,8 +29,12 @@
 </div>
 <div class="long-press-container" *ngIf="longPressEnabled">
     <b class="setting-label">Long press action:</b>
-    <select2 #longPressSelect [data]="longPressGroups" [value]="selectedLongPressIndex.toString()" (valueChanged)="onLongpressChange($event)"
-        [width]="140"></select2>
+    <select2 #longPressSelect
+             [data]="longPressGroups"
+             [value]="selectedLongPressIndex.toString()"
+             (valueChanged)="onLongpressChange($event)"
+             [width]="140"
+    ></select2>
     <icon name="question-circle" title="This action happens when the key is being held along with another key."></icon>
 </div>
 

@@ -17,15 +17,29 @@ main-app {
 .select2 {
     &-container {
         z-index: 1100;
+
+        .scancode--searchterm {
+            text-align: right;
+            color: #b7b7b7;
+        }
+    }
+
+    &-item {
+        display: flex;
+        justify-content: space-between;
     }
 
     &-results {
-        text-align: center;
+        text-align: left;
     }
 }
 
 .nav-pills > li > a {
     cursor: pointer;
+}
+
+.select2-container--default .select2-dropdown--below .select2-results > .select2-results__options {
+    max-height: 300px;
 }
 
 /* GitHub ribbon */

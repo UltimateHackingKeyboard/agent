@@ -1,6 +1,14 @@
-<select2 #toggleSelect [data]="toggleData" [value]="toggle.toString()" (valueChanged)="toggleChanged($event)"></select2>
+<select (change)="toggleChanged($event.target.value)">
+    <option *ngFor="let item of toggleData" [value]="item.id" [selected]="toggle === item.id">
+        {{ item.text }}
+    </option>
+</select>
 <span>the</span>
-<select2 #layerSelect [data]="layerData" [value]="layer.toString()" (valueChanged)="layerChanged($event)"></select2>
+<select (change)="layerChanged($event.target.value)">
+    <option *ngFor="let item of layerData" [value]="item.id" [selected]="layer === item.id">
+        {{ item.text }}
+    </option>
+</select>
 <span [ngSwitch]="toggle">
      <template ngSwitchCase="true">layer by pressing this key.</template>
      <template ngSwitchDefault="false">layer by holding this key.</template>

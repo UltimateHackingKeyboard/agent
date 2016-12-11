@@ -3,9 +3,16 @@
     margin: 0 -5px;
 
     > span,
-    > select2 {
+    > select {
         margin: 0 5px;
         display: flex;
         align-items: center;
     }
+}
+
+select {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 4px 20px 4px 8px;
 }
