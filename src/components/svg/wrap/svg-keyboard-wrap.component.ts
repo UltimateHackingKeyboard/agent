@@ -7,13 +7,7 @@ import {
     Input,
     OnChanges,
     OnInit,
-    SimpleChanges,
-    animate,
-    keyframes,
-    state,
-    style,
-    transition,
-    trigger
+    SimpleChanges
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -42,48 +36,7 @@ import { KeymapActions } from '../../../store/actions';
     selector: 'svg-keyboard-wrap',
     template: require('./svg-keyboard-wrap.component.html'),
     styles: [require('./svg-keyboard-wrap.component.scss')],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
-    animations: [
-        trigger('layerState', [
-            state('leftIn, rightIn', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('leftOut', style({
-                transform: 'translateX(-101%)',
-                left: '0'
-            })),
-            state('rightOut', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
-            transition('leftOut => leftIn, rightOut => leftIn', [
-                animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(0%)', left: '101%', offset: 0 }),
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
-                ]))
-            ]),
-            transition('leftIn => leftOut, rightIn => leftOut', [
-                animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
-                    style({ transform: 'translateX(-101%)', left: '0%', offset: 1 })
-                ]))
-            ]),
-            transition('* => rightIn', [
-                animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(-101%)', left: '0%', offset: 0 }),
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
-                ]))
-            ]),
-            transition('* => rightOut', [
-                animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
-                    style({ transform: 'translateX(0%)', left: '101%', offset: 1 })
-                ]))
-            ])
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
@@ -324,4 +277,5 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     trackKeyboard(index: number) {
         return index;
     }
+
 }

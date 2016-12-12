@@ -1,0 +1,6 @@
+<svg-keyboard *ngFor="let layer of layers; trackBy: trackKeyboard"
+                      [@layerState]="layer.animation"
+                      [moduleConfig]="layer.modules"
+                      (keyClick)="keyClick.emit($event)"
+                      (keyHover)="keyHover.emit($event)">
+</svg-keyboard>

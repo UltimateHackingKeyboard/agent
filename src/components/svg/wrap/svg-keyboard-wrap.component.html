@@ -1,14 +1,9 @@
 <template ngIf="layers">
     <layers [class.disabled]="popoverShown" (select)="selectLayer($event.oldIndex, $event.index)" [current]="currentLayer"></layers>
-    <div class="keyboard-slider">
-        <svg-keyboard *ngFor="let layer of layers; trackBy: trackKeyboard"
-                      [@layerState]="layer.animation"
-                      [moduleConfig]="layer.modules"
-                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
-                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
-        >
-        </svg-keyboard>
-    </div>
+    <keyboard-slider [layers]="layers"
+                     [currentLayer]="currentLayer"
+                     (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
+                     (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"></keyboard-slider>
     <popover [visible]="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction" [currentKeymap]="keymap" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
     <div class="tooltip bottom"
          [class.in]="tooltipData.show"

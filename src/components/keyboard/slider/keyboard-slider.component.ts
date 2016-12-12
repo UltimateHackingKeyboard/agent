@@ -1,0 +1,101 @@
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges,
+    animate,
+    keyframes,
+    state,
+    style,
+    transition,
+    trigger
+} from '@angular/core';
+
+import { Layer } from '../../../config-serializer/config-items/Layer';
+
+@Component({
+    selector: 'keyboard-slider',
+    template: require('./keyboard-slider.component.html'),
+    styles: [require('./keyboard-slider.component.scss')],
+    changeDetection: ChangeDetectionStrategy.Default,
+    // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
+    animations: [
+        trigger('layerState', [
+            state('leftIn, rightIn', style({
+                transform: 'translateX(-50%)',
+                left: '50%'
+            })),
+            state('leftOut', style({
+                transform: 'translateX(-101%)',
+                left: '0'
+            })),
+            state('rightOut', style({
+                transform: 'translateX(0)',
+                left: '101%'
+            })),
+            transition('leftOut => leftIn, rightOut => leftIn', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(0%)', left: '101%', offset: 0 }),
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                ]))
+            ]),
+            transition('leftIn => leftOut, rightIn => leftOut', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
+                    style({ transform: 'translateX(-101%)', left: '0%', offset: 1 })
+                ]))
+            ]),
+            transition('* => rightIn', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(-101%)', left: '0%', offset: 0 }),
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                ]))
+            ]),
+            transition('* => rightOut', [
+                animate('400ms ease-out', keyframes([
+                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
+                    style({ transform: 'translateX(0%)', left: '101%', offset: 1 })
+                ]))
+            ]),
+            transition(':leave', [
+                animate('2000ms ease-out', keyframes([
+                    style({ opacity: 1, offset: 0 }),
+                    style({ opacity: 0, offset: 1 })
+                ]))
+            ])
+        ])
+    ]
+})
+export class KeyboardSliderComponent implements OnChanges {
+    @Input() layers: Layer[];
+    @Input() currentLayer: number;
+    @Output() keyClick = new EventEmitter();
+    @Output() keyHover = new EventEmitter();
+
+    ngOnChanges(changes: SimpleChanges) {
+        const layerChange = changes['currentLayer'];
+        if (layerChange) {
+            const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
+            this.onLayerChange(prevValue, layerChange.currentValue);
+        }
+    }
+
+    trackKeyboard(index: number) {
+        return index;
+    }
+
+    onLayerChange(oldIndex: number, index: number): void {
+        if (index > oldIndex) {
+            this.layers[oldIndex].animation = 'leftOut';
+            this.layers[index].animation = 'leftIn';
+        } else {
+            this.layers[oldIndex].animation = 'rightOut';
+            this.layers[index].animation = 'rightIn';
+        }
+
+    }
+
+}

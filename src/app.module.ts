@@ -11,6 +11,7 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
 
 import { AddOnComponent } from './components/add-on';
+import { KeyboardSliderComponent } from './components/keyboard/slider';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
@@ -57,7 +58,7 @@ import {
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
-import { MainAppComponent, appRoutingProviders, routing }  from './main-app';
+import { MainAppComponent, appRoutingProviders, routing } from './main-app';
 
 import { CancelableDirective } from './directives';
 
@@ -126,6 +127,7 @@ const storeConfig = {
         MacroNotFoundComponent,
         AddOnComponent,
         SettingsComponent,
+        KeyboardSliderComponent,
         CancelableDirective
     ],
     imports: [
