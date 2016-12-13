@@ -44,7 +44,7 @@ export class DataStorage {
         }
         // Local storage
         else {
-            this._environment = new Local();
+            this._environment = new Local(this.uhkConfiguration.dataModelVersion);
         }
     }
 
@@ -88,7 +88,7 @@ export class DataStorage {
 
     getConfiguration(): UhkConfiguration {
         let config: UhkConfiguration = this._environment.getConfig();
-        if (!config || config.dataModelVersion !== this.uhkConfiguration.dataModelVersion) {
+        if (!config) {
             config = this.uhkConfiguration;
         }
         return config;

@@ -2,14 +2,17 @@ import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfig
 
 export class Local {
 
-    constructor() { }
+    constructor(private dataModelVersion: number) { }
 
     getConfig(): UhkConfiguration {
-        let configJson = localStorage.getItem('config');
+        let configJsonString = localStorage.getItem('config');
         let config: UhkConfiguration;
 
-        if (configJson) {
-            config = new UhkConfiguration().fromJsObject(JSON.parse(configJson));
+        if (configJsonString) {
+            const configJsonObject = JSON.parse(configJsonString);
+            if (configJsonObject.dataModelVersion === this.dataModelVersion) {
+                config = new UhkConfiguration().fromJsObject(configJsonObject);
+            }
         }
 
         return config;
