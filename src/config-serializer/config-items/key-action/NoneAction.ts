@@ -9,17 +9,17 @@ import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class NoneAction extends KeyAction {
 
-    _fromJsObject(jsObject: any): NoneAction {
-        this.assertKeyActionType(jsObject);
+    fromJsonObject(jsonObject: any): NoneAction {
+        this.assertKeyActionType(jsonObject);
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): NoneAction {
+    fromBinary(buffer: UhkBuffer): NoneAction {
         this.readAndAssertKeyActionId(buffer);
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             keyActionType: keyActionType.NoneAction
         };

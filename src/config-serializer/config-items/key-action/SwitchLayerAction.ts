@@ -24,21 +24,21 @@ export class SwitchLayerAction extends KeyAction {
         this.layer = other.layer;
     }
 
-    _fromJsObject(jsObject: any): SwitchLayerAction {
-        this.assertKeyActionType(jsObject);
-        this.layer = LayerName[<string>jsObject.layer];
-        this.isLayerToggleable = jsObject.toggle;
+    fromJsonObject(jsonObject: any): SwitchLayerAction {
+        this.assertKeyActionType(jsonObject);
+        this.layer = LayerName[<string>jsonObject.layer];
+        this.isLayerToggleable = jsonObject.toggle;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): SwitchLayerAction {
+    fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer);
         this.layer = buffer.readUInt8();
         this.isLayerToggleable = buffer.readBoolean();
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
             layer: LayerName[this.layer],

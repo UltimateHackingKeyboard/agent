@@ -81,9 +81,16 @@ export class DataStorage {
     }
 
     initUHKJson() {
-        this.uhkConfiguration = new UhkConfiguration().fromJsObject(require('json!../../config-serializer/uhk-config.json'));
+        this.uhkConfiguration = new UhkConfiguration().fromJsonObject(require('json!../../config-serializer/uhk-config.json'));
         this.uhkPresets = (<any[]>require('json!../../config-serializer/preset-keymaps.json'))
-            .map(keymap => new Keymap().fromJsObject(keymap));
+            /* TODO: Remove passing getters, because there shouldn't be any SwitchKeymapAction or PlayMacroAction in presets,
+             * so they shouldn't be needed.
+             */
+            .map(keymap => new Keymap().fromJsonObject(
+                keymap,
+                this.uhkConfiguration.getKeymap.bind(this.uhkConfiguration),
+                this.uhkConfiguration.getMacro.bind(this.uhkConfiguration)
+            ));
     }
 
     getConfiguration(): UhkConfiguration {

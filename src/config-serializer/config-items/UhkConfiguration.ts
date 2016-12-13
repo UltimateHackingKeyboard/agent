@@ -30,44 +30,60 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
     @assertUInt32
     epilogue: number;
 
-    _fromJsObject(jsObject: any): UhkConfiguration {
-        this.signature = jsObject.signature;
-        this.dataModelVersion = jsObject.dataModelVersion;
-        this.prologue = jsObject.prologue;
-        this.hardwareId = jsObject.hardwareId;
-        this.brandId = jsObject.brandId;
-        this.moduleConfigurations = jsObject.moduleConfigurations.map((moduleConfiguration: any) => {
-            return new ModuleConfiguration().fromJsObject(moduleConfiguration);
+    fromJsonObject(jsonObject: any): UhkConfiguration {
+        this.signature = jsonObject.signature;
+        this.dataModelVersion = jsonObject.dataModelVersion;
+        this.prologue = jsonObject.prologue;
+        this.hardwareId = jsonObject.hardwareId;
+        this.brandId = jsonObject.brandId;
+        this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration);
         });
-        this.keymaps = jsObject.keymaps.map((keymap: any) => new Keymap().fromJsObject(keymap));
-        this.macros = jsObject.macros.map((macro: any) => new Macro().fromJsObject(macro));
-        this.epilogue = jsObject.epilogue;
+        this.macros = jsonObject.macros.map((macro: any) => new Macro().fromJsonObject(macro));
+        this.keymaps = jsonObject.keymaps.map((keymap: any) => {
+            const newKeymap = new Keymap();
+            newKeymap.abbreviation = keymap.abbreviation;
+            return newKeymap;
+        });
+        for (let i = 0; i < this.keymaps.length; ++i) {
+            this.keymaps[i].fromJsonObject(
+                jsonObject.keymaps[i],
+                abbrevation => this.getKeymap(abbrevation, true),
+                this.getMacro.bind(this)
+            );
+        }
+        this.epilogue = jsonObject.epilogue;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): UhkConfiguration {
+    fromBinary(buffer: UhkBuffer): UhkConfiguration {
         this.signature = buffer.readString();
         this.dataModelVersion = buffer.readUInt8();
         this.prologue = buffer.readUInt32();
         this.hardwareId = buffer.readUInt8();
         this.brandId = buffer.readUInt8();
-        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(ModuleConfiguration);
-        this.keymaps = buffer.readArray<Keymap>(Keymap);
-        this.macros = buffer.readArray<Macro>(Macro);
+        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
+            return new ModuleConfiguration().fromBinary(uhkBuffer);
+        });
+        this.macros = buffer.readArray<Macro>(uhkBuffer => new Macro().fromBinary(uhkBuffer));
+        this.keymaps = [];
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => {
+            return new Keymap().fromBinary(uhkBuffer, abbrevation => this.getKeymap(abbrevation, true), this.getMacro.bind(this));
+        });
         this.epilogue = buffer.readUInt32();
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             signature: this.signature,
             dataModelVersion: this.dataModelVersion,
             prologue: this.prologue,
             hardwareId: this.hardwareId,
             brandId: this.brandId,
-            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsObject()),
-            keymaps: this.keymaps.map(keymap => keymap.toJsObject()),
-            macros: this.macros.map(macro => macro.toJsObject()),
+            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
+            keymaps: this.keymaps.map(keymap => keymap.toJsonObject()),
+            macros: this.macros.map(macro => macro.toJsonObject()),
             epilogue: this.epilogue
         };
     }
@@ -79,8 +95,8 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         buffer.writeUInt8(this.hardwareId);
         buffer.writeUInt8(this.brandId);
         buffer.writeArray(this.moduleConfigurations);
-        buffer.writeArray(this.keymaps);
         buffer.writeArray(this.macros);
+        buffer.writeArray(this.keymaps);
         buffer.writeUInt32(this.epilogue);
     }
 
@@ -88,11 +104,18 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         return `<UhkConfiguration signature="${this.signature}">`;
     }
 
-    getKeymap(keymapAbbreviation: string): Keymap {
-        return this.keymaps.find(keymap => keymapAbbreviation === keymap.abbreviation);
+    getKeymap(keymapAbbreviation: string, createIfNotExist = false): Keymap {
+        let resultKeymap = this.keymaps.find(keymap => keymapAbbreviation === keymap.abbreviation);
+        if (createIfNotExist && !resultKeymap) {
+            resultKeymap = new Keymap();
+            resultKeymap.abbreviation = keymapAbbreviation;
+            this.keymaps.push(resultKeymap);
+        }
+        return resultKeymap;
     }
 
     getMacro(macroId: number): Macro {
         return this.macros.find(macro => macroId === macro.id);
     }
+
 }

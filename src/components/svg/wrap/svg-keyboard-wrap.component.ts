@@ -17,13 +17,6 @@ import {
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/observable/from';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
 
 import { MapperService } from '../../../services/mapper.service';
 
@@ -270,23 +263,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             });
 
             content.push({
-                name: 'Macro id',
-                value: playMacroAction.macroId.toString()
+                name: 'Macro name',
+                value: playMacroAction.macro.name.toString()
             });
 
-            // Replace the macro id with the name
-            this.store
-                .select(appState => appState.macros)
-                .first()
-                .map(macroState => macroState.entities.filter(macro => {
-                    return macro.id === playMacroAction.macroId;
-                })[0].name)
-                .subscribe(name => {
-                    content[1] = {
-                        name: 'Macro name',
-                        value: name
-                    };
-                });
         } else if (keyAction instanceof SwitchKeymapAction) {
             const switchKeymapAction: SwitchKeymapAction = keyAction;
             content.push({
@@ -295,14 +275,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             });
             content.push({
                 name: 'Keymap',
-                value: '...'
+                value: switchKeymapAction.keymap.name
             });
-            this.store
-                .select(appState => appState.keymaps)
-                .first()
-                .switchMap<Keymap>(keymaps => Observable.from(keymaps.entities))
-                .filter(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation)
-                .subscribe(keymap => content[1].value = keymap.name);
         } else if (keyAction instanceof SwitchLayerAction) {
             const switchLayerAction: SwitchLayerAction = keyAction;
             content.push({

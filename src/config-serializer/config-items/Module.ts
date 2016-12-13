@@ -2,6 +2,8 @@ import { assertEnum, assertUInt8 } from '../assert';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
+import { Keymap } from './Keymap';
+import { Macro } from './Macro';
 
 enum PointerRole {
     none,
@@ -17,42 +19,45 @@ export class Module extends Serializable<Module> {
     keyActions: KeyAction[];
 
     @assertEnum(PointerRole)
-    private pointerRole: PointerRole;
+    pointerRole: PointerRole;
 
-    constructor(other?: Module) {
+    constructor(other?: Module, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro) {
         super();
         if (!other) {
             return;
         }
         this.id = other.id;
-        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction));
+        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction, getKeymap, getMacro));
         this.pointerRole = other.pointerRole;
     }
-    _fromJsObject(jsObject: any): Module {
-        this.id = jsObject.id;
-        this.pointerRole = PointerRole[<string>jsObject.pointerRole];
-        this.keyActions = jsObject.keyActions.map((keyAction: any) => KeyActionHelper.createKeyAction(keyAction));
+
+    fromJsonObject(jsonObject: any, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Module {
+        this.id = jsonObject.id;
+        this.pointerRole = PointerRole[<string>jsonObject.pointerRole];
+        this.keyActions = jsonObject.keyActions.map((keyAction: any) => {
+           return KeyActionHelper.createKeyAction(keyAction, getKeymap, getMacro);
+        });
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): Module {
+    fromBinary(buffer: UhkBuffer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Module {
         this.id = buffer.readUInt8();
         this.pointerRole = buffer.readUInt8();
         let keyActionsLength: number = buffer.readCompactLength();
         this.keyActions = [];
         for (let i = 0; i < keyActionsLength; ++i) {
-            this.keyActions.push(KeyActionHelper.createKeyAction(buffer));
+            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, getKeymap, getMacro));
         }
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             id: this.id,
             pointerRole: PointerRole[this.pointerRole],
             keyActions: this.keyActions.map(keyAction => {
                 if (keyAction) {
-                    return keyAction.toJsObject();
+                    return keyAction.toJsonObject();
                 }
             })
         };

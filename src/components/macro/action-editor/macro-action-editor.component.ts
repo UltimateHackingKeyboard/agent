@@ -39,7 +39,7 @@ export class MacroActionEditorComponent implements OnInit {
 
     ngOnInit() {
         let macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
-        this.editableMacroAction = new EditableMacroAction(macroAction.toJsObject());
+        this.editableMacroAction = new EditableMacroAction(macroAction.toJsonObject());
         let tab: TabName = this.getTabName(this.editableMacroAction);
         this.activeTab = tab;
     }

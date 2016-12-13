@@ -93,7 +93,7 @@ export class EditableMacroAction {
     }
 
     fromKeyAction(keyAction: KeyAction): void {
-        let data = keyAction.toJsObject();
+        let data = keyAction.toJsonObject();
         this.scancode = data.scancode;
         this.modifierMask = data.modifierMask;
     }
@@ -101,7 +101,7 @@ export class EditableMacroAction {
     toKeystrokeAction(): KeystrokeAction {
         let data = this.toJsObject();
         data.keyActionType = keyActionType.KeystrokeAction;
-        return <KeystrokeAction>(new KeystrokeAction().fromJsObject(data));
+        return <KeystrokeAction>(new KeystrokeAction().fromJsonObject(data));
     }
 
     setMouseButtons(buttonStates: boolean[]): void {
@@ -124,19 +124,19 @@ export class EditableMacroAction {
         switch (this.macroActionType) {
             // Delay action
             case macroActionType.DelayMacroAction:
-                return new DelayMacroAction().fromJsObject({
+                return new DelayMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     delay: this.delay
                 });
             // Text action
             case macroActionType.TextMacroAction:
-                return new TextMacroAction().fromJsObject({
+                return new TextMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     text: this.text
                 });
             // Keypress action
             case macroActionType.KeyMacroAction:
-                return new KeyMacroAction().fromJsObject({
+                return new KeyMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     action: MacroSubAction[this.action],
                     scancode: this.scancode,
@@ -144,19 +144,19 @@ export class EditableMacroAction {
                 });
             // Mouse actions
             case macroActionType.MouseButtonMacroAction:
-                return new MouseButtonMacroAction().fromJsObject({
+                return new MouseButtonMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     action: MacroSubAction[this.action],
                     mouseButtonsMask: this.mouseButtonsMask
                 });
             case macroActionType.MoveMouseMacroAction:
-                return new MoveMouseMacroAction().fromJsObject({
+                return new MoveMouseMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     x: this.moveX,
                     y: this.moveY
                 });
             case macroActionType.ScrollMouseMacroAction:
-                return new ScrollMouseMacroAction().fromJsObject({
+                return new ScrollMouseMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     x: this.scrollX,
                     y: this.scrollY

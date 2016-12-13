@@ -19,21 +19,21 @@ export class MoveMouseMacroAction extends MacroAction {
         this.y = other.y;
     }
 
-    _fromJsObject(jsObject: any): MoveMouseMacroAction {
+    fromJsonObject(jsObject: any): MoveMouseMacroAction {
         this.assertMacroActionType(jsObject);
         this.x = jsObject.x;
         this.y = jsObject.y;
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): MoveMouseMacroAction {
+    fromBinary(buffer: UhkBuffer): MoveMouseMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.x = buffer.readInt16();
         this.y = buffer.readInt16();
         return this;
     }
 
-    _toJsObject(): any {
+    _toJsonObject(): any {
         return {
             macroActionType: macroActionType.MoveMouseMacroAction,
             x: this.x,

@@ -10,7 +10,7 @@ export enum KeystrokeActionFlag {
     longPressAction = 1 << 2,
 }
 
-interface JsObjectKeystrokeAction {
+interface JsonObjectKeystrokeAction {
     keyActionType: string;
     scancode?: number;
     modifierMask?: number;
@@ -40,15 +40,15 @@ export class KeystrokeAction extends KeyAction {
         this.longPressAction = other.longPressAction;
     }
 
-    _fromJsObject(jsObject: JsObjectKeystrokeAction): KeystrokeAction {
-        this.assertKeyActionType(jsObject);
-        this.scancode = jsObject.scancode;
-        this.modifierMask = jsObject.modifierMask;
-        this.longPressAction = LongPressAction[jsObject.longPressAction];
+    fromJsonObject(jsonObject: JsonObjectKeystrokeAction): KeystrokeAction {
+        this.assertKeyActionType(jsonObject);
+        this.scancode = jsonObject.scancode;
+        this.modifierMask = jsonObject.modifierMask;
+        this.longPressAction = LongPressAction[jsonObject.longPressAction];
         return this;
     }
 
-    _fromBinary(buffer: UhkBuffer): KeystrokeAction {
+    fromBinary(buffer: UhkBuffer): KeystrokeAction {
         let keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
         let flags: number = keyActionId - KeyActionId.KeystrokeAction;
         if (flags & KeystrokeActionFlag.scancode) {
@@ -63,24 +63,24 @@ export class KeystrokeAction extends KeyAction {
         return this;
     }
 
-    _toJsObject(): JsObjectKeystrokeAction {
-        let jsObject: JsObjectKeystrokeAction = {
+    _toJsonObject(): JsonObjectKeystrokeAction {
+        let jsonObject: JsonObjectKeystrokeAction = {
             keyActionType: keyActionType.KeystrokeAction
         };
 
         if (this.hasScancode()) {
-            jsObject.scancode = this.scancode;
+            jsonObject.scancode = this.scancode;
         }
 
         if (this.hasActiveModifier()) {
-            jsObject.modifierMask = this.modifierMask;
+            jsonObject.modifierMask = this.modifierMask;
         }
 
         if (this.hasLongPressAction()) {
-            jsObject.longPressAction = LongPressAction[this.longPressAction];
+            jsonObject.longPressAction = LongPressAction[this.longPressAction];
         }
 
-        return jsObject;
+        return jsonObject;
     }
 
     _toBinary(buffer: UhkBuffer) {

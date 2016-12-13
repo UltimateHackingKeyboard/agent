@@ -53,8 +53,6 @@ export abstract class KeyAction extends Serializable<KeyAction> {
         return readKeyActionId;
     }
 
-    abstract _fromJsObject(jsObject: any): KeyAction;
-    abstract _fromBinary(buffer: UhkBuffer): KeyAction;
-    abstract _toJsObject(): any;
+    abstract _toJsonObject(): any;
     abstract _toBinary(buffer: UhkBuffer): void;
 }
