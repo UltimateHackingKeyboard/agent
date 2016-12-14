@@ -19,13 +19,13 @@ export class NoneAction extends KeyAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             keyActionType: keyActionType.NoneAction
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.NoneAction);
     }
 

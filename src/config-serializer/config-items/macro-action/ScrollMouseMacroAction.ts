@@ -33,7 +33,7 @@ export class ScrollMouseMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             macroActionType: macroActionType.ScrollMouseMacroAction,
             x: this.x,
@@ -41,7 +41,7 @@ export class ScrollMouseMacroAction extends MacroAction {
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(MacroActionId.ScrollMouseMacroAction);
         buffer.writeInt16(this.x);
         buffer.writeInt16(this.y);

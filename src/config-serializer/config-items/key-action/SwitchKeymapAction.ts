@@ -30,14 +30,14 @@ export class SwitchKeymapAction extends KeyAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             keyActionType: keyActionType.SwitchKeymapAction,
             keymapAbbreviation: this.keymapAbbreviation
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
         buffer.writeString(this.keymapAbbreviation);
     }

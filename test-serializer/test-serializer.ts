@@ -1,5 +1,4 @@
 import { UhkConfiguration } from '../src/config-serializer/config-items/UhkConfiguration';
-import { Serializable } from '../src/config-serializer/Serializable';
 import { UhkBuffer } from '../src/config-serializer/UhkBuffer';
 
 let assert = require('assert');
@@ -8,7 +7,7 @@ let fs = require('fs');
 let uhkConfig = JSON.parse(fs.readFileSync('../src/config-serializer/uhk-config.json'));
 
 let config1Js = uhkConfig;
-let config1Ts: Serializable<UhkConfiguration> = new UhkConfiguration().fromJsonObject(config1Js);
+let config1Ts: UhkConfiguration = new UhkConfiguration().fromJsonObject(config1Js);
 let config1Buffer = new UhkBuffer();
 config1Ts.toBinary(config1Buffer);
 let config1BufferContent = config1Buffer.getBufferContent();

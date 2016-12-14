@@ -27,14 +27,14 @@ export class DelayMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             macroActionType: macroActionType.DelayMacroAction,
             delay: this.delay
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(MacroActionId.DelayMacroAction);
         buffer.writeUInt16(this.delay);
     }

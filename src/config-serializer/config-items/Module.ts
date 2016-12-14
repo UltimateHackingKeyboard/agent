@@ -1,5 +1,4 @@
 import { assertEnum, assertUInt8 } from '../assert';
-import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
 import { Keymap } from './Keymap';
@@ -11,7 +10,7 @@ enum PointerRole {
     scroll
 }
 
-export class Module extends Serializable<Module> {
+export class Module {
 
     @assertUInt8
     id: number;
@@ -22,7 +21,6 @@ export class Module extends Serializable<Module> {
     pointerRole: PointerRole;
 
     constructor(other?: Module) {
-        super();
         if (!other) {
             return;
         }
@@ -51,7 +49,7 @@ export class Module extends Serializable<Module> {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             id: this.id,
             pointerRole: PointerRole[this.pointerRole],
@@ -63,7 +61,7 @@ export class Module extends Serializable<Module> {
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
         buffer.writeUInt8(this.pointerRole);
 

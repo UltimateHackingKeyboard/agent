@@ -55,7 +55,7 @@ export class KeyMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         let jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,
             action: MacroSubAction[this.action]
@@ -72,7 +72,7 @@ export class KeyMacroAction extends MacroAction {
         return jsObject;
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         let keyMacroType: number = MacroActionId.KeyMacroAction;
         keyMacroType += NUM_OF_COMBINATIONS * this.action;
 

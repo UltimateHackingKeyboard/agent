@@ -1,5 +1,3 @@
-import { Serializable } from './Serializable';
-
 export class UhkBuffer {
 
     private static eepromSize = 32 * 1024;
@@ -153,7 +151,7 @@ export class UhkBuffer {
         this.writeUInt8(bool ? 1 : 0);
     }
 
-    readArray<T extends Serializable<T>>(elementReader: (buffer: UhkBuffer) => T): T[] {
+    readArray<T>(elementReader: (buffer: UhkBuffer) => T): T[] {
         let array: T[] = [];
         let length = this.readCompactLength();
         for (let i = 0; i < length; ++i) {
@@ -162,10 +160,10 @@ export class UhkBuffer {
         return array;
     }
 
-    writeArray<T extends Serializable<T>>(array: T[]): void {
+    writeArray<T>(array: T[]): void {
         this.writeCompactLength(array.length);
         for (let element of array) {
-            element.toBinary(this);
+            (<any>element).toBinary(this); // TODO: Remove any
         }
     }
 

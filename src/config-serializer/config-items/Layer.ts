@@ -1,15 +1,13 @@
-import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Keymap } from './Keymap';
 import { Macro } from './Macro';
 import { Module } from './Module';
 
-export class Layer extends Serializable<Layer> {
+export class Layer {
 
     modules: Module[];
 
     constructor(layers?: Layer) {
-        super();
         if (!layers) {
             return;
         }
@@ -28,13 +26,13 @@ export class Layer extends Serializable<Layer> {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             modules: this.modules.map(module => module.toJsonObject())
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeArray(this.modules);
     }
 
