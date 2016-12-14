@@ -1,4 +1,3 @@
-import { Serializable } from '../../Serializable';
 import { UhkBuffer } from '../../UhkBuffer';
 
 export enum MacroActionId {
@@ -45,7 +44,7 @@ export let macroActionType = {
     TextMacroAction                 : 'text'
 };
 
-export abstract class MacroAction extends Serializable<MacroAction> {
+export abstract class MacroAction {
     assertMacroActionType(jsObject: any) {
         let macroActionClassname = this.constructor.name;
         let macroActionTypeString = macroActionType[macroActionClassname];
@@ -73,6 +72,6 @@ export abstract class MacroAction extends Serializable<MacroAction> {
         return readMacroActionId;
     }
 
-    abstract _toJsonObject(): any;
-    abstract _toBinary(buffer: UhkBuffer): void;
+    abstract toJsonObject(): any;
+    abstract toBinary(buffer: UhkBuffer): void;
 }

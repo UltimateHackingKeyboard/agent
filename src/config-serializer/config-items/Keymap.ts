@@ -1,9 +1,8 @@
-import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Layer } from './Layer';
 import { Macro } from './Macro';
 
-export class Keymap extends Serializable<Keymap> {
+export class Keymap {
 
     name: string;
 
@@ -16,7 +15,6 @@ export class Keymap extends Serializable<Keymap> {
     layers: Layer[];
 
     constructor(keymap?: Keymap) {
-        super();
         if (!keymap) {
             return;
         }
@@ -48,7 +46,7 @@ export class Keymap extends Serializable<Keymap> {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             isDefault: this.isDefault,
             abbreviation: this.abbreviation,
@@ -58,7 +56,7 @@ export class Keymap extends Serializable<Keymap> {
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeString(this.abbreviation);
         buffer.writeBoolean(this.isDefault);
         buffer.writeString(this.name);

@@ -43,14 +43,14 @@ export class MouseAction extends KeyAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             keyActionType: keyActionType.MouseAction,
             mouseAction: MouseActionParam[this.mouseAction]
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.MouseAction);
         buffer.writeUInt8(this.mouseAction);
     }

@@ -1,11 +1,10 @@
 import { assertUInt16, assertUInt32, assertUInt8 } from '../assert';
-import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Keymap } from './Keymap';
 import { Macro } from './Macro';
 import { ModuleConfiguration } from './ModuleConfiguration';
 
-export class UhkConfiguration extends Serializable<UhkConfiguration> {
+export class UhkConfiguration {
 
     signature: string;
 
@@ -60,7 +59,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             signature: this.signature,
             dataModelVersion: this.dataModelVersion,
@@ -74,7 +73,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeString(this.signature);
         buffer.writeUInt16(this.dataModelVersion);
         buffer.writeUInt32(this.prologue);

@@ -1,8 +1,7 @@
 import { assertUInt8 } from '../assert';
-import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 
-export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
+export class ModuleConfiguration {
 
     /*
      * module id enumeration is a separate story
@@ -36,7 +35,7 @@ export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             id: this.id,
             initialPointerSpeed: this.initialPointerSpeed,
@@ -45,7 +44,7 @@ export class ModuleConfiguration extends Serializable<ModuleConfiguration> {
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
         buffer.writeUInt8(this.initialPointerSpeed);
         buffer.writeUInt8(this.pointerAcceleration);

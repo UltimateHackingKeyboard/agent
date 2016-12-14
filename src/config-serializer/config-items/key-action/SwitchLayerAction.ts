@@ -38,7 +38,7 @@ export class SwitchLayerAction extends KeyAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
             layer: LayerName[this.layer],
@@ -46,7 +46,7 @@ export class SwitchLayerAction extends KeyAction {
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchLayerAction);
         buffer.writeUInt8(this.layer);
         buffer.writeBoolean(this.isLayerToggleable);

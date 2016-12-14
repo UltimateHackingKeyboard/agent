@@ -1,6 +1,5 @@
 /// <reference path="../../Function.d.ts" />
 
-import { Serializable } from '../../Serializable';
 import { UhkBuffer } from '../../UhkBuffer';
 
 export enum KeyActionId {
@@ -29,7 +28,7 @@ export let keyActionType = {
     PlayMacroAction              : 'playMacro'
 };
 
-export abstract class KeyAction extends Serializable<KeyAction> {
+export abstract class KeyAction {
 
     assertKeyActionType(jsObject: any): void {
         let keyActionClassname: string = this.constructor.name;
@@ -53,6 +52,6 @@ export abstract class KeyAction extends Serializable<KeyAction> {
         return readKeyActionId;
     }
 
-    abstract _toJsonObject(): any;
-    abstract _toBinary(buffer: UhkBuffer): void;
+    abstract toJsonObject(): any;
+    abstract toBinary(buffer: UhkBuffer): void;
 }

@@ -44,7 +44,7 @@ export class MouseButtonMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             macroActionType: macroActionType.MouseButtonMacroAction,
             action: MacroSubAction[this.action],
@@ -52,7 +52,7 @@ export class MouseButtonMacroAction extends MacroAction {
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(MacroActionId.MouseButtonMacroAction + this.action);
         buffer.writeUInt8(this.mouseButtonsMask);
     }

@@ -33,7 +33,7 @@ export class MoveMouseMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             macroActionType: macroActionType.MoveMouseMacroAction,
             x: this.x,
@@ -41,7 +41,7 @@ export class MoveMouseMacroAction extends MacroAction {
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(MacroActionId.MoveMouseMacroAction);
         buffer.writeInt16(this.x);
         buffer.writeInt16(this.y);

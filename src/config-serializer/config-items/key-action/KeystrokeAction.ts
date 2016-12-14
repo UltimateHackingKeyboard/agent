@@ -63,7 +63,7 @@ export class KeystrokeAction extends KeyAction {
         return this;
     }
 
-    _toJsonObject(): JsonObjectKeystrokeAction {
+    toJsonObject(): JsonObjectKeystrokeAction {
         let jsonObject: JsonObjectKeystrokeAction = {
             keyActionType: keyActionType.KeystrokeAction
         };
@@ -83,7 +83,7 @@ export class KeystrokeAction extends KeyAction {
         return jsonObject;
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         let flags = 0;
         let bufferData: number[] = [];
 

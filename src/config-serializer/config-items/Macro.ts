@@ -1,9 +1,8 @@
 import { assertUInt8 } from '../assert';
-import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Helper as MacroActionHelper, MacroAction } from './macro-action';
 
-export class Macro extends Serializable<Macro> {
+export class Macro {
 
     @assertUInt8
     id: number;
@@ -17,7 +16,6 @@ export class Macro extends Serializable<Macro> {
     macroActions: MacroAction[];
 
     constructor(other?: Macro) {
-        super();
         if (!other) {
             return;
         }
@@ -50,7 +48,7 @@ export class Macro extends Serializable<Macro> {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             id: this.id,
             isLooped: this.isLooped,
@@ -60,7 +58,7 @@ export class Macro extends Serializable<Macro> {
         };
     }
 
-    _toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
         buffer.writeBoolean(this.isLooped);
         buffer.writeBoolean(this.isPrivate);

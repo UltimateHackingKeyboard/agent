@@ -25,14 +25,14 @@ export class TextMacroAction extends MacroAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             macroActionType: macroActionType.TextMacroAction,
             text: this.text
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(MacroActionId.TextMacroAction);
         buffer.writeString(this.text);
     }

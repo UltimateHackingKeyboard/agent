@@ -32,14 +32,14 @@ export class PlayMacroAction extends KeyAction {
         return this;
     }
 
-    _toJsonObject(): any {
+    toJsonObject(): any {
         return {
             keyActionType: keyActionType.PlayMacroAction,
             macroId: this.macroId
         };
     }
 
-    _toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.PlayMacroAction);
         buffer.writeUInt8(this.macroId);
     }
