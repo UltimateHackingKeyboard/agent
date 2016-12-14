@@ -8,7 +8,6 @@ import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store';
@@ -30,14 +29,12 @@ export class KeymapEditComponent {
         private store: Store<AppState>,
         private route: ActivatedRoute
     ) {
-        let keymapConnectable: ConnectableObservable<Keymap> = route
+        this.keymap$ = route
             .params
             .select<string>('abbr')
             .switchMap((abbr: string) => store.let(getKeymap(abbr)))
-            .publishReplay();
-
-        this.keymap$ = keymapConnectable;
-        keymapConnectable.connect();
+            .publishReplay(1)
+            .refCount();
 
         this.deletable$ = store.let(getKeymapEntities())
             .map((keymaps: Keymap[]) => keymaps.length > 1);
