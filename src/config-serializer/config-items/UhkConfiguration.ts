@@ -1,4 +1,4 @@
-import { assertUInt32, assertUInt8 } from '../assert';
+import { assertUInt16, assertUInt32, assertUInt8 } from '../assert';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Keymap } from './Keymap';
@@ -9,7 +9,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     signature: string;
 
-    @assertUInt8
+    @assertUInt16
     dataModelVersion: number;
 
     @assertUInt32
@@ -58,7 +58,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     fromBinary(buffer: UhkBuffer): UhkConfiguration {
         this.signature = buffer.readString();
-        this.dataModelVersion = buffer.readUInt8();
+        this.dataModelVersion = buffer.readUInt16();
         this.prologue = buffer.readUInt32();
         this.hardwareId = buffer.readUInt8();
         this.brandId = buffer.readUInt8();
@@ -90,7 +90,7 @@ export class UhkConfiguration extends Serializable<UhkConfiguration> {
 
     _toBinary(buffer: UhkBuffer): void {
         buffer.writeString(this.signature);
-        buffer.writeUInt8(this.dataModelVersion);
+        buffer.writeUInt16(this.dataModelVersion);
         buffer.writeUInt32(this.prologue);
         buffer.writeUInt8(this.hardwareId);
         buffer.writeUInt8(this.brandId);
