@@ -93,11 +93,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             this.layers = this.keymap.layers;
             this.currentLayer = 0;
             this.popoverShown = false;
-
-            if (this.layers.length > 0) {
-                this.layers.forEach(element => element.animation = 'leftOut');
-                this.layers[0].animation = 'leftIn';
-            }
         } else if (changes['keymap']) {
             this.popoverShown = false;
         }
@@ -262,20 +257,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.popoverShown = false;
     }
 
-    selectLayer(oldIndex: number, index: number): void {
-        if (index > oldIndex) {
-            this.layers[oldIndex].animation = 'leftOut';
-            this.layers[index].animation = 'leftIn';
-        } else {
-            this.layers[oldIndex].animation = 'rightOut';
-            this.layers[index].animation = 'rightIn';
-        }
-
+    selectLayer(index: number): void {
         this.currentLayer = index;
-    }
-
-    trackKeyboard(index: number) {
-        return index;
     }
 
 }

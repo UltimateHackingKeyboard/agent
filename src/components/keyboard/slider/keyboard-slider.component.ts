@@ -16,11 +16,17 @@ import {
 
 import { Layer } from '../../../config-serializer/config-items/Layer';
 
+type AnimationKeyboard =
+    'leftIn' |
+    'leftOut' |
+    'rightIn' |
+    'rightOut';
+
 @Component({
     selector: 'keyboard-slider',
     template: require('./keyboard-slider.component.html'),
     styles: [require('./keyboard-slider.component.scss')],
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
@@ -75,7 +81,13 @@ export class KeyboardSliderComponent implements OnChanges {
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
 
+    private layerAnimationState: AnimationKeyboard[];
+
     ngOnChanges(changes: SimpleChanges) {
+        if (changes['layers']) {
+            this.layerAnimationState = this.layers.map<AnimationKeyboard>(() => 'leftOut');
+            this.layerAnimationState[this.currentLayer] = 'leftIn';
+        }
         const layerChange = changes['currentLayer'];
         if (layerChange) {
             const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
@@ -89,11 +101,11 @@ export class KeyboardSliderComponent implements OnChanges {
 
     onLayerChange(oldIndex: number, index: number): void {
         if (index > oldIndex) {
-            this.layers[oldIndex].animation = 'leftOut';
-            this.layers[index].animation = 'leftIn';
+            this.layerAnimationState[oldIndex] = 'leftOut';
+            this.layerAnimationState[index] = 'leftIn';
         } else {
-            this.layers[oldIndex].animation = 'rightOut';
-            this.layers[index].animation = 'rightIn';
+            this.layerAnimationState[oldIndex] = 'rightOut';
+            this.layerAnimationState[index] = 'rightIn';
         }
 
     }

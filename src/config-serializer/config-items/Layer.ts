@@ -1,4 +1,3 @@
-import { AnimationKeyboard } from '../../components/svg/wrap';
 import { Serializable } from '../Serializable';
 import { UhkBuffer } from '../UhkBuffer';
 import { Keymap } from './Keymap';
@@ -8,7 +7,6 @@ import { Module } from './Module';
 export class Layer extends Serializable<Layer> {
 
     modules: Module[];
-    animation: AnimationKeyboard;
 
     constructor(layers?: Layer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro) {
         super();
@@ -16,7 +14,6 @@ export class Layer extends Serializable<Layer> {
             return;
         }
         this.modules = layers.modules.map(module => new Module(module, getKeymap, getMacro));
-        this.animation = layers.animation;
     }
 
     fromJsonObject(jsonObject: any, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Layer {
