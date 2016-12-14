@@ -46,6 +46,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
+    private keybindAnimationEnabled: boolean;
     private currentLayer: number = 0;
     private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], show: boolean };
     private layers: Layer[];
@@ -89,13 +90,18 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['keymap'].previousValue.abbreviation !== changes['keymap'].currentValue.abbreviation) {
-            this.layers = this.keymap.layers;
-            this.currentLayer = 0;
+        const keymapChanges = changes['keymap'];
+        if (keymapChanges) {
             this.popoverShown = false;
-        } else if (changes['keymap']) {
-            this.popoverShown = false;
+            if (keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation) {
+                this.layers = this.keymap.layers;
+                this.currentLayer = 0;
+                this.keybindAnimationEnabled = keymapChanges.isFirstChange();
+            } else {
+                this.keybindAnimationEnabled = true;
+            }
         }
+
     }
 
     onKeyClick(moduleId: number, keyId: number, keyTarget: HTMLElement): void {

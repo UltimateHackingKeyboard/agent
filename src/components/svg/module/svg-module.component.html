@@ -5,6 +5,7 @@
         [width]="key.width" [height]="key.height"
         [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
         [keyAction]="keyActions[i]"
+        [keybindAnimationEnabled]="keybindAnimationEnabled"
         (keyClick)="onKeyClick(i, $event)"
         (mouseenter)="onKeyHover(i, $event, true)"
         (mouseleave)="onKeyHover(i, $event, false)"

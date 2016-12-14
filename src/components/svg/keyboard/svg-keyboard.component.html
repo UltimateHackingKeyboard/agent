@@ -3,6 +3,7 @@
         <svg:g svg-module *ngFor="let module of modules; let i = index"
                 [coverages]="module.coverages"
                 [keyboardKeys]="module.keyboardKeys"
+                [keybindAnimationEnabled]="keybindAnimationEnabled"
                 [attr.transform]="module.attributes.transform"
                 [keyActions]="moduleConfig[i].keyActions"
                 (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
