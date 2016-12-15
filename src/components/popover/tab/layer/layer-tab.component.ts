@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
 
@@ -11,8 +11,11 @@ import { Tab } from '../tab';
 })
 export class LayerTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
+    @Input() currentLayer: number;
 
-    toggleData: {id: boolean, text: string}[] = [
+    @HostBinding('class.no-base') isNotBase: boolean;
+
+    toggleData: { id: boolean, text: string }[] = [
         {
             id: false,
             text: 'Activate'
@@ -23,7 +26,7 @@ export class LayerTabComponent implements OnChanges, Tab {
         }
     ];
 
-    layerData: {id: number, text: string}[] = [
+    layerData: { id: number, text: string }[] = [
         {
             id: 0,
             text: 'Mod'
@@ -46,8 +49,14 @@ export class LayerTabComponent implements OnChanges, Tab {
         this.layer = LayerName.mod;
     }
 
-    ngOnChanges() {
-        this.fromKeyAction(this.defaultKeyAction);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['defaultKeyAction']) {
+            this.fromKeyAction(this.defaultKeyAction);
+        }
+
+        if (changes['currentLayer']) {
+            this.isNotBase = this.currentLayer > 0;
+        }
     }
 
     keyActionValid(): boolean {

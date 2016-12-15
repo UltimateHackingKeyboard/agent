@@ -5,7 +5,8 @@
                      [keybindAnimationEnabled]="keybindAnimationEnabled"
                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"></keyboard-slider>
-    <popover [visible]="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction" [currentKeymap]="keymap" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+    <popover [visible]="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction"
+             [currentKeymap]="keymap" [currentLayer]="currentLayer" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
     <div class="tooltip bottom"
          [class.in]="tooltipData.show"
          [style.top.px]="tooltipData.posTop"

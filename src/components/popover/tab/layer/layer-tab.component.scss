@@ -2,6 +2,10 @@
     display: flex;
     margin: 0 -5px;
 
+    &.no-base {
+        justify-content: center;
+    }
+
     > span,
     > select {
         margin: 0 5px;
