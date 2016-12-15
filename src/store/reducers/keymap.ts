@@ -119,6 +119,7 @@ export default function (state = initialState, action: Action): KeymapState {
             const layer: Layer = changedKeymap.layers[layerIndex];
             const changedLayer: Layer = new Layer();
             Object.assign(changedLayer, layer);
+            changedKeymap.layers = changedKeymap.layers.slice();
             changedKeymap.layers[layerIndex] = changedLayer;
 
             const moduleIndex: number = action.payload.module;
