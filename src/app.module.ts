@@ -68,6 +68,9 @@ import { KeymapEffects, MacroEffects } from './store/effects';
 import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
 import { DataStorage } from './store/storage';
 
+import { KeymapEditGuard } from './components/keymap/edit';
+import { MacroNotFoundGuard } from './components/macro/not-found';
+
 // Create DataStorage dependency injection
 const storageProvider = ReflectiveInjector.resolve([DataStorage]);
 const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
@@ -149,7 +152,9 @@ const storeConfig = {
     ],
     providers: [
         MapperService,
-        appRoutingProviders
+        appRoutingProviders,
+        KeymapEditGuard,
+        MacroNotFoundGuard
     ],
     bootstrap: [MainAppComponent]
 })
