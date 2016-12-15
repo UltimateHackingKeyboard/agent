@@ -97,11 +97,12 @@ export default function (state = initialState, action: Action): KeymapState {
                 filtered[0].isDefault = true;
             }
 
+            const deletedKeymap = state.entities.find(keymap => keymap.abbreviation === action.payload);
             // Check for the deleted keymap in other keymaps
             newState = filtered.map((keymap: Keymap) => {
                 changedKeymap = new Keymap();
                 Object.assign(changedKeymap, keymap);
-                changedKeymap.layers = checkExistence(changedKeymap.layers, 'keymapAbbreviation', action.payload);
+                changedKeymap.layers = checkExistence(changedKeymap.layers, 'keymap', deletedKeymap);
 
                 return changedKeymap;
             });
