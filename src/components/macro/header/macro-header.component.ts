@@ -36,7 +36,7 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     }
 
     removeMacro() {
-        this.store.dispatch(MacroActions.removeMacro(this.macro.id));
+        this.store.dispatch(MacroActions.removeMacro(this.macro));
     }
 
     duplicateMacro() {

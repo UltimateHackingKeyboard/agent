@@ -22,10 +22,10 @@ export namespace MacroActions {
         };
     }
 
-    export function removeMacro(id: number): Action {
+    export function removeMacro(macro: Macro): Action {
         return {
             type: MacroActions.REMOVE,
-            payload: id
+            payload: macro
         };
     }
 

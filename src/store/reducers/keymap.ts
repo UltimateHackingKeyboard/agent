@@ -147,7 +147,7 @@ export default function (state = initialState, action: Action): KeymapState {
             newState = state.entities.map((keymap: Keymap) => {
                 changedKeymap = new Keymap();
                 Object.assign(changedKeymap, keymap);
-                changedKeymap.layers = checkExistence(changedKeymap.layers, '_macroId', action.payload);
+                changedKeymap.layers = checkExistence(changedKeymap.layers, 'macro', action.payload);
 
                 return changedKeymap;
             });
@@ -211,7 +211,7 @@ function generateName(keymaps: Keymap[], name: string) {
     return name;
 }
 
-function checkExistence(layers: Layer[], property: string, value: string | number) {
+function checkExistence(layers: Layer[], property: string, value: any) {
     let newLayers = layers.map((layer) => {
         let newLayer = new Layer(layer);
 
