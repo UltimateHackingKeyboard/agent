@@ -117,6 +117,18 @@ export class MapperService {
         this.scanCodeTextMap.set(81, ['Down Arrow']);
         this.scanCodeTextMap.set(82, ['Up Arrow']);
         this.scanCodeTextMap.set(83, ['Num Lock']);
+        this.scanCodeTextMap.set(104, ['F13']);
+        this.scanCodeTextMap.set(105, ['F14']);
+        this.scanCodeTextMap.set(106, ['F15']);
+        this.scanCodeTextMap.set(107, ['F16']);
+        this.scanCodeTextMap.set(108, ['F17']);
+        this.scanCodeTextMap.set(109, ['F18']);
+        this.scanCodeTextMap.set(110, ['F19']);
+        this.scanCodeTextMap.set(111, ['F20']);
+        this.scanCodeTextMap.set(112, ['F21']);
+        this.scanCodeTextMap.set(113, ['F22']);
+        this.scanCodeTextMap.set(114, ['F23']);
+        this.scanCodeTextMap.set(115, ['F24']);
         this.scanCodeTextMap.set(118, ['Menu']);
         this.scanCodeTextMap.set(232, ['Play']);
         this.scanCodeTextMap.set(233, ['Stop']);
