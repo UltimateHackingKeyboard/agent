@@ -7,7 +7,7 @@ import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 export enum KeystrokeActionFlag {
     scancode = 1 << 0,
     modifierMask = 1 << 1,
-    longPressAction = 1 << 2,
+    longPressAction = 1 << 2
 }
 
 interface JsonObjectKeystrokeAction {

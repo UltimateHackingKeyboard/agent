@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 import {
     KeyAction,
@@ -19,7 +20,6 @@ import { Tab } from './tab/tab';
 
 import { AppState } from '../../store';
 import { getKeymapEntities } from '../../store/reducers';
-import { Observable } from 'rxjs/Observable';
 
 enum TabName {
     Keypress,

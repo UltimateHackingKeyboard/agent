@@ -11,18 +11,12 @@
         "class-name": true,
         "curly": true,
         "no-construct": true,
-        "no-duplicate-key": true,
         "no-duplicate-variable": true,
         "no-eval": true,
         "no-null-keyword": true,
         "no-shadowed-variable": true,
         "no-switch-case-fall-through": true,
-        "no-unreachable": true,
         "no-unused-expression": true,
-        "no-unused-variable": [
-            true,
-            "check-parameters"
-        ],
         "no-use-before-declare": true,
         "no-var-keyword": true,
         "radix": true,
