@@ -60,7 +60,7 @@ export class LayerTabComponent implements OnChanges, Tab {
     }
 
     keyActionValid(): boolean {
-        return true;
+        return !this.isNotBase;
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -78,6 +78,9 @@ export class LayerTabComponent implements OnChanges, Tab {
         let keyAction = new SwitchLayerAction();
         keyAction.isLayerToggleable = this.toggle;
         keyAction.layer = this.layer;
+        if (!this.keyActionValid()) {
+            throw new Error('KeyAction is invalid!');
+        }
         return keyAction;
     }
 
