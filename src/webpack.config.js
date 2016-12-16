@@ -15,7 +15,7 @@ module.exports = {
     devtool: 'source-map',
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
-        modules: [ path.join(rootDir, "node_modules") ]
+        modules: [path.join(rootDir, "node_modules")]
     },
     module: {
         loaders: [
@@ -30,21 +30,13 @@ module.exports = {
     },
     plugins: [
         //   new webpack.optimize.UglifyJsPlugin({ minimize: true })
-        new SvgStore(
-            [
-                rootDir + '/images/icons/**/*.svg'
-            ],
-            './',
-            {
-                name: 'assets/compiled_sprite.svg',
-                chunk: 'app',
-                svgoOptions: {
-                    plugins: [
-                        { removeTitle: true }
-                    ]
-                }
+        new SvgStore({
+            svgoOptions: {
+                plugins: [
+                    { removeTitle: true }
+                ]
             }
-        ),
+        }),
         webpackFailPlugin,
         new CopyWebpackPlugin([
             { from: './src/*.html', flatten: true },

@@ -27,7 +27,7 @@
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
     "webpack-fail-plugin": "^1.0.5",
-    "webpack-svgstore-plugin": "^2.2.2"
+    "webpack-svgstore-plugin": "^3.0.6"
   },
   "dependencies": {
     "@angular/common": "2.3.1",

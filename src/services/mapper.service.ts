@@ -1,3 +1,6 @@
+const svgIcons = { path: '../../images/icons/**/*.svg', name: 'assets/compiled_sprite.svg' };
+require('webpack-svgstore-plugin/src/helpers/svgxhr')(svgIcons);
+
 import { Injectable } from '@angular/core';
 
 @Injectable()
