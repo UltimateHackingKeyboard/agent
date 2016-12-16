@@ -335,10 +335,6 @@
         "text": "Navigation",
         "children": [
             {
-                "id": "73",
-                "text": "Insert"
-            },
-            {
                 "id": "74",
                 "text": "Home"
             },
@@ -348,13 +344,6 @@
                     "explanation": "PgUp pageup"
                 },
                 "text": "Page Up"
-            },
-            {
-                "id": "76",
-                "additional": {
-                    "explanation": "Delete Forward"
-                },
-                "text": "Delete"
             },
             {
                 "id": "77",
@@ -511,7 +500,7 @@
                 "additional": {
                     "explanation": "Period"
                 },
-                "text": ","
+                "text": "."
             },
             {
                 "id": "176",
@@ -533,12 +522,27 @@
         "text": "Misc",
         "children": [
             {
-                "id": "70",
-                "text": "PrintScreen"
+                "id": "118",
+                "text": "Menu"
+            },
+            {
+                "id": "73",
+                "text": "Insert"
+            },
+            {
+                "id": "76",
+                "additional": {
+                    "explanation": "Delete Forward"
+                },
+                "text": "Delete"
             },
             {
                 "id": "57",
                 "text": "CapsLock"
+            },
+            {
+                "id": "70",
+                "text": "PrintScreen"
             },
             {
                 "id": "71",
