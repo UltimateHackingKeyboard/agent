@@ -1,7 +1,12 @@
 <div class="scancode-options">
     <b class="setting-label">Scancode:</b>
-    <select2 #scanCodeSelect [data]="scanCodeGroups" [value]="scanCode.toString()" (valueChanged)="onScancodeChange($event)"
-        [templateResult]="scanCodeTemplateResult" [width]="200"></select2>
+    <select2
+            [data]="scanCodeGroups"
+            [value]="scanCode.toString()"
+            (valueChanged)="onScancodeChange($event)"
+            [width]="200"
+            [options]="options"
+    ></select2>
     <capture-keystroke-button></capture-keystroke-button>
 </div>
 <div class="modifier-options">

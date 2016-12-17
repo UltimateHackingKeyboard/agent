@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
+import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
 
 import { KeyAction, KeystrokeAction } from '../../../../config-serializer/config-items/key-action';
 
@@ -23,6 +23,7 @@ export class KeypressTabComponent implements OnChanges, Tab {
 
     private scanCodeGroups: Array<Select2OptionData>;
     private longPressGroups: Array<Select2OptionData>;
+    private options: Select2Options;
 
     private scanCode: number;
     private selectedLongPressIndex: number;
@@ -40,6 +41,18 @@ export class KeypressTabComponent implements OnChanges, Tab {
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.scanCode = 0;
         this.selectedLongPressIndex = -1;
+        this.options = {
+            templateResult: this.scanCodeTemplateResult,
+            matcher: (term: string, text: string, data: Select2OptionData) => {
+                let found = text.toUpperCase().indexOf(term.toUpperCase()) > -1;
+
+                if (!found && data.additional && data.additional.explanation) {
+                    found = data.additional.explanation.toUpperCase().indexOf(term.toUpperCase()) > -1;
+                }
+
+                return found;
+            }
+        };
     }
 
     ngOnChanges() {
@@ -102,7 +115,7 @@ export class KeypressTabComponent implements OnChanges, Tab {
         return keystrokeAction;
     }
 
-    scanCodeTemplateResult: Function = (state: any) => {
+    scanCodeTemplateResult: Select2TemplateFunction = (state: Select2OptionData): JQuery | string => {
         if (!state.id) {
             return state.text;
         }
