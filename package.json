@@ -15,6 +15,7 @@
     "@types/node": "6.0.52",
     "copy-webpack-plugin": "^4.0.1",
     "electron": "1.4.12",
+    "expose-loader": "^0.7.1",
     "html-loader": "0.4.4",
     "node-sass": "^4.0.0",
     "npm-run-all": "3.1.2",
