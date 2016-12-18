@@ -1,7 +1,6 @@
 /* tslint:disable:variable-name */
 const __svg__ = { path: '../../images/icons/**/*.svg', name: 'assets/compiled_sprite.svg' };
 /* tslint:enable:variable-name */
-require('webpack-svgstore-plugin/src/helpers/svgxhr')(__svg__);
 
 import { Injectable } from '@angular/core';
 
