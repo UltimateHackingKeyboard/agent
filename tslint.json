@@ -13,7 +13,6 @@
         "no-construct": true,
         "no-duplicate-variable": true,
         "no-eval": true,
-        "no-null-keyword": true,
         "no-shadowed-variable": true,
         "no-switch-case-fall-through": true,
         "no-unused-expression": true,
@@ -47,20 +46,13 @@
         ],
         "comment-format": [
             true,
-            "check-space",
-            "check-uppercase"
+            "check-space"
         ],
         "no-consecutive-blank-lines": true,
         "one-line": [
             true,
             "check-open-brace",
             "check-whitespace"
-        ],
-        "ordered-imports": [
-            true,
-            {
-                "named-imports-order": "lowercase-last"
-            }
         ],
         "quotemark": [
             true,
