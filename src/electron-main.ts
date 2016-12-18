@@ -1,21 +1,22 @@
-const {app, BrowserWindow} = require('electron');
-const path = require("path");
+import { BrowserWindow, app } from 'electron';
+import * as path from 'path';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win: Electron.BrowserWindow;
 
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1024,
+        height: 768,
         webPreferences: {
-            nodeIntegration: false
+            nodeIntegration: true
         }
     });
+    win.maximize();
 
-    const indexPath = path.resolve(__dirname, '../dist/index.html');
+    const indexPath = path.resolve(__dirname, 'index.html');
     // and load the index.html of the app.
     win.loadURL(`file://${indexPath}`);
 
@@ -46,7 +47,7 @@ app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (win === null) {
-        createWindow()
+        createWindow();
     }
 });
 

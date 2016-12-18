@@ -11,6 +11,7 @@
     "@ngrx/store-devtools": "3.2.2",
     "@ngrx/store-log-monitor": "3.0.2",
     "@types/core-js": "0.9.35",
+    "@types/electron": "^1.4.29",
     "@types/jquery": "2.0.34",
     "@types/node": "6.0.52",
     "copy-webpack-plugin": "^4.0.1",
@@ -61,8 +62,9 @@
     "stylelint": "stylelint \"src/**/*.scss\" --syntax scss",
     "lint": "run-s -scn tslint stylelint",
     "build": "webpack --config \"src/webpack.config.js\"",
+    "build:electron": "webpack --config \"src/webpack.config.electron.js\"",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
     "dev": "webpack-dev-server --config \"src/webpack.config.js\" --content-base \"./dist\"",
-    "electron": "electron electron/index.js"
+    "electron": "electron dist/electron-main.js"
   }
 }

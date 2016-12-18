@@ -10,6 +10,7 @@ install:
 before_script:
   - npm run build
   - npm run build:test
+  - npm run build:electron
   - npm run lint
 
 script:
