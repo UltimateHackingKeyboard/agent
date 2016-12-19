@@ -6,9 +6,10 @@ import { Component, EventEmitter, HostListener, Output } from '@angular/core';
     styles: [require('./capture-keystroke-button.component.scss')]
 })
 export class CaptureKeystrokeButtonComponent {
-    @Output() keys = new EventEmitter<any>();
+    @Output() capture = new EventEmitter<any>();
 
     private record: boolean;
+    private first: boolean;
     private leftModifiers: Map<number, boolean>;
     private rightModifiers: Map<number, boolean>;
     private mapping: Map<number, number>;
@@ -23,17 +24,19 @@ export class CaptureKeystrokeButtonComponent {
         this.populateMapping();
     }
 
-    @HostListener('window:keyup')
-    onWindowKeyUp() {
-        if (this.record) {
+    @HostListener('keyup')
+    onKeyUp() {
+        if (this.record && !this.first) {
             this.saveScanCode();
         }
     }
 
-    @HostListener('window:keydown', ['$event'])
-    onWindowKeyDown(e: KeyboardEvent) {
+    @HostListener('keydown', ['$event'])
+    onKeyDown(e: KeyboardEvent) {
+        const code: number = e.keyCode;
+
         if (this.record) {
-            const code: number = e.keyCode;
+            this.first = false;
 
             if (this.mapping.has(code)) {
                 this.saveScanCode(this.mapping.get(code));
@@ -47,7 +50,16 @@ export class CaptureKeystrokeButtonComponent {
                     this.rightModifiers.set(code, true);
                 }
             }
+        } else if (code === 13) {
+            this.record = true;
+            this.first = true;
         }
+    }
+
+    @HostListener('focusout')
+    onFocusOut() {
+        this.record = false;
+        this.reset();
     }
 
     start(): void {
@@ -61,7 +73,7 @@ export class CaptureKeystrokeButtonComponent {
         const left: boolean[] = this.reMap(this.leftModifiers);
         const right: boolean[] = this.reMap(this.rightModifiers);
 
-        this.keys.emit({
+        this.capture.emit({
             code,
             left,
             right
@@ -71,6 +83,7 @@ export class CaptureKeystrokeButtonComponent {
     }
 
     private reset() {
+        this.first = false;
         this.leftModifiers.set(16, false); // Shift
         this.leftModifiers.set(17, false); // Ctrl
         this.leftModifiers.set(18, false); // Alt

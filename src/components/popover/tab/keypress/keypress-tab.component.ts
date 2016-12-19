@@ -71,13 +71,8 @@ export class KeypressTabComponent implements OnChanges, Tab {
             this.scanCode = event.code;
         }
 
-        event.left.forEach((value: boolean, index: number) => {
-            this.leftModifierSelects[index] = value;
-        });
-
-        event.right.forEach((value: boolean, index: number) => {
-            this.rightModifierSelects[index] = value;
-        });
+        this.leftModifierSelects = event.left;
+        this.rightModifierSelects = event.right;
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
