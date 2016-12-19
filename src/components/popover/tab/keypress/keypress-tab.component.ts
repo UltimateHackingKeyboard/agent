@@ -66,6 +66,20 @@ export class KeypressTabComponent implements OnChanges, Tab {
         return keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0;
     }
 
+    onKeysCapture(event: {code: number, left: boolean[], right: boolean[]}) {
+        if (event.code) {
+            this.scanCode = event.code;
+        }
+
+        event.left.forEach((value: boolean, index: number) => {
+            this.leftModifierSelects[index] = value;
+        });
+
+        event.right.forEach((value: boolean, index: number) => {
+            this.rightModifierSelects[index] = value;
+        });
+    }
+
     fromKeyAction(keyAction: KeyAction): boolean {
         if (!(keyAction instanceof KeystrokeAction)) {
             return false;
@@ -139,17 +153,11 @@ export class KeypressTabComponent implements OnChanges, Tab {
         modifierSelects[index] = !modifierSelects[index];
     }
 
-    // TODO: change to the correct type when the wrapper has added it.
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private onLongpressChange(event: any) {
-        /* tslint:enable:no-unused-variable: */
+    onLongpressChange(event: {value: string}) {
         this.selectedLongPressIndex = +event.value;
     }
 
-    // TODO: change to the correct type when the wrapper has added it.
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private onScancodeChange(event: any) {
-        /* tslint:enable:no-unused-variable */
+    onScancodeChange(event: {value: string}) {
         this.scanCode = +event.value;
     }
 
