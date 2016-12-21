@@ -69,6 +69,8 @@ export class KeypressTabComponent implements OnChanges, Tab {
     onKeysCapture(event: {code: number, left: boolean[], right: boolean[]}) {
         if (event.code) {
             this.scanCode = event.code;
+        } else {
+            this.scanCode = 0;
         }
 
         this.leftModifierSelects = event.left;
