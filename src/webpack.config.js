@@ -9,8 +9,9 @@ var rootDir = path.resolve(__dirname, '../');
 
 module.exports = {
     entry: {
-        app: ['core-js', 'zone.js', './src/main.ts'],
-        vendor: ['jquery', 'bootstrap', 'select2']
+        polyfills: './src/polyfills.ts',
+        vendor: './src/vendor.ts',
+        app: './src/main.ts'
     },
     output: {
         path: rootDir + "/dist",
@@ -76,7 +77,9 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery"
         }),
-        new CommonsChunkPlugin("commons.chunk.js")
+        new CommonsChunkPlugin({
+            name: ['app', 'vendor', 'polyfills']
+        })
     ]
 
 }
