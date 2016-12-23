@@ -7,7 +7,7 @@
             [width]="200"
             [options]="options"
     ></select2>
-    <capture-keystroke-button></capture-keystroke-button>
+    <capture-keystroke-button (capture)="onKeysCapture($event)"></capture-keystroke-button>
 </div>
 <div class="modifier-options">
     <b class="setting-label">Modifiers:</b>

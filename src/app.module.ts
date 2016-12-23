@@ -62,6 +62,7 @@ import { MainAppComponent, appRoutingProviders, routing } from './main-app';
 
 import { CancelableDirective } from './directives';
 
+import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
 
 import { KeymapEffects, MacroEffects } from './store/effects';
@@ -154,7 +155,8 @@ const storeConfig = {
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,
-        MacroNotFoundGuard
+        MacroNotFoundGuard,
+        CaptureService
     ],
     bootstrap: [MainAppComponent]
 })
