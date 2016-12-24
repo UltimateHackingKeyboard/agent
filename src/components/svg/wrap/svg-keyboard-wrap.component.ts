@@ -139,6 +139,27 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         }
     }
 
+    onCapture(moduleId: number, keyId: number, captured: {code: number, left: boolean[], right: boolean[]}): void {
+        let keystrokeAction: KeystrokeAction = new KeystrokeAction();
+        const modifiers = captured.left.concat(captured.right).map(x => x ? 1 : 0);
+
+        keystrokeAction.scancode = captured.code;
+        keystrokeAction.modifierMask = 0;
+
+        for (let i = 0; i < modifiers.length; ++i) {
+            keystrokeAction.modifierMask |= modifiers[i] << this.modifierMapper(i);
+        }
+
+        this.store.dispatch(
+            KeymapActions.saveKey(
+                this.keymap,
+                this.currentLayer,
+                moduleId,
+                keyId,
+                keystrokeAction)
+        );
+    }
+
     onRemap(keyAction: KeyAction): void {
         this.store.dispatch(
             KeymapActions.saveKey(
@@ -278,4 +299,11 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.currentLayer = index;
     }
 
+    private modifierMapper(x: number) {
+        if (x < 8) {
+            return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
+        } else {
+            return x;
+        }
+    }
 }

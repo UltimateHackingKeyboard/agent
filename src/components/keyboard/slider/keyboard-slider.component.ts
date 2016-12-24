@@ -81,6 +81,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
+    @Output() captured = new EventEmitter();
 
     private layerAnimationState: AnimationKeyboard[];
 

@@ -164,5 +164,5 @@ export class KeypressTabComponent implements OnChanges, Tab {
         } else {
             return x;
         }
-    };
+    }
 }
