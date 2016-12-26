@@ -32,6 +32,7 @@ export class CaptureKeystrokeButtonComponent {
 
         if (this.record) {
             e.preventDefault();
+            e.stopPropagation();
             this.first = false;
 
             if (this.captureService.hasMap(code)) {

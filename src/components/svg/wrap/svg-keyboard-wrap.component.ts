@@ -2,11 +2,13 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
+    Renderer,
     HostBinding,
     HostListener,
     Input,
     OnChanges,
     OnInit,
+    ViewChild,
     SimpleChanges
 } from '@angular/core';
 
@@ -31,6 +33,7 @@ import { camelCaseToSentence, capitalizeFirstLetter } from '../../../util';
 
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
+import { PopoverComponent } from '../../popover';
 
 @Component({
     selector: 'svg-keyboard-wrap',
@@ -42,6 +45,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
+
+    @ViewChild(PopoverComponent, { read: ElementRef}) popover: ElementRef;
 
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
@@ -70,7 +75,12 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         }
     }
 
-    constructor(private store: Store<AppState>, private mapper: MapperService, private element: ElementRef) {
+    constructor(
+        private store: Store<AppState>,
+        private mapper: MapperService,
+        private element: ElementRef,
+        private renderer: Renderer
+    ) {
         this.keyEditConfig = {
             moduleId: undefined,
             keyId: undefined
@@ -145,6 +155,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.keyPosition = this.keyElement.getBoundingClientRect();
         this.popoverInitKeyAction = keyAction;
         this.popoverShown = true;
+        this.renderer.invokeElementMethod(this.popover.nativeElement, 'focus');
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {

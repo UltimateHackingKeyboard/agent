@@ -1,6 +1,6 @@
 import {
-    Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, animate, keyframes,
-    state, style, transition, trigger
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild,
+    animate, keyframes, state, style, transition, trigger
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -49,7 +49,7 @@ enum TabName {
             transition('opened => closed', [
                 animate('200ms ease-out', keyframes([
                     style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
-                    style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0 , offset: 1 })
+                    style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1 })
                 ]))
             ]),
             transition('closed => opened', [
@@ -143,6 +143,10 @@ export class PopoverComponent implements OnChanges {
         }
     }
 
+    @HostListener('keydown.escape') onEscape(): void {
+        this.cancel.emit();
+    }
+
     selectTab(tab: TabName): void {
         this.activeTab = tab;
     }
@@ -156,7 +160,7 @@ export class PopoverComponent implements OnChanges {
         const popover: HTMLElement = this.popoverHost.nativeElement;
         let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
 
-        this.leftArrow = newLeft <  offsetLeft;
+        this.leftArrow = newLeft < offsetLeft;
         this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
 
         if (this.leftArrow) {
