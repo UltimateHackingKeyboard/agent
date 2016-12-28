@@ -16,6 +16,7 @@ export class SvgModuleComponent {
     @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
+    @Output() capture = new EventEmitter();
 
     constructor() {
         this.keyboardKeys = [];
@@ -36,4 +37,10 @@ export class SvgModuleComponent {
         });
     }
 
+    onCapture(index: number, captured: {code: number, left: boolean[], right: boolean[]}) {
+        this.capture.emit({
+            index,
+            captured
+        });
+    }
 }

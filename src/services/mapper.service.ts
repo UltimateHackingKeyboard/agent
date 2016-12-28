@@ -38,6 +38,14 @@ export class MapperService {
         return 'assets/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
     }
 
+    public modifierMapper(x: number) {
+        if (x < 8) {
+            return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
+        } else {
+            return x;
+        }
+    }
+
     // TODO: read the mapping from JSON
     private initScanCodeTextMap(): void {
         this.scanCodeTextMap = new Map<number, string[]>();

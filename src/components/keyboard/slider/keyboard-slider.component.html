@@ -1,7 +1,9 @@
 <svg-keyboard *ngFor="let layer of layers; let index = index; trackBy: trackKeyboard"
-                      [@layerState]="layerAnimationState[index]"
-                      [moduleConfig]="layer.modules"
-                      [keybindAnimationEnabled]="keybindAnimationEnabled"
-                      (keyClick)="keyClick.emit($event)"
-                      (keyHover)="keyHover.emit($event)">
+    [@layerState]="layerAnimationState[index]"
+    [moduleConfig]="layer.modules"
+    [keybindAnimationEnabled]="keybindAnimationEnabled"
+    (keyClick)="keyClick.emit($event)"
+    (keyHover)="keyHover.emit($event)"
+    (capture)="capture.emit($event)"
+>
 </svg-keyboard>

@@ -1,6 +1,6 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange,
-    animate, group, style, transition, trigger
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
+    SimpleChange, animate, group, state, style, transition, trigger
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -19,6 +19,7 @@ import {
 import { KeyModifiers } from '../../../../config-serializer/config-items/KeyModifiers';
 import { Macro } from '../../../../config-serializer/config-items/Macro';
 
+import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';
 
 import { AppState } from '../../../../store/index';
@@ -46,6 +47,15 @@ enum LabelTypes {
                     }))
                 ])
             ])
+        ]),
+        trigger('recording', [
+            state('inactive', style({
+                fill: 'rgba(204, 0, 0, 1)'
+            })),
+            state('active', style({
+                fill: 'rgba(204, 0, 0, 0.6)'
+            })),
+            transition('inactive <=> active', animate('600ms ease-in-out'))
         ])
     ],
     selector: 'g[svg-keyboard-key]',
@@ -61,22 +71,79 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keyAction: KeyAction;
     @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter();
+    @Output() capture = new EventEmitter();
 
     enumLabelTypes = LabelTypes;
+
+    public changeAnimation: string = 'inactive';
+    public recordAnimation: string;
 
     private labelSource: any;
     private labelType: LabelTypes;
     private macros: Macro[];
     private subscription: Subscription;
-    private animation: string = 'inactive';
+    private recording: boolean;
 
-    @HostListener('click') onClick() {
+    @HostListener('click')
+    onClick() {
+        this.reset();
         this.keyClick.emit(this.element.nativeElement);
     }
 
-    constructor(private mapper: MapperService, private store: Store<AppState>, private element: ElementRef) {
+    @HostListener('mousedown', ['$event'])
+    onMouseDown(e: MouseEvent) {
+        if (e.which === 2 || e.button === 1) {
+            e.preventDefault();
+            this.renderer.invokeElementMethod(this.element.nativeElement, 'focus');
+
+            if (this.recording) {
+                this.reset();
+            } else {
+                this.recording = true;
+                this.recordAnimation = 'active';
+            }
+        }
+    }
+
+    @HostListener('keyup')
+    onKeyUp() {
+        if (this.recording) {
+            this.saveScanCode();
+        }
+    }
+
+    @HostListener('keydown', ['$event'])
+    onKeyDown(e: KeyboardEvent) {
+        const code: number = e.keyCode;
+
+        if (this.recording) {
+            e.preventDefault();
+
+            if (this.captureService.hasMap(code)) {
+                this.saveScanCode(this.captureService.getMap(code));
+            } else {
+                this.captureService.setModifier((e.location === 1), code);
+            }
+        }
+    }
+
+    @HostListener('focusout')
+    onFocusOut() {
+        this.reset();
+    }
+
+    constructor(
+        private mapper: MapperService,
+        private store: Store<AppState>,
+        private element: ElementRef,
+        private captureService: CaptureService,
+        private renderer: Renderer
+    ) {
         this.subscription = store.let(getMacroEntities())
             .subscribe((macros: Macro[]) => this.macros = macros);
+
+        this.reset();
+        this.captureService.populateMapping();
     }
 
     ngOnInit() {
@@ -84,22 +151,50 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
-        /* tslint:disable:no-string-literal */
         if (changes['keyAction']) {
             this.setLabels();
             if (this.keybindAnimationEnabled) {
-                this.animation = 'active';
+                this.changeAnimation = 'active';
             }
         }
-        /* tslint:enable:no-string-literal */
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
 
-    animationDone() {
-        this.animation = 'inactive';
+    onChangeAnimationDone() {
+        this.changeAnimation = 'inactive';
+    }
+
+    onRecordingAnimationDone() {
+        if (this.recording && this.recordAnimation === 'inactive') {
+            this.recordAnimation = 'active';
+        } else {
+            this.recordAnimation = 'inactive';
+        }
+    }
+
+    private reset() {
+        this.recording = false;
+        this.changeAnimation = 'inactive';
+        this.captureService.initModifiers();
+    }
+
+    private saveScanCode(code = 0) {
+        this.recording = false;
+        this.changeAnimation = 'inactive';
+
+        const left: boolean[] = this.captureService.getModifiers(true);
+        const right: boolean[] = this.captureService.getModifiers(false);
+
+        this.capture.emit({
+            code,
+            left,
+            right
+        });
+
+        this.captureService.initModifiers();
     }
 
     private setLabels(): void {

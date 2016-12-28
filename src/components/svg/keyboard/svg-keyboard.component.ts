@@ -13,6 +13,7 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
+    @Output() capture = new EventEmitter();
 
     private modules: SvgModule[];
     private svgAttributes: { viewBox: string, transform: string, fill: string };
@@ -31,6 +32,14 @@ export class SvgKeyboardComponent implements OnInit {
             moduleId,
             keyId,
             keyTarget
+        });
+    }
+
+    onCapture(moduleId: number, keyId: number, captured: {code: number, left: boolean[], right: boolean[]}): void {
+        this.capture.emit({
+            moduleId,
+            keyId,
+            captured
         });
     }
 

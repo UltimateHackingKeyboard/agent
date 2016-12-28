@@ -5,6 +5,7 @@ import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
 import { KeyAction, KeystrokeAction } from '../../../../config-serializer/config-items/key-action';
 
 import { Tab } from '../tab';
+import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'keypress-tab',
@@ -28,7 +29,7 @@ export class KeypressTabComponent implements OnChanges, Tab {
     private scanCode: number;
     private selectedLongPressIndex: number;
 
-    constructor() {
+    constructor(private mapper: MapperService) {
         this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
         this.rightModifiers = ['RShift', 'RCtrl', 'RSuper', 'RAlt'];
         this.scanCodeGroups = [{
@@ -89,17 +90,17 @@ export class KeypressTabComponent implements OnChanges, Tab {
 
         // Restore modifiers
         for (let i = 0; i < leftModifiersLength; ++i) {
-            this.leftModifierSelects[this.modifierMapper(i)] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
+            this.leftModifierSelects[this.mapper.modifierMapper(i)] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
         }
 
         for (let i = leftModifiersLength; i < leftModifiersLength + this.rightModifierSelects.length; ++i) {
-            let index: number = this.modifierMapper(i) - leftModifiersLength;
+            let index: number = this.mapper.modifierMapper(i) - leftModifiersLength;
             this.rightModifierSelects[index] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
         }
 
         // Restore longPressAction
         if (keystrokeAction.longPressAction !== undefined) {
-            this.selectedLongPressIndex = this.modifierMapper(keystrokeAction.longPressAction);
+            this.selectedLongPressIndex = this.mapper.modifierMapper(keystrokeAction.longPressAction);
         }
 
         return true;
@@ -112,12 +113,12 @@ export class KeypressTabComponent implements OnChanges, Tab {
         keystrokeAction.modifierMask = 0;
         let modifiers = this.leftModifierSelects.concat(this.rightModifierSelects).map(x => x ? 1 : 0);
         for (let i = 0; i < modifiers.length; ++i) {
-            keystrokeAction.modifierMask |= modifiers[i] << this.modifierMapper(i);
+            keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
         }
 
         keystrokeAction.longPressAction = this.selectedLongPressIndex === -1
             ? undefined
-            : this.modifierMapper(this.selectedLongPressIndex);
+            : this.mapper.modifierMapper(this.selectedLongPressIndex);
 
         if (!this.keyActionValid(keystrokeAction)) {
             throw new Error('KeyAction is invalid!');
@@ -157,12 +158,4 @@ export class KeypressTabComponent implements OnChanges, Tab {
     onScancodeChange(event: {value: string}) {
         this.scanCode = +event.value;
     }
-
-    private modifierMapper(x: number) {
-        if (x < 8) {
-            return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
-        } else {
-            return x;
-        }
-    };
 }
