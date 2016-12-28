@@ -1,6 +1,6 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange,
-    animate, group, state, style, transition, trigger
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
+    SimpleChange, animate, group, state, style, transition, trigger
 } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -71,7 +71,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keyAction: KeyAction;
     @Input() keybindAnimationEnabled: boolean;
     @Output() keyClick = new EventEmitter();
-    @Output() captured = new EventEmitter();
+    @Output() capture = new EventEmitter();
 
     enumLabelTypes = LabelTypes;
 
@@ -82,7 +82,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     private labelType: LabelTypes;
     private macros: Macro[];
     private subscription: Subscription;
-    private record: boolean;
+    private recording: boolean;
 
     @HostListener('click')
     onClick() {
@@ -90,17 +90,24 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.keyClick.emit(this.element.nativeElement);
     }
 
-    @HostListener('mouseup', ['$event'])
-    onMouseUp(e: MouseEvent) {
+    @HostListener('mousedown', ['$event'])
+    onMouseDown(e: MouseEvent) {
         if (e.which === 2 || e.button === 1) {
-            this.record = true;
-            this.recordAnimation = 'active';
+            e.preventDefault();
+            this.renderer.invokeElementMethod(this.element.nativeElement, 'focus');
+
+            if (this.recording) {
+                this.reset();
+            } else {
+                this.recording = true;
+                this.recordAnimation = 'active';
+            }
         }
     }
 
     @HostListener('keyup')
     onKeyUp() {
-        if (this.record) {
+        if (this.recording) {
             this.saveScanCode();
         }
     }
@@ -109,7 +116,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     onKeyDown(e: KeyboardEvent) {
         const code: number = e.keyCode;
 
-        if (this.record) {
+        if (this.recording) {
             e.preventDefault();
 
             if (this.captureService.hasMap(code)) {
@@ -129,7 +136,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private mapper: MapperService,
         private store: Store<AppState>,
         private element: ElementRef,
-        private captureService: CaptureService
+        private captureService: CaptureService,
+        private renderer: Renderer
     ) {
         this.subscription = store.let(getMacroEntities())
             .subscribe((macros: Macro[]) => this.macros = macros);
@@ -155,32 +163,32 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    changeDone() {
+    onChangeAnimationDone() {
         this.changeAnimation = 'inactive';
     }
 
-    recordingDone() {
-        if (this.record) {
-            this.recordAnimation = (this.recordAnimation === 'inactive') ? 'active' : 'inactive';
+    onRecordingAnimationDone() {
+        if (this.recording && this.recordAnimation === 'inactive') {
+            this.recordAnimation = 'active';
         } else {
             this.recordAnimation = 'inactive';
         }
     }
 
     private reset() {
-        this.record = false;
+        this.recording = false;
         this.changeAnimation = 'inactive';
         this.captureService.initModifiers();
     }
 
     private saveScanCode(code = 0) {
-        this.record = false;
+        this.recording = false;
         this.changeAnimation = 'inactive';
 
         const left: boolean[] = this.captureService.getModifiers(true);
         const right: boolean[] = this.captureService.getModifiers(false);
 
-        this.captured.emit({
+        this.capture.emit({
             code,
             left,
             right

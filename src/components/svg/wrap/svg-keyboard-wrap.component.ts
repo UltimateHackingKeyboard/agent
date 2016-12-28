@@ -147,7 +147,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         keystrokeAction.modifierMask = 0;
 
         for (let i = 0; i < modifiers.length; ++i) {
-            keystrokeAction.modifierMask |= modifiers[i] << this.modifierMapper(i);
+            keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
         }
 
         this.store.dispatch(
@@ -297,13 +297,5 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     selectLayer(index: number): void {
         this.currentLayer = index;
-    }
-
-    private modifierMapper(x: number) {
-        if (x < 8) {
-            return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
-        } else {
-            return x;
-        }
     }
 }

@@ -8,7 +8,7 @@
                 [keyActions]="moduleConfig[i].keyActions"
                 (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
                 (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
-                (captured)="onCapture(i, $event.index, $event.captured)"
+                (capture)="onCapture(i, $event.index, $event.captured)"
         />
     </svg:g>
 </svg>

@@ -7,7 +7,7 @@
         [keyAction]="keyActions[i]"
         [keybindAnimationEnabled]="keybindAnimationEnabled"
         (keyClick)="onKeyClick(i, $event)"
-        (captured)="onCapture(i, $event)"
+        (capture)="onCapture(i, $event)"
         (mouseenter)="onKeyHover(i, $event, true)"
         (mouseleave)="onKeyHover(i, $event, false)"
 />

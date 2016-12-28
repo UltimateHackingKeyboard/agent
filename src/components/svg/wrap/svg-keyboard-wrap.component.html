@@ -5,7 +5,7 @@
                      [keybindAnimationEnabled]="keybindAnimationEnabled"
                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
-                     (captured)="onCapture($event.moduleId, $event.keyId, $event.captured)"
+                     (capture)="onCapture($event.moduleId, $event.keyId, $event.captured)"
     ></keyboard-slider>
     <popover tabindex="0" [visible]="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction"
              [currentKeymap]="keymap" [currentLayer]="currentLayer" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
