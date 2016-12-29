@@ -97,12 +97,11 @@ export default function (state = initialState, action: Action): KeymapState {
                 filtered[0].isDefault = true;
             }
 
-            const deletedKeymap = state.entities.find(keymap => keymap.abbreviation === action.payload);
             // Check for the deleted keymap in other keymaps
             newState = filtered.map((keymap: Keymap) => {
                 changedKeymap = new Keymap();
                 Object.assign(changedKeymap, keymap);
-                changedKeymap.layers = checkExistence(changedKeymap.layers, 'keymap', deletedKeymap);
+                changedKeymap.layers = checkExistence(changedKeymap.layers, 'keymapAbbreviation', action.payload);
 
                 return changedKeymap;
             });
@@ -148,7 +147,7 @@ export default function (state = initialState, action: Action): KeymapState {
             newState = state.entities.map((keymap: Keymap) => {
                 changedKeymap = new Keymap();
                 Object.assign(changedKeymap, keymap);
-                changedKeymap.layers = checkExistence(changedKeymap.layers, 'macro', action.payload);
+                changedKeymap.layers = checkExistence(changedKeymap.layers, '_macroId', action.payload);
 
                 return changedKeymap;
             });

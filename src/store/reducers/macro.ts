@@ -57,7 +57,7 @@ export default function (state = initialState, action: Action): MacroState {
             };
 
         case MacroActions.REMOVE:
-            newState = state.entities.filter((macro: Macro) => macro !== action.payload);
+            newState = state.entities.filter((macro: Macro) => macro.id !== action.payload);
 
             return {
                 entities: newState
