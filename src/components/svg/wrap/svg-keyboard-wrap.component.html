@@ -16,7 +16,7 @@
     >
         <div class="tooltip-arrow"></div>
         <div class="tooltip-inner">
-            <p *ngFor="let item of tooltipData.content">
+            <p *ngFor="let item of tooltipData.content | async">
                 {{ item.name }}: {{ item.value }}
             </p>
         </div>

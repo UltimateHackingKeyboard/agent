@@ -12,6 +12,9 @@ import {
     SimpleChanges
 } from '@angular/core';
 
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -46,14 +49,19 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
 
-    @ViewChild(PopoverComponent, { read: ElementRef}) popover: ElementRef;
+    @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private keybindAnimationEnabled: boolean;
     private currentLayer: number = 0;
-    private tooltipData: { posTop: number, posLeft: number, content: { name: string, value: string }[], show: boolean };
+    private tooltipData: {
+        posTop: number,
+        posLeft: number,
+        content: Observable<{ name: string, value: string }[]>,
+        show: boolean
+    };
     private layers: Layer[];
     private keyPosition: ClientRect;
     private wrapPosition: ClientRect;
@@ -89,7 +97,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.tooltipData = {
             posTop: 0,
             posLeft: 0,
-            content: [],
+            content: Observable.of([]),
             show: false
         };
     }
@@ -194,13 +202,33 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             posTop = position.top + position.height;
         }
 
-        let content: {
-            name: string,
-            value: string
-        }[] = [];
+        this.tooltipData = {
+            posLeft: posLeft,
+            posTop: posTop,
+            content: this.getKeyActionContent(keyAction),
+            show: true
+        };
+    }
 
+    hideTooltip() {
+        this.tooltipData.show = false;
+    }
+
+    hidePopover(): void {
+        this.popoverShown = false;
+    }
+
+    selectLayer(index: number): void {
+        this.currentLayer = index;
+    }
+
+    private getKeyActionContent(keyAction: KeyAction): typeof SvgKeyboardWrapComponent.prototype.tooltipData.content {
         if (keyAction instanceof KeystrokeAction) {
             const keystrokeAction: KeystrokeAction = keyAction;
+            const content: {
+                name: string,
+                value: string
+            }[] = [];
             content.push({
                 name: 'Action type',
                 value: 'Keystroke'
@@ -231,71 +259,91 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                     value: LongPressAction[keystrokeAction.longPressAction]
                 });
             }
+            return Observable.of(content);
         } else if (keyAction instanceof MouseAction) {
             const mouseAction: MouseAction = keyAction;
-            content.push({
-                name: 'Action type',
-                value: 'Mouse'
-            });
-            content.push({
-                name: 'Action',
-                value: camelCaseToSentence(MouseActionParam[mouseAction.mouseAction])
-            });
+            const content: {
+                name: string,
+                value: string
+            }[] =
+                [
+                    {
+                        name: 'Action type',
+                        value: 'Mouse'
+                    },
+                    {
+                        name: 'Action',
+                        value: camelCaseToSentence(MouseActionParam[mouseAction.mouseAction])
+                    }
+                ];
+            return Observable.of(content);
         } else if (keyAction instanceof PlayMacroAction) {
             const playMacroAction: PlayMacroAction = keyAction;
-            content.push({
-                name: 'Action type',
-                value: 'Play macro'
-            });
-
-            content.push({
-                name: 'Macro name',
-                value: playMacroAction.macro.name.toString()
-            });
-
+            return this.store
+                .select(appState => appState.macros)
+                .map(macroState => macroState.entities.find(macro => {
+                    return macro.id === playMacroAction.macroId;
+                }).name)
+                .map(macroName => {
+                    const content: {
+                        name: string,
+                        value: string
+                    }[] = [
+                            {
+                                name: 'Action type',
+                                value: 'Play macro'
+                            },
+                            {
+                                name: 'Macro name',
+                                value: macroName
+                            }
+                        ];
+                    return content;
+                });
         } else if (keyAction instanceof SwitchKeymapAction) {
             const switchKeymapAction: SwitchKeymapAction = keyAction;
-            content.push({
-                name: 'Action type',
-                value: 'Switch keymap'
-            });
-            content.push({
-                name: 'Keymap',
-                value: switchKeymapAction.keymap.name
-            });
+            return this.store
+                .select(appState => appState.keymaps.entities)
+                .map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name)
+                .map(keymapName => {
+                    const content: {
+                        name: string,
+                        value: string
+                    }[] = [
+                            {
+                                name: 'Action type',
+                                value: 'Switch keymap'
+                            },
+                            {
+                                name: 'Keymap',
+                                value: keymapName
+                            }
+                        ];
+                    return content;
+                });
         } else if (keyAction instanceof SwitchLayerAction) {
             const switchLayerAction: SwitchLayerAction = keyAction;
-            content.push({
-                name: 'Action type',
-                value: 'Switch layer'
-            });
-            content.push({
-                name: 'Layer',
-                value: capitalizeFirstLetter(LayerName[switchLayerAction.layer])
-            });
-            content.push({
-                name: 'Toogle',
-                value: switchLayerAction.isLayerToggleable ? 'On' : 'Off'
-            });
+            const content: {
+                name: string,
+                value: string
+            }[] =
+                [
+                    {
+                        name: 'Action type',
+                        value: 'Switch layer'
+                    },
+                    {
+                        name: 'Layer',
+                        value: capitalizeFirstLetter(LayerName[switchLayerAction.layer])
+                    },
+                    {
+                        name: 'Toogle',
+                        value: switchLayerAction.isLayerToggleable ? 'On' : 'Off'
+                    }
+                ];
+            return Observable.of(content);
         }
 
-        this.tooltipData = {
-            posLeft: posLeft,
-            posTop: posTop,
-            content,
-            show: true
-        };
-    }
-
-    hideTooltip() {
-        this.tooltipData.show = false;
-    }
-
-    hidePopover(): void {
-        this.popoverShown = false;
-    }
-
-    selectLayer(index: number): void {
-        this.currentLayer = index;
+        return Observable.of([]);
     }
 }

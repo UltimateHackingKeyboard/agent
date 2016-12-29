@@ -15,7 +15,7 @@ export class Keymap extends Serializable<Keymap> {
 
     layers: Layer[];
 
-    constructor(keymap?: Keymap, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro) {
+    constructor(keymap?: Keymap) {
         super();
         if (!keymap) {
             return;
@@ -25,25 +25,25 @@ export class Keymap extends Serializable<Keymap> {
         this.description = keymap.description;
         this.abbreviation = keymap.abbreviation;
         this.isDefault = keymap.isDefault;
-        this.layers = keymap.layers.map(layer => new Layer(layer, getKeymap, getMacro));
+        this.layers = keymap.layers.map(layer => new Layer(layer));
     }
 
-    fromJsonObject(jsonObject: any, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Keymap {
+    fromJsonObject(jsonObject: any): Keymap {
         this.isDefault = jsonObject.isDefault;
         this.abbreviation = jsonObject.abbreviation;
         this.name = jsonObject.name;
         this.description = jsonObject.description;
-        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer, getKeymap, getMacro));
+        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer));
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Keymap {
+    fromBinary(buffer: UhkBuffer): Keymap {
         this.abbreviation = buffer.readString();
         this.isDefault = buffer.readBoolean();
         this.name = buffer.readString();
         this.description = buffer.readString();
         this.layers = buffer.readArray<Layer>(uhkBuffer => {
-            return new Layer().fromBinary(uhkBuffer, getKeymap, getMacro);
+            return new Layer().fromBinary(uhkBuffer);
         });
         return this;
     }

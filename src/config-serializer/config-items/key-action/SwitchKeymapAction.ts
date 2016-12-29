@@ -4,7 +4,7 @@ import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
 
 export class SwitchKeymapAction extends KeyAction {
 
-    keymap: Keymap;
+    keymapAbbreviation: string;
 
     constructor(parameter?: SwitchKeymapAction | Keymap) {
         super();
@@ -12,38 +12,37 @@ export class SwitchKeymapAction extends KeyAction {
             return;
         }
         if (parameter instanceof SwitchKeymapAction) {
-            this.keymap = parameter.keymap;
+            this.keymapAbbreviation = parameter.keymapAbbreviation;
         } else {
-            this.keymap = parameter;
+            this.keymapAbbreviation = parameter.abbreviation;
         }
     }
 
-    fromJsonObject(jsonObject: any, getKeymap: (abbrevation: string) => Keymap): SwitchKeymapAction {
+    fromJsonObject(jsonObject: any): SwitchKeymapAction {
         this.assertKeyActionType(jsonObject);
-        this.keymap = getKeymap(jsonObject.keymapAbbreviation);
+        this.keymapAbbreviation = jsonObject.keymapAbbreviation;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, getKeymap: (abbrevation: string) => Keymap): SwitchKeymapAction {
+    fromBinary(buffer: UhkBuffer): SwitchKeymapAction {
         this.readAndAssertKeyActionId(buffer);
-        const keymapAbbreviation = buffer.readString();
-        this.keymap = getKeymap(keymapAbbreviation);
+        this.keymapAbbreviation = buffer.readString();
         return this;
     }
 
     _toJsonObject(): any {
         return {
             keyActionType: keyActionType.SwitchKeymapAction,
-            keymapAbbreviation: this.keymap.abbreviation
+            keymapAbbreviation: this.keymapAbbreviation
         };
     }
 
     _toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
-        buffer.writeString(this.keymap.abbreviation);
+        buffer.writeString(this.keymapAbbreviation);
     }
 
     toString(): string {
-        return `<SwitchKeymapAction keymapAbbreviation="${this.keymap.abbreviation}">`;
+        return `<SwitchKeymapAction keymapAbbreviation="${this.keymapAbbreviation}">`;
     }
 }

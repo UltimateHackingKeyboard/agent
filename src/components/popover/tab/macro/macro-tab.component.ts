@@ -61,7 +61,7 @@ export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
             return false;
         }
         const playMacroAction: PlayMacroAction = <PlayMacroAction>keyAction;
-        this.selectedMacroIndex = this.macros.findIndex(macro => playMacroAction.macro === macro);
+        this.selectedMacroIndex = this.macros.findIndex(macro => playMacroAction.macroId === macro.id);
         return true;
     }
 
@@ -71,7 +71,7 @@ export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
         }
 
         const keymapAction = new PlayMacroAction();
-        keymapAction.macro = this.macros[this.selectedMacroIndex];
+        keymapAction.macroId = this.macros[this.selectedMacroIndex].id;
         return keymapAction;
     }
 

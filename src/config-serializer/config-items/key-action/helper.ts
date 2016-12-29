@@ -15,25 +15,17 @@ import { Macro } from '../Macro';
 
 export class Helper {
 
-    static createKeyAction(
-        source: KeyAction | UhkBuffer | any,
-        getKeymap?: (abbrevation: string) => Keymap,
-        getMacro?: (macroId: number) => Macro
-    ): KeyAction {
+    static createKeyAction(source: KeyAction | UhkBuffer | any): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {
-            return Helper.fromUhkBuffer(source, getKeymap, getMacro);
+            return Helper.fromUhkBuffer(source);
         } else {
-            return Helper.fromJSONObject(source, getKeymap, getMacro);
+            return Helper.fromJSONObject(source);
         }
     }
 
-    private static fromUhkBuffer(
-        buffer: UhkBuffer,
-        getKeymap?: (abbrevation: string) => Keymap,
-        getMacro?: (macroId: number) => Macro
-    ): KeyAction {
+    private static fromUhkBuffer(buffer: UhkBuffer): KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
@@ -48,11 +40,11 @@ export class Helper {
             case KeyActionId.SwitchLayerAction:
                 return new SwitchLayerAction().fromBinary(buffer);
             case KeyActionId.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromBinary(buffer, getKeymap);
+                return new SwitchKeymapAction().fromBinary(buffer);
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer);
             case KeyActionId.PlayMacroAction:
-                return new PlayMacroAction().fromBinary(buffer, getMacro);
+                return new PlayMacroAction().fromBinary(buffer);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }
@@ -74,11 +66,7 @@ export class Helper {
         return newKeyAction;
     }
 
-    private static fromJSONObject(
-        keyAction: any,
-        getKeymap?: (abbrevation: string) => Keymap,
-        getMacro?: (macroId: number) => Macro
-    ): KeyAction {
+    private static fromJSONObject(keyAction: any): KeyAction {
         if (!keyAction) {
             return;
         }
@@ -89,11 +77,11 @@ export class Helper {
             case keyActionType.SwitchLayerAction:
                 return new SwitchLayerAction().fromJsonObject(keyAction);
             case keyActionType.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromJsonObject(keyAction, getKeymap);
+                return new SwitchKeymapAction().fromJsonObject(keyAction);
             case keyActionType.MouseAction:
                 return new MouseAction().fromJsonObject(keyAction);
             case keyActionType.PlayMacroAction:
-                return new PlayMacroAction().fromJsonObject(keyAction, getMacro);
+                return new PlayMacroAction().fromJsonObject(keyAction);
             default:
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }
