@@ -3,6 +3,7 @@
     <keyboard-slider [layers]="layers"
                      [currentLayer]="currentLayer"
                      [keybindAnimationEnabled]="keybindAnimationEnabled"
+                     [capturingEnabled]="popoverEnabled"
                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
                      (capture)="onCapture($event.moduleId, $event.keyId, $event.captured)"

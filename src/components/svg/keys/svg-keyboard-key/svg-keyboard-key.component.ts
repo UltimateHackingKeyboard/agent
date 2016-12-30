@@ -70,6 +70,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() width: number;
     @Input() keyAction: KeyAction;
     @Input() keybindAnimationEnabled: boolean;
+    @Input() capturingEnabled: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() capture = new EventEmitter();
 
@@ -92,7 +93,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(e: MouseEvent) {
-        if (e.which === 2 || e.button === 1) {
+        if ((e.which === 2 || e.button === 1) && this.capturingEnabled) {
             e.preventDefault();
             this.renderer.invokeElementMethod(this.element.nativeElement, 'focus');
 

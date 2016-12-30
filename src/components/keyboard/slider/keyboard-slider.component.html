@@ -2,6 +2,7 @@
     [@layerState]="layerAnimationState[index]"
     [moduleConfig]="layer.modules"
     [keybindAnimationEnabled]="keybindAnimationEnabled"
+    [capturingEnabled]="capturingEnabled"
     (keyClick)="keyClick.emit($event)"
     (keyHover)="keyHover.emit($event)"
     (capture)="capture.emit($event)"

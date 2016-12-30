@@ -14,6 +14,7 @@ export class SvgModuleComponent {
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
     @Input() keybindAnimationEnabled: boolean;
+    @Input() capturingEnabled: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
