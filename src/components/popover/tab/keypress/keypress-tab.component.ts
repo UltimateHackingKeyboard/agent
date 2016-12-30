@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, EventEmitter, OnChanges, Output } from '@angular/core';
 
 import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
 
@@ -15,6 +15,8 @@ import { MapperService } from '../../../../services/mapper.service';
 export class KeypressTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
     @Input() longPressEnabled: boolean;
+
+    @Output() validAction = new EventEmitter();
 
     private leftModifiers: string[];
     private rightModifiers: string[];
@@ -58,13 +60,15 @@ export class KeypressTabComponent implements OnChanges, Tab {
 
     ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
+        this.validAction.emit(this.keyActionValid());
     }
 
     keyActionValid(keystrokeAction?: KeystrokeAction): boolean {
         if (!keystrokeAction) {
             keystrokeAction = this.toKeyAction();
         }
-        return keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0;
+
+        return (keystrokeAction) ? (keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0) : false;
     }
 
     onKeysCapture(event: {code: number, left: boolean[], right: boolean[]}) {
@@ -76,6 +80,7 @@ export class KeypressTabComponent implements OnChanges, Tab {
 
         this.leftModifierSelects = event.left;
         this.rightModifierSelects = event.right;
+        this.validAction.emit(this.keyActionValid());
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -120,11 +125,9 @@ export class KeypressTabComponent implements OnChanges, Tab {
             ? undefined
             : this.mapper.modifierMapper(this.selectedLongPressIndex);
 
-        if (!this.keyActionValid(keystrokeAction)) {
-            throw new Error('KeyAction is invalid!');
+        if (this.keyActionValid(keystrokeAction)) {
+            return keystrokeAction;
         }
-
-        return keystrokeAction;
     }
 
     scanCodeTemplateResult: Select2TemplateFunction = (state: Select2OptionData): JQuery | string => {
@@ -149,6 +152,8 @@ export class KeypressTabComponent implements OnChanges, Tab {
     toggleModifier(right: boolean, index: number) {
         let modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
         modifierSelects[index] = !modifierSelects[index];
+
+        this.validAction.emit(this.keyActionValid());
     }
 
     onLongpressChange(event: {value: string}) {
@@ -157,5 +162,6 @@ export class KeypressTabComponent implements OnChanges, Tab {
 
     onScancodeChange(event: {value: string}) {
         this.scanCode = +event.value;
+        this.validAction.emit(this.keyActionValid());
     }
 }

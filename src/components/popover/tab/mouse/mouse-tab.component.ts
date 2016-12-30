@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { KeyAction, MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
 import { Tab } from '../tab';
@@ -10,6 +10,7 @@ import { Tab } from '../tab';
 })
 export class MouseTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
+    @Output() validAction = new EventEmitter();
 
     private mouseActionParam: MouseActionParam;
     private selectedPageIndex: number;
@@ -27,6 +28,7 @@ export class MouseTabComponent implements OnChanges, Tab {
 
     ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
+        this.validAction.emit(this.keyActionValid());
     }
 
     keyActionValid(): boolean {
@@ -37,12 +39,14 @@ export class MouseTabComponent implements OnChanges, Tab {
         if (!(keyAction instanceof MouseAction)) {
             return false;
         }
+
         let mouseAction: MouseAction = <MouseAction>keyAction;
         this.mouseActionParam = mouseAction.mouseAction;
 
         if (mouseAction.mouseAction === MouseActionParam.moveUp) {
             this.selectedPageIndex = 0;
         }
+
         switch (mouseAction.mouseAction) {
             case MouseActionParam.moveDown:
             case MouseActionParam.moveUp:
@@ -68,13 +72,11 @@ export class MouseTabComponent implements OnChanges, Tab {
             default:
                 return false;
         }
+
         return true;
     }
 
     toKeyAction(): MouseAction {
-        if (!this.keyActionValid()) {
-            throw new Error('KeyAction is not valid. No selected mouse action!');
-        }
         let mouseAction: MouseAction = new MouseAction();
         mouseAction.mouseAction = this.mouseActionParam;
         return mouseAction;
@@ -85,12 +87,14 @@ export class MouseTabComponent implements OnChanges, Tab {
             console.error(`Invalid index error: ${index}`);
             return;
         }
+
         this.selectedPageIndex = index;
         this.mouseActionParam = undefined;
+        this.validAction.emit(false);
     }
 
     setMouseActionParam(mouseActionParam: MouseActionParam) {
         this.mouseActionParam = mouseActionParam;
+        this.validAction.emit(true);
     }
-
 }
