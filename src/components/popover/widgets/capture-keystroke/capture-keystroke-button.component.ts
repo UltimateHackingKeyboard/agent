@@ -18,9 +18,10 @@ export class CaptureKeystrokeButtonComponent {
         this.captureService.populateMapping();
     }
 
-    @HostListener('keyup')
-    onKeyUp() {
+    @HostListener('keyup', ['$event'])
+    onKeyUp(e: KeyboardEvent) {
         if (this.record && !this.first) {
+            e.preventDefault();
             this.saveScanCode();
         }
     }

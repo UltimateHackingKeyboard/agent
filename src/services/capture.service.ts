@@ -94,6 +94,7 @@ export class CaptureService {
         this.mapping.set(88, 27);  // X
         this.mapping.set(89, 28);  // Y
         this.mapping.set(90, 29);  // Z
+        this.mapping.set(93, 118);  // Menu
         this.mapping.set(96, 98);  // Num pad 0
         this.mapping.set(97, 89);  // Num pad 1
         this.mapping.set(98, 90);  // Num pad 2

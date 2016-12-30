@@ -106,9 +106,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    @HostListener('keyup')
-    onKeyUp() {
+    @HostListener('keyup', ['$event'])
+    onKeyUpe(e: KeyboardEvent) {
         if (this.recording) {
+            e.preventDefault();
             this.saveScanCode();
         }
     }
