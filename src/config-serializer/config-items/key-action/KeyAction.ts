@@ -1,5 +1,6 @@
 /// <reference path="../../Function.d.ts" />
 
+import { Macro } from '../Macro';
 import { UhkBuffer } from '../../UhkBuffer';
 
 export enum KeyActionId {
@@ -52,6 +53,7 @@ export abstract class KeyAction {
         return readKeyActionId;
     }
 
-    abstract toJsonObject(): any;
-    abstract toBinary(buffer: UhkBuffer): void;
+    abstract toJsonObject(macros?: Macro[]): any;
+    abstract toBinary(buffer: UhkBuffer, macros?: Macro[]): any;
+
 }

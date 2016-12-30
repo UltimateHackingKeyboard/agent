@@ -1,6 +1,6 @@
 {
     "signature": "UHK",
-    "dataModelVersion": 1,
+    "dataModelVersion": 2,
     "prologue": 1234678,
     "hardwareId": 0,
     "brandId": 0,
@@ -774,7 +774,7 @@
                                 },
                                 {
                                     "keyActionType": "playMacro",
-                                    "macroId": 0
+                                    "macroIndex": 0
                                 },
                                 {
                                     "keyActionType": "switchKeymap",
@@ -925,7 +925,6 @@
     ],
     "macros": [
         {
-            "id": 0,
             "isLooped": false,
             "isPrivate": true,
             "name": "My address",
@@ -996,7 +995,6 @@
             ]
         },
         {
-            "id": 1,
             "isLooped": true,
             "isPrivate": true,
             "name": "Blah Blah blah",

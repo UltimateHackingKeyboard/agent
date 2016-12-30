@@ -26,42 +26,44 @@ export class Keymap {
         this.layers = keymap.layers.map(layer => new Layer(layer));
     }
 
-    fromJsonObject(jsonObject: any): Keymap {
+    fromJsonObject(jsonObject: any, macros?: Macro[]): Keymap {
         this.isDefault = jsonObject.isDefault;
         this.abbreviation = jsonObject.abbreviation;
         this.name = jsonObject.name;
         this.description = jsonObject.description;
-        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer));
+        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer, macros));
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): Keymap {
+    fromBinary(buffer: UhkBuffer, macros?: Macro[]): Keymap {
         this.abbreviation = buffer.readString();
         this.isDefault = buffer.readBoolean();
         this.name = buffer.readString();
         this.description = buffer.readString();
         this.layers = buffer.readArray<Layer>(uhkBuffer => {
-            return new Layer().fromBinary(uhkBuffer);
+            return new Layer().fromBinary(uhkBuffer, macros);
         });
         return this;
     }
 
-    toJsonObject(): any {
+    toJsonObject(macros?: Macro[]): any {
         return {
             isDefault: this.isDefault,
             abbreviation: this.abbreviation,
             name: this.name,
             description: this.description,
-            layers: this.layers.map(layer => layer.toJsonObject())
+            layers: this.layers.map(layer => layer.toJsonObject(macros))
         };
     }
 
-    toBinary(buffer: UhkBuffer): void {
+    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
         buffer.writeString(this.abbreviation);
         buffer.writeBoolean(this.isDefault);
         buffer.writeString(this.name);
         buffer.writeString(this.description);
-        buffer.writeArray(this.layers);
+        buffer.writeArray(this.layers, (uhkBuffer: UhkBuffer, layer: Layer) => {
+            layer.toBinary(uhkBuffer, macros);
+        });
     }
 
     toString(): string {

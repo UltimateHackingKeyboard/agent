@@ -758,10 +758,7 @@
                                 "keyActionType": "mouse",
                                 "mouseAction": "scrollDown"
                             },
-                            {
-                                "keyActionType": "playMacro",
-                                "macroId": 0
-                            },
+                            null,
                             {
                                 "keyActionType": "switchKeymap",
                                 "keymapAbbreviation": "QTY"

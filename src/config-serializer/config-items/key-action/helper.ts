@@ -15,17 +15,17 @@ import { Macro } from '../Macro';
 
 export class Helper {
 
-    static createKeyAction(source: KeyAction | UhkBuffer | any): KeyAction {
+    static createKeyAction(source: KeyAction | UhkBuffer | any, macros?: Macro[]): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {
-            return Helper.fromUhkBuffer(source);
+            return Helper.fromUhkBuffer(source, macros);
         } else {
-            return Helper.fromJSONObject(source);
+            return Helper.fromJSONObject(source, macros);
         }
     }
 
-    private static fromUhkBuffer(buffer: UhkBuffer): KeyAction {
+    private static fromUhkBuffer(buffer: UhkBuffer, macros: Macro[]): KeyAction {
         let keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
@@ -44,7 +44,7 @@ export class Helper {
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer);
             case KeyActionId.PlayMacroAction:
-                return new PlayMacroAction().fromBinary(buffer);
+                return new PlayMacroAction().fromBinary(buffer, macros);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }
@@ -66,7 +66,7 @@ export class Helper {
         return newKeyAction;
     }
 
-    private static fromJSONObject(keyAction: any): KeyAction {
+    private static fromJSONObject(keyAction: any, macros: Macro[]): KeyAction {
         if (!keyAction) {
             return;
         }
@@ -81,7 +81,7 @@ export class Helper {
             case keyActionType.MouseAction:
                 return new MouseAction().fromJsonObject(keyAction);
             case keyActionType.PlayMacroAction:
-                return new PlayMacroAction().fromJsonObject(keyAction);
+                return new PlayMacroAction().fromJsonObject(keyAction, macros);
             default:
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }
