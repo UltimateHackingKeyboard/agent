@@ -12,6 +12,10 @@ export class UhkBuffer {
     private buffer: Buffer;
     private bytesToBacktrack: number;
 
+    static simpleElementWriter<T>(buffer: UhkBuffer, element: T): void {
+        (<any>element).toBinary(buffer); // TODO: Remove any
+    }
+
     constructor() {
         this.offset = 0;
         this.bytesToBacktrack = 0;
@@ -151,19 +155,23 @@ export class UhkBuffer {
         this.writeUInt8(bool ? 1 : 0);
     }
 
-    readArray<T>(elementReader: (buffer: UhkBuffer) => T): T[] {
+    readArray<T>(elementReader: (buffer: UhkBuffer, index?: number) => T): T[] {
         let array: T[] = [];
         let length = this.readCompactLength();
         for (let i = 0; i < length; ++i) {
-            array.push(elementReader(this));
+            array.push(elementReader(this, i));
         }
         return array;
     }
 
-    writeArray<T>(array: T[]): void {
-        this.writeCompactLength(array.length);
-        for (let element of array) {
-            (<any>element).toBinary(this); // TODO: Remove any
+    writeArray<T>(
+        array: T[],
+        elementWriter: (buffer: UhkBuffer, element: T, index?: number) => void = UhkBuffer.simpleElementWriter
+    ): void {
+        const length = array.length;
+        this.writeCompactLength(length);
+        for (let i = 0; i < length; ++i) {
+            elementWriter(this, array[i], i);
         }
     }
 
@@ -202,4 +210,5 @@ export class UhkBuffer {
             UhkBuffer.isFirstElementToDump = false;
         }
     }
+
 }

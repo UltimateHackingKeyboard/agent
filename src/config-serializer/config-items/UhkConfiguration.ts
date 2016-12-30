@@ -38,8 +38,12 @@ export class UhkConfiguration {
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
             return new ModuleConfiguration().fromJsonObject(moduleConfiguration);
         });
-        this.macros = jsonObject.macros.map((macro: any) => new Macro().fromJsonObject(macro));
-        this.keymaps = jsonObject.keymaps.map((keymap: any) => new Keymap().fromJsonObject(keymap));
+        this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
+            const macro = new Macro().fromJsonObject(macroJsonObject);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = jsonObject.keymaps.map((keymap: any) => new Keymap().fromJsonObject(keymap, this.macros));
         this.epilogue = jsonObject.epilogue;
         return this;
     }
@@ -53,8 +57,12 @@ export class UhkConfiguration {
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
             return new ModuleConfiguration().fromBinary(uhkBuffer);
         });
-        this.macros = buffer.readArray<Macro>(uhkBuffer => new Macro().fromBinary(uhkBuffer));
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer));
+        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
+            const macro = new Macro().fromBinary(uhkBuffer);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
         this.epilogue = buffer.readUInt32();
         return this;
     }
@@ -67,7 +75,7 @@ export class UhkConfiguration {
             hardwareId: this.hardwareId,
             brandId: this.brandId,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
-            keymaps: this.keymaps.map(keymap => keymap.toJsonObject()),
+            keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject()),
             epilogue: this.epilogue
         };
@@ -81,7 +89,9 @@ export class UhkConfiguration {
         buffer.writeUInt8(this.brandId);
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
-        buffer.writeArray(this.keymaps);
+        buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
+            keymap.toBinary(uhkBuffer, this.macros);
+        });
         buffer.writeUInt32(this.epilogue);
     }
 

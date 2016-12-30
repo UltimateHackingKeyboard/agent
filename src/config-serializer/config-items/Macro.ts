@@ -27,7 +27,6 @@ export class Macro {
     }
 
     fromJsonObject(jsonObject: any): Macro {
-        this.id = jsonObject.id;
         this.isLooped = jsonObject.isLooped;
         this.isPrivate = jsonObject.isPrivate;
         this.name = jsonObject.name;
@@ -36,7 +35,6 @@ export class Macro {
     }
 
     fromBinary(buffer: UhkBuffer): Macro {
-        this.id = buffer.readUInt8();
         this.isLooped = buffer.readBoolean();
         this.isPrivate = buffer.readBoolean();
         this.name = buffer.readString();
@@ -50,7 +48,6 @@ export class Macro {
 
     toJsonObject(): any {
         return {
-            id: this.id,
             isLooped: this.isLooped,
             isPrivate: this.isPrivate,
             name: this.name,
@@ -59,7 +56,6 @@ export class Macro {
     }
 
     toBinary(buffer: UhkBuffer): void {
-        buffer.writeUInt8(this.id);
         buffer.writeBoolean(this.isLooped);
         buffer.writeBoolean(this.isPrivate);
         buffer.writeString(this.name);
