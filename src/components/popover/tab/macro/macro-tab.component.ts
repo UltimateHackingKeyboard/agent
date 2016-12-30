@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -21,6 +21,7 @@ import { getMacroEntities } from '../../../../store/reducers/macro';
 })
 export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
     @Input() defaultKeyAction: KeyAction;
+    @Output() validAction = new EventEmitter();
 
     private macros: Macro[];
     private macroOptions: Array<Select2OptionData>;
@@ -45,6 +46,7 @@ export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
 
     ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
+        this.validAction.emit(true);
     }
 
     // TODO: change to the correct type when the wrapper has added it.

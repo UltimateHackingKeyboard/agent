@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
 
@@ -12,6 +12,8 @@ import { Tab } from '../tab';
 export class LayerTabComponent implements OnChanges, Tab {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentLayer: number;
+
+    @Output() validAction = new EventEmitter();
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
@@ -57,6 +59,8 @@ export class LayerTabComponent implements OnChanges, Tab {
         if (changes['currentLayer']) {
             this.isNotBase = this.currentLayer > 0;
         }
+
+        this.validAction.emit(true);
     }
 
     keyActionValid(): boolean {

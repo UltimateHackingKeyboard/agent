@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, OnChanges, Output } from '@angular/core';
 
 import { Tab } from '../tab';
 
@@ -7,7 +7,13 @@ import { Tab } from '../tab';
     template: require('./none-tab.component.html'),
     styles: [require('./none-tab.component.scss')]
 })
-export class NoneTabComponent implements Tab {
+export class NoneTabComponent implements OnChanges, Tab {
+    @Output() validAction = new EventEmitter();
+
+    ngOnChanges(event: any) {
+        this.validAction.emit(true);
+    }
+
     keyActionValid(): boolean {
         return true;
     }

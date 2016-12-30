@@ -47,16 +47,36 @@
         </ul>
     </div>
     <div [ngSwitch]="activeTab">
-        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content" [defaultKeyAction]="defaultKeyAction" [longPressEnabled]="true" (validAction)="isValidAction=$event"></keypress-tab>
-        <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content" [defaultKeyAction]="defaultKeyAction" [currentLayer]="currentLayer"></layer-tab>
-        <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content" [defaultKeyAction]="defaultKeyAction" (validAction)="isValidAction=$event"></mouse-tab>
-        <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content" [defaultKeyAction]="defaultKeyAction"></macro-tab>
-        <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content" [defaultKeyAction]="defaultKeyAction" [keymaps]="keymaps$ | async"></keymap-tab>
-        <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"></none-tab>
+        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content"
+                      [defaultKeyAction]="defaultKeyAction"
+                      [longPressEnabled]="true"
+                      (validAction)="keyActionValid=$event"
+        ></keypress-tab>
+        <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"
+                   [defaultKeyAction]="defaultKeyAction"
+                   [currentLayer]="currentLayer"
+                   (validAction)="keyActionValid=$event"
+        ></layer-tab>
+        <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content"
+                   [defaultKeyAction]="defaultKeyAction"
+                   (validAction)="keyActionValid=$event"
+        ></mouse-tab>
+        <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content"
+                   [defaultKeyAction]="defaultKeyAction"
+                   (validAction)="keyActionValid=$event"
+        ></macro-tab>
+        <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content"
+                    [defaultKeyAction]="defaultKeyAction"
+                    [keymaps]="keymaps$ | async"
+                    (validAction)="keyActionValid=$event"
+        ></keymap-tab>
+        <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"
+                  (validAction)="keyActionValid=$event"
+        ></none-tab>
     </div>
     <div class="popover-action">
         <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel </button>
-        <button class="btn btn-sm btn-primary" [class.disabled]="!isValidAction" type="button" (click)="onRemapKey()"> Remap Key </button>
+        <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button" (click)="onRemapKey()"> Remap Key </button>
     </div>
 </div>
 <div class="popover-overlay" [class.display]="visible" (click)="onOverlay()"></div>
