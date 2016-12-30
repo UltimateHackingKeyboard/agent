@@ -38,6 +38,11 @@ import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
 import { PopoverComponent } from '../../popover';
 
+interface NameValuePair {
+    name: string;
+    value: string;
+}
+
 @Component({
     selector: 'svg-keyboard-wrap',
     template: require('./svg-keyboard-wrap.component.html'),
@@ -59,7 +64,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private tooltipData: {
         posTop: number,
         posLeft: number,
-        content: Observable<{ name: string, value: string }[]>,
+        content: Observable<NameValuePair[]>,
         show: boolean
     };
     private layers: Layer[];
@@ -147,7 +152,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         }
     }
 
-    onCapture(moduleId: number, keyId: number, captured: {code: number, left: boolean[], right: boolean[]}): void {
+    onCapture(moduleId: number, keyId: number, captured: { code: number, left: boolean[], right: boolean[] }): void {
         let keystrokeAction: KeystrokeAction = new KeystrokeAction();
         const modifiers = captured.left.concat(captured.right).map(x => x ? 1 : 0);
 
@@ -222,13 +227,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.currentLayer = index;
     }
 
-    private getKeyActionContent(keyAction: KeyAction): typeof SvgKeyboardWrapComponent.prototype.tooltipData.content {
+    private getKeyActionContent(keyAction: KeyAction): Observable<NameValuePair[]> {
         if (keyAction instanceof KeystrokeAction) {
             const keystrokeAction: KeystrokeAction = keyAction;
-            const content: {
-                name: string,
-                value: string
-            }[] = [];
+            const content: NameValuePair[] = [];
             content.push({
                 name: 'Action type',
                 value: 'Keystroke'
@@ -262,10 +264,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             return Observable.of(content);
         } else if (keyAction instanceof MouseAction) {
             const mouseAction: MouseAction = keyAction;
-            const content: {
-                name: string,
-                value: string
-            }[] =
+            const content: NameValuePair[] =
                 [
                     {
                         name: 'Action type',
@@ -285,19 +284,16 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                     return macro.id === playMacroAction.macroId;
                 }).name)
                 .map(macroName => {
-                    const content: {
-                        name: string,
-                        value: string
-                    }[] = [
-                            {
-                                name: 'Action type',
-                                value: 'Play macro'
-                            },
-                            {
-                                name: 'Macro name',
-                                value: macroName
-                            }
-                        ];
+                    const content: NameValuePair[] = [
+                        {
+                            name: 'Action type',
+                            value: 'Play macro'
+                        },
+                        {
+                            name: 'Macro name',
+                            value: macroName
+                        }
+                    ];
                     return content;
                 });
         } else if (keyAction instanceof SwitchKeymapAction) {
@@ -306,27 +302,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 .select(appState => appState.keymaps.entities)
                 .map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name)
                 .map(keymapName => {
-                    const content: {
-                        name: string,
-                        value: string
-                    }[] = [
-                            {
-                                name: 'Action type',
-                                value: 'Switch keymap'
-                            },
-                            {
-                                name: 'Keymap',
-                                value: keymapName
-                            }
-                        ];
+                    const content: NameValuePair[] = [
+                        {
+                            name: 'Action type',
+                            value: 'Switch keymap'
+                        },
+                        {
+                            name: 'Keymap',
+                            value: keymapName
+                        }
+                    ];
                     return content;
                 });
         } else if (keyAction instanceof SwitchLayerAction) {
             const switchLayerAction: SwitchLayerAction = keyAction;
-            const content: {
-                name: string,
-                value: string
-            }[] =
+            const content: NameValuePair[] =
                 [
                     {
                         name: 'Action type',
