@@ -8,22 +8,22 @@ export class Layer extends Serializable<Layer> {
 
     modules: Module[];
 
-    constructor(layers?: Layer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro) {
+    constructor(layers?: Layer) {
         super();
         if (!layers) {
             return;
         }
-        this.modules = layers.modules.map(module => new Module(module, getKeymap, getMacro));
+        this.modules = layers.modules.map(module => new Module(module));
     }
 
-    fromJsonObject(jsonObject: any, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Layer {
-        this.modules = jsonObject.modules.map((module: any) => new Module().fromJsonObject(module, getKeymap, getMacro));
+    fromJsonObject(jsonObject: any): Layer {
+        this.modules = jsonObject.modules.map((module: any) => new Module().fromJsonObject(module));
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, getKeymap?: (abbrevation: string) => Keymap, getMacro?: (macroId: number) => Macro): Layer {
+    fromBinary(buffer: UhkBuffer): Layer {
         this.modules = buffer.readArray<Module>(uhkBuffer => {
-            return new Module().fromBinary(uhkBuffer, getKeymap, getMacro);
+            return new Module().fromBinary(uhkBuffer);
         });
         return this;
     }
