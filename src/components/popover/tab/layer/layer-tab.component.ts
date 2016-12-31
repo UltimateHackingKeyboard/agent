@@ -9,11 +9,9 @@ import { Tab } from '../tab';
     template: require('./layer-tab.component.html'),
     styles: [require('./layer-tab.component.scss')]
 })
-export class LayerTabComponent implements OnChanges, Tab {
+export class LayerTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentLayer: number;
-
-    @Output() validAction = new EventEmitter();
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
@@ -47,6 +45,7 @@ export class LayerTabComponent implements OnChanges, Tab {
     private layer: LayerName;
 
     constructor() {
+        super();
         this.toggle = false;
         this.layer = LayerName.mod;
     }

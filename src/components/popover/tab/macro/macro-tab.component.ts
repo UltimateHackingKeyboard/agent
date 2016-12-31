@@ -19,9 +19,8 @@ import { getMacroEntities } from '../../../../store/reducers/macro';
     template: require('./macro-tab.component.html'),
     styles: [require('./macro-tab.component.scss')]
 })
-export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
+export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestroy {
     @Input() defaultKeyAction: KeyAction;
-    @Output() validAction = new EventEmitter();
 
     private macros: Macro[];
     private macroOptions: Array<Select2OptionData>;
@@ -29,6 +28,7 @@ export class MacroTabComponent implements OnInit, OnChanges, OnDestroy, Tab {
     private subscription: Subscription;
 
     constructor(private store: Store<AppState>) {
+        super();
         this.subscription = store.let(getMacroEntities())
             .subscribe((macros: Macro[]) => this.macros = macros);
         this.macroOptions = [];

@@ -8,9 +8,8 @@ import { Tab } from '../tab';
     template: require('./mouse-tab.component.html'),
     styles: [require('./mouse-tab.component.scss')]
 })
-export class MouseTabComponent implements OnChanges, Tab {
+export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
-    @Output() validAction = new EventEmitter();
 
     private mouseActionParam: MouseActionParam;
     private selectedPageIndex: number;
@@ -22,6 +21,7 @@ export class MouseTabComponent implements OnChanges, Tab {
     private pages: string[];
 
     constructor() {
+        super();
         this.selectedPageIndex = 0;
         this.pages = ['Move', 'Scroll', 'Click', 'Speed'];
     }

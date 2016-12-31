@@ -12,11 +12,9 @@ import { MapperService } from '../../../../services/mapper.service';
     template: require('./keypress-tab.component.html'),
     styles: [require('./keypress-tab.component.scss')]
 })
-export class KeypressTabComponent implements OnChanges, Tab {
+export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() longPressEnabled: boolean;
-
-    @Output() validAction = new EventEmitter();
 
     private leftModifiers: string[];
     private rightModifiers: string[];
@@ -32,6 +30,7 @@ export class KeypressTabComponent implements OnChanges, Tab {
     private selectedLongPressIndex: number;
 
     constructor(private mapper: MapperService) {
+        super();
         this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
         this.rightModifiers = ['RShift', 'RCtrl', 'RSuper', 'RAlt'];
         this.scanCodeGroups = [{

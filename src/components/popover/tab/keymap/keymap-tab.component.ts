@@ -12,16 +12,15 @@ import { Tab } from '../tab';
     styles: [require('./keymap-tab.component.scss')],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KeymapTabComponent implements OnInit, OnChanges, Tab {
+export class KeymapTabComponent extends Tab implements OnInit, OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
-
-    @Output() validAction = new EventEmitter();
 
     private keymapOptions: Array<Select2OptionData>;
     private selectedKeymap: Keymap;
 
     constructor() {
+        super();
         this.keymapOptions = [];
     }
 
