@@ -86,20 +86,20 @@
             <p>Press this key along with mouse movement/scrolling to accelerate/decelerate the speed of the action.</p>
         </div>
         <div class="btn-group btn-group-lg" role="group">
-            <div class="btn btn-default"
+            <button class="btn btn-default"
                 [class.btn-primary]="mouseActionParam === MouseActionParam.decelerate"
                 (click)="setMouseActionParam(MouseActionParam.decelerate)"
             >
                 -
                 <span>Decelerate</span>
-            </div>
-            <div class="btn btn-default"
+            </button>
+            <button class="btn btn-default"
                 [class.btn-primary]="mouseActionParam === MouseActionParam.accelerate"
                 (click)="setMouseActionParam(MouseActionParam.accelerate)"
             >
                 +
                 <span>Accelerate</span>
-            </div>
+            </button>
         </div>
         <div class="help-text--mouse-speed last-help  text-left">
             <p>You can set the multiplier in the <a [routerLink]="['/settings']" title="Settings">settings</a>.</p>

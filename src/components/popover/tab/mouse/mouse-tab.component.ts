@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { KeyAction, MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
 import { Tab } from '../tab';
@@ -8,7 +8,7 @@ import { Tab } from '../tab';
     template: require('./mouse-tab.component.html'),
     styles: [require('./mouse-tab.component.scss')]
 })
-export class MouseTabComponent implements OnChanges, Tab {
+export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
 
     private mouseActionParam: MouseActionParam;
@@ -21,12 +21,14 @@ export class MouseTabComponent implements OnChanges, Tab {
     private pages: string[];
 
     constructor() {
+        super();
         this.selectedPageIndex = 0;
         this.pages = ['Move', 'Scroll', 'Click', 'Speed'];
     }
 
     ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
+        this.validAction.emit(this.keyActionValid());
     }
 
     keyActionValid(): boolean {
@@ -37,12 +39,14 @@ export class MouseTabComponent implements OnChanges, Tab {
         if (!(keyAction instanceof MouseAction)) {
             return false;
         }
+
         let mouseAction: MouseAction = <MouseAction>keyAction;
         this.mouseActionParam = mouseAction.mouseAction;
 
         if (mouseAction.mouseAction === MouseActionParam.moveUp) {
             this.selectedPageIndex = 0;
         }
+
         switch (mouseAction.mouseAction) {
             case MouseActionParam.moveDown:
             case MouseActionParam.moveUp:
@@ -68,13 +72,11 @@ export class MouseTabComponent implements OnChanges, Tab {
             default:
                 return false;
         }
+
         return true;
     }
 
     toKeyAction(): MouseAction {
-        if (!this.keyActionValid()) {
-            throw new Error('KeyAction is not valid. No selected mouse action!');
-        }
         let mouseAction: MouseAction = new MouseAction();
         mouseAction.mouseAction = this.mouseActionParam;
         return mouseAction;
@@ -85,12 +87,14 @@ export class MouseTabComponent implements OnChanges, Tab {
             console.error(`Invalid index error: ${index}`);
             return;
         }
+
         this.selectedPageIndex = index;
         this.mouseActionParam = undefined;
+        this.validAction.emit(false);
     }
 
     setMouseActionParam(mouseActionParam: MouseActionParam) {
         this.mouseActionParam = mouseActionParam;
+        this.validAction.emit(true);
     }
-
 }

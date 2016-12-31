@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
@@ -12,7 +12,7 @@ import { Tab } from '../tab';
     styles: [require('./keymap-tab.component.scss')],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KeymapTabComponent implements OnInit, OnChanges, Tab {
+export class KeymapTabComponent extends Tab implements OnInit, OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
 
@@ -20,6 +20,7 @@ export class KeymapTabComponent implements OnInit, OnChanges, Tab {
     private selectedKeymap: Keymap;
 
     constructor() {
+        super();
         this.keymapOptions = [];
     }
 
@@ -38,6 +39,7 @@ export class KeymapTabComponent implements OnInit, OnChanges, Tab {
 
     ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
+        this.validAction.emit(true);
     }
 
     // TODO: change to the correct type when the wrapper has added it.

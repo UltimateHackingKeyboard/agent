@@ -79,6 +79,7 @@ export class PopoverComponent implements OnChanges {
     @ViewChild('popover') popoverHost: ElementRef;
 
     public tabName = TabName;
+    public keyActionValid: boolean;
     private activeTab: TabName;
     private keymaps$: Observable<Keymap[]>;
     private leftArrow: boolean = false;
@@ -134,16 +135,19 @@ export class PopoverComponent implements OnChanges {
     }
 
     onRemapKey(): void {
-        try {
-            let keyAction = this.selectedTab.toKeyAction();
-            this.remap.emit(keyAction);
-        } catch (e) {
-            // TODO: show error dialog
-            console.error(e);
+        if (this.keyActionValid) {
+            try {
+                let keyAction = this.selectedTab.toKeyAction();
+                this.remap.emit(keyAction);
+            } catch (e) {
+                // TODO: show error dialog
+                console.error(e);
+            }
         }
     }
 
-    @HostListener('keydown.escape') onEscape(): void {
+    @HostListener('keydown.escape')
+    onEscape(): void {
         this.cancel.emit();
     }
 
