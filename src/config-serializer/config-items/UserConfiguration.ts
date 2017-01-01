@@ -1,24 +1,13 @@
-import { assertUInt16, assertUInt32, assertUInt8 } from '../assert';
+import { assertUInt16 } from '../assert';
 import { UhkBuffer } from '../UhkBuffer';
 import { Keymap } from './Keymap';
 import { Macro } from './Macro';
 import { ModuleConfiguration } from './ModuleConfiguration';
 
-export class UhkConfiguration {
-
-    signature: string;
+export class UserConfiguration {
 
     @assertUInt16
     dataModelVersion: number;
-
-    @assertUInt32
-    prologue: number;
-
-    @assertUInt8
-    hardwareId: number;
-
-    @assertUInt8
-    brandId: number;
 
     moduleConfigurations: ModuleConfiguration[];
 
@@ -26,15 +15,8 @@ export class UhkConfiguration {
 
     macros: Macro[];
 
-    @assertUInt32
-    epilogue: number;
-
-    fromJsonObject(jsonObject: any): UhkConfiguration {
-        this.signature = jsonObject.signature;
+    fromJsonObject(jsonObject: any): UserConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;
-        this.prologue = jsonObject.prologue;
-        this.hardwareId = jsonObject.hardwareId;
-        this.brandId = jsonObject.brandId;
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
             return new ModuleConfiguration().fromJsonObject(moduleConfiguration);
         });
@@ -44,16 +26,11 @@ export class UhkConfiguration {
             return macro;
         });
         this.keymaps = jsonObject.keymaps.map((keymap: any) => new Keymap().fromJsonObject(keymap, this.macros));
-        this.epilogue = jsonObject.epilogue;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): UhkConfiguration {
-        this.signature = buffer.readString();
+    fromBinary(buffer: UhkBuffer): UserConfiguration {
         this.dataModelVersion = buffer.readUInt16();
-        this.prologue = buffer.readUInt32();
-        this.hardwareId = buffer.readUInt8();
-        this.brandId = buffer.readUInt8();
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
             return new ModuleConfiguration().fromBinary(uhkBuffer);
         });
@@ -63,40 +40,29 @@ export class UhkConfiguration {
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
-        this.epilogue = buffer.readUInt32();
         return this;
     }
 
     toJsonObject(): any {
         return {
-            signature: this.signature,
             dataModelVersion: this.dataModelVersion,
-            prologue: this.prologue,
-            hardwareId: this.hardwareId,
-            brandId: this.brandId,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
-            macros: this.macros.map(macro => macro.toJsonObject()),
-            epilogue: this.epilogue
+            macros: this.macros.map(macro => macro.toJsonObject())
         };
     }
 
     toBinary(buffer: UhkBuffer): void {
-        buffer.writeString(this.signature);
         buffer.writeUInt16(this.dataModelVersion);
-        buffer.writeUInt32(this.prologue);
-        buffer.writeUInt8(this.hardwareId);
-        buffer.writeUInt8(this.brandId);
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
             keymap.toBinary(uhkBuffer, this.macros);
         });
-        buffer.writeUInt32(this.epilogue);
     }
 
     toString(): string {
-        return `<UhkConfiguration signature="${this.signature}">`;
+        return `<UserConfiguration dataModelVersion="${this.dataModelVersion}">`;
     }
 
     getKeymap(keymapAbbreviation: string): Keymap {

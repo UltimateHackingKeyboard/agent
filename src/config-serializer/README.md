@@ -75,7 +75,7 @@ KeyActions.toJsObject: <KeyActions length="9">
 
 ## Testing the serializer
 
-[test-serializer.ts](test-serializer.ts) is designed to test the serializer by taking [uhk-config.json](uhk-config.json), and transforming it to TypeScript representation, then to binary representation, then finally back to JavaScript representation. This should exercise every major code path.
+[test-serializer.ts](test-serializer.ts) is designed to test the serializer by taking [user-config.json](user-config.json), and transforming it to TypeScript representation, then to binary representation, then finally back to JavaScript representation. This should exercise every major code path.
 
 If the testing is successful the following should be displayed:
 

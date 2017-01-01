@@ -1,9 +1,5 @@
 {
-    "signature": "UHK",
-    "dataModelVersion": 2,
-    "prologue": 1234678,
-    "hardwareId": 0,
-    "brandId": 0,
+    "dataModelVersion": 3,
     "moduleConfigurations": [
         {
             "id": 1,
@@ -1024,6 +1020,5 @@
                 }
             ]
         }
-    ],
-    "epilogue": 1234678
+    ]
 }

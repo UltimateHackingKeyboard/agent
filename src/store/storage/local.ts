@@ -1,24 +1,24 @@
-import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
+import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
 
 export class Local {
 
     constructor(private dataModelVersion: number) { }
 
-    getConfig(): UhkConfiguration {
+    getConfig(): UserConfiguration {
         let configJsonString = localStorage.getItem('config');
-        let config: UhkConfiguration;
+        let config: UserConfiguration;
 
         if (configJsonString) {
             const configJsonObject = JSON.parse(configJsonString);
             if (configJsonObject.dataModelVersion === this.dataModelVersion) {
-                config = new UhkConfiguration().fromJsonObject(configJsonObject);
+                config = new UserConfiguration().fromJsonObject(configJsonObject);
             }
         }
 
         return config;
     }
 
-    saveConfig(config: UhkConfiguration): void {
+    saveConfig(config: UserConfiguration): void {
         localStorage.setItem('config', JSON.stringify(config.toJsonObject()));
     }
 }

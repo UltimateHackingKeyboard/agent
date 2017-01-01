@@ -1,28 +1,28 @@
-import { UhkConfiguration } from '../src/config-serializer/config-items/UhkConfiguration';
+import { UserConfiguration } from '../src/config-serializer/config-items/UserConfiguration';
 import { UhkBuffer } from '../src/config-serializer/UhkBuffer';
 
 let assert = require('assert');
 let fs = require('fs');
 
-let uhkConfig = JSON.parse(fs.readFileSync('../src/config-serializer/uhk-config.json'));
+let userConfig = JSON.parse(fs.readFileSync('../src/config-serializer/user-config.json'));
 
-let config1Js = uhkConfig;
-let config1Ts: UhkConfiguration = new UhkConfiguration().fromJsonObject(config1Js);
+let config1Js = userConfig;
+let config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(config1Js);
 let config1Buffer = new UhkBuffer();
 config1Ts.toBinary(config1Buffer);
 let config1BufferContent = config1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config.bin', config1BufferContent);
+fs.writeFileSync('user-config.bin', config1BufferContent);
 
 config1Buffer.offset = 0;
 console.log();
-let config2Ts = new UhkConfiguration().fromBinary(config1Buffer);
+let config2Ts = new UserConfiguration().fromBinary(config1Buffer);
 console.log('\n');
 let config2Js = config2Ts.toJsonObject();
 let config2Buffer = new UhkBuffer();
 config2Ts.toBinary(config2Buffer);
-fs.writeFileSync('uhk-config-serialized.json', JSON.stringify(config2Js, undefined, 4));
+fs.writeFileSync('user-config-serialized.json', JSON.stringify(config2Js, undefined, 4));
 let config2BufferContent = config1Buffer.getBufferContent();
-fs.writeFileSync('uhk-config-serialized.bin', config2BufferContent);
+fs.writeFileSync('user-config-serialized.bin', config2BufferContent);
 
 console.log('\n');
 let returnValue = 0;

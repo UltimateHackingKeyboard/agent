@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
-import { UhkConfiguration } from '../../config-serializer/config-items/UhkConfiguration';
+import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
 
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
@@ -15,7 +15,7 @@ import { Local } from './local';
 export class DataStorage {
 
     private _environment: Local | Electron;
-    private uhkConfiguration: UhkConfiguration;
+    private defaultUserConfiguration: UserConfiguration;
     private uhkPresets: Keymap[];
 
     constructor() {
@@ -24,7 +24,7 @@ export class DataStorage {
     }
 
     initialState(): AppState {
-        const config: UhkConfiguration = this.getConfiguration();
+        const config: UserConfiguration = this.getConfiguration();
         return {
             keymaps: {
                 entities: config.keymaps
@@ -44,7 +44,7 @@ export class DataStorage {
         }
         // Local storage
         else {
-            this._environment = new Local(this.uhkConfiguration.dataModelVersion);
+            this._environment = new Local(this.defaultUserConfiguration.dataModelVersion);
         }
     }
 
@@ -52,7 +52,7 @@ export class DataStorage {
     saveState(reducer: any): (state: any, action: Action) => AppState {
         return (state: any, action: Action) => {
             let nextState = reducer(state, action);
-            let config: UhkConfiguration;
+            let config: UserConfiguration;
 
             // Save elements to the UhkConfiguration
             if (
@@ -81,15 +81,16 @@ export class DataStorage {
     }
 
     initUHKJson() {
-        this.uhkConfiguration = new UhkConfiguration().fromJsonObject(require('json!../../config-serializer/uhk-config.json'));
+        this.defaultUserConfiguration = new UserConfiguration()
+            .fromJsonObject(require('json!../../config-serializer/user-config.json'));
         this.uhkPresets = (<any[]>require('json!../../config-serializer/preset-keymaps.json'))
             .map(keymap => new Keymap().fromJsonObject(keymap));
     }
 
-    getConfiguration(): UhkConfiguration {
-        let config: UhkConfiguration = this._environment.getConfig();
+    getConfiguration(): UserConfiguration {
+        let config: UserConfiguration = this._environment.getConfig();
         if (!config) {
-            config = this.uhkConfiguration;
+            config = this.defaultUserConfiguration;
         }
         return config;
     }
