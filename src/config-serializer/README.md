@@ -24,7 +24,7 @@ Each configuration item belongs to a specific type. The following types are avai
 
 **Primitive types** are integers of different sizes, and string. See [UhkBuffer](UhkBuffer.ts) which implements all the primitive types.
 
-**Compound types** are composed of primitive types, and/or compound types. All compound types must descend from the [Serializable](Serializable.ts) class, and saved into the [config-items](config-items) directory.
+**Compound types** are composed of primitive types, and/or compound types. All compound types are saved into the [config-items](config-items) directory.
 
 ## Dumping serialization
 
