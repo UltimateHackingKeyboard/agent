@@ -84,6 +84,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     private macros: Macro[];
     private subscription: Subscription;
     private recording: boolean;
+    private scanCodePressed: boolean;
 
     @HostListener('click')
     onClick() {
@@ -108,7 +109,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     @HostListener('keyup', ['$event'])
     onKeyUpe(e: KeyboardEvent) {
-        if (this.recording) {
+        if (this.scanCodePressed) {
+            e.preventDefault();
+            this.scanCodePressed = false;
+        } else if (this.recording) {
             e.preventDefault();
             this.saveScanCode();
         }
@@ -123,6 +127,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
             if (this.captureService.hasMap(code)) {
                 this.saveScanCode(this.captureService.getMap(code));
+                this.scanCodePressed = true;
             } else {
                 this.captureService.setModifier((e.location === 1), code);
             }
@@ -146,6 +151,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
         this.reset();
         this.captureService.populateMapping();
+        this.scanCodePressed = false;
     }
 
     ngOnInit() {

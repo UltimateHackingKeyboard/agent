@@ -11,16 +11,21 @@ export class CaptureKeystrokeButtonComponent {
 
     private record: boolean;
     private first: boolean; // enable usage of Enter to start capturing
+    private scanCodePressed: boolean;
 
     constructor(private captureService: CaptureService) {
         this.record = false;
         this.captureService.initModifiers();
         this.captureService.populateMapping();
+        this.scanCodePressed = false;
     }
 
     @HostListener('keyup', ['$event'])
     onKeyUp(e: KeyboardEvent) {
-        if (this.record && !this.first) {
+        if (this.scanCodePressed) {
+            e.preventDefault();
+            this.scanCodePressed = false;
+        } else if (this.record && !this.first) {
             e.preventDefault();
             this.saveScanCode();
         }
@@ -38,6 +43,7 @@ export class CaptureKeystrokeButtonComponent {
 
             if (this.captureService.hasMap(code)) {
                 this.saveScanCode(this.captureService.getMap(code));
+                this.scanCodePressed = true;
             } else {
                 this.captureService.setModifier((e.location === 1), code);
             }
