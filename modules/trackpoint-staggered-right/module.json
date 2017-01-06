@@ -1,0 +1,8 @@
+{
+    "id": 4,
+    "name": "trackpoint-staggered-right",
+    "description": "Right trackpoint",
+    "slot": "right-addon",
+    "keyCount": 3,
+    "pointerCount": 1
+}

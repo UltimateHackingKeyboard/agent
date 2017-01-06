@@ -1,0 +1,8 @@
+{
+    "id": 3,
+    "name": "trackball-staggered-right",
+    "description": "Right trackball",
+    "slot": "right-addon",
+    "keyCount": 2,
+    "pointerCount": 1
+}

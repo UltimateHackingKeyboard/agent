@@ -1,0 +1,8 @@
+{
+    "id": 2,
+    "name": "key-cluster-staggered-left",
+    "description": "Left key cluster",
+    "slot": "left-addon",
+    "keyCount": 5,
+    "pointerCount": 1
+}
