@@ -1,3 +1,9 @@
+# Bug reports
+
+If the build process fails, please open a [new issue](https://github.com/UltimateHackingKeyboard/agent/issues/new) containing the complete build log.
+
+If the build process succeeds but Agent fails at runtime, it's most likely due to a JavaScript error. In this case, please open a [new issue](https://github.com/UltimateHackingKeyboard/agent/issues/new) containing the error displayed by the JavaScript console.
+
 # Contributing instructions
 
 Contributors are most welcome and appreciated beyond words!
