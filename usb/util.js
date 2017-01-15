@@ -22,6 +22,20 @@ exports = module.exports = {
         return [endpointIn, endpointOut];
     },
 
+    usbCommands: {
+        getProperty: 0,
+        jumpToBootloader: 1,
+        setTestLed: 2,
+        writeLedDriver: 3,
+        readLedDriver: 4,
+        writeEeprom: 5,
+        readEeprom: 6,
+        readMergeSensor: 7,
+        uploadConfig: 8,
+        applyConfig: 9,
+        setLedPwm: 10
+    },
+
     bufferToString: buffer => {
         let str = '';
         for (let i = 0; i < buffer.length; i++) {
