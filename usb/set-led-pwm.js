@@ -4,7 +4,7 @@ let uhk = require('./uhk');
 let programName = process.argv[1];
 
 if (process.argv.length !== 4) {
-    console.log(`Usage: ${programName} [left LED pwm percent] [right LED pwm percent]`);
+    console.log(`Usage: ${programName} [left LED pwm 0-100] [right LED pwm 0-100]`);
     process.exit(1);
 }
 
