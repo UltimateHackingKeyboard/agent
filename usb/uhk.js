@@ -104,4 +104,6 @@ exports = module.exports = {
         applyConfig: 9,
         setLedPwm: 10
     },
+    leftLedDriverAddress: 0b1110100,
+    rightLedDriverAddress: 0b1110111
 }
