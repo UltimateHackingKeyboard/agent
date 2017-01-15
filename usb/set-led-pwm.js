@@ -2,13 +2,16 @@
 let uhk = require('./uhk');
 
 let programName = process.argv[1];
-let brightnessPercent = process.argv[2] || '';
 
-if (brightnessPercent.length === 0) {
-    console.log('Usage: ${programName} [LED pwm percent]');
+if (process.argv.length !== 4) {
+    console.log(`Usage: ${programName} [left LED pwm percent] [right LED pwm percent]`);
     process.exit(1);
 }
 
+let leftBrightnessPercent = process.argv[2] || '';
+let rightBrightnessPercent = process.argv[3] || '';
+
 uhk.sendUsbPackets([
-    new Buffer([uhk.usbCommands.setLedPwm, +brightnessPercent])
+    new Buffer([uhk.usbCommands.setLedPwm, 0, +leftBrightnessPercent]),
+    new Buffer([uhk.usbCommands.setLedPwm, 1, +rightBrightnessPercent]),
 ]);
