@@ -35,7 +35,26 @@ function getUsbEndpoints() {
     return [endpointIn, endpointOut];
 }
 
-function sendUsbPacket(packet) {
+class DelayMs {
+    constructor(ms) {
+        this.ms = ms;
+    }
+}
+
+function sendUsbPacketsByCallback(packetProvider) {
+    let packet = packetProvider()
+
+    if (!packet) {
+        process.exit(1);
+    }
+
+    if (packet instanceof DelayMs) {
+        setTimeout(() => {
+            sendUsbPacketsByCallback(packetProvider);
+        }, packet.ms);
+        return;
+    }
+
     console.log('Sending: ', bufferToString(packet));
 
     let [endpointIn, endpointOut] = usbEndpoints || getUsbEndpoints();
@@ -50,14 +69,27 @@ function sendUsbPacket(packet) {
                 process.exit(2);
             }
             console.log('Received:', bufferToString(receivedBuffer));
+            sendUsbPacketsByCallback(packetProvider);
         })
     })
 }
 
+function sendUsbPacket(packet) {
+    let isPacketSent = false;
+    sendUsbPacketsByCallback(() => {
+        if (!isPacketSent) {
+            isPacketSent = true;
+            return packet;
+        }
+    })
+}
+
 exports = module.exports = {
+    DelayMs,
     bufferToString,
     getUsbEndpoints,
     sendUsbPacket,
+    sendUsbPacketsByCallback,
     usbCommands: {
         getProperty: 0,
         jumpToBootloader: 1,
