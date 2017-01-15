@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 let uhk = require('./uhk');
+
+let programName = process.argv[1];
 let arg = process.argv[2] || '';
 
 if (arg.length === 0) {
-    console.log('Gotta specify a string to be written to the EEPROM as the argument of this script');
+    console.log(`Usage: ${programName} [string to be written to the EEPROM]`);
     process.exit(1);
 }
 
