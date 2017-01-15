@@ -1,33 +1,11 @@
 #!/usr/bin/env node
-'use strict';
-
-var usb = require('usb');
-var util = require('./util');
-
-var vid = 0x16d3;
-var pid = 0x05ea;
-var readMergeSensorCommandId = 7;
-
-var device = usb.findByIds(vid, pid);
-device.open();
-
-var usbInterface = device.interface(0);
-
-// https://github.com/tessel/node-usb/issues/147
-// The function 'isKernelDriverActive' is not available on Windows and not even needed.
-if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
-    usbInterface.detachKernelDriver();
-}
-usbInterface.claim();
-
-var endpointIn = usbInterface.endpoints[0];
-var endpointOut = usbInterface.endpoints[1];
+let uhk = require('./uhk');
+let [endpointIn, endpointOut] = uhk.getUsbEndpoints();
 var arg = process.argv[2] || '';
 
-
 function readMergeSensor() {
-    var payload = new Buffer([readMergeSensorCommandId]);
-    console.log('Sending ', util.bufferToString(payload));
+    var payload = new Buffer([uhk.usbCommands.readMergeSensor]);
+    console.log('Sending ', uhk.bufferToString(payload));
     endpointOut.transfer(payload, function(err) {
         if (err) {
             console.error("USB error: %s", err);
@@ -38,7 +16,7 @@ function readMergeSensor() {
                 console.error("USB error: %s", err2);
                 process.exit(2);
             }
-            console.log('Received', util.bufferToString(receivedBuffer));
+            console.log('Received', uhk.bufferToString(receivedBuffer));
             setTimeout(readMergeSensor, 500)
             var areHalvesMerged = receivedBuffer[1] === 1;
             console.log('The keyboards halves are ' + (areHalvesMerged ? 'merged' : 'split'))

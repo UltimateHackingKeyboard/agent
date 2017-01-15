@@ -1,31 +1,11 @@
 #!/usr/bin/env node
-'use strict';
+let uhk = require('./uhk');
+let [endpointIn, endpointOut] = uhk.getUsbEndpoints();
 
-var usb = require('usb');
-var util = require('./util');
-
-var vid = 0x16d3;
-var pid = 0x05ea;
 var ledMatrixSize = 144;
 var ledCountToUpdatePerCommand = ledMatrixSize / 3;
-var writeLedDriverCommandId = 3;
 var leftLedDriverAddress = 0b1110100;
 var rightLedDriverAddress = 0b1110111;
-
-var device = usb.findByIds(vid, pid);
-device.open();
-
-var usbInterface = device.interface(0);
-
-// https://github.com/tessel/node-usb/issues/147
-// The function 'isKernelDriverActive' is not available on Windows and not even needed.
-if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
-    usbInterface.detachKernelDriver();
-}
-usbInterface.claim();
-
-var endpointIn = usbInterface.endpoints[0];
-var endpointOut = usbInterface.endpoints[1];
 
 var state = 1;
 
@@ -39,7 +19,7 @@ var matrixId = 0;
 
 var initLedCommands = [
     [ // only enable the LEDs that are actually in the matrix
-        writeLedDriverCommandId,
+        uhk.usbCommands.writeLedDriver,
         leftLedDriverAddress,
         19,
         0,
@@ -54,7 +34,7 @@ var initLedCommands = [
         0, 0b00011111,
     ],
     [ // only enable the LEDs that are actually in the matrix
-        writeLedDriverCommandId,
+        uhk.usbCommands.writeLedDriver,
         rightLedDriverAddress,
         19,
         0,
@@ -68,9 +48,9 @@ var initLedCommands = [
         0, 0,
         0, 0,
     ],
-    [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xfd, 0x0b], // switch to function page
-    [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xc2, 0xff], // enable the ghost image prevention bit
-    [writeLedDriverCommandId, leftLedDriverAddress, 2, 0xfd, 0x00], // switch to page 0
+    [uhk.usbCommands.writeLedDriver, leftLedDriverAddress, 2, 0xfd, 0x0b], // switch to function page
+    [uhk.usbCommands.writeLedDriver, leftLedDriverAddress, 2, 0xc2, 0xff], // enable the ghost image prevention bit
+    [uhk.usbCommands.writeLedDriver, leftLedDriverAddress, 2, 0xfd, 0x00], // switch to page 0
 ]
 
 var ledCommandId = 0;
@@ -97,14 +77,14 @@ function updateLeds() {
 //    console.log('update')
     var buffer = Buffer.concat([
         new Buffer([
-            writeLedDriverCommandId,
+            uhk.usbCommands.writeLedDriver,
             matrixId ? rightLedDriverAddress : leftLedDriverAddress,
             ledCountToUpdatePerCommand,
             0x24 + ledIndex
         ]),
         (matrixId ? ledsRight : ledsLeft).slice(ledIndex, ledIndex + ledCountToUpdatePerCommand)
     ]);
-    console.log('iter: '+letterIdx+' out:', util.bufferToString(buffer))
+    console.log('iter: '+letterIdx+' out:', uhk.bufferToString(buffer))
     endpointOut.transfer(buffer, function(err) {
         if (err) {
             console.error("USB error: %s", err);
@@ -116,7 +96,7 @@ function updateLeds() {
                 console.error("USB error: %s", err2);
                 process.exit(2);
             }
-//            console.log('Received', util.bufferToString(receivedBuffer));
+//            console.log('Received', uhk.bufferToString(receivedBuffer));
 
             ledIndex += ledCountToUpdatePerCommand;
             if (ledIndex >= ledMatrixSize) {

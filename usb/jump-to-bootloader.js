@@ -1,30 +1,9 @@
 #!/usr/bin/env node
-'use strict';
+let uhk = require('./uhk');
+let [endpointIn, endpointOut] = uhk.getUsbEndpoints();
 
-var usb = require('usb');
-var util = require('./util');
-
-var vid = 0x16d3;
-var pid = 0x05ea;
-var jumpToBootloaderCommandId = 1;
-
-var device = usb.findByIds(vid, pid);
-device.open();
-
-var usbInterface = device.interface(0);
-
-// https://github.com/tessel/node-usb/issues/147
-// The function 'isKernelDriverActive' is not available on Windows and not even needed.
-if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
-    usbInterface.detachKernelDriver();
-}
-usbInterface.claim();
-
-var endpointIn = usbInterface.endpoints[0];
-var endpointOut = usbInterface.endpoints[1];
-
-var payload = new Buffer([jumpToBootloaderCommandId]);
-console.log('Sending ', util.bufferToString(payload));
+var payload = new Buffer([uhk.usbCommands.jumpToBootloader]);
+console.log('Sending ', uhk.bufferToString(payload));
 endpointOut.transfer(payload, function(err) {
     if (err) {
         console.error("USB error: %s", err);
@@ -35,6 +14,6 @@ endpointOut.transfer(payload, function(err) {
             console.error("USB error: %s", err2);
             process.exit(2);
         }
-        console.log('Received', util.bufferToString(receivedBuffer));
+        console.log('Received', uhk.bufferToString(receivedBuffer));
     })
 });
