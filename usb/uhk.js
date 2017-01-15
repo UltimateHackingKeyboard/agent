@@ -75,12 +75,12 @@ function sendUsbPacketsByCallback(packetProvider) {
 }
 
 function sendUsbPacket(packet) {
-    let isPacketSent = false;
+    sendUsbPackets([packet]);
+}
+
+function sendUsbPackets(packets) {
     sendUsbPacketsByCallback(() => {
-        if (!isPacketSent) {
-            isPacketSent = true;
-            return packet;
-        }
+        return packets.shift();
     })
 }
 
@@ -89,6 +89,7 @@ exports = module.exports = {
     bufferToString,
     getUsbEndpoints,
     sendUsbPacket,
+    sendUsbPackets,
     sendUsbPacketsByCallback,
     usbCommands: {
         getProperty: 0,
