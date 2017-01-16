@@ -16,65 +16,9 @@ ledsRight.fill(0xff)
 
 var ledIndex = 0;
 var matrixId = 0;
-
-var initLedCommands = [
-    [ // only enable the LEDs that are actually in the matrix
-        uhk.usbCommands.writeLedDriver,
-        leftLedDriverAddress,
-        19,
-        0,
-        0b00000001, 0b00111111,
-        0, 0b00111111,
-        0, 0b00111111,
-        0, 0b00011111,
-        0, 0b00011111,
-        0, 0b00011111,
-        0, 0b00011111,
-        0, 0b00011111,
-        0, 0b00011111,
-    ],
-    [ // only enable the LEDs that are actually in the matrix
-        uhk.usbCommands.writeLedDriver,
-        rightLedDriverAddress,
-        19,
-        0,
-        0b00000001, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-        0, 0,
-    ],
-    [uhk.usbCommands.writeLedDriver, leftLedDriverAddress, 2, 0xfd, 0x0b], // switch to function page
-    [uhk.usbCommands.writeLedDriver, leftLedDriverAddress, 2, 0xc2, 0xff], // enable the ghost image prevention bit
-    [uhk.usbCommands.writeLedDriver, leftLedDriverAddress, 2, 0xfd, 0x00], // switch to page 0
-]
-
 var ledCommandId = 0;
 
-function initLeds() {
-    var ledCommand = initLedCommands[ledCommandId++];
-    console.log('initLeds', ledCommand);
-    var buffer = new Buffer(ledCommand);
-
-    endpointOut.transfer(buffer, function(err) {
-        if (err) {
-            console.error("USB error: %s", err);
-            process.exit(1);
-        }
-        if (ledCommandId < initLedCommands.length) {
-            initLeds();
-        } else {
-            updateLeds();
-        }
-    });
-}
-
 function updateLeds() {
-//    console.log('update')
     var buffer = Buffer.concat([
         new Buffer([
             uhk.usbCommands.writeLedDriver,
@@ -90,13 +34,11 @@ function updateLeds() {
             console.error("USB error: %s", err);
             process.exit(1);
         }
-//        console.log('update success')
         endpointIn.transfer(64, function(err2, receivedBuffer) {
             if (err2) {
                 console.error("USB error: %s", err2);
                 process.exit(2);
             }
-//            console.log('Received', uhk.bufferToString(receivedBuffer));
 
             ledIndex += ledCountToUpdatePerCommand;
             if (ledIndex >= ledMatrixSize) {
@@ -109,7 +51,7 @@ function updateLeds() {
     });
 }
 
-initLeds();
+updateLeds();
 
 var letterIdx = 0;
 
