@@ -2,27 +2,26 @@
 let uhk = require('./uhk');
 let [endpointIn, endpointOut] = uhk.getUsbEndpoints();
 
-var ledMatrixSize = 144;
-var ledCountToUpdatePerCommand = ledMatrixSize / 3;
-var leftLedDriverAddress = 0b1110100;
-var rightLedDriverAddress = 0b1110111;
+let ledMatrixSize = 144;
+let ledCountToUpdatePerCommand = ledMatrixSize / 3;
 
-var state = 1;
+let state = 1;
 
-var ledsLeft = new Buffer(ledMatrixSize);
-var ledsRight = new Buffer(ledMatrixSize);
+let ledsLeft = new Buffer(ledMatrixSize);
+let ledsRight = new Buffer(ledMatrixSize);
 ledsLeft.fill(0xff)
 ledsRight.fill(0xff)
 
-var ledIndex = 0;
-var matrixId = 0;
-var ledCommandId = 0;
+let ledIndex = 0;
+let matrixId = 0;
+let ledCommandId = 0;
+let letterIdx = 0;
 
 function updateLeds() {
-    var buffer = Buffer.concat([
+    let buffer = Buffer.concat([
         new Buffer([
             uhk.usbCommands.writeLedDriver,
-            matrixId ? rightLedDriverAddress : leftLedDriverAddress,
+            matrixId ? uhk.rightLedDriverAddress : uhk.leftLedDriverAddress,
             ledCountToUpdatePerCommand,
             0x24 + ledIndex
         ]),
@@ -53,9 +52,7 @@ function updateLeds() {
 
 updateLeds();
 
-var letterIdx = 0;
-
-var lettersLeds = {
+let lettersLeds = {
     0: [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
     1: [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
     2: [1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1],
@@ -94,41 +91,39 @@ var lettersLeds = {
     Z: [1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
 }
 
-var iconLedsToLedMatrix = [0x08, 0x09, 0x0a];
-var layerLedsToLedMatrix = [0x0d, 0x1d, 0x2d];
+let iconLedsToLedMatrix = [0x08, 0x09, 0x0a];
+let layerLedsToLedMatrix = [0x0d, 0x1d, 0x2d];
 
-var characterLedsToLedMatrix = [
+let characterLedsToLedMatrix = [
     [0x0b, 0x1b, 0x29, 0x2a, 0x2b, 0x0c, 0x1c, 0x28, 0x1a, 0x2c, 0x38, 0x39, 0x18, 0x19],
     [0x3a, 0x4a, 0x58, 0x59, 0x5a, 0x3b, 0x4b, 0x4c, 0x49, 0x5b, 0x5c, 0x68, 0x3c, 0x48],
     [0x69, 0x79, 0x7c, 0x88, 0x89, 0x6a, 0x7a, 0x7b, 0x78, 0x8a, 0x8b, 0x8c, 0x6b, 0x6c]
 ]
 
 function setIcons(iconStates) {
-    for (var i=0; i<iconStates.length; i++) {
+    for (let i=0; i<iconStates.length; i++) {
         ledsLeft[iconLedsToLedMatrix[i]] = iconStates[i] ? 0xff : 0;
     }
 }
 
 function setLayerLed(layerIdx) {
-    for (var i=0; i<layerLedsToLedMatrix.length; i++) {
+    for (let i=0; i<layerLedsToLedMatrix.length; i++) {
         ledsLeft[layerLedsToLedMatrix[i]] = i == layerIdx ? 0xff : 0;
     }
 }
 
 function setLetter(letterLeds, position) {
-    for (var i=0; i<14; i++) {
+    for (let i=0; i<14; i++) {
         ledsLeft[characterLedsToLedMatrix[position][i]] = letterLeds[i] ? 0xff : 0;
     }
 }
 
-var digitsAndLetters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+let digitsAndLetters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-
-var letterIdx = 0;
-var layerLedIdx = 0;
+let layerLedIdx = 0;
 setInterval(function() {
 setIcons([1, 1, 1]);
-    for (var i=0; i<3; i++) {
+    for (let i=0; i<3; i++) {
         setLetter(lettersLeds[digitsAndLetters[(letterIdx+i) % digitsAndLetters.length]], i);
     }
     setLayerLed(layerLedIdx);
