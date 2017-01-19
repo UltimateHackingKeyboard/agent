@@ -64,6 +64,7 @@ import { CancelableDirective } from './directives';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
+import { UhkDeviceService } from './services/uhk-device.service';
 
 import { KeymapEffects, MacroEffects } from './store/effects';
 import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
@@ -156,7 +157,8 @@ const storeConfig = {
         appRoutingProviders,
         KeymapEditGuard,
         MacroNotFoundGuard,
-        CaptureService
+        CaptureService,
+        UhkDeviceService
     ],
     bootstrap: [MainAppComponent]
 })
