@@ -1,10 +1,16 @@
 language: node_js
-sudo: false
+sudo: required
 
 node_js:
-  - '5.10.0'
+  - '6.9.4'
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -q
+  - sudo apt-get install g++-4.8 -y
 
 install:
+  - npm install -g npm@3.10.7
   - npm install
 
 before_script:
@@ -19,3 +25,12 @@ script:
 cache:
   directories:
     - node_modules
+
+env:
+  - CXX=g++-4.8
+
+addons:
+  apt:
+    packages:
+      - build-essential
+      - libudev-dev

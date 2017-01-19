@@ -17,7 +17,8 @@
       "jquery",
       "core-js",
       "select2",
-      "electron"
+      "electron",
+      "usb"
     ]
   },
   "exclude": [

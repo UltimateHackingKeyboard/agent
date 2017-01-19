@@ -227,6 +227,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.currentLayer = index;
     }
 
+    getSelectedLayer(): number {
+        return this.currentLayer;
+    }
+
     private getKeyActionContent(keyAction: KeyAction): Observable<NameValuePair[]> {
         if (keyAction instanceof KeystrokeAction) {
             const keystrokeAction: KeystrokeAction = keyAction;

@@ -14,8 +14,10 @@
     "@types/electron": "^1.4.29",
     "@types/jquery": "2.0.39",
     "@types/node": "6.0.52",
+    "@types/usb": "^1.1.2",
     "copy-webpack-plugin": "^4.0.1",
     "electron": "1.4.15",
+    "electron-rebuild": "^1.5.5",
     "expose-loader": "^0.7.1",
     "html-loader": "0.4.4",
     "node-sass": "^4.3.0",
@@ -54,10 +56,12 @@
     "rxjs": "5.0.3",
     "select2": "^4.0.3",
     "typescript": "2.1.5",
+    "usb": "git+https://github.com/aktary/node-usb.git",
     "xml-loader": "^1.1.0",
     "zone.js": "0.7.6"
   },
   "scripts": {
+    "postinstall": "electron-rebuild -w usb -p",
     "tslint": "tslint \"src/**/*.ts\" \"test-serializer/**/*.ts\"",
     "stylelint": "stylelint \"src/**/*.scss\" --syntax scss",
     "lint": "run-s -scn tslint stylelint",
