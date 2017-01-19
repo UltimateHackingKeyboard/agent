@@ -294,7 +294,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             this.labelSource = keyAction.keymapAbbreviation;
         } else if (this.keyAction instanceof PlayMacroAction) {
             let keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
-            const macro: Macro = this.macros.find((macro: Macro) => macro.id === keyAction.macroId);
+            const macro: Macro = this.macros.find((_macro: Macro) => _macro.id === keyAction.macroId);
             this.labelType = LabelTypes.IconText;
             this.labelSource = {
                 icon: this.mapper.getIcon('macro'),

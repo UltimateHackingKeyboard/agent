@@ -22,18 +22,21 @@ export default function (state = initialState, action: Action): KeymapState {
     switch (action.type) {
         case KeymapActions.ADD:
         case KeymapActions.DUPLICATE:
+            {
+                let newKeymap: Keymap = new Keymap(action.payload);
 
-            let newKeymap: Keymap = new Keymap(action.payload);
+                newKeymap.abbreviation = generateAbbr(state.entities, newKeymap.abbreviation);
+                newKeymap.name = generateName(state.entities, newKeymap.name);
+                newKeymap.isDefault = (state.entities.length === 0);
 
-            newKeymap.abbreviation = generateAbbr(state.entities, newKeymap.abbreviation);
-            newKeymap.name = generateName(state.entities, newKeymap.name);
-            newKeymap.isDefault = (state.entities.length === 0);
-
-            return {
-                entities: [...state.entities, newKeymap]
-            };
-
+                return {
+                    entities: [...state.entities, newKeymap]
+                };
+            }
+        /* tslint:disable:no-switch-case-fall-through */
+        // tslint bug: https://github.com/palantir/tslint/issues/1538
         case KeymapActions.EDIT_NAME:
+            /* tslint:enable:no-switch-case-fall-through */
             let name: string = generateName(state.entities, action.payload.name);
 
             newState = state.entities.map((keymap: Keymap) => {
@@ -111,39 +114,42 @@ export default function (state = initialState, action: Action): KeymapState {
             };
 
         case KeymapActions.SAVE_KEY:
+            {
+                const keymap: Keymap = action.payload.keymap;
+                Object.assign(changedKeymap, keymap);
 
-            const keymap: Keymap = action.payload.keymap;
-            Object.assign(changedKeymap, keymap);
+                const layerIndex: number = action.payload.layer;
+                const layer: Layer = changedKeymap.layers[layerIndex];
+                const changedLayer: Layer = new Layer();
+                Object.assign(changedLayer, layer);
+                changedKeymap.layers = changedKeymap.layers.slice();
+                changedKeymap.layers[layerIndex] = changedLayer;
 
-            const layerIndex: number = action.payload.layer;
-            const layer: Layer = changedKeymap.layers[layerIndex];
-            const changedLayer: Layer = new Layer();
-            Object.assign(changedLayer, layer);
-            changedKeymap.layers = changedKeymap.layers.slice();
-            changedKeymap.layers[layerIndex] = changedLayer;
+                const moduleIndex: number = action.payload.module;
+                const module: Module = changedLayer.modules[moduleIndex];
+                const changedModule: Module = new Module();
+                Object.assign(changedModule, module);
+                changedLayer.modules[moduleIndex] = changedModule;
 
-            const moduleIndex: number = action.payload.module;
-            const module: Module = changedLayer.modules[moduleIndex];
-            const changedModule: Module = new Module();
-            Object.assign(changedModule, module);
-            changedLayer.modules[moduleIndex] = changedModule;
+                const keyIndex: number = action.payload.key;
+                changedModule.keyActions[keyIndex] = KeyActionHelper.createKeyAction(action.payload.keyAction);
 
-            const keyIndex: number = action.payload.key;
-            changedModule.keyActions[keyIndex] = KeyActionHelper.createKeyAction(action.payload.keyAction);
+                newState = state.entities.map((_keymap: Keymap) => {
+                    if (_keymap.abbreviation === changedKeymap.abbreviation) {
+                        _keymap = changedKeymap;
+                    }
 
-            newState = state.entities.map((keymap: Keymap) => {
-                if (keymap.abbreviation === changedKeymap.abbreviation) {
-                    keymap = changedKeymap;
-                }
+                    return _keymap;
+                });
 
-                return keymap;
-            });
-
-            return {
-                entities: newState
-            };
-
+                return {
+                    entities: newState
+                };
+            }
+        /* tslint:disable:no-switch-case-fall-through */
+        // tslint bug: https://github.com/palantir/tslint/issues/1538
         case KeymapActions.CHECK_MACRO:
+        /* tslint:enable:no-switch-case-fall-through */
             newState = state.entities.map((keymap: Keymap) => {
                 changedKeymap = new Keymap();
                 Object.assign(changedKeymap, keymap);
