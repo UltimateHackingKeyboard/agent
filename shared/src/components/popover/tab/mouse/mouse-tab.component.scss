@@ -1,0 +1,85 @@
+@import '../../../../global-styles';
+
+:host {
+    display: flex;
+
+    &.popover-content {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .mouse-action {
+        .nav {
+            border-right: 1px solid #ccc;
+
+            li {
+                a {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+
+                    &.selected {
+                        font-style: italic;
+                    }
+                }
+
+                &.active {
+                    a {
+                        &.selected {
+                            font-style: normal;
+                        }
+
+                        &:after {
+                            content: '';
+                            display: block;
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            top: 0;
+                            right: -4rem;
+                            border-color: transparent transparent transparent $icon-hover;
+                            border-style: solid;
+                            border-width: 2rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .help-text--mouse-speed {
+        margin-bottom: 2rem;
+        font-size: 0.9em;
+        color: #666;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .details {
+        .btn-placeholder {
+            visibility: hidden;
+        }
+    }
+}
+
+.mouse__config--speed {
+    .btn-default {
+        font-size: 25px;
+        line-height: 22px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        span {
+            font-size: 13px;
+            display: block;
+            text-align: center;
+        }
+    }
+}
+
+.help-text--mouse-speed.last-help {
+    margin-bottom: 0;
+    margin-top: 2rem;
+}

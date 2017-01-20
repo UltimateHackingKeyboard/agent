@@ -1,0 +1,24 @@
+@import '../../../../global-styles';
+
+:host {
+    display: flex;
+    align-items: center;
+}
+
+.action {
+
+    &--edit {
+        &:hover {
+            color: $icon-hover;
+            cursor: pointer;
+        }
+    }
+
+    &--trash {
+        &:hover {
+            color: #d9534f;
+            cursor: pointer;
+        }
+    }
+
+}
