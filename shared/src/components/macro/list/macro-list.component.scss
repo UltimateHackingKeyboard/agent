@@ -1,0 +1,153 @@
+@import '../../../global-styles';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .list-container {
+        display: flex;
+        flex: 1;
+    }
+}
+
+.main-wrapper {
+    width: 500px;
+}
+
+h1 {
+    margin-bottom: 3rem;
+}
+
+.action {
+    &--edit__form {
+        background-color: #fff;
+        margin-left: -0.5rem;
+        margin-right: -15px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;
+    }
+
+    &--item {
+        padding-left: 8px;
+
+        &.active,
+        &.active:hover {
+            background-color: white;
+            font-weight: bold;
+            color: black;
+            border-color: black;
+            z-index: 10;
+        }
+    }
+}
+
+.list-group {
+    overflow: auto;
+}
+
+.macro__name {
+    border-bottom: 2px dotted #999;
+    padding: 0 0.5rem;
+    margin: 0 0.25rem;
+}
+
+.macro-settings {
+    border: 1px solid black;
+    border-top-color: #999;
+    z-index: 100;
+
+    .helper {
+        position: absolute;
+        display: block;
+        height: 13px;
+        background: #fff;
+        width: 100%;
+        left: 0;
+        top: -14px;
+    }
+}
+
+.action--item.active.callout,
+.macro-settings.callout {
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+}
+
+.macro-actions-container {
+    margin-bottom: 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    border-bottom: 0;
+}
+
+.list-group-item .move-handle:hover {
+    cursor: move;
+}
+
+.flex-button-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.flex-button {
+    align-self: flex-end;
+}
+
+.add-new__action-container {
+    overflow: hidden;
+    flex-shrink: 0;
+    border-top: 1px solid #ddd;
+}
+
+.add-new__action-item {
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+    padding: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &--link {
+        width: 50%;
+        float: left;
+        padding: 10px 5px;
+        text-align: center;
+        color: $icon-hover;
+
+        &:first-of-type {
+            border-right: 1px solid #ddd;
+        }
+
+        &:hover {
+            text-decoration: none;
+            background: #e6e6e6;
+        }
+    }
+
+    .fa-circle {
+        color: #c00;
+    }
+}
+
+// Dragula styles
+.gu {
+    &-mirror {
+        position: fixed;
+        margin: 0;
+        z-index: 9999;
+        opacity: 0.8;
+    }
+
+    &-hide {
+        display: none;
+    }
+
+    &-unselectable {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}

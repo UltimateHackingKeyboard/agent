@@ -1,10 +1,10 @@
-import { UserConfiguration } from '../src/config-serializer/config-items/UserConfiguration';
-import { UhkBuffer } from '../src/config-serializer/UhkBuffer';
+import { UserConfiguration } from '../shared/src/config-serializer/config-items/UserConfiguration';
+import { UhkBuffer } from '../shared/src/config-serializer/UhkBuffer';
 
 let assert = require('assert');
 let fs = require('fs');
 
-let userConfig = JSON.parse(fs.readFileSync('../src/config-serializer/user-config.json'));
+let userConfig = JSON.parse(fs.readFileSync('../shared/src/config-serializer/user-config.json'));
 
 let config1Js = userConfig;
 let config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(config1Js);

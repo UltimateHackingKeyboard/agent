@@ -1,0 +1,86 @@
+@import '../../../global-styles';
+
+:host {
+    overflow: hidden;
+    display: block;
+
+    &.macro-item:first-of-type {
+        .list-group-item {
+            border-radius: 4px 4px 0 0;
+        }
+    }
+
+    &.macro-item:last-of-type {
+        .list-group-item {
+            border-bottom: 0;
+        }
+    }
+
+    &.gu-transit {
+        opacity: 0.2;
+
+        .list-group-item {
+            background: #f5f5f5;
+        }
+    }
+}
+
+.action {
+    &--item {
+        display: flex;
+        flex-shrink: 0;
+        border: 0;
+        border-bottom: 1px solid #ddd;
+
+        icon {
+            margin: 0 5px;
+        }
+
+        > div {
+            display: flex;
+            flex: 1;
+        }
+
+        &:first-child {
+            border-radius: 0;
+        }
+
+        &.is-editing {
+            background: #f5f5f5;
+        }
+
+        &--wrap {
+            justify-content: space-between;
+
+            &.pointer {
+                &:hover {
+                    cursor: pointer;
+                    color: $icon-hover;
+                }
+            }
+        }
+    }
+
+    &--title {
+        display: flex;
+        flex: 1;
+    }
+
+    &--movable {
+        &:hover {
+            cursor: move;
+        }
+    }
+}
+
+.list-group-item {
+    margin-bottom: 0;
+}
+
+.macro-action-editor__container {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    border: none;
+    overflow: hidden;
+}

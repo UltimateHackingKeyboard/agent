@@ -1,0 +1,1550 @@
+{
+    "dataModelVersion": 3,
+    "moduleConfigurations": [
+        {
+            "id": 1,
+            "initialPointerSpeed": 1,
+            "pointerAcceleration": 5,
+            "maxPointerSpeed": 200
+        }
+    ],
+    "keymaps": [
+        {
+            "isDefault": true,
+            "abbreviation": "QTY",
+            "name": "QWERTY",
+            "description": "",
+            "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 36
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 37
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 38
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 39
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 45
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 46
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 42
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 28
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 24
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 12
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 18
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 19
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 47
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 48
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 49
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 11
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 13
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 14
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 15
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 51
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 52
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 40
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 17
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 16
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 54
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 55
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 56
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 32
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 44
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 53
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 30
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 31
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 32
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 33
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 34
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 35
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 43
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 20
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 26
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 21
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 23
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 4
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 22
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 7
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 9
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 10
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 2
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 29
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 27
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 6
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 25
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 5
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 4
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 44
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "pointerRole": "scroll",
+                            "keyActions": []
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "none",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 75
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 74
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 82
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 77
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 78
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 80
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 81
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 79
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "switchKeymap",
+                                    "keymapAbbreviation": "VIM"
+                                },
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 118
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 32
+                                },
+                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "none",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": false
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 2
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 4
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                },
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": true
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 232
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 237
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 233
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 234
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 238
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 235
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 239
+                                },
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 32
+                                },
+                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 16
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": true
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "scroll",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": true
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": true
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": true
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 2
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 4
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": true
+                                },
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "scrollUp"
+                                },
+                                null,
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveUp"
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "scrollDown"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveLeft"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveDown"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "moveRight"
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 64
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 128
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 16
+                                },
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mouse",
+                                    "toggle": false
+                                },
+                                null,
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "rightClick"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "middleClick"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "leftClick"
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 1
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 8
+                                },
+                                {
+                                    "keyActionType": "keystroke",
+                                    "modifierMask": 4
+                                },
+                                null,
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "accelerate"
+                                },
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "decelerate"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "isDefault": false,
+            "abbreviation": "VIM",
+            "name": "VIM",
+            "description": "",
+            "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "mouse",
+                                    "mouseAction": "scrollDown"
+                                },
+                                {
+                                    "keyActionType": "playMacro",
+                                    "macroIndex": 0
+                                },
+                                {
+                                    "keyActionType": "switchKeymap",
+                                    "keymapAbbreviation": "QTY"
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "scroll",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "scroll",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                {
+                                    "keyActionType": "keystroke",
+                                    "scancode": 111
+                                },
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "isDefault": false,
+            "abbreviation": "DVR",
+            "name": "DVR",
+            "description": "",
+            "layers": [
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "modules": [
+                        {
+                            "id": 0,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "pointerRole": "move",
+                            "keyActions": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "macros": [
+        {
+            "isLooped": false,
+            "isPrivate": true,
+            "name": "My address",
+            "macroActions": [
+                {
+                    "macroActionType": "key",
+                    "action": "press",
+                    "scancode": 111
+                },
+                {
+                    "macroActionType": "key",
+                    "action": "hold",
+                    "scancode": 83
+                },
+                {
+                    "macroActionType": "key",
+                    "action": "release",
+                    "scancode": 112
+                },
+                {
+                    "macroActionType": "key",
+                    "action": "press",
+                    "modifierMask": 93
+                },
+                {
+                    "macroActionType": "key",
+                    "action": "hold",
+                    "modifierMask": 101
+                },
+                {
+                    "macroActionType": "key",
+                    "action": "release",
+                    "modifierMask": 133
+                },
+                {
+                    "macroActionType": "mouseButton",
+                    "action": "press",
+                    "mouseButtonsMask": 9
+                },
+                {
+                    "macroActionType": "mouseButton",
+                    "action": "hold",
+                    "mouseButtonsMask": 12
+                },
+                {
+                    "macroActionType": "mouseButton",
+                    "action": "release",
+                    "mouseButtonsMask": 104
+                },
+                {
+                    "macroActionType": "moveMouse",
+                    "x": -1920,
+                    "y": 220
+                },
+                {
+                    "macroActionType": "scrollMouse",
+                    "x": 0,
+                    "y": 20000
+                },
+                {
+                    "macroActionType": "delay",
+                    "delay": 40000
+                },
+                {
+                    "macroActionType": "text",
+                    "text": "this is a text"
+                }
+            ]
+        },
+        {
+            "isLooped": true,
+            "isPrivate": true,
+            "name": "Blah Blah blah",
+            "macroActions": [
+                {
+                    "macroActionType": "key",
+                    "action": "press",
+                    "scancode": 111
+                },
+                {
+                    "macroActionType": "mouseButton",
+                    "action": "release",
+                    "mouseButtonsMask": 104
+                },
+                {
+                    "macroActionType": "scrollMouse",
+                    "x": 0,
+                    "y": -20000
+                },
+                {
+                    "macroActionType": "delay",
+                    "delay": 40000
+                },
+                {
+                    "macroActionType": "text",
+                    "text": "blahhhhhhh"
+                }
+            ]
+        }
+    ]
+}
