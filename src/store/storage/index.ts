@@ -32,7 +32,12 @@ export class DataStorage {
             macros: {
                 entities: config.macros
             },
-            presetKeymaps: this.uhkPresets
+            presetKeymaps: this.uhkPresets,
+            notification: {
+                action: true,
+                message: '',
+                shown: false
+            }
         };
     }
 

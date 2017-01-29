@@ -65,8 +65,8 @@ import { CancelableDirective } from './directives';
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
 
-import { KeymapEffects, MacroEffects } from './store/effects';
-import { keymapReducer, macroReducer, presetReducer } from './store/reducers';
+import { KeymapEffects, MacroEffects, NotificationEffects } from './store/effects';
+import { keymapReducer, macroReducer, notificationReducer, presetReducer } from './store/reducers';
 import { DataStorage } from './store/storage';
 
 import { KeymapEditGuard } from './components/keymap/edit';
@@ -81,7 +81,8 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
 const storeConfig = {
     keymaps: storageService.saveState(keymapReducer),
     macros: storageService.saveState(macroReducer),
-    presetKeymaps: presetReducer
+    presetKeymaps: presetReducer,
+    notification: notificationReducer
 };
 
 @NgModule({
@@ -149,7 +150,8 @@ const storeConfig = {
         StoreLogMonitorModule,
         Select2Module,
         EffectsModule.runAfterBootstrap(KeymapEffects),
-        EffectsModule.runAfterBootstrap(MacroEffects)
+        EffectsModule.runAfterBootstrap(MacroEffects),
+        EffectsModule.runAfterBootstrap(NotificationEffects)
     ],
     providers: [
         MapperService,
