@@ -16,7 +16,7 @@ export enum MacroActionId {
     */
     LastKeyMacroAction              =  8,
     MouseButtonMacroAction          =  9,
-    /* 
+    /*
         9 - 11 are reserved for MouseButtonMacroAction
         PressMouseButtonsMacroAction    =  9,
         HoldMouseButtonsMacroAction     = 10,

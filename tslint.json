@@ -6,7 +6,6 @@
             "static-before-instance",
             "variables-before-functions"
         ],
-        "no-inferrable-types": true,
         "no-internal-module": true,
         "class-name": true,
         "curly": true,
