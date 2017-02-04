@@ -1,6 +1,5 @@
 var webpack = require("webpack");
 var SvgStore = require('webpack-svgstore-plugin');
-var webpackFailPlugin = require('webpack-fail-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require('path');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
@@ -20,8 +19,8 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
-        modules: [path.join(rootDir, "node_modules")],
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
+        modules: ["node_modules"],
         alias: {
             jquery: 'jquery/dist/jquery.min.js',
             select2: 'select2/dist/js/select2.full.min.js',
@@ -29,15 +28,15 @@ module.exports = {
         }
     },
     module: {
-        loaders: [
-            { test: /\.ts$/, loaders: ['ts-loader', 'angular2-template-loader'], exclude: /node_modules/ },
+        rules: [
+            { test: /\.ts$/, use: ['ts-loader', 'angular2-template-loader'], exclude: /node_modules/ },
             { test: /\.html$/, loader: 'html-loader?attrs=false' },
             {
                 test: /\.scss$/,
                 exclude: /node_modules/,
-                loaders: ['raw-loader', 'sass-loader']
+                use: ['raw-loader', 'sass-loader']
             },
-            { test: /jquery/, loader: 'expose?$!expose?jQuery' }
+            { test: /jquery/, loader: 'expose-loader?$!expose-loader?jQuery' }
         ]
     },
     plugins: [
@@ -49,7 +48,6 @@ module.exports = {
                 ]
             }
         }),
-        webpackFailPlugin,
         new CopyWebpackPlugin(
             [
                 { from: './web/src/index.html', flatten: true },
