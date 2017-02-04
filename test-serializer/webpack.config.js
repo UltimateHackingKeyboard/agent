@@ -1,5 +1,4 @@
 // var webpack = require("webpack");
-var webpackFailPlugin = require('webpack-fail-plugin');
 
 module.exports = {
     entry: {
@@ -11,22 +10,16 @@ module.exports = {
         filename: "test-serializer.js"
     },
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
-        alias: {
-
-        },
-        modulesDirectories: [
-            '../node_modules'
-        ]
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
+        modules: ['node_modules']
     },
     module: {
-        loaders: [
+        rules: [
             { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ }
         ]
     },
     plugins: [
         //   new webpack.optimize.UglifyJsPlugin({ minimize: true }),
-        webpackFailPlugin
     ],
     node: {
         fs: "empty"

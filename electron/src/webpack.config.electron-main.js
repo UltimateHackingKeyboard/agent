@@ -1,5 +1,4 @@
 //var webpack = require("webpack");
-var webpackFailPlugin = require('webpack-fail-plugin');
 var path = require('path');
 
 var rootDir = path.resolve(__dirname, '../');
@@ -13,16 +12,15 @@ module.exports = {
     target: 'electron-main',
     devtool: 'source-map',
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
-        modules: [path.join(rootDir, "node_modules")]
+        extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
+        modules: ["node_modules"]
     },
     module: {
-        loaders: [
+        rules: [
             { test: /\.ts$/, loader: 'ts-loader?' + JSON.stringify({ configFileName: 'tsconfig-electron-main.json' }), exclude: /node_modules/ },
     ]},
     plugins: [
         //   new webpack.optimize.UglifyJsPlugin({ minimize: true })
-        webpackFailPlugin
     ],
     node: {
         __dirname: false,

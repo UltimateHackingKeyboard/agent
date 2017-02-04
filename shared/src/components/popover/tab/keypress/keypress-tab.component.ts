@@ -37,8 +37,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             id: '0',
             text: 'None'
         }];
-        this.scanCodeGroups = this.scanCodeGroups.concat(require('json!./scancodes.json'));
-        this.longPressGroups = require('json!./longPress.json');
+        this.scanCodeGroups = this.scanCodeGroups.concat(require('json-loader!./scancodes.json'));
+        this.longPressGroups = require('json-loader!./longPress.json');
         this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.scanCode = 0;

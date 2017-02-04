@@ -69,7 +69,7 @@ export class SvgKeyboardComponent implements OnInit {
     }
 
     private getBaseLayer(): any {
-        return require('xml!../../../../../images/base-layer.svg').svg;
+        return require('xml-loader!../../../../../images/base-layer.svg').svg;
     }
 
 }
