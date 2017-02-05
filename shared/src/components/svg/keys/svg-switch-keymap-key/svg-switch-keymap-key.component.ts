@@ -4,7 +4,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-switch-keymap-key]',
-    template: require('./svg-switch-keymap-key.component.html')
+    templateUrl: './svg-switch-keymap-key.component.html'
 })
 export class SvgSwitchKeymapKeyComponent implements OnInit {
     @Input() width: number;

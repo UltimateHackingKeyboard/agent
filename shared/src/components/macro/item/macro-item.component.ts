@@ -39,8 +39,8 @@ import { MapperService } from '../../../services/mapper.service';
         ])
     ],
     selector: 'macro-item',
-    template: require('./macro-item.component.html'),
-    styles: [require('./macro-item.component.scss')],
+    templateUrl: './macro-item.component.html',
+    styleUrls: ['./macro-item.component.scss'],
     host: { 'class': 'macro-item' }
 })
 export class MacroItemComponent implements OnInit, OnChanges {

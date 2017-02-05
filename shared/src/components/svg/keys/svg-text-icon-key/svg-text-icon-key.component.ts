@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'g[svg-text-icon-key]',
-    template: require('./svg-text-icon-key.component.html')
+    templateUrl: './svg-text-icon-key.component.html'
 })
 export class SvgTextIconKeyComponent implements OnInit {
     @Input() width: number;

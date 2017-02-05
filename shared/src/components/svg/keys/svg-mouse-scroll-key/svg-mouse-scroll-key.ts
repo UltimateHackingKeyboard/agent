@@ -4,7 +4,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-mouse-scroll-key]',
-    template: require('./svg-mouse-scroll-key.html')
+    templateUrl: './svg-mouse-scroll-key.html'
 })
 export class SvgMouseScrollKeyComponent implements OnChanges {
     @Input() direction: string;

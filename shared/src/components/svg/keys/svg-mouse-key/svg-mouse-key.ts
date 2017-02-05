@@ -4,7 +4,7 @@ import { MouseAction, MouseActionParam } from '../../../../config-serializer/con
 
 @Component({
     selector: 'g[svg-mouse-key]',
-    template: require('./svg-mouse-key.html')
+    templateUrl: './svg-mouse-key.html'
 })
 export class SvgMouseKeyComponent implements OnChanges {
     @Input() mouseAction: MouseAction;

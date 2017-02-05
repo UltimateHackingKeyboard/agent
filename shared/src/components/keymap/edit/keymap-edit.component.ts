@@ -15,8 +15,8 @@ import { getKeymap, getKeymapEntities } from '../../../store/reducers/keymap';
 
 @Component({
     selector: 'keymap-edit',
-    template: require('./keymap-edit.component.html'),
-    styles: [require('./keymap-edit.component.scss')],
+    templateUrl: './keymap-edit.component.html',
+    styleUrls: ['./keymap-edit.component.scss'],
     host: {
         'class': 'container-fluid'
     }

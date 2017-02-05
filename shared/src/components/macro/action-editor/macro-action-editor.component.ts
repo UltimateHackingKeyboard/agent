@@ -17,8 +17,8 @@ enum TabName {
 
 @Component({
     selector: 'macro-action-editor',
-    template: require('./macro-action-editor.component.html'),
-    styles: [require('./macro-action-editor.component.scss')],
+    templateUrl: './macro-action-editor.component.html',
+    styleUrls: ['./macro-action-editor.component.scss'],
     host: { 'class': 'macro-action-editor' }
 })
 export class MacroActionEditorComponent implements OnInit {

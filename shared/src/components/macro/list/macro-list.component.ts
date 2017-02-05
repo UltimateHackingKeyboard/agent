@@ -42,8 +42,8 @@ import { MacroItemComponent } from './../index';
         ])
     ],
     selector: 'macro-list',
-    template: require('./macro-list.component.html'),
-    styles: [require('./macro-list.component.scss')],
+    templateUrl: './macro-list.component.html',
+    styleUrls: ['./macro-list.component.scss'],
     viewProviders: [DragulaService]
 })
 export class MacroListComponent {

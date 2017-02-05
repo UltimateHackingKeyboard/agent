@@ -26,8 +26,8 @@ enum Modifiers {
 
 @Component({
     selector: 'g[svg-keystroke-key]',
-    template: require('./svg-keystroke-key.component.html'),
-    styles: [require('./svg-keystroke-key.component.scss')]
+    templateUrl: './svg-keystroke-key.component.html',
+    styleUrls: ['./svg-keystroke-key.component.scss']
 })
 export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     @Input() height: number;

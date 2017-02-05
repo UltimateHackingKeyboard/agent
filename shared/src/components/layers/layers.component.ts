@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'layers',
-    template: require('./layers.component.html'),
-    styles: [require('./layers.component.scss')]
+    templateUrl: './layers.component.html',
+    styleUrls: ['./layers.component.scss']
 })
 export class LayersComponent {
     @Input() current: number;

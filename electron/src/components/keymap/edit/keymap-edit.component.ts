@@ -19,8 +19,8 @@ import { UhkDeviceService } from '../../../services/uhk-device.service';
 
 @Component({
     selector: 'keymap-edit',
-    template: require('../../../shared/components/keymap/edit/keymap-edit.component.html'),
-    styles: [require('../../../shared/components/keymap/edit/keymap-edit.component.scss')],
+    templateUrl: '../../../shared/components/keymap/edit/keymap-edit.component.html',
+    styleUrls: ['../../../shared/components/keymap/edit/keymap-edit.component.scss'],
     host: {
         'class': 'container-fluid'
     }

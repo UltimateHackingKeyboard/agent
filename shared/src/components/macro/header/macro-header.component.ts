@@ -12,8 +12,8 @@ import { AppState } from '../../../store/index';
 
 @Component({
     selector: 'macro-header',
-    template: require('./macro-header.component.html'),
-    styles: [require('./macro-header.component.scss')],
+    templateUrl: './macro-header.component.html',
+    styleUrls: ['./macro-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MacroHeaderComponent implements AfterViewInit, OnChanges {

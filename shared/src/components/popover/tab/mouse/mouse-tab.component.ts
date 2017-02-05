@@ -5,8 +5,8 @@ import { Tab } from '../tab';
 
 @Component({
     selector: 'mouse-tab',
-    template: require('./mouse-tab.component.html'),
-    styles: [require('./mouse-tab.component.scss')]
+    templateUrl: './mouse-tab.component.html',
+    styleUrls: ['./mouse-tab.component.scss']
 })
 export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;

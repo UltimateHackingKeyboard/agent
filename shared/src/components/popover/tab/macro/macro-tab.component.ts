@@ -16,8 +16,8 @@ import { getMacroEntities } from '../../../../store/reducers/macro';
 
 @Component({
     selector: 'macro-tab',
-    template: require('./macro-tab.component.html'),
-    styles: [require('./macro-tab.component.scss')]
+    templateUrl: './macro-tab.component.html',
+    styleUrls: ['./macro-tab.component.scss']
 })
 export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestroy {
     @Input() defaultKeyAction: KeyAction;

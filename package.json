@@ -15,6 +15,7 @@
     "@types/jquery": "^2.0.40",
     "@types/node": "^7.0.5",
     "@types/usb": "^1.1.2",
+    "angular2-template-loader": "0.6.0",
     "copy-webpack-plugin": "^4.0.1",
     "electron": "1.4.15",
     "electron-rebuild": "^1.5.5",

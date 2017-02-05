@@ -59,8 +59,8 @@ enum LabelTypes {
         ])
     ],
     selector: 'g[svg-keyboard-key]',
-    template: require('./svg-keyboard-key.component.html'),
-    styles: [require('./svg-keyboard-key.component.scss')]
+    templateUrl: './svg-keyboard-key.component.html',
+    styleUrls: ['./svg-keyboard-key.component.scss']
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() id: string;

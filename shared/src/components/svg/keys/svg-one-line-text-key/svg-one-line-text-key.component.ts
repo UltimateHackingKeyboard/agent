@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'g[svg-one-line-text-key]',
-    template: require('./svg-one-line-text-key.component.html')
+    templateUrl: './svg-one-line-text-key.component.html'
 })
 export class SvgOneLineTextKeyComponent implements OnInit {
     @Input() height: number;

@@ -6,8 +6,8 @@ import { SvgKeyboardKey } from '../keys';
 
 @Component({
     selector: 'g[svg-module]',
-    template: require('./svg-module.component.html'),
-    styles: [require('./svg-module.component.scss')]
+    templateUrl: './svg-module.component.html',
+    styleUrls: ['./svg-module.component.scss']
 })
 export class SvgModuleComponent {
     @Input() coverages: any[];

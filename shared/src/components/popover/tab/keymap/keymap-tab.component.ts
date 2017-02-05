@@ -8,8 +8,8 @@ import { Tab } from '../tab';
 
 @Component({
     selector: 'keymap-tab',
-    template: require('./keymap-tab.component.html'),
-    styles: [require('./keymap-tab.component.scss')],
+    templateUrl: './keymap-tab.component.html',
+    styleUrls: ['./keymap-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeymapTabComponent extends Tab implements OnInit, OnChanges {

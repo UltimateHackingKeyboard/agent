@@ -26,8 +26,8 @@ import { getKeymapEntities, getMacroEntities } from '../../store/reducers';
         ])
     ],
     selector: 'side-menu',
-    template: require('./side-menu.component.html'),
-    styles: [require('./side-menu.component.scss')]
+    templateUrl: './side-menu.component.html',
+    styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent {
     private keymaps$: Observable<Keymap[]>;

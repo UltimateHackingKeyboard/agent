@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'settings',
-    template: require('./settings.component.html'),
-    styles: [require('./settings.component.scss')],
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.scss'],
     host: {
         'class': 'container-fluid'
     }

@@ -45,8 +45,8 @@ interface NameValuePair {
 
 @Component({
     selector: 'svg-keyboard-wrap',
-    template: require('./svg-keyboard-wrap.component.html'),
-    styles: [require('./svg-keyboard-wrap.component.scss')],
+    templateUrl: './svg-keyboard-wrap.component.html',
+    styleUrls: ['./svg-keyboard-wrap.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges {

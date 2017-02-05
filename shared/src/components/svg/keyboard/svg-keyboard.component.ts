@@ -5,8 +5,8 @@ import { SvgModule } from '../module';
 
 @Component({
     selector: 'svg-keyboard',
-    template: require('./svg-keyboard.component.html'),
-    styles: [require('./svg-keyboard.component.scss')]
+    templateUrl: './svg-keyboard.component.html',
+    styleUrls: ['./svg-keyboard.component.scss']
 })
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];

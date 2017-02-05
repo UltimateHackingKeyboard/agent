@@ -5,8 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'add-on',
-    template: require('./add-on.component.html'),
-    styles: [require('./add-on.component.scss')],
+    templateUrl: './add-on.component.html',
+    styleUrls: ['./add-on.component.scss'],
     host: {
         'class': 'container-fluid'
     }

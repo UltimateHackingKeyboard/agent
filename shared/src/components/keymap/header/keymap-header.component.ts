@@ -18,8 +18,8 @@ import { KeymapActions } from '../../../store/actions';
 
 @Component({
     selector: 'keymap-header',
-    template: require('./keymap-header.component.html'),
-    styles: [require('./keymap-header.component.scss')],
+    templateUrl: './keymap-header.component.html',
+    styleUrls: ['./keymap-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeymapHeaderComponent implements OnChanges {

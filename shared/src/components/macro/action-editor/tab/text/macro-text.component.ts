@@ -11,8 +11,8 @@ import { EditableMacroAction } from '../../../../../config-serializer/config-ite
 
 @Component({
     selector: 'macro-text-tab',
-    template: require('./macro-text.component.html'),
-    styles: [require('./macro-text.component.scss')],
+    templateUrl: './macro-text.component.html',
+    styleUrls: ['./macro-text.component.scss'],
     host: { 'class': 'macro__text' }
 })
 export class MacroTextTabComponent implements AfterViewInit {

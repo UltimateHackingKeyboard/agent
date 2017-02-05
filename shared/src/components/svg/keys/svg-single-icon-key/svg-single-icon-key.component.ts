@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'g[svg-single-icon-key]',
-    template: require('./svg-single-icon-key.component.html')
+    templateUrl: './svg-single-icon-key.component.html'
 })
 export class SvgSingleIconKeyComponent implements OnInit {
     @Input() width: number;

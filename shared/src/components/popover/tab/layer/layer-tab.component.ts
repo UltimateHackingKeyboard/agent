@@ -6,8 +6,8 @@ import { Tab } from '../tab';
 
 @Component({
     selector: 'layer-tab',
-    template: require('./layer-tab.component.html'),
-    styles: [require('./layer-tab.component.scss')]
+    templateUrl: './layer-tab.component.html',
+    styleUrls: ['./layer-tab.component.scss']
 })
 export class LayerTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;

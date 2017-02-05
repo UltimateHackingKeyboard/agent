@@ -3,8 +3,8 @@ import { CaptureService } from '../../../../services/capture.service';
 
 @Component({
     selector: 'capture-keystroke-button',
-    template: require('./capture-keystroke-button.component.html'),
-    styles: [require('./capture-keystroke-button.component.scss')]
+    templateUrl: './capture-keystroke-button.component.html',
+    styleUrls: ['./capture-keystroke-button.component.scss']
 })
 export class CaptureKeystrokeButtonComponent {
     @Output() capture = new EventEmitter<any>();

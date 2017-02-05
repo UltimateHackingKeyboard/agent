@@ -4,8 +4,8 @@ import { Tab } from '../tab';
 
 @Component({
     selector: 'none-tab',
-    template: require('./none-tab.component.html'),
-    styles: [require('./none-tab.component.scss')]
+    templateUrl: './none-tab.component.html',
+    styleUrls: ['./none-tab.component.scss']
 })
 export class NoneTabComponent extends Tab implements OnChanges {
     ngOnChanges(event: any) {

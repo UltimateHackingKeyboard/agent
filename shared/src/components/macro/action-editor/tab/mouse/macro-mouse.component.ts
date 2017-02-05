@@ -13,10 +13,10 @@ enum TabName {
 
 @Component({
     selector: 'macro-mouse-tab',
-    template: require('./macro-mouse.component.html'),
-    styles: [
-        require('../../macro-action-editor.component.scss'),
-        require('./macro-mouse.component.scss')
+    templateUrl: './macro-mouse.component.html',
+    styleUrls: [
+        '../../macro-action-editor.component.scss',
+        './macro-mouse.component.scss'
     ],
     host: { 'class': 'macro__mouse' }
 })

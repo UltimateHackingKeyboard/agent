@@ -4,7 +4,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-mouse-speed-key]',
-    template: require('./svg-mouse-speed-key.html')
+    templateUrl: './svg-mouse-speed-key.html'
 })
 export class SvgMouseSpeedKeyComponent implements OnChanges {
     @Input() plus: boolean;

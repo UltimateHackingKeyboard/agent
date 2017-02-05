@@ -9,8 +9,8 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'keypress-tab',
-    template: require('./keypress-tab.component.html'),
-    styles: [require('./keypress-tab.component.scss')]
+    templateUrl: './keypress-tab.component.html',
+    styleUrls: ['./keypress-tab.component.scss']
 })
 export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;

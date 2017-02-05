@@ -4,7 +4,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-mouse-click-key]',
-    template: require('./svg-mouse-click-key.html')
+    templateUrl: './svg-mouse-click-key.html'
 })
 export class SvgMouseClickKeyComponent implements OnInit {
     @Input() button: string;

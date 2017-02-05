@@ -12,8 +12,8 @@ import { KeymapActions } from '../../../store/actions';
 
 @Component({
     selector: 'keymap-add',
-    template: require('./keymap-add.component.html'),
-    styles: [require('./keymap-add.component.scss')],
+    templateUrl: './keymap-add.component.html',
+    styleUrls: ['./keymap-add.component.scss'],
     host: {
         'class': 'container-fluid'
     }

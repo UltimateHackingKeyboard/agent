@@ -14,8 +14,8 @@ import { getMacro } from '../../../store/reducers/macro';
 
 @Component({
     selector: 'macro-edit',
-    template: require('./macro-edit.component.html'),
-    styles: [require('./macro-edit.component.scss')],
+    templateUrl: './macro-edit.component.html',
+    styleUrls: ['./macro-edit.component.scss'],
     host: {
         'class': 'container-fluid'
     }

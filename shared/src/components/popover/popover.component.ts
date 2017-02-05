@@ -32,8 +32,8 @@ enum TabName {
 
 @Component({
     selector: 'popover',
-    template: require('./popover.component.html'),
-    styles: [require('./popover.component.scss')],
+    templateUrl: './popover.component.html',
+    styleUrls: ['./popover.component.scss'],
     animations: [
         trigger('popover', [
             state('closed', style({

@@ -24,8 +24,8 @@ type AnimationKeyboard =
 
 @Component({
     selector: 'keyboard-slider',
-    template: require('./keyboard-slider.component.html'),
-    styles: [require('./keyboard-slider.component.scss')],
+    templateUrl: './keyboard-slider.component.html',
+    styleUrls: ['./keyboard-slider.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
