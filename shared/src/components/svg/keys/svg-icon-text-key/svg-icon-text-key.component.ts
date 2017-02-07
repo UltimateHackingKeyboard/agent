@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'g[svg-icon-text-key]',
-    templateUrl: './svg-icon-text-key.component.html'
+    templateUrl: './svg-icon-text-key.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgIconTextKeyComponent implements OnInit {
     @Input() width: number;

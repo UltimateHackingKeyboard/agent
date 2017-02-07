@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-switch-keymap-key]',
-    templateUrl: './svg-switch-keymap-key.component.html'
+    templateUrl: './svg-switch-keymap-key.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgSwitchKeymapKeyComponent implements OnInit {
     @Input() width: number;

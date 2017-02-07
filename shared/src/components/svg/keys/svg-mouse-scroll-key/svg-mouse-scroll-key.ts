@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 
 import { MapperService } from '../../../../services/mapper.service';
 
 @Component({
     selector: 'g[svg-mouse-scroll-key]',
-    templateUrl: './svg-mouse-scroll-key.html'
+    templateUrl: './svg-mouse-scroll-key.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgMouseScrollKeyComponent implements OnChanges {
     @Input() direction: string;

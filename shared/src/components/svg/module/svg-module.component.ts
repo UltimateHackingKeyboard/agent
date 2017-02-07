@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 import { KeyAction } from '../../../config-serializer/config-items/key-action';
 
@@ -7,7 +7,8 @@ import { SvgKeyboardKey } from '../keys';
 @Component({
     selector: 'g[svg-module]',
     templateUrl: './svg-module.component.html',
-    styleUrls: ['./svg-module.component.scss']
+    styleUrls: ['./svg-module.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgModuleComponent {
     @Input() coverages: any[];

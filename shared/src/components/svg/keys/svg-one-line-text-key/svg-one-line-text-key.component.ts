@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'g[svg-one-line-text-key]',
-    templateUrl: './svg-one-line-text-key.component.html'
+    templateUrl: './svg-one-line-text-key.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgOneLineTextKeyComponent implements OnInit {
     @Input() height: number;

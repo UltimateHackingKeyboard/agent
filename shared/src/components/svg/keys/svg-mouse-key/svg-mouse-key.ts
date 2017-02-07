@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 
 import { MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
 
 @Component({
     selector: 'g[svg-mouse-key]',
-    templateUrl: './svg-mouse-key.html'
+    templateUrl: './svg-mouse-key.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgMouseKeyComponent implements OnChanges {
     @Input() mouseAction: MouseAction;

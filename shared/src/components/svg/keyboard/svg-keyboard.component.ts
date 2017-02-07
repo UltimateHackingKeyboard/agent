@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 
 import { Module } from '../../../config-serializer/config-items/Module';
 import { SvgModule } from '../module';
@@ -6,7 +6,8 @@ import { SvgModule } from '../module';
 @Component({
     selector: 'svg-keyboard',
     templateUrl: './svg-keyboard.component.html',
-    styleUrls: ['./svg-keyboard.component.scss']
+    styleUrls: ['./svg-keyboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];

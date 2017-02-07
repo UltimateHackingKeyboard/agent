@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { KeystrokeAction } from '../../../../config-serializer/config-items/key-action';
 import { KeyModifiers } from '../../../../config-serializer/config-items/KeyModifiers';
@@ -27,7 +27,8 @@ enum Modifiers {
 @Component({
     selector: 'g[svg-keystroke-key]',
     templateUrl: './svg-keystroke-key.component.html',
-    styleUrls: ['./svg-keystroke-key.component.scss']
+    styleUrls: ['./svg-keystroke-key.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     @Input() height: number;
