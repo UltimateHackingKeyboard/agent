@@ -16,7 +16,7 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 @Injectable()
 export class KeymapEffects {
 
-    @Effect({ dispatch: false })add$: any = this.actions$
+    @Effect({ dispatch: false }) add$: any = this.actions$
         .ofType(KeymapActions.ADD)
         .withLatestFrom(this.store)
         .do((latest) => {
@@ -34,7 +34,7 @@ export class KeymapEffects {
             this.router.navigate(['/keymap', entities[entities.length - 1].abbreviation]);
         });
 
-    @Effect({ dispatch: false })remove$: any = this.actions$
+    @Effect({ dispatch: false }) remove$: any = this.actions$
         .ofType(KeymapActions.REMOVE)
         .withLatestFrom(this.store)
         .do((latest) => {
@@ -50,11 +50,10 @@ export class KeymapEffects {
 
     @Effect({ dispatch: false }) editAbbr$: any = this.actions$
         .ofType(KeymapActions.EDIT_ABBR)
-        .withLatestFrom(this.store)
-        .do((latest) => {
-            const state: AppState = latest[1];
-            this.router.navigate(['/keymap', state.keymaps.newAbbr]);
+        .map(action => action.payload.newAbbr)
+        .do(newAbbr => {
+            this.router.navigate(['/keymap', newAbbr]);
         });
 
-    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
+    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) { }
 }

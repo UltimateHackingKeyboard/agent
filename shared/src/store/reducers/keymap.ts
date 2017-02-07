@@ -63,8 +63,7 @@ export default function (state = initialState, action: Action): KeymapState {
             });
 
             return {
-                entities: newState,
-                newAbbr: abbr
+                entities: newState
             };
 
         case KeymapActions.SET_DEFAULT:

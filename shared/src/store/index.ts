@@ -3,7 +3,6 @@ import { Macro } from '../config-serializer/config-items/Macro';
 
 export interface KeymapState {
     entities: Keymap[];
-    newAbbr?: string;
 }
 
 export interface MacroState {
