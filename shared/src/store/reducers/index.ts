@@ -1,5 +1,4 @@
-import keymapReducer, { getKeymapEntities } from './keymap';
-import macroReducer, { getMacroEntities } from './macro';
+import userConfigurationReducer, { getUserConfiguration } from './user-configuration';
 import presetReducer from './preset';
 
-export { keymapReducer, macroReducer, presetReducer, getKeymapEntities, getMacroEntities };
+export { userConfigurationReducer, presetReducer, getUserConfiguration };

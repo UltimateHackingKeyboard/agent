@@ -1,17 +1,8 @@
 import { Keymap } from '../config-serializer/config-items/Keymap';
-import { Macro } from '../config-serializer/config-items/Macro';
-
-export interface KeymapState {
-    entities: Keymap[];
-}
-
-export interface MacroState {
-    entities: Macro[];
-}
+import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
 
 // State interface for the application
 export interface AppState {
-    keymaps: KeymapState;
-    macros: MacroState;
+    userConfiguration: UserConfiguration;
     presetKeymaps: Keymap[];
 }

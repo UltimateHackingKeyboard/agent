@@ -12,7 +12,7 @@ import { Macro } from '../../../../config-serializer/config-items/Macro';
 import { Tab } from '../tab';
 
 import { AppState } from '../../../../store/index';
-import { getMacroEntities } from '../../../../store/reducers/macro';
+import { getMacros } from '../../../../store/reducers/user-configuration';
 
 @Component({
     selector: 'macro-tab',
@@ -29,7 +29,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
 
     constructor(private store: Store<AppState>) {
         super();
-        this.subscription = store.let(getMacroEntities())
+        this.subscription = store.let(getMacros())
             .subscribe((macros: Macro[]) => this.macros = macros);
         this.macroOptions = [];
         this.selectedMacroIndex = 0;

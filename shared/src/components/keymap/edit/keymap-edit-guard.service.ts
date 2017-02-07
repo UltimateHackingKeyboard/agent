@@ -10,8 +10,9 @@ import 'rxjs/add/operator/switchMap';
 
 import { Store } from '@ngrx/store';
 
+import { Keymap } from './../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store/index';
-import { getKeymapEntities } from '../../../store/reducers';
+import { getKeymaps } from '../../../store/reducers/user-configuration';
 
 @Injectable()
 export class KeymapEditGuard implements CanActivate {
@@ -20,8 +21,8 @@ export class KeymapEditGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         return this.store
-            .let(getKeymapEntities())
-            .do(keymaps => {
+            .let(getKeymaps())
+            .do((keymaps: Keymap[]) => {
                 const defaultKeymap = keymaps.find(keymap => keymap.isDefault);
                 this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
             })

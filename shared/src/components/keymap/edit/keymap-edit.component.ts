@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store';
-import { getKeymap, getKeymapEntities } from '../../../store/reducers/keymap';
+import { getKeymap, getKeymaps } from '../../../store/reducers/user-configuration';
 
 @Component({
     selector: 'keymap-edit',
@@ -37,7 +37,7 @@ export class KeymapEditComponent {
             .publishReplay(1)
             .refCount();
 
-        this.deletable$ = store.let(getKeymapEntities())
+        this.deletable$ = store.let(getKeymaps())
             .map((keymaps: Keymap[]) => keymaps.length > 1);
     }
 

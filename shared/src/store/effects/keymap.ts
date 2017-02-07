@@ -16,34 +16,23 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 @Injectable()
 export class KeymapEffects {
 
-    @Effect({ dispatch: false }) add$: any = this.actions$
-        .ofType(KeymapActions.ADD)
+    @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
+        .ofType(KeymapActions.ADD, KeymapActions.DUPLICATE)
         .withLatestFrom(this.store)
-        .do((latest) => {
-            const state: AppState = latest[1];
-            const entities: Keymap[] = state.keymaps.entities;
-            this.router.navigate(['/keymap', entities[entities.length - 1].abbreviation]);
-        });
-
-    @Effect({ dispatch: false }) duplicate$: any = this.actions$
-        .ofType(KeymapActions.DUPLICATE)
-        .withLatestFrom(this.store)
-        .do((latest) => {
-            const state: AppState = latest[1];
-            const entities: Keymap[] = state.keymaps.entities;
-            this.router.navigate(['/keymap', entities[entities.length - 1].abbreviation]);
+        .map(latest => latest[1].userConfiguration.keymaps)
+        .do(keymaps => {
+            this.router.navigate(['/keymap', keymaps[keymaps.length - 1].abbreviation]);
         });
 
     @Effect({ dispatch: false }) remove$: any = this.actions$
         .ofType(KeymapActions.REMOVE)
         .withLatestFrom(this.store)
-        .do((latest) => {
-            const state: AppState = latest[1];
-
-            if (state.keymaps.entities.length === 0) {
+        .map(latest => latest[1].userConfiguration.keymaps)
+        .do(keymaps => {
+            if (keymaps.length === 0) {
                 this.router.navigate(['/keymap/add']);
             } else {
-                const favourite: Keymap = state.keymaps.entities.find(keymap => keymap.isDefault);
+                const favourite: Keymap = keymaps.find(keymap => keymap.isDefault);
                 this.router.navigate(['/keymap', favourite.abbreviation]);
             }
         });

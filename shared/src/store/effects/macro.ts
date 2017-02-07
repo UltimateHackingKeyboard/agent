@@ -20,25 +20,22 @@ export class MacroEffects {
         .ofType(MacroActions.REMOVE)
         .map(action => this.store.dispatch(KeymapActions.checkMacro(action.payload)))
         .withLatestFrom(this.store)
-        .do((latest) => {
-            const state: AppState = latest[1];
-            const macro: Macro[] = state.macros.entities;
-
-            if (state.macros.entities.length === 0) {
+        .map(latest => latest[1].userConfiguration.macros)
+        .do(macros => {
+            if (macros.length === 0) {
                 this.router.navigate(['/macro']);
             } else {
-                this.router.navigate(['/macro', macro[0].id]);
+                this.router.navigate(['/macro', macros[0].id]);
             }
         });
 
     @Effect({dispatch: false}) add$: any = this.actions$
         .ofType(MacroActions.ADD)
         .withLatestFrom(this.store)
-        .do((latest) => {
-            const state: AppState = latest[1];
-            const macro: Macro = state.macros.entities[state.macros.entities.length - 1];
-
-            this.router.navigate(['/macro', macro.id, 'new']);
+        .map(latest => latest[1].userConfiguration.macros)
+        .map(macros => macros[macros.length - 1])
+        .do(lastMacro => {
+            this.router.navigate(['/macro', lastMacro.id, 'new']);
         });
 
     constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
