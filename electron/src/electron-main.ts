@@ -12,7 +12,8 @@ function createWindow() {
         height: 768,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        icon: 'images/favicon.ico'
     });
     win.maximize();
 
