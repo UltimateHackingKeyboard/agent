@@ -1,10 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import 'rxjs/add/operator/combineLatest';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/publishReplay';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store';
@@ -18,26 +18,21 @@ import { KeymapActions } from '../../../store/actions';
         'class': 'container-fluid'
     }
 })
-export class KeymapAddComponent implements OnDestroy {
-    private presets: Keymap[];
+export class KeymapAddComponent {
+    presets$: Observable<Keymap[]>;
     private presetsAll$: Observable<Keymap[]>;
     private filterExpression$: BehaviorSubject<string>;
-    private subscription: Subscription;
 
     constructor(private store: Store<AppState>) {
         this.presetsAll$ = store.select((appState: AppState) => appState.presetKeymaps);
         this.filterExpression$ = new BehaviorSubject('');
 
-        this.subscription = this.presetsAll$.combineLatest(
-            this.filterExpression$,
-            (keymaps: Keymap[], filterExpression: string) => {
+        this.presets$ = this.presetsAll$
+            .combineLatest(this.filterExpression$, (keymaps: Keymap[], filterExpression: string) => {
                 return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
-            }
-        ).subscribe(keymaps => this.presets = keymaps);
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
+            })
+            .publishReplay(1)
+            .refCount();
     }
 
     filterKeyboards(filterExpression: string) {
