@@ -26,12 +26,7 @@ export class DataStorage {
     initialState(): AppState {
         const config: UserConfiguration = this.getConfiguration();
         return {
-            keymaps: {
-                entities: config.keymaps
-            },
-            macros: {
-                entities: config.macros
-            },
+            userConfiguration: config,
             presetKeymaps: this.uhkPresets
         };
     }
@@ -51,31 +46,8 @@ export class DataStorage {
     // TODO: Add type for state
     saveState(reducer: any): (state: any, action: Action) => AppState {
         return (state: any, action: Action) => {
-            let nextState = reducer(state, action);
-            let config: UserConfiguration;
-
-            // Save elements to the UhkConfiguration
-            if (
-                action.type.startsWith(KeymapActions.PREFIX) &&
-                (
-                    (nextState.entities && nextState.entities.length && nextState.entities[0] instanceof Keymap) ||
-                    (state.entities && state.entities.length && state.entities[0] instanceof Keymap)
-                )
-            ) {
-                config = this.getConfiguration();
-                config.keymaps = Object.values(nextState.entities);
-                this._environment.saveConfig(config);
-            } else if (
-                action.type.startsWith(MacroActions.PREFIX) &&
-                (
-                    (nextState.entities && nextState.entities.length && nextState.entities[0] instanceof Macro) ||
-                    (state.entities && state.entities.length && state.entities[0] instanceof Macro)
-                )
-            ) {
-                config = this.getConfiguration();
-                config.macros = Object.values(nextState.entities);
-                this._environment.saveConfig(config);
-            }
+            const nextState = reducer(state, action);
+            this._environment.saveConfig(nextState);
             return nextState;
         };
     }

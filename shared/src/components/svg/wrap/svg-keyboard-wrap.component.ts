@@ -283,8 +283,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         } else if (keyAction instanceof PlayMacroAction) {
             const playMacroAction: PlayMacroAction = keyAction;
             return this.store
-                .select(appState => appState.macros)
-                .map(macroState => macroState.entities.find(macro => {
+                .select(appState => appState.userConfiguration.macros)
+                .map(macroState => macroState.find(macro => {
                     return macro.id === playMacroAction.macroId;
                 }).name)
                 .map(macroName => {
@@ -303,7 +303,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         } else if (keyAction instanceof SwitchKeymapAction) {
             const switchKeymapAction: SwitchKeymapAction = keyAction;
             return this.store
-                .select(appState => appState.keymaps.entities)
+                .select(appState => appState.userConfiguration.keymaps)
                 .map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name)
                 .map(keymapName => {
                     const content: NameValuePair[] = [

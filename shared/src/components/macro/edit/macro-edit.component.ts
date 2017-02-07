@@ -10,7 +10,7 @@ import { MacroAction } from '../../../config-serializer/config-items/macro-actio
 
 import { MacroActions } from '../../../store/actions';
 import { AppState } from '../../../store/index';
-import { getMacro } from '../../../store/reducers/macro';
+import { getMacro } from '../../../store/reducers/user-configuration';
 
 @Component({
     selector: 'macro-edit',

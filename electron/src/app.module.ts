@@ -68,7 +68,7 @@ import { MapperService } from './shared/services/mapper.service';
 import { UhkDeviceService } from './services/uhk-device.service';
 
 import { KeymapEffects, MacroEffects } from './shared/store/effects';
-import { keymapReducer, macroReducer, presetReducer } from './shared/store/reducers';
+import { userConfigurationReducer, presetReducer } from './shared/store/reducers';
 import { DataStorage } from './shared/store/storage';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
@@ -81,8 +81,7 @@ const storageService: DataStorage = storageInjector.get(DataStorage);
 
 // All reducers that are used in application
 const storeConfig = {
-    keymaps: storageService.saveState(keymapReducer),
-    macros: storageService.saveState(macroReducer),
+    userConfiguration: storageService.saveState(userConfigurationReducer),
     presetKeymaps: presetReducer
 };
 

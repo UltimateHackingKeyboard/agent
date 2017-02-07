@@ -23,7 +23,7 @@ import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';
 
 import { AppState } from '../../../../store/index';
-import { getMacroEntities } from '../../../../store/reducers/macro';
+import { getMacros } from '../../../../store/reducers/user-configuration';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -146,7 +146,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private captureService: CaptureService,
         private renderer: Renderer
     ) {
-        this.subscription = store.let(getMacroEntities())
+        this.subscription = store.let(getMacros())
             .subscribe((macros: Macro[]) => this.macros = macros);
 
         this.reset();

@@ -19,7 +19,7 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Tab } from './tab/tab';
 
 import { AppState } from '../../store';
-import { getKeymapEntities } from '../../store/reducers';
+import { getKeymaps } from '../../store/reducers/user-configuration';
 
 enum TabName {
     Keypress,
@@ -90,7 +90,7 @@ export class PopoverComponent implements OnChanges {
 
     constructor(private store: Store<AppState>) {
         this.animationState = 'closed';
-        this.keymaps$ = store.let(getKeymapEntities())
+        this.keymaps$ = store.let(getKeymaps())
             .map((keymaps: Keymap[]) =>
                 keymaps.filter((keymap: Keymap) => this.currentKeymap.abbreviation !== keymap.abbreviation)
             );

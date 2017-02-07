@@ -2,16 +2,17 @@ import { Component, Renderer, animate, state, style, transition, trigger } from 
 
 import { Store } from '@ngrx/store';
 
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/let';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 
 import { AppState } from '../../store';
 import { MacroActions } from '../../store/actions';
-import { getKeymapEntities, getMacroEntities } from '../../store/reducers';
+import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 
 @Component({
     animations: [
@@ -41,13 +42,13 @@ export class SideMenuComponent {
             addon: 'active'
         };
 
-        this.keymaps$ = store.let(getKeymapEntities())
+        this.keymaps$ = store.let(getKeymaps())
             .map(keymaps => keymaps.slice()) // Creating a new array reference, because the sort is working in place
             .do((keymaps: Keymap[]) => {
                 keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
             });
 
-        this.macros$ = store.let(getMacroEntities())
+        this.macros$ = store.let(getMacros())
             .map(macros => macros.slice()) // Creating a new array reference, because the sort is working in place
             .do((macros: Macro[]) => {
                 macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));

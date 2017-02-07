@@ -9,7 +9,8 @@ import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../store/index';
-import { getMacroEntities } from '../../../store/reducers';
+import { getMacros } from '../../../store/reducers/user-configuration';
+import { Macro } from './../../../config-serializer/config-items/Macro';
 
 @Injectable()
 export class MacroNotFoundGuard implements CanActivate {
@@ -18,8 +19,8 @@ export class MacroNotFoundGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         return this.store
-            .let(getMacroEntities())
-            .map(macros => {
+            .let(getMacros())
+            .map((macros: Macro[]) => {
                 const hasMacros = macros.length > 0;
                 if (hasMacros) {
                     this.router.navigate(['/macro', macros[0].id]);
