@@ -27,7 +27,7 @@ export class KeymapEditComponent {
     private deletable$: Observable<boolean>;
 
     constructor(
-        private store: Store<AppState>,
+        protected store: Store<AppState>,
         private route: ActivatedRoute
     ) {
         this.keymap$ = route
