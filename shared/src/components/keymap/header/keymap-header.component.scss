@@ -43,6 +43,18 @@
     }
 }
 
+.layer__download {
+    top: 10px;
+    font-size: 0.8em;
+    position: relative;
+    margin-right: 10px;
+
+    &:hover {
+        cursor: pointer;
+        color: $icon-hover;
+    }
+}
+
 .pane-title {
     margin-bottom: 1em;
 

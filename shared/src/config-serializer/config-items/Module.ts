@@ -3,6 +3,7 @@ import { UhkBuffer } from '../UhkBuffer';
 import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
 import { Keymap } from './Keymap';
 import { Macro } from './Macro';
+import { PlayMacroAction, SwitchLayerAction } from './key-action';
 
 enum PointerRole {
     none,
@@ -54,7 +55,7 @@ export class Module {
             id: this.id,
             pointerRole: PointerRole[this.pointerRole],
             keyActions: this.keyActions.map(keyAction => {
-                if (keyAction) {
+                if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchLayerAction))) {
                     return keyAction.toJsonObject(macros);
                 }
             })

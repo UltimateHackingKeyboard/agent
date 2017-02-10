@@ -4,14 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
 
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/switchMap';
-import { Observable } from 'rxjs/Observable';
+
+import { saveAs } from 'file-saver';
 
 import { Keymap } from '../../../config-serializer/config-items/Keymap';
 import { AppState } from '../../../store';
-import { getKeymap, getKeymaps } from '../../../store/reducers/user-configuration';
+import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 
 @Component({
     selector: 'keymap-edit',
@@ -41,4 +45,35 @@ export class KeymapEditComponent {
             .map((keymaps: Keymap[]) => keymaps.length > 1);
     }
 
+    downloadKeymap() {
+        const exportableJSON$: Observable<string> = this.keymap$
+            .switchMap(keymap => this.toExportableJSON(keymap))
+            .map(exportableJSON => JSON.stringify(exportableJSON));
+
+        this.keymap$
+            .combineLatest(exportableJSON$)
+            .first()
+            .subscribe(latest => {
+                const keymap = latest[0];
+                const exportableJSON = latest[1];
+                const fileName = keymap.name + '_keymap.json';
+                saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
+            });
+    }
+
+    private toExportableJSON(keymap: Keymap): Observable<any> {
+        return this.store
+            .let(getUserConfiguration())
+            .first()
+            .map(userConfiguration => {
+                return {
+                    site: 'https://ultimatehackingkeyboard.com',
+                    description: 'Ultimate Hacking Keyboard keymap',
+                    keyboardModel: 'UHK60',
+                    dataModelVersion: userConfiguration.dataModelVersion,
+                    objectType: 'keymap',
+                    objectValue: keymap.toJsonObject()
+                };
+            });
+    }
 }

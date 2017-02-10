@@ -11,7 +11,7 @@ console.log(rootDir, __dirname);
 module.exports = {
     entry: {
         polyfills: path.resolve(rootDir, 'src/shared/polyfills.ts'),
-        vendor: path.resolve(rootDir, 'src/shared/vendor.ts'),
+        vendor: path.resolve(rootDir, 'src/vendor.ts'),
         app: path.resolve(rootDir, 'src/main.ts')
     },
     output: {
@@ -24,7 +24,8 @@ module.exports = {
         modules: [path.join(rootDir, "node_modules")],
         alias: {
             jquery: 'jquery/dist/jquery.min.js',
-            select2: 'select2/dist/js/select2.full.min.js'
+            select2: 'select2/dist/js/select2.full.min.js',
+            'file-saver': 'filesaver.js/FileSaver.min.js'
         }
     },
     module: {
