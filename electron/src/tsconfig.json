@@ -17,6 +17,7 @@
       "jquery",
       "core-js",
       "select2",
+      "file-saver",
       "electron",
       "usb"
     ]

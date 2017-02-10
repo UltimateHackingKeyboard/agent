@@ -3,6 +3,8 @@ import {
     Component,
     ElementRef,
     Input,
+    Output,
+    EventEmitter,
     OnChanges,
     Renderer,
     SimpleChanges,
@@ -25,6 +27,7 @@ import { KeymapActions } from '../../../store/actions';
 export class KeymapHeaderComponent implements OnChanges {
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
+    @Output() downloadClick = new EventEmitter<void>();
 
     @ViewChild('name') keymapName: ElementRef;
     @ViewChild('abbr') keymapAbbr: ElementRef;
@@ -86,5 +89,9 @@ export class KeymapHeaderComponent implements OnChanges {
 
     setTrashTitle(): void {
         this.trashTitle = this.deletable ? '' : 'The last keymap cannot be deleted.';
+    }
+
+    onDownloadIconClick(): void {
+        this.downloadClick.emit();
     }
 }

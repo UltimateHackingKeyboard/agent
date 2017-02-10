@@ -27,7 +27,8 @@ module.exports = {
         modules: [path.join(rootDir, "node_modules")],
         alias: {
             jquery: 'jquery/dist/jquery.min.js',
-            select2: 'select2/dist/js/select2.full.min.js'
+            select2: 'select2/dist/js/select2.full.min.js',
+            'file-saver': 'filesaver.js/FileSaver.min.js'
         }
     },
     module: {
