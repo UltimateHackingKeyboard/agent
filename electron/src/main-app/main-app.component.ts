@@ -11,7 +11,7 @@ import { UhkDeviceService } from '../services/uhk-device.service';
 
 @Component({
     selector: 'main-app',
-    templateUrl: '../shared/main-app/main-app.component.html',
+    templateUrl: './main-app.component.html',
     styleUrls: ['../shared/main-app/main-app.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
