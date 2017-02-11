@@ -11,8 +11,8 @@
         </option>
     </select>
     <span [ngSwitch]="toggle">
-        <template ngSwitchCase="true">layer by pressing this key.</template>
-        <template ngSwitchDefault="false">layer by holding this key.</template>
+        <template [ngSwitchCase]="true">layer by pressing this key.</template>
+        <template ngSwitchDefault>layer by holding this key.</template>
     </span>
 </template>
 <template [ngIf]="isNotBase">
