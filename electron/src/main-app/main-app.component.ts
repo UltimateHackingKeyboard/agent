@@ -1,16 +1,13 @@
 import { Component, ViewEncapsulation, HostListener } from '@angular/core';
 
-// import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 
-// import { Store } from '@ngrx/store';
-// import { AppState } from '../store';
-// import { DataStorage } from '../store/storage';
-// import { getKeymapEntities, getMacroEntities } from '../store/reducers';
+import { AppState } from '../shared/store';
+import { getUserConfiguration } from '../shared/store/reducers/user-configuration';
 
-// import { UhkBuffer } from '../config-serializer/UhkBuffer';
-// import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
+import { UhkBuffer } from '../shared/config-serializer/UhkBuffer';
 
-// import { UhkDeviceService } from '../services/uhk-device.service';
+import { UhkDeviceService } from '../services/uhk-device.service';
 
 @Component({
     selector: 'main-app',
@@ -20,48 +17,32 @@ import { Component, ViewEncapsulation, HostListener } from '@angular/core';
 })
 export class MainAppComponent {
 
-    // private configuration$: Observable<UserConfiguration>;
-
-    constructor(
-        // private uhkDevice: UhkDeviceService,
-        // store: Store<AppState>,
-        // dataStorage: DataStorage
-    ) {
-        // this.configuration$ = store.let(getKeymapEntities())
-        //     .combineLatest(store.let(getMacroEntities()))
-        //     .map((pair) => {
-        //         const config = new UserConfiguration();
-        //         Object.assign(config, dataStorage.getConfiguration());
-        //         config.keymaps = pair[0];
-        //         config.macros = pair[1];
-        //         return config;
-        //     });
-    }
+    constructor(private uhkDevice: UhkDeviceService, private store: Store<AppState>) { }
 
     @HostListener('window:keydown.control.o', ['$event'])
     onCtrlO(event: KeyboardEvent): void {
         console.log('ctrl + o pressed');
         event.preventDefault();
         event.stopPropagation();
-        this.sendConfiguration();
+        this.sendUserConfiguration();
     }
 
-    private sendConfiguration(): void {
-        // this.configuration$
-        //     .first()
-        //     .map(configuration => {
-        //         const uhkBuffer = new UhkBuffer();
-        //         configuration.toBinary(uhkBuffer);
-        //         return uhkBuffer.getBufferContent();
-        //     })
-        //     .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))
-        //     .do(response => console.log('Sending config finished', response))
-        //     .switchMap(() => this.uhkDevice.applyConfig())
-        //     .subscribe(
-        //     (response) => console.log('Applying config finished', response),
-        //     error => console.error('Error during uploading config', error),
-        //     () => console.log('Config has been sucessfully uploaded')
-        //     );
+    private sendUserConfiguration(): void {
+        this.store
+            .let(getUserConfiguration())
+            .map(userConfiguration => {
+                const uhkBuffer = new UhkBuffer();
+                userConfiguration.toBinary(uhkBuffer);
+                return uhkBuffer.getBufferContent();
+            })
+            .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))
+            .do(response => console.log('Sending user configuration finished', response))
+            .switchMap(() => this.uhkDevice.applyConfig())
+            .subscribe(
+            (response) => console.log('Applying user configuration finished', response),
+            error => console.error('Error during uploading user configuration', error),
+            () => console.log('User configuration has been sucessfully uploaded')
+            );
     }
 
 }

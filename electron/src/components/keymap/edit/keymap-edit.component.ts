@@ -17,8 +17,6 @@ import { KeymapEditComponent as SharedKeymapEditComponent } from '../../../share
 
 import { UhkDeviceService } from '../../../services/uhk-device.service';
 
-import { getUserConfiguration } from '../../../shared/store/reducers/user-configuration';
-
 @Component({
     selector: 'keymap-edit',
     templateUrl: '../../../shared/components/keymap/edit/keymap-edit.component.html',
@@ -53,14 +51,6 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
         event.preventDefault();
         event.stopPropagation();
         this.sendKeymap();
-    }
-
-    @HostListener('window:keydown.control.o', ['$event'])
-    onCtrlO(event: KeyboardEvent): void {
-        console.log('ctrl + o pressed');
-        event.preventDefault();
-        event.stopPropagation();
-        this.sendUserConfiguration();
     }
 
     private sendLayer(): void {
@@ -101,21 +91,4 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
             );
     }
 
-    private sendUserConfiguration(): void {
-        this.store
-            .let(getUserConfiguration())
-            .map(userConfiguration => {
-                const uhkBuffer = new UhkBuffer();
-                userConfiguration.toBinary(uhkBuffer);
-                return uhkBuffer.getBufferContent();
-            })
-            .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))
-            .do(response => console.log('Sending user configuration finished', response))
-            .switchMap(() => this.uhkDevice.applyConfig())
-            .subscribe(
-            (response) => console.log('Applying user configuration finished', response),
-            error => console.error('Error during uploading user configuration', error),
-            () => console.log('User configuration has been sucessfully uploaded')
-            );
-    }
 }
