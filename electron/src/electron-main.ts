@@ -15,6 +15,7 @@ function createWindow() {
         },
         icon: 'images/favicon.ico'
     });
+    win.setMenuBarVisibility(false);
     win.maximize();
 
     const indexPath = path.resolve(__dirname, './index.html');
