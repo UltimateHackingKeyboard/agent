@@ -8,6 +8,7 @@ let win: Electron.BrowserWindow;
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
+        title: 'UHK Agent',
         width: 1024,
         height: 768,
         webPreferences: {
@@ -21,6 +22,10 @@ function createWindow() {
     const indexPath = path.resolve(__dirname, './index.html');
     // and load the index.html of the app.
     win.loadURL(`file://${indexPath}`);
+
+    win.on('page-title-updated', (event) => {
+        event.preventDefault();
+    });
 
     // Emitted when the window is closed.
     win.on('closed', () => {
