@@ -6,15 +6,17 @@ export class SwitchKeymapAction extends KeyAction {
 
     keymapAbbreviation: string;
 
-    constructor(parameter?: SwitchKeymapAction | Keymap) {
+    constructor(parameter?: SwitchKeymapAction | Keymap | string) {
         super();
         if (!parameter) {
             return;
         }
         if (parameter instanceof SwitchKeymapAction) {
             this.keymapAbbreviation = parameter.keymapAbbreviation;
-        } else {
+        } else if (parameter instanceof Keymap) {
             this.keymapAbbreviation = parameter.abbreviation;
+        } else {
+            this.keymapAbbreviation = parameter;
         }
     }
 
