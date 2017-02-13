@@ -63,9 +63,9 @@
   },
   "scripts": {
     "postinstall": "run-p build:usb \"symlink -- -i\" ",
-    "tslint": "tslint \"electron/**/*.ts\" \"web/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
-    "stylelint": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
-    "lint": "run-s -scn tslint stylelint",
+    "lint": "run-s -scn lint:ts lint:style",
+    "lint:ts": "tslint \"electron/**/*.ts\" \"web/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
+    "lint:style": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
     "build": "run-p build:web build:electron",
     "build:web": "webpack --config \"web/src/webpack.config.js\"",
     "build:electron": "run-s -scn build:electron:main build:electron:app",
@@ -73,8 +73,10 @@
     "build:electron:app": "webpack --config \"electron/src/webpack.config.js\"",
     "build:usb": "electron-rebuild -w usb -p",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
-    "dev": "webpack-dev-server --config \"web/src/webpack.config.js\" --content-base \"./web/dist\"",
-    "electron": "electron electron/dist/electron-main.js",
+    "server:web": "webpack-dev-server --config \"web/src/webpack.config.js\" --content-base \"./web/dist\"",
+    "server:electron": "webpack-dev-server --config \"electron/src/webpack.config.js\" --content-base \"./electron/dist\" --port 8081",
+    "electron:dev": "electron electron/dist/electron-main.js --url=http://localhost:8081",
+    "electron:prod": "electron electron/dist/electron-main.js",
     "symlink": "node ./tools/symlinker"
   }
 }
