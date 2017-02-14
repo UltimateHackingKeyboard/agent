@@ -105,9 +105,11 @@ export default function (state = initialState, action: Action): UserConfiguratio
 
                 const moduleIndex: number = action.payload.module;
                 const newModule: Module = Object.assign(new Module(), newLayer.modules[moduleIndex]);
+                newLayer.modules = newLayer.modules.slice();
                 newLayer.modules[moduleIndex] = newModule;
 
                 const keyIndex: number = action.payload.key;
+                newModule.keyActions = newModule.keyActions.slice();
                 newModule.keyActions[keyIndex] = KeyActionHelper.createKeyAction(action.payload.keyAction);
 
                 changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
