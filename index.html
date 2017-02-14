@@ -7,8 +7,8 @@
         <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link rel="shortcut icon" href="images/favicon.ico">
-
-        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="polyfills.uhk.js"></script>
+        <script src="vendor.uhk.js"></script>
     </head>
     <body>
         <!-- Google Tag Manager -->
@@ -26,8 +26,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <main-app></main-app>
 
-        <script src="vendor/bootstrap/js/bootstrap.min.js"></script> <!-- TODO remove in near future -->
-        <script src="vendor/select2/js/select2.min.js"></script>
-        <script src="uhk.js"></script>
+        <script src="app.uhk.js"></script> <!-- This should be moved to the head -->
     </body>
 </html>
