@@ -56,8 +56,9 @@ module.exports = {
         webpackFailPlugin,
         new CopyWebpackPlugin(
             [
-                { from: './electron/src/**/*.html', flatten: true },
-                { from: './electron/src/**/*.js', flatten: true },
+                {
+                    from: path.join(__dirname, 'index.html'), flatten: true
+                },
                 {
                     from: 'node_modules/font-awesome/css/font-awesome.min.css',
                     to: 'vendor/font-awesome/css/font-awesome.min.css'
@@ -78,10 +79,7 @@ module.exports = {
                     from: 'node_modules/usb',
                     to: 'vendor/usb'
                 }
-            ],
-            {
-                ignore: ['*.config.js']
-            }
+            ]
         ),
         new webpack.ProvidePlugin({
             $: "jquery",
