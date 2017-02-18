@@ -7,7 +7,7 @@ import { KeymapEditGuard } from '../../shared/components/keymap/edit';
 export const keymapRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/keymap',
+        redirectTo: 'keymap',
         pathMatch: 'full'
     },
     {

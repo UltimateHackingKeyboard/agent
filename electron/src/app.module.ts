@@ -10,6 +10,7 @@ import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
 
+import { MissingDeviceComponent } from './components/missing-device/missing-device.component';
 import { AddOnComponent } from './shared/components/add-on';
 import { KeyboardSliderComponent } from './shared/components/keyboard/slider';
 import { KeymapAddComponent, KeymapHeaderComponent } from './shared/components/keymap';
@@ -59,7 +60,9 @@ import {
 } from './shared/components/svg/keys';
 import { SvgModuleComponent } from './shared/components/svg/module';
 import { SvgKeyboardWrapComponent } from './shared/components/svg/wrap';
-import { MainAppComponent, appRoutingProviders, routing } from './main-app';
+import { appRoutingProviders, routing } from './app/app.routes';
+import { AppComponent } from './app/app.component';
+import { MainAppComponent } from './main-app';
 
 import { CancelableDirective } from './shared/directives';
 
@@ -74,6 +77,8 @@ import { DataStorage } from './shared/store/storage';
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
 
+import { UHkConnectedGuard } from './services/uhk-connected.guard';
+
 // Create DataStorage dependency injection
 const storageProvider = ReflectiveInjector.resolve([DataStorage]);
 const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
@@ -87,6 +92,7 @@ const storeConfig = {
 
 @NgModule({
     declarations: [
+        AppComponent,
         MainAppComponent,
         KeymapEditComponent,
         KeymapHeaderComponent,
@@ -133,6 +139,7 @@ const storeConfig = {
         AddOnComponent,
         SettingsComponent,
         KeyboardSliderComponent,
+        MissingDeviceComponent,
         CancelableDirective
     ],
     imports: [
@@ -153,6 +160,7 @@ const storeConfig = {
         EffectsModule.runAfterBootstrap(MacroEffects)
     ],
     providers: [
+        UHkConnectedGuard,
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,
@@ -160,6 +168,6 @@ const storeConfig = {
         CaptureService,
         UhkDeviceService
     ],
-    bootstrap: [MainAppComponent]
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

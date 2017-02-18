@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observer } from 'rxjs/Observer';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
@@ -14,7 +15,7 @@ import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/publish';
 
-import { Device, Interface, InEndpoint, OutEndpoint, findByIds } from 'usb';
+import { Device, Interface, InEndpoint, OutEndpoint, findByIds, on } from 'usb';
 
 import { Layer } from '../shared/config-serializer/config-items/Layer';
 import { UhkBuffer } from '../shared/config-serializer/UhkBuffer';
@@ -34,28 +35,38 @@ interface SenderMessage {
 };
 
 @Injectable()
-export class UhkDeviceService {
+export class UhkDeviceService implements OnDestroy {
 
     private device: Device;
-    private connected: boolean;
+    private connected$: BehaviorSubject<boolean>;
 
     private messageIn$: Observable<Buffer>;
     private messageOut$: Subject<SenderMessage>;
 
     private outSubscription: Subscription;
 
-    constructor() {
+    constructor(zone: NgZone) {
         this.messageOut$ = new Subject<SenderMessage>();
+        this.connected$ = new BehaviorSubject(false);
         this.connect();
+
+        // The change detection doesn't work properly if the callbacks are called outside Angular Zone
+        on('attach', (device: Device) => zone.run(() => this.onDeviceAttach(device)));
+        on('detach', (device: Device) => zone.run(() => this.onDeviceDetach(device)));
+    }
+
+    ngOnDestroy() {
+        this.disconnect();
+        this.connected$.unsubscribe();
     }
 
     connect(): void {
-        if (this.connected) {
+        if (this.connected$.getValue()) {
             return;
         }
         this.device = findByIds(vendorId, productId);
         if (!this.device) {
-            throw new Error('UhkDevice not found.');
+            return;
         }
         this.device.open();
 
@@ -103,18 +114,20 @@ export class UhkDeviceService {
         }).publish();
         this.outSubscription = outSending.connect();
 
-        this.connected = true;
+        this.connected$.next(true);
     }
 
     disconnect() {
-        if (!this.connected) {
+        if (!this.connected$.getValue()) {
             return;
         }
         this.outSubscription.unsubscribe();
         this.messageIn$ = undefined;
-        this.device.interface(0).release();
-        this.device.close();
-        this.connected = false;
+        this.connected$.next(false);
+    }
+
+    isConnected(): Observable<boolean> {
+        return this.connected$.asObservable();
     }
 
     sendConfig(configBuffer: Buffer): Observable<Buffer> {
@@ -157,6 +170,24 @@ export class UhkDeviceService {
                 observer: subscriber
             });
         });
+    }
+
+    onDeviceAttach(device: Device) {
+        if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
+            return;
+        }
+        if (!this.connected$.getValue()) {
+            this.connect();
+        }
+    }
+
+    onDeviceDetach(device: Device) {
+        if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
+            return;
+        }
+        if (this.connected$.getValue()) {
+            this.disconnect();
+        }
     }
 
 }
