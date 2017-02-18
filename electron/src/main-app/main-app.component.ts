@@ -1,6 +1,11 @@
 import { Component, ViewEncapsulation, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
+
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/ignoreElements';
+import 'rxjs/add/operator/takeWhile';
 
 import { AppState } from '../shared/store';
 import { getUserConfiguration } from '../shared/store/reducers/user-configuration';
@@ -17,7 +22,17 @@ import { UhkDeviceService } from '../services/uhk-device.service';
 })
 export class MainAppComponent {
 
-    constructor(private uhkDevice: UhkDeviceService, private store: Store<AppState>) { }
+    constructor(private uhkDevice: UhkDeviceService, private store: Store<AppState>, router: Router) {
+        uhkDevice.isConnected()
+            .distinctUntilChanged()
+            .takeWhile(connected => connected)
+            .ignoreElements()
+            .subscribe({
+                complete: () => {
+                    router.navigate(['/detection']);
+                }
+            });
+    }
 
     @HostListener('window:keydown.control.o', ['$event'])
     onCtrlO(event: KeyboardEvent): void {
