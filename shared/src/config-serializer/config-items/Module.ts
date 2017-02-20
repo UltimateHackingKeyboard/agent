@@ -84,4 +84,26 @@ export class Module {
         return `<Module id="${this.id}" pointerRole="${this.pointerRole}">`;
     }
 
+    renameKeymap(oldAbbr: string, newAbbr: string): Module {
+        let keyActions: KeyAction[];
+        let keyActionModified = false;
+        this.keyActions.forEach((keyAction, index) => {
+            if (!keyAction) { return; }
+            const newKeyAction = keyAction.renameKeymap(oldAbbr, newAbbr);
+            if (newKeyAction !== keyAction) {
+                if (!keyActionModified) {
+                    keyActions = this.keyActions.slice();
+                    keyActionModified = true;
+                }
+                keyActions[index] = newKeyAction;
+            }
+        });
+        if (keyActionModified) {
+            const newModule = Object.assign(new Module(), this);
+            newModule.keyActions = keyActions;
+            return newModule;
+        }
+        return this;
+    }
+
 }

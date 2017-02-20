@@ -47,4 +47,11 @@ export class SwitchKeymapAction extends KeyAction {
     toString(): string {
         return `<SwitchKeymapAction keymapAbbreviation="${this.keymapAbbreviation}">`;
     }
+
+    renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
+        if (this.keymapAbbreviation !== oldAbbr) {
+            return this;
+        }
+        return new SwitchKeymapAction(newAbbr);
+    }
 }

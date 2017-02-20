@@ -55,7 +55,7 @@ export default function (state = initialState, action: Action): UserConfiguratio
                     keymap = Object.assign(new Keymap(), keymap);
                     keymap.abbreviation = abbr;
                 } else {
-                    keymap = renameKeymapInKeymap(action.payload.abbr, action.payload.newAbbr, keymap);
+                    keymap = keymap.renameKeymap(action.payload.abbr, action.payload.newAbbr);
                 }
 
                 return keymap;
@@ -323,71 +323,4 @@ function checkExistence(layers: Layer[], property: string, value: any) {
     });
 
     return newLayers;
-}
-
-function renameKeymapInKeymap(oldAbbr: string, newAbbr: string, keymap: Keymap): Keymap {
-    let layers: Layer[];
-    let layerModified = false;
-    keymap.layers.forEach((layer, index) => {
-        const newLayer = renameKeymapInLayer(oldAbbr, newAbbr, layer);
-        if (newLayer !== layer) {
-            if (!layerModified) {
-                layers = keymap.layers.slice();
-                layerModified = true;
-            }
-            layers[index] = newLayer;
-        }
-    });
-    if (layerModified) {
-        keymap = Object.assign(new Keymap(), keymap);
-        keymap.layers = layers;
-    }
-    return keymap;
-}
-
-function renameKeymapInLayer(oldAbbr: string, newAbbr: string, layer: Layer): Layer {
-    let modules: Module[];
-    let moduleModified = false;
-    layer.modules.forEach((module, index) => {
-        const newModule = renameKeymapInModule(oldAbbr, newAbbr, module);
-        if (newModule !== module) {
-            if (!moduleModified) {
-                modules = layer.modules.slice();
-                moduleModified = true;
-            }
-            modules[index] = newModule;
-        }
-    });
-    if (moduleModified) {
-        layer = Object.assign(new Layer(), layer);
-        layer.modules = modules;
-    }
-    return layer;
-}
-
-function renameKeymapInModule(oldAbbr: string, newAbbr: string, module: Module): Module {
-    let keyActions: KeyAction[];
-    let keyActionModified = false;
-    module.keyActions.forEach((keyAction, index) => {
-        const newKeyAction = renameKeymapInKeyAction(oldAbbr, newAbbr, keyAction);
-        if (newKeyAction !== keyAction) {
-            if (!keyActionModified) {
-                keyActions = module.keyActions.slice();
-                keyActionModified = true;
-            }
-            keyActions[index] = newKeyAction;
-        }
-    });
-    if (keyActionModified) {
-        module = Object.assign(new Module(), module);
-        module.keyActions = keyActions;
-    }
-    return module;
-}
-
-function renameKeymapInKeyAction(oldAbbr: string, newAbbr: string, keyAction: KeyAction): KeyAction {
-    if (keyAction instanceof SwitchKeymapAction && keyAction.keymapAbbreviation === oldAbbr) {
-        keyAction = new SwitchKeymapAction(newAbbr);
-    }
-    return keyAction;
 }
