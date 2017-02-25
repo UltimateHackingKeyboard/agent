@@ -1,7 +1,7 @@
-<template [ngIf]="macroOptions.length === 0">
+<ng-template [ngIf]="macroOptions.length === 0">
     <span> No macros are available to choose from. Create a macro first! </span>
-</template>
-<template [ngIf]="macroOptions.length > 0">
+</ng-template>
+<ng-template [ngIf]="macroOptions.length > 0">
     <div class="macro-selector">
         <b> Play macro: </b>
         <select2 [data]="macroOptions" [value]="macroOptions[selectedMacroIndex].id" (valueChanged)="onChange($event)" [width]="'100%'"></select2>
@@ -13,4 +13,4 @@
             </macro-item>
         </div>
     </div>
-</template>
+</ng-template>

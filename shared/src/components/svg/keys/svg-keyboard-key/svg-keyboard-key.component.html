@@ -4,7 +4,7 @@
                     [attr.height]="height"  [attr.width]="width"
                     [attr.fill]="fill"
 />
-<template [ngIf]="recording">
+<ng-template [ngIf]="recording">
     <svg:circle
             [@recording]="recordAnimation"
             (@recording.done)="onRecordingAnimationDone()"
@@ -13,8 +13,8 @@
             [attr.r]="10"
             [attr.fill]="'#c00'"
     ></svg:circle>
-</template>
-<template [ngIf]="!recording">
+</ng-template>
+<ng-template [ngIf]="!recording">
     <svg:g [ngSwitch]="labelType"
            [attr.font-size]="19"
            [attr.font-family]="'Helvetica'"
@@ -62,4 +62,4 @@
             <svg:g svg-mouse-key [mouseAction]="labelSource"></svg:g>
         </svg>
     </svg:g>
-</template>
+</ng-template>

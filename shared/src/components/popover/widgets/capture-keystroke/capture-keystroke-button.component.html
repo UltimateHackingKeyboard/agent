@@ -3,10 +3,10 @@
             (click)="start()"
 >
     <i class="fa fa-circle"></i>
-    <template [ngIf]="!record">
+    <ng-template [ngIf]="!record">
         Capture keystroke
-    </template>
-    <template [ngIf]="record">
+    </ng-template>
+    <ng-template [ngIf]="record">
         Capturing ...
-    </template>
+    </ng-template>
  </button>

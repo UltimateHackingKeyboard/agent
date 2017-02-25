@@ -119,7 +119,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         if (keymapChanges) {
             this.popoverShown = false;
             this.layers = this.keymap.layers;
-            if (keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation) {
+            if (keymapChanges.isFirstChange() ||
+                keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation) {
                 this.currentLayer = 0;
                 this.keybindAnimationEnabled = keymapChanges.isFirstChange();
             } else {

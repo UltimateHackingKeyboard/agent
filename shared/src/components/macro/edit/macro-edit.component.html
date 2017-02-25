@@ -1,4 +1,4 @@
-<template [ngIf]="macro">
+<ng-template [ngIf]="macro">
     <macro-header
             [macro]="macro"
             [isNew]="isNew"
@@ -10,7 +10,7 @@
         (delete)="deleteAction($event.macroId, $event.index, $event.action)"
         (reorder)="reorderAction($event.macroId, $event.oldIndex, $event.newIndex)"
     ></macro-list>
-</template>
+</ng-template>
 
 <div *ngIf="!macro" class="not-found">
     There is no macro with id {{ route.params.select('id') | async }}.

@@ -1,4 +1,4 @@
-<template ngIf="layers">
+<ng-template [ngIf]="layers">
     <layers [class.disabled]="popoverShown" (select)="selectLayer($event.index)" [current]="currentLayer"></layers>
     <keyboard-slider [layers]="layers"
                      [currentLayer]="currentLayer"
@@ -22,4 +22,4 @@
             </p>
         </div>
     </div>
-</template>
+</ng-template>

@@ -1,7 +1,7 @@
-<template [ngIf]="keymapOptions.length === 0">
+<ng-template [ngIf]="keymapOptions.length === 0">
     <span> No keymaps are available to choose from. Create a keymap first! </span>
-</template>
-<template [ngIf]="keymapOptions.length > 0">
+</ng-template>
+<ng-template [ngIf]="keymapOptions.length > 0">
     <div>
         <b>Switch to keymap:</b>
         <select2
@@ -19,4 +19,4 @@
                     [moduleConfig]="selectedKeymap.layers[0].modules">
         </svg-keyboard>
     </div>
-</template>
+</ng-template>
