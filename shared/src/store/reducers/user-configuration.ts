@@ -1,10 +1,11 @@
 import '@ngrx/core/add/operator/select';
 import { Action } from '@ngrx/store';
 
-import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
 
-import { Helper as KeyActionHelper, KeyAction } from '../../config-serializer/config-items/key-action';
+import { Helper as KeyActionHelper, KeyAction, SwitchKeymapAction } from '../../config-serializer/config-items/key-action';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
@@ -53,6 +54,8 @@ export default function (state = initialState, action: Action): UserConfiguratio
                 if (keymap.abbreviation === action.payload.abbr) {
                     keymap = Object.assign(new Keymap(), keymap);
                     keymap.abbreviation = abbr;
+                } else {
+                    keymap = keymap.renameKeymap(action.payload.abbr, action.payload.newAbbr);
                 }
 
                 return keymap;

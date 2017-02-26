@@ -42,4 +42,25 @@ export class Layer {
         return `<Layer>`;
     }
 
+    renameKeymap(oldAbbr: string, newAbbr: string): Layer {
+        let modules: Module[];
+        let moduleModified = false;
+        this.modules.forEach((module, index) => {
+            const newModule = module.renameKeymap(oldAbbr, newAbbr);
+            if (newModule !== module) {
+                if (!moduleModified) {
+                    modules = this.modules.slice();
+                    moduleModified = true;
+                }
+                modules[index] = newModule;
+            }
+        });
+        if (moduleModified) {
+            const newLayer = Object.assign(new Layer(), this);
+            newLayer.modules = modules;
+            return newLayer;
+        }
+        return this;
+    }
+
 }

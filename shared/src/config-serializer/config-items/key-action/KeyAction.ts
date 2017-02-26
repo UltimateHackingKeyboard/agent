@@ -56,4 +56,7 @@ export abstract class KeyAction {
     abstract toJsonObject(macros?: Macro[]): any;
     abstract toBinary(buffer: UhkBuffer, macros?: Macro[]): any;
 
+    renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
+        return this;
+    }
 }

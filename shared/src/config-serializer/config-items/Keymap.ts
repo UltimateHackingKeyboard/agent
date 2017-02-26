@@ -69,4 +69,26 @@ export class Keymap {
     toString(): string {
         return `<Keymap abbreviation="${this.abbreviation}" name="${this.name}">`;
     }
+
+    renameKeymap(oldAbbr: string, newAbbr: string): Keymap {
+        let layers: Layer[];
+        let layerModified = false;
+        this.layers.forEach((layer, index) => {
+            const newLayer = layer.renameKeymap(oldAbbr, newAbbr);
+            if (newLayer !== layer) {
+                if (!layerModified) {
+                    layers = this.layers.slice();
+                    layerModified = true;
+                }
+                layers[index] = newLayer;
+            }
+        });
+        if (layerModified) {
+            const newKeymap = Object.assign(new Keymap(), this);
+            newKeymap.layers = layers;
+            return newKeymap;
+        }
+        return this;
+    }
+
 }
