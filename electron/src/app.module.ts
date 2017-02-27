@@ -11,6 +11,7 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
 
 import { MissingDeviceComponent } from './components/missing-device/missing-device.component';
+import { PriviligeCheckerComponent } from './components/privilige-checker';
 import { UhkMessageComponent } from './components/uhk-message';
 import { AddOnComponent } from './shared/components/add-on';
 import { KeyboardSliderComponent } from './shared/components/keyboard/slider';
@@ -141,6 +142,7 @@ const storeConfig = {
         SettingsComponent,
         KeyboardSliderComponent,
         MissingDeviceComponent,
+        PriviligeCheckerComponent,
         UhkMessageComponent,
         CancelableDirective
     ],
