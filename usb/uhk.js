@@ -14,11 +14,17 @@ function bufferToString(buffer) {
 
 let usbEndpoints;
 
-function getUsbEndpoints() {
-    let vid = 0x16d3;
-    let pid = 0x05ea;
+function getUhkDevice() {
+    return usb.findByIds(0x16d3, 0x05ea);
+}
 
-    let device = usb.findByIds(vid, pid);
+function getBootloaderDevice() {
+    return usb.findByIds(0x15a2, 0x0073);
+}
+
+function getUsbEndpoints() {
+    let device = getUhkDevice();
+    device = getUhkDevice();
     device.open();
 
     let usbInterface = device.interface(0);
@@ -87,6 +93,8 @@ function sendUsbPackets(packets) {
 exports = module.exports = {
     DelayMs,
     bufferToString,
+    getUhkDevice,
+    getBootloaderDevice,
     getUsbEndpoints,
     sendUsbPacket,
     sendUsbPackets,
@@ -102,7 +110,8 @@ exports = module.exports = {
         readMergeSensor: 7,
         uploadConfig: 8,
         applyConfig: 9,
-        setLedPwm: 10
+        setLedPwm: 10,
+        getBridgeMessageCounter: 11
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111
