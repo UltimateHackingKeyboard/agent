@@ -5,11 +5,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 @Component({
-    selector: 'privilige-checker',
-    templateUrl: 'privilige-checker.component.html',
-    styleUrls: ['privilige-checker.component.scss']
+    selector: 'privilege-checker',
+    templateUrl: 'privilege-checker.component.html',
+    styleUrls: ['privilege-checker.component.scss']
 })
-export class PriviligeCheckerComponent {
+export class PrivilegeCheckerComponent {
 
     constructor(router: Router) {
         this.checkPermissions()

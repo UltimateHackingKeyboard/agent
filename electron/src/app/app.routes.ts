@@ -3,7 +3,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MissingDeviceComponent } from './../components/missing-device/missing-device.component';
-import { PriviligeCheckerComponent } from './../components/privilige-checker';
+import { PrivilegeCheckerComponent } from './../components/privilege-checker';
 import { MainAppComponent } from './../main-app/main-app.component';
 import { mainAppRoutes } from './../main-app/main-app.routes';
 
@@ -13,8 +13,8 @@ const appRoutes: Routes = [
         component: MissingDeviceComponent
     },
     {
-        path: 'privilige',
-        component: PriviligeCheckerComponent
+        path: 'privilege',
+        component: PrivilegeCheckerComponent
     },
     {
         path: '',
