@@ -11,6 +11,7 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
 
 import { MissingDeviceComponent } from './components/missing-device/missing-device.component';
+import { UhkMessageComponent } from './components/uhk-message';
 import { AddOnComponent } from './shared/components/add-on';
 import { KeyboardSliderComponent } from './shared/components/keyboard/slider';
 import { KeymapAddComponent, KeymapHeaderComponent } from './shared/components/keymap';
@@ -140,6 +141,7 @@ const storeConfig = {
         SettingsComponent,
         KeyboardSliderComponent,
         MissingDeviceComponent,
+        UhkMessageComponent,
         CancelableDirective
     ],
     imports: [

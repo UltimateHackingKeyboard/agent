@@ -10,8 +10,7 @@ import { UhkDeviceService } from './../../services/uhk-device.service';
 
 @Component({
     selector: 'missing-device',
-    templateUrl: 'missing-device.component.html',
-    styleUrls: ['missing-device.component.scss']
+    templateUrl: 'missing-device.component.html'
 })
 export class MissingDeviceComponent {
 
