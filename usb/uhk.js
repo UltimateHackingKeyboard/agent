@@ -47,17 +47,17 @@ class DelayMs {
     }
 }
 
-function sendUsbPacketsByCallback(packetProvider) {
+function sendUsbPacketsByCallback(packetProvider, options) {
     let packet = packetProvider()
-
-    if (!packet) {
-        process.exit(1);
-    }
 
     if (packet instanceof DelayMs) {
         setTimeout(() => {
             sendUsbPacketsByCallback(packetProvider);
         }, packet.ms);
+        return;
+    }
+
+    if (!(packet instanceof Buffer)) {
         return;
     }
 
@@ -69,25 +69,31 @@ function sendUsbPacketsByCallback(packetProvider) {
             console.error("USB error: %s", err);
             process.exit(1);
         }
-        endpointIn.transfer(64, function(err2, receivedBuffer) {
-            if (err2) {
-                console.error("USB error: %s", err2);
-                process.exit(2);
-            }
-            console.log('Received:', bufferToString(receivedBuffer));
+
+        if (options.noReceive) {
             sendUsbPacketsByCallback(packetProvider);
-        })
+        } else {
+            endpointIn.transfer(64, function(err2, receivedBuffer) {
+                if (err2) {
+                    console.error("USB error: %s", err2);
+                    process.exit(2);
+                }
+                console.log('Received:', bufferToString(receivedBuffer));
+                sendUsbPacketsByCallback(packetProvider);
+            })
+        }
+
     })
 }
 
-function sendUsbPacket(packet) {
-    sendUsbPackets([packet]);
+function sendUsbPacket(packet, options={}) {
+    sendUsbPackets([packet], options);
 }
 
-function sendUsbPackets(packets) {
+function sendUsbPackets(packets, options={}) {
     sendUsbPacketsByCallback(() => {
         return packets.shift();
-    })
+    }, options)
 }
 
 exports = module.exports = {
