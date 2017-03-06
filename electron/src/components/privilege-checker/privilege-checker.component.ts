@@ -3,6 +3,12 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/ignoreElements';
+import 'rxjs/add/operator/takeWhile';
+
+import { UhkDeviceService } from './../../services/uhk-device.service';
 
 @Component({
     selector: 'privilege-checker',
@@ -11,13 +17,17 @@ import 'rxjs/add/observable/of';
 })
 export class PrivilegeCheckerComponent {
 
-    constructor(router: Router) {
-        this.checkPermissions()
-            .subscribe(hasPermisson => {
-                if (hasPermisson) {
-                    router.navigate(['/privilige']);
+    constructor(private router: Router, private uhkDevice: UhkDeviceService) {
+        uhkDevice.isConnected()
+            .distinctUntilChanged()
+            .takeWhile(connected => connected)
+            .ignoreElements()
+            .subscribe({
+                complete: () => {
+                    router.navigate(['/detection']);
                 }
             });
+
     }
 
     checkPermissions(): Observable<boolean> {

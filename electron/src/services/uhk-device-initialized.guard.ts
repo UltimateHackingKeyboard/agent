@@ -3,21 +3,19 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/first';
 
 import { UhkDeviceService } from './uhk-device.service';
 
 @Injectable()
-export class UHkConnectedGuard implements CanActivate {
+export class UhkDeviceInitializedGuard implements CanActivate {
 
     constructor(private uhkDevice: UhkDeviceService, private router: Router) { }
 
     canActivate(): Observable<boolean> {
-        return this.uhkDevice.isConnected()
-            .first()
-            .do(connected => {
-                if (!connected) {
-                    return this.router.navigate(['/detection']);
+        return this.uhkDevice.isInitialized()
+            .do(initialized => {
+                if (!initialized) {
+                    this.router.navigate(['/detection']);
                 }
             });
     }

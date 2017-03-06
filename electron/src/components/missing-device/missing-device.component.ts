@@ -21,7 +21,7 @@ export class MissingDeviceComponent {
             .ignoreElements()
             .subscribe({
                 complete: () => {
-                    router.navigate(['/privilige']);
+                    router.navigate(['/privilege']);
                 }
             });
     }

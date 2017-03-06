@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy, NgZone } from '@angular/core';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observer } from 'rxjs/Observer';
@@ -9,11 +10,14 @@ import { Subscription } from 'rxjs/Subscription';
 
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/concat';
+import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/publish';
+import 'rxjs/add/operator/switchMap';
 
 import { Device, Interface, InEndpoint, OutEndpoint, findByIds, on } from 'usb';
 
@@ -38,7 +42,9 @@ interface SenderMessage {
 export class UhkDeviceService implements OnDestroy {
 
     private device: Device;
+    private deviceOpened$: BehaviorSubject<boolean>;
     private connected$: BehaviorSubject<boolean>;
+    private initizalized$: BehaviorSubject<boolean>;
 
     private messageIn$: Observable<Buffer>;
     private messageOut$: Subject<SenderMessage>;
@@ -47,8 +53,12 @@ export class UhkDeviceService implements OnDestroy {
 
     constructor(zone: NgZone) {
         this.messageOut$ = new Subject<SenderMessage>();
+        this.initizalized$ = new BehaviorSubject(false);
         this.connected$ = new BehaviorSubject(false);
-        this.connect();
+        this.deviceOpened$ = new BehaviorSubject(false);
+        this.outSubscription = Subscription.EMPTY;
+
+        this.initialize();
 
         // The change detection doesn't work properly if the callbacks are called outside Angular Zone
         on('attach', (device: Device) => zone.run(() => this.onDeviceAttach(device)));
@@ -57,18 +67,27 @@ export class UhkDeviceService implements OnDestroy {
 
     ngOnDestroy() {
         this.disconnect();
+        this.initizalized$.unsubscribe();
         this.connected$.unsubscribe();
+        this.deviceOpened$.unsubscribe();
     }
 
-    connect(): void {
-        if (this.connected$.getValue()) {
+    initialize(): void {
+        if (this.initizalized$.getValue()) {
             return;
         }
         this.device = findByIds(vendorId, productId);
+        this.connected$.next(!!this.device);
         if (!this.device) {
             return;
         }
-        this.device.open();
+        try {
+            this.device.open();
+            this.deviceOpened$.next(true);
+        } catch (error) {
+            console.log(error);
+            return;
+        }
 
         const usbInterface: Interface = this.device.interface(0);
         // https://github.com/tessel/node-usb/issues/147
@@ -114,20 +133,48 @@ export class UhkDeviceService implements OnDestroy {
         }).publish();
         this.outSubscription = outSending.connect();
 
-        this.connected$.next(true);
+        this.initizalized$.next(true);
     }
 
     disconnect() {
-        if (!this.connected$.getValue()) {
-            return;
-        }
         this.outSubscription.unsubscribe();
         this.messageIn$ = undefined;
+        this.initizalized$.next(false);
+        this.deviceOpened$.next(false);
         this.connected$.next(false);
+    }
+
+    isInitialized(): Observable<boolean> {
+        return this.initizalized$.asObservable();
     }
 
     isConnected(): Observable<boolean> {
         return this.connected$.asObservable();
+    }
+
+    hasPermissions(): Observable<boolean> {
+        return this.isConnected()
+            .combineLatest(this.deviceOpened$)
+            .map((latest: boolean[]) => {
+                const connected = latest[0];
+                const opened = latest[1];
+                if (!connected) {
+                    return false;
+                } else if (opened) {
+                    return true;
+                }
+                try {
+                    this.device.open();
+                } catch (error) {
+                    return false;
+                }
+                this.device.close();
+                return true;
+            });
+    }
+
+    isOpened(): Observable<boolean> {
+        return this.deviceOpened$.asObservable();
     }
 
     sendConfig(configBuffer: Buffer): Observable<Buffer> {
@@ -176,18 +223,14 @@ export class UhkDeviceService implements OnDestroy {
         if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
             return;
         }
-        if (!this.connected$.getValue()) {
-            this.connect();
-        }
+        this.initialize();
     }
 
     onDeviceDetach(device: Device) {
         if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
             return;
         }
-        if (this.connected$.getValue()) {
-            this.disconnect();
-        }
+        this.disconnect();
     }
 
 }
