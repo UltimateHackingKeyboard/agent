@@ -10,7 +10,7 @@ var rootDir = path.resolve(__dirname, '../');
 module.exports = {
     entry: {
         polyfills: path.resolve(rootDir, 'src/shared/polyfills.ts'),
-        vendor: path.resolve(rootDir, 'src/shared/vendor.ts'),
+        vendor: path.resolve(rootDir, 'src/vendor.ts'),
         app: path.resolve(rootDir, 'src/main.ts')
     },
     output: {
@@ -74,6 +74,10 @@ module.exports = {
                 {
                     from: 'images',
                     to: 'images'
+                },
+                {
+                    from: 'rules',
+                    to: 'rules'
                 },
                 {
                     from: 'node_modules/usb',
