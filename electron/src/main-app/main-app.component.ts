@@ -23,9 +23,9 @@ import { UhkDeviceService } from '../services/uhk-device.service';
 export class MainAppComponent {
 
     constructor(private uhkDevice: UhkDeviceService, private store: Store<AppState>, router: Router) {
-        uhkDevice.isConnected()
+        uhkDevice.isInitialized()
             .distinctUntilChanged()
-            .takeWhile(connected => connected)
+            .takeWhile(initialized => initialized)
             .ignoreElements()
             .subscribe({
                 complete: () => {

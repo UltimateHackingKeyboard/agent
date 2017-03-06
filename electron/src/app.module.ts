@@ -79,7 +79,10 @@ import { DataStorage } from './shared/store/storage';
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
 
-import { UHkConnectedGuard } from './services/uhk-connected.guard';
+import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
+import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
+import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
+import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 
 // Create DataStorage dependency injection
 const storageProvider = ReflectiveInjector.resolve([DataStorage]);
@@ -164,7 +167,10 @@ const storeConfig = {
         EffectsModule.runAfterBootstrap(MacroEffects)
     ],
     providers: [
-        UHkConnectedGuard,
+        UhkDeviceConnectedGuard,
+        UhkDeviceDisconnectedGuard,
+        UhkDeviceInitializedGuard,
+        UhkDeviceUninitializedGuard,
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,

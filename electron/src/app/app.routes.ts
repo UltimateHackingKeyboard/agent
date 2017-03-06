@@ -1,4 +1,3 @@
-import { UHkConnectedGuard } from './../services/uhk-connected.guard';
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -7,19 +6,26 @@ import { PrivilegeCheckerComponent } from './../components/privilege-checker';
 import { MainAppComponent } from './../main-app/main-app.component';
 import { mainAppRoutes } from './../main-app/main-app.routes';
 
+import { UhkDeviceConnectedGuard } from './../services/uhk-device-connected.guard';
+import { UhkDeviceDisconnectedGuard } from './../services/uhk-device-disconnected.guard';
+import { UhkDeviceInitializedGuard } from './../services/uhk-device-initialized.guard';
+import { UhkDeviceUninitializedGuard } from './../services/uhk-device-uninitialized.guard';
+
 const appRoutes: Routes = [
     {
         path: 'detection',
-        component: MissingDeviceComponent
+        component: MissingDeviceComponent,
+        canActivate: [UhkDeviceDisconnectedGuard]
     },
     {
         path: 'privilege',
-        component: PrivilegeCheckerComponent
+        component: PrivilegeCheckerComponent,
+        canActivate: [UhkDeviceConnectedGuard, UhkDeviceUninitializedGuard]
     },
     {
         path: '',
         component: MainAppComponent,
-        canActivate: [UHkConnectedGuard],
+        canActivate: [UhkDeviceInitializedGuard],
         children: mainAppRoutes
     }
 ];
