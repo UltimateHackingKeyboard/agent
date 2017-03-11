@@ -7,6 +7,10 @@
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=6.9.5 <7.0.0",
+    "npm": ">=3.10.7 <4.0.0"
+  },
   "devDependencies": {
     "@ngrx/store-devtools": "3.2.3",
     "@ngrx/store-log-monitor": "3.0.2",
@@ -14,7 +18,7 @@
     "@types/electron": "^1.4.32",
     "@types/file-saver": "0.0.0",
     "@types/jquery": "^2.0.40",
-    "@types/node": "^7.0.5",
+    "@types/node": "^6.0.65",
     "@types/usb": "^1.1.2",
     "angular2-template-loader": "0.6.2",
     "copy-webpack-plugin": "^4.0.1",
@@ -62,7 +66,7 @@
     "sudo-prompt": "^6.2.1",
     "typescript": "2.1.6",
     "usb": "git+https://github.com/aktary/node-usb.git",
-    "xml-loader": "^1.1.0",
+    "xml-loader": "1.1.0",
     "zone.js": "0.7.6"
   },
   "scripts": {
