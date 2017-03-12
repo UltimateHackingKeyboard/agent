@@ -6,6 +6,8 @@ import {
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
+import { ClientRect } from '../../dom';
+
 import {
     KeyAction,
     KeystrokeAction,

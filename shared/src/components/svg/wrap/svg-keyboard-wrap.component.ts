@@ -17,6 +17,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
 
+import { ClientRect } from '../../../dom';
+
 import { MapperService } from '../../../services/mapper.service';
 
 import {
