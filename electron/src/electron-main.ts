@@ -21,9 +21,8 @@ function createWindow() {
 
     const indexPath = path.resolve(__dirname, './index.html');
     // and load the index.html of the app.
-    const url = process.argv[2] && process.argv[2].startsWith('--url=') ? process.argv[2].substring(6) : `file://${indexPath}`;
 
-    win.loadURL(url);
+    win.loadURL(`file://${indexPath}`);
 
     win.on('page-title-updated', (event) => {
         event.preventDefault();

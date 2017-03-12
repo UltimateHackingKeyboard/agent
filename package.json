@@ -81,9 +81,8 @@
     "build:usb": "electron-rebuild -w usb -p",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
     "server:web": "webpack-dev-server --config \"web/src/webpack.config.js\" --content-base \"./web/dist\"",
-    "server:electron": "webpack-dev-server --config \"electron/src/webpack.config.js\" --content-base \"./electron/dist\" --port 8081",
-    "electron:dev": "electron electron/dist/electron-main.js --url=http://localhost:8081",
-    "electron:prod": "electron electron/dist/electron-main.js",
+    "server:electron": "webpack --config \"electron/src/webpack.config.js\" --watch",
+    "electron": "electron electron/dist/electron-main.js",
     "symlink": "node ./tools/symlinker"
   }
 }
