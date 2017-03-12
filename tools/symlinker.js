@@ -39,8 +39,6 @@ function printUsage() {
     console.log('node symlinker -h\tShow usage');
 }
 
-console.log(process.argv[2]);
-
 if (process.argv.length >= 4 || process.argv.length <= 2) {
     if (process.argv.length >= 4) {
         console.log('Too many arguments.');
@@ -48,7 +46,6 @@ if (process.argv.length >= 4 || process.argv.length <= 2) {
     printUsage();
     return 0;
 }
-
 
 switch (process.argv[2].slice(1)) {
     case 'i':
@@ -61,5 +58,5 @@ switch (process.argv[2].slice(1)) {
         printUsage();
         break;
     default:
-        console.log('Invalid option: ', process.argv[i]);
+        console.log('Invalid option: ', process.argv[2]);
 }
