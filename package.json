@@ -39,13 +39,13 @@
     "webpack-svgstore-plugin": "4.0.0"
   },
   "dependencies": {
-    "@angular/common": "2.4.7",
-    "@angular/compiler": "2.4.7",
-    "@angular/core": "2.4.7",
-    "@angular/forms": "2.4.7",
-    "@angular/platform-browser": "2.4.7",
-    "@angular/platform-browser-dynamic": "2.4.7",
-    "@angular/router": "3.4.7",
+    "@angular/common": "2.4.9",
+    "@angular/compiler": "2.4.9",
+    "@angular/core": "2.4.9",
+    "@angular/forms": "2.4.9",
+    "@angular/platform-browser": "2.4.9",
+    "@angular/platform-browser-dynamic": "2.4.9",
+    "@angular/router": "3.4.9",
     "@ngrx/core": "1.2.0",
     "@ngrx/effects": "2.0.0",
     "@ngrx/store": "2.2.1",
@@ -66,7 +66,7 @@
     "typescript": "2.2.1",
     "usb": "git+https://github.com/aktary/node-usb.git",
     "xml-loader": "1.1.0",
-    "zone.js": "0.7.6"
+    "zone.js": "0.8.0"
   },
   "scripts": {
     "postinstall": "run-p build:usb \"symlink -- -i\" ",
