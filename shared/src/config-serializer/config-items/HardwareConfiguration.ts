@@ -1,4 +1,4 @@
-import { assertUInt8 } from '../assert';
+import { assertUInt8, assertUInt32 } from '../assert';
 import { UhkBuffer } from '../UhkBuffer';
 
 export class HardwareConfiguration {
@@ -14,6 +14,9 @@ export class HardwareConfiguration {
     @assertUInt8
     brandId: number;
 
+    @assertUInt32
+    uuid: number;
+
     isIso: boolean;
 
     hasBacklighting: boolean;
@@ -23,6 +26,7 @@ export class HardwareConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;
         this.hardwareId = jsonObject.hardwareId;
         this.brandId = jsonObject.brandId;
+        this.uuid = jsonObject.uuid;
         this.isIso = jsonObject.isIso;
         this.hasBacklighting = jsonObject.hasBacklighting;
         return this;
@@ -32,6 +36,7 @@ export class HardwareConfiguration {
         this.signature = buffer.readString();
         this.dataModelVersion = buffer.readUInt16();
         this.hardwareId = buffer.readUInt8();
+        this.uuid = buffer.readUInt32();
         this.brandId = buffer.readUInt8();
         this.isIso = buffer.readBoolean();
         this.hasBacklighting = buffer.readBoolean();
@@ -44,6 +49,7 @@ export class HardwareConfiguration {
             dataModelVersion: this.dataModelVersion,
             hardwareId: this.hardwareId,
             brandId: this.brandId,
+            uuid: this.uuid,
             isIso: this.isIso,
             hasBacklighting: this.hasBacklighting
         };
@@ -54,6 +60,7 @@ export class HardwareConfiguration {
         buffer.writeUInt16(this.dataModelVersion);
         buffer.writeUInt8(this.hardwareId);
         buffer.writeUInt8(this.brandId);
+        buffer.writeUInt32(this.uuid);
         buffer.writeBoolean(this.isIso);
         buffer.writeBoolean(this.hasBacklighting);
     }
