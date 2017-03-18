@@ -47,7 +47,7 @@ class DelayMs {
     }
 }
 
-function sendUsbPacketsByCallback(packetProvider, options) {
+function sendUsbPacketsByCallback(packetProvider, options={}) {
     let packet = packetProvider()
 
     if (packet instanceof DelayMs) {
