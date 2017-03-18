@@ -42,7 +42,7 @@ export class KeyMacroAction extends MacroAction {
     }
 
     fromBinary(buffer: UhkBuffer): KeyMacroAction {
-        let macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
+        const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
         let keyMacroType: number = macroActionId - MacroActionId.KeyMacroAction;
         this.action = Math.floor(keyMacroType / NUM_OF_COMBINATIONS);
         keyMacroType %= NUM_OF_COMBINATIONS;
@@ -56,7 +56,7 @@ export class KeyMacroAction extends MacroAction {
     }
 
     toJsonObject(): any {
-        let jsObject: JsObjectKeyMacroAction = {
+        const jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,
             action: MacroSubAction[this.action]
         };

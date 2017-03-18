@@ -60,7 +60,7 @@ export class MacroListComponent {
     private dragIndex: number;
     private showNew: boolean = false;
 
-    constructor(private dragulaService: DragulaService) {
+    constructor(dragulaService: DragulaService) {
         /* tslint:disable:no-unused-variable: Used by Dragula. */
         dragulaService.setOptions('macroActions', {
             moves: function (el: any, container: any, handle: any) {

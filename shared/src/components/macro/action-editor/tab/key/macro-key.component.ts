@@ -25,14 +25,11 @@ export class MacroKeyTabComponent implements OnInit {
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
 
-    private defaultKeyAction: KeyAction;
-
-    private activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private TabName = TabName;
-    /* tslint:enable:no-unused-variable */
+    TabName = TabName;
     /* tslint:enable:variable-name */
+    activeTab: TabName;
+    defaultKeyAction: KeyAction;
 
     ngOnInit() {
         this.defaultKeyAction = this.macroAction.toKeystrokeAction();

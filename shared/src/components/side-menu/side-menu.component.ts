@@ -56,7 +56,7 @@ export class SideMenuComponent {
     }
 
     toggleHide(event: Event, type: string) {
-        let header: DOMTokenList = (<Element>event.target).classList;
+        const header: DOMTokenList = (<Element>event.target).classList;
         let show = false;
 
         if (header.contains('fa-chevron-down')) {

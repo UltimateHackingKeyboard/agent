@@ -1,5 +1,4 @@
 import { UhkBuffer } from '../UhkBuffer';
-import { Keymap } from './Keymap';
 import { Macro } from './Macro';
 import { Module } from './Module';
 

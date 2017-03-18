@@ -90,7 +90,7 @@ export class PopoverComponent implements OnChanges {
     private leftPosition: number = 0;
     private animationState: string;
 
-    constructor(private store: Store<AppState>) {
+    constructor(store: Store<AppState>) {
         this.animationState = 'closed';
         this.keymaps$ = store.let(getKeymaps())
             .map((keymaps: Keymap[]) =>
@@ -139,7 +139,7 @@ export class PopoverComponent implements OnChanges {
     onRemapKey(): void {
         if (this.keyActionValid) {
             try {
-                let keyAction = this.selectedTab.toKeyAction();
+                const keyAction = this.selectedTab.toKeyAction();
                 this.remap.emit(keyAction);
             } catch (e) {
                 // TODO: show error dialog

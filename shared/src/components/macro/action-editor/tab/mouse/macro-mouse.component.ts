@@ -24,14 +24,12 @@ export class MacroMouseTabComponent implements OnInit {
     @Input() macroAction: EditableMacroAction;
     @ViewChild('tab') selectedTab: Tab;
 
+    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
+    TabName = TabName;
+    /* tslint:enable:variable-name */
     private activeTab: TabName;
     private buttonLabels: string[];
     private selectedButtons: boolean[];
-    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private TabName = TabName;
-    /* tslint:enable:no-unused-variable */
-    /* tslint:enable:variable-name */
 
     constructor() {
         this.buttonLabels = ['Left', 'Middle', 'Right'];

@@ -1,5 +1,5 @@
 import { ModuleWithProviders } from '@angular/core';
-import { RouterModule, Routes }  from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { addOnRoutes } from '../shared/components/add-on';
 import { keymapRoutes } from '../components/keymap';
@@ -13,6 +13,6 @@ const appRoutes: Routes = [
     ...settingsRoutes
 ];
 
-export const appRoutingProviders: any[] = [ ];
+export const appRoutingProviders: any[] = [];
 
-export const routing: ModuleWithProviders =  RouterModule.forRoot(appRoutes, { useHash: true });
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes, { useHash: true });

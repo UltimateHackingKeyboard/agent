@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -27,7 +27,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     private selectedMacroIndex: number;
     private subscription: Subscription;
 
-    constructor(private store: Store<AppState>) {
+    constructor(store: Store<AppState>) {
         super();
         this.subscription = store.let(getMacros())
             .subscribe((macros: Macro[]) => this.macros = macros);

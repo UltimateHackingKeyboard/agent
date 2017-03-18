@@ -32,17 +32,17 @@ export let keyActionType = {
 export abstract class KeyAction {
 
     assertKeyActionType(jsObject: any): void {
-        let keyActionClassname: string = this.constructor.name;
-        let keyActionTypeString: string = keyActionType[keyActionClassname];
+        const keyActionClassname: string = this.constructor.name;
+        const keyActionTypeString: string = keyActionType[keyActionClassname];
         if (jsObject.keyActionType !== keyActionTypeString) {
             throw `Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`;
         }
     }
 
     readAndAssertKeyActionId(buffer: UhkBuffer): KeyActionId {
-        let classname: string = this.constructor.name;
-        let readKeyActionId: number = buffer.readUInt8();
-        let keyActionId: number = KeyActionId[classname];
+        const classname: string = this.constructor.name;
+        const readKeyActionId: number = buffer.readUInt8();
+        const keyActionId: number = KeyActionId[classname];
         if (keyActionId === KeyActionId.KeystrokeAction) {
             if (readKeyActionId < KeyActionId.KeystrokeAction || readKeyActionId > KeyActionId.LastKeystrokeAction) {
                  throw `Invalid ${classname} first byte: ${readKeyActionId}`;

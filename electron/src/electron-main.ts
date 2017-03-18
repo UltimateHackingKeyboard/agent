@@ -24,7 +24,7 @@ function createWindow() {
 
     win.loadURL(`file://${indexPath}`);
 
-    win.on('page-title-updated', (event) => {
+    win.on('page-title-updated', event => {
         event.preventDefault();
     });
 

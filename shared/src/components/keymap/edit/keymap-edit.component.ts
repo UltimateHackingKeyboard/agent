@@ -32,7 +32,7 @@ export class KeymapEditComponent {
 
     constructor(
         protected store: Store<AppState>,
-        private route: ActivatedRoute
+        route: ActivatedRoute
     ) {
         this.keymap$ = route
             .params

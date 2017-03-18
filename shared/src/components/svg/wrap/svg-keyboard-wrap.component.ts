@@ -155,7 +155,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     }
 
     onCapture(moduleId: number, keyId: number, captured: { code: number, left: boolean[], right: boolean[] }): void {
-        let keystrokeAction: KeystrokeAction = new KeystrokeAction();
+        const keystrokeAction: KeystrokeAction = new KeystrokeAction();
         const modifiers = captured.left.concat(captured.right).map(x => x ? 1 : 0);
 
         keystrokeAction.scancode = captured.code;

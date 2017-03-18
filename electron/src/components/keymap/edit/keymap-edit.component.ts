@@ -67,7 +67,7 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
             .do(response => console.log('Sending layer finished', response))
             .switchMap(() => this.uhkDevice.applyConfig())
             .subscribe(
-            (response) => console.log('Applying layer finished', response),
+            response => console.log('Applying layer finished', response),
             error => console.error('Error during uploading layer', error),
             () => console.log('Layer has been sucessfully uploaded')
             );
@@ -85,7 +85,7 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
             .do(response => console.log('Sending keymap finished', response))
             .switchMap(() => this.uhkDevice.applyConfig())
             .subscribe(
-            (response) => console.log('Applying keymap finished', response),
+            response => console.log('Applying keymap finished', response),
             error => console.error('Error during uploading keymap', error),
             () => console.log('Keymap has been sucessfully uploaded')
             );

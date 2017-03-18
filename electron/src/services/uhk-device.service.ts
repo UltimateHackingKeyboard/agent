@@ -115,7 +115,7 @@ export class UhkDeviceService implements OnDestroy {
         const outSending = this.messageOut$.concatMap(senderPackage => {
             return (<Observable<void>>Observable.create((subscriber: Subscriber<void>) => {
                 console.log('transfering', senderPackage.buffer);
-                outEndPoint.transfer(senderPackage.buffer, (error) => {
+                outEndPoint.transfer(senderPackage.buffer, error => {
                     if (error) {
                         console.error('transfering errored', error);
                         subscriber.error(error);

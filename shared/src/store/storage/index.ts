@@ -3,10 +3,8 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
 import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Macro } from '../../config-serializer/config-items/Macro';
 import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
 
-import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { Electron } from './electron';
 import { Local } from './local';

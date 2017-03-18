@@ -55,7 +55,7 @@ export class SvgKeyboardComponent implements OnInit {
     }
 
     private getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {
-        let svg: any = this.getBaseLayer();
+        const svg: any = this.getBaseLayer();
         return {
             viewBox: svg.$.viewBox,
             transform: svg.g[0].$.transform,
@@ -64,7 +64,7 @@ export class SvgKeyboardComponent implements OnInit {
     }
 
     private getSvgModules(): SvgModule[] {
-        let modules = this.getBaseLayer().g[0].g.map((obj: any) => new SvgModule(obj));
+        const modules = this.getBaseLayer().g[0].g.map((obj: any) => new SvgModule(obj));
         return [modules[1], modules[0]]; // TODO: remove if the svg will be correct
     }
 

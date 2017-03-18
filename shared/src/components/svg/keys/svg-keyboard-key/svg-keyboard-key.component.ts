@@ -141,7 +141,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(
         private mapper: MapperService,
-        private store: Store<AppState>,
+        store: Store<AppState>,
         private element: ElementRef,
         private captureService: CaptureService,
         private renderer: Renderer
@@ -215,11 +215,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.labelType = LabelTypes.OneLineText;
 
         if (this.keyAction instanceof KeystrokeAction) {
-            let keyAction: KeystrokeAction = this.keyAction as KeystrokeAction;
+            const keyAction: KeystrokeAction = this.keyAction as KeystrokeAction;
             let newLabelSource: string[];
 
             if (!keyAction.hasActiveModifier() && keyAction.hasScancode()) {
-                let scancode: number = keyAction.scancode;
+                const scancode: number = keyAction.scancode;
                 newLabelSource = this.mapper.scanCodeToText(scancode);
                 if (this.mapper.hasScancodeIcon(scancode)) {
                     this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode);
@@ -262,7 +262,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.labelSource = this.keyAction;
             }
         } else if (this.keyAction instanceof SwitchLayerAction) {
-            let keyAction: SwitchLayerAction = this.keyAction as SwitchLayerAction;
+            const keyAction: SwitchLayerAction = this.keyAction as SwitchLayerAction;
             let newLabelSource: string;
             switch (keyAction.layer) {
                 case LayerName.mod:
@@ -289,11 +289,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.labelSource = newLabelSource;
             }
         } else if (this.keyAction instanceof SwitchKeymapAction) {
-            let keyAction: SwitchKeymapAction = this.keyAction as SwitchKeymapAction;
+            const keyAction: SwitchKeymapAction = this.keyAction as SwitchKeymapAction;
             this.labelType = LabelTypes.SwitchKeymap;
             this.labelSource = keyAction.keymapAbbreviation;
         } else if (this.keyAction instanceof PlayMacroAction) {
-            let keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
+            const keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
             const macro: Macro = this.macros.find((_macro: Macro) => _macro.id === keyAction.macroId);
             this.labelType = LabelTypes.IconText;
             this.labelSource = {

@@ -93,13 +93,13 @@ export class EditableMacroAction {
     }
 
     fromKeyAction(keyAction: KeyAction): void {
-        let data = keyAction.toJsonObject();
+        const data = keyAction.toJsonObject();
         this.scancode = data.scancode;
         this.modifierMask = data.modifierMask;
     }
 
     toKeystrokeAction(): KeystrokeAction {
-        let data = this.toJsObject();
+        const data = this.toJsObject();
         data.keyActionType = keyActionType.KeystrokeAction;
         return <KeystrokeAction>(new KeystrokeAction().fromJsonObject(data));
     }
@@ -113,7 +113,7 @@ export class EditableMacroAction {
     }
 
     getMouseButtons(): boolean[] {
-        let enabledMouseButtons: boolean[] = [];
+        const enabledMouseButtons: boolean[] = [];
         for (let bitmask = this.mouseButtonsMask; bitmask; bitmask >>>= 1) {
             enabledMouseButtons.push(Boolean(bitmask & 1));
         }

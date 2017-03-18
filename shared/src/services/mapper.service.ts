@@ -27,7 +27,7 @@ export class MapperService {
     }
 
     public scanCodeToSvgImagePath(scanCode: number): string {
-        let fileName: string = this.scanCodeFileName.get(scanCode);
+        const fileName: string = this.scanCodeFileName.get(scanCode);
         if (fileName) {
             return 'assets/compiled_sprite.svg#' + fileName;
         }

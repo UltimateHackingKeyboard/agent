@@ -106,12 +106,12 @@ export class MacroItemComponent implements OnInit, OnChanges {
         } else if (this.macroAction instanceof DelayMacroAction) {
             // Delay
             this.iconName = 'clock';
-            let action: DelayMacroAction = this.macroAction as DelayMacroAction;
+            const action: DelayMacroAction = this.macroAction as DelayMacroAction;
             const delay = action.delay > 0 ? action.delay / 1000 : 0;
             this.title = `Delay of ${delay}s`;
         } else if (this.macroAction instanceof TextMacroAction) {
             // Write text
-            let action: TextMacroAction = this.macroAction as TextMacroAction;
+            const action: TextMacroAction = this.macroAction as TextMacroAction;
             this.iconName = 'font';
             this.title = `Write text: ${action.text}`;
         } else if (this.macroAction instanceof KeyMacroAction) {

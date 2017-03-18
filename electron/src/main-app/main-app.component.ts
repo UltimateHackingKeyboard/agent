@@ -54,7 +54,7 @@ export class MainAppComponent {
             .do(response => console.log('Sending user configuration finished', response))
             .switchMap(() => this.uhkDevice.applyConfig())
             .subscribe(
-            (response) => console.log('Applying user configuration finished', response),
+            response => console.log('Applying user configuration finished', response),
             error => console.error('Error during uploading user configuration', error),
             () => console.log('User configuration has been sucessfully uploaded')
             );

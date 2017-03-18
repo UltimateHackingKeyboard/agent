@@ -38,7 +38,7 @@ export class Macro {
         this.isLooped = buffer.readBoolean();
         this.isPrivate = buffer.readBoolean();
         this.name = buffer.readString();
-        let macroActionsLength: number = buffer.readCompactLength();
+        const macroActionsLength: number = buffer.readCompactLength();
         this.macroActions = [];
         for (let i = 0; i < macroActionsLength; ++i) {
             this.macroActions.push(MacroActionHelper.createMacroAction(buffer));

@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, OnChanges, Output } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
 
@@ -86,11 +86,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         if (!(keyAction instanceof KeystrokeAction)) {
             return false;
         }
-        let keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
+        const keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
         // Restore scancode
         this.scanCode = keystrokeAction.scancode || 0;
 
-        let leftModifiersLength: number = this.leftModifiers.length;
+        const leftModifiersLength: number = this.leftModifiers.length;
 
         // Restore modifiers
         for (let i = 0; i < leftModifiersLength; ++i) {
@@ -98,7 +98,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
 
         for (let i = leftModifiersLength; i < leftModifiersLength + this.rightModifierSelects.length; ++i) {
-            let index: number = this.mapper.modifierMapper(i) - leftModifiersLength;
+            const index: number = this.mapper.modifierMapper(i) - leftModifiersLength;
             this.rightModifierSelects[index] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
         }
 
@@ -111,11 +111,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     toKeyAction(): KeystrokeAction {
-        let keystrokeAction: KeystrokeAction = new KeystrokeAction();
+        const keystrokeAction: KeystrokeAction = new KeystrokeAction();
         keystrokeAction.scancode = this.scanCode;
 
         keystrokeAction.modifierMask = 0;
-        let modifiers = this.leftModifierSelects.concat(this.rightModifierSelects).map(x => x ? 1 : 0);
+        const modifiers = this.leftModifierSelects.concat(this.rightModifierSelects).map(x => x ? 1 : 0);
         for (let i = 0; i < modifiers.length; ++i) {
             keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
         }
@@ -149,7 +149,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     toggleModifier(right: boolean, index: number) {
-        let modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
+        const modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
         modifierSelects[index] = !modifierSelects[index];
 
         this.validAction.emit(this.keyActionValid());

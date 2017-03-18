@@ -38,7 +38,7 @@ export class MouseButtonMacroAction extends MacroAction {
     }
 
     fromBinary(buffer: UhkBuffer): MouseButtonMacroAction {
-        let macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
+        const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
         this.action = macroActionId - MacroActionId.MouseButtonMacroAction;
         this.mouseButtonsMask = buffer.readUInt8();
         return this;
@@ -66,7 +66,7 @@ export class MouseButtonMacroAction extends MacroAction {
     }
 
     getMouseButtons(): boolean[] {
-        let enabledMouseButtons: boolean[] = [];
+        const enabledMouseButtons: boolean[] = [];
         for (let bitmask = this.mouseButtonsMask; bitmask; bitmask >>>= 1) {
             enabledMouseButtons.push(Boolean(bitmask & 1));
         }

@@ -17,6 +17,13 @@
         "no-unused-expression": true,
         "no-use-before-declare": true,
         "no-var-keyword": true,
+        "space-before-function-paren": false,
+        "import-spacing": true,
+        "prefer-const": true,
+        "arrow-parens": [
+            true,
+            "ban-single-arg-parens"
+        ],
         "radix": true,
         "switch-default": true,
         "triple-equals": true,

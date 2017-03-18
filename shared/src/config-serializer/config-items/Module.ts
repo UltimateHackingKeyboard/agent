@@ -1,7 +1,6 @@
 import { assertEnum, assertUInt8 } from '../assert';
 import { UhkBuffer } from '../UhkBuffer';
 import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
-import { Keymap } from './Keymap';
 import { Macro } from './Macro';
 import { PlayMacroAction, SwitchLayerAction } from './key-action';
 
@@ -42,7 +41,7 @@ export class Module {
     fromBinary(buffer: UhkBuffer, macros?: Macro[]): Module {
         this.id = buffer.readUInt8();
         this.pointerRole = buffer.readUInt8();
-        let keyActionsLength: number = buffer.readCompactLength();
+        const keyActionsLength: number = buffer.readCompactLength();
         this.keyActions = [];
         for (let i = 0; i < keyActionsLength; ++i) {
             this.keyActions.push(KeyActionHelper.createKeyAction(buffer, macros));

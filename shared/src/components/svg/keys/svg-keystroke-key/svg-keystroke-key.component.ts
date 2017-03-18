@@ -20,10 +20,6 @@ class SvgAttributes {
     }
 }
 
-enum Modifiers {
-    Shift, Control, Alt, Command
-}
-
 @Component({
     selector: 'g[svg-keystroke-key]',
     templateUrl: './svg-keystroke-key.component.html',
@@ -68,7 +64,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         this.modifierIconNames.option = this.mapper.getIcon('option');
         this.modifierIconNames.command = this.mapper.getIcon('command');
 
-        let bottomSideMode: boolean = this.width < this.height * 1.8;
+        const bottomSideMode: boolean = this.width < this.height * 1.8;
 
         const heightWidthRatio = this.height / this.width;
 
@@ -76,8 +72,8 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             const maxIconWidth = this.width / 4;
             const maxIconHeight = this.height;
             const iconScalingFactor = 0.8;
-            let iconWidth = iconScalingFactor * heightWidthRatio * maxIconWidth;
-            let iconHeight = iconScalingFactor * maxIconHeight;
+            const iconWidth = iconScalingFactor * heightWidthRatio * maxIconWidth;
+            const iconHeight = iconScalingFactor * maxIconHeight;
             this.modifierContainer.width = this.width;
             this.modifierContainer.height = this.height / 5;
             this.modifierContainer.y = this.height - this.modifierContainer.height;
@@ -134,7 +130,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     ngOnChanges() {
         let newLabelSource: string[];
         if (this.keystrokeAction.hasScancode()) {
-            let scancode: number = this.keystrokeAction.scancode;
+            const scancode: number = this.keystrokeAction.scancode;
             newLabelSource = this.mapper.scanCodeToText(scancode);
             if (newLabelSource) {
                 if (newLabelSource.length === 1) {

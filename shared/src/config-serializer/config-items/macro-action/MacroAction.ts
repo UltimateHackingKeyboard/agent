@@ -46,17 +46,17 @@ export let macroActionType = {
 
 export abstract class MacroAction {
     assertMacroActionType(jsObject: any) {
-        let macroActionClassname = this.constructor.name;
-        let macroActionTypeString = macroActionType[macroActionClassname];
+        const macroActionClassname = this.constructor.name;
+        const macroActionTypeString = macroActionType[macroActionClassname];
         if (jsObject.macroActionType !== macroActionTypeString) {
             throw `Invalid ${macroActionClassname}.macroActionType: ${jsObject.macroActionType}`;
         }
     }
 
     readAndAssertMacroActionId(buffer: UhkBuffer): MacroActionId {
-        let classname: string = this.constructor.name;
-        let readMacroActionId: MacroActionId = buffer.readUInt8();
-        let macroActionId: MacroActionId = MacroActionId[classname];
+        const classname: string = this.constructor.name;
+        const readMacroActionId: MacroActionId = buffer.readUInt8();
+        const macroActionId: MacroActionId = MacroActionId[classname];
         if (macroActionId === MacroActionId.KeyMacroAction) {
             if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
                 throw `Invalid ${classname} first byte: ${readMacroActionId}`;

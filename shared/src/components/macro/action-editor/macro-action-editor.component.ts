@@ -29,18 +29,16 @@ export class MacroActionEditorComponent implements OnInit {
 
     @ViewChild('tab') selectedTab: any;
 
-    private editableMacroAction: EditableMacroAction;
-    private activeTab: TabName;
+    editableMacroAction: EditableMacroAction;
+    activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private TabName = TabName;
-    /* tslint:enable:no-unused-variable */
+    TabName = TabName;
     /* tslint:enable:variable-name */
 
     ngOnInit() {
-        let macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
+        const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
         this.editableMacroAction = new EditableMacroAction(macroAction.toJsonObject());
-        let tab: TabName = this.getTabName(this.editableMacroAction);
+        const tab: TabName = this.getTabName(this.editableMacroAction);
         this.activeTab = tab;
     }
 

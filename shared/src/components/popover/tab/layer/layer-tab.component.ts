@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
 
@@ -71,14 +71,14 @@ export class LayerTabComponent extends Tab implements OnChanges {
             return false;
         }
 
-        let switchLayerAction: SwitchLayerAction = <SwitchLayerAction>keyAction;
+        const switchLayerAction: SwitchLayerAction = <SwitchLayerAction>keyAction;
         this.toggle = switchLayerAction.isLayerToggleable;
         this.layer = switchLayerAction.layer;
         return true;
     }
 
     toKeyAction(): SwitchLayerAction {
-        let keyAction = new SwitchLayerAction();
+        const keyAction = new SwitchLayerAction();
         keyAction.isLayerToggleable = this.toggle;
         keyAction.layer = this.layer;
         if (!this.keyActionValid()) {

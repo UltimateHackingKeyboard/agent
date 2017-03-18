@@ -24,7 +24,7 @@ export class Helper {
     }
 
     private static fromUhkBuffer(buffer: UhkBuffer): MacroAction {
-        let macroActionFirstByte = buffer.readUInt8();
+        const macroActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
         if (macroActionFirstByte >= MacroActionId.KeyMacroAction && macroActionFirstByte <= MacroActionId.LastKeyMacroAction) {

@@ -5,7 +5,7 @@ export class Local {
     constructor(private dataModelVersion: number) { }
 
     getConfig(): UserConfiguration {
-        let configJsonString = localStorage.getItem('config');
+        const configJsonString = localStorage.getItem('config');
         let config: UserConfiguration;
 
         if (configJsonString) {

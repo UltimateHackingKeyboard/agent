@@ -10,7 +10,6 @@ import {
     keyActionType
 } from './index';
 
-import { Keymap } from '../Keymap';
 import { Macro } from '../Macro';
 
 export class Helper {
@@ -26,7 +25,7 @@ export class Helper {
     }
 
     private static fromUhkBuffer(buffer: UhkBuffer, macros: Macro[]): KeyAction {
-        let keyActionFirstByte = buffer.readUInt8();
+        const keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
         if (keyActionFirstByte >= KeyActionId.KeystrokeAction && keyActionFirstByte < KeyActionId.LastKeystrokeAction) {

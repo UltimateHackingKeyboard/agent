@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnChanges, Output } from '@angular/core';
+import { Component, OnChanges } from '@angular/core';
 
 import { Tab } from '../tab';
 

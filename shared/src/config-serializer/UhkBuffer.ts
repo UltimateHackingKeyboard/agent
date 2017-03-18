@@ -24,7 +24,7 @@ export class UhkBuffer {
     }
 
     readInt8(): number {
-        let value = this.buffer.readInt8(this.offset);
+        const value = this.buffer.readInt8(this.offset);
         this.dump(`i8(${value})`);
         this.bytesToBacktrack = 1;
         this.offset += this.bytesToBacktrack;
@@ -38,7 +38,7 @@ export class UhkBuffer {
     }
 
     readUInt8(): number {
-        let value = this.buffer.readUInt8(this.offset);
+        const value = this.buffer.readUInt8(this.offset);
         this.dump(`u8(${value})`);
         this.bytesToBacktrack = 1;
         this.offset += this.bytesToBacktrack;
@@ -52,7 +52,7 @@ export class UhkBuffer {
     }
 
     readInt16(): number {
-        let value = this.buffer.readInt16LE(this.offset);
+        const value = this.buffer.readInt16LE(this.offset);
         this.dump(`i16(${value})`);
         this.bytesToBacktrack = 2;
         this.offset += this.bytesToBacktrack;
@@ -66,7 +66,7 @@ export class UhkBuffer {
     }
 
     readUInt16(): number {
-        let value = this.buffer.readUInt16LE(this.offset);
+        const value = this.buffer.readUInt16LE(this.offset);
         this.dump(`u16(${value})`);
         this.bytesToBacktrack = 2;
         this.offset += this.bytesToBacktrack;
@@ -80,7 +80,7 @@ export class UhkBuffer {
     }
 
     readInt32(): number {
-        let value = this.buffer.readInt32LE(this.offset);
+        const value = this.buffer.readInt32LE(this.offset);
         this.dump(`i32(${value})`);
         this.bytesToBacktrack = 4;
         this.offset += this.bytesToBacktrack;
@@ -94,7 +94,7 @@ export class UhkBuffer {
     }
 
     readUInt32(): number {
-        let value = this.buffer.readUInt32LE(this.offset);
+        const value = this.buffer.readUInt32LE(this.offset);
         this.dump(`u32(${value})`);
         this.bytesToBacktrack = 4;
         this.offset += this.bytesToBacktrack;
@@ -125,8 +125,8 @@ export class UhkBuffer {
     }
 
     readString(): string {
-        let stringByteLength = this.readCompactLength();
-        let str = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, this.offset + stringByteLength);
+        const stringByteLength = this.readCompactLength();
+        const str = this.buffer.toString(UhkBuffer.stringEncoding, this.offset, this.offset + stringByteLength);
         this.dump(`${UhkBuffer.stringEncoding}(${str})`);
         this.bytesToBacktrack = stringByteLength;
         this.offset += stringByteLength;
@@ -134,7 +134,7 @@ export class UhkBuffer {
     }
 
     writeString(str: string): void {
-        let stringByteLength = Buffer.byteLength(str, UhkBuffer.stringEncoding);
+        const stringByteLength = Buffer.byteLength(str, UhkBuffer.stringEncoding);
 
         if (stringByteLength > UhkBuffer.maxCompactLength) {
             throw `Cannot serialize string: ${stringByteLength} bytes is larger
@@ -156,8 +156,8 @@ export class UhkBuffer {
     }
 
     readArray<T>(elementReader: (buffer: UhkBuffer, index?: number) => T): T[] {
-        let array: T[] = [];
-        let length = this.readCompactLength();
+        const array: T[] = [];
+        const length = this.readCompactLength();
         for (let i = 0; i < length; ++i) {
             array.push(elementReader(this, i));
         }

@@ -12,9 +12,9 @@ import { Observable } from 'rxjs/Observable';
     }
 })
 export class AddOnComponent {
-    private name$: Observable<string>;
+    name$: Observable<string>;
 
-    constructor(private route: ActivatedRoute) {
+    constructor(route: ActivatedRoute) {
         this.name$ = route
             .params
             .select<string>('name');

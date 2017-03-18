@@ -49,8 +49,8 @@ export class KeystrokeAction extends KeyAction {
     }
 
     fromBinary(buffer: UhkBuffer): KeystrokeAction {
-        let keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
-        let flags: number = keyActionId - KeyActionId.KeystrokeAction;
+        const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
+        const flags: number = keyActionId - KeyActionId.KeystrokeAction;
         if (flags & KeystrokeActionFlag.scancode) {
             this.scancode = buffer.readUInt8();
         }
@@ -64,7 +64,7 @@ export class KeystrokeAction extends KeyAction {
     }
 
     toJsonObject(): JsonObjectKeystrokeAction {
-        let jsonObject: JsonObjectKeystrokeAction = {
+        const jsonObject: JsonObjectKeystrokeAction = {
             keyActionType: keyActionType.KeystrokeAction
         };
 
@@ -85,7 +85,7 @@ export class KeystrokeAction extends KeyAction {
 
     toBinary(buffer: UhkBuffer) {
         let flags = 0;
-        let bufferData: number[] = [];
+        const bufferData: number[] = [];
 
         if (this.hasScancode()) {
             flags |= KeystrokeActionFlag.scancode;
@@ -109,7 +109,7 @@ export class KeystrokeAction extends KeyAction {
     }
 
     toString(): string {
-        let properties: string[] = [];
+        const properties: string[] = [];
         if (this.hasScancode()) {
             properties.push(`scancode="${this.scancode}"`);
         }
@@ -144,7 +144,7 @@ export class KeystrokeAction extends KeyAction {
     }
 
     getModifierList(): string[] {
-        let modifierList: string[] = [];
+        const modifierList: string[] = [];
         let modifierMask = this.modifierMask;
         for (let i = 0; modifierMask !== 0; ++i, modifierMask >>= 1) {
             if (modifierMask & 1) {

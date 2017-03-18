@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { Helper as KeyActionHelper, KeyAction, SwitchKeymapAction } from '../../config-serializer/config-items/key-action';
+import { Helper as KeyActionHelper, KeyAction } from '../../config-serializer/config-items/key-action';
 import { Keymap } from '../../config-serializer/config-items/Keymap';
 import { Macro } from '../../config-serializer/config-items/Macro';
 import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
@@ -74,7 +74,7 @@ export default function (state = initialState, action: Action): UserConfiguratio
         case KeymapActions.REMOVE:
             let isDefault: boolean;
 
-            let filtered: Keymap[] = state.keymaps.filter((keymap: Keymap) => {
+            const filtered: Keymap[] = state.keymaps.filter((keymap: Keymap) => {
                 if (keymap.abbreviation === action.payload) {
                     isDefault = keymap.isDefault;
                     return false;
@@ -306,8 +306,8 @@ function generateMacroId(macros: Macro[]) {
 }
 
 function checkExistence(layers: Layer[], property: string, value: any) {
-    let newLayers = layers.map((layer) => {
-        let newLayer = new Layer(layer);
+    const newLayers = layers.map(layer => {
+        const newLayer = new Layer(layer);
 
         newLayer.modules = layer.modules.map((module: Module) => {
             module.keyActions.forEach((action: KeyAction, index: number) => {

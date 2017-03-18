@@ -22,10 +22,8 @@ export class MacroDelayTabComponent implements OnInit {
     @Input() macroAction: EditableMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
 
-    private delay: number;
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private presets: number[] = [0.3, 0.5, 0.8, 1, 2, 3, 4, 5];
-    /* tslint:enable:no-unused-variable */
+    delay: number;
+    presets: number[] = [0.3, 0.5, 0.8, 1, 2, 3, 4, 5];
 
     constructor() { }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { KeyAction, MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
 import { Tab } from '../tab';
@@ -11,14 +11,12 @@ import { Tab } from '../tab';
 export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
 
-    private mouseActionParam: MouseActionParam;
-    private selectedPageIndex: number;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
-    /* tslint:disable:no-unused-variable: It is used in the template. */
-    private MouseActionParam = MouseActionParam;
-    /* tslint:enable:no-unused-variable tslint:enable:variable-name */
-
-    private pages: string[];
+    MouseActionParam = MouseActionParam;
+    /* tslint:enable:variable-name*/
+    mouseActionParam: MouseActionParam;
+    selectedPageIndex: number;
+    pages: string[];
 
     constructor() {
         super();
@@ -40,7 +38,7 @@ export class MouseTabComponent extends Tab implements OnChanges {
             return false;
         }
 
-        let mouseAction: MouseAction = <MouseAction>keyAction;
+        const mouseAction: MouseAction = <MouseAction>keyAction;
         this.mouseActionParam = mouseAction.mouseAction;
 
         if (mouseAction.mouseAction === MouseActionParam.moveUp) {
@@ -77,7 +75,7 @@ export class MouseTabComponent extends Tab implements OnChanges {
     }
 
     toKeyAction(): MouseAction {
-        let mouseAction: MouseAction = new MouseAction();
+        const mouseAction: MouseAction = new MouseAction();
         mouseAction.mouseAction = this.mouseActionParam;
         return mouseAction;
     }
