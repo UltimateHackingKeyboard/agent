@@ -32,6 +32,15 @@ export class PrivilegeCheckerComponent {
                     router.navigate(['/detection']);
                 }
             });
+        uhkDevice.isInitialized()
+            .distinctUntilChanged()
+            .takeWhile(initialized => !initialized)
+            .ignoreElements()
+            .subscribe({
+                complete: () => {
+                    router.navigate(['/']);
+                }
+            });
     }
 
     setUpPermissions(): void {
