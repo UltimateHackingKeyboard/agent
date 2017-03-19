@@ -11,10 +11,12 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/concatMap';
+import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/switchMap';
@@ -223,7 +225,10 @@ export class UhkDeviceService implements OnDestroy {
         if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
             return;
         }
-        this.initialize();
+        // Ugly hack: device is not openable (on Windows) right after the attach
+        Observable.timer(100)
+            .first()
+            .subscribe(() => this.initialize());
     }
 
     onDeviceDetach(device: Device) {
