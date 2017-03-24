@@ -14,7 +14,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        icon: 'images/favicon.ico'
+        icon: 'images/agent-icon.png'
     });
     win.setMenuBarVisibility(false);
     win.maximize();
