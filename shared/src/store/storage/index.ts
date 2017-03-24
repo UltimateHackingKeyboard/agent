@@ -53,8 +53,10 @@ export class DataStorage {
     initUHKJson() {
         this.defaultUserConfiguration = new UserConfiguration()
             .fromJsonObject(require('json-loader!../../config-serializer/user-config.json'));
-        this.uhkPresets = (<any[]>require('json-loader!../../config-serializer/preset-keymaps.json'))
-            .map(keymap => new Keymap().fromJsonObject(keymap));
+
+        const presetsRequireContext = (<any>require).context('../../../res/presets', false, /.json$/);
+        this.uhkPresets = presetsRequireContext.keys().map(presetsRequireContext) // load the presets into an array
+            .map((keymap: any) => new Keymap().fromJsonObject(keymap));
     }
 
     getConfiguration(): UserConfiguration {
