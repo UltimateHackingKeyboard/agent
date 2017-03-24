@@ -1,6 +1,7 @@
 import { NgModule, ReflectiveInjector } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -151,6 +152,7 @@ const storeConfig = {
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         DragulaModule,
         routing,
