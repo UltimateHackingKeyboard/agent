@@ -1,6 +1,7 @@
 import { UhkBuffer } from '../UhkBuffer';
 import { Layer } from './Layer';
 import { Macro } from './Macro';
+import { SwitchLayerAction } from './key-action';
 
 export class Keymap {
 
@@ -32,6 +33,7 @@ export class Keymap {
         this.name = jsonObject.name;
         this.description = jsonObject.description;
         this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer, macros));
+        this.normalize();
         return this;
     }
 
@@ -43,6 +45,7 @@ export class Keymap {
         this.layers = buffer.readArray<Layer>(uhkBuffer => {
             return new Layer().fromBinary(uhkBuffer, macros);
         });
+        this.normalize();
         return this;
     }
 
@@ -89,6 +92,20 @@ export class Keymap {
             return newKeymap;
         }
         return this;
+    }
+
+    private normalize() {
+        // Removes all the SwitchLayerActions from any non base layer
+        for (let i = 1; i < this.layers.length; ++i) {
+            for (const module of this.layers[i].modules) {
+                module.keyActions = module.keyActions.map(keyAction => {
+                    if (keyAction instanceof SwitchLayerAction) {
+                        return undefined;
+                    }
+                    return keyAction;
+                });
+            }
+        }
     }
 
 }
