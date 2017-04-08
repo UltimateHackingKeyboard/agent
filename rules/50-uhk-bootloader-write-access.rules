@@ -1,4 +1,0 @@
-# These are the udev rules for accessing the USB interfaces of the UHK as non-root users.
-# Copy this file to /etc/udev/rules.d and physically reconnect the UHK afterwards.
-# TODO: Restore VID to 16d0 for the latest prototype.
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="15a2", ATTRS{idProduct}=="0073", MODE:="0666"
