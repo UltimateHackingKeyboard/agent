@@ -462,11 +462,7 @@
                             "id": 0,
                             "pointerRole": "move",
                             "keyActions": [
-                                {
-                                    "keyActionType": "switchLayer",
-                                    "layer": "fn",
-                                    "toggle": true
-                                },
+                                null,
                                 null,
                                 null,
                                 null,
@@ -539,7 +535,7 @@
                                 {
                                     "keyActionType": "switchLayer",
                                     "layer": "mod",
-                                    "toggle": true
+                                    "toggle": false
                                 }
                             ]
                         },
@@ -552,16 +548,8 @@
                                 null,
                                 null,
                                 null,
-                                {
-                                    "keyActionType": "switchLayer",
-                                    "layer": "mouse",
-                                    "toggle": true
-                                },
-                                {
-                                    "keyActionType": "switchLayer",
-                                    "layer": "mod",
-                                    "toggle": true
-                                },
+                                null,
+                                null,
                                 null,
                                 null,
                                 null,
@@ -571,7 +559,7 @@
                                 {
                                     "keyActionType": "switchLayer",
                                     "layer": "mouse",
-                                    "toggle": true
+                                    "toggle": false
                                 },
                                 null,
                                 null,
@@ -607,7 +595,7 @@
                                 {
                                     "keyActionType": "switchLayer",
                                     "layer": "mod",
-                                    "toggle": true
+                                    "toggle": false
                                 },
                                 null
                             ]
@@ -667,7 +655,11 @@
                                 null,
                                 null,
                                 null,
-                                null,
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
                                 {
                                     "keyActionType": "keystroke",
                                     "modifierMask": 64
@@ -680,7 +672,11 @@
                                     "keyActionType": "keystroke",
                                     "modifierMask": 16
                                 },
-                                null
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
+                                }
                             ]
                         },
                         {
@@ -737,10 +733,15 @@
                                     "keyActionType": "keystroke",
                                     "modifierMask": 4
                                 },
-                                null,
                                 {
-                                    "keyActionType": "mouse",
-                                    "mouseAction": "accelerate"
+                                    "keyActionType": "switchLayer",
+                                    "layer": "fn",
+                                    "toggle": false
+                                },
+                                {
+                                    "keyActionType": "switchLayer",
+                                    "layer": "mod",
+                                    "toggle": false
                                 },
                                 {
                                     "keyActionType": "mouse",
