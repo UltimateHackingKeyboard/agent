@@ -1,7 +1,7 @@
 import { UhkBuffer } from '../UhkBuffer';
 import { Layer } from './Layer';
 import { Macro } from './Macro';
-import { SwitchLayerAction } from './key-action';
+import { SwitchLayerAction, KeyAction } from './key-action';
 
 export class Keymap {
 
@@ -105,6 +105,19 @@ export class Keymap {
                     return keyAction;
                 });
             }
+        }
+
+        // Adds the SwitchLayerActions from the base layer to any none base layer
+        const baseLayerModules = this.layers[0].modules;
+        for (let i = 0; i < baseLayerModules.length; ++i) {
+            baseLayerModules[i].keyActions.forEach((keyAction: KeyAction, keyActionIndex: number) => {
+                if (keyAction instanceof SwitchLayerAction) {
+                    for (let j = 1; j < this.layers.length; ++j) {
+                        this.layers[j].modules[i].keyActions[keyActionIndex] = new SwitchLayerAction(keyAction);
+                    }
+                }
+            });
+
         }
     }
 
