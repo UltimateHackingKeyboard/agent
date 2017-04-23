@@ -33,12 +33,12 @@ const MAX_PAYLOAD_SIZE = 64;
 enum Command {
     UploadConfig = 8,
     ApplyConfig = 9
-};
+}
 
 interface SenderMessage {
     buffer: Buffer;
     observer: Observer<any>;
-};
+}
 
 @Injectable()
 export class UhkDeviceService implements OnDestroy {

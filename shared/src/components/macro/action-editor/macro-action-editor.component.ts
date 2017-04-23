@@ -13,7 +13,7 @@ enum TabName {
     Text,
     Mouse,
     Delay
-};
+}
 
 @Component({
     selector: 'macro-action-editor',

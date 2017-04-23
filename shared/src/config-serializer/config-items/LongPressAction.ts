@@ -10,4 +10,4 @@ export enum LongPressAction {
     mod,
     fn,
     mouse
-};
+}
