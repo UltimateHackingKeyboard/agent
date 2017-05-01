@@ -6,6 +6,7 @@ import { KeyAction, KeystrokeAction } from '../../../../config-serializer/config
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
+import { KeystrokeType } from '../../../../config-serializer/config-items/key-action/keystroke-type';
 
 @Component({
     selector: 'keypress-tab',
@@ -16,18 +17,18 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() longPressEnabled: boolean;
 
-    private leftModifiers: string[];
-    private rightModifiers: string[];
+    leftModifiers: string[];
+    rightModifiers: string[];
 
-    private leftModifierSelects: boolean[];
-    private rightModifierSelects: boolean[];
+    leftModifierSelects: boolean[];
+    rightModifierSelects: boolean[];
 
-    private scanCodeGroups: Array<Select2OptionData>;
-    private longPressGroups: Array<Select2OptionData>;
-    private options: Select2Options;
+    scanCodeGroups: Array<Select2OptionData>;
+    longPressGroups: Array<Select2OptionData>;
+    options: Select2Options;
 
-    private scanCode: number;
-    private selectedLongPressIndex: number;
+    selectedOption: Select2OptionData;
+    selectedLongPressIndex: number;
 
     constructor(private mapper: MapperService) {
         super();
@@ -41,7 +42,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.longPressGroups = require('json-loader!./longPress.json');
         this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
-        this.scanCode = 0;
+        this.selectedOption = this.scanCodeGroups[0];
         this.selectedLongPressIndex = -1;
         this.options = {
             templateResult: this.scanCodeTemplateResult,
@@ -70,11 +71,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         return (keystrokeAction) ? (keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0) : false;
     }
 
-    onKeysCapture(event: {code: number, left: boolean[], right: boolean[]}) {
+    onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
         if (event.code) {
-            this.scanCode = event.code;
+            this.selectedOption = this.findOptionByScancode(event.code, KeystrokeType.basic);
         } else {
-            this.scanCode = 0;
+            this.selectedOption = this.scanCodeGroups[0];
         }
 
         this.leftModifierSelects = event.left;
@@ -87,8 +88,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             return false;
         }
         const keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
-        // Restore scancode
-        this.scanCode = keystrokeAction.scancode || 0;
+        // Restore selectedOption
+        this.selectedOption = this.findOptionByScancode(keystrokeAction.scancode || 0, keystrokeAction.type);
 
         const leftModifiersLength: number = this.leftModifiers.length;
 
@@ -112,8 +113,13 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     toKeyAction(): KeystrokeAction {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
-        keystrokeAction.scancode = this.scanCode;
-
+        const scTypePair = this.toScancodeTypePair(this.selectedOption);
+        keystrokeAction.scancode = scTypePair[0];
+        if (scTypePair[1] === 'media') {
+            keystrokeAction.type = KeystrokeType.shortMedia;
+        } else {
+            keystrokeAction.type = KeystrokeType[scTypePair[1]];
+        }
         keystrokeAction.modifierMask = 0;
         const modifiers = this.leftModifierSelects.concat(this.rightModifierSelects).map(x => x ? 1 : 0);
         for (let i = 0; i < modifiers.length; ++i) {
@@ -137,10 +143,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         if (state.additional && state.additional.explanation) {
             return jQuery(
                 '<span class="select2-item">'
-                    + '<span>' + state.text + '</span>'
-                    + '<span class="scancode--searchterm"> '
-                    + state.additional.explanation
-                    + '</span>' +
+                + '<span>' + state.text + '</span>'
+                + '<span class="scancode--searchterm"> '
+                + state.additional.explanation
+                + '</span>' +
                 '</span>'
             );
         } else {
@@ -155,12 +161,65 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.validAction.emit(this.keyActionValid());
     }
 
-    onLongpressChange(event: {value: string}) {
+    onLongpressChange(event: { value: string }) {
         this.selectedLongPressIndex = +event.value;
     }
 
-    onScancodeChange(event: {value: string}) {
-        this.scanCode = +event.value;
+    onScancodeChange(event: { value: string }) {
+        const id: string = event.value;
+
+        // ng2-select2 should provide the selectedOption in an upcoming release
+        // TODO: change this when it has become available
+        this.selectedOption = this.findOptionById(id);
+
         this.validAction.emit(this.keyActionValid());
     }
+
+    private findOptionBy(predicate: (option: Select2OptionData) => boolean): Select2OptionData {
+        let selectedOption: Select2OptionData;
+
+        const scanCodeGroups: Select2OptionData[] = [...this.scanCodeGroups];
+        while (scanCodeGroups.length > 0) {
+            const scanCodeGroup = scanCodeGroups.shift();
+            if (predicate(scanCodeGroup)) {
+                selectedOption = scanCodeGroup;
+                break;
+            }
+            scanCodeGroups.push(...scanCodeGroup.children);
+        }
+        return selectedOption;
+    }
+
+    private findOptionById(id: string): Select2OptionData {
+        return this.findOptionBy(option => option.id === id);
+    }
+
+    private findOptionByScancode(scancode: number, type: KeystrokeType): Select2OptionData {
+        const typeToFind: string = type === KeystrokeType.shortMedia || KeystrokeType.longMedia ? 'media' : KeystrokeType[type];
+        return this.findOptionBy((option: Select2OptionData) => {
+            const additional = option.additional;
+            if (additional && additional.scancode === scancode && additional.type === typeToFind) {
+                return true;
+            } else if (+option.id === scancode) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
+    private toScancodeTypePair(option: Select2OptionData): [number, string] {
+        let scanCode: number;
+        let type: string;
+        if (option.additional) {
+            scanCode = option.additional.scancode ? option.additional.scancode : 0;
+            type = option.additional.type || 'basic';
+        } else {
+            scanCode = +option.id;
+            type = 'basic';
+        }
+
+        return [scanCode, type];
+    }
+
 }

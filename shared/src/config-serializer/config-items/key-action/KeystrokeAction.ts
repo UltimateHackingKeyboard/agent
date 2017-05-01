@@ -23,7 +23,17 @@ const MODIFIERS = ['LCtrl', 'LShift', 'LAlt', 'LSuper', 'RCtrl', 'RShift', 'RAlt
 
 export class KeystrokeAction extends KeyAction {
 
-    scancode: number;
+    set scancode(scancode: number) {
+        this._scancode = scancode;
+        if (this.type !== KeystrokeType.shortMedia && this.type !== KeystrokeType.longMedia) {
+            return;
+        }
+        this.type = scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+    }
+
+    get scancode() {
+        return this._scancode;
+    }
 
     @assertUInt8
     modifierMask: number;
@@ -31,8 +41,21 @@ export class KeystrokeAction extends KeyAction {
     @assertEnum(LongPressAction)
     longPressAction: LongPressAction;
 
+    set type(type: KeystrokeType) {
+        if (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) {
+            type = this.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+        }
+        this._type = type;
+    }
+
+    get type() {
+        return this._type;
+    }
+
+    private _scancode: number;
+
     @assertEnum(KeystrokeType)
-    type: KeystrokeType;
+    private _type: KeystrokeType;
 
     constructor(other?: KeystrokeAction) {
         super();
@@ -40,7 +63,7 @@ export class KeystrokeAction extends KeyAction {
             return;
         }
         this.type = other.type;
-        this.scancode = other.scancode;
+        this._scancode = other._scancode;
         this.modifierMask = other.modifierMask;
         this.longPressAction = other.longPressAction;
     }
@@ -52,7 +75,7 @@ export class KeystrokeAction extends KeyAction {
         } else {
             this.type = KeystrokeType[jsonObject.type];
         }
-        this.scancode = jsonObject.scancode;
+        this._scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
         this.longPressAction = LongPressAction[jsonObject.longPressAction];
         return this;
@@ -63,7 +86,7 @@ export class KeystrokeAction extends KeyAction {
         const flags: number = keyActionId - KeyActionId.KeystrokeAction;
         this.type = buffer.readUInt8();
         if (flags & KeystrokeActionFlag.scancode) {
-            this.scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
+            this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
         }
         if (flags & KeystrokeActionFlag.modifierMask) {
             this.modifierMask = buffer.readUInt8();
@@ -86,7 +109,7 @@ export class KeystrokeAction extends KeyAction {
         }
 
         if (this.hasScancode()) {
-            jsonObject.scancode = this.scancode;
+            jsonObject.scancode = this._scancode;
         }
 
         if (this.hasActiveModifier()) {
@@ -111,7 +134,7 @@ export class KeystrokeAction extends KeyAction {
 
         if (this.hasScancode()) {
             flags |= KeystrokeActionFlag.scancode;
-            toWrite.push({ data: this.scancode, long: this.type === KeystrokeType.longMedia });
+            toWrite.push({ data: this._scancode, long: this.type === KeystrokeType.longMedia });
         }
 
         if (this.hasActiveModifier()) {
@@ -140,7 +163,7 @@ export class KeystrokeAction extends KeyAction {
         properties.push(`type="${KeystrokeType[this.type]}"`);
 
         if (this.hasScancode()) {
-            properties.push(`scancode="${this.scancode}"`);
+            properties.push(`scancode="${this._scancode}"`);
         }
         if (this.hasActiveModifier()) {
             properties.push(`modifierMask="${this.modifierMask}"`);
@@ -165,7 +188,7 @@ export class KeystrokeAction extends KeyAction {
     }
 
     hasScancode(): boolean {
-        return !!this.scancode;
+        return !!this._scancode;
     }
 
     hasOnlyOneActiveModifier(): boolean {
