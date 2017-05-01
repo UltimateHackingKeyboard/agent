@@ -47,7 +47,11 @@ export class KeystrokeAction extends KeyAction {
 
     fromJsonObject(jsonObject: JsonObjectKeystrokeAction): KeystrokeAction {
         this.assertKeyActionType(jsonObject);
-        this.type = KeystrokeType[jsonObject.type];
+        if (jsonObject.type === 'media') {
+            this.type = jsonObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+        } else {
+            this.type = KeystrokeType[jsonObject.type];
+        }
         this.scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
         this.longPressAction = LongPressAction[jsonObject.longPressAction];
@@ -74,7 +78,12 @@ export class KeystrokeAction extends KeyAction {
         const jsonObject: JsonObjectKeystrokeAction = {
             keyActionType: keyActionType.KeystrokeAction
         };
-        jsonObject.type = KeystrokeType[this.type];
+
+        if (this.type === KeystrokeType.shortMedia || this.type === KeystrokeType.longMedia) {
+            jsonObject.type = 'media';
+        } else {
+            jsonObject.type = KeystrokeType[this.type];
+        }
 
         if (this.hasScancode()) {
             jsonObject.scancode = this.scancode;

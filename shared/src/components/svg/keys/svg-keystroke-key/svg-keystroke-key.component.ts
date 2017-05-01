@@ -131,7 +131,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         let newLabelSource: string[];
         if (this.keystrokeAction.hasScancode()) {
             const scancode: number = this.keystrokeAction.scancode;
-            newLabelSource = this.mapper.scanCodeToText(scancode);
+            newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
             if (newLabelSource) {
                 if (newLabelSource.length === 1) {
                     this.labelSource = newLabelSource[0];
