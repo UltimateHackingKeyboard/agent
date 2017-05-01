@@ -1,5 +1,5 @@
 {
-    "dataModelVersion": 3,
+    "dataModelVersion": 4,
     "moduleConfigurations": [
         {
             "id": 1,
@@ -550,17 +550,17 @@
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 232,
-                                    "type": "basic"
+                                    "type": "media"
                                 },
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 237,
-                                    "type": "basic"
+                                    "type": "media"
                                 },
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 233,
-                                    "type": "basic"
+                                    "type": "media"
                                 },
                                 null,
                                 null,
@@ -570,17 +570,17 @@
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 234,
-                                    "type": "basic"
+                                    "type": "media"
                                 },
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 238,
-                                    "type": "basic"
+                                    "type": "media"
                                 },
                                 {
                                     "keyActionType": "keystroke",
                                     "scancode": 235,
-                                    "type": "basic"
+                                    "type": "media"
                                 },
                                 null,
                                 null,
@@ -589,8 +589,8 @@
                                 null,
                                 {
                                     "keyActionType": "keystroke",
-                                    "scancode": 239,
-                                    "type": "basic"
+                                    "scancode": 226,
+                                    "type": "media"
                                 },
                                 null,
                                 null,
