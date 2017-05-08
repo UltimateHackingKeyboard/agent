@@ -16,7 +16,7 @@ function readMergeSensor() {
                 console.error("USB error: %s", err2);
                 process.exit(2);
             }
-            console.log('Received', uhk.bufferToString(receivedBuffer));
+            console.log('Received', uhk.bufferToString(receivedBuffer), (receivedBuffer[1]*255 + receivedBuffer[0])/4096*5.5*1.045);
             setTimeout(readMergeSensor, 500)
         })
     });
