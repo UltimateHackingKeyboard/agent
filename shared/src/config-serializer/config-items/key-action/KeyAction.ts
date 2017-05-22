@@ -31,6 +31,8 @@ export let keyActionType = {
 
 export abstract class KeyAction {
 
+    public fillColor: string = '';
+
     assertKeyActionType(jsObject: any): void {
         const keyActionClassname: string = this.constructor.name;
         const keyActionTypeString: string = keyActionType[keyActionClassname];

@@ -191,6 +191,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     showPopover(keyAction: KeyAction): void {
         this.keyPosition = this.keyElement.getBoundingClientRect();
         this.popoverInitKeyAction = keyAction;
+        this.popoverInitKeyAction.fillColor = '#337ab7';
         this.popoverShown = true;
         this.renderer.invokeElementMethod(this.popover.nativeElement, 'focus');
     }
@@ -224,6 +225,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     hidePopover(): void {
         this.popoverShown = false;
+        this.popoverInitKeyAction.fillColor = '';
     }
 
     selectLayer(index: number): void {
