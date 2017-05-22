@@ -117,7 +117,7 @@ exports = module.exports = {
         uploadConfig: 8,
         applyConfig: 9,
         setLedPwm: 10,
-        getBridgeMessageCounter: 11
+        readAdc: 11
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111
