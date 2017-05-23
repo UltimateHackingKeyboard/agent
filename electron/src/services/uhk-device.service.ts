@@ -26,8 +26,8 @@ import { Device, Interface, InEndpoint, OutEndpoint, findByIds, on } from 'usb';
 import { Layer } from '../shared/config-serializer/config-items/Layer';
 import { UhkBuffer } from '../shared/config-serializer/UhkBuffer';
 
-const vendorId = 0x16d3;
-const productId = 0x05ea;
+const vendorId = 0x1d50;
+const productId = 0x6122;
 const MAX_PAYLOAD_SIZE = 64;
 
 enum Command {
