@@ -48,6 +48,10 @@ enum LabelTypes {
                 ])
             ])
         ]),
+        trigger('active', [
+            state('1', style({ fill: '#337ab7' })), // Primary blue color
+            state('0', style({ fill: '#333' })),
+            transition('* => *', animate('.5s'))
         ]),
         trigger('recording', [
             state('inactive', style({
@@ -72,7 +76,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keyAction: KeyAction;
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
-
+    @Input() active: boolean;
 
     @Output() keyClick = new EventEmitter();
     @Output() capture = new EventEmitter();

@@ -5,6 +5,7 @@
         [width]="key.width" [height]="key.height"
         [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
         [keyAction]="keyActions[i]"
+        [active]="keyActions[i] && keyActions[i] === selectedKeyAction"
         [keybindAnimationEnabled]="keybindAnimationEnabled"
         [capturingEnabled]="capturingEnabled"
         (keyClick)="onKeyClick(i, $event)"
