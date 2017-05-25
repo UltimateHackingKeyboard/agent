@@ -48,15 +48,6 @@ enum LabelTypes {
                 ])
             ])
         ]),
-        trigger('fill', [
-            transition('unselected => selected', [
-                style({ fill: '#fff' }),
-                group([
-                    animate('1s ease-in', style({
-                        fill: '#337ab7'
-                    }))
-                ])
-            ])
         ]),
         trigger('recording', [
             state('inactive', style({
@@ -82,8 +73,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
 
-    @HostBinding('attr.fill')
-    @Input() fill: string;
 
     @Output() keyClick = new EventEmitter();
     @Output() capture = new EventEmitter();
@@ -92,7 +81,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     public changeAnimation: string = 'inactive';
     public recordAnimation: string;
-    public fillAnimation: string = 'unselected';
 
     private labelSource: any;
     private labelType: LabelTypes;
@@ -180,11 +168,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeAnimation = 'active';
             }
         }
-        if (changes['fill']) {
-            if (this.keybindAnimationEnabled) {
-                this.fillAnimation = 'selected';
-            }
-        }
     }
 
     ngOnDestroy() {
@@ -193,10 +176,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     onChangeAnimationDone() {
         this.changeAnimation = 'inactive';
-    }
-
-    onFillAnimationDone() {
-        this.fillAnimation = 'unselected';
     }
 
     onRecordingAnimationDone() {
