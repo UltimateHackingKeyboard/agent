@@ -15,11 +15,11 @@ function bufferToString(buffer) {
 let usbEndpoints;
 
 function getUhkDevice() {
-    return usb.findByIds(0x16d3, 0x05ea);
+    return usb.findByIds(0x1d50, 0x6122);
 }
 
 function getBootloaderDevice() {
-    return usb.findByIds(0x15a2, 0x0073);
+    return usb.findByIds(0x1d50, 0x6120);
 }
 
 function getUsbEndpoints() {
