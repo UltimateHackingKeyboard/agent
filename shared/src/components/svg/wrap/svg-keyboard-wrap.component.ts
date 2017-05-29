@@ -137,9 +137,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 moduleId,
                 keyId
             };
-
-            this.selectedKey = {layerId: this.currentLayer, moduleId, keyId};
-            console.log(this.selectedKey);
+            // Save the selected key
+            this.selectedKey = { layerId: this.currentLayer, moduleId, keyId };
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
             this.keyElement = keyTarget;
             this.showPopover(keyActionToEdit);
