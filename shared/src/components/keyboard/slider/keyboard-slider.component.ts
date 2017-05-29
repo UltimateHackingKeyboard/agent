@@ -15,7 +15,6 @@ import {
 } from '@angular/core';
 
 import { Layer } from '../../../config-serializer/config-items/Layer';
-import { KeyAction } from '../../../config-serializer/config-items/key-action';
 
 type AnimationKeyboard =
     'leftIn' |
@@ -81,7 +80,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() currentLayer: number;
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
-    @Input() selectedKeyAction: KeyAction;
+    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();

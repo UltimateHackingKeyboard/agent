@@ -14,7 +14,8 @@ export class SvgModuleComponent {
     @Input() coverages: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
-    @Input() selectedKeyAction: KeyAction;
+    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selected: boolean;
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Output() keyClick = new EventEmitter();

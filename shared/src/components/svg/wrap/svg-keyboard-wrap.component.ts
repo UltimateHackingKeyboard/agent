@@ -60,6 +60,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     private popoverShown: boolean;
     private keyEditConfig: { moduleId: number, keyId: number };
+    private selectedKey: { layerId: number, moduleId: number, keyId: number };
     private popoverInitKeyAction: KeyAction;
     private keybindAnimationEnabled: boolean;
     private currentLayer: number = 0;
@@ -137,6 +138,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 keyId
             };
 
+            this.selectedKey = {layerId: this.currentLayer, moduleId, keyId};
+            console.log(this.selectedKey);
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
             this.keyElement = keyTarget;
             this.showPopover(keyActionToEdit);
@@ -225,6 +228,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     hidePopover(): void {
         this.popoverShown = false;
         this.popoverInitKeyAction = undefined;
+        this.selectedKey = undefined;
     }
 
     selectLayer(index: number): void {

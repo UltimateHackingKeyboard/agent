@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 
 import { Module } from '../../../config-serializer/config-items/Module';
-import { KeyAction } from '../../../config-serializer/config-items/key-action';
 import { SvgModule } from '../module';
 
 @Component({
@@ -14,7 +13,8 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
-    @Input() selectedKeyAction: KeyAction;
+    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selected: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
