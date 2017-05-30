@@ -51,7 +51,7 @@ enum LabelTypes {
         trigger('active', [
             state('1', style({ fill: '#337ab7' })), // Primary blue color
             state('0', style({ fill: '#333' })),
-            transition('* => *', animate('.5s'))
+            transition('* => *', animate('200ms'))
         ]),
         trigger('recording', [
             state('inactive', style({
