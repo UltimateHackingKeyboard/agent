@@ -71,6 +71,7 @@
   },
   "scripts": {
     "postinstall": "run-p build:usb \"symlink -- -i\" ",
+    "test": "cd ./test-serializer && node ./test-serializer.js",
     "lint": "run-s -scn lint:ts lint:style",
     "lint:ts": "tslint \"electron/**/*.ts\" \"web/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
     "lint:style": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
