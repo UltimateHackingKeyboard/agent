@@ -15,7 +15,8 @@ before_script:
   - npm run lint
 
 script:
-  - cd ./test-serializer && node ./test-serializer.js
+  - npm run test
+  - npm run release
 
 cache:
   directories:

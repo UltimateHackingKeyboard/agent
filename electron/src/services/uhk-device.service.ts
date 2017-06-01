@@ -97,7 +97,13 @@ export class UhkDeviceService implements OnDestroy {
         if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
             usbInterface.detachKernelDriver();
         }
-        usbInterface.claim();
+
+        // https://github.com/tessel/node-usb/issues/30
+        // Mac not allow detach the USB driver from the kernel
+        if (process.platform !== 'darwin') {
+            usbInterface.claim();
+        }
+
         this.messageIn$ = Observable.create((subscriber: Subscriber<Buffer>) => {
             const inEndPoint: InEndpoint = <InEndpoint>usbInterface.endpoints[0];
             console.log('Try to read');

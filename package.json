@@ -1,5 +1,6 @@
 {
   "name": "uhk-agent",
+  "main": "electron/dist/electron-main.js",
   "version": "1.0.0-alpha.1",
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
   "repository": {
@@ -23,6 +24,7 @@
     "angular2-template-loader": "0.6.2",
     "copy-webpack-plugin": "^4.0.1",
     "electron": "1.6.5",
+    "electron-builder": "^18.3.0",
     "electron-rebuild": "^1.5.7",
     "expose-loader": "^0.7.1",
     "html-loader": "0.4.5",
@@ -31,6 +33,7 @@
     "path": "^0.12.7",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.3",
+    "standard-version": "^4.0.0",
     "stylelint": "^7.10.1",
     "ts-loader": "^2.0.3",
     "tslint": "~5.1.0",
@@ -85,6 +88,8 @@
     "server:web": "webpack-dev-server --config \"web/src/webpack.config.js\" --content-base \"./web/dist\"",
     "server:electron": "webpack --config \"electron/src/webpack.config.js\" --watch",
     "electron": "electron electron/dist/electron-main.js",
-    "symlink": "node ./tools/symlinker"
+    "symlink": "node ./tools/symlinker",
+    "pack": "node ./scripts/release.js",
+    "release": "node ./scripts/release.js"
   }
 }
