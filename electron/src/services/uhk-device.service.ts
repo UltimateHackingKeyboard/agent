@@ -99,7 +99,7 @@ export class UhkDeviceService implements OnDestroy {
         }
 
         // https://github.com/tessel/node-usb/issues/30
-        // Mac not allow detach the USB driver from the kernel
+        // Mac is not allow excusive right to use USB
         if (process.platform !== 'darwin') {
             usbInterface.claim();
         }
