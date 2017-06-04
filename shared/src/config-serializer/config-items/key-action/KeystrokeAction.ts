@@ -11,6 +11,8 @@ export enum KeystrokeActionFlag {
     longPressAction = 1 << 2
 }
 
+const KEYSTROKE_ACTION_FLAG_LENGTH = 3;
+
 interface JsonObjectKeystrokeAction {
     keyActionType: string;
     scancode?: number;
@@ -84,7 +86,7 @@ export class KeystrokeAction extends KeyAction {
     fromBinary(buffer: UhkBuffer): KeystrokeAction {
         const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
         const flags: number = keyActionId - KeyActionId.KeystrokeAction;
-        this.type = buffer.readUInt8();
+        this.type = (flags >> 3) & 0b11;
         if (flags & KeystrokeActionFlag.scancode) {
             this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
         }
@@ -130,8 +132,6 @@ export class KeystrokeAction extends KeyAction {
             long: boolean
         }[] = [];
 
-        toWrite.push({ data: this.type, long: false });
-
         if (this.hasScancode()) {
             flags |= KeystrokeActionFlag.scancode;
             toWrite.push({ data: this._scancode, long: this.type === KeystrokeType.longMedia });
@@ -147,7 +147,9 @@ export class KeystrokeAction extends KeyAction {
             toWrite.push({ data: this.longPressAction, long: false });
         }
 
-        buffer.writeUInt8(KeyActionId.KeystrokeAction + flags);
+        const TYPE_OFFSET = flags + (this.type << KEYSTROKE_ACTION_FLAG_LENGTH);
+
+        buffer.writeUInt8(KeyActionId.KeystrokeAction + TYPE_OFFSET);
         for (let i = 0; i < toWrite.length; ++i) {
             if (toWrite[i].long) {
                 buffer.writeUInt16(toWrite[i].data);
