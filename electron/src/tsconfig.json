@@ -1,7 +1,6 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "exclude": [
-    "../dist",
     "electron-main.ts",
     "webpack.config.*"
   ]
