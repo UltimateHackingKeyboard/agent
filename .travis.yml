@@ -1,12 +1,35 @@
-language: node_js
+language: c
 sudo: false
 dist: trusty
 
-node_js:
-  - '6.9.4'
+env:
+  global:
+    - ELECTRON_CACHE=$HOME/.electron
+
+matrix:
+  fast_finish: true
+  include:
+    - os: osx
+
+    - os: linux
+      env: CC=clang CXX=clang++ npm_config_clang=1
+      compiler: clang
+
+cache:
+  directories:
+  - node_modules
+  - $HOME/.electron
+  - $HOME/.cache
+
+addons:
+  apt:
+    packages:
+      - libgnome-keyring-dev
+      - libsecret-1-dev
+      - icnsutils
 
 install:
-  - npm install -g npm@3.10.7
+  - nvm install
   - npm install
 
 before_script:
@@ -15,7 +38,8 @@ before_script:
   - npm run lint
 
 script:
-  - cd ./test-serializer && node ./test-serializer.js
+  - npm run test
+  - npm run release
 
 cache:
   directories:

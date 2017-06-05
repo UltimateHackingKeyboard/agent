@@ -1,6 +1,8 @@
 os: unstable
 
 environment:
+  GH_TOKEN: #TODO Change it to the master repo access token
+    secure: SGC3hXXPFwK+vV8jMLJjngg93vCq0lqPaKuBLluWxhaaPR/FZgoZe1aqXIkdFDxR
   matrix:
     - nodejs_version: 6.9.4
 
@@ -21,9 +23,8 @@ install:
   - npm install
 
 test_script:
-  - node --version
-  - npm --version
   - npm run build
   - npm run build:test
   - npm run lint
   - npm run test
+  - npm run release
