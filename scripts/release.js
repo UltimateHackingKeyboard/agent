@@ -1,6 +1,6 @@
 'use strict';
 
-const TEST_BUILD = true; // set true if you would like to test on your local machince
+const TEST_BUILD = false; // set true if you would like to test on your local machince
 
 if (!process.env.CI && !TEST_BUILD) {
     console.error('Create release only on CI server')
@@ -27,7 +27,7 @@ if (process.env.TRAVIS) {
 console.log({ branchName, pullRequestNr, gitTag, repoName })
 
 // TODO(Robi): Remove the comment after success tests
-const isReleaseCommit = TEST_BUILD || branchName === gitTag //&& repoName === 'ert78gb/electron-playground'
+const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent'
 
 if (!isReleaseCommit) {
     console.log('It is not a release task. Skipping publish.')
