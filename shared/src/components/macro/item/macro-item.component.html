@@ -1,6 +1,6 @@
 <div class="list-group-item action--item" [class.is-editing]="editing">
     <span *ngIf="movable" class="glyphicon glyphicon-option-vertical action--movable" aria-hidden="true"></span>
-    <div class="action--item--wrap" [class.pointer]="!editing && editable" (click)="editAction()">
+    <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
         <icon [name]="iconName"></icon>
         <div class="action--title">{{ title }}</div>
         <icon *ngIf="editable && macroAction && !editing" name="pencil"></icon>
