@@ -1,12 +1,36 @@
-language: node_js
+language: c
 sudo: false
 dist: trusty
 
-node_js:
-  - '6.9.4'
+env:
+  global:
+    - ELECTRON_CACHE=$HOME/.electron
+    - secure: "JNX+RLuiPeubWwm7KdJBP6ugdHH1TWkmWNvmY4tH5WEhck5zPrLWMUNfAxtyKQRWJXHJis2yR65pYtVThMM4pQ6X2C0qcOy92JWCQ2K5iy9HUNcA7Je3jZABkgiBYo8A1EpiMB/lYMB13GXWT18bMVB0SltVB8fpt29J+fzTaZN+Q19RietjGfKYar3/s9weD8Ky28+dJW1Ge24ALjq3GPwuUZz5qLMGLwH3zbbL1GF81r3ICjWVYA2E+G+JL7+BnHUvyKHs2qGIylrngfe/BbObubCTiTsUgU3LfsRruoWxK4xquvypVrj7nZAOQ7V61ZBQKOxhUMjGazfYSCS1oL09XbPsMCAIGI3v5/GCq4typv/4cgdi2RJlEw6zJC5lAHj8ivVsR55A2Ga65XGxXCoaYqoWv56rzth+4jZP6mrxvepuiSW60pBDUhwTb685WA/5jX6w343AWaXBWIEe4tGORYgujwsKp5AoBzcyuvY/gm34Ii4rYngdog8aWiXwVthCCrRbGiCB9cU929n3nxiXZk4MvQzQQoyLXnwaamK8EyQg4aKx0SQKpUT63XlyKDD6NwqjvyORYe/NIgPng8TZHMKjtmvjoT/rfolAJK2XTPH9vTDU7NsPWIagr7exMxDa1gqeldWwqQW+2veUEVwKNlX2GS+hQ6xR2Q1oU8s="
+
+matrix:
+  fast_finish: true
+  include:
+    - os: osx
+
+    - os: linux
+      env: CC=clang CXX=clang++ npm_config_clang=1
+      compiler: clang
+
+cache:
+  directories:
+  - node_modules
+  - $HOME/.electron
+  - $HOME/.cache
+
+addons:
+  apt:
+    packages:
+      - libgnome-keyring-dev
+      - libsecret-1-dev
+      - icnsutils
 
 install:
-  - npm install -g npm@3.10.7
+  - nvm install
   - npm install
 
 before_script:
@@ -15,7 +39,8 @@ before_script:
   - npm run lint
 
 script:
-  - cd ./test-serializer && node ./test-serializer.js
+  - npm run test
+  - npm run release
 
 cache:
   directories:

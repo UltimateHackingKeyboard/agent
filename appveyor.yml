@@ -1,0 +1,30 @@
+os: unstable
+
+environment:
+  GH_TOKEN:
+    secure: 3IebpEKmC39codi1wT6dXx8mql4/mCL1JzZ7lir7GQ5MWRnCxlED2OXbiKHHigDV
+  matrix:
+    - nodejs_version: 6.9.4
+
+cache:
+  - node_modules -> package.json
+
+matrix:
+  fast_finish: true
+
+build: off
+
+shallow_clone: true
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - set CI=true
+  - set PATH=%APPDATA%\npm;%PATH%
+  - npm install
+
+test_script:
+  - npm run build
+  - npm run build:test
+  - npm run lint
+  - npm run test
+  - npm run release
