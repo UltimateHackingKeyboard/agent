@@ -1,6 +1,6 @@
 <div class="action--editor">
     <div class="row">
-        <div class="col-xs-4 editor__tab-links">
+        <div class="col-lg-3 editor__tab-links">
             <ul class="nav nav-pills nav-stacked">
                 <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
                     <a>
@@ -28,7 +28,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-xs-8 editor__tabs" [ngSwitch]="activeTab">
+        <div class="col-xs-12 col-lg-9 editor__tabs" [ngSwitch]="activeTab">
             <macro-text-tab #tab *ngSwitchCase="TabName.Text" [macroAction]="editableMacroAction"></macro-text-tab>
             <macro-key-tab #tab *ngSwitchCase="TabName.Keypress" [macroAction]="editableMacroAction"></macro-key-tab>
             <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" [macroAction]="editableMacroAction"></macro-mouse-tab>
