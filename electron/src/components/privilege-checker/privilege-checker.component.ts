@@ -1,3 +1,4 @@
+/// <reference path="../../custom_types/sudo-prompt.d.ts"/>
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -13,7 +14,7 @@ import { remote } from 'electron';
 import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 
-import { UhkDeviceService } from './../../services/uhk-device.service';
+import { UhkDeviceService } from '../../services/uhk-device.service';
 
 @Component({
     selector: 'privilege-checker',

@@ -8,7 +8,7 @@ const initialState: Keymap[] = [];
 export default function(state = initialState, action: Action): Keymap[] {
     switch (action.type) {
         case KeymapActions.LOAD_KEYMAPS_SUCCESS: {
-            return Object.assign(state, action.payload);
+            return action.payload;
         }
 
         default:

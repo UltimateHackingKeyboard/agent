@@ -1,9 +1,21 @@
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
+import * as log from 'electron-log';
 import * as path from 'path';
+import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransform';
+import { VersionInfo } from 'electron-builder-http/out/publishOptions';
+import * as settings from 'electron-settings';
+
+import { IpcEvents, isDev } from './shared/util';
+
+// import './dev-extension';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: Electron.BrowserWindow;
+
+log.transports.file.level = 'debug';
+autoUpdater.logger = log;
 
 function createWindow() {
     // Create the browser window.
@@ -35,6 +47,9 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
+
+    win.webContents.on('did-finish-load', () => {
+    });
 }
 
 // This method will be called when Electron has finished
@@ -61,3 +76,73 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here
+
+// =========================================================================
+// Auto update events
+// =========================================================================
+function checkForUpdate() {
+    if (isDev()) {
+        log.info('Application update is not working in dev mode.');
+        return;
+    }
+
+    if (isFirstRun()) {
+        log.info('Application update is skipping at first run.');
+        return;
+    }
+
+    autoUpdater.checkForUpdates();
+}
+
+autoUpdater.on('checking-for-update', () => {
+    sendIpcToWindow(IpcEvents.autoUpdater.checkingForUpdate);
+});
+
+autoUpdater.on('update-available', (ev: any, info: VersionInfo) => {
+    autoUpdater.downloadUpdate();
+    sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
+});
+
+autoUpdater.on('update-not-available', (ev: any, info: VersionInfo) => {
+    sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
+});
+
+autoUpdater.on('error', (ev: any, err: Error) => {
+    sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, err);
+});
+
+autoUpdater.on('download-progress', (progressObj: ProgressInfo) => {
+    sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloadProgress, progressObj);
+});
+
+autoUpdater.on('update-downloaded', (ev: any, info: VersionInfo) => {
+    sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloaded, info);
+});
+
+ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => autoUpdater.quitAndInstall(true));
+
+ipcMain.on(IpcEvents.app.appStarted, () => checkForUpdate());
+
+function isFirstRun() {
+    if (!settings.has('firstRunVersion')) {
+        return true;
+    }
+    const firstRunVersion = settings.get('firstRunVersion');
+    log.info(`firstRunVersion: ${firstRunVersion}`);
+    log.info(`package.version: ${app.getVersion()}`);
+
+    return firstRunVersion !== app.getVersion();
+}
+
+function saveFirtsRun() {
+    settings.set('firstRunVersion', app.getVersion());
+}
+
+function sendIpcToWindow(message: string, arg?: any) {
+    console.log(message);
+    if (!win || win.isDestroyed()) {
+        return;
+    }
+
+    win.webContents.send(message, arg);
+}

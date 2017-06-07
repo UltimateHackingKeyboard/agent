@@ -1,27 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "typeRoots": [
-      "../../node_modules/@types"
-    ],
-    "types": [
-      "node",
-      "jquery",
-      "core-js",
-      "select2",
-      "file-saver"
-    ]
-  },
-  "exclude": [
-    "node_modules",
-    "config-serializer"
-  ]
+  "extends": "../../tsconfig.base.json"
 }
