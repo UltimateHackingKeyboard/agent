@@ -9,11 +9,11 @@ export class UserConfiguration {
     @assertUInt16
     dataModelVersion: number;
 
-    moduleConfigurations: ModuleConfiguration[];
+    moduleConfigurations: ModuleConfiguration[] = [];
 
-    keymaps: Keymap[];
+    keymaps: Keymap[] = [];
 
-    macros: Macro[];
+    macros: Macro[] = [];
 
     fromJsonObject(jsonObject: any): UserConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;

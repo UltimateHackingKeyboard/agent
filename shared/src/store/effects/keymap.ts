@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Actions, Effect } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/observable/of';
 
 import { KeymapActions } from '../actions';
 import { AppState } from '../index';
@@ -15,6 +17,17 @@ import { Keymap } from '../../config-serializer/config-items/Keymap';
 
 @Injectable()
 export class KeymapEffects {
+
+    @Effect() loadKeymaps$: Observable<Action> = this.actions$
+        .ofType(KeymapActions.LOAD_KEYMAPS)
+        .startWith(KeymapActions.loadKeymaps())
+        .switchMap(() => {
+            const presetsRequireContext = (<any>require).context('../../../res/presets', false, /.json$/);
+            const uhkPresets = presetsRequireContext.keys().map(presetsRequireContext) // load the presets into an array
+                .map((keymap: any) => new Keymap().fromJsonObject(keymap));
+
+            return Observable.of(KeymapActions.loadKeymapsSuccess(uhkPresets));
+        });
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
         .ofType(KeymapActions.ADD, KeymapActions.DUPLICATE)
