@@ -3,7 +3,6 @@ import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observer } from 'rxjs/Observer';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
 import { Subscriber } from 'rxjs/Subscriber';
 import { Subscription } from 'rxjs/Subscription';
@@ -22,9 +21,6 @@ import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/switchMap';
 
 import { Device, Interface, InEndpoint, OutEndpoint, findByIds, on } from 'usb';
-
-import { Layer } from '../shared/config-serializer/config-items/layer';
-import { UhkBuffer } from '../shared/config-serializer/uhk-buffer';
 
 const vendorId = 0x1d50;
 const productId = 0x6122;
