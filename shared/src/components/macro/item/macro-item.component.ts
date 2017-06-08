@@ -84,6 +84,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     editAction(): void {
         if (!this.editable || this.editing) {
+            this.cancelEdit();
             return;
         }
 

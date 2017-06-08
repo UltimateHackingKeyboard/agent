@@ -1,5 +1,5 @@
 <div class="col-xs-12 macro-mouse__container">
-    <div class="col-xs-4 macro-mouse__types">
+    <div class="col-xs-3 macro-mouse__types">
         <ul class="nav nav-pills nav-stacked">
             <li #mouseMove [class.active]="activeTab === TabName.Move" (click)="selectTab(TabName.Move)">
                 <a>
@@ -33,7 +33,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-xs-8 macro-mouse__actions" [ngSwitch]="activeTab">
+    <div class="col-xs-9 macro-mouse__actions" [ngSwitch]="activeTab">
         <div #tab *ngSwitchCase="TabName.Move">
             <h4>Move pointer</h4>
             <p>Use negative values to move down or left from current position.</p>
