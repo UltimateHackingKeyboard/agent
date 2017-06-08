@@ -42,7 +42,7 @@ export class UhkDeviceService implements OnDestroy {
     private device: Device;
     private deviceOpened$: BehaviorSubject<boolean>;
     private connected$: BehaviorSubject<boolean>;
-    private initizalized$: BehaviorSubject<boolean>;
+    private initialized$: BehaviorSubject<boolean>;
 
     private messageIn$: Observable<Buffer>;
     private messageOut$: Subject<SenderMessage>;
@@ -51,7 +51,7 @@ export class UhkDeviceService implements OnDestroy {
 
     constructor(zone: NgZone) {
         this.messageOut$ = new Subject<SenderMessage>();
-        this.initizalized$ = new BehaviorSubject(false);
+        this.initialized$ = new BehaviorSubject(false);
         this.connected$ = new BehaviorSubject(false);
         this.deviceOpened$ = new BehaviorSubject(false);
         this.outSubscription = Subscription.EMPTY;
@@ -65,13 +65,13 @@ export class UhkDeviceService implements OnDestroy {
 
     ngOnDestroy() {
         this.disconnect();
-        this.initizalized$.unsubscribe();
+        this.initialized$.unsubscribe();
         this.connected$.unsubscribe();
         this.deviceOpened$.unsubscribe();
     }
 
     initialize(): void {
-        if (this.initizalized$.getValue()) {
+        if (this.initialized$.getValue()) {
             return;
         }
         this.device = findByIds(vendorId, productId);
@@ -137,19 +137,19 @@ export class UhkDeviceService implements OnDestroy {
         }).publish();
         this.outSubscription = outSending.connect();
 
-        this.initizalized$.next(true);
+        this.initialized$.next(true);
     }
 
     disconnect() {
         this.outSubscription.unsubscribe();
         this.messageIn$ = undefined;
-        this.initizalized$.next(false);
+        this.initialized$.next(false);
         this.deviceOpened$.next(false);
         this.connected$.next(false);
     }
 
     isInitialized(): Observable<boolean> {
-        return this.initizalized$.asObservable();
+        return this.initialized$.asObservable();
     }
 
     isConnected(): Observable<boolean> {
