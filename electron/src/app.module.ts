@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -90,6 +90,9 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
 import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
+import { ElectronLogService } from './services/electron-log.service';
+import { LOG_SERVICE } from '../../shared/src/services/logger.service';
+import { ElectronErrorHandlerService } from './services/electron-error-handler.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { reducer } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
@@ -186,11 +189,12 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         MacroNotFoundGuard,
         CaptureService,
         UhkDeviceService,
-        { provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService },
+        {provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService},
         DefaultUserConfigurationService,
+        { provide: LOG_SERVICE, useClass: ElectronLogService },
+        { provide: ErrorHandler, useClass: ElectronErrorHandlerService },
         AppUpdateRendererService
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
