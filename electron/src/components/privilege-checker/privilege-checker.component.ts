@@ -1,5 +1,5 @@
 /// <reference path="../../custom_types/sudo-prompt.d.ts"/>
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +15,7 @@ import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 
 import { UhkDeviceService } from '../../services/uhk-device.service';
+import { ILogService, LOG_SERVICE } from '../../../../shared/src/services/logger.service';
 
 @Component({
     selector: 'privilege-checker',
@@ -23,7 +24,9 @@ import { UhkDeviceService } from '../../services/uhk-device.service';
 })
 export class PrivilegeCheckerComponent {
 
-    constructor(private router: Router, private uhkDevice: UhkDeviceService) {
+    constructor(private router: Router,
+                private uhkDevice: UhkDeviceService,
+                @Inject(LOG_SERVICE)private logService: ILogService) {
         uhkDevice.isConnected()
             .distinctUntilChanged()
             .takeWhile(connected => connected)
@@ -50,14 +53,17 @@ export class PrivilegeCheckerComponent {
             case 'linux':
                 permissionSetter = this.setUpPermissionsOnLinux();
                 break;
+            case 'win32':
+                permissionSetter = this.setUpPermissionsOnWin();
+                break;
             default:
                 permissionSetter = Observable.throw('Permissions couldn\'t be set. Invalid platform: ' + process.platform);
                 break;
         }
         permissionSetter.subscribe({
-            error: e => console.error(e),
+            error: e => this.logService.error(e),
             complete: () => {
-                console.log('Permissions has been successfully set');
+                this.logService.info('Permissions has been successfully set');
                 this.uhkDevice.initialize();
                 this.router.navigate(['/']);
             }
@@ -72,6 +78,36 @@ export class PrivilegeCheckerComponent {
             name: 'Setting UHK access rules'
         };
         sudo.exec(`sh ${scriptPath}`, options, (error: any) => {
+            if (error) {
+                subject.error(error);
+            } else {
+                subject.complete();
+            }
+        });
+
+        return subject.asObservable();
+    }
+
+    private setUpPermissionsOnWin(): Observable<void> {
+        const subject = new ReplaySubject<void>();
+        const rootDir = path.resolve(path.join(remote.process.cwd(), remote.process.argv[1]), '..');
+        /**
+         * source code: https://github.com/pbatard/libwdi
+         */
+        const scriptPath = path.resolve(rootDir, `rules/wdi-simple-${process.arch}.exe`);
+        const options = {
+            name: 'Setting UHK access rules'
+        };
+        /**
+         * The parameters:
+             - vid: vendor ID
+             - pid: product ID
+             - iid: interface ID
+             - type: driver type (0=WinUSB, 1=libusb-win32, 2=libusbK, 3=usbser, 4=custom)
+             - log: loglevel (0=debug, 1=info, 2=warning, 3=error, 4 = none)
+         */
+        const command = `${scriptPath} --vid 0x1d50 --pid 0x6122 --iid 0 --type 0 --log 0`;
+        sudo.exec(command, options, (error: any) => {
             if (error) {
                 subject.error(error);
             } else {
