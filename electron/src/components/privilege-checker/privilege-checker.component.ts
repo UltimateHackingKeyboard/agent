@@ -24,9 +24,13 @@ import { ILogService, LOG_SERVICE } from '../../../../shared/src/services/logger
 })
 export class PrivilegeCheckerComponent {
 
+    private rootDir: string;
+
     constructor(private router: Router,
                 private uhkDevice: UhkDeviceService,
                 @Inject(LOG_SERVICE)private logService: ILogService) {
+        this.rootDir = path.dirname(remote.app.getAppPath());
+
         uhkDevice.isConnected()
             .distinctUntilChanged()
             .takeWhile(connected => connected)
@@ -72,8 +76,7 @@ export class PrivilegeCheckerComponent {
 
     private setUpPermissionsOnLinux(): Observable<void> {
         const subject = new ReplaySubject<void>();
-        const rootDir = remote.app.getAppPath();
-        const scriptPath = path.resolve(rootDir, 'rules/setup-rules.sh');
+        const scriptPath = path.resolve(this.rootDir, 'rules/setup-rules.sh');
         const options = {
             name: 'Setting UHK access rules'
         };
@@ -90,11 +93,10 @@ export class PrivilegeCheckerComponent {
 
     private setUpPermissionsOnWin(): Observable<void> {
         const subject = new ReplaySubject<void>();
-        const rootDir = remote.app.getAppPath();
         /**
          * source code: https://github.com/pbatard/libwdi
          */
-        const scriptPath = path.resolve(rootDir, `rules/zadic-${process.arch}.exe`);
+        const scriptPath = path.resolve(this.rootDir, `rules/zadic-${process.arch}.exe`);
         const options = {
             name: 'Setting UHK access rules'
         };
