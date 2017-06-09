@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 
+log.transports.console.level = 'debug';
+log.transports.file.level = 'debug';
+
 import { ILogService } from '../../../shared/src/services/logger.service';
 
 /**
