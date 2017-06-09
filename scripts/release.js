@@ -25,7 +25,7 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({branchName, pullRequestNr, gitTag, repoName});
+console.log({ branchName, pullRequestNr, gitTag, repoName });
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
@@ -51,6 +51,7 @@ if (process.env.TRAVIS) {
 
 let target = '';
 let artifactName = 'UHK.Agent-${version}-${os}';
+let extraResources = [];
 
 if (process.platform === 'darwin') {
     target = Platform.MAC.createTarget();
@@ -58,9 +59,12 @@ if (process.platform === 'darwin') {
 } else if (process.platform === 'win32') {
     target = Platform.WINDOWS.createTarget();
     artifactName += '-${arch}.${ext}';
+    extraResources.push(`rules/zadic-${process.arch}.exe`);
 } else if (process.platform === 'linux') {
     target = Platform.LINUX.createTarget();
     artifactName += '.${ext}';
+    extraResources.push('rules/setup-rules.sh');
+    extraResources.push('rules/50-uhk60.rules');
 } else {
     console.error(`I dunno how to publish a release for ${process.platform} :(`);
     process.exit(1);
@@ -78,7 +82,7 @@ if (TEST_BUILD || gitTag) {
     updateVersionNumberIn2rndPackageJson(jsonVersion);
 
     builder.build({
-        dir: true,
+        dir: TEST_BUILD,
         targets: target,
         appMetadata: {
             main: 'electron-main.js',
@@ -96,6 +100,12 @@ if (TEST_BUILD || gitTag) {
             productName: 'UHK Agent',
             mac: {
                 category: 'public.app-category.utilities'
+            },
+            win: {
+                extraResources
+            },
+            linux: {
+                extraResources
             },
             publish: 'github',
             artifactName,

@@ -72,7 +72,7 @@ export class PrivilegeCheckerComponent {
 
     private setUpPermissionsOnLinux(): Observable<void> {
         const subject = new ReplaySubject<void>();
-        const rootDir = path.resolve(path.join(remote.process.cwd(), remote.process.argv[1]), '..');
+        const rootDir = remote.app.getAppPath();
         const scriptPath = path.resolve(rootDir, 'rules/setup-rules.sh');
         const options = {
             name: 'Setting UHK access rules'
@@ -90,7 +90,7 @@ export class PrivilegeCheckerComponent {
 
     private setUpPermissionsOnWin(): Observable<void> {
         const subject = new ReplaySubject<void>();
-        const rootDir = path.resolve(path.join(remote.process.cwd(), remote.process.argv[1]), '..');
+        const rootDir = remote.app.getAppPath();
         /**
          * source code: https://github.com/pbatard/libwdi
          */
@@ -117,5 +117,4 @@ export class PrivilegeCheckerComponent {
 
         return subject.asObservable();
     }
-
 }
