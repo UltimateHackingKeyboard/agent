@@ -108,7 +108,7 @@ export class PrivilegeCheckerComponent {
              - usealldevices: if the device has installed USB driver than overwrite it
              - noprompt: return at the end of the installation and not waiting for any user command
          */
-        const command = `${scriptPath} --vid 0x1D50 --pid 0x6122 --iface 0 --usealldevices --noprompt`;
+        const command = `"${scriptPath}" --vid 0x1D50 --pid 0x6122 --iface 0 --usealldevices --noprompt`;
         sudo.exec(command, options, (error: any) => {
             if (error) {
                 subject.error(error);
