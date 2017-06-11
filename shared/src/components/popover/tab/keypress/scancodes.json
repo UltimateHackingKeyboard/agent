@@ -559,7 +559,11 @@
         "children": [
             {
                 "id": "127",
-                "text": "Mute"
+                "text": "Mute",
+                "additional": {
+                    "type": "media",
+                    "scancode": 226
+                }
             },
             {
                 "id": "128",

@@ -95,7 +95,8 @@
                     "keyActions": [
                         {
                             "keyActionType": "keystroke",
-                            "scancode": 111
+                            "scancode": 111,
+                            "type": "basic"
                         }
                     ]
                 }

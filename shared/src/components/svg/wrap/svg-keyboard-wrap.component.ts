@@ -245,7 +245,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
             if (keystrokeAction.hasScancode()) {
                 let value: string = keystrokeAction.scancode.toString();
-                const scanCodeTexts: string = (this.mapper.scanCodeToText(keystrokeAction.scancode) || []).join(', ');
+                const scanCodeTexts: string = (this.mapper.scanCodeToText(keystrokeAction.scancode, keystrokeAction.type) || [])
+                    .join(', ');
                 if (scanCodeTexts.length > 0) {
                     value += ' (' + scanCodeTexts + ')';
                 }

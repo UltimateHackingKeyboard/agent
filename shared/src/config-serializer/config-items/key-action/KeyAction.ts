@@ -7,17 +7,18 @@ export enum KeyActionId {
     NoneAction                   = 0,
     KeystrokeAction              = 1,
     /*
-        1 - 7 are reserved for KeystrokeAction
-        3 bits:
+        1 - 31 are reserved for KeystrokeAction
+        5 bits:
             1: Do we have scancode?
             2: Do we have modifiers?
             3: Do we have longpress?
+            4-5: What kind of keystroke? (basic, short/long media, system)
     */
-    LastKeystrokeAction          = 7, // TODO: remove this after refactoring the keyActionId check
-    SwitchLayerAction            = 8,
-    SwitchKeymapAction           = 9,
-    MouseAction                  = 10,
-    PlayMacroAction              = 11
+    LastKeystrokeAction          = 31, // TODO: remove this after refactoring the keyActionId check
+    SwitchLayerAction            = 32,
+    SwitchKeymapAction           = 33,
+    MouseAction                  = 34,
+    PlayMacroAction              = 35
 }
 
 export let keyActionType = {
