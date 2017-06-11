@@ -212,11 +212,13 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         let scanCode: number;
         let type: string;
         if (option.additional) {
-            scanCode = option.additional.scancode ? option.additional.scancode : 0;
+            scanCode = option.additional.scancode;
             type = option.additional.type || 'basic';
         } else {
-            scanCode = +option.id;
             type = 'basic';
+        }
+        if (scanCode === undefined) {
+            scanCode = +option.id;
         }
 
         return [scanCode, type];
