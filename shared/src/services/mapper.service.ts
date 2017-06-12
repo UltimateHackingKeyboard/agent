@@ -11,12 +11,13 @@ export class MapperService {
     private basicScanCodeTextMap: Map<number, string[]>;
     private mediaScanCodeTextMap: Map<number, string[]>;
 
-    private scanCodeFileName: Map<number, string>;
+    private basicScancodeIcons: Map<number, string>;
+    private mediaScancodeIcons: Map<number, string>;
     private nameToFileName: Map<string, string>;
 
     constructor() {
         this.initScanCodeTextMap();
-        this.initScanCodeFileName();
+        this.initScancodeIcons();
         this.initNameToFileNames();
     }
 
@@ -34,16 +35,36 @@ export class MapperService {
         return map.get(scanCode);
     }
 
-    public hasScancodeIcon(scancode: number): boolean {
-        return this.scanCodeFileName.has(scancode);
+    public hasScancodeIcon(scancode: number, type = KeystrokeType.basic): boolean {
+        let map: Map<number, string>;
+        switch (type) {
+            case KeystrokeType.basic:
+                map = this.basicScancodeIcons;
+                break;
+            case KeystrokeType.shortMedia:
+            case KeystrokeType.longMedia:
+                map = this.mediaScancodeIcons;
+                break;
+            default:
+                map = new Map<number, string>();
+        }
+        return map.has(scancode);
     }
 
-    public scanCodeToSvgImagePath(scanCode: number): string {
-        const fileName: string = this.scanCodeFileName.get(scanCode);
-        if (fileName) {
-            return 'assets/compiled_sprite.svg#' + fileName;
+    public scanCodeToSvgImagePath(scanCode: number, type = KeystrokeType.basic): string {
+        let map: Map<number, string>;
+        switch (type) {
+            case KeystrokeType.basic:
+                map = this.basicScancodeIcons;
+                break;
+            case KeystrokeType.shortMedia:
+            case KeystrokeType.longMedia:
+                map = this.mediaScancodeIcons;
+                break;
+            default:
+                return undefined;
         }
-        return undefined;
+        return 'assets/compiled_sprite.svg#' + map.get(scanCode);
     }
 
     public getIcon(iconName: string): string {
@@ -188,13 +209,20 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(234, ['Vol -']);
     }
 
-    private initScanCodeFileName(): void {
-        this.scanCodeFileName = new Map<number, string>();
-        this.scanCodeFileName.set(79, 'icon-kbd__mod--arrow-right');
-        this.scanCodeFileName.set(80, 'icon-kbd__mod--arrow-left');
-        this.scanCodeFileName.set(81, 'icon-kbd__mod--arrow-down');
-        this.scanCodeFileName.set(82, 'icon-kbd__mod--arrow-up');
-        this.scanCodeFileName.set(118, 'icon-kbd__mod--menu');
+    private initScancodeIcons(): void {
+        this.basicScancodeIcons = new Map<number, string>();
+        this.basicScancodeIcons.set(79, 'icon-kbd__mod--arrow-right');
+        this.basicScancodeIcons.set(80, 'icon-kbd__mod--arrow-left');
+        this.basicScancodeIcons.set(81, 'icon-kbd__mod--arrow-down');
+        this.basicScancodeIcons.set(82, 'icon-kbd__mod--arrow-up');
+        this.basicScancodeIcons.set(118, 'icon-kbd__mod--menu');
+
+        this.mediaScancodeIcons = new Map<number, string>();
+        this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
+        this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
+        this.mediaScancodeIcons.set(202, 'icon-kbd__media--next');
+        this.mediaScancodeIcons.set(203, 'icon-kbd__media--prev');
+        this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
     }
 
     private initNameToFileNames(): void {

@@ -221,8 +221,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             if (!keyAction.hasActiveModifier() && keyAction.hasScancode()) {
                 const scancode: number = keyAction.scancode;
                 newLabelSource = this.mapper.scanCodeToText(scancode, keyAction.type);
-                if (this.mapper.hasScancodeIcon(scancode)) {
-                    this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode);
+                if (this.mapper.hasScancodeIcon(scancode, keyAction.type)) {
+                    this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, keyAction.type);
                     this.labelType = LabelTypes.SingleIcon;
                 } else if (newLabelSource !== undefined) {
                     if (newLabelSource.length === 1) {
