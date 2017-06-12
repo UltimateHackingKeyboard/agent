@@ -1,9 +1,10 @@
-<svg:path *ngFor="let path of coverages" [attr.d]="path.$.d" />
+<svg:path *ngFor="let path of coverages" [attr.d]="path.$.d" [attr.style]="path.$.style | safeStyle" />
 <svg:g svg-keyboard-key *ngFor="let key of keyboardKeys; let i = index"
         [id]="key.id"
         [rx]="key.rx" [ry]="key.ry"
         [width]="key.width" [height]="key.height"
         [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
+        [attr.style]="key.style | safeStyle"
         [keyAction]="keyActions[i]"
         [keybindAnimationEnabled]="keybindAnimationEnabled"
         [capturingEnabled]="capturingEnabled"
