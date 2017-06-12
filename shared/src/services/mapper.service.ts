@@ -174,18 +174,18 @@ export class MapperService {
         this.basicScanCodeTextMap.set(177, ['000']);
 
         this.mediaScanCodeTextMap = new Map<number, string[]>();
+        this.mediaScanCodeTextMap.set(138, ['WWW']);
+        this.mediaScanCodeTextMap.set(176, ['Play']);
+        this.mediaScanCodeTextMap.set(177, ['Pause']);
+        this.mediaScanCodeTextMap.set(178, ['Stop']);
+        this.mediaScanCodeTextMap.set(179, ['Eject']);
+        this.mediaScanCodeTextMap.set(202, ['Next']);
+        this.mediaScanCodeTextMap.set(203, ['Prev']);
+        this.mediaScanCodeTextMap.set(204, ['Eject', 'Stop']);
+        this.mediaScanCodeTextMap.set(205, ['Pause', 'Play']);
         this.mediaScanCodeTextMap.set(226, ['Mute']);
-        this.mediaScanCodeTextMap.set(232, ['Play']);
-        this.mediaScanCodeTextMap.set(233, ['Stop']);
-        this.mediaScanCodeTextMap.set(234, ['Prev']);
-        this.mediaScanCodeTextMap.set(235, ['Next']);
-        this.mediaScanCodeTextMap.set(236, ['Eject']);
-        this.mediaScanCodeTextMap.set(237, ['Vol +']);
-        this.mediaScanCodeTextMap.set(238, ['Vol -']);
-        this.mediaScanCodeTextMap.set(240, ['WWW']);
-        this.mediaScanCodeTextMap.set(241, ['Bckwrd']);
-        this.mediaScanCodeTextMap.set(242, ['Frwrd']);
-        this.mediaScanCodeTextMap.set(243, ['Cancel']);
+        this.mediaScanCodeTextMap.set(233, ['Vol +']);
+        this.mediaScanCodeTextMap.set(234, ['Vol -']);
     }
 
     private initScanCodeFileName(): void {

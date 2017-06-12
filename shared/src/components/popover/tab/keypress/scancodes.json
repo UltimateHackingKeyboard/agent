@@ -567,31 +567,91 @@
             },
             {
                 "id": "128",
-                "text": "Volume Up"
+                "text": "Volume Up",
+                "additional": {
+                    "type": "media",
+                    "scancode": 233
+                }
             },
             {
                 "id": "129",
-                "text": "Volume Down"
+                "text": "Volume Down",
+                "additional": {
+                    "type": "media",
+                    "scancode": 234
+                }
             },
             {
-                "id": "",
-                "text": "Next Track"
+                "id": "130",
+                "text": "Next Track",
+                "additional": {
+                    "type": "media",
+                    "scancode": 202
+                }
             },
             {
-                "id": "",
-                "text": "Previous Track"
+                "id": "131",
+                "text": "Previous Track",
+                "additional": {
+                    "type": "media",
+                    "scancode": 203
+                }
             },
             {
-                "id": "",
-                "text": "Stop"
+                "id": "132",
+                "text": "Stop/Eject",
+                "additional": {
+                    "type": "media",
+                    "scancode": 204
+                }
             },
             {
-                "id": "",
-                "text": "Play/Pause"
+                "id": "133",
+                "text": "Play/Pause",
+                "additional": {
+                    "type": "media",
+                    "scancode": 205
+                }
             },
             {
-                "id": "",
-                "text": "Eject"
+                "id": "134",
+                "text": "Play",
+                "additional": {
+                    "type": "media",
+                    "scancode": 176
+                }
+            },
+            {
+                "id": "135",
+                "text": "Pause",
+                "additional": {
+                    "type": "media",
+                    "scancode": 177
+                }
+            },
+            {
+                "id": "136",
+                "text": "Stop",
+                "additional": {
+                    "type": "media",
+                    "scancode": 178
+                }
+            },
+            {
+                "id": "137",
+                "text": "Eject",
+                "additional": {
+                    "type": "media",
+                    "scancode": 179
+                }
+            },
+            {
+                "id": "138",
+                "text": "WWW",
+                "additional": {
+                    "type": "media",
+                    "scancode": 138
+                }
             }
         ]
     }
