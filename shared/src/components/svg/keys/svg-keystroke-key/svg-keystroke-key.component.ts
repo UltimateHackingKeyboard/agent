@@ -141,7 +141,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
                     this.labelType = 'two-line';
                 }
             } else {
-                this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode);
+                this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
                 this.labelType = 'icon';
             }
         } else {
