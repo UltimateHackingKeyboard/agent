@@ -586,7 +586,7 @@
                 "text": "Next Track",
                 "additional": {
                     "type": "media",
-                    "scancode": 202
+                    "scancode": 181
                 }
             },
             {
@@ -594,7 +594,7 @@
                 "text": "Previous Track",
                 "additional": {
                     "type": "media",
-                    "scancode": 203
+                    "scancode": 182
                 }
             },
             {
@@ -634,7 +634,7 @@
                 "text": "Stop",
                 "additional": {
                     "type": "media",
-                    "scancode": 178
+                    "scancode": 183
                 }
             },
             {
@@ -642,7 +642,7 @@
                 "text": "Eject",
                 "additional": {
                     "type": "media",
-                    "scancode": 179
+                    "scancode": 184
                 }
             },
             {

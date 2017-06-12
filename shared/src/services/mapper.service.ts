@@ -198,10 +198,10 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(138, ['WWW']);
         this.mediaScanCodeTextMap.set(176, ['Play']);
         this.mediaScanCodeTextMap.set(177, ['Pause']);
-        this.mediaScanCodeTextMap.set(178, ['Stop']);
-        this.mediaScanCodeTextMap.set(179, ['Eject']);
-        this.mediaScanCodeTextMap.set(202, ['Next']);
-        this.mediaScanCodeTextMap.set(203, ['Prev']);
+        this.mediaScanCodeTextMap.set(181, ['Next']);
+        this.mediaScanCodeTextMap.set(182, ['Prev']);
+        this.mediaScanCodeTextMap.set(183, ['Stop']);
+        this.mediaScanCodeTextMap.set(184, ['Eject']);
         this.mediaScanCodeTextMap.set(204, ['Eject', 'Stop']);
         this.mediaScanCodeTextMap.set(205, ['Pause', 'Play']);
         this.mediaScanCodeTextMap.set(226, ['Mute']);
@@ -220,8 +220,8 @@ export class MapperService {
         this.mediaScancodeIcons = new Map<number, string>();
         this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
         this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
-        this.mediaScancodeIcons.set(202, 'icon-kbd__media--next');
-        this.mediaScancodeIcons.set(203, 'icon-kbd__media--prev');
+        this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');
+        this.mediaScancodeIcons.set(182, 'icon-kbd__media--prev');
         this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
     }
 
