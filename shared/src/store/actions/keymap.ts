@@ -14,6 +14,21 @@ export namespace KeymapActions {
     export const SET_DEFAULT = KeymapActions.PREFIX + 'Set default option';
     export const REMOVE = KeymapActions.PREFIX + 'Remove keymap';
     export const CHECK_MACRO = KeymapActions.PREFIX + 'Check deleted macro';
+    export const LOAD_KEYMAPS = KeymapActions.PREFIX + 'Load keymaps';
+    export const LOAD_KEYMAPS_SUCCESS = KeymapActions.PREFIX + 'Load keymaps success';
+
+    export function loadKeymaps(): Action {
+        return {
+            type: KeymapActions.LOAD_KEYMAPS
+        };
+    }
+
+    export function loadKeymapsSuccess(keymaps: Keymap[]): Action {
+        return {
+            type: KeymapActions.LOAD_KEYMAPS_SUCCESS,
+            payload: keymaps
+        };
+    }
 
     export function addKeymap(item: Keymap): Action {
         return {

@@ -24,7 +24,9 @@ export class KeymapEditGuard implements CanActivate {
             .let(getKeymaps())
             .do((keymaps: Keymap[]) => {
                 const defaultKeymap = keymaps.find(keymap => keymap.isDefault);
-                this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
+                if (defaultKeymap) {
+                    this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
+                }
             })
             .switchMap(() => Observable.of(false));
     }

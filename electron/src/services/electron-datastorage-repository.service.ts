@@ -1,6 +1,6 @@
-import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
+import { UserConfiguration } from '../shared/config-serializer/config-items/UserConfiguration';
 
-export class Electron {
+export class ElectronDataStorageRepositoryService {
     getConfig(): UserConfiguration {
         // TODO implement load logic
         return;
