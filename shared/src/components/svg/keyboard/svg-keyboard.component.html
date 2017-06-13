@@ -1,15 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="svgAttributes.viewBox" height="100%" width="100%">
-    <svg:g [attr.transform]="svgAttributes.transform" [attr.fill]="svgAttributes.fill">
-        <svg:g svg-module *ngFor="let module of modules; let i = index"
-                [coverages]="module.coverages"
-                [keyboardKeys]="module.keyboardKeys"
-                [keybindAnimationEnabled]="keybindAnimationEnabled"
-                [capturingEnabled]="capturingEnabled"
-                [attr.transform]="module.attributes.transform"
-                [keyActions]="moduleConfig[i].keyActions"
-                (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
-                (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
-                (capture)="onCapture(i, $event.index, $event.captured)"
-        />
-    </svg:g>
+<svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="viewBox" height="100%" width="100%">
+    <svg:g svg-module *ngFor="let module of modules; let i = index"
+            [coverages]="module.coverages"
+            [keyboardKeys]="module.keyboardKeys"
+            [keybindAnimationEnabled]="keybindAnimationEnabled"
+            [capturingEnabled]="capturingEnabled"
+            [attr.transform]="module.attributes.transform"
+            [keyActions]="moduleConfig[i].keyActions"
+            (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
+            (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
+            (capture)="onCapture(i, $event.index, $event.captured)"
+    />
 </svg>

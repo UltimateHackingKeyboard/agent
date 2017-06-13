@@ -69,6 +69,7 @@ import { AppComponent } from './app/app.component';
 import { MainAppComponent } from './main-app';
 
 import { CancelableDirective } from './shared/directives';
+import { SafeStylePipe } from './shared/pipes';
 
 import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
@@ -140,7 +141,8 @@ import { reducer } from '../../shared/src/store/reducers/index';
         MissingDeviceComponent,
         PrivilegeCheckerComponent,
         UhkMessageComponent,
-        CancelableDirective
+        CancelableDirective,
+        SafeStylePipe
     ],
     imports: [
         BrowserModule,

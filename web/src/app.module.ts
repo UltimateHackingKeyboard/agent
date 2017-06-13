@@ -63,6 +63,7 @@ import { SvgKeyboardWrapComponent } from './shared/components/svg/wrap';
 import { MainAppComponent, appRoutingProviders, routing } from './main-app';
 
 import { CancelableDirective } from './shared/directives';
+import { SafeStylePipe } from './shared/pipes';
 
 import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
@@ -124,7 +125,8 @@ import { reducer } from '../../shared/src/store/reducers/index';
         AddOnComponent,
         SettingsComponent,
         KeyboardSliderComponent,
-        CancelableDirective
+        CancelableDirective,
+        SafeStylePipe
     ],
     imports: [
         BrowserModule,
