@@ -6,7 +6,7 @@
             [rx]="key.rx" [ry]="key.ry"
             [width]="key.width" [height]="key.height"
             [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
-            [attr.style]="key.style | safeStyle"
+            [attr.fill]="key.fill"
             [keyAction]="keyActions[i]"
             [keybindAnimationEnabled]="keybindAnimationEnabled"
             [capturingEnabled]="capturingEnabled"

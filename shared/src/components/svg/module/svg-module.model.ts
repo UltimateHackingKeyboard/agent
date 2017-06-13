@@ -13,6 +13,7 @@ export class SvgModule {
             index = keys[i].id.slice(4) - 1; // remove 'key-' then switch to index from 0
             keys[i].height = +keys[i].height;
             keys[i].width = +keys[i].width;
+            keys[i].fill = keys[i].style.slice(5); // remove 'fill:'
             this.keyboardKeys[index] = keys[i];
         }
         this.coverages = obj.path;
