@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/withLatestFrom';
-import 'rxjs/observable/of';
+import 'rxjs/add/observable/of';
 
 import { KeymapActions } from '../actions';
 import { AppState } from '../index';
