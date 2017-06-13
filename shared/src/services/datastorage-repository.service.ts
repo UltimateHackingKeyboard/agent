@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 
 import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
 
-export interface IDataStorageRepositoryService {
+export interface DataStorageRepositoryService {
 
     getConfig(): UserConfiguration;
 

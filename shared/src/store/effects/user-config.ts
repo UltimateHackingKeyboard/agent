@@ -5,7 +5,7 @@ import { Action } from '@ngrx/store';
 
 import { ActionTypes, LoadUserConfigAction, LoadUserConfigSuccessAction } from '../actions/user-config';
 import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
-import { IDataStorageRepositoryService, DATA_STORAGE_REPOSITORY } from '../../services/datastorage-repository.service';
+import { DataStorageRepositoryService, DATA_STORAGE_REPOSITORY } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 
 @Injectable()
@@ -23,6 +23,6 @@ export class UserConfigEffects {
         });
 
     constructor(private actions$: Actions,
-                @Inject(DATA_STORAGE_REPOSITORY)private dataStorageRepository: IDataStorageRepositoryService,
+                @Inject(DATA_STORAGE_REPOSITORY)private dataStorageRepository: DataStorageRepositoryService,
                 private defaultUserConfigurationService: DefaultUserConfigurationService) { }
 }

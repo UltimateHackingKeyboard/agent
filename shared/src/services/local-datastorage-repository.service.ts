@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
-import { IDataStorageRepositoryService } from './datastorage-repository.service';
-import {DefaultUserConfigurationService} from './default-user-configuration.service';
+import { DataStorageRepositoryService } from './datastorage-repository.service';
+import { DefaultUserConfigurationService } from './default-user-configuration.service';
 
 @Injectable()
-export class LocalDataStorageRepositoryService implements IDataStorageRepositoryService {
+export class LocalDataStorageRepositoryService implements DataStorageRepositoryService {
     constructor(private defaultUserConfigurationService: DefaultUserConfigurationService) { }
 
     getConfig(): UserConfiguration {
