@@ -412,10 +412,7 @@
                         null,
                         null,
                         null,
-                        {
-                            "keyActionType": "switchKeymap",
-                            "keymapAbbreviation": "VIM"
-                        },
+                        null,
                         null,
                         {
                             "keyActionType": "keystroke",
@@ -538,12 +535,7 @@
                         null,
                         {
                             "keyActionType": "keystroke",
-                            "scancode": 232,
-                            "type": "media"
-                        },
-                        {
-                            "keyActionType": "keystroke",
-                            "scancode": 237,
+                            "scancode": 176,
                             "type": "media"
                         },
                         {
@@ -551,11 +543,21 @@
                             "scancode": 233,
                             "type": "media"
                         },
+                        {
+                            "keyActionType": "keystroke",
+                            "scancode": 183,
+                            "type": "media"
+                        },
                         null,
                         null,
                         null,
                         null,
                         null,
+                        {
+                            "keyActionType": "keystroke",
+                            "scancode": 182,
+                            "type": "media"
+                        },
                         {
                             "keyActionType": "keystroke",
                             "scancode": 234,
@@ -563,12 +565,7 @@
                         },
                         {
                             "keyActionType": "keystroke",
-                            "scancode": 238,
-                            "type": "media"
-                        },
-                        {
-                            "keyActionType": "keystroke",
-                            "scancode": 235,
+                            "scancode": 181,
                             "type": "media"
                         },
                         null,
