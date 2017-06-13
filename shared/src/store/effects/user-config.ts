@@ -3,6 +3,10 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
 
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/of';
+
 import { ActionTypes, LoadUserConfigAction, LoadUserConfigSuccessAction } from '../actions/user-config';
 import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
 import { DataStorageRepositoryService, DATA_STORAGE_REPOSITORY } from '../../services/datastorage-repository.service';
