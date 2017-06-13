@@ -15,10 +15,7 @@
                             "mouseAction": "scrollDown"
                         },
                         null,
-                        {
-                            "keyActionType": "switchKeymap",
-                            "keymapAbbreviation": "QTY"
-                        },
+                        null,
                         null,
                         null,
                         null,
