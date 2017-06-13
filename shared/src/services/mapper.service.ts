@@ -218,11 +218,15 @@ export class MapperService {
         this.basicScancodeIcons.set(118, 'icon-kbd__mod--menu');
 
         this.mediaScancodeIcons = new Map<number, string>();
+        this.mediaScancodeIcons.set(138, 'icon-kbd__fn--browser');
         this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
         this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
         this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');
         this.mediaScancodeIcons.set(182, 'icon-kbd__media--prev');
+        this.mediaScancodeIcons.set(184, 'icon-kbd__fn--eject');
         this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
+        this.mediaScancodeIcons.set(233, 'icon-kbd__media--vol-up');
+        this.mediaScancodeIcons.set(234, 'icon-kbd__media--vol-down');
     }
 
     private initNameToFileNames(): void {
