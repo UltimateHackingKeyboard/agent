@@ -67,7 +67,7 @@
     "rxjs": "5.3.0",
     "select2": "^4.0.3",
     "sudo-prompt": "^7.0.0",
-    "typescript": "2.2.2",
+    "typescript": "2.3.4",
     "usb": "git+https://github.com/aktary/node-usb.git",
     "xml-loader": "1.2.1",
     "zone.js": "0.8.5"
