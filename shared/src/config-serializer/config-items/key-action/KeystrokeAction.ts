@@ -85,7 +85,7 @@ export class KeystrokeAction extends KeyAction {
 
     fromBinary(buffer: UhkBuffer): KeystrokeAction {
         const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
-        const flags: number = keyActionId - KeyActionId.KeystrokeAction;
+        const flags: number = keyActionId - KeyActionId.NoneAction; // NoneAction is the same is an empty KeystrokeAction
         this.type = (flags >> 3) & 0b11;
         if (flags & KeystrokeActionFlag.scancode) {
             this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
