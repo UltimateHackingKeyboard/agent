@@ -149,7 +149,10 @@ export class KeystrokeAction extends KeyAction {
 
         const TYPE_OFFSET = flags + (this.type << KEYSTROKE_ACTION_FLAG_LENGTH);
 
-        buffer.writeUInt8(KeyActionId.KeystrokeAction + TYPE_OFFSET);
+        // A keystroke action without scancode, modifiers, and long press
+        // action is just like a none action, so they overlap on purpose.
+        buffer.writeUInt8(KeyActionId.NoneAction + TYPE_OFFSET);
+
         for (let i = 0; i < toWrite.length; ++i) {
             if (toWrite[i].long) {
                 buffer.writeUInt16(toWrite[i].data);
