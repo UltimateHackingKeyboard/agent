@@ -85,7 +85,7 @@ export class KeystrokeAction extends KeyAction {
 
     fromBinary(buffer: UhkBuffer): KeystrokeAction {
         const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
-        const flags: number = keyActionId - KeyActionId.NoneAction; // NoneAction is the same is an empty KeystrokeAction
+        const flags: number = keyActionId - KeyActionId.NoneAction; // NoneAction is the same as an empty KeystrokeAction.
         this.type = (flags >> 3) & 0b11;
         if (flags & KeystrokeActionFlag.scancode) {
             this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
@@ -149,9 +149,7 @@ export class KeystrokeAction extends KeyAction {
 
         const TYPE_OFFSET = flags + (this.type << KEYSTROKE_ACTION_FLAG_LENGTH);
 
-        // A keystroke action without scancode, modifiers, and long press
-        // action is just like a none action, so they overlap on purpose.
-        buffer.writeUInt8(KeyActionId.NoneAction + TYPE_OFFSET);
+        buffer.writeUInt8(KeyActionId.NoneAction + TYPE_OFFSET); // NoneAction is the same as an empty KeystrokeAction.
 
         for (let i = 0; i < toWrite.length; ++i) {
             if (toWrite[i].long) {
