@@ -4,7 +4,7 @@
     [keybindAnimationEnabled]="keybindAnimationEnabled"
     [capturingEnabled]="capturingEnabled"
     [selectedKey]="selectedKey"
-    [selected]="selectedKey && selectedKey.layerId === index"
+    [selected]="selectedKey?.layerId === index"
     (keyClick)="keyClick.emit($event)"
     (keyHover)="keyHover.emit($event)"
     (capture)="capture.emit($event)"

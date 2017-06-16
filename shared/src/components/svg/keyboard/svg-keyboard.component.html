@@ -7,7 +7,7 @@
             [attr.transform]="module.attributes.transform"
             [keyActions]="moduleConfig[i].keyActions"
             [selectedKey]="selectedKey"
-            [selected]="selectedKey && selectedKey.moduleId === i"
+            [selected]="selectedKey?.moduleId === i"
             (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
             (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
             (capture)="onCapture(i, $event.index, $event.captured)"
