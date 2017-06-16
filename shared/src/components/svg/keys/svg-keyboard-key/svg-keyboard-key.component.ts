@@ -50,7 +50,7 @@ enum LabelTypes {
         ]),
         trigger('active', [
             // http://colorblendy.com/#!/multiply/4099e5/cccccc
-            state('1', style({ fill: '#4099e5' })), // Signiture blue color blending
+            state('1', style({ fill: '#4099e5' })), // Signature blue color blending
             transition('1 => *', animate('200ms')),
             transition('* => 1', animate('0ms')) // Instant color to blue
         ]),
