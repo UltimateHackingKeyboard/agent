@@ -110,7 +110,7 @@ export class UhkBuffer {
     readCompactLength(): number {
         let length = this.readUInt8();
         if (length === UhkBuffer.longCompactLengthPrefix) {
-            length += this.readUInt8() << 8;
+            length = this.readUInt16();
         }
         return length;
     }

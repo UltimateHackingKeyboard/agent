@@ -1,4 +1,4 @@
-import { Component, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Tab } from '../tab';
 
@@ -7,8 +7,9 @@ import { Tab } from '../tab';
     templateUrl: './none-tab.component.html',
     styleUrls: ['./none-tab.component.scss']
 })
-export class NoneTabComponent extends Tab implements OnChanges {
-    ngOnChanges(event: any) {
+export class NoneTabComponent extends Tab implements OnInit {
+
+    ngOnInit() {
         this.validAction.emit(true);
     }
 

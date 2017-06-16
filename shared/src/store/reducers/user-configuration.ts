@@ -13,6 +13,7 @@ import { Layer } from '../../config-serializer/config-items/Layer';
 import { Module } from '../../config-serializer/config-items/Module';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
+import { ActionTypes } from '../actions/user-config';
 
 const initialState: UserConfiguration = new UserConfiguration();
 
@@ -23,6 +24,10 @@ export default function (state = initialState, action: Action): UserConfiguratio
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
     switch (action.type) {
+        case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
+            return Object.assign(changedUserConfiguration, action.payload);
+        }
+
         case KeymapActions.ADD:
         case KeymapActions.DUPLICATE:
             {

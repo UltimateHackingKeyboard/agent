@@ -1,15 +1,19 @@
-<svg:path *ngFor="let path of coverages" [attr.d]="path.$.d" />
-<svg:g svg-keyboard-key *ngFor="let key of keyboardKeys; let i = index"
-        [id]="key.id"
-        [rx]="key.rx" [ry]="key.ry"
-        [width]="key.width" [height]="key.height"
-        [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
-        [keyAction]="keyActions[i]"
-        [active]="selected && i == selectedKey.keyId"
-        [keybindAnimationEnabled]="keybindAnimationEnabled"
-        [capturingEnabled]="capturingEnabled"
-        (keyClick)="onKeyClick(i, $event)"
-        (capture)="onCapture(i, $event)"
-        (mouseenter)="onKeyHover(i, $event, true)"
-        (mouseleave)="onKeyHover(i, $event, false)"
-/>
+<svg:path *ngFor="let path of coverages" [attr.d]="path.$.d" [attr.style]="path.$.style | safeStyle" />
+<ng-container *ngFor="let key of keyboardKeys; let i = index">
+    <svg:g svg-keyboard-key
+            *ngIf="key"
+            [id]="key.id"
+            [rx]="key.rx" [ry]="key.ry"
+            [width]="key.width" [height]="key.height"
+            [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
+            [attr.fill]="key.fill"
+            [keyAction]="keyActions[i]"
+            [active]="selected && i == selectedKey.keyId"
+            [keybindAnimationEnabled]="keybindAnimationEnabled"
+            [capturingEnabled]="capturingEnabled"
+            (keyClick)="onKeyClick(i, $event)"
+            (capture)="onCapture(i, $event)"
+            (mouseenter)="onKeyHover(i, $event, true)"
+            (mouseleave)="onKeyHover(i, $event, false)"
+    />
+</ng-container>

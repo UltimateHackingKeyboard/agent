@@ -1,4 +1,4 @@
-import { NgModule, ReflectiveInjector } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -7,6 +7,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
+import { RouterStoreModule } from '@ngrx/router-store';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
@@ -68,14 +69,13 @@ import { AppComponent } from './app/app.component';
 import { MainAppComponent } from './main-app';
 
 import { CancelableDirective } from './shared/directives';
+import { SafeStylePipe } from './shared/pipes';
 
 import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
 import { UhkDeviceService } from './services/uhk-device.service';
 
-import { KeymapEffects, MacroEffects } from './shared/store/effects';
-import { userConfigurationReducer, presetReducer } from './shared/store/reducers';
-import { DataStorage } from './shared/store/storage';
+import { KeymapEffects, MacroEffects, UserConfigEffects} from './shared/store/effects';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
@@ -84,17 +84,10 @@ import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
-
-// Create DataStorage dependency injection
-const storageProvider = ReflectiveInjector.resolve([DataStorage]);
-const storageInjector = ReflectiveInjector.fromResolvedProviders(storageProvider);
-const storageService: DataStorage = storageInjector.get(DataStorage);
-
-// All reducers that are used in application
-const storeConfig = {
-    userConfiguration: storageService.saveState(userConfigurationReducer),
-    presetKeymaps: presetReducer
-};
+import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
+import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
+import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
+import { reducer } from '../../shared/src/store/reducers/index';
 
 @NgModule({
     declarations: [
@@ -148,7 +141,8 @@ const storeConfig = {
         MissingDeviceComponent,
         PrivilegeCheckerComponent,
         UhkMessageComponent,
-        CancelableDirective
+        CancelableDirective,
+        SafeStylePipe
     ],
     imports: [
         BrowserModule,
@@ -156,7 +150,8 @@ const storeConfig = {
         FormsModule,
         DragulaModule,
         routing,
-        StoreModule.provideStore(storeConfig, storageService.initialState()),
+        StoreModule.provideStore(reducer),
+        RouterStoreModule.connectRouter(),
         StoreDevtoolsModule.instrumentStore({
             monitor: useLogMonitor({
                 visible: false,
@@ -166,7 +161,8 @@ const storeConfig = {
         StoreLogMonitorModule,
         Select2Module,
         EffectsModule.runAfterBootstrap(KeymapEffects),
-        EffectsModule.runAfterBootstrap(MacroEffects)
+        EffectsModule.runAfterBootstrap(MacroEffects),
+        EffectsModule.runAfterBootstrap(UserConfigEffects)
     ],
     providers: [
         UhkDeviceConnectedGuard,
@@ -178,7 +174,9 @@ const storeConfig = {
         KeymapEditGuard,
         MacroNotFoundGuard,
         CaptureService,
-        UhkDeviceService
+        UhkDeviceService,
+        {provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService},
+        DefaultUserConfigurationService
     ],
     bootstrap: [AppComponent]
 })

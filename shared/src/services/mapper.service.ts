@@ -3,35 +3,68 @@ const __svg__ = { path: '../../../images/icons/**/*.svg', name: 'assets/compiled
 /* tslint:enable:variable-name */
 
 import { Injectable } from '@angular/core';
+import { KeystrokeType } from '../config-serializer/config-items/key-action/keystroke-type';
 
 @Injectable()
 export class MapperService {
 
-    private scanCodeTextMap: Map<number, string[]>;
+    private basicScanCodeTextMap: Map<number, string[]>;
+    private mediaScanCodeTextMap: Map<number, string[]>;
 
-    private scanCodeFileName: Map<number, string>;
+    private basicScancodeIcons: Map<number, string>;
+    private mediaScancodeIcons: Map<number, string>;
     private nameToFileName: Map<string, string>;
 
     constructor() {
         this.initScanCodeTextMap();
-        this.initScanCodeFileName();
+        this.initScancodeIcons();
         this.initNameToFileNames();
     }
 
-    public scanCodeToText(scanCode: number): string[] {
-        return this.scanCodeTextMap.get(scanCode);
-    }
-
-    public hasScancodeIcon(scancode: number): boolean {
-        return this.scanCodeFileName.has(scancode);
-    }
-
-    public scanCodeToSvgImagePath(scanCode: number): string {
-        const fileName: string = this.scanCodeFileName.get(scanCode);
-        if (fileName) {
-            return 'assets/compiled_sprite.svg#' + fileName;
+    public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
+        let map: Map<number, string[]>;
+        switch (type) {
+            case KeystrokeType.shortMedia:
+            case KeystrokeType.longMedia:
+                map = this.mediaScanCodeTextMap;
+                break;
+            default:
+                map = this.basicScanCodeTextMap;
+                break;
         }
-        return undefined;
+        return map.get(scanCode);
+    }
+
+    public hasScancodeIcon(scancode: number, type = KeystrokeType.basic): boolean {
+        let map: Map<number, string>;
+        switch (type) {
+            case KeystrokeType.basic:
+                map = this.basicScancodeIcons;
+                break;
+            case KeystrokeType.shortMedia:
+            case KeystrokeType.longMedia:
+                map = this.mediaScancodeIcons;
+                break;
+            default:
+                map = new Map<number, string>();
+        }
+        return map.has(scancode);
+    }
+
+    public scanCodeToSvgImagePath(scanCode: number, type = KeystrokeType.basic): string {
+        let map: Map<number, string>;
+        switch (type) {
+            case KeystrokeType.basic:
+                map = this.basicScancodeIcons;
+                break;
+            case KeystrokeType.shortMedia:
+            case KeystrokeType.longMedia:
+                map = this.mediaScancodeIcons;
+                break;
+            default:
+                return undefined;
+        }
+        return 'assets/compiled_sprite.svg#' + map.get(scanCode);
     }
 
     public getIcon(iconName: string): string {
@@ -48,139 +81,152 @@ export class MapperService {
 
     // TODO: read the mapping from JSON
     private initScanCodeTextMap(): void {
-        this.scanCodeTextMap = new Map<number, string[]>();
-        this.scanCodeTextMap.set(4, ['A']);
-        this.scanCodeTextMap.set(5, ['B']);
-        this.scanCodeTextMap.set(6, ['C']);
-        this.scanCodeTextMap.set(7, ['D']);
-        this.scanCodeTextMap.set(8, ['E']);
-        this.scanCodeTextMap.set(9, ['F']);
-        this.scanCodeTextMap.set(10, ['G']);
-        this.scanCodeTextMap.set(11, ['H']);
-        this.scanCodeTextMap.set(12, ['I']);
-        this.scanCodeTextMap.set(13, ['J']);
-        this.scanCodeTextMap.set(14, ['K']);
-        this.scanCodeTextMap.set(15, ['L']);
-        this.scanCodeTextMap.set(16, ['M']);
-        this.scanCodeTextMap.set(17, ['N']);
-        this.scanCodeTextMap.set(18, ['O']);
-        this.scanCodeTextMap.set(19, ['P']);
-        this.scanCodeTextMap.set(20, ['Q']);
-        this.scanCodeTextMap.set(21, ['R']);
-        this.scanCodeTextMap.set(22, ['S']);
-        this.scanCodeTextMap.set(23, ['T']);
-        this.scanCodeTextMap.set(24, ['U']);
-        this.scanCodeTextMap.set(25, ['V']);
-        this.scanCodeTextMap.set(26, ['W']);
-        this.scanCodeTextMap.set(27, ['X']);
-        this.scanCodeTextMap.set(28, ['Y']);
-        this.scanCodeTextMap.set(29, ['Z']);
-        this.scanCodeTextMap.set(30, ['1', '!']);
-        this.scanCodeTextMap.set(31, ['2', '@']);
-        this.scanCodeTextMap.set(32, ['3', '#']);
-        this.scanCodeTextMap.set(33, ['4', '$']);
-        this.scanCodeTextMap.set(34, ['5', '%']);
-        this.scanCodeTextMap.set(35, ['6', '^']);
-        this.scanCodeTextMap.set(36, ['7', '&']);
-        this.scanCodeTextMap.set(37, ['8', '*']);
-        this.scanCodeTextMap.set(38, ['9', '(']);
-        this.scanCodeTextMap.set(39, ['0', ')']);
-        this.scanCodeTextMap.set(40, ['Enter']);
-        this.scanCodeTextMap.set(41, ['Esc']);
-        this.scanCodeTextMap.set(42, ['Backspace']);
-        this.scanCodeTextMap.set(43, ['Tab']);
-        this.scanCodeTextMap.set(44, ['Space']);
-        this.scanCodeTextMap.set(45, ['-', '_']);
-        this.scanCodeTextMap.set(46, ['=', '+']);
-        this.scanCodeTextMap.set(47, ['[', '{']);
-        this.scanCodeTextMap.set(48, [']', '}']);
-        this.scanCodeTextMap.set(49, ['\\', '|']);
-        this.scanCodeTextMap.set(50, ['NON_US_HASHMARK_AND_TILDE']);
-        this.scanCodeTextMap.set(51, [';', ':']);
-        this.scanCodeTextMap.set(52, ['\'', '"']);
-        this.scanCodeTextMap.set(53, ['`', '~']);
-        this.scanCodeTextMap.set(54, [',', '<']);
-        this.scanCodeTextMap.set(55, ['.', '>']);
-        this.scanCodeTextMap.set(56, ['/', '?']);
-        this.scanCodeTextMap.set(57, ['Caps Lock']);
-        this.scanCodeTextMap.set(58, ['F1']);
-        this.scanCodeTextMap.set(59, ['F2']);
-        this.scanCodeTextMap.set(60, ['F3']);
-        this.scanCodeTextMap.set(61, ['F4']);
-        this.scanCodeTextMap.set(62, ['F5']);
-        this.scanCodeTextMap.set(63, ['F6']);
-        this.scanCodeTextMap.set(64, ['F7']);
-        this.scanCodeTextMap.set(65, ['F8']);
-        this.scanCodeTextMap.set(66, ['F9']);
-        this.scanCodeTextMap.set(67, ['F10']);
-        this.scanCodeTextMap.set(68, ['F11']);
-        this.scanCodeTextMap.set(69, ['F12']);
-        this.scanCodeTextMap.set(70, ['PrtScn']);
-        this.scanCodeTextMap.set(71, ['Scroll Lock']);
-        this.scanCodeTextMap.set(72, ['Pause']);
-        this.scanCodeTextMap.set(73, ['Insert']);
-        this.scanCodeTextMap.set(74, ['Home']);
-        this.scanCodeTextMap.set(75, ['PgUp']);
-        this.scanCodeTextMap.set(76, ['Del']);
-        this.scanCodeTextMap.set(77, ['End']);
-        this.scanCodeTextMap.set(78, ['PgDn']);
-        this.scanCodeTextMap.set(79, ['Right Arrow']);
-        this.scanCodeTextMap.set(80, ['Left Arrow']);
-        this.scanCodeTextMap.set(81, ['Down Arrow']);
-        this.scanCodeTextMap.set(82, ['Up Arrow']);
-        this.scanCodeTextMap.set(83, ['Num Lock']);
-        this.scanCodeTextMap.set(84, ['/']);
-        this.scanCodeTextMap.set(85, ['*']);
-        this.scanCodeTextMap.set(86, ['-']);
-        this.scanCodeTextMap.set(87, ['+']);
-        this.scanCodeTextMap.set(88, ['Enter']);
-        this.scanCodeTextMap.set(89, ['end', '1']);
-        this.scanCodeTextMap.set(90, ['2']);
-        this.scanCodeTextMap.set(91, ['pgdn', '3']);
-        this.scanCodeTextMap.set(92, ['4']);
-        this.scanCodeTextMap.set(93, ['5']);
-        this.scanCodeTextMap.set(94, ['6']);
-        this.scanCodeTextMap.set(95, ['home', '7']);
-        this.scanCodeTextMap.set(96, ['8']);
-        this.scanCodeTextMap.set(97, ['pgup', '9']);
-        this.scanCodeTextMap.set(98, ['Insert', '0']);
-        this.scanCodeTextMap.set(99, ['Del', '.']);
-        this.scanCodeTextMap.set(104, ['F13']);
-        this.scanCodeTextMap.set(105, ['F14']);
-        this.scanCodeTextMap.set(106, ['F15']);
-        this.scanCodeTextMap.set(107, ['F16']);
-        this.scanCodeTextMap.set(108, ['F17']);
-        this.scanCodeTextMap.set(109, ['F18']);
-        this.scanCodeTextMap.set(110, ['F19']);
-        this.scanCodeTextMap.set(111, ['F20']);
-        this.scanCodeTextMap.set(112, ['F21']);
-        this.scanCodeTextMap.set(113, ['F22']);
-        this.scanCodeTextMap.set(114, ['F23']);
-        this.scanCodeTextMap.set(115, ['F24']);
-        this.scanCodeTextMap.set(118, ['Menu']);
-        this.scanCodeTextMap.set(176, ['00']);
-        this.scanCodeTextMap.set(177, ['000']);
-        this.scanCodeTextMap.set(232, ['Play']);
-        this.scanCodeTextMap.set(233, ['Stop']);
-        this.scanCodeTextMap.set(234, ['Prev']);
-        this.scanCodeTextMap.set(235, ['Next']);
-        this.scanCodeTextMap.set(236, ['Eject']);
-        this.scanCodeTextMap.set(237, ['Vol +']);
-        this.scanCodeTextMap.set(238, ['Vol -']);
-        this.scanCodeTextMap.set(239, ['Mute']);
-        this.scanCodeTextMap.set(240, ['WWW']);
-        this.scanCodeTextMap.set(241, ['Bckwrd']);
-        this.scanCodeTextMap.set(242, ['Frwrd']);
-        this.scanCodeTextMap.set(243, ['Cancel']);
+        this.basicScanCodeTextMap = new Map<number, string[]>();
+        this.basicScanCodeTextMap.set(4, ['A']);
+        this.basicScanCodeTextMap.set(5, ['B']);
+        this.basicScanCodeTextMap.set(6, ['C']);
+        this.basicScanCodeTextMap.set(7, ['D']);
+        this.basicScanCodeTextMap.set(8, ['E']);
+        this.basicScanCodeTextMap.set(9, ['F']);
+        this.basicScanCodeTextMap.set(10, ['G']);
+        this.basicScanCodeTextMap.set(11, ['H']);
+        this.basicScanCodeTextMap.set(12, ['I']);
+        this.basicScanCodeTextMap.set(13, ['J']);
+        this.basicScanCodeTextMap.set(14, ['K']);
+        this.basicScanCodeTextMap.set(15, ['L']);
+        this.basicScanCodeTextMap.set(16, ['M']);
+        this.basicScanCodeTextMap.set(17, ['N']);
+        this.basicScanCodeTextMap.set(18, ['O']);
+        this.basicScanCodeTextMap.set(19, ['P']);
+        this.basicScanCodeTextMap.set(20, ['Q']);
+        this.basicScanCodeTextMap.set(21, ['R']);
+        this.basicScanCodeTextMap.set(22, ['S']);
+        this.basicScanCodeTextMap.set(23, ['T']);
+        this.basicScanCodeTextMap.set(24, ['U']);
+        this.basicScanCodeTextMap.set(25, ['V']);
+        this.basicScanCodeTextMap.set(26, ['W']);
+        this.basicScanCodeTextMap.set(27, ['X']);
+        this.basicScanCodeTextMap.set(28, ['Y']);
+        this.basicScanCodeTextMap.set(29, ['Z']);
+        this.basicScanCodeTextMap.set(30, ['1', '!']);
+        this.basicScanCodeTextMap.set(31, ['2', '@']);
+        this.basicScanCodeTextMap.set(32, ['3', '#']);
+        this.basicScanCodeTextMap.set(33, ['4', '$']);
+        this.basicScanCodeTextMap.set(34, ['5', '%']);
+        this.basicScanCodeTextMap.set(35, ['6', '^']);
+        this.basicScanCodeTextMap.set(36, ['7', '&']);
+        this.basicScanCodeTextMap.set(37, ['8', '*']);
+        this.basicScanCodeTextMap.set(38, ['9', '(']);
+        this.basicScanCodeTextMap.set(39, ['0', ')']);
+        this.basicScanCodeTextMap.set(40, ['Enter']);
+        this.basicScanCodeTextMap.set(41, ['Esc']);
+        this.basicScanCodeTextMap.set(42, ['Backspace']);
+        this.basicScanCodeTextMap.set(43, ['Tab']);
+        this.basicScanCodeTextMap.set(44, ['Space']);
+        this.basicScanCodeTextMap.set(45, ['-', '_']);
+        this.basicScanCodeTextMap.set(46, ['=', '+']);
+        this.basicScanCodeTextMap.set(47, ['[', '{']);
+        this.basicScanCodeTextMap.set(48, [']', '}']);
+        this.basicScanCodeTextMap.set(49, ['\\', '|']);
+        this.basicScanCodeTextMap.set(50, ['NON_US_HASHMARK_AND_TILDE']);
+        this.basicScanCodeTextMap.set(51, [';', ':']);
+        this.basicScanCodeTextMap.set(52, ['\'', '"']);
+        this.basicScanCodeTextMap.set(53, ['`', '~']);
+        this.basicScanCodeTextMap.set(54, [',', '<']);
+        this.basicScanCodeTextMap.set(55, ['.', '>']);
+        this.basicScanCodeTextMap.set(56, ['/', '?']);
+        this.basicScanCodeTextMap.set(57, ['Caps Lock']);
+        this.basicScanCodeTextMap.set(58, ['F1']);
+        this.basicScanCodeTextMap.set(59, ['F2']);
+        this.basicScanCodeTextMap.set(60, ['F3']);
+        this.basicScanCodeTextMap.set(61, ['F4']);
+        this.basicScanCodeTextMap.set(62, ['F5']);
+        this.basicScanCodeTextMap.set(63, ['F6']);
+        this.basicScanCodeTextMap.set(64, ['F7']);
+        this.basicScanCodeTextMap.set(65, ['F8']);
+        this.basicScanCodeTextMap.set(66, ['F9']);
+        this.basicScanCodeTextMap.set(67, ['F10']);
+        this.basicScanCodeTextMap.set(68, ['F11']);
+        this.basicScanCodeTextMap.set(69, ['F12']);
+        this.basicScanCodeTextMap.set(70, ['PrtScn']);
+        this.basicScanCodeTextMap.set(71, ['Scroll Lock']);
+        this.basicScanCodeTextMap.set(72, ['Pause']);
+        this.basicScanCodeTextMap.set(73, ['Insert']);
+        this.basicScanCodeTextMap.set(74, ['Home']);
+        this.basicScanCodeTextMap.set(75, ['PgUp']);
+        this.basicScanCodeTextMap.set(76, ['Del']);
+        this.basicScanCodeTextMap.set(77, ['End']);
+        this.basicScanCodeTextMap.set(78, ['PgDn']);
+        this.basicScanCodeTextMap.set(79, ['Right Arrow']);
+        this.basicScanCodeTextMap.set(80, ['Left Arrow']);
+        this.basicScanCodeTextMap.set(81, ['Down Arrow']);
+        this.basicScanCodeTextMap.set(82, ['Up Arrow']);
+        this.basicScanCodeTextMap.set(83, ['Num Lock']);
+        this.basicScanCodeTextMap.set(84, ['/']);
+        this.basicScanCodeTextMap.set(85, ['*']);
+        this.basicScanCodeTextMap.set(86, ['-']);
+        this.basicScanCodeTextMap.set(87, ['+']);
+        this.basicScanCodeTextMap.set(88, ['Enter']);
+        this.basicScanCodeTextMap.set(89, ['end', '1']);
+        this.basicScanCodeTextMap.set(90, ['2']);
+        this.basicScanCodeTextMap.set(91, ['pgdn', '3']);
+        this.basicScanCodeTextMap.set(92, ['4']);
+        this.basicScanCodeTextMap.set(93, ['5']);
+        this.basicScanCodeTextMap.set(94, ['6']);
+        this.basicScanCodeTextMap.set(95, ['home', '7']);
+        this.basicScanCodeTextMap.set(96, ['8']);
+        this.basicScanCodeTextMap.set(97, ['pgup', '9']);
+        this.basicScanCodeTextMap.set(98, ['Insert', '0']);
+        this.basicScanCodeTextMap.set(99, ['Del', '.']);
+        this.basicScanCodeTextMap.set(104, ['F13']);
+        this.basicScanCodeTextMap.set(105, ['F14']);
+        this.basicScanCodeTextMap.set(106, ['F15']);
+        this.basicScanCodeTextMap.set(107, ['F16']);
+        this.basicScanCodeTextMap.set(108, ['F17']);
+        this.basicScanCodeTextMap.set(109, ['F18']);
+        this.basicScanCodeTextMap.set(110, ['F19']);
+        this.basicScanCodeTextMap.set(111, ['F20']);
+        this.basicScanCodeTextMap.set(112, ['F21']);
+        this.basicScanCodeTextMap.set(113, ['F22']);
+        this.basicScanCodeTextMap.set(114, ['F23']);
+        this.basicScanCodeTextMap.set(115, ['F24']);
+        this.basicScanCodeTextMap.set(118, ['Menu']);
+        this.basicScanCodeTextMap.set(176, ['00']);
+        this.basicScanCodeTextMap.set(177, ['000']);
+
+        this.mediaScanCodeTextMap = new Map<number, string[]>();
+        this.mediaScanCodeTextMap.set(138, ['WWW']);
+        this.mediaScanCodeTextMap.set(176, ['Play']);
+        this.mediaScanCodeTextMap.set(177, ['Pause']);
+        this.mediaScanCodeTextMap.set(181, ['Next']);
+        this.mediaScanCodeTextMap.set(182, ['Prev']);
+        this.mediaScanCodeTextMap.set(183, ['Stop']);
+        this.mediaScanCodeTextMap.set(184, ['Eject']);
+        this.mediaScanCodeTextMap.set(204, ['Eject', 'Stop']);
+        this.mediaScanCodeTextMap.set(205, ['Pause', 'Play']);
+        this.mediaScanCodeTextMap.set(226, ['Mute']);
+        this.mediaScanCodeTextMap.set(233, ['Vol +']);
+        this.mediaScanCodeTextMap.set(234, ['Vol -']);
     }
 
-    private initScanCodeFileName(): void {
-        this.scanCodeFileName = new Map<number, string>();
-        this.scanCodeFileName.set(79, 'icon-kbd__mod--arrow-right');
-        this.scanCodeFileName.set(80, 'icon-kbd__mod--arrow-left');
-        this.scanCodeFileName.set(81, 'icon-kbd__mod--arrow-down');
-        this.scanCodeFileName.set(82, 'icon-kbd__mod--arrow-up');
-        this.scanCodeFileName.set(118, 'icon-kbd__mod--menu');
+    private initScancodeIcons(): void {
+        this.basicScancodeIcons = new Map<number, string>();
+        this.basicScancodeIcons.set(79, 'icon-kbd__mod--arrow-right');
+        this.basicScancodeIcons.set(80, 'icon-kbd__mod--arrow-left');
+        this.basicScancodeIcons.set(81, 'icon-kbd__mod--arrow-down');
+        this.basicScancodeIcons.set(82, 'icon-kbd__mod--arrow-up');
+        this.basicScancodeIcons.set(118, 'icon-kbd__mod--menu');
+
+        this.mediaScancodeIcons = new Map<number, string>();
+        this.mediaScancodeIcons.set(138, 'icon-kbd__fn--browser');
+        this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
+        this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
+        this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');
+        this.mediaScancodeIcons.set(182, 'icon-kbd__media--prev');
+        this.mediaScancodeIcons.set(184, 'icon-kbd__fn--eject');
+        this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
+        this.mediaScancodeIcons.set(233, 'icon-kbd__media--vol-up');
+        this.mediaScancodeIcons.set(234, 'icon-kbd__media--vol-down');
     }
 
     private initNameToFileNames(): void {

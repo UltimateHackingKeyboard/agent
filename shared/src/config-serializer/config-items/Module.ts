@@ -2,7 +2,7 @@ import { assertEnum, assertUInt8 } from '../assert';
 import { UhkBuffer } from '../UhkBuffer';
 import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
 import { Macro } from './Macro';
-import { PlayMacroAction, SwitchLayerAction } from './key-action';
+import { PlayMacroAction, SwitchKeymapAction } from './key-action';
 
 enum PointerRole {
     none,
@@ -54,7 +54,7 @@ export class Module {
             id: this.id,
             pointerRole: PointerRole[this.pointerRole],
             keyActions: this.keyActions.map(keyAction => {
-                if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchLayerAction))) {
+                if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
                     return keyAction.toJsonObject(macros);
                 }
             })

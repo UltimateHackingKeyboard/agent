@@ -3,6 +3,11 @@ import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy
 import { Module } from '../../../config-serializer/config-items/Module';
 import { SvgModule } from '../module';
 
+enum KeyboardLayout {
+    ANSI,
+    ISO
+}
+
 @Component({
     selector: 'svg-keyboard',
     templateUrl: './svg-keyboard.component.html',
@@ -19,12 +24,12 @@ export class SvgKeyboardComponent implements OnInit {
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
 
-    private modules: SvgModule[];
-    private svgAttributes: { viewBox: string, transform: string, fill: string };
+    modules: SvgModule[];
+    viewBox: string;
 
     constructor() {
         this.modules = [];
-        this.svgAttributes = this.getKeyboardSvgAttributes();
+        this.viewBox = '-520 582 1100 470';
     }
 
     ngOnInit() {
@@ -39,7 +44,7 @@ export class SvgKeyboardComponent implements OnInit {
         });
     }
 
-    onCapture(moduleId: number, keyId: number, captured: {code: number, left: boolean[], right: boolean[]}): void {
+    onCapture(moduleId: number, keyId: number, captured: { code: number, left: boolean[], right: boolean[] }): void {
         this.capture.emit({
             moduleId,
             keyId,
@@ -56,22 +61,21 @@ export class SvgKeyboardComponent implements OnInit {
         });
     }
 
-    private getKeyboardSvgAttributes(): { viewBox: string, transform: string, fill: string } {
-        const svg: any = this.getBaseLayer();
-        return {
-            viewBox: svg.$.viewBox,
-            transform: svg.g[0].$.transform,
-            fill: svg.g[0].$.fill
-        };
-    }
-
     private getSvgModules(): SvgModule[] {
-        const modules = this.getBaseLayer().g[0].g.map((obj: any) => new SvgModule(obj));
-        return [modules[1], modules[0]]; // TODO: remove if the svg will be correct
+        const leftModule = new SvgModule(this.getLeftModule());
+        const rightModule = new SvgModule(this.getRightModule());
+        return [rightModule, leftModule];
     }
 
-    private getBaseLayer(): any {
-        return require('xml-loader!../../../../../images/base-layer.svg').svg;
+    private getLeftModule(layout = KeyboardLayout.ANSI): any {
+        if (layout === KeyboardLayout.ISO) {
+            return require('xml-loader!../../../../../modules/uhk60-left-half/layout-iso.svg').svg;
+        }
+        return require('xml-loader!../../../../../modules/uhk60-left-half/layout-ansi.svg').svg;
+    }
+
+    private getRightModule(): any {
+        return require('xml-loader!../../../../../modules/uhk60-right-half/layout.svg').svg;
     }
 
 }

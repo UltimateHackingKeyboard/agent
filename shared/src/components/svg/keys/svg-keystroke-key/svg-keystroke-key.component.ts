@@ -131,7 +131,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         let newLabelSource: string[];
         if (this.keystrokeAction.hasScancode()) {
             const scancode: number = this.keystrokeAction.scancode;
-            newLabelSource = this.mapper.scanCodeToText(scancode);
+            newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
             if (newLabelSource) {
                 if (newLabelSource.length === 1) {
                     this.labelSource = newLabelSource[0];
@@ -141,7 +141,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
                     this.labelType = 'two-line';
                 }
             } else {
-                this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode);
+                this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
                 this.labelType = 'icon';
             }
         } else {
