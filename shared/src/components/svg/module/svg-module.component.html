@@ -8,6 +8,7 @@
             [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
             [attr.fill]="key.fill"
             [keyAction]="keyActions[i]"
+            [active]="selected && i == selectedKey.keyId"
             [keybindAnimationEnabled]="keybindAnimationEnabled"
             [capturingEnabled]="capturingEnabled"
             (keyClick)="onKeyClick(i, $event)"

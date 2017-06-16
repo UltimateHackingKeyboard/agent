@@ -18,6 +18,8 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
+    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selected: boolean;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
