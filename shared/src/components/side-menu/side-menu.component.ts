@@ -1,4 +1,5 @@
-import { Component, Renderer, animate, state, style, transition, trigger } from '@angular/core';
+import { Component, Renderer } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { Store } from '@ngrx/store';
 

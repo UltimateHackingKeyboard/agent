@@ -1,7 +1,7 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild,
-    animate, keyframes, state, style, transition, trigger
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild
 } from '@angular/core';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';

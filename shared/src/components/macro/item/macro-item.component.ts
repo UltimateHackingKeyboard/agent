@@ -1,17 +1,5 @@
-import {
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnInit,
-    Output,
-    SimpleChanges,
-    animate,
-    state,
-    style,
-    transition,
-    trigger
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { KeyModifiers } from '../../../config-serializer/config-items/KeyModifiers';
 import {
@@ -32,7 +20,7 @@ import { MapperService } from '../../../services/mapper.service';
             state('inactive', style({
                 height: '0px'
             })),
-            state('active',   style({
+            state('active', style({
                 height: '*'
             })),
             transition('inactive <=> active', animate('500ms ease-out'))
@@ -152,7 +140,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.hasScancode()) {
-            const scancode: string = (this.mapper.scanCodeToText(action.scancode) || [ 'Unknown' ]).join(' ');
+            const scancode: string = (this.mapper.scanCodeToText(action.scancode) || ['Unknown']).join(' ');
             if (scancode) {
                 this.title += scancode;
             }

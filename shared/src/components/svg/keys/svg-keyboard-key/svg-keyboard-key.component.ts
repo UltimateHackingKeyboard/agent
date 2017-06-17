@@ -1,7 +1,8 @@
 import {
     Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
-    SimpleChange, animate, group, state, style, transition, trigger
+    SimpleChange
 } from '@angular/core';
+import { animate, group, state, style, transition, trigger } from '@angular/animations';
 
 import { Store } from '@ngrx/store';
 

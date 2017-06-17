@@ -1,17 +1,5 @@
-import {
-    Component,
-    EventEmitter,
-    Input,
-    Output,
-    QueryList,
-    ViewChildren,
-    animate,
-    forwardRef,
-    state,
-    style,
-    transition,
-    trigger
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 

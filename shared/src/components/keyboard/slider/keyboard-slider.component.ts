@@ -1,18 +1,7 @@
 import {
-    ChangeDetectionStrategy,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChanges,
-    animate,
-    keyframes,
-    state,
-    style,
-    transition,
-    trigger
+    Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnChanges, SimpleChanges
 } from '@angular/core';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 import { Layer } from '../../../config-serializer/config-items/Layer';
 
