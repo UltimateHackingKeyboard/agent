@@ -55,6 +55,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
+    @Input() halvesSplit: boolean;
 
     @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import '@ngrx/core/add/operator/select';
@@ -26,6 +26,8 @@ import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/redu
     }
 })
 export class KeymapEditComponent {
+
+    keyboardSplit: boolean;
 
     protected keymap$: Observable<Keymap>;
     private deletable$: Observable<boolean>;
@@ -59,6 +61,11 @@ export class KeymapEditComponent {
                 const fileName = keymap.name + '_keymap.json';
                 saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
             });
+    }
+
+    @HostListener('window:keydown.alt.s', ['$event'])
+    toggleKeyboardSplit() {
+        this.keyboardSplit = !this.keyboardSplit;
     }
 
     private toExportableJSON(keymap: Keymap): Observable<any> {
