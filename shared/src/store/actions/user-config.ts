@@ -8,7 +8,8 @@ const PREFIX = '[user-config] ';
 // tslint:disable-next-line:variable-name
 export const ActionTypes = {
     LOAD_USER_CONFIG: type(PREFIX + 'Load User Config'),
-    LOAD_USER_CONFIG_SUCCESS: type(PREFIX + 'Load User Config Success')
+    LOAD_USER_CONFIG_SUCCESS: type(PREFIX + 'Load User Config Success'),
+    SAVE_USER_CONFIG_SUCCESS: type(PREFIX + 'Save User Config Success')
 };
 
 export class LoadUserConfigAction implements Action {
@@ -23,6 +24,11 @@ export class LoadUserConfigSuccessAction implements Action {
     }
 }
 
+export class SaveUserConfigSuccessAction implements Action {
+    type = ActionTypes.SAVE_USER_CONFIG_SUCCESS;
+}
+
 export type Actions
     = LoadUserConfigAction
-    | LoadUserConfigSuccessAction;
+    | LoadUserConfigSuccessAction
+    | SaveUserConfigSuccessAction;
