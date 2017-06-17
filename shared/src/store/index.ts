@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect';
 import { Keymap } from '../config-serializer/config-items/Keymap';
 import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
 
