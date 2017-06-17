@@ -1,15 +1,15 @@
+
 import { createSelector } from 'reselect';
 import { compose } from '@ngrx/core/compose';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { ActionReducer, combineReducers } from '@ngrx/store';
 import { routerReducer } from '@ngrx/router-store';
+import * as isDev from 'electron-is-dev';
 
 import { AppState as CommonState } from '../shared/store';
 import * as fromApp from './reducers/app.reducer';
 import * as fromAppUpdate from './reducers/app-update.reducer';
 import {userConfigurationReducer, presetReducer} from '../../../shared/src/store/reducers/index';
-
-import { isDev } from '../shared/util';
 
 export interface AppState extends CommonState {
     app: fromApp.State;
@@ -28,7 +28,7 @@ const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combine
 const productionReducer: ActionReducer<AppState> = combineReducers(reducers);
 
 export function reducer(state: any, action: any) {
-    if (isDev()) {
+    if (isDev) {
         return developmentReducer(state, action);
     } else {
         return productionReducer(state, action);

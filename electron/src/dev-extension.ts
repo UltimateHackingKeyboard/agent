@@ -1,10 +1,12 @@
+/// <reference path="./custom_types/electron-is-dev.d.ts"/>
+
 /*
  * Install DevTool extensions when Electron is in development mode
  */
 import { app } from 'electron';
-import { isDev } from './shared/util/index';
+import * as isDev from 'electron-is-dev';
 
-if (isDev()) {
+if (isDev) {
 
     app.once('ready', () => {
         const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');

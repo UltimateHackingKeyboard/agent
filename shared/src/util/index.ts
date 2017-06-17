@@ -30,10 +30,4 @@ export function type<T>(label: T | ''): T {
     return <T>label;
 }
 
-export function isDev() {
-    return process.defaultApp ||
-        /[\\/]electron-prebuilt[\\/]/.test(process.execPath) ||
-        /[\\/]electron[\\/]/.test(process.execPath);
-}
-
 export { IpcEvents } from './ipcEvents';

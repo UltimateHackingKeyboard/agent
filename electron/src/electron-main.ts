@@ -1,3 +1,5 @@
+/// <reference path="./custom_types/electron-is-dev.d.ts"/>
+
 import { BrowserWindow, app, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import * as log from 'electron-log';
@@ -5,8 +7,9 @@ import * as path from 'path';
 import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransform';
 import { VersionInfo } from 'electron-builder-http/out/publishOptions';
 import * as settings from 'electron-settings';
+import * as isDev from 'electron-is-dev';
 
-import { IpcEvents, isDev } from './shared/util';
+import { IpcEvents } from './shared/util';
 
 // import './dev-extension';
 
@@ -81,7 +84,7 @@ app.on('activate', () => {
 // Auto update events
 // =========================================================================
 function checkForUpdate() {
-    if (isDev()) {
+    if (isDev) {
         log.info('Application update is not working in dev mode.');
         return;
     }
