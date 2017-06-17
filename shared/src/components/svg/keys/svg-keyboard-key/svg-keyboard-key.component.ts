@@ -1,6 +1,6 @@
 import {
     Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
-    SimpleChange
+    SimpleChange, ChangeDetectionStrategy
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
 
@@ -67,7 +67,8 @@ enum LabelTypes {
     ],
     selector: 'g[svg-keyboard-key]',
     templateUrl: './svg-keyboard-key.component.html',
-    styleUrls: ['./svg-keyboard-key.component.scss']
+    styleUrls: ['./svg-keyboard-key.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() id: string;
