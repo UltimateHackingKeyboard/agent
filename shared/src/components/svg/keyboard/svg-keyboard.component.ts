@@ -2,11 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy
 
 import { Module } from '../../../config-serializer/config-items/Module';
 import { SvgModule } from '../module';
-
-enum KeyboardLayout {
-    ANSI,
-    ISO
-}
+import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
 
 @Component({
     selector: 'svg-keyboard',
@@ -27,13 +23,13 @@ export class SvgKeyboardComponent implements OnInit {
     modules: SvgModule[];
     viewBox: string;
 
-    constructor() {
+    constructor(private svgModuleProvider: SvgModuleProviderService) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
     }
 
     ngOnInit() {
-        this.modules = this.getSvgModules();
+        this.modules = this.svgModuleProvider.getSvgModules();
     }
 
     onKeyClick(moduleId: number, keyId: number, keyTarget: HTMLElement): void {
@@ -59,23 +55,6 @@ export class SvgKeyboardComponent implements OnInit {
             over,
             keyId
         });
-    }
-
-    private getSvgModules(): SvgModule[] {
-        const leftModule = new SvgModule(this.getLeftModule());
-        const rightModule = new SvgModule(this.getRightModule());
-        return [rightModule, leftModule];
-    }
-
-    private getLeftModule(layout = KeyboardLayout.ANSI): any {
-        if (layout === KeyboardLayout.ISO) {
-            return require('xml-loader!../../../../../modules/uhk60-left-half/layout-iso.svg').svg;
-        }
-        return require('xml-loader!../../../../../modules/uhk60-left-half/layout-ansi.svg').svg;
-    }
-
-    private getRightModule(): any {
-        return require('xml-loader!../../../../../modules/uhk60-right-half/layout.svg').svg;
     }
 
 }

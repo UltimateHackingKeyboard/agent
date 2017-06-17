@@ -73,6 +73,7 @@ import { SafeStylePipe } from './shared/pipes';
 
 import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
+import { SvgModuleProviderService } from './shared/services/svg-module-provider.service';
 import { UhkDeviceService } from './services/uhk-device.service';
 
 import { KeymapEffects, MacroEffects, UserConfigEffects} from './shared/store/effects';
@@ -169,6 +170,7 @@ import { reducer } from '../../shared/src/store/reducers/index';
         UhkDeviceDisconnectedGuard,
         UhkDeviceInitializedGuard,
         UhkDeviceUninitializedGuard,
+        SvgModuleProviderService,
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,
