@@ -146,7 +146,7 @@ import { reducer } from './store';
         PrivilegeCheckerComponent,
         UhkMessageComponent,
         CancelableDirective,
-        SafeStylePipe
+        SafeStylePipe,
         UpdateAvailableComponent
     ],
     imports: [
