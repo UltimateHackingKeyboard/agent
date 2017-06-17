@@ -3,6 +3,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
 
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/withLatestFrom';
@@ -38,13 +39,13 @@ export class UserConfigEffects {
 
     @Effect() saveUserConfig$: Observable<Action> = this.actions$
         .ofType(KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.CHECK_MACRO,
-            MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
+                KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.CHECK_MACRO,
+                MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
+                MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
         .withLatestFrom(this.store.select(getUserConfiguration))
-        .switchMap(([action, config]) => {
+        .map(([action, config]) => {
             this.dataStorageRepository.saveConfig(config);
-            return Observable.of(new SaveUserConfigSuccessAction());
+            return new SaveUserConfigSuccessAction();
         });
 
     constructor(private actions$: Actions,
