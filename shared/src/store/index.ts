@@ -6,3 +6,5 @@ export interface AppState {
     userConfiguration: UserConfiguration;
     presetKeymaps: Keymap[];
 }
+
+export const getUserConfiguration = (state: AppState) => state.userConfiguration;
