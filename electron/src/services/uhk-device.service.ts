@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, NgZone } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -20,11 +20,9 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/switchMap';
 
-import { Device, Interface, InEndpoint, OutEndpoint, findByIds, on } from 'usb';
+import { Device, findByIds, InEndpoint, Interface, on, OutEndpoint } from 'usb';
 
-const vendorId = 0x1d50;
-const productId = 0x6122;
-const MAX_PAYLOAD_SIZE = 64;
+import { Constants } from '../shared/util';
 
 enum Command {
     UploadConfig = 8,
@@ -48,6 +46,11 @@ export class UhkDeviceService implements OnDestroy {
     private messageOut$: Subject<SenderMessage>;
 
     private outSubscription: Subscription;
+
+    static isUhkDevice(device: Device) {
+        return device.deviceDescriptor.idVendor === Constants.VENDOR_ID &&
+            device.deviceDescriptor.idProduct === Constants.PRODUCT_ID;
+    }
 
     constructor(zone: NgZone) {
         this.messageOut$ = new Subject<SenderMessage>();
@@ -74,7 +77,7 @@ export class UhkDeviceService implements OnDestroy {
         if (this.initialized$.getValue()) {
             return;
         }
-        this.device = findByIds(vendorId, productId);
+        this.device = findByIds(Constants.VENDOR_ID, Constants.PRODUCT_ID);
         this.connected$.next(!!this.device);
         if (!this.device) {
             return;
@@ -103,7 +106,7 @@ export class UhkDeviceService implements OnDestroy {
         this.messageIn$ = Observable.create((subscriber: Subscriber<Buffer>) => {
             const inEndPoint: InEndpoint = <InEndpoint>usbInterface.endpoints[0];
             console.log('Try to read');
-            inEndPoint.transfer(MAX_PAYLOAD_SIZE, (error: string, receivedBuffer: Buffer) => {
+            inEndPoint.transfer(Constants.MAX_PAYLOAD_SIZE, (error: string, receivedBuffer: Buffer) => {
                 if (error) {
                     console.error('reading error', error);
                     subscriber.error(error);
@@ -185,7 +188,7 @@ export class UhkDeviceService implements OnDestroy {
         return Observable.create((subscriber: Subscriber<Buffer>) => {
             console.log('Sending...', configBuffer);
             const fragments: Buffer[] = [];
-            const MAX_SENDING_PAYLOAD_SIZE = MAX_PAYLOAD_SIZE - 4;
+            const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
             for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
                 const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
                     ? MAX_SENDING_PAYLOAD_SIZE
@@ -224,7 +227,7 @@ export class UhkDeviceService implements OnDestroy {
     }
 
     onDeviceAttach(device: Device) {
-        if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
+        if (!UhkDeviceService.isUhkDevice(device)) {
             return;
         }
         // Ugly hack: device is not openable (on Windows) right after the attach
@@ -234,10 +237,9 @@ export class UhkDeviceService implements OnDestroy {
     }
 
     onDeviceDetach(device: Device) {
-        if (device.deviceDescriptor.idVendor !== vendorId || device.deviceDescriptor.idProduct !== productId) {
+        if (!UhkDeviceService.isUhkDevice(device)) {
             return;
         }
         this.disconnect();
     }
-
 }

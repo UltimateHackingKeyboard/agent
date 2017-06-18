@@ -14,6 +14,7 @@ import { remote } from 'electron';
 import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 
+import { Constants } from '../../shared/util';
 import { UhkDeviceService } from '../../services/uhk-device.service';
 import { ILogService, LOG_SERVICE } from '../../../../shared/src/services/logger.service';
 
@@ -28,7 +29,7 @@ export class PrivilegeCheckerComponent {
 
     constructor(private router: Router,
                 private uhkDevice: UhkDeviceService,
-                @Inject(LOG_SERVICE)private logService: ILogService) {
+                @Inject(LOG_SERVICE) private logService: ILogService) {
         this.rootDir = path.dirname(remote.app.getAppPath());
 
         uhkDevice.isConnected()
@@ -100,15 +101,16 @@ export class PrivilegeCheckerComponent {
         const options = {
             name: 'Setting UHK access rules'
         };
-        /**
-         * The parameters:
-             - vid: vendor ID
-             - pid: product ID
-             - iface: interface ID
-             - usealldevices: if the device has installed USB driver than overwrite it
-             - noprompt: return at the end of the installation and not waiting for any user command
-         */
-        const command = `"${scriptPath}" --vid 0x1D50 --pid 0x6122 --iface 0 --usealldevices --noprompt`;
+        const params = [
+            `--vid $\{Constants.VENDOR_ID}`,
+            `--pid $\{Constants.PRODUCT_ID}`,
+            '--iface 0', // interface ID
+            '--usealldevices', // if the device has installed USB driver than overwrite it
+            '--noprompt' // return at the end of the installation and not waiting for any user command
+        ];
+        const paramsString = params.join(' ');
+        const command = `"${scriptPath}" ${paramsString}`;
+
         sudo.exec(command, options, (error: any) => {
             if (error) {
                 subject.error(error);
