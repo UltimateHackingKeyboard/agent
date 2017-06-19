@@ -200,7 +200,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             const additional = option.additional;
             if (additional && additional.scancode === scancode && additional.type === typeToFind) {
                 return true;
-            } else if (+option.id === scancode) {
+            } else if ((!additional || additional.scancode === undefined) && +option.id === scancode) {
                 return true;
             } else {
                 return false;
