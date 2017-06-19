@@ -26,7 +26,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "devtron": "^1.4.0",
     "electron": "1.6.11",
-    "electron-builder": "^19.4.2",
+    "electron-builder": "18.3.0",
     "electron-debug": "^1.1.0",
     "electron-devtools-installer": "^2.2.0",
     "electron-rebuild": "^1.5.7",
@@ -74,7 +74,7 @@
     "ng2-dragula": "1.5.0",
     "ng2-select2": "1.0.0-beta.10",
     "ngrx-store-freeze": "^0.1.9",
-    "reselect": "^3.0.1",
+    "reselect": "3.0.1",
     "rxjs": "^5.4.1",
     "select2": "^4.0.3",
     "sudo-prompt": "^7.0.0",
@@ -87,7 +87,7 @@
     "postinstall": "run-p build:usb \"symlink -- -i\" ",
     "test": "cd ./test-serializer && node ./test-serializer.js",
     "lint": "run-s -scn lint:ts lint:style",
-    "lint:ts": "tslint \"electron/**/*.ts\" \"web/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
+    "lint:ts": "tslint \"electron/src/**/*.ts\" \"web/src/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
     "lint:style": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
     "build": "run-p build:web build:electron",
     "build:web": "webpack --config \"web/src/webpack.config.js\"",
@@ -102,6 +102,7 @@
     "symlink": "node ./tools/symlinker",
     "standard-version": "standard-version",
     "pack": "node ./scripts/release.js",
-    "release": "node ./scripts/release.js"
+    "install:build-deps": "cd electron/dist && npm i",
+    "release": "npm run install:build-deps && node ./scripts/release.js"
   }
 }

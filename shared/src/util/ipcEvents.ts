@@ -10,6 +10,8 @@ class AutoUpdate {
     public static readonly autoUpdateDownloaded = 'update-downloaded';
     public static readonly autoUpdateDownloadProgress = 'auto-update-download-progress';
     public static readonly updateAndRestart = 'update-and-restart';
+    public static readonly checkForUpdate = 'check-for-update';
+    public static readonly checkForUpdateNotAvailable = 'check-for-update-not-available';
 }
 
 export class IpcEvents {

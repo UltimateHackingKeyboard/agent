@@ -60,7 +60,7 @@ import {
 } from './shared/components/svg/keys';
 import { SvgModuleComponent } from './shared/components/svg/module';
 import { SvgKeyboardWrapComponent } from './shared/components/svg/wrap';
-import { MainAppComponent, appRoutingProviders, routing } from './main-app';
+import { appRoutingProviders, MainAppComponent, routing } from './main-app';
 
 import { CancelableDirective } from './shared/directives';
 import { SafeStylePipe } from './shared/pipes';
@@ -69,14 +69,15 @@ import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
 import { SvgModuleProviderService } from './shared/services/svg-module-provider.service';
 
-import { KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
+import { AutoUpdateSettingsEffects, KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
 import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
 import { LocalDataStorageRepositoryService } from './shared/services/local-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
-import { reducer } from '../../shared/src/store/reducers/index';
+import { reducer } from './shared/store/reducers/index';
+import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 
 @NgModule({
     declarations: [
@@ -127,7 +128,8 @@ import { reducer } from '../../shared/src/store/reducers/index';
         SettingsComponent,
         KeyboardSliderComponent,
         CancelableDirective,
-        SafeStylePipe
+        SafeStylePipe,
+        AutoUpdateSettings
     ],
     imports: [
         BrowserModule,
@@ -147,7 +149,8 @@ import { reducer } from '../../shared/src/store/reducers/index';
         Select2Module,
         EffectsModule.runAfterBootstrap(KeymapEffects),
         EffectsModule.runAfterBootstrap(MacroEffects),
-        EffectsModule.runAfterBootstrap(UserConfigEffects)
+        EffectsModule.runAfterBootstrap(UserConfigEffects),
+        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects)
     ],
     providers: [
         SvgModuleProviderService,
@@ -156,9 +159,10 @@ import { reducer } from '../../shared/src/store/reducers/index';
         KeymapEditGuard,
         MacroNotFoundGuard,
         CaptureService,
-        {provide: DATA_STORAGE_REPOSITORY, useClass: LocalDataStorageRepositoryService},
+        { provide: DATA_STORAGE_REPOSITORY, useClass: LocalDataStorageRepositoryService },
         DefaultUserConfigurationService
     ],
     bootstrap: [MainAppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

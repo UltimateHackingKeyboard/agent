@@ -30,18 +30,28 @@ export class UserConfigEffects {
         .ofType(ActionTypes.LOAD_USER_CONFIG)
         .startWith(new LoadUserConfigAction())
         .switchMap(() => {
-            let config: UserConfiguration = this.dataStorageRepository.getConfig();
+            const configJsonObject = this.dataStorageRepository.getConfig();
+            let config: UserConfiguration;
+
+            if (configJsonObject) {
+                if (configJsonObject.dataModelVersion === this.defaultUserConfigurationService.getDefault().dataModelVersion) {
+                    config = new UserConfiguration().fromJsonObject(configJsonObject);
+                }
+            }
+
             if (!config) {
                 config = this.defaultUserConfigurationService.getDefault();
             }
+
             return Observable.of(new LoadUserConfigSuccessAction(config));
         });
 
     @Effect() saveUserConfig$: Observable<Action> = this.actions$
-        .ofType(KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-                KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.CHECK_MACRO,
-                MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-                MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
+        .ofType(
+            KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
+            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.CHECK_MACRO,
+            MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
+            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
         .withLatestFrom(this.store.select(getUserConfiguration))
         .map(([action, config]) => {
             this.dataStorageRepository.saveConfig(config);

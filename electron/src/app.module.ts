@@ -77,8 +77,8 @@ import { MapperService } from './shared/services/mapper.service';
 import { SvgModuleProviderService } from './shared/services/svg-module-provider.service';
 import { UhkDeviceService } from './services/uhk-device.service';
 
-import { KeymapEffects, MacroEffects, UserConfigEffects} from './shared/store/effects';
-import { ApplicationEffect, AppUpdateEffect} from './store/effects';
+import { AutoUpdateSettingsEffects, KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
+import { ApplicationEffect, AppUpdateEffect } from './store/effects';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
@@ -92,6 +92,7 @@ import { ElectronDataStorageRepositoryService } from './services/electron-datast
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { reducer } from './store';
+import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 
 @NgModule({
     declarations: [
@@ -147,7 +148,8 @@ import { reducer } from './store';
         UhkMessageComponent,
         CancelableDirective,
         SafeStylePipe,
-        UpdateAvailableComponent
+        UpdateAvailableComponent,
+        AutoUpdateSettings
     ],
     imports: [
         BrowserModule,
@@ -168,6 +170,7 @@ import { reducer } from './store';
         EffectsModule.runAfterBootstrap(KeymapEffects),
         EffectsModule.runAfterBootstrap(MacroEffects),
         EffectsModule.runAfterBootstrap(UserConfigEffects),
+        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
         EffectsModule.run(ApplicationEffect),
         EffectsModule.run(AppUpdateEffect)
     ],
@@ -183,10 +186,11 @@ import { reducer } from './store';
         MacroNotFoundGuard,
         CaptureService,
         UhkDeviceService,
-        {provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService},
+        { provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService },
         DefaultUserConfigurationService,
         AppUpdateRendererService
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

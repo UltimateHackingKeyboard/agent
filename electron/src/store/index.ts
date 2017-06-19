@@ -1,4 +1,4 @@
-
+/// <reference path="../custom_types/electron-is-dev.d.ts"/>
 import { createSelector } from 'reselect';
 import { compose } from '@ngrx/core/compose';
 import { storeFreeze } from 'ngrx-store-freeze';
@@ -9,7 +9,7 @@ import * as isDev from 'electron-is-dev';
 import { AppState as CommonState } from '../shared/store';
 import * as fromApp from './reducers/app.reducer';
 import * as fromAppUpdate from './reducers/app-update.reducer';
-import {userConfigurationReducer, presetReducer} from '../../../shared/src/store/reducers/index';
+import { autoUpdateReducer, presetReducer, userConfigurationReducer } from '../shared/store/reducers';
 
 export interface AppState extends CommonState {
     app: fromApp.State;
@@ -21,7 +21,8 @@ const reducers = {
     presetKeymaps: presetReducer,
     router: routerReducer,
     app: fromApp.reducer,
-    appUpdate: fromAppUpdate.reducer
+    appUpdate: fromAppUpdate.reducer,
+    autoUpdateSettings: autoUpdateReducer
 };
 
 const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(reducers);

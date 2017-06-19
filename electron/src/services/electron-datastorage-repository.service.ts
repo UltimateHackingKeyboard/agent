@@ -1,13 +1,36 @@
-import { UserConfiguration } from '../shared/config-serializer/config-items/UserConfiguration';
+import * as storage from 'electron-settings';
 
-export class ElectronDataStorageRepositoryService {
-    getConfig(): UserConfiguration {
-        // TODO implement load logic
-        return;
+import { UserConfiguration } from '../shared/config-serializer/config-items/UserConfiguration';
+import { DataStorageRepositoryService } from '../shared/services/datastorage-repository.service';
+import { AutoUpdateSettings } from '../shared/models/auto-update-settings';
+
+export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
+    static getValue(key: string): any {
+        const value = storage.get(key);
+        if (!value) {
+            return null;
+        }
+
+        return JSON.parse(<string>value);
     }
 
-    /* tslint:disable:no-unused-variable */
+    static saveValue(key: string, value: any) {
+        storage.set(key, JSON.stringify(value));
+    }
+
+    getConfig(): UserConfiguration {
+        return ElectronDataStorageRepositoryService.getValue('user-config');
+    }
+
     saveConfig(config: UserConfiguration): void {
-        // TODO implement save logic
+        ElectronDataStorageRepositoryService.saveValue('user-config', config.toJsonObject());
+    }
+
+    getAutoUpdateSettings(): AutoUpdateSettings {
+        return ElectronDataStorageRepositoryService.getValue('auto-update-settings');
+    }
+
+    saveAutoUpdateSettings(settings: AutoUpdateSettings): void {
+        ElectronDataStorageRepositoryService.saveValue('auto-update-settings', settings);
     }
 }

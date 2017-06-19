@@ -1,12 +1,17 @@
 import { InjectionToken } from '@angular/core';
 
 import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
+import { AutoUpdateSettings } from '../models/auto-update-settings';
 
 export interface DataStorageRepositoryService {
 
     getConfig(): UserConfiguration;
 
     saveConfig(config: UserConfiguration): void;
+
+    getAutoUpdateSettings(): AutoUpdateSettings;
+
+    saveAutoUpdateSettings(settings: AutoUpdateSettings): void;
 }
 
 export let DATA_STORAGE_REPOSITORY = new InjectionToken('dataStorage-repository');

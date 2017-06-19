@@ -80,6 +80,10 @@ module.exports = {
                 {
                     from: 'node_modules/usb',
                     to: 'vendor/usb'
+                },
+                {
+                    from: 'electron/src/package.json',
+                    to: 'package.json'
                 }
             ]
         ),

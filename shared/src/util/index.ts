@@ -20,6 +20,7 @@ export function capitalizeFirstLetter(text: string): string {
  */
 
 const typeCache: { [label: string]: boolean } = {};
+
 export function type<T>(label: T | ''): T {
     if (typeCache[<string>label]) {
         throw new Error(`Action type "${label}" is not unique"`);
@@ -31,3 +32,7 @@ export function type<T>(label: T | ''): T {
 }
 
 export { IpcEvents } from './ipcEvents';
+
+export function runInElectron() {
+    return window && (<any>window).process && (<any>window).process.type;
+}

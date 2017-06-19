@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { ipcRenderer } from 'electron';
 
 import { IpcEvents } from '../shared/util';
 import { AppState } from '../store';
 import { UpdateDownloadedAction } from '../store/actions/app-update.action';
+import { CheckForUpdateFailedAction, CheckForUpdateSuccessAction } from '../shared/store/actions/auto-update-settings';
 
 /**
- * This service handle the application update events in the electron rendrel process.
+ * This service handle the application update events in the electron renderer process.
  *
  * The class contains parameters with 'any' type, because the relevant type definitions in
  * import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransform';
@@ -17,7 +18,8 @@ import { UpdateDownloadedAction } from '../store/actions/app-update.action';
  */
 @Injectable()
 export class AppUpdateRendererService {
-    constructor(private store: Store<AppState>) {
+    constructor(private store: Store<AppState>,
+                private zone: NgZone) {
         this.registerEvents();
     }
 
@@ -29,6 +31,10 @@ export class AppUpdateRendererService {
         ipcRenderer.send(IpcEvents.autoUpdater.updateAndRestart);
     }
 
+    checkForUpdate() {
+        ipcRenderer.send(IpcEvents.autoUpdater.checkForUpdate);
+    }
+
     private registerEvents() {
         ipcRenderer.on(IpcEvents.autoUpdater.updateAvailable, (event: string, arg: any) => {
             this.writeUpdateState(IpcEvents.autoUpdater.updateAvailable, arg);
@@ -36,10 +42,12 @@ export class AppUpdateRendererService {
 
         ipcRenderer.on(IpcEvents.autoUpdater.updateNotAvailable, () => {
             this.writeUpdateState(IpcEvents.autoUpdater.updateNotAvailable);
+            this.dispachStoreAction(new CheckForUpdateSuccessAction('No update available'));
         });
 
         ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateError, (event: string, arg: any) => {
             this.writeUpdateState(IpcEvents.autoUpdater.autoUpdateError, arg);
+            this.dispachStoreAction(new CheckForUpdateFailedAction(arg));
         });
 
         ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloadProgress, (event: string, arg: any) => {
@@ -51,10 +59,14 @@ export class AppUpdateRendererService {
             this.dispachStoreAction(new UpdateDownloadedAction());
         });
 
+        ipcRenderer.on(IpcEvents.autoUpdater.checkForUpdateNotAvailable, (event: string, arg: any) => {
+            this.writeUpdateState(IpcEvents.autoUpdater.checkForUpdateNotAvailable, arg);
+            this.dispachStoreAction(new CheckForUpdateFailedAction(arg));
+        });
     }
 
     private dispachStoreAction(action: Action) {
-        this.store.dispatch(action);
+        this.zone.run(() => this.store.dispatch(action));
     }
 
     private writeUpdateState(event: any, arg?: any) {

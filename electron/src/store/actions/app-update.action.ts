@@ -9,7 +9,7 @@ export const ActionTypes = {
     UPDATE_APP: type(PREFIX + 'update app'),
     DO_NOT_UPDATE_APP: type(PREFIX + 'do not update app'),
     UPDATE_DOWNLOADED: type(PREFIX + 'update downloaded'),
-    UPDATEING: type(PREFIX + 'updating')
+    UPDATING: type(PREFIX + 'updating')
 };
 
 export class UpdateAvailableAction implements Action {
@@ -29,7 +29,7 @@ export class UpdateDownloadedAction implements Action {
 }
 
 export class UpdatingAction implements Action {
-    type = ActionTypes.UPDATEING;
+    type = ActionTypes.UPDATING;
 }
 
 export type Actions

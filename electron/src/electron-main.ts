@@ -1,6 +1,6 @@
 /// <reference path="./custom_types/electron-is-dev.d.ts"/>
 
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import * as log from 'electron-log';
 import * as path from 'path';
@@ -10,8 +10,10 @@ import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
 
 import { IpcEvents } from './shared/util';
+import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 
 // import './dev-extension';
+// require('electron-debug')({ showDevTools: true, enabled: true });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -69,6 +71,10 @@ app.on('window-all-closed', () => {
     }
 });
 
+app.on('will-quit', () => {
+    saveFirtsRun();
+});
+
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -85,15 +91,20 @@ app.on('activate', () => {
 // =========================================================================
 function checkForUpdate() {
     if (isDev) {
-        log.info('Application update is not working in dev mode.');
+        const msg = 'Application update is not working in dev mode.';
+        log.info(msg);
+        sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
         return;
     }
 
     if (isFirstRun()) {
-        log.info('Application update is skipping at first run.');
+        const msg = 'Application update is skipping at first run.';
+        log.info(msg);
+        sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
         return;
     }
 
+    autoUpdater.allowPrerelease = allowPreRelease();
     autoUpdater.checkForUpdates();
 }
 
@@ -124,7 +135,13 @@ autoUpdater.on('update-downloaded', (ev: any, info: VersionInfo) => {
 
 ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => autoUpdater.quitAndInstall(true));
 
-ipcMain.on(IpcEvents.app.appStarted, () => checkForUpdate());
+ipcMain.on(IpcEvents.app.appStarted, () => {
+    if (checkForUpdateAtStartup()) {
+        checkForUpdate();
+    }
+});
+
+ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => checkForUpdate());
 
 function isFirstRun() {
     if (!settings.has('firstRunVersion')) {
@@ -142,10 +159,27 @@ function saveFirtsRun() {
 }
 
 function sendIpcToWindow(message: string, arg?: any) {
-    console.log(message);
+    log.info('sendIpcToWindow:', message, arg);
     if (!win || win.isDestroyed()) {
         return;
     }
 
     win.webContents.send(message, arg);
+}
+
+function allowPreRelease() {
+    const settings = getAutoUpdateSettings();
+
+    return settings && settings.usePreReleaseUpdate;
+}
+
+function checkForUpdateAtStartup() {
+    const settings = getAutoUpdateSettings();
+
+    return settings && settings.checkForUpdateOnStartUp;
+}
+
+function getAutoUpdateSettings() {
+    const storageService = new ElectronDataStorageRepositoryService();
+    return storageService.getAutoUpdateSettings();
 }
