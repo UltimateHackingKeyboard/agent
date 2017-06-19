@@ -10,6 +10,7 @@ export class MapperService {
 
     private basicScanCodeTextMap: Map<number, string[]>;
     private mediaScanCodeTextMap: Map<number, string[]>;
+    private sytemScanCodeTextMap: Map<number, string[]>;
 
     private basicScancodeIcons: Map<number, string>;
     private mediaScancodeIcons: Map<number, string>;
@@ -27,6 +28,9 @@ export class MapperService {
             case KeystrokeType.shortMedia:
             case KeystrokeType.longMedia:
                 map = this.mediaScanCodeTextMap;
+                break;
+            case KeystrokeType.system:
+                map = this.sytemScanCodeTextMap;
                 break;
             default:
                 map = this.basicScanCodeTextMap;
@@ -207,6 +211,11 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(226, ['Mute']);
         this.mediaScanCodeTextMap.set(233, ['Vol +']);
         this.mediaScanCodeTextMap.set(234, ['Vol -']);
+
+        this.sytemScanCodeTextMap = new Map<number, string[]>();
+        this.sytemScanCodeTextMap.set(129, ['Power']);
+        this.sytemScanCodeTextMap.set(130, ['Sleep']);
+        this.sytemScanCodeTextMap.set(131, ['Wake']);
     }
 
     private initScancodeIcons(): void {

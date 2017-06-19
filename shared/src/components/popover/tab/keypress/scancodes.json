@@ -555,6 +555,35 @@
         ]
     },
     {
+        "text": "System Keys",
+        "children": [
+            {
+                "id": "139",
+                "text": "Power",
+                "additional": {
+                    "type": "system",
+                    "scancode": 129
+                }
+            },
+            {
+                "id": "140",
+                "text": "Sleep",
+                "additional": {
+                    "type": "system",
+                    "scancode": 130
+                }
+            },
+            {
+                "id": "141",
+                "text": "Wake",
+                "additional": {
+                    "type": "system",
+                    "scancode": 131
+                }
+            }
+        ]
+    },
+    {
         "text": "Media Keys",
         "children": [
             {
