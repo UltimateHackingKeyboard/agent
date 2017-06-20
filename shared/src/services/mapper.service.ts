@@ -14,6 +14,7 @@ export class MapperService {
 
     private basicScancodeIcons: Map<number, string>;
     private mediaScancodeIcons: Map<number, string>;
+    private systemScancodeIcons: Map<number, string>;
     private nameToFileName: Map<string, string>;
 
     constructor() {
@@ -49,6 +50,9 @@ export class MapperService {
             case KeystrokeType.longMedia:
                 map = this.mediaScancodeIcons;
                 break;
+            case KeystrokeType.system:
+                map = this.systemScancodeIcons;
+                break;
             default:
                 map = new Map<number, string>();
         }
@@ -64,6 +68,9 @@ export class MapperService {
             case KeystrokeType.shortMedia:
             case KeystrokeType.longMedia:
                 map = this.mediaScancodeIcons;
+                break;
+            case KeystrokeType.system:
+                map = this.systemScancodeIcons;
                 break;
             default:
                 return undefined;
@@ -236,6 +243,11 @@ export class MapperService {
         this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
         this.mediaScancodeIcons.set(233, 'icon-kbd__media--vol-up');
         this.mediaScancodeIcons.set(234, 'icon-kbd__media--vol-down');
+
+        this.systemScancodeIcons = new Map<number, string>();
+        this.systemScancodeIcons.set(129, 'icon-kbd__system_power_down');
+        this.systemScancodeIcons.set(130, 'icon-kbd__system_sleep');
+        this.systemScancodeIcons.set(131, 'icon-kbd__system_wake_up');
     }
 
     private initNameToFileNames(): void {
