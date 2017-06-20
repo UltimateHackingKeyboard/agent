@@ -213,9 +213,9 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(234, ['Vol -']);
 
         this.sytemScanCodeTextMap = new Map<number, string[]>();
-        this.sytemScanCodeTextMap.set(129, ['Power']);
+        this.sytemScanCodeTextMap.set(129, ['Power Down']);
         this.sytemScanCodeTextMap.set(130, ['Sleep']);
-        this.sytemScanCodeTextMap.set(131, ['Wake']);
+        this.sytemScanCodeTextMap.set(131, ['Wake Up']);
     }
 
     private initScancodeIcons(): void {

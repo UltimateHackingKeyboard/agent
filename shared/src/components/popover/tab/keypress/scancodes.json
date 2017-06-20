@@ -559,7 +559,7 @@
         "children": [
             {
                 "id": "139",
-                "text": "Power",
+                "text": "Power Down",
                 "additional": {
                     "type": "system",
                     "scancode": 129
@@ -575,7 +575,7 @@
             },
             {
                 "id": "141",
-                "text": "Wake",
+                "text": "Wake Up",
                 "additional": {
                     "type": "system",
                     "scancode": 131
