@@ -195,7 +195,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): Select2OptionData {
-        const typeToFind: string = type === KeystrokeType.shortMedia || KeystrokeType.longMedia ? 'media' : KeystrokeType[type];
+        const typeToFind: string =
+            (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) ? 'media' : KeystrokeType[type];
         return this.findScancodeOptionBy((option: Select2OptionData) => {
             const additional = option.additional;
             if (additional && additional.scancode === scancode && additional.type === typeToFind) {
