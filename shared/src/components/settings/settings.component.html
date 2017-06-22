@@ -4,4 +4,15 @@
         <span class="macro__name pane-title__name">Settings</span>
     </h1>
 </div>
-To be done...
+<div *ngIf="!runInElectron">
+    To be done...
+</div>
+<auto-update-settings *ngIf="runInElectron"
+                      [version]="version"
+                      [settings]="autoUpdateSettings$ | async"
+                      [checkingForUpdate]="checkingForUpdate$ | async"
+                      [message]="autoUpdateMessage$ | async"
+                      (toggleCheckForUpdateOnStartUp)="toogleCheckForUpdateOnStartUp($event)"
+                      (toggleUsePreReleaseUpdate)="toogleUsePreReleaseUpdate($event)"
+                      (checkForUpdate)="checkForUpdate()">
+</auto-update-settings>

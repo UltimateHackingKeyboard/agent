@@ -11,8 +11,8 @@
     "suppressImplicitAnyIndexErrors": true
   },
   "exclude": [
-    "./node_modules",
+    "./dist",
     ".electron/dist",
-    "./dist"
+    "node_modules"
   ]
 }

@@ -67,6 +67,7 @@ import { SvgKeyboardWrapComponent } from './shared/components/svg/wrap';
 import { appRoutingProviders, routing } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { MainAppComponent } from './main-app';
+import { UpdateAvailableComponent } from './components/update-available/update-available.component';
 
 import { CancelableDirective } from './shared/directives';
 import { SafeStylePipe } from './shared/pipes';
@@ -76,7 +77,8 @@ import { MapperService } from './shared/services/mapper.service';
 import { SvgModuleProviderService } from './shared/services/svg-module-provider.service';
 import { UhkDeviceService } from './services/uhk-device.service';
 
-import { KeymapEffects, MacroEffects, UserConfigEffects} from './shared/store/effects';
+import { AutoUpdateSettingsEffects, KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
+import { ApplicationEffect, AppUpdateEffect } from './store/effects';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
@@ -88,7 +90,9 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
 import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
-import { reducer } from '../../shared/src/store/reducers/index';
+import { AppUpdateRendererService } from './services/app-update-renderer.service';
+import { reducer } from './store';
+import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 
 @NgModule({
     declarations: [
@@ -143,7 +147,9 @@ import { reducer } from '../../shared/src/store/reducers/index';
         PrivilegeCheckerComponent,
         UhkMessageComponent,
         CancelableDirective,
-        SafeStylePipe
+        SafeStylePipe,
+        UpdateAvailableComponent,
+        AutoUpdateSettings
     ],
     imports: [
         BrowserModule,
@@ -163,7 +169,10 @@ import { reducer } from '../../shared/src/store/reducers/index';
         Select2Module,
         EffectsModule.runAfterBootstrap(KeymapEffects),
         EffectsModule.runAfterBootstrap(MacroEffects),
-        EffectsModule.runAfterBootstrap(UserConfigEffects)
+        EffectsModule.runAfterBootstrap(UserConfigEffects),
+        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
+        EffectsModule.run(ApplicationEffect),
+        EffectsModule.run(AppUpdateEffect)
     ],
     providers: [
         UhkDeviceConnectedGuard,
@@ -177,9 +186,11 @@ import { reducer } from '../../shared/src/store/reducers/index';
         MacroNotFoundGuard,
         CaptureService,
         UhkDeviceService,
-        {provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService},
-        DefaultUserConfigurationService
+        { provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService },
+        DefaultUserConfigurationService,
+        AppUpdateRendererService
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

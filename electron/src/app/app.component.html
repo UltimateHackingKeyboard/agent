@@ -1,1 +1,7 @@
+<app-update-available
+    [showUpdateAvailable]="showUpdateAvailable$ | async"
+    (updateApp)="updateApp()"
+    (doNotUpdateApp)="doNotUpdateApp()">
+</app-update-available>
+
 <router-outlet></router-outlet>
