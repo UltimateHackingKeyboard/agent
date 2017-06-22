@@ -1,4 +1,5 @@
 'use strict';
+const jsonfile = require('jsonfile');
 
 const TEST_BUILD = false; // set true if you would like to test on your local machince
 
@@ -72,7 +73,9 @@ if (process.platform === 'darwin') {
 
 let version = '';
 if (TEST_BUILD || gitTag) {
+    const jsonVersion = require('../package.json').version;
     version = gitTag;
+    updateVersionNumberIn2rndPackageJson(jsonVersion);
 
     builder.build({
         dir: true,
@@ -83,7 +86,7 @@ if (TEST_BUILD || gitTag) {
             author: {
                 name: 'Ultimate Gadget Laboratories'
             },
-            version: require('../package.json').version
+            version: jsonVersion
         },
         config: {
             directories: {
@@ -114,4 +117,13 @@ else {
     // TODO: Need it?
     version = sha.substr(0, 8);
     process.exit(1);
+}
+
+function updateVersionNumberIn2rndPackageJson(version) {
+        const jsonPath = path.join(__dirname,'../electron/dist/package.json');
+        const json = require(jsonPath);
+
+        json.version = version;
+
+        jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
 }
