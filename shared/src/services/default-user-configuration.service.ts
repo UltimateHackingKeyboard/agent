@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
+import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
 
 @Injectable()
 export class DefaultUserConfigurationService {

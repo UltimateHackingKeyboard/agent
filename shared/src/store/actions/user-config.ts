@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { type } from '../../util';
-import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
+import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 
 const PREFIX = '[user-config] ';
 

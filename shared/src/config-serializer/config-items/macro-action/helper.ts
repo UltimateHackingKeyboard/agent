@@ -1,4 +1,4 @@
-import { UhkBuffer } from '../../UhkBuffer';
+import { UhkBuffer } from '../../uhk-buffer';
 import {
     DelayMacroAction,
     KeyMacroAction,

@@ -1,6 +1,6 @@
-import { UhkBuffer } from '../UhkBuffer';
-import { Macro } from './Macro';
-import { Module } from './Module';
+import { UhkBuffer } from '../uhk-buffer';
+import { Macro } from './macro';
+import { Module } from './module';
 
 export class Layer {
 

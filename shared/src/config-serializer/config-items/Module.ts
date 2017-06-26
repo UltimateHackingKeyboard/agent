@@ -1,8 +1,7 @@
 import { assertEnum, assertUInt8 } from '../assert';
-import { UhkBuffer } from '../UhkBuffer';
-import { Helper as KeyActionHelper, KeyAction, NoneAction } from './key-action';
-import { Macro } from './Macro';
-import { PlayMacroAction, SwitchKeymapAction } from './key-action';
+import { UhkBuffer } from '../uhk-buffer';
+import { Helper as KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action';
+import { Macro } from './macro';
 
 enum PointerRole {
     none,

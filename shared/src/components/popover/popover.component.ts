@@ -16,7 +16,7 @@ import {
     SwitchKeymapAction,
     SwitchLayerAction
 } from '../../config-serializer/config-items/key-action';
-import { Keymap } from '../../config-serializer/config-items/Keymap';
+import { Keymap } from '../../config-serializer/config-items/keymap';
 
 import { Tab } from './tab/tab';
 

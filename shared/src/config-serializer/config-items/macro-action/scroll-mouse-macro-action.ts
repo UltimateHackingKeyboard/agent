@@ -1,8 +1,8 @@
 import { assertInt16 } from '../../assert';
-import { UhkBuffer } from '../../UhkBuffer';
-import { MacroAction, MacroActionId, macroActionType } from './MacroAction';
+import { UhkBuffer } from '../../uhk-buffer';
+import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
-export class MoveMouseMacroAction extends MacroAction {
+export class ScrollMouseMacroAction extends MacroAction {
 
     @assertInt16
     x: number;
@@ -10,7 +10,7 @@ export class MoveMouseMacroAction extends MacroAction {
     @assertInt16
     y: number;
 
-    constructor(other?: MoveMouseMacroAction) {
+    constructor(other?: ScrollMouseMacroAction) {
         super();
         if (!other) {
             return;
@@ -19,14 +19,14 @@ export class MoveMouseMacroAction extends MacroAction {
         this.y = other.y;
     }
 
-    fromJsonObject(jsObject: any): MoveMouseMacroAction {
+    fromJsonObject(jsObject: any): ScrollMouseMacroAction {
         this.assertMacroActionType(jsObject);
         this.x = jsObject.x;
         this.y = jsObject.y;
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): MoveMouseMacroAction {
+    fromBinary(buffer: UhkBuffer): ScrollMouseMacroAction {
         this.readAndAssertMacroActionId(buffer);
         this.x = buffer.readInt16();
         this.y = buffer.readInt16();
@@ -35,19 +35,19 @@ export class MoveMouseMacroAction extends MacroAction {
 
     toJsonObject(): any {
         return {
-            macroActionType: macroActionType.MoveMouseMacroAction,
+            macroActionType: macroActionType.ScrollMouseMacroAction,
             x: this.x,
             y: this.y
         };
     }
 
     toBinary(buffer: UhkBuffer) {
-        buffer.writeUInt8(MacroActionId.MoveMouseMacroAction);
+        buffer.writeUInt8(MacroActionId.ScrollMouseMacroAction);
         buffer.writeInt16(this.x);
         buffer.writeInt16(this.y);
     }
 
     toString(): string {
-        return `<MoveMouseMacroAction pos="(${this.x},${this.y})">`;
+        return `<ScrollMouseMacroAction pos="(${this.x},${this.y})">`;
     }
 }

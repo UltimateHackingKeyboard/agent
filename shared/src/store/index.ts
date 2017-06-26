@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { Keymap } from '../config-serializer/config-items/Keymap';
-import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
+import { Keymap } from '../config-serializer/config-items/keymap';
+import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
 import * as autoUpdate from './reducers/auto-update-settings';
 
 // State interface for the application

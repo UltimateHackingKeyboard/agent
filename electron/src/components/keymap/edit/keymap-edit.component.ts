@@ -9,8 +9,8 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
-import { Keymap } from '../../../shared/config-serializer/config-items/Keymap';
-import { UhkBuffer } from '../../../shared/config-serializer/UhkBuffer';
+import { Keymap } from '../../../shared/config-serializer/config-items/keymap';
+import { UhkBuffer } from '../../../shared/config-serializer/uhk-buffer';
 import { AppState } from '../../../shared/store';
 import { SvgKeyboardWrapComponent } from '../../../shared/components/svg/wrap';
 import { KeymapEditComponent as SharedKeymapEditComponent } from '../../../shared/components/keymap/edit';

@@ -13,7 +13,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { saveAs } from 'file-saver';
 
-import { Keymap } from '../../../config-serializer/config-items/Keymap';
+import { Keymap } from '../../../config-serializer/config-items/keymap';
 import { AppState } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 

@@ -1,6 +1,6 @@
 import { assertEnum, assertUInt8 } from '../../assert';
-import { UhkBuffer } from '../../UhkBuffer';
-import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './MacroAction';
+import { UhkBuffer } from '../../uhk-buffer';
+import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './macro-action';
 
 export enum MouseButtons {
     Left = 1 << 0,

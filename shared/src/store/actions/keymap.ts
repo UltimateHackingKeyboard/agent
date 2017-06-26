@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 
 import { KeyAction } from '../../config-serializer/config-items/key-action';
-import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Macro } from '../../config-serializer/config-items/Macro';
+import { Keymap } from '../../config-serializer/config-items/keymap';
+import { Macro } from '../../config-serializer/config-items/macro';
 
 export namespace KeymapActions {
     export const PREFIX = '[Keymap] ';

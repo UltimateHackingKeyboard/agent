@@ -23,8 +23,8 @@ import 'rxjs/add/operator/switchMap';
 
 import { Device, Interface, InEndpoint, OutEndpoint, findByIds, on } from 'usb';
 
-import { Layer } from '../shared/config-serializer/config-items/Layer';
-import { UhkBuffer } from '../shared/config-serializer/UhkBuffer';
+import { Layer } from '../shared/config-serializer/config-items/layer';
+import { UhkBuffer } from '../shared/config-serializer/uhk-buffer';
 
 const vendorId = 0x1d50;
 const productId = 0x6122;

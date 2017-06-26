@@ -1,5 +1,5 @@
-import { UserConfiguration } from '../shared/src/config-serializer/config-items/UserConfiguration';
-import { UhkBuffer } from '../shared/src/config-serializer/UhkBuffer';
+import { UserConfiguration } from '../shared/src/config-serializer/config-items/user-configuration';
+import { UhkBuffer } from '../shared/src/config-serializer/uhk-buffer';
 
 const assert = require('assert');
 const fs = require('fs');

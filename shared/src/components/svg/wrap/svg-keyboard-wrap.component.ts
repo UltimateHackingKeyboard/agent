@@ -31,9 +31,9 @@ import {
     SwitchKeymapAction,
     SwitchLayerAction
 } from '../../../config-serializer/config-items/key-action';
-import { Keymap } from '../../../config-serializer/config-items/Keymap';
-import { Layer } from '../../../config-serializer/config-items/Layer';
-import { LongPressAction } from '../../../config-serializer/config-items/LongPressAction';
+import { Keymap } from '../../../config-serializer/config-items/keymap';
+import { Layer } from '../../../config-serializer/config-items/layer';
+import { LongPressAction } from '../../../config-serializer/config-items/long-press-action';
 import { camelCaseToSentence, capitalizeFirstLetter } from '../../../util';
 
 import { AppState } from '../../../store';

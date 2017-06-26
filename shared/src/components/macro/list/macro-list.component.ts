@@ -3,7 +3,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { Macro } from '../../../config-serializer/config-items/Macro';
+import { Macro } from '../../../config-serializer/config-items/macro';
 import { MacroAction } from '../../../config-serializer/config-items/macro-action';
 import { MacroItemComponent } from './../index';
 

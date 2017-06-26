@@ -1,6 +1,6 @@
 import * as storage from 'electron-settings';
 
-import { UserConfiguration } from '../shared/config-serializer/config-items/UserConfiguration';
+import { UserConfiguration } from '../shared/config-serializer/config-items/user-configuration';
 import { DataStorageRepositoryService } from '../shared/services/datastorage-repository.service';
 import { AutoUpdateSettings } from '../shared/models/auto-update-settings';
 

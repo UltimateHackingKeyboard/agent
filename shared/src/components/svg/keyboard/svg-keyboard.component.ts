@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 
-import { Module } from '../../../config-serializer/config-items/Module';
+import { Module } from '../../../config-serializer/config-items/module';
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
 
