@@ -2,12 +2,12 @@ import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { KeyModifiers } from '../key-modifiers';
 import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './macro-action';
-
-const NUM_OF_COMBINATIONS = 3; // Cases: scancode, modifer, both
+import { KeystrokeType } from '../key-action/keystroke-type';
 
 interface JsObjectKeyMacroAction {
     macroActionType: string;
     action: string;
+    type?: string;
     scancode?: number;
     modifierMask?: number;
 }
@@ -16,6 +16,9 @@ export class KeyMacroAction extends MacroAction {
 
     @assertEnum(MacroSubAction)
     action: MacroSubAction;
+
+    @assertEnum(KeystrokeType)
+    type: KeystrokeType;
 
     @assertUInt8
     scancode: number;
@@ -29,6 +32,7 @@ export class KeyMacroAction extends MacroAction {
             return;
         }
         this.action = other.action;
+        this.type = other.type;
         this.scancode = other.scancode;
         this.modifierMask = other.modifierMask;
     }
@@ -36,6 +40,11 @@ export class KeyMacroAction extends MacroAction {
     fromJsonObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
         this.assertMacroActionType(jsObject);
         this.action = MacroSubAction[jsObject.action];
+        if (jsObject.type === 'media') {
+            this.type = jsObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+        } else {
+            this.type = KeystrokeType[jsObject.type];
+        }
         this.scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
         return this;
@@ -44,12 +53,14 @@ export class KeyMacroAction extends MacroAction {
     fromBinary(buffer: UhkBuffer): KeyMacroAction {
         const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
         let keyMacroType: number = macroActionId - MacroActionId.KeyMacroAction;
-        this.action = Math.floor(keyMacroType / NUM_OF_COMBINATIONS);
-        keyMacroType %= NUM_OF_COMBINATIONS;
-        if (keyMacroType % 2 === 0) {
+        this.action = keyMacroType & 0b11;
+        keyMacroType >>= 2;
+        this.type = keyMacroType & 0b11;
+        keyMacroType >>= 2;
+        if (keyMacroType & 0b10) {
             this.scancode = buffer.readUInt8();
         }
-        if (keyMacroType !== 0) {
+        if (keyMacroType & 0b01) {
             this.modifierMask = buffer.readUInt8();
         }
         return this;
@@ -62,6 +73,11 @@ export class KeyMacroAction extends MacroAction {
         };
 
         if (this.hasScancode()) {
+            if (this.type === KeystrokeType.shortMedia || this.type === KeystrokeType.longMedia) {
+                jsObject.type = 'media';
+            } else {
+                jsObject.type = KeystrokeType[this.type];
+            }
             jsObject.scancode = this.scancode;
         }
 
@@ -73,15 +89,13 @@ export class KeyMacroAction extends MacroAction {
     }
 
     toBinary(buffer: UhkBuffer) {
-        let keyMacroType: number = MacroActionId.KeyMacroAction;
-        keyMacroType += NUM_OF_COMBINATIONS * this.action;
+        let TYPE_OFFSET = 0;
+        TYPE_OFFSET |= this.action;
+        TYPE_OFFSET |= this.type << 2;
+        TYPE_OFFSET |= ((this.hasScancode() ? 2 : 0) + (this.hasModifiers() ? 1 : 0)) << 4;
 
-        if (this.hasModifiers()) {
-            ++keyMacroType;
-            if (this.hasScancode()) {
-                ++keyMacroType;
-            }
-        }
+        const keyMacroType: number = MacroActionId.KeyMacroAction + TYPE_OFFSET;
+
         buffer.writeUInt8(keyMacroType);
         if (this.hasScancode()) {
             buffer.writeUInt8(this.scancode);
