@@ -1,7 +1,7 @@
 import { assertUInt8 } from '../../assert';
-import { UhkBuffer } from '../../UhkBuffer';
-import { Macro } from '../Macro';
-import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
+import { UhkBuffer } from '../../uhk-buffer';
+import { Macro } from '../macro';
+import { KeyAction, KeyActionId, keyActionType } from './key-action';
 
 export class PlayMacroAction extends KeyAction {
 

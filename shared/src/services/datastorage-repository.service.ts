@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { UserConfiguration } from '../config-serializer/config-items/UserConfiguration';
+import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
 import { AutoUpdateSettings } from '../models/auto-update-settings';
 
 export interface DataStorageRepositoryService {

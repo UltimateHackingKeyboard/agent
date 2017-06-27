@@ -1,7 +1,7 @@
-/// <reference path="../../Function.d.ts" />
+/// <reference path="../../function.d.ts" />
 
-import { Macro } from '../Macro';
-import { UhkBuffer } from '../../UhkBuffer';
+import { Macro } from '../macro';
+import { UhkBuffer } from '../../uhk-buffer';
 
 export enum KeyActionId {
     NoneAction                   = 0,

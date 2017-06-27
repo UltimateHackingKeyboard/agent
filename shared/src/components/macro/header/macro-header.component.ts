@@ -5,7 +5,7 @@ import {
 
 import { Store } from '@ngrx/store';
 
-import { Macro } from '../../../config-serializer/config-items/Macro';
+import { Macro } from '../../../config-serializer/config-items/macro';
 
 import { MacroActions } from '../../../store/actions';
 import { AppState } from '../../../store/index';

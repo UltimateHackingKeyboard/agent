@@ -8,8 +8,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
-import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Macro } from '../../config-serializer/config-items/Macro';
+import { Keymap } from '../../config-serializer/config-items/keymap';
+import { Macro } from '../../config-serializer/config-items/macro';
 
 import { AppState } from '../../store';
 import { MacroActions } from '../../store/actions';

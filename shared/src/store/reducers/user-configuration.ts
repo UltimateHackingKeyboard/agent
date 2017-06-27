@@ -6,11 +6,11 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
 import { Helper as KeyActionHelper, KeyAction } from '../../config-serializer/config-items/key-action';
-import { Keymap } from '../../config-serializer/config-items/Keymap';
-import { Macro } from '../../config-serializer/config-items/Macro';
-import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
-import { Layer } from '../../config-serializer/config-items/Layer';
-import { Module } from '../../config-serializer/config-items/Module';
+import { Keymap } from '../../config-serializer/config-items/keymap';
+import { Macro } from '../../config-serializer/config-items/macro';
+import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
+import { Layer } from '../../config-serializer/config-items/layer';
+import { Module } from '../../config-serializer/config-items/module';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';

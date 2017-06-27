@@ -15,7 +15,7 @@ import 'rxjs/add/observable/of';
 import { KeymapActions } from '../actions';
 import { AppState } from '../index';
 
-import { Keymap } from '../../config-serializer/config-items/Keymap';
+import { Keymap } from '../../config-serializer/config-items/keymap';
 
 @Injectable()
 export class KeymapEffects {

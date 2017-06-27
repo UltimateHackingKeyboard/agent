@@ -1,5 +1,5 @@
 import { assertUInt8, assertUInt32 } from '../assert';
-import { UhkBuffer } from '../UhkBuffer';
+import { UhkBuffer } from '../uhk-buffer';
 
 export class HardwareConfiguration {
 

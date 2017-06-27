@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { Macro } from '../../../config-serializer/config-items/Macro';
-import { MacroAction } from '../../../config-serializer/config-items/macro-action/MacroAction';
+import { Macro } from '../../../config-serializer/config-items/macro';
+import { MacroAction } from '../../../config-serializer/config-items/macro-action/macro-action';
 
 import { MacroActions } from '../../../store/actions';
 import { AppState } from '../../../store/index';

@@ -10,7 +10,7 @@ import 'rxjs/add/operator/takeWhile';
 import { AppState } from '../shared/store';
 import { getUserConfiguration } from '../shared/store/reducers/user-configuration';
 
-import { UhkBuffer } from '../shared/config-serializer/UhkBuffer';
+import { UhkBuffer } from '../shared/config-serializer/uhk-buffer';
 
 import { UhkDeviceService } from '../services/uhk-device.service';
 

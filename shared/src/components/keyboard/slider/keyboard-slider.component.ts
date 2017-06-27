@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
-import { Layer } from '../../../config-serializer/config-items/Layer';
+import { Layer } from '../../../config-serializer/config-items/layer';
 
 type AnimationKeyboard =
     'leftIn' |

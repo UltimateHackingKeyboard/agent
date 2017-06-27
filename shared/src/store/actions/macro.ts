@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Macro } from '../../config-serializer/config-items/Macro';
+import { Macro } from '../../config-serializer/config-items/macro';
 import { MacroAction } from '../../config-serializer/config-items/macro-action';
 
 export namespace MacroActions {

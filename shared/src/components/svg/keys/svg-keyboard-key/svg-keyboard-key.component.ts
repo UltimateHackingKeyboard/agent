@@ -17,8 +17,8 @@ import {
     SwitchKeymapAction,
     SwitchLayerAction
 } from '../../../../config-serializer/config-items/key-action';
-import { KeyModifiers } from '../../../../config-serializer/config-items/KeyModifiers';
-import { Macro } from '../../../../config-serializer/config-items/Macro';
+import { KeyModifiers } from '../../../../config-serializer/config-items/key-modifiers';
+import { Macro } from '../../../../config-serializer/config-items/macro';
 
 import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';

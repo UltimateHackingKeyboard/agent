@@ -1,7 +1,7 @@
 import { assertEnum, assertUInt8 } from '../../assert';
-import { UhkBuffer } from '../../UhkBuffer';
-import { KeyModifiers } from '../KeyModifiers';
-import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './MacroAction';
+import { UhkBuffer } from '../../uhk-buffer';
+import { KeyModifiers } from '../key-modifiers';
+import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './macro-action';
 
 const NUM_OF_COMBINATIONS = 3; // Cases: scancode, modifer, both
 

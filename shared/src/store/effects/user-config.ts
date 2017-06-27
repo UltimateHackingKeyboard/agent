@@ -16,7 +16,7 @@ import {
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
-import { UserConfiguration } from '../../config-serializer/config-items/UserConfiguration';
+import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getUserConfiguration } from '../index';

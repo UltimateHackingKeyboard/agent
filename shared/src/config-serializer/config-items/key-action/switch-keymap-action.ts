@@ -1,6 +1,6 @@
-import { UhkBuffer } from '../../UhkBuffer';
-import { Keymap } from '../Keymap';
-import { KeyAction, KeyActionId, keyActionType } from './KeyAction';
+import { UhkBuffer } from '../../uhk-buffer';
+import { Keymap } from '../keymap';
+import { KeyAction, KeyActionId, keyActionType } from './key-action';
 
 export class SwitchKeymapAction extends KeyAction {
 

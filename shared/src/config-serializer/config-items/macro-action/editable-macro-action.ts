@@ -1,11 +1,11 @@
 import { KeyAction, KeystrokeAction, keyActionType } from '../key-action';
-import { DelayMacroAction } from './DelayMacroAction';
-import { KeyMacroAction } from './KeyMacroAction';
-import { MacroAction, MacroSubAction, macroActionType } from './MacroAction';
-import { MouseButtonMacroAction } from './MouseButtonMacroAction';
-import { MoveMouseMacroAction } from './MoveMouseMacroAction';
-import { ScrollMouseMacroAction } from './ScrollMouseMacroAction';
-import { TextMacroAction } from './TextMacroAction';
+import { DelayMacroAction } from './delay-macro-action';
+import { KeyMacroAction } from './key-macro-action';
+import { MacroAction, MacroSubAction, macroActionType } from './macro-action';
+import { MouseButtonMacroAction } from './mouse-button-macro-action';
+import { MoveMouseMacroAction } from './move-mouse-macro-action';
+import { ScrollMouseMacroAction } from './scroll-mouse-macro-action';
+import { TextMacroAction } from './text-macro-action';
 
 interface JsObjectEditableMacroAction {
     macroActionType: string;

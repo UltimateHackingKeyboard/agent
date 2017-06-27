@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@a
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
 import { KeyAction, SwitchKeymapAction } from '../../../../config-serializer/config-items/key-action';
-import { Keymap } from '../../../../config-serializer/config-items/Keymap';
+import { Keymap } from '../../../../config-serializer/config-items/keymap';
 import { Tab } from '../tab';
 
 @Component({

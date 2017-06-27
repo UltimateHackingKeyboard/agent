@@ -1,8 +1,8 @@
 import { assertUInt16 } from '../assert';
-import { UhkBuffer } from '../UhkBuffer';
-import { Keymap } from './Keymap';
-import { Macro } from './Macro';
-import { ModuleConfiguration } from './ModuleConfiguration';
+import { UhkBuffer } from '../uhk-buffer';
+import { Keymap } from './keymap';
+import { Macro } from './macro';
+import { ModuleConfiguration } from './module-configuration';
 
 export class UserConfiguration {
 

@@ -1,4 +1,4 @@
-import { UhkBuffer } from '../../UhkBuffer';
+import { UhkBuffer } from '../../uhk-buffer';
 import {
     KeyAction,
     KeyActionId,
@@ -10,7 +10,7 @@ import {
     keyActionType
 } from './index';
 
-import { Macro } from '../Macro';
+import { Macro } from '../macro';
 
 export class Helper {
 

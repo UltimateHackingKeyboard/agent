@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
 import { KeyAction, PlayMacroAction } from '../../../../config-serializer/config-items/key-action';
-import { Macro } from '../../../../config-serializer/config-items/Macro';
+import { Macro } from '../../../../config-serializer/config-items/macro';
 
 import { Tab } from '../tab';
 
