@@ -1,4 +1,5 @@
 import { KeyAction, KeystrokeAction, keyActionType } from '../key-action';
+import { KeystrokeType } from '../key-action/keystroke-type';
 import { DelayMacroAction } from './delay-macro-action';
 import { KeyMacroAction } from './key-macro-action';
 import { MacroAction, MacroSubAction, macroActionType } from './macro-action';
@@ -11,6 +12,7 @@ interface JsObjectEditableMacroAction {
     macroActionType: string;
     action?: string;
     scancode?: number;
+    type?: string;
     modifierMask?: number;
     mouseButtonsMask?: number;
     x?: number;
@@ -23,6 +25,7 @@ export class EditableMacroAction {
     macroActionType: string;
     action: MacroSubAction;
     // Key macro action properties
+    type: number;
     scancode: number;
     modifierMask: number;
     // Mouse macro action properties
@@ -46,6 +49,7 @@ export class EditableMacroAction {
         switch (this.macroActionType) {
             case macroActionType.KeyMacroAction:
                 this.action = MacroSubAction[jsObject.action];
+                this.type = KeystrokeType[jsObject.type];
                 this.scancode = jsObject.scancode;
                 this.modifierMask = jsObject.modifierMask;
                 break;
@@ -78,6 +82,7 @@ export class EditableMacroAction {
             action: this.action,
             delay: this.delay,
             text: this.text,
+            type: KeystrokeType[this.type],
             scancode: this.scancode,
             modifierMask: this.modifierMask,
             mouseButtonsMask: this.mouseButtonsMask,
@@ -95,6 +100,7 @@ export class EditableMacroAction {
     fromKeyAction(keyAction: KeyAction): void {
         const data = keyAction.toJsonObject();
         this.scancode = data.scancode;
+        this.type = KeystrokeType[data.type as string];
         this.modifierMask = data.modifierMask;
     }
 
@@ -139,6 +145,7 @@ export class EditableMacroAction {
                 return new KeyMacroAction().fromJsonObject({
                     macroActionType: this.macroActionType,
                     action: MacroSubAction[this.action],
+                    type: KeystrokeType[this.type],
                     scancode: this.scancode,
                     modifierMask: this.modifierMask
                 });

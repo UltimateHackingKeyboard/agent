@@ -1617,16 +1617,19 @@
                 {
                     "macroActionType": "key",
                     "action": "press",
+                    "type": "basic",
                     "scancode": 111
                 },
                 {
                     "macroActionType": "key",
                     "action": "hold",
+                    "type": "basic",
                     "scancode": 83
                 },
                 {
                     "macroActionType": "key",
                     "action": "release",
+                    "type": "basic",
                     "scancode": 112
                 },
                 {
@@ -1687,6 +1690,7 @@
                 {
                     "macroActionType": "key",
                     "action": "press",
+                    "type": "basic",
                     "scancode": 111
                 },
                 {
