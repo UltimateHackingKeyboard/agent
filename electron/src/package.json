@@ -14,6 +14,7 @@
     "npm": ">=3.10.7 <4.0.0"
   },
   "dependencies": {
+    "node-hid": "0.5.4",
     "usb": "git+https://github.com/aktary/node-usb.git"
   }
 }

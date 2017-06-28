@@ -1,69 +1,33 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
-
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
+import { Observer } from 'rxjs/Observer';
 import { Subscriber } from 'rxjs/Subscriber';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/timer';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/concat';
-import 'rxjs/add/operator/combineLatest';
-import 'rxjs/add/operator/concatMap';
-import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/publish';
-import 'rxjs/add/operator/switchMap';
-
-import { Device, findByIds, InEndpoint, Interface, on, OutEndpoint } from 'usb';
-
-import { Constants } from '../shared/util';
+import { SenderMessage } from '../models/sender-message';
+import { Constants } from '../shared/util/constants';
 
 enum Command {
     UploadConfig = 8,
     ApplyConfig = 9
 }
 
-interface SenderMessage {
-    buffer: Buffer;
-    observer: Observer<any>;
-}
+export abstract class UhkDeviceService {
+    protected connected$: BehaviorSubject<boolean>;
+    protected initialized$: BehaviorSubject<boolean>;
+    protected deviceOpened$: BehaviorSubject<boolean>;
+    protected outSubscription: Subscription;
 
-@Injectable()
-export class UhkDeviceService implements OnDestroy {
+    protected messageIn$: Observable<Buffer>;
+    protected messageOut$: Subject<SenderMessage>;
 
-    private device: Device;
-    private deviceOpened$: BehaviorSubject<boolean>;
-    private connected$: BehaviorSubject<boolean>;
-    private initialized$: BehaviorSubject<boolean>;
-
-    private messageIn$: Observable<Buffer>;
-    private messageOut$: Subject<SenderMessage>;
-
-    private outSubscription: Subscription;
-
-    static isUhkDevice(device: Device) {
-        return device.deviceDescriptor.idVendor === Constants.VENDOR_ID &&
-            device.deviceDescriptor.idProduct === Constants.PRODUCT_ID;
-    }
-
-    constructor(zone: NgZone) {
+    constructor() {
         this.messageOut$ = new Subject<SenderMessage>();
         this.initialized$ = new BehaviorSubject(false);
         this.connected$ = new BehaviorSubject(false);
         this.deviceOpened$ = new BehaviorSubject(false);
         this.outSubscription = Subscription.EMPTY;
-
-        this.initialize();
-
-        // The change detection doesn't work properly if the callbacks are called outside Angular Zone
-        on('attach', (device: Device) => zone.run(() => this.onDeviceAttach(device)));
-        on('detach', (device: Device) => zone.run(() => this.onDeviceDetach(device)));
     }
 
     ngOnDestroy() {
@@ -71,117 +35,6 @@ export class UhkDeviceService implements OnDestroy {
         this.initialized$.unsubscribe();
         this.connected$.unsubscribe();
         this.deviceOpened$.unsubscribe();
-    }
-
-    initialize(): void {
-        if (this.initialized$.getValue()) {
-            return;
-        }
-        this.device = findByIds(Constants.VENDOR_ID, Constants.PRODUCT_ID);
-        this.connected$.next(!!this.device);
-        if (!this.device) {
-            return;
-        }
-        try {
-            this.device.open();
-            this.deviceOpened$.next(true);
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-
-        const usbInterface: Interface = this.device.interface(0);
-        // https://github.com/tessel/node-usb/issues/147
-        // The function 'isKernelDriverActive' is not available on Windows and not even needed.
-        if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
-            usbInterface.detachKernelDriver();
-        }
-
-        // https://github.com/tessel/node-usb/issues/30
-        // Mac is not allow exclusive right to use USB
-        if (process.platform !== 'darwin') {
-            usbInterface.claim();
-        }
-
-        this.messageIn$ = Observable.create((subscriber: Subscriber<Buffer>) => {
-            const inEndPoint: InEndpoint = <InEndpoint>usbInterface.endpoints[0];
-            console.log('Try to read');
-            inEndPoint.transfer(Constants.MAX_PAYLOAD_SIZE, (error: string, receivedBuffer: Buffer) => {
-                if (error) {
-                    console.error('reading error', error);
-                    subscriber.error(error);
-                } else {
-                    console.log('read data', receivedBuffer);
-                    subscriber.next(receivedBuffer);
-                    subscriber.complete();
-                }
-            });
-        });
-
-        const outEndPoint: OutEndpoint = <OutEndpoint>usbInterface.endpoints[1];
-        const outSending = this.messageOut$.concatMap(senderPackage => {
-            return (<Observable<void>>Observable.create((subscriber: Subscriber<void>) => {
-                console.log('transfering', senderPackage.buffer);
-                outEndPoint.transfer(senderPackage.buffer, error => {
-                    if (error) {
-                        console.error('transfering errored', error);
-                        subscriber.error(error);
-                    } else {
-                        console.log('transfering finished');
-                        subscriber.complete();
-                    }
-                });
-            })).concat(this.messageIn$)
-                .do(buffer => senderPackage.observer.next(buffer) && senderPackage.observer.complete())
-                .catch((error: string) => {
-                    senderPackage.observer.error(error);
-                    return Observable.empty<void>();
-                });
-        }).publish();
-        this.outSubscription = outSending.connect();
-
-        this.initialized$.next(true);
-    }
-
-    disconnect() {
-        this.outSubscription.unsubscribe();
-        this.messageIn$ = undefined;
-        this.initialized$.next(false);
-        this.deviceOpened$.next(false);
-        this.connected$.next(false);
-    }
-
-    isInitialized(): Observable<boolean> {
-        return this.initialized$.asObservable();
-    }
-
-    isConnected(): Observable<boolean> {
-        return this.connected$.asObservable();
-    }
-
-    hasPermissions(): Observable<boolean> {
-        return this.isConnected()
-            .combineLatest(this.deviceOpened$)
-            .map((latest: boolean[]) => {
-                const connected = latest[0];
-                const opened = latest[1];
-                if (!connected) {
-                    return false;
-                } else if (opened) {
-                    return true;
-                }
-                try {
-                    this.device.open();
-                } catch (error) {
-                    return false;
-                }
-                this.device.close();
-                return true;
-            });
-    }
-
-    isOpened(): Observable<boolean> {
-        return this.deviceOpened$.asObservable();
     }
 
     sendConfig(configBuffer: Buffer): Observable<Buffer> {
@@ -226,20 +79,27 @@ export class UhkDeviceService implements OnDestroy {
         });
     }
 
-    onDeviceAttach(device: Device) {
-        if (!UhkDeviceService.isUhkDevice(device)) {
-            return;
-        }
-        // Ugly hack: device is not openable (on Windows) right after the attach
-        Observable.timer(100)
-            .first()
-            .subscribe(() => this.initialize());
+    isInitialized(): Observable<boolean> {
+        return this.initialized$.asObservable();
     }
 
-    onDeviceDetach(device: Device) {
-        if (!UhkDeviceService.isUhkDevice(device)) {
-            return;
-        }
-        this.disconnect();
+    isConnected(): Observable<boolean> {
+        return this.connected$.asObservable();
     }
+
+    isOpened(): Observable<boolean> {
+        return this.deviceOpened$.asObservable();
+    }
+
+    disconnect() {
+        this.outSubscription.unsubscribe();
+        this.messageIn$ = undefined;
+        this.initialized$.next(false);
+        this.deviceOpened$.next(false);
+        this.connected$.next(false);
+    }
+
+    abstract initialize(): void;
+
+    abstract hasPermissions(): Observable<boolean>;
 }

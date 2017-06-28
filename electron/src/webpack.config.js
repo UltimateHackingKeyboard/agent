@@ -18,7 +18,8 @@ module.exports = {
     },
     target: 'electron-renderer',
     externals: {
-        usb: 'usb'
+        usb: 'usb',
+        'node-hid':'nodeHid'
     },
     devtool: 'source-map',
     resolve: {
@@ -40,7 +41,8 @@ module.exports = {
                 use: ['raw-loader', 'sass-loader']
             },
             { test: /jquery/, loader: 'expose-loader?$!expose-loader?jQuery' },
-            { test: require.resolve("usb"), loader: "expose-loader?usb" }
+            { test: require.resolve("usb"), loader: "expose-loader?usb" },
+            { test: require.resolve("node-hid"), loader: "expose-loader?node-hid" }
         ]
     },
     plugins: [
