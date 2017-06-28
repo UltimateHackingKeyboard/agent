@@ -367,124 +367,6 @@
         ]
     },
     {
-        "text": "Numpad",
-        "children": [
-            {
-                "id": "83",
-                "text": "NumLock"
-            },
-            {
-                "id": "84",
-                "additional": {
-                    "explanation": "slash"
-                },
-                "text": "/"
-            },
-            {
-                "id": "85",
-                "additional": {
-                    "explanation": "asterisk"
-                },
-                "text": "*"
-            },
-            {
-                "id": "86",
-                "additional": {
-                    "explanation": "minus"
-                },
-                "text": "-"
-            },
-            {
-                "id": "87",
-                "additional": {
-                    "explanation": "plus"
-                },
-                "text": "+"
-            },
-            {
-                "id": "88",
-                "text": "Enter"
-            },
-            {
-                "id": "89",
-                "additional": {
-                    "explanation": "one"
-                },
-                "text": "1"
-            },
-            {
-                "id": "90",
-                "additional": {
-                    "explanation": "two"
-                },
-                "text": "2"
-            },
-            {
-                "id": "91",
-                "additional": {
-                    "explanation": "three"
-                },
-                "text": "3"
-            },
-            {
-                "id": "92",
-                "additional": {
-                    "explanation": "four"
-                },
-                "text": "4"
-            },
-            {
-                "id": "93",
-                "additional": {
-                    "explanation": "five"
-                },
-                "text": "5"
-            },
-            {
-                "id": "94",
-                "additional": {
-                    "explanation": "six"
-                },
-                "text": "6"
-            },
-            {
-                "id": "95",
-                "additional": {
-                    "explanation": "seven"
-                },
-                "text": "7"
-            },
-            {
-                "id": "96",
-                "additional": {
-                    "explanation": "eight"
-                },
-                "text": "8"
-            },
-            {
-                "id": "97",
-                "additional": {
-                    "explanation": "nine"
-                },
-                "text": "9"
-            },
-            {
-                "id": "98",
-                "additional": {
-                    "explanation": "zero"
-                },
-                "text": "0"
-            },
-            {
-                "id": "99",
-                "additional": {
-                    "explanation": "period"
-                },
-                "text": "."
-            }
-        ]
-    },
-    {
         "text": "Misc",
         "children": [
             {
@@ -652,6 +534,124 @@
                     "type": "system",
                     "scancode": 131
                 }
+            }
+        ]
+    },
+    {
+        "text": "Numpad",
+        "children": [
+            {
+                "id": "83",
+                "text": "NumLock"
+            },
+            {
+                "id": "84",
+                "additional": {
+                    "explanation": "slash"
+                },
+                "text": "/"
+            },
+            {
+                "id": "85",
+                "additional": {
+                    "explanation": "asterisk"
+                },
+                "text": "*"
+            },
+            {
+                "id": "86",
+                "additional": {
+                    "explanation": "minus"
+                },
+                "text": "-"
+            },
+            {
+                "id": "87",
+                "additional": {
+                    "explanation": "plus"
+                },
+                "text": "+"
+            },
+            {
+                "id": "88",
+                "text": "Enter"
+            },
+            {
+                "id": "89",
+                "additional": {
+                    "explanation": "one"
+                },
+                "text": "1"
+            },
+            {
+                "id": "90",
+                "additional": {
+                    "explanation": "two"
+                },
+                "text": "2"
+            },
+            {
+                "id": "91",
+                "additional": {
+                    "explanation": "three"
+                },
+                "text": "3"
+            },
+            {
+                "id": "92",
+                "additional": {
+                    "explanation": "four"
+                },
+                "text": "4"
+            },
+            {
+                "id": "93",
+                "additional": {
+                    "explanation": "five"
+                },
+                "text": "5"
+            },
+            {
+                "id": "94",
+                "additional": {
+                    "explanation": "six"
+                },
+                "text": "6"
+            },
+            {
+                "id": "95",
+                "additional": {
+                    "explanation": "seven"
+                },
+                "text": "7"
+            },
+            {
+                "id": "96",
+                "additional": {
+                    "explanation": "eight"
+                },
+                "text": "8"
+            },
+            {
+                "id": "97",
+                "additional": {
+                    "explanation": "nine"
+                },
+                "text": "9"
+            },
+            {
+                "id": "98",
+                "additional": {
+                    "explanation": "zero"
+                },
+                "text": "0"
+            },
+            {
+                "id": "99",
+                "additional": {
+                    "explanation": "period"
+                },
+                "text": "."
             }
         ]
     }
