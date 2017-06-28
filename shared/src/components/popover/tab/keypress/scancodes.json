@@ -203,6 +203,67 @@
         ]
     },
     {
+        "text": "Whitespace",
+        "children": [
+            {
+                "id": "40",
+                "additional": {
+                    "explanation": "Return"
+                },
+                "text": "Enter"
+            },
+            {
+                "id": "43",
+                "text": "Tab"
+            },
+            {
+                "id": "44",
+                "text": "Space"
+            }
+        ]
+    },
+    {
+        "text": "Misc",
+        "children": [
+            {
+                "id": "42",
+                "text": "Backspace"
+            },
+            {
+                "id": "41",
+                "text": "Escape"
+            },
+            {
+                "id": "118",
+                "text": "Menu"
+            },
+            {
+                "id": "73",
+                "text": "Insert"
+            },
+            {
+                "id": "76",
+                "text": "Delete"
+            },
+            {
+                "id": "57",
+                "text": "Caps Lock"
+            },
+            {
+                "id": "70",
+                "text": "Print Screen"
+            },
+            {
+                "id": "71",
+                "text": "Scroll Lock"
+            },
+            {
+                "id": "72",
+                "text": "Pause"
+            }
+        ]
+    },
+    {
         "text": "Function",
         "children": [
             {
@@ -343,67 +404,6 @@
             {
                 "id": "81",
                 "text": "Down Arrow"
-            }
-        ]
-    },
-    {
-        "text": "Whitespace",
-        "children": [
-            {
-                "id": "40",
-                "additional": {
-                    "explanation": "Return"
-                },
-                "text": "Enter"
-            },
-            {
-                "id": "43",
-                "text": "Tab"
-            },
-            {
-                "id": "44",
-                "text": "Space"
-            }
-        ]
-    },
-    {
-        "text": "Misc",
-        "children": [
-            {
-                "id": "42",
-                "text": "Backspace"
-            },
-            {
-                "id": "41",
-                "text": "Escape"
-            },
-            {
-                "id": "118",
-                "text": "Menu"
-            },
-            {
-                "id": "73",
-                "text": "Insert"
-            },
-            {
-                "id": "76",
-                "text": "Delete"
-            },
-            {
-                "id": "57",
-                "text": "Caps Lock"
-            },
-            {
-                "id": "70",
-                "text": "Print Screen"
-            },
-            {
-                "id": "71",
-                "text": "Scroll Lock"
-            },
-            {
-                "id": "72",
-                "text": "Pause"
             }
         ]
     },
