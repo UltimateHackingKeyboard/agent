@@ -28,6 +28,7 @@ addons:
       - libgnome-keyring-dev
       - libsecret-1-dev
       - icnsutils
+      - libudev-dev
 
 install:
   - nvm install
