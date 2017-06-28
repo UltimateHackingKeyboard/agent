@@ -1,7 +1,7 @@
 'use strict';
 const jsonfile = require('jsonfile');
 
-const TEST_BUILD = false; // set true if you would like to test on your local machince
+const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machince
 
 // electron-builder security override.
 // Need if wanna create test release build from PR
