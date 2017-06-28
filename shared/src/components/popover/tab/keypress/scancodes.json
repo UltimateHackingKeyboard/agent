@@ -327,19 +327,11 @@
         "text": "Navigation",
         "children": [
             {
-                "id": "74",
-                "text": "Home"
-            },
-            {
                 "id": "75",
                 "additional": {
                     "explanation": "PgUp"
                 },
                 "text": "Page Up"
-            },
-            {
-                "id": "77",
-                "text": "End"
             },
             {
                 "id": "78",
@@ -349,20 +341,28 @@
                 "text": "Page Down"
             },
             {
-                "id": "79",
-                "text": "Right Arrow"
+                "id": "74",
+                "text": "Home"
+            },
+            {
+                "id": "77",
+                "text": "End"
             },
             {
                 "id": "80",
                 "text": "Left Arrow"
             },
             {
-                "id": "81",
-                "text": "Down Arrow"
+                "id": "79",
+                "text": "Right Arrow"
             },
             {
                 "id": "82",
                 "text": "Up Arrow"
+            },
+            {
+                "id": "81",
+                "text": "Down Arrow"
             }
         ]
     },
