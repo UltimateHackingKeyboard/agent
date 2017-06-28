@@ -1,6 +1,6 @@
 [
     {
-        "text": "Alphabet",
+        "text": "Letter",
         "children": [
             {
                 "id": "4",
@@ -109,8 +109,12 @@
         ]
     },
     {
-        "text": "Number Row",
+        "text": "Number",
         "children": [
+            {
+                "id": "39",
+                "text": "0 )"
+            },
             {
                 "id": "30",
                 "text": "1 !"
@@ -146,10 +150,6 @@
             {
                 "id": "38",
                 "text": "9 ("
-            },
-            {
-                "id": "39",
-                "text": "0 )"
             }
         ]
     },
@@ -162,14 +162,6 @@
                     "explanation": "Return"
                 },
                 "text": "Enter"
-            },
-            {
-                "id": "41",
-                "text": "Escape"
-            },
-            {
-                "id": "42",
-                "text": "Backspace"
             },
             {
                 "id": "43",
@@ -231,7 +223,7 @@
         ]
     },
     {
-        "text": "Function keys",
+        "text": "Function",
         "children": [
             {
                 "id": "58",
@@ -341,7 +333,7 @@
             {
                 "id": "75",
                 "additional": {
-                    "explanation": "PgUp pageup"
+                    "explanation": "PgUp"
                 },
                 "text": "Page Up"
             },
@@ -352,36 +344,24 @@
             {
                 "id": "78",
                 "additional": {
-                    "explanation": "PgDn pagedown"
+                    "explanation": "PgDn"
                 },
                 "text": "Page Down"
             },
             {
                 "id": "79",
-                "additional": {
-                    "explanation": "ArrowRight"
-                },
                 "text": "Right Arrow"
             },
             {
                 "id": "80",
-                "additional": {
-                    "explanation": "ArrowLeft"
-                },
                 "text": "Left Arrow"
             },
             {
                 "id": "81",
-                "additional": {
-                    "explanation": "ArrowDown"
-                },
                 "text": "Down Arrow"
             },
             {
                 "id": "82",
-                "additional": {
-                    "explanation": "ArrowUp"
-                },
                 "text": "Up Arrow"
             }
         ]
@@ -498,22 +478,16 @@
             {
                 "id": "99",
                 "additional": {
-                    "explanation": "Period"
+                    "explanation": "period"
                 },
                 "text": "."
             },
             {
                 "id": "176",
-                "additional": {
-                    "explanation": "Doublezero"
-                },
                 "text": "00"
             },
             {
                 "id": "177",
-                "additional": {
-                    "explanation": "Triplezero"
-                },
                 "text": "000"
             }
         ]
@@ -521,6 +495,14 @@
     {
         "text": "Misc",
         "children": [
+            {
+                "id": "42",
+                "text": "Backspace"
+            },
+            {
+                "id": "41",
+                "text": "Escape"
+            },
             {
                 "id": "118",
                 "text": "Menu"
@@ -531,22 +513,19 @@
             },
             {
                 "id": "76",
-                "additional": {
-                    "explanation": "Delete Forward"
-                },
                 "text": "Delete"
             },
             {
                 "id": "57",
-                "text": "CapsLock"
+                "text": "Caps Lock"
             },
             {
                 "id": "70",
-                "text": "PrintScreen"
+                "text": "Print Screen"
             },
             {
                 "id": "71",
-                "text": "ScrollLock"
+                "text": "Scroll Lock"
             },
             {
                 "id": "72",
@@ -555,7 +534,7 @@
         ]
     },
     {
-        "text": "Media Keys",
+        "text": "Media",
         "children": [
             {
                 "id": "127",
@@ -656,7 +635,7 @@
         ]
     },
     {
-        "text": "System Keys",
+        "text": "System",
         "children": [
             {
                 "id": "139",
