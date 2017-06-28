@@ -154,26 +154,6 @@
         ]
     },
     {
-        "text": "Whitespace",
-        "children": [
-            {
-                "id": "40",
-                "additional": {
-                    "explanation": "Return"
-                },
-                "text": "Enter"
-            },
-            {
-                "id": "43",
-                "text": "Tab"
-            },
-            {
-                "id": "44",
-                "text": "Space"
-            }
-        ]
-    },
-    {
         "text": "Punctuation",
         "children": [
             {
@@ -363,6 +343,26 @@
             {
                 "id": "81",
                 "text": "Down Arrow"
+            }
+        ]
+    },
+    {
+        "text": "Whitespace",
+        "children": [
+            {
+                "id": "40",
+                "additional": {
+                    "explanation": "Return"
+                },
+                "text": "Enter"
+            },
+            {
+                "id": "43",
+                "text": "Tab"
+            },
+            {
+                "id": "44",
+                "text": "Space"
             }
         ]
     },
