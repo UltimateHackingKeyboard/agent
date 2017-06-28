@@ -29,6 +29,7 @@ addons:
       - libsecret-1-dev
       - icnsutils
       - libudev-dev
+      - build-essential
 
 install:
   - nvm install
@@ -46,9 +47,3 @@ script:
 cache:
   directories:
     - node_modules
-
-addons:
-  apt:
-    packages:
-      - build-essential
-      - libudev-dev
