@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Inject, Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 
@@ -14,6 +14,7 @@ import 'rxjs/add/operator/do';
 
 import { Device, findByIds, InEndpoint, Interface, on, OutEndpoint } from 'usb';
 
+import { ILogService, LOG_SERVICE } from '../shared/services/logger.service';
 import { Constants } from '../shared/util';
 import { UhkDeviceService } from './uhk-device.service';
 
@@ -26,8 +27,9 @@ export class UhkLibUsbApiService extends UhkDeviceService implements OnDestroy {
             device.deviceDescriptor.idProduct === Constants.PRODUCT_ID;
     }
 
-    constructor(zone: NgZone) {
-        super();
+    constructor(zone: NgZone,
+                @Inject(LOG_SERVICE) protected logService: ILogService) {
+        super(logService);
 
         this.initialize();
 
@@ -49,7 +51,7 @@ export class UhkLibUsbApiService extends UhkDeviceService implements OnDestroy {
             this.device.open();
             this.deviceOpened$.next(true);
         } catch (error) {
-            console.log(error);
+            this.logService.error(error);
             return;
         }
 
@@ -62,13 +64,13 @@ export class UhkLibUsbApiService extends UhkDeviceService implements OnDestroy {
 
         this.messageIn$ = Observable.create((subscriber: Subscriber<Buffer>) => {
             const inEndPoint: InEndpoint = <InEndpoint>usbInterface.endpoints[0];
-            console.log('Try to read');
+            this.logService.info('Try to read');
             inEndPoint.transfer(Constants.MAX_PAYLOAD_SIZE, (error: string, receivedBuffer: Buffer) => {
                 if (error) {
-                    console.error('reading error', error);
+                    this.logService.error('reading error', error);
                     subscriber.error(error);
                 } else {
-                    console.log('read data', receivedBuffer);
+                    this.logService.info('read data', receivedBuffer);
                     subscriber.next(receivedBuffer);
                     subscriber.complete();
                 }
@@ -78,13 +80,13 @@ export class UhkLibUsbApiService extends UhkDeviceService implements OnDestroy {
         const outEndPoint: OutEndpoint = <OutEndpoint>usbInterface.endpoints[1];
         const outSending = this.messageOut$.concatMap(senderPackage => {
             return (<Observable<void>>Observable.create((subscriber: Subscriber<void>) => {
-                console.log('transfering', senderPackage.buffer);
+                this.logService.info('transfering', senderPackage.buffer);
                 outEndPoint.transfer(senderPackage.buffer, error => {
                     if (error) {
-                        console.error('transfering errored', error);
+                        this.logService.error('transfering errored', error);
                         subscriber.error(error);
                     } else {
-                        console.log('transfering finished');
+                        this.logService.info('transfering finished');
                         subscriber.complete();
                     }
                 });

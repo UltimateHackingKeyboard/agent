@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
@@ -14,6 +14,7 @@ import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/do';
 
+import { ILogService, LOG_SERVICE } from '../shared/services/logger.service';
 import { Constants } from '../shared/util';
 import { UhkDeviceService } from './uhk-device.service';
 
@@ -23,8 +24,8 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
 
     private pollTimer$: Subscription;
 
-    constructor() {
-        super();
+    constructor(@Inject(LOG_SERVICE) protected logService: ILogService) {
+        super(logService);
 
         this.pollUhkDevice();
     }
@@ -47,13 +48,13 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
         this.deviceOpened$.next(true);
 
         this.messageIn$ = Observable.create((subscriber: Subscriber<Buffer>) => {
-            console.log('Try to read');
+            this.logService.info('Try to read');
             this.device.read((error: any, data: any = []) => {
                 if (error) {
-                    console.error('reading error', error);
+                    this.logService.error('reading error', error);
                     subscriber.error(error);
                 } else {
-                    console.log('read data', data);
+                    this.logService.info('read data', data);
                     subscriber.next(data);
                     subscriber.complete();
                 }
@@ -62,15 +63,15 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
 
         const outSending = this.messageOut$.concatMap(senderPackage => {
             return (<Observable<void>>Observable.create((subscriber: Subscriber<void>) => {
-                console.log('transfering', senderPackage.buffer);
+                this.logService.info('transfering', senderPackage.buffer);
                 const data = Array.prototype.slice.call(senderPackage.buffer, 0);
                 try {
                     this.device.write(data);
-                    console.log('transfering finished');
+                    this.logService.info('transfering finished');
                     subscriber.complete();
                 }
                 catch (error) {
-                    console.error('transfering errored', error);
+                    this.logService.error('transfering errored', error);
                     subscriber.error(error);
                 }
             })).concat(this.messageIn$)
@@ -115,6 +116,7 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
             return new HID(dev.path);
         }
         catch (err) {
+            this.logService.error('Can not create device:', err);
         }
 
         return null;

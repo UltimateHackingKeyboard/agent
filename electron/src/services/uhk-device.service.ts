@@ -1,3 +1,4 @@
+import { Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Observer } from 'rxjs/Observer';
@@ -5,6 +6,7 @@ import { Subscriber } from 'rxjs/Subscriber';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 
+import { ILogService, LOG_SERVICE } from '../shared/services/logger.service';
 import { SenderMessage } from '../models/sender-message';
 import { Constants } from '../shared/util/constants';
 
@@ -22,7 +24,7 @@ export abstract class UhkDeviceService {
     protected messageIn$: Observable<Buffer>;
     protected messageOut$: Subject<SenderMessage>;
 
-    constructor() {
+    constructor(@Inject(LOG_SERVICE) protected logService: ILogService) {
         this.messageOut$ = new Subject<SenderMessage>();
         this.initialized$ = new BehaviorSubject(false);
         this.connected$ = new BehaviorSubject(false);
@@ -39,7 +41,7 @@ export abstract class UhkDeviceService {
 
     sendConfig(configBuffer: Buffer): Observable<Buffer> {
         return Observable.create((subscriber: Subscriber<Buffer>) => {
-            console.log('Sending...', configBuffer);
+            this.logService.info('Sending...', configBuffer);
             const fragments: Buffer[] = [];
             const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
             for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
@@ -58,7 +60,7 @@ export abstract class UhkDeviceService {
                     if (buffers.length === fragments.length) {
                         subscriber.next(Buffer.concat(buffers));
                         subscriber.complete();
-                        console.log('Sending finished');
+                        this.logService.info('Sending finished');
                     }
                 }
             };
@@ -71,7 +73,7 @@ export abstract class UhkDeviceService {
 
     applyConfig(): Observable<Buffer> {
         return Observable.create((subscriber: Subscriber<Buffer>) => {
-            console.log('Applying configuration');
+            this.logService.info('Applying configuration');
             this.messageOut$.next({
                 buffer: new Buffer([Command.ApplyConfig]),
                 observer: subscriber
