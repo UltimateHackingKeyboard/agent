@@ -99,7 +99,7 @@
     "build:electron": "run-s -sn build:electron:main build:electron:app install:build-deps build:usb",
     "build:electron:main": "webpack --config \"electron/src/webpack.config.electron-main.js\"",
     "build:electron:app": "webpack --config \"electron/src/webpack.config.js\"",
-    "build:usb": "electron-rebuild -w usb,node-hid -p -m electron/dist",
+    "build:usb": "electron-rebuild -w usb -p -m electron/dist",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
     "server:web": "webpack-dev-server --config \"web/src/webpack.config.js\" --content-base \"./web/dist\"",
     "server:electron": "webpack --config \"electron/src/webpack.config.js\" --watch",
