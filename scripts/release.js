@@ -1,7 +1,7 @@
 'use strict';
 const jsonfile = require('jsonfile');
 
-const TEST_BUILD = false; // set true if you would like to test on your local machince
+const TEST_BUILD = true; // set true if you would like to test on your local machince
 
 if (!process.env.CI && !TEST_BUILD) {
     console.error('Create release only on CI server');

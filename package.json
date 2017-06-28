@@ -108,7 +108,7 @@
     "standard-version": "standard-version",
     "pack": "node ./scripts/release.js",
     "install:build-deps": "cd electron/dist && npm i && cd .. && npm run build:usb",
-    "release": "npm run install:build-deps && node ./scripts/release.js",
+    "release": "node ./scripts/release.js",
     "clean": "rimraf ./node_modules ./electron/dist"
   }
 }
