@@ -30,6 +30,7 @@ addons:
       - icnsutils
       - libudev-dev
       - build-essential
+      - libusb-1.0-0-dev
 
 install:
   - nvm install

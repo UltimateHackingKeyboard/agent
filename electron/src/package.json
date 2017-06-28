@@ -16,11 +16,6 @@
   "dependencies": {
     "node-hid": "git+https://github.com/node-hid/node-hid.git",
     "usb": "git+https://github.com/aktary/node-usb.git"
-  },
-  "scripts": {
-    "postinstall": "run-s build:usb clean",
-    "build:usb": "electron-rebuild",
-    "clean": "npm prune --production"
   }
 }
 
