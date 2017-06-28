@@ -3,6 +3,10 @@ const jsonfile = require('jsonfile');
 
 const TEST_BUILD = true; // set true if you would like to test on your local machince
 
+// electron-builder security override.
+// Need if wanna create test release build from PR
+process.env.PUBLISH_FOR_PULL_REQUEST = TEST_BUILD;
+
 if (!process.env.CI && !TEST_BUILD) {
     console.error('Create release only on CI server');
     process.exit(1);
