@@ -89,14 +89,14 @@
     "zone.js": "0.8.12"
   },
   "scripts": {
-    "postinstall": "run-p install:build-deps \"symlink -- -i\" ",
+    "postinstall": "run-p \"symlink -- -i\" ",
     "test": "cd ./test-serializer && node ./test-serializer.js",
     "lint": "run-s -scn lint:ts lint:style",
     "lint:ts": "tslint \"electron/src/**/*.ts\" \"web/src/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
     "lint:style": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
     "build": "run-p build:web build:electron",
     "build:web": "webpack --config \"web/src/webpack.config.js\"",
-    "build:electron": "run-s -scn build:electron:main build:electron:app",
+    "build:electron": "run-s -scn build:electron:main build:electron:app install:build-deps",
     "build:electron:main": "webpack --config \"electron/src/webpack.config.electron-main.js\"",
     "build:electron:app": "webpack --config \"electron/src/webpack.config.js\"",
     "build:usb": "electron-rebuild -w usb,node-hid -p -m electron/dist",
@@ -109,6 +109,6 @@
     "pack": "node ./scripts/release.js",
     "install:build-deps": "cd electron/dist && npm i && cd .. && npm run build:usb",
     "release": "npm run install:build-deps && node ./scripts/release.js",
-    "clean": "rimraf ./node_modules ./electron/dist/node_modules"
+    "clean": "rimraf ./node_modules ./electron/dist"
   }
 }
