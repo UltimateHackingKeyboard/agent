@@ -71,11 +71,11 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
                     data.unshift(0);
                 }
 
-                // I don't know why but the leading zero is need on windows platform.
-                // I don't know how it is works with prev hacking
-                if (process.platform === 'win32') {
-                    data.unshift(0);
-                }
+                // From HID API documentation:
+                // http://www.signal11.us/oss/hidapi/hidapi/doxygen/html/group__API.html#gad14ea48e440cf5066df87cc6488493af
+                // The first byte of data[] must contain the Report ID.
+                // For devices which only support a single report, this must be set to 0x0.
+                data.unshift(0);
 
                 try {
                     this.device.write(data);
