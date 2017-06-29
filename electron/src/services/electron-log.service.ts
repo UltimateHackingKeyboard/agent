@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
+import * as util from 'util';
 
 import { ILogService } from '../../../shared/src/services/logger.service';
 
@@ -15,25 +16,7 @@ import { ILogService } from '../../../shared/src/services/logger.service';
 @Injectable()
 export class ElectronLogService implements ILogService {
     private static getErrorText(args: any) {
-        const json: any = Array.from(args).map(x => {
-            if (x instanceof Array) {
-                return ElectronLogService.getErrorText(x);
-            }
-
-            if (typeof x === 'string' ||
-                typeof x === 'number' ||
-                typeof x === 'boolean') {
-                return x;
-            }
-
-            if (x instanceof Error) {
-                return `${x.message}\n${x.stack}`;
-            }
-
-            return JSON.stringify(x, Object.getOwnPropertyNames(x));
-        });
-
-        return json.join('\n');
+        return util.inspect(args);
     }
 
     error(...args: any[]): void {
