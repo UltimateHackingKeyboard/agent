@@ -1,7 +1,7 @@
 /// <reference path="../../custom_types/sudo-prompt.d.ts"/>
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-
+import * as isDev from 'electron-is-dev';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/of';
@@ -14,7 +14,6 @@ import { remote } from 'electron';
 import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 
-import { Constants } from '../../shared/util';
 import { UhkDeviceService } from '../../services/uhk-device.service';
 import { ILogService, LOG_SERVICE } from '../../../../shared/src/services/logger.service';
 
@@ -30,7 +29,12 @@ export class PrivilegeCheckerComponent {
     constructor(private router: Router,
                 private uhkDevice: UhkDeviceService,
                 @Inject(LOG_SERVICE) private logService: ILogService) {
-        this.rootDir = path.dirname(remote.app.getAppPath());
+        if (isDev) {
+            this.rootDir = path.resolve(path.join(remote.process.cwd(), remote.process.argv[1]), '..');
+        }
+        else {
+            this.rootDir = path.dirname(remote.app.getAppPath());
+        }
 
         uhkDevice.isConnected()
             .distinctUntilChanged()
@@ -66,7 +70,9 @@ export class PrivilegeCheckerComponent {
                 break;
         }
         permissionSetter.subscribe({
-            error: e => this.logService.error(e),
+            error: e => {
+                console.log(e);
+            },
             complete: () => {
                 this.logService.info('Permissions has been successfully set');
                 this.uhkDevice.initialize();
@@ -81,7 +87,9 @@ export class PrivilegeCheckerComponent {
         const options = {
             name: 'Setting UHK access rules'
         };
-        sudo.exec(`sh ${scriptPath}`, options, (error: any) => {
+        const command = `sh ${scriptPath}`;
+        console.log(command);
+        sudo.exec(command, options, (error: any) => {
             if (error) {
                 subject.error(error);
             } else {

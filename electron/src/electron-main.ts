@@ -13,7 +13,7 @@ import { IpcEvents } from './shared/util';
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 
 // import './dev-extension';
-// require('electron-debug')({ showDevTools: true, enabled: true });
+require('electron-debug')({ showDevTools: false, enabled: true });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
