@@ -213,12 +213,12 @@
                 "text": "Enter"
             },
             {
-                "id": "43",
-                "text": "Tab"
-            },
-            {
                 "id": "44",
                 "text": "Space"
+            },
+            {
+                "id": "43",
+                "text": "Tab"
             }
         ]
     },
@@ -226,16 +226,12 @@
         "text": "Miscellaneous",
         "children": [
             {
-                "id": "42",
-                "text": "Backspace"
-            },
-            {
                 "id": "41",
                 "text": "Escape"
             },
             {
-                "id": "118",
-                "text": "Menu"
+                "id": "42",
+                "text": "Backspace"
             },
             {
                 "id": "73",
@@ -246,16 +242,20 @@
                 "text": "Delete"
             },
             {
+                "id": "118",
+                "text": "Menu"
+            },
+            {
                 "id": "57",
                 "text": "Caps Lock"
             },
             {
-                "id": "70",
-                "text": "Print Screen"
-            },
-            {
                 "id": "71",
                 "text": "Scroll Lock"
+            },
+            {
+                "id": "70",
+                "text": "Print Screen"
             },
             {
                 "id": "72",
