@@ -116,7 +116,7 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
                 ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
 
             const device = new HID(dev.path);
-            this.logService.info('Used device:', device);
+            this.logService.info('Used device:', dev);
             return device;
         }
         catch (err) {
