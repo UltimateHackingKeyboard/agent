@@ -107,8 +107,7 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
      */
     getDevice(): HID {
         try {
-            // TODO: Change any to Device after node-hid type have published
-            const dev = devices().find((x: any) =>
+            const dev = devices().find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
                 x.productId === Constants.PRODUCT_ID &&
                 ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
