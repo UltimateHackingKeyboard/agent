@@ -35,6 +35,7 @@ export class PrivilegeCheckerComponent {
         else {
             this.rootDir = path.dirname(remote.app.getAppPath());
         }
+        this.logService.info('App root dir: ', this.rootDir);
 
         uhkDevice.isConnected()
             .distinctUntilChanged()
