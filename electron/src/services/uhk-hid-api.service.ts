@@ -65,6 +65,18 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
             return (<Observable<void>>Observable.create((subscriber: Subscriber<void>) => {
                 this.logService.info('transfering', senderPackage.buffer);
                 const data = Array.prototype.slice.call(senderPackage.buffer, 0);
+                // if data start with 0 need to add additional leading zero because HID API remove it.
+                // https://github.com/node-hid/node-hid/issues/187
+                if (data.length > 0 && data[0] === 0) {
+                    data.unshift(0);
+                }
+
+                // I don't know why but the leading zero is need on windows platform.
+                // I don't know how it is works with prev hacking
+                if (process.platform === 'win32') {
+                    data.unshift(0);
+                }
+
                 try {
                     this.device.write(data);
                     this.logService.info('transfering finished');
