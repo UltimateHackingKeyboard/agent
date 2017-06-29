@@ -107,12 +107,17 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
      */
     getDevice(): HID {
         try {
-            const dev = devices().find((x: Device) =>
+            const devs = devices();
+            this.logService.info('Available devices:', devs);
+
+            const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
                 x.productId === Constants.PRODUCT_ID &&
                 ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
 
-            return new HID(dev.path);
+            const device = new HID(dev.path);
+            this.logService.info('Used device:', device);
+            return device;
         }
         catch (err) {
             this.logService.error('Can not create device:', err);
