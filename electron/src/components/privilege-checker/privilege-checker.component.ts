@@ -62,9 +62,11 @@ export class PrivilegeCheckerComponent {
             case 'linux':
                 permissionSetter = this.setUpPermissionsOnLinux();
                 break;
-            case 'win32':
-                permissionSetter = this.setUpPermissionsOnWin();
-                break;
+            // HID API shouldn't need privilege escalation on Windows
+            // TODO: If all HID API test success then delete this branch and setUpPermissionsOnWin() method
+            // case 'win32':
+            //     permissionSetter = this.setUpPermissionsOnWin();
+            //     break;
             default:
                 permissionSetter = Observable.throw('Permissions couldn\'t be set. Invalid platform: ' + process.platform);
                 break;
@@ -100,32 +102,34 @@ export class PrivilegeCheckerComponent {
         return subject.asObservable();
     }
 
-    private setUpPermissionsOnWin(): Observable<void> {
-        const subject = new ReplaySubject<void>();
-
-         // source code: https://github.com/pbatard/libwdi
-        const scriptPath = path.resolve(this.rootDir, `rules/zadic-${process.arch}.exe`);
-        const options = {
-            name: 'Setting UHK access rules'
-        };
-        const params = [
-            `--vid $\{Constants.VENDOR_ID}`,
-            `--pid $\{Constants.PRODUCT_ID}`,
-            '--iface 0', // interface ID
-            '--usealldevices', // if the device has installed USB driver than overwrite it
-            '--noprompt' // return at the end of the installation and not waiting for any user command
-        ];
-        const paramsString = params.join(' ');
-        const command = `"${scriptPath}" ${paramsString}`;
-
-        sudo.exec(command, options, (error: any) => {
-            if (error) {
-                subject.error(error);
-            } else {
-                subject.complete();
-            }
-        });
-
-        return subject.asObservable();
-    }
+    // TODO: If all HID API test success then delete this method.
+    // and remove zadic-${process.arch}.exe files from windows installer resources
+    // private setUpPermissionsOnWin(): Observable<void> {
+    //     const subject = new ReplaySubject<void>();
+    //
+    //      // source code: https://github.com/pbatard/libwdi
+    //     const scriptPath = path.resolve(this.rootDir, `rules/zadic-${process.arch}.exe`);
+    //     const options = {
+    //         name: 'Setting UHK access rules'
+    //     };
+    //     const params = [
+    //         `--vid $\{Constants.VENDOR_ID}`,
+    //         `--pid $\{Constants.PRODUCT_ID}`,
+    //         '--iface 0', // interface ID
+    //         '--usealldevices', // if the device has installed USB driver than overwrite it
+    //         '--noprompt' // return at the end of the installation and not waiting for any user command
+    //     ];
+    //     const paramsString = params.join(' ');
+    //     const command = `"${scriptPath}" ${paramsString}`;
+    //
+    //     sudo.exec(command, options, (error: any) => {
+    //         if (error) {
+    //             subject.error(error);
+    //         } else {
+    //             subject.complete();
+    //         }
+    //     });
+    //
+    //     return subject.asObservable();
+    // }
 }
