@@ -31,8 +31,7 @@ export class PrivilegeCheckerComponent {
                 @Inject(LOG_SERVICE) private logService: ILogService) {
         if (isDev) {
             this.rootDir = path.resolve(path.join(remote.process.cwd(), remote.process.argv[1]), '..');
-        }
-        else {
+        } else {
             this.rootDir = path.dirname(remote.app.getAppPath());
         }
         this.logService.info('App root dir: ', this.rootDir);
@@ -103,9 +102,8 @@ export class PrivilegeCheckerComponent {
 
     private setUpPermissionsOnWin(): Observable<void> {
         const subject = new ReplaySubject<void>();
-        /**
-         * source code: https://github.com/pbatard/libwdi
-         */
+
+         // source code: https://github.com/pbatard/libwdi
         const scriptPath = path.resolve(this.rootDir, `rules/zadic-${process.arch}.exe`);
         const options = {
             name: 'Setting UHK access rules'
