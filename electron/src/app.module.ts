@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -75,7 +75,9 @@ import { SafeStylePipe } from './shared/pipes';
 import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
 import { SvgModuleProviderService } from './shared/services/svg-module-provider.service';
-import { UhkDeviceService } from './services/uhk-device.service';
+import { UhkLibUsbApiService } from './services/uhk-lib-usb-api.service';
+import { UhkHidApiService } from './services/uhk-hid-api.service';
+import { uhkDeviceProvider } from './services/uhk-device-provider';
 
 import { AutoUpdateSettingsEffects, KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
 import { ApplicationEffect, AppUpdateEffect } from './store/effects';
@@ -90,6 +92,9 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
 import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
+import { ElectronLogService } from './services/electron-log.service';
+import { LOG_SERVICE } from '../../shared/src/services/logger.service';
+import { ElectronErrorHandlerService } from './services/electron-error-handler.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { reducer } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
@@ -185,10 +190,15 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         KeymapEditGuard,
         MacroNotFoundGuard,
         CaptureService,
-        UhkDeviceService,
         { provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService },
         DefaultUserConfigurationService,
-        AppUpdateRendererService
+        { provide: LOG_SERVICE, useClass: ElectronLogService },
+        { provide: ErrorHandler, useClass: ElectronErrorHandlerService },
+        AppUpdateRendererService,
+        UhkHidApiService,
+        UhkLibUsbApiService,
+        uhkDeviceProvider()
+
     ],
     bootstrap: [AppComponent]
 })

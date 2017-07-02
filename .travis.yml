@@ -28,6 +28,9 @@ addons:
       - libgnome-keyring-dev
       - libsecret-1-dev
       - icnsutils
+      - libudev-dev
+      - build-essential
+      - libusb-1.0-0-dev
 
 install:
   - nvm install
@@ -45,9 +48,3 @@ script:
 cache:
   directories:
     - node_modules
-
-addons:
-  apt:
-    packages:
-      - build-essential
-      - libudev-dev

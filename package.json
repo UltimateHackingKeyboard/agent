@@ -1,5 +1,6 @@
 {
   "name": "uhk-agent",
+  "author": "Ultimate Gadget Laboratories",
   "main": "electron/dist/electron-main.js",
   "version": "1.0.0",
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
@@ -21,6 +22,7 @@
     "@types/file-saver": "0.0.1",
     "@types/jquery": "3.2.1",
     "@types/node": "^6.0.78",
+    "@types/node-hid": "^0.5.2",
     "@types/usb": "^1.1.3",
     "angular2-template-loader": "0.6.2",
     "copy-webpack-plugin": "^4.0.1",
@@ -37,6 +39,7 @@
     "npm-run-all": "4.0.2",
     "path": "^0.12.7",
     "raw-loader": "^0.5.1",
+    "rimraf": "^2.6.1",
     "sass-loader": "^6.0.3",
     "standard-version": "^4.0.0",
     "stylelint": "^7.10.1",
@@ -75,6 +78,7 @@
     "ng2-dragula": "1.5.0",
     "ng2-select2": "1.0.0-beta.10",
     "ngrx-store-freeze": "^0.1.9",
+    "node-hid": "0.5.4",
     "reselect": "3.0.1",
     "rxjs": "^5.4.1",
     "select2": "^4.0.3",
@@ -85,17 +89,17 @@
     "zone.js": "0.8.12"
   },
   "scripts": {
-    "postinstall": "run-p build:usb \"symlink -- -i\" ",
+    "postinstall": "run-p \"symlink -- -i\" ",
     "test": "cd ./test-serializer && node ./test-serializer.js",
     "lint": "run-s -scn lint:ts lint:style",
     "lint:ts": "tslint \"electron/src/**/*.ts\" \"web/src/**/*.ts\" \"shared/**/*.ts\" \"test-serializer/**/*.ts\"",
     "lint:style": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
     "build": "run-p build:web build:electron",
     "build:web": "webpack --config \"web/src/webpack.config.js\"",
-    "build:electron": "run-s -scn build:electron:main build:electron:app",
+    "build:electron": "run-s -sn build:electron:main build:electron:app install:build-deps",
     "build:electron:main": "webpack --config \"electron/src/webpack.config.electron-main.js\"",
     "build:electron:app": "webpack --config \"electron/src/webpack.config.js\"",
-    "build:usb": "electron-rebuild -w usb -p",
+    "build:usb": "electron-rebuild -w usb,node-hid -p -m electron/dist",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
     "server:web": "webpack-dev-server --config \"web/src/webpack.config.js\" --content-base \"./web/dist\"",
     "server:electron": "webpack --config \"electron/src/webpack.config.js\" --watch",
@@ -103,7 +107,8 @@
     "symlink": "node ./tools/symlinker",
     "standard-version": "standard-version",
     "pack": "node ./scripts/release.js",
-    "install:build-deps": "cd electron/dist && npm i",
-    "release": "npm run install:build-deps && node ./scripts/release.js"
+    "install:build-deps": "cd electron/dist && npm i && cd .. && npm run build:usb",
+    "release": "node ./scripts/release.js",
+    "clean": "rimraf ./node_modules ./electron/dist"
   }
 }
