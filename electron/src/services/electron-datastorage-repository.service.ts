@@ -18,12 +18,18 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
         storage.set(key, JSON.stringify(value));
     }
 
+    // TODO: Throw error when read user config from electron datastore
+    // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
+    // If implemented the feature should have to throw an error to prevent unwanted side effects.
     getConfig(): UserConfiguration {
-        return ElectronDataStorageRepositoryService.getValue('user-config');
+        return null;
     }
 
+    // TODO: Throw error when save user config from electron-datastore
+    // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
+    // If implemented the feature should have to throw an error to prevent unwanted side effects.
     saveConfig(config: UserConfiguration): void {
-        ElectronDataStorageRepositoryService.saveValue('user-config', config.toJsonObject());
+
     }
 
     getAutoUpdateSettings(): AutoUpdateSettings {
