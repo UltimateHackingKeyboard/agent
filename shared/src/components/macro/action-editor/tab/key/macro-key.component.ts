@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-import { KeyAction } from '../../../../../config-serializer/config-items/key-action';
-import { EditableMacroAction, MacroSubAction } from '../../../../../config-serializer/config-items/macro-action';
+import { KeyAction, KeystrokeAction } from '../../../../../config-serializer/config-items/key-action';
+import { KeyMacroAction, MacroSubAction } from '../../../../../config-serializer/config-items/macro-action';
 import { KeypressTabComponent } from '../../../../popover/tab';
 import { Tab } from '../../../../popover/tab';
 
@@ -21,7 +21,7 @@ enum TabName {
     host: { 'class': 'macro__mouse' }
 })
 export class MacroKeyTabComponent implements OnInit {
-    @Input() macroAction: EditableMacroAction;
+    @Input() macroAction: KeyMacroAction;
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
 
@@ -29,24 +29,26 @@ export class MacroKeyTabComponent implements OnInit {
     TabName = TabName;
     /* tslint:enable:variable-name */
     activeTab: TabName;
-    defaultKeyAction: KeyAction;
+    defaultKeyAction: KeystrokeAction;
 
     ngOnInit() {
-        this.defaultKeyAction = this.macroAction.toKeystrokeAction();
+        if (!this.macroAction) {
+            this.macroAction = new KeyMacroAction();
+        }
+        this.defaultKeyAction = new KeystrokeAction(<any>this.macroAction);
         this.selectTab(this.getTabName(this.macroAction));
     }
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
-        this.macroAction.action = this.getActionType(tab);
     }
 
-    getTabName(action: EditableMacroAction): TabName {
-        if (!action.action || action.isOnlyPressAction()) {
+    getTabName(macroAction: KeyMacroAction): TabName {
+        if (!macroAction.action) {
             return TabName.Keypress;
-        } else if (action.isOnlyHoldAction()) {
+        } else if (macroAction.action === MacroSubAction.hold) {
             return TabName.Hold;
-        } else if (action.isOnlyReleaseAction()) {
+        } else if (macroAction.action === MacroSubAction.release) {
             return TabName.Release;
         }
     }
@@ -64,8 +66,10 @@ export class MacroKeyTabComponent implements OnInit {
         }
     }
 
-    getKeyAction(): KeyAction {
-        return this.keypressTab.toKeyAction();
+    getKeyMacroAction(): KeyMacroAction {
+        const keyMacroAction = Object.assign(new KeyMacroAction(), this.keypressTab.toKeyAction());
+        keyMacroAction.action = this.getActionType(this.activeTab);
+        return keyMacroAction;
     }
 
 }

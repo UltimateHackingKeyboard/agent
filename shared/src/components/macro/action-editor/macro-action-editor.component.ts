@@ -1,12 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import {
-    EditableMacroAction,
     MacroAction,
+    DelayMacroAction,
+    KeyMacroAction,
+    ScrollMouseMacroAction,
+    MoveMouseMacroAction,
+    MouseButtonMacroAction,
     TextMacroAction,
-    macroActionType
+    macroActionType,
+    Helper as MacroActionHelper
 } from '../../../config-serializer/config-items/macro-action';
-import { MacroKeyTabComponent } from './tab/key';
+import { MacroDelayTabComponent, MacroMouseTabComponent, MacroKeyTabComponent, MacroTextTabComponent } from './tab';
+import { KeystrokeAction } from '../../../config-serializer/config-items/key-action';
 
 enum TabName {
     Keypress,
@@ -27,19 +33,22 @@ export class MacroActionEditorComponent implements OnInit {
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
 
-    @ViewChild('tab') selectedTab: any;
+    @ViewChild('tab') selectedTab: MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
 
-    editableMacroAction: EditableMacroAction;
+    editableMacroAction: MacroAction;
     activeTab: TabName;
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     TabName = TabName;
     /* tslint:enable:variable-name */
 
     ngOnInit() {
-        const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
-        this.editableMacroAction = new EditableMacroAction(macroAction.toJsonObject());
+        this.updateEditableMacroAction();
         const tab: TabName = this.getTabName(this.editableMacroAction);
         this.activeTab = tab;
+    }
+
+    ngOnChanges() {
+        this.ngOnInit();
     }
 
     onCancelClick(): void {
@@ -48,13 +57,11 @@ export class MacroActionEditorComponent implements OnInit {
 
     onSaveClick(): void {
         try {
-            const action = this.editableMacroAction;
-            if (action.isKeyAction()) {
-                // Could updating the saved keys be done in a better way?
-                const tab = this.selectedTab as MacroKeyTabComponent;
-                action.fromKeyAction(tab.getKeyAction());
-            }
-            this.save.emit(action.toClass());
+            // TODO: Refactor after getKeyMacroAction has been added to all tabs
+            const action = this.selectedTab instanceof MacroKeyTabComponent ?
+                this.selectedTab.getKeyMacroAction() :
+                this.selectedTab.macroAction;
+            this.save.emit(action);
         } catch (e) {
             // TODO: show error dialog
             console.error(e);
@@ -63,43 +70,31 @@ export class MacroActionEditorComponent implements OnInit {
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
-        this.editableMacroAction.macroActionType = this.getTabMacroActionType(tab);
-    }
-
-    getTabName(action: EditableMacroAction): TabName {
-        switch (action.macroActionType) {
-            // Delay action
-            case macroActionType.DelayMacroAction:
-                return TabName.Delay;
-            // Text action
-            case macroActionType.TextMacroAction:
-                return TabName.Text;
-            // Keypress actions
-            case macroActionType.KeyMacroAction:
-                return TabName.Keypress;
-            // Mouse actions
-            case macroActionType.MouseButtonMacroAction:
-            case macroActionType.MoveMouseMacroAction:
-            case macroActionType.ScrollMouseMacroAction:
-                return TabName.Mouse;
-            default:
-                return TabName.Keypress;
+        if (tab === this.getTabName(this.macroAction)) {
+            this.updateEditableMacroAction();
+        } else {
+            this.editableMacroAction = undefined;
         }
     }
 
-    getTabMacroActionType(tab: TabName): string {
-        switch (tab) {
-            case TabName.Delay:
-                return macroActionType.DelayMacroAction;
-            case TabName.Keypress:
-                return macroActionType.KeyMacroAction;
-            case TabName.Mouse:
-                return macroActionType.MouseButtonMacroAction;
-            case TabName.Text:
-                return macroActionType.TextMacroAction;
-            default:
-                throw new Error('Could not get macro action type');
+    getTabName(action: MacroAction): TabName {
+        if (action instanceof DelayMacroAction) {
+            return TabName.Delay;
+        } else if (action instanceof TextMacroAction) {
+            return TabName.Text;
+        } else if (action instanceof KeyMacroAction) {
+            return TabName.Keypress;
+        } else if (action instanceof MouseButtonMacroAction ||
+            action instanceof MoveMouseMacroAction ||
+            action instanceof ScrollMouseMacroAction) {
+            return TabName.Mouse;
         }
+        return undefined;
+    }
+
+    private updateEditableMacroAction() {
+        const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
+        this.editableMacroAction = MacroActionHelper.createMacroAction(macroAction);
     }
 
 }

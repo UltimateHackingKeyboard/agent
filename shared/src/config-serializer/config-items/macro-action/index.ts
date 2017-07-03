@@ -1,5 +1,4 @@
 export * from './delay-macro-action';
-export * from './editable-macro-action';
 export * from './key-macro-action';
 export * from './macro-action';
 export * from './move-mouse-macro-action';
