@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
 import { ActionTypes } from '../actions/auto-update-settings';
+import { ActionTypes as UpdateActions } from '../actions/app-update.action';
 import { AutoUpdateSettings } from '../../models/auto-update-settings';
 
 export interface State extends AutoUpdateSettings {
     checkingForUpdate: boolean;
-    message?: string;
 }
 
 export const initialState: State = {
@@ -28,12 +28,13 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case ActionTypes.CHECK_FOR_UPDATE_NOW: {
-            return Object.assign({}, state, { checkingForUpdate: true, message: null });
+            return Object.assign({}, state, { checkingForUpdate: true});
         }
 
+        case UpdateActions.UPDATE_ERROR:
         case ActionTypes.CHECK_FOR_UPDATE_SUCCESS:
         case ActionTypes.CHECK_FOR_UPDATE_FAILED: {
-            return Object.assign({}, state, { checkingForUpdate: false, message: action.payload });
+            return Object.assign({}, state, { checkingForUpdate: false });
         }
 
         default:
@@ -47,4 +48,3 @@ export const getUpdateSettings = (state: State) => ({
 });
 
 export const checkingForUpdate = (state: State) => state.checkingForUpdate;
-export const getMessage = (state: State) => state.message;

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { type } from '../../shared/util/';
+import { type } from '../../util';
 
 const PREFIX = '[app-update] ';
 
@@ -9,7 +9,8 @@ export const ActionTypes = {
     UPDATE_APP: type(PREFIX + 'update app'),
     DO_NOT_UPDATE_APP: type(PREFIX + 'do not update app'),
     UPDATE_DOWNLOADED: type(PREFIX + 'update downloaded'),
-    UPDATING: type(PREFIX + 'updating')
+    UPDATING: type(PREFIX + 'updating'),
+    UPDATE_ERROR: type(PREFIX + 'error')
 };
 
 export class UpdateAvailableAction implements Action {
@@ -32,9 +33,16 @@ export class UpdatingAction implements Action {
     type = ActionTypes.UPDATING;
 }
 
+export class UpdateErrorAction implements Action {
+    type = ActionTypes.UPDATE_ERROR;
+
+    constructor(public payload: any) {}
+}
+
 export type Actions
     = UpdateAvailableAction
     | UpdateAppAction
     | DoNotUpdateAppAction
     | UpdateDownloadedAction
-    | UpdatingAction;
+    | UpdatingAction
+    | UpdateErrorAction;
