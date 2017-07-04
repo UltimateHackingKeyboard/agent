@@ -20,6 +20,7 @@
     "@types/electron-devtools-installer": "^2.0.2",
     "@types/electron-settings": "^3.0.0",
     "@types/file-saver": "0.0.1",
+    "@types/bootstrap": "3.3.34",
     "@types/jquery": "3.2.1",
     "@types/node": "^6.0.78",
     "@types/node-hid": "^0.5.2",

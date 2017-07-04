@@ -40,7 +40,12 @@
              (valueChanged)="onLongpressChange($event)"
              [width]="140"
     ></select2>
-    <icon name="question-circle" title="This action activates when another key gets pressed while holding this key."></icon>
+    <icon name="question-circle" data-toggle="tooltip" title="This action activates when another key gets pressed while holding this key."></icon>&nbsp;
+    (
+    <span data-toggle="tooltip">title missing</span>,&nbsp;
+    <span data-toggle="tooltip" title="top" [options]="{placement: 'top'}">top</span>
+    <a data-toggle="tooltip" title="default tooltip">default</a>,&nbsp;
+    )
 </div>
 
 <div class="disabled-state--text">
