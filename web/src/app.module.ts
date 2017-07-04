@@ -77,7 +77,7 @@ import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repositor
 import { LocalDataStorageRepositoryService } from './shared/services/local-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
 import { reducer } from '../../shared/src/store/reducers/index';
-import { ConsoleLogService, LOG_SERVICE } from '../../shared/src/services/logger.service';
+import { LogService } from '../../shared/src/services/logger.service';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 
 @NgModule({
@@ -162,7 +162,7 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         CaptureService,
         {provide: DATA_STORAGE_REPOSITORY, useClass: LocalDataStorageRepositoryService},
         DefaultUserConfigurationService,
-        { provide: LOG_SERVICE, useClass: ConsoleLogService },
+        LogService,
         DefaultUserConfigurationService
     ],
     bootstrap: [MainAppComponent]

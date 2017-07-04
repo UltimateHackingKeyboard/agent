@@ -1,8 +1,9 @@
-import { ErrorHandler, Inject } from '@angular/core';
-import { ILogService, LOG_SERVICE } from '../../../shared/src/services/logger.service';
+import { ErrorHandler, Injectable } from '@angular/core';
+import { LogService} from '../shared/services/logger.service';
 
+@Injectable()
 export class ElectronErrorHandlerService implements ErrorHandler {
-    constructor(@Inject(LOG_SERVICE)private logService: ILogService) {}
+    constructor(private logService: LogService) {}
 
     handleError(error: any) {
         this.logService.error(error);

@@ -93,7 +93,7 @@ import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repositor
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
 import { ElectronLogService } from './services/electron-log.service';
-import { LOG_SERVICE } from '../../shared/src/services/logger.service';
+import { LogService } from './shared/services/logger.service';
 import { ElectronErrorHandlerService } from './services/electron-error-handler.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { reducer } from './store';
@@ -192,7 +192,7 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         CaptureService,
         { provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService },
         DefaultUserConfigurationService,
-        { provide: LOG_SERVICE, useClass: ElectronLogService },
+        { provide: LogService, useClass: ElectronLogService },
         { provide: ErrorHandler, useClass: ElectronErrorHandlerService },
         AppUpdateRendererService,
         UhkHidApiService,

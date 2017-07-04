@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 import * as util from 'util';
 
-import { ILogService } from '../../../shared/src/services/logger.service';
+import { LogService } from '../shared/services/logger.service';
 
 /**
  * This service use the electron-log package to write log in file.
@@ -14,7 +14,7 @@ import { ILogService } from '../../../shared/src/services/logger.service';
  * The app name: UHK Agent. The up to date value in the scripts/release.js file.
  */
 @Injectable()
-export class ElectronLogService implements ILogService {
+export class ElectronLogService implements LogService {
     private static getErrorText(args: any) {
         return util.inspect(args);
     }
