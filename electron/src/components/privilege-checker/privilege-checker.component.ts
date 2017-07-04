@@ -15,7 +15,7 @@ import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 
 import { UhkDeviceService } from '../../services/uhk-device.service';
-import { LogService } from '../../../../shared/src/services/logger.service';
+import { LogService } from '../../shared/services/logger.service';
 
 @Component({
     selector: 'privilege-checker',

@@ -76,8 +76,8 @@ import { MacroNotFoundGuard } from './shared/components/macro/not-found';
 import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
 import { LocalDataStorageRepositoryService } from './shared/services/local-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
-import { reducer } from '../../shared/src/store/reducers/index';
-import { LogService } from '../../shared/src/services/logger.service';
+import { reducer } from './shared/store/reducers/index';
+import { LogService } from './shared/services/logger.service';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 
 @NgModule({
