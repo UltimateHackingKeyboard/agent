@@ -11,6 +11,16 @@ import { Notification, NotificationType } from '../../models/notification';
 
 @Injectable()
 export class ApplicationEffects {
+
+    @Effect({ dispatch: false })
+    appStart$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.APP_SHOW_NOTIFICATION)
+        .map(toPayload)
+        .do((notification: Notification) => {
+            const type = ApplicationEffects.mapNotificationType(notification.type);
+            this.notifierService.notify(type, notification.message);
+        });
+
     // TODO: Change typescript -> 2.4 and use string enum.
     // Corrently ngrx store is not compatible witn typescript 2.4
     private static mapNotificationType(type: NotificationType): string {
@@ -31,15 +41,6 @@ export class ApplicationEffects {
                 return 'default';
         }
     }
-
-    @Effect({ dispatch: false })
-    appStart$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.APP_SHOW_NOTIFICATION)
-        .map(toPayload)
-        .do((notification: Notification) => {
-            const type = ApplicationEffects.mapNotificationType(notification.type);
-            this.notifierService.notify(type, notification.message);
-        });
 
     constructor(private actions$: Actions,
                 private notifierService: NotifierService) { }
