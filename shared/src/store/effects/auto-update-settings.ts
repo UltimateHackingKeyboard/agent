@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
 
@@ -18,6 +18,8 @@ import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../ser
 import { AppState, getAutoUpdateSettings } from '../index';
 import { initialState } from '../reducers/auto-update-settings';
 import { AutoUpdateSettings } from '../../models/auto-update-settings';
+import { NotificationType } from '../../models/notification';
+import { ShowNotificationAction } from '../actions/app.action';
 
 @Injectable()
 export class AutoUpdateSettingsEffects {
@@ -38,6 +40,16 @@ export class AutoUpdateSettingsEffects {
         .map(([action, config]) => {
             this.dataStorageRepository.saveAutoUpdateSettings(config);
             return new SaveAutoUpdateSettingsSuccessAction();
+        });
+
+    @Effect() sendNotification$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.CHECK_FOR_UPDATE_FAILED, ActionTypes.CHECK_FOR_UPDATE_SUCCESS)
+        .map(toPayload)
+        .map((message: string) => {
+            return new ShowNotificationAction({
+                type: NotificationType.Info,
+                message
+            });
         });
 
     constructor(private actions$: Actions,

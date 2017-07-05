@@ -12,7 +12,6 @@ export class AutoUpdateSettings {
     @Input() version: string;
     @Input() settings: State;
     @Input() checkingForUpdate: boolean;
-    @Input() message: string;
 
     @Output() toggleCheckForUpdateOnStartUp = new EventEmitter<boolean>();
     @Output() toggleUsePreReleaseUpdate = new EventEmitter<boolean>();

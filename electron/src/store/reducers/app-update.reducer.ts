@@ -1,4 +1,4 @@
-import { Actions, ActionTypes } from '../actions/app-update.action';
+import { Actions, ActionTypes } from '../../shared/store/actions/app-update.action';
 
 export interface State {
     updateAvailable: boolean;
@@ -19,11 +19,13 @@ export function reducer(state = initialState, action: Actions) {
             newState.updateAvailable = true;
             return newState;
         }
+
         case ActionTypes.UPDATE_DOWNLOADED: {
             const newState = Object.assign({}, state);
             newState.updateDownloaded = true;
             return newState;
         }
+
         case ActionTypes.DO_NOT_UPDATE_APP: {
             const newState = Object.assign({}, state);
             newState.doNotUpdateApp = true;
