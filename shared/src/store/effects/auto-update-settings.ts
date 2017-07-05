@@ -8,7 +8,6 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/map';
 
-
 import {
     ActionTypes,
     LoadAutoUpdateSettingsAction,
