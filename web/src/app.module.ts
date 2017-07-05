@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NotifierModule } from 'angular-notifier';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -69,16 +70,23 @@ import { CaptureService } from './shared/services/capture.service';
 import { MapperService } from './shared/services/mapper.service';
 import { SvgModuleProviderService } from './shared/services/svg-module-provider.service';
 
-import { AutoUpdateSettingsEffects, KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
+import {
+    ApplicationEffects,
+    AutoUpdateSettingsEffects,
+    KeymapEffects,
+    MacroEffects,
+    UserConfigEffects
+} from './shared/store/effects';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
 import { MacroNotFoundGuard } from './shared/components/macro/not-found';
 import { DATA_STORAGE_REPOSITORY } from './shared/services/datastorage-repository.service';
 import { LocalDataStorageRepositoryService } from './shared/services/local-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './shared/services/default-user-configuration.service';
-import { reducer } from '../../shared/src/store/reducers/index';
-import { ConsoleLogService, LOG_SERVICE } from '../../shared/src/services/logger.service';
+import { reducer } from './shared/store/reducers/index';
+import { LogService } from './shared/services/logger.service';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
+import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-config';
 
 @NgModule({
     declarations: [
@@ -148,10 +156,12 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         }),
         StoreLogMonitorModule,
         Select2Module,
+        NotifierModule.withConfig(angularNotifierConfig),
         EffectsModule.runAfterBootstrap(KeymapEffects),
         EffectsModule.runAfterBootstrap(MacroEffects),
         EffectsModule.runAfterBootstrap(UserConfigEffects),
-        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects)
+        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
+        EffectsModule.runAfterBootstrap(ApplicationEffects)
     ],
     providers: [
         SvgModuleProviderService,
@@ -160,11 +170,12 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         KeymapEditGuard,
         MacroNotFoundGuard,
         CaptureService,
-        {provide: DATA_STORAGE_REPOSITORY, useClass: LocalDataStorageRepositoryService},
+        { provide: DATA_STORAGE_REPOSITORY, useClass: LocalDataStorageRepositoryService },
         DefaultUserConfigurationService,
-        { provide: LOG_SERVICE, useClass: ConsoleLogService },
+        LogService,
         DefaultUserConfigurationService
     ],
     bootstrap: [MainAppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

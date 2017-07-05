@@ -4,7 +4,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
-import * as app from '../actions/app.action';
+import * as app from '../../shared/store/actions/app.action';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 
 @Injectable()

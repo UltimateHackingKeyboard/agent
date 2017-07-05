@@ -14,7 +14,7 @@ import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/do';
 
-import { ILogService, LOG_SERVICE } from '../shared/services/logger.service';
+import { LogService } from '../shared/services/logger.service';
 import { Constants } from '../shared/util';
 import { UhkDeviceService } from './uhk-device.service';
 
@@ -24,7 +24,7 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
 
     private pollTimer$: Subscription;
 
-    constructor(@Inject(LOG_SERVICE) protected logService: ILogService) {
+    constructor(protected logService: LogService) {
         super(logService);
 
         this.pollUhkDevice();

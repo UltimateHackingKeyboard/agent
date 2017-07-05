@@ -6,7 +6,7 @@ import { Subscriber } from 'rxjs/Subscriber';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 
-import { ILogService, LOG_SERVICE } from '../shared/services/logger.service';
+import { LogService } from '../shared/services/logger.service';
 import { SenderMessage } from '../models/sender-message';
 import { Constants } from '../shared/util/constants';
 
@@ -24,7 +24,7 @@ export abstract class UhkDeviceService {
     protected messageIn$: Observable<Buffer>;
     protected messageOut$: Subject<SenderMessage>;
 
-    constructor(@Inject(LOG_SERVICE) protected logService: ILogService) {
+    constructor(protected logService: LogService) {
         this.messageOut$ = new Subject<SenderMessage>();
         this.initialized$ = new BehaviorSubject(false);
         this.connected$ = new BehaviorSubject(false);

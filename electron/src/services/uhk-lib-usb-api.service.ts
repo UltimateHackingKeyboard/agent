@@ -14,7 +14,7 @@ import 'rxjs/add/operator/do';
 
 import { Device, findByIds, InEndpoint, Interface, on, OutEndpoint } from 'usb';
 
-import { ILogService, LOG_SERVICE } from '../shared/services/logger.service';
+import { LogService} from '../shared/services/logger.service';
 import { Constants } from '../shared/util';
 import { UhkDeviceService } from './uhk-device.service';
 
@@ -28,7 +28,7 @@ export class UhkLibUsbApiService extends UhkDeviceService implements OnDestroy {
     }
 
     constructor(zone: NgZone,
-                @Inject(LOG_SERVICE) protected logService: ILogService) {
+                protected logService: LogService) {
         super(logService);
 
         this.initialize();
