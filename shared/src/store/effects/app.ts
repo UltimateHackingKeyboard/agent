@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { ActionTypes } from '../actions/app.action';
 import { Notification, NotificationType } from '../../models/notification';
