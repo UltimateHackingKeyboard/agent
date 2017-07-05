@@ -3,6 +3,12 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
 
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/map';
+
+
 import {
     ActionTypes,
     LoadAutoUpdateSettingsAction,
@@ -11,7 +17,7 @@ import {
 } from '../actions/auto-update-settings';
 import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { AppState, getAutoUpdateSettings } from '../index';
-import { initialState, State } from '../reducers/auto-update-settings';
+import { initialState } from '../reducers/auto-update-settings';
 import { AutoUpdateSettings } from '../../models/auto-update-settings';
 
 @Injectable()
