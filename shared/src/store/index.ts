@@ -17,4 +17,3 @@ export const appUpdateState = (state: AppState) => state.autoUpdateSettings;
 
 export const getAutoUpdateSettings = createSelector(appUpdateState, autoUpdate.getUpdateSettings);
 export const getCheckingForUpdate = createSelector(appUpdateState, autoUpdate.checkingForUpdate);
-export const getAutoUpdateMessage = createSelector(appUpdateState, autoUpdate.getMessage);

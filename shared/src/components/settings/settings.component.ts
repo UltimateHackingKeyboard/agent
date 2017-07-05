@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { runInElectron } from '../../util/index';
-import { AppState, getAutoUpdateMessage, getAutoUpdateSettings, getCheckingForUpdate } from '../../store';
+import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../store';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction,
@@ -25,12 +25,10 @@ export class SettingsComponent {
     version = '1.0.0';
     autoUpdateSettings$: Observable<AutoUpdateSettings>;
     checkingForUpdate$: Observable<boolean>;
-    autoUpdateMessage$: Observable<string>;
 
     constructor(private store: Store<AppState>) {
         this.autoUpdateSettings$ = store.select(getAutoUpdateSettings);
         this.checkingForUpdate$ = store.select(getCheckingForUpdate);
-        this.autoUpdateMessage$ = store.select(getAutoUpdateMessage);
     }
 
     toogleCheckForUpdateOnStartUp(value: boolean) {

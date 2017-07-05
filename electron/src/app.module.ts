@@ -2,6 +2,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NotifierModule } from 'angular-notifier';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -79,7 +80,13 @@ import { UhkLibUsbApiService } from './services/uhk-lib-usb-api.service';
 import { UhkHidApiService } from './services/uhk-hid-api.service';
 import { uhkDeviceProvider } from './services/uhk-device-provider';
 
-import { AutoUpdateSettingsEffects, KeymapEffects, MacroEffects, UserConfigEffects } from './shared/store/effects';
+import {
+    ApplicationEffects,
+    AutoUpdateSettingsEffects,
+    KeymapEffects,
+    MacroEffects,
+    UserConfigEffects
+} from './shared/store/effects';
 import { ApplicationEffect, AppUpdateEffect } from './store/effects';
 
 import { KeymapEditGuard } from './shared/components/keymap/edit';
@@ -98,6 +105,7 @@ import { ElectronErrorHandlerService } from './services/electron-error-handler.s
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { reducer } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
+import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-config';
 
 @NgModule({
     declarations: [
@@ -172,12 +180,14 @@ import { AutoUpdateSettings } from './shared/components/auto-update-settings/aut
         }),
         StoreLogMonitorModule,
         Select2Module,
+        NotifierModule.withConfig(angularNotifierConfig),
         EffectsModule.runAfterBootstrap(KeymapEffects),
         EffectsModule.runAfterBootstrap(MacroEffects),
         EffectsModule.runAfterBootstrap(UserConfigEffects),
         EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
         EffectsModule.run(ApplicationEffect),
-        EffectsModule.run(AppUpdateEffect)
+        EffectsModule.run(AppUpdateEffect),
+        EffectsModule.run(ApplicationEffects)
     ],
     providers: [
         UhkDeviceConnectedGuard,
