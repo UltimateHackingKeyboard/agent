@@ -10,13 +10,16 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { Store } from '@ngrx/store';
 
 import { Keymap } from '../../../config-serializer/config-items/keymap';
+import { Notification } from '../../../models/notification';
 
-import { AppState } from '../../../store';
+import { AppState, getUndoableNotification } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
+import { DismissUndoNotificationAction, UndoLastAction } from '../../../store/actions/app.action';
 
 @Component({
     selector: 'keymap-header',
@@ -32,10 +35,14 @@ export class KeymapHeaderComponent implements OnChanges {
     @ViewChild('name') keymapName: ElementRef;
     @ViewChild('abbr') keymapAbbr: ElementRef;
 
+    undoableNotification$: Observable<Notification>;
+
     starTitle: string;
     trashTitle: string = 'Delete keymap';
 
-    constructor(private store: Store<AppState>, private renderer: Renderer) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer) {
+        this.undoableNotification$ = this.store.select(getUndoableNotification);
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap']) {
@@ -95,5 +102,13 @@ export class KeymapHeaderComponent implements OnChanges {
 
     onDownloadIconClick(): void {
         this.downloadClick.emit();
+    }
+
+    onUndoLastNotification(data: any): void {
+        this.store.dispatch(new UndoLastAction(data));
+    }
+
+    onDismissLastNotification(): void {
+        this.store.dispatch(new DismissUndoNotificationAction());
     }
 }

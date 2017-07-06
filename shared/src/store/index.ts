@@ -19,6 +19,7 @@ export const getUserConfiguration = (state: AppState) => state.userConfiguration
 
 export const appState = (state: AppState) => state.app;
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
+export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 
 export const appUpdateState = (state: AppState) => state.autoUpdateSettings;
 

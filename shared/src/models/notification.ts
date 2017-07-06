@@ -3,7 +3,8 @@ export enum NotificationType {
     Success,
     Error,
     Warning,
-    Info
+    Info,
+    Undoable
 }
 
 export interface Notification {
