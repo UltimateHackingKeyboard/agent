@@ -54,6 +54,7 @@ export class UndoLastSuccessAction implements Action {
     type = ActionTypes.UNDO_LAST_SUCCESS;
 }
 
+
 export class DismissUndoNotificationAction implements Action {
     type = ActionTypes.DISMISS_UNDO_NOTIFICATION;
 }
