@@ -509,6 +509,35 @@
         ]
     },
     {
+        "text": "Launch application",
+        "children": [
+            {
+                "id": "142",
+                "text": "Launch Web Browser",
+                "additional": {
+                    "type": "media",
+                    "scancode": 406
+                }
+            },
+            {
+                "id": "143",
+                "text": "Launch Email Client",
+                "additional": {
+                    "type": "media",
+                    "scancode": 394
+                }
+            },
+            {
+                "id": "144",
+                "text": "Launch Calculator",
+                "additional": {
+                    "type": "media",
+                    "scancode": 402
+                }
+            }
+        ]
+    },
+    {
         "text": "System",
         "children": [
             {

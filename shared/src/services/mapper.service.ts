@@ -219,6 +219,10 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(233, ['Vol +']);
         this.mediaScanCodeTextMap.set(234, ['Vol -']);
 
+        this.mediaScanCodeTextMap.set(406, ['Launch Web Browser']);
+        this.mediaScanCodeTextMap.set(394, ['Launch Email Client']);
+        this.mediaScanCodeTextMap.set(402, ['Launch Calculator']);
+
         this.sytemScanCodeTextMap = new Map<number, string[]>();
         this.sytemScanCodeTextMap.set(129, ['Power Down']);
         this.sytemScanCodeTextMap.set(130, ['Sleep']);
@@ -243,6 +247,10 @@ export class MapperService {
         this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
         this.mediaScancodeIcons.set(233, 'icon-kbd__media--vol-up');
         this.mediaScancodeIcons.set(234, 'icon-kbd__media--vol-down');
+
+        this.mediaScancodeIcons.set(406, 'icon-kbd__media--web-browser');
+        this.mediaScancodeIcons.set(394, 'icon-kbd__media--email-client');
+        this.mediaScancodeIcons.set(402, 'icon-kbd__media--calculator');
 
         this.systemScancodeIcons = new Map<number, string>();
         this.systemScancodeIcons.set(129, 'icon-kbd__system_power_down');
