@@ -104,7 +104,7 @@ export class MacroMouseTabComponent implements OnInit {
         if (action instanceof MouseButtonMacroAction) {
             if (!action.action || action.isOnlyPressAction()) {
                 return TabName.Click;
-            } else if (action.isOnlyPressAction()) {
+            } else if (action.isOnlyHoldAction()) {
                 return TabName.Hold;
             } else if (action.isOnlyReleaseAction()) {
                 return TabName.Release;

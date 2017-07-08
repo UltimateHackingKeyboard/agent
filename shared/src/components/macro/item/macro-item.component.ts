@@ -148,7 +148,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
         if (action.hasModifiers()) {
             // Press/hold/release modifiers
-            for (let i = KeyModifiers.leftCtrl; i !== KeyModifiers.rightGui; i <<= 1) {
+            for (let i = KeyModifiers.leftCtrl; i <= KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
                 }
