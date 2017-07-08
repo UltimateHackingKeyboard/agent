@@ -7,7 +7,7 @@ import {
     ViewChild
 } from '@angular/core';
 
-import { EditableMacroAction } from '../../../../../config-serializer/config-items/macro-action';
+import { DelayMacroAction } from '../../../../../config-serializer/config-items/macro-action';
 
 const INITIAL_DELAY = 0.5; // In seconds
 
@@ -19,7 +19,7 @@ const INITIAL_DELAY = 0.5; // In seconds
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MacroDelayTabComponent implements OnInit {
-    @Input() macroAction: EditableMacroAction;
+    @Input() macroAction: DelayMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
 
     delay: number;
@@ -28,6 +28,9 @@ export class MacroDelayTabComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        if (!this.macroAction) {
+            this.macroAction = new DelayMacroAction();
+        }
         this.delay = this.macroAction.delay > 0 ? this.macroAction.delay / 1000 : INITIAL_DELAY;
     }
 
