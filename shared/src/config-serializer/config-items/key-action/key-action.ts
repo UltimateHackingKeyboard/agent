@@ -1,5 +1,3 @@
-/// <reference path="../../function.d.ts" />
-
 import { Macro } from '../macro';
 import { UhkBuffer } from '../../uhk-buffer';
 
