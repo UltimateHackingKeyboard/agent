@@ -168,15 +168,15 @@ function sendIpcToWindow(message: string, arg?: any) {
 }
 
 function allowPreRelease() {
-    const settings = getAutoUpdateSettings();
+    const autoUpdateSettings = getAutoUpdateSettings();
 
-    return settings && settings.usePreReleaseUpdate;
+    return autoUpdateSettings && autoUpdateSettings.usePreReleaseUpdate;
 }
 
 function checkForUpdateAtStartup() {
-    const settings = getAutoUpdateSettings();
+    const autoUpdateSettings = getAutoUpdateSettings();
 
-    return settings && settings.checkForUpdateOnStartUp;
+    return autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
 }
 
 function getAutoUpdateSettings() {

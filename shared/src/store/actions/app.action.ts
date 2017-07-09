@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { type } from '../../util';
-import {Notification} from '../../models/notification';
+import { Notification } from '../../models/notification';
 
 const PREFIX = '[app] ';
 
@@ -23,7 +23,7 @@ export class AppStartedAction implements Action {
 export class ShowNotificationAction implements Action {
     type = ActionTypes.APP_SHOW_NOTIFICATION;
 
-    constructor(public payload: Notification) {}
+    constructor(public payload: Notification) { }
 }
 
 export type Actions

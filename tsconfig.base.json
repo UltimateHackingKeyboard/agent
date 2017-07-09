@@ -8,7 +8,14 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": [
+      "es6",
+      "es2016.array.include",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
   },
   "exclude": [
     "./dist",

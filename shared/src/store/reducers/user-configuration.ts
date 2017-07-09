@@ -17,9 +17,6 @@ import { ActionTypes } from '../actions/user-config';
 
 const initialState: UserConfiguration = new UserConfiguration();
 
-/* tslint:disable:no-switch-case-fall-through */
-// tslint bug: https://github.com/palantir/tslint/issues/1538
-
 export default function (state = initialState, action: Action): UserConfiguration {
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
