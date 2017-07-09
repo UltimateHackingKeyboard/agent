@@ -45,8 +45,8 @@
     "stylelint": "^7.12.0",
     "ts-loader": "^2.0.3",
     "tslint": "~5.4.3",
-    "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.4",
+    "webpack": "^3.1.0",
+    "webpack-dev-server": "^2.5.1",
     "webpack-svgstore-plugin": "4.0.1"
   },
   "dependencies": {
