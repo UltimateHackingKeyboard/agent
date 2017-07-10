@@ -17,9 +17,6 @@ import { ActionTypes } from '../actions/user-config';
 
 const initialState: UserConfiguration = new UserConfiguration();
 
-/* tslint:disable:no-switch-case-fall-through */
-// tslint bug: https://github.com/palantir/tslint/issues/1538
-
 export default function (state = initialState, action: Action): UserConfiguration {
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
@@ -310,22 +307,45 @@ function generateMacroId(macros: Macro[]) {
     return newId + 1;
 }
 
-function checkExistence(layers: Layer[], property: string, value: any) {
-    const newLayers = layers.map(layer => {
-        const newLayer = new Layer(layer);
-
-        newLayer.modules = layer.modules.map((module: Module) => {
-            module.keyActions.forEach((action: KeyAction, index: number) => {
+function checkExistence(layers: Layer[], property: string, value: any): Layer[] {
+    const keyActionsToClear: {
+        layerIdx: number,
+        moduleIdx: number,
+        keyActionIdx: number
+    }[] = [];
+    for (let layerIdx = 0; layerIdx < layers.length; ++layerIdx) {
+        const modules = layers[layerIdx].modules;
+        for (let moduleIdx = 0; moduleIdx < modules.length; ++moduleIdx) {
+            const keyActions = modules[moduleIdx].keyActions;
+            for (let keyActionIdx = 0; keyActionIdx < keyActions.length; ++keyActionIdx) {
+                const action = keyActions[keyActionIdx];
                 if (action && action.hasOwnProperty(property) && action[property] === value) {
-                    module.keyActions[index] = undefined;
+                    keyActionsToClear.push({
+                        layerIdx,
+                        moduleIdx,
+                        keyActionIdx
+                    });
                 }
-            });
+            }
+        }
+    }
+    if (keyActionsToClear.length === 0) {
+        return layers;
+    }
 
-            return module;
-        });
-
-        return newLayer;
-    });
+    const newLayers = [...layers];
+    for (const path of keyActionsToClear) {
+        if (newLayers[path.layerIdx] === layers[path.layerIdx]) {
+            newLayers[path.layerIdx] = Object.assign(new Layer(), newLayers[path.layerIdx]);
+            newLayers[path.layerIdx].modules = [...newLayers[path.layerIdx].modules];
+        }
+        const newModules = newLayers[path.layerIdx].modules;
+        if (newModules[path.moduleIdx] === layers[path.layerIdx].modules[path.moduleIdx]) {
+            newModules[path.moduleIdx] = Object.assign(new Module(), newModules[path.moduleIdx]);
+            newModules[path.moduleIdx].keyActions = [...newModules[path.moduleIdx].keyActions];
+        }
+        newModules[path.moduleIdx].keyActions[path.keyActionIdx] = undefined;
+    }
 
     return newLayers;
 }

@@ -15,7 +15,7 @@ import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 
 import { UhkDeviceService } from '../../services/uhk-device.service';
-import { ILogService, LOG_SERVICE } from '../../../../shared/src/services/logger.service';
+import { LogService } from '../../shared/services/logger.service';
 
 @Component({
     selector: 'privilege-checker',
@@ -28,7 +28,7 @@ export class PrivilegeCheckerComponent {
 
     constructor(private router: Router,
                 private uhkDevice: UhkDeviceService,
-                @Inject(LOG_SERVICE) private logService: ILogService) {
+                private logService: LogService) {
         if (isDev) {
             this.rootDir = path.resolve(path.join(remote.process.cwd(), remote.process.argv[1]), '..');
         } else {

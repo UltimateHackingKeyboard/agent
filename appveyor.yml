@@ -4,7 +4,7 @@ environment:
   GH_TOKEN:
     secure: 3IebpEKmC39codi1wT6dXx8mql4/mCL1JzZ7lir7GQ5MWRnCxlED2OXbiKHHigDV
   matrix:
-    - nodejs_version: 6.9.4
+    - nodejs_version: "8"
 
 cache:
   - node_modules -> package.json

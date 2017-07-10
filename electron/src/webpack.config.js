@@ -1,10 +1,13 @@
-var webpack = require("webpack");
-var SvgStore = require('webpack-svgstore-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require('path');
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+const webpack = require("webpack");
+const SvgStore = require('webpack-svgstore-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+const ContextReplacementPlugin = require("webpack/lib/ContextReplacementPlugin");
 
-var rootDir = path.resolve(__dirname, '../');
+const webpackHelper = require('../../scripts/webpack-helper');
+
+const rootDir = path.resolve(__dirname, '../');
 
 module.exports = {
     entry: {
@@ -19,7 +22,7 @@ module.exports = {
     target: 'electron-renderer',
     externals: {
         usb: 'usb',
-        'node-hid':'nodeHid'
+        'node-hid': 'nodeHid'
     },
     devtool: 'source-map',
     resolve: {
@@ -95,7 +98,12 @@ module.exports = {
         }),
         new CommonsChunkPlugin({
             name: ['app', 'vendor', 'polyfills']
-        })
+        }),
+        new ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)@angular/,
+            webpackHelper.root(__dirname, './src') // location of your src
+        )
     ]
 
-}
+};

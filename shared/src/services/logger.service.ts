@@ -1,15 +1,7 @@
-import {Injectable, InjectionToken} from '@angular/core';
-
-export interface ILogService {
-
-    error(...args: any[]): void;
-    info(...args: any[]): void;
-}
-
-export let LOG_SERVICE = new InjectionToken('logger-service');
+import { Injectable } from '@angular/core';
 
 @Injectable()
-export class ConsoleLogService implements ILogService {
+export class LogService {
     error(...args: any[]): void {
         console.error(args);
     }

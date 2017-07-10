@@ -121,8 +121,8 @@ autoUpdater.on('update-not-available', (ev: any, info: VersionInfo) => {
     sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
 });
 
-autoUpdater.on('error', (ev: any, err: Error) => {
-    sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, err);
+autoUpdater.on('error', (ev: any, err: string) => {
+    sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, err.substr(0, 100));
 });
 
 autoUpdater.on('download-progress', (progressObj: ProgressInfo) => {
@@ -168,15 +168,15 @@ function sendIpcToWindow(message: string, arg?: any) {
 }
 
 function allowPreRelease() {
-    const settings = getAutoUpdateSettings();
+    const autoUpdateSettings = getAutoUpdateSettings();
 
-    return settings && settings.usePreReleaseUpdate;
+    return autoUpdateSettings && autoUpdateSettings.usePreReleaseUpdate;
 }
 
 function checkForUpdateAtStartup() {
-    const settings = getAutoUpdateSettings();
+    const autoUpdateSettings = getAutoUpdateSettings();
 
-    return settings && settings.checkForUpdateOnStartUp;
+    return autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
 }
 
 function getAutoUpdateSettings() {

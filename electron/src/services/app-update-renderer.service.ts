@@ -4,7 +4,7 @@ import { ipcRenderer } from 'electron';
 
 import { IpcEvents } from '../shared/util';
 import { AppState } from '../store';
-import { UpdateDownloadedAction } from '../store/actions/app-update.action';
+import { UpdateDownloadedAction, UpdateErrorAction } from '../shared/store/actions/app-update.action';
 import { CheckForUpdateFailedAction, CheckForUpdateSuccessAction } from '../shared/store/actions/auto-update-settings';
 
 /**
@@ -47,7 +47,7 @@ export class AppUpdateRendererService {
 
         ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateError, (event: string, arg: any) => {
             this.writeUpdateState(IpcEvents.autoUpdater.autoUpdateError, arg);
-            this.dispachStoreAction(new CheckForUpdateFailedAction(arg));
+            this.dispachStoreAction(new UpdateErrorAction(arg));
         });
 
         ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloadProgress, (event: string, arg: any) => {

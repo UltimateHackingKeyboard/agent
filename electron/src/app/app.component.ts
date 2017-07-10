@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 
 import { AppState, getShowAppUpdateAvailable } from '../store';
-import { DoNotUpdateAppAction, UpdateAppAction } from '../store/actions/app-update.action';
+import { DoNotUpdateAppAction, UpdateAppAction } from '../shared/store/actions/app-update.action';
 
 @Component({
     selector: 'app',

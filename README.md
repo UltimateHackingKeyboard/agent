@@ -9,7 +9,7 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 
 ## Set up instructions
 
-First up, make sure that node >=4.x.x and npm >=3.x.x are installed on your system. Next up:
+First up, make sure that node >=8.1.x and npm >=5.1.x are installed on your system. Next up:
 
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
