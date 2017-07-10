@@ -13,10 +13,12 @@ $tooltip-background: #333;
     }
 
     .tooltip-arrow {
+        // scss-lint:disable ImportantRule
         // Placement top
         border-top-color: $tooltip-background !important;
         // Placemet bottom
         border-bottom-color: $tooltip-background !important;
+        // scss-lint:enable ImportantRule
     }
 
     .tooltip-head {
