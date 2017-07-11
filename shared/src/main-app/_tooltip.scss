@@ -1,0 +1,22 @@
+$tooltip-text-color: #fff;
+$tooltip-background: #333;
+
+// Customised bootstrap tooltip
+// Source: https://www.tutorialrepublic.com/codelab.php?topic=bootstrap&file=create-custom-template-for-tooltips
+.tooltip {
+    z-index: 10001; // Over dropdowns
+
+    .tooltip-inner {
+        color: $tooltip-text-color;
+        background: $tooltip-background;
+    }
+
+    .tooltip-arrow {
+        // Placement top
+        /* stylelint-disable-next-line declaration-no-important */
+        border-top-color: $tooltip-background !important;
+        // Placemet bottom
+        /* stylelint-disable-next-line declaration-no-important */
+        border-bottom-color: $tooltip-background !important;
+    }
+}

@@ -70,7 +70,7 @@ import { AppComponent } from './app/app.component';
 import { MainAppComponent } from './main-app';
 import { UpdateAvailableComponent } from './components/update-available/update-available.component';
 
-import { CancelableDirective } from './shared/directives';
+import { CancelableDirective, TooltipDirective } from './shared/directives';
 import { SafeStylePipe } from './shared/pipes';
 
 import { CaptureService } from './shared/services/capture.service';
@@ -160,6 +160,7 @@ import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-
         PrivilegeCheckerComponent,
         UhkMessageComponent,
         CancelableDirective,
+        TooltipDirective,
         SafeStylePipe,
         UpdateAvailableComponent,
         AutoUpdateSettings

@@ -63,7 +63,7 @@ import { SvgModuleComponent } from './shared/components/svg/module';
 import { SvgKeyboardWrapComponent } from './shared/components/svg/wrap';
 import { appRoutingProviders, MainAppComponent, routing } from './main-app';
 
-import { CancelableDirective } from './shared/directives';
+import { CancelableDirective, TooltipDirective } from './shared/directives';
 import { SafeStylePipe } from './shared/pipes';
 
 import { CaptureService } from './shared/services/capture.service';
@@ -137,6 +137,7 @@ import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-
         SettingsComponent,
         KeyboardSliderComponent,
         CancelableDirective,
+        TooltipDirective,
         SafeStylePipe,
         AutoUpdateSettings
     ],
