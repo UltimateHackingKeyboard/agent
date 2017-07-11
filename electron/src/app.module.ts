@@ -159,7 +159,8 @@ import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-
         MissingDeviceComponent,
         PrivilegeCheckerComponent,
         UhkMessageComponent,
-        CancelableDirective, TooltipDirective,
+        CancelableDirective,
+        TooltipDirective,
         SafeStylePipe,
         UpdateAvailableComponent,
         AutoUpdateSettings

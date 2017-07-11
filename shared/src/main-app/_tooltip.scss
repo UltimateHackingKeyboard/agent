@@ -1,5 +1,4 @@
-$tooltip-head-color: #fff;
-$tooltip-text-color: #999;
+$tooltip-text-color: #fff;
 $tooltip-background: #333;
 
 // Customised bootstrap tooltip
@@ -19,24 +18,5 @@ $tooltip-background: #333;
         // Placemet bottom
         /* stylelint-disable-next-line declaration-no-important */
         border-bottom-color: $tooltip-background !important;
-    }
-
-    .tooltip-head {
-        color: $tooltip-head-color;
-        background: $tooltip-background;
-        padding: 10px 10px 5px;
-        border-radius: 4px 4px 0 0;
-        text-align: center;
-        margin-bottom: -2px; /* Hide default tooltip rounded corner from top */
-
-        .glyphicon {
-            font-size: 22px;
-            vertical-align: bottom;
-        }
-
-        h3 {
-            margin: 0;
-            font-size: 18px;
-        }
     }
 }

@@ -136,7 +136,8 @@ import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-
         AddOnComponent,
         SettingsComponent,
         KeyboardSliderComponent,
-        CancelableDirective, TooltipDirective,
+        CancelableDirective,
+        TooltipDirective,
         SafeStylePipe,
         AutoUpdateSettings
     ],
