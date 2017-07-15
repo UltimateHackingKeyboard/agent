@@ -15,7 +15,7 @@ export const ActionTypes = {
     APP_PROCESS_COMMAND_LINE_ARGS: type(PREFIX + 'process command line args'),
     UNDO_LAST: type(PREFIX + 'undo last action'),
     UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
-    DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'undo notification action')
+    DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action')
 };
 
 export class AppBootsrappedAction implements Action {

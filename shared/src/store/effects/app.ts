@@ -7,9 +7,10 @@ import { NotifierService } from 'angular-notifier';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { ActionTypes, ToggleAddonMenuAction, ShowNotificationAction, UndoLastSuccessAction } from '../actions/app.action';
+import { ActionTypes, DismissUndoNotificationAction, ToggleAddonMenuAction, ShowNotificationAction, UndoLastSuccessAction } from '../actions/app.action';
 import { Notification, NotificationType } from '../../models/notification';
 import { CommandLineArgs } from '../../models/command-line-args';
 import { KeymapActions } from '../actions/keymap';
@@ -54,16 +55,7 @@ export class ApplicationEffects {
     @Effect() undoLastNotification$: Observable<Action> = this.actions$
         .ofType(ActionTypes.UNDO_LAST)
         .map(toPayload)
-        .do(payload => {
-            // TODO: Implement undo functionality;
-            throw  new Error('Undo functionality is not implemented yet');
-        })
-        .map(() => new UndoLastSuccessAction())
-        .catch((error: any) => Observable.of(new ShowNotificationAction({
-            type: NotificationType.Error,
-            message: 'Can not undo the last operation',
-            extra: error
-        })));
+        .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
     // TODO: Change typescript -> 2.4 and use string enum.
     // Corrently ngrx store is not compatible witn typescript 2.4

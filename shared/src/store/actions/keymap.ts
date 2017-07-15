@@ -16,6 +16,7 @@ export namespace KeymapActions {
     export const CHECK_MACRO = KeymapActions.PREFIX + 'Check deleted macro';
     export const LOAD_KEYMAPS = KeymapActions.PREFIX + 'Load keymaps';
     export const LOAD_KEYMAPS_SUCCESS = KeymapActions.PREFIX + 'Load keymaps success';
+    export const UNDO_LAST_ACTION = KeymapActions.PREFIX + 'Undo last action';
 
     export function loadKeymaps(): Action {
         return {
