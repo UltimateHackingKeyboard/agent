@@ -1,39 +1,42 @@
-<div class="row">
-    <h1 class="col-xs-12 pane-title">
-        <i class="fa fa-keyboard-o"></i>
-        <input #name cancelable
-                class="keymap__name pane-title__name"
-                type="text"
-                value="{{ keymap.name }}"
-                (change)="editKeymapName($event.target.value)"
-                (keyup.enter)="name.blur()"
-        /> keymap
-        (<input #abbr cancelable
-                class="keymap__abbrev pane-title__abbrev"
-                type="text"
-                value="{{ keymap.abbreviation }}"
-                (change)="editKeymapAbbr($event.target.value)"
-                (keyup.enter)="abbr.blur()"
-                [attr.maxLength]="3"
+<uhk-header>
+    <div class="row">
+        <h1 class="col-xs-12 pane-title">
+            <i class="fa fa-keyboard-o"></i>
+            <input #name cancelable
+                   class="keymap__name pane-title__name"
+                   type="text"
+                   value="{{ keymap.name }}"
+                   (change)="editKeymapName($event.target.value)"
+                   (keyup.enter)="name.blur()"
+            /> keymap
+            (<input #abbr cancelable
+                    class="keymap__abbrev pane-title__abbrev"
+                    type="text"
+                    value="{{ keymap.abbreviation }}"
+                    (change)="editKeymapAbbr($event.target.value)"
+                    (keyup.enter)="abbr.blur()"
+                    [attr.maxLength]="3"
         />)
-        <i class="fa keymap__is-default"
-           [ngClass]="{'fa-star-o': !keymap.isDefault, 'fa-star': keymap.isDefault}"
-           [title]="starTitle"
-           (click)="setDefault()"
-        ></i>
-        <i class="glyphicon glyphicon-trash keymap__remove pull-right" [title]="trashTitle"
-            [class.disabled]="!deletable"
-            data-toggle="tooltip"
-            data-placement="left"
-            data-original-title="Remove keymap"
-            (click)="removeKeymap()"
-        ></i>
-        <i class="fa fa-files-o keymap__duplicate pull-right" title=""
-           data-toggle="tooltip"
-           data-placement="left"
-           data-original-title="Duplicate keymap"
-           (click)="duplicateKeymap()"
-        ></i>
-        <i class="fa fa-download keymap__download pull-right" title="Download keymap" (click)="onDownloadIconClick()"></i>
-    </h1>
-</div>
+            <i class="fa keymap__is-default"
+               [ngClass]="{'fa-star-o': !keymap.isDefault, 'fa-star': keymap.isDefault}"
+               [title]="starTitle"
+               (click)="setDefault()"
+            ></i>
+            <i class="glyphicon glyphicon-trash keymap__remove pull-right" [title]="trashTitle"
+               [class.disabled]="!deletable"
+               data-toggle="tooltip"
+               data-placement="left"
+               data-original-title="Remove keymap"
+               (click)="removeKeymap()"
+            ></i>
+            <i class="fa fa-files-o keymap__duplicate pull-right" title=""
+               data-toggle="tooltip"
+               data-placement="left"
+               data-original-title="Duplicate keymap"
+               (click)="duplicateKeymap()"
+            ></i>
+            <i class="fa fa-download keymap__download pull-right" title="Download keymap"
+               (click)="onDownloadIconClick()"></i>
+        </h1>
+    </div>
+</uhk-header>

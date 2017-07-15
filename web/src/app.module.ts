@@ -86,7 +86,8 @@ import { DefaultUserConfigurationService } from './shared/services/default-user-
 import { reducer } from './shared/store/reducers/index';
 import { LogService } from './shared/services/logger.service';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
-import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-config';
+import { angularNotifierConfig } from './shared/models/angular-notifier-config';
+import { UhkHeader } from './shared/components/uhk-header/uhk-header';
 
 @NgModule({
     declarations: [
@@ -139,7 +140,8 @@ import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-
         CancelableDirective,
         TooltipDirective,
         SafeStylePipe,
-        AutoUpdateSettings
+        AutoUpdateSettings,
+        UhkHeader
     ],
     imports: [
         BrowserModule,

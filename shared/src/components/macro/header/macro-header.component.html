@@ -1,24 +1,26 @@
-<div class="row">
-    <h1 class="col-xs-12 pane-title">
-        <i class="fa fa-play"></i>
-        <input #macroName cancelable
-                class="pane-title__name"
-                type="text"
-                value="{{ macro.name }}"
-               (change)="editMacroName($event.target.value)"
-               (keyup.enter)="macroName.blur()"
-        />
-        <i class="glyphicon glyphicon-trash macro__remove pull-right" title=""
-           data-toggle="tooltip"
-           data-placement="left"
-           data-original-title="Remove macro"
-           (click)="removeMacro()"
-        ></i>
-        <i class="fa fa-files-o macro__duplicate pull-right" title=""
-           data-toggle="tooltip"
-           data-placement="left"
-           data-original-title="Duplicate macro"
-           (click)="duplicateMacro()"
-        ></i>
-    </h1>
-</div>
+<uhk-header>
+    <div class="row">
+        <h1 class="col-xs-12 pane-title">
+            <i class="fa fa-play"></i>
+            <input #macroName cancelable
+                   class="pane-title__name"
+                   type="text"
+                   value="{{ macro.name }}"
+                   (change)="editMacroName($event.target.value)"
+                   (keyup.enter)="macroName.blur()"
+            />
+            <i class="glyphicon glyphicon-trash macro__remove pull-right" title=""
+               data-toggle="tooltip"
+               data-placement="left"
+               data-original-title="Remove macro"
+               (click)="removeMacro()"
+            ></i>
+            <i class="fa fa-files-o macro__duplicate pull-right" title=""
+               data-toggle="tooltip"
+               data-placement="left"
+               data-original-title="Duplicate macro"
+               (click)="duplicateMacro()"
+            ></i>
+        </h1>
+    </div>
+</uhk-header>
