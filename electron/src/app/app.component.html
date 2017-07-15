@@ -1,5 +1,4 @@
-<app-update-available
-    [showUpdateAvailable]="showUpdateAvailable$ | async"
+<app-update-available *ngIf="showUpdateAvailable$ | async"
     (updateApp)="updateApp()"
     (doNotUpdateApp)="doNotUpdateApp()">
 </app-update-available>
