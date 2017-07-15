@@ -1,4 +1,4 @@
-<div *ngIf="showUpdateAvailable">
+<div class="app-update-available-wrapper">
     New version available.
     <button type="button" (click)="updateApp.emit()" class="btn btn-primary">Update</button>
     <button type="button" (click)="doNotUpdateApp.emit()" class="btn btn-default">Close</button>
