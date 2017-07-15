@@ -105,7 +105,8 @@ import { ElectronErrorHandlerService } from './services/electron-error-handler.s
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { reducer } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
-import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-config';
+import { angularNotifierConfig } from './shared/models/angular-notifier-config';
+import { UhkHeader } from './shared/components/uhk-header/uhk-header';
 
 @NgModule({
     declarations: [
@@ -163,7 +164,8 @@ import { angularNotifierConfig } from '../../shared/src/models/angular-notifier-
         TooltipDirective,
         SafeStylePipe,
         UpdateAvailableComponent,
-        AutoUpdateSettings
+        AutoUpdateSettings,
+        UhkHeader
     ],
     imports: [
         BrowserModule,
