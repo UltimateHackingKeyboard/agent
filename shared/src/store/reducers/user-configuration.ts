@@ -87,7 +87,9 @@ export default function (state = initialState, action: Action): UserConfiguratio
 
             // If deleted one is default set default keymap to the first on the list of keymaps
             if (isDefault && filtered.length > 0) {
-                filtered[0].isDefault = true;
+                filtered[0] = Object.assign(new Keymap(), filtered[0], {
+                    isDefault: true
+                });
             }
 
             // Check for the deleted keymap in other keymaps
