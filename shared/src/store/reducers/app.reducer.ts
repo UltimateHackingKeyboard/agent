@@ -33,7 +33,6 @@ export function reducer(state = initialState, action: Action) {
             return Object.assign({}, state, { undoableNotification: currentAction.payload });
         }
 
-        case routerActions.UPDATE_LOCATION:
         case ActionTypes.UNDO_LAST_SUCCESS:
         case ActionTypes.DISMISS_UNDO_NOTIFICATION: {
             return Object.assign({}, state, { undoableNotification: null });

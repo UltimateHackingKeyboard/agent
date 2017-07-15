@@ -46,12 +46,3 @@
         </h1>
     </div>
 </uhk-header>
-
-<div class="row">
-    <div class="col-xs-12">
-        <undoable-notifier [notification]="undoableNotification$ | async"
-                           (close)="onDismissLastNotification()"
-                           (undo)="onUndoLastNotification($event)">
-        </undoable-notifier>
-    </div>
-</div>
