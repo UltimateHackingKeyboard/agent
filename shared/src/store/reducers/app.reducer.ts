@@ -1,21 +1,30 @@
-import { Actions, ActionTypes } from '../actions/app.action';
+import { Action } from '@ngrx/store';
+
+import { ActionTypes } from '../actions/app.action';
 
 export interface State {
     started: boolean;
+    showAddonMenu: boolean;
 }
 
 const initialState: State = {
-    started: false
+    started: false,
+    showAddonMenu: false
 };
 
-export function reducer(state = initialState, action: Actions) {
+export function reducer(state = initialState, action: Action) {
     switch (action.type) {
         case ActionTypes.APP_STARTED: {
-            const newState = Object.assign({}, state);
-            newState.started = true;
-            return newState;
+            return Object.assign({ ...state }, { started: true });
         }
+
+        case ActionTypes.APP_TOGGLE_ADDON_MENU: {
+            return Object.assign({ ...state }, { showAddonMenu: action.payload });
+        }
+
         default:
             return state;
     }
 }
+
+export const showAddonMenu = (state: State) => state.showAddonMenu;

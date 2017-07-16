@@ -7,8 +7,9 @@ import { NotifierService } from 'angular-notifier';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
-import { ActionTypes } from '../actions/app.action';
+import { ActionTypes, ToggleAddonMenuAction } from '../actions/app.action';
 import { Notification, NotificationType } from '../../models/notification';
+import { CommandLineArgs } from '../../models/command-line-args';
 
 @Injectable()
 export class ApplicationEffects {
@@ -21,6 +22,12 @@ export class ApplicationEffects {
             const type = ApplicationEffects.mapNotificationType(notification.type);
             this.notifierService.notify(type, notification.message);
         });
+
+    @Effect()
+    processCommandLineArgs: Observable<Action> = this.actions$
+        .ofType(ActionTypes.APP_PROCESS_COMMAND_LINE_ARGS)
+        .map(toPayload)
+        .map((args: CommandLineArgs) => new ToggleAddonMenuAction(args.addons || false));
 
     // TODO: Change typescript -> 2.4 and use string enum.
     // Corrently ngrx store is not compatible witn typescript 2.4
