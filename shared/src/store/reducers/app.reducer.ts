@@ -1,4 +1,4 @@
-import { Actions, ActionTypes } from '../../shared/store/actions/app.action';
+import { Actions, ActionTypes } from '../actions/app.action';
 
 export interface State {
     started: boolean;
