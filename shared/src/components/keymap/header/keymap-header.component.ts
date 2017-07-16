@@ -72,7 +72,9 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     editKeymapAbbr(newAbbr: string) {
-        if (newAbbr.length !== 3) {
+        const regexp = new RegExp(/^[a-zA-Z\d]+$/g);
+
+        if (newAbbr.length < 1 || newAbbr.length > 3 || !regexp.test(newAbbr)) {
             this.renderer.setElementProperty(this.keymapAbbr.nativeElement, 'value', this.keymap.abbreviation);
             return;
         }
