@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { runInElectron } from '../../util/index';
 import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../store';
 import {
     CheckForUpdateNowAction,
@@ -20,7 +19,6 @@ import { AutoUpdateSettings } from '../../models/auto-update-settings';
     }
 })
 export class SettingsComponent {
-    runInElectron = runInElectron();
     // TODO: From where do we get the version number? The electron gives back in main process, but the web...
     version = '1.0.0';
     autoUpdateSettings$: Observable<AutoUpdateSettings>;

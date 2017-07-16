@@ -61,7 +61,7 @@
         </ul>
     </li>
 </ul>
-<ul class="menu--bottom">
+<ul class="menu--bottom" *ngIf="runInElectron">
     <li class="sidebar__level-1--item" [routerLinkActive]="['active']">
         <a class="sidebar__level-1" [routerLink]="['/settings']">
             <i class="fa fa-gear"></i> Settings

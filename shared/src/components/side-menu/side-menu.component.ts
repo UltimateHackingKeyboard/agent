@@ -8,6 +8,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
+import { runInElectron } from '../../util/index';
 import { Keymap } from '../../config-serializer/config-items/keymap';
 import { Macro } from '../../config-serializer/config-items/macro';
 
@@ -32,6 +33,8 @@ import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
     styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent {
+    runInElectron = runInElectron();
+
     private keymaps$: Observable<Keymap[]>;
     private macros$: Observable<Macro[]>;
     private animation: { [key: string]: 'active' | 'inactive' };
