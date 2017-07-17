@@ -274,7 +274,7 @@ export function getMacro(id: number) {
 }
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
-    const chars: string[] = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const chars: string[] = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let position = 0;
 
     while (keymaps.some((keymap: Keymap) => keymap.abbreviation === abbr)) {
