@@ -6,13 +6,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { Device, devices, HID } from 'node-hid';
 
 import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/timer';
+import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/startWith';
 
 import { LogService } from '../shared/services/logger.service';
 import { Constants } from '../shared/util';
@@ -144,7 +145,8 @@ export class UhkHidApiService extends UhkDeviceService implements OnDestroy {
      * Every second check the HID device list.
      */
     private pollUhkDevice() {
-        this.pollTimer$ = Observable.timer(0, 1000)
+        this.pollTimer$ = Observable.interval(1000)
+            .startWith(0)
             .map(() => {
                 return devices().some((dev: Device) => dev.vendorId === Constants.VENDOR_ID &&
                     dev.productId === Constants.PRODUCT_ID);
