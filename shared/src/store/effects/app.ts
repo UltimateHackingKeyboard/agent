@@ -10,11 +10,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { ActionTypes, DismissUndoNotificationAction, ToggleAddonMenuAction, ShowNotificationAction, UndoLastSuccessAction } from '../actions/app.action';
+import { ActionTypes, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app.action';
 import { Notification, NotificationType } from '../../models/notification';
 import { CommandLineArgs } from '../../models/command-line-args';
-import { KeymapActions } from '../actions/keymap';
-import { MacroActions } from '../actions/macro';
 
 @Injectable()
 export class ApplicationEffects {
@@ -27,8 +25,7 @@ export class ApplicationEffects {
             if (notification.type === NotificationType.Undoable) {
                 return;
             }
-            const type = ApplicationEffects.mapNotificationType(notification.type);
-            this.notifierService.notify(type, notification.message);
+            this.notifierService.notify(notification.type, notification.message);
         });
 
     @Effect()
@@ -37,46 +34,10 @@ export class ApplicationEffects {
         .map(toPayload)
         .map((args: CommandLineArgs) => new ToggleAddonMenuAction(args.addons || false));
 
-    @Effect() showUndoableNotification$: Observable<Action> = this.actions$
-        .ofType(
-            KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.CHECK_MACRO,
-            MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
-        .map(toPayload)
-        .map(payload => {
-            return new ShowNotificationAction({
-                type: NotificationType.Undoable,
-                message: 'Keymap has been modified',
-                extra: payload
-            });
-        });
-
     @Effect() undoLastNotification$: Observable<Action> = this.actions$
         .ofType(ActionTypes.UNDO_LAST)
         .map(toPayload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
-
-    // TODO: Change typescript -> 2.4 and use string enum.
-    // Corrently ngrx store is not compatible witn typescript 2.4
-    private static mapNotificationType(type: NotificationType): string {
-        switch (type) {
-            case NotificationType.Success:
-                return 'success';
-
-            case NotificationType.Error:
-                return 'error';
-
-            case NotificationType.Info:
-                return 'info';
-
-            case NotificationType.Warning:
-                return 'warning';
-
-            default:
-                return 'default';
-        }
-    }
 
     constructor(private actions$: Actions,
                 private notifierService: NotifierService) { }

@@ -8,11 +8,13 @@ export interface State {
     started: boolean;
     showAddonMenu: boolean;
     undoableNotification?: Notification;
+    navigationCountAfterNotification: number;
 }
 
 const initialState: State = {
     started: false,
-    showAddonMenu: false
+    showAddonMenu: false,
+    navigationCountAfterNotification: 0
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -30,12 +32,29 @@ export function reducer(state = initialState, action: Action) {
             if (currentAction.payload.type !== NotificationType.Undoable) {
                 return state;
             }
-            return Object.assign({}, state, { undoableNotification: currentAction.payload });
+            return Object.assign({ ...state }, {
+                undoableNotification: currentAction.payload,
+                navigationCountAfterNotification: 0
+            });
+        }
+
+        // Required to dismiss the undoNotification dialog, when user navigate in the app.
+        // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
+        // so we have to count the navigations and when reach the 2nd then remove the dialog.
+        case routerActions.UPDATE_LOCATION: {
+            const newState = { ...state };
+            newState.navigationCountAfterNotification++;
+
+            if (newState.navigationCountAfterNotification > 1) {
+                newState.undoableNotification = null;
+            }
+
+            return newState;
         }
 
         case ActionTypes.UNDO_LAST_SUCCESS:
         case ActionTypes.DISMISS_UNDO_NOTIFICATION: {
-            return Object.assign({}, state, { undoableNotification: null });
+            return Object.assign({ ...state }, { undoableNotification: null });
         }
 
         default:

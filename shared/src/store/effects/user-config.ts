@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { go } from '@ngrx/router-store';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
@@ -25,6 +26,7 @@ import { KeymapActions } from '../actions/keymap';
 import { MacroActions } from '../actions/macro';
 import { DismissUndoNotificationAction, ShowNotificationAction } from '../actions/app.action';
 import { NotificationType } from '../../models/notification';
+import { UndoUserConfigData } from '../../models/undo-user-config-data';
 
 @Injectable()
 export class UserConfigEffects {
@@ -46,12 +48,22 @@ export class UserConfigEffects {
             this.dataStorageRepository.saveConfig(config);
 
             if (action.type === KeymapActions.REMOVE || action.type === MacroActions.REMOVE) {
+                const text = action.type === KeymapActions.REMOVE ? 'Keymap' : 'Macro';
+                const pathPrefix = action.type === KeymapActions.REMOVE ? 'keymap' : 'macro';
+                const payload: UndoUserConfigData = {
+                    path: `/${pathPrefix}/${action.payload}`,
+                    config: prevUserConfiguration
+                };
+
                 return [
                     new SaveUserConfigSuccessAction(),
                     new ShowNotificationAction({
                         type: NotificationType.Undoable,
-                        message: 'Keymap has been deleted',
-                        extra: { type: KeymapActions.UNDO_LAST_ACTION, payload: prevUserConfiguration }
+                        message: `${text} has been deleted`,
+                        extra: {
+                            payload,
+                            type: KeymapActions.UNDO_LAST_ACTION
+                        }
                     })
                 ];
             }
@@ -62,9 +74,9 @@ export class UserConfigEffects {
     @Effect() undoUserConfig$: Observable<Action> = this.actions$
         .ofType(KeymapActions.UNDO_LAST_ACTION)
         .map(toPayload)
-        .switchMap(prevUserConfiguration => {
-            this.dataStorageRepository.saveConfig(prevUserConfiguration);
-            return Observable.of(new LoadUserConfigSuccessAction(prevUserConfiguration));
+        .mergeMap((payload: UndoUserConfigData) => {
+            this.dataStorageRepository.saveConfig(payload.config);
+            return [new LoadUserConfigSuccessAction(payload.config), go(payload.path)];
         });
 
     constructor(private actions$: Actions,

@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 
 export enum NotificationType {
-    Default,
-    Success,
-    Error,
-    Warning,
-    Info,
-    Undoable
+    Default = 'default',
+    Success = 'success',
+    Error = 'error',
+    Warning = 'warning',
+    Info = 'info',
+    Undoable = 'undoable'
 }
 
 export interface Notification {
