@@ -1,22 +1,29 @@
-$tooltip-text-color: #fff;
-$tooltip-background: #333;
+@import '../global-styles';
 
 // Customised bootstrap tooltip
 // Source: https://www.tutorialrepublic.com/codelab.php?topic=bootstrap&file=create-custom-template-for-tooltips
 .tooltip {
-    z-index: 10001; // Over dropdowns
+    z-index: 100010; // Over dropdowns
+    position: fixed;
 
     .tooltip-inner {
         color: $tooltip-text-color;
         background: $tooltip-background;
+        border: 1px solid $tooltip-border-color;
     }
 
     .tooltip-arrow {
         // Placement top
         /* stylelint-disable-next-line declaration-no-important */
-        border-top-color: $tooltip-background !important;
+        border-top-color: $tooltip-border-color !important;
         // Placemet bottom
         /* stylelint-disable-next-line declaration-no-important */
-        border-bottom-color: $tooltip-background !important;
+        border-bottom-color: $tooltip-border-color !important;
     }
+
+    &.in {
+        /* stylelint-disable-next-line declaration-no-important */
+        opacity: 1 !important;
+    }
+
 }

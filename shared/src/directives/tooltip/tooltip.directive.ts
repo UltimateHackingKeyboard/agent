@@ -1,9 +1,13 @@
-import { Directive, ElementRef, AfterContentInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, HostBinding, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 
 @Directive({
     selector: '[data-toggle="tooltip"]'
 })
-export class TooltipDirective implements AfterContentInit {
+export class TooltipDirective implements AfterContentInit, OnChanges {
+
+    @HostBinding('attr.data-placement') placement: string;
+    @Input('title') title: string;
+    @Input('html') html: boolean;
 
     private customTooltipTemplate = `
         <div class="tooltip">
@@ -15,11 +19,27 @@ export class TooltipDirective implements AfterContentInit {
     constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
 
     ngAfterContentInit() {
+        this.init();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes['title']) {
+            this.fixTitle();
+        }
+    }
+
+    private init() {
         jQuery(this.elementRef.nativeElement).tooltip({
-            placement: 'top',
-            html: true,
-            template: this.customTooltipTemplate
+            placement: this.placement,
+            html: this.html,
+            template: this.customTooltipTemplate,
+            title: this.title
         });
     }
 
+    private fixTitle() {
+        jQuery(this.elementRef.nativeElement)
+            .attr('title', this.title)
+            .tooltip('fixTitle');
+    }
 }
