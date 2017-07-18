@@ -87,7 +87,6 @@ export class KeymapHeaderComponent implements OnChanges {
         this.starTitle = this.keymap.isDefault
             ? 'This is the default keymap which gets activated when powering the keyboard.'
             : 'Makes this keymap the default keymap which gets activated when powering the keyboard.';
-        console.log(this.starTitle);
     }
 
     setTrashTitle(): void {
