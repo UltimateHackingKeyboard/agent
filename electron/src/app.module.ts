@@ -107,6 +107,7 @@ import { reducer } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './shared/models/angular-notifier-config';
 import { UhkHeader } from './shared/components/uhk-header/uhk-header';
+import { AppRendererService } from './services/app-renderer.service';
 
 @NgModule({
     declarations: [
@@ -210,8 +211,8 @@ import { UhkHeader } from './shared/components/uhk-header/uhk-header';
         AppUpdateRendererService,
         UhkHidApiService,
         UhkLibUsbApiService,
-        uhkDeviceProvider()
-
+        uhkDeviceProvider(),
+        AppRendererService
     ],
     bootstrap: [AppComponent]
 })

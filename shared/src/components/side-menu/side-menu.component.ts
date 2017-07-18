@@ -12,7 +12,7 @@ import { runInElectron } from '../../util/index';
 import { Keymap } from '../../config-serializer/config-items/keymap';
 import { Macro } from '../../config-serializer/config-items/macro';
 
-import { AppState } from '../../store';
+import { AppState, showAddonMenu } from '../../store';
 import { MacroActions } from '../../store/actions';
 import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 
@@ -33,6 +33,7 @@ import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
     styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent {
+    showAddonMenu$: Observable<boolean>;
     runInElectron = runInElectron();
 
     private keymaps$: Observable<Keymap[]>;
@@ -57,6 +58,8 @@ export class SideMenuComponent {
             .do((macros: Macro[]) => {
                 macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
             });
+
+        this.showAddonMenu$ = this.store.select(showAddonMenu);
     }
 
     toggleHide(event: Event, type: string) {

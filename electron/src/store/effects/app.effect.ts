@@ -6,6 +6,7 @@ import 'rxjs/add/operator/do';
 
 import * as app from '../../shared/store/actions/app.action';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
+import { AppRendererService } from '../../services/app-renderer.service';
 
 @Injectable()
 export class ApplicationEffect {
@@ -13,12 +14,13 @@ export class ApplicationEffect {
     appStart$: Observable<Action> = this.actions$
         .ofType(app.ActionTypes.APP_BOOTSRAPPED)
         .startWith(new app.AppStartedAction())
-        .delay(3000) // wait 3 sec to mainRenderer subscribe all events
         .do(() => {
             this.appUpdateRendererService.sendAppStarted();
+            this.appRendererService.getCommandLineArgs();
         });
 
     constructor(
         private actions$: Actions,
-        private appUpdateRendererService: AppUpdateRendererService) { }
+        private appUpdateRendererService: AppUpdateRendererService,
+        private appRendererService: AppRendererService) { }
 }

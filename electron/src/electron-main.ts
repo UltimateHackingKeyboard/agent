@@ -1,4 +1,5 @@
 /// <reference path="./custom_types/electron-is-dev.d.ts"/>
+/// <reference path="./custom_types/command-line-args.d.ts"/>
 
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -8,9 +9,17 @@ import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransfor
 import { VersionInfo } from 'electron-builder-http/out/publishOptions';
 import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
+import * as commandLineArgs from 'command-line-args';
 
 import { IpcEvents } from './shared/util';
 import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
+import { CommandLineArgs } from './shared/models/command-line-args';
+
+const optionDefinitions = [
+    { name: 'addons', type: Boolean, defaultOption: false }
+];
+
+const options: CommandLineArgs = commandLineArgs(optionDefinitions);
 
 // import './dev-extension';
 require('electron-debug')({ showDevTools: false, enabled: true });
@@ -142,6 +151,8 @@ ipcMain.on(IpcEvents.app.appStarted, () => {
 });
 
 ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => checkForUpdate());
+
+ipcMain.on(IpcEvents.app.getCommandLineArgs, (event: any) => event.sender.send(IpcEvents.app.getCommandLineArgsReply, options));
 
 function isFirstRun() {
     if (!settings.has('firstRunVersion')) {

@@ -32,7 +32,7 @@
             </li>
         </ul>
     </li>
-    <li class="sidebar__level-1--item">
+    <li class="sidebar__level-1--item" *ngIf="showAddonMenu$ | async">
         <div class="sidebar__level-1">
             <i class="fa fa-puzzle-piece"></i> Add-on modules
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
