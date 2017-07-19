@@ -19,23 +19,29 @@
         />)
             <i class="fa keymap__is-default"
                [ngClass]="{'fa-star-o': !keymap.isDefault, 'fa-star': keymap.isDefault}"
+               data-toggle="tooltip"
+               data-placement="bottom"
                [title]="starTitle"
                (click)="setDefault()"
             ></i>
-            <i class="glyphicon glyphicon-trash keymap__remove pull-right" [title]="trashTitle"
+            <i class="glyphicon glyphicon-trash keymap__remove pull-right"
+               [title]="trashTitle"
                [class.disabled]="!deletable"
                data-toggle="tooltip"
-               data-placement="left"
-               data-original-title="Remove keymap"
+               data-placement="bottom"
                (click)="removeKeymap()"
             ></i>
-            <i class="fa fa-files-o keymap__duplicate pull-right" title=""
+            <i class="fa fa-files-o keymap__duplicate pull-right"
+               title="Duplicate keymap"
                data-toggle="tooltip"
-               data-placement="left"
-               data-original-title="Duplicate keymap"
+               data-placement="bottom"
                (click)="duplicateKeymap()"
             ></i>
-            <i class="fa fa-download keymap__download pull-right" title="Download keymap"
+            <i class="fa fa-download keymap__download pull-right"
+               title="Download keymap"
+               [html]="true"
+               data-toggle="tooltip"
+               data-placement="bottom"
                (click)="onDownloadIconClick()"></i>
         </h1>
     </div>

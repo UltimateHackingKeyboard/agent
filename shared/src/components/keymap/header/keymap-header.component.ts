@@ -32,8 +32,8 @@ export class KeymapHeaderComponent implements OnChanges {
     @ViewChild('name') keymapName: ElementRef;
     @ViewChild('abbr') keymapAbbr: ElementRef;
 
-    private starTitle: string;
-    private trashTitle: string;
+    starTitle: string;
+    trashTitle: string = 'Delete keymap';
 
     constructor(private store: Store<AppState>, private renderer: Renderer) { }
 
@@ -90,7 +90,7 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     setTrashTitle(): void {
-        this.trashTitle = this.deletable ? '' : 'The last keymap cannot be deleted.';
+        this.trashTitle = this.deletable ? 'Delete keymap' : 'The last keymap cannot be deleted.';
     }
 
     onDownloadIconClick(): void {

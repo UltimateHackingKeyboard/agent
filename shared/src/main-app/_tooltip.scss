@@ -1,22 +1,92 @@
-$tooltip-text-color: #fff;
-$tooltip-background: #333;
+@import '../global-styles';
 
 // Customised bootstrap tooltip
-// Source: https://www.tutorialrepublic.com/codelab.php?topic=bootstrap&file=create-custom-template-for-tooltips
-.tooltip {
-    z-index: 10001; // Over dropdowns
+// Source: https://gist.github.com/dsnoeck/9ce65ec8d025796c3be53e7c06880eab
+.tooltip .tooltip-inner {
+    background-color: $tooltip-background-color;
+    border: $tooltip-border-width solid $tooltip-border-color;
+    color: $tooltip-inner-color;
+}
 
-    .tooltip-inner {
-        color: $tooltip-text-color;
-        background: $tooltip-background;
+.tooltip-arrow:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: solid transparent;
+    z-index: -1;
+}
+
+.tooltip {
+    z-index: 100010; // Over dropdowns
+    position: fixed;
+
+    &.top {
+        padding: $tooltip-arrow-border-width 0;
     }
 
-    .tooltip-arrow {
-        // Placement top
+    &.right {
+        padding: 0 $tooltip-arrow-border-width;
+    }
+
+    &.bottom {
+        padding: $tooltip-arrow-border-width 0;
+    }
+
+    &.left {
+        padding: 0 $tooltip-arrow-border-width;
+    }
+
+    &.in {
         /* stylelint-disable-next-line declaration-no-important */
-        border-top-color: $tooltip-background !important;
-        // Placemet bottom
-        /* stylelint-disable-next-line declaration-no-important */
-        border-bottom-color: $tooltip-background !important;
+        opacity: 1 !important;
+    }
+
+    &.top .tooltip-arrow {
+        bottom: 2 * $tooltip-border-width;
+        border-top-color: $tooltip-background-color;
+        &:after {
+            bottom: -2 * $tooltip-border-width;
+            left: 50%;
+            margin-left: -$tooltip-arrow-border-width;
+            border-width: $tooltip-arrow-border-width $tooltip-arrow-border-width 0;
+            border-top-color: $tooltip-border-color;
+        }
+    }
+
+    &.bottom .tooltip-arrow {
+        top: 2 * $tooltip-border-width;
+        border-bottom-color: $tooltip-background-color;
+        &:after {
+            top: -2 * $tooltip-border-width;
+            left: 50%;
+            margin-left: -$tooltip-arrow-border-width;
+            border-width: 0 $tooltip-arrow-border-width $tooltip-arrow-border-width;
+            border-bottom-color: $tooltip-border-color;
+        }
+    }
+
+    &.left .tooltip-arrow {
+        right: 2 * $tooltip-border-width;
+        border-left-color: $tooltip-background-color;
+        &:after {
+            right: -2 * $tooltip-border-width;
+            top: 50%;
+            margin-top: -$tooltip-arrow-border-width;
+            border-width: $tooltip-arrow-border-width 0 $tooltip-arrow-border-width $tooltip-arrow-border-width;
+            border-left-color: $tooltip-border-color;
+        }
+    }
+
+    &.right .tooltip-arrow {
+        left: 2 * $tooltip-border-width;
+        border-right-color: $tooltip-background-color;
+        &:after {
+            left: -2 * $tooltip-border-width;
+            top: 50%;
+            margin-top: -$tooltip-arrow-border-width;
+            border-width: $tooltip-arrow-border-width $tooltip-arrow-border-width $tooltip-arrow-border-width 0;
+            border-right-color: $tooltip-border-color;
+        }
     }
 }
