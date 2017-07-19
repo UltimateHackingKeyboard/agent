@@ -3,6 +3,9 @@ $dark-grey: #ccc;
 $icon-hover: #337ab7;
 $icon-hover-delete: #900;
 
-$tooltip-text-color: #000;
+$tooltip-border-width: 1px;
+$tooltip-arrow-width: 5px;
 $tooltip-border-color: $dark-grey;
-$tooltip-background: #fff;
+$tooltip-background-color: #fff;
+$tooltip-inner-color: #000;
+$tooltip-arrow-border-width: $tooltip-arrow-width + $tooltip-border-width;
