@@ -21,7 +21,7 @@ import {
 import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
-import { AppState, getUserConfiguration } from '../index';
+import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
 import { KeymapActions } from '../actions/keymap';
 import { MacroActions } from '../actions/macro';
 import { DismissUndoNotificationAction, ShowNotificationAction } from '../actions/app.action';
@@ -42,9 +42,8 @@ export class UserConfigEffects {
             KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
             MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
             MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
-        .withLatestFrom(this.store.select(getUserConfiguration))
-        .mergeMap(([action, config]) => {
-            const prevUserConfiguration = this.getUserConfiguration();
+        .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
+        .mergeMap(([action, config, prevUserConfiguration]) => {
             this.dataStorageRepository.saveConfig(config);
 
             if (action.type === KeymapActions.REMOVE || action.type === MacroActions.REMOVE) {
@@ -52,11 +51,11 @@ export class UserConfigEffects {
                 const pathPrefix = action.type === KeymapActions.REMOVE ? 'keymap' : 'macro';
                 const payload: UndoUserConfigData = {
                     path: `/${pathPrefix}/${action.payload}`,
-                    config: prevUserConfiguration
+                    config: prevUserConfiguration.toJsonObject()
                 };
 
                 return [
-                    new SaveUserConfigSuccessAction(),
+                    new SaveUserConfigSuccessAction(config),
                     new ShowNotificationAction({
                         type: NotificationType.Undoable,
                         message: `${text} has been deleted`,
@@ -68,15 +67,16 @@ export class UserConfigEffects {
                 ];
             }
 
-            return [new SaveUserConfigSuccessAction(), new DismissUndoNotificationAction()];
+            return [new SaveUserConfigSuccessAction(config), new DismissUndoNotificationAction()];
         });
 
     @Effect() undoUserConfig$: Observable<Action> = this.actions$
         .ofType(KeymapActions.UNDO_LAST_ACTION)
         .map(toPayload)
         .mergeMap((payload: UndoUserConfigData) => {
-            this.dataStorageRepository.saveConfig(payload.config);
-            return [new LoadUserConfigSuccessAction(payload.config), go(payload.path)];
+            const config = new UserConfiguration().fromJsonObject(payload.config);
+            this.dataStorageRepository.saveConfig(config);
+            return [new LoadUserConfigSuccessAction(config), go(payload.path)];
         });
 
     constructor(private actions$: Actions,

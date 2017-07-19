@@ -19,13 +19,13 @@ export class LoadUserConfigAction implements Action {
 export class LoadUserConfigSuccessAction implements Action {
     type = ActionTypes.LOAD_USER_CONFIG_SUCCESS;
 
-    constructor(public payload: UserConfiguration) {
-
-    }
+    constructor(public payload: UserConfiguration) { }
 }
 
 export class SaveUserConfigSuccessAction implements Action {
     type = ActionTypes.SAVE_USER_CONFIG_SUCCESS;
+
+    constructor(public payload: UserConfiguration) { }
 }
 
 export type Actions

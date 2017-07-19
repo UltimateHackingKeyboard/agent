@@ -2,13 +2,16 @@ import { routerActions } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 
 import { ActionTypes, ShowNotificationAction } from '../actions/app.action';
+import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { Notification, NotificationType } from '../../models/notification';
+import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 
 export interface State {
     started: boolean;
     showAddonMenu: boolean;
     undoableNotification?: Notification;
     navigationCountAfterNotification: number;
+    prevUserConfig?: UserConfiguration;
 }
 
 const initialState: State = {
@@ -57,6 +60,11 @@ export function reducer(state = initialState, action: Action) {
             return Object.assign({ ...state }, { undoableNotification: null });
         }
 
+        case UserConfigActionTypes.LOAD_USER_CONFIG_SUCCESS:
+        case UserConfigActionTypes.SAVE_USER_CONFIG_SUCCESS: {
+            return Object.assign({ ...state }, { prevUserConfig: action.payload });
+        }
+
         default:
             return state;
     }
@@ -64,3 +72,4 @@ export function reducer(state = initialState, action: Action) {
 
 export const showAddonMenu = (state: State) => state.showAddonMenu;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
+export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
