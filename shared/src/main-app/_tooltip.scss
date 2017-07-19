@@ -8,15 +8,6 @@
     color: $tooltip-inner-color;
 }
 
-.tooltip {
-    z-index: 100010; // Over dropdowns
-    position: fixed;
-    &.top    { padding: $tooltip-arrow-border-width 0; }
-    &.right  { padding: 0 $tooltip-arrow-border-width; }
-    &.bottom { padding: $tooltip-arrow-border-width 0; }
-    &.left   { padding: 0 $tooltip-arrow-border-width; }
-}
-
 .tooltip-arrow:after {
     content: '';
     position: absolute;
@@ -27,6 +18,25 @@
 }
 
 .tooltip {
+    z-index: 100010; // Over dropdowns
+    position: fixed;
+
+    &.top {
+        padding: $tooltip-arrow-border-width 0;
+    }
+
+    &.right {
+        padding: 0 $tooltip-arrow-border-width;
+    }
+
+    &.bottom {
+        padding: $tooltip-arrow-border-width 0;
+    }
+
+    &.left {
+        padding: 0 $tooltip-arrow-border-width;
+    }
+
     &.in {
         /* stylelint-disable-next-line declaration-no-important */
         opacity: 1 !important;
@@ -43,6 +53,7 @@
             border-top-color: $tooltip-border-color;
         }
     }
+
     &.bottom .tooltip-arrow {
         top: 2 * $tooltip-border-width;
         border-bottom-color: $tooltip-background-color;
@@ -54,6 +65,7 @@
             border-bottom-color: $tooltip-border-color;
         }
     }
+
     &.left .tooltip-arrow {
         right: 2 * $tooltip-border-width;
         border-left-color: $tooltip-background-color;
@@ -65,6 +77,7 @@
             border-left-color: $tooltip-border-color;
         }
     }
+
     &.right .tooltip-arrow {
         left: 2 * $tooltip-border-width;
         border-right-color: $tooltip-background-color;
