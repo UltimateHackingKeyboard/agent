@@ -1,5 +1,12 @@
 import {
-    AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    Renderer2,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
 
@@ -21,17 +28,20 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     @Input() isNew: boolean;
     @ViewChild('macroName') macroName: ElementRef;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer2) { }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
         if (this.isNew) {
-            this.renderer.invokeElementMethod(this.macroName.nativeElement, 'select', []);
+            this.setFocusOnName();
+        }
+        if (changes['macro']) {
+            this.setName();
         }
     }
 
     ngAfterViewInit() {
         if (this.isNew) {
-            this.renderer.invokeElementMethod(this.macroName.nativeElement, 'select', []);
+            this.setFocusOnName();
         }
     }
 
@@ -45,11 +55,19 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
 
     editMacroName(name: string) {
         if (name.length === 0) {
-            this.renderer.setElementProperty(this.macroName.nativeElement, 'value', this.macro.name);
+            this.setName();
             return;
         }
 
         this.store.dispatch(MacroActions.editMacroName(this.macro.id, name));
+    }
+
+    private setFocusOnName() {
+        this.macroName.nativeElement.select();
+    }
+
+    private setName(): void {
+        this.renderer.setProperty(this.macroName.nativeElement, 'value', this.macro.name);
     }
 
 }
