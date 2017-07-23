@@ -68,12 +68,13 @@ export namespace KeymapActions {
         };
     }
 
-    export function editKeymapAbbr(abbr: string, newAbbr: string): Action {
+    export function editKeymapAbbr(name: string, abbr: string, newAbbr: string): Action {
         return {
             type: KeymapActions.EDIT_ABBR,
             payload: {
-                abbr: abbr,
-                newAbbr: newAbbr
+                name,
+                abbr,
+                newAbbr
             }
         };
     }

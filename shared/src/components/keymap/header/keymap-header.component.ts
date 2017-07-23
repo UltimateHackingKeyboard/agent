@@ -2,11 +2,11 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
-    Input,
-    Output,
     EventEmitter,
+    Input,
     OnChanges,
-    Renderer,
+    Output,
+    Renderer2,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
@@ -35,11 +35,13 @@ export class KeymapHeaderComponent implements OnChanges {
     starTitle: string;
     trashTitle: string = 'Delete keymap';
 
-    constructor(private store: Store<AppState>, private renderer: Renderer) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer2) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap']) {
             this.setKeymapTitle();
+            this.setName();
+            this.setAbbreviation();
         }
         if (changes['deletable']) {
             this.setTrashTitle();
@@ -64,7 +66,7 @@ export class KeymapHeaderComponent implements OnChanges {
 
     editKeymapName(name: string) {
         if (name.length === 0) {
-            this.renderer.setElementProperty(this.keymapName.nativeElement, 'value', this.keymap.name);
+            this.setName();
             return;
         }
 
@@ -75,12 +77,12 @@ export class KeymapHeaderComponent implements OnChanges {
         const regexp = new RegExp(/^[a-zA-Z\d]+$/g);
 
         if (newAbbr.length < 1 || newAbbr.length > 3 || !regexp.test(newAbbr)) {
-            this.renderer.setElementProperty(this.keymapAbbr.nativeElement, 'value', this.keymap.abbreviation);
+            this.setAbbreviation();
             return;
         }
 
         newAbbr = newAbbr.toUpperCase();
-        this.store.dispatch(KeymapActions.editKeymapAbbr(this.keymap.abbreviation, newAbbr));
+        this.store.dispatch(KeymapActions.editKeymapAbbr(this.keymap.name, this.keymap.abbreviation, newAbbr));
     }
 
     setKeymapTitle(): void {
@@ -95,5 +97,13 @@ export class KeymapHeaderComponent implements OnChanges {
 
     onDownloadIconClick(): void {
         this.downloadClick.emit();
+    }
+
+    private setName(): void {
+        this.renderer.setProperty(this.keymapName.nativeElement, 'value', this.keymap.name);
+    }
+
+    private setAbbreviation() {
+        this.renderer.setProperty(this.keymapAbbr.nativeElement, 'value', this.keymap.abbreviation);
     }
 }

@@ -36,31 +36,41 @@ export default function (state = initialState, action: Action): UserConfiguratio
             break;
         }
         case KeymapActions.EDIT_NAME: {
-            const name: string = generateName(state.keymaps, action.payload.name);
+            const name: string = action.payload.name.toUpperCase();
+
+            const duplicate = state.keymaps.some((keymap: Keymap) => {
+                return keymap.name === name && keymap.abbreviation !== action.payload.abbr;
+            });
 
             changedUserConfiguration.keymaps = state.keymaps.map((keymap: Keymap) => {
-                if (keymap.abbreviation === action.payload.abbr) {
-                    keymap = Object.assign(new Keymap(), keymap);
+                keymap = Object.assign(new Keymap(), keymap);
+
+                if (!duplicate && keymap.abbreviation === action.payload.abbr) {
                     keymap.name = name;
                 }
                 return keymap;
             });
+
             break;
         }
-        case KeymapActions.EDIT_ABBR:
-            const abbr: string = generateAbbr(state.keymaps, action.payload.newAbbr);
+        case KeymapActions.EDIT_ABBR: {
+            const abbr: string = action.payload.newAbbr.toUpperCase();
+
+            const duplicate = state.keymaps.some((keymap: Keymap) => {
+                return keymap.name !== action.payload.name && keymap.abbreviation === abbr;
+            });
 
             changedUserConfiguration.keymaps = state.keymaps.map((keymap: Keymap) => {
-                if (keymap.abbreviation === action.payload.abbr) {
-                    keymap = Object.assign(new Keymap(), keymap);
+                keymap = Object.assign(new Keymap(), keymap);
+                if (!duplicate && keymap.abbreviation === action.payload.abbr) {
                     keymap.abbreviation = abbr;
-                } else {
-                    keymap = keymap.renameKeymap(action.payload.abbr, action.payload.newAbbr);
                 }
 
                 return keymap;
             });
             break;
+        }
+
         case KeymapActions.SET_DEFAULT:
             changedUserConfiguration.keymaps = state.keymaps.map((keymap: Keymap) => {
                 if (keymap.abbreviation === action.payload || keymap.isDefault) {
@@ -152,10 +162,15 @@ export default function (state = initialState, action: Action): UserConfiguratio
             break;
         }
         case MacroActions.EDIT_NAME: {
-            const name: string = generateName(state.macros, action.payload.name);
+            const name: string = action.payload.name;
+
+            const duplicate = state.macros.some((macro: Macro) => {
+                return macro.id !== action.payload.id && macro.name === name;
+            });
 
             changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
-                if (macro.id === action.payload.id) {
+                macro = Object.assign(new Macro(), macro);
+                if (!duplicate && macro.id === action.payload.id) {
                     macro.name = name;
                 }
 
@@ -281,7 +296,6 @@ function generateAbbr(keymaps: Keymap[], abbr: string): string {
 
 function generateName(items: { name: string }[], name: string) {
     let suffix = 1;
-    const oldName: string = name;
     const regexp = / \(\d+\)$/g;
     const matchName = name.replace(regexp, '');
     items.forEach(item => {

@@ -14,11 +14,11 @@ import { AppState } from '../index';
 @Injectable()
 export class MacroEffects {
 
-    @Effect({dispatch: false}) remove$: any = this.actions$
+    @Effect({ dispatch: false }) remove$: any = this.actions$
         .ofType(MacroActions.REMOVE)
         .map(action => this.store.dispatch(KeymapActions.checkMacro(action.payload)))
         .withLatestFrom(this.store)
-        .map(latest => latest[1].userConfiguration.macros)
+        .map(([action, state]) => state.userConfiguration.macros)
         .do(macros => {
             if (macros.length === 0) {
                 this.router.navigate(['/macro']);
@@ -27,13 +27,22 @@ export class MacroEffects {
             }
         });
 
-    @Effect({dispatch: false}) add$: any = this.actions$
+    @Effect({ dispatch: false }) add$: any = this.actions$
         .ofType(MacroActions.ADD)
         .withLatestFrom(this.store)
-        .map(latest => latest[1].userConfiguration.macros)
+        .map(([action, state]) => state.userConfiguration.macros)
         .map(macros => macros[macros.length - 1])
         .do(lastMacro => {
             this.router.navigate(['/macro', lastMacro.id, 'new']);
+        });
+
+    @Effect({ dispatch: false }) duplicate: any = this.actions$
+        .ofType(MacroActions.DUPLICATE)
+        .withLatestFrom(this.store)
+        .map(([action, state]) => state.userConfiguration.macros)
+        .map(macros => macros[macros.length - 1])
+        .do(lastMacro => {
+            this.router.navigate(['/macro', lastMacro.id]);
         });
 
     constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}

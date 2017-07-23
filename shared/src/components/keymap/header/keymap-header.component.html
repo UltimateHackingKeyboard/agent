@@ -5,14 +5,12 @@
             <input #name cancelable
                    class="keymap__name pane-title__name"
                    type="text"
-                   value="{{ keymap.name }}"
                    (change)="editKeymapName($event.target.value)"
                    (keyup.enter)="name.blur()"
             /> keymap
             (<input #abbr cancelable
                     class="keymap__abbrev pane-title__abbrev"
                     type="text"
-                    value="{{ keymap.abbreviation }}"
                     (change)="editKeymapAbbr($event.target.value)"
                     (keyup.enter)="abbr.blur()"
                     [attr.maxLength]="3"
