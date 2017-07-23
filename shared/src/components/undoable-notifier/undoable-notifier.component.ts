@@ -29,7 +29,7 @@ export class UndoableNotifierComponent implements OnChanges {
     @Output() undo = new EventEmitter();
 
     get slideInOut() {
-        return !this.notification ? 'out' : 'in';
+        return this.notification ? 'in' : 'out';
     }
 
     ngOnChanges(changes: SimpleChanges): void {

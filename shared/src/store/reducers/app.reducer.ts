@@ -23,11 +23,17 @@ const initialState: State = {
 export function reducer(state = initialState, action: Action) {
     switch (action.type) {
         case ActionTypes.APP_STARTED: {
-            return Object.assign({ ...state }, { started: true });
+            return {
+                ...state,
+                started: true
+            };
         }
 
         case ActionTypes.APP_TOGGLE_ADDON_MENU: {
-            return Object.assign({ ...state }, { showAddonMenu: action.payload });
+            return {
+                ...state,
+                showAddonMenu: action.payload
+            };
         }
 
         case ActionTypes.APP_SHOW_NOTIFICATION: {
@@ -35,10 +41,11 @@ export function reducer(state = initialState, action: Action) {
             if (currentAction.payload.type !== NotificationType.Undoable) {
                 return state;
             }
-            return Object.assign({ ...state }, {
+            return {
+                ...state,
                 undoableNotification: currentAction.payload,
                 navigationCountAfterNotification: 0
-            });
+            };
         }
 
         // Required to dismiss the undoNotification dialog, when user navigate in the app.
@@ -57,12 +64,18 @@ export function reducer(state = initialState, action: Action) {
 
         case ActionTypes.UNDO_LAST_SUCCESS:
         case ActionTypes.DISMISS_UNDO_NOTIFICATION: {
-            return Object.assign({ ...state }, { undoableNotification: null });
+            return {
+                ...state,
+                undoableNotification: null
+            };
         }
 
         case UserConfigActionTypes.LOAD_USER_CONFIG_SUCCESS:
         case UserConfigActionTypes.SAVE_USER_CONFIG_SUCCESS: {
-            return Object.assign({ ...state }, { prevUserConfig: action.payload });
+            return {
+                ...state,
+                prevUserConfig: action.payload
+            };
         }
 
         default:

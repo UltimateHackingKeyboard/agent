@@ -106,7 +106,7 @@ import { AppUpdateRendererService } from './services/app-update-renderer.service
 import { reducer } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './shared/models/angular-notifier-config';
-import { UndoableNotifierComponent } from './shared/components/undoable-notifier/undoable-notifier.component';
+import { UndoableNotifierComponent } from './shared/components/undoable-notifier';
 import { UhkHeader } from './shared/components/uhk-header/uhk-header';
 import { AppRendererService } from './services/app-renderer.service';
 

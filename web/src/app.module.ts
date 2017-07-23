@@ -87,7 +87,7 @@ import { reducer } from './shared/store/reducers/index';
 import { LogService } from './shared/services/logger.service';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './shared/models/angular-notifier-config';
-import { UndoableNotifierComponent } from './shared/components/undoable-notifier/undoable-notifier.component';
+import { UndoableNotifierComponent } from './shared/components/undoable-notifier';
 import { UhkHeader } from './shared/components/uhk-header/uhk-header';
 
 @NgModule({
