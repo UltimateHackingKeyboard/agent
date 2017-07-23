@@ -4,10 +4,13 @@ import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/catch';
 
-import { ActionTypes, ToggleAddonMenuAction } from '../actions/app.action';
+import { ActionTypes, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app.action';
 import { Notification, NotificationType } from '../../models/notification';
 import { CommandLineArgs } from '../../models/command-line-args';
 
@@ -19,8 +22,10 @@ export class ApplicationEffects {
         .ofType(ActionTypes.APP_SHOW_NOTIFICATION)
         .map(toPayload)
         .do((notification: Notification) => {
-            const type = ApplicationEffects.mapNotificationType(notification.type);
-            this.notifierService.notify(type, notification.message);
+            if (notification.type === NotificationType.Undoable) {
+                return;
+            }
+            this.notifierService.notify(notification.type, notification.message);
         });
 
     @Effect()
@@ -29,26 +34,10 @@ export class ApplicationEffects {
         .map(toPayload)
         .map((args: CommandLineArgs) => new ToggleAddonMenuAction(args.addons || false));
 
-    // TODO: Change typescript -> 2.4 and use string enum.
-    // Corrently ngrx store is not compatible witn typescript 2.4
-    private static mapNotificationType(type: NotificationType): string {
-        switch (type) {
-            case NotificationType.Success:
-                return 'success';
-
-            case NotificationType.Error:
-                return 'error';
-
-            case NotificationType.Info:
-                return 'info';
-
-            case NotificationType.Warning:
-                return 'warning';
-
-            default:
-                return 'default';
-        }
-    }
+    @Effect() undoLastNotification$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.UNDO_LAST)
+        .map(toPayload)
+        .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
     constructor(private actions$: Actions,
                 private notifierService: NotifierService) { }

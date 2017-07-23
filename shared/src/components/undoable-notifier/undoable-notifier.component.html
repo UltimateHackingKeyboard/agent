@@ -1,0 +1,12 @@
+<div class="pull-right">
+    <div class="alert alert-warning alert-dismissible" role="alert" [@slideInOut]="slideInOut">
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="clickOnClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{text}}
+        <a *ngIf="undoable" (click)="clickOnUndo()" class="undo-button">Undo</a>
+    </div>
+</div>
