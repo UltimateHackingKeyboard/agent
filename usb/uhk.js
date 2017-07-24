@@ -1,4 +1,5 @@
 let usb = require('usb');
+let receiveCallback;
 
 function bufferToString(buffer) {
     let str = '';
@@ -47,6 +48,10 @@ class DelayMs {
     }
 }
 
+function registerReceiveCallback(receiveCallbackParam) {
+    receiveCallback = receiveCallbackParam;
+}
+
 function sendUsbPacketsByCallback(packetProvider, options={}) {
     let packet = packetProvider()
 
@@ -79,6 +84,7 @@ function sendUsbPacketsByCallback(packetProvider, options={}) {
                     process.exit(2);
                 }
                 console.log('Received:', bufferToString(receivedBuffer));
+                (receiveCallback || (()=>{}))(receivedBuffer);
                 sendUsbPacketsByCallback(packetProvider);
             })
         }
@@ -102,6 +108,7 @@ exports = module.exports = {
     getUhkDevice,
     getBootloaderDevice,
     getUsbEndpoints,
+    registerReceiveCallback,
     sendUsbPacket,
     sendUsbPackets,
     sendUsbPacketsByCallback,
@@ -114,10 +121,22 @@ exports = module.exports = {
         writeEeprom: 5,
         readEeprom: 6,
         readMergeSensor: 7,
-        uploadConfig: 8,
+        writeUserConfig: 8,
         applyConfig: 9,
         setLedPwm: 10,
-        readAdc: 11
+        readAdc: 11,
+        launchEepromTransfer: 12,
+        readHardwareConfig: 13,
+        writeHardwareConfig: 14,
+        readUserConfig: 15,
+    },
+    systemPropertyIds: {
+        usbProtocolVersion: 0,
+        bridgeProtocolVersion: 1,
+        dataModelVersion: 2,
+        firmwareVersion: 3,
+        hardwareConfigSize: 4,
+        userConfigSize: 5,
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111
