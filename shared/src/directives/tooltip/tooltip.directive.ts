@@ -1,4 +1,5 @@
-import { AfterContentInit, Directive, ElementRef, HostBinding, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Directive({
     selector: '[data-toggle="tooltip"]'
@@ -16,7 +17,7 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
         </div>
     `;
 
-    constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+    constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer) { }
 
     ngAfterContentInit() {
         this.init();
@@ -38,6 +39,13 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
     }
 
     private fixTitle() {
+        jQuery(this.elementRef.nativeElement).tooltip({
+            placement: this.placement,
+            html: this.html,
+            template: this.customTooltipTemplate,
+            title: this.title
+        });
+
         jQuery(this.elementRef.nativeElement)
             .attr('title', this.title)
             .tooltip('fixTitle');
