@@ -18,6 +18,8 @@ import { Keymap } from '../../../config-serializer/config-items/keymap';
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
 
+const DEFAULT_TRASH_TITLE = '<span class="text-nowrap">Delete keymap</span>';
+
 @Component({
     selector: 'keymap-header',
     templateUrl: './keymap-header.component.html',
@@ -25,6 +27,7 @@ import { KeymapActions } from '../../../store/actions';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeymapHeaderComponent implements OnChanges {
+
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
     @Output() downloadClick = new EventEmitter<void>();
@@ -33,7 +36,7 @@ export class KeymapHeaderComponent implements OnChanges {
     @ViewChild('abbr') keymapAbbr: ElementRef;
 
     starTitle: string;
-    trashTitle: string = 'Delete keymap';
+    trashTitle: string = DEFAULT_TRASH_TITLE;
 
     constructor(private store: Store<AppState>, private renderer: Renderer2) { }
 
@@ -92,7 +95,9 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     setTrashTitle(): void {
-        this.trashTitle = this.deletable ? 'Delete keymap' : 'The last keymap cannot be deleted.';
+        this.trashTitle = this.deletable
+            ? DEFAULT_TRASH_TITLE
+            : '<span class="text-nowrap">The last keymap cannot be deleted.</span>';
     }
 
     onDownloadIconClick(): void {
