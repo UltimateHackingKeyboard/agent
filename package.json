@@ -37,6 +37,7 @@
     "expose-loader": "^0.7.3",
     "html-loader": "^0.5.1",
     "jsonfile": "^3.0.1",
+    "lerna": "^2.0.0",
     "node-sass": "^4.5.2",
     "npm-run-all": "4.0.2",
     "path": "^0.12.7",
