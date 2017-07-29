@@ -31,12 +31,6 @@ export class Layer {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
-        buffer.writeArray(this.modules, (uhkBuffer: UhkBuffer, module: Module) => {
-            module.toBinary(uhkBuffer, macros);
-        });
-    }
-
     toString(): string {
         return `<Layer>`;
     }

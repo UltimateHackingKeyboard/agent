@@ -44,7 +44,7 @@ export abstract class KeyAction {
         const keyActionId: number = KeyActionId[classname];
         if (keyActionId === KeyActionId.KeystrokeAction) {
             if (readKeyActionId < KeyActionId.KeystrokeAction || readKeyActionId > KeyActionId.LastKeystrokeAction) {
-                 throw `Invalid ${classname} first byte: ${readKeyActionId}`;
+                throw `Invalid ${classname} first byte: ${readKeyActionId}`;
             }
         } else if (readKeyActionId !== keyActionId) {
             throw `Invalid ${classname} first byte: ${readKeyActionId}`;
@@ -53,7 +53,7 @@ export abstract class KeyAction {
     }
 
     abstract toJsonObject(macros?: Macro[]): any;
-    abstract toBinary(buffer: UhkBuffer, macros?: Macro[]): any;
+    toBinary?(buffer: UhkBuffer, macros?: Macro[]): any; // This should be abstract
 
     renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
         return this;

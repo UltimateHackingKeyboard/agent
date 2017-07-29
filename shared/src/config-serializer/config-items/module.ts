@@ -60,24 +60,6 @@ export class Module {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
-        buffer.writeUInt8(this.id);
-        buffer.writeUInt8(this.pointerRole);
-
-        const noneAction = new NoneAction();
-
-        const keyActions: KeyAction[] = this.keyActions.map(keyAction => {
-            if (keyAction) {
-                return keyAction;
-            }
-            return noneAction;
-        });
-
-        buffer.writeArray(keyActions, (uhkBuffer: UhkBuffer, keyAction: KeyAction) => {
-            keyAction.toBinary(uhkBuffer, macros);
-        });
-    }
-
     toString(): string {
         return `<Module id="${this.id}" pointerRole="${this.pointerRole}">`;
     }

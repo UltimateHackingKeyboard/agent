@@ -10,6 +10,7 @@ import 'rxjs/add/operator/takeWhile';
 import { AppState } from '../shared/store';
 import { getUserConfiguration } from '../shared/store/reducers/user-configuration';
 
+import { ConfigSerializer } from '../shared/config-serializer';
 import { UhkBuffer } from '../shared/config-serializer/uhk-buffer';
 
 import { UhkDeviceService } from '../services/uhk-device.service';
@@ -47,7 +48,7 @@ export class MainAppComponent {
             .let(getUserConfiguration())
             .map(userConfiguration => {
                 const uhkBuffer = new UhkBuffer();
-                userConfiguration.toBinary(uhkBuffer);
+                ConfigSerializer.writeUserConfiguration(userConfiguration, uhkBuffer);
                 return uhkBuffer.getBufferContent();
             })
             .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))

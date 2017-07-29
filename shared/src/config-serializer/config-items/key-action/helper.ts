@@ -7,7 +7,8 @@ import {
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    keyActionType
+    keyActionType,
+    UnresolvedSwitchKeymapAction
 } from './index';
 
 import { Macro } from '../macro';
@@ -39,7 +40,7 @@ export class Helper {
             case KeyActionId.SwitchLayerAction:
                 return new SwitchLayerAction().fromBinary(buffer);
             case KeyActionId.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromBinary(buffer);
+                return new UnresolvedSwitchKeymapAction().fromBinary(buffer);
             case KeyActionId.MouseAction:
                 return new MouseAction().fromBinary(buffer);
             case KeyActionId.PlayMacroAction:

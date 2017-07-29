@@ -29,20 +29,6 @@ export class UserConfiguration {
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): UserConfiguration {
-        this.dataModelVersion = buffer.readUInt16();
-        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
-            return new ModuleConfiguration().fromBinary(uhkBuffer);
-        });
-        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
-            const macro = new Macro().fromBinary(uhkBuffer);
-            macro.id = index;
-            return macro;
-        });
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
-        return this;
-    }
-
     toJsonObject(): any {
         return {
             dataModelVersion: this.dataModelVersion,
@@ -50,15 +36,6 @@ export class UserConfiguration {
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject())
         };
-    }
-
-    toBinary(buffer: UhkBuffer): void {
-        buffer.writeUInt16(this.dataModelVersion);
-        buffer.writeArray(this.moduleConfigurations);
-        buffer.writeArray(this.macros);
-        buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
-            keymap.toBinary(uhkBuffer, this.macros);
-        });
     }
 
     toString(): string {

@@ -59,16 +59,6 @@ export class Keymap {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
-        buffer.writeString(this.abbreviation);
-        buffer.writeBoolean(this.isDefault);
-        buffer.writeString(this.name);
-        buffer.writeString(this.description);
-        buffer.writeArray(this.layers, (uhkBuffer: UhkBuffer, layer: Layer) => {
-            layer.toBinary(uhkBuffer, macros);
-        });
-    }
-
     toString(): string {
         return `<Keymap abbreviation="${this.abbreviation}" name="${this.name}">`;
     }

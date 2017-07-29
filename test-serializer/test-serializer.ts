@@ -1,5 +1,6 @@
 import { UserConfiguration } from '../shared/src/config-serializer/config-items/user-configuration';
 import { UhkBuffer } from '../shared/src/config-serializer/uhk-buffer';
+import { ConfigSerializer } from '../shared/src/config-serializer';
 
 const assert = require('assert');
 const fs = require('fs');
@@ -9,17 +10,17 @@ const userConfig = JSON.parse(fs.readFileSync('../shared/src/config-serializer/u
 const config1Js = userConfig;
 const config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(config1Js);
 const config1Buffer = new UhkBuffer();
-config1Ts.toBinary(config1Buffer);
+ConfigSerializer.writeUserConfiguration(config1Ts, config1Buffer);
 const config1BufferContent = config1Buffer.getBufferContent();
 fs.writeFileSync('user-config.bin', config1BufferContent);
 
 config1Buffer.offset = 0;
 console.log();
-const config2Ts = new UserConfiguration().fromBinary(config1Buffer);
+const config2Ts = ConfigSerializer.uhkBufferToUserConfiguration(config1Buffer);
 console.log('\n');
 const config2Js = config2Ts.toJsonObject();
 const config2Buffer = new UhkBuffer();
-config2Ts.toBinary(config2Buffer);
+ConfigSerializer.writeUserConfiguration(config2Ts, config2Buffer);
 fs.writeFileSync('user-config-serialized.json', JSON.stringify(config2Js, undefined, 4));
 const config2BufferContent = config1Buffer.getBufferContent();
 fs.writeFileSync('user-config-serialized.bin', config2BufferContent);
