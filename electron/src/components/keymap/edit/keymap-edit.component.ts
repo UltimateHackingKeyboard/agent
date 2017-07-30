@@ -17,7 +17,6 @@ import { SvgKeyboardWrapComponent } from '../../../shared/components/svg/wrap';
 import { KeymapEditComponent as SharedKeymapEditComponent } from '../../../shared/components/keymap/edit';
 
 import { UhkDeviceService } from '../../../services/uhk-device.service';
-import { ConfigSerializer } from '../../../shared/config-serializer';
 import { getUserConfiguration } from '../../../shared/store/reducers/user-configuration';
 
 @Component({
@@ -64,7 +63,7 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
             .withLatestFrom(this.store.let(getUserConfiguration()))
             .map(([layer, userConfig]) => {
                 const uhkBuffer = new UhkBuffer();
-                ConfigSerializer.writeLayer(layer, uhkBuffer, userConfig);
+                layer.toBinary(uhkBuffer, userConfig);
                 return uhkBuffer.getBufferContent();
             })
             .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))
@@ -83,7 +82,7 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
             .withLatestFrom(this.store.let(getUserConfiguration()))
             .map(([keymap, userConfig]) => {
                 const uhkBuffer = new UhkBuffer();
-                ConfigSerializer.writeKeymap(keymap, uhkBuffer, userConfig);
+                keymap.toBinary(uhkBuffer, userConfig);
                 return uhkBuffer.getBufferContent();
             })
             .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))

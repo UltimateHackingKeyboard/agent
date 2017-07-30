@@ -2,6 +2,7 @@ import { assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { Macro } from '../macro';
 import { KeyAction, KeyActionId, keyActionType } from './key-action';
+import { UserConfiguration } from '../user-configuration';
 
 export class PlayMacroAction extends KeyAction {
 
@@ -40,9 +41,9 @@ export class PlayMacroAction extends KeyAction {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros: Macro[]) {
+    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration) {
         buffer.writeUInt8(KeyActionId.PlayMacroAction);
-        buffer.writeUInt8(macros.findIndex(macro => macro.id === this.macroId));
+        buffer.writeUInt8(userConfiguration.macros.findIndex(macro => macro.id === this.macroId));
     }
 
     toString(): string {

@@ -2,6 +2,7 @@ import { assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { Keymap } from '../keymap';
 import { KeyAction, KeyActionId, keyActionType } from './key-action';
+import { UserConfiguration } from '../user-configuration';
 
 export class SwitchKeymapAction extends KeyAction {
 
@@ -32,6 +33,12 @@ export class SwitchKeymapAction extends KeyAction {
             keyActionType: keyActionType.SwitchKeymapAction,
             keymapAbbreviation: this.keymapAbbreviation
         };
+    }
+
+    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
+        const keymapIndex = userConfiguration.keymaps.findIndex(keymap => keymap.abbreviation === this.keymapAbbreviation);
+        buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
+        buffer.writeUInt8(keymapIndex);
     }
 
     toString(): string {

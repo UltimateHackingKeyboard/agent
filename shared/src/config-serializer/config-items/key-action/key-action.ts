@@ -1,5 +1,6 @@
 import { Macro } from '../macro';
 import { UhkBuffer } from '../../uhk-buffer';
+import { UserConfiguration } from '../user-configuration';
 
 export enum KeyActionId {
     NoneAction                   = 0,
@@ -53,7 +54,7 @@ export abstract class KeyAction {
     }
 
     abstract toJsonObject(macros?: Macro[]): any;
-    toBinary?(buffer: UhkBuffer, macros?: Macro[]): any; // This should be abstract
+    abstract toBinary(buffer: UhkBuffer, userConfiguration?: UserConfiguration): void;
 
     renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
         return this;
