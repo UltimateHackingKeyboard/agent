@@ -2,6 +2,8 @@ import { UhkBuffer } from '../uhk-buffer';
 import { Layer } from './layer';
 import { Macro } from './macro';
 import { SwitchLayerAction, KeyAction } from './key-action';
+import { ConfigSerializer } from '../config-serializer';
+import { UserConfiguration } from './user-configuration';
 
 export class Keymap {
 
@@ -59,13 +61,13 @@ export class Keymap {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
+    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
         buffer.writeString(this.abbreviation);
         buffer.writeBoolean(this.isDefault);
         buffer.writeString(this.name);
         buffer.writeString(this.description);
         buffer.writeArray(this.layers, (uhkBuffer: UhkBuffer, layer: Layer) => {
-            layer.toBinary(uhkBuffer, macros);
+            layer.toBinary(uhkBuffer, userConfiguration);
         });
     }
 

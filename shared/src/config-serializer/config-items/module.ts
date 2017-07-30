@@ -2,6 +2,7 @@ import { assertEnum, assertUInt8 } from '../assert';
 import { UhkBuffer } from '../uhk-buffer';
 import { Helper as KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action';
 import { Macro } from './macro';
+import { UserConfiguration } from './user-configuration';
 
 enum PointerRole {
     none,
@@ -60,7 +61,7 @@ export class Module {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
+    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
         buffer.writeUInt8(this.id);
         buffer.writeUInt8(this.pointerRole);
 
@@ -74,7 +75,7 @@ export class Module {
         });
 
         buffer.writeArray(keyActions, (uhkBuffer: UhkBuffer, keyAction: KeyAction) => {
-            keyAction.toBinary(uhkBuffer, macros);
+            keyAction.toBinary(uhkBuffer, userConfiguration);
         });
     }
 

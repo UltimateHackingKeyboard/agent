@@ -8,6 +8,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/withLatestFrom';
 
 import { Keymap } from '../../../shared/config-serializer/config-items/keymap';
 import { UhkBuffer } from '../../../shared/config-serializer/uhk-buffer';
@@ -16,6 +17,7 @@ import { SvgKeyboardWrapComponent } from '../../../shared/components/svg/wrap';
 import { KeymapEditComponent as SharedKeymapEditComponent } from '../../../shared/components/keymap/edit';
 
 import { UhkDeviceService } from '../../../services/uhk-device.service';
+import { getUserConfiguration } from '../../../shared/store/reducers/user-configuration';
 
 @Component({
     selector: 'keymap-edit',
@@ -58,9 +60,10 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
         this.keymap$
             .first()
             .map(keymap => keymap.layers[currentLayer])
-            .map(layer => {
+            .withLatestFrom(this.store.let(getUserConfiguration()))
+            .map(([layer, userConfig]) => {
                 const uhkBuffer = new UhkBuffer();
-                layer.toBinary(uhkBuffer);
+                layer.toBinary(uhkBuffer, userConfig);
                 return uhkBuffer.getBufferContent();
             })
             .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))
@@ -76,9 +79,10 @@ export class KeymapEditComponent extends SharedKeymapEditComponent {
     private sendKeymap(): void {
         this.keymap$
             .first()
-            .map(keymap => {
+            .withLatestFrom(this.store.let(getUserConfiguration()))
+            .map(([keymap, userConfig]) => {
                 const uhkBuffer = new UhkBuffer();
-                keymap.toBinary(uhkBuffer);
+                keymap.toBinary(uhkBuffer, userConfig);
                 return uhkBuffer.getBufferContent();
             })
             .switchMap((buffer: Buffer) => this.uhkDevice.sendConfig(buffer))

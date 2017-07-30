@@ -3,6 +3,7 @@ import { UhkBuffer } from '../uhk-buffer';
 import { Keymap } from './keymap';
 import { Macro } from './macro';
 import { ModuleConfiguration } from './module-configuration';
+import { ConfigSerializer } from '../config-serializer';
 
 export class UserConfiguration {
 
@@ -40,6 +41,7 @@ export class UserConfiguration {
             return macro;
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
+        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
         return this;
     }
 
@@ -57,7 +59,7 @@ export class UserConfiguration {
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
-            keymap.toBinary(uhkBuffer, this.macros);
+            keymap.toBinary(uhkBuffer, this);
         });
     }
 

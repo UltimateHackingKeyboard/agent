@@ -1,6 +1,8 @@
 import { UhkBuffer } from '../uhk-buffer';
 import { Macro } from './macro';
 import { Module } from './module';
+import { UserConfiguration } from './user-configuration';
+import { ConfigSerializer } from '../config-serializer';
 
 export class Layer {
 
@@ -31,9 +33,9 @@ export class Layer {
         };
     }
 
-    toBinary(buffer: UhkBuffer, macros?: Macro[]): void {
+    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
         buffer.writeArray(this.modules, (uhkBuffer: UhkBuffer, module: Module) => {
-            module.toBinary(uhkBuffer, macros);
+            module.toBinary(uhkBuffer, userConfiguration);
         });
     }
 
