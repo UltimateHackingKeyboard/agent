@@ -1,0 +1,43 @@
+@import '../../../../variables';
+
+.macro {
+    &__remove {
+        font-size: 0.75em;
+        top: 8px;
+
+        &:hover {
+            cursor: pointer;
+            color: $icon-hover-delete;
+        }
+    }
+
+    &__duplicate {
+        font-size: 0.75em;
+        top: 7px;
+        margin-right: 15px;
+        position: relative;
+
+        &:hover {
+            cursor: pointer;
+            color: $icon-hover;
+        }
+    }
+}
+
+.pane-title {
+    margin-bottom: 1em;
+
+    &__name {
+        border: none;
+        border-bottom: 2px dotted #999;
+        padding: 0;
+        margin: 0 0.25rem;
+        width: 330px;
+        text-overflow: ellipsis;
+
+        &:focus {
+            box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
+            border-color: transparent;
+        }
+    }
+}

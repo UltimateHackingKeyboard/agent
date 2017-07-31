@@ -1,0 +1,11 @@
+{
+  "dest": "src/",
+  "mode": {
+    "css": {
+      "prefix": ".icon-%s",
+      "dest": "assets",
+      "sprite": "compiled_sprite.svg",
+      "bust": false
+    }
+  }
+}

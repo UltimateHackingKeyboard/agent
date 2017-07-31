@@ -94,7 +94,7 @@
     "zone.js": "^0.8.16"
   },
   "scripts": {
-    "postinstall": "run-p \"symlink -- -i\" ",
+    "postinstall": "lerna bootstrap",
     "test": "cd ./test-serializer && node ./test-serializer.js",
     "lint": "run-s -scn lint:ts lint:style",
     "lint:ts": "run-p -sn lint:ts:electron-main lint:ts:electron-renderer lint:ts:web lint:ts:test-serializer",
