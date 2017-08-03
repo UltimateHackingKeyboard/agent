@@ -6,7 +6,7 @@ import { autoUpdater } from 'electron-updater';
 import * as log from 'electron-log';
 import * as path from 'path';
 import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransform';
-import { VersionInfo } from 'electron-builder-http/out/publishOptions';
+import { VersionInfo } from 'electron-builder-http/out/updateInfo';
 import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
 import * as commandLineArgs from 'command-line-args';
