@@ -7,7 +7,6 @@ import '@angular/router';
 
 import 'rxjs';
 
-import '@ngrx/core';
 import '@ngrx/effects';
 import '@ngrx/store';
 

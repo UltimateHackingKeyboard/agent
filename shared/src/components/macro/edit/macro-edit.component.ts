@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/pluck';
 
 import { Macro } from '../../../config-serializer/config-items/macro';
 import { MacroAction } from '../../../config-serializer/config-items/macro-action/macro-action';
@@ -28,7 +29,7 @@ export class MacroEditComponent implements OnDestroy {
     constructor(private store: Store<AppState>, public route: ActivatedRoute) {
         this.subscription = route
             .params
-            .select<string>('id')
+            .pluck<{}, string>('id')
             .switchMap((id: string) => store.let(getMacro(+id)))
             .subscribe((macro: Macro) => {
                 this.macro = macro;

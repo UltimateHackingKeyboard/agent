@@ -55,7 +55,7 @@ export class KeymapEffects {
     @Effect({ dispatch: false }) editAbbr$: any = this.actions$
         .ofType(KeymapActions.EDIT_ABBR)
         .withLatestFrom(this.store)
-        .do(([action, store]) => {
+        .do(([action, store]: [KeymapActions.EditKeymapAbbreviationAction, AppState]) => {
             for (const keymap of store.userConfiguration.keymaps) {
                 if (keymap.name === action.payload.name && keymap.abbreviation === action.payload.newAbbr) {
                     this.router.navigate(['/keymap', action.payload.newAbbr]);

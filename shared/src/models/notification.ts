@@ -1,4 +1,5 @@
-import { Action } from '@ngrx/store';
+
+import { KeymapActions } from '../store/actions';
 
 export enum NotificationType {
     Default = 'default',
@@ -13,5 +14,5 @@ export interface Notification {
     type: NotificationType;
     title?: string;
     message: string;
-    extra?: Action;
+    extra?: KeymapActions.UndoLastAction;
 }

@@ -1,7 +1,6 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
 
 import 'rxjs/add/operator/do';

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { go } from '@ngrx/router-store';
+import { Router } from '@angular/router';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
@@ -22,8 +23,8 @@ import { UserConfiguration } from '../../config-serializer/config-items/user-con
 import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
-import { KeymapActions } from '../actions/keymap';
-import { MacroActions } from '../actions/macro';
+import { KeymapAction, KeymapActions } from '../actions/keymap';
+import { MacroAction, MacroActions } from '../actions/macro';
 import { DismissUndoNotificationAction, ShowNotificationAction } from '../actions/app.action';
 import { NotificationType } from '../../models/notification';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
@@ -36,12 +37,13 @@ export class UserConfigEffects {
         .startWith(new LoadUserConfigAction())
         .switchMap(() => Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration())));
 
-    @Effect() saveUserConfig$: Observable<Action> = this.actions$
+    @Effect() saveUserConfig$: Observable<Action> = (this.actions$
         .ofType(
-            KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
-            MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
+        KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
+        KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
+        MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
+        MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION) as
+        Observable<KeymapAction | MacroAction>)
         .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
         .mergeMap(([action, config, prevUserConfiguration]) => {
             this.dataStorageRepository.saveConfig(config);
@@ -76,13 +78,16 @@ export class UserConfigEffects {
         .mergeMap((payload: UndoUserConfigData) => {
             const config = new UserConfiguration().fromJsonObject(payload.config);
             this.dataStorageRepository.saveConfig(config);
-            return [new LoadUserConfigSuccessAction(config), go(payload.path)];
+            this.router.navigate([payload.path]);
+            return [new LoadUserConfigSuccessAction(config)];
         });
 
-    constructor(private actions$: Actions,
-                @Inject(DATA_STORAGE_REPOSITORY) private dataStorageRepository: DataStorageRepositoryService,
-                private store: Store<AppState>,
-                private defaultUserConfigurationService: DefaultUserConfigurationService) {
+    constructor(
+        private router: Router,
+        private actions$: Actions,
+        @Inject(DATA_STORAGE_REPOSITORY) private dataStorageRepository: DataStorageRepositoryService,
+        private store: Store<AppState>,
+        private defaultUserConfigurationService: DefaultUserConfigurationService) {
     }
 
     private getUserConfiguration() {

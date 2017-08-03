@@ -1,4 +1,4 @@
-import { routerActions } from '@ngrx/router-store';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 
 import { ActionTypes, ShowNotificationAction } from '../actions/app.action';
@@ -20,7 +20,7 @@ const initialState: State = {
     navigationCountAfterNotification: 0
 };
 
-export function reducer(state = initialState, action: Action) {
+export function reducer(state = initialState, action: Action & { payload?: any}) {
     switch (action.type) {
         case ActionTypes.APP_STARTED: {
             return {
@@ -51,7 +51,7 @@ export function reducer(state = initialState, action: Action) {
         // Required to dismiss the undoNotification dialog, when user navigate in the app.
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
-        case routerActions.UPDATE_LOCATION: {
+        case ROUTER_NAVIGATION: {
             const newState = { ...state };
             newState.navigationCountAfterNotification++;
 

@@ -16,7 +16,7 @@ export class MacroEffects {
 
     @Effect({ dispatch: false }) remove$: any = this.actions$
         .ofType(MacroActions.REMOVE)
-        .map(action => this.store.dispatch(KeymapActions.checkMacro(action.payload)))
+        .do<any>(action => this.store.dispatch(KeymapActions.checkMacro(action.payload)))
         .withLatestFrom(this.store)
         .map(([action, state]) => state.userConfiguration.macros)
         .do(macros => {

@@ -7,8 +7,7 @@ import { NotifierModule } from 'angular-notifier';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
-import { RouterStoreModule } from '@ngrx/router-store';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
@@ -151,22 +150,20 @@ import { UhkHeader } from './shared/components/uhk-header/uhk-header';
         FormsModule,
         DragulaModule,
         routing,
-        StoreModule.provideStore(reducer),
-        RouterStoreModule.connectRouter(),
-        StoreDevtoolsModule.instrumentStore({
-            monitor: useLogMonitor({
-                visible: false,
-                position: 'right'
-            })
+        StoreModule.forRoot(reducer),
+        StoreRouterConnectingModule,
+        StoreDevtoolsModule.instrument({
+           maxAge: 10
         }),
-        StoreLogMonitorModule,
         Select2Module,
         NotifierModule.withConfig(angularNotifierConfig),
-        EffectsModule.runAfterBootstrap(KeymapEffects),
-        EffectsModule.runAfterBootstrap(MacroEffects),
-        EffectsModule.runAfterBootstrap(UserConfigEffects),
-        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
-        EffectsModule.runAfterBootstrap(ApplicationEffects)
+        EffectsModule.forRoot([
+            KeymapEffects,
+            MacroEffects,
+            UserConfigEffects,
+            AutoUpdateSettingsEffects,
+            ApplicationEffects
+        ])
     ],
     providers: [
         SvgModuleProviderService,

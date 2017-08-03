@@ -7,8 +7,7 @@ import { NotifierModule } from 'angular-notifier';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreLogMonitorModule, useLogMonitor } from '@ngrx/store-log-monitor';
-import { RouterStoreModule } from '@ngrx/router-store';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
@@ -103,7 +102,7 @@ import { ElectronLogService } from './services/electron-log.service';
 import { LogService } from './shared/services/logger.service';
 import { ElectronErrorHandlerService } from './services/electron-error-handler.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
-import { reducer } from './store';
+import { reducers, storeConfig } from './store';
 import { AutoUpdateSettings } from './shared/components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './shared/models/angular-notifier-config';
 import { UndoableNotifierComponent } from './shared/components/undoable-notifier';
@@ -176,24 +175,22 @@ import { AppRendererService } from './services/app-renderer.service';
         FormsModule,
         DragulaModule,
         routing,
-        StoreModule.provideStore(reducer),
-        RouterStoreModule.connectRouter(),
-        StoreDevtoolsModule.instrumentStore({
-            monitor: useLogMonitor({
-                visible: false,
-                position: 'right'
-            })
+        StoreModule.forRoot(reducers, storeConfig),
+        StoreRouterConnectingModule,
+        StoreDevtoolsModule.instrument({
+           maxAge: 10
         }),
-        StoreLogMonitorModule,
         Select2Module,
         NotifierModule.withConfig(angularNotifierConfig),
-        EffectsModule.runAfterBootstrap(KeymapEffects),
-        EffectsModule.runAfterBootstrap(MacroEffects),
-        EffectsModule.runAfterBootstrap(UserConfigEffects),
-        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
-        EffectsModule.run(ApplicationEffect),
-        EffectsModule.run(AppUpdateEffect),
-        EffectsModule.run(ApplicationEffects)
+        EffectsModule.forRoot([
+            KeymapEffects,
+            MacroEffects,
+            UserConfigEffects,
+            AutoUpdateSettingsEffects,
+            ApplicationEffect,
+            AppUpdateEffect,
+            ApplicationEffects
+        ])
     ],
     providers: [
         UhkDeviceConnectedGuard,

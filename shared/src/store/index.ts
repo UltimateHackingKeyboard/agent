@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RouterState } from '@ngrx/router-store';
+import { RouterReducerState } from '@ngrx/router-store';
 
 import { Keymap } from '../config-serializer/config-items/keymap';
 import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
@@ -12,7 +12,7 @@ export interface AppState {
     presetKeymaps: Keymap[];
     autoUpdateSettings: autoUpdate.State;
     app: fromApp.State;
-    router: RouterState;
+    router: RouterReducerState;
 }
 
 export const getUserConfiguration = (state: AppState) => state.userConfiguration;

@@ -1,13 +1,13 @@
 import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/switchMap';
 
@@ -38,7 +38,7 @@ export class KeymapEditComponent {
     ) {
         this.keymap$ = route
             .params
-            .select<string>('abbr')
+            .pluck<{}, string>('abbr')
             .switchMap((abbr: string) => store.let(getKeymap(abbr)))
             .publishReplay(1)
             .refCount();
