@@ -4,6 +4,7 @@ import userConfigurationReducer from './user-configuration';
 import presetReducer from './preset';
 import { reducer as autoUpdateReducer } from './auto-update-settings';
 import { reducer as appReducer } from './app.reducer';
+import * as fromAppUpdate from './app-update.reducer';
 
 export { userConfigurationReducer, presetReducer, autoUpdateReducer, appReducer };
 
@@ -13,5 +14,6 @@ export const reducer = {
     presetKeymaps: presetReducer,
     router: routerReducer,
     autoUpdateSettings: autoUpdateReducer,
-    app: appReducer
+    app: appReducer,
+    appUpdate: fromAppUpdate.reducer
 };

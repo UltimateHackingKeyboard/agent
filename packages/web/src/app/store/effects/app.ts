@@ -10,15 +10,21 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { ActionTypes, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app.action';
-import { Notification, NotificationType } from '../../models/notification';
-import { CommandLineArgs } from '../../models/command-line-args';
+import {
+    CommandLineArgs,
+    Notification,
+    NotificationType,
+    ActionTypes,
+    AppStartedAction,
+    DismissUndoNotificationAction,
+    ToggleAddonMenuAction
+} from 'uhk-common';
 
 @Injectable()
 export class ApplicationEffects {
 
     @Effect({ dispatch: false })
-    appStart$: Observable<Action> = this.actions$
+    showNotification$: Observable<Action> = this.actions$
         .ofType(ActionTypes.APP_SHOW_NOTIFICATION)
         .map(toPayload)
         .do((notification: Notification) => {
@@ -40,5 +46,6 @@ export class ApplicationEffects {
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
     constructor(private actions$: Actions,
-                private notifierService: NotifierService) { }
+                private notifierService: NotifierService
+    ) { }
 }

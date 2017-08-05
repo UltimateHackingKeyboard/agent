@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-import { Notification } from '../../models/notification';
+import { Notification } from 'uhk-common';
 
 @Component({
     selector: 'undoable-notifier',

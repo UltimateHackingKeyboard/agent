@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { ActionTypes } from '../actions/auto-update-settings';
 import { ActionTypes as UpdateActions } from '../actions/app-update.action';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
+import { AutoUpdateSettings } from '../../../models/auto-update-settings';
 
 export interface State extends AutoUpdateSettings {
     checkingForUpdate: boolean;

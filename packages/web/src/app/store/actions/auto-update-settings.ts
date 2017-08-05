@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
-import { type } from '../../util';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
+import { type } from 'uhk-common';
+import { AutoUpdateSettings } from '../../../models/auto-update-settings';
 
 const PREFIX = '[app-update-config] ';
 

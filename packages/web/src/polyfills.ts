@@ -57,7 +57,9 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-
+// This is hack of jQuery module loading logic
+// When loading in electron jQuery detect it is a node app and not load themself into window
+window['$'] = window['jQuery'] = require('../node_modules/jquery/dist/jquery.js');
 /**
  * Date, currency, decimal and percent pipes.
  * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10

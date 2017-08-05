@@ -8,7 +8,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
-import { runInElectron } from '../../util/index';
+import { runInElectron } from 'uhk-common';
 import { Keymap } from '../../config-serializer/config-items/keymap';
 import { Macro } from '../../config-serializer/config-items/macro';
 

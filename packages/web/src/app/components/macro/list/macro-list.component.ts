@@ -5,7 +5,7 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { Macro } from '../../../config-serializer/config-items/macro';
 import { MacroAction } from '../../../config-serializer/config-items/macro-action';
-import { MacroItemComponent } from './../index';
+import { MacroItemComponent } from '../item';
 
 @Component({
     animations: [

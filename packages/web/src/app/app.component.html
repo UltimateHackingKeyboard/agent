@@ -1,3 +1,8 @@
+<app-update-available *ngIf="showUpdateAvailable$ | async"
+                      (updateApp)="updateApp()"
+                      (doNotUpdateApp)="doNotUpdateApp()">
+</app-update-available>
+
 <side-menu></side-menu>
 <div id="main-content" class="split split-horizontal main-content">
     <router-outlet></router-outlet>

@@ -1,9 +1,9 @@
 import { routerActions } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 
-import { ActionTypes, ShowNotificationAction } from '../actions/app.action';
+import { ActionTypes, ShowNotificationAction } from 'uhk-common';
+import { Notification, NotificationType } from 'uhk-common';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
-import { Notification, NotificationType } from '../../models/notification';
 import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 
 export interface State {

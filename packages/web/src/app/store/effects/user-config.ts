@@ -11,6 +11,9 @@ import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 
+import { DismissUndoNotificationAction, ShowNotificationAction } from 'uhk-common';
+import { NotificationType } from 'uhk-common';
+
 import {
     ActionTypes,
     LoadUserConfigAction,
@@ -18,15 +21,14 @@ import {
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
+
 import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
 import { KeymapActions } from '../actions/keymap';
 import { MacroActions } from '../actions/macro';
-import { DismissUndoNotificationAction, ShowNotificationAction } from '../actions/app.action';
-import { NotificationType } from '../../models/notification';
-import { UndoUserConfigData } from '../../models/undo-user-config-data';
+import { UndoUserConfigData } from '../../../models/undo-user-config-data';
 
 @Injectable()
 export class UserConfigEffects {

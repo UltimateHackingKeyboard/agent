@@ -8,7 +8,7 @@ import {
     ToggleCheckForUpdateOnStartupAction,
     TogglePreReleaseFlagAction
 } from '../../store/actions/auto-update-settings';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
+import { AutoUpdateSettings } from '../../../models/auto-update-settings';
 
 @Component({
     selector: 'settings',

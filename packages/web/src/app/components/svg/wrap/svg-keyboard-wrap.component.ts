@@ -32,7 +32,7 @@ import {
 import { Keymap } from '../../../config-serializer/config-items/keymap';
 import { Layer } from '../../../config-serializer/config-items/layer';
 import { LongPressAction } from '../../../config-serializer/config-items/long-press-action';
-import { camelCaseToSentence, capitalizeFirstLetter } from '../../../util';
+import { camelCaseToSentence, capitalizeFirstLetter } from 'uhk-common';
 
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';

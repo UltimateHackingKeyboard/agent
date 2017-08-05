@@ -1,0 +1,12 @@
+{
+  "name": "uhk-common",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Common Library contains the common code for uhk-agent (electron-main) and web (electron-renderer) modules",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

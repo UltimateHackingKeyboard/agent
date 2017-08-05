@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { Notification } from '../../models/notification';
+import { Notification } from 'uhk-common';
 import { AppState, getUndoableNotification } from '../../store/index';
-import { DismissUndoNotificationAction, UndoLastAction } from '../../store/actions/app.action';
+import { DismissUndoNotificationAction, UndoLastAction } from 'uhk-common';
 
 @Component({
     selector: 'uhk-header',

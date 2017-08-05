@@ -1,7 +1,0 @@
-{
-  "extends": "../../tsconfig.base.json",
-  "exclude": [
-    "electron-main.ts",
-    "webpack.config.*"
-  ]
-}

@@ -1,0 +1,7 @@
+{
+  "compileOnSave": false,
+  "extends": "../../tsconfig.base.json",
+  "files": [
+    "src/electron-main.ts"
+  ]
+}

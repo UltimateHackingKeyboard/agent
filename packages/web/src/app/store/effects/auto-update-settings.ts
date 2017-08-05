@@ -8,18 +8,20 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/map';
 
+import { NotificationType } from 'uhk-common';
+import { ShowNotificationAction } from 'uhk-common';
+
 import {
     ActionTypes,
     LoadAutoUpdateSettingsAction,
     LoadAutoUpdateSettingsSuccessAction,
     SaveAutoUpdateSettingsSuccessAction
 } from '../actions/auto-update-settings';
+
 import { DATA_STORAGE_REPOSITORY, DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { AppState, getAutoUpdateSettings } from '../index';
 import { initialState } from '../reducers/auto-update-settings';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
-import { NotificationType } from '../../models/notification';
-import { ShowNotificationAction } from '../actions/app.action';
+import { AutoUpdateSettings } from '../../../models/auto-update-settings';
 
 @Injectable()
 export class AutoUpdateSettingsEffects {
