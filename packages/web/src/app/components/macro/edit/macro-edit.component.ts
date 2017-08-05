@@ -22,8 +22,8 @@ import { getMacro } from '../../../store/reducers/user-configuration';
 })
 export class MacroEditComponent implements OnDestroy {
     private subscription: Subscription;
-    private macro: Macro;
-    private isNew: boolean;
+    macro: Macro;
+    isNew: boolean;
 
     constructor(private store: Store<AppState>, public route: ActivatedRoute) {
         this.subscription = route

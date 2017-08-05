@@ -8,5 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@angular/core": "^4.3.3",
+    "@ngrx/core": "1.2.0",
+    "@ngrx/store": "^2.2.3"
+  }
 }

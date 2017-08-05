@@ -12,13 +12,13 @@ export class SvgSwitchKeymapKeyComponent implements OnInit {
     @Input() height: number;
     @Input() abbreviation: string;
 
-    private icon: string;
-    private useWidth: number;
-    private useHeight: number;
-    private useX: number;
-    private useY: number;
-    private textY: number;
-    private spanX: number;
+    icon: string;
+    useWidth: number;
+    useHeight: number;
+    useX: number;
+    useY: number;
+    textY: number;
+    spanX: number;
 
     constructor(private mapperService: MapperService) { }
 

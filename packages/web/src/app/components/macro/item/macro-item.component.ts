@@ -42,10 +42,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Output() edit = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
 
-    private title: string;
-    private iconName: string;
-    private editing: boolean;
-    private newItem: boolean = false;
+    title: string;
+    iconName: string;
+    editing: boolean;
+    newItem: boolean = false;
 
     constructor(private mapper: MapperService) { }
 

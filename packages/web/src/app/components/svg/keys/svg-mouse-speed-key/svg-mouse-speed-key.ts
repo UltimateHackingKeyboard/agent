@@ -10,8 +10,8 @@ import { MapperService } from '../../../../services/mapper.service';
 export class SvgMouseSpeedKeyComponent implements OnChanges {
     @Input() plus: boolean;
 
-    private icon: string;
-    private sign: string;
+    icon: string;
+    sign: string;
 
     constructor(private mapper: MapperService) {
         this.icon = this.mapper.getIcon('mouse');

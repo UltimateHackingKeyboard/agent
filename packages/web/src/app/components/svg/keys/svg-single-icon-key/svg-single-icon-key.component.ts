@@ -10,8 +10,8 @@ export class SvgSingleIconKeyComponent implements OnInit {
     @Input() height: number;
     @Input() icon: string;
 
-    private svgHeight: number;
-    private svgWidth: number;
+    svgHeight: number;
+    svgWidth: number;
 
     constructor() { }
 

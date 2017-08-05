@@ -43,10 +43,10 @@ export class MacroListComponent {
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
 
-    private newMacro: Macro = undefined;
+    newMacro: Macro = undefined;
+    showNew: boolean = false;
     private activeEdit: number = undefined;
     private dragIndex: number;
-    private showNew: boolean = false;
 
     constructor(dragulaService: DragulaService) {
         /* tslint:disable:no-unused-variable: Used by Dragula. */

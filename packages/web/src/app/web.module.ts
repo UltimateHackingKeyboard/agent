@@ -83,7 +83,7 @@ import { DATA_STORAGE_REPOSITORY } from './services/datastorage-repository.servi
 import { LocalDataStorageRepositoryService } from './services/local-datastorage-repository.service';
 import { DefaultUserConfigurationService } from './services/default-user-configuration.service';
 import { reducer } from './store/reducers/index';
-import { LogService } from './services/logger.service';
+import { LogService } from 'uhk-common';
 import { AutoUpdateSettings } from './components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from '../models/angular-notifier-config';
 import { UndoableNotifierComponent } from './components/undoable-notifier';
@@ -154,13 +154,6 @@ import { UpdateAvailableComponent } from './components/update-available/update-a
         routing,
         StoreModule.provideStore(reducer),
         RouterStoreModule.connectRouter(),
-        // StoreDevtoolsModule.instrumentStore({
-        //     monitor: useLogMonitor({
-        //         visible: false,
-        //         position: 'right'
-        //     })
-        // }),
-        // StoreLogMonitorModule,
         Select2Module,
         NotifierModule.withConfig(angularNotifierConfig),
         EffectsModule.runAfterBootstrap(KeymapEffects),

@@ -14,8 +14,7 @@ import 'rxjs/add/operator/do';
 
 import { Device, findByIds, InEndpoint, Interface, on, OutEndpoint } from 'usb';
 
-import { LogService } from '../../app/services/logger.service';
-import { Constants } from 'uhk-common';
+import { Constants, LogService } from 'uhk-common';
 import { UhkDeviceService } from './uhk-device.service';
 
 @Injectable()

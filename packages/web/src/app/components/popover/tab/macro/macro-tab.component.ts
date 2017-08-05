@@ -22,9 +22,9 @@ import { getMacros } from '../../../../store/reducers/user-configuration';
 export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestroy {
     @Input() defaultKeyAction: KeyAction;
 
-    private macros: Macro[];
-    private macroOptions: Array<Select2OptionData>;
-    private selectedMacroIndex: number;
+    macros: Macro[];
+    macroOptions: Array<Select2OptionData>;
+    selectedMacroIndex: number;
     private subscription: Subscription;
 
     constructor(store: Store<AppState>) {

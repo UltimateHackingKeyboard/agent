@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
@@ -15,8 +15,7 @@ import 'rxjs/add/operator/publish';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/startWith';
 
-import { LogService } from '../../app/services/logger.service';
-import { Constants } from 'uhk-common';
+import { Constants, LogService } from 'uhk-common';
 import { UhkDeviceService } from './uhk-device.service';
 
 @Injectable()

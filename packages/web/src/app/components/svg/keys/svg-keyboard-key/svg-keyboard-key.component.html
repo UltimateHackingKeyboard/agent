@@ -1,18 +1,20 @@
 <svg:rect [@change]="changeAnimation"
           (@change.done)="onChangeAnimationDone()"
           [@active]="active"
-          [id]="id" [attr.rx]="rx"          [attr.ry]="ry"
-                    [attr.height]="height"  [attr.width]="width"
-                    [attr.fill]="fill"
+          [id]="id"
+          [attr.rx]="rx"
+          [attr.ry]="ry"
+          [attr.height]="height"
+          [attr.width]="width"
 />
 <ng-template [ngIf]="recording">
     <svg:circle
-            [@recording]="recordAnimation"
-            (@recording.done)="onRecordingAnimationDone()"
-            [attr.cx]="(width / 2)"
-            [attr.cy]="(height / 2)"
-            [attr.r]="10"
-            [attr.fill]="'#c00'"
+        [@recording]="recordAnimation"
+        (@recording.done)="onRecordingAnimationDone()"
+        [attr.cx]="(width / 2)"
+        [attr.cy]="(height / 2)"
+        [attr.r]="10"
+        [attr.fill]="'#c00'"
     ></svg:circle>
 </ng-template>
 <ng-template [ngIf]="!recording">

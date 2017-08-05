@@ -11,13 +11,13 @@ export class SvgTextIconKeyComponent implements OnInit {
     @Input() text: string;
     @Input() icon: string;
 
-    private useWidth: number;
-    private useHeight: number;
-    private useX: number;
-    private useY: number;
-    private textY: number;
-    private textAnchor: string;
-    private spanX: number;
+    useWidth: number;
+    useHeight: number;
+    useX: number;
+    useY: number;
+    textY: number;
+    textAnchor: string;
+    spanX: number;
 
     constructor() { }
 

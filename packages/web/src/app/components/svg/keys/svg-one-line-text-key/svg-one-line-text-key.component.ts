@@ -10,8 +10,8 @@ export class SvgOneLineTextKeyComponent implements OnInit {
     @Input() width: number;
     @Input() text: string;
 
-    private textY: number;
-    private spanX: number;
+    textY: number;
+    spanX: number;
 
     constructor() { }
 

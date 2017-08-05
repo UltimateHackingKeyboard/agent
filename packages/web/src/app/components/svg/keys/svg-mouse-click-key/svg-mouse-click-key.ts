@@ -10,7 +10,7 @@ import { MapperService } from '../../../../services/mapper.service';
 export class SvgMouseClickKeyComponent implements OnInit {
     @Input() button: string;
 
-    private icon: string;
+    icon: string;
 
     constructor(private mapper: MapperService) {
         this.icon = this.mapper.getIcon('mouse');

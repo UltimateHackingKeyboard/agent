@@ -31,18 +31,18 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     @Input() width: number;
     @Input() keystrokeAction: KeystrokeAction;
 
-    private viewBox: string;
-    private textContainer: SvgAttributes;
-    private modifierContainer: SvgAttributes;
-    private shift: SvgAttributes;
-    private control: SvgAttributes;
-    private option: SvgAttributes;
-    private command: SvgAttributes;
+    viewBox: string;
+    textContainer: SvgAttributes;
+    modifierContainer: SvgAttributes;
+    shift: SvgAttributes;
+    control: SvgAttributes;
+    option: SvgAttributes;
+    command: SvgAttributes;
 
-    private labelSource: any;
-    private labelType: 'empty' | 'one-line' | 'two-line' | 'icon';
+    labelSource: any;
+    labelType: 'empty' | 'one-line' | 'two-line' | 'icon';
 
-    private modifierIconNames: {
+    modifierIconNames: {
         shift?: string,
         option?: string,
         command?: string

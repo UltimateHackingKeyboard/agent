@@ -86,14 +86,14 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     enumLabelTypes = LabelTypes;
 
-    public changeAnimation: string = 'inactive';
-    public recordAnimation: string;
+    changeAnimation: string = 'inactive';
+    recordAnimation: string;
+    recording: boolean;
+    labelType: LabelTypes;
 
-    private labelSource: any;
-    private labelType: LabelTypes;
-    private macros: Macro[];
+    labelSource: any;
+    macros: Macro[];
     private subscription: Subscription;
-    private recording: boolean;
     private scanCodePressed: boolean;
 
     @HostListener('click')

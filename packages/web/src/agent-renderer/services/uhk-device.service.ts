@@ -1,4 +1,3 @@
-import { Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Observer } from 'rxjs/Observer';
@@ -6,9 +5,8 @@ import { Subscriber } from 'rxjs/Subscriber';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 
-import { LogService } from '../../app/services/logger.service';
+import { Constants, LogService } from 'uhk-common';
 import { SenderMessage } from '../../models/sender-message';
-import { Constants } from 'uhk-common';
 
 enum Command {
     UploadConfig = 8,

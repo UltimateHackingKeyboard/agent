@@ -3,7 +3,6 @@
 
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import * as log from 'electron-log';
 import * as path from 'path';
 import * as url from 'url';
 import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransform';
@@ -12,9 +11,10 @@ import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
 import * as commandLineArgs from 'command-line-args';
 
+import { logger } from './services/logger.service';
 import { IpcEvents } from 'uhk-common/src/util';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
-import { CommandLineArgs } from 'uhk-common/src/models';
+import { CommandLineArgs } from 'uhk-common';
 
 const optionDefinitions = [
     { name: 'addons', type: Boolean, defaultOption: false }
@@ -29,8 +29,7 @@ require('electron-debug')({ showDevTools: true, enabled: true });
 // be closed automatically when the JavaScript object is garbage collected.
 let win: Electron.BrowserWindow;
 
-log.transports.file.level = 'debug';
-autoUpdater.logger = log;
+autoUpdater.logger = logger;
 
 function createWindow() {
     // Create the browser window.
@@ -54,7 +53,7 @@ function createWindow() {
         slashes: true
     }));
 
-    win.on('page-title-updated', event => {
+    win.on('page-title-updated', (event: any) => {
         event.preventDefault();
     });
 
@@ -105,14 +104,14 @@ app.on('activate', () => {
 function checkForUpdate() {
     if (isDev) {
         const msg = 'Application update is not working in dev mode.';
-        log.info(msg);
+        logger.info(msg);
         sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
         return;
     }
 
     if (isFirstRun()) {
         const msg = 'Application update is skipping at first run.';
-        log.info(msg);
+        logger.info(msg);
         sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
         return;
     }
@@ -163,8 +162,8 @@ function isFirstRun() {
         return true;
     }
     const firstRunVersion = settings.get('firstRunVersion');
-    log.info(`firstRunVersion: ${firstRunVersion}`);
-    log.info(`package.version: ${app.getVersion()}`);
+    logger.info(`firstRunVersion: ${firstRunVersion}`);
+    logger.info(`package.version: ${app.getVersion()}`);
 
     return firstRunVersion !== app.getVersion();
 }
@@ -174,7 +173,7 @@ function saveFirtsRun() {
 }
 
 function sendIpcToWindow(message: string, arg?: any) {
-    log.info('sendIpcToWindow:', message, arg);
+    logger.info('sendIpcToWindow:', message, arg);
     if (!win || win.isDestroyed()) {
         return;
     }

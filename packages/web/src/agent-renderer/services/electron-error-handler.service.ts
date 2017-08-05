@@ -1,5 +1,5 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-import { LogService } from '../../app/services/logger.service';
+import { LogService } from 'uhk-common';
 
 @Injectable()
 export class ElectronErrorHandlerService implements ErrorHandler {

@@ -75,7 +75,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
 
-    private layerAnimationState: AnimationKeyboard[];
+    layerAnimationState: AnimationKeyboard[];
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['layers']) {

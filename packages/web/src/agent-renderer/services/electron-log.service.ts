@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 import * as util from 'util';
 
-import { LogService } from '../../app/services/logger.service';
+import { LogService } from 'uhk-common';
 
 /**
  * This service use the electron-log package to write log in file.

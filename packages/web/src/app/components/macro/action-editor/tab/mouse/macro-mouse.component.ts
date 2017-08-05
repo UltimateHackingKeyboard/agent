@@ -31,8 +31,8 @@ export class MacroMouseTabComponent implements OnInit {
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     TabName = TabName;
     /* tslint:enable:variable-name */
-    private activeTab: TabName;
-    private buttonLabels: string[];
+    activeTab: TabName;
+    buttonLabels: string[];
     private selectedButtons: boolean[];
 
     constructor() {

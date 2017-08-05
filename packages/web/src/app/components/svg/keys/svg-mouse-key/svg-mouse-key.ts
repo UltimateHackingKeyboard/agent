@@ -9,8 +9,8 @@ import { MouseAction, MouseActionParam } from '../../../../config-serializer/con
 })
 export class SvgMouseKeyComponent implements OnChanges {
     @Input() mouseAction: MouseAction;
-    private type: 'click' | 'scroll' | 'move' | 'speed';
-    private param: any;
+    type: 'click' | 'scroll' | 'move' | 'speed';
+    param: any;
 
     constructor() { }
 

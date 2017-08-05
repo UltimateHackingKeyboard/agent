@@ -81,15 +81,15 @@ export class PopoverComponent implements OnChanges {
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('popover') popoverHost: ElementRef;
 
-    public tabName = TabName;
-    public keyActionValid: boolean;
-    private activeTab: TabName;
-    private keymaps$: Observable<Keymap[]>;
-    private leftArrow: boolean = false;
-    private rightArrow: boolean = false;
-    private topPosition: number = 0;
-    private leftPosition: number = 0;
-    private animationState: string;
+    tabName = TabName;
+    keyActionValid: boolean;
+    activeTab: TabName;
+    keymaps$: Observable<Keymap[]>;
+    leftArrow: boolean = false;
+    rightArrow: boolean = false;
+    topPosition: number = 0;
+    leftPosition: number = 0;
+    animationState: string;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 

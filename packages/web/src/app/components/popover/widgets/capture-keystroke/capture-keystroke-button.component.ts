@@ -9,7 +9,7 @@ import { CaptureService } from '../../../../services/capture.service';
 export class CaptureKeystrokeButtonComponent {
     @Output() capture = new EventEmitter<any>();
 
-    private record: boolean;
+    record: boolean;
     private first: boolean; // enable usage of Enter to start capturing
     private scanCodePressed: boolean;
 

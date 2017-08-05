@@ -36,9 +36,9 @@ export class SideMenuComponent {
     showAddonMenu$: Observable<boolean>;
     runInElectron = runInElectron();
 
-    private keymaps$: Observable<Keymap[]>;
-    private macros$: Observable<Macro[]>;
-    private animation: { [key: string]: 'active' | 'inactive' };
+    keymaps$: Observable<Keymap[]>;
+    macros$: Observable<Macro[]>;
+    animation: { [key: string]: 'active' | 'inactive' };
 
     constructor(private store: Store<AppState>, private renderer: Renderer) {
         this.animation = {

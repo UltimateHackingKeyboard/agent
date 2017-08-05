@@ -10,8 +10,8 @@ import { MapperService } from '../../../../services/mapper.service';
 export class SvgMouseMoveKeyComponent implements OnChanges {
     @Input() direction: string;
 
-    private mouseIcon: string;
-    private directionIcon: string;
+    mouseIcon: string;
+    directionIcon: string;
 
     constructor(private mapper: MapperService) { }
 

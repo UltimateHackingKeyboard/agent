@@ -20,7 +20,7 @@ import { KeymapActions } from '../../../store/actions';
 })
 export class KeymapAddComponent {
     presets$: Observable<Keymap[]>;
-    private presetsAll$: Observable<Keymap[]>;
+    presetsAll$: Observable<Keymap[]>;
     private filterExpression$: BehaviorSubject<string>;
 
     constructor(private store: Store<AppState>) {

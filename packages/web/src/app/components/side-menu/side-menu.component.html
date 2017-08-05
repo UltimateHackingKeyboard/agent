@@ -7,7 +7,7 @@
             </a>
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'keymap')"></i>
         </div>
-        <ul [@toggler]="animation.keymap">
+        <ul [@toggler]="animation['keymap']">
             <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/keymap', keymap.abbreviation]">{{keymap.name}}</a>
@@ -28,7 +28,7 @@
             </a>
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'macro')"></i>
         </div>
-        <ul [@toggler]="animation.macro">
+        <ul [@toggler]="animation['macro']">
             <li *ngFor="let macro of macros$ | async" class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
@@ -41,7 +41,7 @@
             <i class="fa fa-puzzle-piece"></i> Add-on modules
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
         </div>
-        <ul [@toggler]="animation.addon">
+        <ul [@toggler]="animation['addon']">
             <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/add-on', 'Key cluster']">Key cluster</a>

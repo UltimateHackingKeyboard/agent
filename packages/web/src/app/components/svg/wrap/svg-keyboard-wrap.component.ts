@@ -57,21 +57,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 
-    private popoverShown: boolean;
-    private keyEditConfig: { moduleId: number, keyId: number };
-    private selectedKey: { layerId: number, moduleId: number, keyId: number };
-    private popoverInitKeyAction: KeyAction;
-    private keybindAnimationEnabled: boolean;
-    private currentLayer: number = 0;
-    private tooltipData: {
+    popoverShown: boolean;
+    keyEditConfig: { moduleId: number, keyId: number };
+    selectedKey: { layerId: number, moduleId: number, keyId: number };
+    popoverInitKeyAction: KeyAction;
+    keybindAnimationEnabled: boolean;
+    currentLayer: number = 0;
+    tooltipData: {
         posTop: number,
         posLeft: number,
         content: Observable<NameValuePair[]>,
         show: boolean
     };
-    private layers: Layer[];
-    private keyPosition: ClientRect;
-    private wrapPosition: ClientRect;
+    layers: Layer[];
+    keyPosition: ClientRect;
+    wrapPosition: ClientRect;
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
 

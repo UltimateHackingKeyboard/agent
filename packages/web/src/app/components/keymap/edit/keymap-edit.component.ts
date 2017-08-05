@@ -30,7 +30,7 @@ export class KeymapEditComponent {
     keyboardSplit: boolean;
 
     protected keymap$: Observable<Keymap>;
-    private deletable$: Observable<boolean>;
+    deletable$: Observable<boolean>;
 
     constructor(
         protected store: Store<AppState>,

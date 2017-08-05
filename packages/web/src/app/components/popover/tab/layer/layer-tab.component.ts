@@ -41,8 +41,8 @@ export class LayerTabComponent extends Tab implements OnChanges {
         }
     ];
 
-    private toggle: boolean;
-    private layer: LayerName;
+    toggle: boolean;
+    layer: LayerName;
 
     constructor() {
         super();

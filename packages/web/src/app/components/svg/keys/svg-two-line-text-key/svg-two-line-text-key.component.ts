@@ -10,9 +10,9 @@ export class SvgTwoLineTextKeyComponent implements OnInit {
     @Input() width: number;
     @Input() texts: string[];
 
-    private textY: number;
-    private spanX: number;
-    private spanYs: number[];
+    textY: number;
+    spanX: number;
+    spanYs: number[];
 
     constructor() {
         this.spanYs = [];

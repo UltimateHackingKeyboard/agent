@@ -16,8 +16,8 @@ export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
 
-    private keymapOptions: Array<Select2OptionData>;
-    private selectedKeymap: Keymap;
+    keymapOptions: Array<Select2OptionData>;
+    selectedKeymap: Keymap;
 
     constructor() {
         super();

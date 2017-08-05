@@ -9,7 +9,7 @@ export class LayersComponent {
     @Input() current: number;
     @Output() select = new EventEmitter();
 
-    private buttons: string[];
+    buttons: string[];
 
     constructor() {
         this.buttons = ['Base', 'Mod', 'Fn', 'Mouse'];
