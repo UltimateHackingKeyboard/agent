@@ -89,6 +89,7 @@ import { angularNotifierConfig } from '../models/angular-notifier-config';
 import { UndoableNotifierComponent } from './components/undoable-notifier';
 import { UhkHeader } from './components/uhk-header/uhk-header';
 import { UpdateAvailableComponent } from './components/update-available/update-available.component';
+import { UhkMessageComponent } from './components/uhk-message/uhk-message.component';
 
 @NgModule({
     declarations: [
@@ -144,7 +145,8 @@ import { UpdateAvailableComponent } from './components/update-available/update-a
         AutoUpdateSettings,
         UndoableNotifierComponent,
         UhkHeader,
-        UpdateAvailableComponent
+        UpdateAvailableComponent,
+        UhkMessageComponent
     ],
     imports: [
         BrowserModule,
