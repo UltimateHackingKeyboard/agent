@@ -19,8 +19,8 @@ import { UhkDeviceService } from '../../services/uhk-device.service';
 
 @Component({
     selector: 'privilege-checker',
-    templateUrl: 'privilege-checker.component.html',
-    styleUrls: ['privilege-checker.component.scss']
+    templateUrl: './privilege-checker.component.html',
+    styleUrls: ['./privilege-checker.component.scss']
 })
 export class PrivilegeCheckerComponent {
 
