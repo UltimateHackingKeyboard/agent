@@ -7,7 +7,7 @@
     "start": "ng serve",
     "server:electron": "npm run build:electron -- --watch",
     "build:electron": "ng build --app renderer --base-href ''",
-    "build:web": "ng build",
+    "build:web": "ng build --app web",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
