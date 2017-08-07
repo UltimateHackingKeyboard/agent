@@ -129,6 +129,8 @@ exports = module.exports = {
         readHardwareConfig: 13,
         writeHardwareConfig: 14,
         readUserConfig: 15,
+        getKeyboardState: 16,
+        readDebugInfo: 17,
     },
     systemPropertyIds: {
         usbProtocolVersion: 0,

@@ -3,7 +3,7 @@ let uhk = require('./uhk');
 let [endpointIn, endpointOut] = uhk.getUsbEndpoints();
 var arg = process.argv[2] || '';
 
-function readMergeSensor() {
+function readAdc() {
     var payload = new Buffer([uhk.usbCommands.readAdc]);
     console.log('Sending ', uhk.bufferToString(payload));
     endpointOut.transfer(payload, function(err) {
@@ -17,9 +17,9 @@ function readMergeSensor() {
                 process.exit(2);
             }
             console.log('Received', uhk.bufferToString(receivedBuffer), (receivedBuffer[1]*255 + receivedBuffer[0])/4096*5.5*1.045);
-            setTimeout(readMergeSensor, 500)
+            setTimeout(readAdc, 500)
         })
     });
 }
 
-readMergeSensor();
+readAdc();
