@@ -66,7 +66,9 @@ function sendUsbPacketsByCallback(packetProvider, options={}) {
         return;
     }
 
-    console.log('Sending: ', bufferToString(packet));
+    if (!moduleExports.silent) {
+        console.log('Sending: ', bufferToString(packet));
+    }
 
     let [endpointIn, endpointOut] = usbEndpoints || getUsbEndpoints();
     endpointOut.transfer(packet, function(err) {
@@ -83,7 +85,9 @@ function sendUsbPacketsByCallback(packetProvider, options={}) {
                     console.error("USB error: %s", err2);
                     process.exit(2);
                 }
-                console.log('Received:', bufferToString(receivedBuffer));
+                if (!moduleExports.silent) {
+                    console.log('Received:', bufferToString(receivedBuffer));
+                }
                 (receiveCallback || (()=>{}))(receivedBuffer);
                 sendUsbPacketsByCallback(packetProvider);
             })
@@ -102,7 +106,7 @@ function sendUsbPackets(packets, options={}) {
     }, options)
 }
 
-exports = module.exports = {
+exports = module.exports = moduleExports = {
     DelayMs,
     bufferToString,
     getUhkDevice,
@@ -139,6 +143,12 @@ exports = module.exports = {
         firmwareVersion: 3,
         hardwareConfigSize: 4,
         userConfigSize: 5,
+    },
+    eepromTransfer: {
+        readHardwareConfig: 0,
+        writeHardwareConfig: 1,
+        readUserConfig: 2,
+        writeUserConfig: 3,
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111
