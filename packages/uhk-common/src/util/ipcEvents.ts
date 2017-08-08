@@ -16,7 +16,16 @@ class AutoUpdate {
     public static readonly checkForUpdateNotAvailable = 'check-for-update-not-available';
 }
 
+class Device {
+    public static readonly setPrivilegeOnLinux = 'set-privilege-on-linux';
+    public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';
+    public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';
+    public static readonly saveUserConfiguration = 'device-save-user-configuration';
+    public static readonly saveUserConfigurationReply = 'device-save-user-configuration-reply';
+}
+
 export class IpcEvents {
     public static readonly app = App;
     public static readonly autoUpdater = AutoUpdate;
+    public static readonly device = Device;
 }

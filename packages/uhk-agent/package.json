@@ -17,6 +17,7 @@
     "node-hid": "0.5.4",
     "usb": "git+https://github.com/aktary/node-usb.git",
     "command-line-args": "^4.0.6",
+    "electron": "~1.6.11",
     "electron-is-dev": "0.1.2",
     "electron-log": "2.2.6",
     "electron-settings": "3.0.14",

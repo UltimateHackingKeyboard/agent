@@ -1,7 +1,21 @@
 {
   "compileOnSave": false,
-  "extends": "../../tsconfig.base.json",
-  "files": [
-    "src/electron-main.ts"
-  ]
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2016",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2015.iterable",
+      "es2016",
+      "dom",
+      "dom.iterable"
+    ]
+  }
 }

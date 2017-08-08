@@ -1,12 +1,20 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./src",
-    "experimentalDecorators": true,
+    "sourceMap": true,
+    "declaration": false,
+    "module": "commonjs",
     "moduleResolution": "node",
-    "rootDir": "./src",
-    "lib": ["es2015", "dom"],
-    "skipLibCheck": true,
-    "types": []
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2015.iterable",
+      "dom",
+      "es2016"
+    ]
   }
 }
