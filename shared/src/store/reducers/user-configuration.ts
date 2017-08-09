@@ -64,6 +64,8 @@ export default function (state = initialState, action: Action): UserConfiguratio
                 keymap = Object.assign(new Keymap(), keymap);
                 if (!duplicate && keymap.abbreviation === action.payload.abbr) {
                     keymap.abbreviation = abbr;
+                } else {
+                    keymap = keymap.renameKeymap(action.payload.abbr, action.payload.newAbbr);
                 }
 
                 return keymap;
