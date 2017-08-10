@@ -5,6 +5,9 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/map';
 
 import { ClientRect } from '../../dom';
 
@@ -90,11 +93,14 @@ export class PopoverComponent implements OnChanges {
     private leftPosition: number = 0;
     private animationState: string;
 
+    private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
+
     constructor(store: Store<AppState>) {
         this.animationState = 'closed';
         this.keymaps$ = store.let(getKeymaps())
-            .map((keymaps: Keymap[]) =>
-                keymaps.filter((keymap: Keymap) => this.currentKeymap.abbreviation !== keymap.abbreviation)
+            .combineLatest(this.currentKeymap$)
+            .map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
+                keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation)
             );
     }
 
@@ -129,6 +135,10 @@ export class PopoverComponent implements OnChanges {
             } else {
                 this.animationState = 'closed';
             }
+        }
+
+        if (change.currentKeymap) {
+            this.currentKeymap$.next(this.currentKeymap);
         }
     }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
@@ -12,7 +12,7 @@ import { Tab } from '../tab';
     styleUrls: ['./keymap-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KeymapTabComponent extends Tab implements OnInit, OnChanges {
+export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
 
@@ -24,20 +24,20 @@ export class KeymapTabComponent extends Tab implements OnInit, OnChanges {
         this.keymapOptions = [];
     }
 
-    ngOnInit() {
-        this.keymapOptions = this.keymaps
-            .map((keymap: Keymap): Select2OptionData => {
-                return {
-                    id: keymap.abbreviation,
-                    text: keymap.name
-                };
-            });
-        if (this.keymaps.length > 0) {
-            this.selectedKeymap = this.keymaps[0];
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.keymaps) {
+            this.keymapOptions = this.keymaps
+                .map((keymap: Keymap): Select2OptionData => {
+                    return {
+                        id: keymap.abbreviation,
+                        text: keymap.name
+                    };
+                });
+            if (this.keymaps.length > 0) {
+                this.selectedKeymap = this.keymaps[0];
+            }
         }
-    }
 
-    ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
         this.validAction.emit(true);
     }
