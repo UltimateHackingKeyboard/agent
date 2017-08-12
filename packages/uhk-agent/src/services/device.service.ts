@@ -12,7 +12,16 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
 
+enum Command {
+    UploadConfig = 8,
+    ApplyConfig = 9
+}
+
 export class DeviceService {
+    private static convertBufferToIntArray(buffer: Buffer): number[] {
+        return Array.prototype.slice.call(buffer, 0);
+    }
+
     private pollTimer$: Subscription;
     private connected: boolean = false;
 
@@ -59,8 +68,39 @@ export class DeviceService {
             .subscribe();
     }
 
-    private saveUserConfiguration(event: Electron.Event, buffer: Buffer): void {
-        const data = Array.prototype.slice.call(buffer, 0);
+    private saveUserConfiguration(event: Electron.Event, json: string): void {
+        const response = new IpcResponse();
+
+        try {
+            const buffer: Buffer = new Buffer(JSON.parse(json).data);
+            const fragments = this.getTransferBuffers(buffer);
+            const device = this.getDevice();
+
+            for (const fragment of fragments) {
+                const transferData = this.getTransferData(fragment);
+                this.logService.debug('Fragment: ', JSON.stringify(transferData));
+                device.write(transferData);
+            }
+
+            const applyBuffer = new Buffer([Command.ApplyConfig]);
+            const applyTransferData = this.getTransferData(applyBuffer);
+            this.logService.debug('Fragment: ', JSON.stringify(applyTransferData));
+            device.write(applyTransferData);
+
+            response.success = true;
+            this.logService.info('transferring finished');
+        }
+        catch (error) {
+            this.logService.error('transferring error', error);
+            response.error = { message: error.message };
+        }
+
+        event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
+    }
+
+    private getTransferData(buffer: Buffer): number[] {
+        const data = DeviceService.convertBufferToIntArray(buffer);
+        data.unshift(Command.UploadConfig);
         // if data start with 0 need to add additional leading zero because HID API remove it.
         // https://github.com/node-hid/node-hid/issues/187
         if (data.length > 0 && data[0] === 0) {
@@ -73,20 +113,21 @@ export class DeviceService {
         // For devices which only support a single report, this must be set to 0x0.
         data.unshift(0);
 
-        const response = new IpcResponse();
+        return data;
+    }
 
-        try {
-            const device = this.getDevice();
-            device.write(data);
-            response.success = true;
-            this.logService.info('transfering finished');
-        }
-        catch (error) {
-            this.logService.error('transfering errored', error);
-            response.error = error;
+    private getTransferBuffers(configBuffer: Buffer): Buffer[] {
+        const fragments: Buffer[] = [];
+        const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
+        for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
+            const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
+                ? MAX_SENDING_PAYLOAD_SIZE
+                : configBuffer.length - offset;
+            const header = new Buffer([Command.UploadConfig, length, offset & 0xFF, offset >> 8]);
+            fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
         }
 
-        event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
+        return fragments;
     }
 
     /**

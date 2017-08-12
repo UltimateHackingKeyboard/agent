@@ -8,7 +8,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
-import { IpcResponse, NotificationType } from 'uhk-common';
+import { NotificationType, IpcResponse } from 'uhk-common';
 import { ActionTypes, ConnectionStateChangedAction, PermissionStateChangedAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
@@ -65,6 +65,32 @@ export class DeviceEffects {
                     message: response.error.message
                 })
             ];
+        });
+
+    @Effect({ dispatch: false })
+    saveLayer$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.SAVE_LAYER)
+        .map(toPayload)
+        .do((buffer: Buffer) => {
+            this.deviceRendererService.saveUserConfiguration(buffer);
+        });
+
+    @Effect()
+    saveLayerReply$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.SAVE_LAYER)
+        .map(toPayload)
+        .map((response: IpcResponse) => {
+            if (response.success) {
+                return new ShowNotificationAction({
+                    type: NotificationType.Success,
+                    message: 'Save layer successful.'
+                });
+            }
+
+            return new ShowNotificationAction({
+                type: NotificationType.Error,
+                message: response.error.message
+            });
         });
 
     constructor(private actions$: Actions,
