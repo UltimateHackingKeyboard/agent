@@ -8,8 +8,7 @@
       "../node_modules/@types"
     ],
     "types": [
-      "node",
-      "core-js"
+      "node"
     ]
   }
 }
