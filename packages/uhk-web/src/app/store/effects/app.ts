@@ -42,7 +42,7 @@ export class ApplicationEffects {
         });
 
     @Effect()
-    processStartInfo: Observable<Action> = this.actions$
+    processStartInfo$: Observable<Action> = this.actions$
         .ofType(ActionTypes.APP_PROCESS_START_INFO)
         .map(toPayload)
         .mergeMap((appInfo: AppStartInfo) => {

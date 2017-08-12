@@ -10,15 +10,28 @@ export class SudoService {
 
     constructor(private logService: LogService) {
         if (isDev) {
-            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '..');
+            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../..');
         } else {
             this.rootDir = path.dirname(app.getAppPath());
         }
-        this.logService.info('App root dir: ', this.rootDir);
+        this.logService.info('[SudoService] App root dir: ', this.rootDir);
+        ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilege.bind(this));
     }
 
-    listen() {
-        ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilegeOnLinux.bind(this));
+    private setPrivilege(event: Electron.Event) {
+        switch (process.platform) {
+            case 'linux':
+                this.setPrivilegeOnLinux(event);
+                break;
+            default:
+                const response: IpcResponse = {
+                    success: false,
+                    error: { message: 'Permissions couldn\'t be set. Invalid platform: ' + process.platform }
+                };
+
+                event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
+                break;
+        }
     }
 
     private setPrivilegeOnLinux(event: Electron.Event) {

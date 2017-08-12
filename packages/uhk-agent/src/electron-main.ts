@@ -15,6 +15,7 @@ import { DeviceService } from './services/device.service';
 import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
+import { SudoService } from './services/sudo.service';
 
 const optionDefinitions = [
     { name: 'addons', type: Boolean, defaultOption: false }
@@ -33,6 +34,7 @@ autoUpdater.logger = logger;
 let deviceService: DeviceService;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
+let sudoService: SudoService;
 
 function createWindow() {
     // Create the browser window.
@@ -50,6 +52,7 @@ function createWindow() {
     deviceService = new DeviceService(logger, win);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options);
+    sudoService = new SudoService(logger);
     // and load the index.html of the app.
 
     win.loadURL(url.format({
@@ -71,6 +74,7 @@ function createWindow() {
         deviceService = null;
         appUpdateService = null;
         appService = null;
+        sudoService = null;
     });
 
     win.webContents.on('did-finish-load', () => {

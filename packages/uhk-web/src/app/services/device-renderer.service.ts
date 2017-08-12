@@ -1,10 +1,10 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { IpcEvents, LogService } from 'uhk-common';
+import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
 import { AppState } from '../store/index';
 import { IpcCommonRenderer } from './ipc-common-renderer';
-import { ConnectionStateChangedAction } from '../store/actions/device';
+import { ConnectionStateChangedAction, SetPrivilegeOnLinuxReplyAction } from '../store/actions/device';
 
 @Injectable()
 export class DeviceRendererService {
@@ -16,14 +16,22 @@ export class DeviceRendererService {
         this.logService.info('[DeviceRendererService] init success ');
     }
 
-    private registerEvents() {
+    setPrivilegeOnLinux(): void {
+        this.ipcRenderer.send(IpcEvents.device.setPrivilegeOnLinux);
+    }
+
+    private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: boolean) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });
+
+        this.ipcRenderer.on(IpcEvents.device.setPrivilegeOnLinuxReply, (event: string, response: IpcResponse) => {
+            this.dispachStoreAction(new SetPrivilegeOnLinuxReplyAction(response));
+        });
     }
 
-    private dispachStoreAction(action: Action) {
-        this.logService.info('[AppRendererService] dispatch action', action);
+    private dispachStoreAction(action: Action): void {
+        this.logService.info('[DeviceRendererService] dispatch action', action);
         this.zone.run(() => this.store.dispatch(action));
     }
 }
