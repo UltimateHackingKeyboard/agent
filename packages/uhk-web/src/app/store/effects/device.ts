@@ -17,11 +17,24 @@ export class DeviceEffects {
         .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(toPayload)
         .do((connected: boolean) => {
-            if (!connected) {
+            if (connected) {
+                this.router.navigate(['/']);
+            }
+            else {
+                this.router.navigate(['/detection']);
+            }
+        });
+
+    @Effect({ dispatch: false })
+    permissionStateChange: Observable<Action> = this.actions$
+        .ofType(ActionTypes.PERMISSION_STATE_CHANGED)
+        .map(toPayload)
+        .do((hasPermission: boolean) => {
+            if (hasPermission) {
                 this.router.navigate(['/detection']);
             }
             else {
-                this.router.navigate(['/']);
+                this.router.navigate(['/privilege']);
             }
         });
 

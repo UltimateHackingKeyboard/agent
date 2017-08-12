@@ -23,12 +23,19 @@ export class DeviceService {
         logService.info('DeviceService init success');
     }
 
-    public get isConnected() {
+    public get isConnected(): boolean {
         return this.connected;
     }
 
-    public hasPermission() {
-        return this.getDevice() !== null;
+    public hasPermission(): boolean {
+        try {
+            const devs = devices();
+            return true;
+        } catch (err) {
+            this.logService.error('[DeviceService] hasPermission', err);
+        }
+
+        return false;
     }
 
     /**
@@ -36,7 +43,7 @@ export class DeviceService {
      * This method check the keyboard is attached to the computer or not.
      * Every second check the HID device list.
      */
-    private pollUhkDevice() {
+    private pollUhkDevice(): void {
         this.pollTimer$ = Observable.interval(1000)
             .startWith(0)
             .map(() => {
@@ -52,7 +59,7 @@ export class DeviceService {
             .subscribe();
     }
 
-    private saveUserConfiguration(event: Electron.Event, buffer: Buffer) {
+    private saveUserConfiguration(event: Electron.Event, buffer: Buffer): void {
         const data = Array.prototype.slice.call(buffer, 0);
         // if data start with 0 need to add additional leading zero because HID API remove it.
         // https://github.com/node-hid/node-hid/issues/187

@@ -9,23 +9,24 @@ import { MissingDeviceComponent } from './components/missing-device/missing-devi
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
+import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { MainPage } from './pages/main-page/main.page';
 
 const appRoutes: Routes = [
     {
         path: 'detection',
         component: MissingDeviceComponent,
-        canActivate: [UhkDeviceDisconnectedGuard]
+        canActivate: [UhkDeviceConnectedGuard, UhkDeviceUninitializedGuard]
     },
     {
         path: 'privilege',
         component: PrivilegeCheckerComponent,
-        canActivate: [UhkDeviceConnectedGuard, UhkDeviceUninitializedGuard]
+        canActivate: [UhkDeviceInitializedGuard]
     },
     {
         path: '',
         component: MainPage,
-        canActivate: [UhkDeviceConnectedGuard],
+        canActivate: [UhkDeviceDisconnectedGuard],
         children: [
             ...keymapRoutes,
             ...macroRoutes,

@@ -16,10 +16,9 @@ export class UhkDeviceDisconnectedGuard implements CanActivate {
     canActivate(): Observable<boolean> {
         return this.store.select(deviceConnected)
             .do(connected => {
-                if (connected) {
-                    this.router.navigate(['/privilege']);
+                if (!connected) {
+                    this.router.navigate(['/detection']);
                 }
-            })
-            .map(connected => !connected);
+            });
     }
 }

@@ -101,6 +101,7 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
 import { MainPage } from './pages/main-page/main.page';
 import { DeviceEffects } from './store/effects/device';
 import { DeviceRendererService } from './services/device-renderer.service';
+import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 
 @NgModule({
     declarations: [
@@ -197,6 +198,7 @@ import { DeviceRendererService } from './services/device-renderer.service';
         DeviceRendererService,
         UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
+        UhkDeviceInitializedGuard,
         UhkDeviceUninitializedGuard
     ],
     exports: [

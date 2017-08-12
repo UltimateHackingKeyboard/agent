@@ -9,16 +9,17 @@ import 'rxjs/add/operator/map';
 import { AppState, hasDevicePermission } from '../store/index';
 
 @Injectable()
-export class UhkDeviceUninitializedGuard implements CanActivate {
+export class UhkDeviceInitializedGuard implements CanActivate {
 
     constructor(private store: Store<AppState>, private router: Router) { }
 
     canActivate(): Observable<boolean> {
         return this.store.select(hasDevicePermission)
             .do(hasPermission => {
-                if (!hasPermission) {
-                    this.router.navigate(['/privilege']);
+                if (hasPermission) {
+                    this.router.navigate(['/detection']);
                 }
-            });
+            })
+            .map(hasPermission => !hasPermission);
     }
 }

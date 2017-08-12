@@ -10,11 +10,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { AppStartInfo, CommandLineArgs, Notification, NotificationType, LogService } from 'uhk-common';
+import { AppStartInfo, Notification, NotificationType, LogService } from 'uhk-common';
 import { ActionTypes, AppStartedAction, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { ConnectionStateChangedAction } from '../actions/device';
+import { ConnectionStateChangedAction, PermissionStateChangedAction } from '../actions/device';
 
 @Injectable()
 export class ApplicationEffects {
@@ -49,7 +49,8 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
-                new ConnectionStateChangedAction(appInfo.deviceConnected)
+                new ConnectionStateChangedAction(appInfo.deviceConnected),
+                new PermissionStateChangedAction(appInfo.hasPermission)
             ];
         });
 

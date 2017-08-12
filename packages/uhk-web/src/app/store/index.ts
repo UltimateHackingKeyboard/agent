@@ -65,3 +65,7 @@ export const isDeviceConnected = createSelector(deviceState, fromDevice.isDevice
 export const deviceConnected = createSelector(runningInElectron, isDeviceConnected, (electron, connected) => {
     return !electron ? true : connected;
 });
+export const devicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
+export const hasDevicePermission = createSelector(runningInElectron, devicePermission, (electron, permission) => {
+    return !electron ? true : permission;
+});
