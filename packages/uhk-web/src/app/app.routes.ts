@@ -11,6 +11,7 @@ import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { MainPage } from './pages/main-page/main.page';
+import { settingsRoutes } from './components/settings/settings.routes';
 
 const appRoutes: Routes = [
     {
@@ -30,7 +31,8 @@ const appRoutes: Routes = [
         children: [
             ...keymapRoutes,
             ...macroRoutes,
-            ...addOnRoutes
+            ...addOnRoutes,
+            ...settingsRoutes
         ]
     }
 ];

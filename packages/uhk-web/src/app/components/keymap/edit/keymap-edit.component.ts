@@ -103,9 +103,10 @@ export class KeymapEditComponent {
         this.keymap$
             .first()
             .map(keymap => keymap.layers[currentLayer])
-            .map(layer => {
+            .withLatestFrom(this.store.let(getUserConfiguration()))
+            .map(([layer, userConfig]) => {
                 const uhkBuffer = new UhkBuffer();
-                layer.toBinary(uhkBuffer);
+                layer.toBinary(uhkBuffer, userConfig);
                 return uhkBuffer.getBufferContent();
             })
             .subscribe(

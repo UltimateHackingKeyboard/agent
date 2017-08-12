@@ -4,7 +4,7 @@ import { Macro } from '../macro';
 import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { KeystrokeAction } from './keystroke-action';
 import { SwitchLayerAction } from './switch-layer-action';
-import { SwitchKeymapAction } from './switch-keymap-action';
+import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action';
 import { MouseAction } from './mouse-action';
 import { PlayMacroAction } from './play-macro-action';
 
