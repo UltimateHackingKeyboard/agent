@@ -1,4 +1,4 @@
 export class IpcResponse {
     success: boolean;
-    error?: Error;
+    error?: { message: string };
 }

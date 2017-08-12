@@ -12,7 +12,7 @@ import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/pluck';
 
-// import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver';
 
 import { Keymap } from '../../../config-serializer/config-items/keymap';
 import { AppState } from '../../../store';
@@ -61,7 +61,7 @@ export class KeymapEditComponent {
                 const keymap = latest[0];
                 const exportableJSON = latest[1];
                 const fileName = keymap.name + '_keymap.json';
-                // saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
+                saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
             });
     }
 
