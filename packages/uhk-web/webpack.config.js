@@ -57,9 +57,6 @@ const postcssPlugins = function () {
 
 module.exports = {
     "target": "electron-renderer",
-    externals: {
-        "node-hid": "nodeHid"
-    },
     "resolve": {
         "extensions": [
             ".ts",
@@ -85,11 +82,12 @@ module.exports = {
             "./src/polyfills.ts"
         ],
         "styles": [
+            "./node_modules/bootstrap/dist/css/bootstrap.min.css",
             "./src/styles.scss"
         ]
     },
     "output": {
-        "path": path.join(__dirname, "../uhk-agent/dist"),
+        "path": path.join(__dirname, "../uhk-agent/dist/renderer"),
         "filename": "[name].bundle.js",
         "chunkFilename": "[id].chunk.js"
     },
@@ -121,6 +119,7 @@ module.exports = {
             },
             {
                 "exclude": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.css$/,
@@ -144,6 +143,7 @@ module.exports = {
             },
             {
                 "exclude": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.scss$|\.sass$/,
@@ -175,6 +175,7 @@ module.exports = {
             },
             {
                 "exclude": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.less$/,
@@ -204,6 +205,7 @@ module.exports = {
             },
             {
                 "exclude": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.styl$/,
@@ -234,6 +236,7 @@ module.exports = {
             },
             {
                 "include": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.css$/,
@@ -257,6 +260,7 @@ module.exports = {
             },
             {
                 "include": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.scss$|\.sass$/,
@@ -288,6 +292,7 @@ module.exports = {
             },
             {
                 "include": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.less$/,
@@ -317,6 +322,7 @@ module.exports = {
             },
             {
                 "include": [
+                    path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.styl$/,

@@ -1,3 +1,4 @@
 export * from './command-line-args';
 export * from './notification';
-export * from './set-privilege-reply';
+export * from './ipc-response';
+export * from './app-start-info';

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
-import { AppState, getShowAppUpdateAvailable } from './store/index';
+import { AppState, getShowAppUpdateAvailable, deviceConnected, runningInElectron } from './store';
 
 @Component({
     selector: 'main-app',
@@ -13,9 +13,13 @@ import { AppState, getShowAppUpdateAvailable } from './store/index';
 })
 export class MainAppComponent {
     showUpdateAvailable$: Observable<boolean>;
+    deviceConnected$: Observable<boolean>;
+    runningInElectron$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
+        this.deviceConnected$ = store.select(deviceConnected);
+        this.runningInElectron$ = store.select(runningInElectron);
     }
 
     updateApp() {

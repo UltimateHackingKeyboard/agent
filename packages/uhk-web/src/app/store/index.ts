@@ -1,12 +1,27 @@
 import { createSelector } from 'reselect';
-import { RouterState } from '@ngrx/router-store';
+import { compose } from '@ngrx/core/compose';
+import { ActionReducer, combineReducers } from '@ngrx/store';
+import { RouterState, routerReducer } from '@ngrx/router-store';
+import { storeFreeze } from 'ngrx-store-freeze';
 
+import userConfigurationReducer from './reducers/user-configuration';
+import presetReducer from './reducers/preset';
 import { Keymap } from '../config-serializer/config-items/keymap';
 import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
 import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
+
+export const reducers = {
+    userConfiguration: userConfigurationReducer,
+    presetKeymaps: presetReducer,
+    router: routerReducer,
+    autoUpdateSettings: autoUpdateSettings.reducer,
+    app: fromApp.reducer,
+    appUpdate: fromAppUpdate.reducer,
+    device: fromDevice.reducer
+};
 
 // State interface for the application
 export interface AppState {
@@ -17,6 +32,17 @@ export interface AppState {
     router: RouterState;
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
+}
+
+const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(reducers);
+const productionReducer: ActionReducer<AppState> = combineReducers(reducers);
+
+export function reducer(state: any, action: any) {
+    // if (isDev) {
+        return developmentReducer(state, action);
+    // } else {
+    //     return productionReducer(state, action);
+    // }
 }
 
 export const getUserConfiguration = (state: AppState) => state.userConfiguration;

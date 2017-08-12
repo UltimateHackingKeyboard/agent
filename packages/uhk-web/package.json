@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "server:renderer": "webpack --config webpack.config.js"
+    "build:renderer": "webpack --config webpack.config.js",
+    "server:renderer": "webpack --config webpack.config.js --watch"
   },
   "private": true,
   "devDependencies": {
@@ -30,6 +31,7 @@
     "@ngrx/store": "^2.2.3",
     "@ngrx/store-devtools": "3.2.4",
     "@ngrx/store-log-monitor": "3.0.2",
+    "ngrx-store-freeze": "^0.1.9",
     "node-hid": "0.5.4",
     "usb": "git+https://github.com/aktary/node-usb.git",
     "sudo-prompt": "^7.1.1",

@@ -10,10 +10,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { CommandLineArgs, Notification, NotificationType } from 'uhk-common';
+import { AppStartInfo, CommandLineArgs, Notification, NotificationType, LogService } from 'uhk-common';
 import { ActionTypes, AppStartedAction, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
+import { ConnectionStateChangedAction } from '../actions/device';
 
 @Injectable()
 export class ApplicationEffects {
@@ -23,8 +24,10 @@ export class ApplicationEffects {
         .ofType(ActionTypes.APP_BOOTSRAPPED)
         .startWith(new AppStartedAction())
         .do(() => {
+            this.logService.info('Renderer appStart effect start');
             this.appUpdateRendererService.sendAppStarted();
-            this.appRendererService.getCommandLineArgs();
+            this.appRendererService.getAppStartInfo();
+            this.logService.info('Renderer appStart effect end');
         });
 
     @Effect({ dispatch: false })
@@ -39,10 +42,16 @@ export class ApplicationEffects {
         });
 
     @Effect()
-    processCommandLineArgs: Observable<Action> = this.actions$
-        .ofType(ActionTypes.APP_PROCESS_COMMAND_LINE_ARGS)
+    processStartInfo: Observable<Action> = this.actions$
+        .ofType(ActionTypes.APP_PROCESS_START_INFO)
         .map(toPayload)
-        .map((args: CommandLineArgs) => new ToggleAddonMenuAction(args.addons || false));
+        .mergeMap((appInfo: AppStartInfo) => {
+            this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
+            return [
+                new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
+                new ConnectionStateChangedAction(appInfo.deviceConnected)
+            ];
+        });
 
     @Effect() undoLastNotification$: Observable<Action> = this.actions$
         .ofType(ActionTypes.UNDO_LAST)
@@ -52,5 +61,6 @@ export class ApplicationEffects {
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
-                private appRendererService: AppRendererService) { }
+                private appRendererService: AppRendererService,
+                private logService: LogService) { }
 }

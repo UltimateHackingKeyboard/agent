@@ -10,6 +10,9 @@ module.exports = {
         filename: "electron-main.js"
     },
     target: 'electron-main',
+    externals: {
+        "node-hid": "require('node-hid')"
+    },
     devtool: 'source-map',
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
@@ -26,6 +29,10 @@ module.exports = {
                 {
                     from: 'src/manifest.json',
                     to: 'manifest.json'
+                },
+                {
+                    from: 'src/package.json',
+                    to: 'package.json'
                 }
             ]
         )

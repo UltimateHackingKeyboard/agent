@@ -9,6 +9,7 @@ import { MissingDeviceComponent } from './components/missing-device/missing-devi
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
+import { MainPage } from './pages/main-page/main.page';
 
 const appRoutes: Routes = [
     {
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
     },
     {
         path: '',
+        component: MainPage,
         canActivate: [UhkDeviceConnectedGuard],
         children: [
             ...keymapRoutes,

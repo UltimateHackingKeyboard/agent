@@ -8,8 +8,10 @@ import { UhkHidApiService } from './services/uhk-hid-api.service';
 import { uhkDeviceFactory } from './services/uhk-device-provider';
 import { UhkDeviceService } from './services/uhk-device.service';
 import { WebModule } from '../app/web.module';
-import { appRoutingProviders, routing } from '../app/app.routes';
+import { routing } from '../app/app.routes';
 import { MainAppComponent } from '../app/app.component';
+import { IpcUhkRenderer } from './services/ipc-uhk-renderer';
+import { IpcCommonRenderer } from '../app/services/ipc-common-renderer';
 // import { DATA_STORAGE_REPOSITORY } from './services/datastorage-repository.service';
 
 @NgModule({
@@ -19,16 +21,10 @@ import { MainAppComponent } from '../app/app.component';
     routing
   ],
   providers: [
-    appRoutingProviders,
     // { provide: DATA_STORAGE_REPOSITORY, useClass: ElectronDataStorageRepositoryService },
+    { provide: IpcCommonRenderer, useClass: IpcUhkRenderer },
     { provide: LogService, useClass: ElectronLogService },
-    { provide: ErrorHandler, useClass: ElectronErrorHandlerService },
-    UhkHidApiService,
-    {
-      provide: UhkDeviceService,
-      useFactory: uhkDeviceFactory,
-      deps: [LogService]
-    }
+    { provide: ErrorHandler, useClass: ElectronErrorHandlerService }
   ],
   bootstrap: [MainAppComponent]
 })

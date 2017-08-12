@@ -20,6 +20,7 @@ export class DeviceService {
                 private win: Electron.BrowserWindow) {
         this.pollUhkDevice();
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
+        logService.info('DeviceService init success');
     }
 
     public get isConnected() {
@@ -44,9 +45,9 @@ export class DeviceService {
             })
             .distinctUntilChanged()
             .do((connected: boolean) => {
-                this.logService.info(`Device connection state changed to: ${connected}`);
                 this.connected = connected;
                 this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
+                this.logService.info(`Device connection state changed to: ${connected}`);
             })
             .subscribe();
     }
@@ -88,13 +89,17 @@ export class DeviceService {
     private getDevice(): HID {
         try {
             const devs = devices();
-            this.logService.info('Available devices:', devs);
+            this.logService.silly('Available devices:', devs);
 
             const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
                 x.productId === Constants.PRODUCT_ID &&
                 ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
 
+            if (!dev) {
+                this.logService.info('[DeviceService] UHK Device not found:');
+                return null;
+            }
             const device = new HID(dev.path);
             this.logService.info('Used device:', dev);
             return device;

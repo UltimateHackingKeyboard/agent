@@ -1,29 +1,24 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { IpcEvents, AppStartInfo, LogService } from 'uhk-common';
+import { IpcEvents, LogService } from 'uhk-common';
 import { AppState } from '../store/index';
-import { ProcessAppStartInfoAction } from '../store/actions/app';
 import { IpcCommonRenderer } from './ipc-common-renderer';
+import { ConnectionStateChangedAction } from '../store/actions/device';
 
 @Injectable()
-export class AppRendererService {
+export class DeviceRendererService {
     constructor(private store: Store<AppState>,
                 private zone: NgZone,
                 private ipcRenderer: IpcCommonRenderer,
                 private logService: LogService) {
         this.registerEvents();
-        this.logService.info('[AppRendererService] init success ');
-    }
-
-    getAppStartInfo() {
-        this.logService.info('[AppRendererService] getAppStartInfo');
-        this.ipcRenderer.send(IpcEvents.app.getAppStartInfo);
+        this.logService.info('[DeviceRendererService] init success ');
     }
 
     private registerEvents() {
-        this.ipcRenderer.on(IpcEvents.app.getAppStartInfoReply, (event: string, arg: AppStartInfo) => {
-            this.dispachStoreAction(new ProcessAppStartInfoAction(arg));
+        this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: boolean) => {
+            this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });
     }
 

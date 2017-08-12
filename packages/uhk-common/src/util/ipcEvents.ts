@@ -1,7 +1,7 @@
 class App {
     public static readonly appStarted = 'app-started';
-    public static readonly getCommandLineArgs = 'app-get-command-line-args';
-    public static readonly getCommandLineArgsReply = 'app-get-command-line-args-reply';
+    public static readonly getAppStartInfo = 'app-get-start-info';
+    public static readonly getAppStartInfoReply = 'app-get-start-info-reply';
 }
 
 class AutoUpdate {

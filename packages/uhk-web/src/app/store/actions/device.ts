@@ -16,7 +16,7 @@ export class SetPrivilegeOnLinuxAction implements Action {
 export class ConnectionStateChangedAction implements Action {
     type = ActionTypes.CONNECTION_STATE_CHANGED;
 
-    constructor(payload: boolean) {}
+    constructor(public payload: boolean) {}
 }
 
 export type Actions

@@ -8,11 +8,10 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
-import { runInElectron } from 'uhk-common';
 import { Keymap } from '../../config-serializer/config-items/keymap';
 import { Macro } from '../../config-serializer/config-items/macro';
 
-import { AppState, showAddonMenu } from '../../store';
+import { AppState, showAddonMenu, runningInElectron } from '../../store';
 import { MacroActions } from '../../store/actions';
 import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 
@@ -34,7 +33,7 @@ import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 })
 export class SideMenuComponent {
     showAddonMenu$: Observable<boolean>;
-    runInElectron = runInElectron();
+    runInElectron$: Observable<boolean>;
 
     keymaps$: Observable<Keymap[]>;
     macros$: Observable<Macro[]>;
@@ -60,6 +59,7 @@ export class SideMenuComponent {
             });
 
         this.showAddonMenu$ = this.store.select(showAddonMenu);
+        this.runInElectron$ = this.store.select(runningInElectron);
     }
 
     toggleHide(event: Event, type: string) {

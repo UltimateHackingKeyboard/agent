@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { type } from 'uhk-common';
 import { Notification, CommandLineArgs } from 'uhk-common';
+import { AppStartInfo } from '../../../../../uhk-common/src/models/app-start-info';
 
 const PREFIX = '[app] ';
 
@@ -11,7 +12,7 @@ export const ActionTypes = {
     APP_STARTED: type(PREFIX + 'started'),
     APP_SHOW_NOTIFICATION: type(PREFIX + 'show notification'),
     APP_TOGGLE_ADDON_MENU: type(PREFIX + 'toggle add-on menu'),
-    APP_PROCESS_COMMAND_LINE_ARGS: type(PREFIX + 'process command line args'),
+    APP_PROCESS_START_INFO: type(PREFIX + 'process start info'),
     UNDO_LAST: type(PREFIX + 'undo last action'),
     UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
     DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action')
@@ -37,10 +38,10 @@ export class ToggleAddonMenuAction implements Action {
     constructor(public payload: boolean) { }
 }
 
-export class ProcessCommandLineArgsAction implements Action {
-    type = ActionTypes.APP_PROCESS_COMMAND_LINE_ARGS;
+export class ProcessAppStartInfoAction implements Action {
+    type = ActionTypes.APP_PROCESS_START_INFO;
 
-    constructor(public payload: CommandLineArgs) { }
+    constructor(public payload: AppStartInfo) { }
 }
 
 export class UndoLastAction implements Action {
@@ -62,7 +63,7 @@ export type Actions
     | AppBootsrappedAction
     | ShowNotificationAction
     | ToggleAddonMenuAction
-    | ProcessCommandLineArgsAction
+    | ProcessAppStartInfoAction
     | UndoLastAction
     | UndoLastSuccessAction
     | DismissUndoNotificationAction;

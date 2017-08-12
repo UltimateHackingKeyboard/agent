@@ -3,12 +3,11 @@
                       (doNotUpdateApp)="doNotUpdateApp()">
 </app-update-available>
 
-<side-menu></side-menu>
-<div id="main-content" class="split split-horizontal main-content">
+<side-menu *ngIf="deviceConnected$ | async"></side-menu>
+<div id="main-content">
     <router-outlet></router-outlet>
 </div>
-<div class="github-fork-ribbon">
+<div class="github-fork-ribbon" *ngIf="!(runningInElectron$ | async)">
     <a class="" href="https://github.com/UltimateHackingKeyboard/agent" title="Fork me on GitHub">Fork me on GitHub</a>
 </div>
-<!--<ngrx-store-log-monitor toggleCommand="alt-t"></ngrx-store-log-monitor>-->
 <notifier-container></notifier-container>

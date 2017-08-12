@@ -23,6 +23,14 @@ export class ElectronLogService implements LogService {
         log.error(ElectronLogService.getErrorText(args));
     }
 
+    debug(...args: any[]): void {
+        log.debug(ElectronLogService.getErrorText(args));
+    }
+
+    silly(...args: any[]): void {
+        log.silly(ElectronLogService.getErrorText(args));
+    }
+
     info(...args: any[]): void {
         log.info(ElectronLogService.getErrorText(args));
     }

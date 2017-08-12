@@ -4,10 +4,12 @@ import { ActionTypes } from '../actions/device';
 
 export interface State {
     connected: boolean;
+    hasPermission: boolean;
 }
 
 const initialState: State = {
-    connected: false
+    connected: false,
+    hasPermission: false
 };
 
 export function reducer(state = initialState, action: Action) {

@@ -6,6 +6,7 @@ import { NotifierModule } from 'angular-notifier';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { RouterStoreModule } from '@ngrx/router-store';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
@@ -81,7 +82,7 @@ import { KeymapEditGuard } from './components/keymap/edit';
 import { MacroNotFoundGuard } from './components/macro/not-found';
 import { DataStorageRepositoryService } from './services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from './services/default-user-configuration.service';
-import { reducer } from './store/reducers/index';
+import { reducer } from './store';
 import { LogService } from 'uhk-common';
 import { AutoUpdateSettings } from './components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './models/angular-notifier-config';
@@ -97,6 +98,9 @@ import { PrivilegeCheckerComponent } from './components/privilege-checker/privil
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
+import { MainPage } from './pages/main-page/main.page';
+import { DeviceEffects } from './store/effects/device';
+import { DeviceRendererService } from './services/device-renderer.service';
 
 @NgModule({
     declarations: [
@@ -155,23 +159,26 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
         UpdateAvailableComponent,
         UhkMessageComponent,
         MissingDeviceComponent,
-        PrivilegeCheckerComponent
+        PrivilegeCheckerComponent,
+        MainPage
     ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         DragulaModule,
-        // routing,
-        // StoreModule.provideStore(reducer),
-        // RouterStoreModule.connectRouter(),
+        routing,
         Select2Module,
+        StoreModule.provideStore(reducer),
+        RouterStoreModule.connectRouter(),
+        StoreDevtoolsModule.instrumentOnlyWithExtension(),
         NotifierModule.withConfig(angularNotifierConfig),
         EffectsModule.runAfterBootstrap(KeymapEffects),
         EffectsModule.runAfterBootstrap(MacroEffects),
         EffectsModule.runAfterBootstrap(UserConfigEffects),
-        EffectsModule.runAfterBootstrap(AutoUpdateSettingsEffects),
-        EffectsModule.runAfterBootstrap(ApplicationEffects)
+        EffectsModule.run(AutoUpdateSettingsEffects),
+        EffectsModule.run(ApplicationEffects),
+        EffectsModule.run(DeviceEffects)
     ],
     providers: [
         SvgModuleProviderService,
@@ -187,6 +194,7 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
         AppUpdateRendererService,
         AppRendererService,
         IpcCommonRenderer,
+        DeviceRendererService,
         UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
         UhkDeviceUninitializedGuard

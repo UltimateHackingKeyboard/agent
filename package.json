@@ -107,16 +107,14 @@
     "build:web": "webpack --config \"web/src/webpack.config.js\"",
     "build:electron": "run-s -sn build:electron:renderer build:electron:main",
     "build:electron:main": "lerna exec --scope uhk-agent npm run build",
-    "build:electron:renderer": "lerna exec --scope uhk-web npm run server:renderer",
-    "build:usb": "electron-rebuild -w usb,node-hid -p -m electron/dist",
+    "build:electron:renderer": "lerna exec --scope uhk-web npm run build:renderer",
     "build:test": "webpack --config \"test-serializer/webpack.config.js\"",
     "server:web": "lerna exec --scope uhk-web npm start",
-    "server:electron": "lerna exec --scope uhk-web npm run server:electron",
+    "server:electron": "lerna exec --scope uhk-web npm run server:renderer",
     "electron": "lerna exec --scope uhk-agent npm start",
     "standard-version": "standard-version",
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",
-    "install:build-deps": "cd electron/dist && npm i && cd .. && npm run build:usb",
     "release": "node ./scripts/release.js",
     "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist package-lock.json"
   }
