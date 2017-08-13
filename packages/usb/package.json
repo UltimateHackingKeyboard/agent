@@ -6,7 +6,6 @@
   "license": "GPL-3.0",
   "dependencies": {
     "ramda": "^0.22.1",
-    "underscore.string": "^3.3.4",
-    "usb": "^1.2.0"
+    "underscore.string": "^3.3.4"
   }
 }
