@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'variables';
+@import './styles/variables';
 @import '~angular-notifier/styles';
 @import '~font-awesome/scss/font-awesome';
-@import './app/main-app/tooltip';
+@import './styles/tooltip';
 
 main-app {
     display: block;
@@ -15,6 +15,10 @@ main-app {
 }
 
 .main-content {
+    height: 100vh;
+}
+
+.main-page-content {
     margin-left: 250px;
 }
 

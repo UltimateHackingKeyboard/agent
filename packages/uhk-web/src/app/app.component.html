@@ -4,7 +4,7 @@
 </app-update-available>
 
 <side-menu *ngIf="deviceConnected$ | async"></side-menu>
-<div id="main-content">
+<div id="main-content" class="main-content">
     <router-outlet></router-outlet>
 </div>
 <div class="github-fork-ribbon" *ngIf="!(runningInElectron$ | async)">
