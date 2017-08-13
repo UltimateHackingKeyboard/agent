@@ -75,21 +75,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
 
-    @HostBinding('class.space') get space() {
-        return this.popoverEnabled;
-    }
-
-    @HostListener('window:resize')
-    onResize() {
-        if (this.wrapHost) {
-            this.wrapPosition = this.wrapHost.getBoundingClientRect();
-        }
-
-        if (this.keyElement) {
-            this.keyPosition = this.keyElement.getBoundingClientRect();
-        }
-    }
-
     constructor(
         private store: Store<AppState>,
         private mapper: MapperService,
@@ -107,6 +92,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             content: Observable.of([]),
             show: false
         };
+    }
+
+    @HostBinding('class.space') get space() {
+        return this.popoverEnabled;
+    }
+
+    @HostListener('window:resize')
+    onResize() {
+        if (this.wrapHost) {
+            this.wrapPosition = this.wrapHost.getBoundingClientRect();
+        }
+
+        if (this.keyElement) {
+            this.keyPosition = this.keyElement.getBoundingClientRect();
+        }
     }
 
     ngOnInit() {

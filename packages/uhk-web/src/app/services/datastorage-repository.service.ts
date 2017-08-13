@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
 import { AutoUpdateSettings } from '../models/auto-update-settings';

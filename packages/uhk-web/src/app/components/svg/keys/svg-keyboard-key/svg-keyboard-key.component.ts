@@ -96,6 +96,21 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     private subscription: Subscription;
     private scanCodePressed: boolean;
 
+    constructor(
+        private mapper: MapperService,
+        store: Store<AppState>,
+        private element: ElementRef,
+        private captureService: CaptureService,
+        private renderer: Renderer
+    ) {
+        this.subscription = store.let(getMacros())
+            .subscribe((macros: Macro[]) => this.macros = macros);
+
+        this.reset();
+        this.captureService.populateMapping();
+        this.scanCodePressed = false;
+    }
+
     @HostListener('click')
     onClick() {
         this.reset();
@@ -147,21 +162,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @HostListener('focusout')
     onFocusOut() {
         this.reset();
-    }
-
-    constructor(
-        private mapper: MapperService,
-        store: Store<AppState>,
-        private element: ElementRef,
-        private captureService: CaptureService,
-        private renderer: Renderer
-    ) {
-        this.subscription = store.let(getMacros())
-            .subscribe((macros: Macro[]) => this.macros = macros);
-
-        this.reset();
-        this.captureService.populateMapping();
-        this.scanCodePressed = false;
     }
 
     ngOnInit() {

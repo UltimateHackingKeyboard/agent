@@ -102,7 +102,7 @@
     "lint:ts:electron-renderer": "tslint --type-check --project ./packages/uhk-web/src/tsconfig.renderer.json",
     "lint:ts:web": "tslint --type-check --project ./packages/uhk-web/src/tsconfig.app.json",
     "lint:ts:test-serializer": "tslint --type-check --project ./packages/test-serializer/tsconfig.json",
-    "lint:style": "stylelint \"electron/**/*.scss\" \"web/**/*.scss\" \"shared/**/*.scss\" --syntax scss",
+    "lint:style": "stylelint \"packages/uhk-agent/src/**/*.scss\" \"packages/uhk-web/src/**/*.scss\" --syntax scss",
     "build": "run-s build:web build:electron",
     "build:web": "lerna exec --scope uhk-web npm run build",
     "build:electron": "run-s -sn build:electron:renderer build:electron:main",

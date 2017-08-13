@@ -152,7 +152,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         } else {
             return jQuery('<span class="select2-item">' + state.text + '</span>');
         }
-    };
+    }
 
     toggleModifier(right: boolean, index: number) {
         const modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
