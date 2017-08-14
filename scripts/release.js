@@ -134,7 +134,7 @@ else {
 }
 
 function updateVersionNumberIn2rndPackageJson(version) {
-        const jsonPath = path.join(__dirname,'../electron/dist/package.json');
+        const jsonPath = path.join(__dirname,'../packages/uhk-agent/dist/package.json');
         const json = require(jsonPath);
 
         json.version = version;
