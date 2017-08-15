@@ -20,8 +20,6 @@ import { AppState } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 import 'rxjs/add/operator/pluck';
 import { SvgKeyboardWrapComponent } from '../../svg/wrap/svg-keyboard-wrap.component';
-import { UhkBuffer } from '../../../config-serializer/uhk-buffer';
-import { SaveLayerAction } from '../../../store/actions/device';
 
 @Component({
     selector: 'keymap-edit',
@@ -74,14 +72,6 @@ export class KeymapEditComponent {
         this.keyboardSplit = !this.keyboardSplit;
     }
 
-    @HostListener('window:keydown.control.u', ['$event'])
-    onCtrlU(event: KeyboardEvent): void {
-        console.log('ctrl + u pressed');
-        event.preventDefault();
-        event.stopPropagation();
-        this.sendLayer();
-    }
-
     private toExportableJSON(keymap: Keymap): Observable<any> {
         return this.store
             .let(getUserConfiguration())
@@ -96,23 +86,5 @@ export class KeymapEditComponent {
                     objectValue: keymap.toJsonObject()
                 };
             });
-    }
-
-    private sendLayer(): void {
-        const currentLayer: number = this.wrap.getSelectedLayer();
-        this.keymap$
-            .first()
-            .map(keymap => keymap.layers[currentLayer])
-            .withLatestFrom(this.store.let(getUserConfiguration()))
-            .map(([layer, userConfig]) => {
-                const uhkBuffer = new UhkBuffer();
-                layer.toBinary(uhkBuffer, userConfig);
-                return uhkBuffer.getBufferContent();
-            })
-            .subscribe(
-                buffer => this.store.dispatch(new SaveLayerAction(buffer)),
-                error => console.error('Error during uploading layer', error),
-                () => console.log('Layer has been sucessfully uploaded')
-            );
     }
 }
