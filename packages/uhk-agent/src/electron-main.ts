@@ -24,7 +24,7 @@ const optionDefinitions = [
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);
 
 // import './dev-extension';
-require('electron-debug')({ showDevTools: true, enabled: true });
+// require('electron-debug')({ showDevTools: true, enabled: true });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
