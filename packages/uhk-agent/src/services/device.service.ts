@@ -76,7 +76,9 @@ export class DeviceService {
             const fragments = this.getTransferBuffers(buffer);
             const device = this.getDevice();
             device.read((err, data) => {
-                this.logService.error('Send data to device: err', err);
+                if (err) {
+                    this.logService.error('Send data to device err:', err);
+                }
                 this.logService.debug('send data to device response:', data.toString());
             });
 

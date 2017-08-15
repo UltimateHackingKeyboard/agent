@@ -39,9 +39,9 @@ const productionReducer: ActionReducer<AppState> = combineReducers(reducers);
 
 export function reducer(state: any, action: any) {
     // if (isDev) {
-    return developmentReducer(state, action);
+    // return developmentReducer(state, action);
     // } else {
-    //     return productionReducer(state, action);
+        return productionReducer(state, action);
     // }
 }
 

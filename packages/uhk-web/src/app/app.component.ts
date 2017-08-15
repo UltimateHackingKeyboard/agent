@@ -3,7 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
-import { AppState, getShowAppUpdateAvailable, deviceConnected, runningInElectron } from './store';
+import {
+    AppState,
+    getShowAppUpdateAvailable,
+    deviceConnected,
+    runningInElectron
+} from './store';
 import { getUserConfiguration } from './store/reducers/user-configuration';
 import { UhkBuffer } from './config-serializer/uhk-buffer';
 import { SaveConfigurationAction } from './store/actions/device';
@@ -73,6 +78,7 @@ export class MainAppComponent {
     private sendUserConfiguration(): void {
         this.store
             .let(getUserConfiguration())
+            .first()
             .map(userConfiguration => {
                 const uhkBuffer = new UhkBuffer();
                 userConfiguration.toBinary(uhkBuffer);
