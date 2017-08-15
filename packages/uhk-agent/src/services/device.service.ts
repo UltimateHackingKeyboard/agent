@@ -75,6 +75,10 @@ export class DeviceService {
             const buffer: Buffer = new Buffer(JSON.parse(json).data);
             const fragments = this.getTransferBuffers(buffer);
             const device = this.getDevice();
+            device.read((err, data) => {
+                this.logService.error('Send data to device: err', err);
+                this.logService.debug('send data to device response:', data.toString());
+            });
 
             for (const fragment of fragments) {
                 const transferData = this.getTransferData(fragment);

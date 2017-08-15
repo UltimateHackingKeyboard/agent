@@ -6,6 +6,7 @@ import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-updat
 import { AppState, getShowAppUpdateAvailable, deviceConnected, runningInElectron } from './store';
 import { getUserConfiguration } from './store/reducers/user-configuration';
 import { UhkBuffer } from './config-serializer/uhk-buffer';
+import { SaveConfigurationAction } from './store/actions/device';
 
 @Component({
     selector: 'main-app',
@@ -30,6 +31,14 @@ export class MainAppComponent {
 
     doNotUpdateApp() {
         this.store.dispatch(new DoNotUpdateAppAction());
+    }
+
+    @HostListener('window:keydown.control.o', ['$event'])
+    onCtrlO(event: KeyboardEvent): void {
+        console.log('ctrl + o pressed');
+        event.preventDefault();
+        event.stopPropagation();
+        this.sendUserConfiguration();
     }
 
     @HostListener('window:keydown.alt.j', ['$event'])
@@ -61,4 +70,18 @@ export class MainAppComponent {
             .subscribe(blob => saveAs(blob, 'UserConfiguration.bin'));
     }
 
+    private sendUserConfiguration(): void {
+        this.store
+            .let(getUserConfiguration())
+            .map(userConfiguration => {
+                const uhkBuffer = new UhkBuffer();
+                userConfiguration.toBinary(uhkBuffer);
+                return uhkBuffer.getBufferContent();
+            })
+            .subscribe(
+                buffer => this.store.dispatch(new SaveConfigurationAction(buffer)),
+                error => console.error('Error during uploading user configuration', error),
+                () => console.log('User configuration has been successfully uploaded')
+            );
+    }
 }

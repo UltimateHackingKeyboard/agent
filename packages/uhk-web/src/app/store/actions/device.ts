@@ -9,8 +9,8 @@ export const ActionTypes = {
     SET_PRIVILEGE_ON_LINUX_REPLY: type(PREFIX + 'set privilege on linux reply'),
     CONNECTION_STATE_CHANGED: type(PREFIX + 'connection state changed'),
     PERMISSION_STATE_CHANGED: type(PREFIX + 'permission state changed'),
-    SAVE_LAYER: type(PREFIX + 'save layer'),
-    SAVE_LAYER_REPLY: type(PREFIX + 'save layer reply')
+    SAVE_CONFIGURATION: type(PREFIX + 'save configuration'),
+    SAVE_CONFIGURATION_REPLY: type(PREFIX + 'save configuration reply')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -35,14 +35,14 @@ export class PermissionStateChangedAction implements Action {
     constructor(public payload: boolean) {}
 }
 
-export class SaveLayerAction implements Action {
-    type = ActionTypes.SAVE_LAYER;
+export class SaveConfigurationAction implements Action {
+    type = ActionTypes.SAVE_CONFIGURATION;
 
     constructor(public payload: Buffer) {}
 }
 
-export class SaveLayerReplyAction implements Action {
-    type = ActionTypes.SAVE_LAYER_REPLY;
+export class SaveConfigurationReplyAction implements Action {
+    type = ActionTypes.SAVE_CONFIGURATION_REPLY;
 
     constructor(public payload: IpcResponse) {}
 }

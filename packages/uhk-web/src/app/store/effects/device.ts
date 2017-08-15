@@ -68,22 +68,22 @@ export class DeviceEffects {
         });
 
     @Effect({ dispatch: false })
-    saveLayer$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SAVE_LAYER)
+    saveConfiguration$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.SAVE_CONFIGURATION)
         .map(toPayload)
         .do((buffer: Buffer) => {
             this.deviceRendererService.saveUserConfiguration(buffer);
         });
 
     @Effect()
-    saveLayerReply$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SAVE_LAYER)
+    saveConfigurationReply$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.SAVE_CONFIGURATION_REPLY)
         .map(toPayload)
         .map((response: IpcResponse) => {
             if (response.success) {
                 return new ShowNotificationAction({
                     type: NotificationType.Success,
-                    message: 'Save layer successful.'
+                    message: 'Save configuration successful.'
                 });
             }
 

@@ -4,7 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
 import { AppState } from '../store/index';
 import { IpcCommonRenderer } from './ipc-common-renderer';
-import { ConnectionStateChangedAction, SaveLayerReplyAction, SetPrivilegeOnLinuxReplyAction } from '../store/actions/device';
+import { ConnectionStateChangedAction, SaveConfigurationReplyAction, SetPrivilegeOnLinuxReplyAction } from '../store/actions/device';
 
 @Injectable()
 export class DeviceRendererService {
@@ -34,7 +34,7 @@ export class DeviceRendererService {
         });
 
         this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationReply, (event: string, response: IpcResponse) => {
-            this.dispachStoreAction(new SaveLayerReplyAction(response));
+            this.dispachStoreAction(new SaveConfigurationReplyAction(response));
         });
     }
 
