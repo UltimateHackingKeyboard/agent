@@ -4,7 +4,11 @@ import { Action, Store } from '@ngrx/store';
 import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
 import { AppState } from '../store/index';
 import { IpcCommonRenderer } from './ipc-common-renderer';
-import { ConnectionStateChangedAction, SaveConfigurationReplyAction, SetPrivilegeOnLinuxReplyAction } from '../store/actions/device';
+import {
+    ConnectionStateChangedAction,
+    SaveConfigurationReplyAction,
+    SetPrivilegeOnLinuxReplyAction
+} from '../store/actions/device';
 
 @Injectable()
 export class DeviceRendererService {
