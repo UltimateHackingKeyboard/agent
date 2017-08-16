@@ -22,11 +22,11 @@ install:
   - set PATH=%APPDATA%\npm;%PATH%
   - node -v
   - npm -v
-  - npm install
+  - appveyor-retry npm install
 
 test_script:
-  - npm run build
-  - npm run build:test
+  - appveyor-retry npm run build
+  - appveyor-retry npm run build:test
   - npm run lint
   - npm run test
   - npm run release
