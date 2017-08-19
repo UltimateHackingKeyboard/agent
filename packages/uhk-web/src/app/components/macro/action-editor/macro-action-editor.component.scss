@@ -1,0 +1,88 @@
+@import '../../../../styles/variables';
+
+:host {
+    display: block;
+    width: 100%;
+}
+
+.action--editor {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    border: 0;
+}
+
+.nav {
+    padding-bottom: 1rem;
+
+    li {
+        a {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+
+            &.selected {
+                font-style: italic;
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &.active {
+            z-index: 2;
+
+            a {
+                &.selected {
+                    font-style: normal;
+                }
+
+                &:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    top: 0;
+                    right: -4rem;
+                    border-color: transparent transparent transparent $icon-hover;
+                    border-style: solid;
+                    border-width: 2rem;
+                }
+            }
+        }
+    }
+}
+
+.editor {
+    &__tabs,
+    &__tab-links {
+        padding-top: 1rem;
+    }
+
+    &__tabs {
+        border-left: 1px solid #ddd;
+        margin-left: -1.6rem;
+        padding-left: 3rem;
+    }
+
+    &__actions {
+        float: right;
+
+        &-container {
+            background: #f5f5f5;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 1.5rem;
+        }
+    }
+}
+
+.flex-button-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.flex-button {
+    align-self: flex-end;
+}

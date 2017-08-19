@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+@import './styles/variables';
+@import '~angular-notifier/styles';
+@import '~font-awesome/scss/font-awesome';
+@import './styles/tooltip';
+
+main-app {
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 26px;
+}
+
+.main-content {
+    height: 100vh;
+}
+
+.main-page-content {
+    margin-left: 250px;
+}
+
+.select2 {
+    &-container {
+        z-index: 1100;
+
+        .scancode--searchterm {
+            text-align: right;
+            color: #b7b7b7;
+        }
+    }
+
+    &-item {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &-results {
+        text-align: left;
+    }
+}
+
+.nav-pills > li > a {
+    cursor: pointer;
+}
+
+.select2-container--default .select2-dropdown--below .select2-results > .select2-results__options {
+    max-height: 300px;
+}

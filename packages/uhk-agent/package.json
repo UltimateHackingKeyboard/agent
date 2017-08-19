@@ -1,0 +1,36 @@
+{
+  "name": "uhk-agent",
+  "main": "electron-main.js",
+  "version": "0.0.0",
+  "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
+  "author": "Ultimate Gadget Laboratories",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UltimateHackingKeyboard/agent.git"
+  },
+  "license": "GPL-3.0",
+  "engines": {
+    "node": ">=8.1.0 <9.0.0",
+    "npm": ">=5.1.0 <6.0.0"
+  },
+  "dependencies": {
+    "command-line-args": "4.0.6",
+    "electron": "1.7.5",
+    "electron-is-dev": "0.1.2",
+    "electron-log": "2.2.6",
+    "electron-rebuild": "1.6.0",
+    "electron-settings": "3.0.14",
+    "electron-updater": "2.2.0",
+    "node-hid": "0.5.4",
+    "sudo-prompt": "^7.0.0"
+  },
+  "devDependencies": {
+    "uhk-common": "^1.0.0"
+  },
+  "scripts": {
+    "start": "electron ./dist/electron-main.js",
+    "build": "webpack && npm run install:build-deps && npm run build:usb",
+    "build:usb": "electron-rebuild -w node-hid -p -m ./dist",
+    "install:build-deps": "cd ./dist && npm i"
+  }
+}
