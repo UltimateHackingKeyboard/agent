@@ -8,4 +8,8 @@ export class MainPage {
 
     constructor() {
     }
+
+    onActivate(e, outlet) {
+        outlet.scrollIntoView();
+    }
 }
