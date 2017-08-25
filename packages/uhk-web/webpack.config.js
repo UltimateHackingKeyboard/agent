@@ -1,3 +1,5 @@
+const AOT_BUILD = process.env.AOT_BUILD;
+
 const fs = require('fs');
 const path = require('path');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
@@ -15,7 +17,7 @@ const nodeModules = path.join(process.cwd(), 'node_modules');
 const realNodeModules = fs.realpathSync(nodeModules);
 const genDirNodeModules = path.join(process.cwd(), 'src', '$$_gendir', 'node_modules');
 const entryPoints = ["inline","polyfills","sw-register","scripts","styles","vendor","main"];
-const minimizeCss = false;
+const minimizeCss = AOT_BUILD;
 const baseHref = "";
 const deployUrl = "";
 const postcssPlugins = function () {
