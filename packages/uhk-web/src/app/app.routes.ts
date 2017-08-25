@@ -1,6 +1,7 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { deviceRoutes } from './components/device';
 import { addOnRoutes } from './components/add-on';
 import { keymapRoutes } from './components/keymap';
 import { macroRoutes } from './components/macro';
@@ -29,6 +30,7 @@ const appRoutes: Routes = [
         component: MainPage,
         canActivate: [UhkDeviceDisconnectedGuard],
         children: [
+            ...deviceRoutes,
             ...keymapRoutes,
             ...macroRoutes,
             ...addOnRoutes,

@@ -7,6 +7,17 @@
     height: 100%;
 }
 
+.device {
+    background-image: url(/assets/images/icon-usb-stick.svg);
+    display: inline-block;
+    width: 20px;
+    height: 25px;
+    background-size: 24px 25px;
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg) translate(4px, 0px); // svg not aligned properly
+  }
+
 a {
     color: #333;
 }
@@ -27,8 +38,15 @@ ul {
 }
 
 .sidebar {
-    &__level-1 {
+    &__level-0 {
         padding: 0.5rem 1rem;
+    }
+    &__level-1 {
+        padding: 1rem 1rem 1rem 2rem;
+    }
+
+    &__level-0 ,
+    &__level-1 {
         font-size: 2rem;
         line-height: 3rem;
         cursor: default;
@@ -46,11 +64,6 @@ ul {
             &:nth-child(1) {
                 margin: 0;
             }
-        }
-
-        .sidebar__name {
-            width: 100%;
-            display: block;
         }
 
         .fa-chevron-up,
@@ -111,6 +124,7 @@ ul {
     }
 
     // General hover over menu items.
+    &__level-0,
     &__level-1,
     &__level-2 {
         &:hover {
