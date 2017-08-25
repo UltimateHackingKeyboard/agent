@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 import { DelayMacroAction } from '../../../../../config-serializer/config-items/macro-action';
+import { MacroValidator } from './../../macro-action-editor.component';
 
 const INITIAL_DELAY = 0.5; // In seconds
 
@@ -18,7 +19,7 @@ const INITIAL_DELAY = 0.5; // In seconds
     host: { 'class': 'macro__delay' },
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MacroDelayTabComponent implements OnInit {
+export class MacroDelayTabComponent implements OnInit, MacroValidator {
     @Input() macroAction: DelayMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
 
@@ -38,4 +39,7 @@ export class MacroDelayTabComponent implements OnInit {
         this.delay = value;
         this.macroAction.delay = this.delay * 1000;
     }
+
+    isMacroValid = () => this.macroAction.delay !== 0;
+
 }

@@ -7,6 +7,7 @@ import {
     MacroSubAction
 } from '../../../../../config-serializer/config-items/macro-action';
 import { Tab } from '../../../../popover/tab';
+import { MacroValidator } from './../../macro-action-editor.component';
 
 type MouseMacroAction = MouseButtonMacroAction | MoveMouseMacroAction | ScrollMouseMacroAction;
 
@@ -27,7 +28,7 @@ enum TabName {
     ],
     host: { 'class': 'macro__mouse' }
 })
-export class MacroMouseTabComponent implements OnInit {
+export class MacroMouseTabComponent implements OnInit, MacroValidator {
     @Input() macroAction: MouseMacroAction;
     @ViewChild('tab') selectedTab: Tab;
 
@@ -118,6 +119,20 @@ export class MacroMouseTabComponent implements OnInit {
             return TabName.Scroll;
         }
         return TabName.Move;
+    }
+
+    isMacroValid = () => {
+        switch (this.macroAction.constructor) {
+            case MoveMouseMacroAction:
+            case ScrollMouseMacroAction:
+                const { x, y } = this.macroAction as MoveMouseMacroAction;
+                return (x !== undefined && x !== null) || (y !== undefined && y !== null);
+            case MouseButtonMacroAction:
+                const { mouseButtonsMask } = this.macroAction as MouseButtonMacroAction;
+                return mouseButtonsMask !== undefined && mouseButtonsMask !== 0;
+            default:
+                return true;
+        }
     }
 
 }

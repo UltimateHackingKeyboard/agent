@@ -19,6 +19,10 @@ enum TabName {
     Delay
 }
 
+export interface MacroValidator {
+    isMacroValid: () => boolean;
+}
+
 @Component({
     selector: 'macro-action-editor',
     templateUrl: './macro-action-editor.component.html',
@@ -59,7 +63,9 @@ export class MacroActionEditorComponent implements OnInit {
             const action = this.selectedTab instanceof MacroKeyTabComponent ?
                 this.selectedTab.getKeyMacroAction() :
                 this.selectedTab.macroAction;
-            this.save.emit(action);
+            if (this.selectedTab.isMacroValid()) {
+                this.save.emit(action);
+            }
         } catch (e) {
             // TODO: show error dialog
             console.error(e);
