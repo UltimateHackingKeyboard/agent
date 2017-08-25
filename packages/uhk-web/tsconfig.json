@@ -1,5 +1,4 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../uhk-agent/dist/out-tsc",
     "sourceMap": true,
@@ -16,6 +15,9 @@
       "es2015.iterable",
       "dom",
       "es2016"
-    ]
+    ],
+    "paths": {
+      "@angular/*": ["../node_modules/@angular/*"]
+    }
   }
 }
