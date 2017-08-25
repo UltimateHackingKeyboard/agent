@@ -442,7 +442,7 @@ module.exports = {
             },
             "exclude": [],
             "tsConfigPath": "src/tsconfig.renderer.json",
-            "skipCodeGeneration": true
+            "skipCodeGeneration": !process.env.AOT_BUILD
         })
     ],
     "node": {
