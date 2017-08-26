@@ -7,7 +7,7 @@ import {
     MacroSubAction
 } from '../../../../../config-serializer/config-items/macro-action';
 import { Tab } from '../../../../popover/tab';
-import { MacroValidator } from './../../macro-action-editor.component';
+import { MacroBaseComponent } from './../macro-base.component';
 
 type MouseMacroAction = MouseButtonMacroAction | MoveMouseMacroAction | ScrollMouseMacroAction;
 
@@ -28,7 +28,7 @@ enum TabName {
     ],
     host: { 'class': 'macro__mouse' }
 })
-export class MacroMouseTabComponent implements OnInit, MacroValidator {
+export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: MouseMacroAction;
     @ViewChild('tab') selectedTab: Tab;
 
@@ -40,6 +40,7 @@ export class MacroMouseTabComponent implements OnInit, MacroValidator {
     private selectedButtons: boolean[];
 
     constructor() {
+        super();
         this.buttonLabels = ['Left', 'Middle', 'Right'];
         this.selectedButtons = Array(this.buttonLabels.length).fill(false);
     }
@@ -66,6 +67,8 @@ export class MacroMouseTabComponent implements OnInit, MacroValidator {
 
         if (tab === this.getTabName(this.macroAction)) {
             return;
+        } else {
+            this.selectedButtons = [];
         }
 
         switch (tab) {
@@ -80,11 +83,13 @@ export class MacroMouseTabComponent implements OnInit, MacroValidator {
                 this.macroAction.action = this.getAction(tab);
                 break;
         }
+        this.validate();
     }
 
     setMouseClick(index: number): void {
         this.selectedButtons[index] = !this.selectedButtons[index];
         (<MouseButtonMacroAction>this.macroAction).setMouseButtons(this.selectedButtons);
+        this.validate();
     }
 
     hasButton(index: number): boolean {

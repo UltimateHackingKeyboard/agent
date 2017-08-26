@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 import { TextMacroAction } from '../../../../../config-serializer/config-items/macro-action';
-import { MacroValidator } from './../../macro-action-editor.component';
+import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
     selector: 'macro-text-tab',
@@ -17,16 +17,14 @@ import { MacroValidator } from './../../macro-action-editor.component';
     styleUrls: ['./macro-text.component.scss'],
     host: { 'class': 'macro__text' }
 })
-export class MacroTextTabComponent implements OnInit, AfterViewInit, MacroValidator {
+export class MacroTextTabComponent extends MacroBaseComponent implements OnInit, AfterViewInit {
     @Input() macroAction: TextMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
-    constructor(private renderer: Renderer) {}
+    constructor(private renderer: Renderer) { super(); }
 
     ngOnInit() {
-        if (!this.macroAction) {
-            this.macroAction = new TextMacroAction();
-        }
+        this.init();
     }
 
     ngAfterViewInit() {
@@ -34,9 +32,16 @@ export class MacroTextTabComponent implements OnInit, AfterViewInit, MacroValida
     }
 
     onTextChange() {
+        this.init();
         this.macroAction.text = this.input.nativeElement.value;
     }
 
-    isMacroValid = () => this.macroAction.text !== undefined && this.macroAction.text.length > 0;
+    isMacroValid = () => this.input.nativeElement.value !== undefined && this.input.nativeElement.value.length > 0;
+
+    private init = () => {
+        if (!this.macroAction) {
+            this.macroAction = new TextMacroAction();
+        }
+    }
 
 }

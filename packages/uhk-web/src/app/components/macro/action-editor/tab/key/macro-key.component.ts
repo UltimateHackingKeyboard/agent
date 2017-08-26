@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { KeystrokeAction } from '../../../../../config-serializer/config-items/key-action';
 import { KeyMacroAction, MacroSubAction } from '../../../../../config-serializer/config-items/macro-action';
 import { KeypressTabComponent, Tab } from '../../../../popover/tab';
-import { MacroValidator } from './../../macro-action-editor.component';
+import { MacroBaseComponent } from '../macro-base.component';
 
 enum TabName {
     Keypress,
@@ -20,7 +20,7 @@ enum TabName {
     ],
     host: { 'class': 'macro__mouse' }
 })
-export class MacroKeyTabComponent implements OnInit, MacroValidator {
+export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: KeyMacroAction;
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
@@ -41,6 +41,7 @@ export class MacroKeyTabComponent implements OnInit, MacroValidator {
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.validate();
     }
 
     getTabName(macroAction: KeyMacroAction): TabName {
