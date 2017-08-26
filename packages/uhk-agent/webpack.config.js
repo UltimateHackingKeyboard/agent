@@ -1,5 +1,8 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ContextReplacementPlugin = require("webpack/lib/ContextReplacementPlugin")
+
+const webpackHelper = require('../../scripts/webpack-helper');
 
 const rootDir = __dirname;
 
@@ -35,6 +38,11 @@ module.exports = {
                     to: 'package.json'
                 }
             ]
+        ),
+        new ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)@angular/,
+            webpackHelper.root(__dirname, './src') // location of your src
         )
     ],
     node: {
@@ -42,4 +50,4 @@ module.exports = {
         __filename: false
     }
 
-};
+}
