@@ -92,4 +92,8 @@ export class MouseButtonMacroAction extends MacroAction {
     isOnlyReleaseAction(): boolean {
         return this.action === MacroSubAction.release;
     }
+
+    public getName(): string {
+        return 'MouseButtonMacroAction';
+    }
 }

@@ -51,6 +51,10 @@ export class SwitchKeymapAction extends KeyAction {
         }
         return new SwitchKeymapAction(newAbbr);
     }
+
+    public getName(): string {
+        return 'SwitchKeymapAction';
+    }
 }
 
 export class UnresolvedSwitchKeymapAction extends KeyAction {
@@ -80,5 +84,9 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
 
     resolve(keymaps: Keymap[]): SwitchKeymapAction {
         return new SwitchKeymapAction(keymaps[this.keymapIndex]);
+    }
+
+    public getName(): string {
+        return 'UnresolvedSwitchKeymapAction';
     }
 }

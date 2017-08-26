@@ -49,4 +49,8 @@ export class PlayMacroAction extends KeyAction {
     toString(): string {
         return `<PlayMacroAction macroId="${this.macroId}">`;
     }
+
+    public getName(): string {
+        return 'PlayMacroAction';
+    }
 }

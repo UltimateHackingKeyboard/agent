@@ -40,4 +40,8 @@ export class TextMacroAction extends MacroAction {
     toString(): string {
         return `<TextMacroAction text="${this.text}">`;
     }
+
+    public getName(): string {
+        return 'TextMacroAction';
+    }
 }
