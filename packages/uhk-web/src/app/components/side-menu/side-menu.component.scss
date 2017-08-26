@@ -8,15 +8,15 @@
 }
 
 .device {
-    background-image: url(/assets/images/icon-usb-stick.svg);
+    background-image: url('/assets/images/icon-usb-stick.svg');
     display: inline-block;
     width: 20px;
     height: 25px;
     background-size: 24px 25px;
     -ms-transform: rotate(90deg); /* IE 9 */
     -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
-    transform: rotate(90deg) translate(4px, 0px); // svg not aligned properly
-  }
+    transform: rotate(90deg) translate(4px); // svg not aligned properly
+}
 
 a {
     color: #333;
