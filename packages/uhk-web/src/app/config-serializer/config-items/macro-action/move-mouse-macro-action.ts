@@ -50,4 +50,8 @@ export class MoveMouseMacroAction extends MacroAction {
     toString(): string {
         return `<MoveMouseMacroAction pos="(${this.x},${this.y})">`;
     }
+
+    public getName(): string {
+        return 'MoveMouseMacroAction';
+    }
 }

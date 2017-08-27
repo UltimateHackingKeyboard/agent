@@ -208,4 +208,8 @@ export class KeystrokeAction extends KeyAction {
         }
         return modifierList;
     }
+
+    public getName(): string {
+        return 'KeystrokeAction';
+    }
 }
