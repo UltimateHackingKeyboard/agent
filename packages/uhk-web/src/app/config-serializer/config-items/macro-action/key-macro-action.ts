@@ -132,4 +132,8 @@ export class KeyMacroAction extends MacroAction {
     isReleaseAction(): boolean {
         return this.action === MacroSubAction.release;
     }
+
+    public getName(): string {
+        return 'KeyMacroAction';
+    }
 }

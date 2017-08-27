@@ -42,4 +42,8 @@ export class DelayMacroAction extends MacroAction {
     toString(): string {
         return `<DelayMacroAction delay="${this.delay}">`;
     }
+
+    public getName(): string {
+        return 'DelayMacroAction';
+    }
 }

@@ -32,4 +32,8 @@ export class NoneAction extends KeyAction {
     toString(): string {
         return '<NoneAction>';
     }
+
+    public getName(): string {
+        return 'NoneAction';
+    }
 }

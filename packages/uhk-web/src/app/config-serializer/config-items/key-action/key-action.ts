@@ -32,7 +32,7 @@ export let keyActionType = {
 export abstract class KeyAction {
 
     assertKeyActionType(jsObject: any): void {
-        const keyActionClassname: string = this.constructor.name;
+        const keyActionClassname: string = this.getName();
         const keyActionTypeString: string = keyActionType[keyActionClassname];
         if (jsObject.keyActionType !== keyActionTypeString) {
             throw `Invalid ${keyActionClassname}.keyActionType: ${jsObject.keyActionType}`;
@@ -40,7 +40,7 @@ export abstract class KeyAction {
     }
 
     readAndAssertKeyActionId(buffer: UhkBuffer): KeyActionId {
-        const classname: string = this.constructor.name;
+        const classname: string = this.getName();
         const readKeyActionId: number = buffer.readUInt8();
         const keyActionId: number = KeyActionId[classname];
         if (keyActionId === KeyActionId.KeystrokeAction) {
@@ -54,7 +54,10 @@ export abstract class KeyAction {
     }
 
     abstract toJsonObject(macros?: Macro[]): any;
+
     abstract toBinary(buffer: UhkBuffer, userConfiguration?: UserConfiguration): void;
+
+    abstract getName(): string;
 
     renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
         return this;

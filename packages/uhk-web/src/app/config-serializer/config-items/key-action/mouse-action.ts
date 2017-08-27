@@ -58,4 +58,8 @@ export class MouseAction extends KeyAction {
     toString(): string {
         return `<MouseAction mouseAction="${this.mouseAction}">`;
     }
+
+    public getName(): string {
+        return 'MouseAction';
+    }
 }

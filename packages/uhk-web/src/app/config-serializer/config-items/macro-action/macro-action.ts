@@ -40,7 +40,7 @@ export let macroActionType = {
 
 export abstract class MacroAction {
     assertMacroActionType(jsObject: any) {
-        const macroActionClassname = this.constructor.name;
+        const macroActionClassname = this.getName();
         const macroActionTypeString = macroActionType[macroActionClassname];
         if (jsObject.macroActionType !== macroActionTypeString) {
             throw `Invalid ${macroActionClassname}.macroActionType: ${jsObject.macroActionType}`;
@@ -48,7 +48,7 @@ export abstract class MacroAction {
     }
 
     readAndAssertMacroActionId(buffer: UhkBuffer): MacroActionId {
-        const classname: string = this.constructor.name;
+        const classname: string = this.getName();
         const readMacroActionId: MacroActionId = buffer.readUInt8();
         const macroActionId: MacroActionId = MacroActionId[classname];
         if (macroActionId === MacroActionId.KeyMacroAction) {
@@ -67,5 +67,8 @@ export abstract class MacroAction {
     }
 
     abstract toJsonObject(): any;
+
     abstract toBinary(buffer: UhkBuffer): void;
+
+    abstract getName(): string;
 }

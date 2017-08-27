@@ -56,4 +56,7 @@ export class SwitchLayerAction extends KeyAction {
         return `<SwitchLayerAction layer="${this.layer}" toggle="${this.isLayerToggleable}">`;
     }
 
+    public getName(): string {
+        return 'SwitchLayerAction';
+    }
 }
