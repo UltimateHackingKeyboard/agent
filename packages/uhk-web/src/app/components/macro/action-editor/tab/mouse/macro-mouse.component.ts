@@ -131,7 +131,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
             case MoveMouseMacroAction:
             case ScrollMouseMacroAction:
                 const { x, y } = this.macroAction as MoveMouseMacroAction;
-                return (x !== undefined && x !== null) || (y !== undefined && y !== null);
+                return x !== undefined && x !== null && y !== undefined && y !== null;
             case MouseButtonMacroAction:
                 const { mouseButtonsMask } = this.macroAction as MouseButtonMacroAction;
                 return mouseButtonsMask !== undefined && mouseButtonsMask !== 0;
