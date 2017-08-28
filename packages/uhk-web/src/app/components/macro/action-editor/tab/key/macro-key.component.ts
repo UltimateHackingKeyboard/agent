@@ -3,6 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { KeystrokeAction } from '../../../../../config-serializer/config-items/key-action';
 import { KeyMacroAction, MacroSubAction } from '../../../../../config-serializer/config-items/macro-action';
 import { KeypressTabComponent, Tab } from '../../../../popover/tab';
+import { MacroBaseComponent } from '../macro-base.component';
 
 enum TabName {
     Keypress,
@@ -19,7 +20,7 @@ enum TabName {
     ],
     host: { 'class': 'macro__mouse' }
 })
-export class MacroKeyTabComponent implements OnInit {
+export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: KeyMacroAction;
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
@@ -40,6 +41,7 @@ export class MacroKeyTabComponent implements OnInit {
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.validate();
     }
 
     getTabName(macroAction: KeyMacroAction): TabName {
@@ -69,6 +71,11 @@ export class MacroKeyTabComponent implements OnInit {
         const keyMacroAction = Object.assign(new KeyMacroAction(), this.keypressTab.toKeyAction());
         keyMacroAction.action = this.getActionType(this.activeTab);
         return keyMacroAction;
+    }
+
+    isMacroValid = () => {
+        const keyMacroAction = this.getKeyMacroAction();
+        return !!keyMacroAction.scancode || !!keyMacroAction.modifierMask;
     }
 
 }

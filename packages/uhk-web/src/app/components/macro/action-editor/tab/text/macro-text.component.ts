@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 import { TextMacroAction } from '../../../../../config-serializer/config-items/macro-action';
+import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
     selector: 'macro-text-tab',
@@ -16,16 +17,14 @@ import { TextMacroAction } from '../../../../../config-serializer/config-items/m
     styleUrls: ['./macro-text.component.scss'],
     host: { 'class': 'macro__text' }
 })
-export class MacroTextTabComponent implements OnInit, AfterViewInit {
+export class MacroTextTabComponent extends MacroBaseComponent implements OnInit, AfterViewInit {
     @Input() macroAction: TextMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
-    constructor(private renderer: Renderer) {}
+    constructor(private renderer: Renderer) { super(); }
 
     ngOnInit() {
-        if (!this.macroAction) {
-            this.macroAction = new TextMacroAction();
-        }
+        this.init();
     }
 
     ngAfterViewInit() {
@@ -33,7 +32,16 @@ export class MacroTextTabComponent implements OnInit, AfterViewInit {
     }
 
     onTextChange() {
+        this.init();
         this.macroAction.text = this.input.nativeElement.value;
+    }
+
+    isMacroValid = () => !!this.input.nativeElement.value;
+
+    private init = () => {
+        if (!this.macroAction) {
+            this.macroAction = new TextMacroAction();
+        }
     }
 
 }

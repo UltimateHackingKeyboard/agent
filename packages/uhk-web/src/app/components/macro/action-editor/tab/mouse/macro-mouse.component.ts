@@ -7,6 +7,7 @@ import {
     MacroSubAction
 } from '../../../../../config-serializer/config-items/macro-action';
 import { Tab } from '../../../../popover/tab';
+import { MacroBaseComponent } from '../macro-base.component';
 
 type MouseMacroAction = MouseButtonMacroAction | MoveMouseMacroAction | ScrollMouseMacroAction;
 
@@ -27,7 +28,7 @@ enum TabName {
     ],
     host: { 'class': 'macro__mouse' }
 })
-export class MacroMouseTabComponent implements OnInit {
+export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: MouseMacroAction;
     @ViewChild('tab') selectedTab: Tab;
 
@@ -39,6 +40,7 @@ export class MacroMouseTabComponent implements OnInit {
     private selectedButtons: boolean[];
 
     constructor() {
+        super();
         this.buttonLabels = ['Left', 'Middle', 'Right'];
         this.selectedButtons = Array(this.buttonLabels.length).fill(false);
     }
@@ -65,6 +67,8 @@ export class MacroMouseTabComponent implements OnInit {
 
         if (tab === this.getTabName(this.macroAction)) {
             return;
+        } else {
+            this.selectedButtons = [];
         }
 
         switch (tab) {
@@ -79,11 +83,13 @@ export class MacroMouseTabComponent implements OnInit {
                 this.macroAction.action = this.getAction(tab);
                 break;
         }
+        this.validate();
     }
 
     setMouseClick(index: number): void {
         this.selectedButtons[index] = !this.selectedButtons[index];
         (<MouseButtonMacroAction>this.macroAction).setMouseButtons(this.selectedButtons);
+        this.validate();
     }
 
     hasButton(index: number): boolean {
@@ -118,6 +124,20 @@ export class MacroMouseTabComponent implements OnInit {
             return TabName.Scroll;
         }
         return TabName.Move;
+    }
+
+    isMacroValid = () => {
+        switch (this.macroAction.constructor) {
+            case MoveMouseMacroAction:
+            case ScrollMouseMacroAction:
+                const { x, y } = this.macroAction as MoveMouseMacroAction;
+                return x !== undefined && x !== null && y !== undefined && y !== null;
+            case MouseButtonMacroAction:
+                const { mouseButtonsMask } = this.macroAction as MouseButtonMacroAction;
+                return !!mouseButtonsMask;
+            default:
+                return true;
+        }
     }
 
 }

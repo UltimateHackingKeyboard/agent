@@ -38,6 +38,7 @@ export class MacroActionEditorComponent implements OnInit {
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     TabName = TabName;
     /* tslint:enable:variable-name */
+    isSelectedMacroValid = false;
 
     ngOnInit() {
         this.updateEditableMacroAction();
@@ -66,12 +67,15 @@ export class MacroActionEditorComponent implements OnInit {
         }
     }
 
+    onValid = (isMacroValid: boolean) => this.isSelectedMacroValid = isMacroValid;
+
     selectTab(tab: TabName): void {
         this.activeTab = tab;
         if (tab === this.getTabName(this.macroAction)) {
             this.updateEditableMacroAction();
         } else {
             this.editableMacroAction = undefined;
+            this.isSelectedMacroValid = false;
         }
     }
 
