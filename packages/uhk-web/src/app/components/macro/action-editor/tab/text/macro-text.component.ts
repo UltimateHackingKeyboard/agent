@@ -36,7 +36,7 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
         this.macroAction.text = this.input.nativeElement.value;
     }
 
-    isMacroValid = () => this.input.nativeElement.value !== undefined && this.input.nativeElement.value.length > 0;
+    isMacroValid = () => !!this.input.nativeElement.value;
 
     private init = () => {
         if (!this.macroAction) {

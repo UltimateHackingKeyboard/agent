@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 import { DelayMacroAction } from '../../../../../config-serializer/config-items/macro-action';
-import { MacroBaseComponent } from './../macro-base.component';
+import { MacroBaseComponent } from '../macro-base.component';
 
 const INITIAL_DELAY = 0.5; // In seconds
 

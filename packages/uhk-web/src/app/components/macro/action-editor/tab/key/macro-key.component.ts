@@ -75,7 +75,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
 
     isMacroValid = () => {
         const keyMacroAction = this.getKeyMacroAction();
-        return keyMacroAction.scancode !== undefined || keyMacroAction.modifierMask !== undefined;
+        return !!keyMacroAction.scancode || !!keyMacroAction.modifierMask;
     }
 
 }

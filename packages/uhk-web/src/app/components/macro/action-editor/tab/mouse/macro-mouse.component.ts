@@ -7,7 +7,7 @@ import {
     MacroSubAction
 } from '../../../../../config-serializer/config-items/macro-action';
 import { Tab } from '../../../../popover/tab';
-import { MacroBaseComponent } from './../macro-base.component';
+import { MacroBaseComponent } from '../macro-base.component';
 
 type MouseMacroAction = MouseButtonMacroAction | MoveMouseMacroAction | ScrollMouseMacroAction;
 
@@ -134,7 +134,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
                 return x !== undefined && x !== null && y !== undefined && y !== null;
             case MouseButtonMacroAction:
                 const { mouseButtonsMask } = this.macroAction as MouseButtonMacroAction;
-                return mouseButtonsMask !== undefined && mouseButtonsMask !== 0;
+                return !!mouseButtonsMask;
             default:
                 return true;
         }
