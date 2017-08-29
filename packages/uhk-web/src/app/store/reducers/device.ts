@@ -5,11 +5,15 @@ import { ActionTypes } from '../actions/device';
 export interface State {
     connected: boolean;
     hasPermission: boolean;
+    showSaveToKeyboardButton: boolean;
+    savingToKeyboard: boolean;
 }
 
 const initialState: State = {
     connected: true,
-    hasPermission: true
+    hasPermission: true,
+    showSaveToKeyboardButton: false,
+    savingToKeyboard: false
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -26,6 +30,36 @@ export function reducer(state = initialState, action: Action) {
                 hasPermission: action.payload
             };
 
+        case ActionTypes.SAVING_CONFIGURATION: {
+            return {
+                ...state,
+                savingToKeyboard: true
+            };
+        }
+
+        case ActionTypes.SHOW_SAVE_TO_KEYBOARD_BUTTON: {
+            return {
+                ...state,
+                showSaveToKeyboardButton: true,
+                savingToKeyboard: false
+            };
+        }
+
+        case ActionTypes.SAVE_TO_KEYBOARD_SUCCESS: {
+            return {
+                ...state,
+                showSaveToKeyboardButton: false,
+                savingToKeyboard: false
+            };
+        }
+
+        case ActionTypes.SAVE_TO_KEYBOARD_FAILED: {
+            return {
+                ...state,
+                savingToKeyboard: false
+            };
+        }
+
         default:
             return state;
     }
@@ -33,3 +67,5 @@ export function reducer(state = initialState, action: Action) {
 
 export const isDeviceConnected = (state: State) => state.connected;
 export const hasDevicePermission = (state: State) => state.hasPermission;
+export const showSaveToKeyboardButton = (state: State) => state.showSaveToKeyboardButton;
+export const savingToKeyboard = (state: State) => state.savingToKeyboard;

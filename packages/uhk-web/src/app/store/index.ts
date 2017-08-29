@@ -41,7 +41,7 @@ export function reducer(state: any, action: any) {
     // if (isDev) {
     // return developmentReducer(state, action);
     // } else {
-        return productionReducer(state, action);
+    return productionReducer(state, action);
     // }
 }
 
@@ -68,4 +68,16 @@ export const deviceConnected = createSelector(runningInElectron, isDeviceConnect
 export const devicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
 export const hasDevicePermission = createSelector(runningInElectron, devicePermission, (electron, permission) => {
     return !electron ? true : permission;
+});
+export const showSaveToKeyboardButtonSelector = createSelector(deviceState, fromDevice.showSaveToKeyboardButton);
+export const showSaveToKeyboardButton = createSelector(
+    runningInElectron,
+    showSaveToKeyboardButtonSelector,
+    (electron, showButton) => {
+        return !electron ? true : showButton;
+    });
+
+export const savingToKeyboardSelector = createSelector(deviceState, fromDevice.savingToKeyboard);
+export const savingToKeyboard = createSelector(runningInElectron, savingToKeyboardSelector, (electron, saving) => {
+    return !electron ? true : saving;
 });

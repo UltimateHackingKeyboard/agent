@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/withLatestFrom';
 
 import { NotificationType, IpcResponse } from 'uhk-common';
-import { ActionTypes, ConnectionStateChangedAction, PermissionStateChangedAction } from '../actions/device';
+import {
+    ActionTypes,
+    ConnectionStateChangedAction,
+    PermissionStateChangedAction,
+    SaveToKeyboardSuccessAction,
+    SavingConfigurationAction
+} from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
+import { AppState } from '../index';
+import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
+import { UhkBuffer } from '../../config-serializer/uhk-buffer';
 
 @Injectable()
 export class DeviceEffects {
@@ -67,35 +78,45 @@ export class DeviceEffects {
             ];
         });
 
-    @Effect({ dispatch: false })
+    @Effect()
     saveConfiguration$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_CONFIGURATION)
-        .map(toPayload)
-        .do((buffer: Buffer) => {
-            this.deviceRendererService.saveUserConfiguration(buffer);
-        });
+        .withLatestFrom(this.store)
+        .map(([action, state]) => state.userConfiguration)
+        .do((userConfiguration: UserConfiguration) => {
+            const uhkBuffer = new UhkBuffer();
+            userConfiguration.toBinary(uhkBuffer);
+            this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
+        })
+        .switchMap(() => Observable.of(new SavingConfigurationAction()));
 
     @Effect()
     saveConfigurationReply$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_CONFIGURATION_REPLY)
         .map(toPayload)
-        .map((response: IpcResponse) => {
+        .mergeMap((response: IpcResponse) => {
             if (response.success) {
-                return new ShowNotificationAction({
-                    type: NotificationType.Success,
-                    message: 'Save configuration successful.'
-                });
+                return [
+                    new ShowNotificationAction({
+                        type: NotificationType.Success,
+                        message: 'Save configuration successful.'
+                    }),
+                    new SaveToKeyboardSuccessAction()
+                ];
             }
 
-            return new ShowNotificationAction({
-                type: NotificationType.Error,
-                message: response.error.message
-            });
+            return [
+                new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: response.error.message
+                })
+            ];
         });
 
     constructor(private actions$: Actions,
                 private router: Router,
-                private deviceRendererService: DeviceRendererService) {
+                private deviceRendererService: DeviceRendererService,
+                private store: Store<AppState>) {
     }
 
 }
