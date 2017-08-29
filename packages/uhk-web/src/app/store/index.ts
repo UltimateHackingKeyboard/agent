@@ -74,10 +74,10 @@ export const showSaveToKeyboardButton = createSelector(
     runningInElectron,
     showSaveToKeyboardButtonSelector,
     (electron, showButton) => {
-        return !electron ? true : showButton;
+        return electron ? showButton : false;
     });
 
 export const savingToKeyboardSelector = createSelector(deviceState, fromDevice.savingToKeyboard);
 export const savingToKeyboard = createSelector(runningInElectron, savingToKeyboardSelector, (electron, saving) => {
-    return !electron ? true : saving;
+    return electron ? saving : false;
 });
