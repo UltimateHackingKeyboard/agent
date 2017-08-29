@@ -97,10 +97,6 @@ export class DeviceEffects {
         .mergeMap((response: IpcResponse) => {
             if (response.success) {
                 return [
-                    new ShowNotificationAction({
-                        type: NotificationType.Success,
-                        message: 'Save configuration successful.'
-                    }),
                     new SaveToKeyboardSuccessAction()
                 ];
             }
