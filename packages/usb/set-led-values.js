@@ -1,19 +1,20 @@
 #!/usr/bin/env node
-let uhk = require('./uhk');
+const uhk = require('./uhk');
 
-let programName = process.argv[1];
+const programName = process.argv[1];
 
 if (process.argv.length !== 6) {
     console.log(`Usage: ${programName} [display 0-255] [left keys 0-255] [unused 0-255] [right keys 0-255]`);
     process.exit(1);
 }
 
+const device = uhk.getUhkDevice();
 let pwmOffset = 0;
 let ledDriverAddresses = [uhk.leftLedDriverAddress, uhk.rightLedDriverAddress];
 let ledDriverAddress;
 const FRAME_REGISTER_PWM_FIRST = 0x24;
 
-uhk.sendUsbPacketsByCallback(() => {
+setInterval(()=>{
     if (pwmOffset === 0) {
         ledDriverAddress = ledDriverAddresses.shift();
     }
@@ -32,5 +33,5 @@ uhk.sendUsbPacketsByCallback(() => {
         pwmOffset = 0;
     }
 
-    return buffer;
-});
+    device.write(uhk.getTransferData(buffer));
+}, 500)

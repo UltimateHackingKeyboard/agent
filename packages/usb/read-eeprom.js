@@ -1,3 +1,4 @@
 #!/usr/bin/env node
-let uhk = require('./uhk');
-uhk.sendUsbPacket(new Buffer([uhk.usbCommands.readEeprom, 63, 0x00, 0x00]))
+const uhk = require('./uhk');
+const device = uhk.getUhkDevice();
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.readEeprom, 63, 0x00, 0x00])));

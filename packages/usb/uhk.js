@@ -1,23 +1,18 @@
-let usb = require('usb')
-const HID = require('node-hid')
-let receiveCallback
+const HID = require('node-hid');
 
-function bufferToString (buffer) {
-    let str = ''
+function bufferToString(buffer) {
+    let str = '';
     for (let i = 0; i < buffer.length; i++) {
-        let hex = buffer[i].toString(16) + ' '
+        let hex = buffer[i].toString(16) + ' ';
         if (hex.length <= 2) {
-            hex = '0' + hex
+            hex = '0' + hex;
         }
-        str += hex
+        str += hex;
     }
-
-    return str
+    return str;
 }
 
-let usbEndpoints
-
-function getUhkDevice () {
+function getUhkDevice() {
     const devs = HID.devices()
 
     const dev = devs.find(x =>
@@ -33,12 +28,12 @@ function getUhkDevice () {
     return new HID.HID(dev.path)
 }
 
-function getBootloaderDevice () {
+function getBootloaderDevice() {
     const devs = HID.devices()
 
     const dev = devs.find(x =>
-        x.vendorId === 0x1d50 &&
-        x.productId === 0x6120)
+        x.vendorId === 0x15a2
+        && x.productId === 0x0073)
 
     if (!dev) {
         console.error('UHK Bootloader not found:')
@@ -51,114 +46,10 @@ function getBootloaderDevice () {
     return new HID.HID(dev.path)
 }
 
-function getUsbEndpoints () {
-    let device = getUhkDevice()
-    device = getUhkDevice()
-    device.open()
-
-    let usbInterface = device.interface(0)
-
-    // https://github.com/tessel/node-usb/issues/147
-    // The function 'isKernelDriverActive' is not available on Windows and not even needed.
-    if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
-        usbInterface.detachKernelDriver()
-    }
-    usbInterface.claim()
-
-    let endpointIn = usbInterface.endpoints[0]
-    let endpointOut = usbInterface.endpoints[1]
-    return [endpointIn, endpointOut]
-}
-
-class DelayMs{
-    constructor (ms) {
-        this.ms = ms
-    }
-}
-
-function registerReceiveCallback (receiveCallbackParam) {
-    receiveCallback = receiveCallbackParam
-}
-
-function sendUsbPacketsByCallback (packetProvider, options = {}) {
-    let packet = packetProvider()
-
-    if (packet instanceof DelayMs) {
-        setTimeout(() => {
-            sendUsbPacketsByCallback(packetProvider)
-        }, packet.ms)
-        return
-    }
-
-    if (!(packet instanceof Buffer)) {
-        return
-    }
-
-    if (!moduleExports.silent) {
-        console.log('Sending: ', bufferToString(packet))
-    }
-
-    let [endpointIn, endpointOut] = usbEndpoints || getUsbEndpoints()
-    endpointOut.transfer(packet, function (err) {
-        if (err) {
-            console.error('USB error: %s', err)
-            process.exit(1)
-        }
-
-        if (options.noReceive) {
-            sendUsbPacketsByCallback(packetProvider)
-        } else {
-            endpointIn.transfer(64, function (err2, receivedBuffer) {
-                if (err2) {
-                    console.error('USB error: %s', err2)
-                    process.exit(2)
-                }
-                if (!moduleExports.silent) {
-                    console.log('Received:', bufferToString(receivedBuffer))
-                }
-                (receiveCallback || (() => {}))(receivedBuffer)
-                sendUsbPacketsByCallback(packetProvider)
-            })
-        }
-
-    })
-}
-
-function sendUsbPacket2 (device, packet) {
-    device.on('data', (data) => {
-        console.log('data: ', data)
-    })
-    device.on('error', (data) => {
-        console.log('error: ', data)
-    })
-    device.read((err, data) => {
-        console.log('read: ', err, data)
-    })
-    device.write(getTransferData(packet))
-
-}
-
-function sendUsbPacket (packet, options = {}) {
-    sendUsbPackets([packet], options)
-}
-
-function sendUsbPackets (packets, options = {}) {
-    sendUsbPacketsByCallback(() => {
-        return packets.shift()
-    }, options)
-}
-
 exports = module.exports = moduleExports = {
-    DelayMs,
     bufferToString,
     getUhkDevice,
     getBootloaderDevice,
-    getUsbEndpoints,
-    registerReceiveCallback,
-    sendUsbPacket,
-    sendUsbPacket2,
-    sendUsbPackets,
-    sendUsbPacketsByCallback,
     getTransferData,
     usbCommands: {
         getProperty: 0,
@@ -198,11 +89,11 @@ exports = module.exports = moduleExports = {
     rightLedDriverAddress: 0b1110111
 }
 
-function convertBufferToIntArray (buffer) {
+function convertBufferToIntArray(buffer) {
     return Array.prototype.slice.call(buffer, 0)
 }
 
-function getTransferData (buffer) {
+function getTransferData(buffer) {
     const data = convertBufferToIntArray(buffer)
     // if data start with 0 need to add additional leading zero because HID API remove it.
     // https://github.com/node-hid/node-hid/issues/187

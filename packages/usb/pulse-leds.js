@@ -1,20 +1,18 @@
 #!/usr/bin/env node
-let uhk = require('./uhk');
-let [endpointIn, endpointOut] = uhk.getUsbEndpoints();
+const uhk = require('./uhk');
 
-let ledMatrixSize = 144;
-let ledCountToUpdatePerCommand = ledMatrixSize / 3;
+const ledMatrixSize = 144;
+const ledCountToUpdatePerCommand = ledMatrixSize / 3;
 
-let state = 1;
-
-let ledsLeft = new Buffer(ledMatrixSize);
-let ledsRight = new Buffer(ledMatrixSize);
+const ledsLeft = new Buffer(ledMatrixSize);
+const ledsRight = new Buffer(ledMatrixSize);
 ledsLeft.fill(0xff)
 ledsRight.fill(0xff)
 
+const device = uhk.getUhkDevice();
+
 let ledIndex = 0;
 let matrixId = 0;
-let ledCommandId = 0;
 let letterIdx = 0;
 
 function updateLeds() {
@@ -28,29 +26,14 @@ function updateLeds() {
         (matrixId ? ledsRight : ledsLeft).slice(ledIndex, ledIndex + ledCountToUpdatePerCommand)
     ]);
     console.log('iter: '+letterIdx+' out:', uhk.bufferToString(buffer))
-    endpointOut.transfer(buffer, function(err) {
-        if (err) {
-            console.error("USB error: %s", err);
-            process.exit(1);
-        }
-        endpointIn.transfer(64, function(err2, receivedBuffer) {
-            if (err2) {
-                console.error("USB error: %s", err2);
-                process.exit(2);
-            }
-
-            ledIndex += ledCountToUpdatePerCommand;
-            if (ledIndex >= ledMatrixSize) {
-                ledIndex = 0;
-                matrixId = matrixId ? 0 : 1;
-            }
-
-            updateLeds();
-        })
-    });
+    device.write(uhk.getTransferData(buffer));
+    device.write([64]);
+    ledIndex += ledCountToUpdatePerCommand;
+    if (ledIndex >= ledMatrixSize) {
+        ledIndex = 0;
+        matrixId = matrixId ? 0 : 1;
+    }
 }
-
-updateLeds();
 
 let lettersLeds = {
     0: [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
@@ -122,13 +105,18 @@ let digitsAndLetters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 let layerLedIdx = 0;
 setInterval(function() {
-setIcons([1, 1, 1]);
+    updateLeds();
+    setIcons([1, 1, 1]);
+
     for (let i=0; i<3; i++) {
         setLetter(lettersLeds[digitsAndLetters[(letterIdx+i) % digitsAndLetters.length]], i);
     }
+
     setLayerLed(layerLedIdx);
+
     if (++letterIdx >= digitsAndLetters.length) {
         letterIdx = 0;
     }
+
     layerLedIdx = ++layerLedIdx % layerLedsToLedMatrix.length;
 }, 200);

@@ -24,7 +24,7 @@ setInterval(() => {
     device = uhk.getUhkDevice();
     if (device && !jumped) {
         console.log('UHK found, jumping to bootloader');
-        uhk.sendUsbPacket2(device, new Buffer([uhk.usbCommands.jumpToBootloader]), {noReceive:true});
+        device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.jumpToBootloader])));
         jumped = true;
     }
 
