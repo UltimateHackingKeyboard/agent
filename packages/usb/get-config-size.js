@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const uhk = require('./uhk');
 
-uhk.silent = true;
 const isHardwareConfig = process.argv[2] === 'h';
 
 const device = uhk.getUhkDevice();
