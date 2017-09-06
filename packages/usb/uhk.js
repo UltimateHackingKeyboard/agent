@@ -13,37 +13,30 @@ function bufferToString(buffer) {
 }
 
 function getUhkDevice() {
-    const devs = HID.devices()
+    const foundDevice = HID.devices().find(device =>
+        device.vendorId === 0x1d50 && device.productId === 0x6122 &&
+        ((device.usagePage === 128 && device.usage === 129) || device.interface === 0));
 
-    const dev = devs.find(x =>
-        x.vendorId === 0x1d50 &&
-        x.productId === 0x6122 &&
-        ((x.usagePage === 128 && x.usage === 129) || x.interface === 0))
-
-    if (!dev) {
-        console.error('UHK Device not found:')
-        return null
+    if (!foundDevice) {
+        console.error('UHK Device not found:');
+        return null;
     }
 
-    return new HID.HID(dev.path)
+    return new HID.HID(foundDevice.path);
 }
 
 function getBootloaderDevice() {
-    const devs = HID.devices()
+    const foundDevice = HID.devices().find(device =>
+        device.vendorId === 0x1d50 && device.productId === 0x6120);
 
-    const dev = devs.find(x =>
-        x.vendorId === 0x1d50
-        && x.productId === 0x6120)
-
-    if (!dev) {
-        console.error('UHK Bootloader not found:')
-        return null
-    }
-    else {
-        console.info(dev)
+    if (!foundDevice) {
+        console.error('UHK Bootloader not found:');
+        return null;
+    } else {
+        console.info(foundDevice);
     }
 
-    return new HID.HID(dev.path)
+    return new HID.HID(foundDevice.path);
 }
 
 exports = module.exports = moduleExports = {
@@ -55,7 +48,6 @@ exports = module.exports = moduleExports = {
         getProperty: 0,
         jumpToBootloader: 1,
         setTestLed: 2,
-        writeLedDriver: 3,
         readMergeSensor: 7,
         writeUserConfig: 8,
         applyConfig: 9,
