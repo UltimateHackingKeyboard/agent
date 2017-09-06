@@ -32,8 +32,8 @@ function getBootloaderDevice() {
     const devs = HID.devices()
 
     const dev = devs.find(x =>
-        x.vendorId === 0x15a2
-        && x.productId === 0x0073)
+        x.vendorId === 0x1d50
+        && x.productId === 0x6120)
 
     if (!dev) {
         console.error('UHK Bootloader not found:')
