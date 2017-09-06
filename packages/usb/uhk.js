@@ -18,11 +18,17 @@ function getUhkDevice() {
         ((device.usagePage === 128 && device.usage === 129) || device.interface === 0));
 
     if (!foundDevice) {
-        console.error('UHK Device not found:');
         return null;
     }
 
-    return new HID.HID(foundDevice.path);
+    let hid;
+    try {
+        hid = new HID.HID(foundDevice.path);
+    } catch (error) {
+        // Already jumped to the bootloader, so ignore this exception.
+        return null;
+    }
+    return hid;
 }
 
 function getBootloaderDevice() {
@@ -30,10 +36,7 @@ function getBootloaderDevice() {
         device.vendorId === 0x1d50 && device.productId === 0x6120);
 
     if (!foundDevice) {
-        console.error('UHK Bootloader not found:');
         return null;
-    } else {
-        console.info(foundDevice);
     }
 
     return new HID.HID(foundDevice.path);
