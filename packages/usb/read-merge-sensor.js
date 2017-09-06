@@ -6,7 +6,6 @@ function readMergeSensor() {
     const payload = new Buffer([uhk.usbCommands.readMergeSensor]);
     console.log('Sending ', uhk.bufferToString(payload));
     device.write(uhk.getTransferData(payload));
-    device.write([64]);
     const receivedBuffer = device.readSync();
     console.log('Received', uhk.bufferToString(receivedBuffer));
     const areHalvesMerged = receivedBuffer[1] === 1;
