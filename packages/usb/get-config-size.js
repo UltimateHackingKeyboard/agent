@@ -1,17 +1,14 @@
 #!/usr/bin/env node
-let uhk = require('./uhk');
-let process = require('process');
+const uhk = require('./uhk');
 
-uhk.silent = true;
-let isHardwareConfig = process.argv[2] === 'h';
-let configTypeString = isHardwareConfig ? 'hardware' : 'user';
+const isHardwareConfig = process.argv[2] === 'h';
 
-uhk.sendUsbPacketsByCallback(() => {
-    return new Buffer([uhk.usbCommands.getProperty, isHardwareConfig ? uhk.systemPropertyIds.hardwareConfigSize : uhk.systemPropertyIds.userConfigSize]);
-});
+const device = uhk.getUhkDevice();
+const sendData = new Buffer([uhk.usbCommands.getProperty,
+    isHardwareConfig ?
+        uhk.systemPropertyIds.hardwareConfigSize
+        : uhk.systemPropertyIds.userConfigSize]);
 
-uhk.registerReceiveCallback((buffer) => {
-    configSize = buffer[1] + (buffer[2]<<8);
-    console.log(configSize);
-    process.exit(0);
-});
+device.write(uhk.getTransferData(sendData));
+const response = Buffer.from(device.readSync());
+console.log(response[1] + (response[2]<<8));

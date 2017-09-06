@@ -1,16 +1,12 @@
 #!/usr/bin/env node
-let uhk = require('./uhk');
+const uhk = require('./uhk');
 
-let delayCycle = true;
 let areLedsEnabled = true;
 
-uhk.sendUsbPacketsByCallback(() => {
-    delayCycle = !delayCycle;
-    if (delayCycle) {
-        return new uhk.DelayMs(500);
-    } else {
-        areLedsEnabled = !areLedsEnabled;
-        let brightnessPercent = areLedsEnabled ? 100 : 0;
-        return new Buffer([uhk.usbCommands.setLedPwm, brightnessPercent]);
-    }
-});
+const device = uhk.getUhkDevice();
+setInterval(() => {
+    areLedsEnabled = !areLedsEnabled;
+    const brightnessPercent = areLedsEnabled ? 100 : 0;
+
+    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.setLedPwm, brightnessPercent])));
+}, 500);

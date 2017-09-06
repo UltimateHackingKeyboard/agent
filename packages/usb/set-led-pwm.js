@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-let uhk = require('./uhk');
+const uhk = require('./uhk');
+const device = uhk.getUhkDevice();
 
 let programName = process.argv[1];
 
@@ -9,7 +10,4 @@ if (process.argv.length !== 3) {
 }
 
 let leftBrightnessPercent = process.argv[2] || '';
-
-uhk.sendUsbPackets([
-    new Buffer([uhk.usbCommands.setLedPwm, +leftBrightnessPercent]),
-]);
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.setLedPwm, +leftBrightnessPercent])));

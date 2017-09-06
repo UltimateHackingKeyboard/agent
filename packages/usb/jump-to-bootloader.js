@@ -9,7 +9,9 @@ console.log('Trying to jump to the bootloader...');
 setInterval(() => {
     timeoutMs -= pollingIntervalMs;
 
-    if (uhk.getBootloaderDevice()) {
+    let device = uhk.getBootloaderDevice();
+
+    if (device) {
         console.log('Bootloader is up');
         process.exit(0);
     }
@@ -19,9 +21,10 @@ setInterval(() => {
         process.exit(1);
     }
 
-    if (uhk.getUhkDevice() && !jumped) {
+    device = uhk.getUhkDevice();
+    if (device && !jumped) {
         console.log('UHK found, jumping to bootloader');
-        uhk.sendUsbPacket(new Buffer([uhk.usbCommands.jumpToBootloader]), {noReceive:true});
+        device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.jumpToBootloader])));
         jumped = true;
     }
 

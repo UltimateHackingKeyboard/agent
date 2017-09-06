@@ -1,5 +1,4 @@
-let usb = require('usb');
-let receiveCallback;
+const HID = require('node-hid');
 
 function bufferToString(buffer) {
     let str = '';
@@ -9,121 +8,54 @@ function bufferToString(buffer) {
             hex = '0' + hex;
         }
         str += hex;
-    };
+    }
     return str;
 }
 
-let usbEndpoints;
-
 function getUhkDevice() {
-    return usb.findByIds(0x1d50, 0x6122);
+    const devs = HID.devices()
+
+    const dev = devs.find(x =>
+        x.vendorId === 0x1d50 &&
+        x.productId === 0x6122 &&
+        ((x.usagePage === 128 && x.usage === 129) || x.interface === 0))
+
+    if (!dev) {
+        console.error('UHK Device not found:')
+        return null
+    }
+
+    return new HID.HID(dev.path)
 }
 
 function getBootloaderDevice() {
-    return usb.findByIds(0x1d50, 0x6120);
-}
+    const devs = HID.devices()
 
-function getUsbEndpoints() {
-    let device = getUhkDevice();
-    device = getUhkDevice();
-    device.open();
+    const dev = devs.find(x =>
+        x.vendorId === 0x1d50
+        && x.productId === 0x6120)
 
-    let usbInterface = device.interface(0);
-
-    // https://github.com/tessel/node-usb/issues/147
-    // The function 'isKernelDriverActive' is not available on Windows and not even needed.
-    if (process.platform !== 'win32' && usbInterface.isKernelDriverActive()) {
-        usbInterface.detachKernelDriver();
+    if (!dev) {
+        console.error('UHK Bootloader not found:')
+        return null
     }
-    usbInterface.claim();
-
-    let endpointIn = usbInterface.endpoints[0];
-    let endpointOut = usbInterface.endpoints[1];
-    return [endpointIn, endpointOut];
-}
-
-class DelayMs {
-    constructor(ms) {
-        this.ms = ms;
-    }
-}
-
-function registerReceiveCallback(receiveCallbackParam) {
-    receiveCallback = receiveCallbackParam;
-}
-
-function sendUsbPacketsByCallback(packetProvider, options={}) {
-    let packet = packetProvider()
-
-    if (packet instanceof DelayMs) {
-        setTimeout(() => {
-            sendUsbPacketsByCallback(packetProvider);
-        }, packet.ms);
-        return;
+    else {
+        console.info(dev)
     }
 
-    if (!(packet instanceof Buffer)) {
-        return;
-    }
-
-    if (!moduleExports.silent) {
-        console.log('Sending: ', bufferToString(packet));
-    }
-
-    let [endpointIn, endpointOut] = usbEndpoints || getUsbEndpoints();
-    endpointOut.transfer(packet, function(err) {
-        if (err) {
-            console.error("USB error: %s", err);
-            process.exit(1);
-        }
-
-        if (options.noReceive) {
-            sendUsbPacketsByCallback(packetProvider);
-        } else {
-            endpointIn.transfer(64, function(err2, receivedBuffer) {
-                if (err2) {
-                    console.error("USB error: %s", err2);
-                    process.exit(2);
-                }
-                if (!moduleExports.silent) {
-                    console.log('Received:', bufferToString(receivedBuffer));
-                }
-                (receiveCallback || (()=>{}))(receivedBuffer);
-                sendUsbPacketsByCallback(packetProvider);
-            })
-        }
-
-    })
-}
-
-function sendUsbPacket(packet, options={}) {
-    sendUsbPackets([packet], options);
-}
-
-function sendUsbPackets(packets, options={}) {
-    sendUsbPacketsByCallback(() => {
-        return packets.shift();
-    }, options)
+    return new HID.HID(dev.path)
 }
 
 exports = module.exports = moduleExports = {
-    DelayMs,
     bufferToString,
     getUhkDevice,
     getBootloaderDevice,
-    getUsbEndpoints,
-    registerReceiveCallback,
-    sendUsbPacket,
-    sendUsbPackets,
-    sendUsbPacketsByCallback,
+    getTransferData,
     usbCommands: {
         getProperty: 0,
         jumpToBootloader: 1,
         setTestLed: 2,
         writeLedDriver: 3,
-        readLedDriver: 4,
-        writeEeprom: 5,
-        readEeprom: 6,
         readMergeSensor: 7,
         writeUserConfig: 8,
         applyConfig: 9,
@@ -152,4 +84,25 @@ exports = module.exports = moduleExports = {
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111
+}
+
+function convertBufferToIntArray(buffer) {
+    return Array.prototype.slice.call(buffer, 0)
+}
+
+function getTransferData(buffer) {
+    const data = convertBufferToIntArray(buffer)
+    // if data start with 0 need to add additional leading zero because HID API remove it.
+    // https://github.com/node-hid/node-hid/issues/187
+    if (data.length > 0 && data[0] === 0) {
+//        data.unshift(0)
+    }
+
+    // From HID API documentation:
+    // http://www.signal11.us/oss/hidapi/hidapi/doxygen/html/group__API.html#gad14ea48e440cf5066df87cc6488493af
+    // The first byte of data[] must contain the Report ID.
+    // For devices which only support a single report, this must be set to 0x0.
+    data.unshift(0)
+
+    return data
 }
