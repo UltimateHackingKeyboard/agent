@@ -95,7 +95,7 @@ function getTransferData(buffer) {
     // if data start with 0 need to add additional leading zero because HID API remove it.
     // https://github.com/node-hid/node-hid/issues/187
     if (data.length > 0 && data[0] === 0) {
-        data.unshift(0)
+//        data.unshift(0)
     }
 
     // From HID API documentation:
