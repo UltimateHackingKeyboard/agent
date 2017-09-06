@@ -87,7 +87,7 @@ function getTransferData(buffer) {
     // if data start with 0 need to add additional leading zero because HID API remove it.
     // https://github.com/node-hid/node-hid/issues/187
     if (data.length > 0 && data[0] === 0) {
-//        data.unshift(0)
+//        data.unshift(0)  // TODO: This has been commented out because it causes bugs on Linux and Mac. Gotta test it on Windows and fully remove it if possible.
     }
 
     // From HID API documentation:
