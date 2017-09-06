@@ -7,7 +7,6 @@ function readAdc() {
     const data = uhk.getTransferData(new Buffer([uhk.usbCommands.readAdc]));
     console.log('Sending ', data);
     device.write(data);
-    device.write([64]);
     const receivedBuffer = Buffer.from(device.readSync());
     console.log('Received', uhk.bufferToString(receivedBuffer), (receivedBuffer[1]*255 + receivedBuffer[0])/4096*5.5*1.045);
 
