@@ -12,6 +12,9 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 First up, make sure that node >=8.1.x and npm >=5.1.x are installed on your system. Next up:
 
 ```
+# Execute the following line on Linux. Use relevant package manager and package names on non-Debian based distros.
+apt-get install libusb-dev libudev-dev g++
+
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
 npm install
