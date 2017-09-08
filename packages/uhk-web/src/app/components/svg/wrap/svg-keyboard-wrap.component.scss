@@ -10,7 +10,8 @@
 keyboard-slider {
     display: block;
     position: relative;
-    height: 500px;
+    overflow: hidden;
+    height: 1000px;
     margin-top: 30px;
 }
 
