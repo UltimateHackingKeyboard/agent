@@ -10,7 +10,8 @@ import {
     AppState,
     getShowAppUpdateAvailable,
     deviceConnected,
-    runningInElectron, saveToKeyboardState
+    runningInElectron,
+    saveToKeyboardState
 } from './store';
 import { getUserConfiguration } from './store/reducers/user-configuration';
 import { UhkBuffer } from './config-serializer/uhk-buffer';
