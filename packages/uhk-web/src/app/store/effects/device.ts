@@ -88,9 +88,11 @@ export class DeviceEffects {
         .do((userConfiguration: UserConfiguration) => {
             const uhkBuffer = new UhkBuffer();
             userConfiguration.toBinary(uhkBuffer);
+            /* tslint:disable: align */
             setTimeout(() => {
                 this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
-            });
+            }, 100);
+            /* tslint:enable: align */
         })
         .switchMap(() => Observable.empty());
 
