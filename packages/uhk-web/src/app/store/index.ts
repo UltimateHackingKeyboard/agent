@@ -12,6 +12,7 @@ import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
+import { initProgressButtonState } from './reducers/progress-button-state';
 
 export const reducers = {
     userConfiguration: userConfigurationReducer,
@@ -69,15 +70,7 @@ export const devicePermission = createSelector(deviceState, fromDevice.hasDevice
 export const hasDevicePermission = createSelector(runningInElectron, devicePermission, (electron, permission) => {
     return !electron ? true : permission;
 });
-export const showSaveToKeyboardButtonSelector = createSelector(deviceState, fromDevice.showSaveToKeyboardButton);
-export const showSaveToKeyboardButton = createSelector(
-    runningInElectron,
-    showSaveToKeyboardButtonSelector,
-    (electron, showButton) => {
-        return electron ? showButton : false;
-    });
-
-export const savingToKeyboardSelector = createSelector(deviceState, fromDevice.savingToKeyboard);
-export const savingToKeyboard = createSelector(runningInElectron, savingToKeyboardSelector, (electron, saving) => {
-    return electron ? saving : false;
+export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
+export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
+    return electron ? state : initProgressButtonState;
 });

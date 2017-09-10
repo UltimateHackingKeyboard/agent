@@ -1,20 +1,20 @@
 import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
+
+import 'rxjs/add/operator/last';
 
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
 import {
     AppState,
     getShowAppUpdateAvailable,
     deviceConnected,
-    runningInElectron,
-    showSaveToKeyboardButton,
-    savingToKeyboard
+    runningInElectron, saveToKeyboardState
 } from './store';
 import { getUserConfiguration } from './store/reducers/user-configuration';
 import { UhkBuffer } from './config-serializer/uhk-buffer';
-import { SaveConfigurationAction } from './store/actions/device';
+import { ProgressButtonState } from './store/reducers/progress-button-state';
 
 @Component({
     selector: 'main-app',
@@ -25,12 +25,12 @@ import { SaveConfigurationAction } from './store/actions/device';
         trigger(
             'showSaveToKeyboardButton', [
                 transition(':enter', [
-                        style({ transform: 'translateY(100%)' }),
-                        animate('400ms ease-in-out', style({ transform: 'translateY(0)' }))
-                    ]),
+                    style({transform: 'translateY(100%)'}),
+                    animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
+                ]),
                 transition(':leave', [
-                    style({ transform: 'translateY(0)' }),
-                    animate('400ms ease-in-out', style({ transform: 'translateY(100%)' }))
+                    style({transform: 'translateY(0)'}),
+                    animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
                 ])
             ])
     ]
@@ -39,15 +39,13 @@ export class MainAppComponent {
     showUpdateAvailable$: Observable<boolean>;
     deviceConnected$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
-    showSaveToKeyboardButton$: Observable<boolean>;
-    savingToKeyboard$: Observable<boolean>;
+    saveToKeyboardState$: Observable<ProgressButtonState>;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
         this.deviceConnected$ = store.select(deviceConnected);
         this.runningInElectron$ = store.select(runningInElectron);
-        this.showSaveToKeyboardButton$ = store.select(showSaveToKeyboardButton);
-        this.savingToKeyboard$ = store.select(savingToKeyboard);
+        this.saveToKeyboardState$ = store.select(saveToKeyboardState);
     }
 
     updateApp() {
@@ -58,9 +56,8 @@ export class MainAppComponent {
         this.store.dispatch(new DoNotUpdateAppAction());
     }
 
-    saveToKeyboard() {
-        console.log('clicked saveToKeyboard');
-        this.store.dispatch(new SaveConfigurationAction());
+    clickedOnProgressButton(action: Action) {
+        return this.store.dispatch(action);
     }
 
     @HostListener('window:keydown.alt.j', ['$event'])
@@ -72,7 +69,7 @@ export class MainAppComponent {
             .first()
             .subscribe(userConfiguration => {
                 const asString = JSON.stringify(userConfiguration.toJsonObject());
-                const asBlob = new Blob([asString], { type: 'text/plain' });
+                const asBlob = new Blob([asString], {type: 'text/plain'});
                 saveAs(asBlob, 'UserConfiguration.json');
             });
     }

@@ -5,6 +5,7 @@ import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
@@ -16,7 +17,7 @@ import {
     ConnectionStateChangedAction,
     PermissionStateChangedAction,
     SaveToKeyboardSuccessAction,
-    SavingConfigurationAction
+    SaveToKeyboardSuccessFailed
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
@@ -26,7 +27,7 @@ import { UhkBuffer } from '../../config-serializer/uhk-buffer';
 
 @Injectable()
 export class DeviceEffects {
-    @Effect({ dispatch: false })
+    @Effect({dispatch: false})
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(toPayload)
@@ -39,7 +40,7 @@ export class DeviceEffects {
             }
         });
 
-    @Effect({ dispatch: false })
+    @Effect({dispatch: false})
     permissionStateChange$: Observable<Action> = this.actions$
         .ofType(ActionTypes.PERMISSION_STATE_CHANGED)
         .map(toPayload)
@@ -52,7 +53,7 @@ export class DeviceEffects {
             }
         });
 
-    @Effect({ dispatch: false })
+    @Effect({dispatch: false})
     setPrivilegeOnLinux$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SET_PRIVILEGE_ON_LINUX)
         .do(() => {
@@ -78,7 +79,7 @@ export class DeviceEffects {
             ];
         });
 
-    @Effect()
+    @Effect({dispatch: false})
     saveConfiguration$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_CONFIGURATION)
         .withLatestFrom(this.store)
@@ -88,7 +89,7 @@ export class DeviceEffects {
             userConfiguration.toBinary(uhkBuffer);
             this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
         })
-        .switchMap(() => Observable.of(new SavingConfigurationAction()));
+        .switchMap(() => Observable.empty());
 
     @Effect()
     saveConfigurationReply$: Observable<Action> = this.actions$
@@ -105,7 +106,8 @@ export class DeviceEffects {
                 new ShowNotificationAction({
                     type: NotificationType.Error,
                     message: response.error.message
-                })
+                }),
+                new SaveToKeyboardSuccessFailed()
             ];
         });
 

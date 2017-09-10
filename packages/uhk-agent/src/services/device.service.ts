@@ -92,7 +92,7 @@ export class DeviceService {
             const applyTransferData = this.getTransferData(applyBuffer);
             this.logService.debug('Fragment: ', JSON.stringify(applyTransferData));
             device.write(applyTransferData);
-
+            device.close();
             response.success = true;
             this.logService.info('transferring finished');
         }

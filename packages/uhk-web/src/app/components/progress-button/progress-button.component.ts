@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Action } from '@ngrx/store';
+
+import { ProgressButtonState, initProgressButtonState } from '../../store/reducers/progress-button-state';
 
 @Component({
     selector: 'progress-button',
@@ -7,7 +10,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgressButtonComponent {
-    @Input() baseText: string = 'Save';
-    @Input() progressText: string = 'Saving';
-    @Input() progress: boolean = false;
+    @Input() state: ProgressButtonState = initProgressButtonState;
+    @Output() clicked: EventEmitter<Action> = new EventEmitter<Action>();
+
+    onClicked() {
+        this.clicked.emit(this.state.action);
+    }
 }

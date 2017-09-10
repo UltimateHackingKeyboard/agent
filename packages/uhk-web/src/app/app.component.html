@@ -12,9 +12,7 @@
 </div>
 <notifier-container></notifier-container>
 <progress-button class="save-to-keyboard-button"
-                 *ngIf="showSaveToKeyboardButton$ | async"
+                 *ngIf="(saveToKeyboardState$ | async).showButton"
                  [@showSaveToKeyboardButton]
-                 [progress]="savingToKeyboard$ | async"
-                 baseText="Save to keyboard"
-                 progressText="Saving"
-                 (click)="saveToKeyboard()"></progress-button>
+                 [state]="saveToKeyboardState$ | async"
+                 (clicked)="clickedOnProgressButton($event)"></progress-button>

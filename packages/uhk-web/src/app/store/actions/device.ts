@@ -14,7 +14,8 @@ export const ActionTypes = {
     SAVING_CONFIGURATION: type(PREFIX + 'saving configuration'),
     SHOW_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'show save to keyboard button'),
     SAVE_TO_KEYBOARD_SUCCESS: type(PREFIX + 'save to keyboard success'),
-    SAVE_TO_KEYBOARD_FAILED: type(PREFIX + 'save to keyboard failed')
+    SAVE_TO_KEYBOARD_FAILED: type(PREFIX + 'save to keyboard failed'),
+    HIDE_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'hide save to keyboard button')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -51,10 +52,6 @@ export class SaveConfigurationReplyAction implements Action {
     constructor(public payload: IpcResponse) {}
 }
 
-export class SavingConfigurationAction implements Action {
-    type = ActionTypes.SAVING_CONFIGURATION;
-}
-
 export class ShowSaveToKeyboardButtonAction implements Action {
     type = ActionTypes.SHOW_SAVE_TO_KEYBOARD_BUTTON;
 }
@@ -67,10 +64,18 @@ export class SaveToKeyboardSuccessFailed implements Action {
     type = ActionTypes.SAVE_TO_KEYBOARD_FAILED;
 }
 
+export class HideSaveToKeyboardButton implements Action {
+    type = ActionTypes.HIDE_SAVE_TO_KEYBOARD_BUTTON;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
+    | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction
+    | PermissionStateChangedAction
     | ShowSaveToKeyboardButtonAction
-    | SavingConfigurationAction
+    | SaveConfigurationAction
+    | SaveConfigurationReplyAction
     | SaveToKeyboardSuccessAction
-    | SaveToKeyboardSuccessFailed;
+    | SaveToKeyboardSuccessFailed
+    | HideSaveToKeyboardButton;
