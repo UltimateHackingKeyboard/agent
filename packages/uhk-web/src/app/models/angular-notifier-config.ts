@@ -1,6 +1,9 @@
 import { NotifierOptions } from 'angular-notifier';
 
 export const angularNotifierConfig: NotifierOptions = {
+    behaviour: {
+        autoHide: false
+    },
     position: {
 
         horizontal: {
