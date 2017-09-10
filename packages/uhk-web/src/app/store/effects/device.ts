@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/empty';
+import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
@@ -14,7 +15,7 @@ import 'rxjs/add/operator/withLatestFrom';
 import { NotificationType, IpcResponse } from 'uhk-common';
 import {
     ActionTypes,
-    ConnectionStateChangedAction,
+    ConnectionStateChangedAction, HideSaveToKeyboardButton,
     PermissionStateChangedAction,
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed
@@ -110,6 +111,13 @@ export class DeviceEffects {
                 new SaveToKeyboardSuccessFailed()
             ];
         });
+
+    @Effect()
+    autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.SAVE_TO_KEYBOARD_SUCCESS)
+        .switchMap(() => Observable.timer(1000)
+            .switchMap(() => Observable.of(new HideSaveToKeyboardButton()))
+        );
 
     constructor(private actions$: Actions,
                 private router: Router,

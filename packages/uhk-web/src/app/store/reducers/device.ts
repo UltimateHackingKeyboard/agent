@@ -64,7 +64,7 @@ export function reducer(state = initialState, action: Action) {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Saved!',
-                    action: new HideSaveToKeyboardButton()
+                    action: null
                 }
             };
         }
