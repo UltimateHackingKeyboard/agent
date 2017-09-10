@@ -28,6 +28,7 @@ import { KeymapActions } from '../actions/keymap';
 import { MacroActions } from '../actions/macro';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { ShowNotificationAction, DismissUndoNotificationAction } from '../actions/app';
+import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 
 @Injectable()
 export class UserConfigEffects {
@@ -64,11 +65,16 @@ export class UserConfigEffects {
                             payload,
                             type: KeymapActions.UNDO_LAST_ACTION
                         }
-                    })
+                    }),
+                    new ShowSaveToKeyboardButtonAction()
                 ];
             }
 
-            return [new SaveUserConfigSuccessAction(config), new DismissUndoNotificationAction()];
+            return [
+                new SaveUserConfigSuccessAction(config),
+                new DismissUndoNotificationAction(),
+                new ShowSaveToKeyboardButtonAction()
+            ];
         });
 
     @Effect() undoUserConfig$: Observable<Action> = this.actions$

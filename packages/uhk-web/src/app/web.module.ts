@@ -103,6 +103,7 @@ import { MainPage } from './pages/main-page/main.page';
 import { DeviceEffects } from './store/effects/device';
 import { DeviceRendererService } from './services/device-renderer.service';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
+import { ProgressButtonComponent } from './components/progress-button/progress-button.component';
 
 @NgModule({
     declarations: [
@@ -163,7 +164,8 @@ import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.gua
         UhkMessageComponent,
         MissingDeviceComponent,
         PrivilegeCheckerComponent,
-        MainPage
+        MainPage,
+        ProgressButtonComponent
     ],
     imports: [
         BrowserModule,
