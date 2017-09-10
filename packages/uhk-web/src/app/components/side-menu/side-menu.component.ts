@@ -41,6 +41,7 @@ export class SideMenuComponent {
 
     constructor(private store: Store<AppState>, private renderer: Renderer) {
         this.animation = {
+            device: 'active',
             keymap: 'active',
             macro: 'active',
             addon: 'active'

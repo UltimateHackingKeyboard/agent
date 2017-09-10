@@ -15,6 +15,7 @@ import { Select2Module } from 'ng2-select2/ng2-select2';
 import { MainAppComponent } from './app.component';
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
+import { DeviceSettingsComponent } from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
@@ -106,6 +107,7 @@ import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.gua
 @NgModule({
     declarations: [
         MainAppComponent,
+        DeviceSettingsComponent,
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,

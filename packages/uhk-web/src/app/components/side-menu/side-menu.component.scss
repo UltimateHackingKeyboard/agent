@@ -27,8 +27,15 @@ ul {
 }
 
 .sidebar {
-    &__level-1 {
+    &__level-0 {
         padding: 0.5rem 1rem;
+    }
+    &__level-1 {
+        padding: 0.5rem 1rem 0.5rem 2rem;
+    }
+
+    &__level-0 ,
+    &__level-1 {
         font-size: 2rem;
         line-height: 3rem;
         cursor: default;
@@ -46,11 +53,6 @@ ul {
             &:nth-child(1) {
                 margin: 0;
             }
-        }
-
-        .sidebar__name {
-            width: 100%;
-            display: block;
         }
 
         .fa-chevron-up,
@@ -111,6 +113,7 @@ ul {
     }
 
     // General hover over menu items.
+    &__level-0,
     &__level-1,
     &__level-2 {
         &:hover {

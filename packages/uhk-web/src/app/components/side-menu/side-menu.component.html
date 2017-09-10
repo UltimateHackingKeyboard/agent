@@ -1,67 +1,77 @@
 <ul class="menu--top">
-    <li class="sidebar__level-1--item">
-        <div class="sidebar__level-1">
-            <i class="fa fa-keyboard-o"></i> Keymaps
-            <a [routerLink]="['/keymap/add']" class="btn btn-default pull-right btn-sm">
-                <i class="fa fa-plus"></i>
-            </a>
-            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'keymap')"></i>
+    <li class="sidebar__level-0--item">
+        <div class="sidebar__level-0">
+            <i class="uhk-icon uhk-icon-0401-usb-stick rotate-right"></i> UHK 60
+            <a [routerLink]="['/device/settings']" class="btn btn-default pull-right btn-sm">
+                    <i class="fa fa-cog"></i>
+                </a>
+            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'device')"></i>
         </div>
-        <ul [@toggler]="animation['keymap']">
-            <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/keymap', keymap.abbreviation]">{{keymap.name}}</a>
-                    <i *ngIf="keymap.isDefault"
-                       class="fa fa-star sidebar__fav"
-                       title="This is the default keymap which gets activated when powering the keyboard."
-                       data-toggle="tooltip"
-                       data-placement="bottom"></i>
+        <ul [@toggler]="animation['device']">
+
+            <li class="sidebar__level-1--item">
+                <div class="sidebar__level-1">
+                    <i class="fa fa-keyboard-o"></i> Keymaps
+                    <a [routerLink]="['/keymap/add']" class="btn btn-default pull-right btn-sm">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                    <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'keymap')"></i>
                 </div>
+                <ul [@toggler]="animation['keymap']">
+                    <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/keymap', keymap.abbreviation]">{{keymap.name}}</a>
+                            <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav" title="This is the default keymap which gets activated when powering the keyboard."
+                                data-toggle="tooltip" data-placement="bottom"></i>
+                        </div>
+                    </li>
+                </ul>
             </li>
-        </ul>
-    </li>
-    <li class="sidebar__level-1--item">
-        <div class="sidebar__level-1">
-            <i class="fa fa-play"></i> Macros
-            <a (click)="addMacro()" class="btn btn-default pull-right btn-sm">
-                <i class="fa fa-plus"></i>
-            </a>
-            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'macro')"></i>
-        </div>
-        <ul [@toggler]="animation['macro']">
-            <li *ngFor="let macro of macros$ | async" class="sidebar__level-2--item">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
+            <li class="sidebar__level-1--item">
+                <div class="sidebar__level-1">
+                    <i class="fa fa-play"></i> Macros
+                    <a (click)="addMacro()" class="btn btn-default pull-right btn-sm">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                    <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'macro')"></i>
                 </div>
+                <ul [@toggler]="animation['macro']">
+                    <li *ngFor="let macro of macros$ | async" class="sidebar__level-2--item">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/macro', macro.id]">{{macro.name}}</a>
+                        </div>
+                    </li>
+                </ul>
             </li>
-        </ul>
-    </li>
-    <li class="sidebar__level-1--item" *ngIf="showAddonMenu$ | async">
-        <div class="sidebar__level-1">
-            <i class="fa fa-puzzle-piece"></i> Add-on modules
-            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
-        </div>
-        <ul [@toggler]="animation['addon']">
-            <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/add-on', 'Key cluster']">Key cluster</a>
+            <li class="sidebar__level-1--item" *ngIf="showAddonMenu$ | async">
+                <div class="sidebar__level-1">
+                    <i class="fa fa-puzzle-piece"></i> Add-on modules
+                    <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
                 </div>
+                <ul [@toggler]="animation['addon']">
+                    <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/add-on', 'Key cluster']">Key cluster</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item" data-name="Trackball" data-abbrev="">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/add-on', 'Trackball']">Trackball</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item" data-name="Toucpad" data-abbrev="">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/add-on', 'Touchpad']">Touchpad</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item" data-name="Trackpoint" data-abbrev="">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/add-on', 'Trackpoint']">Trackpoint</a>
+                        </div>
+                    </li>
+                </ul>
             </li>
-            <li class="sidebar__level-2--item" data-name="Trackball" data-abbrev="">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/add-on', 'Trackball']">Trackball</a>
-                </div>
-            </li>
-            <li class="sidebar__level-2--item" data-name="Toucpad" data-abbrev="">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/add-on', 'Touchpad']">Touchpad</a>
-                </div>
-            </li>
-            <li class="sidebar__level-2--item" data-name="Trackpoint" data-abbrev="">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/add-on', 'Trackpoint']">Trackpoint</a>
-                </div>
-            </li>
+
         </ul>
     </li>
 </ul>

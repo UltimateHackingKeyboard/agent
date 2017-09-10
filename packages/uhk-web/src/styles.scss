@@ -3,6 +3,21 @@
 @import '~angular-notifier/styles';
 @import '~font-awesome/scss/font-awesome';
 @import './styles/tooltip';
+@import './styles/uhk-icons/uhk-icon';
+
+.uhk-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-size: auto 100%;
+    vertical-align: text-bottom;
+}
+
+.rotate-right {
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg); // svg not aligned properly
+}
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 26px;
