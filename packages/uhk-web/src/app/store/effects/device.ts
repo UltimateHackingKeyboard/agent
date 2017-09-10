@@ -88,7 +88,9 @@ export class DeviceEffects {
         .do((userConfiguration: UserConfiguration) => {
             const uhkBuffer = new UhkBuffer();
             userConfiguration.toBinary(uhkBuffer);
-            this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
+            setTimeout(() => {
+                this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
+            });
         })
         .switchMap(() => Observable.empty());
 
