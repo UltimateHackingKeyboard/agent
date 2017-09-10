@@ -86,13 +86,7 @@ export class DeviceEffects {
         .withLatestFrom(this.store)
         .map(([action, state]) => state.userConfiguration)
         .do((userConfiguration: UserConfiguration) => {
-            const uhkBuffer = new UhkBuffer();
-            userConfiguration.toBinary(uhkBuffer);
-            /* tslint:disable: align */
-            setTimeout(() => {
-                this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
-            }, 100);
-            /* tslint:enable: align */
+            setTimeout(() => this.sendUserConfigToKeyboard(userConfiguration), 100);
         })
         .switchMap(() => Observable.empty());
 
@@ -129,4 +123,9 @@ export class DeviceEffects {
                 private store: Store<AppState>) {
     }
 
+    private sendUserConfigToKeyboard(userConfiguration: UserConfiguration): void {
+        const uhkBuffer = new UhkBuffer();
+        userConfiguration.toBinary(uhkBuffer);
+        this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
+    }
 }
