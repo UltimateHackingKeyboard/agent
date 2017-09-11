@@ -4,7 +4,7 @@ import { Constants, IpcEvents, LogService, IpcResponse } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { Device, devices } from 'node-hid';
+import { Device, devices, HID } from 'node-hid';
 
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
@@ -19,7 +19,16 @@ import { UhkHidDeviceService } from './uhk-hid-device.service';
  */
 enum Command {
     UploadConfig = 8,
-    ApplyConfig = 9
+    ApplyConfig = 9,
+    LaunchEepromTransfer = 12,
+    GetKeyboardState = 16
+}
+
+enum EepromTransfer {
+    ReadHardwareConfig = 0,
+    WriteHardwareConfig = 1,
+    ReadUserConfig = 2,
+    WriteUserConfig = 3
 }
 
 /**
@@ -70,28 +79,16 @@ export class DeviceService {
             .subscribe();
     }
 
-    /**
-     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
-     * @param {Electron.Event} event - ipc event
-     * @param {string} json - UserConfiguration in JSON format
-     * @returns {Promise<void>}
-     * @private
-     */
-    private async saveUserConfiguration(event: Electron.Event, json: string): Promise<void> {
+    private saveUserConfiguration(event: Electron.Event, json: string): void {
         const response = new IpcResponse();
 
         try {
-            const buffer: Buffer = new Buffer(JSON.parse(json).data);
-            const fragments = this.getTransferBuffers(buffer);
-            for (const fragment of fragments) {
-                await this.device.write(fragment);
-            }
-
-            const applyBuffer = new Buffer([Command.ApplyConfig]);
-            await this.device.write(applyBuffer);
+            this.sendUserConfigToKeyboard(json);
+            this.writeUserConfigToEeprom();
             this.device.close();
+
             response.success = true;
-            this.logService.info('[DeviceService] Transferring finished');
+            this.logService.info('transferring finished');
         }
         catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
@@ -99,6 +96,35 @@ export class DeviceService {
         }
 
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
+    }
+
+    /**
+     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
+     * @param {string} json - UserConfiguration in JSON format
+     * @returns {Promise<void>}
+     * @private
+     */
+    private async sendUserConfigToKeyboard(json: string): Promise<void> {
+        const buffer: Buffer = new Buffer(JSON.parse(json).data);
+        const fragments = this.getTransferBuffers(buffer);
+        for (const fragment of fragments) {
+            await this.device.write(fragment);
+        }
+
+        const applyBuffer = new Buffer([Command.ApplyConfig]);
+        await this.device.write(applyBuffer);
+        this.logService.info('[DeviceService] Transferring finished');
+    }
+
+    private async writeUserConfigToEeprom(): Promise<void> {
+        this.logService.info('[DeviceService] Start write user configuration to eeprom');
+
+        const buffer = await this.device.write(new Buffer([Command.LaunchEepromTransfer, EepromTransfer.WriteUserConfig]));
+        if (buffer[1] === 1) {
+            this.device.write(new Buffer([Command.GetKeyboardState]));
+        }
+
+        this.logService.info('[DeviceService] End write user configuration to eeprom');
     }
 
     /**
