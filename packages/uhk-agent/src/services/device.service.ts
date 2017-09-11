@@ -4,7 +4,7 @@ import { Constants, IpcEvents, LogService, IpcResponse } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { Device, devices, HID } from 'node-hid';
+import { Device, devices } from 'node-hid';
 
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
@@ -30,6 +30,8 @@ enum EepromTransfer {
     ReadUserConfig = 2,
     WriteUserConfig = 3
 }
+
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * IpcMain pair of the UHK Communication
@@ -79,12 +81,12 @@ export class DeviceService {
             .subscribe();
     }
 
-    private saveUserConfiguration(event: Electron.Event, json: string): void {
+    private async saveUserConfiguration(event: Electron.Event, json: string): Promise<void> {
         const response = new IpcResponse();
 
         try {
             this.sendUserConfigToKeyboard(json);
-            this.writeUserConfigToEeprom();
+            await this.writeUserConfigToEeprom();
             this.device.close();
 
             response.success = true;
@@ -96,6 +98,8 @@ export class DeviceService {
         }
 
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
+
+        return Promise.resolve();
     }
 
     /**
@@ -120,11 +124,20 @@ export class DeviceService {
         this.logService.info('[DeviceService] Start write user configuration to eeprom');
 
         const buffer = await this.device.write(new Buffer([Command.LaunchEepromTransfer, EepromTransfer.WriteUserConfig]));
-        if (buffer[1] === 1) {
-            this.device.write(new Buffer([Command.GetKeyboardState]));
-        }
+        await this.waitUntilKeyboardBusy();
 
         this.logService.info('[DeviceService] End write user configuration to eeprom');
+    }
+
+    private async waitUntilKeyboardBusy(): Promise<void> {
+        while (true) {
+            const buffer = await this.device.write(new Buffer([Command.GetKeyboardState]));
+            if (buffer[1] === 0) {
+                break;
+            }
+            this.logService.debug('Keyboard is busy, wait...');
+            await snooze(200);
+        }
     }
 
     /**
