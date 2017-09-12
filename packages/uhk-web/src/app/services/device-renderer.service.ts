@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
+import { DeviceConnectedArg, IpcEvents, LogService, IpcResponse } from 'uhk-common';
 import { AppState } from '../store/index';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
@@ -29,7 +29,7 @@ export class DeviceRendererService {
     }
 
     private registerEvents(): void {
-        this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: boolean) => {
+        this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectedArg) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });
 

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 
-import { NotificationType, IpcResponse } from 'uhk-common';
+import { DeviceConnectedArg, NotificationType, IpcResponse } from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction, HideSaveToKeyboardButton,
@@ -25,20 +25,35 @@ import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { UhkBuffer } from '../../config-serializer/uhk-buffer';
+import { LoadUserConfigSuccessAction } from '../actions/user-config';
 
 @Injectable()
 export class DeviceEffects {
-    @Effect({dispatch: false})
+    @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(toPayload)
-        .do((connected: boolean) => {
-            if (connected) {
+        .switchMap((arg: DeviceConnectedArg) => {
+            let userConfig;
+            if (arg.userConfig.length > 0) {
+                const uhkBuffer = new UhkBuffer();
+                for (const num of arg.userConfig) {
+                    uhkBuffer.writeInt8(num);
+                }
+                userConfig = new UserConfiguration().fromBinary(uhkBuffer);
+            }
+
+            if (arg.connected) {
                 this.router.navigate(['/']);
             }
             else {
                 this.router.navigate(['/detection']);
             }
+
+            if (userConfig) {
+                return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+            }
+            return Observable.empty();
         });
 
     @Effect({dispatch: false})
@@ -68,7 +83,7 @@ export class DeviceEffects {
         .mergeMap((response: any) => {
             if (response.success) {
                 return [
-                    new ConnectionStateChangedAction(true),
+                    new ConnectionStateChangedAction({connected: true, userConfig: []}),
                     new PermissionStateChangedAction(true)
                 ];
             }

@@ -27,6 +27,7 @@ while(offset < configSize) {
     const usbCommand = isHardwareConfig ? uhk.usbCommands.readHardwareConfig : uhk.usbCommands.readUserConfig;
     chunkSizeToRead = Math.min(chunkSize, configSize - offset);
     buffer = Buffer.from([usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8]);
+    console.log('write to keyboard', uhk.bufferToString(buffer));
     device.write(uhk.getTransferData(buffer));
     buffer = Buffer.from(device.readSync());
     console.log('read-config-chunk', uhk.bufferToString(buffer));

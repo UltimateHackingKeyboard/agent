@@ -18,9 +18,11 @@ import { UhkHidDeviceService } from './uhk-hid-device.service';
  * UHK USB Communications command. All communication package should have start with a command code.
  */
 enum Command {
+    GetProperty = 0,
     UploadConfig = 8,
     ApplyConfig = 9,
     LaunchEepromTransfer = 12,
+    ReadUserConfig = 15,
     GetKeyboardState = 16
 }
 
@@ -29,6 +31,15 @@ enum EepromTransfer {
     WriteHardwareConfig = 1,
     ReadUserConfig = 2,
     WriteUserConfig = 3
+}
+
+enum SystemPropertyIds {
+    UsbProtocolVersion = 0,
+    BridgeProtocolVersion = 1,
+    DataModelVersion = 2,
+    FirmwareVersion = 3,
+    HardwareConfigSize = 4,
+    UserConfigSize = 5
 }
 
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -60,6 +71,35 @@ export class DeviceService {
     }
 
     /**
+     * Return with the actual UserConfiguration from UHK Device
+     * @returns {Promise<Buffer>}
+     */
+    public async getUserConfigFromEeprom(): Promise<Buffer> {
+        if (!this.connected) {
+            return new Buffer(0);
+        }
+
+        try {
+            const configSize = await this.getUserConfigSizeFromKeyboard();
+            const chunkSize = 63;
+            let offset = 0;
+            let configBuffer = new Buffer(0);
+
+            while (offset < configSize) {
+                const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
+                const writeBuffer = Buffer.from([Command.ReadUserConfig, chunkSizeToRead, offset & 0xff, offset >> 8]);
+                const readBuffer = await this.device.write(writeBuffer);
+                configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
+                offset += chunkSizeToRead;
+            }
+            this.device.close();
+            return configBuffer;
+        } catch (error) {
+            this.logService.error('[DeviceService] getUserConfigFromEeprom error', error);
+        }
+    }
+
+    /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
      * Every second check the HID device list.
@@ -79,6 +119,17 @@ export class DeviceService {
                 this.logService.info(`Device connection state changed to: ${connected}`);
             })
             .subscribe();
+    }
+
+    /**
+     * Return the UserConfiguration size from the UHK Device
+     * @returns {Promise<number>}
+     */
+    private async getUserConfigSizeFromKeyboard(): Promise<number> {
+        const buffer = await this.device.write(new Buffer([Command.GetProperty, SystemPropertyIds.UserConfigSize]));
+        const configSize = buffer[1] + (buffer[2] << 8);
+        this.logService.debug('[DeviceService] User config size:', configSize);
+        return configSize;
     }
 
     private async saveUserConfiguration(event: Electron.Event, json: string): Promise<void> {
