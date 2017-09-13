@@ -16,6 +16,7 @@ import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
+import { UhkHidDeviceService } from './services/uhk-hid-device.service';
 
 const optionDefinitions = [
     { name: 'addons', type: Boolean, defaultOption: false }
@@ -32,6 +33,7 @@ let win: Electron.BrowserWindow;
 autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
+let uhkHidDeviceService: UhkHidDeviceService;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
 let sudoService: SudoService;
@@ -49,9 +51,10 @@ function createWindow() {
     });
     win.setMenuBarVisibility(false);
     win.maximize();
-    deviceService = new DeviceService(logger, win);
+    uhkHidDeviceService = new UhkHidDeviceService(logger);
+    deviceService = new DeviceService(logger, win, uhkHidDeviceService);
     appUpdateService = new AppUpdateService(logger, win, app);
-    appService = new AppService(logger, win, deviceService, options);
+    appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
     sudoService = new SudoService(logger);
     // and load the index.html of the app.
 
@@ -74,6 +77,7 @@ function createWindow() {
         deviceService = null;
         appUpdateService = null;
         appService = null;
+        uhkHidDeviceService = null;
         sudoService = null;
     });
 
