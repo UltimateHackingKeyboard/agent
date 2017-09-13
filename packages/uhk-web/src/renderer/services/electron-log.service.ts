@@ -4,6 +4,12 @@ import * as util from 'util';
 
 import { LogService } from 'uhk-common';
 
+// https://github.com/megahertz/electron-log/issues/44
+// console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
+if (console.debug) {
+    console.debug = console.log;
+}
+
 /**
  * This service use the electron-log package to write log in file.
  * The logger usable in main and renderer process.
