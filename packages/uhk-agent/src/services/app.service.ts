@@ -3,12 +3,14 @@ import { ipcMain, BrowserWindow } from 'electron';
 import { CommandLineArgs, IpcEvents, AppStartInfo, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
+import { UhkHidDeviceService } from './uhk-hid-device.service';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
                 private deviceService: DeviceService,
-                private options: CommandLineArgs) {
+                private options: CommandLineArgs,
+                private uhkHidDeviceService: UhkHidDeviceService) {
         super(logService, win);
 
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
@@ -20,7 +22,7 @@ export class AppService extends MainServiceBase {
         const response: AppStartInfo = {
             commandLineArgs: this.options,
             deviceConnected: this.deviceService.isConnected,
-            hasPermission: this.deviceService.hasPermission()
+            hasPermission: this.uhkHidDeviceService.hasPermission()
         };
         this.logService.info('getStartInfo response:', response);
         return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);
