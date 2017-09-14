@@ -49,6 +49,7 @@ const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
  * Functionality:
  * - Detect device is connected or not
  * - Send UserConfiguration to the UHK Device
+ * - Read UserConfiguration from the UHK Device
  */
 export class DeviceService {
     private pollTimer$: Subscription;
@@ -59,6 +60,7 @@ export class DeviceService {
                 private device: UhkHidDeviceService) {
         this.pollUhkDevice();
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
+        ipcMain.on(IpcEvents.device.loadUserConfiguration, this.loadUserConfiguration.bind(this));
         logService.debug('[DeviceService] init success');
     }
 
@@ -74,10 +76,8 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async getUserConfigFromEeprom(): Promise<Buffer> {
-        if (!this.connected) {
-            return new Buffer(0);
-        }
+    public async loadUserConfiguration(event: Electron.Event): Promise<void> {
+        let response = [];
 
         try {
             const configSize = await this.getUserConfigSizeFromKeyboard();
@@ -92,11 +92,14 @@ export class DeviceService {
                 configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
             }
-            this.device.close();
-            return configBuffer;
+            response = UhkHidDeviceService.convertBufferToIntArray(configBuffer);
         } catch (error) {
             this.logService.error('[DeviceService] getUserConfigFromEeprom error', error);
+        } finally {
+            this.device.close();
         }
+
+        event.sender.send(IpcEvents.device.loadUserConfigurationReply, JSON.stringify(response));
     }
 
     /**
@@ -116,7 +119,7 @@ export class DeviceService {
             .do((connected: boolean) => {
                 this.connected = connected;
                 this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
-                this.logService.info(`Device connection state changed to: ${connected}`);
+                this.logService.info(`[DeviceService] Device connection state changed to: ${connected}`);
             })
             .subscribe();
     }
@@ -138,7 +141,6 @@ export class DeviceService {
         try {
             this.sendUserConfigToKeyboard(json);
             await this.writeUserConfigToEeprom();
-            this.device.close();
 
             response.success = true;
             this.logService.info('transferring finished');
@@ -146,6 +148,8 @@ export class DeviceService {
         catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
             response.error = {message: error.message};
+        } finally {
+            this.device.close();
         }
 
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);

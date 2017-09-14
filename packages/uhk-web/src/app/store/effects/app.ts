@@ -15,6 +15,7 @@ import { ActionTypes, AppStartedAction, DismissUndoNotificationAction, ToggleAdd
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { PermissionStateChangedAction } from '../actions/device';
+import { LoadUserConfigFromDeviceAction } from '../actions/user-config';
 
 @Injectable()
 export class ApplicationEffects {
@@ -49,7 +50,8 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
-                new PermissionStateChangedAction(appInfo.hasPermission)
+                new PermissionStateChangedAction(appInfo.hasPermission),
+                new LoadUserConfigFromDeviceAction()
             ];
         });
 

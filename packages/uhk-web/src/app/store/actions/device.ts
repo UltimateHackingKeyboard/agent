@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectedArg, type, IpcResponse } from 'uhk-common';
+import { type, IpcResponse } from 'uhk-common';
 
 const PREFIX = '[device] ';
 
@@ -31,7 +31,7 @@ export class SetPrivilegeOnLinuxReplyAction implements Action {
 export class ConnectionStateChangedAction implements Action {
     type = ActionTypes.CONNECTION_STATE_CHANGED;
 
-    constructor(public payload: DeviceConnectedArg) {}
+    constructor(public payload: boolean) {}
 }
 
 export class PermissionStateChangedAction implements Action {

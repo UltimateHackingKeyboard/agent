@@ -29,6 +29,8 @@ import { MacroActions } from '../actions/macro';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { ShowNotificationAction, DismissUndoNotificationAction } from '../actions/app';
 import { ShowSaveToKeyboardButtonAction } from '../actions/device';
+import { DeviceRendererService } from '../../services/device-renderer.service';
+import { UhkBuffer } from '../../config-serializer/uhk-buffer';
 
 @Injectable()
 export class UserConfigEffects {
@@ -86,10 +88,32 @@ export class UserConfigEffects {
             return [new LoadUserConfigSuccessAction(config), go(payload.path)];
         });
 
+    @Effect({dispatch: false}) loadUserConfigFromDevice$ = this.actions$
+        .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE)
+        .do(() => this.deviceRendererService.loadUserConfiguration());
+
+    @Effect() loadUserConfigFromDeviceReply$ = this.actions$
+        .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE_REPLY)
+        .map(action => action.payload)
+        .map((data: Array<number>) => {
+            let userConfig;
+            if (data.length > 0) {
+                const uhkBuffer = new UhkBuffer();
+                for (const num of data) {
+                    uhkBuffer.writeInt8(num);
+                }
+                userConfig = new UserConfiguration().fromBinary(uhkBuffer);
+                return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+            }
+
+            return Observable.empty();
+        });
+
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,
                 private store: Store<AppState>,
-                private defaultUserConfigurationService: DefaultUserConfigurationService) {
+                private defaultUserConfigurationService: DefaultUserConfigurationService,
+                private deviceRendererService: DeviceRendererService) {
     }
 
     private getUserConfiguration() {

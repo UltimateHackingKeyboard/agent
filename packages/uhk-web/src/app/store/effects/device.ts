@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 
-import { DeviceConnectedArg, NotificationType, IpcResponse } from 'uhk-common';
+import { NotificationType, IpcResponse } from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction, HideSaveToKeyboardButton,
@@ -25,7 +25,7 @@ import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { UhkBuffer } from '../../config-serializer/uhk-buffer';
-import { LoadUserConfigSuccessAction } from '../actions/user-config';
+import { LoadUserConfigFromDeviceAction } from '../actions/user-config';
 
 @Injectable()
 export class DeviceEffects {
@@ -33,26 +33,13 @@ export class DeviceEffects {
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(toPayload)
-        .switchMap((arg: DeviceConnectedArg) => {
-            let userConfig;
-            if (arg.userConfig.length > 0) {
-                const uhkBuffer = new UhkBuffer();
-                for (const num of arg.userConfig) {
-                    uhkBuffer.writeInt8(num);
-                }
-                userConfig = new UserConfiguration().fromBinary(uhkBuffer);
-            }
-
-            if (arg.connected) {
+        .switchMap((connected: boolean) => {
+            if (connected) {
                 this.router.navigate(['/']);
-            }
-            else {
-                this.router.navigate(['/detection']);
+                return Observable.of(new LoadUserConfigFromDeviceAction());
             }
 
-            if (userConfig) {
-                return Observable.of(new LoadUserConfigSuccessAction(userConfig));
-            }
+            this.router.navigate(['/detection']);
             return Observable.empty();
         });
 
@@ -83,7 +70,7 @@ export class DeviceEffects {
         .mergeMap((response: any) => {
             if (response.success) {
                 return [
-                    new ConnectionStateChangedAction({connected: true, userConfig: []}),
+                    new ConnectionStateChangedAction(true),
                     new PermissionStateChangedAction(true)
                 ];
             }

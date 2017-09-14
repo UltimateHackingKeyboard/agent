@@ -13,13 +13,15 @@ export interface State {
     navigationCountAfterNotification: number;
     prevUserConfig?: UserConfiguration;
     runningInElectron: boolean;
+    userConfigLoading: boolean;
 }
 
 const initialState: State = {
     started: false,
     showAddonMenu: false,
     navigationCountAfterNotification: 0,
-    runningInElectron: runInElectron()
+    runningInElectron: runInElectron(),
+    userConfigLoading: true
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -76,7 +78,16 @@ export function reducer(state = initialState, action: Action) {
         case UserConfigActionTypes.SAVE_USER_CONFIG_SUCCESS: {
             return {
                 ...state,
-                prevUserConfig: action.payload
+                prevUserConfig: action.payload,
+                userConfigLoading: false
+            };
+        }
+
+        case UserConfigActionTypes.LOAD_USER_CONFIG_FROM_DEVICE:
+        case UserConfigActionTypes.LOAD_USER_CONFIG: {
+            return {
+                ...state,
+                userConfigLoading: true
             };
         }
 
