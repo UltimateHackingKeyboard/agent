@@ -20,7 +20,7 @@ export function reducer(state = initialState, action: Action) {
         case ActionTypes.CONNECTION_STATE_CHANGED:
             return {
                 ...state,
-                connected: action.payload.connected
+                connected: action.payload
             };
 
         case ActionTypes.PERMISSION_STATE_CHANGED:

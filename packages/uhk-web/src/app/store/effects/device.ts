@@ -15,7 +15,8 @@ import 'rxjs/add/operator/withLatestFrom';
 import { NotificationType, IpcResponse } from 'uhk-common';
 import {
     ActionTypes,
-    ConnectionStateChangedAction, HideSaveToKeyboardButton,
+    ConnectionStateChangedAction,
+    HideSaveToKeyboardButton,
     PermissionStateChangedAction,
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed
@@ -33,13 +34,19 @@ export class DeviceEffects {
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(toPayload)
-        .switchMap((connected: boolean) => {
+        .do((connected: boolean) => {
             if (connected) {
                 this.router.navigate(['/']);
+            }
+            else {
+                this.router.navigate(['/detection']);
+            }
+        })
+        .switchMap((connected: boolean) => {
+            if (connected) {
                 return Observable.of(new LoadUserConfigFromDeviceAction());
             }
 
-            this.router.navigate(['/detection']);
             return Observable.empty();
         });
 

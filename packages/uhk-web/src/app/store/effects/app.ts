@@ -14,8 +14,7 @@ import { AppStartInfo, Notification, NotificationType, LogService } from 'uhk-co
 import { ActionTypes, AppStartedAction, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { PermissionStateChangedAction } from '../actions/device';
-import { LoadUserConfigFromDeviceAction } from '../actions/user-config';
+import { ConnectionStateChangedAction, PermissionStateChangedAction } from '../actions/device';
 
 @Injectable()
 export class ApplicationEffects {
@@ -50,8 +49,8 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
-                new PermissionStateChangedAction(appInfo.hasPermission),
-                new LoadUserConfigFromDeviceAction()
+                new ConnectionStateChangedAction(appInfo.deviceConnected),
+                new PermissionStateChangedAction(appInfo.hasPermission)
             ];
         });
 
@@ -64,6 +63,5 @@ export class ApplicationEffects {
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
-                private logService: LogService) {
-    }
+                private logService: LogService) { }
 }
