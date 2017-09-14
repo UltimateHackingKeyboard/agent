@@ -99,13 +99,20 @@ export class UserConfigEffects {
             let userConfig;
             if (data.length > 0) {
                 const uhkBuffer = new UhkBuffer();
+                let hasNonZeroValue = false;
                 for (const num of data) {
+                    if (num < 0) {
+                        hasNonZeroValue = true;
+                    }
                     uhkBuffer.writeUInt8(num);
                 }
                 uhkBuffer.offset = 0;
                 userConfig = new UserConfiguration();
                 userConfig.fromBinary(uhkBuffer);
-                return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+
+                if (hasNonZeroValue) {
+                    return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+                }
             }
 
             return Observable.empty();
