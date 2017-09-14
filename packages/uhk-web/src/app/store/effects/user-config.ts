@@ -95,14 +95,16 @@ export class UserConfigEffects {
     @Effect() loadUserConfigFromDeviceReply$ = this.actions$
         .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE_REPLY)
         .map(action => action.payload)
-        .map((data: Array<number>) => {
+        .switchMap((data: Array<number>) => {
             let userConfig;
             if (data.length > 0) {
                 const uhkBuffer = new UhkBuffer();
                 for (const num of data) {
-                    uhkBuffer.writeInt8(num);
+                    uhkBuffer.writeUInt8(num);
                 }
-                userConfig = new UserConfiguration().fromBinary(uhkBuffer);
+                uhkBuffer.offset = 0;
+                userConfig = new UserConfiguration();
+                userConfig.fromBinary(uhkBuffer);
                 return Observable.of(new LoadUserConfigSuccessAction(userConfig));
             }
 
