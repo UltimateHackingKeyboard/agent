@@ -109,7 +109,7 @@ export class UhkHidDeviceService {
                     return reject(err);
                 }
                 const logString = UhkHidDeviceService.bufferToString(receivedData);
-                this.logService.debug('[UhkHidDevice] Transfer UHK ===> Agent: ', logString);
+                this.logService.debug('[UhkHidDevice] USB[R]: ', logString);
 
                 if (receivedData[0] !== 0) {
                     return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
@@ -119,7 +119,7 @@ export class UhkHidDeviceService {
             });
 
             const sendData = UhkHidDeviceService.getTransferData(buffer);
-            this.logService.debug('[UhkHidDevice] Transfer Agent ===> UHK: ', UhkHidDeviceService.bufferToString(sendData));
+            this.logService.debug('[UhkHidDevice] USB[W]: ', UhkHidDeviceService.bufferToString(sendData));
             device.write(sendData);
         });
     }

@@ -11,7 +11,7 @@ import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 
-import { NotificationType } from 'uhk-common';
+import { LogService, NotificationType } from 'uhk-common';
 
 import {
     ActionTypes,
@@ -96,23 +96,27 @@ export class UserConfigEffects {
         .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE_REPLY)
         .map(action => action.payload)
         .switchMap((data: Array<number>) => {
-            let userConfig;
-            if (data.length > 0) {
-                const uhkBuffer = new UhkBuffer();
-                let hasNonZeroValue = false;
-                for (const num of data) {
-                    if (num < 0) {
-                        hasNonZeroValue = true;
+            try {
+                let userConfig;
+                if (data.length > 0) {
+                    const uhkBuffer = new UhkBuffer();
+                    let hasNonZeroValue = false;
+                    for (const num of data) {
+                        if (num > 0) {
+                            hasNonZeroValue = true;
+                        }
+                        uhkBuffer.writeUInt8(num);
                     }
-                    uhkBuffer.writeUInt8(num);
-                }
-                uhkBuffer.offset = 0;
-                userConfig = new UserConfiguration();
-                userConfig.fromBinary(uhkBuffer);
+                    uhkBuffer.offset = 0;
+                    userConfig = new UserConfiguration();
+                    userConfig.fromBinary(uhkBuffer);
 
-                if (hasNonZeroValue) {
-                    return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+                    if (hasNonZeroValue) {
+                        return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+                    }
                 }
+            } catch (err) {
+                this.logService.error('Eeprom parse error:', err);
             }
 
             return Observable.empty();
@@ -122,7 +126,8 @@ export class UserConfigEffects {
                 private dataStorageRepository: DataStorageRepositoryService,
                 private store: Store<AppState>,
                 private defaultUserConfigurationService: DefaultUserConfigurationService,
-                private deviceRendererService: DeviceRendererService) {
+                private deviceRendererService: DeviceRendererService,
+                private logService: LogService) {
     }
 
     private getUserConfiguration() {
