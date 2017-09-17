@@ -147,7 +147,6 @@ export class DeviceService {
             await this.writeUserConfigToEeprom();
 
             response.success = true;
-            this.logService.info('transferring finished');
         }
         catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
@@ -176,16 +175,11 @@ export class DeviceService {
 
         const applyBuffer = new Buffer([Command.ApplyConfig]);
         await this.device.write(applyBuffer);
-        this.logService.info('[DeviceService] Transferring finished');
     }
 
     private async writeUserConfigToEeprom(): Promise<void> {
-        this.logService.info('[DeviceService] Start write user configuration to eeprom');
-
         await this.device.write(new Buffer([Command.LaunchEepromTransfer, EepromTransfer.WriteUserConfig]));
         await this.waitUntilKeyboardBusy();
-
-        this.logService.info('[DeviceService] End write user configuration to eeprom');
     }
 
     private async waitUntilKeyboardBusy(): Promise<void> {
