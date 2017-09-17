@@ -80,11 +80,13 @@ export class DeviceService {
         let response = [];
 
         try {
+            this.logService.debug('USB[T]: Read user configuration size from keyboard');
             const configSize = await this.getUserConfigSizeFromKeyboard();
             const chunkSize = 63;
             let offset = 0;
             let configBuffer = new Buffer(0);
 
+            this.logService.debug('USB[T]: Read user configuration from keyboard');
             while (offset < configSize) {
                 const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
                 const writeBuffer = Buffer.from([Command.ReadUserConfig, chunkSizeToRead, offset & 0xff, offset >> 8]);
@@ -139,7 +141,9 @@ export class DeviceService {
         const response = new IpcResponse();
 
         try {
+            this.logService.debug('USB[T]: Write user configuration to keyboard');
             this.sendUserConfigToKeyboard(json);
+            this.logService.debug('USB[T]: Write user configuration to EEPROM');
             await this.writeUserConfigToEeprom();
 
             response.success = true;
