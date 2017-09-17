@@ -36,7 +36,7 @@ export default function (state = initialState, action: Action): UserConfiguratio
             break;
         }
         case KeymapActions.EDIT_NAME: {
-            const name: string = action.payload.name.toUpperCase();
+            const name: string = action.payload.name;
 
             const duplicate = state.keymaps.some((keymap: Keymap) => {
                 return keymap.name === name && keymap.abbreviation !== action.payload.abbr;
