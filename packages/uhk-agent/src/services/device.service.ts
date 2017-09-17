@@ -172,7 +172,7 @@ export class DeviceService {
         for (const fragment of fragments) {
             await this.device.write(fragment);
         }
-
+        this.logService.debug('[DeviceService] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = new Buffer([Command.ApplyConfig]);
         await this.device.write(applyBuffer);
     }
