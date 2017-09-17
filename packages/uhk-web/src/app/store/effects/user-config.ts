@@ -11,7 +11,7 @@ import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 
-import { NotificationType } from 'uhk-common';
+import { LogService, NotificationType } from 'uhk-common';
 
 import {
     ActionTypes,
@@ -29,6 +29,8 @@ import { MacroActions } from '../actions/macro';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { ShowNotificationAction, DismissUndoNotificationAction } from '../actions/app';
 import { ShowSaveToKeyboardButtonAction } from '../actions/device';
+import { DeviceRendererService } from '../../services/device-renderer.service';
+import { UhkBuffer } from '../../config-serializer/uhk-buffer';
 
 @Injectable()
 export class UserConfigEffects {
@@ -86,10 +88,46 @@ export class UserConfigEffects {
             return [new LoadUserConfigSuccessAction(config), go(payload.path)];
         });
 
+    @Effect({dispatch: false}) loadUserConfigFromDevice$ = this.actions$
+        .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE)
+        .do(() => this.deviceRendererService.loadUserConfiguration());
+
+    @Effect() loadUserConfigFromDeviceReply$ = this.actions$
+        .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE_REPLY)
+        .map(action => action.payload)
+        .switchMap((data: Array<number>) => {
+            try {
+                let userConfig;
+                if (data.length > 0) {
+                    const uhkBuffer = new UhkBuffer();
+                    let hasNonZeroValue = false;
+                    for (const num of data) {
+                        if (num > 0) {
+                            hasNonZeroValue = true;
+                        }
+                        uhkBuffer.writeUInt8(num);
+                    }
+                    uhkBuffer.offset = 0;
+                    userConfig = new UserConfiguration();
+                    userConfig.fromBinary(uhkBuffer);
+
+                    if (hasNonZeroValue) {
+                        return Observable.of(new LoadUserConfigSuccessAction(userConfig));
+                    }
+                }
+            } catch (err) {
+                this.logService.error('Eeprom parse error:', err);
+            }
+
+            return Observable.empty();
+        });
+
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,
                 private store: Store<AppState>,
-                private defaultUserConfigurationService: DefaultUserConfigurationService) {
+                private defaultUserConfigurationService: DefaultUserConfigurationService,
+                private deviceRendererService: DeviceRendererService,
+                private logService: LogService) {
     }
 
     private getUserConfiguration() {

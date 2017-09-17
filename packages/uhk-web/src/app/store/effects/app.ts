@@ -30,7 +30,7 @@ export class ApplicationEffects {
             this.logService.info('Renderer appStart effect end');
         });
 
-    @Effect({ dispatch: false })
+    @Effect({dispatch: false})
     showNotification$: Observable<Action> = this.actions$
         .ofType(ActionTypes.APP_SHOW_NOTIFICATION)
         .map(toPayload)

@@ -18,9 +18,11 @@ import { UhkHidDeviceService } from './uhk-hid-device.service';
  * UHK USB Communications command. All communication package should have start with a command code.
  */
 enum Command {
+    GetProperty = 0,
     UploadConfig = 8,
     ApplyConfig = 9,
     LaunchEepromTransfer = 12,
+    ReadUserConfig = 15,
     GetKeyboardState = 16
 }
 
@@ -31,6 +33,15 @@ enum EepromTransfer {
     WriteUserConfig = 3
 }
 
+enum SystemPropertyIds {
+    UsbProtocolVersion = 0,
+    BridgeProtocolVersion = 1,
+    DataModelVersion = 2,
+    FirmwareVersion = 3,
+    HardwareConfigSize = 4,
+    UserConfigSize = 5
+}
+
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
@@ -38,6 +49,7 @@ const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
  * Functionality:
  * - Detect device is connected or not
  * - Send UserConfiguration to the UHK Device
+ * - Read UserConfiguration from the UHK Device
  */
 export class DeviceService {
     private pollTimer$: Subscription;
@@ -48,6 +60,7 @@ export class DeviceService {
                 private device: UhkHidDeviceService) {
         this.pollUhkDevice();
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
+        ipcMain.on(IpcEvents.device.loadUserConfiguration, this.loadUserConfiguration.bind(this));
         logService.debug('[DeviceService] init success');
     }
 
@@ -57,6 +70,38 @@ export class DeviceService {
      */
     public get isConnected(): boolean {
         return this.connected;
+    }
+
+    /**
+     * Return with the actual UserConfiguration from UHK Device
+     * @returns {Promise<Buffer>}
+     */
+    public async loadUserConfiguration(event: Electron.Event): Promise<void> {
+        let response = [];
+
+        try {
+            this.logService.debug('[DeviceService] USB[T]: Read user configuration size from keyboard');
+            const configSize = await this.getUserConfigSizeFromKeyboard();
+            const chunkSize = 63;
+            let offset = 0;
+            let configBuffer = new Buffer(0);
+
+            this.logService.debug('[DeviceService] USB[T]: Read user configuration from keyboard');
+            while (offset < configSize) {
+                const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
+                const writeBuffer = Buffer.from([Command.ReadUserConfig, chunkSizeToRead, offset & 0xff, offset >> 8]);
+                const readBuffer = await this.device.write(writeBuffer);
+                configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
+                offset += chunkSizeToRead;
+            }
+            response = UhkHidDeviceService.convertBufferToIntArray(configBuffer);
+        } catch (error) {
+            this.logService.error('[DeviceService] getUserConfigFromEeprom error', error);
+        } finally {
+            this.device.close();
+        }
+
+        event.sender.send(IpcEvents.device.loadUserConfigurationReply, JSON.stringify(response));
     }
 
     /**
@@ -76,25 +121,38 @@ export class DeviceService {
             .do((connected: boolean) => {
                 this.connected = connected;
                 this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
-                this.logService.info(`Device connection state changed to: ${connected}`);
+                this.logService.info(`[DeviceService] Device connection state changed to: ${connected}`);
             })
             .subscribe();
+    }
+
+    /**
+     * Return the UserConfiguration size from the UHK Device
+     * @returns {Promise<number>}
+     */
+    private async getUserConfigSizeFromKeyboard(): Promise<number> {
+        const buffer = await this.device.write(new Buffer([Command.GetProperty, SystemPropertyIds.UserConfigSize]));
+        const configSize = buffer[1] + (buffer[2] << 8);
+        this.logService.debug('[DeviceService] User config size:', configSize);
+        return configSize;
     }
 
     private async saveUserConfiguration(event: Electron.Event, json: string): Promise<void> {
         const response = new IpcResponse();
 
         try {
-            this.sendUserConfigToKeyboard(json);
+            this.logService.debug('[DeviceService] USB[T]: Write user configuration to keyboard');
+            await this.sendUserConfigToKeyboard(json);
+            this.logService.debug('[DeviceService] USB[T]: Write user configuration to EEPROM');
             await this.writeUserConfigToEeprom();
-            this.device.close();
 
             response.success = true;
-            this.logService.info('transferring finished');
         }
         catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
             response.error = {message: error.message};
+        } finally {
+            this.device.close();
         }
 
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
@@ -114,19 +172,14 @@ export class DeviceService {
         for (const fragment of fragments) {
             await this.device.write(fragment);
         }
-
+        this.logService.debug('[DeviceService] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = new Buffer([Command.ApplyConfig]);
         await this.device.write(applyBuffer);
-        this.logService.info('[DeviceService] Transferring finished');
     }
 
     private async writeUserConfigToEeprom(): Promise<void> {
-        this.logService.info('[DeviceService] Start write user configuration to eeprom');
-
-        const buffer = await this.device.write(new Buffer([Command.LaunchEepromTransfer, EepromTransfer.WriteUserConfig]));
+        await this.device.write(new Buffer([Command.LaunchEepromTransfer, EepromTransfer.WriteUserConfig]));
         await this.waitUntilKeyboardBusy();
-
-        this.logService.info('[DeviceService] End write user configuration to eeprom');
     }
 
     private async waitUntilKeyboardBusy(): Promise<void> {

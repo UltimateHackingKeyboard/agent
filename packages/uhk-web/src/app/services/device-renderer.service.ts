@@ -9,6 +9,7 @@ import {
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction
 } from '../store/actions/device';
+import { LoadUserConfigFromDeviceReplyAction } from '../store/actions/user-config';
 
 @Injectable()
 export class DeviceRendererService {
@@ -28,6 +29,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.saveUserConfiguration, JSON.stringify(buffer));
     }
 
+    loadUserConfiguration(): void {
+        this.ipcRenderer.send(IpcEvents.device.loadUserConfiguration);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: boolean) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
@@ -39,6 +44,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationReply, (event: string, response: IpcResponse) => {
             this.dispachStoreAction(new SaveConfigurationReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.loadUserConfigurationReply, (event: string, response: string) => {
+            this.dispachStoreAction(new LoadUserConfigFromDeviceReplyAction(JSON.parse(response)));
         });
     }
 

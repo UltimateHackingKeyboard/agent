@@ -7,6 +7,17 @@ import { Constants, LogService } from 'uhk-common';
  */
 export class UhkHidDeviceService {
     /**
+     * Convert the Buffer to number[]
+     * @param {Buffer} buffer
+     * @returns {number[]}
+     * @private
+     * @static
+     */
+    public static convertBufferToIntArray(buffer: Buffer): number[] {
+        return Array.prototype.slice.call(buffer, 0);
+    }
+
+    /**
      * Create the communication package that will send over USB and
      * - add usb report code as 1st byte
      * - https://github.com/node-hid/node-hid/issues/187 issue
@@ -30,17 +41,6 @@ export class UhkHidDeviceService {
         data.unshift(0);
 
         return data;
-    }
-
-    /**
-     * Convert the Buffer to number[]
-     * @param {Buffer} buffer
-     * @returns {number[]}
-     * @private
-     * @static
-     */
-    private static convertBufferToIntArray(buffer: Buffer): number[] {
-        return Array.prototype.slice.call(buffer, 0);
     }
 
     /**
@@ -109,7 +109,7 @@ export class UhkHidDeviceService {
                     return reject(err);
                 }
                 const logString = UhkHidDeviceService.bufferToString(receivedData);
-                this.logService.debug('[UhkHidDevice] Transfer UHK ===> Agent: ', logString);
+                this.logService.debug('[UhkHidDevice] USB[R]:', logString);
 
                 if (receivedData[0] !== 0) {
                     return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
@@ -119,7 +119,7 @@ export class UhkHidDeviceService {
             });
 
             const sendData = UhkHidDeviceService.getTransferData(buffer);
-            this.logService.debug('[UhkHidDevice] Transfer Agent ===> UHK: ', UhkHidDeviceService.bufferToString(sendData));
+            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDeviceService.bufferToString(sendData));
             device.write(sendData);
         });
     }

@@ -22,6 +22,8 @@ class Device {
     public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';
     public static readonly saveUserConfiguration = 'device-save-user-configuration';
     public static readonly saveUserConfigurationReply = 'device-save-user-configuration-reply';
+    public static readonly loadUserConfiguration = 'device-load-user-configuration';
+    public static readonly loadUserConfigurationReply = 'device-load-user-configuration-reply';
 }
 
 export class IpcEvents {

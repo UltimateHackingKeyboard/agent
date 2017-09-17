@@ -15,7 +15,8 @@ import 'rxjs/add/operator/withLatestFrom';
 import { NotificationType, IpcResponse } from 'uhk-common';
 import {
     ActionTypes,
-    ConnectionStateChangedAction, HideSaveToKeyboardButton,
+    ConnectionStateChangedAction,
+    HideSaveToKeyboardButton,
     PermissionStateChangedAction,
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed
@@ -25,10 +26,11 @@ import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { UhkBuffer } from '../../config-serializer/uhk-buffer';
+import { LoadUserConfigFromDeviceAction } from '../actions/user-config';
 
 @Injectable()
 export class DeviceEffects {
-    @Effect({dispatch: false})
+    @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(toPayload)
@@ -39,6 +41,13 @@ export class DeviceEffects {
             else {
                 this.router.navigate(['/detection']);
             }
+        })
+        .switchMap((connected: boolean) => {
+            if (connected) {
+                return Observable.of(new LoadUserConfigFromDeviceAction());
+            }
+
+            return Observable.empty();
         });
 
     @Effect({dispatch: false})
