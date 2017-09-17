@@ -30,24 +30,24 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
     }
 
     private init() {
-        // jQuery(this.elementRef.nativeElement).tooltip({
-        //     placement: this.placement,
-        //     html: this.html,
-        //     template: this.customTooltipTemplate,
-        //     title: this.title
-        // });
+        (<any>jQuery(this.elementRef.nativeElement)).tooltip({
+            placement: this.placement,
+            html: this.html,
+            template: this.customTooltipTemplate,
+            title: this.title
+        });
     }
 
     private fixTitle() {
-        // jQuery(this.elementRef.nativeElement).tooltip({
-        //     placement: this.placement,
-        //     html: this.html,
-        //     template: this.customTooltipTemplate,
-        //     title: this.title
-        // });
+        (<any>jQuery(this.elementRef.nativeElement)).tooltip({
+            placement: this.placement,
+            html: this.html,
+            template: this.customTooltipTemplate,
+            title: this.title
+        });
 
-        // jQuery(this.elementRef.nativeElement)
-        //     .attr('title', this.title)
-        //     .tooltip('fixTitle');
+        (<any>jQuery(this.elementRef.nativeElement)
+            .attr('title', this.title))
+            .tooltip('fixTitle');
     }
 }
