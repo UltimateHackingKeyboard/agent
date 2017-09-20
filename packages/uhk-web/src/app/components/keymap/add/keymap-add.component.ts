@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Keymap } from 'uhk-common';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/publishReplay';
 
-import { Keymap } from '../../../config-serializer/config-items/keymap';
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
 

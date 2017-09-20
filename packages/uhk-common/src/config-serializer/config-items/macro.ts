@@ -1,6 +1,7 @@
 import { assertUInt8 } from '../assert';
 import { UhkBuffer } from '../uhk-buffer';
-import { Helper as MacroActionHelper, MacroAction } from './macro-action';
+import { MacroAction } from './macro-action';
+import { Helper as MacroActionHelper } from './macro-action/helper';
 
 export class Macro {
 

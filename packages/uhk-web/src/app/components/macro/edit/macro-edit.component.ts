@@ -1,13 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { Store } from '@ngrx/store';
+import { Macro, MacroAction } from 'uhk-common';
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/pluck';
-
-import { Macro } from '../../../config-serializer/config-items/macro';
-import { MacroAction } from '../../../config-serializer/config-items/macro-action/macro-action';
 
 import { MacroActions } from '../../../store/actions';
 import { AppState } from '../../../store/index';

@@ -1,10 +1,9 @@
-import { UserConfiguration } from '../uhk-web/src/app/config-serializer/config-items/user-configuration';
-import { UhkBuffer } from '../uhk-web/src/app/config-serializer/uhk-buffer';
+import { UhkBuffer, UserConfiguration } from 'uhk-common';
 
 const assert = require('assert');
 const fs = require('fs');
 
-const userConfig = JSON.parse(fs.readFileSync('../uhk-web/src/app/config-serializer/user-config.json'));
+const userConfig = JSON.parse(fs.readFileSync('../uhk-web/src/app/services/user-config.json'));
 
 const config1Js = userConfig;
 const config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(config1Js);

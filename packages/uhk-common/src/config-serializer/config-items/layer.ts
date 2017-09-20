@@ -2,7 +2,6 @@ import { UhkBuffer } from '../uhk-buffer';
 import { Macro } from './macro';
 import { Module } from './module';
 import { UserConfiguration } from './user-configuration';
-import { ConfigSerializer } from '../config-serializer';
 
 export class Layer {
 

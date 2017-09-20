@@ -1,6 +1,6 @@
 import * as storage from 'electron-settings';
 
-import { UserConfiguration } from '../../app/config-serializer/config-items/user-configuration';
+import { UserConfiguration } from 'uhk-common';
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
 import { AutoUpdateSettings } from '../../app/models/auto-update-settings';
 

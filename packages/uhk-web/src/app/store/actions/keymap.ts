@@ -1,8 +1,5 @@
 import { Action } from '@ngrx/store';
-
-import { KeyAction } from '../../config-serializer/config-items/key-action';
-import { Keymap } from '../../config-serializer/config-items/keymap';
-import { Macro } from '../../config-serializer/config-items/macro';
+import { KeyAction, Keymap, Macro } from 'uhk-common';
 
 export namespace KeymapActions {
     export const PREFIX = '[Keymap] ';

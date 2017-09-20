@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
-
-import { KeyAction } from '../../../config-serializer/config-items/key-action';
+import { KeyAction } from 'uhk-common';
 
 import { SvgKeyboardKey } from '../keys';
 

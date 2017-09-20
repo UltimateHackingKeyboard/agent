@@ -1,6 +1,5 @@
 import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
-
-import { KeyAction, LayerName, SwitchLayerAction } from '../../../../config-serializer/config-items/key-action';
+import { KeyAction, LayerName, SwitchLayerAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 

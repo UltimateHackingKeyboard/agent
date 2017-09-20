@@ -1,6 +1,5 @@
 import { EventEmitter, Output } from '@angular/core';
-
-import { KeyAction } from '../../../config-serializer/config-items/key-action';
+import { KeyAction } from 'uhk-common';
 
 export abstract class Tab {
     @Output() validAction = new EventEmitter<boolean>();

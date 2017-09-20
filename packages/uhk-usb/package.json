@@ -1,5 +1,5 @@
 {
-  "name": "agent-usb",
+  "name": "uhk-usb",
   "version": "1.0.0",
   "description": "Agent preliminary USB code",
   "main": "UhkConnection.js",
@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "node-hid": "0.5.4",
-    "uhk-usb": "1.0.0"
+    "uhk-common": "1.0.0"
   }
 }

@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
-
-import { Layer } from '../../../config-serializer/config-items/layer';
+import { Layer } from 'uhk-common';
 
 type AnimationKeyboard =
     'leftIn' |

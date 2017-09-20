@@ -16,7 +16,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "uhk-web": "^1.0.0"
+    "uhk-common": "1.0.0"
   },
   "scripts": {
     "build": "webpack",

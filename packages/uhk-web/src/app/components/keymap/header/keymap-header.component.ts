@@ -10,10 +10,9 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { Keymap } from 'uhk-common';
 
 import { Store } from '@ngrx/store';
-
-import { Keymap } from '../../../config-serializer/config-items/keymap';
 
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';

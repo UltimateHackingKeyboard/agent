@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
+import { UserConfiguration } from 'uhk-common';
 
 @Injectable()
 export class DefaultUserConfigurationService {
@@ -7,7 +7,7 @@ export class DefaultUserConfigurationService {
 
     constructor() {
         this._defaultConfig = new UserConfiguration()
-            .fromJsonObject(require('../config-serializer/user-config.json'));
+            .fromJsonObject(require('./user-config.json'));
     }
 
     getDefault(): UserConfiguration {

@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { KeyAction, MouseAction, MouseActionParam } from 'uhk-common';
 
-import { KeyAction, MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
 import { Tab } from '../tab';
 
 @Component({

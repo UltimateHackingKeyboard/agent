@@ -22,7 +22,8 @@
     "electron-settings": "3.0.14",
     "electron-updater": "2.2.0",
     "node-hid": "0.5.4",
-    "sudo-prompt": "^7.0.0"
+    "sudo-prompt": "^7.0.0",
+    "uhk-usb": "1.0.0"
   },
   "devDependencies": {
     "uhk-common": "^1.0.0"

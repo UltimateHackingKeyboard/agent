@@ -1,11 +1,12 @@
 import { Device, devices, HID } from 'node-hid';
+import { LogService } from 'uhk-common';
 
-import { Constants, LogService } from 'uhk-common';
+import { Constants } from './constants';
 
 /**
  * HID API wrapper to support unified logging and async write
  */
-export class UhkHidDeviceService {
+export class UhkHidDevice {
     /**
      * Convert the Buffer to number[]
      * @param {Buffer} buffer
@@ -27,7 +28,7 @@ export class UhkHidDeviceService {
      * @static
      */
     private static getTransferData(buffer: Buffer): number[] {
-        const data = UhkHidDeviceService.convertBufferToIntArray(buffer);
+        const data = UhkHidDevice.convertBufferToIntArray(buffer);
         // if data start with 0 need to add additional leading zero because HID API remove it.
         // https://github.com/node-hid/node-hid/issues/187
         if (data.length > 0 && data[0] === 0 && process.platform === 'win32') {
@@ -108,7 +109,7 @@ export class UhkHidDeviceService {
                     this.logService.error('[UhkHidDevice] Transfer error: ', err);
                     return reject(err);
                 }
-                const logString = UhkHidDeviceService.bufferToString(receivedData);
+                const logString = UhkHidDevice.bufferToString(receivedData);
                 this.logService.debug('[UhkHidDevice] USB[R]:', logString);
 
                 if (receivedData[0] !== 0) {
@@ -118,8 +119,8 @@ export class UhkHidDeviceService {
                 return resolve(Buffer.from(receivedData));
             });
 
-            const sendData = UhkHidDeviceService.getTransferData(buffer);
-            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDeviceService.bufferToString(sendData));
+            const sendData = UhkHidDevice.getTransferData(buffer);
+            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDevice.bufferToString(sendData));
             device.write(sendData);
         });
     }

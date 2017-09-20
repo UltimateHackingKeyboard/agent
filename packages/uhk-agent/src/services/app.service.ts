@@ -1,16 +1,16 @@
 import { ipcMain, BrowserWindow } from 'electron';
+import { UhkHidDevice } from 'uhk-usb';
 
 import { CommandLineArgs, IpcEvents, AppStartInfo, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
-import { UhkHidDeviceService } from './uhk-hid-device.service';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
                 private deviceService: DeviceService,
                 private options: CommandLineArgs,
-                private uhkHidDeviceService: UhkHidDeviceService) {
+                private uhkHidDeviceService: UhkHidDevice) {
         super(logService, win);
 
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));

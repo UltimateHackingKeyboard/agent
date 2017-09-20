@@ -5,4 +5,4 @@ export * from './move-mouse-macro-action';
 export * from './mouse-button-macro-action';
 export * from './scroll-mouse-macro-action';
 export * from './text-macro-action';
-export * from './helper';
+export { Helper as MacroActionHelper } from './helper';

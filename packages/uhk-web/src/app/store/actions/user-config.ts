@@ -1,7 +1,5 @@
 import { Action } from '@ngrx/store';
-
-import { type } from 'uhk-common';
-import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
+import { type, UserConfiguration } from 'uhk-common';
 
 const PREFIX = '[user-config] ';
 

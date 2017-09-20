@@ -9,10 +9,8 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-
 import { Store } from '@ngrx/store';
-
-import { Macro } from '../../../config-serializer/config-items/macro';
+import { Macro } from 'uhk-common';
 
 import { MacroActions } from '../../../store/actions';
 import { AppState } from '../../../store/index';

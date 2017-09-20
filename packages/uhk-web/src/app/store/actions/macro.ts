@@ -1,7 +1,5 @@
 import { Action } from '@ngrx/store';
-
-import { Macro } from '../../config-serializer/config-items/macro';
-import { MacroAction } from '../../config-serializer/config-items/macro-action';
+import { Macro, MacroAction } from 'uhk-common';
 
 export namespace MacroActions {
     export const PREFIX = '[Macro] ';

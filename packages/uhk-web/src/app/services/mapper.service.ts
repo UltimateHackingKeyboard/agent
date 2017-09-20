@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { KeystrokeType } from '../config-serializer/config-items/key-action/keystroke-type';
+import { KeystrokeType } from 'uhk-common';
 
 @Injectable()
 export class MapperService {

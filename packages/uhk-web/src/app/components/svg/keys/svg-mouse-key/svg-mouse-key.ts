@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 
-import { MouseAction, MouseActionParam } from '../../../../config-serializer/config-items/key-action';
+import { MouseAction, MouseActionParam } from 'uhk-common';
 
 @Component({
     selector: 'g[svg-mouse-key]',

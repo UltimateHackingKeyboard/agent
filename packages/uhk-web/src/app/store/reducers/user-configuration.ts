@@ -5,12 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { Helper as KeyActionHelper } from '../../config-serializer/config-items/key-action';
-import { Keymap } from '../../config-serializer/config-items/keymap';
-import { Macro } from '../../config-serializer/config-items/macro';
-import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
-import { Layer } from '../../config-serializer/config-items/layer';
-import { Module } from '../../config-serializer/config-items/module';
+import { Keymap, KeyActionHelper, Layer, Macro, Module, UserConfiguration } from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';

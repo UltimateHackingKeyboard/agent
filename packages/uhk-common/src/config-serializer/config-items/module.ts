@@ -1,6 +1,6 @@
 import { assertEnum, assertUInt8 } from '../assert';
 import { UhkBuffer } from '../uhk-buffer';
-import { Helper as KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action';
+import { KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action';
 import { Macro } from './macro';
 import { UserConfiguration } from './user-configuration';
 

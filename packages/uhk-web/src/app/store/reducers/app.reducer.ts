@@ -1,10 +1,9 @@
 import { routerActions } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 
-import { runInElectron, Notification, NotificationType } from 'uhk-common';
+import { runInElectron, Notification, NotificationType, UserConfiguration } from 'uhk-common';
 import { ActionTypes, ShowNotificationAction } from '../actions/app';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
-import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 
 export interface State {
     started: boolean;

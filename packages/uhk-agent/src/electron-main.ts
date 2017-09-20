@@ -8,6 +8,7 @@ import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
 import * as commandLineArgs from 'command-line-args';
+import { UhkHidDevice } from 'uhk-usb';
 
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { CommandLineArgs } from 'uhk-common';
@@ -16,7 +17,6 @@ import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
-import { UhkHidDeviceService } from './services/uhk-hid-device.service';
 
 const optionDefinitions = [
     { name: 'addons', type: Boolean, defaultOption: false }
@@ -33,7 +33,7 @@ let win: Electron.BrowserWindow;
 autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
-let uhkHidDeviceService: UhkHidDeviceService;
+let uhkHidDeviceService: UhkHidDevice;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
 let sudoService: SudoService;
@@ -51,7 +51,7 @@ function createWindow() {
     });
     win.setMenuBarVisibility(false);
     win.maximize();
-    uhkHidDeviceService = new UhkHidDeviceService(logger);
+    uhkHidDeviceService = new UhkHidDevice(logger);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
