@@ -12,8 +12,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 /**
  * IpcMain pair of the UHK Communication
  * Functionality:
@@ -114,7 +112,7 @@ export class DeviceService {
             this.logService.debug('[DeviceService] USB[T]: Write user configuration to keyboard');
             await this.sendUserConfigToKeyboard(json);
             this.logService.debug('[DeviceService] USB[T]: Write user configuration to EEPROM');
-            await this.writeUserConfigToEeprom();
+            await this.device.writeConfigToEeprom(EepromTransfer.WriteUserConfig);
 
             response.success = true;
         }
@@ -145,21 +143,5 @@ export class DeviceService {
         this.logService.debug('[DeviceService] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = new Buffer([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
-    }
-
-    private async writeUserConfigToEeprom(): Promise<void> {
-        await this.device.write(new Buffer([UsbCommand.LaunchEepromTransfer, EepromTransfer.WriteUserConfig]));
-        await this.waitUntilKeyboardBusy();
-    }
-
-    private async waitUntilKeyboardBusy(): Promise<void> {
-        while (true) {
-            const buffer = await this.device.write(new Buffer([UsbCommand.GetKeyboardState]));
-            if (buffer[1] === 0) {
-                break;
-            }
-            this.logService.debug('Keyboard is busy, wait...');
-            await snooze(200);
-        }
     }
 }

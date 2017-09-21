@@ -1,7 +1,9 @@
 import { Device, devices, HID } from 'node-hid';
 import { LogService } from 'uhk-common';
 
-import { Constants, UsbCommand } from './constants';
+import { Constants, EepromTransfer, UsbCommand } from './constants';
+
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * HID API wrapper to support unified logging and async write
@@ -146,6 +148,11 @@ export class UhkHidDevice {
         });
     }
 
+    public async writeConfigToEeprom(transferType: EepromTransfer): Promise<void> {
+        await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, transferType]));
+        await this.waitUntilKeyboardBusy();
+    }
+
     /**
      * Close the communication chanel with UHK Device
      */
@@ -156,6 +163,17 @@ export class UhkHidDevice {
 
         this._device.close();
         this._device = null;
+    }
+
+    private async waitUntilKeyboardBusy(): Promise<void> {
+        while (true) {
+            const buffer = await this.write(new Buffer([UsbCommand.GetKeyboardState]));
+            if (buffer[1] === 0) {
+                break;
+            }
+            this.logService.debug('Keyboard is busy, wait...');
+            await snooze(200);
+        }
     }
 
     /**
