@@ -138,7 +138,7 @@ export class DeviceService {
      */
     private async sendUserConfigToKeyboard(json: string): Promise<void> {
         const buffer: Buffer = new Buffer(JSON.parse(json).data);
-        const fragments = this.getTransferBuffers(buffer);
+        const fragments = UhkHidDevice.getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
         for (const fragment of fragments) {
             await this.device.write(fragment);
         }
@@ -161,25 +161,5 @@ export class DeviceService {
             this.logService.debug('Keyboard is busy, wait...');
             await snooze(200);
         }
-    }
-
-    /**
-     * Split the whole UserConfiguration package into 64 byte fragments
-     * @param {Buffer} configBuffer
-     * @returns {Buffer[]}
-     * @private
-     */
-    private getTransferBuffers(configBuffer: Buffer): Buffer[] {
-        const fragments: Buffer[] = [];
-        const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
-        for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
-            const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
-                ? MAX_SENDING_PAYLOAD_SIZE
-                : configBuffer.length - offset;
-            const header = new Buffer([UsbCommand.UploadConfig, length, offset & 0xFF, offset >> 8]);
-            fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
-        }
-
-        return fragments;
     }
 }

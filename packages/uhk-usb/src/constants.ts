@@ -9,7 +9,7 @@ export namespace Constants {
  */
 export enum UsbCommand {
     GetProperty = 0,
-    UploadConfig = 8,
+    UploadUserConfig = 8,
     ApplyConfig = 9,
     LaunchEepromTransfer = 12,
     ReadUserConfig = 15,

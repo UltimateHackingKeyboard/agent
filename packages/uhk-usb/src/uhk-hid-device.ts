@@ -1,7 +1,7 @@
 import { Device, devices, HID } from 'node-hid';
 import { LogService } from 'uhk-common';
 
-import { Constants } from './constants';
+import { Constants, UsbCommand } from './constants';
 
 /**
  * HID API wrapper to support unified logging and async write
@@ -16,6 +16,27 @@ export class UhkHidDevice {
      */
     public static convertBufferToIntArray(buffer: Buffer): number[] {
         return Array.prototype.slice.call(buffer, 0);
+    }
+
+    /**
+     * Split the communication package into 64 byte fragments
+     * @param {UsbCommand} usbCommand
+     * @param {Buffer} configBuffer
+     * @returns {Buffer[]}
+     * @private
+     */
+    public static getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer): Buffer[] {
+        const fragments: Buffer[] = [];
+        const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
+        for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
+            const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
+                ? MAX_SENDING_PAYLOAD_SIZE
+                : configBuffer.length - offset;
+            const header = new Buffer([usbCommand, length, offset & 0xFF, offset >> 8]);
+            fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
+        }
+
+        return fragments;
     }
 
     /**
