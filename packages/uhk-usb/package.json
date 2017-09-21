@@ -2,7 +2,7 @@
   "name": "uhk-usb",
   "version": "1.0.0",
   "description": "Agent preliminary USB code",
-  "main": "UhkConnection.js",
+  "main": "dist/index.js",
   "license": "GPL-3.0",
   "scripts": {
     "build": "tsc"
