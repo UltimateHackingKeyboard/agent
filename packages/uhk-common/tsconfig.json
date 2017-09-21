@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "sourceMap": true,
+    "outDir": "./dist",
     "declaration": false,
     "module": "commonjs",
     "moduleResolution": "node",

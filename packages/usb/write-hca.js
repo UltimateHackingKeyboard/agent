@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-const uhk = require('./uhk');
+const {HardwareConfiguration, LogService, UhkBuffer} = require('uhk-common');
+const {EepromTransfer, UhkHidDevice, UsbCommand} = require('uhk-usb');
 
 if (process.argv.length < 3) {
     console.log(`use: write-hca <layout> <manufactureId>
@@ -22,25 +23,27 @@ if (isNaN(uuid)) {
     console.log('Manufacture Id is not a integer');
     process.exit(1);
 }
+const hardwareConfig = new HardwareConfiguration();
 
-const signature = 'UHK';
-const dataModelVersion = 0;
-const hardwareId = 0;
-const brandId = 0;
-const isIso = layout === 'iso' ? 1 : 0;
-const hasBacklighting = 0;
+hardwareConfig.signature = 'UHK';
+hardwareConfig.dataModelVersion = 0;
+hardwareConfig.hardwareId = 0;
+hardwareConfig.uuid = uuid;
+hardwareConfig.brandId = 0;
+hardwareConfig.isIso = layout === 'iso';
+hardwareConfig.hasBacklighting = false;
 
-const device = uhk.getUhkDevice();
-const payload = uhk.getTransferData(Buffer.concat([
-    Buffer.from([uhk.usbCommands.writeHardwareConfig]),
-    Buffer.from(signature),
-    Buffer.from([dataModelVersion, hardwareId, uuid, brandId, isIso, hasBacklighting])
-]));
-uhk.sendLog(payload);
-device.write(payload);
-const response = Buffer.from(device.readSync());
-uhk.readLog(response);
+async function writeHca() {
+    const device = new UhkHidDevice(new LogService());
+    const hardwareBuffer = new UhkBuffer();
+    hardwareConfig.toBinary(hardwareBuffer);
+    const buffer = hardwareBuffer.buffer.slice(0, 60);
+    const fragments = UhkHidDevice.getTransferBuffers(UsbCommand.WriteHardwareConfig, buffer);
+    for (const fragment of fragments) {
+        await device.write(fragment);
+    }
 
-if (response[0] !== 0) {
-    process.exit(response[0]);
+    await device.writeConfigToEeprom(EepromTransfer.WriteHardwareConfig);
 }
+
+writeHca();

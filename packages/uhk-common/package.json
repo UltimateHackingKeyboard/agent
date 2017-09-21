@@ -3,8 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "description": "Common Library contains the common code for uhk-agent (electron-main) and web (electron-renderer) modules",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +13,7 @@
   "devDependencies": {
     "@angular/core": "4.3.3",
     "@ngrx/core": "1.2.0",
-    "@ngrx/store": "2.2.3"
+    "@ngrx/store": "2.2.3",
+    "@types/node": "8.0.28"
   }
 }

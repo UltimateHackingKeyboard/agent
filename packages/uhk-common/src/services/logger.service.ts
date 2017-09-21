@@ -4,11 +4,11 @@ export class LogService {
     }
 
     debug(...args: any[]): void {
-        console.debug(args);
+        console.log(args);
     }
 
     silly(...args: any[]): void {
-        console.debug(args);
+        console.log(args);
     }
 
     info(...args: any[]): void {
