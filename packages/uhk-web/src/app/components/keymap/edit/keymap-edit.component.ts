@@ -16,10 +16,11 @@ import 'rxjs/add/operator/combineLatest';
 
 import { saveAs } from 'file-saver';
 
-import { AppState } from '../../../store';
+import { AppState, getKeyboardLayout } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 import 'rxjs/add/operator/pluck';
 import { SvgKeyboardWrapComponent } from '../../svg/wrap/svg-keyboard-wrap.component';
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 @Component({
     selector: 'keymap-edit',
@@ -37,6 +38,7 @@ export class KeymapEditComponent {
 
     deletable$: Observable<boolean>;
     keymap$: Observable<Keymap>;
+    keyboardLayout$: Observable<KeyboardLayout>;
 
     constructor(protected store: Store<AppState>,
                 route: ActivatedRoute) {
@@ -49,6 +51,8 @@ export class KeymapEditComponent {
 
         this.deletable$ = store.let(getKeymaps())
             .map((keymaps: Keymap[]) => keymaps.length > 1);
+
+        this.keyboardLayout$ = store.select(getKeyboardLayout);
     }
 
     downloadKeymap() {

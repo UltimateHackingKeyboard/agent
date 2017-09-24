@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
+import { IpcEvents, LogService, IpcResponse, ConfigurationReply } from 'uhk-common';
 import { Constants, EepromTransfer, SystemPropertyIds, UsbCommand } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -28,7 +28,7 @@ export class DeviceService {
                 private device: UhkHidDevice) {
         this.pollUhkDevice();
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
-        ipcMain.on(IpcEvents.device.loadUserConfiguration, this.loadUserConfiguration.bind(this));
+        ipcMain.on(IpcEvents.device.loadConfigurations, this.loadConfigurations.bind(this));
         logService.debug('[DeviceService] init success');
     }
 
@@ -44,32 +44,64 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadUserConfiguration(event: Electron.Event): Promise<void> {
+    public async loadConfigurations(event: Electron.Event): Promise<void> {
+        try {
+            const userConfiguration = await this.loadConfiguration(
+                SystemPropertyIds.UserConfigSize,
+                UsbCommand.ReadUserConfig,
+                'user configuration');
+
+            const hardwareConfiguration = await this.loadConfiguration(
+                SystemPropertyIds.HardwareConfigSize,
+                UsbCommand.ReadHardwareConfig,
+                'hardware configuration');
+
+            const response: ConfigurationReply = {
+                success: true,
+                userConfiguration,
+                hardwareConfiguration
+            };
+            event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
+        } catch (error) {
+            const response: ConfigurationReply = {
+                success: false,
+                error: error.message
+            };
+            event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
+        } finally {
+            this.device.close();
+        }
+    }
+
+    /**
+     * Return with the actual user / hardware fonfiguration from UHK Device
+     * @returns {Promise<Buffer>}
+     */
+    public async loadConfiguration(property: SystemPropertyIds, config: UsbCommand, configName: string): Promise<string> {
         let response = [];
 
         try {
-            this.logService.debug('[DeviceService] USB[T]: Read user configuration size from keyboard');
-            const configSize = await this.getUserConfigSizeFromKeyboard();
+            this.logService.debug(`[DeviceService] USB[T]: Read ${configName} size from keyboard`);
+            const configSize = await this.getConfigSizeFromKeyboard(property);
             const chunkSize = 63;
             let offset = 0;
             let configBuffer = new Buffer(0);
 
-            this.logService.debug('[DeviceService] USB[T]: Read user configuration from keyboard');
+            this.logService.debug(`[DeviceService] USB[T]: Read ${configName} from keyboard`);
             while (offset < configSize) {
                 const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
-                const writeBuffer = Buffer.from([UsbCommand.ReadUserConfig, chunkSizeToRead, offset & 0xff, offset >> 8]);
+                const writeBuffer = Buffer.from([config, chunkSizeToRead, offset & 0xff, offset >> 8]);
                 const readBuffer = await this.device.write(writeBuffer);
                 configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
             }
             response = UhkHidDevice.convertBufferToIntArray(configBuffer);
+            return Promise.resolve(JSON.stringify(response));
         } catch (error) {
-            this.logService.error('[DeviceService] getUserConfigFromEeprom error', error);
-        } finally {
-            this.device.close();
+            const errMsg = `[DeviceService] ${configName} from eeprom error`;
+            this.logService.error(errMsg, error);
+            throw new Error(errMsg);
         }
-
-        event.sender.send(IpcEvents.device.loadUserConfigurationReply, JSON.stringify(response));
     }
 
     /**
@@ -95,11 +127,11 @@ export class DeviceService {
     }
 
     /**
-     * Return the UserConfiguration size from the UHK Device
+     * Return the user / hardware configuration size from the UHK Device
      * @returns {Promise<number>}
      */
-    private async getUserConfigSizeFromKeyboard(): Promise<number> {
-        const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, SystemPropertyIds.UserConfigSize]));
+    private async getConfigSizeFromKeyboard(property: SystemPropertyIds): Promise<number> {
+        const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, property]));
         const configSize = buffer[1] + (buffer[2] << 8);
         this.logService.debug('[DeviceService] User config size:', configSize);
         return configSize;

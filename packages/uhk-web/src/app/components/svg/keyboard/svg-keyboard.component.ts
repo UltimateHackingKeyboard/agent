@@ -4,6 +4,7 @@ import { Module } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 @Component({
     selector: 'svg-keyboard',
@@ -29,6 +30,7 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
     @Input() halvesSplit: boolean;
+    @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
@@ -45,12 +47,16 @@ export class SvgKeyboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.modules = this.svgModuleProvider.getSvgModules();
+        this.setModuls();
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.halvesSplit) {
             this.updateModuleAnimationStates();
+        }
+
+        if (changes['keyboardLayout']) {
+            this.setModuls();
         }
     }
 
@@ -87,4 +93,7 @@ export class SvgKeyboardComponent implements OnInit {
         }
     }
 
+    private setModuls() {
+        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout);
+    }
 }

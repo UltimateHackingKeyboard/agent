@@ -4,6 +4,24 @@ export class UhkBuffer {
         (<any>element).toBinary(buffer); // TODO: Remove any
     }
 
+    static fromArray(data: Array<number>): UhkBuffer {
+        if (data.length < 1) {
+            return null;
+        }
+
+        const uhkBuffer = new UhkBuffer();
+        let hasNonZeroValue = false;
+        for (const num of data) {
+            if (num > 0) {
+                hasNonZeroValue = true;
+            }
+            uhkBuffer.writeUInt8(num);
+        }
+        uhkBuffer.offset = 0;
+
+        return uhkBuffer;
+    }
+
     private static eepromSize = 32 * 1024;
     private static maxCompactLength = 0xFFFF;
     private static longCompactLengthPrefix = 0xFF;

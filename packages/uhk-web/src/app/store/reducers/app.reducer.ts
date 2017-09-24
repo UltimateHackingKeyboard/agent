@@ -1,9 +1,10 @@
 import { routerActions } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 
-import { runInElectron, Notification, NotificationType, UserConfiguration } from 'uhk-common';
+import { HardwareConfiguration, runInElectron, Notification, NotificationType, UserConfiguration } from 'uhk-common';
 import { ActionTypes, ShowNotificationAction } from '../actions/app';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
+import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 
 export interface State {
     started: boolean;
@@ -12,7 +13,8 @@ export interface State {
     navigationCountAfterNotification: number;
     prevUserConfig?: UserConfiguration;
     runningInElectron: boolean;
-    userConfigLoading: boolean;
+    configLoading: boolean;
+    hardwareConfig?: HardwareConfiguration;
 }
 
 const initialState: State = {
@@ -20,7 +22,7 @@ const initialState: State = {
     showAddonMenu: false,
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
-    userConfigLoading: true
+    configLoading: true
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -55,7 +57,7 @@ export function reducer(state = initialState, action: Action) {
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
         case routerActions.UPDATE_LOCATION: {
-            const newState = { ...state };
+            const newState = {...state};
             newState.navigationCountAfterNotification++;
 
             if (newState.navigationCountAfterNotification > 1) {
@@ -78,17 +80,23 @@ export function reducer(state = initialState, action: Action) {
             return {
                 ...state,
                 prevUserConfig: action.payload,
-                userConfigLoading: false
+                configLoading: false
             };
         }
 
-        case UserConfigActionTypes.LOAD_USER_CONFIG_FROM_DEVICE:
+        case UserConfigActionTypes.LOAD_CONFIG_FROM_DEVICE:
         case UserConfigActionTypes.LOAD_USER_CONFIG: {
             return {
                 ...state,
-                userConfigLoading: true
+                configLoading: true
             };
         }
+
+        case ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS:
+            return {
+                ...state,
+                hardwareConfig: action.payload
+            };
 
         default:
             return state;
@@ -99,3 +107,11 @@ export const showAddonMenu = (state: State) => state.showAddonMenu;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;
+export const getHardwareConfiguration = (state: State) => state.hardwareConfig;
+export const getKeyboardLayout = (state: State): KeyboardLayout => {
+    if (state.hardwareConfig && state.hardwareConfig.isIso) {
+        return KeyboardLayout.ISO;
+    }
+
+    return KeyboardLayout.ANSI;
+};

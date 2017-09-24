@@ -37,6 +37,7 @@ import { MapperService } from '../../../services/mapper.service';
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
 import { PopoverComponent } from '../../popover';
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 interface NameValuePair {
     name: string;
@@ -54,6 +55,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesSplit: boolean;
+    @Input() keyboardLayout: KeyboardLayout.ANSI;
 
     @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 

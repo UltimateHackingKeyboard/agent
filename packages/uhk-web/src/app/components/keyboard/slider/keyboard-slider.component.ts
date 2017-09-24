@@ -2,6 +2,8 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnChan
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { Layer } from 'uhk-common';
 
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
+
 type AnimationKeyboard =
     'leftIn' |
     'leftOut' |
@@ -68,6 +70,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() capturingEnabled: boolean;
     @Input() halvesSplit: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();

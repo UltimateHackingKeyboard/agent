@@ -52,6 +52,8 @@ export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
+export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
+export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);

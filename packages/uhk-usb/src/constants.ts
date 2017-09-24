@@ -12,6 +12,7 @@ export enum UsbCommand {
     UploadUserConfig = 8,
     ApplyConfig = 9,
     LaunchEepromTransfer = 12,
+    ReadHardwareConfig = 13,
     WriteHardwareConfig = 14,
     ReadUserConfig = 15,
     GetKeyboardState = 16

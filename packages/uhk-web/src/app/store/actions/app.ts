@@ -1,8 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { type } from 'uhk-common';
-import { Notification, CommandLineArgs } from 'uhk-common';
-import { AppStartInfo } from '../../../../../uhk-common/src/models/app-start-info';
+import { AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
 
 const PREFIX = '[app] ';
 
@@ -15,7 +14,8 @@ export const ActionTypes = {
     APP_PROCESS_START_INFO: type(PREFIX + 'process start info'),
     UNDO_LAST: type(PREFIX + 'undo last action'),
     UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
-    DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action')
+    DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action'),
+    LOAD_HARDWARE_CONFIGURATION_SUCCESS: type(PREFIX + 'load hardware configuration success')
 };
 
 export class AppBootsrappedAction implements Action {
@@ -58,6 +58,12 @@ export class DismissUndoNotificationAction implements Action {
     type = ActionTypes.DISMISS_UNDO_NOTIFICATION;
 }
 
+export class LoadHardwareConfigurationSuccessAction implements Action {
+    type = ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS;
+
+    constructor(public payload: HardwareConfiguration) {}
+}
+
 export type Actions
     = AppStartedAction
     | AppBootsrappedAction
@@ -66,4 +72,6 @@ export type Actions
     | ProcessAppStartInfoAction
     | UndoLastAction
     | UndoLastSuccessAction
-    | DismissUndoNotificationAction;
+    | DismissUndoNotificationAction
+    | LoadHardwareConfigurationSuccessAction
+    ;

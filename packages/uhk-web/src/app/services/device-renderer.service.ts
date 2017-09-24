@@ -9,7 +9,7 @@ import {
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction
 } from '../store/actions/device';
-import { LoadUserConfigFromDeviceReplyAction } from '../store/actions/user-config';
+import { LoadConfigFromDeviceReplyAction } from '../store/actions/user-config';
 
 @Injectable()
 export class DeviceRendererService {
@@ -29,8 +29,8 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.saveUserConfiguration, JSON.stringify(buffer));
     }
 
-    loadUserConfiguration(): void {
-        this.ipcRenderer.send(IpcEvents.device.loadUserConfiguration);
+    loadConfigurationFromKeyboard(): void {
+        this.ipcRenderer.send(IpcEvents.device.loadConfigurations);
     }
 
     private registerEvents(): void {
@@ -46,8 +46,8 @@ export class DeviceRendererService {
             this.dispachStoreAction(new SaveConfigurationReplyAction(response));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.loadUserConfigurationReply, (event: string, response: string) => {
-            this.dispachStoreAction(new LoadUserConfigFromDeviceReplyAction(JSON.parse(response)));
+        this.ipcRenderer.on(IpcEvents.device.loadConfigurationReply, (event: string, response: string) => {
+            this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response)));
         });
     }
 
