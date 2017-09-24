@@ -17,7 +17,8 @@
       "es2016"
     ],
     "paths": {
-      "@angular/*": ["../node_modules/@angular/*"]
+      "@angular/*": ["../node_modules/@angular/*"],
+      "rxjs/*": ["../node_modules/rxjs/*"]
     }
   }
 }
