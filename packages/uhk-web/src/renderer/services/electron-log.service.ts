@@ -1,25 +1,19 @@
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 import * as util from 'util';
-
-import { LogService } from 'uhk-common';
-
-const transferRegExp = /USB\[T]:/;
-const writeRegExp = /USB\[W]:/;
-const readRegExp = /USB\[R]: 00/;
-const errorRegExp = /(?:(USB\[R]: ([^0]|0[^0])))/;
+import { LogService, LogRegExps } from 'uhk-common';
 
 // https://github.com/megahertz/electron-log/issues/44
 // console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
 if (console.debug) {
     console.debug = (...args: any[]): void => {
-        if (writeRegExp.test(args[0])) {
+        if (LogRegExps.writeRegExp.test(args[0])) {
             console.log('%c' + args[0], 'color:blue');
-        } else if (readRegExp.test(args[0])) {
+        } else if (LogRegExps.readRegExp.test(args[0])) {
             console.log('%c' + args[0], 'color:green');
-        } else if (errorRegExp.test(args[0])) {
+        } else if (LogRegExps.errorRegExp.test(args[0])) {
             console.log('%c' + args[0], 'color:red');
-        }else if (transferRegExp.test(args[0])) {
+        }else if (LogRegExps.transferRegExp.test(args[0])) {
             console.log('%c' + args[0], 'color:orange');
         } else {
             console.log(...args);
