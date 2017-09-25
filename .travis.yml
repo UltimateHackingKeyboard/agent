@@ -32,7 +32,6 @@ install:
 
 before_script:
   - npm run build
-  - npm run build:test
   - npm run lint
 
 script:

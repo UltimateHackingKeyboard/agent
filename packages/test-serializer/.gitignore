@@ -1,4 +1,3 @@
-uhk-config.bin
-uhk-config-serialized.json
-uhk-config-serialized.bin
-test-serializer.js
+user-config.bin
+user-config-serialized.json
+user-config-serialized.bin
