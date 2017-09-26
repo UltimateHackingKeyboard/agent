@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
+import { Keymap, KeyAction, SwitchKeymapAction } from 'uhk-common';
 
-import { KeyAction, SwitchKeymapAction } from '../../../../config-serializer/config-items/key-action';
-import { Keymap } from '../../../../config-serializer/config-items/keymap';
 import { Tab } from '../tab';
 
 @Component({

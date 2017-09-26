@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { Keymap } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -10,7 +11,6 @@ import 'rxjs/add/operator/switchMap';
 
 import { Store } from '@ngrx/store';
 
-import { Keymap } from '../../../config-serializer/config-items/keymap';
 import { AppState } from '../../../store/index';
 import { getKeymaps } from '../../../store/reducers/user-configuration';
 

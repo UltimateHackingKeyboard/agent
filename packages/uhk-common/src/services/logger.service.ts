@@ -1,17 +1,14 @@
-import { Injectable } from '@angular/core';
-
-@Injectable()
 export class LogService {
     error(...args: any[]): void {
         console.error(args);
     }
 
     debug(...args: any[]): void {
-        console.debug(args);
+        console.log(args);
     }
 
     silly(...args: any[]): void {
-        console.debug(args);
+        console.log(args);
     }
 
     info(...args: any[]): void {

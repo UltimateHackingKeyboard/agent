@@ -1,16 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
-import { KeyModifiers } from '../../../config-serializer/config-items/key-modifiers';
 import {
     DelayMacroAction,
     KeyMacroAction,
+    KeyModifiers,
     MacroAction,
     MouseButtonMacroAction,
     MoveMouseMacroAction,
     ScrollMouseMacroAction,
     TextMacroAction
-} from '../../../config-serializer/config-items/macro-action';
+} from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
 

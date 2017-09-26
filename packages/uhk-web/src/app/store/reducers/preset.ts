@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
+import { Keymap } from 'uhk-common';
 
-import { Keymap } from '../../config-serializer/config-items/keymap';
 import { KeymapActions } from '../actions/keymap';
 
 const initialState: Keymap[] = [];

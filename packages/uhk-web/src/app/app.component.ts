@@ -2,6 +2,7 @@ import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
+import { UhkBuffer } from 'uhk-common';
 
 import 'rxjs/add/operator/last';
 
@@ -14,7 +15,6 @@ import {
     saveToKeyboardState
 } from './store';
 import { getUserConfiguration } from './store/reducers/user-configuration';
-import { UhkBuffer } from './config-serializer/uhk-buffer';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 
 @Component({

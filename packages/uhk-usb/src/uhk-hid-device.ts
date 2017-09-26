@@ -1,11 +1,14 @@
 import { Device, devices, HID } from 'node-hid';
+import { LogService } from 'uhk-common';
 
-import { Constants, LogService } from 'uhk-common';
+import { Constants, EepromTransfer, UsbCommand } from './constants';
+
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * HID API wrapper to support unified logging and async write
  */
-export class UhkHidDeviceService {
+export class UhkHidDevice {
     /**
      * Convert the Buffer to number[]
      * @param {Buffer} buffer
@@ -18,6 +21,27 @@ export class UhkHidDeviceService {
     }
 
     /**
+     * Split the communication package into 64 byte fragments
+     * @param {UsbCommand} usbCommand
+     * @param {Buffer} configBuffer
+     * @returns {Buffer[]}
+     * @private
+     */
+    public static getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer): Buffer[] {
+        const fragments: Buffer[] = [];
+        const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
+        for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
+            const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
+                ? MAX_SENDING_PAYLOAD_SIZE
+                : configBuffer.length - offset;
+            const header = new Buffer([usbCommand, length, offset & 0xFF, offset >> 8]);
+            fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
+        }
+
+        return fragments;
+    }
+
+    /**
      * Create the communication package that will send over USB and
      * - add usb report code as 1st byte
      * - https://github.com/node-hid/node-hid/issues/187 issue
@@ -27,7 +51,7 @@ export class UhkHidDeviceService {
      * @static
      */
     private static getTransferData(buffer: Buffer): number[] {
-        const data = UhkHidDeviceService.convertBufferToIntArray(buffer);
+        const data = UhkHidDevice.convertBufferToIntArray(buffer);
         // if data start with 0 need to add additional leading zero because HID API remove it.
         // https://github.com/node-hid/node-hid/issues/187
         if (data.length > 0 && data[0] === 0 && process.platform === 'win32') {
@@ -108,7 +132,7 @@ export class UhkHidDeviceService {
                     this.logService.error('[UhkHidDevice] Transfer error: ', err);
                     return reject(err);
                 }
-                const logString = UhkHidDeviceService.bufferToString(receivedData);
+                const logString = UhkHidDevice.bufferToString(receivedData);
                 this.logService.debug('[UhkHidDevice] USB[R]:', logString);
 
                 if (receivedData[0] !== 0) {
@@ -118,10 +142,15 @@ export class UhkHidDeviceService {
                 return resolve(Buffer.from(receivedData));
             });
 
-            const sendData = UhkHidDeviceService.getTransferData(buffer);
-            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDeviceService.bufferToString(sendData));
+            const sendData = UhkHidDevice.getTransferData(buffer);
+            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDevice.bufferToString(sendData));
             device.write(sendData);
         });
+    }
+
+    public async writeConfigToEeprom(transferType: EepromTransfer): Promise<void> {
+        await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, transferType]));
+        await this.waitUntilKeyboardBusy();
     }
 
     /**
@@ -134,6 +163,17 @@ export class UhkHidDeviceService {
 
         this._device.close();
         this._device = null;
+    }
+
+    private async waitUntilKeyboardBusy(): Promise<void> {
+        while (true) {
+            const buffer = await this.write(new Buffer([UsbCommand.GetKeyboardState]));
+            if (buffer[1] === 0) {
+                break;
+            }
+            this.logService.debug('Keyboard is busy, wait...');
+            await snooze(200);
+        }
     }
 
     /**

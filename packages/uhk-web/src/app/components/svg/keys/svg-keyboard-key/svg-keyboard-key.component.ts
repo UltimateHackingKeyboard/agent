@@ -10,15 +10,15 @@ import { Subscription } from 'rxjs/Subscription';
 
 import {
     KeyAction,
+    KeyModifiers,
     KeystrokeAction,
     LayerName,
+    Macro,
     MouseAction,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction
-} from '../../../../config-serializer/config-items/key-action';
-import { KeyModifiers } from '../../../../config-serializer/config-items/key-modifiers';
-import { Macro } from '../../../../config-serializer/config-items/macro';
+} from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';

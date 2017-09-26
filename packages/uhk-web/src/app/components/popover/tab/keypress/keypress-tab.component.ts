@@ -1,12 +1,9 @@
 import { Component, Input, OnChanges } from '@angular/core';
-
 import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
-
-import { KeyAction, KeystrokeAction } from '../../../../config-serializer/config-items/key-action';
+import { KeyAction, KeystrokeAction, KeystrokeType } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
-import { KeystrokeType } from '../../../../config-serializer/config-items/key-action/keystroke-type';
 
 @Component({
     selector: 'keypress-tab',

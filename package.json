@@ -16,7 +16,8 @@
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.0.2",
     "@types/electron-settings": "^3.0.0",
-    "@types/node": "~8.0.25",
+    "@types/jasmine": "2.6.0",
+    "@types/node": "8.0.30",
     "@types/node-hid": "^0.5.2",
     "@types/usb": "^1.1.3",
     "autoprefixer": "^6.5.3",
@@ -44,25 +45,27 @@
     "ts-loader": "^2.3.1",
     "ts-node": "~3.0.4",
     "tslint": "~5.5.0",
-    "typescript": "^2.4.2",
+    "typescript": "2.5.2",
     "webpack": "^2.4.1"
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
     "test": "lerna exec --scope test-serializer npm test",
     "lint": "run-s -scn lint:ts lint:style",
-    "lint:ts": "run-p -sn lint:ts:electron-main lint:ts:electron-renderer lint:ts:web lint:ts:test-serializer",
+    "lint:ts": "run-p -sn lint:ts:electron-main lint:ts:electron-renderer lint:ts:web lint:ts:test-serializer lint:ts:uhk-usb",
     "lint:ts:electron-main": "tslint --type-check --project ./packages/uhk-agent/tsconfig.json",
     "lint:ts:electron-renderer": "tslint --type-check --project ./packages/uhk-web/src/tsconfig.renderer.json",
     "lint:ts:web": "tslint --type-check --project ./packages/uhk-web/src/tsconfig.app.json",
     "lint:ts:test-serializer": "tslint --type-check --project ./packages/test-serializer/tsconfig.json",
+    "lint:ts:uhk-usb": "tslint --type-check --project ./packages/uhk-usb/tsconfig.json",
     "lint:style": "stylelint \"packages/uhk-agent/src/**/*.scss\" \"packages/uhk-web/src/**/*.scss\" --syntax scss",
-    "build": "run-s build:web build:electron",
+    "build": "run-s build:web build:electron build:usb build:common",
     "build:web": "lerna exec --scope uhk-web npm run build",
     "build:electron": "cross-env AOT_BUILD=true run-s -sn build:electron:renderer build:electron:main",
     "build:electron:main": "lerna exec --scope uhk-agent npm run build",
     "build:electron:renderer": "lerna exec --scope uhk-web npm run build:renderer",
-    "build:test": "lerna exec --scope test-serializer npm run build",
+    "build:common": "lerna exec --scope uhk-common npm run build",
+    "build:usb": "lerna exec --scope uhk-usb npm run build",
     "server:web": "lerna exec --scope uhk-web npm start",
     "server:electron": "lerna exec --scope uhk-web npm run server:renderer",
     "electron": "lerna exec --scope uhk-agent npm start",
@@ -70,6 +73,6 @@
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",
-    "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist package-lock.json"
+    "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist"
   }
 }

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 
-import { NotificationType, IpcResponse } from 'uhk-common';
+import { NotificationType, IpcResponse, UhkBuffer, UserConfiguration } from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction,
@@ -24,9 +24,7 @@ import {
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
-import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
-import { UhkBuffer } from '../../config-serializer/uhk-buffer';
-import { LoadUserConfigFromDeviceAction } from '../actions/user-config';
+import { LoadConfigFromDeviceAction } from '../actions/user-config';
 
 @Injectable()
 export class DeviceEffects {
@@ -44,7 +42,7 @@ export class DeviceEffects {
         })
         .switchMap((connected: boolean) => {
             if (connected) {
-                return Observable.of(new LoadUserConfigFromDeviceAction());
+                return Observable.of(new LoadConfigFromDeviceAction());
             }
 
             return Observable.empty();

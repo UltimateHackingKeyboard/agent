@@ -3,7 +3,6 @@ import { Layer } from './layer';
 import { Macro } from './macro';
 import { SwitchLayerAction } from './key-action/switch-layer-action';
 import { KeyAction } from './key-action/key-action';
-import { ConfigSerializer } from '../config-serializer';
 import { UserConfiguration } from './user-configuration';
 
 export class Keymap {

@@ -5,7 +5,7 @@ import {
     MoveMouseMacroAction,
     ScrollMouseMacroAction,
     MacroSubAction
-} from '../../../../../config-serializer/config-items/macro-action';
+} from 'uhk-common';
 import { Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 

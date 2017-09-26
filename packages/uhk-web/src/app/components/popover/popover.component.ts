@@ -19,13 +19,13 @@ import 'rxjs/add/operator/map';
 
 import {
     KeyAction,
+    Keymap,
     KeystrokeAction,
     MouseAction,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction
-} from '../../config-serializer/config-items/key-action';
-import { Keymap } from '../../config-serializer/config-items/keymap';
+} from 'uhk-common';
 
 import { Tab } from './tab/tab';
 

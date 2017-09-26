@@ -1,0 +1,17 @@
+{
+  "name": "uhk-usb",
+  "version": "1.0.0",
+  "description": "Agent preliminary USB code",
+  "main": "dist/index.js",
+  "license": "GPL-3.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "8.0.28"
+  },
+  "dependencies": {
+    "node-hid": "0.5.4",
+    "uhk-common": "1.0.0"
+  }
+}

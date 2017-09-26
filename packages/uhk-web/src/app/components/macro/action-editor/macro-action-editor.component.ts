@@ -8,8 +8,8 @@ import {
     MoveMouseMacroAction,
     MouseButtonMacroAction,
     TextMacroAction,
-    Helper as MacroActionHelper
-} from '../../../config-serializer/config-items/macro-action';
+    MacroActionHelper
+} from 'uhk-common';
 import { MacroDelayTabComponent, MacroMouseTabComponent, MacroKeyTabComponent, MacroTextTabComponent } from './tab';
 
 enum TabName {

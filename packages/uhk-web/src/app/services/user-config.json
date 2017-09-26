@@ -1080,10 +1080,12 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 47
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 48
                 },
                 {
@@ -1093,54 +1095,67 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 10
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 6
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 21
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 15
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 56
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 46
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 49
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 9
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 11
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 23
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 17
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 22
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 45
                 },
                 {
@@ -1150,26 +1165,32 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 7
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 5
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 16
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 26
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 25
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 29
                 },
                 {
@@ -1256,23 +1277,28 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 52
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 54
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 55
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 19
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 28
                 },
                 {
@@ -1287,19 +1313,23 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 18
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 8
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 24
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 12
                 },
                 {
@@ -1310,22 +1340,27 @@
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 51
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 20
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 13
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 14
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 27
                 },
                 {
@@ -2105,18 +2140,22 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 15
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 24
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 28
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 51
                 },
                 {
@@ -2136,22 +2175,27 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 13
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 17
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 8
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 12
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 18
                 },
                 {
@@ -2171,10 +2215,12 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 14
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 16
                 },
                 {
@@ -2286,15 +2332,18 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 9
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 19
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 10
                 },
                 {
@@ -2309,19 +2358,23 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 21
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 22
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 23
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 7
                 },
                 {
@@ -3132,18 +3185,22 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 9
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 24
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 19
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 51
                 },
                 {
@@ -3163,22 +3220,27 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 13
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 17
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 8
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 18
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 12
                 },
                 {
@@ -3193,14 +3255,17 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 28
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 14
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 15
                 },
                 {
@@ -3307,19 +3372,23 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 7
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 21
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 26
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 5
                 },
                 {
@@ -3334,19 +3403,23 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 22
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 11
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 23
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 10
                 },
                 {
@@ -3367,14 +3440,17 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 16
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 6
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 25
                 },
                 {
@@ -4462,72 +4538,89 @@
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 35
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 34
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 33
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 32
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 31
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 30
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 53
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 21
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 8
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 26
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 20
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 43
                 },
                 null,
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 23
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 9
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 7
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 22
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 4
                 },
                 {
@@ -4538,26 +4631,32 @@
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 10
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 5
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 25
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 6
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 27
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 29
                 },
                 {
@@ -4600,30 +4699,37 @@
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 42
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 46
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 45
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 39
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 38
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 37
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 36
                 },
                 {
@@ -4633,23 +4739,28 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 19
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 18
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 12
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 24
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 28
                 },
                 {
@@ -4659,23 +4770,28 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 51
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 15
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 14
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 13
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 11
                 },
                 {
@@ -4686,22 +4802,27 @@
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 56
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 55
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 54
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 16
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 17
                 },
                 {
@@ -5489,72 +5610,89 @@
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 35
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 34
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 33
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 32
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 31
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 30
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 53
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 21
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 8
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 26
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 20
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 43
                 },
                 null,
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 23
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 9
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 7
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 22
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 4
                 },
                 {
@@ -5565,26 +5703,32 @@
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 10
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 5
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 25
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 6
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 27
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 29
                 },
                 {
@@ -5627,30 +5771,37 @@
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 42
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 46
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 45
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 39
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 38
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 37
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 36
                 },
                 {
@@ -5660,23 +5811,28 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 19
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 18
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 12
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 24
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 28
                 },
                 {
@@ -5686,23 +5842,28 @@
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 51
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 15
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 14
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 13
                 },
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 11
                 },
                 {
@@ -5713,22 +5874,27 @@
                 null,
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 56
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 55
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 54
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 16
                 },
                 {
                   "keyActionType": "keystroke",
+                  "type": "basic",
                   "scancode": 17
                 },
                 {

@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Macro, MacroAction } from 'uhk-common';
 
-import { Macro } from '../../../config-serializer/config-items/macro';
-import { MacroAction } from '../../../config-serializer/config-items/macro-action';
 import { MacroItemComponent } from '../item';
 
 @Component({

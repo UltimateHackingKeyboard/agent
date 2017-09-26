@@ -1,8 +1,9 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Keymap } from 'uhk-common';
 
 import '@ngrx/core/add/operator/select';
-import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/first';
@@ -15,11 +16,11 @@ import 'rxjs/add/operator/combineLatest';
 
 import { saveAs } from 'file-saver';
 
-import { Keymap } from '../../../config-serializer/config-items/keymap';
-import { AppState } from '../../../store';
+import { AppState, getKeyboardLayout } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 import 'rxjs/add/operator/pluck';
 import { SvgKeyboardWrapComponent } from '../../svg/wrap/svg-keyboard-wrap.component';
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 @Component({
     selector: 'keymap-edit',
@@ -37,6 +38,7 @@ export class KeymapEditComponent {
 
     deletable$: Observable<boolean>;
     keymap$: Observable<Keymap>;
+    keyboardLayout$: Observable<KeyboardLayout>;
 
     constructor(protected store: Store<AppState>,
                 route: ActivatedRoute) {
@@ -49,6 +51,8 @@ export class KeymapEditComponent {
 
         this.deletable$ = store.let(getKeymaps())
             .map((keymaps: Keymap[]) => keymaps.length > 1);
+
+        this.keyboardLayout$ = store.select(getKeyboardLayout);
     }
 
     downloadKeymap() {

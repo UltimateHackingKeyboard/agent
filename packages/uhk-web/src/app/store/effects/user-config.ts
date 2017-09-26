@@ -11,7 +11,14 @@ import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 
-import { LogService, NotificationType } from 'uhk-common';
+import {
+    ConfigurationReply,
+    HardwareConfiguration,
+    LogService,
+    NotificationType,
+    UhkBuffer,
+    UserConfiguration
+} from 'uhk-common';
 
 import {
     ActionTypes,
@@ -20,20 +27,41 @@ import {
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
-import { UserConfiguration } from '../../config-serializer/config-items/user-configuration';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
 import { KeymapActions } from '../actions/keymap';
 import { MacroActions } from '../actions/macro';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
-import { ShowNotificationAction, DismissUndoNotificationAction } from '../actions/app';
+import { ShowNotificationAction, DismissUndoNotificationAction, LoadHardwareConfigurationSuccessAction } from '../actions/app';
 import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
-import { UhkBuffer } from '../../config-serializer/uhk-buffer';
 
 @Injectable()
 export class UserConfigEffects {
+
+    private static getUserConfigFromDeviceResponse(json: string): UserConfiguration {
+        const data = JSON.parse(json);
+        const userConfig = new UserConfiguration();
+        userConfig.fromBinary(UhkBuffer.fromArray(data));
+
+        if (userConfig.dataModelVersion > 0) {
+            return userConfig;
+        }
+
+        return null;
+    }
+
+    private static getHardwareConfigFromDeviceResponse(json: string): HardwareConfiguration {
+        const data = JSON.parse(json);
+        const hardwareConfig = new HardwareConfiguration();
+        hardwareConfig.fromBinary(UhkBuffer.fromArray(data));
+
+        if (hardwareConfig.uuid > 0) {
+            return hardwareConfig;
+        }
+        return null;
+    }
 
     @Effect() loadUserConfig$: Observable<Action> = this.actions$
         .ofType(ActionTypes.LOAD_USER_CONFIG)
@@ -88,38 +116,36 @@ export class UserConfigEffects {
             return [new LoadUserConfigSuccessAction(config), go(payload.path)];
         });
 
-    @Effect({dispatch: false}) loadUserConfigFromDevice$ = this.actions$
-        .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE)
-        .do(() => this.deviceRendererService.loadUserConfiguration());
+    @Effect({dispatch: false}) loadConfigFromDevice$ = this.actions$
+        .ofType(ActionTypes.LOAD_CONFIG_FROM_DEVICE)
+        .do(() => this.deviceRendererService.loadConfigurationFromKeyboard());
 
-    @Effect() loadUserConfigFromDeviceReply$ = this.actions$
-        .ofType(ActionTypes.LOAD_USER_CONFIG_FROM_DEVICE_REPLY)
-        .map(action => action.payload)
-        .switchMap((data: Array<number>) => {
-            try {
-                let userConfig;
-                if (data.length > 0) {
-                    const uhkBuffer = new UhkBuffer();
-                    let hasNonZeroValue = false;
-                    for (const num of data) {
-                        if (num > 0) {
-                            hasNonZeroValue = true;
-                        }
-                        uhkBuffer.writeUInt8(num);
-                    }
-                    uhkBuffer.offset = 0;
-                    userConfig = new UserConfiguration();
-                    userConfig.fromBinary(uhkBuffer);
-
-                    if (hasNonZeroValue) {
-                        return Observable.of(new LoadUserConfigSuccessAction(userConfig));
-                    }
-                }
-            } catch (err) {
-                this.logService.error('Eeprom parse error:', err);
+    @Effect() loadConfigFromDeviceReply$ = this.actions$
+        .ofType(ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY)
+        .map(toPayload)
+        .mergeMap((data: ConfigurationReply): any => {
+            if (!data.success) {
+                return [new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: data.error
+                })];
             }
 
-            return Observable.empty();
+            try {
+                const userConfig = UserConfigEffects.getUserConfigFromDeviceResponse(data.userConfiguration);
+                const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+
+                return [
+                    new LoadUserConfigSuccessAction(userConfig),
+                    new LoadHardwareConfigurationSuccessAction(hardwareConfig)
+                ];
+            } catch (err) {
+                this.logService.error('Eeprom parse error:', err);
+                return [new ShowNotificationAction({
+                    type: NotificationType.Error,
+                    message: err.message
+                })];
+            }
         });
 
     constructor(private actions$: Actions,
@@ -147,4 +173,5 @@ export class UserConfigEffects {
         return config;
 
     }
+
 }

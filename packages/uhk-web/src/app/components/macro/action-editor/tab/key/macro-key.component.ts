@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-import { KeystrokeAction } from '../../../../../config-serializer/config-items/key-action';
-import { KeyMacroAction, MacroSubAction } from '../../../../../config-serializer/config-items/macro-action';
+import { KeyMacroAction, KeystrokeAction, MacroSubAction } from 'uhk-common';
 import { KeypressTabComponent, Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 

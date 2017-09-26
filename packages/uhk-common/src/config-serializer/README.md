@@ -6,13 +6,13 @@ The configuration of the UHK is unusually complex for a keyboard, and is compose
 
 ## Setup
 
-Given that the development dependencies are installed on your system you should be able to build the configuration serializer tester by executing `npm run build:test` in this directory, then start the test by running `node test-serializer.js`.
+Given that the development dependencies are installed on your system you should be able to run the configuration serializer tester test by running `npm run test` in this directorx.
 
 ## Configuration representations
 
 There are 3 different representations of the configuration, each filling a specific purpose.
 
-The **JavaScript representation** is optimally suited to be serialized as JSON, and saved to the file system, or transmitted over the network. As a plaintext format, it's human-readable and easily editable. See [user-config.json](user-config.json) for an example configuration.
+The **JavaScript representation** is optimally suited to be serialized as JSON, and saved to the file system, or transmitted over the network. As a plaintext format, it's human-readable and easily editable. See [user-config.json](../../../uhk-web/src/app/services/user-config.json) for an example configuration.
 
 The **TypeScript representation** is structurally similar to the JavaScript representation, but it features strongly typed TypeScript objects instead of typeless JavaScript objects. This representation is meant to be used by Agent. Extensive, per-property [assertion](assert.ts) takes place upon initializing the TypeScript objects to ensure the integrity of the configuration.
 
@@ -75,7 +75,7 @@ KeyActions.toJsObject: <KeyActions length="9">
 
 ## Testing the serializer
 
-[test-serializer.ts](test-serializer.ts) is designed to test the serializer by taking [user-config.json](user-config.json), and transforming it to TypeScript representation, then to binary representation, then finally back to JavaScript representation. This should exercise every major code path.
+[test-serializer.ts](test-serializer.ts) is designed to test the serializer by taking [user-config.json](../../../uhk-web/src/app/services/user-config.json), and transforming it to TypeScript representation, then to binary representation, then finally back to JavaScript representation. This should exercise every major code path.
 
 If the testing is successful the following should be displayed:
 

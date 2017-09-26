@@ -5,10 +5,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "typeRoots": [
-      "../node_modules/@types"
-    ],
-    "types": [
-      "node"
+      "./node_modules/@types"
     ]
   }
 }

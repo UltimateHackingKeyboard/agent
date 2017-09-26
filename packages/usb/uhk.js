@@ -1,4 +1,6 @@
 const HID = require('node-hid');
+// const debug = process.env.DEBUG;
+const debug = true;
 
 function bufferToString(buffer) {
     let str = '';
@@ -78,8 +80,10 @@ exports = module.exports = moduleExports = {
         writeUserConfig: 3,
     },
     leftLedDriverAddress: 0b1110100,
-    rightLedDriverAddress: 0b1110111
-}
+    rightLedDriverAddress: 0b1110111,
+    sendLog: sendLog,
+    readLog: readLog
+};
 
 function convertBufferToIntArray(buffer) {
     return Array.prototype.slice.call(buffer, 0)
@@ -100,4 +104,19 @@ function getTransferData(buffer) {
     data.unshift(0)
 
     return data
+}
+
+function readLog(buffer) {
+    writeLog('USB[R]: ', buffer)
+}
+
+function sendLog(buffer) {
+    writeLog('USB[W]: ', buffer)
+}
+
+function writeLog(prefix, buffer) {
+    if (!debug) {
+        return;
+    }
+    console.log(prefix + bufferToString(buffer))
 }

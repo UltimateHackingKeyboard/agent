@@ -17,26 +17,27 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import { Store } from '@ngrx/store';
 
-import { MapperService } from '../../../services/mapper.service';
-
 import {
+    camelCaseToSentence,
+    capitalizeFirstLetter,
     KeyAction,
+    Keymap,
     KeystrokeAction,
+    Layer,
     LayerName,
+    LongPressAction,
     MouseAction,
     MouseActionParam,
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction
-} from '../../../config-serializer/config-items/key-action';
-import { Keymap } from '../../../config-serializer/config-items/keymap';
-import { Layer } from '../../../config-serializer/config-items/layer';
-import { LongPressAction } from '../../../config-serializer/config-items/long-press-action';
-import { camelCaseToSentence, capitalizeFirstLetter } from 'uhk-common';
+} from 'uhk-common';
 
+import { MapperService } from '../../../services/mapper.service';
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
 import { PopoverComponent } from '../../popover';
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 interface NameValuePair {
     name: string;
@@ -54,6 +55,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesSplit: boolean;
+    @Input() keyboardLayout: KeyboardLayout.ANSI;
 
     @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 

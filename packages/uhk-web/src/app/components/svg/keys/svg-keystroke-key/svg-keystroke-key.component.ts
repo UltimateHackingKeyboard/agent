@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { KeyModifiers, KeystrokeAction } from 'uhk-common';
 
-import { KeystrokeAction } from '../../../../config-serializer/config-items/key-action';
-import { KeyModifiers } from '../../../../config-serializer/config-items/key-modifiers';
 import { MapperService } from '../../../../services/mapper.service';
 
 class SvgAttributes {

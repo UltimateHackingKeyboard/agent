@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { Macro } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -10,7 +11,6 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../store/index';
 import { getMacros } from '../../../store/reducers/user-configuration';
-import { Macro } from '../../../config-serializer/config-items/macro';
 
 @Injectable()
 export class MacroNotFoundGuard implements CanActivate {

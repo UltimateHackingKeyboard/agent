@@ -12,10 +12,9 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/observable/of';
 
+import { Keymap } from 'uhk-common';
 import { KeymapActions } from '../actions';
 import { AppState } from '../index';
-
-import { Keymap } from '../../config-serializer/config-items/keymap';
 
 @Injectable()
 export class KeymapEffects {

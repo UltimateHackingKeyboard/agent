@@ -7,8 +7,8 @@ import {
     Renderer,
     ViewChild
 } from '@angular/core';
+import { TextMacroAction } from 'uhk-common';
 
-import { TextMacroAction } from '../../../../../config-serializer/config-items/macro-action';
 import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({

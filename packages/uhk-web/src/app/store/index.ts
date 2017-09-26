@@ -3,11 +3,10 @@ import { compose } from '@ngrx/core/compose';
 import { ActionReducer, combineReducers } from '@ngrx/store';
 import { RouterState, routerReducer } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { Keymap, UserConfiguration } from 'uhk-common';
 
 import userConfigurationReducer from './reducers/user-configuration';
 import presetReducer from './reducers/preset';
-import { Keymap } from '../config-serializer/config-items/keymap';
-import { UserConfiguration } from '../config-serializer/config-items/user-configuration';
 import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
@@ -53,6 +52,8 @@ export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
+export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
+export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
