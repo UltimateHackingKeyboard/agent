@@ -47,7 +47,7 @@ export class SvgKeyboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.setModuls();
+        this.setModules();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -56,7 +56,7 @@ export class SvgKeyboardComponent implements OnInit {
         }
 
         if (changes['keyboardLayout']) {
-            this.setModuls();
+            this.setModules();
         }
     }
 
@@ -93,7 +93,7 @@ export class SvgKeyboardComponent implements OnInit {
         }
     }
 
-    private setModuls() {
+    private setModules() {
         this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout);
     }
 }
