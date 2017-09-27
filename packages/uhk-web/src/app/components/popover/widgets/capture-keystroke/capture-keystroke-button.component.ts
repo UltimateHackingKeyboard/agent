@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output, Input } from '@angular/core';
 import { CaptureService } from '../../../../services/capture.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { CaptureService } from '../../../../services/capture.service';
     styleUrls: ['./capture-keystroke-button.component.scss']
 })
 export class CaptureKeystrokeButtonComponent {
+    @Input() isLink = false;
+    @Input() captureText = 'Capture keystroke';
     @Output() capture = new EventEmitter<any>();
 
     record: boolean;

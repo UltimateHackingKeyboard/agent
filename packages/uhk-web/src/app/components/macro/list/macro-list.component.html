@@ -28,8 +28,8 @@
                 <a class="add-new__action-item--link" (click)="showNewAction()">
                     <i class="fa fa-plus"></i> Add macro action
                 </a>
-                <a class="add-new__action-item--link">
-                    <i class="fa fa fa-circle"></i> Add captured keystroke
+                <a class="add-new__action-item--link capture">
+                    <capture-keystroke-button captureText="Add captured keystroke" isLink="true" (capture)="onKeysCapture($event)" ></capture-keystroke-button>
                 </a>
             </div>
         </div>
