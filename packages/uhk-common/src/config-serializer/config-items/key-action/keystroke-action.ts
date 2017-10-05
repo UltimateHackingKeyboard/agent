@@ -65,7 +65,7 @@ export class KeystrokeAction extends KeyAction {
             return;
         }
         this.type = other.type;
-        this._scancode = other._scancode; // TODO: Suggest to change to property getter / setter
+        this.scancode = other.scancode;
         this.modifierMask = other.modifierMask;
         this.longPressAction = other.longPressAction;
     }
@@ -77,8 +77,8 @@ export class KeystrokeAction extends KeyAction {
         } else {
             this.type = KeystrokeType[jsonObject.type];
         }
-        // TODO: use property setter to fix should map "media" type to "shortMedia" if scancode < 256
-        this._scancode = jsonObject.scancode;
+
+        this.scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
         this.longPressAction = LongPressAction[jsonObject.longPressAction];
         return this;

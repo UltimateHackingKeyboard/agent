@@ -216,7 +216,7 @@ describe('keystroke-action', () => {
             expect(action).toEqual(expected);
         });
 
-        xit('should map "media" type to "shortMedia" if scancode < 256', () => {
+        it('should map "media" type to "shortMedia" if scancode < 256', () => {
             const jsObject = {
                 keyActionType: 'keystroke',
                 type: 'media',
