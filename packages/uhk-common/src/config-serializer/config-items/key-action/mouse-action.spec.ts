@@ -1,0 +1,39 @@
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
+import { MouseAction, MouseActionParam } from './mouse-action';
+
+// TODO: Add null, undefined, empty object, empty buffer test cases
+fdescribe('mouse-action', () => {
+    it('should be instantiate', () => {
+        const action = new MouseAction();
+        expect(action).toBeTruthy();
+    });
+
+    describe('toString', () => {
+        it('should return with "<NoneAction>"', () => {
+            const action = new MouseAction();
+            action.mouseAction = MouseActionParam.leftClick;
+            expect(action.toString()).toEqual(`<MouseAction mouseAction="${MouseActionParam.leftClick}">`);
+        });
+    });
+
+    describe('getName', () => {
+        it('should return with "NoneAction"', () => {
+            const action = new MouseAction();
+            expect(action.getName()).toEqual('MouseAction');
+        });
+    });
+
+    describe('full serialization', () => {
+        it('should json match', () => {
+            const action = new MouseAction();
+            action.mouseAction = MouseActionParam.leftClick;
+            jsonDefaultHelper(action);
+        });
+
+        it('should binary match', () => {
+            const action = new MouseAction();
+            action.mouseAction = MouseActionParam.leftClick;
+            binaryDefaultHelper(action);
+        });
+    });
+});

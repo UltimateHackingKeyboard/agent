@@ -4,7 +4,7 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
-fdescribe('node-action', () => {
+describe('node-action', () => {
     it('should be instantiate', () => {
         const action = new NoneAction();
         expect(action).toBeTruthy();
@@ -63,11 +63,11 @@ fdescribe('node-action', () => {
 
     describe('full serialization', () => {
         it('should json match with default constructor', () => {
-            jsonDefaultHelper(NoneAction);
+            jsonDefaultHelper(new NoneAction());
         });
 
         it('should binary match with default constructor', () => {
-            binaryDefaultHelper(NoneAction);
+            binaryDefaultHelper(new NoneAction());
         });
     });
 });
