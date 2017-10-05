@@ -2,7 +2,7 @@ import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/seriali
 import { PlayMacroAction } from './play-macro-action';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
-fdescribe('play-action', () => {
+describe('play-action', () => {
     const macros = [{id: 1}, {id: 2}];
     const userConfiguration = {macros};
 

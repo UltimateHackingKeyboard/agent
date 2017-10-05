@@ -35,6 +35,14 @@ export class SwitchKeymapAction extends KeyAction {
         };
     }
 
+    // TODO: New method pls check UnresolvedSwitchKeymapAction TODO
+    fromBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): SwitchKeymapAction {
+        buffer.readUInt8(); // Skip key action id
+        const keymapIndex = buffer.readUInt8();
+        this.keymapAbbreviation = userConfiguration.keymaps[keymapIndex].abbreviation;
+        return this;
+    }
+
     toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
         const keymapIndex = userConfiguration.keymaps.findIndex(keymap => keymap.abbreviation === this.keymapAbbreviation);
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
@@ -45,6 +53,10 @@ export class SwitchKeymapAction extends KeyAction {
         return `<SwitchKeymapAction keymapAbbreviation="${this.keymapAbbreviation}">`;
     }
 
+    // TODO: It is a bad pattern the method should have same behavior
+    // Not good if sometimes return with the same keymap and sometime a new instance
+    // for the consistent behavior it should be throw and error if
+    // oldAbbr not equal with current keymapAbbreviation
     renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
         if (this.keymapAbbreviation !== oldAbbr) {
             return this;
@@ -57,6 +69,10 @@ export class SwitchKeymapAction extends KeyAction {
     }
 }
 
+// TODO: This is unnecessary object.
+// move the fromBinary() method to the SwitchKeymapAction
+// and append the resolve() method logic to the new fromBinary()
+// I checked and hard to delete this class.
 export class UnresolvedSwitchKeymapAction extends KeyAction {
 
     @assertUInt8
