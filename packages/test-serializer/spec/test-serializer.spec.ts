@@ -30,4 +30,11 @@ describe('Test Serializer', () => {
         expect(buffersContentsAreEqual).toBe(true);
 
     });
+
+    fit('check json serializer', () => {
+        const config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(userConfig);
+        const jsonObject = config1Ts.toJsonObject();
+
+        expect(jsonObject).toEqual(userConfig);
+    });
 });

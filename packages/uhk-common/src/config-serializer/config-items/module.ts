@@ -57,6 +57,7 @@ export class Module {
                 if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
                     return keyAction.toJsonObject(macros);
                 }
+                return null;
             })
         };
     }

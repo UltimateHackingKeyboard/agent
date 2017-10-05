@@ -2,7 +2,7 @@ import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/seriali
 import { SwitchKeymapAction } from './switch-keymap-action';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
-fdescribe('switch-keymap-action', () => {
+describe('switch-keymap-action', () => {
     const userConfiguration = {
         keymaps: [
             {abbreviation: 'AB1'},
