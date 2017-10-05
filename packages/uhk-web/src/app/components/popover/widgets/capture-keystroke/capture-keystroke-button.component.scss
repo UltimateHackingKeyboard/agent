@@ -4,12 +4,12 @@
 }
 
 .link--capture-keystroke {
-    padding: 0;
-    margin: 0;
+    padding: 10px 5px;
+    width: 100%;
     border: 0;
     text-decoration: none;
     &:focus {
-        outline:none;
+        outline: none;
     }
 }
 
