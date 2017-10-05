@@ -2,14 +2,14 @@ import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/seriali
 import { MouseAction, MouseActionParam } from './mouse-action';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
-fdescribe('mouse-action', () => {
+describe('mouse-action', () => {
     it('should be instantiate', () => {
         const action = new MouseAction();
         expect(action).toBeTruthy();
     });
 
     describe('toString', () => {
-        it('should return with "<NoneAction>"', () => {
+        it(`should return with <MouseAction mouseAction="${MouseActionParam.leftClick}">`, () => {
             const action = new MouseAction();
             action.mouseAction = MouseActionParam.leftClick;
             expect(action.toString()).toEqual(`<MouseAction mouseAction="${MouseActionParam.leftClick}">`);
@@ -17,7 +17,7 @@ fdescribe('mouse-action', () => {
     });
 
     describe('getName', () => {
-        it('should return with "NoneAction"', () => {
+        it('should return with "MouseAction"', () => {
             const action = new MouseAction();
             expect(action.getName()).toEqual('MouseAction');
         });
