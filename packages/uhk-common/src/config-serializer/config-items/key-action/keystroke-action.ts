@@ -65,7 +65,7 @@ export class KeystrokeAction extends KeyAction {
             return;
         }
         this.type = other.type;
-        this._scancode = other._scancode;
+        this._scancode = other._scancode; // TODO: Suggest to change to property getter / setter
         this.modifierMask = other.modifierMask;
         this.longPressAction = other.longPressAction;
     }
@@ -77,6 +77,7 @@ export class KeystrokeAction extends KeyAction {
         } else {
             this.type = KeystrokeType[jsonObject.type];
         }
+        // TODO: use property setter to fix should map "media" type to "shortMedia" if scancode < 256
         this._scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
         this.longPressAction = LongPressAction[jsonObject.longPressAction];
@@ -134,17 +135,17 @@ export class KeystrokeAction extends KeyAction {
 
         if (this.hasScancode()) {
             flags |= KeystrokeActionFlag.scancode;
-            toWrite.push({ data: this._scancode, long: this.type === KeystrokeType.longMedia });
+            toWrite.push({data: this._scancode, long: this.type === KeystrokeType.longMedia});
         }
 
         if (this.hasActiveModifier()) {
             flags |= KeystrokeActionFlag.modifierMask;
-            toWrite.push({ data: this.modifierMask, long: false });
+            toWrite.push({data: this.modifierMask, long: false});
         }
 
         if (this.hasLongPressAction()) {
             flags |= KeystrokeActionFlag.longPressAction;
-            toWrite.push({ data: this.longPressAction, long: false });
+            toWrite.push({data: this.longPressAction, long: false});
         }
 
         const TYPE_OFFSET = flags + (this.type << KEYSTROKE_ACTION_FLAG_LENGTH);
