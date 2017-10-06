@@ -63,7 +63,7 @@ export class Helper {
 
     private static fromJSONObject(keyAction: any, macros: Macro[]): KeyAction {
         if (!keyAction) {
-            return;
+            return null;
         }
 
         switch (keyAction.keyActionType) {

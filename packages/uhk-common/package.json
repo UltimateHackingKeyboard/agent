@@ -4,16 +4,42 @@
   "version": "1.0.0",
   "description": "Common Library contains the common code for uhk-agent (electron-main) and web (electron-renderer) modules",
   "main": "dist/index.js",
+  "author": "Ultimate Gadget Laboratories",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UltimateHackingKeyboard/agent.git"
+  },
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine-ts --config=jasmine.json",
+    "coverage": "nyc jasmine-ts --config=jasmine.json"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@angular/core": "4.3.3",
     "@ngrx/core": "1.2.0",
+    "@types/jasmine": "2.6.0",
     "@ngrx/store": "2.2.3",
-    "@types/node": "8.0.28"
+    "@types/node": "8.0.30",
+    "jasmine": "2.8.0",
+    "jasmine-core": "2.8.0",
+    "jasmine-node": "2.0.0",
+    "jasmine-ts": "0.2.1",
+    "nyc": "11.2.1",
+    "ts-node": "3.3.0"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/**/*.spec.ts"
+    ],
+    "reporter": [
+      "lcov"
+    ]
   }
 }
