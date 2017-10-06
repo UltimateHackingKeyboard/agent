@@ -25,12 +25,14 @@
         </div>
         <div class="list-group add-new__action-container" [@toggler]="(!showNew) ? 'active' : 'inactive'">
             <div class="list-group-item action--item add-new__action-item no-reorder clearfix">
-                <a class="add-new__action-item--link" (click)="showNewAction()">
-                    <i class="fa fa-plus"></i> Add macro action
-                </a>
-                <a class="add-new__action-item--link capture">
+                <span class="add-new__action-item--link" (click)="showNewAction()">
+                    <button type="button" class="btn btn-link">
+                        <i class="fa fa-plus"></i> Add macro action
+                    </button>
+                </span>
+                <span class="add-new__action-item--link">
                     <capture-keystroke-button captureText="Add captured keystroke" isLink="true" (capture)="onKeysCapture($event)" ></capture-keystroke-button>
-                </a>
+                </span>
             </div>
         </div>
     </div>

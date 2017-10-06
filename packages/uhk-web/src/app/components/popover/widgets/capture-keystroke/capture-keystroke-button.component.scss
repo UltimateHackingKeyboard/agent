@@ -1,16 +1,12 @@
+@import '../../../../../styles/common';
+
 .btn--capture-keystroke {
     display: inline-block;
     margin: 0 0 0 0.25rem;
 }
 
 .link--capture-keystroke {
-    padding: 10px 5px;
-    width: 100%;
-    border: 0;
-    text-decoration: none;
-    &:focus {
-        outline: none;
-    }
+    @extend %btn-link;
 }
 
 .fa-circle {

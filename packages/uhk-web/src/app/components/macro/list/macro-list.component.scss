@@ -1,4 +1,5 @@
 @import '../../../../styles/variables';
+@import '../../../../styles/common';
 
 :host {
     display: flex;
@@ -112,7 +113,6 @@ h1 {
     &--link {
         width: 50%;
         float: left;
-        padding: 10px 5px;
         text-align: center;
         color: $icon-hover;
 
@@ -124,10 +124,10 @@ h1 {
             text-decoration: none;
             background: #e6e6e6;
         }
-    }
 
-    .capture {
-        padding: 0px;
+        button.btn-link {
+            @extend %btn-link;
+        }
     }
 
     .fa-circle {
