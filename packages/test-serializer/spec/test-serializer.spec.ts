@@ -31,7 +31,7 @@ describe('Test Serializer', () => {
 
     });
 
-    fit('check json serializer', () => {
+    it('check json serializer', () => {
         const config1Ts: UserConfiguration = new UserConfiguration().fromJsonObject(userConfig);
         const jsonObject = config1Ts.toJsonObject();
 

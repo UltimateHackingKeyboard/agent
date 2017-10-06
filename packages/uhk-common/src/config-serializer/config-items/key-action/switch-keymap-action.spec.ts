@@ -23,7 +23,7 @@ describe('switch-keymap-action', () => {
     });
 
     describe('getName', () => {
-        it('should return with "PlayMacroAction"', () => {
+        it('should return with "SwitchKeymapAction"', () => {
             const action = new SwitchKeymapAction();
             expect(action.getName()).toEqual('SwitchKeymapAction');
         });
