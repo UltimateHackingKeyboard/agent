@@ -1,0 +1,31 @@
+{
+  "name": "test-serializer",
+  "main": "test-serializer.js",
+  "version": "0.0.0",
+  "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
+  "author": "Ultimate Gadget Laboratories",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UltimateHackingKeyboard/agent.git"
+  },
+  "license": "GPL-3.0",
+  "engines": {
+    "node": ">=8.1.0 <9.0.0",
+    "npm": ">=5.1.0 <6.0.0"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.6.0",
+    "@types/node": "8.0.30",
+    "jasmine": "^2.8.0",
+    "jasmine-core": "^2.8.0",
+    "jasmine-node": "2.0.0",
+    "jasmine-ts": "^0.2.1",
+    "ts-node": "3.3.0",
+    "uhk-common": "1.0.0"
+  },
+  "scripts": {
+    "test": "jasmine-ts --config=jasmine.json"
+  }
+}

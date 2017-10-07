@@ -1,0 +1,26 @@
+<div class="macro-delay">
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>Enter delay in seconds</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-4">
+          <input #macroDelayInput
+                 type="number" 
+                 min="0" 
+                 max="1000" 
+                 step="0.1" 
+                 placeholder="Delay amount" 
+                 class="form-control"
+                 [value]="delay"
+                 (change)="setDelay(macroDelayInput.value)">
+        </div>
+    </div>
+    <div class="row macro-delay__presets">
+        <div class="col-xs-12">
+          <h6>Choose a preset</h6>
+          <button *ngFor="let delay of presets" class="btn btn-sm btn-default" (click)="setDelay(delay)">{{delay}}s</button>
+        </div>
+    </div>
+</div>

@@ -2,9 +2,25 @@
   "rules": {
     "member-ordering": [
       true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
+      {
+        "order": [
+          "public-static-field",
+          "public-static-method",
+          "protected-static-field",
+          "protected-static-method",
+          "private-static-field",
+          "private-static-method",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "public-constructor",
+          "protected-constructor",
+          "private-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
     ],
     "no-internal-module": true,
     "class-name": true,

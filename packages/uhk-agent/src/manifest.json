@@ -1,0 +1,6 @@
+{
+  "name": "UHK-Agent",
+  "version": "1.0",
+  "devtools_page": "foo.html",
+  "default_locale": "en"
+}

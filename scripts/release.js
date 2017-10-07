@@ -38,13 +38,10 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
-
-const fs = require('fs-extra');
-const cp = require('child_process');
 const path = require('path');
 const builder = require("electron-builder");
 const Platform = builder.Platform;
-const electron_build_folder = path.join(__dirname, '../electron/dist');
+const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
 
 let sha = '';
 if (process.env.TRAVIS) {
@@ -137,7 +134,7 @@ else {
 }
 
 function updateVersionNumberIn2rndPackageJson(version) {
-        const jsonPath = path.join(__dirname,'../electron/dist/package.json');
+        const jsonPath = path.join(__dirname,'../packages/uhk-agent/dist/package.json');
         const json = require(jsonPath);
 
         json.version = version;

@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "baseUrl": "./",
+    "target": "es6",
+    "types": ["node"],
+    "lib": [
+      "es2016",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

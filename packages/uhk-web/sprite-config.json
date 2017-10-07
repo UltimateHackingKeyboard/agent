@@ -1,0 +1,17 @@
+{
+  "dest": "src/assets/",
+  "shape": {
+    "id": {
+      "generator": "function(name, file){return name}"
+    }
+  },
+  "mode": {
+    "defs": {
+      "inline": true,
+      "dest": "./",
+      "sprite": "compiled_sprite.svg",
+      "prefix": "icon-%s",
+      "bust": false
+    }
+  }
+}

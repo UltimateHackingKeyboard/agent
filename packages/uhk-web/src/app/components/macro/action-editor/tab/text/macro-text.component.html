@@ -1,0 +1,6 @@
+<div>
+    <h4>Type text</h4>
+    <p>Input the text you want to type with this macro action.</p>
+    <textarea #macroTextInput name="macro-text" (change)="onTextChange()"
+    (keyup)="validate()" class="macro__text-input">{{ macroAction?.text }}</textarea>
+</div>

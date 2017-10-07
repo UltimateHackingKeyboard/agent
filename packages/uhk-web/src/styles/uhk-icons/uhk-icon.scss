@@ -1,0 +1,8 @@
+%svg-common {
+    background: url($uhk-icon-path) no-repeat;
+}
+
+.uhk-icon-0401-usb-stick {
+    @extend %svg-common;
+    background-position: 0 0;
+}

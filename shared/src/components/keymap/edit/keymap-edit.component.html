@@ -1,8 +1,0 @@
-<ng-template [ngIf]="keymap$ | async">
-    <keymap-header [keymap]="keymap$ | async" [deletable]="deletable$ | async" (downloadClick)="downloadKeymap()"></keymap-header>
-    <svg-keyboard-wrap [keymap]="keymap$ | async" [halvesSplit]="keyboardSplit"></svg-keyboard-wrap>
-</ng-template>
-
-<div *ngIf="!(keymap$ | async)" class="not-found">
-    Sorry, there is no keymap with this abbreviation.
-</div>
