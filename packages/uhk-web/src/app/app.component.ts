@@ -2,6 +2,7 @@ import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
+import { saveAs } from 'file-saver';
 import { UhkBuffer } from 'uhk-common';
 
 import 'rxjs/add/operator/last';
