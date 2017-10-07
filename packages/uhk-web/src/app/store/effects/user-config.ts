@@ -144,7 +144,7 @@ export class UserConfigEffects {
                 this.logService.error('Eeprom parse error:', err);
                 return [new ShowNotificationAction({
                     type: NotificationType.Error,
-                    message: err.message
+                    message: err
                 })];
             }
         });

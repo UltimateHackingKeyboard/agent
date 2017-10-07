@@ -11,7 +11,8 @@ export const ActionTypes = {
     LOAD_USER_CONFIG_SUCCESS: type(PREFIX + 'Load User Config Success'),
     SAVE_USER_CONFIG_SUCCESS: type(PREFIX + 'Save User Config Success'),
     SAVE_USER_CONFIG_IN_JSON_FILE: type(PREFIX + 'Save User Config in JSON file'),
-    SAVE_USER_CONFIG_IN_BIN_FILE: type(PREFIX + 'Save User Config in binary file')
+    SAVE_USER_CONFIG_IN_BIN_FILE: type(PREFIX + 'Save User Config in binary file'),
+    LOAD_RESET_USER_CONFIGURATION: type(PREFIX + 'Load reset user configuration')
 };
 
 export class LoadUserConfigAction implements Action {
@@ -48,6 +49,12 @@ export class SaveUserConfigInBinaryFileAction implements Action {
     type = ActionTypes.SAVE_USER_CONFIG_IN_BIN_FILE;
 }
 
+export class LoadResetUserConfigurationAction implements Action {
+    type = ActionTypes.LOAD_RESET_USER_CONFIGURATION;
+
+    constructor(public payload: UserConfiguration) { }
+}
+
 export type Actions
     = LoadUserConfigAction
     | LoadUserConfigSuccessAction
@@ -56,4 +63,5 @@ export type Actions
     | LoadConfigFromDeviceReplyAction
     | SaveUserConfigInJsonFileAction
     | SaveUserConfigInBinaryFileAction
+    | LoadResetUserConfigurationAction
     ;
