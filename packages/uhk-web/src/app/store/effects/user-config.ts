@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
+import { defer } from 'rxjs/observable/defer';
 import { Action, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 
@@ -23,7 +24,6 @@ import {
 
 import {
     ActionTypes,
-    LoadUserConfigAction,
     LoadUserConfigSuccessAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
@@ -63,17 +63,16 @@ export class UserConfigEffects {
         return null;
     }
 
-    @Effect() loadUserConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_USER_CONFIG)
-        .startWith(new LoadUserConfigAction())
-        .switchMap(() => Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration())));
+    @Effect() loadUserConfig$: Observable<Action> = defer(() => {
+        return Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
+    });
 
     @Effect() saveUserConfig$: Observable<Action> = (this.actions$
         .ofType(
-        KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-        KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
-        MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-        MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION) as
+            KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
+            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
+            MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
+            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION) as
         Observable<KeymapAction | MacroAction>)
         .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
         .mergeMap(([action, config, prevUserConfiguration]) => {
