@@ -3,6 +3,7 @@ import { go } from '@ngrx/router-store';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
+import { saveAs } from 'file-saver';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
@@ -146,6 +147,25 @@ export class UserConfigEffects {
                     message: err.message
                 })];
             }
+        });
+
+    @Effect({dispatch: false}) saveUserConfigInJsonFile$ = this.actions$
+        .ofType(ActionTypes.SAVE_USER_CONFIG_IN_JSON_FILE)
+        .withLatestFrom(this.store.select(getUserConfiguration))
+        .do(([action, userConfiguration]) => {
+            const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
+            const asBlob = new Blob([asString], {type: 'text/plain'});
+            saveAs(asBlob, 'UserConfiguration.json');
+        });
+
+    @Effect({dispatch: false}) saveUserConfigInBinFile$ = this.actions$
+        .ofType(ActionTypes.SAVE_USER_CONFIG_IN_BIN_FILE)
+        .withLatestFrom(this.store.select(getUserConfiguration))
+        .do(([action, userConfiguration]) => {
+            const uhkBuffer = new UhkBuffer();
+            userConfiguration.toBinary(uhkBuffer);
+            const blob = new Blob([uhkBuffer.getBufferContent()]);
+            saveAs(blob, 'UserConfiguration.bin');
         });
 
     constructor(private actions$: Actions,

@@ -2,8 +2,6 @@ import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
-import { saveAs } from 'file-saver';
-import { UhkBuffer } from 'uhk-common';
 
 import 'rxjs/add/operator/last';
 
@@ -15,8 +13,8 @@ import {
     runningInElectron,
     saveToKeyboardState
 } from './store';
-import { getUserConfiguration } from './store/reducers/user-configuration';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
+import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from './store/actions/user-config';
 
 @Component({
     selector: 'main-app',
@@ -66,28 +64,13 @@ export class MainAppComponent {
     onAltJ(event: KeyboardEvent): void {
         event.preventDefault();
         event.stopPropagation();
-        this.store
-            .let(getUserConfiguration())
-            .first()
-            .subscribe(userConfiguration => {
-                const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
-                const asBlob = new Blob([asString], {type: 'text/plain'});
-                saveAs(asBlob, 'UserConfiguration.json');
-            });
+        this.store.dispatch(new SaveUserConfigInJsonFileAction());
     }
 
     @HostListener('window:keydown.alt.b', ['$event'])
     onAltB(event: KeyboardEvent): void {
         event.preventDefault();
         event.stopPropagation();
-        this.store
-            .let(getUserConfiguration())
-            .first()
-            .map(userConfiguration => {
-                const uhkBuffer = new UhkBuffer();
-                userConfiguration.toBinary(uhkBuffer);
-                return new Blob([uhkBuffer.getBufferContent()]);
-            })
-            .subscribe(blob => saveAs(blob, 'UserConfiguration.bin'));
+        this.store.dispatch(new SaveUserConfigInBinaryFileAction());
     }
 }
