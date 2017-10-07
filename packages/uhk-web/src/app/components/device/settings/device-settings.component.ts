@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import { AppState } from '../../../store';
+import { ResetUserConfigurationAction } from '../../../store/actions/device';
 
 @Component({
     selector: 'device-settings',
@@ -10,6 +14,10 @@ import { Component } from '@angular/core';
 })
 export class DeviceSettingsComponent {
 
-    constructor() {}
+    constructor(private store: Store<AppState>) {
+    }
 
+    resetUserConfiguration() {
+        this.store.dispatch(new ResetUserConfigurationAction());
+    }
 }

@@ -16,6 +16,7 @@ export default function (state = initialState, action: Action): UserConfiguratio
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
     switch (action.type) {
+        case ActionTypes.LOAD_RESET_USER_CONFIGURATION:
         case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
             return Object.assign(changedUserConfiguration, action.payload);
         }
