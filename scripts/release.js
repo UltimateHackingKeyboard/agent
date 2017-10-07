@@ -59,11 +59,7 @@ if (process.platform === 'darwin') {
     artifactName += '.${ext}';
 } else if (process.platform === 'win32') {
     target = Platform.WINDOWS.createTarget();
-    // TODO: If all HID API test success then remove zadic extra resources
-    extraResources.push(`rules/zadic-ia32.exe`);
-    extraResources.push(`rules/zadic-x64.exe`);
     artifactName += '-${arch}.${ext}';
-    extraResources.push(`rules/zadic-${process.arch}.exe`);
 } else if (process.platform === 'linux') {
     target = Platform.LINUX.createTarget();
     artifactName += '.${ext}';
