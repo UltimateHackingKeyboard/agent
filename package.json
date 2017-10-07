@@ -2,7 +2,7 @@
   "name": "uhk-agent",
   "author": "Ultimate Gadget Laboratories",
   "main": "electron/dist/electron-main.js",
-  "version": "1.0.0-robi",
+  "version": "1.0.1",
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
   "repository": {
     "type": "git",
