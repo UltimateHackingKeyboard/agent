@@ -17,7 +17,7 @@ export interface State {
     hardwareConfig?: HardwareConfiguration;
 }
 
-const initialState: State = {
+export const initialState: State = {
     started: false,
     showAddonMenu: false,
     navigationCountAfterNotification: 0,
@@ -25,7 +25,7 @@ const initialState: State = {
     configLoading: true
 };
 
-export function reducer(state = initialState, action: Action) {
+export function reducer(state = initialState, action: Action & { payload: any }) {
     switch (action.type) {
         case ActionTypes.APP_STARTED: {
             return {

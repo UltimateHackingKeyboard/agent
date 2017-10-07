@@ -3,8 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
 
-import '@ngrx/core/add/operator/select';
-
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/let';
@@ -18,7 +16,7 @@ import { saveAs } from 'file-saver';
 
 import { AppState, getKeyboardLayout } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
-import { SvgKeyboardWrapComponent } from '../../svg/wrap/svg-keyboard-wrap.component';
+import { SvgKeyboardWrapComponent } from '../../svg/wrap';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 @Component({

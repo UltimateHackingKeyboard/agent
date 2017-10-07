@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { KeyAction, Keymap, Macro } from 'uhk-common';
+import { UndoUserConfigData } from '../../models/undo-user-config-data';
 
 export type KeymapAction =
     KeymapActions.AddKeymapAction |
@@ -10,7 +11,6 @@ export type KeymapAction =
     KeymapActions.SetDefaultAction |
     KeymapActions.RemoveKeymapAction |
     KeymapActions.SaveKeyAction |
-    KeymapActions.UndoLastAction |
     KeymapActions.CheckMacroAction;
 
 export namespace KeymapActions {

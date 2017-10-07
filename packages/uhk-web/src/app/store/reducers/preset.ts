@@ -1,7 +1,6 @@
-import { Action } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
 
-import { KeymapAction, KeymapActions } from '../actions/keymap';
+import { KeymapAction, KeymapActions } from '../actions';
 
 const initialState: Keymap[] = [];
 

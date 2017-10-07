@@ -83,7 +83,7 @@ import { KeymapEditGuard } from './components/keymap/edit';
 import { MacroNotFoundGuard } from './components/macro/not-found';
 import { DataStorageRepositoryService } from './services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from './services/default-user-configuration.service';
-import { reducer } from './store';
+import { metaReducers, reducers } from './store';
 import { LogService } from 'uhk-common';
 import { AutoUpdateSettings } from './components/auto-update-settings/auto-update-settings';
 import { angularNotifierConfig } from './models/angular-notifier-config';
@@ -174,23 +174,20 @@ import { ProgressButtonComponent } from './components/progress-button/progress-b
         DragulaModule,
         routing,
         Select2Module,
-        StoreModule.provideStore(reducer),
-        RouterStoreModule.connectRouter(),
-        StoreDevtoolsModule.instrumentOnlyWithExtension(),
-        StoreModule.forRoot(reducers, storeConfig),
+        StoreModule.forRoot(reducers),
         StoreRouterConnectingModule,
         StoreDevtoolsModule.instrument({
-           maxAge: 10
+            maxAge: 10
         }),
         Select2Module,
         NotifierModule.withConfig(angularNotifierConfig),
         EffectsModule.forRoot([
+            ApplicationEffects,
             KeymapEffects,
             MacroEffects,
             UserConfigEffects,
             AutoUpdateSettingsEffects,
-            DeviceEffects,
-            ApplicationEffect
+            DeviceEffects
         ])
     ],
     providers: [

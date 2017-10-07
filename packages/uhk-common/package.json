@@ -16,10 +16,7 @@
   },
   "license": "GPL-3.0",
   "devDependencies": {
-    "@angular/core": "4.3.3",
-    "@ngrx/core": "1.2.0",
     "@types/jasmine": "2.6.0",
-    "@ngrx/store": "2.2.3",
     "@types/node": "8.0.30",
     "jasmine": "2.8.0",
     "jasmine-core": "2.8.0",

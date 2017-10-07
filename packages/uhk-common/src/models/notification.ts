@@ -1,6 +1,3 @@
-
-import { KeymapActions } from '../store/actions';
-
 export enum NotificationType {
     Default = 'default',
     Success = 'success',
@@ -14,5 +11,5 @@ export interface Notification {
     type: NotificationType;
     title?: string;
     message: string;
-    extra?: KeymapActions.UndoLastAction;
+    extra?: any;
 }

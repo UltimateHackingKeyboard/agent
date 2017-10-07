@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@ngrx/router-store';
+import { Router } from '@angular/router';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
@@ -30,13 +30,11 @@ import {
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
-import { KeymapAction, KeymapActions } from '../actions/keymap';
-import { MacroAction, MacroActions } from '../actions/macro';
-import { NotificationType } from '../../models/notification';
-import { UndoUserConfigData } from '../../models/undo-user-config-data';
+import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
 import { ShowNotificationAction, DismissUndoNotificationAction, LoadHardwareConfigurationSuccessAction } from '../actions/app';
 import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
+import { UndoUserConfigData } from '../../models/undo-user-config-data';
 
 @Injectable()
 export class UserConfigEffects {
@@ -115,7 +113,8 @@ export class UserConfigEffects {
         .mergeMap((payload: UndoUserConfigData) => {
             const config = new UserConfiguration().fromJsonObject(payload.config);
             this.dataStorageRepository.saveConfig(config);
-            return [new LoadUserConfigSuccessAction(config), go(payload.path)];
+            this.router.navigate([payload.path]);
+            return [new LoadUserConfigSuccessAction(config)];
         });
 
     @Effect({dispatch: false}) loadConfigFromDevice$ = this.actions$
@@ -145,7 +144,7 @@ export class UserConfigEffects {
                 this.logService.error('Eeprom parse error:', err);
                 return [new ShowNotificationAction({
                     type: NotificationType.Error,
-                    message: err.message
+                    message: err
                 })];
             }
         });
@@ -155,7 +154,8 @@ export class UserConfigEffects {
                 private store: Store<AppState>,
                 private defaultUserConfigurationService: DefaultUserConfigurationService,
                 private deviceRendererService: DeviceRendererService,
-                private logService: LogService) {
+                private logService: LogService,
+                private router: Router) {
     }
 
     private getUserConfiguration() {

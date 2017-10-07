@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
-import { compose } from '@ngrx/core/compose';
-import { ActionReducer, combineReducers } from '@ngrx/store';
-import { RouterState, routerReducer } from '@ngrx/router-store';
+import { MetaReducer } from '@ngrx/store';
+import { RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { Keymap, UserConfiguration } from 'uhk-common';
 
@@ -12,11 +11,12 @@ import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
 import { initProgressButtonState } from './reducers/progress-button-state';
+import { environment } from '../../environments/environment';
+import { RouterStateUrl } from './router-util';
 
 export const reducers = {
     userConfiguration: userConfigurationReducer,
     presetKeymaps: presetReducer,
-    router: routerReducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
     app: fromApp.reducer,
     appUpdate: fromAppUpdate.reducer,
@@ -29,21 +29,14 @@ export interface AppState {
     presetKeymaps: Keymap[];
     autoUpdateSettings: autoUpdateSettings.State;
     app: fromApp.State;
-    router: RouterState;
+    router: RouterReducerState<RouterStateUrl>;
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
 }
 
-const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(reducers);
-const productionReducer: ActionReducer<AppState> = combineReducers(reducers);
-
-export function reducer(state: any, action: any) {
-    // if (isDev) {
-    // return developmentReducer(state, action);
-    // } else {
-    return productionReducer(state, action);
-    // }
-}
+export const metaReducers: MetaReducer<AppState>[] = environment.production
+    ? []
+    : [storeFreeze];
 
 export const getUserConfiguration = (state: AppState) => state.userConfiguration;
 
