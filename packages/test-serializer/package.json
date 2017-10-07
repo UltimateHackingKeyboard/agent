@@ -16,12 +16,12 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@types/jasmine": "^2.6.0",
+    "@types/jasmine": "2.6.0",
     "@types/node": "8.0.30",
-    "jasmine": "^2.8.0",
-    "jasmine-core": "^2.8.0",
+    "jasmine": "2.8.0",
+    "jasmine-core": "2.8.0",
     "jasmine-node": "2.0.0",
-    "jasmine-ts": "^0.2.1",
+    "jasmine-ts": "0.2.1",
     "ts-node": "3.3.0",
     "uhk-common": "1.0.0"
   },
