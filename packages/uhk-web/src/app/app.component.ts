@@ -70,7 +70,7 @@ export class MainAppComponent {
             .let(getUserConfiguration())
             .first()
             .subscribe(userConfiguration => {
-                const asString = JSON.stringify(userConfiguration.toJsonObject());
+                const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
                 const asBlob = new Blob([asString], {type: 'text/plain'});
                 saveAs(asBlob, 'UserConfiguration.json');
             });
