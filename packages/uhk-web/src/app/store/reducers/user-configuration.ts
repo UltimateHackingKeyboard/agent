@@ -9,9 +9,9 @@ import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';
 
-const initialState: UserConfiguration = new UserConfiguration();
+export const initialState: UserConfiguration = new UserConfiguration();
 
-export default function (state = initialState, action: Action & { payload?: any }): UserConfiguration {
+export function reducer(state = initialState, action: Action & { payload?: any }): UserConfiguration {
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
     switch (action.type) {

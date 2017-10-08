@@ -4,8 +4,8 @@ import { RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { Keymap, UserConfiguration } from 'uhk-common';
 
-import userConfigurationReducer from './reducers/user-configuration';
-import presetReducer from './reducers/preset';
+import * as fromUserConfig from './reducers/user-configuration';
+import * as fromPreset from './reducers/preset';
 import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
@@ -15,8 +15,8 @@ import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
 
 export const reducers = {
-    userConfiguration: userConfigurationReducer,
-    presetKeymaps: presetReducer,
+    userConfiguration: fromUserConfig.reducer,
+    presetKeymaps: fromPreset.reducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
     app: fromApp.reducer,
     appUpdate: fromAppUpdate.reducer,
