@@ -35,7 +35,7 @@ describe('switch-keymap-action', () => {
             jsonDefaultHelper(action, null, userConfiguration);
         });
 
-        it('should binary match', () => {
+        xit('should binary match', () => {
             const action = new SwitchKeymapAction('AB1');
             binaryDefaultHelper(action, userConfiguration, userConfiguration);
         });
