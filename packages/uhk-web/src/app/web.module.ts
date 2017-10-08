@@ -183,9 +183,9 @@ import { ProgressButtonComponent } from './components/progress-button/progress-b
         NotifierModule.withConfig(angularNotifierConfig),
         EffectsModule.forRoot([
             ApplicationEffects,
+            UserConfigEffects,
             KeymapEffects,
             MacroEffects,
-            UserConfigEffects,
             AutoUpdateSettingsEffects,
             DeviceEffects
         ])
