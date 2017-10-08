@@ -15,7 +15,8 @@ export const ActionTypes = {
     SHOW_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'show save to keyboard button'),
     SAVE_TO_KEYBOARD_SUCCESS: type(PREFIX + 'save to keyboard success'),
     SAVE_TO_KEYBOARD_FAILED: type(PREFIX + 'save to keyboard failed'),
-    HIDE_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'hide save to keyboard button')
+    HIDE_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'hide save to keyboard button'),
+    RESET_USER_CONFIGURATION: type(PREFIX + 'reset user configuration')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -68,6 +69,10 @@ export class HideSaveToKeyboardButton implements Action {
     type = ActionTypes.HIDE_SAVE_TO_KEYBOARD_BUTTON;
 }
 
+export class ResetUserConfigurationAction implements Action {
+    type = ActionTypes.RESET_USER_CONFIGURATION;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -78,4 +83,6 @@ export type Actions
     | SaveConfigurationReplyAction
     | SaveToKeyboardSuccessAction
     | SaveToKeyboardSuccessFailed
-    | HideSaveToKeyboardButton;
+    | HideSaveToKeyboardButton
+    | ResetUserConfigurationAction
+    ;
