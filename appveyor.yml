@@ -26,7 +26,6 @@ install:
 
 test_script:
   - appveyor-retry npm run build
-  - appveyor-retry npm run build:test
   - npm run lint
   - npm run test
   - npm run release

@@ -65,7 +65,7 @@ export class KeystrokeAction extends KeyAction {
             return;
         }
         this.type = other.type;
-        this.scancode = other.scancode;
+        this._scancode = other._scancode;
         this.modifierMask = other.modifierMask;
         this.longPressAction = other.longPressAction;
     }
@@ -78,7 +78,7 @@ export class KeystrokeAction extends KeyAction {
             this.type = KeystrokeType[jsonObject.type];
         }
 
-        this.scancode = jsonObject.scancode;
+        this._scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
         this.longPressAction = LongPressAction[jsonObject.longPressAction];
         return this;

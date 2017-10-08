@@ -1,4 +1,3 @@
-import '@ngrx/core/add/operator/select';
 import { Action } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
@@ -10,9 +9,9 @@ import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';
 
-const initialState: UserConfiguration = new UserConfiguration();
+export const initialState: UserConfiguration = new UserConfiguration();
 
-export default function (state = initialState, action: Action): UserConfiguration {
+export function reducer(state = initialState, action: Action & { payload?: any }): UserConfiguration {
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
     switch (action.type) {
@@ -240,12 +239,12 @@ export default function (state = initialState, action: Action): UserConfiguratio
 
 export function getUserConfiguration(): (state$: Observable<AppState>) => Observable<UserConfiguration> {
     return (state$: Observable<AppState>) => state$
-        .select(state => state.userConfiguration);
+        .map(state => state.userConfiguration);
 }
 
 export function getKeymaps(): (state$: Observable<AppState>) => Observable<Keymap[]> {
     return (state$: Observable<AppState>) => state$
-        .select(state => state.userConfiguration.keymaps);
+        .map(state => state.userConfiguration.keymaps);
 }
 
 export function getKeymap(abbr: string) {
@@ -268,7 +267,7 @@ export function getDefaultKeymap() {
 
 export function getMacros(): (state$: Observable<AppState>) => Observable<Macro[]> {
     return (state$: Observable<AppState>) => state$
-        .select(state => state.userConfiguration.macros);
+        .map(state => state.userConfiguration.macros);
 }
 
 export function getMacro(id: number) {

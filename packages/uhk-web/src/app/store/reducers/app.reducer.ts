@@ -1,4 +1,4 @@
-import { routerActions } from '@ngrx/router-store';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 
 import { HardwareConfiguration, runInElectron, Notification, NotificationType, UserConfiguration } from 'uhk-common';
@@ -17,7 +17,7 @@ export interface State {
     hardwareConfig?: HardwareConfiguration;
 }
 
-const initialState: State = {
+export const initialState: State = {
     started: false,
     showAddonMenu: false,
     navigationCountAfterNotification: 0,
@@ -25,7 +25,7 @@ const initialState: State = {
     configLoading: true
 };
 
-export function reducer(state = initialState, action: Action) {
+export function reducer(state = initialState, action: Action & { payload: any }) {
     switch (action.type) {
         case ActionTypes.APP_STARTED: {
             return {
@@ -56,8 +56,8 @@ export function reducer(state = initialState, action: Action) {
         // Required to dismiss the undoNotification dialog, when user navigate in the app.
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
-        case routerActions.UPDATE_LOCATION: {
-            const newState = {...state};
+        case ROUTER_NAVIGATION: {
+            const newState = { ...state };
             newState.navigationCountAfterNotification++;
 
             if (newState.navigationCountAfterNotification > 1) {
