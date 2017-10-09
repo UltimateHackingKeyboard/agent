@@ -31,5 +31,5 @@ export enum SystemPropertyIds {
     DataModelVersion = 2,
     FirmwareVersion = 3,
     HardwareConfigSize = 4,
-    UserConfigSize = 5
+    MaxUserConfigSize = 5
 }
