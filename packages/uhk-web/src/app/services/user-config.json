@@ -499,11 +499,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -586,11 +582,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -658,11 +650,7 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "switchLayer",
@@ -756,11 +744,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -819,11 +803,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 null,
                 null,
                 {
@@ -874,11 +854,7 @@
                   "toggle": false
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -938,16 +914,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -1025,20 +993,12 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -1049,7 +1009,7 @@
     {
       "isDefault": false,
       "abbreviation": "DVO",
-      "name": "DVORAK",
+      "name": "Dvorak",
       "description": "",
       "layers": [
         {
@@ -1536,11 +1496,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -1623,11 +1579,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -1695,11 +1647,7 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "switchLayer",
@@ -1801,11 +1749,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -1864,11 +1808,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 null,
                 null,
                 {
@@ -1919,11 +1859,7 @@
                   "toggle": false
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -1983,16 +1919,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -2070,20 +1998,12 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -2094,7 +2014,7 @@
     {
       "isDefault": false,
       "abbreviation": "COL",
-      "name": "COLEMAK",
+      "name": "Colemak",
       "description": "",
       "layers": [
         {
@@ -2581,11 +2501,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -2668,11 +2584,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -2740,11 +2652,7 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "switchLayer",
@@ -2846,11 +2754,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -2909,11 +2813,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 null,
                 null,
                 {
@@ -2964,11 +2864,7 @@
                   "toggle": false
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -3028,16 +2924,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -3115,20 +3003,12 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -3139,7 +3019,7 @@
     {
       "isDefault": false,
       "abbreviation": "WOR",
-      "name": "WORKMAN",
+      "name": "Workman",
       "description": "",
       "layers": [
         {
@@ -3626,11 +3506,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -3713,11 +3589,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -3785,11 +3657,7 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "switchLayer",
@@ -3883,11 +3751,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -3946,11 +3810,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 null,
                 null,
                 {
@@ -4001,11 +3861,7 @@
                   "toggle": false
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -4065,16 +3921,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -4152,20 +4000,12 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -4176,7 +4016,7 @@
     {
       "isDefault": false,
       "abbreviation": "1HA",
-      "name": "ONE-HANDED",
+      "name": "One-handed",
       "description": "",
       "layers": [
         {
@@ -4623,11 +4463,7 @@
                   "type": "basic",
                   "scancode": 4
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "basic",
-                  "scancode": 52
-                },
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -4670,11 +4506,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -4763,11 +4595,7 @@
                   "type": "basic",
                   "scancode": 28
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -4845,11 +4673,7 @@
                   "type": "basic",
                   "scancode": 40
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
@@ -4927,11 +4751,7 @@
                   "type": "basic",
                   "scancode": 73
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -4953,11 +4773,7 @@
                   "modifierMask": 32
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -5037,11 +4853,7 @@
                   "type": "basic",
                   "scancode": 76
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -5112,11 +4924,7 @@
                   "layer": "fn",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -5168,7 +4976,11 @@
                   "mouseAction": "moveRight"
                 },
                 null,
-                null,
+                {
+                  "keyActionType": "switchLayer",
+                  "layer": "mouse",
+                  "toggle": false
+                },
                 null,
                 {
                   "keyActionType": "mouse",
@@ -5190,16 +5002,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -5303,16 +5107,8 @@
                   "modifierMask": 4
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
+                null,
                 null
               ]
             }
@@ -5323,7 +5119,7 @@
     {
       "isDefault": false,
       "abbreviation": "KAP",
-      "name": "KEYBOARD+MOUSE",
+      "name": "Keyboard + Mouse",
       "description": "",
       "layers": [
         {
@@ -5742,11 +5538,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -5835,11 +5627,7 @@
                   "type": "basic",
                   "scancode": 28
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -5913,11 +5701,7 @@
                   "modifierMask": 4
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
@@ -6021,11 +5805,7 @@
                   "modifierMask": 32
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -6105,11 +5885,7 @@
                   "type": "basic",
                   "scancode": 76
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -6180,11 +5956,7 @@
                   "layer": "fn",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -6281,7 +6053,7 @@
     {
       "isDefault": false,
       "abbreviation": "EGG",
-      "name": "EGGHEAD.IO",
+      "name": "egghead.io",
       "description": "",
       "layers": [
         {
@@ -6768,11 +6540,7 @@
                   "layer": "mod",
                   "toggle": false
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -6855,11 +6623,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -6924,11 +6688,7 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 null,
                 {
                   "keyActionType": "switchLayer",
@@ -7030,11 +6790,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
@@ -7093,11 +6849,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mouse",
-                  "toggle": false
-                },
+                null,
                 null,
                 null,
                 {
@@ -7148,11 +6900,7 @@
                   "toggle": false
                 },
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -7212,16 +6960,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -7299,20 +7039,12 @@
                   "type": "basic",
                   "modifierMask": 4
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "fn",
-                  "toggle": false
-                },
+                null,
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                {
-                  "keyActionType": "switchLayer",
-                  "layer": "mod",
-                  "toggle": false
-                },
+                null,
                 null
               ]
             }
@@ -7325,104 +7057,44 @@
     {
       "isLooped": false,
       "isPrivate": true,
-      "name": "My address",
+      "name": "Type Silent Bob's address",
       "macroActions": [
         {
-          "macroActionType": "key",
-          "action": "press",
-          "type": "basic",
-          "scancode": 111
-        },
-        {
-          "macroActionType": "key",
-          "action": "hold",
-          "type": "basic",
-          "scancode": 83
-        },
-        {
-          "macroActionType": "key",
-          "action": "release",
-          "type": "basic",
-          "scancode": 112
-        },
-        {
-          "macroActionType": "key",
-          "action": "press",
-          "modifierMask": 93
-        },
-        {
-          "macroActionType": "key",
-          "action": "hold",
-          "modifierMask": 101
-        },
-        {
-          "macroActionType": "key",
-          "action": "release",
-          "modifierMask": 133
-        },
-        {
-          "macroActionType": "mouseButton",
-          "action": "press",
-          "mouseButtonsMask": 9
-        },
-        {
-          "macroActionType": "mouseButton",
-          "action": "hold",
-          "mouseButtonsMask": 12
-        },
-        {
-          "macroActionType": "mouseButton",
-          "action": "release",
-          "mouseButtonsMask": 104
-        },
-        {
-          "macroActionType": "moveMouse",
-          "x": -1920,
-          "y": 220
-        },
-        {
-          "macroActionType": "scrollMouse",
-          "x": 0,
-          "y": 20000
-        },
-        {
-          "macroActionType": "delay",
-          "delay": 40000
-        },
-        {
           "macroActionType": "text",
-          "text": "this is a text"
+          "text": "Silent Bob\n711-2880 Nulla St.\nMankato Mississippi 96522\n(257) 563-7401"
         }
       ]
     },
     {
       "isLooped": true,
       "isPrivate": true,
-      "name": "Blah Blah blah",
+      "name": "Go to UHK site in browser",
       "macroActions": [
         {
           "macroActionType": "key",
           "action": "press",
-          "type": "basic",
-          "scancode": 111
-        },
-        {
-          "macroActionType": "mouseButton",
-          "action": "release",
-          "mouseButtonsMask": 104
-        },
-        {
-          "macroActionType": "scrollMouse",
-          "x": 0,
-          "y": -20000
-        },
-        {
-          "macroActionType": "delay",
-          "delay": 40000
+          "scancode": 15,
+          "modifierMask": 1
         },
         {
           "macroActionType": "text",
-          "text": "blahhhhhhh"
+          "text": "https://ultimatehackingkeyboard.com"
+        },
+        {
+          "macroActionType": "key",
+          "action": "press",
+          "scancode": 40
+        }
+      ]
+    },
+    {
+      "isLooped": false,
+      "isPrivate": true,
+      "name": "God mode in Doom",
+      "macroActions": [
+        {
+          "macroActionType": "text",
+          "text": "iddqd"
         }
       ]
     }
