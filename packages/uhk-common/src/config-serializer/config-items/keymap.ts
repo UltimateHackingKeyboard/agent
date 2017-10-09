@@ -1,8 +1,7 @@
 import { UhkBuffer } from '../uhk-buffer';
 import { Layer } from './layer';
 import { Macro } from './macro';
-import { SwitchLayerAction } from './key-action/switch-layer-action';
-import { KeyAction } from './key-action/key-action';
+import { KeyAction, SwitchLayerAction } from './key-action';
 import { UserConfiguration } from './user-configuration';
 
 export class Keymap {
