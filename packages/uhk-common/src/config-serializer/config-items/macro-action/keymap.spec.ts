@@ -247,7 +247,7 @@ describe('keymap', () => {
                 }
             ]
         };
-        spyOn(console, 'warn').and.callThrough();
+        spyOn(console, 'warn');
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
