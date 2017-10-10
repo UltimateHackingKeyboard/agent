@@ -50,7 +50,10 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "test": "lerna exec --scope test-serializer npm test",
+    "test":"run-p -sn test:test-serializer test:uhk-common",
+    "test:test-serializer": "lerna exec --scope test-serializer npm test",
+    "test:uhk-common": "lerna exec --scope uhk-common npm test",
+    "test:uhk-web": "lerna exec --scope uhk-web npm test",
     "lint": "run-s -scn lint:ts lint:style",
     "lint:ts": "run-p -sn lint:ts:electron-main lint:ts:electron-renderer lint:ts:web lint:ts:test-serializer lint:ts:uhk-usb",
     "lint:ts:electron-main": "tslint --type-check --project ./packages/uhk-agent/tsconfig.json",
