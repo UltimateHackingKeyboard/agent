@@ -1,7 +1,7 @@
 import { UhkBuffer } from '../uhk-buffer';
 import { Layer } from './layer';
 import { Macro } from './macro';
-import { KeyAction, SwitchLayerAction } from './key-action';
+import { KeyActionHelper, SwitchLayerAction } from './key-action';
 import { UserConfiguration } from './user-configuration';
 
 export class Keymap {
@@ -96,30 +96,50 @@ export class Keymap {
     }
 
     private normalize() {
-        // Removes all the SwitchLayerActions from any non base layer
-        for (let i = 1; i < this.layers.length; ++i) {
-            for (const module of this.layers[i].modules) {
-                module.keyActions = module.keyActions.map(keyAction => {
-                    if (keyAction instanceof SwitchLayerAction) {
-                        return undefined;
+        if (this.layers.length < 1) {
+            return;
+        }
+
+        for (let moduleId = 0; moduleId < this.layers[0].modules.length && moduleId < 2; moduleId++) {
+            const baseModule = this.layers[0].modules[moduleId];
+            for (let keyActionId = 0; keyActionId < baseModule.keyActions.length; keyActionId++) {
+                const baseKeyAction = baseModule.keyActions[keyActionId];
+
+                if (!(baseKeyAction instanceof SwitchLayerAction)) {
+                    continue;
+                }
+
+                const destinationLayerId = baseKeyAction.layer + 1;
+                if (this.layers.length < destinationLayerId) {
+                    console.error(`${this.name} has not enough layer. Need: ${destinationLayerId}`);
+                    continue;
+                }
+
+                const destinationModule = this.layers[destinationLayerId].modules[moduleId];
+
+                if (!destinationModule) {
+                    console.error(`${this.name} layer ${destinationLayerId} has not enough module. Need: ${destinationLayerId}`);
+                    continue;
+                }
+
+                const destinationKeyAction = destinationModule.keyActions[keyActionId];
+
+                if (destinationKeyAction instanceof SwitchLayerAction) {
+                    if (destinationKeyAction.layer === baseKeyAction.layer &&
+                        destinationKeyAction.isLayerToggleable === baseKeyAction.isLayerToggleable) {
+                        continue;
                     }
-                    return keyAction;
-                });
+                    const error = `${this.name}.layers[${destinationLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                        ` is different switch layer. ${destinationKeyAction} will be override with ${baseKeyAction}`;
+                    console.warn(error);
+                } else {
+                    const error = `${this.name}.layers[${destinationLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                        ` is not switch layer. ${destinationKeyAction} will be override with ${baseKeyAction}`;
+                    console.warn(error);
+                }
+
+                destinationModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction);
             }
         }
-
-        // Adds the SwitchLayerActions from the base layer to any none base layer
-        const baseLayerModules = this.layers[0].modules;
-        for (let i = 0; i < baseLayerModules.length; ++i) {
-            baseLayerModules[i].keyActions.forEach((keyAction: KeyAction, keyActionIndex: number) => {
-                if (keyAction instanceof SwitchLayerAction) {
-                    for (let j = 1; j < this.layers.length; ++j) {
-                        this.layers[j].modules[i].keyActions[keyActionIndex] = new SwitchLayerAction(keyAction);
-                    }
-                }
-            });
-
-        }
     }
-
 }
