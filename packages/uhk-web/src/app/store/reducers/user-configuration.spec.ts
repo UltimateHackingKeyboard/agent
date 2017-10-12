@@ -215,7 +215,7 @@ describe('user-configuration reducer', () => {
             });
         });
 
-        fit('should copy the SwitchLayerAction to the destination layer and clear the modified', () => {
+        it('should copy the SwitchLayerAction to the destination layer and clear the modified', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const destinationLayerId = LayerName.fn;

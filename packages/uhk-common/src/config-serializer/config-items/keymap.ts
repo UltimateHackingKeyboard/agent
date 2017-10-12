@@ -105,40 +105,54 @@ export class Keymap {
             for (let keyActionId = 0; keyActionId < baseModule.keyActions.length; keyActionId++) {
                 const baseKeyAction = baseModule.keyActions[keyActionId];
 
-                if (!(baseKeyAction instanceof SwitchLayerAction)) {
-                    continue;
+                if (baseKeyAction instanceof SwitchLayerAction) {
+                    const destinationLayerId = baseKeyAction.layer + 1;
+                    if (this.layers.length < destinationLayerId) {
+                        // TODO: What should we do???
+                        console.error(`${this.name} has not enough layer. Need: ${destinationLayerId}`);
+                    }
                 }
 
-                const destinationLayerId = baseKeyAction.layer + 1;
-                if (this.layers.length < destinationLayerId) {
-                    console.error(`${this.name} has not enough layer. Need: ${destinationLayerId}`);
-                    continue;
-                }
-
-                const destinationModule = this.layers[destinationLayerId].modules[moduleId];
-
-                if (!destinationModule) {
-                    console.error(`${this.name} layer ${destinationLayerId} has not enough module. Need: ${destinationLayerId}`);
-                    continue;
-                }
-
-                const destinationKeyAction = destinationModule.keyActions[keyActionId];
-
-                if (destinationKeyAction instanceof SwitchLayerAction) {
-                    if (destinationKeyAction.layer === baseKeyAction.layer &&
-                        destinationKeyAction.isLayerToggleable === baseKeyAction.isLayerToggleable) {
+                for (let currentLayerId = 1; currentLayerId < this.layers.length; currentLayerId++) {
+                    const currentLayer = this.layers[currentLayerId];
+                    if (currentLayer.modules.length < moduleId) {
+                        // TODO: What should we do???
+                        console.error(`${this.name}.layers[${currentLayerId}] has not enough module. Need: ${moduleId}`);
                         continue;
                     }
-                    const error = `${this.name}.layers[${destinationLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
-                        ` is different switch layer. ${destinationKeyAction} will be override with ${baseKeyAction}`;
-                    console.warn(error);
-                } else {
-                    const error = `${this.name}.layers[${destinationLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
-                        ` is not switch layer. ${destinationKeyAction} will be override with ${baseKeyAction}`;
-                    console.warn(error);
-                }
+                    const currentModule = currentLayer.modules[moduleId];
+                    const currentKeyAction = currentModule.keyActions[keyActionId];
 
-                destinationModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction);
+                    if (baseKeyAction instanceof SwitchLayerAction) {
+                        if (currentLayerId - 1 === baseKeyAction.layer) {
+                            if (currentKeyAction instanceof SwitchLayerAction) {
+                                if (currentKeyAction.layer === baseKeyAction.layer &&
+                                    currentKeyAction.isLayerToggleable === baseKeyAction.isLayerToggleable) {
+                                    continue;
+                                }
+                                // tslint:disable-next-line: max-line-length
+                                const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                    ` is different switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
+                                console.warn(error);
+                            } else {
+                                // tslint:disable-next-line: max-line-length
+                                const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                    ` is not switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
+                                console.warn(error);
+                            }
+                            currentModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction);
+                        }
+                    }
+                    else {
+                        if (currentKeyAction instanceof SwitchLayerAction) {
+                            // tslint:disable-next-line: max-line-length
+                            const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                ` is switch layer action, but the base key action is not switch layer action, so will delete`;
+                            console.warn(error);
+                            currentModule.keyActions[keyActionId] = null;
+                        }
+                    }
+                }
             }
         }
     }
