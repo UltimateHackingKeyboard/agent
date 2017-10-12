@@ -122,9 +122,13 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 }
                 // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                 // on the target layer
-                if (newKeyAction instanceof SwitchLayerAction && index - 1 === newKeyAction.layer) {
-                    const clonedAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
-                    setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
+                else if (newKeyAction instanceof SwitchLayerAction) {
+                    if (index - 1 === newKeyAction.layer) {
+                        const clonedAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
+                        setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
+                    }else {
+                        setKeyActionToLayer(newLayer, moduleIndex, keyIndex, null);
+                    }
                 }
                 return newLayer;
             });

@@ -1,136 +1,152 @@
 import { cloneDeep } from 'lodash';
 
 const defaultUserConfig = {
-  dataModelVersion: 4,
-  moduleConfigurations: [
+    dataModelVersion: 4,
+    moduleConfigurations: [
         {
-          id: 1,
-          initialPointerSpeed: 1,
-          pointerAcceleration: 5,
-          maxPointerSpeed: 200
+            id: 1,
+            initialPointerSpeed: 1,
+            pointerAcceleration: 5,
+            maxPointerSpeed: 200
         }
     ],
-  keymaps: [
+    keymaps: [
         {
-          isDefault: true,
-          abbreviation: 'QWR',
-          name: 'QWERTY',
-          description: '',
-          layers: [
+            isDefault: true,
+            abbreviation: 'QWR',
+            name: 'QWERTY',
+            description: '',
+            layers: [
                 {
-                  modules: [
+                    modules: [
                         {
-                          id: 0,
-                          pointerRole: 'move',
-                          keyActions: [
+                            id: 0,
+                            pointerRole: 'move',
+                            keyActions: [
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 36
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 36
                                 },
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 37
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 37
+                                },
+                                {
+                                    'keyActionType': 'switchLayer',
+                                    'layer': 'mod',
+                                    'toggle': false
                                 }
                             ]
                         },
                         {
-                          id: 1,
-                          pointerRole: 'move',
-                          keyActions: [
+                            id: 1,
+                            pointerRole: 'move',
+                            keyActions: [
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 53
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 53
                                 },
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 30
-                                }
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 30
+                                },
+                                null
                             ]
                         },
                         {
-                          id: 2,
-                          pointerRole: 'scroll',
-                          keyActions: []
+                            id: 2,
+                            pointerRole: 'scroll',
+                            keyActions: []
                         }
                     ]
                 },
                 {
-                  modules: [
+                    modules: [
                         {
-                          id: 0,
-                          pointerRole: 'none',
-                          keyActions: [
+                            id: 0,
+                            pointerRole: 'none',
+                            keyActions: [
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 64
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 64
                                 },
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 65
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 65
+                                },
+                                {
+                                    keyActionType: 'switchLayer',
+                                    layer: 'mod',
+                                    toggle: false
                                 }
                             ]
                         },
                         {
-                          id: 1,
-                          pointerRole: 'none',
-                          keyActions: [
+                            id: 1,
+                            pointerRole: 'none',
+                            keyActions: [
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 41
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 41
                                 },
                                 {
-                                  keyActionType: 'keystroke',
-                                  type: 'basic',
-                                  scancode: 58
-                                }
+                                    keyActionType: 'keystroke',
+                                    type: 'basic',
+                                    scancode: 58
+                                },
+                                null
                             ]
                         }
                     ]
                 },
                 {
-                  modules: [
+                    modules: [
                         {
-                          id: 0,
-                          pointerRole: 'move',
-                          keyActions: [
+                            id: 0,
+                            pointerRole: 'move',
+                            keyActions: [
+                                null,
                                 null,
                                 null
                             ]
                         },
                         {
-                          id: 1,
-                          pointerRole: 'scroll',
-                          keyActions: [
+                            id: 1,
+                            pointerRole: 'scroll',
+                            keyActions: [
                                 null,
                                 {
-                                  keyActionType: 'switchKeymap',
-                                  keymapAbbreviation: 'DVO'
-                                }
+                                    keyActionType: 'switchKeymap',
+                                    keymapAbbreviation: 'DVO'
+                                },
+                                null
                             ]
                         }
                     ]
                 },
                 {
-                  modules: [
+                    modules: [
                         {
-                          id: 0,
-                          pointerRole: 'move',
-                          keyActions: [
+                            id: 0,
+                            pointerRole: 'move',
+                            keyActions: [
+                                null,
                                 null,
                                 null
                             ]
                         },
                         {
-                          id: 1,
-                          pointerRole: 'move',
-                          keyActions: [
+                            id: 1,
+                            pointerRole: 'move',
+                            keyActions: [
+                                null,
                                 null,
                                 null
                             ]
@@ -140,7 +156,7 @@ const defaultUserConfig = {
             ]
         }
     ],
-  macros: []
+    macros: []
 };
 
 export function getDefaultUserConfig() {
