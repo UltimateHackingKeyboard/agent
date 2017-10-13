@@ -46,6 +46,7 @@ export class DeviceService {
      */
     public async loadConfigurations(event: Electron.Event): Promise<void> {
         try {
+            await this.device.waitUntilKeyboardBusy();
             const userConfiguration = await this.loadConfiguration(
                 SystemPropertyIds.MaxUserConfigSize,
                 UsbCommand.ReadUserConfig,
