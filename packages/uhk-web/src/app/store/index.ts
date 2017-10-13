@@ -47,6 +47,7 @@ export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrev
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
 export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
+export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);

@@ -115,3 +115,4 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
 
     return KeyboardLayout.ANSI;
 };
+export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;

@@ -13,6 +13,9 @@ import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { MainPage } from './pages/main-page/main.page';
 import { settingsRoutes } from './components/settings/settings.routes';
+import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
+import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
+import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 
 const appRoutes: Routes = [
     {
@@ -26,9 +29,14 @@ const appRoutes: Routes = [
         canActivate: [UhkDeviceInitializedGuard]
     },
     {
+        path: 'loading',
+        component: LoadingDevicePageComponent,
+        canActivate: [UhkDeviceLoadedGuard]
+    },
+    {
         path: '',
         component: MainPage,
-        canActivate: [UhkDeviceDisconnectedGuard],
+        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard],
         children: [
             ...deviceRoutes,
             ...keymapRoutes,

@@ -3,7 +3,7 @@
                       (doNotUpdateApp)="doNotUpdateApp()">
 </app-update-available>
 
-<side-menu *ngIf="deviceConnected$ | async"></side-menu>
+<side-menu *ngIf="deviceConfigurationLoaded$ | async"></side-menu>
 <div id="main-content" class="main-content">
     <router-outlet></router-outlet>
 </div>
