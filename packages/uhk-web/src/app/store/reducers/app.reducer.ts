@@ -4,6 +4,7 @@ import { Action } from '@ngrx/store';
 import { HardwareConfiguration, runInElectron, Notification, NotificationType, UserConfiguration } from 'uhk-common';
 import { ActionTypes, ShowNotificationAction } from '../actions/app';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
+import { ActionTypes as DeviceActionTypes } from '../actions/device';
 import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 
 export interface State {
@@ -57,7 +58,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
         case ROUTER_NAVIGATION: {
-            const newState = { ...state };
+            const newState = {...state};
             newState.navigationCountAfterNotification++;
 
             if (newState.navigationCountAfterNotification > 1) {
@@ -96,6 +97,17 @@ export function reducer(state = initialState, action: Action & { payload: any })
             return {
                 ...state,
                 hardwareConfig: action.payload
+            };
+
+        case DeviceActionTypes.CONNECTION_STATE_CHANGED:
+
+            if (action.payload === true) {
+                return state;
+            }
+
+            return {
+                ...state,
+                hardwareConfig: null
             };
 
         default:
