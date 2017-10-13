@@ -135,6 +135,7 @@ export class UserConfigEffects {
             try {
                 const userConfig = UserConfigEffects.getUserConfigFromDeviceResponse(data.userConfiguration);
                 const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+                this.router.navigate(['/']);
 
                 return [
                     new LoadUserConfigSuccessAction(userConfig),

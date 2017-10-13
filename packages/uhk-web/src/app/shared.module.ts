@@ -85,11 +85,13 @@ import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { MainPage } from './pages/main-page/main.page';
-import { DeviceEffects } from './store/effects/device';
 import { DeviceRendererService } from './services/device-renderer.service';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { ProgressButtonComponent } from './components/progress-button/progress-button.component';
 import { MainAppComponent } from './app.component';
+import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
+import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
+import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 
 @NgModule({
     declarations: [
@@ -151,7 +153,8 @@ import { MainAppComponent } from './app.component';
         MissingDeviceComponent,
         PrivilegeCheckerComponent,
         MainPage,
-        ProgressButtonComponent
+        ProgressButtonComponent,
+        LoadingDevicePageComponent
     ],
     imports: [
         CommonModule,
@@ -180,7 +183,9 @@ import { MainAppComponent } from './app.component';
         UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
         UhkDeviceInitializedGuard,
-        UhkDeviceUninitializedGuard
+        UhkDeviceUninitializedGuard,
+        UhkDeviceLoadingGuard,
+        UhkDeviceLoadedGuard
     ],
     exports: [
         UhkMessageComponent,

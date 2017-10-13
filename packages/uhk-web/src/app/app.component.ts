@@ -9,7 +9,7 @@ import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-updat
 import {
     AppState,
     getShowAppUpdateAvailable,
-    deviceConnected,
+    deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState
 } from './store';
@@ -37,13 +37,13 @@ import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from
 })
 export class MainAppComponent {
     showUpdateAvailable$: Observable<boolean>;
-    deviceConnected$: Observable<boolean>;
+    deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState$: Observable<ProgressButtonState>;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
-        this.deviceConnected$ = store.select(deviceConnected);
+        this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
         this.saveToKeyboardState$ = store.select(saveToKeyboardState);
     }
