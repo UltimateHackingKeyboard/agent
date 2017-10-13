@@ -1,5 +1,7 @@
 <span class="uhk-message-wrapper">
-    <img class="agent-logo" src="assets/images/agent-icon.png"/>
+    <img class="agent-logo spin-logo"
+         [ngClass]="{'spin-logo': rotateLogo}"
+         src="assets/images/agent-icon.png"/>
     <div class="messages">
         <h1> {{ title }} </h1>
         <h2> {{ subtitle }} </h2>

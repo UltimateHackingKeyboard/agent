@@ -9,4 +9,5 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 export class UhkMessageComponent {
     @Input() title: string;
     @Input() subtitle: string;
+    @Input() rotateLogo = false;
 }
