@@ -1,8 +1,7 @@
 import { UhkBuffer } from '../uhk-buffer';
 import { Layer } from './layer';
 import { Macro } from './macro';
-import { SwitchLayerAction } from './key-action/switch-layer-action';
-import { KeyAction } from './key-action/key-action';
+import { KeyActionHelper, SwitchLayerAction } from './key-action';
 import { UserConfiguration } from './user-configuration';
 
 export class Keymap {
@@ -97,30 +96,64 @@ export class Keymap {
     }
 
     private normalize() {
-        // Removes all the SwitchLayerActions from any non base layer
-        for (let i = 1; i < this.layers.length; ++i) {
-            for (const module of this.layers[i].modules) {
-                module.keyActions = module.keyActions.map(keyAction => {
-                    if (keyAction instanceof SwitchLayerAction) {
-                        return undefined;
-                    }
-                    return keyAction;
-                });
-            }
+        if (this.layers.length < 1) {
+            return;
         }
 
-        // Adds the SwitchLayerActions from the base layer to any none base layer
-        const baseLayerModules = this.layers[0].modules;
-        for (let i = 0; i < baseLayerModules.length; ++i) {
-            baseLayerModules[i].keyActions.forEach((keyAction: KeyAction, keyActionIndex: number) => {
-                if (keyAction instanceof SwitchLayerAction) {
-                    for (let j = 1; j < this.layers.length; ++j) {
-                        this.layers[j].modules[i].keyActions[keyActionIndex] = new SwitchLayerAction(keyAction);
+        for (let moduleId = 0; moduleId < this.layers[0].modules.length && moduleId < 2; moduleId++) {
+            const baseModule = this.layers[0].modules[moduleId];
+            for (let keyActionId = 0; keyActionId < baseModule.keyActions.length; keyActionId++) {
+                const baseKeyAction = baseModule.keyActions[keyActionId];
+
+                if (baseKeyAction instanceof SwitchLayerAction) {
+                    const destinationLayerId = baseKeyAction.layer + 1;
+                    if (this.layers.length < destinationLayerId) {
+                        // TODO: What should we do???
+                        console.error(`${this.name} has not enough layer. Need: ${destinationLayerId}`);
                     }
                 }
-            });
 
+                for (let currentLayerId = 1; currentLayerId < this.layers.length; currentLayerId++) {
+                    const currentLayer = this.layers[currentLayerId];
+                    if (currentLayer.modules.length < moduleId) {
+                        // TODO: What should we do???
+                        console.error(`${this.name}.layers[${currentLayerId}] has not enough module. Need: ${moduleId}`);
+                        continue;
+                    }
+                    const currentModule = currentLayer.modules[moduleId];
+                    const currentKeyAction = currentModule.keyActions[keyActionId];
+
+                    if (baseKeyAction instanceof SwitchLayerAction) {
+                        if (currentLayerId - 1 === baseKeyAction.layer) {
+                            if (currentKeyAction instanceof SwitchLayerAction) {
+                                if (currentKeyAction.layer === baseKeyAction.layer &&
+                                    currentKeyAction.isLayerToggleable === baseKeyAction.isLayerToggleable) {
+                                    continue;
+                                }
+                                // tslint:disable-next-line: max-line-length
+                                const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                    ` is different switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
+                                console.warn(error);
+                            } else {
+                                // tslint:disable-next-line: max-line-length
+                                const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                    ` is not switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
+                                console.warn(error);
+                            }
+                            currentModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction);
+                        }
+                    }
+                    else {
+                        if (currentKeyAction instanceof SwitchLayerAction) {
+                            // tslint:disable-next-line: max-line-length
+                            const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                ` is switch layer action, but the base key action is not switch layer action, so will delete`;
+                            console.warn(error);
+                            currentModule.keyActions[keyActionId] = null;
+                        }
+                    }
+                }
+            }
         }
     }
-
 }
