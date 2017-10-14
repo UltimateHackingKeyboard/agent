@@ -50,7 +50,7 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "test":"run-p -sn test:test-serializer test:uhk-common",
+    "test": "run-p -sn test:test-serializer test:uhk-common",
     "test:test-serializer": "lerna exec --scope test-serializer npm test",
     "test:uhk-common": "lerna exec --scope uhk-common npm test",
     "test:uhk-web": "lerna exec --scope uhk-web npm test",

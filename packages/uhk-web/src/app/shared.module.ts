@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotifierModule } from 'angular-notifier';
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
@@ -163,7 +164,10 @@ import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
         DragulaModule,
         routing,
         Select2Module,
-        NotifierModule.withConfig(angularNotifierConfig)
+        NotifierModule.withConfig(angularNotifierConfig),
+        ConfirmationPopoverModule.forRoot({
+            confirmButtonType: 'danger' // set defaults here
+        })
     ],
     providers: [
         SvgModuleProviderService,

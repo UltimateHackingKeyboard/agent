@@ -6,7 +6,12 @@
 <ul class="list-unstyled btn-list">
     <li>
         <button class="btn btn-danger"
-                (click)="resetUserConfiguration()">Reset user configuration including all your keymaps and macros
+                mwlConfirmationPopover
+                title="Are you sure?"
+                placement="bottom"
+                confirmText="Yes"
+                cancelText="No"
+                (confirm)="resetUserConfiguration()">Reset user configuration including all your keymaps and macros
         </button>
     </li>
     <li>
