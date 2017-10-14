@@ -59,18 +59,4 @@ export class MainAppComponent {
     clickedOnProgressButton(action: Action) {
         return this.store.dispatch(action);
     }
-
-    @HostListener('window:keydown.alt.j', ['$event'])
-    onAltJ(event: KeyboardEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.store.dispatch(new SaveUserConfigInJsonFileAction());
-    }
-
-    @HostListener('window:keydown.alt.b', ['$event'])
-    onAltB(event: KeyboardEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.store.dispatch(new SaveUserConfigInBinaryFileAction());
-    }
 }

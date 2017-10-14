@@ -1,5 +1,22 @@
 <h1>
     <i class="fa fa-cog"></i>
-    <span>Device settings...</span>
+    <span>Device settings</span>
 </h1>
-<a (click)="resetUserConfiguration()">Reset user configuration</a>
+
+<ul class="list-unstyled btn-list">
+    <li>
+        <button class="btn btn-danger"
+                (click)="resetUserConfiguration()">Reset user configuration including all your keymaps and macros
+        </button>
+    </li>
+    <li>
+        <button class="btn btn-default"
+                (click)="saveConfigurationInJSONFormat()">Save device JSON configuration
+        </button>
+    </li>
+    <li>
+        <button class="btn btn-default"
+                (click)="saveConfigurationInBINFormat()">Save device binary configuration
+        </button>
+    </li>
+</ul>
