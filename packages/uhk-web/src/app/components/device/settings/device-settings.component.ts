@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../store';
 import { ResetUserConfigurationAction } from '../../../store/actions/device';
+import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from '../../../store/actions/user-config';
 
 @Component({
     selector: 'device-settings',
@@ -19,5 +20,13 @@ export class DeviceSettingsComponent {
 
     resetUserConfiguration() {
         this.store.dispatch(new ResetUserConfigurationAction());
+    }
+
+    saveConfigurationInJSONFormat(){
+        this.store.dispatch(new SaveUserConfigInJsonFileAction());
+    }
+
+    saveConfigurationInBINFormat(){
+        this.store.dispatch(new SaveUserConfigInBinaryFileAction());
     }
 }

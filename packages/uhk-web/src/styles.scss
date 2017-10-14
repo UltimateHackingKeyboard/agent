@@ -59,3 +59,9 @@
 .select2-container--default .select2-dropdown--below .select2-results > .select2-results__options {
     max-height: 300px;
 }
+
+ul.btn-list {
+    & li {
+        margin-top: 0.5em;
+    }
+}
