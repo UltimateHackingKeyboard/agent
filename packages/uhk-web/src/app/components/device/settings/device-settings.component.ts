@@ -22,11 +22,11 @@ export class DeviceSettingsComponent {
         this.store.dispatch(new ResetUserConfigurationAction());
     }
 
-    saveConfigurationInJSONFormat(){
+    saveConfigurationInJSONFormat() {
         this.store.dispatch(new SaveUserConfigInJsonFileAction());
     }
 
-    saveConfigurationInBINFormat(){
+    saveConfigurationInBINFormat() {
         this.store.dispatch(new SaveUserConfigInBinaryFileAction());
     }
 }
