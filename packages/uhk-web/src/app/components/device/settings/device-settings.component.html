@@ -5,13 +5,16 @@
 
 <ul class="list-unstyled btn-list">
     <li>
+        The device configuration contains all the keymaps, macros, and settings that are stored on the device.
+    </li>
+    <li>
         <button class="btn btn-default"
-                (click)="saveConfigurationInJSONFormat()">Save device JSON configuration
+                (click)="saveConfigurationInJSONFormat()">Download device configuration
         </button>
     </li>
     <li>
         <button class="btn btn-default"
-                (click)="saveConfigurationInBINFormat()">Save device binary configuration
+                >Upload device configuration
         </button>
     </li>
     <li>
@@ -22,6 +25,6 @@
                 confirmText="Yes"
                 cancelText="No"
                 (confirm)="resetUserConfiguration()">Reset device configuration
-        </button> - Reset all your keymaps, macros, and device settings to defaults.
+        </button>
     </li>
 </ul>
