@@ -5,16 +5,6 @@
 
 <ul class="list-unstyled btn-list">
     <li>
-        <button class="btn btn-danger"
-                mwlConfirmationPopover
-                title="Are you sure?"
-                placement="bottom"
-                confirmText="Yes"
-                cancelText="No"
-                (confirm)="resetUserConfiguration()">Reset user configuration
-        </button> - including all your keymaps and macros
-    </li>
-    <li>
         <button class="btn btn-default"
                 (click)="saveConfigurationInJSONFormat()">Save device JSON configuration
         </button>
@@ -23,5 +13,15 @@
         <button class="btn btn-default"
                 (click)="saveConfigurationInBINFormat()">Save device binary configuration
         </button>
+    </li>
+    <li>
+        <button class="btn btn-danger"
+                mwlConfirmationPopover
+                title="Are you sure?"
+                placement="bottom"
+                confirmText="Yes"
+                cancelText="No"
+                (confirm)="resetUserConfiguration()">Reset device configuration
+        </button> - Reset all your keymaps, macros, and device settings to defaults.
     </li>
 </ul>
