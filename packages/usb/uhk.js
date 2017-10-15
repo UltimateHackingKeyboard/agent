@@ -53,7 +53,6 @@ exports = module.exports = moduleExports = {
         getProperty: 0,
         jumpToBootloader: 1,
         setTestLed: 2,
-        readMergeSensor: 7,
         writeUserConfig: 8,
         applyConfig: 9,
         setLedPwm: 10,
