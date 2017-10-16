@@ -65,6 +65,12 @@ exports = module.exports = moduleExports = {
         readDebugInfo: 17,
         jumpToSlaveBootloader: 18,
     },
+    enumerationModes: {
+        bootloader: 0,
+        busPal: 1,
+        normalKeyboard: 2,
+        compatibleKeyboard: 3,
+    },
     systemPropertyIds: {
         usbProtocolVersion: 0,
         bridgeProtocolVersion: 1,
