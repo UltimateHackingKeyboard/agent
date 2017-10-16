@@ -63,6 +63,7 @@ exports = module.exports = moduleExports = {
         readUserConfig: 15,
         getKeyboardState: 16,
         readDebugInfo: 17,
+        jumpToSlaveBootloader: 18,
     },
     systemPropertyIds: {
         usbProtocolVersion: 0,
