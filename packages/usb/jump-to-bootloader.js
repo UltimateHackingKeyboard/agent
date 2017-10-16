@@ -3,6 +3,7 @@ let uhk = require('./uhk');
 
 let timeoutMs = 10000;
 let pollingIntervalMs = 100;
+let bootloaderTimeoutMs = 5000;
 let jumped = false;
 
 console.log('Trying to jump to the bootloader...');
@@ -24,7 +25,8 @@ setInterval(() => {
     device = uhk.getUhkDevice();
     if (device && !jumped) {
         console.log('UHK found, jumping to bootloader');
-        device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.jumpToBootloader])));
+        let t =  bootloaderTimeoutMs;
+        device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.jumpToBootloader, 0, t&0xff, (t&0xff<<8)>>8, (t&0xff<<16)>>16, (t&0xff<<24)>>24])));
         jumped = true;
     }
 
