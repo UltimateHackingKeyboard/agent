@@ -7,13 +7,13 @@ import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from
 
 @Component({
     selector: 'device-settings',
-    templateUrl: './device-settings.component.html',
-    styleUrls: ['./device-settings.component.scss'],
+    templateUrl: './device-configuration.component.html',
+    styleUrls: ['./device-configuration.component.scss'],
     host: {
         'class': 'container-fluid'
     }
 })
-export class DeviceSettingsComponent {
+export class DeviceConfigurationComponent {
 
     constructor(private store: Store<AppState>) {
     }

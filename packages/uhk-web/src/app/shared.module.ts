@@ -10,7 +10,11 @@ import { Select2Module } from 'ng2-select2/ng2-select2';
 
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
-import { DeviceSettingsComponent } from './components/device';
+import {
+    DeviceConfigurationComponent,
+    DeviceFirmwareComponent,
+    MouseSpeedComponent
+} from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
@@ -97,7 +101,9 @@ import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 @NgModule({
     declarations: [
         MainAppComponent,
-        DeviceSettingsComponent,
+        DeviceConfigurationComponent,
+        DeviceFirmwareComponent,
+        MouseSpeedComponent,
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,

@@ -1,15 +1,30 @@
 import { Routes } from '@angular/router';
 
-import { DeviceSettingsComponent } from './settings/device-settings.component';
+import { DeviceConfigurationComponent } from './configuration/device-configuration.component';
+import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
+import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
 
 export const deviceRoutes: Routes = [
     {
-        path: '',
-        redirectTo: 'device',
-        pathMatch: 'full'
-    },
-    {
-        path: 'device/settings',
-        component: DeviceSettingsComponent
+        path: 'device',
+        children: [
+            {
+                path: '',
+                redirectTo: 'configuration',
+                pathMatch: 'full'
+            },
+            {
+                path: 'configuration',
+                component: DeviceConfigurationComponent
+            },
+            {
+                path: 'mouse-speed',
+                component: MouseSpeedComponent
+            },
+            {
+                path: 'firmware',
+                component: DeviceFirmwareComponent
+            }
+        ]
     }
 ];
