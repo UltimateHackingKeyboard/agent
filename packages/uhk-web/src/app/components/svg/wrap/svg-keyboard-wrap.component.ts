@@ -25,7 +25,7 @@ import {
     KeystrokeAction,
     Layer,
     LayerName,
-    LongPressAction,
+    SecondaryRoleAction,
     MouseAction,
     MouseActionParam,
     PlayMacroAction,
@@ -266,10 +266,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 });
             }
 
-            if (keystrokeAction.hasLongPressAction()) {
+            if (keystrokeAction.hasSecondaryRoleAction()) {
                 content.push({
-                    name: 'Long press',
-                    value: LongPressAction[keystrokeAction.longPressAction]
+                    name: 'Secondary role',
+                    value: SecondaryRoleAction[keystrokeAction.secondaryRoleAction]
                 });
             }
             return Observable.of(content);

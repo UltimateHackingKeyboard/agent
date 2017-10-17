@@ -12,7 +12,7 @@ import { MapperService } from '../../../../services/mapper.service';
 })
 export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
-    @Input() longPressEnabled: boolean;
+    @Input() secondaryRoleEnabled: boolean;
 
     leftModifiers: string[];
     rightModifiers: string[];
@@ -21,11 +21,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     rightModifierSelects: boolean[];
 
     scanCodeGroups: Array<Select2OptionData>;
-    longPressGroups: Array<Select2OptionData>;
+    secondaryRoleGroups: Array<Select2OptionData>;
     options: Select2Options;
 
     selectedScancodeOption: Select2OptionData;
-    selectedLongPressIndex: number;
+    selectedSecondaryRoleIndex: number;
 
     constructor(private mapper: MapperService) {
         super();
@@ -36,11 +36,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             text: 'None'
         }];
         this.scanCodeGroups = this.scanCodeGroups.concat(require('./scancodes.json'));
-        this.longPressGroups = require('./longPress.json');
+        this.secondaryRoleGroups = require('./secondaryRole.json');
         this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.selectedScancodeOption = this.scanCodeGroups[0];
-        this.selectedLongPressIndex = -1;
+        this.selectedSecondaryRoleIndex = -1;
         this.options = {
             templateResult: this.scanCodeTemplateResult,
             matcher: (term: string, text: string, data: Select2OptionData) => {
@@ -100,9 +100,9 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             this.rightModifierSelects[index] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
         }
 
-        // Restore longPressAction
-        if (keystrokeAction.longPressAction !== undefined) {
-            this.selectedLongPressIndex = this.mapper.modifierMapper(keystrokeAction.longPressAction);
+        // Restore secondaryRoleAction
+        if (keystrokeAction.secondaryRoleAction !== undefined) {
+            this.selectedSecondaryRoleIndex = this.mapper.modifierMapper(keystrokeAction.secondaryRoleAction);
         }
 
         return true;
@@ -123,9 +123,9 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
         }
 
-        keystrokeAction.longPressAction = this.selectedLongPressIndex === -1
+        keystrokeAction.secondaryRoleAction = this.selectedSecondaryRoleIndex === -1
             ? undefined
-            : this.mapper.modifierMapper(this.selectedLongPressIndex);
+            : this.mapper.modifierMapper(this.selectedSecondaryRoleIndex);
 
         if (this.keyActionValid(keystrokeAction)) {
             return keystrokeAction;
@@ -158,8 +158,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.validAction.emit(this.keyActionValid());
     }
 
-    onLongpressChange(event: { value: string }) {
-        this.selectedLongPressIndex = +event.value;
+    onSecondaryRoleChange(event: { value: string }) {
+        this.selectedSecondaryRoleIndex = +event.value;
     }
 
     onScancodeChange(event: { value: string }) {

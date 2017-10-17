@@ -37,7 +37,7 @@ KeyActions.fromJsObject: [{"keyActionType":"none"},{"keyActionType":"keystroke",
     KeystrokeModifiersAction.fromJsObject: {"keyActionType":"keystrokeModifiers","modifierMask":33} => <KeystrokeModifiersAction modifierMask="33">
     KeystrokeWithModifiersAction.fromJsObject: {"keyActionType":"keystrokeWithModifiers","scancode":120,"modifierMask":16} => <KeystrokeWithModifiersAction scancode="120" modifierMask="16">
     SwitchLayerAction.fromJsObject: {"keyActionType":"switchLayer","layer":"fn","toggle":false} => <SwitchLayerAction layer="1" toggle="false">
-    DualRoleKeystrokeAction.fromJsObject: {"keyActionType":"dualRoleKeystroke","scancode":111,"longPressAction":"mod"} => <DualRoleKeystrokeAction scancode="111" longPressAction="8">
+    DualRoleKeystrokeAction.fromJsObject: {"keyActionType":"dualRoleKeystroke","scancode":111,"secondaryRoleAction":"mod"} => <DualRoleKeystrokeAction scancode="111" secondaryRoleAction="8">
     MouseAction.fromJsObject: {"keyActionType":"mouse","mouseAction":"scrollDown"} => <MouseAction mouseAction="8">
     PlayMacroAction.fromJsObject: {"keyActionType":"playMacro","macroId":0} => <PlayMacroAction macroId="0">
     SwitchKeymapAction.fromJsObject: {"keyActionType":"switchKeymap","keymapId":1} => <SwitchKeymapAction keymapId="1">
@@ -47,7 +47,7 @@ KeyActions.toBinary: <KeyActions length="9"> => ['u8(9)]
     KeystrokeModifiersAction.toBinary: <KeystrokeModifiersAction modifierMask="33"> => ['u8(2), u8(33)]
     KeystrokeWithModifiersAction.toBinary: <KeystrokeWithModifiersAction scancode="120" modifierMask="16"> => ['u8(3), u8(120), u8(16)]
     SwitchLayerAction.toBinary: <SwitchLayerAction layer="1" toggle="false"> => ['u8(5), u8(1)]
-    DualRoleKeystrokeAction.toBinary: <DualRoleKeystrokeAction scancode="111" longPressAction="8"> => ['u8(4), u8(111), u8(8)]
+    DualRoleKeystrokeAction.toBinary: <DualRoleKeystrokeAction scancode="111" secondaryRoleAction="8"> => ['u8(4), u8(111), u8(8)]
     MouseAction.toBinary: <MouseAction mouseAction="8"> => ['u8(7), u8(8)]
     PlayMacroAction.toBinary: <PlayMacroAction macroId="0"> => ['u8(8), u8(0)]
     SwitchKeymapAction.toBinary: <SwitchKeymapAction keymapId="1"> => ['u8(6), u8(1)]
@@ -57,7 +57,7 @@ KeyActions.fromBinary: [u8(9)]
     KeystrokeModifiersAction.fromBinary: [u8(2), u8(33)] => <KeystrokeModifiersAction modifierMask="33">
     KeystrokeWithModifiersAction.fromBinary: [u8(3), u8(120), u8(16)] => <KeystrokeWithModifiersAction scancode="120" modifierMask="16">
     SwitchLayerAction.fromBinary: [u8(5), u8(1)] => <SwitchLayerAction layer="1" toggle="false">
-    DualRoleKeystrokeAction.fromBinary: [u8(4), u8(111), u8(8)] => <DualRoleKeystrokeAction scancode="111" longPressAction="8">
+    DualRoleKeystrokeAction.fromBinary: [u8(4), u8(111), u8(8)] => <DualRoleKeystrokeAction scancode="111" secondaryRoleAction="8">
     MouseAction.fromBinary: [u8(7), u8(8)] => <MouseAction mouseAction="8">
     PlayMacroAction.fromBinary: [u8(8), u8(0)] => <PlayMacroAction macroId="0">
     SwitchKeymapAction.fromBinary: [u8(6), u8(1)] => <SwitchKeymapAction keymapId="1">
@@ -67,7 +67,7 @@ KeyActions.toJsObject: <KeyActions length="9">
     KeystrokeModifiersAction.toJsObject: <KeystrokeModifiersAction modifierMask="33"> => {"keyActionType":"keystrokeModifiers","modifierMask":33}
     KeystrokeWithModifiersAction.toJsObject: <KeystrokeWithModifiersAction scancode="120" modifierMask="16"> => {"keyActionType":"keystrokeWithModifiers","scancode":120,"modifierMask":16}
     SwitchLayerAction.toJsObject: <SwitchLayerAction layer="1" toggle="false"> => {"keyActionType":"switchLayer","layer":"fn","toggle":false}
-    DualRoleKeystrokeAction.toJsObject: <DualRoleKeystrokeAction scancode="111" longPressAction="8"> => {"keyActionType":"dualRoleKeystroke","scancode":111,"longPressAction":"mod"}
+    DualRoleKeystrokeAction.toJsObject: <DualRoleKeystrokeAction scancode="111" secondaryRoleAction="8"> => {"keyActionType":"dualRoleKeystroke","scancode":111,"secondaryRoleAction":"mod"}
     MouseAction.toJsObject: <MouseAction mouseAction="8"> => {"keyActionType":"mouse","mouseAction":"scrollDown"}
     PlayMacroAction.toJsObject: <PlayMacroAction macroId="0"> => {"keyActionType":"playMacro","macroId":0}
     SwitchKeymapAction.toJsObject: <SwitchKeymapAction keymapId="1"> => {"keyActionType":"switchKeymap","keymapId":1}
