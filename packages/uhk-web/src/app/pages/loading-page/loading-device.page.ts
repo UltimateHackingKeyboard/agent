@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'loading-device',
     template: `
-        <uhk-message title="Loading keyboard configuration..."
+        <uhk-message header="Loading keyboard configuration..."
                      subtitle="Hang tight!"
                      [rotateLogo]="true"></uhk-message>
     `
