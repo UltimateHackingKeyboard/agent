@@ -5,6 +5,8 @@ import { Layer } from 'uhk-common';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 type AnimationKeyboard =
+    'init' |
+    'initOut' |
     'leftIn' |
     'leftOut' |
     'rightIn' |
@@ -18,6 +20,14 @@ type AnimationKeyboard =
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
+            state('init', style({
+                transform: 'translateX(0)',
+                left: '0'
+            })),
+            state('initOut', style({
+                transform: 'translateX(0)',
+                left: '101%'
+            })),
             state('leftIn, rightIn', style({
                 transform: 'translateX(-50%)',
                 left: '50%'
@@ -30,34 +40,34 @@ type AnimationKeyboard =
                 transform: 'translateX(0)',
                 left: '101%'
             })),
-            transition('leftOut => leftIn, rightOut => leftIn', [
+            transition('initOut => leftIn, leftOut => leftIn, rightOut => leftIn', [
                 animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(0%)', left: '101%', offset: 0 }),
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                    style({transform: 'translateX(0%)', left: '101%', offset: 0}),
+                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
                 ]))
             ]),
-            transition('leftIn => leftOut, rightIn => leftOut', [
+            transition('init => leftOut, leftIn => leftOut, rightIn => leftOut', [
                 animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
-                    style({ transform: 'translateX(-101%)', left: '0%', offset: 1 })
+                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
+                    style({transform: 'translateX(-101%)', left: '0%', offset: 1})
                 ]))
             ]),
             transition('* => rightIn', [
                 animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(-101%)', left: '0%', offset: 0 }),
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                    style({transform: 'translateX(-101%)', left: '0%', offset: 0}),
+                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
                 ]))
             ]),
             transition('* => rightOut', [
                 animate('400ms ease-out', keyframes([
-                    style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
-                    style({ transform: 'translateX(0%)', left: '101%', offset: 1 })
+                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
+                    style({transform: 'translateX(0%)', left: '101%', offset: 1})
                 ]))
             ]),
             transition(':leave', [
                 animate('2000ms ease-out', keyframes([
-                    style({ opacity: 1, offset: 0 }),
-                    style({ opacity: 0, offset: 1 })
+                    style({opacity: 1, offset: 0}),
+                    style({opacity: 0, offset: 1})
                 ]))
             ])
         ])
@@ -76,16 +86,20 @@ export class KeyboardSliderComponent implements OnChanges {
     @Output() capture = new EventEmitter();
 
     layerAnimationState: AnimationKeyboard[];
-
     ngOnChanges(changes: SimpleChanges) {
         if (changes['layers']) {
-            this.layerAnimationState = this.layers.map<AnimationKeyboard>(() => 'leftOut');
-            this.layerAnimationState[this.currentLayer] = 'leftIn';
+            this.layerAnimationState = this.layers.map<AnimationKeyboard>(() => 'initOut');
+            this.layerAnimationState[this.currentLayer] = 'init';
         }
         const layerChange = changes['currentLayer'];
         if (layerChange) {
-            const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
-            this.onLayerChange(prevValue, layerChange.currentValue);
+            // turn off the routing navigation from non keymap route
+            if (changes['layers']) {
+            }
+            else {
+                const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
+                this.onLayerChange(prevValue, layerChange.currentValue);
+            }
         }
     }
 
@@ -101,7 +115,5 @@ export class KeyboardSliderComponent implements OnChanges {
             this.layerAnimationState[oldIndex] = 'rightOut';
             this.layerAnimationState[index] = 'rightIn';
         }
-
     }
-
 }
