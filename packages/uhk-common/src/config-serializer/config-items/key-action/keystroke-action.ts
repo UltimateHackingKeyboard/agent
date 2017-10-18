@@ -1,14 +1,14 @@
 import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { KeyModifiers } from '../key-modifiers';
-import { LongPressAction } from '../long-press-action';
+import { SecondaryRoleAction } from '../secondary-role-action';
 import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { KeystrokeType } from './keystroke-type';
 
 export enum KeystrokeActionFlag {
     scancode = 1 << 0,
     modifierMask = 1 << 1,
-    longPressAction = 1 << 2
+    secondaryRoleAction = 1 << 2
 }
 
 const KEYSTROKE_ACTION_FLAG_LENGTH = 3;
@@ -17,7 +17,7 @@ interface JsonObjectKeystrokeAction {
     keyActionType: string;
     scancode?: number;
     modifierMask?: number;
-    longPressAction?: string;
+    secondaryRoleAction?: string;
     type?: string;
 }
 
@@ -40,8 +40,8 @@ export class KeystrokeAction extends KeyAction {
     @assertUInt8
     modifierMask: number;
 
-    @assertEnum(LongPressAction)
-    longPressAction: LongPressAction;
+    @assertEnum(SecondaryRoleAction)
+    secondaryRoleAction: SecondaryRoleAction;
 
     set type(type: KeystrokeType) {
         if (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) {
@@ -67,7 +67,7 @@ export class KeystrokeAction extends KeyAction {
         this.type = other.type;
         this._scancode = other._scancode;
         this.modifierMask = other.modifierMask;
-        this.longPressAction = other.longPressAction;
+        this.secondaryRoleAction = other.secondaryRoleAction;
     }
 
     fromJsonObject(jsonObject: JsonObjectKeystrokeAction): KeystrokeAction {
@@ -77,9 +77,10 @@ export class KeystrokeAction extends KeyAction {
         } else {
             this.type = KeystrokeType[jsonObject.type];
         }
+
         this._scancode = jsonObject.scancode;
         this.modifierMask = jsonObject.modifierMask;
-        this.longPressAction = LongPressAction[jsonObject.longPressAction];
+        this.secondaryRoleAction = SecondaryRoleAction[jsonObject.secondaryRoleAction];
         return this;
     }
 
@@ -93,8 +94,8 @@ export class KeystrokeAction extends KeyAction {
         if (flags & KeystrokeActionFlag.modifierMask) {
             this.modifierMask = buffer.readUInt8();
         }
-        if (flags & KeystrokeActionFlag.longPressAction) {
-            this.longPressAction = buffer.readUInt8();
+        if (flags & KeystrokeActionFlag.secondaryRoleAction) {
+            this.secondaryRoleAction = buffer.readUInt8();
         }
         return this;
     }
@@ -118,8 +119,8 @@ export class KeystrokeAction extends KeyAction {
             jsonObject.modifierMask = this.modifierMask;
         }
 
-        if (this.hasLongPressAction()) {
-            jsonObject.longPressAction = LongPressAction[this.longPressAction];
+        if (this.hasSecondaryRoleAction()) {
+            jsonObject.secondaryRoleAction = SecondaryRoleAction[this.secondaryRoleAction];
         }
 
         return jsonObject;
@@ -134,17 +135,17 @@ export class KeystrokeAction extends KeyAction {
 
         if (this.hasScancode()) {
             flags |= KeystrokeActionFlag.scancode;
-            toWrite.push({ data: this._scancode, long: this.type === KeystrokeType.longMedia });
+            toWrite.push({data: this._scancode, long: this.type === KeystrokeType.longMedia});
         }
 
         if (this.hasActiveModifier()) {
             flags |= KeystrokeActionFlag.modifierMask;
-            toWrite.push({ data: this.modifierMask, long: false });
+            toWrite.push({data: this.modifierMask, long: false});
         }
 
-        if (this.hasLongPressAction()) {
-            flags |= KeystrokeActionFlag.longPressAction;
-            toWrite.push({ data: this.longPressAction, long: false });
+        if (this.hasSecondaryRoleAction()) {
+            flags |= KeystrokeActionFlag.secondaryRoleAction;
+            toWrite.push({data: this.secondaryRoleAction, long: false});
         }
 
         const TYPE_OFFSET = flags + (this.type << KEYSTROKE_ACTION_FLAG_LENGTH);
@@ -171,8 +172,8 @@ export class KeystrokeAction extends KeyAction {
         if (this.hasActiveModifier()) {
             properties.push(`modifierMask="${this.modifierMask}"`);
         }
-        if (this.hasLongPressAction()) {
-            properties.push(`longPressAction="${this.longPressAction}"`);
+        if (this.hasSecondaryRoleAction()) {
+            properties.push(`secondaryRoleAction="${this.secondaryRoleAction}"`);
         }
 
         return `<KeystrokeAction ${properties.join(' ')}>`;
@@ -186,8 +187,8 @@ export class KeystrokeAction extends KeyAction {
         return this.modifierMask > 0;
     }
 
-    hasLongPressAction(): boolean {
-        return this.longPressAction !== undefined;
+    hasSecondaryRoleAction(): boolean {
+        return this.secondaryRoleAction !== undefined && this.secondaryRoleAction !== null;
     }
 
     hasScancode(): boolean {

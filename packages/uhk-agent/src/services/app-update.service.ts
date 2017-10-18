@@ -1,7 +1,6 @@
 import { ipcMain, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import { ProgressInfo } from 'electron-builder-http/out/ProgressCallbackTransform';
-import { VersionInfo } from 'electron-builder-http/out/publishOptions';
+import { VersionInfo, ProgressInfo } from 'builder-util-runtime';
 import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
 

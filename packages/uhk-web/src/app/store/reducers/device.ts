@@ -1,6 +1,9 @@
 import { Action } from '@ngrx/store';
 
-import { ActionTypes, HideSaveToKeyboardButton, SaveConfigurationAction } from '../actions/device';
+import {
+    ActionTypes, ConnectionStateChangedAction, HideSaveToKeyboardButton, PermissionStateChangedAction,
+    SaveConfigurationAction
+} from '../actions/device';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
 
 export interface State {
@@ -9,7 +12,7 @@ export interface State {
     saveToKeyboard: ProgressButtonState;
 }
 
-const initialState: State = {
+export const initialState: State = {
     connected: true,
     hasPermission: true,
     saveToKeyboard: initProgressButtonState
@@ -20,13 +23,13 @@ export function reducer(state = initialState, action: Action) {
         case ActionTypes.CONNECTION_STATE_CHANGED:
             return {
                 ...state,
-                connected: action.payload
+                connected: (<ConnectionStateChangedAction>action).payload
             };
 
         case ActionTypes.PERMISSION_STATE_CHANGED:
             return {
                 ...state,
-                hasPermission: action.payload
+                hasPermission: (<PermissionStateChangedAction>action).payload
             };
 
         case ActionTypes.SAVING_CONFIGURATION: {

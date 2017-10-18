@@ -26,7 +26,7 @@
 
     "unit-case": "lower",
     "unit-no-unknown": true,
-    "unit-whitelist": ["px", "%", "deg", "ms", "em", "rem", "vh", "vv"],
+    "unit-whitelist": ["px", "%", "deg", "ms", "em", "rem", "vh", "vv", "s"],
 
     "value-list-comma-space-after": "always-single-line",
     "value-list-comma-space-before": "never",

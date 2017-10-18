@@ -1,21 +1,21 @@
-import '@ngrx/core/add/operator/select';
 import { Action } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { Keymap, KeyActionHelper, Layer, Macro, Module, UserConfiguration } from 'uhk-common';
+import { KeyAction, Keymap, KeyActionHelper, Layer, Macro, Module, SwitchLayerAction, UserConfiguration } from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';
 
-const initialState: UserConfiguration = new UserConfiguration();
+export const initialState: UserConfiguration = new UserConfiguration();
 
-export default function (state = initialState, action: Action): UserConfiguration {
+export function reducer(state = initialState, action: Action & { payload?: any }): UserConfiguration {
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
     switch (action.type) {
+        case ActionTypes.LOAD_RESET_USER_CONFIGURATION:
         case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
             return Object.assign(changedUserConfiguration, action.payload);
         }
@@ -107,21 +107,31 @@ export default function (state = initialState, action: Action): UserConfiguratio
             break;
 
         case KeymapActions.SAVE_KEY: {
+            const keyIndex: number = action.payload.key;
+            const layerIndex: number = action.payload.layer;
+            const moduleIndex: number = action.payload.module;
+            const newKeyAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
             const newKeymap: Keymap = Object.assign(new Keymap(), action.payload.keymap);
             newKeymap.layers = newKeymap.layers.slice();
 
-            const layerIndex: number = action.payload.layer;
-            const newLayer: Layer = Object.assign(new Layer(), newKeymap.layers[layerIndex]);
-            newKeymap.layers[layerIndex] = newLayer;
+            newKeymap.layers = newKeymap.layers.map((layer, index) => {
+                const newLayer = Object.assign(new Layer(), layer);
 
-            const moduleIndex: number = action.payload.module;
-            const newModule: Module = Object.assign(new Module(), newLayer.modules[moduleIndex]);
-            newLayer.modules = newLayer.modules.slice();
-            newLayer.modules[moduleIndex] = newModule;
-
-            const keyIndex: number = action.payload.key;
-            newModule.keyActions = newModule.keyActions.slice();
-            newModule.keyActions[keyIndex] = KeyActionHelper.createKeyAction(action.payload.keyAction);
+                if (index === layerIndex) {
+                    setKeyActionToLayer(newLayer, moduleIndex, keyIndex, newKeyAction);
+                }
+                // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
+                // on the target layer
+                else if (newKeyAction instanceof SwitchLayerAction) {
+                    if (index - 1 === newKeyAction.layer) {
+                        const clonedAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
+                        setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
+                    }else {
+                        setKeyActionToLayer(newLayer, moduleIndex, keyIndex, null);
+                    }
+                }
+                return newLayer;
+            });
 
             changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
                 if (keymap.abbreviation === newKeymap.abbreviation) {
@@ -239,12 +249,12 @@ export default function (state = initialState, action: Action): UserConfiguratio
 
 export function getUserConfiguration(): (state$: Observable<AppState>) => Observable<UserConfiguration> {
     return (state$: Observable<AppState>) => state$
-        .select(state => state.userConfiguration);
+        .map(state => state.userConfiguration);
 }
 
 export function getKeymaps(): (state$: Observable<AppState>) => Observable<Keymap[]> {
     return (state$: Observable<AppState>) => state$
-        .select(state => state.userConfiguration.keymaps);
+        .map(state => state.userConfiguration.keymaps);
 }
 
 export function getKeymap(abbr: string) {
@@ -267,7 +277,7 @@ export function getDefaultKeymap() {
 
 export function getMacros(): (state$: Observable<AppState>) => Observable<Macro[]> {
     return (state$: Observable<AppState>) => state$
-        .select(state => state.userConfiguration.macros);
+        .map(state => state.userConfiguration.macros);
 }
 
 export function getMacro(id: number) {
@@ -356,4 +366,13 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
     }
 
     return newLayers;
+}
+
+function setKeyActionToLayer(newLayer: Layer, moduleIndex: number, keyIndex: number, newKeyAction: KeyAction): void {
+    const newModule: Module = Object.assign(new Module(), newLayer.modules[moduleIndex]);
+    newLayer.modules = newLayer.modules.slice();
+    newLayer.modules[moduleIndex] = newModule;
+
+    newModule.keyActions = newModule.keyActions.slice();
+    newModule.keyActions[keyIndex] = newKeyAction;
 }

@@ -185,6 +185,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(97, ['pgup', '9']);
         this.basicScanCodeTextMap.set(98, ['Insert', '0']);
         this.basicScanCodeTextMap.set(99, ['Del', '.']);
+        this.basicScanCodeTextMap.set(100, ['ISO key', '|']);
         this.basicScanCodeTextMap.set(104, ['F13']);
         this.basicScanCodeTextMap.set(105, ['F14']);
         this.basicScanCodeTextMap.set(106, ['F15']);

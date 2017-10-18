@@ -14,18 +14,19 @@
     "npm": ">=5.1.0 <6.0.0"
   },
   "dependencies": {
-    "command-line-args": "4.0.6",
-    "electron": "1.7.5",
+    "command-line-args": "4.0.7",
+    "electron": "1.7.8",
     "electron-is-dev": "0.1.2",
-    "electron-log": "2.2.6",
+    "electron-log": "2.2.9",
     "electron-rebuild": "1.6.0",
-    "electron-settings": "3.0.14",
-    "electron-updater": "2.2.0",
+    "electron-settings": "3.1.2",
+    "electron-updater": "2.10.1",
     "node-hid": "0.5.4",
-    "sudo-prompt": "^7.0.0",
+    "sudo-prompt": "7.0.0",
     "uhk-usb": "1.0.0"
   },
   "devDependencies": {
+    "@types/node": "8.0.33",
     "uhk-common": "^1.0.0"
   },
   "scripts": {

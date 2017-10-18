@@ -1,0 +1,31 @@
+<h1>
+    <i class="fa fa-sliders"></i>
+    <span>Device configuration</span>
+</h1>
+
+<p>
+    The device configuration contains all the keymaps, macros, and settings that are stored on the device.
+</p>
+
+<ul class="list-unstyled btn-list">
+    <li>
+        <button class="btn btn-default"
+                (click)="saveConfigurationInJSONFormat()">Download device configuration
+        </button>
+    </li>
+    <li>
+        <button class="btn btn-default"
+                >Upload device configuration
+        </button>
+    </li>
+    <li>
+        <button class="btn btn-danger"
+                mwlConfirmationPopover
+                title="Are you sure?"
+                placement="bottom"
+                confirmText="Yes"
+                cancelText="No"
+                (confirm)="resetUserConfiguration()">Reset device configuration
+        </button>
+    </li>
+</ul>

@@ -1,5 +1,3 @@
-import { Action } from '@ngrx/store';
-
 export enum NotificationType {
     Default = 'default',
     Success = 'success',
@@ -13,5 +11,5 @@ export interface Notification {
     type: NotificationType;
     title?: string;
     message: string;
-    extra?: Action;
+    extra?: any;
 }

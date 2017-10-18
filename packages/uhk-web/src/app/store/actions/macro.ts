@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
-import { Macro, MacroAction } from 'uhk-common';
+import { Macro, MacroAction as ConfigItemMacroAction } from 'uhk-common';
+
+export type MacroAction = Action & { payload?: any };
 
 export namespace MacroActions {
     export const PREFIX = '[Macro] ';
@@ -14,27 +16,27 @@ export namespace MacroActions {
     export const DELETE_ACTION = MacroActions.PREFIX + 'Delete macro action';
     export const REORDER_ACTION = MacroActions.PREFIX + 'Reorder macro action';
 
-    export function addMacro(): Action {
+    export function addMacro(): MacroAction {
         return {
             type: MacroActions.ADD
         };
     }
 
-    export function removeMacro(macroId: number): Action {
+    export function removeMacro(macroId: number): MacroAction {
         return {
             type: MacroActions.REMOVE,
             payload: macroId
         };
     }
 
-    export function duplicateMacro(macro: Macro): Action {
+    export function duplicateMacro(macro: Macro): MacroAction {
         return {
             type: MacroActions.DUPLICATE,
             payload: macro
         };
     }
 
-    export function editMacroName(id: number, name: string): Action {
+    export function editMacroName(id: number, name: string): MacroAction {
         return {
             type: MacroActions.EDIT_NAME,
             payload: {
@@ -44,7 +46,7 @@ export namespace MacroActions {
         };
     }
 
-    export function addMacroAction(id: number, action: MacroAction): Action {
+    export function addMacroAction(id: number, action: ConfigItemMacroAction): MacroAction {
         return {
             type: MacroActions.ADD_ACTION,
             payload: {
@@ -54,7 +56,7 @@ export namespace MacroActions {
         };
     }
 
-    export function saveMacroAction(id: number, index: number, action: MacroAction): Action {
+    export function saveMacroAction(id: number, index: number, action: ConfigItemMacroAction): MacroAction {
         return {
             type: MacroActions.SAVE_ACTION,
             payload: {
@@ -65,7 +67,7 @@ export namespace MacroActions {
         };
     }
 
-    export function deleteMacroAction(id: number, index: number, action: MacroAction): Action {
+    export function deleteMacroAction(id: number, index: number, action: ConfigItemMacroAction): MacroAction {
         return {
             type: MacroActions.DELETE_ACTION,
             payload: {
@@ -76,7 +78,7 @@ export namespace MacroActions {
         };
     }
 
-    export function reorderMacroAction(id: number, oldIndex: number, newIndex: number): Action {
+    export function reorderMacroAction(id: number, oldIndex: number, newIndex: number): MacroAction {
         return {
             type: MacroActions.REORDER_ACTION,
             payload: {

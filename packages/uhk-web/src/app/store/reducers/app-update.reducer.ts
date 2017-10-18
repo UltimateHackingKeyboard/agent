@@ -6,7 +6,7 @@ export interface State {
     doNotUpdateApp: boolean;
 }
 
-const initialState: State = {
+export const initialState: State = {
     updateAvailable: false,
     updateDownloaded: false,
     doNotUpdateApp: false

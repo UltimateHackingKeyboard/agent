@@ -19,7 +19,7 @@ import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 
 const optionDefinitions = [
-    { name: 'addons', type: Boolean, defaultOption: false }
+    {name: 'addons', type: Boolean, defaultOption: false}
 ];
 
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);

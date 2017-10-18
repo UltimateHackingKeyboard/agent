@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { go } from '@ngrx/router-store';
+import { Router } from '@angular/router';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
+import { defer } from 'rxjs/observable/defer';
 import { Action, Store } from '@ngrx/store';
+import { saveAs } from 'file-saver';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
@@ -22,7 +24,6 @@ import {
 
 import {
     ActionTypes,
-    LoadUserConfigAction,
     LoadUserConfigSuccessAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
@@ -30,12 +31,11 @@ import {
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
-import { KeymapActions } from '../actions/keymap';
-import { MacroActions } from '../actions/macro';
-import { UndoUserConfigData } from '../../models/undo-user-config-data';
+import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
 import { ShowNotificationAction, DismissUndoNotificationAction, LoadHardwareConfigurationSuccessAction } from '../actions/app';
 import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
+import { UndoUserConfigData } from '../../models/undo-user-config-data';
 
 @Injectable()
 export class UserConfigEffects {
@@ -63,17 +63,17 @@ export class UserConfigEffects {
         return null;
     }
 
-    @Effect() loadUserConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_USER_CONFIG)
-        .startWith(new LoadUserConfigAction())
-        .switchMap(() => Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration())));
+    @Effect() loadUserConfig$: Observable<Action> = defer(() => {
+        return Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
+    });
 
-    @Effect() saveUserConfig$: Observable<Action> = this.actions$
+    @Effect() saveUserConfig$: Observable<Action> = (this.actions$
         .ofType(
             KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
             KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
             MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION)
+            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION) as
+        Observable<KeymapAction | MacroAction>)
         .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
         .mergeMap(([action, config, prevUserConfiguration]) => {
             this.dataStorageRepository.saveConfig(config);
@@ -113,7 +113,8 @@ export class UserConfigEffects {
         .mergeMap((payload: UndoUserConfigData) => {
             const config = new UserConfiguration().fromJsonObject(payload.config);
             this.dataStorageRepository.saveConfig(config);
-            return [new LoadUserConfigSuccessAction(config), go(payload.path)];
+            this.router.navigate([payload.path]);
+            return [new LoadUserConfigSuccessAction(config)];
         });
 
     @Effect({dispatch: false}) loadConfigFromDevice$ = this.actions$
@@ -134,6 +135,7 @@ export class UserConfigEffects {
             try {
                 const userConfig = UserConfigEffects.getUserConfigFromDeviceResponse(data.userConfiguration);
                 const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+                this.router.navigate(['/']);
 
                 return [
                     new LoadUserConfigSuccessAction(userConfig),
@@ -143,9 +145,28 @@ export class UserConfigEffects {
                 this.logService.error('Eeprom parse error:', err);
                 return [new ShowNotificationAction({
                     type: NotificationType.Error,
-                    message: err.message
+                    message: err
                 })];
             }
+        });
+
+    @Effect({dispatch: false}) saveUserConfigInJsonFile$ = this.actions$
+        .ofType(ActionTypes.SAVE_USER_CONFIG_IN_JSON_FILE)
+        .withLatestFrom(this.store.select(getUserConfiguration))
+        .do(([action, userConfiguration]) => {
+            const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
+            const asBlob = new Blob([asString], {type: 'text/plain'});
+            saveAs(asBlob, 'UserConfiguration.json');
+        });
+
+    @Effect({dispatch: false}) saveUserConfigInBinFile$ = this.actions$
+        .ofType(ActionTypes.SAVE_USER_CONFIG_IN_BIN_FILE)
+        .withLatestFrom(this.store.select(getUserConfiguration))
+        .do(([action, userConfiguration]) => {
+            const uhkBuffer = new UhkBuffer();
+            userConfiguration.toBinary(uhkBuffer);
+            const blob = new Blob([uhkBuffer.getBufferContent()]);
+            saveAs(blob, 'UserConfiguration.bin');
         });
 
     constructor(private actions$: Actions,
@@ -153,7 +174,8 @@ export class UserConfigEffects {
                 private store: Store<AppState>,
                 private defaultUserConfigurationService: DefaultUserConfigurationService,
                 private deviceRendererService: DeviceRendererService,
-                private logService: LogService) {
+                private logService: LogService,
+                private router: Router) {
     }
 
     private getUserConfiguration() {
@@ -173,5 +195,4 @@ export class UserConfigEffects {
         return config;
 
     }
-
 }

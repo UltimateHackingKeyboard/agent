@@ -2,7 +2,6 @@ import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
-import { UhkBuffer } from 'uhk-common';
 
 import 'rxjs/add/operator/last';
 
@@ -10,12 +9,12 @@ import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-updat
 import {
     AppState,
     getShowAppUpdateAvailable,
-    deviceConnected,
+    deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState
 } from './store';
-import { getUserConfiguration } from './store/reducers/user-configuration';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
+import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from './store/actions/user-config';
 
 @Component({
     selector: 'main-app',
@@ -38,13 +37,13 @@ import { ProgressButtonState } from './store/reducers/progress-button-state';
 })
 export class MainAppComponent {
     showUpdateAvailable$: Observable<boolean>;
-    deviceConnected$: Observable<boolean>;
+    deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState$: Observable<ProgressButtonState>;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
-        this.deviceConnected$ = store.select(deviceConnected);
+        this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
         this.saveToKeyboardState$ = store.select(saveToKeyboardState);
     }
@@ -59,34 +58,5 @@ export class MainAppComponent {
 
     clickedOnProgressButton(action: Action) {
         return this.store.dispatch(action);
-    }
-
-    @HostListener('window:keydown.alt.j', ['$event'])
-    onAltJ(event: KeyboardEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.store
-            .let(getUserConfiguration())
-            .first()
-            .subscribe(userConfiguration => {
-                const asString = JSON.stringify(userConfiguration.toJsonObject());
-                const asBlob = new Blob([asString], {type: 'text/plain'});
-                saveAs(asBlob, 'UserConfiguration.json');
-            });
-    }
-
-    @HostListener('window:keydown.alt.b', ['$event'])
-    onAltB(event: KeyboardEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.store
-            .let(getUserConfiguration())
-            .first()
-            .map(userConfiguration => {
-                const uhkBuffer = new UhkBuffer();
-                userConfiguration.toBinary(uhkBuffer);
-                return new Blob([uhkBuffer.getBufferContent()]);
-            })
-            .subscribe(blob => saveAs(blob, 'UserConfiguration.bin'));
     }
 }

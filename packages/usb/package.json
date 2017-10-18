@@ -11,7 +11,7 @@
     "@types/node": "8.0.28"
   },
   "dependencies": {
-    "chalk": "^2.1.0",
+    "chalk": "2.1.0",
     "node-hid": "0.5.4",
     "uhk-common": "1.0.0",
     "uhk-usb": "1.0.0"

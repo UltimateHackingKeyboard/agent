@@ -25,12 +25,18 @@ addons:
       - libudev-dev
       - build-essential
       - libusb-1.0-0-dev
+  chrome: stable
 
 install:
   - nvm install
   - npm install
 
 before_script:
+  - 'if [ ${TRAVIS_OS_NAME} = "linux" ]; then
+      export DISPLAY=:99.0;
+      sh -e /etc/init.d/xvfb start;
+      sleep 3;
+     fi'
   - npm run build
   - npm run lint
 

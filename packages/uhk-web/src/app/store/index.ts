@@ -1,22 +1,22 @@
 import { createSelector } from 'reselect';
-import { compose } from '@ngrx/core/compose';
-import { ActionReducer, combineReducers } from '@ngrx/store';
-import { RouterState, routerReducer } from '@ngrx/router-store';
+import { MetaReducer } from '@ngrx/store';
+import { RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { Keymap, UserConfiguration } from 'uhk-common';
 
-import userConfigurationReducer from './reducers/user-configuration';
-import presetReducer from './reducers/preset';
+import * as fromUserConfig from './reducers/user-configuration';
+import * as fromPreset from './reducers/preset';
 import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
 import { initProgressButtonState } from './reducers/progress-button-state';
+import { environment } from '../../environments/environment';
+import { RouterStateUrl } from './router-util';
 
 export const reducers = {
-    userConfiguration: userConfigurationReducer,
-    presetKeymaps: presetReducer,
-    router: routerReducer,
+    userConfiguration: fromUserConfig.reducer,
+    presetKeymaps: fromPreset.reducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
     app: fromApp.reducer,
     appUpdate: fromAppUpdate.reducer,
@@ -29,21 +29,14 @@ export interface AppState {
     presetKeymaps: Keymap[];
     autoUpdateSettings: autoUpdateSettings.State;
     app: fromApp.State;
-    router: RouterState;
+    router: RouterReducerState<RouterStateUrl>;
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
 }
 
-const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(reducers);
-const productionReducer: ActionReducer<AppState> = combineReducers(reducers);
-
-export function reducer(state: any, action: any) {
-    // if (isDev) {
-    // return developmentReducer(state, action);
-    // } else {
-    return productionReducer(state, action);
-    // }
-}
+export const metaReducers: MetaReducer<AppState>[] = environment.production
+    ? []
+    : [storeFreeze];
 
 export const getUserConfiguration = (state: AppState) => state.userConfiguration;
 
@@ -54,6 +47,7 @@ export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrev
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
 export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
+export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);

@@ -3,7 +3,11 @@ let uhk = require('./uhk');
 
 let timeoutMs = 10000;
 let pollingIntervalMs = 100;
+let bootloaderTimeoutMs = 5000;
 let jumped = false;
+
+console.log(process.argv[2])
+let enumerationMode = process.argv[2] === 'buspal' ? uhk.enumerationModes.busPal : uhk.enumerationModes.bootloader;
 
 console.log('Trying to jump to the bootloader...');
 setInterval(() => {
@@ -24,8 +28,15 @@ setInterval(() => {
     device = uhk.getUhkDevice();
     if (device && !jumped) {
         console.log('UHK found, jumping to bootloader');
-        device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.jumpToBootloader])));
+        let t =  bootloaderTimeoutMs;
+        let message = new Buffer([uhk.usbCommands.jumpToBootloader, enumerationMode, t&0xff, (t&0xff<<8)>>8, (t&0xff<<16)>>16, (t&0xff<<24)>>24]);
+        console.log(message);
+        device.write(uhk.getTransferData(message));
         jumped = true;
+
+        if (enumerationMode == uhk.enumerationModes.busPal) {
+            process.exit();
+        }
     }
 
 }, pollingIntervalMs);

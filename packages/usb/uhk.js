@@ -53,7 +53,6 @@ exports = module.exports = moduleExports = {
         getProperty: 0,
         jumpToBootloader: 1,
         setTestLed: 2,
-        readMergeSensor: 7,
         writeUserConfig: 8,
         applyConfig: 9,
         setLedPwm: 10,
@@ -64,6 +63,13 @@ exports = module.exports = moduleExports = {
         readUserConfig: 15,
         getKeyboardState: 16,
         readDebugInfo: 17,
+        jumpToSlaveBootloader: 18,
+    },
+    enumerationModes: {
+        bootloader: 0,
+        busPal: 1,
+        normalKeyboard: 2,
+        compatibleKeyboard: 3,
     },
     systemPropertyIds: {
         usbProtocolVersion: 0,
