@@ -1,6 +1,6 @@
 import { KeystrokeAction } from './keystroke-action';
 import { KeystrokeType } from './keystroke-type';
-import { LongPressAction } from '../long-press-action';
+import { SecondaryRoleAction } from '../secondary-role-action';
 
 describe('keystroke-action', () => {
     it('should be instantiate', () => {
@@ -13,7 +13,7 @@ describe('keystroke-action', () => {
         other.type = KeystrokeType.basic;
         other.scancode = 125;
         other.modifierMask = 1;
-        other.longPressAction = LongPressAction.leftAlt;
+        other.secondaryRoleAction = SecondaryRoleAction.leftAlt;
         const action = new KeystrokeAction(other);
         expect(action).toEqual(other);
     });
@@ -104,12 +104,12 @@ describe('keystroke-action', () => {
         });
     });
 
-    describe('longPressAction', () => {
+    describe('secondaryRoleAction', () => {
         it('should store the value without modification', () => {
-            const value = LongPressAction.leftAlt;
+            const value = SecondaryRoleAction.leftAlt;
             const action = new KeystrokeAction();
-            action.longPressAction = value;
-            expect(action.longPressAction).toEqual(value);
+            action.secondaryRoleAction = value;
+            expect(action.secondaryRoleAction).toEqual(value);
         });
     });
 
@@ -182,7 +182,7 @@ describe('keystroke-action', () => {
                 type: 'basic',
                 scancode: 100,
                 modifierMask: 10,
-                longPressAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -191,7 +191,7 @@ describe('keystroke-action', () => {
             expected.type = KeystrokeType.basic;
             expected.scancode = 100;
             expected.modifierMask = 10;
-            expected.longPressAction = LongPressAction.leftAlt;
+            expected.secondaryRoleAction = SecondaryRoleAction.leftAlt;
 
             expect(action).toEqual(expected);
         });
@@ -202,7 +202,7 @@ describe('keystroke-action', () => {
                 type: 'system',
                 scancode: 100,
                 modifierMask: 10,
-                longPressAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -211,7 +211,7 @@ describe('keystroke-action', () => {
             expected.type = KeystrokeType.system;
             expected.scancode = 100;
             expected.modifierMask = 10;
-            expected.longPressAction = LongPressAction.leftAlt;
+            expected.secondaryRoleAction = SecondaryRoleAction.leftAlt;
 
             expect(action).toEqual(expected);
         });
@@ -222,7 +222,7 @@ describe('keystroke-action', () => {
                 type: 'media',
                 scancode: 100,
                 modifierMask: 10,
-                longPressAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -231,7 +231,7 @@ describe('keystroke-action', () => {
             expected.type = KeystrokeType.shortMedia;
             expected.scancode = 100;
             expected.modifierMask = 10;
-            expected.longPressAction = LongPressAction.leftAlt;
+            expected.secondaryRoleAction = SecondaryRoleAction.leftAlt;
 
             expect(action).toEqual(expected);
         });
@@ -242,7 +242,7 @@ describe('keystroke-action', () => {
                 type: 'media',
                 scancode: 256,
                 modifierMask: 10,
-                longPressAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -251,7 +251,7 @@ describe('keystroke-action', () => {
             expected.type = KeystrokeType.longMedia;
             expected.scancode = 256;
             expected.modifierMask = 10;
-            expected.longPressAction = LongPressAction.leftAlt;
+            expected.secondaryRoleAction = SecondaryRoleAction.leftAlt;
 
             expect(action).toEqual(expected);
         });
@@ -281,7 +281,7 @@ describe('keystroke-action', () => {
 
     });
 
-    describe('hasLongPressAction', () => {
+    describe('hasSecondaryRoleAction', () => {
 
     });
 

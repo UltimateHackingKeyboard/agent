@@ -10,7 +10,7 @@ export enum KeyActionId {
         5 bits:
             1: Do we have scancode?
             2: Do we have modifiers?
-            3: Do we have longpress?
+            3: Do we have secondaryRole?
             4-5: What kind of keystroke? (basic, short/long media, system)
     */
     LastKeystrokeAction          = 31, // TODO: remove this after refactoring the keyActionId check

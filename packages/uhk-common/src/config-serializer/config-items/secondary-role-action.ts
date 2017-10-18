@@ -1,4 +1,4 @@
-export enum LongPressAction {
+export enum SecondaryRoleAction {
     leftCtrl,
     leftShift,
     leftAlt,
