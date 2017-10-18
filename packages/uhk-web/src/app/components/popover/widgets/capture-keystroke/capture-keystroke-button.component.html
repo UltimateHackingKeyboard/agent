@@ -1,12 +1,15 @@
-<button type="button" class="btn btn-sm btn--capture-keystroke"
-            [ngClass]="{'btn-default': !record, 'btn-info': record}"
-            (click)="start()"
->
-    <i class="fa fa-circle"></i>
-    <ng-template [ngIf]="!record">
-        Capture keystroke
-    </ng-template>
-    <ng-template [ngIf]="record">
-        Capturing ...
-    </ng-template>
- </button>
+<button type="button" [ngClass]="{
+    'btn btn-sm btn--capture-keystroke': !isLink,
+    'btn-link link--capture-keystroke': isLink,
+    'btn-default': !record && !isLink,
+    'btn-info': record && !isLink
+}" (click)="start()">
+<i class="fa fa-circle"></i>
+
+<ng-template [ngIf]="!record">
+{{ captureText }}
+</ng-template>
+
+<ng-template [ngIf]="record">
+Capturing ...
+</ng-template>

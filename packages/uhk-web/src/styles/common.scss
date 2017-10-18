@@ -1,0 +1,10 @@
+%btn-link {
+    padding: 7px 0px;
+    text-decoration: none;
+    border: 0;
+    width: 100%;
+
+    &:focus {
+        outline: none;
+    }
+}

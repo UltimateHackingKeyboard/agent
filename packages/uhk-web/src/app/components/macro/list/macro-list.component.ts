@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
-import { Macro, MacroAction } from 'uhk-common';
+import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroSubAction } from 'uhk-common';
 
+import { MapperService } from '../../../services/mapper.service';
 import { MacroItemComponent } from '../item';
 
 @Component({
@@ -46,7 +47,10 @@ export class MacroListComponent {
     private activeEdit: number = undefined;
     private dragIndex: number;
 
-    constructor(dragulaService: DragulaService) {
+    constructor(
+        private mapper: MapperService,
+        private dragulaService: DragulaService
+    ) {
         /* tslint:disable:no-unused-variable: Used by Dragula. */
         dragulaService.setOptions('macroActions', {
             moves: function (el: any, container: any, handle: any) {
@@ -119,6 +123,27 @@ export class MacroListComponent {
         });
 
         this.hideActiveEditor();
+    }
+
+    onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
+        const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event));
+        keyMacroAction.action = MacroSubAction.press;
+
+        this.add.emit({
+            macroId: this.macro.id,
+            action: keyMacroAction
+        });
+    }
+
+    private toKeyAction(event: { code: number, left: boolean[], right: boolean[] }): KeystrokeAction {
+        const keystrokeAction: KeystrokeAction = new KeystrokeAction();
+        keystrokeAction.scancode = event.code;
+        keystrokeAction.modifierMask = 0;
+        const modifiers = event.left.concat(event.right).map(x => x ? 1 : 0);
+        for (let i = 0; i < modifiers.length; ++i) {
+            keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
+        }
+        return keystrokeAction;
     }
 
     private hideActiveEditor() {
