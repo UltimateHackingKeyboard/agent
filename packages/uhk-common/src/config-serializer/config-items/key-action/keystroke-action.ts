@@ -188,7 +188,7 @@ export class KeystrokeAction extends KeyAction {
     }
 
     hasSecondaryRoleAction(): boolean {
-        return this.secondaryRoleAction !== undefined;
+        return this.secondaryRoleAction !== undefined && this.secondaryRoleAction !== null;
     }
 
     hasScancode(): boolean {
