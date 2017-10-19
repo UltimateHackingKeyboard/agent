@@ -95,7 +95,7 @@
     "zone.js": "0.8.14"
   },
   "dependencies": {
-    "classlist.js": "^1.1.20150312",
-    "file-saver": "^1.3.3"
+    "classlist.js": "1.1.20150312",
+    "file-saver": "1.3.3"
   }
 }
