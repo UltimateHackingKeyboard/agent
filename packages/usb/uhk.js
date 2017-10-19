@@ -41,7 +41,7 @@ function getBootloaderDevice() {
         return null;
     }
 
-    return new HID.HID(foundDevice.path);
+    return foundDevice;
 }
 
 exports = module.exports = moduleExports = {
