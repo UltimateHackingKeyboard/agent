@@ -86,6 +86,11 @@ exports = module.exports = moduleExports = {
         readUserConfig: 2,
         writeUserConfig: 3,
     },
+    kbootCommands: {
+        idle: 0,
+        ping: 1,
+        reset: 2,
+    },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,
     sendLog: sendLog,
