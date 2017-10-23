@@ -51,7 +51,7 @@ exports = module.exports = moduleExports = {
     getTransferData,
     usbCommands: {
         getProperty: 0,
-        jumpToBootloader: 1,
+        reenumerate: 1,
         setTestLed: 2,
         writeUserConfig: 8,
         applyConfig: 9,
@@ -68,10 +68,17 @@ exports = module.exports = moduleExports = {
     },
     enumerationModes: {
         bootloader: 0,
-        busPal: 1,
+        buspal: 1,
         normalKeyboard: 2,
         compatibleKeyboard: 3,
     },
+    enumerationModeIdToProductId: {
+        '0': 0x6120,
+        '1': 0x6121,
+        '2': 0x6122,
+        '3': 0x6123,
+    },
+    vendorId: 0x1D50,
     systemPropertyIds: {
         usbProtocolVersion: 0,
         bridgeProtocolVersion: 1,
