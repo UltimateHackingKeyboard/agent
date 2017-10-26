@@ -1,12 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-import { KeyMacroAction, KeystrokeAction, MacroSubAction } from 'uhk-common';
+import { KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 import { KeypressTabComponent, Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 
 enum TabName {
-    Keypress,
-    Hold,
+    Tap,
+    Press,
     Release
 }
 
@@ -45,22 +45,22 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
 
     getTabName(macroAction: KeyMacroAction): TabName {
         if (!macroAction.action) {
-            return TabName.Keypress;
-        } else if (macroAction.action === MacroSubAction.hold) {
-            return TabName.Hold;
-        } else if (macroAction.action === MacroSubAction.release) {
+            return TabName.Tap;
+        } else if (macroAction.action === MacroKeySubAction.press) {
+            return TabName.Press;
+        } else if (macroAction.action === MacroKeySubAction.release) {
             return TabName.Release;
         }
     }
 
-    getActionType(tab: TabName): MacroSubAction {
+    getActionType(tab: TabName): MacroKeySubAction {
         switch (tab) {
-            case TabName.Keypress:
-                return MacroSubAction.press;
-            case TabName.Hold:
-                return MacroSubAction.hold;
+            case TabName.Tap:
+                return MacroKeySubAction.tap;
+            case TabName.Press:
+                return MacroKeySubAction.press;
             case TabName.Release:
-                return MacroSubAction.release;
+                return MacroKeySubAction.release;
             default:
                 throw new Error('Invalid tab type');
         }

@@ -7072,7 +7072,7 @@
       "macroActions": [
         {
           "macroActionType": "key",
-          "action": "press",
+          "action": "tap",
           "scancode": 15,
           "modifierMask": 1,
           "type": "basic"
@@ -7083,7 +7083,7 @@
         },
         {
           "macroActionType": "key",
-          "action": "press",
+          "action": "tap",
           "scancode": 40,
           "type": "basic"
         }
