@@ -1,16 +1,16 @@
 <div class="col-xs-12 macro-key__container">
     <div class="col-xs-3 macro-key__types">
         <ul class="nav nav-pills nav-stacked">
-            <li #keyMove [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
+            <li #keyMove [class.active]="activeTab === TabName.Tap" (click)="selectTab(TabName.Tap)">
                 <a>
                     <i class="fa fa-hand-pointer-o"></i>
-                    <span>Press key</span>
+                    <span>Tap key</span>
                 </a>
             </li>
-            <li #keyHold [class.active]="activeTab === TabName.Hold" (click)="selectTab(TabName.Hold)">
+            <li #keyHold [class.active]="activeTab === TabName.Press" (click)="selectTab(TabName.Press)">
                 <a>
                     <i class="fa fa-hand-rock-o"></i>
-                    <span>Hold key</span>
+                    <span>Press key</span>
                 </a>
             </li>
             <li #keyRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
@@ -23,8 +23,8 @@
     </div>
     <div class="col-xs-9 macro-key__action-container">
         <div class="macro-key__action">
-            <h4 *ngIf="activeTab === TabName.Keypress">Press key</h4>
-            <h4 *ngIf="activeTab === TabName.Hold">Hold key</h4>
+            <h4 *ngIf="activeTab === TabName.Tap">Tap key</h4>
+            <h4 *ngIf="activeTab === TabName.Press">Press key</h4>
             <h4 *ngIf="activeTab === TabName.Release">Release key</h4>
             <keypress-tab #keypressTab [defaultKeyAction]="defaultKeyAction" [secondaryRoleEnabled]="false"
                           (validAction)="validate()"></keypress-tab>
