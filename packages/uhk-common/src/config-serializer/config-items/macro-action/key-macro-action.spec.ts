@@ -1,6 +1,6 @@
 import { KeyMacroAction } from './key-macro-action';
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
-import { MacroSubAction } from './macro-action';
+import { MacroKeySubAction } from './macro-action';
 import { KeystrokeType } from '../key-action';
 
 describe('key-macro-action', () => {
@@ -12,7 +12,7 @@ describe('key-macro-action', () => {
     describe('full serialization', () => {
         it('should json match', () => {
             const action = new KeyMacroAction();
-            action.action = MacroSubAction.hold;
+            action.action = MacroKeySubAction.press;
             action.type = KeystrokeType.basic;
             action.scancode = 100;
             jsonDefaultHelper(action);
@@ -20,7 +20,7 @@ describe('key-macro-action', () => {
 
         it('should binary match', () => {
             const action = new KeyMacroAction();
-            action.action = MacroSubAction.hold;
+            action.action = MacroKeySubAction.press;
             action.type = KeystrokeType.basic;
             action.scancode = 100;
             binaryDefaultHelper(action);

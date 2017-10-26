@@ -4,7 +4,7 @@ import {
     MouseButtonMacroAction,
     MoveMouseMacroAction,
     ScrollMouseMacroAction,
-    MacroSubAction
+    MacroMouseSubAction
 } from 'uhk-common';
 import { Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
@@ -48,7 +48,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
     ngOnInit() {
         if (!this.macroAction) {
             this.macroAction = new MouseButtonMacroAction();
-            this.macroAction.action = MacroSubAction.press;
+            this.macroAction.action = MacroMouseSubAction.click;
         }
         const tabName = this.getTabName(this.macroAction);
         this.selectTab(tabName);
@@ -96,14 +96,14 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
         return this.selectedButtons[index];
     }
 
-    getAction(tab: TabName): MacroSubAction {
+    getAction(tab: TabName): MacroMouseSubAction {
         switch (tab) {
             case TabName.Click:
-                return MacroSubAction.press;
+                return MacroMouseSubAction.click;
             case TabName.Hold:
-                return MacroSubAction.hold;
+                return MacroMouseSubAction.hold;
             case TabName.Release:
-                return MacroSubAction.release;
+                return MacroMouseSubAction.release;
             default:
                 throw new Error(`Invalid tab name: ${TabName[tab]}`);
         }
@@ -111,7 +111,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
 
     getTabName(action: MouseMacroAction): TabName {
         if (action instanceof MouseButtonMacroAction) {
-            if (!action.action || action.isOnlyPressAction()) {
+            if (!action.action || action.isOnlyClickAction()) {
                 return TabName.Click;
             } else if (action.isOnlyHoldAction()) {
                 return TabName.Hold;

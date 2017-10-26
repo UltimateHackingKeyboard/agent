@@ -1,8 +1,8 @@
 import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { KeyModifiers } from '../key-modifiers';
-import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './macro-action';
-import { KeystrokeType } from '../key-action/keystroke-type';
+import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action';
+import { KeystrokeType } from '../key-action';
 
 interface JsObjectKeyMacroAction {
     macroActionType: string;
@@ -14,8 +14,8 @@ interface JsObjectKeyMacroAction {
 
 export class KeyMacroAction extends MacroAction {
 
-    @assertEnum(MacroSubAction)
-    action: MacroSubAction;
+    @assertEnum(MacroKeySubAction)
+    action: MacroKeySubAction;
 
     @assertEnum(KeystrokeType)
     type: KeystrokeType;
@@ -39,7 +39,7 @@ export class KeyMacroAction extends MacroAction {
 
     fromJsonObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
         this.assertMacroActionType(jsObject);
-        this.action = MacroSubAction[jsObject.action];
+        this.action = MacroKeySubAction[jsObject.action];
         if (jsObject.type === 'media') {
             this.type = jsObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
         } else {
@@ -69,7 +69,7 @@ export class KeyMacroAction extends MacroAction {
     toJsonObject(): any {
         const jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,
-            action: MacroSubAction[this.action]
+            action: MacroKeySubAction[this.action]
         };
 
         if (this.hasScancode()) {
@@ -121,16 +121,16 @@ export class KeyMacroAction extends MacroAction {
         return !!this.modifierMask;
     }
 
-    isHoldAction(): boolean {
-        return this.action === MacroSubAction.hold;
+    isPressAction(): boolean {
+        return this.action === MacroKeySubAction.press;
     }
 
-    isPressAction(): boolean {
-        return this.action === MacroSubAction.press;
+    isTapAction(): boolean {
+        return this.action === MacroKeySubAction.tap;
     }
 
     isReleaseAction(): boolean {
-        return this.action === MacroSubAction.release;
+        return this.action === MacroKeySubAction.release;
     }
 
     public getName(): string {
