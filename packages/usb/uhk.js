@@ -41,7 +41,7 @@ function getBootloaderDevice() {
         return null;
     }
 
-    return new HID.HID(foundDevice.path);
+    return foundDevice;
 }
 
 exports = module.exports = moduleExports = {
@@ -51,7 +51,7 @@ exports = module.exports = moduleExports = {
     getTransferData,
     usbCommands: {
         getProperty: 0,
-        jumpToBootloader: 1,
+        reenumerate: 1,
         setTestLed: 2,
         writeUserConfig: 8,
         applyConfig: 9,
@@ -64,13 +64,21 @@ exports = module.exports = moduleExports = {
         getKeyboardState: 16,
         readDebugInfo: 17,
         jumpToSlaveBootloader: 18,
+        sendKbootCommand: 19,
     },
     enumerationModes: {
         bootloader: 0,
-        busPal: 1,
+        buspal: 1,
         normalKeyboard: 2,
         compatibleKeyboard: 3,
     },
+    enumerationModeIdToProductId: {
+        '0': 0x6120,
+        '1': 0x6121,
+        '2': 0x6122,
+        '3': 0x6123,
+    },
+    vendorId: 0x1D50,
     systemPropertyIds: {
         usbProtocolVersion: 0,
         bridgeProtocolVersion: 1,
@@ -84,6 +92,11 @@ exports = module.exports = moduleExports = {
         writeHardwareConfig: 1,
         readUserConfig: 2,
         writeUserConfig: 3,
+    },
+    kbootCommands: {
+        idle: 0,
+        ping: 1,
+        reset: 2,
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,

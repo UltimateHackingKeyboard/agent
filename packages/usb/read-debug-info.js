@@ -8,7 +8,7 @@ function readDebugInfo() {
     device.write(uhk.getTransferData(payload));
     const receivedBuffer = Buffer.from(device.readSync());
     console.log('Received', uhk.bufferToString(receivedBuffer));
-    setTimeout(readDebugInfo, 500)
+    setTimeout(readDebugInfo, 500);
 }
 
 readDebugInfo();

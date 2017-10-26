@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "chalk": "2.1.0",
+    "commander": "^2.11.0",
     "node-hid": "0.5.4",
     "uhk-common": "1.0.0",
     "uhk-usb": "1.0.0"
