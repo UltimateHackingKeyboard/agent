@@ -127,7 +127,7 @@ export class MacroListComponent {
 
     onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
         const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event));
-        keyMacroAction.action = MacroSubAction.press;
+        keyMacroAction.action = MacroSubAction.tap;
 
         this.add.emit({
             macroId: this.macro.id,

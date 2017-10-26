@@ -24,7 +24,7 @@ export enum MacroActionId {
 }
 
 export enum MacroSubAction {
-    press = 0,
+    tap = 0,
     hold = 1,
     release = 2
 }

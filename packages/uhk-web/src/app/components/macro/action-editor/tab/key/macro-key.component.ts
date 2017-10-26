@@ -5,7 +5,7 @@ import { KeypressTabComponent, Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 
 enum TabName {
-    Keypress,
+    Tap,
     Hold,
     Release
 }
@@ -45,7 +45,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
 
     getTabName(macroAction: KeyMacroAction): TabName {
         if (!macroAction.action) {
-            return TabName.Keypress;
+            return TabName.Tap;
         } else if (macroAction.action === MacroSubAction.hold) {
             return TabName.Hold;
         } else if (macroAction.action === MacroSubAction.release) {
@@ -55,8 +55,8 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
 
     getActionType(tab: TabName): MacroSubAction {
         switch (tab) {
-            case TabName.Keypress:
-                return MacroSubAction.press;
+            case TabName.Tap:
+                return MacroSubAction.tap;
             case TabName.Hold:
                 return MacroSubAction.hold;
             case TabName.Release:

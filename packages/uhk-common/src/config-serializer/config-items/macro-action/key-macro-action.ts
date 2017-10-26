@@ -125,8 +125,8 @@ export class KeyMacroAction extends MacroAction {
         return this.action === MacroSubAction.hold;
     }
 
-    isPressAction(): boolean {
-        return this.action === MacroSubAction.press;
+    isTapAction(): boolean {
+        return this.action === MacroSubAction.tap;
     }
 
     isReleaseAction(): boolean {
