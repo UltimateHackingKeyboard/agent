@@ -76,6 +76,6 @@
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",
-    "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist"
+    "clean": "lerna exec rimraf ./node_modules ./dist"
   }
 }
