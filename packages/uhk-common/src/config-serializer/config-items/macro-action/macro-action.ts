@@ -23,8 +23,14 @@ export enum MacroActionId {
     TextMacroAction                 = 70
 }
 
-export enum MacroSubAction {
+export enum MacroKeySubAction {
     tap = 0,
+    press = 1,
+    release = 2
+}
+
+export enum MacroMouseSubAction {
+    press = 0,
     hold = 1,
     release = 2
 }

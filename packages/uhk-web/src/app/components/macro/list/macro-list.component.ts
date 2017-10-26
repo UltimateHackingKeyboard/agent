@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
-import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroSubAction } from 'uhk-common';
+import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
 import { MacroItemComponent } from '../item';
@@ -127,7 +127,7 @@ export class MacroListComponent {
 
     onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
         const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event));
-        keyMacroAction.action = MacroSubAction.tap;
+        keyMacroAction.action = MacroKeySubAction.tap;
 
         this.add.emit({
             macroId: this.macro.id,

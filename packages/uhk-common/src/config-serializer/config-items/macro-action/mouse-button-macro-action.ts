@@ -1,6 +1,6 @@
 import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
-import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './macro-action';
+import { MacroAction, MacroActionId, MacroMouseSubAction, macroActionType } from './macro-action';
 
 export enum MouseButtons {
     Left = 1 << 0,
@@ -15,8 +15,8 @@ interface JsObjectMouseButtonMacroAction {
 }
 
 export class MouseButtonMacroAction extends MacroAction {
-    @assertEnum(MacroSubAction)
-    action: MacroSubAction;
+    @assertEnum(MacroMouseSubAction)
+    action: MacroMouseSubAction;
 
     @assertUInt8
     mouseButtonsMask: number;
@@ -32,7 +32,7 @@ export class MouseButtonMacroAction extends MacroAction {
 
     fromJsonObject(jsObject: JsObjectMouseButtonMacroAction): MouseButtonMacroAction {
         this.assertMacroActionType(jsObject);
-        this.action = MacroSubAction[jsObject.action];
+        this.action = MacroMouseSubAction[jsObject.action];
         this.mouseButtonsMask = jsObject.mouseButtonsMask;
         return this;
     }
@@ -47,7 +47,7 @@ export class MouseButtonMacroAction extends MacroAction {
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.MouseButtonMacroAction,
-            action: MacroSubAction[this.action],
+            action: MacroMouseSubAction[this.action],
             mouseButtonsMask: this.mouseButtonsMask
         };
     }
@@ -81,16 +81,16 @@ export class MouseButtonMacroAction extends MacroAction {
         return this.mouseButtonsMask !== 0;
     }
 
-    isOnlyHoldAction(): boolean {
-        return this.action === MacroSubAction.hold;
+    isOnlyPressAction(): boolean {
+        return this.action === MacroMouseSubAction.press;
     }
 
-    isOnlyTapAction(): boolean {
-        return this.action === MacroSubAction.tap;
+    isOnlyHoldAction(): boolean {
+        return this.action === MacroMouseSubAction.hold;
     }
 
     isOnlyReleaseAction(): boolean {
-        return this.action === MacroSubAction.release;
+        return this.action === MacroMouseSubAction.release;
     }
 
     public getName(): string {

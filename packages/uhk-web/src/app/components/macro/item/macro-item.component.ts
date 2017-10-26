@@ -125,13 +125,13 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.isTapAction()) {
-            // Press key
+            // Tap key
             this.iconName = 'hand-pointer';
             this.title = 'Tap key: ';
-        } else if (action.isHoldAction()) {
-            // Hold key
+        } else if (action.isPressAction()) {
+            // Press key
             this.iconName = 'hand-rock';
-            this.title = 'Hold key: ';
+            this.title = 'Press key: ';
         } else if (action.isReleaseAction()) {
             // Release key
             this.iconName = 'hand-paper';
@@ -146,7 +146,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.hasModifiers()) {
-            // Press/hold/release modifiers
+            // Tap/press/release modifiers
             for (let i = KeyModifiers.leftCtrl; i <= KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
                     this.title += ' ' + KeyModifiers[i];
@@ -181,7 +181,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     private setMouseButtonActionContent(action: MouseButtonMacroAction): void {
         // Press/hold/release mouse buttons
-        if (action.isOnlyTapAction()) {
+        if (action.isOnlyPressAction()) {
             this.iconName = 'mouse-pointer';
             this.title = 'Click mouse button: ';
         } else if (action.isOnlyHoldAction()) {
