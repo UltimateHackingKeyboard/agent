@@ -21,8 +21,8 @@ type AnimationKeyboard =
     animations: [
         trigger('layerState', [
             state('init', style({
-                transform: 'translateX(0)',
-                left: '0'
+                transform: 'translateX(-50%)',
+                left: '50%'
             })),
             state('initOut', style({
                 transform: 'translateX(0)',
