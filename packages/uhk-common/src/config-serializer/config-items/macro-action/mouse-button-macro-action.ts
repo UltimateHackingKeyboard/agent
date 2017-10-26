@@ -81,8 +81,8 @@ export class MouseButtonMacroAction extends MacroAction {
         return this.mouseButtonsMask !== 0;
     }
 
-    isOnlyPressAction(): boolean {
-        return this.action === MacroMouseSubAction.press;
+    isOnlyClickAction(): boolean {
+        return this.action === MacroMouseSubAction.click;
     }
 
     isOnlyHoldAction(): boolean {

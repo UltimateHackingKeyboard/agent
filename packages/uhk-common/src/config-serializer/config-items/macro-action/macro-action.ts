@@ -30,7 +30,7 @@ export enum MacroKeySubAction {
 }
 
 export enum MacroMouseSubAction {
-    press = 0,
+    click = 0,
     hold = 1,
     release = 2
 }

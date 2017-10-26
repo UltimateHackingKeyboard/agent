@@ -48,7 +48,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
     ngOnInit() {
         if (!this.macroAction) {
             this.macroAction = new MouseButtonMacroAction();
-            this.macroAction.action = MacroMouseSubAction.press;
+            this.macroAction.action = MacroMouseSubAction.click;
         }
         const tabName = this.getTabName(this.macroAction);
         this.selectTab(tabName);
@@ -99,7 +99,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
     getAction(tab: TabName): MacroMouseSubAction {
         switch (tab) {
             case TabName.Click:
-                return MacroMouseSubAction.press;
+                return MacroMouseSubAction.click;
             case TabName.Hold:
                 return MacroMouseSubAction.hold;
             case TabName.Release:
@@ -111,7 +111,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
 
     getTabName(action: MouseMacroAction): TabName {
         if (action instanceof MouseButtonMacroAction) {
-            if (!action.action || action.isOnlyPressAction()) {
+            if (!action.action || action.isOnlyClickAction()) {
                 return TabName.Click;
             } else if (action.isOnlyHoldAction()) {
                 return TabName.Hold;
