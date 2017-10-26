@@ -2,7 +2,7 @@ import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { KeyModifiers } from '../key-modifiers';
 import { MacroAction, MacroActionId, MacroSubAction, macroActionType } from './macro-action';
-import { KeystrokeType } from '../key-action/keystroke-type';
+import { KeystrokeType } from '../key-action';
 
 interface JsObjectKeyMacroAction {
     macroActionType: string;
