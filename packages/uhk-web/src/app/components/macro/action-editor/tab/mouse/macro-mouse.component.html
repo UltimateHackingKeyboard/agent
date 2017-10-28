@@ -35,7 +35,7 @@
     </div>
     <div class="col-xs-9 macro-mouse__actions" [ngSwitch]="activeTab">
         <div #tab *ngSwitchCase="TabName.Move">
-            <h4>Move pointer</h4>
+            <h4>Move mouse pointer</h4>
             <div class="form-horizontal">
                 <div class="form-group">
                     <label for="move-mouse-x">X:</label>
@@ -62,7 +62,7 @@
             </div>
         </div>
         <div #tab *ngSwitchCase="TabName.Scroll">
-            <h4>Scroll</h4>
+            <h4>Scroll with mouse</h4>
             <div class="form-horizontal">
                 <div class="form-group">
                     <label for="scroll-mouse-x">X:</label>
