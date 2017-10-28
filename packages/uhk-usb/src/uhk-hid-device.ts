@@ -143,7 +143,7 @@ export class UhkHidDevice {
             });
 
             const sendData = UhkHidDevice.getTransferData(buffer);
-            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDevice.bufferToString(sendData));
+            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDevice.bufferToString(sendData).substr(3));
             device.write(sendData);
         });
     }
