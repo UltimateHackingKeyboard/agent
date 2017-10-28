@@ -19,6 +19,7 @@
         a {
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+            user-select: none;
 
             &.selected {
                 font-style: italic;
