@@ -18,6 +18,10 @@ export class UserConfiguration {
 
     macros: Macro[] = [];
 
+    constructor() {
+        this.setDefaultDeviceName();
+    }
+
     fromJsonObject(jsonObject: any): UserConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;
         this.deviceName = jsonObject.deviceName;
