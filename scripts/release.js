@@ -38,6 +38,10 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
+const execSync = require('child_process').execSync;
+
+execSync('npm i electron-builder@19.34.2 --no-save');
+
 const path = require('path');
 const builder = require("electron-builder");
 const Platform = builder.Platform;
