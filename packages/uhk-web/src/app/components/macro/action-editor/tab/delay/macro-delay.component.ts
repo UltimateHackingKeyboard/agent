@@ -23,7 +23,7 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
     @Input() macroAction: DelayMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
 
-    presets: number[] = [0.3, 0.5, 0.8, 1, 2, 3, 4, 5];
+    presets: number[] = [0.1, 0.5, 1, 5, 10];
 
     get delay(): number {
         return this._delay;
