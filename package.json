@@ -27,7 +27,7 @@
     "cross-env": "5.0.5",
     "devtron": "1.4.0",
     "electron": "1.7.5",
-    "electron-builder": "19.34.2",
+    "electron-builder": "19.42.2",
     "electron-debug": "1.4.0",
     "electron-devtools-installer": "2.2.0",
     "electron-log": "2.2.9",
