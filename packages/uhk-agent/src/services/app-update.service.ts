@@ -1,8 +1,9 @@
 import { ipcMain, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import { VersionInfo, ProgressInfo } from 'builder-util-runtime';
+import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
 import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
+import * as storage from 'electron-settings';
 
 import { IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
@@ -14,7 +15,7 @@ export class AppUpdateService extends MainServiceBase {
         super(logService, win);
 
         this.initListeners();
-        logService.info('AppUpdateService init success');
+        logService.info('[AppUpdateService] init success');
     }
 
     saveFirtsRun() {
@@ -26,16 +27,17 @@ export class AppUpdateService extends MainServiceBase {
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkingForUpdate);
         });
 
-        autoUpdater.on('update-available', (ev: any, info: VersionInfo) => {
-            autoUpdater.downloadUpdate();
+        autoUpdater.on('update-available', async (ev: any, info: UpdateInfo) => {
+            await autoUpdater.downloadUpdate();
             this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
         });
 
-        autoUpdater.on('update-not-available', (ev: any, info: VersionInfo) => {
+        autoUpdater.on('update-not-available', (ev: any, info: UpdateInfo) => {
             this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
         });
 
         autoUpdater.on('error', (ev: any, err: string) => {
+            console.error('[AppUpdateService] error', err);
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, err.substr(0, 100));
         });
 
@@ -43,11 +45,14 @@ export class AppUpdateService extends MainServiceBase {
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloadProgress, progressObj);
         });
 
-        autoUpdater.on('update-downloaded', (ev: any, info: VersionInfo) => {
+        autoUpdater.on('update-downloaded', (ev: any, info: UpdateInfo) => {
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloaded, info);
         });
 
-        ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => autoUpdater.quitAndInstall(true));
+        ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => {
+            this.logService.debug('[AppUpdateService] update and restart from renderer process');
+            return autoUpdater.quitAndInstall(true);
+        });
 
         ipcMain.on(IpcEvents.app.appStarted, () => {
             if (this.checkForUpdateAtStartup()) {
@@ -55,26 +60,35 @@ export class AppUpdateService extends MainServiceBase {
             }
         });
 
-        ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => this.checkForUpdate());
+        ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => {
+            this.logService.debug('[AppUpdateService] checkForUpdate request from renderer process');
+            this.checkForUpdate();
+        });
     }
 
     private checkForUpdate() {
         if (isDev) {
-            const msg = 'Application update is not working in dev mode.';
+            const msg = '[AppUpdateService] Application update is not working in dev mode.';
             this.logService.info(msg);
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
             return;
         }
 
         if (this.isFirstRun()) {
-            const msg = 'Application update is skipping at first run.';
+            const msg = '[AppUpdateService] Application update is skipping at first run.';
             this.logService.info(msg);
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
             return;
         }
 
         autoUpdater.allowPrerelease = this.allowPreRelease();
-        autoUpdater.checkForUpdates();
+        autoUpdater.checkForUpdates()
+            .then(() => {
+                this.logService.debug('[AppUpdateService] checkForUpdate success');
+            })
+            .catch(error => {
+                this.logService.error('[AppUpdateService] checkForUpdate error:', error);
+            });
     }
 
     private isFirstRun() {
@@ -96,14 +110,20 @@ export class AppUpdateService extends MainServiceBase {
 
     private checkForUpdateAtStartup() {
         const autoUpdateSettings = this.getAutoUpdateSettings();
+        const checkForUpdate = autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
 
-        return autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
+        this.logService.debug('[AppUpdateService] check for update at startup:', {checkForUpdate, autoUpdateSettings});
+
+        return checkForUpdate;
     }
 
     private getAutoUpdateSettings() {
-        // const storageService = new ElectronDataStorageRepositoryService();
-        // return storageService.getAutoUpdateSettings();
-        return { checkForUpdateOnStartUp: false, usePreReleaseUpdate: false };
+        const value = storage.get('auto-update-settings');
+        if (!value) {
+            return {checkForUpdateOnStartUp: false, usePreReleaseUpdate: false};
+        }
+
+        return JSON.parse(<string>value);
     }
 
 }

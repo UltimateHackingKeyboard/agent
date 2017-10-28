@@ -79,13 +79,13 @@ import { AutoUpdateSettings } from './components/auto-update-settings/auto-updat
 import { angularNotifierConfig } from './models/angular-notifier-config';
 import { UndoableNotifierComponent } from './components/undoable-notifier';
 import { UhkHeader } from './components/uhk-header/uhk-header';
-import { UpdateAvailableComponent } from './components/update-available/update-available.component';
-import { UhkMessageComponent } from './components/uhk-message/uhk-message.component';
+import { UpdateAvailableComponent } from './components/update-available';
+import { UhkMessageComponent } from './components/uhk-message';
 import { AppRendererService } from './services/app-renderer.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { IpcCommonRenderer } from './services/ipc-common-renderer';
-import { MissingDeviceComponent } from './components/missing-device/missing-device.component';
-import { PrivilegeCheckerComponent } from './components/privilege-checker/privilege-checker.component';
+import { MissingDeviceComponent } from './components/missing-device';
+import { PrivilegeCheckerComponent } from './components/privilege-checker';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';

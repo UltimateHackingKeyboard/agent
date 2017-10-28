@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import { IpcEvents } from 'uhk-common';
-import { AppState } from '../store/index';
+import { AppState } from '../store';
 import { UpdateDownloadedAction, UpdateErrorAction } from '../store/actions/app-update.action';
 import { CheckForUpdateFailedAction, CheckForUpdateSuccessAction } from '../store/actions/auto-update-settings';
 import { IpcCommonRenderer } from './ipc-common-renderer';

@@ -12,12 +12,15 @@ cache:
 matrix:
   fast_finish: true
 
+platform:
+  - x64
+
 build: off
 
 shallow_clone: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - npm i -g npm@latest
   - choco install chromium
   - set CI=true

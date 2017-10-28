@@ -4,6 +4,7 @@ import { MacroEffects } from './macro';
 import { KeymapEffects } from './keymap';
 import { UserConfigEffects } from './user-config';
 import { ApplicationEffects } from './app';
+import { AppUpdateEffect } from './app-update';
 
 export * from './keymap';
 export * from './macro';
@@ -13,6 +14,7 @@ export * from './app';
 
 export const effects = [
     ApplicationEffects,
+    AppUpdateEffect,
     UserConfigEffects,
     KeymapEffects,
     MacroEffects,

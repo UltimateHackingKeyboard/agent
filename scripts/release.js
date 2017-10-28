@@ -1,7 +1,8 @@
 'use strict';
 const jsonfile = require('jsonfile');
 
-const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machince
+const TEST_BUILD = process.env.TEST_BUILD;// set true if you would like to test on your local machine
+const DIR = process.env.DIR;
 
 // electron-builder security override.
 // Need if wanna create test release build from PR
@@ -29,7 +30,7 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({ branchName, pullRequestNr, gitTag, repoName });
+console.log({branchName, pullRequestNr, gitTag, repoName});
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
@@ -56,13 +57,13 @@ let extraResources = [];
 
 if (process.platform === 'darwin') {
     target = Platform.MAC.createTarget();
-    artifactName += '.${ext}';
+    artifactName += '.${version}.${ext}';
 } else if (process.platform === 'win32') {
-    target = Platform.WINDOWS.createTarget();
+    target = Platform.WINDOWS.createTarget('nsis', builder.Arch.ia32, builder.Arch.x64);
     artifactName += '-${arch}.${ext}';
 } else if (process.platform === 'linux') {
-    target = Platform.LINUX.createTarget();
-    artifactName += '.${ext}';
+    target = Platform.LINUX.createTarget('AppImage', builder.Arch.ia32, builder.Arch.x64, builder.Arch.armv7l);
+    artifactName += '-${arch}.${ext}';
     extraResources.push('rules/setup-rules.sh');
     extraResources.push('rules/50-uhk60.rules');
 } else {
@@ -82,7 +83,7 @@ if (TEST_BUILD || gitTag) {
     updateVersionNumberIn2rndPackageJson(jsonVersion);
 
     builder.build({
-        dir: TEST_BUILD,
+        dir: DIR,
         targets: target,
         appMetadata: {
             main: 'electron-main.js',
@@ -130,10 +131,10 @@ else {
 }
 
 function updateVersionNumberIn2rndPackageJson(version) {
-        const jsonPath = path.join(__dirname,'../packages/uhk-agent/dist/package.json');
-        const json = require(jsonPath);
+    const jsonPath = path.join(__dirname, '../packages/uhk-agent/dist/package.json');
+    const json = require(jsonPath);
 
-        json.version = version;
+    json.version = version;
 
-        jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
+    jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
 }
