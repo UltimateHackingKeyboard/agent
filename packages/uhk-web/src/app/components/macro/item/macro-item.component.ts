@@ -171,11 +171,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
         let needAnd: boolean;
         if (Math.abs(typedAction.x) !== 0) {
-            this.title += ` by ${Math.abs(typedAction.x)}px ${typedAction.x > 0 ? 'left' : 'right'}`;
+            this.title += ` by ${Math.abs(typedAction.x)}px ${typedAction.x > 0 ? 'leftward' : 'rightward'}`;
             needAnd = true;
         }
         if (Math.abs(typedAction.y) !== 0) {
-            this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(typedAction.y)}px ${typedAction.y > 0 ? 'down' : 'up'}`;
+            this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(typedAction.y)}px ${typedAction.y > 0 ? 'downward' : 'upward'}`;
         }
     }
 
