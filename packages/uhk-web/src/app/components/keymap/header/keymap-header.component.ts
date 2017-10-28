@@ -3,6 +3,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    HostListener,
     Input,
     OnChanges,
     Output,
@@ -16,6 +17,7 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
+import * as util from '../../../util';
 
 const DEFAULT_TRASH_TITLE = '<span class="text-nowrap">Delete keymap</span>';
 
@@ -48,6 +50,11 @@ export class KeymapHeaderComponent implements OnChanges {
         if (changes['deletable']) {
             this.setTrashTitle();
         }
+    }
+
+    @HostListener('window:resize')
+    windowResize(): void {
+        this.calculateHeaderTextWidth(this.keymap.name);
     }
 
     setDefault() {
@@ -103,8 +110,16 @@ export class KeymapHeaderComponent implements OnChanges {
         this.downloadClick.emit();
     }
 
+    calculateHeaderTextWidth(text): void {
+        const htmlInput = this.keymapName.nativeElement as HTMLInputElement;
+        const maxWidth = htmlInput.parentElement.offsetWidth - 530;
+        const textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
+        this.renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
+    }
+
     private setName(): void {
         this.renderer.setProperty(this.keymapName.nativeElement, 'value', this.keymap.name);
+        this.calculateHeaderTextWidth(this.keymap.name);
     }
 
     private setAbbreviation() {

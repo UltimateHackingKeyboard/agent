@@ -7,7 +7,7 @@
                    type="text"
                    (change)="editMacroName($event.target.value)"
                    (keyup.enter)="macroName.blur()"
-            />
+                   (keyup)="calculateHeaderTextWidth($event.target.value)">
             <i class="glyphicon glyphicon-trash macro__remove pull-right" title=""
                data-toggle="tooltip"
                data-placement="bottom"
