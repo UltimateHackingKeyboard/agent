@@ -1,7 +1,7 @@
 'use strict';
 const jsonfile = require('jsonfile');
 
-const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machince
+const TEST_BUILD = process.env.TEST_BUILD;// set true if you would like to test on your local machine
 const DIR = process.env.DIR;
 
 // electron-builder security override.
@@ -30,7 +30,7 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({ branchName, pullRequestNr, gitTag, repoName });
+console.log({branchName, pullRequestNr, gitTag, repoName});
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
@@ -132,9 +132,9 @@ else {
 
 function updateVersionNumberIn2rndPackageJson(version) {
         const jsonPath = path.join(__dirname,'../packages/uhk-agent/dist/package.json');
-        const json = require(jsonPath);
+    const json = require(jsonPath);
 
-        json.version = version;
+    json.version = version;
 
-        jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
+    jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
 }
