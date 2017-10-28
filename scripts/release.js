@@ -2,6 +2,7 @@
 const jsonfile = require('jsonfile');
 
 const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machince
+const DIR = process.env.DIR;
 
 // electron-builder security override.
 // Need if wanna create test release build from PR
@@ -82,7 +83,7 @@ if (TEST_BUILD || gitTag) {
     updateVersionNumberIn2rndPackageJson(jsonVersion);
 
     builder.build({
-        dir: TEST_BUILD,
+        dir: DIR,
         targets: target,
         appMetadata: {
             main: 'electron-main.js',
