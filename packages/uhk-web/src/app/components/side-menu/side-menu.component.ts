@@ -1,6 +1,6 @@
-import { Component, Renderer } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Keymap, Macro, UserConfiguration } from 'uhk-common';
+import { Keymap, Macro } from 'uhk-common';
 
 import { Store } from '@ngrx/store';
 
@@ -12,6 +12,8 @@ import 'rxjs/add/operator/let';
 import { AppState, getDeviceName, showAddonMenu, runningInElectron } from '../../store';
 import { MacroActions } from '../../store/actions';
 import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
+import * as util from '../../util';
+import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 
 @Component({
     animations: [
@@ -29,7 +31,7 @@ import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
     templateUrl: './side-menu.component.html',
     styleUrls: ['./side-menu.component.scss']
 })
-export class SideMenuComponent {
+export class SideMenuComponent implements AfterContentInit {
     showAddonMenu$: Observable<boolean>;
     runInElectron$: Observable<boolean>;
 
@@ -37,8 +39,10 @@ export class SideMenuComponent {
     keymaps$: Observable<Keymap[]>;
     macros$: Observable<Macro[]>;
     animation: { [key: string]: 'active' | 'inactive' };
+    deviceNameValue: string;
+    @ViewChild('deviceName') deviceName: ElementRef;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer) {
+    constructor(private store: Store<AppState>, private renderer: Renderer2) {
         this.animation = {
             device: 'active',
             configuration: 'active',
@@ -62,6 +66,14 @@ export class SideMenuComponent {
         this.showAddonMenu$ = this.store.select(showAddonMenu);
         this.runInElectron$ = this.store.select(runningInElectron);
         this.deviceName$ = store.select(getDeviceName);
+        this.deviceName$.subscribe(name => {
+            this.deviceNameValue = name;
+            this.setDeviceName();
+        });
+    }
+
+    ngAfterContentInit(): void {
+        this.setDeviceName();
     }
 
     toggleHide(event: Event, type: string) {
@@ -75,11 +87,34 @@ export class SideMenuComponent {
             this.animation[type] = 'inactive';
         }
 
-        this.renderer.setElementClass(event.target, 'fa-chevron-up', show);
-        this.renderer.setElementClass(event.target, 'fa-chevron-down', !show);
+        if (show) {
+            this.renderer.addClass(event.target, 'fa-chevron-up');
+            this.renderer.removeClass(event.target, 'fa-chevron-down');
+        } else {
+            this.renderer.removeClass(event.target, 'fa-chevron-up');
+            this.renderer.addClass(event.target, 'fa-chevron-down');
+        }
     }
 
     addMacro() {
         this.store.dispatch(MacroActions.addMacro());
+    }
+
+    editDeviceName(name): void {
+        this.store.dispatch(new RenameUserConfigurationAction(name));
+    }
+
+    calculateHeaderTextWidth(text): void {
+        const htmlInput = this.deviceName.nativeElement as HTMLInputElement;
+        const maxWidth = htmlInput.parentElement.offsetWidth * 0.66;
+        const textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
+        this.renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
+    }
+
+    private setDeviceName(): void {
+        if (this.deviceName) {
+            this.renderer.setProperty(this.deviceName.nativeElement, 'value', this.deviceNameValue);
+            this.calculateHeaderTextWidth(this.deviceName.nativeElement.value);
+        }
     }
 }

@@ -25,6 +25,7 @@ import {
 import {
     ActionTypes,
     LoadUserConfigSuccessAction,
+    RenameUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
@@ -72,8 +73,9 @@ export class UserConfigEffects {
             KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
             KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
             MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION) as
-        Observable<KeymapAction | MacroAction>)
+            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION,
+            ActionTypes.RENAME_USER_CONFIGURATION) as
+        Observable<KeymapAction | MacroAction | RenameUserConfigurationAction>)
         .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
         .mergeMap(([action, config, prevUserConfiguration]) => {
             this.dataStorageRepository.saveConfig(config);

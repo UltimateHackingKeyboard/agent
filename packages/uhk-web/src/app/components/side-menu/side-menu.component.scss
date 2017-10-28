@@ -34,7 +34,7 @@ ul {
         padding: 0.5rem 1rem 0.5rem 2rem;
     }
 
-    &__level-0 ,
+    &__level-0,
     &__level-1 {
         font-size: 2rem;
         line-height: 3rem;
@@ -147,6 +147,25 @@ ul {
             &:hover {
                 text-decoration: none;
             }
+        }
+    }
+}
+
+.pane-title {
+    margin-bottom: 1em;
+
+    &__name {
+        border: none;
+        border-bottom: 2px dotted #999;
+        padding: 0;
+        margin: 0 0.25rem;
+        text-overflow: ellipsis;
+        background-color: inherit;
+
+        &:focus {
+            box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
+            border-color: transparent;
+            background-color: inherit;
         }
     }
 }
