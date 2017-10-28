@@ -9,6 +9,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', () => {
         jsonTester({
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: []
@@ -18,6 +19,7 @@ describe('user-configuration', () => {
     it('should transform a null keyActionType ', () => {
         jsonTester({
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: [

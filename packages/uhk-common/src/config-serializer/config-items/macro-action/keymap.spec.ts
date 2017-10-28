@@ -4,6 +4,7 @@ describe('keymap', () => {
     it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', () => {
         const inputJsonConfig = {
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -63,6 +64,7 @@ describe('keymap', () => {
         };
         const expectedJsonConfig = {
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -131,6 +133,7 @@ describe('keymap', () => {
     it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', () => {
         const inputJsonConfig = {
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -190,6 +193,7 @@ describe('keymap', () => {
         };
         const expectedJsonConfig = {
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: [
