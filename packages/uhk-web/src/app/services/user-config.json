@@ -1,5 +1,6 @@
 {
   "dataModelVersion": 4,
+  "deviceName": "My UHK",
   "moduleConfigurations": [
     {
       "id": 1,

@@ -1,7 +1,7 @@
 <ul class="menu--top">
     <li class="sidebar__level-0--item">
         <div class="sidebar__level-0">
-            <i class="uhk-icon uhk-icon-0401-usb-stick rotate-right"></i> UHK 60
+            <i class="uhk-icon uhk-icon-0401-usb-stick rotate-right"></i> {{ deviceName$ | async }}
             <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'device')"></i>
         </div>
         <ul [@toggler]="animation['device']">

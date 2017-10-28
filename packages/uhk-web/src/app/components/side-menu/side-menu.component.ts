@@ -1,6 +1,6 @@
 import { Component, Renderer } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Keymap, Macro } from 'uhk-common';
+import { Keymap, Macro, UserConfiguration } from 'uhk-common';
 
 import { Store } from '@ngrx/store';
 
@@ -9,7 +9,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
-import { AppState, showAddonMenu, runningInElectron } from '../../store';
+import { AppState, getDeviceName, showAddonMenu, runningInElectron } from '../../store';
 import { MacroActions } from '../../store/actions';
 import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 
@@ -33,6 +33,7 @@ export class SideMenuComponent {
     showAddonMenu$: Observable<boolean>;
     runInElectron$: Observable<boolean>;
 
+    deviceName$: Observable<string>;
     keymaps$: Observable<Keymap[]>;
     macros$: Observable<Macro[]>;
     animation: { [key: string]: 'active' | 'inactive' };
@@ -60,6 +61,7 @@ export class SideMenuComponent {
 
         this.showAddonMenu$ = this.store.select(showAddonMenu);
         this.runInElectron$ = this.store.select(runningInElectron);
+        this.deviceName$ = store.select(getDeviceName);
     }
 
     toggleHide(event: Event, type: string) {
