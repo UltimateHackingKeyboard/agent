@@ -12,7 +12,8 @@ export const ActionTypes = {
     SAVE_USER_CONFIG_SUCCESS: type(PREFIX + 'Save User Config Success'),
     SAVE_USER_CONFIG_IN_JSON_FILE: type(PREFIX + 'Save User Config in JSON file'),
     SAVE_USER_CONFIG_IN_BIN_FILE: type(PREFIX + 'Save User Config in binary file'),
-    LOAD_RESET_USER_CONFIGURATION: type(PREFIX + 'Load reset user configuration')
+    LOAD_RESET_USER_CONFIGURATION: type(PREFIX + 'Load reset user configuration'),
+    RENAME_USER_CONFIGURATION: type(PREFIX + 'Rename user configuration')
 };
 
 export class LoadUserConfigAction implements Action {
@@ -26,19 +27,22 @@ export class LoadConfigFromDeviceAction implements Action {
 export class LoadConfigFromDeviceReplyAction implements Action {
     type = ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY;
 
-    constructor(public payload: ConfigurationReply) { }
+    constructor(public payload: ConfigurationReply) {
+    }
 }
 
 export class LoadUserConfigSuccessAction implements Action {
     type = ActionTypes.LOAD_USER_CONFIG_SUCCESS;
 
-    constructor(public payload: UserConfiguration) { }
+    constructor(public payload: UserConfiguration) {
+    }
 }
 
 export class SaveUserConfigSuccessAction implements Action {
     type = ActionTypes.SAVE_USER_CONFIG_SUCCESS;
 
-    constructor(public payload: UserConfiguration) { }
+    constructor(public payload: UserConfiguration) {
+    }
 }
 
 export class SaveUserConfigInJsonFileAction implements Action {
@@ -52,7 +56,15 @@ export class SaveUserConfigInBinaryFileAction implements Action {
 export class LoadResetUserConfigurationAction implements Action {
     type = ActionTypes.LOAD_RESET_USER_CONFIGURATION;
 
-    constructor(public payload: UserConfiguration) { }
+    constructor(public payload: UserConfiguration) {
+    }
+}
+
+export class RenameUserConfigurationAction implements Action {
+    type = ActionTypes.RENAME_USER_CONFIGURATION;
+
+    constructor(public payload: string) {
+    }
 }
 
 export type Actions
@@ -64,4 +76,5 @@ export type Actions
     | SaveUserConfigInJsonFileAction
     | SaveUserConfigInBinaryFileAction
     | LoadResetUserConfigurationAction
+    | RenameUserConfigurationAction
     ;

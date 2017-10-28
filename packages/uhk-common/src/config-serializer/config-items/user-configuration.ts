@@ -10,14 +10,22 @@ export class UserConfiguration {
     @assertUInt16
     dataModelVersion: number;
 
+    deviceName: string;
+
     moduleConfigurations: ModuleConfiguration[] = [];
 
     keymaps: Keymap[] = [];
 
     macros: Macro[] = [];
 
+    constructor() {
+        this.setDefaultDeviceName();
+    }
+
     fromJsonObject(jsonObject: any): UserConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;
+        this.deviceName = jsonObject.deviceName;
+        this.setDefaultDeviceName();
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
             return new ModuleConfiguration().fromJsonObject(moduleConfiguration);
         });
@@ -32,6 +40,8 @@ export class UserConfiguration {
 
     fromBinary(buffer: UhkBuffer): UserConfiguration {
         this.dataModelVersion = buffer.readUInt16();
+        this.deviceName = buffer.readString();
+        this.setDefaultDeviceName();
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
             return new ModuleConfiguration().fromBinary(uhkBuffer);
         });
@@ -48,6 +58,7 @@ export class UserConfiguration {
     toJsonObject(): any {
         return {
             dataModelVersion: this.dataModelVersion,
+            deviceName: this.deviceName,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject())
@@ -56,6 +67,7 @@ export class UserConfiguration {
 
     toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt16(this.dataModelVersion);
+        buffer.writeString(this.deviceName);
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
@@ -75,4 +87,9 @@ export class UserConfiguration {
         return this.macros.find(macro => macroId === macro.id);
     }
 
+    private setDefaultDeviceName(): void {
+        if (!this.deviceName || this.deviceName.trim().length === 0) {
+            this.deviceName = 'My UHK';
+        }
+    }
 }

@@ -9,6 +9,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', () => {
         jsonTester({
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: []
@@ -18,6 +19,7 @@ describe('user-configuration', () => {
     it('should transform a null keyActionType ', () => {
         jsonTester({
             dataModelVersion: 1,
+            deviceName: 'My UHK',
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -39,6 +41,21 @@ describe('user-configuration', () => {
             ]
         });
     });
+
+    it('Should set the device name to "My UHK" if not exists in the config', () => {
+        const original = {
+            dataModelVersion: 1,
+            moduleConfigurations: [],
+            macros: [],
+            keymaps: []
+        };
+
+        const config = new UserConfiguration();
+        config.fromJsonObject(original);
+
+        expect(config.deviceName).toEqual('My UHK');
+    });
+
 });
 
 function jsonTester(json: any): void {

@@ -126,7 +126,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                     if (index - 1 === newKeyAction.layer) {
                         const clonedAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
                         setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
-                    }else {
+                    } else {
                         setKeyActionToLayer(newLayer, moduleIndex, keyIndex, null);
                     }
                 }
@@ -240,6 +240,12 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 return macro;
             });
             break;
+
+        case ActionTypes.RENAME_USER_CONFIGURATION: {
+            changedUserConfiguration.deviceName = action.payload;
+            break;
+        }
+
         default:
             break;
     }
