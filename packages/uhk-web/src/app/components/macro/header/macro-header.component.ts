@@ -3,6 +3,7 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
+    HostListener,
     Input,
     OnChanges,
     Renderer2,
@@ -13,7 +14,8 @@ import { Store } from '@ngrx/store';
 import { Macro } from 'uhk-common';
 
 import { MacroActions } from '../../../store/actions';
-import { AppState } from '../../../store/index';
+import { AppState } from '../../../store';
+import * as util from '../../../util';
 
 @Component({
     selector: 'macro-header',
@@ -43,6 +45,11 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
         }
     }
 
+    @HostListener('window:resize')
+    windowResize(): void {
+        this.calculateHeaderTextWidth(this.macro.name);
+    }
+
     removeMacro() {
         this.store.dispatch(MacroActions.removeMacro(this.macro.id));
     }
@@ -60,12 +67,20 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
         this.store.dispatch(MacroActions.editMacroName(this.macro.id, name));
     }
 
+    calculateHeaderTextWidth(text): void {
+        const htmlInput = this.macroName.nativeElement as HTMLInputElement;
+        const maxWidth = htmlInput.parentElement.offsetWidth * 0.8;
+        const textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
+        this.renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
+    }
+
     private setFocusOnName() {
         this.macroName.nativeElement.select();
     }
 
     private setName(): void {
         this.renderer.setProperty(this.macroName.nativeElement, 'value', this.macro.name);
+        this.calculateHeaderTextWidth(this.macro.name);
     }
 
 }

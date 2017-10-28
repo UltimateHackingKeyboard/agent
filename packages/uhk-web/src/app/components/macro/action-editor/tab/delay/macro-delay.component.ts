@@ -23,8 +23,18 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
     @Input() macroAction: DelayMacroAction;
     @ViewChild('macroDelayInput') input: ElementRef;
 
-    delay: number;
     presets: number[] = [0.3, 0.5, 0.8, 1, 2, 3, 4, 5];
+
+    get delay(): number {
+        return this._delay;
+    }
+
+    set delay(value: number) {
+        this._delay = value;
+        this.validate();
+    }
+
+    private _delay: number;
 
     constructor() { super(); }
 
@@ -33,12 +43,11 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
             this.macroAction = new DelayMacroAction();
         }
         this.delay = this.macroAction.delay > 0 ? this.macroAction.delay / 1000 : INITIAL_DELAY;
-        this.validate(); // initial validation as it has defaults
     }
 
     setDelay(value: number): void {
-        this.delay = value;
-        this.macroAction.delay = this.delay * 1000;
+        this._delay = value;
+        this.macroAction.delay = this._delay * 1000;
         this.validate();
     }
 
