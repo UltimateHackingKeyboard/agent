@@ -57,12 +57,12 @@ let extraResources = [];
 
 if (process.platform === 'darwin') {
     target = Platform.MAC.createTarget();
-    artifactName += '.${ext}';
+    artifactName += '.${version}.${ext}';
 } else if (process.platform === 'win32') {
-    target = Platform.WINDOWS.createTarget('nsis', [builder.Arch.ia32, builder.Arch.x64]);
+    target = Platform.WINDOWS.createTarget('nsis', builder.Arch.ia32, builder.Arch.x64);
     artifactName += '-${arch}.${ext}';
 } else if (process.platform === 'linux') {
-    target = Platform.LINUX.createTarget('AppImage', [builder.Arch.ia32, builder.Arch.x64, builder.Arch.armv7l]);
+    target = Platform.LINUX.createTarget('AppImage', builder.Arch.ia32, builder.Arch.x64, builder.Arch.armv7l);
     artifactName += '-${arch}.${ext}';
     extraResources.push('rules/setup-rules.sh');
     extraResources.push('rules/50-uhk60.rules');
