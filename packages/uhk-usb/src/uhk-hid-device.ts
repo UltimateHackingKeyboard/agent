@@ -54,9 +54,9 @@ export class UhkHidDevice {
         const data = UhkHidDevice.convertBufferToIntArray(buffer);
         // if data start with 0 need to add additional leading zero because HID API remove it.
         // https://github.com/node-hid/node-hid/issues/187
-        if (data.length > 0 && data[0] === 0 && process.platform === 'win32') {
-            data.unshift(0);
-        }
+        // if (data.length > 0 && data[0] === 0 && process.platform === 'win32') {
+        //     data.unshift(0);
+        // }
 
         // From HID API documentation:
         // http://www.signal11.us/oss/hidapi/hidapi/doxygen/html/group__API.html#gad14ea48e440cf5066df87cc6488493af
