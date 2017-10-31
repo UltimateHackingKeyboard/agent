@@ -1,6 +1,6 @@
 {
     "id": 0,
-    "name": "uhk60-right-half",
+    "name": "uhk60-right",
     "description": "Right UHK60 keyboard half",
     "slot": "right-half",
     "keyCount": 35,
