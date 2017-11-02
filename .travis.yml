@@ -29,7 +29,6 @@ addons:
 
 install:
   - nvm install
-  - npm i -g npm@latest
   - npm install
 
 before_script:
