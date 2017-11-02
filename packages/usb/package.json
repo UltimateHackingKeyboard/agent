@@ -5,7 +5,8 @@
   "main": "UhkConnection.js",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "devDependencies": {
     "@types/node": "8.0.28",
