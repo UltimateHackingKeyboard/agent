@@ -38,6 +38,7 @@
     "lerna": "2.0.0",
     "mkdirp": "0.5.1",
     "npm-run-all": "4.0.2",
+    "pre-commit": "1.2.2",
     "rimraf": "2.6.1",
     "standard-version": "4.2.0",
     "stylelint": "7.13.0",
@@ -48,8 +49,13 @@
     "typescript": "2.5.2",
     "webpack": "2.4.1"
   },
+  "pre-commit": [
+    "precommit-msg",
+    "lint"
+  ],
   "scripts": {
     "postinstall": "lerna bootstrap",
+    "precommit-msg": "Git precommit hook is running... & exit 0",
     "test": "run-p -sn test:test-serializer test:uhk-common",
     "test:test-serializer": "lerna exec --scope test-serializer npm test",
     "test:uhk-common": "lerna exec --scope uhk-common npm test",

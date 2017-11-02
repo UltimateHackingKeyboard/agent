@@ -100,7 +100,7 @@ export class UserConfiguration {
         return this.macros.find(macro => macroId === macro.id);
     }
 
-    recalculateConfigurationLength(){
+    recalculateConfigurationLength() {
         const buffer = new UhkBuffer();
         this.toBinary(buffer);
         this.userConfigurationLength = buffer.offset;
