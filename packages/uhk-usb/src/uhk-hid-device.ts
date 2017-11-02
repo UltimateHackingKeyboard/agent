@@ -157,12 +157,13 @@ export class UhkHidDevice {
      * Close the communication chanel with UHK Device
      */
     public close(): void {
+        this.logService.info('[UhkHidDevice] Device communication closing.');
         if (!this._device) {
             return;
         }
-
         this._device.close();
         this._device = null;
+        this.logService.info('[UhkHidDevice] Device communication closed.');
     }
 
     public async waitUntilKeyboardBusy(): Promise<void> {
@@ -196,7 +197,7 @@ export class UhkHidDevice {
     private connectToDevice(): HID {
         try {
             const devs = devices();
-            this.logService.debug('[DeviceService] Available devices:', devs);
+            this.logService.debug('[UhkHidDevice] Available devices:', devs);
 
             const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
@@ -204,15 +205,15 @@ export class UhkHidDevice {
                 ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
 
             if (!dev) {
-                this.logService.info('[DeviceService] UHK Device not found:');
+                this.logService.info('[UhkHidDevice] UHK Device not found:');
                 return null;
             }
             const device = new HID(dev.path);
-            this.logService.info('[DeviceService] Used device:', dev);
+            this.logService.info('[UhkHidDevice] Used device:', dev);
             return device;
         }
         catch (err) {
-            this.logService.error('[DeviceService] Can not create device:', err);
+            this.logService.error('[UhkHidDevice] Can not create device:', err);
         }
 
         return null;

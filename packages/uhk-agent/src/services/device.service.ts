@@ -83,10 +83,11 @@ export class DeviceService {
 
         try {
             this.logService.debug(`[DeviceService] USB[T]: Read ${configName} size from keyboard`);
-            const configSize = await this.getConfigSizeFromKeyboard(property);
+            let configSize = await this.getConfigSizeFromKeyboard(property);
             const chunkSize = 63;
             let offset = 0;
             let configBuffer = new Buffer(0);
+            let firstRead = true;
 
             this.logService.debug(`[DeviceService] USB[T]: Read ${configName} from keyboard`);
             while (offset < configSize) {
@@ -95,6 +96,11 @@ export class DeviceService {
                 const readBuffer = await this.device.write(writeBuffer);
                 configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
+
+                if (firstRead && config === UsbCommand.ReadUserConfig) {
+                    firstRead = false;
+                    configSize = readBuffer[3] + (readBuffer[4] << 8);
+                }
             }
             response = UhkHidDevice.convertBufferToIntArray(configBuffer);
             return Promise.resolve(JSON.stringify(response));
@@ -103,6 +109,13 @@ export class DeviceService {
             this.logService.error(errMsg, error);
             throw new Error(errMsg);
         }
+    }
+
+    public close(): void {
+        this.connected = false;
+        this.pollTimer$.unsubscribe();
+        this.logService.info('[DeviceService] Device connection checker stopped.');
+
     }
 
     /**
