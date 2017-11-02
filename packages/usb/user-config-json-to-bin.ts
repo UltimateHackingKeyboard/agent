@@ -1,6 +1,5 @@
-import { UhkBuffer, UserConfiguration } from './index';
-
-const fs = require('fs');
+import { UhkBuffer, UserConfiguration } from '../uhk-common/src/config-serializer/index';
+import * as fs from 'fs';
 
 const inputFile = process.argv[2];
 console.log(inputFile);
