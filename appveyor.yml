@@ -18,7 +18,6 @@ shallow_clone: true
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm i -g npm@latest
   - choco install chromium
   - set CI=true
   - set PATH=%APPDATA%\npm;%PATH%
