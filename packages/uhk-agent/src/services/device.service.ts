@@ -111,6 +111,13 @@ export class DeviceService {
         }
     }
 
+    public close(): void {
+        this.connected = false;
+        this.pollTimer$.unsubscribe();
+        this.logService.info('[DeviceService] Device connection checker stopped.');
+
+    }
+
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
