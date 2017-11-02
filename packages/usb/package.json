@@ -8,7 +8,8 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "@types/node": "8.0.28"
+    "@types/node": "8.0.28",
+    "typescript": "2.5.3"
   },
   "dependencies": {
     "chalk": "2.1.0",
