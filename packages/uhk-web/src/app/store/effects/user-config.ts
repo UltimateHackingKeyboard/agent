@@ -78,6 +78,7 @@ export class UserConfigEffects {
         Observable<KeymapAction | MacroAction | RenameUserConfigurationAction>)
         .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
         .mergeMap(([action, config, prevUserConfiguration]) => {
+            config.recalculateConfigurationLength();
             this.dataStorageRepository.saveConfig(config);
 
             if (action.type === KeymapActions.REMOVE || action.type === MacroActions.REMOVE) {

@@ -10,6 +10,9 @@ export class UserConfiguration {
     @assertUInt16
     dataModelVersion: number;
 
+    @assertUInt16
+    userConfigurationLength: number;
+
     deviceName: string;
 
     moduleConfigurations: ModuleConfiguration[] = [];
@@ -24,6 +27,7 @@ export class UserConfiguration {
 
     fromJsonObject(jsonObject: any): UserConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;
+        this.userConfigurationLength = jsonObject.userConfigurationLength;
         this.deviceName = jsonObject.deviceName;
         this.setDefaultDeviceName();
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
@@ -35,11 +39,13 @@ export class UserConfiguration {
             return macro;
         });
         this.keymaps = jsonObject.keymaps.map((keymap: any) => new Keymap().fromJsonObject(keymap, this.macros));
+        this.recalculateConfigurationLength();
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): UserConfiguration {
         this.dataModelVersion = buffer.readUInt16();
+        this.userConfigurationLength = buffer.readUInt16();
         this.deviceName = buffer.readString();
         this.setDefaultDeviceName();
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
@@ -52,12 +58,18 @@ export class UserConfiguration {
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+        if (this.userConfigurationLength === 0) {
+            this.recalculateConfigurationLength();
+        }
+
         return this;
     }
 
     toJsonObject(): any {
         return {
             dataModelVersion: this.dataModelVersion,
+            userConfigurationLength: this.userConfigurationLength,
             deviceName: this.deviceName,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
@@ -67,6 +79,7 @@ export class UserConfiguration {
 
     toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt16(this.dataModelVersion);
+        buffer.writeUInt16(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
@@ -85,6 +98,12 @@ export class UserConfiguration {
 
     getMacro(macroId: number): Macro {
         return this.macros.find(macro => macroId === macro.id);
+    }
+
+    recalculateConfigurationLength(){
+        const buffer = new UhkBuffer();
+        this.toBinary(buffer);
+        this.userConfigurationLength = buffer.offset;
     }
 
     private setDefaultDeviceName(): void {
