@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { UhkBuffer, UserConfiguration } from 'uhk-common';
 import * as fs from 'fs';
 

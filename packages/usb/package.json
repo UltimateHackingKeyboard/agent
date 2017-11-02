@@ -5,11 +5,14 @@
   "main": "UhkConnection.js",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run tsc && npm run chmod",
+    "tsc": "tsc",
+    "chmod": "shx chmod u+x dist/*.js",
     "watch": "tsc -w"
   },
   "devDependencies": {
     "@types/node": "8.0.28",
+    "shx": "0.2.2",
     "typescript": "2.5.3"
   },
   "dependencies": {
