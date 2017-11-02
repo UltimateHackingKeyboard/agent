@@ -1,18 +1,11 @@
 {
   "name": "agent-usb",
   "version": "1.0.0",
-  "description": "Agent preliminary USB code",
-  "main": "UhkConnection.js",
+  "description": "Agent USB scripts",
+  "main": "uhk.js",
   "license": "GPL-3.0",
-  "scripts": {
-    "build": "npm run tsc && npm run chmod",
-    "tsc": "tsc",
-    "chmod": "shx chmod u+x dist/*.js",
-    "watch": "tsc -w"
-  },
   "devDependencies": {
     "@types/node": "8.0.28",
-    "shx": "0.2.2",
     "typescript": "2.5.3"
   },
   "dependencies": {

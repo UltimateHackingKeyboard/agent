@@ -50,8 +50,7 @@
     "webpack": "2.4.1"
   },
   "pre-commit": [
-    "precommit-msg",
-    "lint"
+    "precommit-msg"
   ],
   "scripts": {
     "postinstall": "lerna bootstrap",
