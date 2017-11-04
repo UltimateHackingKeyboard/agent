@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node
 
 import { UhkBuffer, UserConfiguration } from 'uhk-common';
 import * as fs from 'fs';

@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run tsc && npm run chmod",
     "tsc": "tsc",
-    "chmod": "shx chmod u+x dist/*.js",
+    "chmod": "shx chmod u+x ./*.ts",
     "watch": "tsc -w"
   },
   "devDependencies": {
