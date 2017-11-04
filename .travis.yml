@@ -41,6 +41,7 @@ before_script:
   - npm run lint
 
 script:
+  - set -e
   - npm run test
   - npm run release
 
