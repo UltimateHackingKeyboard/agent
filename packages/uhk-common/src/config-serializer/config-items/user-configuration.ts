@@ -27,7 +27,6 @@ export class UserConfiguration {
 
     fromJsonObject(jsonObject: any): UserConfiguration {
         this.dataModelVersion = jsonObject.dataModelVersion;
-        this.userConfigurationLength = jsonObject.userConfigurationLength;
         this.deviceName = jsonObject.deviceName;
         this.setDefaultDeviceName();
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
@@ -69,7 +68,6 @@ export class UserConfiguration {
     toJsonObject(): any {
         return {
             dataModelVersion: this.dataModelVersion,
-            userConfigurationLength: this.userConfigurationLength,
             deviceName: this.deviceName,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
