@@ -4,12 +4,6 @@
   "description": "Agent USB scripts",
   "main": "uhk.js",
   "license": "GPL-3.0",
-  "scripts": {
-    "build": "npm run chmod",
-    "tsc": "tsc",
-    "chmod": "shx chmod u+x ./*.ts",
-    "watch": "tsc -w"
-  },
   "devDependencies": {
     "@types/node": "8.0.28",
     "shx": "0.2.2",
