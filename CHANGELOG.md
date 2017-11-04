@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/UltimateHackingKeyboard/agent/compare/v1.2.4...v1.3.0) (2017-11-04)
+
+
+### Bug Fixes
+
+* **config:** Add userConfigurationLength to the user-config.json ([ea70085](https://github.com/UltimateHackingKeyboard/agent/commit/ea70085))
+* **usb:** user-config-json-to-bin compile ([009dd8e](https://github.com/UltimateHackingKeyboard/agent/commit/009dd8e))
+
+
+### Features
+
+* **device:** Read only filled user configuration and fix app close on mac ([#486](https://github.com/UltimateHackingKeyboard/agent/issues/486)) ([0c30ecc](https://github.com/UltimateHackingKeyboard/agent/commit/0c30ecc))
+
+
+
 <a name="1.2.4"></a>
 ## [1.2.4](https://github.com/UltimateHackingKeyboard/agent/compare/v1.2.3...v1.2.4) (2017-10-30)
 
