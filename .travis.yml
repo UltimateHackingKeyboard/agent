@@ -25,6 +25,7 @@ addons:
       - libudev-dev
       - build-essential
       - libusb-1.0-0-dev
+      - g++-multilib
   chrome: stable
 
 install:
