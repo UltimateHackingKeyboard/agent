@@ -1,4 +1,4 @@
-language: c
+language: cpp
 sudo: false
 dist: trusty
 
@@ -18,14 +18,29 @@ matrix:
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - libgnome-keyring-dev
       - libsecret-1-dev
       - icnsutils
-      - libudev-dev
-      - build-essential
+      - g++-4.8
+      - g++-4.8-multilib
+      - gcc-multilib
+      - libgtk2.0-0
+      - libxtst6
+      - libnotify4
+      - libgconf2-4
+      - libgtk2.0-0:i386
+      - libxtst6:i386
+      - libnotify4:i386
+      - libgconf2-4:i386
+      - libnss3:i386
+      - libasound2:i386
+      - libxss1:i386
+      - socat
       - libusb-1.0-0-dev
-      - g++-multilib
+      - libudev-dev
   chrome: stable
 
 install:
