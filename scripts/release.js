@@ -1,5 +1,6 @@
 'use strict';
 const jsonfile = require('jsonfile');
+const exec = require('child_process').execSync;
 
 const TEST_BUILD = process.env.TEST_BUILD;// set true if you would like to test on your local machine
 const DIR = process.env.DIR;
@@ -39,6 +40,8 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
+exec("npm i -g electron-builder");
+
 const path = require('path');
 const builder = require("electron-builder");
 const Platform = builder.Platform;
@@ -62,7 +65,7 @@ if (process.platform === 'darwin') {
     target = Platform.WINDOWS.createTarget('nsis', builder.Arch.ia32, builder.Arch.x64);
     artifactName += '-${arch}.${ext}';
 } else if (process.platform === 'linux') {
-    target = Platform.LINUX.createTarget('AppImage', builder.Arch.ia32, builder.Arch.x64, builder.Arch.armv7l);
+    target = Platform.LINUX.createTarget();
     artifactName += '-${arch}.${ext}';
     extraResources.push('rules/setup-rules.sh');
     extraResources.push('rules/50-uhk60.rules');
