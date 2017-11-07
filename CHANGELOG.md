@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.5"></a>
+## [1.3.5](https://github.com/UltimateHackingKeyboard/agent/compare/v1.3.4...v1.3.5) (2017-11-07)
+
+
+### Reverts
+
+* remove electron builder from package.json ([915aefe](https://github.com/UltimateHackingKeyboard/agent/commit/915aefe))
+
+
+
 <a name="1.3.4"></a>
 ## [1.3.4](https://github.com/UltimateHackingKeyboard/agent/compare/v1.3.3...v1.3.4) (2017-11-06)
 

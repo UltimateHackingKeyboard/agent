@@ -3,7 +3,7 @@
   "private": true,
   "author": "Ultimate Gadget Laboratories",
   "main": "electron/dist/electron-main.js",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
   "repository": {
     "type": "git",
