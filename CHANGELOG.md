@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.6"></a>
+## [1.3.6](https://github.com/UltimateHackingKeyboard/agent/compare/v1.3.5...v1.3.6) (2017-11-07)
+
+
+
 <a name="1.3.5"></a>
 ## [1.3.5](https://github.com/UltimateHackingKeyboard/agent/compare/v1.3.4...v1.3.5) (2017-11-07)
 
