@@ -40,6 +40,10 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
+if (process.platform === 'darwin') {
+    exec('brew install yarn --without-node');
+}
+
 exec("yarn add electron-builder");
 
 const path = require('path');
