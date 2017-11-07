@@ -40,7 +40,7 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
-exec("npm i -g electron-builder");
+exec("yarn add electron-builder");
 
 const path = require('path');
 const builder = require("electron-builder");
