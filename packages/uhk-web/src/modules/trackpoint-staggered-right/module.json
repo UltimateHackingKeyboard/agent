@@ -1,5 +1,5 @@
 {
-    "id": 4,
+    "moduleId": 4,
     "name": "trackpoint-staggered-right",
     "description": "Right trackpoint",
     "slot": "right-addon",

@@ -1,5 +1,5 @@
 {
-    "id": 5,
+    "moduleId": 5,
     "name": "touchpad-stagered-right",
     "description": "Right touchpad",
     "slot": "right-addon",

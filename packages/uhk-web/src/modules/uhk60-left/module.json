@@ -1,5 +1,5 @@
 {
-    "id": 1,
+    "moduleId": 1,
     "name": "uhk60-left",
     "description": "Left UHK60 keyboard half",
     "slot": "left-half",

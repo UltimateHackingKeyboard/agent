@@ -1,5 +1,5 @@
 {
-    "id": 0,
+    "deviceId": 1,
     "name": "uhk60-right",
     "description": "Right UHK60 keyboard half",
     "slot": "right-half",

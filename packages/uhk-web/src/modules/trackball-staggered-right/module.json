@@ -1,5 +1,5 @@
 {
-    "id": 3,
+    "moduleId": 3,
     "name": "trackball-staggered-right",
     "description": "Right trackball",
     "slot": "right-addon",

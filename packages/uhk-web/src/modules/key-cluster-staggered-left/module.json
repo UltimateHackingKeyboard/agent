@@ -1,5 +1,5 @@
 {
-    "id": 2,
+    "moduleId": 2,
     "name": "key-cluster-staggered-left",
     "description": "Left key cluster",
     "slot": "left-addon",
