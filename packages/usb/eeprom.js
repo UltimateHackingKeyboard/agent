@@ -10,7 +10,7 @@ if (eepromTransferId === undefined) {
 }
 
 const device = uhk.getUhkDevice();
-device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.launchEepromTransfer, eepromTransferId])));
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.launchEepromTransferLegacy, eepromTransferId])));
 const buffer = Buffer.from(device.readSync());
 const responseCode = buffer[0];
 if (responseCode !== 0) {

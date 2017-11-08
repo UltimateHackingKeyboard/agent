@@ -58,7 +58,7 @@ exports = module.exports = moduleExports = {
         applyConfig: 9,
         setLedPwmBrightness: 10,
         getAdcValue: 11,
-        launchEepromTransfer: 12,
+        launchEepromTransferLegacy: 12,
         readHardwareConfig: 13,
         writeHardwareConfig: 14,
         readUserConfig: 15,
