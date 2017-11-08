@@ -30,7 +30,7 @@ export class SvgModuleProviderService {
     private getRightModule(): SvgModule {
 
         if (!this.right) {
-            this.right = new SvgModule(require('xml-loader!../../modules/uhk60-right/layout.xml').svg);
+            this.right = new SvgModule(require('xml-loader!../../devices/uhk60-right/layout.xml').svg);
         }
         return this.right;
     }
