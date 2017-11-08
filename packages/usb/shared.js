@@ -35,7 +35,7 @@ function getBlhostCmd(pid) {
             break;
     }
 
-    return `${__dirname}/blhost/${blhostPath} --usb 0x1d50,${pid}`;
+    return `${__dirname}/blhost/${blhostPath} --usb 0x1d50,0x${pid.toString(16)}`;
 }
 
 function execRetry(command) {

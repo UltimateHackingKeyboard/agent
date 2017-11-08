@@ -49,6 +49,7 @@ exports = module.exports = moduleExports = {
     getUhkDevice,
     getBootloaderDevice,
     getTransferData,
+    checkModuleSlot,
     usbCommands: {
         getProperty: 0,
         reenumerate: 1,
@@ -63,7 +64,7 @@ exports = module.exports = moduleExports = {
         readUserConfig: 15,
         getKeyboardState: 16,
         readDebugInfo: 17,
-        jumpToSlaveBootloader: 18,
+        jumpToModuleBootloader: 18,
         sendKbootCommand: 19,
     },
     enumerationModes: {
@@ -77,6 +78,12 @@ exports = module.exports = moduleExports = {
         '1': 0x6121,
         '2': 0x6122,
         '3': 0x6123,
+    },
+    enumerationNameToProductId: {
+        bootloader: 0x6120,
+        buspal: 0x6121,
+        normalKeyboard: 0x6122,
+        compatibleKeyboard: 0x6123,
     },
     vendorId: 0x1D50,
     systemPropertyIds: {
@@ -99,9 +106,14 @@ exports = module.exports = moduleExports = {
         reset: 2,
     },
     moduleSlotToI2cAddress: {
-        leftHalf: 0x10,
-        leftAddon: 0x20,
-        rightAddon: 0x30,
+        leftHalf: '0x10',
+        leftAddon: '0x20',
+        rightAddon: '0x30',
+    },
+    moduleSlotToId: {
+        leftHalf: 1,
+        leftAddon: 2,
+        rightAddon: 3,
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,
@@ -143,4 +155,21 @@ function writeLog(prefix, buffer) {
         return;
     }
     console.log(prefix + bufferToString(buffer))
+}
+
+function checkModuleSlot(moduleSlot, mapping) {
+    const mapped = mapping[moduleSlot];
+
+    if (moduleSlot == undefined) {
+        console.log(`No moduleSlot specified.`);
+        process.exit(1);
+    }
+
+    if (mapped == undefined) {
+        console.log(`Invalid moduleSlot "${moduleSlot}" specified.`);
+        console.log(`Valid module slots are: ${Object.keys(mapping).join(', ')}.`);
+        process.exit(1);
+    }
+
+    return mapped;
 }
