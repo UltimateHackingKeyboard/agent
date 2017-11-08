@@ -98,6 +98,11 @@ exports = module.exports = moduleExports = {
         ping: 1,
         reset: 2,
     },
+    moduleSlotToI2cAddress: {
+        leftHalf: 0x10,
+        leftAddon: 0x20,
+        rightAddon: 0x30,
+    },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,
     sendLog: sendLog,
