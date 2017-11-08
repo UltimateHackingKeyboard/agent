@@ -8,5 +8,5 @@ setInterval(() => {
     areLedsEnabled = !areLedsEnabled;
     const brightnessPercent = areLedsEnabled ? 100 : 0;
 
-    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.setLedPwm, brightnessPercent])));
+    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.setLedPwmBrightness, brightnessPercent])));
 }, 500);

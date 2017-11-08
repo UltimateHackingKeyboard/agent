@@ -10,4 +10,4 @@ if (process.argv.length !== 3) {
 }
 
 let leftBrightnessPercent = process.argv[2] || '';
-device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.setLedPwm, +leftBrightnessPercent])));
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.setLedPwmBrightness, +leftBrightnessPercent])));
