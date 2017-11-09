@@ -28,7 +28,7 @@ const hardwareConfig = new HardwareConfiguration();
 
 hardwareConfig.signature = 'UHK';
 hardwareConfig.dataModelVersion = 0;
-hardwareConfig.hardwareId = 0;
+hardwareConfig.deviceId = 1;
 hardwareConfig.uuid = uuid;
 hardwareConfig.brandId = 0;
 hardwareConfig.isIso = layout === 'iso';
