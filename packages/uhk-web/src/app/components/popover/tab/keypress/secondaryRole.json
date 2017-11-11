@@ -4,6 +4,23 @@
         "text": "None"
     },
     {
+        "text": "Layer switcher",
+        "children": [
+            {
+                "id": "8",
+                "text": "Mod"
+            },
+            {
+                "id": "9",
+                "text": "Mouse"
+            },
+            {
+                "id": "10",
+                "text": "Fn"
+            }
+        ]
+    },
+    {
         "text": "Modifier",
         "children": [
             {
@@ -37,23 +54,6 @@
             {
                 "id": "7",
                 "text": "RAlt"
-            }
-        ]
-    },
-    {
-        "text": "Layer switcher",
-        "children": [
-            {
-                "id": "8",
-                "text": "Mod"
-            },
-            {
-                "id": "9",
-                "text": "Mouse"
-            },
-            {
-                "id": "10",
-                "text": "Fn"
             }
         ]
     }
