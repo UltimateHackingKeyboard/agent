@@ -13,9 +13,9 @@ function getDebugInfo() {
     const rxBuffer = Buffer.from(device.readSync());
     console.log('Received', uhk.bufferToString(rxBuffer));
     process.stdout.write(`I2C_Watchdog:${getUint32(rxBuffer, 1)} | `);
-    process.stdout.write(`I2cSchedulerCounter:${getUint32(rxBuffer, 5)} | `);
-    process.stdout.write(`I2cWatchdog_OuterCounter:${getUint32(rxBuffer, 9)} | `);
-    process.stdout.write(`I2cWatchdog_InnerCounter:${getUint32(rxBuffer, 13)}`);
+    process.stdout.write(`I2cSlaveScheduler_Counter:${getUint32(rxBuffer, 5)} | `);
+    process.stdout.write(`I2cWatchdog_WatchCounter:${getUint32(rxBuffer, 9)} | `);
+    process.stdout.write(`I2cWatchdog_RecoveryCounter:${getUint32(rxBuffer, 13)}`);
     process.stdout.write('\n');
     setTimeout(getDebugInfo, 500);
 }
