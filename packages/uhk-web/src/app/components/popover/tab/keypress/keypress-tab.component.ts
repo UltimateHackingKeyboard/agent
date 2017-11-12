@@ -103,6 +103,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         // Restore secondaryRoleAction
         if (keystrokeAction.secondaryRoleAction !== undefined) {
             this.selectedSecondaryRoleIndex = this.mapper.modifierMapper(keystrokeAction.secondaryRoleAction);
+        } else {
+            this.selectedSecondaryRoleIndex = -1;
         }
 
         return true;
