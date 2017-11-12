@@ -302,6 +302,18 @@ function generateAbbr(keymaps: Keymap[], abbr: string): string {
     while (keymaps.some((keymap: Keymap) => keymap.abbreviation === abbr)) {
         abbr = abbr.substring(0, abbr.length - 1) + chars[position];
         ++position;
+        if (position > chars.length) {
+            position = 0;
+            let firstCharIndex = chars.indexOf(abbr.substr(0, 1));
+            let secondCharIndex = chars.indexOf(abbr.substr(1, 1));
+            secondCharIndex++;
+
+            if (secondCharIndex > chars.length) {
+                secondCharIndex = 0;
+                firstCharIndex++;
+            }
+            abbr = chars[firstCharIndex] + chars[secondCharIndex] + chars[position];
+        }
     }
 
     return abbr;
