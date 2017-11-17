@@ -2,7 +2,7 @@ require('shelljs/global');
 
 function checkFirmwareImage(imagePath, extension) {
     if (!imagePath) {
-        echo('No firmware image specified');
+        echo('No firmware image specified.');
         exit(1);
     }
 
@@ -12,7 +12,7 @@ function checkFirmwareImage(imagePath, extension) {
     }
 
     if (!test('-f', imagePath)) {
-        echo('Firmware image does not exist');
+        echo('Firmware image does not exist.');
         exit(1);
     }
 }
@@ -30,7 +30,7 @@ function getBlhostCmd(pid) {
             blhostPath = 'win/blhost.exe';
             break;
         default:
-            echo('Your operating system is not supported');
+            echo('Your operating system is not supported.');
             exit(1);
             break;
     }

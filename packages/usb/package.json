@@ -12,8 +12,11 @@
   "dependencies": {
     "chalk": "2.1.0",
     "commander": "^2.11.0",
+    "decompress": "^4.2.0",
+    "decompress-tarbz2": "^4.1.1",
     "node-hid": "0.5.7",
     "shelljs": "^0.7.8",
+    "tmp": "0.0.33",
     "uhk-common": "1.0.0",
     "uhk-usb": "1.0.0"
   }
