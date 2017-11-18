@@ -146,8 +146,5 @@ function update2rndPackageJson(rootJson) {
     const json = require(jsonPath);
 
     json.version = rootJson.version;
-    json.dataModelVersion = rootJson.dataModelVersion;
-    json.usbProtocolVersion = rootJson.usbProtocolVersion;
-    json.slaveProtocolVersion = rootJson.slaveProtocolVersion;
     jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
 }
