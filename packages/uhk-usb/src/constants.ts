@@ -9,13 +9,16 @@ export namespace Constants {
  */
 export enum UsbCommand {
     GetProperty = 0,
+    Reenumerate = 1,
     UploadUserConfig = 8,
     ApplyConfig = 9,
     LaunchEepromTransfer = 12,
     ReadHardwareConfig = 13,
     WriteHardwareConfig = 14,
     ReadUserConfig = 15,
-    GetKeyboardState = 16
+    GetKeyboardState = 16,
+    JumpToModuleBootloader = 18,
+    SendKbootCommandToModule = 19
 }
 
 export enum EepromTransfer {
@@ -32,4 +35,43 @@ export enum SystemPropertyIds {
     FirmwareVersion = 3,
     HardwareConfigSize = 4,
     MaxUserConfigSize = 5
+}
+
+export enum EnumerationModes {
+    Bootloader = 0,
+    Buspal = 1,
+    NormalKeyboard = 2,
+    CompatibleKeyboard = 3
+}
+
+export const enumerationModeIdToProductId = {
+    '0': 0x6120,
+    '1': 0x6121,
+    '2': 0x6122,
+    '3': 0x6123
+};
+
+export enum EnumerationNameToProductId {
+    bootloader = 0x6120,
+    buspal = 0x6121,
+    normalKeyboard = 0x6122,
+    compatibleKeyboard = 0x6123
+}
+
+export enum ModuleSlotToI2cAddress {
+    leftHalf = '0x10',
+    leftAddon = '0x20',
+    rightAddon = '0x30'
+}
+
+export enum ModuleSlotToId {
+    leftHalf = 1,
+    leftAddon = 2,
+    rightAddon = 3
+}
+
+export enum KbootCommands {
+    idle = 0,
+    ping = 1,
+    reset = 2
 }

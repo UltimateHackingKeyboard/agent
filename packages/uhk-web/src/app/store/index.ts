@@ -70,3 +70,4 @@ export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevic
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
     return electron ? state : initProgressButtonState;
 });
+export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);

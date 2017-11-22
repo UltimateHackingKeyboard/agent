@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 import * as util from 'util';
-import { LogService, LogRegExps } from 'uhk-common';
+import { LogRegExps, LogService } from 'uhk-common';
 
 // https://github.com/megahertz/electron-log/issues/44
 // console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
@@ -13,7 +13,7 @@ if (console.debug) {
             console.log('%c' + args[0], 'color:green');
         } else if (LogRegExps.errorRegExp.test(args[0])) {
             console.log('%c' + args[0], 'color:red');
-        }else if (LogRegExps.transferRegExp.test(args[0])) {
+        } else if (LogRegExps.transferRegExp.test(args[0])) {
             console.log('%c' + args[0], 'color:orange');
         } else {
             console.log(...args);

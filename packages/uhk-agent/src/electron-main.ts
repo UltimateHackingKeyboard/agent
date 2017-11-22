@@ -8,8 +8,7 @@ import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
 import * as commandLineArgs from 'command-line-args';
-import { UhkHidDevice } from 'uhk-usb';
-
+import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { CommandLineArgs } from 'uhk-common';
 import { DeviceService } from './services/device.service';
@@ -17,6 +16,9 @@ import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
+import { UhkBlhost } from '../../uhk-usb/src';
+import * as isDev from 'electron-is-dev';
+import { LogRegExps } from '../../uhk-common';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean, defaultOption: false}
@@ -33,13 +35,41 @@ let win: Electron.BrowserWindow;
 autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
+let uhkBlhost: UhkBlhost;
 let uhkHidDeviceService: UhkHidDevice;
+let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
 let sudoService: SudoService;
 
+// https://github.com/megahertz/electron-log/issues/44
+// console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
+if (console.debug) {
+    console.debug = (...args: any[]): void => {
+        if (LogRegExps.writeRegExp.test(args[0])) {
+            console.log(args[0]);
+        } else if (LogRegExps.readRegExp.test(args[0])) {
+            console.log(args[0]);
+        } else if (LogRegExps.errorRegExp.test(args[0])) {
+            console.log(args[0]);
+        } else if (LogRegExps.transferRegExp.test(args[0])) {
+            console.log(args[0]);
+        } else {
+            console.log(...args);
+        }
+    };
+}
+
 function createWindow() {
     logger.info('[Electron Main] Create new window.');
+    let packagesDir;
+    if (isDev) {
+        packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../tmp/');
+    } else {
+        packagesDir = path.dirname(app.getAppPath());
+    }
+
+    logger.info(`[Electron Main] packagesDir: ${packagesDir}`);
 
     // Create the browser window.
     win = new BrowserWindow({
@@ -54,7 +84,9 @@ function createWindow() {
     win.setMenuBarVisibility(false);
     win.maximize();
     uhkHidDeviceService = new UhkHidDevice(logger);
-    deviceService = new DeviceService(logger, win, uhkHidDeviceService);
+    uhkBlhost = new UhkBlhost(logger, packagesDir);
+    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
+    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
     sudoService = new SudoService(logger);

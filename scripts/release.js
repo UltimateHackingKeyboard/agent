@@ -46,7 +46,7 @@ if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
     exec('brew install yarn --without-node');
 }
 
-if(!RUNNING_IN_DEV_MODE) {
+if (!RUNNING_IN_DEV_MODE) {
     exec("yarn add electron-builder");
 }
 
@@ -87,11 +87,20 @@ if (process.platform === 'darwin') {
     //require('./setup-macos-keychain').registerKeyChain();
 }
 
-let version = '';
 if (TEST_BUILD || gitTag) {
     const rootJson = require('../package.json');
-    version = gitTag;
-    update2rndPackageJson(rootJson);
+    update2ndPackageJson(rootJson);
+
+    // Add firmware to extra resources
+    const extractedFirmwareDir = path.join(__dirname, '../tmp/firmware');
+    extraResources.push({from: extractedFirmwareDir, to: 'firmware/'});
+
+    // Add tmp/usb/** as extra resources
+    const usbSourcePackage = path.join(__dirname, '../packages/usb/blhost');
+    extraResources.push({
+        from: usbSourcePackage,
+        to: 'usb/blhost/',
+    });
 
     builder.build({
         dir: DIR,
@@ -111,7 +120,8 @@ if (TEST_BUILD || gitTag) {
             appId: 'com.ultimategadgetlabs.uhk.agent',
             productName: 'UHK Agent',
             mac: {
-                category: 'public.app-category.utilities'
+                category: 'public.app-category.utilities',
+                extraResources
             },
             win: {
                 extraResources
@@ -137,11 +147,10 @@ if (TEST_BUILD || gitTag) {
 else {
     console.log('No git tag');
     // TODO: Need it?
-    version = sha.substr(0, 8);
     process.exit(1);
 }
 
-function update2rndPackageJson(rootJson) {
+function update2ndPackageJson(rootJson) {
     const jsonPath = path.join(__dirname, '../packages/uhk-agent/dist/package.json');
     const json = require(jsonPath);
 

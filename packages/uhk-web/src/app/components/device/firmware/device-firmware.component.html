@@ -3,5 +3,19 @@
     <span>Firmware</span>
 </h1>
 <p>
-    Coming soon ...
+    Flash firmware x.y.z (bundled with Agent)
+    <button class="btn btn-primary"
+            [disabled]="updatingFirmware$ | async"
+            (click)="onUpdateFirmware()">Flash firmware
+    </button>
 </p>
+
+<p>
+    Flash firmware file <input id="firmware-file-select"
+                               type="file"
+                               (change)="changeFile($event)">
+    <button class="btn btn-primary"
+            [disabled]="updatingFirmware$ | async"
+            (click)="onUpdateFirmwareWithFile()">Flash firmware</button>
+</p>
+<xterm></xterm>

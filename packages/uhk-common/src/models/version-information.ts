@@ -3,4 +3,5 @@ export interface VersionInformation {
     dataModelVersion: string;
     usbProtocolVersion: string;
     slaveProtocolVersion: string;
+    firmwareVersion: string;
 }

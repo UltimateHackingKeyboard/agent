@@ -13,7 +13,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/switchMap';
 
-import { NotificationType, IpcResponse, UhkBuffer, UserConfiguration } from 'uhk-common';
+import { IpcResponse, NotificationType, UhkBuffer, UserConfiguration } from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction,
@@ -21,15 +21,18 @@ import {
     PermissionStateChangedAction,
     SaveConfigurationAction,
     SaveToKeyboardSuccessAction,
-    SaveToKeyboardSuccessFailed
+    SaveToKeyboardSuccessFailed, UpdateFirmwareAction,
+    UpdateFirmwareFailedAction,
+    UpdateFirmwareReplyAction,
+    UpdateFirmwareSuccessAction, UpdateFirmwareWithAction
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import {
+    ActionTypes as UserConfigActions,
     LoadConfigFromDeviceAction,
-    LoadResetUserConfigurationAction,
-    ActionTypes as UserConfigActions
+    LoadResetUserConfigurationAction
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 
@@ -141,6 +144,26 @@ export class DeviceEffects {
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
         .ofType(UserConfigActions.LOAD_RESET_USER_CONFIGURATION)
         .switchMap(() => Observable.of(new SaveConfigurationAction()));
+
+    @Effect({dispatch: false}) updateFirmware$ = this.actions$
+        .ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE)
+        .do(() => this.deviceRendererService.updateFirmware());
+
+    @Effect({dispatch: false}) updateFirmwareWith$ = this.actions$
+        .ofType<UpdateFirmwareWithAction>(ActionTypes.UPDATE_FIRMWARE_WITH)
+        .map(action => action.payload)
+        .do(data => this.deviceRendererService.updateFirmware(data));
+
+    @Effect() updateFirmwareReply$ = this.actions$
+        .ofType<UpdateFirmwareReplyAction>(ActionTypes.UPDATE_FIRMWARE_REPLY)
+        .map(action => action.payload)
+        .switchMap((response: IpcResponse) => {
+            if (response.success) {
+                return Observable.of(new UpdateFirmwareSuccessAction());
+            }
+
+            return Observable.of(new UpdateFirmwareFailedAction(response.error));
+        });
 
     constructor(private actions$: Actions,
                 private router: Router,

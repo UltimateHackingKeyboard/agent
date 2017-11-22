@@ -1,7 +1,9 @@
 import { Action } from '@ngrx/store';
 
 import {
-    ActionTypes, ConnectionStateChangedAction, HideSaveToKeyboardButton, PermissionStateChangedAction,
+    ActionTypes,
+    ConnectionStateChangedAction,
+    PermissionStateChangedAction,
     SaveConfigurationAction
 } from '../actions/device';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
@@ -10,12 +12,14 @@ export interface State {
     connected: boolean;
     hasPermission: boolean;
     saveToKeyboard: ProgressButtonState;
+    updatingFirmware: boolean;
 }
 
 export const initialState: State = {
     connected: true,
     hasPermission: true,
-    saveToKeyboard: initProgressButtonState
+    saveToKeyboard: initProgressButtonState,
+    updatingFirmware: false
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -89,11 +93,27 @@ export function reducer(state = initialState, action: Action) {
                 saveToKeyboard: initProgressButtonState
             };
         }
+
+        case ActionTypes.UPDATE_FIRMWARE_WITH:
+        case ActionTypes.UPDATE_FIRMWARE:
+            return {
+                ...state,
+                updatingFirmware: true
+            };
+
+        case ActionTypes.UPDATE_FIRMWARE_SUCCESS:
+        case ActionTypes.UPDATE_FIRMWARE_FAILED:
+            return {
+                ...state,
+                updatingFirmware: false
+            };
+
         default:
             return state;
     }
 }
 
-export const isDeviceConnected = (state: State) => state.connected;
+export const updatingFirmware = (state: State) => state.updatingFirmware;
+export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;

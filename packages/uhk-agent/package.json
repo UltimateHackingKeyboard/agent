@@ -31,8 +31,10 @@
   },
   "scripts": {
     "start": "electron ./dist/electron-main.js",
-    "build": "webpack && npm run install:build-deps && npm run build:usb",
+    "build": "webpack && npm run install:build-deps && npm run build:usb && npm run download-firmware && npm run copy-blhost",
     "build:usb": "electron-rebuild -w node-hid -p -m ./dist",
-    "install:build-deps": "cd ./dist && npm i"
+    "install:build-deps": "cd ./dist && npm i",
+    "download-firmware": "node ../../scripts/download-firmware.js",
+    "copy-blhost": "node ../../scripts/copy-blhost.js"
   }
 }

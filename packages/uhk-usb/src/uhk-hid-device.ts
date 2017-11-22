@@ -1,91 +1,23 @@
 import { Device, devices, HID } from 'node-hid';
 import { LogService } from 'uhk-common';
 
-import { Constants, EepromTransfer, UsbCommand } from './constants';
+import {
+    Constants,
+    EepromTransfer,
+    enumerationModeIdToProductId,
+    EnumerationModes,
+    KbootCommands,
+    ModuleSlotToI2cAddress, ModuleSlotToId,
+    UsbCommand
+} from './constants';
+import { bufferToString, getTransferData, retry, snooze } from './util';
 
-const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+export const BOOTLOADER_TIMEOUT_MS = 5000;
 
 /**
  * HID API wrapper to support unified logging and async write
  */
 export class UhkHidDevice {
-    /**
-     * Convert the Buffer to number[]
-     * @param {Buffer} buffer
-     * @returns {number[]}
-     * @private
-     * @static
-     */
-    public static convertBufferToIntArray(buffer: Buffer): number[] {
-        return Array.prototype.slice.call(buffer, 0);
-    }
-
-    /**
-     * Split the communication package into 64 byte fragments
-     * @param {UsbCommand} usbCommand
-     * @param {Buffer} configBuffer
-     * @returns {Buffer[]}
-     * @private
-     */
-    public static getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer): Buffer[] {
-        const fragments: Buffer[] = [];
-        const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
-        for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
-            const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
-                ? MAX_SENDING_PAYLOAD_SIZE
-                : configBuffer.length - offset;
-            const header = new Buffer([usbCommand, length, offset & 0xFF, offset >> 8]);
-            fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
-        }
-
-        return fragments;
-    }
-
-    /**
-     * Create the communication package that will send over USB and
-     * - add usb report code as 1st byte
-     * - https://github.com/node-hid/node-hid/issues/187 issue
-     * @param {Buffer} buffer
-     * @returns {number[]}
-     * @private
-     * @static
-     */
-    private static getTransferData(buffer: Buffer): number[] {
-        const data = UhkHidDevice.convertBufferToIntArray(buffer);
-        // if data start with 0 need to add additional leading zero because HID API remove it.
-        // https://github.com/node-hid/node-hid/issues/187
-        // if (data.length > 0 && data[0] === 0 && process.platform === 'win32') {
-        //     data.unshift(0);
-        // }
-
-        // From HID API documentation:
-        // http://www.signal11.us/oss/hidapi/hidapi/doxygen/html/group__API.html#gad14ea48e440cf5066df87cc6488493af
-        // The first byte of data[] must contain the Report ID.
-        // For devices which only support a single report, this must be set to 0x0.
-        data.unshift(0);
-
-        return data;
-    }
-
-    /**
-     * Convert buffer to space separated hexadecimal string
-     * @param {Buffer} buffer
-     * @returns {string}
-     * @private
-     * @static
-     */
-    private static bufferToString(buffer: Array<number>): string {
-        let str = '';
-        for (let i = 0; i < buffer.length; i++) {
-            let hex = buffer[i].toString(16) + ' ';
-            if (hex.length <= 2) {
-                hex = '0' + hex;
-            }
-            str += hex;
-        }
-        return str;
-    }
-
     /**
      * Internal variable that represent the USB UHK device
      * @private
@@ -132,7 +64,7 @@ export class UhkHidDevice {
                     this.logService.error('[UhkHidDevice] Transfer error: ', err);
                     return reject(err);
                 }
-                const logString = UhkHidDevice.bufferToString(receivedData);
+                const logString = bufferToString(receivedData);
                 this.logService.debug('[UhkHidDevice] USB[R]:', logString);
 
                 if (receivedData[0] !== 0) {
@@ -142,8 +74,8 @@ export class UhkHidDevice {
                 return resolve(Buffer.from(receivedData));
             });
 
-            const sendData = UhkHidDevice.getTransferData(buffer);
-            this.logService.debug('[UhkHidDevice] USB[W]:', UhkHidDevice.bufferToString(sendData).substr(3));
+            const sendData = getTransferData(buffer);
+            this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
             device.write(sendData);
         });
     }
@@ -177,6 +109,70 @@ export class UhkHidDevice {
         }
     }
 
+    async reenumerate(enumerationMode: EnumerationModes): Promise<void> {
+        const reenumMode = EnumerationModes[enumerationMode].toString();
+        this.logService.debug(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}`);
+
+        const message = new Buffer([
+            UsbCommand.Reenumerate,
+            enumerationMode,
+            BOOTLOADER_TIMEOUT_MS & 0xff,
+            (BOOTLOADER_TIMEOUT_MS & 0xff << 8) >> 8,
+            (BOOTLOADER_TIMEOUT_MS & 0xff << 16) >> 16,
+            (BOOTLOADER_TIMEOUT_MS & 0xff << 24) >> 24
+        ]);
+
+        const enumeratedProductId = enumerationModeIdToProductId[enumerationMode.toString()];
+        const startTime = new Date();
+        let jumped = false;
+
+        while (new Date().getTime() - startTime.getTime() < 20000) {
+            const devs = devices();
+            this.logService.silly('[UhkHidDevice] reenumeration devices', devs);
+
+            const inBootloaderMode = devs.some((x: Device) =>
+                x.vendorId === Constants.VENDOR_ID &&
+                x.productId === enumeratedProductId);
+
+            if (inBootloaderMode) {
+                this.logService.debug(`[UhkHidDevice] reenumeration devices up`);
+                return;
+            }
+
+            // tslint:disable-next-line: max-line-length
+            this.logService.silly(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
+            await snooze(100);
+
+            if (!jumped) {
+                // tslint:disable-next-line: max-line-length
+                this.logService.silly(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
+                const device = this.getDevice();
+                if (device) {
+                    device.write(getTransferData(message));
+                    device.close();
+                    jumped = true;
+                } else {
+                    this.logService.silly(`[UhkHidDevice] USB[T]: Enumerate device is not ready yet}`);
+                }
+            }
+        }
+
+        // tslint:disable-next-line: max-line-length
+        this.logService.error(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Timeout`);
+
+        throw new Error(`Could not reenumerate as ${reenumMode}`);
+    }
+
+    async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
+        const transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command, module]);
+        await retry(async () => await this.write(transfer), maxTry, this.logService);
+    }
+
+    async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
+        const transfer = new Buffer([UsbCommand.JumpToModuleBootloader, module]);
+        await this.write(transfer);
+    }
+
     /**
      * Return the stored version of HID device. If not exist try to initialize.
      * @returns {HID}
@@ -197,7 +193,7 @@ export class UhkHidDevice {
     private connectToDevice(): HID {
         try {
             const devs = devices();
-            this.logService.debug('[UhkHidDevice] Available devices:', devs);
+            this.logService.silly('[UhkHidDevice] Available devices:', devs);
 
             const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
@@ -218,5 +214,4 @@ export class UhkHidDevice {
 
         return null;
     }
-
 }

@@ -1,7 +1,8 @@
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
+import { VersionInformation } from 'uhk-common';
 
-import { HardwareConfiguration, runInElectron, Notification, NotificationType, UserConfiguration } from 'uhk-common';
+import { HardwareConfiguration, Notification, NotificationType, runInElectron, UserConfiguration } from 'uhk-common';
 import { ActionTypes, ShowNotificationAction } from '../actions/app';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes } from '../actions/device';
@@ -16,6 +17,7 @@ export interface State {
     runningInElectron: boolean;
     configLoading: boolean;
     hardwareConfig?: HardwareConfiguration;
+    agentVersionInfo?: VersionInformation;
 }
 
 export const initialState: State = {
@@ -99,7 +101,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
                 hardwareConfig: action.payload
             };
 
-        case DeviceActionTypes.CONNECTION_STATE_CHANGED:
+        case DeviceActionTypes.CONNECTION_STATE_CHANGED: {
 
             if (action.payload === true) {
                 return state;
@@ -109,7 +111,13 @@ export function reducer(state = initialState, action: Action & { payload: any })
                 ...state,
                 hardwareConfig: null
             };
+        }
 
+        case ActionTypes.UPDATE_AGENT_VERSION_INFORMATION:
+            return {
+                ...state,
+                agentVersionInfo: action.payload
+            };
         default:
             return state;
     }
@@ -128,3 +136,4 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
     return KeyboardLayout.ANSI;
 };
 export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
+export const getAgentVersionInfo = (state: State) => state.agentVersionInfo;

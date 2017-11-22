@@ -32,7 +32,8 @@ export class AppService extends MainServiceBase {
                 version: packageJson.version,
                 dataModelVersion: packageJson.dataModelVersion,
                 usbProtocolVersion: packageJson.usbProtocolVersion,
-                slaveProtocolVersion: packageJson.slaveProtocolVersion
+                slaveProtocolVersion: packageJson.slaveProtocolVersion,
+                firmwareVersion: packageJson.firmwareVersion
             }
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);

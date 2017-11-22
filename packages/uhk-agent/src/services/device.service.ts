@@ -1,16 +1,25 @@
 import { ipcMain } from 'electron';
-import { IpcEvents, LogService, IpcResponse, ConfigurationReply } from 'uhk-common';
-import { Constants, EepromTransfer, SystemPropertyIds, UsbCommand } from 'uhk-usb';
+import { ConfigurationReply, IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import {
+    Constants,
+    convertBufferToIntArray,
+    EepromTransfer,
+    getTransferBuffers,
+    SystemPropertyIds,
+    UhkHidDevice,
+    UhkOperations,
+    UsbCommand
+} from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Device, devices } from 'node-hid';
-import { UhkHidDevice } from 'uhk-usb';
 
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
+import { snooze } from '../../../uhk-usb/src';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -25,10 +34,12 @@ export class DeviceService {
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
-                private device: UhkHidDevice) {
+                private device: UhkHidDevice,
+                private operations: UhkOperations) {
         this.pollUhkDevice();
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
         ipcMain.on(IpcEvents.device.loadConfigurations, this.loadConfigurations.bind(this));
+        ipcMain.on(IpcEvents.device.updateFirmware, this.updateFirmware.bind(this));
         logService.debug('[DeviceService] init success');
     }
 
@@ -45,6 +56,8 @@ export class DeviceService {
      * @returns {Promise<Buffer>}
      */
     public async loadConfigurations(event: Electron.Event): Promise<void> {
+        let response: ConfigurationReply;
+
         try {
             await this.device.waitUntilKeyboardBusy();
             const userConfiguration = await this.loadConfiguration(
@@ -57,21 +70,22 @@ export class DeviceService {
                 UsbCommand.ReadHardwareConfig,
                 'hardware configuration');
 
-            const response: ConfigurationReply = {
+            response = {
                 success: true,
                 userConfiguration,
                 hardwareConfiguration
             };
             event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
         } catch (error) {
-            const response: ConfigurationReply = {
+            response = {
                 success: false,
                 error: error.message
             };
-            event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
         } finally {
             this.device.close();
         }
+
+        event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
     }
 
     /**
@@ -102,7 +116,7 @@ export class DeviceService {
                     configSize = readBuffer[3] + (readBuffer[4] << 8);
                 }
             }
-            response = UhkHidDevice.convertBufferToIntArray(configBuffer);
+            response = convertBufferToIntArray(configBuffer);
             return Promise.resolve(JSON.stringify(response));
         } catch (error) {
             const errMsg = `[DeviceService] ${configName} from eeprom error`;
@@ -115,7 +129,29 @@ export class DeviceService {
         this.connected = false;
         this.pollTimer$.unsubscribe();
         this.logService.info('[DeviceService] Device connection checker stopped.');
+    }
 
+    public async updateFirmware(event: Electron.Event, data?: Array<number>): Promise<void> {
+        const response = new IpcResponse();
+
+        try {
+            this.pollTimer$.unsubscribe();
+
+            await this.operations.updateRightFirmware();
+            await this.operations.updateLeftModule();
+
+            response.success = true;
+        } catch (error) {
+            this.logService.error('[DeviceService] updateFirmware error', error);
+
+            response.error = {message: error.message};
+        }
+        finally {
+            await snooze(500);
+            this.pollUhkDevice();
+        }
+
+        event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
     /**
@@ -134,7 +170,7 @@ export class DeviceService {
             .distinctUntilChanged()
             .do((connected: boolean) => {
                 this.connected = connected;
-                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
+                // this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
                 this.logService.info(`[DeviceService] Device connection state changed to: ${connected}`);
             })
             .subscribe();
@@ -146,6 +182,7 @@ export class DeviceService {
      */
     private async getConfigSizeFromKeyboard(property: SystemPropertyIds): Promise<number> {
         const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, property]));
+        this.device.close();
         const configSize = buffer[1] + (buffer[2] << 8);
         this.logService.debug('[DeviceService] User config size:', configSize);
         return configSize;
@@ -182,7 +219,7 @@ export class DeviceService {
      */
     private async sendUserConfigToKeyboard(json: string): Promise<void> {
         const buffer: Buffer = new Buffer(JSON.parse(json).data);
-        const fragments = UhkHidDevice.getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
+        const fragments = getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
         for (const fragment of fragments) {
             await this.device.write(fragment);
         }
