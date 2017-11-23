@@ -9,9 +9,9 @@
 
 <ul class="list-unstyled btn-list">
     <li>
-        <button class="btn btn-default"
-                (click)="saveConfigurationInJSONFormat()">Download device configuration
-        </button>
+        Download device configuration in
+        <span role="button" class="btn-link" (click)="saveConfigurationInJSONFormat()">JSON</span> or
+        <span role="button" class="btn-link" (click)="saveConfigurationInBINFormat()">binary</span> format.
     </li>
     <li>
         <button class="btn btn-default"
