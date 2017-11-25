@@ -10,7 +10,7 @@ import * as url from 'url';
 import * as commandLineArgs from 'command-line-args';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
-import { CommandLineArgs } from 'uhk-common';
+import { CommandLineArgs, LogRegExps } from 'uhk-common';
 import { DeviceService } from './services/device.service';
 import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
@@ -18,7 +18,6 @@ import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import { UhkBlhost } from '../../uhk-usb/src';
 import * as isDev from 'electron-is-dev';
-import { LogRegExps } from '../../uhk-common';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean, defaultOption: false}

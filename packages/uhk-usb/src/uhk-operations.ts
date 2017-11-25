@@ -1,4 +1,4 @@
-import { LogService } from '../../uhk-common';
+import { LogService } from 'uhk-common';
 import { EnumerationModes, EnumerationNameToProductId, KbootCommands, ModuleSlotToI2cAddress, ModuleSlotToId } from './constants';
 import * as path from 'path';
 import * as fs from 'fs';
