@@ -20,9 +20,9 @@ export class UhkOperations {
         this.device.close();
         await this.blhost.runBlhostCommand([...prefix, 'flash-security-disable', '0403020108070605']);
         await this.blhost.runBlhostCommand([...prefix, 'flash-erase-region', '0xc000', '475136']);
-        await this.blhost.runBlhostCommand([...prefix, 'flash-image', firmwarePath]);
+        await this.blhost.runBlhostCommand([...prefix, 'flash-image', `"${firmwarePath}"`]);
         await this.blhost.runBlhostCommand([...prefix, 'reset']);
-        this.logService.debug('[UhkOperations] Emd flashing right firmware');
+        this.logService.debug('[UhkOperations] End flashing right firmware');
     }
 
     public async updateLeftModule(firmwarePath = this.getLeftModuleFirmwarePath()) {
@@ -41,7 +41,7 @@ export class UhkOperations {
         this.device.close();
         await this.blhost.runBlhostCommandRetry([...buspalPrefix, 'get-property', '1']);
         await this.blhost.runBlhostCommand([...buspalPrefix, 'flash-erase-all-unsecure']);
-        await this.blhost.runBlhostCommand([...buspalPrefix, 'write-memory', '0x0', firmwarePath]);
+        await this.blhost.runBlhostCommand([...buspalPrefix, 'write-memory', '0x0', `"${firmwarePath}"`]);
         await this.blhost.runBlhostCommand([...prefix, 'reset']);
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
@@ -52,7 +52,7 @@ export class UhkOperations {
     }
 
     private getFirmwarePath(): string {
-        const firmware = path.join(this.rootDir, 'firmware/devices/uhk60-right/firmware.hex');
+        const firmware = path.join(this.rootDir, 'packages/firmware/devices/uhk60-right/firmware.hex');
 
         if (fs.existsSync(firmware)) {
             return firmware;
@@ -62,7 +62,7 @@ export class UhkOperations {
     }
 
     private getLeftModuleFirmwarePath(): string {
-        const firmware = path.join(this.rootDir, 'firmware/modules/uhk60-left.bin');
+        const firmware = path.join(this.rootDir, 'packages/firmware/modules/uhk60-left.bin');
 
         if (fs.existsSync(firmware)) {
             return firmware;

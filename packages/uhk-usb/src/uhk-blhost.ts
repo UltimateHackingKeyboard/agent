@@ -15,7 +15,7 @@ export class UhkBlhost {
         return new Promise<void>((resolve, reject) => {
             const blhostPath = this.getBlhostPath();
             self.logService.debug(`[blhost] RUN: ${blhostPath} ${params.join(' ')}`);
-            const childProcess = spawn(blhostPath, params, {shell: true});
+            const childProcess = spawn(`"${blhostPath}"`, params, {shell: true});
             let finished = false;
 
             childProcess.stdout.on('data', data => {
@@ -82,7 +82,7 @@ export class UhkBlhost {
                 throw new Error(`Could not find blhost path. Unknown platform:${process.platform}`);
         }
 
-        this.blhostPath = path.join(this.rootDir, `blhost/${blhostPath}`);
+        this.blhostPath = path.join(this.rootDir, `packages/blhost/${blhostPath}`);
 
         return this.blhostPath;
     }

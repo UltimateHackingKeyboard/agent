@@ -91,16 +91,9 @@ if (TEST_BUILD || gitTag) {
     const rootJson = require('../package.json');
     update2ndPackageJson(rootJson);
 
-    // Add firmware to extra resources
-    const extractedFirmwareDir = path.join(__dirname, '../tmp/firmware');
-    extraResources.push({from: extractedFirmwareDir, to: 'firmware/'});
-
-    // Add tmp/usb/** as extra resources
-    const usbSourcePackage = path.join(__dirname, '../packages/usb/blhost');
-    extraResources.push({
-        from: usbSourcePackage,
-        to: 'usb/blhost/',
-    });
+    // Add firmware and blhost to extra resources
+    const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
+    extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
 
     builder.build({
         dir: DIR,

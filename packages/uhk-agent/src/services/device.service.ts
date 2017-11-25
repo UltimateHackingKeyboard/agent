@@ -148,7 +148,7 @@ export class DeviceService {
         }
 
         await snooze(500);
-        this.pollTimer$.unsubscribe();
+        this.pollUhkDevice();
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 

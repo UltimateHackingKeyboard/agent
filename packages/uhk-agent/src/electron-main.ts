@@ -64,7 +64,7 @@ function createWindow() {
     logger.info('[Electron Main] Create new window.');
     let packagesDir;
     if (isDev) {
-        packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../tmp/');
+        packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../tmp');
     } else {
         packagesDir = path.dirname(app.getAppPath());
     }

@@ -37,7 +37,7 @@ async function downloadFile(url, output) {
 (async function main() {
     const agentJson = require('../packages/uhk-agent/src/package.json');
 
-    const extractedFirmwareDir = path.join(__dirname, '../tmp/firmware');
+    const extractedFirmwareDir = path.join(__dirname, '../tmp/packages/firmware');
     await fse.emptyDir(extractedFirmwareDir);
 
     // Download the firmware and add as extra resources
