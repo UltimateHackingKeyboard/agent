@@ -1,23 +1,35 @@
-<h1>
-    <i class="fa fa-sliders"></i>
-    <span>Firmware</span>
-</h1>
-<p>
-    Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
-    <button class="btn btn-primary"
-            [disabled]="flashFirmwareButtonDisbabled$ | async"
-            (click)="onUpdateFirmware()">Flash firmware
-    </button>
-</p>
+<div class="full-height">
+    <div class="flex-container">
+        <div>
 
-<p class="hidden">
-    Flash firmware file <input id="firmware-file-select"
-                               type="file"
-                               (change)="changeFile($event)">
-    <button class="btn btn-primary"
-            [disabled]="flashFirmwareButtonDisbabled$ | async"
-            (click)="onUpdateFirmwareWithFile()">Flash firmware
-    </button>
-</p>
+            <h1>
+                <i class="fa fa-sliders"></i>
+                <span>Firmware</span>
+            </h1>
+            <p>
+                Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
+                <button class="btn btn-primary"
+                        [disabled]="flashFirmwareButtonDisbabled$ | async"
+                        (click)="onUpdateFirmware()">Flash firmware
+                </button>
+            </p>
 
-<xterm [logs]="xtermLog$ | async"></xterm>
+            <p class="hidden">
+                Flash firmware file <input id="firmware-file-select"
+                                           type="file"
+                                           (change)="changeFile($event)">
+                <button class="btn btn-primary"
+                        [disabled]="flashFirmwareButtonDisbabled$ | async"
+                        (click)="onUpdateFirmwareWithFile()">Flash firmware
+                </button>
+            </p>
+        </div>
+
+        <div class="flex-grow">
+            <xterm [logs]="xtermLog$ | async"></xterm>
+        </div>
+        <div class="footer">
+            <button type="button" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+</div>
