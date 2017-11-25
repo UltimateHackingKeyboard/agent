@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "@types/node": "8.0.33",
-    "uhk-common": "^1.0.0"
+    "uhk-common": "^1.0.0",
+    "uhk-usb": "^1.0.0"
   },
   "scripts": {
     "start": "electron ./dist/electron-main.js",

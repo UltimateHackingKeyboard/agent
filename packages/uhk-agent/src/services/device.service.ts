@@ -5,6 +5,7 @@ import {
     convertBufferToIntArray,
     EepromTransfer,
     getTransferBuffers,
+    snooze,
     SystemPropertyIds,
     UhkHidDevice,
     UhkOperations,
@@ -19,7 +20,6 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
-import { snooze } from '../../../uhk-usb/src';
 
 /**
  * IpcMain pair of the UHK Communication
