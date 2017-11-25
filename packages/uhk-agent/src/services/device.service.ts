@@ -30,7 +30,7 @@ import { snooze } from '../../../uhk-usb/src';
  */
 export class DeviceService {
     private pollTimer$: Subscription;
-    private connected: boolean = false;
+    private connected = false;
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
@@ -146,11 +146,9 @@ export class DeviceService {
 
             response.error = {message: error.message};
         }
-        finally {
-            await snooze(500);
-            this.pollUhkDevice();
-        }
 
+        await snooze(500);
+        this.pollTimer$.unsubscribe();
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
@@ -170,7 +168,7 @@ export class DeviceService {
             .distinctUntilChanged()
             .do((connected: boolean) => {
                 this.connected = connected;
-                // this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
+                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
                 this.logService.info(`[DeviceService] Device connection state changed to: ${connected}`);
             })
             .subscribe();

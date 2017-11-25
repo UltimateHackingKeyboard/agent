@@ -4,22 +4,26 @@ import {
     ActionTypes,
     ConnectionStateChangedAction,
     PermissionStateChangedAction,
-    SaveConfigurationAction
+    SaveConfigurationAction, UpdateFirmwareFailedAction
 } from '../actions/device';
+import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
+import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 
 export interface State {
     connected: boolean;
     hasPermission: boolean;
     saveToKeyboard: ProgressButtonState;
     updatingFirmware: boolean;
+    log: Array<XtermLog>;
 }
 
 export const initialState: State = {
     connected: true,
     hasPermission: true,
     saveToKeyboard: initProgressButtonState,
-    updatingFirmware: false
+    updatingFirmware: false,
+    log: [{message: '', cssClass: XtermCssClass.standard}]
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -98,16 +102,52 @@ export function reducer(state = initialState, action: Action) {
         case ActionTypes.UPDATE_FIRMWARE:
             return {
                 ...state,
-                updatingFirmware: true
+                updatingFirmware: true,
+                log: [{message: 'Start flashing firmware', cssClass: XtermCssClass.standard}]
             };
 
         case ActionTypes.UPDATE_FIRMWARE_SUCCESS:
-        case ActionTypes.UPDATE_FIRMWARE_FAILED:
             return {
                 ...state,
                 updatingFirmware: false
             };
 
+        case ActionTypes.UPDATE_FIRMWARE_FAILED: {
+            const payload = (action as UpdateFirmwareFailedAction).payload;
+
+            const logEntry = {
+                message: payload.message,
+                cssClass: XtermCssClass.error
+            };
+
+            return {
+                ...state,
+                updatingFirmware: false,
+                log: [...state.log, logEntry]
+            };
+        }
+
+        case AppActions.ELECTRON_MAIN_LOG_RECEIVED: {
+            if (!state.updatingFirmware) {
+                return state;
+            }
+
+            const payload = (action as ElectronMainLogReceivedAction).payload;
+
+            if (payload.message.indexOf('UHK Device not found:') > -1) {
+                return state;
+            }
+
+            const logEntry = {
+                message: payload.message,
+                cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard
+            };
+
+            return {
+                ...state,
+                log: [...state.log, logEntry]
+            };
+        }
         default:
             return state;
     }
@@ -117,3 +157,4 @@ export const updatingFirmware = (state: State) => state.updatingFirmware;
 export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
+export const xtermLog = (state: State) => state.log;

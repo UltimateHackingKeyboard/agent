@@ -1,0 +1,20 @@
+.wrapper {
+    background-color: black;
+}
+
+.xterm-standard {
+    color: white;
+}
+
+.xterm-error {
+    color: red;
+}
+
+ul {
+    li {
+        padding-left: 5px;
+        span:before {
+            content: '$ ';
+        }
+    }
+}

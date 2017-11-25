@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { VersionInformation } from 'uhk-common';
 
-import { AppState, updatingFirmware } from '../../../store';
+import { AppState, flashFirmwareButtonDisbabled, getAgentVersionInfo, xtermLog } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
+import { XtermLog } from '../../../models/xterm-log';
 
 @Component({
     selector: 'device-firmware',
@@ -14,11 +16,15 @@ import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/a
     }
 })
 export class DeviceFirmwareComponent {
-    updatingFirmware$: Observable<boolean>;
+    flashFirmwareButtonDisbabled$: Observable<boolean>;
+    xtermLog$: Observable<Array<XtermLog>>;
+    getAgentVersionInfo$: Observable<VersionInformation>;
     arrayBuffer: Uint8Array;
 
     constructor(private store: Store<AppState>) {
-        this.updatingFirmware$ = store.select(updatingFirmware);
+        this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
+        this.xtermLog$ = store.select(xtermLog);
+        this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
     }
 
     onUpdateFirmware(): void {

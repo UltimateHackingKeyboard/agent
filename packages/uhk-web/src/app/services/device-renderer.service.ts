@@ -61,7 +61,7 @@ export class DeviceRendererService {
     }
 
     private dispachStoreAction(action: Action): void {
-        this.logService.info('[DeviceRendererService] dispatch action', action);
+        this.logService.info('[DeviceRendererService] dispatch action', JSON.stringify(action));
         this.zone.run(() => this.store.dispatch(action));
     }
 }

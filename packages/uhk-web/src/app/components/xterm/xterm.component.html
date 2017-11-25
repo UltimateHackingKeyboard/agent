@@ -1,3 +1,5 @@
-<ul>
-    <li *ngFor="let log of logs">{{ log }}</li>
-</ul>
+<div class="wrapper">
+    <ul class="list-unstyled">
+        <li *ngFor="let log of logs" [ngClass]="log.cssClass"><span>{{ log.message }}</span></li>
+    </ul>
+</div>

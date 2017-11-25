@@ -3,19 +3,21 @@
     <span>Firmware</span>
 </h1>
 <p>
-    Flash firmware x.y.z (bundled with Agent)
+    Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
     <button class="btn btn-primary"
-            [disabled]="updatingFirmware$ | async"
+            [disabled]="flashFirmwareButtonDisbabled$ | async"
             (click)="onUpdateFirmware()">Flash firmware
     </button>
 </p>
 
-<p>
+<p class="hidden">
     Flash firmware file <input id="firmware-file-select"
                                type="file"
                                (change)="changeFile($event)">
     <button class="btn btn-primary"
-            [disabled]="updatingFirmware$ | async"
-            (click)="onUpdateFirmwareWithFile()">Flash firmware</button>
+            [disabled]="flashFirmwareButtonDisbabled$ | async"
+            (click)="onUpdateFirmwareWithFile()">Flash firmware
+    </button>
 </p>
-<xterm></xterm>
+
+<xterm [logs]="xtermLog$ | async"></xterm>

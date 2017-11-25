@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
-import { type, VersionInformation } from 'uhk-common';
-import { AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
+import { AppStartInfo, HardwareConfiguration, Notification, type, VersionInformation } from 'uhk-common';
+import { ElectronLogEntry } from '../../models/xterm-log';
 
 const PREFIX = '[app] ';
 
@@ -16,7 +16,8 @@ export const ActionTypes = {
     UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
     DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action'),
     LOAD_HARDWARE_CONFIGURATION_SUCCESS: type(PREFIX + 'load hardware configuration success'),
-    UPDATE_AGENT_VERSION_INFORMATION: type(PREFIX + 'update agent version information')
+    UPDATE_AGENT_VERSION_INFORMATION: type(PREFIX + 'update agent version information'),
+    ELECTRON_MAIN_LOG_RECEIVED: type(PREFIX + 'Electron main log received')
 };
 
 export class AppBootsrappedAction implements Action {
@@ -71,6 +72,12 @@ export class UpdateAgentVersionInformationAction implements Action {
     constructor(public payload: VersionInformation) {}
 }
 
+export class ElectronMainLogReceivedAction implements Action {
+    type = ActionTypes.ELECTRON_MAIN_LOG_RECEIVED;
+
+    constructor(public payload: ElectronLogEntry) {}
+}
+
 export type Actions
     = AppStartedAction
     | AppBootsrappedAction
@@ -82,4 +89,5 @@ export type Actions
     | DismissUndoNotificationAction
     | LoadHardwareConfigurationSuccessAction
     | UpdateAgentVersionInformationAction
+    | ElectronMainLogReceivedAction
     ;

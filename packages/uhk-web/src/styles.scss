@@ -73,3 +73,8 @@ ul.btn-list {
 input[type=file] {
     display: inline-block;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
