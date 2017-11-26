@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { VersionInformation } from 'uhk-common';
 
 import { AppState, firmwareOkButtonDisabled, flashFirmwareButtonDisbabled, getAgentVersionInfo, xtermLog } from '../../../store';
@@ -15,19 +16,32 @@ import { XtermLog } from '../../../models/xterm-log';
         'class': 'container-fluid'
     }
 })
-export class DeviceFirmwareComponent {
+export class DeviceFirmwareComponent implements OnDestroy {
     flashFirmwareButtonDisbabled$: Observable<boolean>;
     xtermLog$: Observable<Array<XtermLog>>;
+    xtermLogSubscription: Subscription;
     getAgentVersionInfo$: Observable<VersionInformation>;
     firmwareOkButtonDisabled$: Observable<boolean>;
 
     arrayBuffer: Uint8Array;
+    @ViewChild('scrollMe') divElement: ElementRef;
 
     constructor(private store: Store<AppState>) {
         this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
         this.xtermLog$ = store.select(xtermLog);
+        this.xtermLogSubscription = this.xtermLog$.subscribe(() => {
+            if (this.divElement && this.divElement.nativeElement) {
+                setTimeout(() => {
+                    this.divElement.nativeElement.scrollTop = this.divElement.nativeElement.scrollHeight;
+                });
+            }
+        });
         this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
         this.firmwareOkButtonDisabled$ = store.select(firmwareOkButtonDisabled);
+    }
+
+    ngOnDestroy(): void {
+        this.xtermLogSubscription.unsubscribe();
     }
 
     onUpdateFirmware(): void {
