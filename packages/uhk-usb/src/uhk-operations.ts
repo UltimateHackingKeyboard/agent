@@ -34,7 +34,6 @@ export class UhkOperations {
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping);
-        this.device.close();
         await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
         this.device.close();
         await this.device.reenumerate(EnumerationModes.Buspal);
