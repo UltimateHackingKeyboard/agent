@@ -89,13 +89,13 @@ export class UhkHidDevice {
      * Close the communication chanel with UHK Device
      */
     public close(): void {
-        this.logService.info('[UhkHidDevice] Device communication closing.');
+        this.logService.debug('[UhkHidDevice] Device communication closing.');
         if (!this._device) {
             return;
         }
         this._device.close();
         this._device = null;
-        this.logService.info('[UhkHidDevice] Device communication closed.');
+        this.logService.debug('[UhkHidDevice] Device communication closed.');
     }
 
     public async waitUntilKeyboardBusy(): Promise<void> {
@@ -201,11 +201,11 @@ export class UhkHidDevice {
                 ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
 
             if (!dev) {
-                this.logService.info('[UhkHidDevice] UHK Device not found:');
+                this.logService.debug('[UhkHidDevice] UHK Device not found:');
                 return null;
             }
             const device = new HID(dev.path);
-            this.logService.info('[UhkHidDevice] Used device:', dev);
+            this.logService.debug('[UhkHidDevice] Used device:', dev);
             return device;
         }
         catch (err) {
