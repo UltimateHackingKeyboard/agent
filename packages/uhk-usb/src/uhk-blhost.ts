@@ -58,7 +58,7 @@ export class UhkBlhost {
         });
     }
 
-    public async runBlhostCommandRetry(params: Array<string>, maxTry = 3): Promise<void> {
+    public async runBlhostCommandRetry(params: Array<string>, maxTry = 100): Promise<void> {
         return await retry(async () => await this.runBlhostCommand(params), maxTry, this.logService);
     }
 
