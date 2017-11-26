@@ -150,7 +150,6 @@ export class UhkHidDevice {
                     this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
                     this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     device.write(data);
-                    device.close();
                     jumped = true;
                 } else {
                     this.logService.silly(`[UhkHidDevice] USB[T]: Enumerate device is not ready yet}`);
@@ -165,7 +164,8 @@ export class UhkHidDevice {
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
-        this.logService.debug('[UhkHidDevice] USB[T]: Send KbootCommand.');
+        const moduleName = kbootKommandName(module);
+        this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
             transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
         } else {
@@ -220,5 +220,22 @@ export class UhkHidDevice {
         }
 
         return null;
+    }
+}
+
+
+function  kbootKommandName(module: ModuleSlotToI2cAddress): string {
+    switch (module) {
+        case ModuleSlotToI2cAddress.leftHalf:
+            return 'leftHalf';
+
+        case ModuleSlotToI2cAddress.leftAddon:
+            return 'leftAddon';
+
+        case ModuleSlotToI2cAddress.rightAddon:
+            return 'rightAddon';
+
+        default :
+            return 'Unknown';
     }
 }
