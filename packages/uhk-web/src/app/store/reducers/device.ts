@@ -105,6 +105,7 @@ export function reducer(state = initialState, action: Action) {
             return {
                 ...state,
                 updatingFirmware: true,
+                firmwareUpdateFinished: false,
                 log: [{message: 'Start flashing firmware', cssClass: XtermCssClass.standard}]
             };
 
