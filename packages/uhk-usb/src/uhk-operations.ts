@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
+import { snooze } from './util';
 
 export class UhkOperations {
     constructor(private logService: LogService,
@@ -33,7 +34,9 @@ export class UhkOperations {
 
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
+        await snooze(1000);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping);
+        await snooze(1000);
         await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
         this.device.close();
         await this.device.reenumerate(EnumerationModes.Buspal);
