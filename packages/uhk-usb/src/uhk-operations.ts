@@ -45,10 +45,15 @@ export class UhkOperations {
         await this.blhost.runBlhostCommand([...buspalPrefix, 'flash-erase-all-unsecure']);
         await this.blhost.runBlhostCommand([...buspalPrefix, 'write-memory', '0x0', `"${firmwarePath}"`]);
         await this.blhost.runBlhostCommand([...prefix, 'reset']);
+        await snooze(1000);
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset);
+        await snooze(1000);
+        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset, 3);
+        this.device.close();
+        await snooze(1000);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
+        this.device.close();
 
         this.logService.debug('[UhkOperations] End flashing left module firmware');
     }

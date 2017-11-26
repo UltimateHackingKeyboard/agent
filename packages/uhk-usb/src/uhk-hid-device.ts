@@ -140,16 +140,16 @@ export class UhkHidDevice {
                 return;
             }
 
-            // tslint:disable-next-line: max-line-length
             this.logService.silly(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
             await snooze(100);
 
             if (!jumped) {
-                // tslint:disable-next-line: max-line-length
-                this.logService.silly(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
                 const device = this.getDevice();
                 if (device) {
-                    device.write(getTransferData(message));
+                    const data = getTransferData(message);
+                    this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
+                    this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
+                    device.write(data);
                     device.close();
                     jumped = true;
                 } else {
@@ -158,18 +158,24 @@ export class UhkHidDevice {
             }
         }
 
-        // tslint:disable-next-line: max-line-length
         this.logService.error(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Timeout`);
 
         throw new Error(`Could not reenumerate as ${reenumMode}`);
     }
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
-        const transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command, module]);
+        let transfer;
+        this.logService.debug('[UhkHidDevice] USB[T]: Send KbootCommand.');
+        if (command === KbootCommands.idle) {
+            transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
+        } else {
+            transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command, Number.parseInt(module)]);
+        }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
+        this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = new Buffer([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
     }
