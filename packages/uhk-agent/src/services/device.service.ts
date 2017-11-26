@@ -143,9 +143,10 @@ export class DeviceService {
 
             response.success = true;
         } catch (error) {
-            this.logService.error('[DeviceService] updateFirmware error', error);
+            const err = {message: error.message, stack: error.stack};
+            this.logService.error('[DeviceService] updateFirmware error', err);
 
-            response.error = {message: error.message};
+            response.error = err;
         }
 
         await snooze(500);
