@@ -150,6 +150,7 @@ export class UhkHidDevice {
                     this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
                     this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     device.write(data);
+                    device.close();
                     jumped = true;
                 } else {
                     this.logService.silly(`[UhkHidDevice] USB[T]: Enumerate device is not ready yet}`);
