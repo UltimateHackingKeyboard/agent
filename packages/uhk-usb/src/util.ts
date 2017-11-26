@@ -79,7 +79,7 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
             return;
         } catch (err) {
             retryCount++;
-            if (retryCount > maxTry) {
+            if (retryCount >= maxTry) {
 
                 if (logService) {
                     // logService.error(`[retry] failed and no try rerun FUNCTION:\n ${command}, \n retry: ${retryCount}`);
