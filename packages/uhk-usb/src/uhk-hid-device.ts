@@ -7,7 +7,8 @@ import {
     enumerationModeIdToProductId,
     EnumerationModes,
     KbootCommands,
-    ModuleSlotToI2cAddress, ModuleSlotToId,
+    ModuleSlotToI2cAddress,
+    ModuleSlotToId,
     UsbCommand
 } from './constants';
 import { bufferToString, getTransferData, retry, snooze } from './util';
@@ -164,8 +165,12 @@ export class UhkHidDevice {
     }
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
-        const transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command, module]);
-        await retry(async () => await this.write(transfer), maxTry, this.logService);
+        const transfer = getTransferData(new Buffer([UsbCommand.SendKbootCommandToModule, command, module]));
+        const device = this.getDevice();
+        await retry(() => {
+            device.write(transfer);
+            device.readSync();
+        }, maxTry, this.logService);
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
