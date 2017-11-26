@@ -75,6 +75,7 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
         try {
             // logService.debug(`[retry] try to run FUNCTION:\n ${command}, \n retry: ${retryCount}`);
             await command();
+            await snooze(100);
             // logService.debug(`[retry] success FUNCTION:\n ${command}, \n retry: ${retryCount}`);
             return;
         } catch (err) {
@@ -88,7 +89,7 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
                 throw err;
             } else {
                 if (logService) {
-                    // logService.error(`[retry] failed, but try run FUNCTION:\n ${command}, \n retry: ${retryCount}`);
+                    logService.error(`[retry] failed, but try run FUNCTION:\n ${command}, \n retry: ${retryCount}`);
                 }
             }
         }
