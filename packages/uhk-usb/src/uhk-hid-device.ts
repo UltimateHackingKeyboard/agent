@@ -200,7 +200,7 @@ export class UhkHidDevice {
     private connectToDevice(): HID {
         try {
             const devs = devices();
-            this.logService.silly('[UhkHidDevice] Available devices:', devs);
+            this.logService.debug('[UhkHidDevice] Available devices:', devs);
 
             const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
