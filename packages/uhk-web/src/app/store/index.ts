@@ -73,5 +73,6 @@ export const saveToKeyboardState = createSelector(runningInElectron, saveToKeybo
 });
 export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
+export const firmwareOkButtonDisabled = createSelector(deviceState, fromDevice.firmwareOkButtonDisabled);
 // tslint:disable-next-line: max-line-length
 export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);

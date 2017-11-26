@@ -15,6 +15,7 @@ export interface State {
     hasPermission: boolean;
     saveToKeyboard: ProgressButtonState;
     updatingFirmware: boolean;
+    firmwareUpdateFinished: boolean;
     log: Array<XtermLog>;
 }
 
@@ -23,52 +24,8 @@ export const initialState: State = {
     hasPermission: true,
     saveToKeyboard: initProgressButtonState,
     updatingFirmware: false,
-    log: [
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard},
-        {message: '', cssClass: XtermCssClass.standard}
-    ]
+    firmwareUpdateFinished: false,
+    log: [{message: '', cssClass: XtermCssClass.standard}]
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -154,20 +111,20 @@ export function reducer(state = initialState, action: Action) {
         case ActionTypes.UPDATE_FIRMWARE_SUCCESS:
             return {
                 ...state,
-                updatingFirmware: false
+                updatingFirmware: false,
+                firmwareUpdateFinished: true
             };
 
         case ActionTypes.UPDATE_FIRMWARE_FAILED: {
-            const payload = (action as UpdateFirmwareFailedAction).payload;
-
             const logEntry = {
-                message: payload.message,
+                message: (action as UpdateFirmwareFailedAction).payload.message,
                 cssClass: XtermCssClass.error
             };
 
             return {
                 ...state,
                 updatingFirmware: false,
+                firmwareUpdateFinished: true,
                 log: [...state.log, logEntry]
             };
         }
@@ -203,3 +160,4 @@ export const isDeviceConnected = (state: State) => state.connected || state.upda
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
+export const firmwareOkButtonDisabled = (state: State) => !state.firmwareUpdateFinished;

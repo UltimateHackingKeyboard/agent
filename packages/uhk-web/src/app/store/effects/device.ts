@@ -22,7 +22,7 @@ import {
     SaveConfigurationAction,
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed, UpdateFirmwareAction,
-    UpdateFirmwareFailedAction,
+    UpdateFirmwareFailedAction, UpdateFirmwareOkButtonAction,
     UpdateFirmwareReplyAction,
     UpdateFirmwareSuccessAction, UpdateFirmwareWithAction
 } from '../actions/device';
@@ -164,6 +164,10 @@ export class DeviceEffects {
 
             return Observable.of(new UpdateFirmwareFailedAction(response.error));
         });
+
+    @Effect({dispatch: false}) updateFirmwareOkButton$ = this.actions$
+        .ofType<UpdateFirmwareOkButtonAction>(ActionTypes.UPDATE_FIRMWARE_OK_BUTTON)
+        .do(() => this.deviceRendererService.startConnectionPoller());
 
     constructor(private actions$: Actions,
                 private router: Router,

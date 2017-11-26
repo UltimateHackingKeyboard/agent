@@ -40,6 +40,7 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
         ipcMain.on(IpcEvents.device.loadConfigurations, this.loadConfigurations.bind(this));
         ipcMain.on(IpcEvents.device.updateFirmware, this.updateFirmware.bind(this));
+        ipcMain.on(IpcEvents.device.startConnectionPoller, this.pollUhkDevice.bind(this));
         logService.debug('[DeviceService] init success');
     }
 
@@ -127,7 +128,7 @@ export class DeviceService {
 
     public close(): void {
         this.connected = false;
-        this.pollTimer$.unsubscribe();
+        this.stopPollTimer();
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
 
@@ -135,7 +136,7 @@ export class DeviceService {
         const response = new IpcResponse();
 
         try {
-            this.pollTimer$.unsubscribe();
+            this.stopPollTimer();
 
             await this.operations.updateRightFirmware();
             await this.operations.updateLeftModule();
@@ -148,7 +149,6 @@ export class DeviceService {
         }
 
         await snooze(500);
-        this.pollUhkDevice();
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
@@ -159,6 +159,10 @@ export class DeviceService {
      * @private
      */
     private pollUhkDevice(): void {
+        if (this.pollTimer$) {
+            return;
+        }
+
         this.pollTimer$ = Observable.interval(1000)
             .startWith(0)
             .map(() => {
@@ -224,5 +228,15 @@ export class DeviceService {
         this.logService.debug('[DeviceService] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = new Buffer([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
+    }
+
+    private stopPollTimer(): void {
+        if (!this.pollTimer$) {
+            return;
+        }
+
+        this.pollTimer$.unsubscribe();
+        this.pollTimer$ = null;
+
     }
 }

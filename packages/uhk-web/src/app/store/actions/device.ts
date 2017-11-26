@@ -21,7 +21,8 @@ export const ActionTypes = {
     UPDATE_FIRMWARE_WITH: type(PREFIX + 'update firmware with'),
     UPDATE_FIRMWARE_REPLY: type(PREFIX + 'update firmware reply'),
     UPDATE_FIRMWARE_SUCCESS: type(PREFIX + 'update firmware success'),
-    UPDATE_FIRMWARE_FAILED: type(PREFIX + 'update firmware failed')
+    UPDATE_FIRMWARE_FAILED: type(PREFIX + 'update firmware failed'),
+    UPDATE_FIRMWARE_OK_BUTTON: type(PREFIX + 'update firmware ok button click')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -112,6 +113,10 @@ export class UpdateFirmwareFailedAction implements Action {
     }
 }
 
+export class UpdateFirmwareOkButtonAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE_OK_BUTTON;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -129,4 +134,5 @@ export type Actions
     | UpdateFirmwareReplyAction
     | UpdateFirmwareSuccessAction
     | UpdateFirmwareFailedAction
+    | UpdateFirmwareOkButtonAction
     ;
