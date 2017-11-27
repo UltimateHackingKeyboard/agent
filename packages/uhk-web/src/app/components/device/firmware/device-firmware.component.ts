@@ -62,6 +62,13 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     changeFile(event): void {
         const files = event.srcElement.files;
+
+        if (files.length === 0) {
+            this.arrayBuffer = null;
+
+            return;
+        }
+
         const fileReader = new FileReader();
         fileReader.onloadend = function () {
             this.arrayBuffer = new Uint8Array(fileReader.result);

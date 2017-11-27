@@ -14,9 +14,10 @@
                 </button>
             </p>
 
-            <p class="hidden">
+            <p>
                 Flash firmware file <input id="firmware-file-select"
                                            type="file"
+                                           [disabled]="flashFirmwareButtonDisbabled$ | async"
                                            (change)="changeFile($event)">
                 <button class="btn btn-primary"
                         [disabled]="flashFirmwareButtonDisbabled$ | async"

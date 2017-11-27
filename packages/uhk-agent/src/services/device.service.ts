@@ -14,12 +14,16 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Device, devices } from 'node-hid';
+import { emptyDir } from 'fs-extra';
 
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
+
+import { saveTmpFirmware } from '../util/save-extract-firmware';
+import { TmpFirmware } from '../models/tmp-firmware';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -132,14 +136,23 @@ export class DeviceService {
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
 
-    public async updateFirmware(event: Electron.Event, data?: Array<number>): Promise<void> {
+    public async updateFirmware(event: Electron.Event, data?: string): Promise<void> {
         const response = new IpcResponse();
+
+        let firmwarePathData: TmpFirmware;
 
         try {
             this.stopPollTimer();
 
-            await this.operations.updateRightFirmware();
-            await this.operations.updateLeftModule();
+            if (data) {
+                firmwarePathData = await saveTmpFirmware(data);
+                await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
+                await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
+            }
+            else {
+                await this.operations.updateRightFirmware();
+                await this.operations.updateLeftModule();
+            }
 
             response.success = true;
         } catch (error) {
@@ -148,6 +161,8 @@ export class DeviceService {
 
             response.error = err;
         }
+
+        await emptyDir(firmwarePathData.tmpDirectory.name);
 
         await snooze(500);
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);

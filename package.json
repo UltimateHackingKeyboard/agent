@@ -17,8 +17,8 @@
   "devDependencies": {
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
-    "@types/jasmine": "2.6.0",
     "@types/fs-extra": "4.0.5",
+    "@types/jasmine": "2.6.0",
     "@types/jsonfile": "4.0.1",
     "@types/node": "8.0.53",
     "@types/node-hid": "0.5.2",
@@ -91,5 +91,6 @@
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",
     "clean": "lerna exec rimraf ./node_modules ./dist"
-  }
+  },
+  "dependencies": {}
 }
