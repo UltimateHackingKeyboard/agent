@@ -224,7 +224,6 @@ export class UhkHidDevice {
     }
 }
 
-
 function  kbootKommandName(module: ModuleSlotToI2cAddress): string {
     switch (module) {
         case ModuleSlotToI2cAddress.leftHalf:
