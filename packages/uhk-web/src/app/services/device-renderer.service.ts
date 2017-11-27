@@ -1,13 +1,14 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
-import { AppState } from '../store/index';
+import { IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ConnectionStateChangedAction,
     SaveConfigurationReplyAction,
-    SetPrivilegeOnLinuxReplyAction
+    SetPrivilegeOnLinuxReplyAction,
+    UpdateFirmwareReplyAction
 } from '../store/actions/device';
 import { LoadConfigFromDeviceReplyAction } from '../store/actions/user-config';
 
@@ -33,6 +34,14 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.loadConfigurations);
     }
 
+    updateFirmware(data?: Array<number>): void {
+        this.ipcRenderer.send(IpcEvents.device.updateFirmware, JSON.stringify(data));
+    }
+
+    startConnectionPoller(): void {
+        this.ipcRenderer.send(IpcEvents.device.startConnectionPoller);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: boolean) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
@@ -49,10 +58,14 @@ export class DeviceRendererService {
         this.ipcRenderer.on(IpcEvents.device.loadConfigurationReply, (event: string, response: string) => {
             this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response)));
         });
+
+        this.ipcRenderer.on(IpcEvents.device.updateFirmwareReply, (event: string, response: IpcResponse) => {
+            this.dispachStoreAction(new UpdateFirmwareReplyAction(response));
+        });
     }
 
     private dispachStoreAction(action: Action): void {
-        this.logService.info('[DeviceRendererService] dispatch action', action);
+        this.logService.info('[DeviceRendererService] dispatch action', JSON.stringify(action));
         this.zone.run(() => this.store.dispatch(action));
     }
 }

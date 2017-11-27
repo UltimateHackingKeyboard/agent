@@ -3,6 +3,8 @@ const jsonfile = require('jsonfile');
 const exec = require('child_process').execSync;
 
 const TEST_BUILD = process.env.TEST_BUILD;// set true if you would like to test on your local machine
+// set true if running on your dev mac machine where yarn is installed or not need to install
+const RUNNING_IN_DEV_MODE = process.env.RUNNING_IN_DEV_MODE === 'true';
 const DIR = process.env.DIR;
 
 // electron-builder security override.
@@ -40,11 +42,13 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
-if (process.platform === 'darwin') {
+if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
     exec('brew install yarn --without-node');
 }
 
-exec("yarn add electron-builder");
+if (!RUNNING_IN_DEV_MODE) {
+    exec("yarn add electron-builder");
+}
 
 const path = require('path');
 const builder = require("electron-builder");
@@ -83,11 +87,13 @@ if (process.platform === 'darwin') {
     //require('./setup-macos-keychain').registerKeyChain();
 }
 
-let version = '';
 if (TEST_BUILD || gitTag) {
-    const jsonVersion = require('../package.json').version;
-    version = gitTag;
-    updateVersionNumberIn2rndPackageJson(jsonVersion);
+    const rootJson = require('../package.json');
+    update2ndPackageJson(rootJson);
+
+    // Add firmware and blhost to extra resources
+    const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
+    extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
 
     builder.build({
         dir: DIR,
@@ -98,7 +104,7 @@ if (TEST_BUILD || gitTag) {
             author: {
                 name: 'Ultimate Gadget Laboratories'
             },
-            version: jsonVersion
+            version: rootJson.version
         },
         config: {
             directories: {
@@ -107,7 +113,8 @@ if (TEST_BUILD || gitTag) {
             appId: 'com.ultimategadgetlabs.uhk.agent',
             productName: 'UHK Agent',
             mac: {
-                category: 'public.app-category.utilities'
+                category: 'public.app-category.utilities',
+                extraResources
             },
             win: {
                 extraResources
@@ -133,15 +140,13 @@ if (TEST_BUILD || gitTag) {
 else {
     console.log('No git tag');
     // TODO: Need it?
-    version = sha.substr(0, 8);
     process.exit(1);
 }
 
-function updateVersionNumberIn2rndPackageJson(version) {
+function update2ndPackageJson(rootJson) {
     const jsonPath = path.join(__dirname, '../packages/uhk-agent/dist/package.json');
     const json = require(jsonPath);
 
-    json.version = version;
-
+    json.version = rootJson.version;
     jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
 }

@@ -13,7 +13,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/switchMap';
 
-import { NotificationType, IpcResponse, UhkBuffer, UserConfiguration } from 'uhk-common';
+import { IpcResponse, NotificationType, UhkBuffer, UserConfiguration } from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction,
@@ -21,15 +21,22 @@ import {
     PermissionStateChangedAction,
     SaveConfigurationAction,
     SaveToKeyboardSuccessAction,
-    SaveToKeyboardSuccessFailed
+    SaveToKeyboardSuccessFailed,
+    SetPrivilegeOnLinuxReplyAction,
+    UpdateFirmwareAction,
+    UpdateFirmwareFailedAction,
+    UpdateFirmwareOkButtonAction,
+    UpdateFirmwareReplyAction,
+    UpdateFirmwareSuccessAction,
+    UpdateFirmwareWithAction
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import {
+    ActionTypes as UserConfigActions,
     LoadConfigFromDeviceAction,
-    LoadResetUserConfigurationAction,
-    ActionTypes as UserConfigActions
+    LoadResetUserConfigurationAction
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 
@@ -37,8 +44,8 @@ import { DefaultUserConfigurationService } from '../../services/default-user-con
 export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
-        .map(toPayload)
+        .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
+        .map(action => action.payload)
         .do((connected: boolean) => {
             if (connected) {
                 this.router.navigate(['/']);
@@ -56,9 +63,9 @@ export class DeviceEffects {
         });
 
     @Effect({dispatch: false})
-    permissionStateChange$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.PERMISSION_STATE_CHANGED)
-        .map(toPayload)
+    permissionStateChange$: Observable<boolean> = this.actions$
+        .ofType<PermissionStateChangedAction>(ActionTypes.PERMISSION_STATE_CHANGED)
+        .map(action => action.payload)
         .do((hasPermission: boolean) => {
             if (hasPermission) {
                 this.router.navigate(['/detection']);
@@ -77,8 +84,8 @@ export class DeviceEffects {
 
     @Effect()
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
-        .map(toPayload)
+        .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
+        .map(action => action.payload)
         .mergeMap((response: any) => {
             if (response.success) {
                 return [
@@ -141,6 +148,30 @@ export class DeviceEffects {
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
         .ofType(UserConfigActions.LOAD_RESET_USER_CONFIGURATION)
         .switchMap(() => Observable.of(new SaveConfigurationAction()));
+
+    @Effect({dispatch: false}) updateFirmware$ = this.actions$
+        .ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE)
+        .do(() => this.deviceRendererService.updateFirmware());
+
+    @Effect({dispatch: false}) updateFirmwareWith$ = this.actions$
+        .ofType<UpdateFirmwareWithAction>(ActionTypes.UPDATE_FIRMWARE_WITH)
+        .map(action => action.payload)
+        .do(data => this.deviceRendererService.updateFirmware(data));
+
+    @Effect() updateFirmwareReply$ = this.actions$
+        .ofType<UpdateFirmwareReplyAction>(ActionTypes.UPDATE_FIRMWARE_REPLY)
+        .map(action => action.payload)
+        .switchMap((response: IpcResponse) => {
+            if (response.success) {
+                return Observable.of(new UpdateFirmwareSuccessAction());
+            }
+
+            return Observable.of(new UpdateFirmwareFailedAction(response.error));
+        });
+
+    @Effect({dispatch: false}) updateFirmwareOkButton$ = this.actions$
+        .ofType<UpdateFirmwareOkButtonAction>(ActionTypes.UPDATE_FIRMWARE_OK_BUTTON)
+        .do(() => this.deviceRendererService.startConnectionPoller());
 
     constructor(private actions$: Actions,
                 private router: Router,

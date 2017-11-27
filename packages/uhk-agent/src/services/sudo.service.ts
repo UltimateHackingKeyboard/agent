@@ -10,7 +10,7 @@ export class SudoService {
 
     constructor(private logService: LogService) {
         if (isDev) {
-            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../..');
+            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '..');
         } else {
             this.rootDir = path.dirname(app.getAppPath());
         }

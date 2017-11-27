@@ -49,6 +49,7 @@ export const runningInElectron = createSelector(appState, fromApp.runningInElect
 export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
+export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
@@ -70,3 +71,8 @@ export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevic
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
     return electron ? state : initProgressButtonState;
 });
+export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
+export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
+export const firmwareOkButtonDisabled = createSelector(deviceState, fromDevice.firmwareOkButtonDisabled);
+// tslint:disable-next-line: max-line-length
+export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);

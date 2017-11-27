@@ -1,9 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { IpcEvents, AppStartInfo, LogService } from 'uhk-common';
-import { AppState } from '../store/index';
-import { ProcessAppStartInfoAction } from '../store/actions/app';
+import { AppStartInfo, IpcEvents, LogService } from 'uhk-common';
+import { AppState } from '../store';
+import { ElectronMainLogReceivedAction, ProcessAppStartInfoAction } from '../store/actions/app';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 
 @Injectable()
@@ -24,6 +24,10 @@ export class AppRendererService {
     private registerEvents() {
         this.ipcRenderer.on(IpcEvents.app.getAppStartInfoReply, (event: string, arg: AppStartInfo) => {
             this.dispachStoreAction(new ProcessAppStartInfoAction(arg));
+        });
+
+        this.ipcRenderer.on('__ELECTRON_LOG_RENDERER__', (event: string, level: string, message: string) => {
+            this.zone.run(() => this.store.dispatch(new ElectronMainLogReceivedAction({level, message})));
         });
     }
 

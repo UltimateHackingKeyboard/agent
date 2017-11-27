@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { type, IpcResponse } from 'uhk-common';
+import { IpcResponse, type } from 'uhk-common';
 
 const PREFIX = '[device] ';
 
@@ -16,7 +16,13 @@ export const ActionTypes = {
     SAVE_TO_KEYBOARD_SUCCESS: type(PREFIX + 'save to keyboard success'),
     SAVE_TO_KEYBOARD_FAILED: type(PREFIX + 'save to keyboard failed'),
     HIDE_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'hide save to keyboard button'),
-    RESET_USER_CONFIGURATION: type(PREFIX + 'reset user configuration')
+    RESET_USER_CONFIGURATION: type(PREFIX + 'reset user configuration'),
+    UPDATE_FIRMWARE: type(PREFIX + 'update firmware'),
+    UPDATE_FIRMWARE_WITH: type(PREFIX + 'update firmware with'),
+    UPDATE_FIRMWARE_REPLY: type(PREFIX + 'update firmware reply'),
+    UPDATE_FIRMWARE_SUCCESS: type(PREFIX + 'update firmware success'),
+    UPDATE_FIRMWARE_FAILED: type(PREFIX + 'update firmware failed'),
+    UPDATE_FIRMWARE_OK_BUTTON: type(PREFIX + 'update firmware ok button click')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -26,31 +32,36 @@ export class SetPrivilegeOnLinuxAction implements Action {
 export class SetPrivilegeOnLinuxReplyAction implements Action {
     type = ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY;
 
-    constructor(public payload: IpcResponse) {}
+    constructor(public payload: IpcResponse) {
+    }
 }
 
 export class ConnectionStateChangedAction implements Action {
     type = ActionTypes.CONNECTION_STATE_CHANGED;
 
-    constructor(public payload: boolean) {}
+    constructor(public payload: boolean) {
+    }
 }
 
 export class PermissionStateChangedAction implements Action {
     type = ActionTypes.PERMISSION_STATE_CHANGED;
 
-    constructor(public payload: boolean) {}
+    constructor(public payload: boolean) {
+    }
 }
 
 export class SaveConfigurationAction implements Action {
     type = ActionTypes.SAVE_CONFIGURATION;
 
-    constructor() {}
+    constructor() {
+    }
 }
 
 export class SaveConfigurationReplyAction implements Action {
     type = ActionTypes.SAVE_CONFIGURATION_REPLY;
 
-    constructor(public payload: IpcResponse) {}
+    constructor(public payload: IpcResponse) {
+    }
 }
 
 export class ShowSaveToKeyboardButtonAction implements Action {
@@ -73,6 +84,39 @@ export class ResetUserConfigurationAction implements Action {
     type = ActionTypes.RESET_USER_CONFIGURATION;
 }
 
+export class UpdateFirmwareAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE;
+}
+
+export class UpdateFirmwareWithAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE_WITH;
+
+    constructor(public payload: Array<number>) {
+    }
+}
+
+export class UpdateFirmwareReplyAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE_REPLY;
+
+    constructor(public payload: IpcResponse) {
+    }
+}
+
+export class UpdateFirmwareSuccessAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE_SUCCESS;
+}
+
+export class UpdateFirmwareFailedAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE_FAILED;
+
+    constructor(public payload: any) {
+    }
+}
+
+export class UpdateFirmwareOkButtonAction implements Action {
+    type = ActionTypes.UPDATE_FIRMWARE_OK_BUTTON;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -85,4 +129,10 @@ export type Actions
     | SaveToKeyboardSuccessFailed
     | HideSaveToKeyboardButton
     | ResetUserConfigurationAction
+    | UpdateFirmwareAction
+    | UpdateFirmwareWithAction
+    | UpdateFirmwareReplyAction
+    | UpdateFirmwareSuccessAction
+    | UpdateFirmwareFailedAction
+    | UpdateFirmwareOkButtonAction
     ;

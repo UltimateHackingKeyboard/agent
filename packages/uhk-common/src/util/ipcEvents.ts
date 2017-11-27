@@ -24,6 +24,9 @@ class Device {
     public static readonly saveUserConfigurationReply = 'device-save-user-configuration-reply';
     public static readonly loadConfigurations = 'device-load-configuration';
     public static readonly loadConfigurationReply = 'device-load-configuration-reply';
+    public static readonly updateFirmware = 'device-update-firmware';
+    public static readonly updateFirmwareReply = 'device-update-firmware-reply';
+    public static readonly startConnectionPoller = 'device-start-connection-poller';
 }
 
 export class IpcEvents {

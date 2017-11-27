@@ -1,7 +1,40 @@
-<h1>
-    <i class="fa fa-sliders"></i>
-    <span>Firmware</span>
-</h1>
-<p>
-    Coming soon ...
-</p>
+<div class="full-height">
+    <div class="flex-container">
+        <div>
+
+            <h1>
+                <i class="fa fa-sliders"></i>
+                <span>Firmware</span>
+            </h1>
+            <p>
+                Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
+                <button class="btn btn-primary"
+                        [disabled]="flashFirmwareButtonDisbabled$ | async"
+                        (click)="onUpdateFirmware()">Flash firmware
+                </button>
+            </p>
+
+            <p>
+                Flash firmware file <input id="firmware-file-select"
+                                           type="file"
+                                           [disabled]="flashFirmwareButtonDisbabled$ | async"
+                                           (change)="changeFile($event)">
+                <button class="btn btn-primary"
+                        [disabled]="flashFirmwareButtonDisbabled$ | async"
+                        (click)="onUpdateFirmwareWithFile()">Flash firmware
+                </button>
+            </p>
+        </div>
+
+        <div class="flex-grow" #scrollMe>
+            <xterm [logs]="xtermLog$ | async"></xterm>
+        </div>
+        <div class="footer">
+            <button type="button"
+                    class="btn btn-primary ok-button"
+                    [disabled]="firmwareOkButtonDisabled$ | async"
+                    (click)="onOkButtonClick()">OK
+            </button>
+        </div>
+    </div>
+</div>

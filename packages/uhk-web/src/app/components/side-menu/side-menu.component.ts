@@ -1,15 +1,16 @@
-import { AfterContentInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Keymap, Macro } from 'uhk-common';
 
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
-import { AppState, getDeviceName, showAddonMenu, runningInElectron } from '../../store';
+import { AppState, getDeviceName, runningInElectron, showAddonMenu, updatingFirmware } from '../../store';
 import { MacroActions } from '../../store/actions';
 import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 import * as util from '../../util';
@@ -31,15 +32,19 @@ import { RenameUserConfigurationAction } from '../../store/actions/user-config';
     templateUrl: './side-menu.component.html',
     styleUrls: ['./side-menu.component.scss']
 })
-export class SideMenuComponent implements AfterContentInit {
+export class SideMenuComponent implements AfterContentInit, OnDestroy {
     showAddonMenu$: Observable<boolean>;
     runInElectron$: Observable<boolean>;
+    updatingFirmware$: Observable<boolean>;
 
     deviceName$: Observable<string>;
+    deviceNameSubscription: Subscription;
     keymaps$: Observable<Keymap[]>;
     macros$: Observable<Macro[]>;
     animation: { [key: string]: 'active' | 'inactive' };
     deviceNameValue: string;
+    updatingFirmware = false;
+    updatingFirmwareSubscription: Subscription;
     @ViewChild('deviceName') deviceName: ElementRef;
 
     constructor(private store: Store<AppState>, private renderer: Renderer2) {
@@ -66,9 +71,13 @@ export class SideMenuComponent implements AfterContentInit {
         this.showAddonMenu$ = this.store.select(showAddonMenu);
         this.runInElectron$ = this.store.select(runningInElectron);
         this.deviceName$ = store.select(getDeviceName);
-        this.deviceName$.subscribe(name => {
+        this.deviceNameSubscription = this.deviceName$.subscribe(name => {
             this.deviceNameValue = name;
             this.setDeviceName();
+        });
+        this.updatingFirmware$ = store.select(updatingFirmware);
+        this.updatingFirmwareSubscription = this.updatingFirmware$.subscribe(updating => {
+            this.updatingFirmware = updating;
         });
     }
 
@@ -76,7 +85,16 @@ export class SideMenuComponent implements AfterContentInit {
         this.setDeviceName();
     }
 
+    ngOnDestroy(): void {
+        this.deviceNameSubscription.unsubscribe();
+        this.updatingFirmwareSubscription.unsubscribe();
+    }
+
     toggleHide(event: Event, type: string) {
+        if (this.updatingFirmware) {
+            return;
+        }
+
         const header: DOMTokenList = (<Element>event.target).classList;
         let show = false;
 

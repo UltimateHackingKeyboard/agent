@@ -15,5 +15,9 @@
   },
   "dependencies": {
     "node-hid": "0.5.7"
-  }
+  },
+  "dataModelVersion": "1.0.0",
+  "usbProtocolVersion": "1.2.0",
+  "slaveProtocolVersion": "2.1.0",
+  "firmwareVersion": "3.0.0"
 }

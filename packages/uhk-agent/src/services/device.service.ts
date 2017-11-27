@@ -1,16 +1,29 @@
 import { ipcMain } from 'electron';
-import { IpcEvents, LogService, IpcResponse, ConfigurationReply } from 'uhk-common';
-import { Constants, EepromTransfer, SystemPropertyIds, UsbCommand } from 'uhk-usb';
+import { ConfigurationReply, IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import {
+    Constants,
+    convertBufferToIntArray,
+    EepromTransfer,
+    getTransferBuffers,
+    snooze,
+    SystemPropertyIds,
+    UhkHidDevice,
+    UhkOperations,
+    UsbCommand
+} from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Device, devices } from 'node-hid';
-import { UhkHidDevice } from 'uhk-usb';
+import { emptyDir } from 'fs-extra';
 
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
+
+import { saveTmpFirmware } from '../util/save-extract-firmware';
+import { TmpFirmware } from '../models/tmp-firmware';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -21,14 +34,17 @@ import 'rxjs/add/operator/distinctUntilChanged';
  */
 export class DeviceService {
     private pollTimer$: Subscription;
-    private connected: boolean = false;
+    private connected = false;
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
-                private device: UhkHidDevice) {
+                private device: UhkHidDevice,
+                private operations: UhkOperations) {
         this.pollUhkDevice();
         ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
         ipcMain.on(IpcEvents.device.loadConfigurations, this.loadConfigurations.bind(this));
+        ipcMain.on(IpcEvents.device.updateFirmware, this.updateFirmware.bind(this));
+        ipcMain.on(IpcEvents.device.startConnectionPoller, this.pollUhkDevice.bind(this));
         logService.debug('[DeviceService] init success');
     }
 
@@ -45,6 +61,8 @@ export class DeviceService {
      * @returns {Promise<Buffer>}
      */
     public async loadConfigurations(event: Electron.Event): Promise<void> {
+        let response: ConfigurationReply;
+
         try {
             await this.device.waitUntilKeyboardBusy();
             const userConfiguration = await this.loadConfiguration(
@@ -57,21 +75,22 @@ export class DeviceService {
                 UsbCommand.ReadHardwareConfig,
                 'hardware configuration');
 
-            const response: ConfigurationReply = {
+            response = {
                 success: true,
                 userConfiguration,
                 hardwareConfiguration
             };
             event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
         } catch (error) {
-            const response: ConfigurationReply = {
+            response = {
                 success: false,
                 error: error.message
             };
-            event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
         } finally {
             this.device.close();
         }
+
+        event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
     }
 
     /**
@@ -102,7 +121,7 @@ export class DeviceService {
                     configSize = readBuffer[3] + (readBuffer[4] << 8);
                 }
             }
-            response = UhkHidDevice.convertBufferToIntArray(configBuffer);
+            response = convertBufferToIntArray(configBuffer);
             return Promise.resolve(JSON.stringify(response));
         } catch (error) {
             const errMsg = `[DeviceService] ${configName} from eeprom error`;
@@ -113,9 +132,40 @@ export class DeviceService {
 
     public close(): void {
         this.connected = false;
-        this.pollTimer$.unsubscribe();
+        this.stopPollTimer();
         this.logService.info('[DeviceService] Device connection checker stopped.');
+    }
 
+    public async updateFirmware(event: Electron.Event, data?: string): Promise<void> {
+        const response = new IpcResponse();
+
+        let firmwarePathData: TmpFirmware;
+
+        try {
+            this.stopPollTimer();
+
+            if (data) {
+                firmwarePathData = await saveTmpFirmware(data);
+                await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
+                await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
+            }
+            else {
+                await this.operations.updateRightFirmware();
+                await this.operations.updateLeftModule();
+            }
+
+            response.success = true;
+        } catch (error) {
+            const err = {message: error.message, stack: error.stack};
+            this.logService.error('[DeviceService] updateFirmware error', err);
+
+            response.error = err;
+        }
+
+        await emptyDir(firmwarePathData.tmpDirectory.name);
+
+        await snooze(500);
+        event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
     /**
@@ -125,6 +175,10 @@ export class DeviceService {
      * @private
      */
     private pollUhkDevice(): void {
+        if (this.pollTimer$) {
+            return;
+        }
+
         this.pollTimer$ = Observable.interval(1000)
             .startWith(0)
             .map(() => {
@@ -146,6 +200,7 @@ export class DeviceService {
      */
     private async getConfigSizeFromKeyboard(property: SystemPropertyIds): Promise<number> {
         const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, property]));
+        this.device.close();
         const configSize = buffer[1] + (buffer[2] << 8);
         this.logService.debug('[DeviceService] User config size:', configSize);
         return configSize;
@@ -182,12 +237,22 @@ export class DeviceService {
      */
     private async sendUserConfigToKeyboard(json: string): Promise<void> {
         const buffer: Buffer = new Buffer(JSON.parse(json).data);
-        const fragments = UhkHidDevice.getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
+        const fragments = getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
         for (const fragment of fragments) {
             await this.device.write(fragment);
         }
         this.logService.debug('[DeviceService] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = new Buffer([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
+    }
+
+    private stopPollTimer(): void {
+        if (!this.pollTimer$) {
+            return;
+        }
+
+        this.pollTimer$.unsubscribe();
+        this.pollTimer$ = null;
+
     }
 }

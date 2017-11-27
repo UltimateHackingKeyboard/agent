@@ -5,6 +5,11 @@
 @import './styles/tooltip';
 @import './styles/uhk-icons/uhk-icon';
 
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
 .uhk-icon {
     display: inline-block;
     width: 1em;
@@ -30,6 +35,7 @@
 .main-page-content {
     margin-left: 250px;
     overflow-x: hidden;
+    height: 99%;
 }
 
 .select2 {
@@ -68,4 +74,19 @@ ul.btn-list {
 
 .h1, .h2, .h3, h1, h2, h3 {
     margin-top: 10px;
+}
+
+input[type=file] {
+    display: inline-block;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+.full-height {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, Effect, toPayload } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 
@@ -10,8 +10,16 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { AppStartInfo, Notification, NotificationType, LogService } from 'uhk-common';
-import { ActionTypes, AppStartedAction, DismissUndoNotificationAction, ToggleAddonMenuAction } from '../actions/app';
+import { AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
+import {
+    ActionTypes,
+    AppStartedAction,
+    DismissUndoNotificationAction,
+    ProcessAppStartInfoAction,
+    ShowNotificationAction,
+    ToggleAddonMenuAction,
+    UndoLastAction, UpdateAgentVersionInformationAction
+} from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { ConnectionStateChangedAction, PermissionStateChangedAction } from '../actions/device';
@@ -32,8 +40,8 @@ export class ApplicationEffects {
 
     @Effect({dispatch: false})
     showNotification$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.APP_SHOW_NOTIFICATION)
-        .map(toPayload)
+        .ofType<ShowNotificationAction>(ActionTypes.APP_SHOW_NOTIFICATION)
+        .map(action => action.payload)
         .do((notification: Notification) => {
             if (notification.type === NotificationType.Undoable) {
                 return;
@@ -43,25 +51,27 @@ export class ApplicationEffects {
 
     @Effect()
     processStartInfo$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.APP_PROCESS_START_INFO)
-        .map(toPayload)
+        .ofType<ProcessAppStartInfoAction>(ActionTypes.APP_PROCESS_START_INFO)
+        .map(action => action.payload)
         .mergeMap((appInfo: AppStartInfo) => {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
                 new ConnectionStateChangedAction(appInfo.deviceConnected),
-                new PermissionStateChangedAction(appInfo.hasPermission)
+                new PermissionStateChangedAction(appInfo.hasPermission),
+                new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
             ];
         });
 
     @Effect() undoLastNotification$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.UNDO_LAST)
-        .map(toPayload)
+        .ofType<UndoLastAction>(ActionTypes.UNDO_LAST)
+        .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
-                private logService: LogService) { }
+                private logService: LogService) {
+    }
 }
