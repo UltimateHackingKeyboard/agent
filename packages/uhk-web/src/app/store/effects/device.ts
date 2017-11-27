@@ -21,10 +21,14 @@ import {
     PermissionStateChangedAction,
     SaveConfigurationAction,
     SaveToKeyboardSuccessAction,
-    SaveToKeyboardSuccessFailed, UpdateFirmwareAction,
-    UpdateFirmwareFailedAction, UpdateFirmwareOkButtonAction,
+    SaveToKeyboardSuccessFailed,
+    SetPrivilegeOnLinuxReplyAction,
+    UpdateFirmwareAction,
+    UpdateFirmwareFailedAction,
+    UpdateFirmwareOkButtonAction,
     UpdateFirmwareReplyAction,
-    UpdateFirmwareSuccessAction, UpdateFirmwareWithAction
+    UpdateFirmwareSuccessAction,
+    UpdateFirmwareWithAction
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ShowNotificationAction } from '../actions/app';
@@ -40,8 +44,8 @@ import { DefaultUserConfigurationService } from '../../services/default-user-con
 export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.CONNECTION_STATE_CHANGED)
-        .map(toPayload)
+        .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
+        .map(action => action.payload)
         .do((connected: boolean) => {
             if (connected) {
                 this.router.navigate(['/']);
@@ -59,9 +63,9 @@ export class DeviceEffects {
         });
 
     @Effect({dispatch: false})
-    permissionStateChange$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.PERMISSION_STATE_CHANGED)
-        .map(toPayload)
+    permissionStateChange$: Observable<boolean> = this.actions$
+        .ofType<PermissionStateChangedAction>(ActionTypes.PERMISSION_STATE_CHANGED)
+        .map(action => action.payload)
         .do((hasPermission: boolean) => {
             if (hasPermission) {
                 this.router.navigate(['/detection']);
@@ -80,8 +84,8 @@ export class DeviceEffects {
 
     @Effect()
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
-        .map(toPayload)
+        .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
+        .map(action => action.payload)
         .mergeMap((response: any) => {
             if (response.success) {
                 return [
