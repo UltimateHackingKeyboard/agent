@@ -29,13 +29,13 @@ html, body {
 }
 
 .main-content {
-    height: 100vh;
+    height: 100%;
 }
 
 .main-page-content {
     margin-left: 250px;
     overflow-x: hidden;
-    height: 99%;
+    min-height: 100%;
 }
 
 .select2 {
