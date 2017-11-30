@@ -11,48 +11,47 @@ export class ModuleConfiguration {
     id: number;
 
     @assertUInt8
-    initialPointerSpeed: number;
+    deceleratedPointerSpeedMultiplier: number;
 
     @assertUInt8
-    pointerAcceleration: number;
+    basePointerSpeedMultiplier: number;
 
     @assertUInt8
-    maxPointerSpeed: number;
+    acceleratedPointerSpeedMultiplier: number;
 
     fromJsonObject(jsonObject: any): ModuleConfiguration {
         this.id = jsonObject.id;
-        this.initialPointerSpeed = jsonObject.initialPointerSpeed;
-        this.pointerAcceleration = jsonObject.pointerAcceleration;
-        this.maxPointerSpeed = jsonObject.maxPointerSpeed;
+        this.deceleratedPointerSpeedMultiplier = jsonObject.deceleratedPointerSpeedMultiplier;
+        this.basePointerSpeedMultiplier = jsonObject.basePointerSpeedMultiplier;
+        this.acceleratedPointerSpeedMultiplier = jsonObject.acceleratedPointerSpeedMultiplier;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): ModuleConfiguration {
         this.id = buffer.readUInt8();
-        this.initialPointerSpeed = buffer.readUInt8();
-        this.pointerAcceleration = buffer.readUInt8();
-        this.maxPointerSpeed = buffer.readUInt8();
+        this.deceleratedPointerSpeedMultiplier = buffer.readUInt8();
+        this.basePointerSpeedMultiplier = buffer.readUInt8();
+        this.acceleratedPointerSpeedMultiplier = buffer.readUInt8();
         return this;
     }
 
     toJsonObject(): any {
         return {
             id: this.id,
-            initialPointerSpeed: this.initialPointerSpeed,
-            pointerAcceleration: this.pointerAcceleration,
-            maxPointerSpeed: this.maxPointerSpeed
+            deceleratedPointerSpeedMultiplier: this.deceleratedPointerSpeedMultiplier,
+            basePointerSpeedMultiplier: this.basePointerSpeedMultiplier,
+            acceleratedPointerSpeedMultiplier: this.acceleratedPointerSpeedMultiplier
         };
     }
 
     toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
-        buffer.writeUInt8(this.initialPointerSpeed);
-        buffer.writeUInt8(this.pointerAcceleration);
-        buffer.writeUInt8(this.maxPointerSpeed);
+        buffer.writeUInt8(this.deceleratedPointerSpeedMultiplier);
+        buffer.writeUInt8(this.basePointerSpeedMultiplier);
+        buffer.writeUInt8(this.acceleratedPointerSpeedMultiplier);
     }
 
     toString(): string {
         return `<ModuleConfiguration id="${this.id}" >`;
     }
-
 }

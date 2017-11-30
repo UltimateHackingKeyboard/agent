@@ -46,7 +46,7 @@ export class UserConfigEffects {
         const userConfig = new UserConfiguration();
         userConfig.fromBinary(UhkBuffer.fromArray(data));
 
-        if (userConfig.dataModelVersion > 0) {
+        if (userConfig.dataModelMajorVersion > 0) {
             return userConfig;
         }
 
@@ -186,8 +186,9 @@ export class UserConfigEffects {
         let config: UserConfiguration;
 
         if (configJsonObject) {
-            if (configJsonObject.dataModelVersion === this.defaultUserConfigurationService.getDefault().dataModelVersion) {
-                config = new UserConfiguration().fromJsonObject(configJsonObject);
+            if (configJsonObject.dataModelMajorVersion ===
+                this.defaultUserConfigurationService.getDefault().dataModelMajorVersion) {
+                    config = new UserConfiguration().fromJsonObject(configJsonObject);
             }
         }
 

@@ -1,6 +1,20 @@
 {
-  "dataModelVersion": 4,
+  "dataModelMajorVersion": 3,
+  "dataModelMinorVersion": 0,
+  "dataModelPatchVersion": 0,
   "deviceName": "My UHK",
+  "doubleTapSwitchLayerTimeout": 300,
+  "keyBacklightBrightness": 255,
+  "mouseMoveInitialSpeed": 5,
+  "mouseMoveAcceleration": 35,
+  "mouseMoveDeceleratedSpeed": 10,
+  "mouseMoveBaseSpeed": 40,
+  "mouseMoveAcceleratedSpeed": 80,
+  "mouseScrollInitialSpeed": 20,
+  "mouseScrollAcceleration": 20,
+  "mouseScrollDeceleratedSpeed": 20,
+  "mouseScrollBaseSpeed": 20,
+  "mouseScrollAcceleratedSpeed": 50,
   "moduleConfigurations": [
     {
       "id": 1,
