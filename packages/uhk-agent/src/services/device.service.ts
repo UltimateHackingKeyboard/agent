@@ -144,7 +144,7 @@ export class DeviceService {
         try {
             this.stopPollTimer();
 
-            if (data) {
+            if (data && data.length > 0) {
                 firmwarePathData = await saveTmpFirmware(data);
                 await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
                 await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
@@ -162,7 +162,9 @@ export class DeviceService {
             response.error = err;
         }
 
-        await emptyDir(firmwarePathData.tmpDirectory.name);
+        if (firmwarePathData) {
+            await emptyDir(firmwarePathData.tmpDirectory.name);
+        }
 
         await snooze(500);
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
