@@ -37,8 +37,7 @@ export class DeviceRendererService {
     updateFirmware(data?: Array<number>): void {
         if (data) {
             this.ipcRenderer.send(IpcEvents.device.updateFirmware, JSON.stringify(data));
-        }
-        else {
+        } else {
             this.ipcRenderer.send(IpcEvents.device.updateFirmware);
         }
     }
