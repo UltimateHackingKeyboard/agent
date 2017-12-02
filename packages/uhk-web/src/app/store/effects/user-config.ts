@@ -141,28 +141,36 @@ export class UserConfigEffects {
                 })];
             }
 
-            let result;
+            const result = [];
             try {
                 const userConfig = UserConfigEffects.getUserConfigFromDeviceResponse(data.userConfiguration);
-                const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+                result.push(new LoadUserConfigSuccessAction(userConfig));
 
-                result = [
-                    new LoadUserConfigSuccessAction(userConfig),
-                    new LoadHardwareConfigurationSuccessAction(hardwareConfig)
-                ];
             } catch (err) {
-                this.logService.error('Eeprom parse error:', err);
-                result = [
+                this.logService.error('Eeprom user-config parse error:', err);
+                result.push(
                     new ShowNotificationAction({
                         type: NotificationType.Error,
                         message: err
-                    }),
-                    new LoadUserConfigSuccessAction(this.getUserConfiguration()),
-                    new LoadHardwareConfigurationSuccessAction({} as any)
-                ];
+                    }));
+
+                result.push(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
+            }
+
+            try {
+                const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+                result.push(new LoadHardwareConfigurationSuccessAction(hardwareConfig));
+            } catch (err) {
+                this.logService.error('Eeprom hardware-config parse error:', err);
+                result.push(
+                    new ShowNotificationAction({
+                        type: NotificationType.Error,
+                        message: err
+                    }));
             }
 
             this.router.navigate(['/']);
+
             return result;
         });
 
