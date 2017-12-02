@@ -6,6 +6,10 @@ function getUint32(buffer, offset) {
     return (buffer[offset]) + (buffer[offset+1] << 8) + (buffer[offset+2] << 16) + (buffer[offset+3] << 24);
 }
 
+function getUint16(buffer, offset) {
+    return (buffer[offset]) + (buffer[offset+1] << 8);
+}
+
 function getDebugInfo() {
     const payload = new Buffer([uhk.usbCommands.getDebugInfo]);
     console.log('Sending ', uhk.bufferToString(payload));

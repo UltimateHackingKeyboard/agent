@@ -118,7 +118,7 @@ export class DeviceService {
 
                 if (firstRead && config === UsbCommand.ReadUserConfig) {
                     firstRead = false;
-                    configSize = readBuffer[3] + (readBuffer[4] << 8);
+                    configSize = readBuffer[6] + (readBuffer[7] << 8);
                 }
             }
             response = convertBufferToIntArray(configBuffer);
