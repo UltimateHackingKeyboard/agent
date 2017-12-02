@@ -24,43 +24,43 @@ export class UserConfiguration {
     @assertUInt16
     doubleTapSwitchLayerTimeout: number;
 
-   @assertUInt8
+    @assertUInt8
     iconsAndLayerTextsBrightness: number;
 
-   @assertUInt8
+    @assertUInt8
     alphanumericSegmentsBrightness: number;
 
-   @assertUInt8
+    @assertUInt8
     keyBacklightBrightness: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseMoveInitialSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseMoveAcceleration: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseMoveDeceleratedSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseMoveBaseSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseMoveAcceleratedSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseScrollInitialSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseScrollAcceleration: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseScrollDeceleratedSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseScrollBaseSpeed: number;
 
-   @assertUInt8
+    @assertUInt8
     mouseScrollAcceleratedSpeed: number;
 
     moduleConfigurations: ModuleConfiguration[] = [];
