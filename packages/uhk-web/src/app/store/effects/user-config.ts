@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, Effect, toPayload } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
 import { Action, Store } from '@ngrx/store';
@@ -24,6 +24,7 @@ import {
 
 import {
     ActionTypes,
+    LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
     RenameUserConfigurationAction,
     SaveUserConfigSuccessAction
@@ -33,7 +34,12 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
 import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
-import { ShowNotificationAction, DismissUndoNotificationAction, LoadHardwareConfigurationSuccessAction } from '../actions/app';
+import {
+    DismissUndoNotificationAction,
+    LoadHardwareConfigurationSuccessAction,
+    ShowNotificationAction,
+    UndoLastAction
+} from '../actions/app';
 import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
@@ -111,8 +117,8 @@ export class UserConfigEffects {
         });
 
     @Effect() undoUserConfig$: Observable<Action> = this.actions$
-        .ofType(KeymapActions.UNDO_LAST_ACTION)
-        .map(toPayload)
+        .ofType<UndoLastAction>(KeymapActions.UNDO_LAST_ACTION)
+        .map(action => action.payload)
         .mergeMap((payload: UndoUserConfigData) => {
             const config = new UserConfiguration().fromJsonObject(payload.config);
             this.dataStorageRepository.saveConfig(config);
@@ -125,8 +131,8 @@ export class UserConfigEffects {
         .do(() => this.deviceRendererService.loadConfigurationFromKeyboard());
 
     @Effect() loadConfigFromDeviceReply$ = this.actions$
-        .ofType(ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY)
-        .map(toPayload)
+        .ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY)
+        .map(action => action.payload)
         .mergeMap((data: ConfigurationReply): any => {
             if (!data.success) {
                 return [new ShowNotificationAction({
@@ -135,22 +141,29 @@ export class UserConfigEffects {
                 })];
             }
 
+            let result;
             try {
                 const userConfig = UserConfigEffects.getUserConfigFromDeviceResponse(data.userConfiguration);
                 const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
-                this.router.navigate(['/']);
 
-                return [
+                result = [
                     new LoadUserConfigSuccessAction(userConfig),
                     new LoadHardwareConfigurationSuccessAction(hardwareConfig)
                 ];
             } catch (err) {
                 this.logService.error('Eeprom parse error:', err);
-                return [new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: err
-                })];
+                result = [
+                    new ShowNotificationAction({
+                        type: NotificationType.Error,
+                        message: err
+                    }),
+                    new LoadUserConfigSuccessAction(this.getUserConfiguration()),
+                    new LoadHardwareConfigurationSuccessAction({} as any)
+                ];
             }
+
+            this.router.navigate(['/']);
+            return result;
         });
 
     @Effect({dispatch: false}) saveUserConfigInJsonFile$ = this.actions$
@@ -188,7 +201,7 @@ export class UserConfigEffects {
         if (configJsonObject) {
             if (configJsonObject.dataModelMajorVersion ===
                 this.defaultUserConfigurationService.getDefault().dataModelMajorVersion) {
-                    config = new UserConfiguration().fromJsonObject(configJsonObject);
+                config = new UserConfiguration().fromJsonObject(configJsonObject);
             }
         }
 
