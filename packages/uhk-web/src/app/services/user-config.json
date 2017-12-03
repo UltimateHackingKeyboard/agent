@@ -3,7 +3,9 @@
   "dataModelMinorVersion": 0,
   "dataModelPatchVersion": 0,
   "deviceName": "My UHK",
-  "doubleTapSwitchLayerTimeout": 300,
+  "doubleTapSwitchLayerTimeout": 250,
+  "iconsAndLayerTextsBrightness": 255,
+  "alphanumericSegmentsBrightness": 255,
   "keyBacklightBrightness": 255,
   "mouseMoveInitialSpeed": 5,
   "mouseMoveAcceleration": 35,
@@ -15,14 +17,7 @@
   "mouseScrollDeceleratedSpeed": 20,
   "mouseScrollBaseSpeed": 20,
   "mouseScrollAcceleratedSpeed": 50,
-  "moduleConfigurations": [
-    {
-      "id": 1,
-      "initialPointerSpeed": 1,
-      "pointerAcceleration": 5,
-      "maxPointerSpeed": 200
-    }
-  ],
+  "moduleConfigurations": [],
   "keymaps": [
     {
       "isDefault": true,
@@ -34,7 +29,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -211,7 +205,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -380,7 +373,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -389,7 +381,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -538,7 +529,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -685,7 +675,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -788,7 +777,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 null,
                 {
@@ -883,7 +871,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -954,7 +941,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -1035,7 +1021,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -1212,7 +1197,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -1381,7 +1365,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -1390,7 +1373,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -1539,7 +1521,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -1686,7 +1667,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -1797,7 +1777,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 {
                   "keyActionType": "switchKeymap",
@@ -1892,7 +1871,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -1963,7 +1941,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -2044,7 +2021,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -2221,7 +2197,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -2390,7 +2365,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -2399,7 +2373,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -2548,7 +2521,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -2695,7 +2667,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -2806,7 +2777,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 {
                   "keyActionType": "switchKeymap",
@@ -2901,7 +2871,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -2972,7 +2941,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -3053,7 +3021,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -3230,7 +3197,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -3399,7 +3365,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -3408,7 +3373,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -3557,7 +3521,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -3704,7 +3667,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -3807,7 +3769,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 {
                   "keyActionType": "switchKeymap",
@@ -3902,7 +3863,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -3973,7 +3933,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -4054,7 +4013,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -4231,7 +4189,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -4400,7 +4357,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -4409,7 +4365,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -4566,7 +4521,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -4727,7 +4681,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -4838,7 +4791,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 {
                   "keyActionType": "switchKeymap",
@@ -4973,7 +4925,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -5063,7 +5014,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -5165,7 +5115,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -5267,7 +5216,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -5436,7 +5384,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -5445,7 +5392,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -5602,7 +5548,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -5759,7 +5704,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -5874,7 +5818,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 {
                   "keyActionType": "switchKeymap",
@@ -6009,7 +5952,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -6050,7 +5992,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -6103,7 +6044,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -6280,7 +6220,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -6449,7 +6388,6 @@
             },
             {
               "id": 2,
-              "pointerRole": "scroll",
               "keyActions": []
             }
           ]
@@ -6458,7 +6396,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -6607,7 +6544,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "none",
               "keyActions": [
                 {
                   "keyActionType": "keystroke",
@@ -6751,7 +6687,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -6862,7 +6797,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "scroll",
               "keyActions": [
                 {
                   "keyActionType": "switchKeymap",
@@ -6957,7 +6891,6 @@
           "modules": [
             {
               "id": 0,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,
@@ -7028,7 +6961,6 @@
             },
             {
               "id": 1,
-              "pointerRole": "move",
               "keyActions": [
                 null,
                 null,

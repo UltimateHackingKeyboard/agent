@@ -103,6 +103,8 @@ export class DeviceService {
         try {
             this.logService.debug(`[DeviceService] USB[T]: Read ${configName} size from keyboard`);
             let configSize = await this.getConfigSizeFromKeyboard(property);
+            const originalConfigSize = configSize;
+            this.logService.debug(`[DeviceService] getConfigSize() configSize: ${configSize}`);
             const chunkSize = 63;
             let offset = 0;
             let configBuffer = new Buffer(0);
@@ -118,7 +120,13 @@ export class DeviceService {
 
                 if (firstRead && config === UsbCommand.ReadUserConfig) {
                     firstRead = false;
-                    configSize = readBuffer[6] + (readBuffer[7] << 8);
+                    configSize = readBuffer[7] + (readBuffer[8] << 8);
+                    this.logService.debug(`[DeviceService] userConfigSize: ${configSize}`);
+                    if (originalConfigSize < configSize) {
+                        this.logService.debug(`[DeviceService] userConfigSize should never be larger than getConfigSize()! ` +
+                                              `Overriding configSize with getConfigSize()`);
+                        configSize = originalConfigSize;
+                    }
                 }
             }
             response = convertBufferToIntArray(configBuffer);
