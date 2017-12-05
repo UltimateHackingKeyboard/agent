@@ -3,8 +3,24 @@ import { UserConfiguration } from '../user-configuration';
 describe('keymap', () => {
     it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', () => {
         const inputJsonConfig = {
-            dataModelVersion: 1,
+            dataModelMajorVersion: 3,
+            dataModelMinorVersion: 0,
+            dataModelPatchVersion: 0,
             deviceName: 'My UHK',
+            doubleTapSwitchLayerTimeout: 250,
+            iconsAndLayerTextsBrightness: 255,
+            alphanumericSegmentsBrightness: 255,
+            keyBacklightBrightness: 255,
+            mouseMoveInitialSpeed: 5,
+            mouseMoveAcceleration: 35,
+            mouseMoveDeceleratedSpeed: 10,
+            mouseMoveBaseSpeed: 40,
+            mouseMoveAcceleratedSpeed: 80,
+            mouseScrollInitialSpeed: 20,
+            mouseScrollAcceleration: 20,
+            mouseScrollDeceleratedSpeed: 20,
+            mouseScrollBaseSpeed: 20,
+            mouseScrollAcceleratedSpeed: 50,
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -17,7 +33,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -30,7 +45,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'keystroke',
@@ -43,7 +57,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -52,7 +65,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -63,8 +75,24 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            dataModelVersion: 1,
+            dataModelMajorVersion: 3,
+            dataModelMinorVersion: 0,
+            dataModelPatchVersion: 0,
             deviceName: 'My UHK',
+            doubleTapSwitchLayerTimeout: 250,
+            iconsAndLayerTextsBrightness: 255,
+            alphanumericSegmentsBrightness: 255,
+            keyBacklightBrightness: 255,
+            mouseMoveInitialSpeed: 5,
+            mouseMoveAcceleration: 35,
+            mouseMoveDeceleratedSpeed: 10,
+            mouseMoveBaseSpeed: 40,
+            mouseMoveAcceleratedSpeed: 80,
+            mouseScrollInitialSpeed: 20,
+            mouseScrollAcceleration: 20,
+            mouseScrollDeceleratedSpeed: 20,
+            mouseScrollBaseSpeed: 20,
+            mouseScrollAcceleratedSpeed: 50,
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -77,7 +105,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -90,7 +117,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -103,7 +129,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -112,7 +137,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -132,8 +156,24 @@ describe('keymap', () => {
 
     it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', () => {
         const inputJsonConfig = {
-            dataModelVersion: 1,
+            dataModelMajorVersion: 3,
+            dataModelMinorVersion: 0,
+            dataModelPatchVersion: 0,
             deviceName: 'My UHK',
+            doubleTapSwitchLayerTimeout: 250,
+            iconsAndLayerTextsBrightness: 255,
+            alphanumericSegmentsBrightness: 255,
+            keyBacklightBrightness: 255,
+            mouseMoveInitialSpeed: 5,
+            mouseMoveAcceleration: 35,
+            mouseMoveDeceleratedSpeed: 10,
+            mouseMoveBaseSpeed: 40,
+            mouseMoveAcceleratedSpeed: 80,
+            mouseScrollInitialSpeed: 20,
+            mouseScrollAcceleration: 20,
+            mouseScrollDeceleratedSpeed: 20,
+            mouseScrollBaseSpeed: 20,
+            mouseScrollAcceleratedSpeed: 50,
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -146,7 +186,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -159,7 +198,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -172,7 +210,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -181,7 +218,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -192,8 +228,24 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            dataModelVersion: 1,
+            dataModelMajorVersion: 3,
+            dataModelMinorVersion: 0,
+            dataModelPatchVersion: 0,
             deviceName: 'My UHK',
+            doubleTapSwitchLayerTimeout: 250,
+            iconsAndLayerTextsBrightness: 255,
+            alphanumericSegmentsBrightness: 255,
+            keyBacklightBrightness: 255,
+            mouseMoveInitialSpeed: 5,
+            mouseMoveAcceleration: 35,
+            mouseMoveDeceleratedSpeed: 10,
+            mouseMoveBaseSpeed: 40,
+            mouseMoveAcceleratedSpeed: 80,
+            mouseScrollInitialSpeed: 20,
+            mouseScrollAcceleration: 20,
+            mouseScrollDeceleratedSpeed: 20,
+            mouseScrollBaseSpeed: 20,
+            mouseScrollAcceleratedSpeed: 50,
             moduleConfigurations: [],
             macros: [],
             keymaps: [
@@ -206,7 +258,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -219,7 +270,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -232,7 +282,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
@@ -241,7 +290,6 @@ describe('keymap', () => {
                         {
                             modules: [{
                                 id: 0,
-                                pointerRole: 'move',
                                 keyActions: [
                                     null
                                 ]
