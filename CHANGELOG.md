@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/UltimateHackingKeyboard/agent/compare/v1.3.7...v1.4.0) (2017-12-05)
+
+
+### Bug Fixes
+
+* **device:** fix IpcRenderer empty data messages ([#503](https://github.com/UltimateHackingKeyboard/agent/issues/503)) ([58b1b9b](https://github.com/UltimateHackingKeyboard/agent/commit/58b1b9b))
+* **keymap:** Handle more than 35 same keymap abbreviation ([#497](https://github.com/UltimateHackingKeyboard/agent/issues/497)) ([62c5e9d](https://github.com/UltimateHackingKeyboard/agent/commit/62c5e9d))
+* **keymap:** Secondary role show 'None' value if not set ([#496](https://github.com/UltimateHackingKeyboard/agent/issues/496)) ([9e69098](https://github.com/UltimateHackingKeyboard/agent/commit/9e69098))
+* **rendered:** Double scrollbar ([13f2b65](https://github.com/UltimateHackingKeyboard/agent/commit/13f2b65))
+
+
+### Features
+
+* **device:** flash device firmware from Agent ([#499](https://github.com/UltimateHackingKeyboard/agent/issues/499)) ([297fd3b](https://github.com/UltimateHackingKeyboard/agent/commit/297fd3b))
+
+
+
 <a name="1.3.7"></a>
 ## [1.3.7](https://github.com/UltimateHackingKeyboard/agent/compare/v1.3.6...v1.3.7) (2017-11-07)
 
