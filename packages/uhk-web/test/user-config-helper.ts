@@ -1,15 +1,25 @@
 import { cloneDeep } from 'lodash';
 
 const defaultUserConfig = {
-    dataModelVersion: 4,
-    moduleConfigurations: [
-        {
-            id: 1,
-            initialPointerSpeed: 1,
-            pointerAcceleration: 5,
-            maxPointerSpeed: 200
-        }
-    ],
+    dataModelMajorVersion: 3,
+    dataModelMinorVersion: 0,
+    dataModelPatchVersion: 0,
+    deviceName: 'My UHK',
+    doubleTapSwitchLayerTimeout: 250,
+    iconsAndLayerTextsBrightness: 255,
+    alphanumericSegmentsBrightness: 255,
+    keyBacklightBrightness: 255,
+    mouseMoveInitialSpeed: 5,
+    mouseMoveAcceleration: 35,
+    mouseMoveDeceleratedSpeed: 10,
+    mouseMoveBaseSpeed: 40,
+    mouseMoveAcceleratedSpeed: 80,
+    mouseScrollInitialSpeed: 20,
+    mouseScrollAcceleration: 20,
+    mouseScrollDeceleratedSpeed: 20,
+    mouseScrollBaseSpeed: 20,
+    mouseScrollAcceleratedSpeed: 50,
+    moduleConfigurations: [],
     keymaps: [
         {
             isDefault: true,
@@ -21,7 +31,6 @@ const defaultUserConfig = {
                     modules: [
                         {
                             id: 0,
-                            pointerRole: 'move',
                             keyActions: [
                                 {
                                     keyActionType: 'keystroke',
@@ -42,7 +51,6 @@ const defaultUserConfig = {
                         },
                         {
                             id: 1,
-                            pointerRole: 'move',
                             keyActions: [
                                 {
                                     keyActionType: 'keystroke',
@@ -59,7 +67,6 @@ const defaultUserConfig = {
                         },
                         {
                             id: 2,
-                            pointerRole: 'scroll',
                             keyActions: []
                         }
                     ]
@@ -68,7 +75,6 @@ const defaultUserConfig = {
                     modules: [
                         {
                             id: 0,
-                            pointerRole: 'none',
                             keyActions: [
                                 {
                                     keyActionType: 'keystroke',
@@ -89,7 +95,6 @@ const defaultUserConfig = {
                         },
                         {
                             id: 1,
-                            pointerRole: 'none',
                             keyActions: [
                                 {
                                     keyActionType: 'keystroke',
@@ -110,7 +115,6 @@ const defaultUserConfig = {
                     modules: [
                         {
                             id: 0,
-                            pointerRole: 'move',
                             keyActions: [
                                 null,
                                 null,
@@ -119,7 +123,6 @@ const defaultUserConfig = {
                         },
                         {
                             id: 1,
-                            pointerRole: 'scroll',
                             keyActions: [
                                 null,
                                 {
@@ -135,7 +138,6 @@ const defaultUserConfig = {
                     modules: [
                         {
                             id: 0,
-                            pointerRole: 'move',
                             keyActions: [
                                 null,
                                 null,
@@ -144,7 +146,6 @@ const defaultUserConfig = {
                         },
                         {
                             id: 1,
-                            pointerRole: 'move',
                             keyActions: [
                                 null,
                                 null,
