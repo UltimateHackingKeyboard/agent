@@ -1,5 +1,5 @@
 import { Constants, UsbCommand } from './constants';
-import { LogService } from '../../uhk-common';
+import { LogService } from 'uhk-common';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 

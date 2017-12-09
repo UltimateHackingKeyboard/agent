@@ -1,16 +1,6 @@
 import { ipcMain } from 'electron';
 import { ConfigurationReply, IpcEvents, IpcResponse, LogService } from 'uhk-common';
-import {
-    Constants,
-    convertBufferToIntArray,
-    EepromTransfer,
-    getTransferBuffers,
-    snooze,
-    SystemPropertyIds,
-    UhkHidDevice,
-    UhkOperations,
-    UsbCommand
-} from 'uhk-usb';
+import { Constants, snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Device, devices } from 'node-hid';
@@ -93,20 +83,11 @@ export class DeviceService {
 
         try {
             await this.device.waitUntilKeyboardBusy();
-            const userConfiguration = await this.loadConfiguration(
-                SystemPropertyIds.MaxUserConfigSize,
-                UsbCommand.ReadUserConfig,
-                'user configuration');
-
-            const hardwareConfiguration = await this.loadConfiguration(
-                SystemPropertyIds.HardwareConfigSize,
-                UsbCommand.ReadHardwareConfig,
-                'hardware configuration');
+            const result = await this.operations.loadConfigurations();
 
             response = {
                 success: true,
-                userConfiguration,
-                hardwareConfiguration
+                ...result
             };
             event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
         } catch (error) {
@@ -119,51 +100,6 @@ export class DeviceService {
         }
 
         event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
-    }
-
-    /**
-     * Return with the actual user / hardware fonfiguration from UHK Device
-     * @returns {Promise<Buffer>}
-     */
-    public async loadConfiguration(property: SystemPropertyIds, config: UsbCommand, configName: string): Promise<string> {
-        let response = [];
-
-        try {
-            this.logService.debug(`[DeviceService] USB[T]: Read ${configName} size from keyboard`);
-            let configSize = await this.getConfigSizeFromKeyboard(property);
-            const originalConfigSize = configSize;
-            this.logService.debug(`[DeviceService] getConfigSize() configSize: ${configSize}`);
-            const chunkSize = 63;
-            let offset = 0;
-            let configBuffer = new Buffer(0);
-            let firstRead = true;
-
-            this.logService.debug(`[DeviceService] USB[T]: Read ${configName} from keyboard`);
-            while (offset < configSize) {
-                const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
-                const writeBuffer = Buffer.from([config, chunkSizeToRead, offset & 0xff, offset >> 8]);
-                const readBuffer = await this.device.write(writeBuffer);
-                configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
-                offset += chunkSizeToRead;
-
-                if (firstRead && config === UsbCommand.ReadUserConfig) {
-                    firstRead = false;
-                    configSize = readBuffer[7] + (readBuffer[8] << 8);
-                    this.logService.debug(`[DeviceService] userConfigSize: ${configSize}`);
-                    if (originalConfigSize < configSize) {
-                        this.logService.debug(`[DeviceService] userConfigSize should never be larger than getConfigSize()! ` +
-                                              `Overriding configSize with getConfigSize()`);
-                        configSize = originalConfigSize;
-                    }
-                }
-            }
-            response = convertBufferToIntArray(configBuffer);
-            return Promise.resolve(JSON.stringify(response));
-        } catch (error) {
-            const errMsg = `[DeviceService] ${configName} from eeprom error`;
-            this.logService.error(errMsg, error);
-            throw new Error(errMsg);
-        }
     }
 
     public close(): void {
@@ -231,27 +167,12 @@ export class DeviceService {
             .subscribe();
     }
 
-    /**
-     * Return the user / hardware configuration size from the UHK Device
-     * @returns {Promise<number>}
-     */
-    private async getConfigSizeFromKeyboard(property: SystemPropertyIds): Promise<number> {
-        const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, property]));
-        this.device.close();
-        const configSize = buffer[1] + (buffer[2] << 8);
-        this.logService.debug('[DeviceService] User config size:', configSize);
-        return configSize;
-    }
-
     private async saveUserConfiguration(event: Electron.Event, args: Array<string>): Promise<void> {
         const response = new IpcResponse();
         const json = args[0];
 
         try {
-            this.logService.debug('[DeviceService] USB[T]: Write user configuration to keyboard');
-            await this.sendUserConfigToKeyboard(json);
-            this.logService.debug('[DeviceService] USB[T]: Write user configuration to EEPROM');
-            await this.device.writeConfigToEeprom(EepromTransfer.WriteUserConfig);
+            await this.operations.saveUserConfiguration(json);
 
             response.success = true;
         }
@@ -265,23 +186,6 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
 
         return Promise.resolve();
-    }
-
-    /**
-     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
-     * @param {string} json - UserConfiguration in JSON format
-     * @returns {Promise<void>}
-     * @private
-     */
-    private async sendUserConfigToKeyboard(json: string): Promise<void> {
-        const buffer: Buffer = new Buffer(JSON.parse(json).data);
-        const fragments = getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
-        for (const fragment of fragments) {
-            await this.device.write(fragment);
-        }
-        this.logService.debug('[DeviceService] USB[T]: Apply user configuration to keyboard');
-        const applyBuffer = new Buffer([UsbCommand.ApplyConfig]);
-        await this.device.write(applyBuffer);
     }
 
     private stopPollTimer(): void {
