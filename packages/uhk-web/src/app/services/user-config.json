@@ -699,7 +699,10 @@
                   "scancode": 183
                 },
                 null,
-                null,
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "COL"
+                },
                 {
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "DVO"
@@ -776,6 +779,7 @@
               "id": 1,
               "keyActions": [
                 null,
+                null,
                 {
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "DVO"
@@ -784,7 +788,6 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "COL"
                 },
-                null,
                 null,
                 null,
                 null,
@@ -864,12 +867,18 @@
                 null,
                 null,
                 null,
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "scrollLeft"
+                },
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "moveUp"
                 },
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "scrollRight"
+                },
                 null,
                 null,
                 null,
@@ -904,8 +913,14 @@
                 null,
                 null,
                 null,
-                null,
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "leftClick"
+                },
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "rightClick"
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -988,7 +1003,10 @@
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "accelerate"
+                },
                 null
               ]
             }
@@ -1763,6 +1781,7 @@
             {
               "id": 1,
               "keyActions": [
+                null,
                 {
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "QWR"
@@ -1772,7 +1791,6 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "COL"
                 },
-                null,
                 null,
                 null,
                 null,
@@ -1852,15 +1870,27 @@
                 null,
                 null,
                 null,
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "scrollLeft"
+                },
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "moveUp"
                 },
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "scrollRight"
+                },
                 null,
-                null,
-                null,
-                null,
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "QWR"
+                },
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "COL"
+                },
                 null,
                 {
                   "keyActionType": "mouse",
@@ -1892,8 +1922,14 @@
                 null,
                 null,
                 null,
-                null,
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "leftClick"
+                },
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "rightClick"
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -1976,7 +2012,10 @@
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "accelerate"
+                },
                 null
               ]
             }
@@ -2676,7 +2715,10 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "DVO"
                 },
-                null,
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "QWR"
+                },
                 null,
                 null,
                 {
@@ -2748,6 +2790,7 @@
             {
               "id": 1,
               "keyActions": [
+                null,
                 {
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "QWR"
@@ -2756,7 +2799,6 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "DVO"
                 },
-                null,
                 null,
                 null,
                 null,
@@ -2837,12 +2879,18 @@
                 null,
                 null,
                 null,
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "scrollLeft"
+                },
                 {
                   "keyActionType": "mouse",
                   "mouseAction": "moveUp"
                 },
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "scrollRight"
+                },
                 null,
                 null,
                 null,
@@ -2877,8 +2925,14 @@
                 null,
                 null,
                 null,
-                null,
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "leftClick"
+                },
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "rightClick"
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -2901,8 +2955,14 @@
               "id": 1,
               "keyActions": [
                 null,
-                null,
-                null,
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "QWR"
+                },
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "DVO"
+                },
                 null,
                 null,
                 null,
@@ -2961,7 +3021,10 @@
                   "keyActionType": "mouse",
                   "mouseAction": "decelerate"
                 },
-                null,
+                {
+                  "keyActionType": "mouse",
+                  "mouseAction": "accelerate"
+                },
                 null
               ]
             }
