@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
-const {EepromTransfer, UhkHidDevice, UsbCommand} = require('uhk-usb');
+const {EepromTransfer, getTransferBuffers, UhkHidDevice, UsbCommand} = require('uhk-usb');
 const Logger = require('./logger');
 
 if (process.argv.length < 3) {
@@ -40,8 +40,8 @@ async function writeHca() {
     const device = new UhkHidDevice(logger);
     const hardwareBuffer = new UhkBuffer();
     hardwareConfig.toBinary(hardwareBuffer);
-    const buffer = hardwareBuffer.buffer.slice(0, 60);
-    const fragments = UhkHidDevice.getTransferBuffers(UsbCommand.WriteHardwareConfig, buffer);
+    const buffer = hardwareBuffer.getBufferContent();
+    const fragments = getTransferBuffers(UsbCommand.WriteHardwareConfig, buffer);
     logger.debug('USB[T]: Write hardware configuration to keyboard');
     for (const fragment of fragments) {
         await device.write(fragment);
