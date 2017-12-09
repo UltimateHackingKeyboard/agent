@@ -24,6 +24,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 
 import { saveTmpFirmware } from '../util/save-extract-firmware';
 import { TmpFirmware } from '../models/tmp-firmware';
+import { QueueManager } from './queue-manager';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -35,16 +36,43 @@ import { TmpFirmware } from '../models/tmp-firmware';
 export class DeviceService {
     private pollTimer$: Subscription;
     private connected = false;
+    private queueManager = new QueueManager();
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
                 private device: UhkHidDevice,
                 private operations: UhkOperations) {
         this.pollUhkDevice();
-        ipcMain.on(IpcEvents.device.saveUserConfiguration, this.saveUserConfiguration.bind(this));
-        ipcMain.on(IpcEvents.device.loadConfigurations, this.loadConfigurations.bind(this));
-        ipcMain.on(IpcEvents.device.updateFirmware, this.updateFirmware.bind(this));
+
+        ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.saveUserConfiguration,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.loadConfigurations, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.loadConfigurations,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.updateFirmware, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.updateFirmware,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
         ipcMain.on(IpcEvents.device.startConnectionPoller, this.pollUhkDevice.bind(this));
+
         logService.debug('[DeviceService] init success');
     }
 
@@ -144,16 +172,15 @@ export class DeviceService {
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
 
-    public async updateFirmware(event: Electron.Event, data?: string): Promise<void> {
+    public async updateFirmware(event: Electron.Event, args?: Array<string>): Promise<void> {
         const response = new IpcResponse();
-
         let firmwarePathData: TmpFirmware;
 
         try {
             this.stopPollTimer();
 
-            if (data && data.length > 0) {
-                firmwarePathData = await saveTmpFirmware(data);
+            if (args && args.length > 0) {
+                firmwarePathData = await saveTmpFirmware(args[0]);
                 await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
                 await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
             }
@@ -216,8 +243,9 @@ export class DeviceService {
         return configSize;
     }
 
-    private async saveUserConfiguration(event: Electron.Event, json: string): Promise<void> {
+    private async saveUserConfiguration(event: Electron.Event, args: Array<string>): Promise<void> {
         const response = new IpcResponse();
+        const json = args[0];
 
         try {
             this.logService.debug('[DeviceService] USB[T]: Write user configuration to keyboard');
