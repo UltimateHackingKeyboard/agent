@@ -1682,16 +1682,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
+                null,
                 {
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "TES"
@@ -2694,16 +2686,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
