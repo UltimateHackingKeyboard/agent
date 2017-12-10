@@ -4632,19 +4632,19 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 80,
-                  "modifierMask": 5
+                  "modifierMask": 1
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 43,
-                  "modifierMask": 4
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 79,
-                  "modifierMask": 5
+                  "modifierMask": 1
                 },
                 null,
                 null,
@@ -5645,19 +5645,19 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 80,
-                  "modifierMask": 5
+                  "modifierMask": 1
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 43,
-                  "modifierMask": 4
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 79,
-                  "modifierMask": 5
+                  "modifierMask": 1
                 },
                 null,
                 null,
@@ -6658,19 +6658,19 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 80,
-                  "modifierMask": 5
+                  "modifierMask": 1
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 43,
-                  "modifierMask": 4
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 79,
-                  "modifierMask": 5
+                  "modifierMask": 1
                 },
                 null,
                 null,
