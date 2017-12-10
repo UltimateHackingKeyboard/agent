@@ -4611,7 +4611,7 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 23,
-                  "modifierMask": 1
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4665,7 +4665,7 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 26,
-                  "modifierMask": 1
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5624,7 +5624,7 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 23,
-                  "modifierMask": 1
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5678,7 +5678,7 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 26,
-                  "modifierMask": 1
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6637,7 +6637,7 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 23,
-                  "modifierMask": 1
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6691,7 +6691,7 @@
                   "keyActionType": "keystroke",
                   "type": "basic",
                   "scancode": 26,
-                  "modifierMask": 1
+                  "modifierMask": 8
                 },
                 {
                   "keyActionType": "keystroke",
