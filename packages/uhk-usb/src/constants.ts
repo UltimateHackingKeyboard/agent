@@ -17,7 +17,7 @@ export enum UsbCommand {
     WriteHardwareConfig = 14,
     ReadUserConfig = 15,
     GetKeyboardState = 16,
-    JumpToModuleBootloader = 18,
+    JumpToModuleBootloader = 0x02,
     SendKbootCommandToModule = 19
 }
 
