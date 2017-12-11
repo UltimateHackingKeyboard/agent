@@ -65,7 +65,7 @@ exports = module.exports = moduleExports = {
         getKeyboardState: 16,
         getDebugInfo: 17,
         jumpToModuleBootloader: 0x02,
-        sendKbootCommandToModule: 19,
+        sendKbootCommandToModule: 0x03,
     },
     enumerationModes: {
         bootloader: 0,

@@ -18,7 +18,7 @@ export enum UsbCommand {
     ReadUserConfig = 15,
     GetKeyboardState = 16,
     JumpToModuleBootloader = 0x02,
-    SendKbootCommandToModule = 19
+    SendKbootCommandToModule = 0x03
 }
 
 export enum EepromTransfer {
