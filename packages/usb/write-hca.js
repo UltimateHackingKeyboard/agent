@@ -3,36 +3,28 @@ const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
 const {EepromTransfer, getTransferBuffers, UhkHidDevice, UsbCommand} = require('uhk-usb');
 const Logger = require('./logger');
 
-if (process.argv.length < 3) {
-    console.log(`use: write-hca <layout> <manufactureId>
-
-- layout:           iso or ansi
-- manufactureId:    max 32 bit integer
-`);
+if (process.argv.length < 2) {
+    console.log(`use: write-hca {iso|ansi}`);
     process.exit(1);
 }
 
 const layout = process.argv[2];
 if (layout !== 'iso' && layout !== 'ansi') {
-    console.log('Invalid layout. Layout should be on of: iso, ansi');
+    console.log('Invalid layout. Layout should be either iso or ansi');
     process.exit(1);
 }
 
-const uuid = Number.parseInt(process.argv[3]);
-
-if (isNaN(uuid)) {
-    console.log('Manufacture Id is not a integer');
-    process.exit(1);
-}
 const hardwareConfig = new HardwareConfiguration();
 
 hardwareConfig.signature = 'UHK';
-hardwareConfig.dataModelVersion = 0;
-hardwareConfig.deviceId = 1;
-hardwareConfig.uuid = uuid;
+hardwareConfig.majorVersion = 1;
+hardwareConfig.minorVersion = 0;
+hardwareConfig.patchVersion = 0;
 hardwareConfig.brandId = 0;
+hardwareConfig.deviceId = 1;
+hardwareConfig.uniqueId = Math.floor(2**32 * Math.random());
+hardwareConfig.isVendorModeOn = false;
 hardwareConfig.isIso = layout === 'iso';
-hardwareConfig.hasBacklighting = false;
 
 const logger = new Logger();
 

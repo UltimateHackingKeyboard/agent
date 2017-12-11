@@ -6,67 +6,80 @@ export class HardwareConfiguration {
     signature: string;
 
     @assertUInt8
-    dataModelVersion: number;
+    majorVersion: number;
 
     @assertUInt8
-    deviceId: number;
+    minorVersion: number;
+
+    @assertUInt8
+    patchVersion: number;
 
     @assertUInt8
     brandId: number;
 
+    @assertUInt8
+    deviceId: number;
+
     @assertUInt32
-    uuid: number;
+    uniqueId: number;
+
+    isVendorModeOn: boolean;
 
     isIso: boolean;
 
-    hasBacklighting: boolean;
-
     fromJsonObject(jsonObject: any): HardwareConfiguration {
         this.signature = jsonObject.signature;
-        this.dataModelVersion = jsonObject.dataModelVersion;
-        this.deviceId = jsonObject.deviceId;
+        this.majorVersion = jsonObject.majorVersion;
+        this.minorVersion = jsonObject.minorVersion;
+        this.patchVersion = jsonObject.patchVersion;
         this.brandId = jsonObject.brandId;
-        this.uuid = jsonObject.uuid;
+        this.deviceId = jsonObject.deviceId;
+        this.uniqueId = jsonObject.uniqueId;
+        this.isVendorModeOn = jsonObject.isVendorModeOn;
         this.isIso = jsonObject.isIso;
-        this.hasBacklighting = jsonObject.hasBacklighting;
         return this;
     }
 
     fromBinary(buffer: UhkBuffer): HardwareConfiguration {
         this.signature = buffer.readString();
-        this.dataModelVersion = buffer.readUInt16();
-        this.deviceId = buffer.readUInt8();
-        this.uuid = buffer.readUInt32();
+        this.majorVersion = buffer.readUInt8();
+        this.minorVersion = buffer.readUInt8();
+        this.patchVersion = buffer.readUInt8();
         this.brandId = buffer.readUInt8();
+        this.deviceId = buffer.readUInt8();
+        this.uniqueId = buffer.readUInt32();
+        this.isVendorModeOn = buffer.readBoolean();
         this.isIso = buffer.readBoolean();
-        this.hasBacklighting = buffer.readBoolean();
         return this;
     }
 
     toJsonObject(): any {
         return {
             signature: this.signature,
-            dataModelVersion: this.dataModelVersion,
-            deviceId: this.deviceId,
+            majorVersion: this.majorVersion,
+            minorVersion: this.minorVersion,
+            patchVersion: this.patchVersion,
             brandId: this.brandId,
-            uuid: this.uuid,
-            isIso: this.isIso,
-            hasBacklighting: this.hasBacklighting
+            deviceId: this.deviceId,
+            uniqueId: this.uniqueId,
+            isVendorModeOn: this.isVendorModeOn,
+            isIso: this.isIso
         };
     }
 
     toBinary(buffer: UhkBuffer): void {
         buffer.writeString(this.signature);
-        buffer.writeUInt16(this.dataModelVersion);
-        buffer.writeUInt8(this.deviceId);
+        buffer.writeUInt8(this.majorVersion);
+        buffer.writeUInt8(this.minorVersion);
+        buffer.writeUInt8(this.patchVersion);
         buffer.writeUInt8(this.brandId);
-        buffer.writeUInt32(this.uuid);
+        buffer.writeUInt8(this.deviceId);
+        buffer.writeUInt32(this.uniqueId);
+        buffer.writeBoolean(this.isVendorModeOn);
         buffer.writeBoolean(this.isIso);
-        buffer.writeBoolean(this.hasBacklighting);
     }
 
     toString(): string {
         return `<HardwareConfiguration signature="${this.signature}">`;
     }
-
 }
