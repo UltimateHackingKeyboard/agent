@@ -64,7 +64,7 @@ export class UserConfigEffects {
         const hardwareConfig = new HardwareConfiguration();
         hardwareConfig.fromBinary(UhkBuffer.fromArray(data));
 
-        if (hardwareConfig.uuid > 0) {
+        if (hardwareConfig.uniqueId > 0) {
             return hardwareConfig;
         }
         return null;
