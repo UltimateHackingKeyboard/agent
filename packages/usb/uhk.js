@@ -53,7 +53,7 @@ exports = module.exports = moduleExports = {
     usbCommands: {
         getProperty: 0,
         reenumerate: 1,
-        setTestLed: 2,
+        setTestLed: 0x14,
         writeUserConfig: 8,
         applyConfig: 9,
         setLedPwmBrightness: 10,
