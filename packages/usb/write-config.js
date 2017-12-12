@@ -24,7 +24,7 @@ let buffer = Buffer.from(device.readSync());
 configSize = buffer[1] + (buffer[2]<<8);
 console.log(`${configTypeString}configSize:`, configSize);
 
-while (offset < configSize){
+while (offset < configSize) {
     const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeUserConfig;
     chunkSizeToRead = Math.min(chunkSize, configSize - offset);
     buffer = Buffer.concat([

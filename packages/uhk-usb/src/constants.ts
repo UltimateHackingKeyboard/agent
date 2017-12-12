@@ -13,10 +13,10 @@ export enum UsbCommand {
     JumpToModuleBootloader   = 0x02,
     SendKbootCommandToModule = 0x03,
     ReadConfig               = 0x04,
-    UploadUserConfig = 8,
+    WriteHardwareConfig      = 0x05,
+    WriteStagingUserConfig   = 0x06,
     ApplyConfig = 9,
     LaunchEepromTransfer = 12,
-    WriteHardwareConfig = 14,
     GetKeyboardState = 16
 }
 

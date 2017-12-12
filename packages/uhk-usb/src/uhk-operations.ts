@@ -171,7 +171,7 @@ export class UhkOperations {
      */
     private async sendUserConfigToKeyboard(json: string): Promise<void> {
         const buffer: Buffer = new Buffer(JSON.parse(json).data);
-        const fragments = getTransferBuffers(UsbCommand.UploadUserConfig, buffer);
+        const fragments = getTransferBuffers(UsbCommand.WriteStagingUserConfig, buffer);
         for (const fragment of fragments) {
             await this.device.write(fragment);
         }
