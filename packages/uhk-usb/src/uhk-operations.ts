@@ -5,7 +5,8 @@ import * as fs from 'fs';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { snooze } from './util';
-import { convertBufferToIntArray, EepromTransfer, getTransferBuffers, SystemPropertyIds, UsbCommand } from '../index';
+import { convertBufferToIntArray, EepromTransfer, getTransferBuffers, SystemPropertyIds, UsbCommand, ConfigBufferId
+       } from '../index';
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
 export class UhkOperations {
@@ -69,12 +70,12 @@ export class UhkOperations {
             await this.device.waitUntilKeyboardBusy();
             const userConfiguration = await this.loadConfiguration(
                 SystemPropertyIds.MaxUserConfigSize,
-                UsbCommand.ReadUserConfig,
+                ConfigBufferId.validatedUserConfig,
                 'user configuration');
 
             const hardwareConfiguration = await this.loadConfiguration(
                 SystemPropertyIds.HardwareConfigSize,
-                UsbCommand.ReadHardwareConfig,
+                ConfigBufferId.hardwareConfig,
                 'hardware configuration');
 
             return {
@@ -90,7 +91,10 @@ export class UhkOperations {
      * Return with the actual user / hardware fonfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfiguration(property: SystemPropertyIds, config: UsbCommand, configName: string): Promise<string> {
+    public async loadConfiguration(
+        property: SystemPropertyIds,
+        configBufferId: ConfigBufferId ,
+        configName: string): Promise<string> {
         let response = [];
 
         try {
@@ -106,12 +110,13 @@ export class UhkOperations {
             this.logService.debug(`[DeviceOperation] USB[T]: Read ${configName} from keyboard`);
             while (offset < configSize) {
                 const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
-                const writeBuffer = Buffer.from([config, chunkSizeToRead, offset & 0xff, offset >> 8]);
+                const writeBuffer = Buffer.from(
+                    [UsbCommand.ReadConfig, configBufferId, chunkSizeToRead, offset & 0xff, offset >> 8]);
                 const readBuffer = await this.device.write(writeBuffer);
                 configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
 
-                if (firstRead && config === UsbCommand.ReadUserConfig) {
+                if (firstRead && configBufferId !== ConfigBufferId.hardwareConfig) {
                     firstRead = false;
                     configSize = readBuffer[7] + (readBuffer[8] << 8);
                     this.logService.debug(`[DeviceOperation] userConfigSize: ${configSize}`);

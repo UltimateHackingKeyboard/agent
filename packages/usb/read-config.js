@@ -23,10 +23,10 @@ device.write(uhk.getTransferData(payload));
 let buffer = Buffer.from(device.readSync());
 configSize = buffer[1] + (buffer[2]<<8);
 console.log(`${configTypeString}configSize:`, configSize);
-while(offset < configSize) {
-    const usbCommand = isHardwareConfig ? uhk.usbCommands.readHardwareConfig : uhk.usbCommands.readUserConfig;
+while (offset < configSize) {
+    const configBufferId = isHardwareConfig ? uhk.configBufferIds.hardwareConfig : uhk.configBufferIds.validatedUserConfig;
     chunkSizeToRead = Math.min(chunkSize, configSize - offset);
-    buffer = Buffer.from([usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8]);
+    buffer = Buffer.from([uhk.usbCommands.readConfig, configBufferId, chunkSizeToRead, offset & 0xff, offset >> 8]);
     console.log('write to keyboard', uhk.bufferToString(buffer));
     device.write(uhk.getTransferData(buffer));
     buffer = Buffer.from(device.readSync());
