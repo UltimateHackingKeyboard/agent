@@ -15,7 +15,7 @@ export enum UsbCommand {
     ReadConfig               = 0x04,
     WriteHardwareConfig      = 0x05,
     WriteStagingUserConfig   = 0x06,
-    ApplyConfig = 9,
+    ApplyConfig              = 0x07,
     LaunchEepromTransfer = 12,
     GetKeyboardState = 16
 }
