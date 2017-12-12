@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { snooze } from './util';
-import { convertBufferToIntArray, EepromTransfer, getTransferBuffers, SystemPropertyIds, UsbCommand, ConfigBufferId
+import { convertBufferToIntArray, getTransferBuffers, SystemPropertyIds, UsbCommand, ConfigBufferId
        } from '../index';
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
@@ -153,7 +153,7 @@ export class UhkOperations {
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             await this.sendUserConfigToKeyboard(json);
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
-            await this.device.writeConfigToEeprom(EepromTransfer.WriteUserConfig);
+            await this.device.writeUserConfigToEeprom();
         }
         catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);

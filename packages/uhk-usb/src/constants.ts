@@ -16,21 +16,19 @@ export enum UsbCommand {
     WriteHardwareConfig      = 0x05,
     WriteStagingUserConfig   = 0x06,
     ApplyConfig              = 0x07,
-    LaunchEepromTransfer = 12,
+    LaunchEepromTransfer     = 0x08,
     GetKeyboardState = 16
+}
+
+export enum EepromOperation {
+    read = 0,
+    write = 1
 }
 
 export enum ConfigBufferId {
     hardwareConfig = 0,
     stagingUserConfig = 1,
     validatedUserConfig = 2
-}
-
-export enum EepromTransfer {
-    ReadHardwareConfig = 0,
-    WriteHardwareConfig = 1,
-    ReadUserConfig = 2,
-    WriteUserConfig = 3
 }
 
 export enum SystemPropertyIds {

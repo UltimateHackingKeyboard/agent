@@ -25,7 +25,7 @@ configSize = buffer[1] + (buffer[2]<<8);
 console.log(`${configTypeString}configSize:`, configSize);
 
 while (offset < configSize) {
-    const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeUserConfig;
+    const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;
     chunkSizeToRead = Math.min(chunkSize, configSize - offset);
     buffer = Buffer.concat([
         new Buffer([usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8]),
