@@ -106,7 +106,7 @@ export class UhkHidDevice {
 
     public async waitUntilKeyboardBusy(): Promise<void> {
         while (true) {
-            const buffer = await this.write(new Buffer([UsbCommand.GetKeyboardState]));
+            const buffer = await this.write(new Buffer([UsbCommand.GetDeviceState]));
             if (buffer[1] === 0) {
                 break;
             }

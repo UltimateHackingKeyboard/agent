@@ -20,7 +20,7 @@ if (responseCode !== 0) {
 
 function waitUntilKeyboardBusy() {
 
-    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getKeyboardState])));
+    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceState])));
     const keyboardStateBuffer = Buffer.from(device.readSync());
 
     if (keyboardStateBuffer[1] === 1) {

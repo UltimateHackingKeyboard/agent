@@ -17,7 +17,11 @@ export enum UsbCommand {
     WriteStagingUserConfig   = 0x06,
     ApplyConfig              = 0x07,
     LaunchEepromTransfer     = 0x08,
-    GetKeyboardState = 16
+    GetDeviceState           = 0x09,
+    SetTestLed               = 0x0a,
+    GetDebugBuffer           = 0x0b,
+    GetAdcValue              = 0x0c,
+    SetLedPwmBrightness      = 0x0d
 }
 
 export enum EepromOperation {
