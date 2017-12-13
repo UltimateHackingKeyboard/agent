@@ -153,7 +153,7 @@ export class UhkOperations {
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to keyboard');
             await this.sendUserConfigToKeyboard(json);
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
-            await this.device.writeUserConfigToEeprom();
+            await this.device.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
         }
         catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);

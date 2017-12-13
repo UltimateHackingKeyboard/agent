@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
-const {EepromTransfer, getTransferBuffers, UhkHidDevice, UsbCommand} = require('uhk-usb');
+const {EepromTransfer, getTransferBuffers, ConfigBufferId, UhkHidDevice, UsbCommand} = require('uhk-usb');
 const Logger = require('./logger');
 
 if (process.argv.length < 2) {
@@ -40,7 +40,7 @@ async function writeHca() {
     }
 
     logger.debug('USB[T]: Write hardware configuration to EEPROM');
-    await device.writeConfigToEeprom(EepromTransfer.WriteHardwareConfig);
+    await device.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
 }
 
 writeHca()
