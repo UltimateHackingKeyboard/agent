@@ -21,7 +21,8 @@ function getBlhostCmd(pid) {
     let blhostPath;
     switch (process.platform) {
         case 'linux':
-            blhostPath = 'linux/amd64/blhost';
+            const arch = exec('uname -m', {silent:true}).stdout.trim();
+            blhostPath = `linux/${arch}/blhost`;
             break;
         case 'darwin':
             blhostPath = 'mac/blhost';
