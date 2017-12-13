@@ -82,12 +82,8 @@ export class UhkHidDevice {
         });
     }
 
-    public async writeUserConfigToEeprom(): Promise<void> {
-        await this.write(new Buffer([
-            UsbCommand.LaunchEepromTransfer,
-            EepromOperation.write,
-            ConfigBufferId.validatedUserConfig
-        ]));
+    public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
+        await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
         await this.waitUntilKeyboardBusy();
     }
 
