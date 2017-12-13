@@ -2,15 +2,15 @@
 const uhk = require('./uhk');
 
 const eepromTransferType = process.argv[2];
-const eepromTransferId = uhk.eepromTransfer[eepromTransferType];
+const eepromTransfer = uhk.eepromTransfer[eepromTransferType];
 
-if (eepromTransferId === undefined) {
+if (eepromTransfer === undefined) {
     console.error(`Gotta provide one of ${Object.keys(uhk.eepromTransfer).join(', ')}`);
     process.exit(1);
 }
 
 const device = uhk.getUhkDevice();
-device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.launchEepromTransferLegacy, eepromTransferId])));
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.launchEepromTransfer, eepromTransfer.operation, eepromTransfer.configBuffer])));
 const buffer = Buffer.from(device.readSync());
 const responseCode = buffer[0];
 if (responseCode !== 0) {
@@ -20,7 +20,7 @@ if (responseCode !== 0) {
 
 function waitUntilKeyboardBusy() {
 
-    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getKeyboardState])));
+    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceState])));
     const keyboardStateBuffer = Buffer.from(device.readSync());
 
     if (keyboardStateBuffer[1] === 1) {

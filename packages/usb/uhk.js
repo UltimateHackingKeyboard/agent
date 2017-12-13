@@ -44,6 +44,17 @@ function getBootloaderDevice() {
     return foundDevice;
 }
 
+let configBufferIds = {
+    hardwareConfig: 0,
+    stagingUserConfig: 1,
+    validatedUserConfig: 2,
+};
+
+let eepromOperations = {
+    read: 0,
+    write: 1,
+};
+
 exports = module.exports = moduleExports = {
     bufferToString,
     getUhkDevice,
@@ -51,21 +62,20 @@ exports = module.exports = moduleExports = {
     getTransferData,
     checkModuleSlot,
     usbCommands: {
-        getProperty: 0,
-        reenumerate: 1,
-        setTestLed: 2,
-        writeUserConfig: 8,
-        applyConfig: 9,
-        setLedPwmBrightness: 10,
-        getAdcValue: 11,
-        launchEepromTransferLegacy: 12,
-        readHardwareConfig: 13,
-        writeHardwareConfig: 14,
-        readUserConfig: 15,
-        getKeyboardState: 16,
-        getDebugInfo: 17,
-        jumpToModuleBootloader: 18,
-        sendKbootCommandToModule: 19,
+        getProperty             : 0x00,
+        reenumerate             : 0x01,
+        jumpToModuleBootloader  : 0x02,
+        sendKbootCommandToModule: 0x03,
+        readConfig              : 0x04,
+        writeHardwareConfig     : 0x05,
+        writeStagingUserConfig  : 0x06,
+        applyConfig             : 0x07,
+        launchEepromTransfer    : 0x08,
+        getDeviceState          : 0x09,
+        setTestLed              : 0x0a,
+        getDebugBuffer          : 0x0b,
+        getAdcValue             : 0x0c,
+        setLedPwmBrightness     : 0x0d,
     },
     enumerationModes: {
         bootloader: 0,
@@ -94,11 +104,25 @@ exports = module.exports = moduleExports = {
         hardwareConfigSize: 4,
         userConfigSize: 5,
     },
+    configBufferIds,
+    eepromOperations,
     eepromTransfer: {
-        readHardwareConfig: 0,
-        writeHardwareConfig: 1,
-        readUserConfig: 2,
-        writeUserConfig: 3,
+        readHardwareConfig: {
+            operation: eepromOperations.read,
+            configBuffer: configBufferIds.hardwareConfig,
+        },
+        writeHardwareConfig: {
+            operation: eepromOperations.write,
+            configBuffer:configBufferIds.hardwareConfig,
+        },
+        readUserConfig: {
+            operation: eepromOperations.read,
+            configBuffer: configBufferIds.validatedUserConfig,
+        },
+        writeUserConfig: {
+            operation: eepromOperations.write,
+            configBuffer: configBufferIds.validatedUserConfig,
+        },
     },
     kbootCommands: {
         idle: 0,

@@ -8,24 +8,31 @@ export namespace Constants {
  * UHK USB Communications command. All communication package should have start with a command code.
  */
 export enum UsbCommand {
-    GetProperty = 0,
-    Reenumerate = 1,
-    UploadUserConfig = 8,
-    ApplyConfig = 9,
-    LaunchEepromTransfer = 12,
-    ReadHardwareConfig = 13,
-    WriteHardwareConfig = 14,
-    ReadUserConfig = 15,
-    GetKeyboardState = 16,
-    JumpToModuleBootloader = 18,
-    SendKbootCommandToModule = 19
+    GetProperty              = 0x00,
+    Reenumerate              = 0x01,
+    JumpToModuleBootloader   = 0x02,
+    SendKbootCommandToModule = 0x03,
+    ReadConfig               = 0x04,
+    WriteHardwareConfig      = 0x05,
+    WriteStagingUserConfig   = 0x06,
+    ApplyConfig              = 0x07,
+    LaunchEepromTransfer     = 0x08,
+    GetDeviceState           = 0x09,
+    SetTestLed               = 0x0a,
+    GetDebugBuffer           = 0x0b,
+    GetAdcValue              = 0x0c,
+    SetLedPwmBrightness      = 0x0d
 }
 
-export enum EepromTransfer {
-    ReadHardwareConfig = 0,
-    WriteHardwareConfig = 1,
-    ReadUserConfig = 2,
-    WriteUserConfig = 3
+export enum EepromOperation {
+    read = 0,
+    write = 1
+}
+
+export enum ConfigBufferId {
+    hardwareConfig = 0,
+    stagingUserConfig = 1,
+    validatedUserConfig = 2
 }
 
 export enum SystemPropertyIds {

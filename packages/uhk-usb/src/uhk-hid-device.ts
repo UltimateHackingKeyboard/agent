@@ -2,8 +2,9 @@ import { Device, devices, HID } from 'node-hid';
 import { LogService } from 'uhk-common';
 
 import {
+    ConfigBufferId,
     Constants,
-    EepromTransfer,
+    EepromOperation,
     enumerationModeIdToProductId,
     EnumerationModes,
     KbootCommands,
@@ -81,8 +82,12 @@ export class UhkHidDevice {
         });
     }
 
-    public async writeConfigToEeprom(transferType: EepromTransfer): Promise<void> {
-        await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, transferType]));
+    public async writeUserConfigToEeprom(): Promise<void> {
+        await this.write(new Buffer([
+            UsbCommand.LaunchEepromTransfer,
+            EepromOperation.write,
+            ConfigBufferId.validatedUserConfig
+        ]));
         await this.waitUntilKeyboardBusy();
     }
 
@@ -101,7 +106,7 @@ export class UhkHidDevice {
 
     public async waitUntilKeyboardBusy(): Promise<void> {
         while (true) {
-            const buffer = await this.write(new Buffer([UsbCommand.GetKeyboardState]));
+            const buffer = await this.write(new Buffer([UsbCommand.GetDeviceState]));
             if (buffer[1] === 0) {
                 break;
             }
