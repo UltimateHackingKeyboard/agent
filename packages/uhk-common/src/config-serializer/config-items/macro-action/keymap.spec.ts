@@ -3,9 +3,9 @@ import { UserConfiguration } from '../user-configuration';
 describe('keymap', () => {
     it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', () => {
         const inputJsonConfig = {
-            dataModelMajorVersion: 3,
-            dataModelMinorVersion: 0,
-            dataModelPatchVersion: 0,
+            userConfigMajorVersion: 3,
+            userConfigMinorVersion: 0,
+            userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             iconsAndLayerTextsBrightness: 255,
@@ -75,9 +75,9 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            dataModelMajorVersion: 3,
-            dataModelMinorVersion: 0,
-            dataModelPatchVersion: 0,
+            userConfigMajorVersion: 3,
+            userConfigMinorVersion: 0,
+            userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             iconsAndLayerTextsBrightness: 255,
@@ -156,9 +156,9 @@ describe('keymap', () => {
 
     it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', () => {
         const inputJsonConfig = {
-            dataModelMajorVersion: 3,
-            dataModelMinorVersion: 0,
-            dataModelPatchVersion: 0,
+            userConfigMajorVersion: 3,
+            userConfigMinorVersion: 0,
+            userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             iconsAndLayerTextsBrightness: 255,
@@ -228,9 +228,9 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            dataModelMajorVersion: 3,
-            dataModelMinorVersion: 0,
-            dataModelPatchVersion: 0,
+            userConfigMajorVersion: 3,
+            userConfigMinorVersion: 0,
+            userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             iconsAndLayerTextsBrightness: 255,

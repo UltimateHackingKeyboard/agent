@@ -8,9 +8,9 @@ describe('user-configuration', () => {
 
     it('should transform an empty config', () => {
         jsonTester({
-            dataModelMajorVersion: 3,
-            dataModelMinorVersion: 0,
-            dataModelPatchVersion: 0,
+            userConfigMajorVersion: 3,
+            userConfigMinorVersion: 0,
+            userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             iconsAndLayerTextsBrightness: 255,
@@ -34,9 +34,9 @@ describe('user-configuration', () => {
 
     it('should transform a null keyActionType ', () => {
         jsonTester({
-            dataModelMajorVersion: 3,
-            dataModelMinorVersion: 0,
-            dataModelPatchVersion: 0,
+            userConfigMajorVersion: 3,
+            userConfigMinorVersion: 0,
+            userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
             iconsAndLayerTextsBrightness: 255,
@@ -75,7 +75,7 @@ describe('user-configuration', () => {
 
     it('Should set the device name to "My UHK" if not exists in the config', () => {
         const original = {
-            dataModelVersion: 1,
+            userConfigVersion: 1,
             moduleConfigurations: [],
             macros: [],
             keymaps: []

@@ -56,7 +56,7 @@ describe('user-configuration reducer', () => {
             const result = reducer(state, saveKeyAction);
             expect(result).not.toBe(defaultUserConfig);
             expect(result.toJsonObject()).toEqual({
-                dataModelVersion: 4,
+                userConfigVersion: 4,
                 moduleConfigurations: [
                     {
                         id: 1,
@@ -233,7 +233,7 @@ describe('user-configuration reducer', () => {
             const result = reducer(state, saveKeyAction);
             expect(result).not.toBe(defaultUserConfig);
             expect(result.toJsonObject()).toEqual({
-                dataModelVersion: 4,
+                userConfigVersion: 4,
                 moduleConfigurations: [
                     {
                         id: 1,

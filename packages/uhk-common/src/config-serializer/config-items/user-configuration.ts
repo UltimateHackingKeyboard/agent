@@ -8,13 +8,13 @@ import { ConfigSerializer } from '../config-serializer';
 export class UserConfiguration {
 
     @assertUInt16
-    dataModelMajorVersion: number;
+    userConfigMajorVersion: number;
 
     @assertUInt16
-    dataModelMinorVersion: number;
+    userConfigMinorVersion: number;
 
     @assertUInt16
-    dataModelPatchVersion: number;
+    userConfigPatchVersion: number;
 
     @assertUInt16
     userConfigurationLength: number;
@@ -74,9 +74,9 @@ export class UserConfiguration {
     }
 
     fromJsonObject(jsonObject: any): UserConfiguration {
-        this.dataModelMajorVersion = jsonObject.dataModelMajorVersion;
-        this.dataModelMinorVersion = jsonObject.dataModelMinorVersion;
-        this.dataModelPatchVersion = jsonObject.dataModelPatchVersion;
+        this.userConfigMajorVersion = jsonObject.userConfigMajorVersion;
+        this.userConfigMinorVersion = jsonObject.userConfigMinorVersion;
+        this.userConfigPatchVersion = jsonObject.userConfigPatchVersion;
         this.deviceName = jsonObject.deviceName;
         this.setDefaultDeviceName();
         this.doubleTapSwitchLayerTimeout = jsonObject.doubleTapSwitchLayerTimeout;
@@ -107,9 +107,9 @@ export class UserConfiguration {
     }
 
     fromBinary(buffer: UhkBuffer): UserConfiguration {
-        this.dataModelMajorVersion = buffer.readUInt16();
-        this.dataModelMinorVersion = buffer.readUInt16();
-        this.dataModelPatchVersion = buffer.readUInt16();
+        this.userConfigMajorVersion = buffer.readUInt16();
+        this.userConfigMinorVersion = buffer.readUInt16();
+        this.userConfigPatchVersion = buffer.readUInt16();
         this.userConfigurationLength = buffer.readUInt16();
         this.deviceName = buffer.readString();
         this.setDefaultDeviceName();
@@ -147,9 +147,9 @@ export class UserConfiguration {
 
     toJsonObject(): any {
         return {
-            dataModelMajorVersion: this.dataModelMajorVersion,
-            dataModelMinorVersion: this.dataModelMinorVersion,
-            dataModelPatchVersion: this.dataModelPatchVersion,
+            userConfigMajorVersion: this.userConfigMajorVersion,
+            userConfigMinorVersion: this.userConfigMinorVersion,
+            userConfigPatchVersion: this.userConfigPatchVersion,
             deviceName: this.deviceName,
             doubleTapSwitchLayerTimeout: this.doubleTapSwitchLayerTimeout,
             iconsAndLayerTextsBrightness: this.iconsAndLayerTextsBrightness,
@@ -172,9 +172,9 @@ export class UserConfiguration {
     }
 
     toBinary(buffer: UhkBuffer): void {
-        buffer.writeUInt16(this.dataModelMajorVersion);
-        buffer.writeUInt16(this.dataModelMinorVersion);
-        buffer.writeUInt16(this.dataModelPatchVersion);
+        buffer.writeUInt16(this.userConfigMajorVersion);
+        buffer.writeUInt16(this.userConfigMinorVersion);
+        buffer.writeUInt16(this.userConfigPatchVersion);
         buffer.writeUInt16(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeUInt16(this.doubleTapSwitchLayerTimeout);
@@ -199,8 +199,8 @@ export class UserConfiguration {
     }
 
     toString(): string {
-        return `<UserConfiguration dataModelVersion="${this.dataModelMajorVersion}.\
-               ${this.dataModelMinorVersion}.${this.dataModelPatchVersion}">`;
+        return `<UserConfiguration userConfigVersion="${this.userConfigMajorVersion}.\
+               ${this.userConfigMinorVersion}.${this.userConfigPatchVersion}">`;
     }
 
     getKeymap(keymapAbbreviation: string): Keymap {
