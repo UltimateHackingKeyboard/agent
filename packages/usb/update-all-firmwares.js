@@ -34,6 +34,8 @@ require('shelljs/global');
 
         if (program.overwriteUserConfig) {
             exec(`${__dirname}/write-config.js ${firmwarePath}/devices/uhk60-right/config.bin`);
+            exec(`${__dirname}/apply-config.js`);
+            exec(`${__dirname}/eeprom.js writeUserConfig`);
         }
 
         config.verbose = false;
