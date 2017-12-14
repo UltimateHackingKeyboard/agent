@@ -2,6 +2,7 @@ class App {
     public static readonly appStarted = 'app-started';
     public static readonly getAppStartInfo = 'app-get-start-info';
     public static readonly getAppStartInfoReply = 'app-get-start-info-reply';
+    public static readonly exit = 'app-exit';
 }
 
 class AutoUpdate {

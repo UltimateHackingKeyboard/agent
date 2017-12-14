@@ -89,7 +89,6 @@ export class DeviceService {
                 success: true,
                 ...result
             };
-            event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
         } catch (error) {
             response = {
                 success: false,

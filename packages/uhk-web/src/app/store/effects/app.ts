@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
@@ -13,16 +13,23 @@ import 'rxjs/add/operator/catch';
 import { AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
 import {
     ActionTypes,
+    ApplyCommandLineArgsAction,
     AppStartedAction,
     DismissUndoNotificationAction,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
-    ToggleAddonMenuAction,
-    UndoLastAction, UpdateAgentVersionInformationAction
+    UndoLastAction,
+    UpdateAgentVersionInformationAction
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { ConnectionStateChangedAction, PermissionStateChangedAction } from '../actions/device';
+import {
+    ActionTypes as DeviceActions,
+    ConnectionStateChangedAction,
+    PermissionStateChangedAction,
+    SaveToKeyboardSuccessAction
+} from '../actions/device';
+import { AppState, autoWriteUserConfiguration } from '../index';
 
 @Injectable()
 export class ApplicationEffects {
@@ -56,7 +63,7 @@ export class ApplicationEffects {
         .mergeMap((appInfo: AppStartInfo) => {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
-                new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
+                new ApplyCommandLineArgsAction(appInfo.commandLineArgs),
                 new ConnectionStateChangedAction(appInfo.deviceConnected),
                 new PermissionStateChangedAction(appInfo.hasPermission),
                 new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
@@ -68,10 +75,20 @@ export class ApplicationEffects {
         .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
+    @Effect({dispatch: false}) saveToKeyboardSuccess$ = this.actions$
+        .ofType<SaveToKeyboardSuccessAction>(DeviceActions.SAVE_TO_KEYBOARD_SUCCESS)
+        .withLatestFrom(this.store.select(autoWriteUserConfiguration))
+        .do(([action, autoWriteUserConfig]) => {
+            if (autoWriteUserConfig) {
+                this.appRendererService.exit();
+            }
+        });
+
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
-                private logService: LogService) {
+                private logService: LogService,
+                private store: Store<AppState>) {
     }
 }

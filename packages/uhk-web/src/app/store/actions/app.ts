@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { AppStartInfo, HardwareConfiguration, Notification, type, VersionInformation } from 'uhk-common';
+import { AppStartInfo, CommandLineArgs, HardwareConfiguration, Notification, type, VersionInformation } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 
 const PREFIX = '[app] ';
@@ -10,7 +10,7 @@ export const ActionTypes = {
     APP_BOOTSRAPPED: type(PREFIX + 'bootstrapped'),
     APP_STARTED: type(PREFIX + 'started'),
     APP_SHOW_NOTIFICATION: type(PREFIX + 'show notification'),
-    APP_TOGGLE_ADDON_MENU: type(PREFIX + 'toggle add-on menu'),
+    APPLY_COMMAND_LINE_ARGS: type(PREFIX + 'apply command line args'),
     APP_PROCESS_START_INFO: type(PREFIX + 'process start info'),
     UNDO_LAST: type(PREFIX + 'undo last action'),
     UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
@@ -34,10 +34,10 @@ export class ShowNotificationAction implements Action {
     constructor(public payload: Notification) { }
 }
 
-export class ToggleAddonMenuAction implements Action {
-    type = ActionTypes.APP_TOGGLE_ADDON_MENU;
+export class ApplyCommandLineArgsAction implements Action {
+    type = ActionTypes.APPLY_COMMAND_LINE_ARGS;
 
-    constructor(public payload: boolean) { }
+    constructor(public payload: CommandLineArgs) { }
 }
 
 export class ProcessAppStartInfoAction implements Action {
@@ -82,7 +82,7 @@ export type Actions
     = AppStartedAction
     | AppBootsrappedAction
     | ShowNotificationAction
-    | ToggleAddonMenuAction
+    | ApplyCommandLineArgsAction
     | ProcessAppStartInfoAction
     | UndoLastAction
     | UndoLastSuccessAction
