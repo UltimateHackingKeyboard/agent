@@ -35,13 +35,10 @@ export enum ConfigBufferId {
     validatedUserConfig = 2
 }
 
-export enum SystemPropertyIds {
-    UsbProtocolVersion = 0,
-    BridgeProtocolVersion = 1,
-    DataModelVersion = 2,
-    FirmwareVersion = 3,
-    HardwareConfigSize = 4,
-    MaxUserConfigSize = 5
+export enum DevicePropertyIds {
+    DeviceProtocolVersion = 0,
+    ProtocolVersions = 1,
+    ConfigSizes = 2
 }
 
 export enum EnumerationModes {

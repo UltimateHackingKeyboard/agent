@@ -96,13 +96,10 @@ exports = module.exports = moduleExports = {
         compatibleKeyboard: 0x6123,
     },
     vendorId: 0x1D50,
-    systemPropertyIds: {
-        usbProtocolVersion: 0,
-        bridgeProtocolVersion: 1,
-        dataModelVersion: 2,
-        firmwareVersion: 3,
-        hardwareConfigSize: 4,
-        userConfigSize: 5,
+    devicePropertyIds: {
+        deviceProtocolVersion: 0,
+        protocolVersions: 1,
+        configSizes: 2,
     },
     configBufferIds,
     eepromOperations,

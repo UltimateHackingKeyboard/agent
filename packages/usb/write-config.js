@@ -19,21 +19,18 @@ const configBin = program.args[0];
 const chunkSize = 60;
 const isHardwareConfig = program.hardwareConfig;
 const configTypeString = isHardwareConfig ? 'hardware' : 'user';
-let configSize;
 let offset = 0;
 let configBuffer = fs.readFileSync(configBin);
 let chunkSizeToRead;
 
-const payload = new Buffer([
-    uhk.usbCommands.getProperty,
-    isHardwareConfig
-        ? uhk.systemPropertyIds.hardwareConfigSize
-        : uhk.systemPropertyIds.userConfigSize
-    ]);
+const payload = new Buffer([uhk.usbCommands.getProperty, uhk.devicePropertyIds.configSizes]);
 
 device.write(uhk.getTransferData(payload));
 let buffer = Buffer.from(device.readSync());
-configSize = Math.min(buffer[1] + (buffer[2]<<8), configBuffer.length);
+const hardwareConfigMaxSize = buffer[1] + (buffer[2]<<8);
+const userConfigMaxSize = buffer[3] + (buffer[4]<<8);
+const configMaxSize = isHardwareConfig ? hardwareConfigMaxSize : userConfigMaxSize;
+const configSize = Math.min(configMaxSize, configBuffer.length);
 
 while (offset < configSize) {
     const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;

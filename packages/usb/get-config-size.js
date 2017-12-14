@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 const uhk = require('./uhk');
 
-const isHardwareConfig = process.argv[2] === 'h';
-
 const device = uhk.getUhkDevice();
-const sendData = new Buffer([uhk.usbCommands.getProperty,
-    isHardwareConfig ?
-        uhk.systemPropertyIds.hardwareConfigSize
-        : uhk.systemPropertyIds.userConfigSize]);
-
+const sendData = new Buffer([uhk.usbCommands.getProperty, uhk.devicePropertyIds.configSizes]);
 device.write(uhk.getTransferData(sendData));
 const response = Buffer.from(device.readSync());
-console.log(response[1] + (response[2]<<8));
+
+const hardwareConfigMaxSize = response[1] + (response[2]<<8);
+const userConfigMaxSize = response[3] + (response[4]<<8);
+
+console.log(`hardwareConfigMaxSize: ${hardwareConfigMaxSize}`);
+console.log(`userConfigMaxSize: ${userConfigMaxSize}`);

@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { snooze } from './util';
-import { convertBufferToIntArray, getTransferBuffers, SystemPropertyIds, UsbCommand, ConfigBufferId
+import { convertBufferToIntArray, getTransferBuffers, DevicePropertyIds, UsbCommand, ConfigBufferId
        } from '../index';
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
@@ -68,15 +68,8 @@ export class UhkOperations {
     public async loadConfigurations(): Promise<LoadConfigurationsResult> {
         try {
             await this.device.waitUntilKeyboardBusy();
-            const userConfiguration = await this.loadConfiguration(
-                SystemPropertyIds.MaxUserConfigSize,
-                ConfigBufferId.validatedUserConfig,
-                'user configuration');
-
-            const hardwareConfiguration = await this.loadConfiguration(
-                SystemPropertyIds.HardwareConfigSize,
-                ConfigBufferId.hardwareConfig,
-                'hardware configuration');
+            const userConfiguration = await this.loadConfiguration(ConfigBufferId.validatedUserConfig);
+            const hardwareConfiguration = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
 
             return {
                 userConfiguration,
@@ -91,15 +84,15 @@ export class UhkOperations {
      * Return with the actual user / hardware fonfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfiguration(
-        property: SystemPropertyIds,
-        configBufferId: ConfigBufferId ,
-        configName: string): Promise<string> {
+    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<string> {
         let response = [];
+
+        const configBufferIdToName = ['HardwareConfig', 'StagingUserConfig', 'ValidatedUserConfig'];
+        const configName = configBufferIdToName[configBufferId];
 
         try {
             this.logService.debug(`[DeviceOperation] USB[T]: Read ${configName} size from keyboard`);
-            let configSize = await this.getConfigSizeFromKeyboard(property);
+            let configSize = await this.getConfigSizeFromKeyboard(configBufferId);
             const originalConfigSize = configSize;
             this.logService.debug(`[DeviceOperation] getConfigSize() configSize: ${configSize}`);
             const chunkSize = 63;
@@ -140,11 +133,15 @@ export class UhkOperations {
      * Return the user / hardware configuration size from the UHK Device
      * @returns {Promise<number>}
      */
-    public async getConfigSizeFromKeyboard(property: SystemPropertyIds): Promise<number> {
-        const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, property]));
+    public async getConfigSizeFromKeyboard(configBufferId: ConfigBufferId): Promise<number> {
+        const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, DevicePropertyIds.ConfigSizes]));
         this.device.close();
-        const configSize = buffer[1] + (buffer[2] << 8);
-        this.logService.debug('[DeviceOperation] User config size:', configSize);
+        const hardwareConfigSize = buffer[1] + (buffer[2] << 8);
+        const userConfigSize = buffer[3] + (buffer[4] << 8);
+        const isHardwareConfig = configBufferId === ConfigBufferId.hardwareConfig;
+        const configSize = isHardwareConfig ? hardwareConfigSize : userConfigSize;
+        const configString = isHardwareConfig ? 'Hardware' : 'User';
+        this.logService.debug(`[DeviceOperation] ${configString} config size:`, configSize);
         return configSize;
     }
 
