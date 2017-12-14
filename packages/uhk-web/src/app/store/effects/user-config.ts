@@ -186,9 +186,10 @@ export class UserConfigEffects {
         });
 
     @Effect() loadUserConfigurationSuccess$ = this.actions$
-        .ofType(ActionTypes.SAVE_USER_CONFIG_SUCCESS)
+        .ofType(ActionTypes.LOAD_USER_CONFIG_SUCCESS)
         .withLatestFrom(this.store.select(autoWriteUserConfiguration))
         .switchMap(([action, autoWriteUserConfig]) => {
+            this.logService.debug('[UserConfigEffect] LOAD_USER_CONFIG_SUCCESS', {autoWriteUserConfig});
             if (autoWriteUserConfig) {
                 return Observable.of(new SaveConfigurationAction());
             }
