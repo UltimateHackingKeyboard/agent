@@ -11,6 +11,7 @@ require('shelljs/global');
 
         program
             .usage(`firmwarePath`)
+            .option('-u, --overwrite-user-config', 'Overwrite the user configuration with the one that is bundled with the firmware')
             .parse(process.argv);
 
         if (program.args.length == 0) {
@@ -30,6 +31,11 @@ require('shelljs/global');
         exec(`${__dirname}/update-device-firmware.js ${firmwarePath}/devices/uhk60-right/firmware.hex`);
         exec(`${__dirname}/reenumerate.js normalKeyboard`);
         exec(`${__dirname}/update-module-firmware.js leftHalf ${firmwarePath}/modules/uhk60-left.bin`);
+
+        if (program.overwriteUserConfig) {
+            exec(`${__dirname}/write-config.js ${firmwarePath}/devices/uhk60-right/config.bin`);
+        }
+
         config.verbose = false;
     } catch(exception) {
         console.error(exception.message);
