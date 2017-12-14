@@ -30,10 +30,11 @@ export class AppService extends MainServiceBase {
             hasPermission: this.uhkHidDeviceService.hasPermission(),
             agentVersionInfo: {
                 version: packageJson.version,
-                dataModelVersion: packageJson.dataModelVersion,
-                usbProtocolVersion: packageJson.usbProtocolVersion,
-                slaveProtocolVersion: packageJson.slaveProtocolVersion,
-                firmwareVersion: packageJson.firmwareVersion
+                firmwareVersion: packageJson.firmwareVersion,
+                deviceProtocolVersion: packageJson.deviceProtocolVersion,
+                moduleProtocolVersion: packageJson.moduleProtocolVersion,
+                userConfigVersion: packageJson.userConfigVersion,
+                hardwareConfigVersion: packageJson.hardwareConfigVersion
             }
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);

@@ -1,7 +1,8 @@
 export interface VersionInformation {
     version: string;
-    dataModelVersion: string;
-    usbProtocolVersion: string;
-    slaveProtocolVersion: string;
     firmwareVersion: string;
+    deviceProtocolVersion: string;
+    moduleProtocolVersion: string;
+    userConfigVersion: string;
+    hardwareConfigVersion: string;
 }

@@ -82,9 +82,9 @@ export class KeymapEditComponent {
                     site: 'https://ultimatehackingkeyboard.com',
                     description: 'Ultimate Hacking Keyboard keymap',
                     keyboardModel: 'UHK60',
-                    dataModelMajorVersion: userConfiguration.dataModelMajorVersion,
-                    dataModelMinorVersion: userConfiguration.dataModelMinorVersion,
-                    dataModelPatchVersion: userConfiguration.dataModelPatchVersion,
+                    userConfigMajorVersion: userConfiguration.userConfigMajorVersion,
+                    userConfigMinorVersion: userConfiguration.userConfigMinorVersion,
+                    userConfigPatchVersion: userConfiguration.userConfigPatchVersion,
                     objectType: 'keymap',
                     objectValue: keymap.toJsonObject()
                 };

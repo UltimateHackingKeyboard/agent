@@ -1,9 +1,9 @@
 import { cloneDeep } from 'lodash';
 
 const defaultUserConfig = {
-    dataModelMajorVersion: 3,
-    dataModelMinorVersion: 0,
-    dataModelPatchVersion: 0,
+    userConfigMajorVersion: 3,
+    userConfigMinorVersion: 0,
+    userConfigPatchVersion: 0,
     deviceName: 'My UHK',
     doubleTapSwitchLayerTimeout: 250,
     iconsAndLayerTextsBrightness: 255,
