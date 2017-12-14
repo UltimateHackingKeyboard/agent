@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect, toPayload } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';
@@ -20,6 +20,7 @@ import {
     HideSaveToKeyboardButton,
     PermissionStateChangedAction,
     SaveConfigurationAction,
+    SaveConfigurationReplyAction,
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed,
     SetPrivilegeOnLinuxReplyAction,
@@ -113,8 +114,8 @@ export class DeviceEffects {
 
     @Effect()
     saveConfigurationReply$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SAVE_CONFIGURATION_REPLY)
-        .map(toPayload)
+        .ofType<SaveConfigurationReplyAction>(ActionTypes.SAVE_CONFIGURATION_REPLY)
+        .map(action => action.payload)
         .mergeMap((response: IpcResponse) => {
             if (response.success) {
                 return [
