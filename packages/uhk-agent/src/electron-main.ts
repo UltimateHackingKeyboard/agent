@@ -10,7 +10,7 @@ import * as url from 'url';
 import * as commandLineArgs from 'command-line-args';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
-import { CommandLineArgs, LogRegExps } from 'uhk-common';
+import { LogRegExps } from 'uhk-common';
 import { DeviceService } from './services/device.service';
 import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
@@ -18,12 +18,14 @@ import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import { UhkBlhost } from '../../uhk-usb/src';
 import * as isDev from 'electron-is-dev';
+import { CommandLineInputs } from './models/command-line-inputs';
 
 const optionDefinitions = [
-    {name: 'addons', type: Boolean, defaultOption: false}
+    {name: 'addons', type: Boolean},
+    {name: 'auto-write-config', type: Boolean}
 ];
 
-const options: CommandLineArgs = commandLineArgs(optionDefinitions);
+const options: CommandLineInputs = commandLineArgs(optionDefinitions);
 
 // import './dev-extension';
 // require('electron-debug')({ showDevTools: true, enabled: true });

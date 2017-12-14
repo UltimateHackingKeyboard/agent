@@ -12,35 +12,27 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/empty';
 
 import {
-    ConfigurationReply,
-    HardwareConfiguration,
-    LogService,
-    NotificationType,
-    UhkBuffer,
+    ConfigurationReply, HardwareConfiguration, LogService, NotificationType, UhkBuffer,
     UserConfiguration
 } from 'uhk-common';
 
 import {
-    ActionTypes,
-    LoadConfigFromDeviceReplyAction,
-    LoadUserConfigSuccessAction,
-    RenameUserConfigurationAction,
+    ActionTypes, LoadConfigFromDeviceReplyAction, LoadUserConfigSuccessAction, RenameUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
-import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
+import { AppState, autoWriteUserConfiguration, getPrevUserConfiguration, getUserConfiguration } from '../index';
 import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
 import {
-    DismissUndoNotificationAction,
-    LoadHardwareConfigurationSuccessAction,
-    ShowNotificationAction,
+    DismissUndoNotificationAction, LoadHardwareConfigurationSuccessAction, ShowNotificationAction,
     UndoLastAction
 } from '../actions/app';
-import { ShowSaveToKeyboardButtonAction } from '../actions/device';
+import { SaveConfigurationAction, ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 
@@ -191,6 +183,18 @@ export class UserConfigEffects {
             userConfiguration.toBinary(uhkBuffer);
             const blob = new Blob([uhkBuffer.getBufferContent()]);
             saveAs(blob, 'UserConfiguration.bin');
+        });
+
+    @Effect() loadUserConfigurationSuccess$ = this.actions$
+        .ofType(ActionTypes.SAVE_USER_CONFIG_SUCCESS)
+        .withLatestFrom(this.store.select(autoWriteUserConfiguration))
+        .switchMap(([action, autoWriteUserConfig]) => {
+            if (autoWriteUserConfig) {
+                return Observable.of(new SaveConfigurationAction());
+            }
+            else {
+                return Observable.empty();
+            }
         });
 
     constructor(private actions$: Actions,

@@ -17,7 +17,7 @@ import {
     DismissUndoNotificationAction,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
-    ToggleAddonMenuAction,
+    ApplyCommandLineArgsAction,
     UndoLastAction, UpdateAgentVersionInformationAction
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
@@ -56,7 +56,7 @@ export class ApplicationEffects {
         .mergeMap((appInfo: AppStartInfo) => {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
-                new ToggleAddonMenuAction(appInfo.commandLineArgs.addons),
+                new ApplyCommandLineArgsAction(appInfo.commandLineArgs),
                 new ConnectionStateChangedAction(appInfo.deviceConnected),
                 new PermissionStateChangedAction(appInfo.hasPermission),
                 new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
