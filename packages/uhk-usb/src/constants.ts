@@ -21,7 +21,8 @@ export enum UsbCommand {
     SetTestLed               = 0x0a,
     GetDebugBuffer           = 0x0b,
     GetAdcValue              = 0x0c,
-    SetLedPwmBrightness      = 0x0d
+    SetLedPwmBrightness      = 0x0d,
+    GetModuleProperties      = 0x0e
 }
 
 export enum EepromOperation {

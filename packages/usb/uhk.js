@@ -76,6 +76,7 @@ exports = module.exports = moduleExports = {
         getDebugBuffer          : 0x0b,
         getAdcValue             : 0x0c,
         setLedPwmBrightness     : 0x0d,
+        getModuleProperties     : 0x0e,
     },
     enumerationModes: {
         bootloader: 0,
