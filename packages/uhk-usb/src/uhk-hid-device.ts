@@ -50,7 +50,7 @@ export class UhkHidDevice {
             this._hasPermission = this.getDevice() !== null;
             this.close();
 
-            return true;
+            return this._hasPermission;
         } catch (err) {
             this.logService.error('[UhkHidDevice] hasPermission', err);
         }
