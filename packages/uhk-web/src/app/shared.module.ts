@@ -7,13 +7,15 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
+import { NouisliderModule } from 'ng2-nouislider';
 
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
-    MouseSpeedComponent
+    MouseSpeedComponent,
+    LEDBrightnessComponent
 } from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
@@ -105,6 +107,7 @@ import { XtermComponent } from './components/xterm/xterm.component';
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
         MouseSpeedComponent,
+        LEDBrightnessComponent,
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,
@@ -172,6 +175,7 @@ import { XtermComponent } from './components/xterm/xterm.component';
         DragulaModule,
         routing,
         Select2Module,
+        NouisliderModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here
