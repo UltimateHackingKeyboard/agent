@@ -25,6 +25,7 @@ export class UhkHidDevice {
      * @private
      */
     private _device: HID;
+    private _hasPermission = false;
 
     constructor(private logService: LogService) {
     }
@@ -36,9 +37,14 @@ export class UhkHidDevice {
      * the Agent will ask permission to run at the first time.
      * @returns {boolean}
      */
-    public hasPermission(): boolean {
+    public async hasPermission(): Promise<boolean> {
         try {
-            devices();
+            if (this._hasPermission) {
+                return true;
+            }
+            await this.write(new Buffer([UsbCommand.GetDeviceState]));
+            this._hasPermission = true;
+
             return true;
         } catch (err) {
             this.logService.error('[UhkHidDevice] hasPermission', err);
@@ -225,7 +231,7 @@ export class UhkHidDevice {
     }
 }
 
-function  kbootKommandName(module: ModuleSlotToI2cAddress): string {
+function kbootKommandName(module: ModuleSlotToI2cAddress): string {
     switch (module) {
         case ModuleSlotToI2cAddress.leftHalf:
             return 'leftHalf';

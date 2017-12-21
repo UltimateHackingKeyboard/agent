@@ -158,7 +158,11 @@ export class DeviceService {
                     dev.productId === Constants.PRODUCT_ID);
             })
             .distinctUntilChanged()
-            .do((connected: boolean) => {
+            .do(async (connected: boolean) => {
+                if (!await this.device.hasPermission()) {
+                    return;
+                }
+
                 this.connected = connected;
                 this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
                 this.logService.info(`[DeviceService] Device connection state changed to: ${connected}`);

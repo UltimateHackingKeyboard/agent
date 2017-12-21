@@ -64,7 +64,7 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ApplyCommandLineArgsAction(appInfo.commandLineArgs),
-                new ConnectionStateChangedAction(appInfo.deviceConnected),
+                new ConnectionStateChangedAction(appInfo.deviceConnected && appInfo.hasPermission),
                 new PermissionStateChangedAction(appInfo.hasPermission),
                 new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
             ];

@@ -32,7 +32,7 @@ export class AppService extends MainServiceBase {
                 autoWriteConfig: this.options['auto-write-config'] || false
             },
             deviceConnected: this.deviceService.isConnected,
-            hasPermission: this.uhkHidDeviceService.hasPermission(),
+            hasPermission: await this.uhkHidDeviceService.hasPermission(),
             agentVersionInfo: {
                 version: packageJson.version,
                 firmwareVersion: packageJson.firmwareVersion,
