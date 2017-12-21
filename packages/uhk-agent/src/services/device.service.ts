@@ -1,9 +1,8 @@
 import { ipcMain } from 'electron';
-import { ConfigurationReply, IpcEvents, IpcResponse, LogService } from 'uhk-common';
-import { Constants, snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
+import { ConfigurationReply, DeviceConnectionState, IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { Device, devices } from 'node-hid';
 import { emptyDir } from 'fs-extra';
 
 import 'rxjs/add/observable/interval';
@@ -19,13 +18,11 @@ import { QueueManager } from './queue-manager';
 /**
  * IpcMain pair of the UHK Communication
  * Functionality:
- * - Detect device is connected or not
  * - Send UserConfiguration to the UHK Device
  * - Read UserConfiguration from the UHK Device
  */
 export class DeviceService {
     private pollTimer$: Subscription;
-    private connected = false;
     private queueManager = new QueueManager();
 
     constructor(private logService: LogService,
@@ -67,14 +64,6 @@ export class DeviceService {
     }
 
     /**
-     * Return with true is an UHK Device is connected to the computer.
-     * @returns {boolean}
-     */
-    public get isConnected(): boolean {
-        return this.connected;
-    }
-
-    /**
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
@@ -102,7 +91,6 @@ export class DeviceService {
     }
 
     public close(): void {
-        this.connected = false;
         this.stopPollTimer();
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
@@ -153,19 +141,16 @@ export class DeviceService {
 
         this.pollTimer$ = Observable.interval(1000)
             .startWith(0)
-            .map(() => {
-                return devices().some((dev: Device) => dev.vendorId === Constants.VENDOR_ID &&
-                    dev.productId === Constants.PRODUCT_ID);
-            })
+            .map(() => this.device.deviceConnected())
             .distinctUntilChanged()
-            .do(async (connected: boolean) => {
-                if (!await this.device.hasPermission()) {
-                    return;
-                }
+            .do((connected: boolean) => {
+                const response: DeviceConnectionState = {
+                    connected,
+                    hasPermission: this.device.hasPermission()
+                };
 
-                this.connected = connected;
-                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, connected);
-                this.logService.info(`[DeviceService] Device connection state changed to: ${connected}`);
+                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, response);
+                this.logService.info('[DeviceService] Device connection state changed to:', response);
             })
             .subscribe();
     }

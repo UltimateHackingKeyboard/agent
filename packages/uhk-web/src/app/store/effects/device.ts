@@ -13,12 +13,11 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/switchMap';
 
-import { IpcResponse, NotificationType, UhkBuffer, UserConfiguration } from 'uhk-common';
+import { DeviceConnectionState, IpcResponse, NotificationType, UhkBuffer, UserConfiguration } from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction,
     HideSaveToKeyboardButton,
-    PermissionStateChangedAction,
     SaveConfigurationAction,
     SaveConfigurationReplyAction,
     SaveToKeyboardSuccessAction,
@@ -47,33 +46,23 @@ export class DeviceEffects {
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
         .map(action => action.payload)
-        .do((connected: boolean) => {
-            if (connected) {
+        .do((state: DeviceConnectionState) => {
+            if (!state.hasPermission) {
+                this.router.navigate(['/privilege']);
+            }
+            else if (state.connected) {
                 this.router.navigate(['/']);
             }
             else {
                 this.router.navigate(['/detection']);
             }
         })
-        .switchMap((connected: boolean) => {
-            if (connected) {
+        .switchMap((state: DeviceConnectionState) => {
+            if (state.connected && state.hasPermission) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }
 
             return Observable.empty();
-        });
-
-    @Effect({dispatch: false})
-    permissionStateChange$: Observable<boolean> = this.actions$
-        .ofType<PermissionStateChangedAction>(ActionTypes.PERMISSION_STATE_CHANGED)
-        .map(action => action.payload)
-        .do((hasPermission: boolean) => {
-            if (hasPermission) {
-                this.router.navigate(['/detection']);
-            }
-            else {
-                this.router.navigate(['/privilege']);
-            }
         });
 
     @Effect({dispatch: false})
@@ -90,8 +79,10 @@ export class DeviceEffects {
         .mergeMap((response: any) => {
             if (response.success) {
                 return [
-                    new ConnectionStateChangedAction(true),
-                    new PermissionStateChangedAction(true)
+                    new ConnectionStateChangedAction({
+                        connected: true,
+                        hasPermission: true
+                    })
                 ];
             }
             return [

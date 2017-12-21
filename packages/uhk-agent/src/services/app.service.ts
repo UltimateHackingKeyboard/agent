@@ -31,8 +31,8 @@ export class AppService extends MainServiceBase {
                 addons: this.options.addons || false,
                 autoWriteConfig: this.options['auto-write-config'] || false
             },
-            deviceConnected: this.deviceService.isConnected,
-            hasPermission: await this.uhkHidDeviceService.hasPermission(),
+            deviceConnected: this.uhkHidDeviceService.deviceConnected(),
+            hasPermission: this.uhkHidDeviceService.hasPermission(),
             agentVersionInfo: {
                 version: packageJson.version,
                 firmwareVersion: packageJson.firmwareVersion,

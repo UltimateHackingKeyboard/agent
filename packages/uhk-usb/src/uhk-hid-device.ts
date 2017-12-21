@@ -37,12 +37,18 @@ export class UhkHidDevice {
      * the Agent will ask permission to run at the first time.
      * @returns {boolean}
      */
-    public async hasPermission(): Promise<boolean> {
+    public hasPermission(): boolean {
         try {
             if (this._hasPermission) {
                 return true;
             }
-            await this.write(new Buffer([UsbCommand.GetDeviceState]));
+
+            if (!this.deviceConnected()) {
+                return true;
+            }
+
+            this.getDevice();
+            this.close();
             this._hasPermission = true;
 
             return true;
@@ -51,6 +57,21 @@ export class UhkHidDevice {
         }
 
         return false;
+    }
+
+    /**
+     * Return with true is an UHK Device is connected to the computer.
+     * @returns {boolean}
+     */
+    public deviceConnected(): boolean {
+        const connected = devices().some((dev: Device) => dev.vendorId === Constants.VENDOR_ID &&
+            dev.productId === Constants.PRODUCT_ID);
+
+        if (!connected) {
+            this._hasPermission = false;
+        }
+
+        return connected;
     }
 
     /**
