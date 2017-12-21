@@ -25,6 +25,12 @@
                     </li>
                     <li class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/device/led-brightness']"
+                               [class.disabled]="updatingFirmware$ | async">LED brightness</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/configuration']"
                                [class.disabled]="updatingFirmware$ | async">Configuration</a>
                         </div>
