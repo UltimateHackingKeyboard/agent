@@ -21,11 +21,13 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../node_modules/nouislider/distribute/nouislider.min.css",
         "styles.scss"
       ],
       "scripts": [
         "../node_modules/bootstrap/dist/js/bootstrap.js",
-        "../node_modules/select2/dist/js/select2.full.js"
+        "../node_modules/select2/dist/js/select2.full.js",
+        "../node_modules/nouislider/distribute/nouislider.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
