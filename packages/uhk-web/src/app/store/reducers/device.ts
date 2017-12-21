@@ -157,7 +157,7 @@ export function reducer(state = initialState, action: Action) {
 }
 
 export const updatingFirmware = (state: State) => state.updatingFirmware;
-export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
+export const isDeviceConnected = (state: State) => state.hasPermission && (state.connected || state.updatingFirmware);
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
