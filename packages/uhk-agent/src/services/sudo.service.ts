@@ -10,7 +10,7 @@ export class SudoService {
 
     constructor(private logService: LogService) {
         if (isDev) {
-            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '..');
+            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../');
         } else {
             this.rootDir = path.dirname(app.getAppPath());
         }
@@ -40,11 +40,12 @@ export class SudoService {
             name: 'Setting UHK access rules'
         };
         const command = `sh ${scriptPath}`;
-        console.log(command);
+        this.logService.debug('[SudoService] Set privilege command: ', command);
         sudo.exec(command, options, (error: any) => {
             const response = new IpcResponse();
 
             if (error) {
+                this.logService.error('[SudoService] Error when set privilege: ', error);
                 response.success = false;
                 response.error = error;
             } else {
