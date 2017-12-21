@@ -47,9 +47,8 @@ export class UhkHidDevice {
                 return true;
             }
 
-            this.getDevice();
+            this._hasPermission = this.getDevice() !== null;
             this.close();
-            this._hasPermission = true;
 
             return true;
         } catch (err) {
