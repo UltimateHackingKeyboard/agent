@@ -1,0 +1,52 @@
+<h1>
+    <i class="fa fa-sliders"></i>
+    <span>LED brightness</span>
+</h1>
+<div class="row led-setting">
+    <div class="col-xs-12 col-md-6">
+        <label>LED display icon and layer texts brightness</label>
+        <div class="col-xs-2">
+            <input type="number" min="0" max="255" [(ngModel)]="iconsAndLayerTextsBrightness" />
+        </div>
+        <div class="col-xs-10">
+            <nouislider 
+                [min]="0" 
+                [max]="255" 
+                [step]="1"
+                [(ngModel)]="iconsAndLayerTextsBrightness" 
+                (ngModelChange)="onChange($event)"></nouislider>
+        </div>
+    </div>
+</div>
+<div class="row led-setting">
+    <div class="col-xs-12 col-md-6">
+        <label>LED display alphanumeric segments brightness</label>
+        <div class="col-xs-2">
+            <input type="number" min="0" max="255" [(ngModel)]="alphanumericSegmentsBrightness" />
+        </div>
+        <div class="col-xs-10">
+            <nouislider 
+                [min]="0" 
+                [max]="255" 
+                [step]="1" 
+                [(ngModel)]="alphanumericSegmentsBrightness" 
+                (ngModelChange)="onChange($event)"></nouislider>
+        </div>
+    </div>
+</div>
+<div class="row led-setting">
+    <div class="col-xs-12 col-md-6">
+        <label>Key backlight brightness</label>
+        <div class="col-xs-2">
+            <input type="number" min="0" max="255" [(ngModel)]="keyBacklightBrightness" />
+        </div>
+        <div class="col-xs-10">
+            <nouislider 
+                [min]="0" 
+                [max]="255" 
+                [step]="1" 
+                [(ngModel)]="keyBacklightBrightness" 
+                (ngModelChange)="onChange($event)"></nouislider>
+        </div>
+    </div>
+</div>
