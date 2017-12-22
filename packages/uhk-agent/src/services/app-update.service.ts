@@ -37,8 +37,13 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         autoUpdater.on('error', (ev: any, err: string) => {
-            console.error('[AppUpdateService] error', err);
-            this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, err.substr(0, 100));
+            this.logService.error('[AppUpdateService] error', err)
+            let msg = '';
+            if (err) {
+                msg = err.substr(0, 100);
+            }
+
+            this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateError, msg);
         });
 
         autoUpdater.on('download-progress', (progressObj: ProgressInfo) => {
