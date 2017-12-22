@@ -88,7 +88,7 @@ export class DeviceEffects {
             return [
                 <any>new ShowNotificationAction({
                     type: NotificationType.Error,
-                    message: response.error.message
+                    message: response.error.message || response.error
                 })
             ];
         });

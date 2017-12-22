@@ -2,6 +2,8 @@ import { ipcMain, app } from 'electron';
 import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as sudo from 'sudo-prompt';
+import { dirSync } from 'tmp';
+import { emptyDir, copy } from 'fs-extra';
 
 import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
 
@@ -18,10 +20,10 @@ export class SudoService {
         ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilege.bind(this));
     }
 
-    private setPrivilege(event: Electron.Event) {
+    private async setPrivilege(event: Electron.Event) {
         switch (process.platform) {
             case 'linux':
-                this.setPrivilegeOnLinux(event);
+                await this.setPrivilegeOnLinux(event);
                 break;
             default:
                 const response: IpcResponse = {
@@ -34,14 +36,20 @@ export class SudoService {
         }
     }
 
-    private setPrivilegeOnLinux(event: Electron.Event) {
-        const scriptPath = path.join(this.rootDir, 'rules/setup-rules.sh');
+    private async setPrivilegeOnLinux(event: Electron.Event) {
+        const tmpDirectory = dirSync();
+        const rulesDir = path.join(this.rootDir, 'rules');
+        this.logService.debug('[SudoService] Copy rules dir', { src: rulesDir, dst: tmpDirectory.name });
+        await copy(rulesDir, tmpDirectory.name);
+
+        const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
+
         const options = {
             name: 'Setting UHK access rules'
         };
         const command = `sh ${scriptPath}`;
         this.logService.debug('[SudoService] Set privilege command: ', command);
-        sudo.exec(command, options, (error: any) => {
+        sudo.exec(command, options, async (error: any) => {
             const response = new IpcResponse();
 
             if (error) {
@@ -52,6 +60,7 @@ export class SudoService {
                 response.success = true;
             }
 
+            await emptyDir(tmpDirectory.name);
             event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
         });
     }
