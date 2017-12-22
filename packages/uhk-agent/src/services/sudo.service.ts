@@ -37,16 +37,17 @@ export class SudoService {
     }
 
     private async setPrivilegeOnLinux(event: Electron.Event) {
-        const scriptPath = path.join(this.rootDir, 'rules/setup-rules.sh');
         const tmpDirectory = dirSync();
-        const tmpSetupRulesPath = path.join(tmpDirectory.name, 'setup-rules.sh');
-        this.logService.debug('[SudoService] Copy setup-rules.sh', { src: scriptPath, dst: tmpSetupRulesPath });
-        await copy(scriptPath, tmpSetupRulesPath);
+        const rulesDir = path.join(this.rootDir, 'rules');
+        this.logService.debug('[SudoService] Copy rules dir', { src: rulesDir, dst: tmpDirectory.name });
+        await copy(rulesDir, tmpDirectory.name);
+
+        const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
 
         const options = {
             name: 'Setting UHK access rules'
         };
-        const command = `sh ${tmpSetupRulesPath}`;
+        const command = `sh ${scriptPath}`;
         this.logService.debug('[SudoService] Set privilege command: ', command);
         sudo.exec(command, options, async (error: any) => {
             const response = new IpcResponse();
@@ -59,7 +60,7 @@ export class SudoService {
                 response.success = true;
             }
 
-            await emptyDir(tmpDirectory.name);
+            // await emptyDir(tmpDirectory.name);
             event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
         });
     }
