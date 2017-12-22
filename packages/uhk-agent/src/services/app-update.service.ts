@@ -37,7 +37,7 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         autoUpdater.on('error', (ev: any, err: string) => {
-            this.logService.error('[AppUpdateService] error', err)
+            this.logService.error('[AppUpdateService] error', err);
             let msg = 'Electron updater error';
             if (err) {
                 msg = err.substr(0, 100);
