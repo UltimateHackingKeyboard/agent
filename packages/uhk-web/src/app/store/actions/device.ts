@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { IpcResponse, type } from 'uhk-common';
+import { DeviceConnectionState, IpcResponse, type } from 'uhk-common';
 
 const PREFIX = '[device] ';
 
@@ -8,7 +8,6 @@ export const ActionTypes = {
     SET_PRIVILEGE_ON_LINUX: type(PREFIX + 'set privilege on linux'),
     SET_PRIVILEGE_ON_LINUX_REPLY: type(PREFIX + 'set privilege on linux reply'),
     CONNECTION_STATE_CHANGED: type(PREFIX + 'connection state changed'),
-    PERMISSION_STATE_CHANGED: type(PREFIX + 'permission state changed'),
     SAVE_CONFIGURATION: type(PREFIX + 'save configuration'),
     SAVE_CONFIGURATION_REPLY: type(PREFIX + 'save configuration reply'),
     SAVING_CONFIGURATION: type(PREFIX + 'saving configuration'),
@@ -39,14 +38,7 @@ export class SetPrivilegeOnLinuxReplyAction implements Action {
 export class ConnectionStateChangedAction implements Action {
     type = ActionTypes.CONNECTION_STATE_CHANGED;
 
-    constructor(public payload: boolean) {
-    }
-}
-
-export class PermissionStateChangedAction implements Action {
-    type = ActionTypes.PERMISSION_STATE_CHANGED;
-
-    constructor(public payload: boolean) {
+    constructor(public payload: DeviceConnectionState) {
     }
 }
 
@@ -121,7 +113,6 @@ export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction
-    | PermissionStateChangedAction
     | ShowSaveToKeyboardButtonAction
     | SaveConfigurationAction
     | SaveConfigurationReplyAction

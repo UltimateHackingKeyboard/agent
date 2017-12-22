@@ -25,6 +25,7 @@ export class UhkHidDevice {
      * @private
      */
     private _device: HID;
+    private _hasPermission = false;
 
     constructor(private logService: LogService) {
     }
@@ -38,13 +39,38 @@ export class UhkHidDevice {
      */
     public hasPermission(): boolean {
         try {
-            devices();
-            return true;
+            if (this._hasPermission) {
+                return true;
+            }
+
+            if (!this.deviceConnected()) {
+                return true;
+            }
+
+            this._hasPermission = this.getDevice() !== null;
+            this.close();
+
+            return this._hasPermission;
         } catch (err) {
             this.logService.error('[UhkHidDevice] hasPermission', err);
         }
 
         return false;
+    }
+
+    /**
+     * Return with true is an UHK Device is connected to the computer.
+     * @returns {boolean}
+     */
+    public deviceConnected(): boolean {
+        const connected = devices().some((dev: Device) => dev.vendorId === Constants.VENDOR_ID &&
+            dev.productId === Constants.PRODUCT_ID);
+
+        if (!connected) {
+            this._hasPermission = false;
+        }
+
+        return connected;
     }
 
     /**
@@ -225,7 +251,7 @@ export class UhkHidDevice {
     }
 }
 
-function  kbootKommandName(module: ModuleSlotToI2cAddress): string {
+function kbootKommandName(module: ModuleSlotToI2cAddress): string {
     switch (module) {
         case ModuleSlotToI2cAddress.leftHalf:
             return 'leftHalf';

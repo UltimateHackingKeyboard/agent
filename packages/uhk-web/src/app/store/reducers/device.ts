@@ -3,8 +3,8 @@ import { Action } from '@ngrx/store';
 import {
     ActionTypes,
     ConnectionStateChangedAction,
-    PermissionStateChangedAction,
-    SaveConfigurationAction, UpdateFirmwareFailedAction
+    SaveConfigurationAction,
+    UpdateFirmwareFailedAction
 } from '../actions/device';
 import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
@@ -30,17 +30,14 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: Action) {
     switch (action.type) {
-        case ActionTypes.CONNECTION_STATE_CHANGED:
+        case ActionTypes.CONNECTION_STATE_CHANGED: {
+            const data = (<ConnectionStateChangedAction>action).payload;
             return {
                 ...state,
-                connected: (<ConnectionStateChangedAction>action).payload
+                connected: data.connected,
+                hasPermission: data.hasPermission
             };
-
-        case ActionTypes.PERMISSION_STATE_CHANGED:
-            return {
-                ...state,
-                hasPermission: (<PermissionStateChangedAction>action).payload
-            };
+        }
 
         case ActionTypes.SAVING_CONFIGURATION: {
             return {

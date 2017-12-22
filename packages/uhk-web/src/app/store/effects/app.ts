@@ -26,7 +26,6 @@ import { AppUpdateRendererService } from '../../services/app-update-renderer.ser
 import {
     ActionTypes as DeviceActions,
     ConnectionStateChangedAction,
-    PermissionStateChangedAction,
     SaveToKeyboardSuccessAction
 } from '../actions/device';
 import { AppState, autoWriteUserConfiguration } from '../index';
@@ -64,8 +63,10 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ApplyCommandLineArgsAction(appInfo.commandLineArgs),
-                new ConnectionStateChangedAction(appInfo.deviceConnected),
-                new PermissionStateChangedAction(appInfo.hasPermission),
+                new ConnectionStateChangedAction({
+                    connected: appInfo.deviceConnected,
+                    hasPermission: appInfo.hasPermission
+                }),
                 new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
             ];
         });
