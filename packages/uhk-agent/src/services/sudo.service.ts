@@ -60,7 +60,7 @@ export class SudoService {
                 response.success = true;
             }
 
-            // await emptyDir(tmpDirectory.name);
+            await emptyDir(tmpDirectory.name);
             event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
         });
     }
