@@ -5,48 +5,51 @@
 <div class="row led-setting">
     <div class="col-xs-12 col-md-6">
         <label>LED display icon and layer texts brightness</label>
-        <div class="col-xs-2">
-            <input type="number" min="0" max="255" [(ngModel)]="iconsAndLayerTextsBrightness" />
-        </div>
         <div class="col-xs-10">
             <nouislider 
                 [min]="0" 
                 [max]="255" 
                 [step]="1"
                 [keyboard]="true"
+                [tooltips]="true"
                 [(ngModel)]="iconsAndLayerTextsBrightness"></nouislider>
+        </div>
+        <div class="col-xs-2">
+            <div class="value-indicator">{{iconsAndLayerTextsBrightness}}</div>
         </div>
     </div>
 </div>
 <div class="row led-setting">
     <div class="col-xs-12 col-md-6">
         <label>LED display alphanumeric segments brightness</label>
-        <div class="col-xs-2">
-            <input type="number" min="0" max="255" [(ngModel)]="alphanumericSegmentsBrightness" />
-        </div>
         <div class="col-xs-10">
             <nouislider 
                 [min]="0" 
                 [max]="255" 
                 [step]="1"
-                [keyboard]="true" 
+                [keyboard]="true"
+                [tooltips]="true"
                 [(ngModel)]="alphanumericSegmentsBrightness"></nouislider>
+        </div>
+        <div class="col-xs-2">
+            <div class="value-indicator">{{alphanumericSegmentsBrightness}}</div>
         </div>
     </div>
 </div>
 <div class="row led-setting">
     <div class="col-xs-12 col-md-6">
         <label>Key backlight brightness</label>
-        <div class="col-xs-2">
-            <input type="number" min="0" max="255" [(ngModel)]="keyBacklightBrightness" />
-        </div>
         <div class="col-xs-10">
             <nouislider 
                 [min]="0" 
                 [max]="255" 
                 [step]="1"
-                [keyboard]="true" 
+                [keyboard]="true"
+                [tooltips]="true"
                 [(ngModel)]="keyBacklightBrightness"></nouislider>
+        </div>
+        <div class="col-xs-2">
+            <div class="value-indicator">{{keyBacklightBrightness}}</div>
         </div>
     </div>
 </div>

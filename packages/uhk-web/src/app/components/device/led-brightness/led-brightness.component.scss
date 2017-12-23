@@ -4,17 +4,23 @@
     height: 100%;
     width: 100%;
 
-    label, input {
+    label {
         display: block;
+        font-weight: normal;
     }
 
-    input {
-        width: 50px;
-        min-width: 0;
-        margin: 0.6rem 0;
+    .value-indicator {
+        padding: 1rem 0;
+        vertical-align: middle;
     }
 
     .led-setting {
-        margin-bottom: 1rem;
+        margin-bottom: 6rem;
+    }
+
+    .ng2-nouislider {
+        ::ng-deep .noUi-value {
+            top: 2rem;
+        }
     }
 }
