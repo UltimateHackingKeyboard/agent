@@ -17,7 +17,7 @@ The **web build** is meant to be used for demonstation purposes, so people who d
 
 The two builds share code as much as possible.
 
-## Set up instructions
+## Building the electron application
 
 First up, make sure that node >=8.1.x and npm >=5.1.x are installed on your system. Next up:
 
@@ -33,6 +33,13 @@ npm run electron
 ```
 
 At this point, Agent should be running on your machine.
+
+## Developing the web application
+
+- The frontend code is located in `packages/uhk-web/`
+- Run the project locally with `npm run server:web`
+- View the app at `http://localhost:8080`
+- The app will automatically reload when you make changes
 
 ## Contributing
 
