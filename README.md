@@ -7,7 +7,17 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 
 [Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent/)
 
-## Set up instructions
+## Two builds to rule them all
+
+It's worth mentioning that Agent has two builds.
+
+The **electron build** is the desktop application which is meant to be used if you have an actual UHK at hand. It starts with an opening screen which detects your UHK. You cannot get past this screen without connecting a UHK via USB.
+
+The **web build** is meant to be used for demonstation purposes, so people who don't yet own a UHK can get a feel of Agent and its capabilities in their browser. Eventually, WebUSB support will be added to the web build, making it able to communicate with the UHK. Given the sandboxed nature of browers, the web build will always lack features that the electron build offers, so this won't make the electron build obsolete.
+
+The two builds share code as much as possible.
+
+## Building the electron application
 
 First up, make sure that node >=8.1.x and npm >=5.1.x are installed on your system. Next up:
 
@@ -23,6 +33,13 @@ npm run electron
 ```
 
 At this point, Agent should be running on your machine.
+
+## Developing the web application
+
+- The frontend code is located in `packages/uhk-web/`
+- Run the project locally with `npm run server:web`
+- View the app at `http://localhost:8080`
+- The app will automatically reload when you make changes
 
 ## Contributing
 
