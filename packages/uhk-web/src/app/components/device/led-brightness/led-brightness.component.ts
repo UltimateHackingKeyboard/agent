@@ -5,11 +5,11 @@ import { AppState } from '../../../store/index';
 import { NouisliderComponent } from 'ng2-nouislider/src/nouislider';
 
 const sliderPips = {
-	mode: 'positions',
+    mode: 'positions',
     values: [0, 50, 128, 255],
     density: 6,
     stepped: true
-}
+};
 
 @Component({
     selector: 'device-led-brightness',
@@ -33,7 +33,7 @@ export class LEDBrightnessComponent implements AfterViewInit {
         this.sliders.forEach(slider => {
             slider.slider.pips(sliderPips);
             slider.slider.target.querySelector('.noUi-tooltip').style.display = 'none';
-            
+
             slider.slider.on('start', function() {
                 this.target.querySelector('.noUi-tooltip').style.display = 'block';
             });
