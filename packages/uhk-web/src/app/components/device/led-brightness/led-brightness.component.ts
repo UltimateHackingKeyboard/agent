@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/index';
+import { AppState, getUserConfiguration } from '../../../store';
 import { NouisliderComponent } from 'ng2-nouislider/src/nouislider';
 
 const sliderPips = {
@@ -19,7 +19,7 @@ const sliderPips = {
         'class': 'container-fluid'
     }
 })
-export class LEDBrightnessComponent implements AfterViewInit {
+export class LEDBrightnessComponent implements OnInit, AfterViewInit {
     @ViewChildren(NouisliderComponent) sliders: QueryList<NouisliderComponent>;
 
     public iconsAndLayerTextsBrightness: number = 0;
@@ -28,6 +28,15 @@ export class LEDBrightnessComponent implements AfterViewInit {
     public sliderTooltipsEnabled: boolean = false;
 
     constructor(private store: Store<AppState>) {}
+
+    ngOnInit() {
+        this.store.select(getUserConfiguration)
+            .subscribe(config => {
+                this.iconsAndLayerTextsBrightness = config.iconsAndLayerTextsBrightness;
+                this.alphanumericSegmentsBrightness = config.alphanumericSegmentsBrightness;
+                this.keyBacklightBrightness = config.keyBacklightBrightness;
+            });
+    }
 
     ngAfterViewInit() {
         this.sliders.forEach(slider => {
