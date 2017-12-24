@@ -3,6 +3,7 @@ import { AfterViewInit, Component, OnInit, ViewChildren, QueryList } from '@angu
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { NouisliderComponent } from 'ng2-nouislider/src/nouislider';
+import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
 
 const sliderPips = {
     mode: 'positions',
@@ -50,5 +51,12 @@ export class LEDBrightnessComponent implements OnInit, AfterViewInit {
                 this.target.querySelector('.noUi-tooltip').style.display = 'none';
             });
         });
+    }
+
+    onSetPropertyValue(propertyName: string, value: number): void {
+        this.store.dispatch(new SetUserConfigurationValueAction({
+            propertyName,
+            value
+        }));
     }
 }
