@@ -76,7 +76,7 @@
     </div>
     <div class="popover-action">
         <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel </button>
-        <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button" (click)="onRemapKey()"> Remap Key </button>
+        <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button" (click)="remapKey()"> Remap Key </button>
     </div>
 </div>
 <div class="popover-overlay" [class.display]="visible" (click)="onOverlay()"></div>
