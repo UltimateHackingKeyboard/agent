@@ -152,7 +152,10 @@ export class PopoverComponent implements OnChanges {
         this.cancel.emit(undefined);
     }
 
-    onRemapKey(): void {
+    // We may should listen for enter keydowns in the popover component.
+    // However selecting an item with select2 loses focus.
+    @HostListener('window:keydown.enter')
+    remapKey(): void {
         if (this.keyActionValid) {
             try {
                 const keyAction = this.selectedTab.toKeyAction();
