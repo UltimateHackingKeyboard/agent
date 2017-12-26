@@ -2,13 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChildren, QueryList } from '@angu
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
-
-const sliderPips = {
-    mode: 'positions',
-    values: [0, 50, 128, 255],
-    density: 6,
-    stepped: true
-};
+import { SliderPips } from '../../slider-wrapper/slider-wrapper.component';
 
 @Component({
     selector: 'device-led-brightness',
@@ -22,7 +16,12 @@ export class LEDBrightnessComponent implements OnInit {
     public iconsAndLayerTextsBrightness: number = 0;
     public alphanumericSegmentsBrightness: number = 0;
     public keyBacklightBrightness: number = 0;
-    public sliderTooltipsEnabled: boolean = false;
+    public sliderPips: SliderPips = {
+        mode: 'positions',
+        values: [0, 50, 128, 255],
+        density: 6,
+        stepped: true
+    };
 
     constructor(private store: Store<AppState>) {}
 
