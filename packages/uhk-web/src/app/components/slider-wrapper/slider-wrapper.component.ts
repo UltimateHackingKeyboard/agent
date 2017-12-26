@@ -26,6 +26,7 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
     @Input() max: number;
     @Input() step: number;
     @Input() pips: SliderPips;
+    @Input() valueUnit: string;
     @Output() onChange = new EventEmitter<number>();
 
     public value: number;
