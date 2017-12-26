@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Input, Output, OnDestroy, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NouisliderComponent } from 'ng2-nouislider/src/nouislider';
-import { Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operator/debounceTime';
-import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 export interface SliderPips {
     mode: string;
@@ -20,7 +21,7 @@ export interface SliderPips {
         { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SliderWrapperComponent), multi: true }
     ]
 })
-export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor {
+export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent) slider: NouisliderComponent;
     @Input() min: number;
     @Input() max: number;
@@ -30,7 +31,7 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
     @Output() onChange = new EventEmitter<number>();
 
     public value: number;
-    private changeObserver$;
+    private changeObserver$: Observer<number>;
     private changeDebounceTime: number = 300;
 
     ngAfterViewInit(): void {
@@ -47,6 +48,12 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
         this.slider.slider.on('end', function() {
             this.target.querySelector('.noUi-tooltip').style.display = 'none';
         });
+    }
+
+    ngOnDestroy() {
+        if (this.changeObserver$) {
+            this.changeObserver$.complete();
+        }
     }
 
     writeValue(value: number): void {
