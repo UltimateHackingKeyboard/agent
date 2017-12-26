@@ -71,7 +71,11 @@ export class MapperService {
             default:
                 return undefined;
         }
-        return 'assets/compiled_sprite.svg#' + map.get(scanCode);
+        const id = map.get(scanCode);
+        if (!id) {
+            return undefined;
+        }
+        return `assets/compiled_sprite.svg#${id}`;
     }
 
     public getIcon(iconName: string): string {

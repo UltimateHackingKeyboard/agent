@@ -1,5 +1,10 @@
 <svg [attr.viewBox]="viewBox" [attr.width]="textContainer.width" [attr.height]="textContainer.height"
     [attr.x]="textContainer.x" [attr.y]="textContainer.y" [ngSwitch]="labelType">
+    <svg:g svg-single-icon-key *ngSwitchCase="'icon'"
+            [height]="height"
+            [width]="width"
+            [icon]="labelSource">
+    </svg:g>
     <svg:g svg-one-line-text-key *ngSwitchCase="'one-line'"
             [height]="height"
             [width]="width"

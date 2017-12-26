@@ -127,21 +127,23 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-        let newLabelSource: string[];
         if (this.keystrokeAction.hasScancode()) {
             const scancode: number = this.keystrokeAction.scancode;
-            newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
-            if (newLabelSource) {
-                if (newLabelSource.length === 1) {
-                    this.labelSource = newLabelSource[0];
-                    this.labelType = 'one-line';
-                } else {
-                    this.labelSource = newLabelSource;
-                    this.labelType = 'two-line';
-                }
-            } else {
-                this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
+            this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
+            if (this.labelSource) {
                 this.labelType = 'icon';
+            } else {
+                let newLabelSource: string[];
+                newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
+                if (newLabelSource) {
+                    if (newLabelSource.length === 1) {
+                        this.labelSource = newLabelSource[0];
+                        this.labelType = 'one-line';
+                    } else {
+                        this.labelSource = newLabelSource;
+                        this.labelType = 'two-line';
+                    }
+                }
             }
         } else {
             this.labelType = 'empty';
