@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operator/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
 
-interface SliderPips {
+export interface SliderPips {
     mode: string;
     values: number[];
     density: number;
