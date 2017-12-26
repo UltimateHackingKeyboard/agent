@@ -65,6 +65,8 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
             }).debounceTime(this.changeDebounceTime)
             .distinctUntilChanged()
             .subscribe(this.propagateChange);
+
+            return; // No change event on first change as the value is just being set
         }
         this.changeObserver$.next(value);
     }
