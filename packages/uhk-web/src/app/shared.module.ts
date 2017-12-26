@@ -100,6 +100,7 @@ import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
+import SliderWrapperComponent from './components/slider-wrapper/slider-wrapper.component';
 
 @NgModule({
     declarations: [
@@ -166,7 +167,8 @@ import { XtermComponent } from './components/xterm/xterm.component';
         MainPage,
         ProgressButtonComponent,
         LoadingDevicePageComponent,
-        XtermComponent
+        XtermComponent,
+        SliderWrapperComponent
     ],
     imports: [
         CommonModule,

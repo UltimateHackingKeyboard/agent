@@ -1,0 +1,13 @@
+<div class="slider-container">
+    <nouislider
+        [min]="min"
+        [max]="max"
+        [step]="step"
+        [keyboard]="true"
+        [tooltips]="true"
+        [(ngModel)]="value"
+        (ngModelChange)="onSliderChange($event)"></nouislider>
+</div>
+<div class="slider-value">
+    <div class="value-indicator">{{value}}</div>
+</div>

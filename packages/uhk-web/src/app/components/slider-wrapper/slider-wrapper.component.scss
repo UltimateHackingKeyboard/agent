@@ -1,0 +1,23 @@
+:host {
+    display: flex;
+    flex-direction: row;
+
+    .slider-container {
+        width: 80%;
+    }
+
+    .slider-value {
+        width: 20%;
+    }
+
+    .value-indicator {
+        margin: 1rem 1rem 1rem 3rem;
+        vertical-align: middle;
+    }
+
+    .ng2-nouislider {
+        ::ng-deep .noUi-value {
+            top: 2rem;
+        }
+    }
+}

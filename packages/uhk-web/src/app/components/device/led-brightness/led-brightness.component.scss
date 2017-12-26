@@ -9,18 +9,7 @@
         font-weight: normal;
     }
 
-    .value-indicator {
-        padding: 1rem 0;
-        vertical-align: middle;
-    }
-
     .led-setting {
         margin-bottom: 6rem;
-    }
-
-    .ng2-nouislider {
-        ::ng-deep .noUi-value {
-            top: 2rem;
-        }
     }
 }
