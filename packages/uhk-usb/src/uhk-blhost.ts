@@ -70,7 +70,7 @@ export class UhkBlhost {
         let blhostPath;
         switch (process.platform) {
             case 'linux':
-                blhostPath = 'linux/amd64/blhost';
+                blhostPath = 'linux/x86_64/blhost';
                 break;
             case 'darwin':
                 blhostPath = 'mac/blhost';
