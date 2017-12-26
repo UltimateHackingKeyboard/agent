@@ -20,7 +20,7 @@ interface SliderPips {
         { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SliderWrapperComponent), multi: true }
     ]
 })
-export default class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor {
+export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor {
     @ViewChild(NouisliderComponent) slider: NouisliderComponent;
     @Input() min: number;
     @Input() max: number;
@@ -28,7 +28,7 @@ export default class SliderWrapperComponent implements AfterViewInit, ControlVal
     @Input() pips: SliderPips;
     @Output() onChange = new EventEmitter<number>();
 
-    private value: number;
+    public value: number;
     private changeObserver$;
     private changeDebounceTime: number = 300;
 
