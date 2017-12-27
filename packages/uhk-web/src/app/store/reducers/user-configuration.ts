@@ -246,6 +246,11 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             break;
         }
 
+        case ActionTypes.SET_USER_CONFIGURATION_VALUE: {
+            changedUserConfiguration[action.payload.propertyName] = action.payload.value;
+            break;
+        }
+
         default:
             break;
     }

@@ -85,10 +85,12 @@ module.exports = {
         ],
         "scripts": [
             "script-loader!./node_modules/bootstrap/dist/js/bootstrap.js",
-            "script-loader!./node_modules/select2/dist/js/select2.full.js"
+            "script-loader!./node_modules/select2/dist/js/select2.full.js",
+            "script-loader!./node_modules/nouislider/distribute/nouislider.js"
         ],
         "styles": [
             "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "./node_modules/nouislider/distribute/nouislider.min.css",
             "./src/styles.scss"
         ]
     },
@@ -126,6 +128,7 @@ module.exports = {
             {
                 "exclude": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.css$/,
@@ -150,6 +153,7 @@ module.exports = {
             {
                 "exclude": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.scss$|\.sass$/,
@@ -182,6 +186,7 @@ module.exports = {
             {
                 "exclude": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.less$/,
@@ -212,6 +217,7 @@ module.exports = {
             {
                 "exclude": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.styl$/,
@@ -243,6 +249,7 @@ module.exports = {
             {
                 "include": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.css$/,
@@ -267,6 +274,7 @@ module.exports = {
             {
                 "include": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.scss$|\.sass$/,
@@ -299,6 +307,7 @@ module.exports = {
             {
                 "include": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.less$/,
@@ -329,6 +338,7 @@ module.exports = {
             {
                 "include": [
                     path.join(process.cwd(), "node_modules/bootstrap/dist/css/bootstrap.min.css"),
+                    path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.min.css"),
                     path.join(process.cwd(), "src/styles.scss")
                 ],
                 "test": /\.styl$/,

@@ -1,0 +1,19 @@
+:host {
+    overflow-y: auto;
+    display: block;
+    height: 100%;
+    width: 100%;
+
+    label {
+        display: block;
+        font-weight: normal;
+    }
+
+    .led-setting {
+        margin-bottom: 6rem;
+    }
+
+    .slider-wrapper-container {
+        margin-left: 1.6rem;
+    }
+}

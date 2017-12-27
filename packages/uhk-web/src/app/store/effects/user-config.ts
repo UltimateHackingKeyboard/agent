@@ -72,7 +72,7 @@ export class UserConfigEffects {
             KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
             MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
             MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION,
-            ActionTypes.RENAME_USER_CONFIGURATION) as
+            ActionTypes.RENAME_USER_CONFIGURATION, ActionTypes.SET_USER_CONFIGURATION_VALUE) as
         Observable<KeymapAction | MacroAction | RenameUserConfigurationAction>)
         .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
         .mergeMap(([action, config, prevUserConfiguration]) => {
