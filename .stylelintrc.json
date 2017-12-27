@@ -66,8 +66,6 @@
     "selector-pseudo-element-colon-notation": "single",
     "selector-type-case": "lower",
     "selector-max-id": 0,
-    "selector-pseudo-element-no-unknown": [ true, {
-      "ignorePseudoElements": ["ng-deep"]
-    } ]
+    "selector-pseudo-element-no-unknown": true
   }
 }
