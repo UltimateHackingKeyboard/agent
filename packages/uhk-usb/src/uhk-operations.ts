@@ -26,7 +26,7 @@ export class UhkOperations {
         await this.blhost.runBlhostCommand([...prefix, 'flash-erase-region', '0xc000', '475136']);
         await this.blhost.runBlhostCommand([...prefix, 'flash-image', `"${firmwarePath}"`]);
         await this.blhost.runBlhostCommand([...prefix, 'reset']);
-        this.logService.debug('[UhkOperations] End flashing right firmware');
+        this.logService.debug('[UhkOperations] Right firmware successfully flashed');
     }
 
     public async updateLeftModule(firmwarePath = this.getLeftModuleFirmwarePath()) {
@@ -58,7 +58,8 @@ export class UhkOperations {
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
         this.device.close();
 
-        this.logService.debug('[UhkOperations] End flashing left module firmware');
+        this.logService.debug('[UhkOperations] Left firmware successfully flashed');
+        this.logService.debug('[UhkOperations] Both left and right firmwares successfully flashed');
     }
 
     /**
