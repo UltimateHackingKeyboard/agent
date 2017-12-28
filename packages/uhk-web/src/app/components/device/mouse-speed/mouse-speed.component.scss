@@ -4,4 +4,24 @@
     height: 100%;
     width: 100%;
 
+    label {
+        display: block;
+        font-weight: normal;
+
+        icon {
+            display: inline-block;
+        }
+    }
+
+    .mouse-speed-setting {
+        margin-bottom: 6rem;
+
+        + h3 {
+            margin-top: 2rem;
+        }
+    }
+
+    .slider-wrapper-container {
+        margin-left: 1.6rem;
+    }
 }

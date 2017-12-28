@@ -2,6 +2,36 @@
     <i class="fa fa-sliders"></i>
     <span>Mouse speed</span>
 </h1>
-<p>
-    Coming soon ...
-</p>
+<h3>Mouse pointer speed</h3>
+<div class="row mouse-speed-setting" *ngFor="let prop of moveProps">
+    <div class="col-xs-12 col-md-6">
+        <ng-container *ngTemplateOutlet="sliderTemplate; context: {prop: prop, sliderSettings: moveSettings}"></ng-container>
+    </div>
+</div>
+<h3>Mouse scroll speed</h3>
+<div class="row mouse-speed-setting" *ngFor="let prop of scrollProps">
+    <div class="col-xs-12 col-md-6">
+        <ng-container *ngTemplateOutlet="sliderTemplate; context: {prop: prop, sliderSettings: scrollSettings}"></ng-container>
+    </div>
+</div>
+
+<ng-template #sliderTemplate let-prop="prop" let-sliderSettings="sliderSettings">
+    <label>
+        <span>{{prop.title}}</span>
+        <icon name="question-circle"
+            data-toggle="tooltip"
+            [title]="prop.tooltip"
+            html="true"
+            data-placement="bottom"></icon>
+    </label>
+    <div class="slider-wrapper-container">
+        <slider-wrapper
+            [min]="sliderSettings.min"
+            [max]="sliderSettings.max"
+            [step]="sliderSettings.step"
+            [pips]="sliderPips"
+            [valueUnit]="prop.valueUnit"
+            [(ngModel)]="prop.value"
+            (ngModelChange)="onSetPropertyValue(prop.prop, $event)"></slider-wrapper>
+    </div>
+</ng-template>
