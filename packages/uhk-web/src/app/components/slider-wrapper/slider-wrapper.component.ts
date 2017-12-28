@@ -13,6 +13,14 @@ export interface SliderPips {
     stepped?: boolean;
 }
 
+export interface SliderProps {
+    min: number;
+    max: number;
+    step?: number;
+    pips?: SliderPips;
+    valueUnit?: string;
+}
+
 @Component({
     selector: 'slider-wrapper',
     templateUrl: './slider-wrapper.component.html',
