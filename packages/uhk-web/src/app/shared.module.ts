@@ -193,7 +193,6 @@ import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapp
         DataStorageRepositoryService,
         DefaultUserConfigurationService,
         LogService,
-        DefaultUserConfigurationService,
         AppUpdateRendererService,
         AppRendererService,
         IpcCommonRenderer,
