@@ -4917,7 +4917,7 @@
                 null,
                 {
                   "keyActionType": "mouse",
-                  "mouseAction": "scrollUp"
+                  "mouseAction": "scrollDown"
                 },
                 {
                   "keyActionType": "mouse",
@@ -4936,7 +4936,7 @@
                 null,
                 {
                   "keyActionType": "mouse",
-                  "mouseAction": "scrollDown"
+                  "mouseAction": "scrollUp"
                 },
                 null,
                 null,
@@ -5926,7 +5926,7 @@
                 null,
                 {
                   "keyActionType": "mouse",
-                  "mouseAction": "scrollUp"
+                  "mouseAction": "scrollDown"
                 },
                 {
                   "keyActionType": "mouse",
@@ -5945,7 +5945,7 @@
                 null,
                 {
                   "keyActionType": "mouse",
-                  "mouseAction": "scrollDown"
+                  "mouseAction": "scrollUp"
                 },
                 null,
                 null,
@@ -6927,7 +6927,7 @@
                 null,
                 {
                   "keyActionType": "mouse",
-                  "mouseAction": "scrollUp"
+                  "mouseAction": "scrollDown"
                 },
                 {
                   "keyActionType": "mouse",
@@ -6946,7 +6946,7 @@
                 null,
                 {
                   "keyActionType": "mouse",
-                  "mouseAction": "scrollDown"
+                  "mouseAction": "scrollUp"
                 },
                 null,
                 null,
