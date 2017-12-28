@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
+import { DefaultUserConfigurationService } from '../../../services/default-user-configuration.service';
 import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
 import { Subscription } from 'rxjs/Subscription';
 import { UserConfiguration } from 'uhk-common';
@@ -115,7 +116,7 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     private userConfig$: Store<UserConfiguration>;
     private userConfigSubscription: Subscription;
 
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>, private defaultUserConfigurationService: DefaultUserConfigurationService) {}
 
     ngOnInit(): void {
         this.userConfig$ = this.store.select(getUserConfiguration);
@@ -138,5 +139,15 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
             propertyName,
             value: propertyName.indexOf('mouseMove') !== -1 ? value / MOUSE_MOVE_VALUE_MULTIPLIER : value
         }));
+    }
+
+    resetToDefault() {
+        const defaultUserConfig = this.defaultUserConfigurationService.getDefault();
+        this.moveProps.forEach(moveProp => {
+            this.onSetPropertyValue(moveProp.prop, defaultUserConfig[moveProp.prop] * MOUSE_MOVE_VALUE_MULTIPLIER);
+        });
+        this.scrollProps.forEach(scrollProp => {
+            this.onSetPropertyValue(scrollProp.prop, defaultUserConfig[scrollProp.prop]);
+        });
     }
 }
