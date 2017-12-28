@@ -102,9 +102,9 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     };
 
     public moveSettings: SliderProps = {
-        min: 25,
+        min: MOUSE_MOVE_VALUE_MULTIPLIER,
         max: 6375,
-        step: 1
+        step: MOUSE_MOVE_VALUE_MULTIPLIER
     };
 
     public scrollSettings: SliderProps = {
