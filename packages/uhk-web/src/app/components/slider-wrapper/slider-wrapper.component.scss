@@ -1,6 +1,18 @@
 :host {
-    display: flex;
-    flex-direction: row;
+    label {
+        display: block;
+        font-weight: normal;
+
+        icon {
+            display: inline-block;
+        }
+    }
+
+    .slider-wrapper {
+        display: flex;
+        flex-direction: row;
+        padding-left: 1.6rem;
+    }
 
     .slider-container {
         width: 80%;

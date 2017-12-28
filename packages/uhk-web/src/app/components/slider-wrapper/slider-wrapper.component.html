@@ -1,13 +1,24 @@
-<div class="slider-container">
-    <nouislider
-        [min]="min"
-        [max]="max"
-        [step]="step"
-        [keyboard]="true"
-        [tooltips]="true"
-        [(ngModel)]="value"
-        (ngModelChange)="onSliderChange($event)"></nouislider>
-</div>
-<div class="slider-value">
-    <div class="value-indicator">{{value}} {{valueUnit}}</div>
+<label *ngIf="label">
+    <span>{{label}}</span>
+    <icon name="question-circle"
+            data-toggle="tooltip"
+            [title]="tooltip"
+            html="true"
+            data-placement="bottom"
+            *ngIf="tooltip"></icon>
+</label>
+<div class="slider-wrapper">
+    <div class="slider-container">
+        <nouislider
+            [min]="min"
+            [max]="max"
+            [step]="step"
+            [keyboard]="true"
+            [tooltips]="true"
+            [(ngModel)]="value"
+            (ngModelChange)="onSliderChange($event)"></nouislider>
+    </div>
+    <div class="slider-value">
+        <div class="value-indicator">{{value}} {{valueUnit}}</div>
+    </div>
 </div>

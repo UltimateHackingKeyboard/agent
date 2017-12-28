@@ -31,6 +31,8 @@ export interface SliderProps {
 })
 export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent) slider: NouisliderComponent;
+    @Input() label: string;
+    @Input() tooltip: string;
     @Input() min: number;
     @Input() max: number;
     @Input() step: number;
