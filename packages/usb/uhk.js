@@ -102,6 +102,9 @@ exports = module.exports = moduleExports = {
         protocolVersions: 1,
         configSizes: 2,
     },
+    modulePropertyIds: {
+        protocolVersions: 0,
+    },
     configBufferIds,
     eepromOperations,
     eepromTransfer: {
