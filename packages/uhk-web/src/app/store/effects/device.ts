@@ -18,6 +18,7 @@ import {
     ActionTypes,
     ConnectionStateChangedAction,
     HideSaveToKeyboardButton,
+    ResetMouseSpeedSettingsAction,
     SaveConfigurationAction,
     SaveConfigurationReplyAction,
     SaveToKeyboardSuccessAction,
@@ -129,6 +130,30 @@ export class DeviceEffects {
         .switchMap(() => Observable.timer(1000)
             .switchMap(() => Observable.of(new HideSaveToKeyboardButton()))
         );
+
+    @Effect()
+    resetMouseSpeedSettings$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.RESET_MOUSE_SPEED_SETTINGS)
+        .switchMap(() => {
+            const config = this.defaultUserConfigurationService.getDefault();
+            const mouseSpeedDefaultSettings = {};
+            const mouseSpeedProps = [
+                'mouseMoveInitialSpeed',
+                'mouseMoveAcceleration',
+                'mouseMoveDeceleratedSpeed',
+                'mouseMoveBaseSpeed',
+                'mouseMoveAcceleratedSpeed',
+                'mouseScrollInitialSpeed',
+                'mouseScrollAcceleration',
+                'mouseScrollDeceleratedSpeed',
+                'mouseScrollBaseSpeed',
+                'mouseScrollAcceleratedSpeed'
+            ];
+            mouseSpeedProps.forEach(prop => {
+                mouseSpeedDefaultSettings[prop] = config[prop];
+            });
+            return Observable.of(new LoadResetUserConfigurationAction(<UserConfiguration>mouseSpeedDefaultSettings));
+        });
 
     @Effect() resetUserConfiguration$: Observable<Action> = this.actions$
         .ofType(ActionTypes.RESET_USER_CONFIGURATION)
