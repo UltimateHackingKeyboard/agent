@@ -2,6 +2,41 @@
     <i class="fa fa-sliders"></i>
     <span>Mouse speed</span>
 </h1>
-<p>
-    Coming soon ...
-</p>
+<h3>Mouse pointer speed</h3>
+<div class="row mouse-speed-setting" *ngFor="let prop of moveProps">
+    <div class="col-xs-12 col-md-6">
+        <slider-wrapper
+            [label]="prop.title"
+            [tooltip]="prop.tooltip"
+            [min]="moveSettings.min"
+            [max]="moveSettings.max"
+            [step]="moveSettings.step"
+            [pips]="sliderPips"
+            [valueUnit]="prop.valueUnit"
+            [(ngModel)]="prop.value"
+            (ngModelChange)="onSetPropertyValue(prop.prop, $event)"></slider-wrapper>
+    </div>
+</div>
+<h3>Mouse scroll speed</h3>
+<div class="row mouse-speed-setting" *ngFor="let prop of scrollProps">
+    <div class="col-xs-12 col-md-6">
+        <slider-wrapper
+            [label]="prop.title"
+            [tooltip]="prop.tooltip"
+            [min]="scrollSettings.min"
+            [max]="scrollSettings.max"
+            [step]="scrollSettings.step"
+            [pips]="sliderPips"
+            [valueUnit]="prop.valueUnit"
+            [(ngModel)]="prop.value"
+            (ngModelChange)="onSetPropertyValue(prop.prop, $event)"></slider-wrapper>
+    </div>
+</div>
+<button class="btn btn-danger mouse-speed-reset-button"
+        mwlConfirmationPopover
+        title="Are you sure?"
+        placement="top"
+        confirmText="Yes"
+        cancelText="No"
+        (confirm)="resetToDefault()">Reset speeds to default
+</button>
