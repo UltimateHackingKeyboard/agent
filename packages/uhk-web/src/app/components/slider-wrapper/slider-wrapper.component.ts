@@ -13,6 +13,14 @@ export interface SliderPips {
     stepped?: boolean;
 }
 
+export interface SliderProps {
+    min: number;
+    max: number;
+    step?: number;
+    pips?: SliderPips;
+    valueUnit?: string;
+}
+
 @Component({
     selector: 'slider-wrapper',
     templateUrl: './slider-wrapper.component.html',
@@ -23,6 +31,8 @@ export interface SliderPips {
 })
 export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent) slider: NouisliderComponent;
+    @Input() label: string;
+    @Input() tooltip: string;
     @Input() min: number;
     @Input() max: number;
     @Input() step: number;

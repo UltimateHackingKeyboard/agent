@@ -16,6 +16,7 @@ export const ActionTypes = {
     SAVE_TO_KEYBOARD_FAILED: type(PREFIX + 'save to keyboard failed'),
     HIDE_SAVE_TO_KEYBOARD_BUTTON: type(PREFIX + 'hide save to keyboard button'),
     RESET_USER_CONFIGURATION: type(PREFIX + 'reset user configuration'),
+    RESET_MOUSE_SPEED_SETTINGS: type(PREFIX + 'reset mouse speed settings'),
     UPDATE_FIRMWARE: type(PREFIX + 'update firmware'),
     UPDATE_FIRMWARE_WITH: type(PREFIX + 'update firmware with'),
     UPDATE_FIRMWARE_REPLY: type(PREFIX + 'update firmware reply'),
@@ -109,6 +110,10 @@ export class UpdateFirmwareOkButtonAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_OK_BUTTON;
 }
 
+export class ResetMouseSpeedSettingsAction implements Action {
+    type = ActionTypes.RESET_MOUSE_SPEED_SETTINGS;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -119,6 +124,7 @@ export type Actions
     | SaveToKeyboardSuccessAction
     | SaveToKeyboardSuccessFailed
     | HideSaveToKeyboardButton
+    | ResetMouseSpeedSettingsAction
     | ResetUserConfigurationAction
     | UpdateFirmwareAction
     | UpdateFirmwareWithAction
