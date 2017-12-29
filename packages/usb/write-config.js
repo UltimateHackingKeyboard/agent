@@ -23,7 +23,7 @@ let offset = 0;
 let configBuffer = fs.readFileSync(configBin);
 let chunkSizeToRead;
 
-const payload = new Buffer([uhk.usbCommands.getProperty, uhk.devicePropertyIds.configSizes]);
+const payload = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
 
 device.write(uhk.getTransferData(payload));
 let buffer = Buffer.from(device.readSync());

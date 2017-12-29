@@ -62,7 +62,7 @@ exports = module.exports = moduleExports = {
     getTransferData,
     checkModuleSlot,
     usbCommands: {
-        getProperty             : 0x00,
+        getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
         jumpToModuleBootloader  : 0x02,
         sendKbootCommandToModule: 0x03,
@@ -76,7 +76,7 @@ exports = module.exports = moduleExports = {
         getDebugBuffer          : 0x0b,
         getAdcValue             : 0x0c,
         setLedPwmBrightness     : 0x0d,
-        getModuleProperties     : 0x0e,
+        getModuleProperty       : 0x0e,
     },
     enumerationModes: {
         bootloader: 0,

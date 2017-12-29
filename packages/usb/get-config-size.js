@@ -2,7 +2,7 @@
 const uhk = require('./uhk');
 
 const device = uhk.getUhkDevice();
-const sendData = new Buffer([uhk.usbCommands.getProperty, uhk.devicePropertyIds.configSizes]);
+const sendData = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
 device.write(uhk.getTransferData(sendData));
 const response = Buffer.from(device.readSync());
 

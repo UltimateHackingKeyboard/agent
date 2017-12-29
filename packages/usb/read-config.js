@@ -10,7 +10,7 @@ let offset = 0;
 let configBuffer = new Buffer(0);
 let chunkSizeToRead;
 
-const payload = new Buffer([uhk.usbCommands.getProperty, uhk.devicePropertyIds.configSizes]);
+const payload = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
 device.write(uhk.getTransferData(payload));
 let buffer = Buffer.from(device.readSync());
 const hardwareConfigMaxSize = buffer[1] + (buffer[2]<<8);

@@ -3,7 +3,7 @@ const uhk = require('./uhk');
 const device = uhk.getUhkDevice();
 
 function getModuleState() {
-    const payload = new Buffer([uhk.usbCommands.getModuleProperties, 1]);
+    const payload = new Buffer([uhk.usbCommands.getModuleProperty, 1]);
     console.log('Sending ', uhk.bufferToString(payload));
     device.write(uhk.getTransferData(payload));
     const receivedBuffer = device.readSync();
