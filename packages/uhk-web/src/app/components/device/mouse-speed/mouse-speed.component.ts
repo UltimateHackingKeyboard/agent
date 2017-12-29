@@ -6,6 +6,7 @@ import { DefaultUserConfigurationService } from '../../../services/default-user-
 import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
 import { Subscription } from 'rxjs/Subscription';
 import { UserConfiguration } from 'uhk-common';
+import { ResetMouseSpeedSettingsAction } from '../../../store/actions/device';
 
 const MOUSE_MOVE_VALUE_MULTIPLIER = 25;
 
@@ -142,12 +143,6 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     }
 
     resetToDefault() {
-        const defaultUserConfig = this.defaultUserConfigurationService.getDefault();
-        this.moveProps.forEach(moveProp => {
-            this.onSetPropertyValue(moveProp.prop, defaultUserConfig[moveProp.prop] * MOUSE_MOVE_VALUE_MULTIPLIER);
-        });
-        this.scrollProps.forEach(scrollProp => {
-            this.onSetPropertyValue(scrollProp.prop, defaultUserConfig[scrollProp.prop]);
-        });
+       this.store.dispatch(new ResetMouseSpeedSettingsAction());
     }
 }
