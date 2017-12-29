@@ -18,7 +18,6 @@ import {
     ActionTypes,
     ConnectionStateChangedAction,
     HideSaveToKeyboardButton,
-    ResetMouseSpeedSettingsAction,
     SaveConfigurationAction,
     SaveConfigurationReplyAction,
     SaveToKeyboardSuccessAction,
