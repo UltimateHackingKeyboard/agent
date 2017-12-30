@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../store';
+import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../../store';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction,
     TogglePreReleaseFlagAction
-} from '../../store/actions/auto-update-settings';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
+} from '../../../store/actions/auto-update-settings';
+import { AutoUpdateSettings } from '../../../models/auto-update-settings';
+import { appVersion } from '../../../app-version';
 
 @Component({
     selector: 'settings',
@@ -19,8 +20,7 @@ import { AutoUpdateSettings } from '../../models/auto-update-settings';
     }
 })
 export class SettingsComponent {
-    // TODO: From where do we get the version number? The electron gives back in main process, but the web...
-    version = '1.0.0';
+    version: string = appVersion;
     autoUpdateSettings$: Observable<AutoUpdateSettings>;
     checkingForUpdate$: Observable<boolean>;
 
