@@ -1,0 +1,35 @@
+:host {
+    overflow-y: auto;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.agent {
+    &-container {
+        text-align: center;
+        width: 300px;
+        margin: 4.6rem;
+    }
+
+    &-logo {
+        margin-bottom: 3rem;
+    }
+
+    &-info {
+        display: inline-block;
+        text-align: left;
+    }
+
+    &-version {
+        margin-bottom: 1rem;
+
+        span {
+            font-weight: bold;
+        }
+    }
+}
+
+.link-github {
+    cursor: pointer;
+}
