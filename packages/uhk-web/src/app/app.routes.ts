@@ -12,7 +12,7 @@ import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { MainPage } from './pages/main-page/main.page';
-import { settingsRoutes } from './components/settings/settings.routes';
+import { agentRoutes } from './components/agent/agent.routes';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
@@ -42,7 +42,7 @@ const appRoutes: Routes = [
             ...keymapRoutes,
             ...macroRoutes,
             ...addOnRoutes,
-            ...settingsRoutes
+            ...agentRoutes
         ]
     }
 ];
