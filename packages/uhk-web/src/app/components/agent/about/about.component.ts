@@ -7,7 +7,10 @@ import { appVersion } from '../../../app-version';
 @Component({
     selector: 'about-page',
     templateUrl: './about.component.html',
-    styleUrls: ['./about.component.scss']
+    styleUrls: ['./about.component.scss'],
+    host: {
+        'class': 'container-fluid'
+    }
 })
 export class AboutComponent {
     public version: string = appVersion;
