@@ -117,24 +117,24 @@
                     </li>
                 </ul>
             </li>
-            <li class="sidebar__level-0--item" [routerLinkActive]="['active']">
-                <div class="sidebar__level-0">
-                    <i class="uhk-icon uhk-icon-agent-icon"></i> Agent
-                    <i class="fa fa-chevron-up pull-right"
-                        (click)="toggleHide($event, 'agent')"></i>
+        </ul>
+    </li>
+    <li class="sidebar__level-0--item" [routerLinkActive]="['active']">
+        <div class="sidebar__level-0">
+            <i class="uhk-icon uhk-icon-agent-icon"></i> Agent
+            <i class="fa fa-chevron-up pull-right"
+                (click)="toggleHide($event, 'agent')"></i>
+        </div>
+        <ul [@toggler]="animation['agent']">
+            <li class="sidebar__level-2--item">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                    <a [routerLink]="['/settings']">Settings</a>
                 </div>
-                <ul [@toggler]="animation['agent']">
-                    <li class="sidebar__level-2--item">
-                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                            <a [routerLink]="['/settings']">Settings</a>
-                        </div>
-                    </li>
-                    <li class="sidebar__level-2--item">
-                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                            <a [routerLink]="['/about']">About</a>
-                        </div>
-                    </li>
-                </ul>
+            </li>
+            <li class="sidebar__level-2--item">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                    <a [routerLink]="['/about']">About</a>
+                </div>
             </li>
         </ul>
     </li>
