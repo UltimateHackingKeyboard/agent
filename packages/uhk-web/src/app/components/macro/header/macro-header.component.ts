@@ -59,7 +59,7 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     }
 
     editMacroName(name: string) {
-        if (name.length === 0) {
+        if (!util.isValidName(name)) {
             this.setName();
             return;
         }

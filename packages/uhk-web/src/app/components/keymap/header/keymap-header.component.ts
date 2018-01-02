@@ -74,7 +74,7 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     editKeymapName(name: string) {
-        if (name.length === 0) {
+        if (!util.isValidName(name)) {
             this.setName();
             return;
         }

@@ -118,7 +118,11 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
         this.store.dispatch(MacroActions.addMacro());
     }
 
-    editDeviceName(name): void {
+    editDeviceName(name: string): void {
+        if (!util.isValidName(name)) {
+            this.setDeviceName();
+            return;
+        }
         this.store.dispatch(new RenameUserConfigurationAction(name));
     }
 
