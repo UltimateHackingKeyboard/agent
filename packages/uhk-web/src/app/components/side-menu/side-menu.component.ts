@@ -119,7 +119,7 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
     }
 
     editDeviceName(name: string): void {
-        if (!util.isValidName(name)) {
+        if (!util.isValidName(name) || name.trim() === this.deviceNameValue) {
             this.setDeviceName();
             return;
         }
