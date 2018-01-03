@@ -4,10 +4,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { KeyAction, Keymap, KeyActionHelper, Layer, Macro, Module, SwitchLayerAction, UserConfiguration } from 'uhk-common';
+import { KeyAction, KeyActionHelper, Keymap, Layer, Macro, Module, SwitchLayerAction, UserConfiguration } from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';
+import { isValidName } from '../../util';
 
 export const initialState: UserConfiguration = new UserConfiguration();
 
@@ -31,7 +32,11 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             break;
         }
         case KeymapActions.EDIT_NAME: {
-            const name: string = action.payload.name;
+            if (!isValidName(action.payload.name)) {
+                break;
+            }
+
+            const name: string = action.payload.name.trim();
 
             const duplicate = state.keymaps.some((keymap: Keymap) => {
                 return keymap.name === name && keymap.abbreviation !== action.payload.abbr;
@@ -169,7 +174,11 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             break;
         }
         case MacroActions.EDIT_NAME: {
-            const name: string = action.payload.name;
+            if (!isValidName(action.payload.name)) {
+                break;
+            }
+
+            const name: string = action.payload.name.trim();
 
             const duplicate = state.macros.some((macro: Macro) => {
                 return macro.id !== action.payload.id && macro.name === name;
@@ -242,7 +251,9 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             break;
 
         case ActionTypes.RENAME_USER_CONFIGURATION: {
-            changedUserConfiguration.deviceName = action.payload;
+            if (isValidName(action.payload)) {
+                changedUserConfiguration.deviceName = action.payload.trim();
+            }
             break;
         }
 
@@ -399,3 +410,5 @@ function setKeyActionToLayer(newLayer: Layer, moduleIndex: number, keyIndex: num
     newModule.keyActions = newModule.keyActions.slice();
     newModule.keyActions[keyIndex] = newKeyAction;
 }
+
+export const getDeviceName = (state: UserConfiguration) => state.deviceName;
