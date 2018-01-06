@@ -236,8 +236,7 @@ export class UserConfigEffects {
             } catch (err) {
                 return new ShowNotificationAction({
                     type: NotificationType.Error,
-                    title: 'Invalid configuration specified.',
-                    message: err.message
+                    message: 'Invalid configuration specified.'
                 });
             }
         });
