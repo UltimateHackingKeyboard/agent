@@ -44,7 +44,8 @@ const statusCodesToStrings = {
     1100: 'busy',
     1101: 'idle',
     1102: 'nak',
-    1103: 'timeout',
+    1103: 'arbitrationLost',
+    1104: 'timeout',
     20000: 'idleSlave',
     20001: 'idleCycle',
 }
