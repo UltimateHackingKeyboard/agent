@@ -25,6 +25,7 @@ import {
 
 import {
     ActionTypes,
+    ApplyUserConfigurationFromFileAction,
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
     LoadUserConfigurationFromFileAction,
@@ -226,7 +227,7 @@ export class UserConfigEffects {
                 }
 
                 if (userConfig.userConfigMajorVersion) {
-                    return new LoadUserConfigSuccessAction(userConfig);
+                    return new ApplyUserConfigurationFromFileAction(userConfig);
                 }
 
                 return new ShowNotificationAction({
