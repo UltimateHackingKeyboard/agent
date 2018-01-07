@@ -21,7 +21,7 @@ The two builds share code as much as possible.
 
 ### Step 1: Build Dependencies
 
-You'll need Node (>=8.1.x) and NPM (>=5.1.x). Use your OS package manager to install these. [Check the NodeJS site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both.
+You'll need Node.js LTS. Use your OS package manager to install these. [Check the NodeJS site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both. Should you like to use more Node.js version on the same computer use the following Node version managers for [Mac/Linux](https://github.com/creationix/nvm) for [Windows](https://github.com/coreybutler/nvm-windows)
 
 You'll also need `libusb`.
 On debian-based linux distros, `apt-get install libusb-dev libudev-dev g++` is sufficient.
