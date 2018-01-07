@@ -13,7 +13,7 @@ It's worth mentioning that Agent has two builds.
 
 The **electron build** is the desktop application which is meant to be used if you have an actual UHK at hand. It starts with an opening screen which detects your UHK. You cannot get past this screen without connecting a UHK via USB.
 
-The **web build** is meant to be used for demonstation purposes, so people who don't yet own a UHK can get a feel of Agent and its capabilities in their browser. Eventually, WebUSB support will be added to the web build, making it able to communicate with the UHK. Given the sandboxed nature of browers, the web build will always lack features that the electron build offers, so this won't make the electron build obsolete.
+The **web build** is meant to be used for demonstration purposes, so people who don't yet own a UHK can get a feel of Agent and its capabilities in their browser. Eventually, WebUSB support will be added to the web build, making it able to communicate with the UHK. Given the sandboxed nature of browsers, the web build will always lack features that the electron build offers, so this won't make the electron build obsolete.
 
 The two builds share code as much as possible.
 
