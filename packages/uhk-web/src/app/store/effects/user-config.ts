@@ -204,8 +204,7 @@ export class UserConfigEffects {
             this.logService.debug('[UserConfigEffect] LOAD_USER_CONFIG_SUCCESS', {autoWriteUserConfig});
             if (autoWriteUserConfig) {
                 return Observable.of(new SaveConfigurationAction());
-            }
-            else {
+            } else {
                 return Observable.empty();
             }
         });
@@ -219,8 +218,7 @@ export class UserConfigEffects {
 
                 if (info.filename.endsWith('.bin')) {
                     userConfig.fromBinary(UhkBuffer.fromArray(info.data));
-                }
-                else {
+                } else {
                     const buffer = new Buffer(info.data);
                     const json = buffer.toString();
                     userConfig.fromJsonObject(JSON.parse(json));
