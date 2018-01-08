@@ -30,7 +30,6 @@ For everyone else, use the appropriate package manager for your OS.
 
 ### Step 2: Build Environment
 
-If your
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
