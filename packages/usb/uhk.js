@@ -102,6 +102,7 @@ exports = module.exports = moduleExports = {
         deviceProtocolVersion: 0,
         protocolVersions: 1,
         configSizes: 2,
+        currentKbootCommand: 3,
     },
     modulePropertyIds: {
         protocolVersions: 0,
