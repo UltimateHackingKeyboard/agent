@@ -14,9 +14,11 @@
         <span role="button" class="btn-link" (click)="saveConfigurationInBINFormat()">binary</span> format.
     </li>
     <li>
-        <button class="btn btn-default"
-                >Upload device configuration
-        </button>
+        <label class="btn btn-default btn-file">
+            Upload device configuration
+            <input type="file"
+                   (change)="changeFile($event)">
+        </label>
     </li>
     <li>
         <button class="btn btn-danger"

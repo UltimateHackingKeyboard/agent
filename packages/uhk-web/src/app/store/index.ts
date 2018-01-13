@@ -39,9 +39,10 @@ export const metaReducers: MetaReducer<AppState>[] = environment.production
     : [storeFreeze];
 
 export const getUserConfiguration = (state: AppState) => state.userConfiguration;
-export const getDeviceName = (state: AppState) => state.userConfiguration.deviceName;
+export const getDeviceName = createSelector(getUserConfiguration, fromUserConfig.getDeviceName);
 
 export const appState = (state: AppState) => state.app;
+
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const autoWriteUserConfiguration = createSelector(appState, fromApp.autoWriteUserConfiguration);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);

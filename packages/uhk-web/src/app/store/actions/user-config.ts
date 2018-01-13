@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { type, UserConfiguration, ConfigurationReply } from 'uhk-common';
 import { UserConfigurationValue } from '../../models/user-configuration-value';
+import { UploadFileData } from '../../models/upload-file-data';
 
 const PREFIX = '[user-config] ';
 
@@ -15,7 +16,9 @@ export const ActionTypes = {
     SAVE_USER_CONFIG_IN_BIN_FILE: type(PREFIX + 'Save User Config in binary file'),
     LOAD_RESET_USER_CONFIGURATION: type(PREFIX + 'Load reset user configuration'),
     RENAME_USER_CONFIGURATION: type(PREFIX + 'Rename user configuration'),
-    SET_USER_CONFIGURATION_VALUE: type(PREFIX + 'Set user configuration value')
+    SET_USER_CONFIGURATION_VALUE: type(PREFIX + 'Set user configuration value'),
+    LOAD_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Load user configuration from file'),
+    APPLY_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Apply user configuration from file')
 };
 
 export class LoadUserConfigAction implements Action {
@@ -76,6 +79,20 @@ export class SetUserConfigurationValueAction implements Action {
     }
 }
 
+export class LoadUserConfigurationFromFileAction implements Action {
+    type = ActionTypes.LOAD_USER_CONFIGURATION_FROM_FILE;
+
+    constructor(public payload: UploadFileData) {
+    }
+}
+
+export class ApplyUserConfigurationFromFileAction implements Action {
+    type = ActionTypes.APPLY_USER_CONFIGURATION_FROM_FILE;
+
+    constructor(public payload: UserConfiguration) {
+    }
+}
+
 export type Actions
     = LoadUserConfigAction
     | LoadUserConfigSuccessAction
@@ -87,4 +104,6 @@ export type Actions
     | LoadResetUserConfigurationAction
     | RenameUserConfigurationAction
     | SetUserConfigurationValueAction
+    | LoadUserConfigurationFromFileAction
+    | ApplyUserConfigurationFromFileAction
     ;
