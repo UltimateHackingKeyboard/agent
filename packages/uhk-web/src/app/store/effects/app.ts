@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
@@ -23,12 +23,7 @@ import {
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import {
-    ActionTypes as DeviceActions,
-    ConnectionStateChangedAction,
-    SaveToKeyboardSuccessAction
-} from '../actions/device';
-import { AppState, autoWriteUserConfiguration } from '../index';
+import { ConnectionStateChangedAction } from '../actions/device';
 
 @Injectable()
 export class ApplicationEffects {
@@ -76,20 +71,10 @@ export class ApplicationEffects {
         .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
-    @Effect({dispatch: false}) saveToKeyboardSuccess$ = this.actions$
-        .ofType<SaveToKeyboardSuccessAction>(DeviceActions.SAVE_TO_KEYBOARD_SUCCESS)
-        .withLatestFrom(this.store.select(autoWriteUserConfiguration))
-        .do(([action, autoWriteUserConfig]) => {
-            if (autoWriteUserConfig) {
-                this.appRendererService.exit();
-            }
-        });
-
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
-                private logService: LogService,
-                private store: Store<AppState>) {
+                private logService: LogService) {
     }
 }

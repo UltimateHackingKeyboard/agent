@@ -35,7 +35,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
-import { AppState, autoWriteUserConfiguration, getPrevUserConfiguration, getUserConfiguration } from '../index';
+import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
 import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
 import {
     DismissUndoNotificationAction,
@@ -43,7 +43,7 @@ import {
     ShowNotificationAction,
     UndoLastAction
 } from '../actions/app';
-import { SaveConfigurationAction, ShowSaveToKeyboardButtonAction } from '../actions/device';
+import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { UploadFileData } from '../../models/upload-file-data';
@@ -195,18 +195,6 @@ export class UserConfigEffects {
             userConfiguration.toBinary(uhkBuffer);
             const blob = new Blob([uhkBuffer.getBufferContent()]);
             saveAs(blob, 'UserConfiguration.bin');
-        });
-
-    @Effect() loadUserConfigurationSuccess$ = this.actions$
-        .ofType(ActionTypes.LOAD_USER_CONFIG_SUCCESS)
-        .withLatestFrom(this.store.select(autoWriteUserConfiguration))
-        .switchMap(([action, autoWriteUserConfig]) => {
-            this.logService.debug('[UserConfigEffect] LOAD_USER_CONFIG_SUCCESS', {autoWriteUserConfig});
-            if (autoWriteUserConfig) {
-                return Observable.of(new SaveConfigurationAction());
-            } else {
-                return Observable.empty();
-            }
         });
 
     @Effect() loadUserConfigurationFromFile$ = this.actions$

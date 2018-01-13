@@ -28,8 +28,7 @@ export class AppService extends MainServiceBase {
 
         const response: AppStartInfo = {
             commandLineArgs: {
-                addons: this.options.addons || false,
-                autoWriteConfig: this.options['auto-write-config'] || false
+                addons: this.options.addons || false
             },
             deviceConnected: this.uhkHidDeviceService.deviceConnected(),
             hasPermission: this.uhkHidDeviceService.hasPermission(),
