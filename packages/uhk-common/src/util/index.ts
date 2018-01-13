@@ -1,5 +1,6 @@
 export { IpcEvents } from './ipcEvents';
 export * from './log';
+export * from './constants';
 
 // Source: http://stackoverflow.com/questions/13720256/javascript-regex-camelcase-to-sentence
 export function camelCaseToSentence(camelCasedText: string): string {
