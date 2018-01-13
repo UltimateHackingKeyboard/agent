@@ -16,19 +16,15 @@ import {
     ApplyCommandLineArgsAction,
     AppStartedAction,
     DismissUndoNotificationAction,
+    OpenUrlInNewWindow,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
-    UndoLastAction,
-    UpdateAgentVersionInformationAction
+    UndoLastAction
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import {
-    ActionTypes as DeviceActions,
-    ConnectionStateChangedAction,
-    SaveToKeyboardSuccessAction
-} from '../actions/device';
-import { AppState, autoWriteUserConfiguration } from '../index';
+import { ActionTypes as DeviceActions, ConnectionStateChangedAction, SaveToKeyboardSuccessAction } from '../actions/device';
+import { AppState, autoWriteUserConfiguration, runningInElectron } from '../index';
 
 @Injectable()
 export class ApplicationEffects {
@@ -66,8 +62,7 @@ export class ApplicationEffects {
                 new ConnectionStateChangedAction({
                     connected: appInfo.deviceConnected,
                     hasPermission: appInfo.hasPermission
-                }),
-                new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
+                })
             ];
         });
 
@@ -82,6 +77,19 @@ export class ApplicationEffects {
         .do(([action, autoWriteUserConfig]) => {
             if (autoWriteUserConfig) {
                 this.appRendererService.exit();
+            }
+        });
+
+    @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
+        .ofType<OpenUrlInNewWindow>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
+        .withLatestFrom(this.store.select(runningInElectron))
+        .do(([action, inElectron]) => {
+            const url = action.payload;
+
+            if (inElectron) {
+                this.appRendererService.openUrl(url);
+            } else {
+                window.open(url, '_blank');
             }
         });
 

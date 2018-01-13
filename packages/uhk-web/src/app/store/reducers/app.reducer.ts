@@ -7,6 +7,7 @@ import { ActionTypes, ShowNotificationAction } from '../actions/app';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes } from '../actions/device';
 import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
+import { getVersions } from '../../util';
 
 export interface State {
     started: boolean;
@@ -27,7 +28,8 @@ export const initialState: State = {
     autoWriteUserConfiguration: false,
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
-    configLoading: true
+    configLoading: true,
+    agentVersionInfo: getVersions()
 };
 
 export function reducer(state = initialState, action: Action & { payload: any }) {
@@ -116,11 +118,6 @@ export function reducer(state = initialState, action: Action & { payload: any })
             };
         }
 
-        case ActionTypes.UPDATE_AGENT_VERSION_INFORMATION:
-            return {
-                ...state,
-                agentVersionInfo: action.payload
-            };
         default:
             return state;
     }

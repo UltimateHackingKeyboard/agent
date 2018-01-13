@@ -9,7 +9,7 @@ import {
     TogglePreReleaseFlagAction
 } from '../../../store/actions/auto-update-settings';
 import { AutoUpdateSettings } from '../../../models/auto-update-settings';
-import { appVersion } from '../../../app-version';
+import { getVersions } from '../../../util';
 
 @Component({
     selector: 'settings',
@@ -20,7 +20,7 @@ import { appVersion } from '../../../app-version';
     }
 })
 export class SettingsComponent {
-    version: string = appVersion;
+    version: string = getVersions().version;
     autoUpdateSettings$: Observable<AutoUpdateSettings>;
     checkingForUpdate$: Observable<boolean>;
 

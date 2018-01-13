@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AppState, runningInElectron } from '../../../store';
-import { appVersion } from '../../../app-version';
+import { Constants } from 'uhk-common';
+
+import { AppState } from '../../../store';
+import { getVersions } from '../../../util';
+import { OpenUrlInNewWindow } from '../../../store/actions/app';
 
 @Component({
     selector: 'about-page',
@@ -13,24 +15,13 @@ import { appVersion } from '../../../app-version';
     }
 })
 export class AboutComponent {
-    public version: string = appVersion;
-
-    private agentGitHubURL: string = 'https://github.com/UltimateHackingKeyboard/agent';
-    private runningInElectron: boolean;
+    version: string = getVersions().version;
 
     constructor(private store: Store<AppState>) {
-        store.select(runningInElectron)
-            .subscribe(isRunningInElectron => {
-                this.runningInElectron = isRunningInElectron;
-            }).unsubscribe();
     }
 
     openAgentGitHubPage(event) {
         event.preventDefault();
-        if (this.runningInElectron) {
-            require('electron').shell.openExternal(this.agentGitHubURL);
-        } else {
-            window.open(this.agentGitHubURL, '_blank');
-        }
+        this.store.dispatch(new OpenUrlInNewWindow(Constants.AGENT_GITHUB_URL));
     }
 }
