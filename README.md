@@ -13,23 +13,29 @@ It's worth mentioning that Agent has two builds.
 
 The **electron build** is the desktop application which is meant to be used if you have an actual UHK at hand. It starts with an opening screen which detects your UHK. You cannot get past this screen without connecting a UHK via USB.
 
-The **web build** is meant to be used for demonstation purposes, so people who don't yet own a UHK can get a feel of Agent and its capabilities in their browser. Eventually, WebUSB support will be added to the web build, making it able to communicate with the UHK. Given the sandboxed nature of browers, the web build will always lack features that the electron build offers, so this won't make the electron build obsolete.
+The **web build** is meant to be used for demonstration purposes, so people who don't yet own a UHK can get a feel of Agent and its capabilities in their browser. Eventually, WebUSB support will be added to the web build, making it able to communicate with the UHK. Given the sandboxed nature of browsers, the web build will always lack features that the electron build offers, so this won't make the electron build obsolete.
 
 The two builds share code as much as possible.
 
 ## Building the electron application
 
-First up, make sure that node >=8.1.x and npm >=5.1.x are installed on your system. Next up:
+### Step 1: Build Dependencies
+
+You'll need Node.js LTS. Use your OS package manager to install it. [Check the NodeJS site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both. Should you need multiple Node.js versions on the same computer, use Node Version Manager for [Mac/Linux](https://github.com/creationix/nvm) or for [Windows](https://github.com/coreybutler/nvm-windows)
+
+You'll also need `libusb`.
+On debian-based linux distros, `apt-get install libusb-dev libudev-dev g++` is sufficient.
+On Mac OS, use `brew install libusb libusb-compat`.
+For everyone else, use the appropriate package manager for your OS.
+
+### Step 2: Build Environment
 
 ```
-# Execute the following line on Linux. Use relevant package manager and package names on non-Debian based distros.
-apt-get install libusb-dev libudev-dev g++
-
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
-npm install
-npm run build:electron
-npm run electron
+npm install             # to install Node dependencies
+npm run build:electron  # to build the agent
+npm run electron        # to run the newly built agent
 ```
 
 At this point, Agent should be running on your machine.

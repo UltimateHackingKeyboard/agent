@@ -77,6 +77,7 @@ exports = module.exports = moduleExports = {
         getAdcValue             : 0x0c,
         setLedPwmBrightness     : 0x0d,
         getModuleProperty       : 0x0e,
+        getSlaveI2cErrors       : 0x0f,
     },
     enumerationModes: {
         bootloader: 0,
@@ -101,6 +102,7 @@ exports = module.exports = moduleExports = {
         deviceProtocolVersion: 0,
         protocolVersions: 1,
         configSizes: 2,
+        currentKbootCommand: 3,
     },
     modulePropertyIds: {
         protocolVersions: 0,
