@@ -16,7 +16,7 @@ import {
     ApplyCommandLineArgsAction,
     AppStartedAction,
     DismissUndoNotificationAction,
-    OpenUrlInNewWindow,
+    OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
     UndoLastAction
@@ -81,7 +81,7 @@ export class ApplicationEffects {
         });
 
     @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
-        .ofType<OpenUrlInNewWindow>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
+        .ofType<OpenUrlInNewWindowAction>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
         .withLatestFrom(this.store.select(runningInElectron))
         .do(([action, inElectron]) => {
             const url = action.payload;

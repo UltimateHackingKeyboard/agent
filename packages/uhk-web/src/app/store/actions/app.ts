@@ -72,7 +72,7 @@ export class ElectronMainLogReceivedAction implements Action {
     constructor(public payload: ElectronLogEntry) {}
 }
 
-export class OpenUrlInNewWindow implements Action {
+export class OpenUrlInNewWindowAction implements Action {
     type = ActionTypes.OPEN_URL_IN_NEW_WINDOW;
 
     constructor(public payload: string) {}
@@ -89,5 +89,5 @@ export type Actions
     | DismissUndoNotificationAction
     | LoadHardwareConfigurationSuccessAction
     | ElectronMainLogReceivedAction
-    | OpenUrlInNewWindow
+    | OpenUrlInNewWindowAction
     ;

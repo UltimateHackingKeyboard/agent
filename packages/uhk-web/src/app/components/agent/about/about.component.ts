@@ -4,7 +4,7 @@ import { Constants } from 'uhk-common';
 
 import { AppState } from '../../../store';
 import { getVersions } from '../../../util';
-import { OpenUrlInNewWindow } from '../../../store/actions/app';
+import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 
 @Component({
     selector: 'about-page',
@@ -22,6 +22,6 @@ export class AboutComponent {
 
     openAgentGitHubPage(event) {
         event.preventDefault();
-        this.store.dispatch(new OpenUrlInNewWindow(Constants.AGENT_GITHUB_URL));
+        this.store.dispatch(new OpenUrlInNewWindowAction(Constants.AGENT_GITHUB_URL));
     }
 }
