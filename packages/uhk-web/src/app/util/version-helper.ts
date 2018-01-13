@@ -1,14 +1,5 @@
 import { VersionInformation } from 'uhk-common';
 
-let versions: VersionInformation;
-
-export const getVersions = (): VersionInformation => {
-    if (!versions) {
-        versions = collectVersions();
-    }
-    return versions;
-};
-
 const collectVersions = (): VersionInformation => {
     const pkgJson = require('../../../../../package.json');
     return {
@@ -19,4 +10,13 @@ const collectVersions = (): VersionInformation => {
         userConfigVersion: pkgJson['userConfigVersion'],
         hardwareConfigVersion: pkgJson['hardwareConfigVersion']
     };
+};
+
+let versions: VersionInformation;
+
+export const getVersions = (): VersionInformation => {
+    if (!versions) {
+        versions = collectVersions();
+    }
+    return versions;
 };
