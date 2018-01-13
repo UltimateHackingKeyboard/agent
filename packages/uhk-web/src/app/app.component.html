@@ -7,9 +7,6 @@
 <div id="main-content" class="main-content">
     <router-outlet></router-outlet>
 </div>
-<div class="github-fork-ribbon" *ngIf="!(runningInElectron$ | async)">
-    <a class="" href="https://github.com/UltimateHackingKeyboard/agent" title="Fork me on GitHub">Fork me on GitHub</a>
-</div>
 <notifier-container></notifier-container>
 <progress-button class="save-to-keyboard-button"
                  *ngIf="(saveToKeyboardState$ | async).showButton"

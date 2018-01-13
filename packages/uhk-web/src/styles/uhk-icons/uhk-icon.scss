@@ -6,3 +6,8 @@
     @extend %svg-common;
     background-position: 0 0;
 }
+
+.uhk-icon-agent-icon {
+    @extend %svg-common;
+    background-position: 100% 0;
+}

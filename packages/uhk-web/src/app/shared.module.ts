@@ -43,7 +43,7 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
-import { SettingsComponent } from './components/settings';
+import { AboutComponent, SettingsComponent } from './components/agent';
 import { SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
@@ -152,6 +152,7 @@ import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapp
         MacroTextTabComponent,
         MacroNotFoundComponent,
         AddOnComponent,
+        AboutComponent,
         SettingsComponent,
         KeyboardSliderComponent,
         CancelableDirective,
