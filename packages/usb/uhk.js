@@ -14,6 +14,22 @@ function bufferToString(buffer) {
     return str;
 }
 
+function getUint16(buffer, offset) {
+    return (buffer[offset]) + (buffer[offset+1] * 2**8);
+}
+
+function getUint32(buffer, offset) {
+    return (buffer[offset]) + (buffer[offset+1] * 2**8) + (buffer[offset+2] * 2**16) + (buffer[offset+3] * 2**24);
+}
+
+function pushUint32(array, value) {
+    array.push((value >> 0) & 0xff);
+    array.push((value >> 8) & 0xff);
+    array.push((value >> 16) & 0xff);
+    array.push((value >> 24) & 0xff);
+    return array;
+}
+
 function getUhkDevice() {
     const foundDevice = HID.devices().find(device =>
         device.vendorId === 0x1d50 && device.productId === 0x6122 &&
@@ -57,6 +73,9 @@ let eepromOperations = {
 
 exports = module.exports = moduleExports = {
     bufferToString,
+    getUint16,
+    getUint32,
+    pushUint32,
     getUhkDevice,
     getBootloaderDevice,
     getTransferData,
@@ -78,6 +97,7 @@ exports = module.exports = moduleExports = {
         setLedPwmBrightness     : 0x0d,
         getModuleProperty       : 0x0e,
         getSlaveI2cErrors       : 0x0f,
+        setI2cBaudRate          : 0x10,
     },
     enumerationModes: {
         bootloader: 0,
