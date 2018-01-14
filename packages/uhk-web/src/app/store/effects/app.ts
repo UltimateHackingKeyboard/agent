@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
@@ -16,14 +16,15 @@ import {
     ApplyCommandLineArgsAction,
     AppStartedAction,
     DismissUndoNotificationAction,
+    OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
-    UndoLastAction,
-    UpdateAgentVersionInformationAction
+    UndoLastAction
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { ConnectionStateChangedAction } from '../actions/device';
+import { AppState, runningInElectron } from '../index';
 
 @Injectable()
 export class ApplicationEffects {
@@ -61,8 +62,7 @@ export class ApplicationEffects {
                 new ConnectionStateChangedAction({
                     connected: appInfo.deviceConnected,
                     hasPermission: appInfo.hasPermission
-                }),
-                new UpdateAgentVersionInformationAction(appInfo.agentVersionInfo)
+                })
             ];
         });
 
@@ -71,10 +71,24 @@ export class ApplicationEffects {
         .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
+    @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
+        .ofType<OpenUrlInNewWindowAction>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
+        .withLatestFrom(this.store.select(runningInElectron))
+        .do(([action, inElectron]) => {
+            const url = action.payload;
+
+            if (inElectron) {
+                this.appRendererService.openUrl(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        });
+
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
-                private logService: LogService) {
+                private logService: LogService,
+                private store: Store<AppState>) {
     }
 }

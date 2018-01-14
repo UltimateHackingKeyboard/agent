@@ -47,16 +47,6 @@
         }
     }
 
-    .help-text--mouse-speed {
-        margin-bottom: 2rem;
-        font-size: 0.9em;
-        color: #666;
-
-        p {
-            margin: 0;
-        }
-    }
-
     .details {
         .btn-placeholder {
             visibility: hidden;
@@ -77,9 +67,4 @@
             text-align: center;
         }
     }
-}
-
-.help-text--mouse-speed.last-help {
-    margin-bottom: 0;
-    margin-top: 2rem;
 }
