@@ -23,8 +23,8 @@ import {
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { ActionTypes as DeviceActions, ConnectionStateChangedAction, SaveToKeyboardSuccessAction } from '../actions/device';
-import { AppState, autoWriteUserConfiguration, runningInElectron } from '../index';
+import { ConnectionStateChangedAction } from '../actions/device';
+import { AppState, runningInElectron } from '../index';
 
 @Injectable()
 export class ApplicationEffects {
@@ -70,15 +70,6 @@ export class ApplicationEffects {
         .ofType<UndoLastAction>(ActionTypes.UNDO_LAST)
         .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
-
-    @Effect({dispatch: false}) saveToKeyboardSuccess$ = this.actions$
-        .ofType<SaveToKeyboardSuccessAction>(DeviceActions.SAVE_TO_KEYBOARD_SUCCESS)
-        .withLatestFrom(this.store.select(autoWriteUserConfiguration))
-        .do(([action, autoWriteUserConfig]) => {
-            if (autoWriteUserConfig) {
-                this.appRendererService.exit();
-            }
-        });
 
     @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
         .ofType<OpenUrlInNewWindowAction>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)

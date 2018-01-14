@@ -21,8 +21,7 @@ import * as isDev from 'electron-is-dev';
 import { CommandLineInputs } from './models/command-line-inputs';
 
 const optionDefinitions = [
-    {name: 'addons', type: Boolean},
-    {name: 'auto-write-config', type: Boolean}
+    {name: 'addons', type: Boolean}
 ];
 
 const options: CommandLineInputs = commandLineArgs(optionDefinitions);

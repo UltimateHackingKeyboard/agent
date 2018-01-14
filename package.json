@@ -90,7 +90,6 @@
     "server:web": "lerna exec --scope uhk-web npm start",
     "server:electron": "lerna exec --scope uhk-web npm run server:renderer",
     "electron": "lerna exec --scope uhk-agent npm start",
-    "electron:auto-write-config": "lerna exec --scope uhk-agent npm run auto-write-config",
     "standard-version": "standard-version",
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",

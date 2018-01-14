@@ -12,7 +12,6 @@ import { getVersions } from '../../util';
 export interface State {
     started: boolean;
     showAddonMenu: boolean;
-    autoWriteUserConfiguration: boolean;
     undoableNotification?: Notification;
     navigationCountAfterNotification: number;
     prevUserConfig?: UserConfiguration;
@@ -25,7 +24,6 @@ export interface State {
 export const initialState: State = {
     started: false,
     showAddonMenu: false,
-    autoWriteUserConfiguration: false,
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
     configLoading: true,
@@ -44,8 +42,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         case ActionTypes.APPLY_COMMAND_LINE_ARGS: {
             return {
                 ...state,
-                showAddonMenu: action.payload.addons,
-                autoWriteUserConfiguration: action.payload.autoWriteConfig
+                showAddonMenu: action.payload.addons
             };
         }
 
@@ -124,7 +121,6 @@ export function reducer(state = initialState, action: Action & { payload: any })
 }
 
 export const showAddonMenu = (state: State) => state.showAddonMenu;
-export const autoWriteUserConfiguration = (state: State) => state.autoWriteUserConfiguration;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;
