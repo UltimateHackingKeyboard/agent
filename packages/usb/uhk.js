@@ -124,6 +124,7 @@ exports = module.exports = moduleExports = {
         configSizes: 2,
         currentKbootCommand: 3,
         i2cBaudRate: 4,
+        uptime: 5,
     },
     modulePropertyIds: {
         protocolVersions: 0,

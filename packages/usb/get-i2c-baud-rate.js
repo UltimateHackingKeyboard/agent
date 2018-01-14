@@ -3,9 +3,6 @@ const path = require('path');
 const uhk = require('./uhk');
 const device = uhk.getUhkDevice();
 
-let programName = path.basename(process.argv[1]);
-
-let bps = process.argv[2];
 let buffer = new Buffer(uhk.pushUint32([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.i2cBaudRate]));
 //console.log(buffer);
 device.write(uhk.getTransferData(buffer));
