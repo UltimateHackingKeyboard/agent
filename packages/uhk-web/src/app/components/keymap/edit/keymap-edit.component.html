@@ -4,7 +4,8 @@
                    (downloadClick)="downloadKeymap()"></keymap-header>
     <svg-keyboard-wrap [keymap]="keymap$ | async"
                        [halvesSplit]="keyboardSplit"
-                       [keyboardLayout]="keyboardLayout$ | async"></svg-keyboard-wrap>
+                       [keyboardLayout]="keyboardLayout$ | async"
+                       (descriptionChanged)="descriptionChanged($event)"></svg-keyboard-wrap>
 </ng-template>
 
 <div *ngIf="!(keymap$ | async)" class="not-found">

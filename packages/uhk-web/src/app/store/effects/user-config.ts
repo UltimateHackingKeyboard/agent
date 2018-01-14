@@ -81,7 +81,7 @@ export class UserConfigEffects {
     @Effect() saveUserConfig$: Observable<Action> = (this.actions$
         .ofType(
             KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY,
+            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.EDIT_DESCRIPTION,
             MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
             MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION,
             ActionTypes.RENAME_USER_CONFIGURATION, ActionTypes.SET_USER_CONFIGURATION_VALUE) as

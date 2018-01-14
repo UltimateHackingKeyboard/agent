@@ -1,0 +1,28 @@
+:host {
+    span.placeholder {
+        color: gray;
+
+        .glyphicon {
+            color: black;
+        }
+    }
+
+    span.editable, span.placeholder {
+        .glyphicon {
+            display: none;
+        }
+
+        &:hover > .glyphicon {
+            display: inline-block;
+        }
+    }
+
+    textarea.text-editor {
+        display: block;
+        width: 100%;
+    }
+
+    .buttons {
+        margin-top: 0.5em;
+    }
+}
