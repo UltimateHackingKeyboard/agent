@@ -123,6 +123,7 @@ exports = module.exports = moduleExports = {
         protocolVersions: 1,
         configSizes: 2,
         currentKbootCommand: 3,
+        i2cBaudRate: 4,
     },
     modulePropertyIds: {
         protocolVersions: 0,
