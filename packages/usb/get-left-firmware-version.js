@@ -3,10 +3,10 @@ const uhk = require('./uhk');
 
 const device = uhk.getUhkDevice();
 const sendData = new Buffer([uhk.usbCommands.getModuleProperty, uhk.moduleSlotToId.leftHalf, uhk.modulePropertyIds.protocolVersions]);
-console.log(sendData)
+//console.log(sendData)
 device.write(uhk.getTransferData(sendData));
 const response = Buffer.from(device.readSync());
-console.log(response)
+//console.log(response)
 const moduleProtocolMajorVersion = uhk.getUint16(response, 2);
 const moduleProtocolMinorVersion = uhk.getUint16(response, 4);
 const moduleProtocolPatchVersion = uhk.getUint16(response, 6);
