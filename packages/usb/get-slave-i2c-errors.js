@@ -2,14 +2,6 @@
 const process = require('process');
 const uhk = require('./uhk');
 
-function getUint32(buffer, offset) {
-    return (buffer[offset]) + (buffer[offset+1] * 2**8) + (buffer[offset+2] * 2**16) + (buffer[offset+3] * 2**24);
-}
-
-function getUint16(buffer, offset) {
-    return (buffer[offset]) + (buffer[offset+1] * 2**8);
-}
-
 const slaveId = parseInt(process.argv[2]);
 
 const device = uhk.getUhkDevice();
@@ -48,11 +40,11 @@ const statusCodesToStrings = {
     1104: 'timeout',
     20000: 'idleSlave',
     20001: 'idleCycle',
-}
+};
 
 for (let i=0; i<statusCount; i++) {
-    let status = getUint32(response, i*8+2);
-    let count = getUint32(response, i*8+4+2);
+    let status = uhk.getUint32(response, i*8+2);
+    let count = uhk.getUint32(response, i*8+4+2);
     str += `${statusCodesToStrings[status]}:${count} `;
 }
 
