@@ -33,7 +33,7 @@ export class UhkOperations {
         this.logService.debug('[UhkOperations] Start flashing left module firmware');
 
         const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.buspal.toString(16)}`];
-        const buspalPrefix = [...prefix, `--buspal i2c,${ModuleSlotToI2cAddress.leftHalf},100k`];
+        const buspalPrefix = [...prefix, `--buspal i2c,${ModuleSlotToI2cAddress.leftHalf}`];
 
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
