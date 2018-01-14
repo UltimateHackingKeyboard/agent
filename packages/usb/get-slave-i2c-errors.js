@@ -20,15 +20,15 @@ if (status != 0) {
 let statusCount = response[1];
 
 const slaveIdToName = [
-    'leftHalf      ',
-    'leftAddon     ',
-    'rightAddon    ',
+    'leftHalf',
+    'leftAddon',
+    'rightAddon',
     'rightLedDriver',
-    'leftLedDriver ',
-    'kboot         ',
+    'leftLedDriver',
+    'kboot',
 ];
 
-let str = `${slaveIdToName[slaveId]}: `;
+let str = `${slaveIdToName[slaveId].padEnd(14)}: `;
 
 const statusCodesToStrings = {
     0: 'nak',
