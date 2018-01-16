@@ -6,7 +6,7 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 ## [1.1.0] - 2017-01-15
 
-Firmware: [8.1.0](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.0) | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: 8.**1**.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.0)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Only accept device, keymap, and macro names upon editing if their trimmed length is non-zero.
 - Add diagnostics USB scripts, most notably /packages/usb/{get-i2c-health,set-i2c-baud-rate}.js, some utilizing new device protocol commands and properties. `DEVICEPROTOCOL:MINOR`
@@ -19,13 +19,13 @@ Firmware: [8.1.0](https://github.com/UltimateHackingKeyboard/firmware/releases/t
 
 ## [1.0.4] - 2017-12-30
 
-Firmware: [8.0.0](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.0.0) | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: 8.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.0.0)] | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Add mouse speed settings.
 
 ## [1.0.3] - 2017-12-28
 
-Firmware: [8.0.**0**](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.0.0) | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: 8.0.**0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.0.0)] | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Add LED brightness settings.
 - Some key actions, for example Left Arrow were displayed as text with modifiers and as icon without modifires. Now, they're always displayed as icons.
@@ -36,18 +36,18 @@ Firmware: [8.0.**0**](https://github.com/UltimateHackingKeyboard/firmware/releas
 
 ## [1.0.2] - 2017-12-25
 
-Firmware: [**8.0.1**](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.0.1) | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: **8.0.1**[[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.0.1)] | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Fix firmware upgrade on Linux.
 
 ## [1.0.1] - 2017-12-22
 
-Firmware: [7.0.0](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v7.0.0) | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: 7.0.0[[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v7.0.0)] | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Fix Linux privilege escalation when udev rules aren't set up.
 
 ## [1.0.0] - 2017-12-14
 
-Firmware: [**7**.0.0](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v7.0.0) | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: **7**.0.0[[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v7.0.0)] | Device Protocol: 4.0.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - First release
