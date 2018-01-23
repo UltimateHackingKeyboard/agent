@@ -110,7 +110,7 @@ if (TEST_BUILD || gitTag) {
             directories: {
                 app: electron_build_folder
             },
-            appId: 'com.ultimategadgetlabs.uhk.agent',
+            appId: 'com.ultimategadgetlabs.agent',
             productName: 'UHK Agent',
             mac: {
                 category: 'public.app-category.utilities',
