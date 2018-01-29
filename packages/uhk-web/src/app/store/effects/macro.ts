@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Actions, Effect } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { Store, Action } from '@ngrx/store';
 
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/withLatestFrom';
 
+import { Macro } from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
+import { getMacros } from '../reducers/user-configuration';
+import { findNewItem } from '../../util';
 
 @Injectable()
 export class MacroEffects {
@@ -27,23 +31,17 @@ export class MacroEffects {
             }
         });
 
-    @Effect({ dispatch: false }) add$: any = this.actions$
-        .ofType(MacroActions.ADD)
-        .withLatestFrom(this.store)
-        .map(([action, state]) => state.userConfiguration.macros)
-        .map(macros => macros[macros.length - 1])
-        .do(lastMacro => {
-            this.router.navigate(['/macro', lastMacro.id, 'new']);
+    @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
+        .ofType(MacroActions.ADD, MacroActions.DUPLICATE)
+        .withLatestFrom(this.store.let(getMacros()).pairwise(), (action, latest) => ([action, latest[0], latest[1]]))
+        .do(([action, prevMacros, newMacros]: [Action, Macro[], Macro[]]) => {
+            const newMacro = findNewItem(prevMacros, newMacros);
+            const commands = ['/macro', newMacro.id];
+            if (action.type === MacroActions.ADD) {
+                commands.push('new');
+            }
+            this.router.navigate(commands);
         });
 
-    @Effect({ dispatch: false }) duplicate: any = this.actions$
-        .ofType(MacroActions.DUPLICATE)
-        .withLatestFrom(this.store)
-        .map(([action, state]) => state.userConfiguration.macros)
-        .map(macros => macros[macros.length - 1])
-        .do(lastMacro => {
-            this.router.navigate(['/macro', lastMacro.id]);
-        });
-
-    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
+    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) { }
 }

@@ -7,14 +7,17 @@ import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/observable/of';
 
 import { Keymap } from 'uhk-common';
+import { findNewItem } from '../../util';
 import { KeymapActions } from '../actions';
 import { AppState } from '../index';
+import { getKeymaps } from '../reducers/user-configuration';
 
 @Injectable()
 export class KeymapEffects {
@@ -32,10 +35,10 @@ export class KeymapEffects {
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
         .ofType(KeymapActions.ADD, KeymapActions.DUPLICATE)
-        .withLatestFrom(this.store)
-        .map(latest => latest[1].userConfiguration.keymaps)
-        .do(keymaps => {
-            this.router.navigate(['/keymap', keymaps[keymaps.length - 1].abbreviation]);
+        .withLatestFrom(this.store.let(getKeymaps()).pairwise(), (action, latest) => latest)
+        .do(([prevKeymaps, newKeymaps]) => {
+            const newKeymap = findNewItem(prevKeymaps, newKeymaps);
+            this.router.navigate(['/keymap', newKeymap.abbreviation]);
         });
 
     @Effect({ dispatch: false }) remove$: any = this.actions$
