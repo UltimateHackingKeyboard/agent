@@ -1,26 +1,29 @@
-<span *ngIf="showPlaceholder"
-      class="placeholder">
-    <span>{{ placeholder }}</span>
-    <span class="glyphicon glyphicon-edit"
-          (click)="editText()"></span>
-</span>
-<span *ngIf="showText"
-     class="editable">
-    <span>{{ text }}</span>
-    <span class="glyphicon glyphicon-edit"
-          (click)="editText()"></span>
-</span>
+<div class="text-center">
+    <span *ngIf="showPlaceholder"
+          class="placeholder">
+        <span (click)="editText()">{{ placeholder }}</span>
+    </span>
+
+    <span *ngIf="showText"
+          class="editable">
+        <span (click)="editText()">{{ text }}</span>
+    </span>
+</div>
+
 <div *ngIf="editing">
     <textarea class="text-editor"
               [(ngModel)]="text"
-              autofocus></textarea>
+              autofocus
+              (keydown.control.enter)="keydownEnter()"
+              (keydown.alt.enter)="keydownEnter()"></textarea>
     <div class="pull-right buttons">
         <button class="btn btn-danger"
                 (click)="cancelEditText()">
             Cancel
         </button>
         <button class="btn btn-primary"
-                (click)="saveText()">
+                (click)="saveText()"
+                [disabled]="isSaveDisabled">
             Update description
         </button>
     </div>

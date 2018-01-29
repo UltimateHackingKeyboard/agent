@@ -17,6 +17,10 @@ export class EditableTextComponent implements ControlValueAccessor {
     originalText: string;
     editing = false;
 
+    get isSaveDisabled(): boolean {
+        return !this.text || this.text.trim().length === 0;
+    }
+
     constructor(private cdr: ChangeDetectorRef) {
 
     }
@@ -53,6 +57,14 @@ export class EditableTextComponent implements ControlValueAccessor {
         this.editing = false;
     }
 
+    keydownEnter(): void {
+        if (this.isSaveDisabled) {
+            return;
+        }
+
+        this.saveText();
+    }
+
     get showPlaceholder(): boolean {
         return !this.editing && !this.text;
     }
@@ -60,6 +72,7 @@ export class EditableTextComponent implements ControlValueAccessor {
     get showText(): boolean {
         return !this.editing && !!this.text;
     }
+
     private textChange: any = () => {
     }
 }

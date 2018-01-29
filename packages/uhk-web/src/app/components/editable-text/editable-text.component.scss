@@ -1,20 +1,18 @@
 :host {
+    margin-top: 0.5em;
+
     span.placeholder {
         color: gray;
+        display: inline-block;
 
         .glyphicon {
             color: black;
         }
     }
 
-    span.editable, span.placeholder {
-        .glyphicon {
-            display: none;
-        }
-
-        &:hover > .glyphicon {
-            display: inline-block;
-        }
+    span.editable,
+    span.placeholder {
+        cursor: pointer;
     }
 
     textarea.text-editor {
