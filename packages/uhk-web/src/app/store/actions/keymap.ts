@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { KeyAction, Keymap, Macro } from 'uhk-common';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
+import { ChangeKeymapDescription } from '../../models/ChangeKeymapDescription';
 
 export type KeymapAction =
     KeymapActions.AddKeymapAction |
@@ -11,7 +12,8 @@ export type KeymapAction =
     KeymapActions.SetDefaultAction |
     KeymapActions.RemoveKeymapAction |
     KeymapActions.SaveKeyAction |
-    KeymapActions.CheckMacroAction;
+    KeymapActions.CheckMacroAction |
+    KeymapActions.EditDescriptionAction;
 
 export namespace KeymapActions {
     export const ADD = '[Keymap] Add keymap';
@@ -97,6 +99,16 @@ export namespace KeymapActions {
         type: typeof UNDO_LAST_ACTION,
         payload: UndoUserConfigData
     };
+
+    export const EDIT_DESCRIPTION = '[Keymap] Edit description';
+
+    export class EditDescriptionAction {
+        type = EDIT_DESCRIPTION;
+
+        constructor(public payload: ChangeKeymapDescription) {
+
+        }
+    }
 
     export function loadKeymaps(): Action {
         return {

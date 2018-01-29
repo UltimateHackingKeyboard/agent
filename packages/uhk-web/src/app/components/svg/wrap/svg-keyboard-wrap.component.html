@@ -7,9 +7,11 @@
                      [selectedKey]="selectedKey"
                      [halvesSplit]="halvesSplit"
                      [keyboardLayout]="keyboardLayout"
+                     [description]="keymap.description"
                      (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
                      (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
                      (capture)="onCapture($event.moduleId, $event.keyId, $event.captured)"
+                     (descriptionChanged)="onDescriptionChanged($event)"
     ></keyboard-slider>
     <popover tabindex="0" [visible]="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction"
              [currentKeymap]="keymap" [currentLayer]="currentLayer" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>

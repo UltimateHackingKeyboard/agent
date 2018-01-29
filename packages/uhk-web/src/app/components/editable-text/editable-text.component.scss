@@ -1,0 +1,26 @@
+:host {
+    margin-top: 0.5em;
+
+    span.placeholder {
+        color: gray;
+        display: inline-block;
+
+        .glyphicon {
+            color: black;
+        }
+    }
+
+    span.editable,
+    span.placeholder {
+        cursor: pointer;
+    }
+
+    textarea.text-editor {
+        display: block;
+        width: 100%;
+    }
+
+    .buttons {
+        margin-top: 0.5em;
+    }
+}

@@ -277,6 +277,18 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             break;
         }
 
+        case KeymapActions.EDIT_DESCRIPTION: {
+            const data = (action as KeymapActions.EditDescriptionAction).payload;
+
+            changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
+                if (keymap.abbreviation === data.abbr) {
+                    keymap.description = data.description;
+                }
+                return keymap;
+            });
+            break;
+        }
+
         default:
             break;
     }

@@ -7,8 +7,10 @@
               [selectedKey]="selectedKey"
               [selected]="selectedKey?.layerId === index"
               [keyboardLayout]="keyboardLayout"
+              [description]="description"
               (keyClick)="keyClick.emit($event)"
               (keyHover)="keyHover.emit($event)"
               (capture)="capture.emit($event)"
+              (descriptionChanged)="descriptionChanged.emit($event)"
 >
 </svg-keyboard>
