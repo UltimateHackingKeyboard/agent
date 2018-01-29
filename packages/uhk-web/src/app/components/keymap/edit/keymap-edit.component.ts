@@ -18,6 +18,8 @@ import { AppState, getKeyboardLayout } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 import { SvgKeyboardWrapComponent } from '../../svg/wrap';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
+import { KeymapActions } from '../../../store/actions';
+import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 
 @Component({
     selector: 'keymap-edit',
@@ -64,13 +66,17 @@ export class KeymapEditComponent {
                 const keymap = latest[0];
                 const exportableJSON = latest[1];
                 const fileName = keymap.name + '_keymap.json';
-                saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
+                saveAs(new Blob([exportableJSON], {type: 'application/json'}), fileName);
             });
     }
 
     @HostListener('window:keydown.alt.s', ['$event'])
     toggleKeyboardSplit() {
         this.keyboardSplit = !this.keyboardSplit;
+    }
+
+    descriptionChanged(event: ChangeKeymapDescription): void {
+        this.store.dispatch(new KeymapActions.EditDescriptionAction(event));
     }
 
     private toExportableJSON(keymap: Keymap): Observable<any> {

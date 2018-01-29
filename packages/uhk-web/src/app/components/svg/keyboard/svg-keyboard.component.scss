@@ -1,5 +1,10 @@
 :host {
-    display: flex;
+    display: block;
     width: 100%;
     position: relative;
+}
+editable-text {
+    padding-left: 2em;
+    padding-right: 2em;
+    display: block;
 }
