@@ -56,17 +56,8 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
             addon: 'active'
         };
 
-        this.keymaps$ = store.let(getKeymaps())
-            .map(keymaps => keymaps.slice()) // Creating a new array reference, because the sort is working in place
-            .do((keymaps: Keymap[]) => {
-                keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
-            });
-
-        this.macros$ = store.let(getMacros())
-            .map(macros => macros.slice()) // Creating a new array reference, because the sort is working in place
-            .do((macros: Macro[]) => {
-                macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
-            });
+        this.keymaps$ = store.let(getKeymaps());
+        this.macros$ = store.let(getMacros());
 
         this.showAddonMenu$ = this.store.select(showAddonMenu);
         this.runInElectron$ = this.store.select(runningInElectron);

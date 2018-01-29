@@ -19,7 +19,12 @@ export function reducer(state = initialState, action: Action & { payload?: any }
         case ActionTypes.APPLY_USER_CONFIGURATION_FROM_FILE:
         case ActionTypes.LOAD_RESET_USER_CONFIGURATION:
         case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
-            return Object.assign(changedUserConfiguration, action.payload);
+            Object.assign(changedUserConfiguration, action.payload);
+            changedUserConfiguration.keymaps = [...changedUserConfiguration.keymaps];
+            changedUserConfiguration.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
+            changedUserConfiguration.macros = [...changedUserConfiguration.macros];
+            changedUserConfiguration.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
+            return changedUserConfiguration;
         }
 
         case KeymapActions.ADD:
@@ -29,7 +34,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             newKeymap.name = generateName(state.keymaps, newKeymap.name);
             newKeymap.isDefault = (state.keymaps.length === 0);
 
-            changedUserConfiguration.keymaps = state.keymaps.concat(newKeymap);
+            changedUserConfiguration.keymaps = insertItemInNameOrder(state.keymaps, newKeymap);
             break;
         }
         case KeymapActions.EDIT_NAME: {
@@ -38,20 +43,27 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const name: string = action.payload.name.trim();
+            let keymapToRename: Keymap = null;
 
             const duplicate = state.keymaps.some((keymap: Keymap) => {
+                if (keymap.abbreviation === action.payload.abbr) {
+                    keymapToRename = keymap;
+                }
+
                 return keymap.name === name && keymap.abbreviation !== action.payload.abbr;
             });
 
-            changedUserConfiguration.keymaps = state.keymaps.map((keymap: Keymap) => {
-                keymap = Object.assign(new Keymap(), keymap);
+            if (duplicate) {
+                break;
+            }
 
-                if (!duplicate && keymap.abbreviation === action.payload.abbr) {
-                    keymap.name = name;
-                }
-                return keymap;
-            });
+            const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
 
+            changedUserConfiguration.keymaps = insertItemInNameOrder(
+                state.keymaps,
+                newKeymap,
+                keymap => keymap.abbreviation !== newKeymap.abbreviation
+            );
             break;
         }
         case KeymapActions.EDIT_ABBR: {
@@ -163,7 +175,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             newMacro.isPrivate = true;
             newMacro.macroActions = [];
 
-            changedUserConfiguration.macros = state.macros.concat(newMacro);
+            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro);
             break;
         }
         case MacroActions.DUPLICATE: {
@@ -171,7 +183,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             newMacro.name = generateName(state.macros, newMacro.name);
             newMacro.id = generateMacroId(state.macros);
 
-            changedUserConfiguration.macros = state.macros.concat(newMacro);
+            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro);
             break;
         }
         case MacroActions.EDIT_NAME: {
@@ -180,20 +192,22 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const name: string = action.payload.name.trim();
+            let macroToRename: Macro = null;
 
             const duplicate = state.macros.some((macro: Macro) => {
+                if (macro.id === action.payload.id) {
+                   macroToRename = macro;
+                }
+
                 return macro.id !== action.payload.id && macro.name === name;
             });
 
-            changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
-                macro = Object.assign(new Macro(), macro);
-                if (!duplicate && macro.id === action.payload.id) {
-                    macro.name = name;
-                }
+            if (duplicate) {
+                break;
+            }
 
-                return macro;
-            });
-
+            const newMacro = Object.assign(new Macro(), macroToRename, { name });
+            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro, macro => macro.id !== newMacro.id);
             break;
         }
         case MacroActions.REMOVE:
@@ -370,6 +384,27 @@ function generateMacroId(macros: Macro[]) {
     });
 
     return newId + 1;
+}
+
+function insertItemInNameOrder<T extends { name: string }>(
+    items: T[], newItem: T, keepItem: (item: T) => boolean = () => true
+): T[] {
+    const newItems: T[] = [];
+    let added = false;
+    for (const item of items) {
+        if (!added && item.name.localeCompare(newItem.name) > 0) {
+            newItems.push(newItem);
+            added = true;
+        }
+        if (keepItem(item)) {
+            newItems.push(item);
+        }
+    }
+    if (!added) {
+        newItems.push(newItem);
+    }
+
+    return newItems;
 }
 
 function checkExistence(layers: Layer[], property: string, value: any): Layer[] {
