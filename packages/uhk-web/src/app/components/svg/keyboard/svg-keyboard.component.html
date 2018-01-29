@@ -14,6 +14,7 @@
            (capture)="onCapture(i, $event.index, $event.captured)"
     />
 </svg>
-<editable-text [ngModel]="description"
+<editable-text *ngIf="showDescription"
+               [ngModel]="description"
                (ngModelChange)="descriptionChanged.emit($event)"
                placeholder="No description provided for this keymap."></editable-text>
