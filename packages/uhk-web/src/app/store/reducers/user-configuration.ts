@@ -43,8 +43,13 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const name: string = action.payload.name.trim();
+            let keymapToRename: Keymap = null;
 
             const duplicate = state.keymaps.some((keymap: Keymap) => {
+                if (keymap.abbreviation === action.payload.abbr) {
+                    keymapToRename = keymap;
+                }
+
                 return keymap.name === name && keymap.abbreviation !== action.payload.abbr;
             });
 
@@ -52,8 +57,6 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 break;
             }
 
-            const index = state.keymaps.findIndex(keymap => keymap.abbreviation === action.payload.abbr);
-            const keymapToRename = state.keymaps[index];
             const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
 
             changedUserConfiguration.keymaps = insertItemInNameOrder(
@@ -189,8 +192,13 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const name: string = action.payload.name.trim();
+            let macroToRename: Macro = null;
 
             const duplicate = state.macros.some((macro: Macro) => {
+                if (macro.id === action.payload.id) {
+                   macroToRename = macro;
+                }
+
                 return macro.id !== action.payload.id && macro.name === name;
             });
 
@@ -198,8 +206,6 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 break;
             }
 
-            const index = state.macros.findIndex(macro => macro.id === action.payload.id);
-            const macroToRename = state.macros[index];
             const newMacro = Object.assign(new Macro(), macroToRename, { name });
             changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro, macro => macro.id !== newMacro.id);
             break;
