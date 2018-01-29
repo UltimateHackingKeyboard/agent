@@ -1,0 +1,13 @@
+<div class="row">
+    <h1 class="col-xs-12 pane-title">
+        <i class="fa fa-gear"></i>
+        <span class="macro__name pane-title__name">Settings</span>
+    </h1>
+</div>
+<auto-update-settings [version]="version"
+                      [settings]="autoUpdateSettings$ | async"
+                      [checkingForUpdate]="checkingForUpdate$ | async"
+                      (toggleCheckForUpdateOnStartUp)="toogleCheckForUpdateOnStartUp($event)"
+                      (toggleUsePreReleaseUpdate)="toogleUsePreReleaseUpdate($event)"
+                      (checkForUpdate)="checkForUpdate()">
+</auto-update-settings>

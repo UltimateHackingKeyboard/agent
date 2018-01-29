@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { AppStartInfo, CommandLineArgs, HardwareConfiguration, Notification, type, VersionInformation } from 'uhk-common';
+import { AppStartInfo, CommandLineArgs, HardwareConfiguration, Notification, type } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 
 const PREFIX = '[app] ';
@@ -16,8 +16,8 @@ export const ActionTypes = {
     UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
     DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action'),
     LOAD_HARDWARE_CONFIGURATION_SUCCESS: type(PREFIX + 'load hardware configuration success'),
-    UPDATE_AGENT_VERSION_INFORMATION: type(PREFIX + 'update agent version information'),
-    ELECTRON_MAIN_LOG_RECEIVED: type(PREFIX + 'Electron main log received')
+    ELECTRON_MAIN_LOG_RECEIVED: type(PREFIX + 'Electron main log received'),
+    OPEN_URL_IN_NEW_WINDOW: type(PREFIX + 'Open URL in new Window')
 };
 
 export class AppBootsrappedAction implements Action {
@@ -66,16 +66,16 @@ export class LoadHardwareConfigurationSuccessAction implements Action {
     constructor(public payload: HardwareConfiguration) {}
 }
 
-export class UpdateAgentVersionInformationAction implements Action {
-    type = ActionTypes.UPDATE_AGENT_VERSION_INFORMATION;
-
-    constructor(public payload: VersionInformation) {}
-}
-
 export class ElectronMainLogReceivedAction implements Action {
     type = ActionTypes.ELECTRON_MAIN_LOG_RECEIVED;
 
     constructor(public payload: ElectronLogEntry) {}
+}
+
+export class OpenUrlInNewWindowAction implements Action {
+    type = ActionTypes.OPEN_URL_IN_NEW_WINDOW;
+
+    constructor(public payload: string) {}
 }
 
 export type Actions
@@ -88,6 +88,6 @@ export type Actions
     | UndoLastSuccessAction
     | DismissUndoNotificationAction
     | LoadHardwareConfigurationSuccessAction
-    | UpdateAgentVersionInformationAction
     | ElectronMainLogReceivedAction
+    | OpenUrlInNewWindowAction
     ;

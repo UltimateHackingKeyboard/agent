@@ -16,6 +16,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
     const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
 
     switch (action.type) {
+        case ActionTypes.APPLY_USER_CONFIGURATION_FROM_FILE:
         case ActionTypes.LOAD_RESET_USER_CONFIGURATION:
         case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
             Object.assign(changedUserConfiguration, action.payload);

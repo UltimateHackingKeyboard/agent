@@ -3,7 +3,11 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../store';
 import { ResetUserConfigurationAction } from '../../../store/actions/device';
-import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from '../../../store/actions/user-config';
+import {
+    LoadUserConfigurationFromFileAction,
+    SaveUserConfigInBinaryFileAction,
+    SaveUserConfigInJsonFileAction
+} from '../../../store/actions/user-config';
 
 @Component({
     selector: 'device-settings',
@@ -28,5 +32,18 @@ export class DeviceConfigurationComponent {
 
     saveConfigurationInBINFormat() {
         this.store.dispatch(new SaveUserConfigInBinaryFileAction());
+    }
+
+    changeFile(event): void {
+        const files = event.srcElement.files;
+        const fileReader = new FileReader();
+        fileReader.onloadend = function () {
+            const arrayBuffer = new Uint8Array(fileReader.result);
+            this.store.dispatch(new LoadUserConfigurationFromFileAction({
+                filename: event.srcElement.value,
+                data: Array.from(arrayBuffer)
+            }));
+        }.bind(this);
+        fileReader.readAsArrayBuffer(files[0]);
     }
 }

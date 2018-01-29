@@ -26,6 +26,11 @@ export class AppRendererService {
         this.ipcRenderer.send(IpcEvents.app.exit);
     }
 
+    openUrl(url: string): void {
+        this.logService.info(`[AppRendererService] open url: ${url}`);
+        this.ipcRenderer.send(IpcEvents.app.openUrl, url);
+    }
+
     private registerEvents() {
         this.ipcRenderer.on(IpcEvents.app.getAppStartInfoReply, (event: string, arg: AppStartInfo) => {
             this.dispachStoreAction(new ProcessAppStartInfoAction(arg));

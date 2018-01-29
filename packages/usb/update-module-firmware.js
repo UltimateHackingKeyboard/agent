@@ -19,11 +19,12 @@ checkFirmwareImage(firmwareImage, extension);
 
 const usbDir = `${__dirname}`;
 const blhostUsb = getBlhostCmd(uhk.enumerationNameToProductId.buspal);
-const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress},100k`;
+const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
 
 config.verbose = true;
 exec(`${usbDir}/send-kboot-command-to-module.js ping ${moduleSlot}`);
 exec(`${usbDir}/jump-to-module-bootloader.js ${moduleSlot}`);
+exec(`${usbDir}/wait-for-kboot-idle.js`);
 exec(`${usbDir}/reenumerate.js buspal`);
 execRetry(`${blhostBuspal} get-property 1`);
 exec(`${blhostBuspal} flash-erase-all-unsecure`);

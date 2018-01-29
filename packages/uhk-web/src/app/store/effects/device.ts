@@ -162,7 +162,7 @@ export class DeviceEffects {
         });
 
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
-        .ofType(UserConfigActions.LOAD_RESET_USER_CONFIGURATION)
+        .ofType(UserConfigActions.LOAD_RESET_USER_CONFIGURATION, UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
         .switchMap(() => Observable.of(new SaveConfigurationAction()));
 
     @Effect({dispatch: false}) updateFirmware$ = this.actions$

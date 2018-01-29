@@ -6,7 +6,7 @@ const fs = require('fs');
 const fse = require('fs-extra');
 
 async function downloadFirmware(version) {
-    const url = `https://github.com/UltimateHackingKeyboard/firmware/releases/download/${version}/uhk-firmware-${version}.tar.bz2`;
+    const url = `https://github.com/UltimateHackingKeyboard/firmware/releases/download/v${version}/uhk-firmware-${version}.tar.bz2`;
     const outputDir = path.join(__dirname, `../tmp`);
     const output = path.join(outputDir, `uhk-firmware-${version}.tar.bz2`);
 
@@ -35,7 +35,7 @@ async function downloadFile(url, output) {
 }
 
 (async function main() {
-    const agentJson = require('../packages/uhk-agent/src/package.json');
+    const agentJson = require('../package.json');
 
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages/firmware');
     await fse.emptyDir(extractedFirmwareDir);

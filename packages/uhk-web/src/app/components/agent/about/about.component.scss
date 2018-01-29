@@ -1,0 +1,20 @@
+:host {
+    overflow-y: auto;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.agent {
+    &-version {
+        margin-bottom: 1rem;
+
+        span {
+            font-weight: bold;
+        }
+    }
+}
+
+.link-github {
+    cursor: pointer;
+}
