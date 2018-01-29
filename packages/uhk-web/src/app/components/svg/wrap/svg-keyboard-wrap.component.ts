@@ -2,14 +2,16 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
-    Renderer,
+    EventEmitter,
     HostBinding,
     HostListener,
     Input,
     OnChanges,
     OnInit,
-    ViewChild,
-    SimpleChanges
+    Output,
+    Renderer,
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
@@ -25,10 +27,10 @@ import {
     KeystrokeAction,
     Layer,
     LayerName,
-    SecondaryRoleAction,
     MouseAction,
     MouseActionParam,
     PlayMacroAction,
+    SecondaryRoleAction,
     SwitchKeymapAction,
     SwitchLayerAction
 } from 'uhk-common';
@@ -38,6 +40,7 @@ import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
 import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
+import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 
 interface NameValuePair {
     name: string;
@@ -56,6 +59,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesSplit: boolean;
     @Input() keyboardLayout: KeyboardLayout.ANSI;
+    @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
     @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 
@@ -235,6 +239,13 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     getSelectedLayer(): number {
         return this.currentLayer;
+    }
+
+    onDescriptionChanged(description: string): void {
+        this.descriptionChanged.emit({
+            description,
+            abbr: this.keymap.abbreviation
+        });
     }
 
     private getKeyActionContent(keyAction: KeyAction): Observable<NameValuePair[]> {
