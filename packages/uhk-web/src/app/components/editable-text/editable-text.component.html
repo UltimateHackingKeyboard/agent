@@ -6,7 +6,8 @@
 
     <span *ngIf="showText"
           class="editable">
-        <span (click)="editText()">{{ text }}</span>
+        <span (click)="editText()"
+              [innerHtml]="displayText"></span>
     </span>
 </div>
 
