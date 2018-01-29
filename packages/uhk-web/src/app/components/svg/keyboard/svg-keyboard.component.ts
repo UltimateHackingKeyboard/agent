@@ -32,6 +32,7 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() halvesSplit: boolean;
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
+    @Input() showDescription = false;
     @Output() keyClick = new EventEmitter();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter();
