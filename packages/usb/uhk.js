@@ -127,6 +127,23 @@ let eepromOperations = {
     write: 1,
 };
 
+async function updateDeviceFirmware(firmwareImage, extension) {
+    const usbDir = `${__dirname}`;
+    const blhost = uhk.getBlhostCmd(uhk.enumerationNameToProductId.bootloader);
+
+    uhk.checkFirmwareImage(firmwareImage, extension);
+    config.verbose = true;
+
+    await uhk.reenumerate('bootloader');
+    exec(`${blhost} flash-security-disable 0403020108070605`);
+    exec(`${blhost} flash-erase-region 0xc000 475136`);
+    exec(`${blhost} flash-image ${firmwareImage}`);
+    exec(`${blhost} reset`);
+
+    config.verbose = false;
+    echo('Firmware updated successfully.');
+};
+
 // USB commands
 
 function reenumerate(enumerationMode) {
@@ -179,7 +196,7 @@ function reenumerate(enumerationMode) {
     })
 };
 
-exports = module.exports = moduleExports = {
+uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
     getUint32,
@@ -192,6 +209,7 @@ exports = module.exports = moduleExports = {
     checkFirmwareImage,
     getBlhostCmd,
     execRetry,
+    updateDeviceFirmware,
     reenumerate,
     usbCommands: {
         getDeviceProperty       : 0x00,
