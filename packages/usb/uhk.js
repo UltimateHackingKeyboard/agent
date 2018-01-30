@@ -79,6 +79,28 @@ function checkFirmwareImage(imagePath, extension) {
     }
 }
 
+function getBlhostCmd(pid) {
+    let blhostPath;
+    switch (process.platform) {
+        case 'linux':
+            const arch = exec('uname -m', {silent:true}).stdout.trim();
+            blhostPath = `linux/${arch}/blhost`;
+            break;
+        case 'darwin':
+            blhostPath = 'mac/blhost';
+            break;
+        case 'win32':
+            blhostPath = 'win/blhost.exe';
+            break;
+        default:
+            echo('Your operating system is not supported.');
+            exit(1);
+            break;
+    }
+
+    return `${__dirname}/blhost/${blhostPath} --usb 0x1d50,0x${pid.toString(16)}`;
+}
+
 let configBufferIds = {
     hardwareConfig: 0,
     stagingUserConfig: 1,
@@ -153,6 +175,7 @@ exports = module.exports = moduleExports = {
     getTransferData,
     checkModuleSlot,
     checkFirmwareImage,
+    getBlhostCmd,
     reenumerate,
     usbCommands: {
         getDeviceProperty       : 0x00,

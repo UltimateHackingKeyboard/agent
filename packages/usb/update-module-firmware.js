@@ -18,7 +18,7 @@ const firmwareImage = program.args[1];
 uhk.checkFirmwareImage(firmwareImage, extension);
 
 const usbDir = `${__dirname}`;
-const blhostUsb = getBlhostCmd(uhk.enumerationNameToProductId.buspal);
+const blhostUsb = uhk.getBlhostCmd(uhk.enumerationNameToProductId.buspal);
 const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
 
 config.verbose = true;

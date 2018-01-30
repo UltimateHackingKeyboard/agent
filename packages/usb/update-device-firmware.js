@@ -13,7 +13,7 @@ program
 
 const firmwareImage = program.args[0];
 const usbDir = `${__dirname}`;
-const blhost = getBlhostCmd(uhk.enumerationNameToProductId.bootloader);
+const blhost = uhk.getBlhostCmd(uhk.enumerationNameToProductId.bootloader);
 
 uhk.checkFirmwareImage(firmwareImage, extension);
 
