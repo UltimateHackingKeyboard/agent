@@ -51,13 +51,13 @@ function convertMs(milliseconds) {
 
 const device = uhk.getUhkDevice();
 
-device.write(uhk.getTransferData(new Buffer(uhk.pushUint32([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.uptime]))));
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.uptime])));
 let response = device.readSync();
 let uptimeMs = uhk.getUint32(response, 1);
 let uptime = convertMs(uptimeMs);
 console.log(`uptime: ${uptime.days}d ${String(uptime.hours).padStart(2, '0')}:${String(uptime.minutes).padStart(2, '0')}:${String(uptime.seconds).padStart(2, '0')}`)
 
-device.write(uhk.getTransferData(new Buffer(uhk.pushUint32([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.i2cBaudRate]))));
+device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.i2cBaudRate])));
 response = device.readSync();
 let requestedBaudRate = uhk.getUint32(response, 2);
 let actualBaudRate = uhk.getUint32(response, 6);

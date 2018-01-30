@@ -15,7 +15,7 @@ function convertMs(milliseconds) {
     return {days, hours, minutes, seconds};
 }
 
-let buffer = new Buffer(uhk.pushUint32([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.uptime]));
+let buffer = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.uptime]);
 //console.log(buffer);
 device.write(uhk.getTransferData(buffer));
 let response = device.readSync();

@@ -22,12 +22,8 @@ function getUint32(buffer, offset) {
     return (buffer[offset]) + (buffer[offset+1] * 2**8) + (buffer[offset+2] * 2**16) + (buffer[offset+3] * 2**24);
 }
 
-function pushUint32(array, value) {
-    array.push((value >> 0) & 0xff);
-    array.push((value >> 8) & 0xff);
-    array.push((value >> 16) & 0xff);
-    array.push((value >> 24) & 0xff);
-    return array;
+function uint32ToArray(value) {
+    return [(value >> 0) & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff];
 }
 
 function getUhkDevice() {
@@ -75,7 +71,7 @@ exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
     getUint32,
-    pushUint32,
+    uint32ToArray,
     getUhkDevice,
     getBootloaderDevice,
     getTransferData,
