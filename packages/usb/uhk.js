@@ -1,3 +1,4 @@
+const util = require('util');
 const HID = require('node-hid');
 // const debug = process.env.DEBUG;
 const debug = true;
@@ -24,6 +25,11 @@ function getUint32(buffer, offset) {
 
 function uint32ToArray(value) {
     return [(value >> 0) & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff];
+}
+
+function writeDevice(device, data, options={}) {
+    device.write(getTransferData(new Buffer(data)));
+    return util.promisify(device.read.bind(device))();
 }
 
 function getUhkDevice() {
@@ -72,6 +78,7 @@ exports = module.exports = moduleExports = {
     getUint16,
     getUint32,
     uint32ToArray,
+    writeDevice,
     getUhkDevice,
     getBootloaderDevice,
     getTransferData,
