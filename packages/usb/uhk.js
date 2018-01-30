@@ -73,6 +73,58 @@ let eepromOperations = {
     write: 1,
 };
 
+// USB commands
+
+function reenumerate(enumerationMode) {
+    const bootloaderTimeoutMs = 5000;
+    const pollingIntervalMs = 100;
+    let pollingTimeoutMs = 10000;
+
+    let jumped = false;
+
+    return new Promise((resolve, reject) => {
+        const enumerationModeId = exports.enumerationModes[enumerationMode];
+
+        if (enumerationModeId === undefined) {
+            const enumerationModes = Object.keys(uhk.enumerationModes).join(', ');
+            console.log(`Invalid enumeration mode '${enumerationMode}' is not one of: ${enumerationModes}`);
+            reject();
+            return;
+        }
+
+        console.log(`Trying to reenumerate as ${enumerationMode}...`);
+        const intervalId = setInterval(() => {
+            pollingTimeoutMs -= pollingIntervalMs;
+
+            const foundDevice = HID.devices().find(device =>
+                device.vendorId === exports.vendorId && device.productId === exports.enumerationModeIdToProductId[enumerationModeId]);
+
+            if (foundDevice) {
+                console.log(`${enumerationMode} is up`);
+                resolve();
+                clearInterval(intervalId);
+                return;
+            }
+
+            if (pollingTimeoutMs <= 0) {
+                console.log(`Couldn't reenumerate as ${enumerationMode}`);
+                reject();
+                clearInterval(intervalId);
+                return;
+            }
+
+            let device = exports.getUhkDevice();
+            if (device && !jumped) {
+                console.log(`UHK found, reenumerating as ${enumerationMode}`);
+                let message = new Buffer([exports.usbCommands.reenumerate, enumerationModeId, ...uint32ToArray(bootloaderTimeoutMs)]);
+                device.write(getTransferData(message));
+                jumped = true;
+            }
+
+        }, pollingIntervalMs);
+    })
+};
+
 exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -83,6 +135,7 @@ exports = module.exports = moduleExports = {
     getBootloaderDevice,
     getTransferData,
     checkModuleSlot,
+    reenumerate,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
