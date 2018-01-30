@@ -17,12 +17,13 @@ const blhost = getBlhostCmd(uhk.enumerationNameToProductId.bootloader);
 
 checkFirmwareImage(firmwareImage, extension);
 
-config.verbose = true;
-exec(`${usbDir}/reenumerate.js bootloader`);
-exec(`${blhost} flash-security-disable 0403020108070605`);
-exec(`${blhost} flash-erase-region 0xc000 475136`);
-exec(`${blhost} flash-image ${firmwareImage}`);
-exec(`${blhost} reset`);
-config.verbose = false;
-
-echo('Firmware updated successfully.');
+(async function() {
+    config.verbose = true;
+    await uhk.reenumerate('bootloader');
+    exec(`${blhost} flash-security-disable 0403020108070605`);
+    exec(`${blhost} flash-erase-region 0xc000 475136`);
+    exec(`${blhost} flash-image ${firmwareImage}`);
+    exec(`${blhost} reset`);
+    config.verbose = false;
+    echo('Firmware updated successfully.');
+})();

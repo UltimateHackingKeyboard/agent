@@ -86,7 +86,7 @@ function reenumerate(enumerationMode) {
         const enumerationModeId = exports.enumerationModes[enumerationMode];
 
         if (enumerationModeId === undefined) {
-            const enumerationModes = Object.keys(uhk.enumerationModes).join(', ');
+            const enumerationModes = Object.keys(exports.enumerationModes).join(', ');
             console.log(`Invalid enumeration mode '${enumerationMode}' is not one of: ${enumerationModes}`);
             reject();
             return;
