@@ -33,6 +33,6 @@ if (kbootCommand !== 'idle') {
 }
 
 const device = uhk.getUhkDevice();
-let transfer = new Buffer([uhk.usbCommands.sendKbootCommandToModule, kbootCommandId, parseInt(i2cAddress)]);
-device.write(uhk.getTransferData(transfer));
-const response = Buffer.from(device.readSync());
+(async function() {
+    await uhk.sendKbootCommandToModule(device, kbootCommandId, i2cAddress);
+})();

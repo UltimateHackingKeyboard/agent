@@ -196,6 +196,10 @@ function reenumerate(enumerationMode) {
     })
 };
 
+async function sendKbootCommandToModule(device, kbootCommandId, i2cAddress) {
+    return await uhk.writeDevice(device, [uhk.usbCommands.sendKbootCommandToModule, kbootCommandId, parseInt(i2cAddress)])
+};
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -211,6 +215,7 @@ uhk = exports = module.exports = moduleExports = {
     execRetry,
     updateDeviceFirmware,
     reenumerate,
+    sendKbootCommandToModule,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
