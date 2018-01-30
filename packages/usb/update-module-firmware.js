@@ -22,18 +22,20 @@ const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
 
 (async function() {
     config.verbose = true;
-    exec(`${usbDir}/send-kboot-command-to-module.js ping ${moduleSlot}`);
-//    const device = uhk.getUhkDevice();
-//    await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.ping, i2cAddress);
+    let device = uhk.getUhkDevice();
+    await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.ping, i2cAddress);
+    device.close();
     exec(`${usbDir}/jump-to-module-bootloader.js ${moduleSlot}`);
     exec(`${usbDir}/wait-for-kboot-idle.js`);
+
     await uhk.reenumerate('buspal');
     uhk.execRetry(`${blhostBuspal} get-property 1`);
     exec(`${blhostBuspal} flash-erase-all-unsecure`);
     exec(`${blhostBuspal} write-memory 0x0 ${firmwareImage}`);
     exec(`${blhostUsb} reset`);
+
     await uhk.reenumerate('normalKeyboard');
-    const device = uhk.getUhkDevice();
+    device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.idle, i2cAddress);
     config.verbose = false;
