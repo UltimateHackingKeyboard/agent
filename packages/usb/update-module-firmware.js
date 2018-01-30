@@ -20,18 +20,19 @@ const usbDir = `${__dirname}`;
 const blhostUsb = uhk.getBlhostCmd(uhk.enumerationNameToProductId.buspal);
 const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
 
-config.verbose = true;
-exec(`${usbDir}/send-kboot-command-to-module.js ping ${moduleSlot}`);
-exec(`${usbDir}/jump-to-module-bootloader.js ${moduleSlot}`);
-exec(`${usbDir}/wait-for-kboot-idle.js`);
-exec(`${usbDir}/reenumerate.js buspal`);
-uhk.execRetry(`${blhostBuspal} get-property 1`);
-exec(`${blhostBuspal} flash-erase-all-unsecure`);
-exec(`${blhostBuspal} write-memory 0x0 ${firmwareImage}`);
-exec(`${blhostUsb} reset`);
-exec(`${usbDir}/reenumerate.js normalKeyboard`);
-uhk.execRetry(`${usbDir}/send-kboot-command-to-module.js reset ${moduleSlot}`);
-exec(`${usbDir}/send-kboot-command-to-module.js idle`);
-config.verbose = false;
-
-echo('Firmware updated successfully.');
+(async function() {
+    config.verbose = true;
+    exec(`${usbDir}/send-kboot-command-to-module.js ping ${moduleSlot}`);
+    exec(`${usbDir}/jump-to-module-bootloader.js ${moduleSlot}`);
+    exec(`${usbDir}/wait-for-kboot-idle.js`);
+    await uhk.reenumerate('buspal');
+    uhk.execRetry(`${blhostBuspal} get-property 1`);
+    exec(`${blhostBuspal} flash-erase-all-unsecure`);
+    exec(`${blhostBuspal} write-memory 0x0 ${firmwareImage}`);
+    exec(`${blhostUsb} reset`);
+    exec(`${usbDir}/reenumerate.js normalKeyboard`);
+    uhk.execRetry(`${usbDir}/send-kboot-command-to-module.js reset ${moduleSlot}`);
+    exec(`${usbDir}/send-kboot-command-to-module.js idle`);
+    config.verbose = false;
+    echo('Firmware updated successfully.');
+})();
