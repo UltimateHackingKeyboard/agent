@@ -43,8 +43,7 @@ setInterval(() => {
     let device = uhk.getUhkDevice();
     if (device && !jumped) {
         console.log(`UHK found, reenumerating as ${enumerationMode}`);
-        let t =  bootloaderTimeoutMs;
-        let message = new Buffer([uhk.usbCommands.reenumerate, enumerationModeId, t&0xff, (t&0xff<<8)>>8, (t&0xff<<16)>>16, (t&0xff<<24)>>24]);
+        let message = new Buffer([uhk.usbCommands.reenumerate, enumerationModeId, ...uhk.uint32ToArray(bootloaderTimeoutMs)]);
         device.write(uhk.getTransferData(message));
         jumped = true;
     }
