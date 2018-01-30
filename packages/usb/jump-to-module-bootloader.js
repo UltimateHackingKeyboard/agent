@@ -9,6 +9,7 @@ program
 const moduleSlot = program.args[0];
 const moduleSlotId = uhk.checkModuleSlot(moduleSlot, uhk.moduleSlotToId);
 const device = uhk.getUhkDevice();
-let transfer = new Buffer([uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
-device.write(uhk.getTransferData(transfer));
-const response = Buffer.from(device.readSync());
+
+(async function() {
+    await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
+})();
