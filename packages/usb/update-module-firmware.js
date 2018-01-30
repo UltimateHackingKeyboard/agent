@@ -15,7 +15,7 @@ let moduleSlot = program.args[0];
 const i2cAddress = uhk.checkModuleSlot(moduleSlot, uhk.moduleSlotToI2cAddress);
 
 const firmwareImage = program.args[1];
-checkFirmwareImage(firmwareImage, extension);
+uhk.checkFirmwareImage(firmwareImage, extension);
 
 const usbDir = `${__dirname}`;
 const blhostUsb = getBlhostCmd(uhk.enumerationNameToProductId.buspal);

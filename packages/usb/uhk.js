@@ -62,6 +62,23 @@ function getBootloaderDevice() {
     return foundDevice;
 }
 
+function checkFirmwareImage(imagePath, extension) {
+    if (!imagePath) {
+        echo('No firmware image specified.');
+        exit(1);
+    }
+
+    if (!imagePath.endsWith(extension)) {
+        echo(`Firmware image extension is not ${extension}`);
+        exit(1);
+    }
+
+    if (!test('-f', imagePath)) {
+        echo('Firmware image does not exist.');
+        exit(1);
+    }
+}
+
 let configBufferIds = {
     hardwareConfig: 0,
     stagingUserConfig: 1,
@@ -135,6 +152,7 @@ exports = module.exports = moduleExports = {
     getBootloaderDevice,
     getTransferData,
     checkModuleSlot,
+    checkFirmwareImage,
     reenumerate,
     usbCommands: {
         getDeviceProperty       : 0x00,

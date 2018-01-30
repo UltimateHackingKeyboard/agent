@@ -15,7 +15,7 @@ const firmwareImage = program.args[0];
 const usbDir = `${__dirname}`;
 const blhost = getBlhostCmd(uhk.enumerationNameToProductId.bootloader);
 
-checkFirmwareImage(firmwareImage, extension);
+uhk.checkFirmwareImage(firmwareImage, extension);
 
 (async function() {
     config.verbose = true;
