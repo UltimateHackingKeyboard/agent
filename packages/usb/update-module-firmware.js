@@ -26,12 +26,12 @@ exec(`${usbDir}/send-kboot-command-to-module.js ping ${moduleSlot}`);
 exec(`${usbDir}/jump-to-module-bootloader.js ${moduleSlot}`);
 exec(`${usbDir}/wait-for-kboot-idle.js`);
 exec(`${usbDir}/reenumerate.js buspal`);
-execRetry(`${blhostBuspal} get-property 1`);
+uhk.execRetry(`${blhostBuspal} get-property 1`);
 exec(`${blhostBuspal} flash-erase-all-unsecure`);
 exec(`${blhostBuspal} write-memory 0x0 ${firmwareImage}`);
 exec(`${blhostUsb} reset`);
 exec(`${usbDir}/reenumerate.js normalKeyboard`);
-execRetry(`${usbDir}/send-kboot-command-to-module.js reset ${moduleSlot}`);
+uhk.execRetry(`${usbDir}/send-kboot-command-to-module.js reset ${moduleSlot}`);
 exec(`${usbDir}/send-kboot-command-to-module.js idle`);
 config.verbose = false;
 

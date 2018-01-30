@@ -101,6 +101,21 @@ function getBlhostCmd(pid) {
     return `${__dirname}/blhost/${blhostPath} --usb 0x1d50,0x${pid.toString(16)}`;
 }
 
+function execRetry(command) {
+    let firstRun = true;
+    let remainingRetries = 3;
+    let code;
+    do {
+        if (!firstRun) {
+            console.log(`Retrying ${command}`)
+        }
+        config.fatal = !remainingRetries;
+        code = exec(command).code;
+        config.fatal = true;
+        firstRun = false;
+    } while(code && --remainingRetries);
+}
+
 let configBufferIds = {
     hardwareConfig: 0,
     stagingUserConfig: 1,
@@ -176,6 +191,7 @@ exports = module.exports = moduleExports = {
     checkModuleSlot,
     checkFirmwareImage,
     getBlhostCmd,
+    execRetry,
     reenumerate,
     usbCommands: {
         getDeviceProperty       : 0x00,
