@@ -175,20 +175,11 @@ function convertBufferToIntArray(buffer) {
 }
 
 function getTransferData(buffer) {
-    const data = convertBufferToIntArray(buffer)
-    // if data start with 0 need to add additional leading zero because HID API remove it.
-    // https://github.com/node-hid/node-hid/issues/187
-    if (data.length > 0 && data[0] === 0) {
-//        data.unshift(0)  // TODO: This has been commented out because it causes bugs on Linux and Mac. Gotta test it on Windows and fully remove it if possible.
-    }
-
     // From HID API documentation:
     // http://www.signal11.us/oss/hidapi/hidapi/doxygen/html/group__API.html#gad14ea48e440cf5066df87cc6488493af
     // The first byte of data[] must contain the Report ID.
     // For devices which only support a single report, this must be set to 0x0.
-    data.unshift(0)
-
-    return data
+    return [0, ...convertBufferToIntArray(buffer)];
 }
 
 function readLog(buffer) {
