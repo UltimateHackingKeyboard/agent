@@ -17,8 +17,7 @@ You're free to use any value in between and test the results.`);
 }
 
 let bps = process.argv[2];
-let buffer = new Buffer([uhk.usbCommands.setI2cBaudRate, ...uhk.uint32ToArray(+bps)]);
-//console.log(buffer);
-device.write(uhk.getTransferData(buffer));
-let response = device.readSync();
-//console.log(Buffer.from(response));
+
+(async function() {
+    await uhk.writeDevice(device, [uhk.usbCommands.setI2cBaudRate, ...uhk.uint32ToArray(+bps)]);
+})();
