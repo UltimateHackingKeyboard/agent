@@ -2,7 +2,6 @@
 const uhk = require('./uhk');
 const program = require('commander');
 require('shelljs/global');
-require('./shared');
 
 const extension = '.bin';
 config.fatal = true;
