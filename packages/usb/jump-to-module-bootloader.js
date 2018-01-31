@@ -11,5 +11,5 @@ const moduleSlotId = uhk.checkModuleSlot(moduleSlot, uhk.moduleSlotToId);
 const device = uhk.getUhkDevice();
 
 (async function() {
-    await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
+    await uhk.jumpToModuleBootloader(device, moduleSlotId);
 })();

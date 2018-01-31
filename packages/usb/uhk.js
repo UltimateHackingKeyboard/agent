@@ -200,6 +200,10 @@ async function sendKbootCommandToModule(device, kbootCommandId, i2cAddress) {
     return await uhk.writeDevice(device, [uhk.usbCommands.sendKbootCommandToModule, kbootCommandId, parseInt(i2cAddress)])
 };
 
+async function jumpToModuleBootloader(device, moduleSlotId) {
+    await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
+};
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -216,6 +220,7 @@ uhk = exports = module.exports = moduleExports = {
     updateDeviceFirmware,
     reenumerate,
     sendKbootCommandToModule,
+    jumpToModuleBootloader,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,

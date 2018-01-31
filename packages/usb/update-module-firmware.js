@@ -11,6 +11,7 @@ program
     .parse(process.argv)
 
 let moduleSlot = program.args[0];
+const moduleSlotId = uhk.checkModuleSlot(moduleSlot, uhk.moduleSlotToId);
 const i2cAddress = uhk.checkModuleSlot(moduleSlot, uhk.moduleSlotToI2cAddress);
 
 const firmwareImage = program.args[1];
@@ -24,8 +25,8 @@ const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
     config.verbose = true;
     let device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.ping, i2cAddress);
+    await uhk.jumpToModuleBootloader(device, moduleSlotId);
     device.close();
-    exec(`${usbDir}/jump-to-module-bootloader.js ${moduleSlot}`);
     exec(`${usbDir}/wait-for-kboot-idle.js`);
 
     await uhk.reenumerate('buspal');
