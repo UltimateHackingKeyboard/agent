@@ -29,6 +29,9 @@ function uint32ToArray(value) {
 
 function writeDevice(device, data, options={}) {
     device.write(getTransferData(new Buffer(data)));
+    if (options.noRead) {
+        return Promise.resolve();
+    }
     return util.promisify(device.read.bind(device))();
 }
 
@@ -164,7 +167,7 @@ function reenumerate(enumerationMode) {
         }
 
         console.log(`Trying to reenumerate as ${enumerationMode}...`);
-        const intervalId = setInterval(() => {
+        const intervalId = setInterval(async function() {
             pollingTimeoutMs -= pollingIntervalMs;
 
             const foundDevice = HID.devices().find(device =>
@@ -187,8 +190,7 @@ function reenumerate(enumerationMode) {
             let device = exports.getUhkDevice();
             if (device && !jumped) {
                 console.log(`UHK found, reenumerating as ${enumerationMode}`);
-                let message = new Buffer([exports.usbCommands.reenumerate, enumerationModeId, ...uint32ToArray(bootloaderTimeoutMs)]);
-                device.write(getTransferData(message));
+                await writeDevice(device, [exports.usbCommands.reenumerate, enumerationModeId, ...uint32ToArray(bootloaderTimeoutMs)], {noRead:true});
                 jumped = true;
             }
 
