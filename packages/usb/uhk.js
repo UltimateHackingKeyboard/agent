@@ -255,6 +255,7 @@ async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
     device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.idle, i2cAddress);
+    device.close();
     config.verbose = false;
     echo('Firmware updated successfully.');
 };

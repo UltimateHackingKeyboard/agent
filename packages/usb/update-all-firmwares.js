@@ -3,6 +3,7 @@ const program = require('commander');
 const tmp = require('tmp');
 const decompress = require('decompress');
 const decompressTarbz = require('decompress-tarbz2');
+const uhk = require('./uhk')
 require('shelljs/global');
 
 (async function() {
@@ -28,9 +29,11 @@ require('shelljs/global');
             firmwarePath = tmpObj.name;
         }
         config.verbose = true;
-        exec(`${__dirname}/update-device-firmware.js ${firmwarePath}/devices/uhk60-right/firmware.hex`);
-        exec(`${__dirname}/reenumerate.js normalKeyboard`);
-        exec(`${__dirname}/update-module-firmware.js leftHalf ${firmwarePath}/modules/uhk60-left.bin`);
+        console.log('Updating right firmware');
+        await uhk.updateDeviceFirmware(`${firmwarePath}/devices/uhk60-right/firmware.hex`, 'hex');
+        await uhk.reenumerate('normalKeyboard');
+        console.log('Updating left firmware');
+        await uhk.updateModuleFirmware(uhk.moduleSlotToI2cAddress.leftHalf, uhk.moduleSlotToId.leftHalf, `${firmwarePath}/modules/uhk60-left.bin`);
 
         if (program.overwriteUserConfig) {
             exec(`${__dirname}/write-config.js ${firmwarePath}/devices/uhk60-right/config.bin`);
@@ -39,7 +42,7 @@ require('shelljs/global');
         }
 
         config.verbose = false;
-    } catch(exception) {
+    } catch (exception) {
         console.error(exception.message);
         exit(1);
     }
