@@ -233,6 +233,32 @@ async function waitForKbootIdle(device) {
     });
 }
 
+async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
+    const usbDir = `${__dirname}`;
+    const blhostUsb = uhk.getBlhostCmd(uhk.enumerationNameToProductId.buspal);
+    const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
+
+    config.verbose = true;
+    let device = uhk.getUhkDevice();
+    await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.ping, i2cAddress);
+    await uhk.jumpToModuleBootloader(device, moduleSlotId);
+    await uhk.waitForKbootIdle(device);
+    device.close();
+
+    await uhk.reenumerate('buspal');
+    uhk.execRetry(`${blhostBuspal} get-property 1`);
+    exec(`${blhostBuspal} flash-erase-all-unsecure`);
+    exec(`${blhostBuspal} write-memory 0x0 ${firmwareImage}`);
+    exec(`${blhostUsb} reset`);
+
+    await uhk.reenumerate('normalKeyboard');
+    device = uhk.getUhkDevice();
+    await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
+    await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.idle, i2cAddress);
+    config.verbose = false;
+    echo('Firmware updated successfully.');
+};
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -251,6 +277,7 @@ uhk = exports = module.exports = moduleExports = {
     sendKbootCommandToModule,
     jumpToModuleBootloader,
     waitForKbootIdle,
+    updateModuleFirmware,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
