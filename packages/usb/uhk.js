@@ -204,6 +204,35 @@ async function jumpToModuleBootloader(device, moduleSlotId) {
     await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
 };
 
+async function waitForKbootIdle(device) {
+    const intervalMs = 100;
+    const pingMessageInterval = 500;
+    let timeoutMs = 10000;
+
+    return new Promise((resolve, reject) => {
+        const intervalId = setInterval(async function() {
+            const response = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.currentKbootCommand]);
+            const currentKbootCommand = response[1];
+            if (currentKbootCommand == 0) {
+                console.log('Bootloader pinged.');
+                resolve();
+                clearInterval(intervalId);
+                return;
+            } else if (timeoutMs % pingMessageInterval === 0) {
+                console.log("Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.");
+            };
+
+            timeoutMs -= intervalMs;
+
+            if (timeoutMs < 0) {
+                reject();
+                clearInterval(intervalId);
+                return;
+            }
+        }, intervalMs);
+    });
+}
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -221,6 +250,7 @@ uhk = exports = module.exports = moduleExports = {
     reenumerate,
     sendKbootCommandToModule,
     jumpToModuleBootloader,
+    waitForKbootIdle,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
