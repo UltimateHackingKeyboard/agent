@@ -26,8 +26,8 @@ const blhostBuspal = `${blhostUsb} --buspal i2c,${i2cAddress}`;
     let device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.ping, i2cAddress);
     await uhk.jumpToModuleBootloader(device, moduleSlotId);
+    await uhk.waitForKbootIdle(device);
     device.close();
-    exec(`${usbDir}/wait-for-kboot-idle.js`);
 
     await uhk.reenumerate('buspal');
     uhk.execRetry(`${blhostBuspal} get-property 1`);
