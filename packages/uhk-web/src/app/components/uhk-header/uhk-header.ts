@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { Notification } from 'uhk-common';
-import { AppState, getUndoableNotification } from '../../store/index';
+import { AppState, getUndoableNotification } from '../../store';
 import { DismissUndoNotificationAction, UndoLastAction } from '../../store/actions/app';
 
 @Component({
