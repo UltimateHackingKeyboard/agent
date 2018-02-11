@@ -35,10 +35,12 @@ import { ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import {
     ActionTypes as UserConfigActions,
+    ApplyUserConfigurationFromFileAction,
     LoadConfigFromDeviceAction,
     LoadResetUserConfigurationAction
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
+import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 
 @Injectable()
 export class DeviceEffects {
@@ -162,8 +164,16 @@ export class DeviceEffects {
         });
 
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
-        .ofType(UserConfigActions.LOAD_RESET_USER_CONFIGURATION, UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
-        .switchMap(() => Observable.of(new SaveConfigurationAction()));
+        .ofType<ApplyUserConfigurationFromFileAction
+            | LoadResetUserConfigurationAction>(
+                UserConfigActions.LOAD_RESET_USER_CONFIGURATION,
+                UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
+        .map(action => action.payload)
+        .switchMap((config: UserConfiguration) => {
+            this.dataStorageRepository.saveConfig(config);
+
+            return Observable.of(new SaveConfigurationAction());
+        });
 
     @Effect({dispatch: false}) updateFirmware$ = this.actions$
         .ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE)
@@ -193,6 +203,7 @@ export class DeviceEffects {
                 private router: Router,
                 private deviceRendererService: DeviceRendererService,
                 private store: Store<AppState>,
+                private dataStorageRepository: DataStorageRepositoryService,
                 private defaultUserConfigurationService: DefaultUserConfigurationService) {
     }
 
