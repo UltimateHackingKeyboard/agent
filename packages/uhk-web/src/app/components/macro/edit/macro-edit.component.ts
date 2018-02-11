@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/pluck';
 
 import { MacroActions } from '../../../store/actions';
-import { AppState } from '../../../store/index';
+import { AppState } from '../../../store';
 import { getMacro } from '../../../store/reducers/user-configuration';
 
 @Component({
@@ -21,13 +21,17 @@ import { getMacro } from '../../../store/reducers/user-configuration';
 export class MacroEditComponent implements OnDestroy {
     macro: Macro;
     isNew: boolean;
+    macroId: number;
 
     private subscription: Subscription;
     constructor(private store: Store<AppState>, public route: ActivatedRoute) {
         this.subscription = route
             .params
             .pluck<{}, string>('id')
-            .switchMap((id: string) => store.let(getMacro(+id)))
+            .switchMap((id: string) => {
+                this.macroId = +id;
+                return store.let(getMacro(this.macroId));
+            })
             .subscribe((macro: Macro) => {
                 this.macro = macro;
             });
