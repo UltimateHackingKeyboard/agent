@@ -7,6 +7,7 @@ import { SwitchLayerAction } from './switch-layer-action';
 import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action';
 import { MouseAction } from './mouse-action';
 import { PlayMacroAction } from './play-macro-action';
+import { NoneAction } from './none-action';
 
 export class Helper {
 
@@ -77,6 +78,8 @@ export class Helper {
                 return new MouseAction().fromJsonObject(keyAction);
             case keyActionType.PlayMacroAction:
                 return new PlayMacroAction().fromJsonObject(keyAction, macros);
+            case keyActionType.NoneAction:
+                return new NoneAction();
             default:
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }
