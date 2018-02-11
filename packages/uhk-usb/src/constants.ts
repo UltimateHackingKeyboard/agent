@@ -39,7 +39,8 @@ export enum ConfigBufferId {
 export enum DevicePropertyIds {
     DeviceProtocolVersion = 0,
     ProtocolVersions = 1,
-    ConfigSizes = 2
+    ConfigSizes = 2,
+    CurrentKbootCommand = 3
 }
 
 export enum EnumerationModes {

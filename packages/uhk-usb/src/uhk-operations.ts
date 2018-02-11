@@ -5,8 +5,13 @@ import * as fs from 'fs';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { snooze } from './util';
-import { convertBufferToIntArray, getTransferBuffers, DevicePropertyIds, UsbCommand, ConfigBufferId
-       } from '../index';
+import {
+    convertBufferToIntArray,
+    getTransferBuffers,
+    DevicePropertyIds,
+    UsbCommand,
+    ConfigBufferId
+} from '../index';
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
 export class UhkOperations {
@@ -42,6 +47,13 @@ export class UhkOperations {
         await snooze(1000);
         await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
         this.device.close();
+
+        const leftModuleBricked = await this.waitForKbootIdle();
+        if (!leftModuleBricked) {
+            this.logService.error('[UhkOperations] Couldn\'t connect to the left keyboard half.');
+            return;
+        }
+
         await this.device.reenumerate(EnumerationModes.Buspal);
         this.device.close();
         await this.blhost.runBlhostCommandRetry([...buspalPrefix, 'get-property', '1']);
@@ -159,6 +171,26 @@ export class UhkOperations {
         } finally {
             this.device.close();
         }
+    }
+
+    public async waitForKbootIdle(): Promise<boolean> {
+        const timeoutTime = new Date(new Date().getTime() + 30000);
+
+        while (new Date() < timeoutTime) {
+            const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
+            this.device.close();
+
+            if (buffer[1] === 0) {
+                return true;
+            }
+
+            // tslint:disable-next-line: max-line-length
+            this.logService.info('[DeviceOperation] Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.');
+
+            await snooze(1000);
+        }
+
+        return false;
     }
 
     /**
