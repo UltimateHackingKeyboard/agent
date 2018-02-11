@@ -4,7 +4,18 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { KeyAction, KeyActionHelper, Keymap, Layer, Macro, Module, SwitchLayerAction, UserConfiguration } from 'uhk-common';
+import {
+    KeyAction,
+    KeyActionHelper,
+    Keymap,
+    Layer,
+    Macro,
+    Module,
+    NoneAction,
+    PlayMacroAction,
+    SwitchLayerAction,
+    UserConfiguration
+} from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
 import { ActionTypes } from '../actions/user-config';
@@ -210,9 +221,34 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro, macro => macro.id !== newMacro.id);
             break;
         }
+
         case MacroActions.REMOVE:
-            changedUserConfiguration.macros = state.macros.filter((macro: Macro) => macro.id !== action.payload);
+            const macroId = action.payload;
+            changedUserConfiguration.macros = state.macros.filter((macro: Macro) => macro.id !== macroId);
+
+            for (let k = 0; k < changedUserConfiguration.keymaps.length; k++) {
+                const keymap = changedUserConfiguration.keymaps[k];
+                let hasChanges = false;
+
+                for (const layer of  keymap.layers) {
+                    for (const module of layer.modules) {
+                        for (let ka = 0; ka < module.keyActions.length; ka++) {
+                            const keyAction = module.keyActions[ka];
+
+                            if (keyAction instanceof PlayMacroAction && keyAction.macroId === macroId) {
+                                hasChanges = true;
+                                module.keyActions[ka] = new NoneAction();
+                            }
+                        }
+                    }
+                }
+
+                if (hasChanges) {
+                    changedUserConfiguration.keymaps[k] = new Keymap(keymap);
+                }
+            }
             break;
+
         case MacroActions.ADD_ACTION:
             changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
                 if (macro.id === action.payload.id) {
