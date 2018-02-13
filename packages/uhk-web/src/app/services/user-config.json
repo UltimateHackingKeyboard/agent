@@ -23,7 +23,7 @@
       "isDefault": false,
       "abbreviation": "COM",
       "name": "Colemak for Mac",
-      "description": "",
+      "description": "Colemak is based on QWERTY, but it places the most frequent letters under the strongest fingers. This is the Mac version.",
       "layers": [
         {
           "modules": [
@@ -1029,7 +1029,7 @@
       "isDefault": false,
       "abbreviation": "COL",
       "name": "Colemak for PC",
-      "description": "",
+      "description": "Colemak is based on QWERTY, but it places the most frequent letters under the strongest fingers. This is the PC version.\n",
       "layers": [
         {
           "modules": [
@@ -2045,7 +2045,7 @@
       "isDefault": false,
       "abbreviation": "DVM",
       "name": "Dvorak for Mac",
-      "description": "",
+      "description": "The Dvorak keyboard layout was designed with the goal of maximizing typing efficiency. This is the Mac version.",
       "layers": [
         {
           "modules": [
@@ -3048,7 +3048,7 @@
       "isDefault": false,
       "abbreviation": "DVO",
       "name": "Dvorak for PC",
-      "description": "",
+      "description": "The Dvorak keyboard layout was designed with the goal of maximizing typing efficiency. This is the PC version.",
       "layers": [
         {
           "modules": [
@@ -4061,7 +4061,7 @@
       "isDefault": false,
       "abbreviation": "QWM",
       "name": "QWERTY for Mac",
-      "description": "",
+      "description": "QWERTY is the mother of all layouts. This is the Mac version.",
       "layers": [
         {
           "modules": [
@@ -5062,7 +5062,7 @@
       "isDefault": true,
       "abbreviation": "QWR",
       "name": "QWERTY for PC",
-      "description": "",
+      "description": "QWERTY is the mother of all layouts. This is the PC version.",
       "layers": [
         {
           "modules": [
@@ -6073,7 +6073,7 @@
       "isDefault": false,
       "abbreviation": "TES",
       "name": "Test",
-      "description": "",
+      "description": "This keymap is only used for factory testing purposes.",
       "layers": [
         {
           "modules": [
