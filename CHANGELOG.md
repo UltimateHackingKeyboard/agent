@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
+
+## [1.1.1] - 2017-02-13
+
+Firmware: 8.1.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.2)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+
+- Sign Agent on OSX resulting in easier installation.
+- Add per-keymap description field.
+- Sort keymaps and macros alphabetically within the key action popover.
+- Add tooltip regarding non-US scancodes.
+- When deleting a macro, also delete the relevant play macro actions.
+- Make the reset configuration button persist the reset configuration in Agent-web.
+- Make Agent able to unbrick bricked modules.
+- Assign "switch to test keymap" action on all keymaps in the default configuration.
+- Add keymap descriptions in the default configuration.
+
 ## [1.1.0] - 2017-01-15
 
 Firmware: 8.**1**.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.0)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
