@@ -54,15 +54,12 @@ export class Module {
 
         const noneAction = new NoneAction();
 
-        const keyActions: KeyAction[] = this.keyActions.map(keyAction => {
+        buffer.writeArray(this.keyActions, (uhkBuffer: UhkBuffer, keyAction: KeyAction) => {
             if (keyAction) {
-                return keyAction;
+                keyAction.toBinary(uhkBuffer, userConfiguration);
+            } else {
+                noneAction.toBinary(uhkBuffer);
             }
-            return noneAction;
-        });
-
-        buffer.writeArray(keyActions, (uhkBuffer: UhkBuffer, keyAction: KeyAction) => {
-            keyAction.toBinary(uhkBuffer, userConfiguration);
         });
     }
 
