@@ -88,7 +88,6 @@ if (process.platform === 'darwin') {
 } else if (process.platform === 'win32') {
     // decrypt windows certificate
     exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
-    process.env.CSC_LINK = path.join(__dirname, 'certs/windows-cert.p12');
 }
 
 if (TEST_BUILD || gitTag) {
