@@ -120,7 +120,8 @@ if (TEST_BUILD || gitTag) {
                 extraResources
             },
             win: {
-                extraResources
+                extraResources,
+                certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
             },
             linux: {
                 extraResources
