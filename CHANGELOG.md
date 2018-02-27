@@ -6,7 +6,7 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.1.1] - 2017-02-13
+## [1.1.1] - 2018-02-13
 
 Firmware: 8.1.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.2)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
@@ -20,7 +20,7 @@ Firmware: 8.1.**2** [[release](https://github.com/UltimateHackingKeyboard/firmwa
 - Assign "switch to test keymap" action on all keymaps in the default configuration.
 - Add keymap descriptions in the default configuration.
 
-## [1.1.0] - 2017-01-15
+## [1.1.0] - 2018-01-15
 
 Firmware: 8.**1**.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.0)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
 
