@@ -6,6 +6,14 @@
                 <i class="fa fa-sliders"></i>
                 <span>Firmware</span>
             </h1>
+
+            <p><i>
+                Please note that the firmware update process may sometimes fail. If if fails then
+                simply retry until it succeeds. If the left half becomes unresponsive after a failed
+                update then retry and follow the instructions displayed during the update to fix it.
+                We'll make the firmware update process more robust.
+            </i></p>
+
             <p>
                 Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 <button class="btn btn-primary"
