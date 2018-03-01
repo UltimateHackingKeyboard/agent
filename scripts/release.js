@@ -83,7 +83,12 @@ if (process.platform === 'darwin') {
 }
 
 if (process.platform === 'darwin') {
+    // TODO: Remove comment when macOS certificates boughted and exported
+    //require('./setup-macos-keychain').registerKeyChain();
     exec('openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in scripts/certs/mac-cert.p12.enc -out scripts/certs/mac-cert.p12 -d')
+} else if (process.platform === 'win32') {
+    // decrypt windows certificate
+    exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
     //process.env.CSC_LINK = path.join(__dirname, 'certs/mac-cert.p12');
 }
 
@@ -117,7 +122,8 @@ if (TEST_BUILD || gitTag) {
                 extraResources
             },
             win: {
-                extraResources
+                extraResources,
+                certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
             },
             linux: {
                 extraResources
