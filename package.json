@@ -47,7 +47,7 @@
     "file-loader": "0.10.0",
     "fs-extra": "4.0.2",
     "jsonfile": "4.0.0",
-    "lerna": "2.0.0",
+    "lerna": "2.9.0",
     "mkdirp": "0.5.1",
     "npm-run-all": "4.0.2",
     "pre-commit": "1.2.2",
