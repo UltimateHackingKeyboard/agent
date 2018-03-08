@@ -42,13 +42,13 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
-if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
-    exec('brew install yarn --without-node');
-}
+// if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
+//     exec('brew install yarn --without-node');
+// }
 
-if (!RUNNING_IN_DEV_MODE) {
-    exec("yarn add electron-builder");
-}
+// if (!RUNNING_IN_DEV_MODE) {
+//     exec("yarn add electron-builder");
+// }
 
 const path = require('path');
 const builder = require("electron-builder");
@@ -82,7 +82,7 @@ if (process.platform === 'darwin') {
     process.exit(1);
 }
 
-if (process.platform === 'darwin') {
+if (process.platform === 'darwin' && process.env.CI) {
     require('./setup-macos-keychain').registerKeyChain();
 } else if (process.platform === 'win32') {
     // decrypt windows certificate
