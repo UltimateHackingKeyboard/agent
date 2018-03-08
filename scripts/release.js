@@ -83,7 +83,10 @@ if (process.platform === 'darwin') {
 }
 
 if (process.platform === 'darwin' && process.env.CI) {
-    require('./setup-macos-keychain').registerKeyChain();
+    const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
+    const decryptedFile = path.join(__dirname, './certs/mac-cert.p12');
+    exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${decryptedFile} -d`);
+    // require('./setup-macos-keychain').registerKeyChain();
 } else if (process.platform === 'win32') {
     // decrypt windows certificate
     exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
@@ -116,7 +119,9 @@ if (TEST_BUILD || gitTag) {
             productName: 'UHK Agent',
             mac: {
                 category: 'public.app-category.utilities',
-                extraResources
+                extraResources,
+                identity: 'CMXCBCFHDG',
+                cscLink: path.join(__dirname, 'certs/mac-cert.p12')
             },
             win: {
                 extraResources,
