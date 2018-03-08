@@ -2,7 +2,7 @@
 const jsonfile = require('jsonfile');
 const exec = require('child_process').execSync;
 
-const TEST_BUILD = process.env.TEST_BUILD;// set true if you would like to test on your local machine
+const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machine
 // set true if running on your dev mac machine where yarn is installed or not need to install
 const RUNNING_IN_DEV_MODE = process.env.RUNNING_IN_DEV_MODE === 'true';
 const DIR = process.env.DIR;
@@ -33,7 +33,12 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({branchName, pullRequestNr, gitTag, repoName});
+console.log({
+    branchName,
+    pullRequestNr,
+    gitTag,
+    repoName
+});
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
@@ -86,7 +91,6 @@ if (process.platform === 'darwin' && process.env.CI) {
     const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
     const decryptedFile = path.join(__dirname, './certs/mac-cert.p12');
     exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${decryptedFile} -d`);
-    // require('./setup-macos-keychain').registerKeyChain();
 } else if (process.platform === 'win32') {
     // decrypt windows certificate
     exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
@@ -98,45 +102,48 @@ if (TEST_BUILD || gitTag) {
 
     // Add firmware and blhost to extra resources
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
-    extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
+    extraResources.push({
+        from: extractedFirmwareDir,
+        to: 'packages/'
+    });
 
     builder.build({
-        dir: DIR,
-        targets: target,
-        appMetadata: {
-            main: 'electron-main.js',
-            name: 'UHK Agent',
-            author: {
-                name: 'Ultimate Gadget Laboratories'
+            dir: DIR,
+            targets: target,
+            appMetadata: {
+                main: 'electron-main.js',
+                name: 'UHK Agent',
+                author: {
+                    name: 'Ultimate Gadget Laboratories'
+                },
+                version: rootJson.version
             },
-            version: rootJson.version
-        },
-        config: {
-            directories: {
-                app: electron_build_folder
+            config: {
+                directories: {
+                    app: electron_build_folder
+                },
+                appId: 'com.ultimategadgetlabs.agent',
+                productName: 'UHK Agent',
+                mac: {
+                    category: 'public.app-category.utilities',
+                    extraResources,
+                    identity: 'CMXCBCFHDG',
+                    cscLink: path.join(__dirname, 'certs/mac-cert.p12')
+                },
+                win: {
+                    extraResources,
+                    certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
+                },
+                linux: {
+                    extraResources
+                },
+                publish: 'github',
+                artifactName,
+                files: [
+                    '**/*'
+                ]
             },
-            appId: 'com.ultimategadgetlabs.agent',
-            productName: 'UHK Agent',
-            mac: {
-                category: 'public.app-category.utilities',
-                extraResources,
-                identity: 'CMXCBCFHDG',
-                cscLink: path.join(__dirname, 'certs/mac-cert.p12')
-            },
-            win: {
-                extraResources,
-                certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
-            },
-            linux: {
-                extraResources
-            },
-            publish: 'github',
-            artifactName,
-            files: [
-                '**/*'
-            ]
-        },
-    })
+        })
         .then(() => {
             console.log('Packing success.');
         })
@@ -144,8 +151,7 @@ if (TEST_BUILD || gitTag) {
             console.error(`${error}`);
             process.exit(1);
         })
-}
-else {
+} else {
     console.log('No git tag');
     // TODO: Need it?
     process.exit(1);
@@ -156,5 +162,7 @@ function update2ndPackageJson(rootJson) {
     const json = require(jsonPath);
 
     json.version = rootJson.version;
-    jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
+    jsonfile.writeFileSync(jsonPath, json, {
+        spaces: 2
+    })
 }
