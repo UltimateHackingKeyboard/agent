@@ -102,10 +102,7 @@ if (TEST_BUILD || gitTag) {
 
     // Add firmware and blhost to extra resources
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
-    extraResources.push({
-        from: extractedFirmwareDir,
-        to: 'packages/'
-    });
+    extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
 
     builder.build({
         dir: DIR,
@@ -162,7 +159,5 @@ function update2ndPackageJson(rootJson) {
     const json = require(jsonPath);
 
     json.version = rootJson.version;
-    jsonfile.writeFileSync(jsonPath, json, {
-        spaces: 2
-    })
+    jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
 }
