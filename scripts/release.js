@@ -108,42 +108,42 @@ if (TEST_BUILD || gitTag) {
     });
 
     builder.build({
-            dir: DIR,
-            targets: target,
-            appMetadata: {
-                main: 'electron-main.js',
-                name: 'UHK Agent',
-                author: {
-                    name: 'Ultimate Gadget Laboratories'
-                },
-                version: rootJson.version
+        dir: DIR,
+        targets: target,
+        appMetadata: {
+            main: 'electron-main.js',
+            name: 'UHK Agent',
+            author: {
+                name: 'Ultimate Gadget Laboratories'
             },
-            config: {
-                directories: {
-                    app: electron_build_folder
-                },
-                appId: 'com.ultimategadgetlabs.agent',
-                productName: 'UHK Agent',
-                mac: {
-                    category: 'public.app-category.utilities',
-                    extraResources,
-                    identity: 'CMXCBCFHDG',
-                    cscLink: path.join(__dirname, 'certs/mac-cert.p12')
-                },
-                win: {
-                    extraResources,
-                    certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
-                },
-                linux: {
-                    extraResources
-                },
-                publish: 'github',
-                artifactName,
-                files: [
-                    '**/*'
-                ]
+            version: rootJson.version
+        },
+        config: {
+            directories: {
+                app: electron_build_folder
             },
-        })
+            appId: 'com.ultimategadgetlabs.agent',
+            productName: 'UHK Agent',
+            mac: {
+                category: 'public.app-category.utilities',
+                extraResources,
+                identity: 'CMXCBCFHDG',
+                cscLink: path.join(__dirname, 'certs/mac-cert.p12')
+            },
+            win: {
+                extraResources,
+                certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
+            },
+            linux: {
+                extraResources
+            },
+            publish: 'github',
+            artifactName,
+            files: [
+                '**/*'
+            ]
+        },
+    })
         .then(() => {
             console.log('Packing success.');
         })
