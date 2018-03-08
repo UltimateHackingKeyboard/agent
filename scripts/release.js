@@ -33,12 +33,7 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({
-    branchName,
-    pullRequestNr,
-    gitTag,
-    repoName
-});
+console.log({branchName, pullRequestNr, gitTag, repoName});
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
