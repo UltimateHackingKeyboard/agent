@@ -4,6 +4,7 @@ const cp = require('child_process');
 const path = require('path');
 
 function registerKeyChain() {
+    console.log('Start creating keychain');
     const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
     const decryptedFile = path.join(__dirname, './certs/mac-cert.p12');
     cp.execSync(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${decryptedFile} -d`);
@@ -14,7 +15,8 @@ function registerKeyChain() {
     cp.execSync(`security unlock-keychain -p travis ${keyChain}`);
     cp.execSync(`security set-keychain-settings -t 3600 -u ${keyChain}`);
 
-    cp.execSync(`security import ${decryptedFile} -k ${keyChain} -T /usr/bin/codesign`);
+    cp.execSync(`security import ${decryptedFile} -k ${keyChain} -T /usr/bin/codesign -P ''`);
+    console.log('Finished creating keychain');
 }
 
 module.exports.registerKeyChain = registerKeyChain;
