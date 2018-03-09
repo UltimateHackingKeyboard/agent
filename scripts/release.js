@@ -2,7 +2,7 @@
 const jsonfile = require('jsonfile');
 const exec = require('child_process').execSync;
 
-const TEST_BUILD = process.env.TEST_BUILD;// set true if you would like to test on your local machine
+const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machine
 // set true if running on your dev mac machine where yarn is installed or not need to install
 const RUNNING_IN_DEV_MODE = process.env.RUNNING_IN_DEV_MODE === 'true';
 const DIR = process.env.DIR;
@@ -42,13 +42,13 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
-if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
-    exec('brew install yarn --without-node');
-}
+// if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
+//     exec('brew install yarn --without-node');
+// }
 
-if (!RUNNING_IN_DEV_MODE) {
-    exec("yarn add electron-builder");
-}
+// if (!RUNNING_IN_DEV_MODE) {
+//     exec("yarn add electron-builder");
+// }
 
 const path = require('path');
 const builder = require("electron-builder");
@@ -82,14 +82,13 @@ if (process.platform === 'darwin') {
     process.exit(1);
 }
 
-if (process.platform === 'darwin') {
-    // TODO: Remove comment when macOS certificates boughted and exported
-    //require('./setup-macos-keychain').registerKeyChain();
-    exec('openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in scripts/certs/mac-cert.p12.enc -out scripts/certs/mac-cert.p12 -d')
+if (process.platform === 'darwin' && process.env.CI) {
+    const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
+    const decryptedFile = path.join(__dirname, './certs/mac-cert.p12');
+    exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${decryptedFile} -d`);
 } else if (process.platform === 'win32') {
     // decrypt windows certificate
     exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
-    //process.env.CSC_LINK = path.join(__dirname, 'certs/mac-cert.p12');
 }
 
 if (TEST_BUILD || gitTag) {
@@ -119,7 +118,9 @@ if (TEST_BUILD || gitTag) {
             productName: 'UHK Agent',
             mac: {
                 category: 'public.app-category.utilities',
-                extraResources
+                extraResources,
+                identity: 'CMXCBCFHDG',
+                cscLink: path.join(__dirname, 'certs/mac-cert.p12')
             },
             win: {
                 extraResources,
@@ -142,8 +143,7 @@ if (TEST_BUILD || gitTag) {
             console.error(`${error}`);
             process.exit(1);
         })
-}
-else {
+} else {
     console.log('No git tag');
     // TODO: Need it?
     process.exit(1);
