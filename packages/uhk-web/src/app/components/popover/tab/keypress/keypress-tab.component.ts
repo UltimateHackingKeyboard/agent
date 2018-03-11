@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
-import { KeyAction, KeystrokeAction, KeystrokeType } from 'uhk-common';
+import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
@@ -35,8 +35,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             id: '0',
             text: 'None'
         }];
-        this.scanCodeGroups = this.scanCodeGroups.concat(require('./scancodes.json'));
-        this.secondaryRoleGroups = require('./secondaryRole.json');
+        this.scanCodeGroups = this.scanCodeGroups.concat(SCANCODES);
+        this.secondaryRoleGroups = SECONDARY_ROLES;
         this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.selectedScancodeOption = this.scanCodeGroups[0];

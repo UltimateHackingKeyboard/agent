@@ -8,6 +8,7 @@ import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keyma
 import { MouseAction } from './mouse-action';
 import { PlayMacroAction } from './play-macro-action';
 import { NoneAction } from './none-action';
+import { isScancodeExists } from '../scancode-checker';
 
 export class Helper {
 
@@ -26,7 +27,12 @@ export class Helper {
         buffer.backtrack();
 
         if (keyActionFirstByte >= KeyActionId.KeystrokeAction && keyActionFirstByte < KeyActionId.LastKeystrokeAction) {
-            return new KeystrokeAction().fromBinary(buffer);
+            const keystrokeAction = new KeystrokeAction().fromBinary(buffer);
+            if (isValidKeystrokeAction(keystrokeAction)) {
+                return keystrokeAction;
+            }
+
+            return new NoneAction();
         }
 
         switch (keyActionFirstByte) {
@@ -68,8 +74,14 @@ export class Helper {
         }
 
         switch (keyAction.keyActionType) {
-            case keyActionType.KeystrokeAction:
-                return new KeystrokeAction().fromJsonObject(keyAction);
+            case keyActionType.KeystrokeAction: {
+                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction);
+                if (isValidKeystrokeAction(keystrokeAction)) {
+                    return keystrokeAction;
+                }
+
+                return new NoneAction();
+            }
             case keyActionType.SwitchLayerAction:
                 return new SwitchLayerAction().fromJsonObject(keyAction);
             case keyActionType.SwitchKeymapAction:
@@ -84,4 +96,10 @@ export class Helper {
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }
     }
+}
+
+function isValidKeystrokeAction(keystrokeAction: KeystrokeAction): boolean {
+    return keystrokeAction.hasSecondaryRoleAction() ||
+        keystrokeAction.hasActiveModifier() ||
+        keystrokeAction.hasScancode() && isScancodeExists(keystrokeAction.scancode);
 }

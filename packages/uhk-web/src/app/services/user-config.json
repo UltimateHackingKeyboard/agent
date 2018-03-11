@@ -495,7 +495,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",
@@ -1501,7 +1501,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",
@@ -2517,7 +2517,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",
@@ -3520,7 +3520,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4533,7 +4533,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5534,7 +5534,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6547,7 +6547,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 118
+                  "scancode": 101
                 },
                 {
                   "keyActionType": "keystroke",

@@ -10,7 +10,10 @@
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "run-s tsc copy:*",
+    "tsc": "tsc",
+    "copy:scancodes": "copyfiles ./src/config-serializer/config-items/scancodes.json dist",
+    "copy:secondary-roles": "copyfiles ./src/config-serializer/config-items/secondaryRole.json dist",
     "test": "jasmine-ts --config=jasmine.json",
     "coverage": "nyc jasmine-ts --config=jasmine.json"
   },

@@ -190,6 +190,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(98, ['Insert', '0']);
         this.basicScanCodeTextMap.set(99, ['Del', '.']);
         this.basicScanCodeTextMap.set(100, ['ISO key', '|']);
+        this.basicScanCodeTextMap.set(101, ['Menu']);
         this.basicScanCodeTextMap.set(104, ['F13']);
         this.basicScanCodeTextMap.set(105, ['F14']);
         this.basicScanCodeTextMap.set(106, ['F15']);
@@ -202,7 +203,6 @@ export class MapperService {
         this.basicScanCodeTextMap.set(113, ['F22']);
         this.basicScanCodeTextMap.set(114, ['F23']);
         this.basicScanCodeTextMap.set(115, ['F24']);
-        this.basicScanCodeTextMap.set(118, ['Menu']);
         this.basicScanCodeTextMap.set(176, ['00']);
         this.basicScanCodeTextMap.set(177, ['000']);
 
@@ -236,7 +236,7 @@ export class MapperService {
         this.basicScancodeIcons.set(80, 'icon-kbd__mod--arrow-left');
         this.basicScancodeIcons.set(81, 'icon-kbd__mod--arrow-down');
         this.basicScancodeIcons.set(82, 'icon-kbd__mod--arrow-up');
-        this.basicScancodeIcons.set(118, 'icon-kbd__mod--menu');
+        this.basicScancodeIcons.set(101, 'icon-kbd__mod--menu');
 
         this.mediaScancodeIcons = new Map<number, string>();
         this.mediaScancodeIcons.set(138, 'icon-kbd__fn--browser');
