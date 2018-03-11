@@ -9,3 +9,6 @@ export * from './macro';
 export * from './module';
 export * from './module-configuration';
 export * from './user-configuration';
+
+export const SCANCODES = require('./scancodes.json');
+export const SECONDARY_ROLES = require('./secondaryRole.json');
