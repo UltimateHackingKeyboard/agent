@@ -15,22 +15,37 @@
             </i></p>
 
             <p>
-                Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 <button class="btn btn-primary"
                         [disabled]="flashFirmwareButtonDisbabled$ | async"
-                        (click)="onUpdateFirmware()">Flash firmware
+                        mwlConfirmationPopover
+                        title="Firmware update notice"
+                        message="Please don't disconnect your keyboard or the keyboard halves during the update process!"
+                        placement="bottom"
+                        confirmText="Flash firmware"
+                        cancelText="Cancel"
+                        (confirm)="onUpdateFirmware()">
+                    Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 </button>
             </p>
 
             <p>
-                Flash firmware file <input id="firmware-file-select"
-                                           type="file"
-                                           [disabled]="flashFirmwareButtonDisbabled$ | async"
-                                           (change)="changeFile($event)">
-                <button class="btn btn-primary"
-                        [disabled]="flashFirmwareButtonDisbabled$ | async"
-                        (click)="onUpdateFirmwareWithFile()">Flash firmware
-                </button>
+                <label class="btn btn-primary btn-file"
+                       [class.disabled]="flashFirmwareButtonDisbabled$ | async"
+                       mwlConfirmationPopover
+                       title="Firmware update notice"
+                       message="Please don't disconnect your keyboard or the keyboard halves during the update process!"
+                       placement="bottom"
+                       confirmText="Flash firmware"
+                       cancelText="Cancel"
+                       (confirm)="openFileDialog()">
+                    Choose firmware file and flash it
+                </label>
+                <input id="firmware-file-select"
+                       type="file"
+                       style="visibility: collapse"
+                       accept=".tar.bz2"
+                       [disabled]="flashFirmwareButtonDisbabled$ | async"
+                       (change)="changeFile($event)">
             </p>
         </div>
 
