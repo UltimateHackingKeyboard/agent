@@ -23,7 +23,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
     getAgentVersionInfo$: Observable<VersionInformation>;
     firmwareOkButtonDisabled$: Observable<boolean>;
 
-    arrayBuffer: Uint8Array;
     @ViewChild('scrollMe') divElement: ElementRef;
 
     constructor(private store: Store<AppState>) {
@@ -48,14 +47,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
         this.store.dispatch(new UpdateFirmwareAction());
     }
 
-    onUpdateFirmwareWithFile(): void {
-        if (!this.arrayBuffer) {
-            return;
-        }
-
-        this.store.dispatch(new UpdateFirmwareWithAction(Array.prototype.slice.call(this.arrayBuffer)));
-    }
-
     onOkButtonClick(): void {
         this.store.dispatch(new UpdateFirmwareOkButtonAction());
     }
@@ -64,14 +55,13 @@ export class DeviceFirmwareComponent implements OnDestroy {
         const files = event.srcElement.files;
 
         if (files.length === 0) {
-            this.arrayBuffer = null;
-
             return;
         }
 
         const fileReader = new FileReader();
         fileReader.onloadend = function () {
-            this.arrayBuffer = new Uint8Array(fileReader.result);
+            const arrayBuffer = new Uint8Array(fileReader.result);
+            this.store.dispatch(new UpdateFirmwareWithAction(Array.prototype.slice.call(arrayBuffer)));
         }.bind(this);
         fileReader.readAsArrayBuffer(files[0]);
     }

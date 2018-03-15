@@ -128,12 +128,14 @@
         <ul [@toggler]="animation['agent']">
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/settings']">Settings</a>
+                    <a [routerLink]="['/settings']"
+                       [class.disabled]="updatingFirmware$ | async">Settings</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/about']">About</a>
+                    <a [routerLink]="['/about']"
+                       [class.disabled]="updatingFirmware$ | async">About</a>
                 </div>
             </li>
         </ul>

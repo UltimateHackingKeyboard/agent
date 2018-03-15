@@ -9,6 +9,10 @@
 
 a {
     color: #333;
+
+    &.disabled {
+        opacity: 0.65;
+    }
 }
 
 // General list styles for the sidebar-menu.
@@ -111,6 +115,10 @@ ul {
                 &:hover,
                 &:focus {
                     text-decoration: none;
+                }
+
+                &.disabled {
+                    opacity: 0.65;
                 }
             }
         }
