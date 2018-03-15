@@ -17,35 +17,18 @@
             <p>
                 <button class="btn btn-primary"
                         [disabled]="flashFirmwareButtonDisbabled$ | async"
-                        mwlConfirmationPopover
-                        title="Firmware update notice"
-                        message="Please don't disconnect your keyboard or the keyboard halves during the update process!"
-                        placement="bottom"
-                        confirmText="Flash firmware"
-                        cancelText="Cancel"
-                        (confirm)="onUpdateFirmware()">
+                        (click)="onUpdateFirmware()">
                     Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 </button>
-            </p>
-
-            <p>
                 <label class="btn btn-primary btn-file"
-                       [class.disabled]="flashFirmwareButtonDisbabled$ | async"
-                       mwlConfirmationPopover
-                       title="Firmware update notice"
-                       message="Please don't disconnect your keyboard or the keyboard halves during the update process!"
-                       placement="bottom"
-                       confirmText="Flash firmware"
-                       cancelText="Cancel"
-                       (confirm)="openFileDialog()">
+                       [class.disabled]="flashFirmwareButtonDisbabled$ | async">
                     Choose firmware file and flash it
+                    <input id="firmware-file-select"
+                           type="file"
+                           accept=".tar.bz2"
+                           [disabled]="flashFirmwareButtonDisbabled$ | async"
+                           (change)="changeFile($event)">
                 </label>
-                <input id="firmware-file-select"
-                       type="file"
-                       style="visibility: collapse"
-                       accept=".tar.bz2"
-                       [disabled]="flashFirmwareButtonDisbabled$ | async"
-                       (change)="changeFile($event)">
             </p>
         </div>
 

@@ -65,8 +65,4 @@ export class DeviceFirmwareComponent implements OnDestroy {
         }.bind(this);
         fileReader.readAsArrayBuffer(files[0]);
     }
-
-    openFileDialog(): void {
-        document.getElementById('firmware-file-select').click();
-    }
 }
