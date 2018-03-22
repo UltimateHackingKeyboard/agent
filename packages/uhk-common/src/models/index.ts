@@ -5,3 +5,5 @@ export * from './app-start-info';
 export * from './configuration-reply';
 export * from './version-information';
 export * from './device-connection-state';
+export * from './hardware-modules';
+export * from './hardware-module-info';

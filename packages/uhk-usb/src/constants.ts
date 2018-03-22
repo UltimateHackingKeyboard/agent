@@ -22,7 +22,7 @@ export enum UsbCommand {
     GetDebugBuffer           = 0x0b,
     GetAdcValue              = 0x0c,
     SetLedPwmBrightness      = 0x0d,
-    GetModuleProperties      = 0x0e
+    GetModuleProperty        = 0x0e
 }
 
 export enum EepromOperation {
@@ -80,4 +80,8 @@ export enum KbootCommands {
     idle = 0,
     ping = 1,
     reset = 2
+}
+
+export enum ModulePropertyId {
+    protocolVersions = 0
 }

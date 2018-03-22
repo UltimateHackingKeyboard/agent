@@ -43,7 +43,7 @@ import {
     ShowNotificationAction,
     UndoLastAction
 } from '../actions/app';
-import { ShowSaveToKeyboardButtonAction } from '../actions/device';
+import { HardwareModulesLoadedAction, ShowSaveToKeyboardButtonAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { UploadFileData } from '../../models/upload-file-data';
@@ -172,6 +172,8 @@ export class UserConfigEffects {
                         message: err
                     }));
             }
+
+            result.push(new HardwareModulesLoadedAction(data.modules));
 
             this.router.navigate(['/']);
 

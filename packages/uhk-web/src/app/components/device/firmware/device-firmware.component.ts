@@ -2,9 +2,16 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { VersionInformation } from 'uhk-common';
+import { HardwareModules, VersionInformation } from 'uhk-common';
 
-import { AppState, firmwareOkButtonDisabled, flashFirmwareButtonDisbabled, getAgentVersionInfo, xtermLog } from '../../../store';
+import {
+    AppState,
+    firmwareOkButtonDisabled,
+    flashFirmwareButtonDisbabled,
+    getAgentVersionInfo,
+    getHardwareModules,
+    xtermLog
+} from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareOkButtonAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 
@@ -22,6 +29,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
     xtermLogSubscription: Subscription;
     getAgentVersionInfo$: Observable<VersionInformation>;
     firmwareOkButtonDisabled$: Observable<boolean>;
+    hardwareModulesSubscription: Subscription;
+    hardwareModules: HardwareModules;
 
     @ViewChild('scrollMe') divElement: ElementRef;
 
@@ -37,10 +46,14 @@ export class DeviceFirmwareComponent implements OnDestroy {
         });
         this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
         this.firmwareOkButtonDisabled$ = store.select(firmwareOkButtonDisabled);
+        this.hardwareModulesSubscription = store.select(getHardwareModules).subscribe(data => {
+            this.hardwareModules = data;
+        });
     }
 
     ngOnDestroy(): void {
         this.xtermLogSubscription.unsubscribe();
+        this.hardwareModulesSubscription.unsubscribe();
     }
 
     onUpdateFirmware(): void {

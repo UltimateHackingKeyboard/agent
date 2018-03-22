@@ -1,5 +1,12 @@
-import { LogService } from 'uhk-common';
-import { EnumerationModes, EnumerationNameToProductId, KbootCommands, ModuleSlotToI2cAddress, ModuleSlotToId } from './constants';
+import { HardwareModuleInfo, LogService, UhkBuffer } from 'uhk-common';
+import {
+    EnumerationModes,
+    EnumerationNameToProductId,
+    KbootCommands,
+    ModulePropertyId,
+    ModuleSlotToI2cAddress,
+    ModuleSlotToId
+} from './constants';
 import * as path from 'path';
 import * as fs from 'fs';
 import { UhkBlhost } from './uhk-blhost';
@@ -191,6 +198,50 @@ export class UhkOperations {
         }
 
         return false;
+    }
+
+    public async getLeftModuleVersionInfo(): Promise<HardwareModuleInfo> {
+        try {
+            this.logService.debug('[DeviceOperation] USB[T]: Read left module version information');
+
+            const command = new Buffer([
+                UsbCommand.GetModuleProperty,
+                ModuleSlotToId.leftHalf,
+                ModulePropertyId.protocolVersions
+            ]);
+
+            const buffer = await this.device.write(command);
+            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+            // skip the first 2 byte
+            uhkBuffer.readUInt16();
+
+            return {
+                moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+            };
+        }
+        catch (error) {
+            this.logService.error('[DeviceOperation] Could not read left module version information', error);
+        }
+
+        return {
+            moduleProtocolVersion: '',
+            firmwareVersion: ''
+        };
+    }
+
+    public async getRightModuleVersionInfo(): Promise<HardwareModuleInfo> {
+        this.logService.debug('[DeviceOperation] USB[T]: Read right module version information');
+
+        const command = new Buffer([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
+        const buffer = await this.device.write(command);
+        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+        // skip the first byte
+        uhkBuffer.readUInt8();
+
+        return {
+            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+        };
     }
 
     /**
