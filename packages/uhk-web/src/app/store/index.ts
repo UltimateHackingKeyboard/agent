@@ -77,3 +77,4 @@ export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
 export const firmwareOkButtonDisabled = createSelector(deviceState, fromDevice.firmwareOkButtonDisabled);
 // tslint:disable-next-line: max-line-length
 export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
+export const getHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);

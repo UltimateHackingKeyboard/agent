@@ -7,12 +7,19 @@
                 <span>Firmware</span>
             </h1>
 
-            <p><i>
-                Please note that the firmware update process may sometimes fail. If if fails then
-                simply retry until it succeeds. If the left half becomes unresponsive after a failed
-                update then retry and follow the instructions displayed during the update to fix it.
-                We'll make the firmware update process more robust.
-            </i></p>
+            <p>
+                Firmware {{ hardwareModules.leftModuleInfo.firmwareVersion }} is running on the left keyboard half.<br>
+                Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the right keyboard half.
+            </p>
+
+            <p>
+                <i>
+                    Please note that the firmware update process may sometimes fail. If if fails then
+                    simply retry until it succeeds. If the left half becomes unresponsive after a failed
+                    update then retry and follow the instructions displayed during the update to fix it.
+                    We'll make the firmware update process more robust.
+                </i>
+            </p>
 
             <p>
                 <button class="btn btn-primary"

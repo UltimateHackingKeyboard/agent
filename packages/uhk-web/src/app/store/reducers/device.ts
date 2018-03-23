@@ -1,8 +1,10 @@
 import { Action } from '@ngrx/store';
+import { HardwareModules } from 'uhk-common';
 
 import {
     ActionTypes,
     ConnectionStateChangedAction,
+    HardwareModulesLoadedAction,
     SaveConfigurationAction,
     UpdateFirmwareFailedAction
 } from '../actions/device';
@@ -16,6 +18,7 @@ export interface State {
     saveToKeyboard: ProgressButtonState;
     updatingFirmware: boolean;
     firmwareUpdateFinished: boolean;
+    modules: HardwareModules;
     log: Array<XtermLog>;
 }
 
@@ -25,6 +28,15 @@ export const initialState: State = {
     saveToKeyboard: initProgressButtonState,
     updatingFirmware: false,
     firmwareUpdateFinished: false,
+    modules: {
+        leftModuleInfo: {
+            firmwareVersion: '',
+            moduleProtocolVersion: ''
+        },
+        rightModuleInfo: {
+            firmwareVersion: ''
+        }
+    },
     log: [{message: '', cssClass: XtermCssClass.standard}]
 };
 
@@ -148,6 +160,13 @@ export function reducer(state = initialState, action: Action) {
                 log: [...state.log, logEntry]
             };
         }
+
+        case ActionTypes.MODULES_INFO_LOADED:
+            return {
+                ...state,
+                modules: (action as HardwareModulesLoadedAction).payload
+            };
+
         default:
             return state;
     }
@@ -159,3 +178,4 @@ export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
 export const firmwareOkButtonDisabled = (state: State) => !state.firmwareUpdateFinished;
+export const getHardwareModules = (state: State) => state.modules;

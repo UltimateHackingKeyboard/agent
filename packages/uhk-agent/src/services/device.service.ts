@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { ConfigurationReply, DeviceConnectionState, IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import { ConfigurationReply, DeviceConnectionState, HardwareModules, IpcEvents, IpcResponse, LogService } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -73,10 +73,15 @@ export class DeviceService {
         try {
             await this.device.waitUntilKeyboardBusy();
             const result = await this.operations.loadConfigurations();
+            const modules: HardwareModules = {
+                leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
+                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
+            };
 
             response = {
                 success: true,
-                ...result
+                ...result,
+                modules
             };
         } catch (error) {
             response = {

@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { DeviceConnectionState, IpcResponse, type } from 'uhk-common';
+import { HardwareModules } from '../../../../../uhk-common/src/models';
 
 const PREFIX = '[device] ';
 
@@ -22,7 +23,8 @@ export const ActionTypes = {
     UPDATE_FIRMWARE_REPLY: type(PREFIX + 'update firmware reply'),
     UPDATE_FIRMWARE_SUCCESS: type(PREFIX + 'update firmware success'),
     UPDATE_FIRMWARE_FAILED: type(PREFIX + 'update firmware failed'),
-    UPDATE_FIRMWARE_OK_BUTTON: type(PREFIX + 'update firmware ok button click')
+    UPDATE_FIRMWARE_OK_BUTTON: type(PREFIX + 'update firmware ok button click'),
+    MODULES_INFO_LOADED: type(PREFIX + 'module info loaded')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -114,6 +116,13 @@ export class ResetMouseSpeedSettingsAction implements Action {
     type = ActionTypes.RESET_MOUSE_SPEED_SETTINGS;
 }
 
+export class HardwareModulesLoadedAction implements Action {
+    type = ActionTypes.MODULES_INFO_LOADED;
+
+    constructor(public payload: HardwareModules) {
+    }
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -132,4 +141,5 @@ export type Actions
     | UpdateFirmwareSuccessAction
     | UpdateFirmwareFailedAction
     | UpdateFirmwareOkButtonAction
+    | HardwareModulesLoadedAction
     ;
