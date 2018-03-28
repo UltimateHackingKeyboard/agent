@@ -6183,7 +6183,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 40
+                  "scancode": 87
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6224,33 +6224,32 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 63
+                  "scancode": 94
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 69
+                  "scancode": 85
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 64,
-                  "secondaryRoleAction": "fn"
+                  "scancode": 95
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 65
+                  "scancode": 96
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 66
+                  "scancode": 97
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 67
+                  "scancode": 98
                 }
               ]
             },
@@ -6295,7 +6294,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 43
+                  "scancode": 41
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6326,7 +6325,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 41
+                  "scancode": 86
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6392,33 +6391,32 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 58
+                  "scancode": 89
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 59
+                  "scancode": 90
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 60
+                  "scancode": 91
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 61,
-                  "secondaryRoleAction": "fn"
+                  "scancode": 92
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 68
+                  "scancode": 84
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 62
+                  "scancode": 93
                 },
                 null
               ]
