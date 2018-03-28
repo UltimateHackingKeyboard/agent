@@ -9,13 +9,13 @@
 
 <ul class="list-unstyled btn-list">
     <li>
-        Download device configuration in
+        Export device configuration in
         <span role="button" class="btn-link" (click)="saveConfigurationInJSONFormat()">JSON</span> or
         <span role="button" class="btn-link" (click)="saveConfigurationInBINFormat()">binary</span> format.
     </li>
     <li>
         <label class="btn btn-default btn-file">
-            Upload device configuration
+            Import device configuration
             <input type="file"
                    (change)="changeFile($event)">
         </label>
