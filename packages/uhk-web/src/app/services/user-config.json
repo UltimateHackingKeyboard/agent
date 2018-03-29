@@ -4783,11 +4783,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -5784,11 +5780,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -6773,11 +6765,7 @@
                 },
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
