@@ -692,14 +692,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVM"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
@@ -1704,14 +1698,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWM"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
@@ -2706,14 +2694,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWM"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COM"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
@@ -3715,14 +3697,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COL"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
@@ -4714,14 +4690,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COL"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVM"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
@@ -5721,14 +5691,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COM"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
@@ -6717,14 +6681,8 @@
                   "scancode": 183
                 },
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
-                },
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
-                },
+                null,
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "system",
