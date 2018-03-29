@@ -672,10 +672,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "TES"
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
@@ -1662,10 +1659,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "TES"
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
@@ -2642,10 +2636,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "TES"
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
@@ -3629,10 +3620,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "TES"
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
@@ -4606,10 +4594,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "TES"
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
@@ -5587,10 +5572,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "TES"
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
