@@ -793,11 +793,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -809,16 +805,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -1799,11 +1787,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -1815,16 +1799,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -2795,11 +2771,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -2811,16 +2783,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -3798,11 +3762,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -3814,16 +3774,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -4791,11 +4743,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -4807,16 +4755,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -5788,11 +5728,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -5804,16 +5740,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -6773,11 +6701,7 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 406
-                },
+                null,
                 null,
                 null,
                 null,
@@ -6789,16 +6713,8 @@
                 null,
                 null,
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 402
-                },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 184
-                },
+                null,
+                null,
                 null,
                 {
                   "keyActionType": "keystroke",
