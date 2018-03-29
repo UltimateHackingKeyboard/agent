@@ -34,6 +34,14 @@ export class DeviceConfigurationComponent {
         this.store.dispatch(new SaveUserConfigInBinaryFileAction());
     }
 
+    exportUserConfiguration(event: MouseEvent) {
+        if (event.shiftKey) {
+            this.saveConfigurationInBINFormat();
+        } else {
+            this.saveConfigurationInJSONFormat();
+        }
+    }
+
     changeFile(event): void {
         const files = event.srcElement.files;
         const fileReader = new FileReader();
