@@ -700,7 +700,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "QWR"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -718,11 +722,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -733,11 +733,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -1716,7 +1712,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "QWM"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -1734,11 +1734,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -1749,11 +1745,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -2722,7 +2714,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "COM"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -2740,11 +2736,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -2755,11 +2747,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -3735,7 +3723,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "COL"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -3753,11 +3745,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -3768,11 +3756,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -4738,7 +4722,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "DVM"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -4756,11 +4744,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -4771,11 +4755,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -5749,7 +5729,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "DVO"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -5767,11 +5751,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -5782,11 +5762,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
@@ -6749,7 +6725,11 @@
                   "keyActionType": "switchKeymap",
                   "keymapAbbreviation": "QWR"
                 },
-                null,
+                {
+                  "keyActionType": "keystroke",
+                  "type": "system",
+                  "scancode": 130
+                },
                 null,
                 {
                   "keyActionType": "keystroke",
@@ -6767,11 +6747,7 @@
                   "scancode": 181
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 131
-                },
+                null,
                 null,
                 null,
                 null,
@@ -6782,11 +6758,7 @@
                   "scancode": 226
                 },
                 null,
-                {
-                  "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
-                },
+                null,
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
