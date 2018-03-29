@@ -679,18 +679,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -1673,18 +1669,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -2657,18 +2649,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -3648,18 +3636,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -4629,18 +4613,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -5614,18 +5594,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
@@ -6588,18 +6564,14 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
-                  "scancode": 176
+                  "scancode": 205
                 },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",
                   "scancode": 233
                 },
-                {
-                  "keyActionType": "keystroke",
-                  "type": "media",
-                  "scancode": 183
-                },
+                null,
                 null,
                 null,
                 null,
