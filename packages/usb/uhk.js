@@ -299,6 +299,7 @@ uhk = exports = module.exports = moduleExports = {
         getModuleProperty       : 0x0e,
         getSlaveI2cErrors       : 0x0f,
         setI2cBaudRate          : 0x10,
+        switchKeymap            : 0x11,
     },
     enumerationModes: {
         bootloader: 0,
