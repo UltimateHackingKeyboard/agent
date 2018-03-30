@@ -206,6 +206,12 @@ async function jumpToModuleBootloader(device, moduleSlotId) {
     await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
 };
 
+async function switchKeymap(device, keymapAbbreviation) {
+    const keymapAbbreviationAscii = keymapAbbreviation.split('').map(char => char.charCodeAt(0));
+    const payload = [uhk.usbCommands.switchKeymap, keymapAbbreviation.length, ...keymapAbbreviationAscii];
+    return await uhk.writeDevice(device, payload);
+}
+
 async function waitForKbootIdle(device) {
     const intervalMs = 100;
     const pingMessageInterval = 500;
@@ -279,6 +285,7 @@ uhk = exports = module.exports = moduleExports = {
     reenumerate,
     sendKbootCommandToModule,
     jumpToModuleBootloader,
+    switchKeymap,
     waitForKbootIdle,
     updateModuleFirmware,
     usbCommands: {

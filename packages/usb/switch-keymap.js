@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 const uhk = require('./uhk');
 
-const device = uhk.getUhkDevice();
-const sendData = Buffer.concat([new Buffer([uhk.usbCommands.switchKeymap, 3]), new Buffer('TES')]);
-console.log(sendData)
-device.write(uhk.getTransferData(sendData));
-const response = Buffer.from(device.readSync());
-console.log(response);
+(async function() {
+    const device = uhk.getUhkDevice();
+    const sendData = await uhk.switchKeymap(device, 'TES');
+    console.log(sendData)
+})();
