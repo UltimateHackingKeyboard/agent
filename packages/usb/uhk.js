@@ -276,6 +276,33 @@ async function updateFirmwares(firmwarePath) {
     await uhk.updateModuleFirmware(uhk.moduleSlotToI2cAddress.leftHalf, uhk.moduleSlotToId.leftHalf, `${firmwarePath}/modules/uhk60-left.bin`);
 }
 
+async function writeUserConfig(device, configBuffer, isHardwareConfig) {
+    const chunkSize = 60;
+    let offset = 0;
+    let chunkSizeToRead;
+    let buffer = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
+    const hardwareConfigMaxSize = buffer[1] + (buffer[2]<<8);
+    const userConfigMaxSize = buffer[3] + (buffer[4]<<8);
+    const configMaxSize = isHardwareConfig ? hardwareConfigMaxSize : userConfigMaxSize;
+    const configSize = Math.min(configMaxSize, configBuffer.length);
+
+    while (offset < configSize) {
+        const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;
+        chunkSizeToRead = Math.min(chunkSize, configSize - offset);
+
+        if (chunkSizeToRead === 0) {
+            break;
+        }
+
+        buffer = [
+            ...[usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8],
+            ...configBuffer.slice(offset, offset+chunkSizeToRead)
+        ];
+        await uhk.writeDevice(device, buffer)
+        offset += chunkSizeToRead;
+    }
+}
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -297,6 +324,7 @@ uhk = exports = module.exports = moduleExports = {
     waitForKbootIdle,
     updateModuleFirmware,
     updateFirmwares,
+    writeUserConfig,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
