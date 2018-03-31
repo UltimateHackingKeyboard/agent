@@ -18,7 +18,7 @@ const firmwarePath = program.args[0];
 const layout = program.args[1];
 
 config.verbose = true;
-exec(`${__dirname}/update-all-firmwares.js --overwrite-user-config ${firmwarePath}`);
+exec(`${__dirname}/update-firmwares.js --overwrite-user-config ${firmwarePath}`);
 exec(`${__dirname}/write-hca.js ${layout}`);
 config.verbose = false;
 
