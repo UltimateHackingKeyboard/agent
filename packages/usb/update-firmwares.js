@@ -29,11 +29,7 @@ require('shelljs/global');
             firmwarePath = tmpObj.name;
         }
         config.verbose = true;
-        console.log('Updating right firmware');
-        await uhk.updateDeviceFirmware(`${firmwarePath}/devices/uhk60-right/firmware.hex`, 'hex');
-        await uhk.reenumerate('normalKeyboard');
-        console.log('Updating left firmware');
-        await uhk.updateModuleFirmware(uhk.moduleSlotToI2cAddress.leftHalf, uhk.moduleSlotToId.leftHalf, `${firmwarePath}/modules/uhk60-left.bin`);
+        await uhk.updateFirmwares(firmwarePath);
 
         if (program.overwriteUserConfig) {
             exec(`${__dirname}/write-config.js ${firmwarePath}/devices/uhk60-right/config.bin`);
