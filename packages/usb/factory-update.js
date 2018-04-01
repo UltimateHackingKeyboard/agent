@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const program = require('commander');
-const tmp = require('tmp');
-const decompress = require('decompress');
-const decompressTarbz = require('decompress-tarbz2');
 const uhk = require('./uhk')
 require('shelljs/global');
 
@@ -13,7 +10,6 @@ require('shelljs/global');
 
         program
             .usage(`firmwarePath`)
-            .option('-u, --overwrite-user-config', 'Overwrite the user configuration with the one that is bundled with the firmware')
             .parse(process.argv);
 
         if (program.args.length == 0) {
@@ -21,26 +17,19 @@ require('shelljs/global');
             exit(1);
         }
 
-        let firmwarePath = program.args[0];
-
-        // If a tarball is specified then extract it and override firmwarePath with the target directory name.
-        if (test('-f', firmwarePath)) {
-            const tmpObj = tmp.dirSync();
-            await decompress(firmwarePath, tmpObj.name, {plugins: [decompressTarbz()]});
-            firmwarePath = tmpObj.name;
-        }
         config.verbose = true;
+        const firmwarePath = program.args[0];
         await uhk.updateFirmwares(firmwarePath);
-
-        if (program.overwriteUserConfig) {
-            const device = uhk.getUhkDevice();
-            const configBuffer = fs.readFileSync(`${firmwarePath}/devices/uhk60-right/config.bin`);
-            await uhk.writeConfig(device, configBuffer, false);
-            await uhk.applyConfig(device);
-            await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeUserConfig);
-        }
-
+        const device = uhk.getUhkDevice();
+        const configBuffer = fs.readFileSync(`${firmwarePath}/devices/uhk60-right/config.bin`);
+        console.log('write config');
+        await uhk.writeConfig(device, configBuffer, false);
+        console.log('apply config');
+        await uhk.applyConfig(device);
+        console.log('lanuch eeprom transfer');
+        await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeUserConfig);
         config.verbose = false;
+
     } catch (exception) {
         console.error(exception.message);
         exit(1);
