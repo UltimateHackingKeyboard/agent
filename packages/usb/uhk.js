@@ -1,7 +1,6 @@
 const util = require('util');
 const HID = require('node-hid');
-// const debug = process.env.DEBUG;
-const debug = true;
+const debug = process.env.DEBUG;
 
 function bufferToString(buffer) {
     let str = '';
@@ -28,11 +27,23 @@ function uint32ToArray(value) {
 }
 
 function writeDevice(device, data, options={}) {
-    device.write(getTransferData(new Buffer(data)));
+    const dataBuffer = new Buffer(data);
+    writeLog('W: ', dataBuffer);
+    device.write(getTransferData(dataBuffer));
     if (options.noRead) {
         return Promise.resolve();
     }
-    return util.promisify(device.read.bind(device))();
+
+    return new Promise((resolve, reject) => {
+        device.read((err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                writeLog('R: ', data);
+                resolve(data);
+            }
+        });
+    });
 }
 
 function getUhkDevice() {
