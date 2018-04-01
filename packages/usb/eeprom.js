@@ -9,23 +9,5 @@ if (eepromTransfer === undefined) {
     process.exit(1);
 }
 
-const device = uhk.getUhkDevice();
-device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.launchEepromTransfer, eepromTransfer.operation, eepromTransfer.configBuffer])));
-const buffer = Buffer.from(device.readSync());
-const responseCode = buffer[0];
-if (responseCode !== 0) {
-    console.error(`Write user config to eeprom failed. Response code: ${responseCode}`);
-    process.exit(1);
-}
+//    const buffer = await uhk.writeDevice(device, [uhk.usbCommands.launchEepromTransfer, eepromTransfer.operation, eepromTransfer.configBuffer]);
 
-function waitUntilKeyboardBusy() {
-
-    device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceState])));
-    const keyboardStateBuffer = Buffer.from(device.readSync());
-
-    if (keyboardStateBuffer[1] === 1) {
-        setTimeout(waitUntilKeyboardBusy, 200);
-    }
-}
-
-waitUntilKeyboardBusy();

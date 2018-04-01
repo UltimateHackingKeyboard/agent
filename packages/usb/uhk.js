@@ -276,7 +276,7 @@ async function updateFirmwares(firmwarePath) {
     await uhk.updateModuleFirmware(uhk.moduleSlotToI2cAddress.leftHalf, uhk.moduleSlotToId.leftHalf, `${firmwarePath}/modules/uhk60-left.bin`);
 }
 
-async function writeUserConfig(device, configBuffer, isHardwareConfig) {
+async function writeConfig(device, configBuffer, isHardwareConfig) {
     const chunkSize = 60;
     let offset = 0;
     let chunkSizeToRead;
@@ -303,6 +303,19 @@ async function writeUserConfig(device, configBuffer, isHardwareConfig) {
     }
 }
 
+async function applyConfig(device) {
+    await uhk.writeDevice(device, [uhk.usbCommands.applyConfig]);
+}
+
+async function launchEepromTransfer(device, operation, configBuffer) {
+    const buffer = await uhk.writeDevice(device, [uhk.usbCommands.launchEepromTransfer, operation, configBuffer]);
+    isBusy = true;
+    do {
+        const buffer = uhk.writeDevice(device, [uhk.usbCommands.getDeviceState]);
+        isBusy = buffer[1] === 1;
+    } while (isBusy);
+};
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -324,7 +337,9 @@ uhk = exports = module.exports = moduleExports = {
     waitForKbootIdle,
     updateModuleFirmware,
     updateFirmwares,
-    writeUserConfig,
+    writeConfig,
+    applyConfig,
+    launchEepromTransfer,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,

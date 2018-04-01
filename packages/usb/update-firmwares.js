@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const fs = require('fs');
 const program = require('commander');
 const tmp = require('tmp');
 const decompress = require('decompress');
@@ -32,9 +33,11 @@ require('shelljs/global');
         await uhk.updateFirmwares(firmwarePath);
 
         if (program.overwriteUserConfig) {
-            exec(`${__dirname}/write-config.js ${firmwarePath}/devices/uhk60-right/config.bin`);
-            exec(`${__dirname}/apply-config.js`);
-            exec(`${__dirname}/eeprom.js writeUserConfig`);
+            const device = uhk.getUhkDevice();
+            const configBuffer = fs.readFileSync(`${firmwarePath}/devices/uhk60-right/config.bin`);
+            await uhk.writeConfig(device, configBuffer, false);
+            await uhk.applyConfig(device);
+            await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeUserConfig);
         }
 
         config.verbose = false;
