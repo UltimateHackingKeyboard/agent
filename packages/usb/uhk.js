@@ -5,6 +5,12 @@ const {getTransferBuffers, ConfigBufferId, UhkHidDevice, UsbCommand} = require('
 const Logger = require('./logger');
 const debug = process.env.DEBUG;
 
+const kbootCommandIdToName = {
+    0: 'idle',
+    1: 'ping',
+    2: 'reset',
+};
+
 function bufferToString(buffer) {
     let str = '';
     for (let i = 0; i < buffer.length; i++) {
@@ -213,7 +219,7 @@ function reenumerate(enumerationMode) {
 };
 
 async function sendKbootCommandToModule(device, kbootCommandId, i2cAddress) {
-    writeLog(`T: sendKbootCommandToModule kbootCommandId:${kbootCommandId} i2cAddress:${i2cAddress}`);
+    writeLog(`T: sendKbootCommandToModule kbootCommandId:${kbootCommandIdToName[kbootCommandId]} i2cAddress:${i2cAddress}`);
     return await uhk.writeDevice(device, [uhk.usbCommands.sendKbootCommandToModule, kbootCommandId, parseInt(i2cAddress)])
 };
 
