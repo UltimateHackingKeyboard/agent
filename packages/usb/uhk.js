@@ -366,6 +366,10 @@ async function writeHca(device, isIso) {
     await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeHardwareConfig);
 }
 
+async function getModuleProperty(device, slotId, moduleProperty) {
+    await writeDevice(device, [uhk.usbCommands.getModuleProperty, slotId, moduleProperty]);
+}
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -392,6 +396,7 @@ uhk = exports = module.exports = moduleExports = {
     launchEepromTransfer,
     writeUca,
     writeHca,
+    getModuleProperty,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
