@@ -1,5 +1,8 @@
 const util = require('util');
 const HID = require('node-hid');
+const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
+const {getTransferBuffers, ConfigBufferId, UhkHidDevice, UsbCommand} = require('uhk-usb');
+const Logger = require('./logger');
 const debug = process.env.DEBUG;
 
 function bufferToString(buffer) {
@@ -327,6 +330,35 @@ async function launchEepromTransfer(device, operation, configBuffer) {
     } while (isBusy);
 };
 
+async function writeHca(isIso) {
+    const hardwareConfig = new HardwareConfiguration();
+
+    hardwareConfig.signature = 'UHK';
+    hardwareConfig.majorVersion = 1;
+    hardwareConfig.minorVersion = 0;
+    hardwareConfig.patchVersion = 0;
+    hardwareConfig.brandId = 0;
+    hardwareConfig.deviceId = 1;
+    hardwareConfig.uniqueId = Math.floor(2**32 * Math.random());
+    hardwareConfig.isVendorModeOn = false;
+    hardwareConfig.isIso = isIso;
+
+    const logger = new Logger();
+
+    const device = new UhkHidDevice(logger);
+    const hardwareBuffer = new UhkBuffer();
+    hardwareConfig.toBinary(hardwareBuffer);
+    const buffer = hardwareBuffer.getBufferContent();
+    const fragments = getTransferBuffers(UsbCommand.WriteHardwareConfig, buffer);
+    logger.debug('USB[T]: Write hardware configuration to keyboard');
+    for (const fragment of fragments) {
+        await device.write(fragment);
+    }
+
+    logger.debug('USB[T]: Write hardware configuration to EEPROM');
+    await device.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+}
+
 uhk = exports = module.exports = moduleExports = {
     bufferToString,
     getUint16,
@@ -351,6 +383,7 @@ uhk = exports = module.exports = moduleExports = {
     writeConfig,
     applyConfig,
     launchEepromTransfer,
+    writeHca,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
