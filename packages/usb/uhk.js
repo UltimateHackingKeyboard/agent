@@ -292,8 +292,8 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
     let offset = 0;
     let chunkSizeToRead;
     let buffer = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
-    const hardwareConfigMaxSize = buffer[1] + (buffer[2]<<8);
-    const userConfigMaxSize = buffer[3] + (buffer[4]<<8);
+    const hardwareConfigMaxSize = getUint16(buffer, 1);
+    const userConfigMaxSize = getUint16(buffer, 3);
     const configMaxSize = isHardwareConfig ? hardwareConfigMaxSize : userConfigMaxSize;
     const configSize = Math.min(configMaxSize, configBuffer.length);
 
@@ -306,7 +306,7 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
         }
 
         buffer = [
-            ...[usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8],
+            usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8,
             ...configBuffer.slice(offset, offset+chunkSizeToRead)
         ];
         await uhk.writeDevice(device, buffer)
