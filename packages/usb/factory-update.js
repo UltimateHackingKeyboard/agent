@@ -23,5 +23,6 @@ require('shelljs/global');
     const configBuffer = fs.readFileSync(`${firmwarePath}/devices/uhk60-right/config.bin`);
     await uhk.writeUca(device, configBuffer);
     await uhk.writeHca(device, false);
+    await uhk.switchKeymap(device, 'TES');
     config.verbose = false;
 })();
