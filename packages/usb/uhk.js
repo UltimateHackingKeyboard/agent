@@ -330,7 +330,7 @@ async function launchEepromTransfer(device, operation, configBuffer) {
     } while (isBusy);
 };
 
-async function writeHca(isIso) {
+async function writeHca(device, isIso) {
     const hardwareConfig = new HardwareConfiguration();
 
     hardwareConfig.signature = 'UHK';
@@ -344,19 +344,14 @@ async function writeHca(isIso) {
     hardwareConfig.isIso = isIso;
 
     const logger = new Logger();
-
-    const device = new UhkHidDevice(logger);
     const hardwareBuffer = new UhkBuffer();
     hardwareConfig.toBinary(hardwareBuffer);
     const buffer = hardwareBuffer.getBufferContent();
-    const fragments = getTransferBuffers(UsbCommand.WriteHardwareConfig, buffer);
-    logger.debug('USB[T]: Write hardware configuration to keyboard');
-    for (const fragment of fragments) {
-        await device.write(fragment);
-    }
 
-    logger.debug('USB[T]: Write hardware configuration to EEPROM');
-    await device.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+    console.log('write hardware config')
+    await uhk.writeConfig(device, buffer, true);
+    console.log('lanuch eeprom transfer');
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeHardwareConfig);
 }
 
 uhk = exports = module.exports = moduleExports = {
