@@ -5,6 +5,10 @@ const {getTransferBuffers, ConfigBufferId, UhkHidDevice, UsbCommand} = require('
 const Logger = require('./logger');
 const debug = process.env.DEBUG;
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const kbootCommandIdToName = {
     0: 'idle',
     1: 'ping',
@@ -301,6 +305,7 @@ async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
     await uhk.reenumerate('normalKeyboard');
     device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
+    await sleep(1000);
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.idle, i2cAddress);
     device.close();
     config.verbose = false;
