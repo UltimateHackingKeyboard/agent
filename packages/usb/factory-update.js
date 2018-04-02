@@ -21,13 +21,7 @@ require('shelljs/global');
     await uhk.updateFirmwares(firmwarePath);
     const device = uhk.getUhkDevice();
     const configBuffer = fs.readFileSync(`${firmwarePath}/devices/uhk60-right/config.bin`);
-    console.log('write config');
-    await uhk.writeConfig(device, configBuffer, false);
-    console.log('apply config');
-    await uhk.applyConfig(device);
-    console.log('lanuch eeprom transfer');
-    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeUserConfig);
-
+    await uhk.writeUca(device, configBuffer);
     await uhk.writeHca(device, false);
     config.verbose = false;
 })();

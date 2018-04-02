@@ -330,6 +330,15 @@ async function launchEepromTransfer(device, operation, configBuffer) {
     } while (isBusy);
 };
 
+async function writeUca(device, configBuffer) {
+    console.log('write config');
+    await uhk.writeConfig(device, configBuffer, false);
+    console.log('apply config');
+    await uhk.applyConfig(device);
+    console.log('lanuch eeprom transfer');
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeUserConfig);
+}
+
 async function writeHca(device, isIso) {
     const hardwareConfig = new HardwareConfiguration();
 
@@ -378,6 +387,7 @@ uhk = exports = module.exports = moduleExports = {
     writeConfig,
     applyConfig,
     launchEepromTransfer,
+    writeUca,
     writeHca,
     usbCommands: {
         getDeviceProperty       : 0x00,
