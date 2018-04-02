@@ -37,7 +37,9 @@ function uint32ToArray(value) {
 
 function writeDevice(device, data, options={}) {
     const dataBuffer = new Buffer(data);
-    writeLog('W: ', dataBuffer);
+    if (!options.noDebug) {
+        writeLog('W: ', dataBuffer);
+    }
     device.write(getTransferData(dataBuffer));
     if (options.noRead) {
         return Promise.resolve();
@@ -48,7 +50,9 @@ function writeDevice(device, data, options={}) {
             if (err) {
                 reject(err);
             } else {
-                writeLog('R: ', data);
+                if (!options.noDebug) {
+                    writeLog('R: ', data);
+                }
                 resolve(data);
             }
         });
@@ -311,6 +315,7 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
     const configMaxSize = isHardwareConfig ? hardwareConfigMaxSize : userConfigMaxSize;
     const configSize = Math.min(configMaxSize, configBuffer.length);
 
+    writeLog('WR: ...');
     while (offset < configSize) {
         const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;
         chunkSizeToRead = Math.min(chunkSize, configSize - offset);
@@ -323,7 +328,7 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
             usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8,
             ...configBuffer.slice(offset, offset+chunkSizeToRead)
         ];
-        await uhk.writeDevice(device, buffer)
+        await uhk.writeDevice(device, buffer, {noDebug:true})
         offset += chunkSizeToRead;
     }
 }
