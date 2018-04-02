@@ -14,21 +14,21 @@ if (layout !== 'iso' && layout !== 'ansi') {
     process.exit(1);
 }
 
-const hardwareConfig = new HardwareConfiguration();
+async function writeHca(isIso) {
+    const hardwareConfig = new HardwareConfiguration();
 
-hardwareConfig.signature = 'UHK';
-hardwareConfig.majorVersion = 1;
-hardwareConfig.minorVersion = 0;
-hardwareConfig.patchVersion = 0;
-hardwareConfig.brandId = 0;
-hardwareConfig.deviceId = 1;
-hardwareConfig.uniqueId = Math.floor(2**32 * Math.random());
-hardwareConfig.isVendorModeOn = false;
-hardwareConfig.isIso = layout === 'iso';
+    hardwareConfig.signature = 'UHK';
+    hardwareConfig.majorVersion = 1;
+    hardwareConfig.minorVersion = 0;
+    hardwareConfig.patchVersion = 0;
+    hardwareConfig.brandId = 0;
+    hardwareConfig.deviceId = 1;
+    hardwareConfig.uniqueId = Math.floor(2**32 * Math.random());
+    hardwareConfig.isVendorModeOn = false;
+    hardwareConfig.isIso = isIso;
 
-const logger = new Logger();
+    const logger = new Logger();
 
-async function writeHca() {
     const device = new UhkHidDevice(logger);
     const hardwareBuffer = new UhkBuffer();
     hardwareConfig.toBinary(hardwareBuffer);
@@ -43,7 +43,7 @@ async function writeHca() {
     await device.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
 }
 
-writeHca()
+writeHca(layout === 'iso')
     .catch((err)=>{
         console.error(err);
     });
