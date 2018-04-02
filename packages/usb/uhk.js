@@ -11,6 +11,11 @@ const kbootCommandIdToName = {
     2: 'reset',
 };
 
+const eepromOperationIdToName = {
+    0: 'read',
+    1: 'write',
+}
+
 function bufferToString(buffer) {
     let str = '';
     for (let i = 0; i < buffer.length; i++) {
@@ -143,11 +148,17 @@ function execRetry(command) {
     } while(code && --remainingRetries);
 }
 
-let configBufferIds = {
+const configBufferIds = {
     hardwareConfig: 0,
     stagingUserConfig: 1,
     validatedUserConfig: 2,
 };
+
+const configBufferIdToName = {
+    0: 'hardwareConfig',
+    1: 'stagingUserConfig',
+    2: 'validatedUserConfig',
+}
 
 let eepromOperations = {
     read: 0,
@@ -338,9 +349,9 @@ async function applyConfig(device) {
     await uhk.writeDevice(device, [uhk.usbCommands.applyConfig]);
 }
 
-async function launchEepromTransfer(device, operation, configBuffer) {
-    writeLog(`T: launchEepromTransfer operation:${operation}`);
-    const buffer = await uhk.writeDevice(device, [uhk.usbCommands.launchEepromTransfer, operation, configBuffer]);
+async function launchEepromTransfer(device, operation, configBufferId) {
+    writeLog(`T: launchEepromTransfer operation:${eepromOperationIdToName[operation]}`);
+    const buffer = await uhk.writeDevice(device, [uhk.usbCommands.launchEepromTransfer, operation, configBufferId]);
     isBusy = true;
     writeLog(`T: getDeviceState`);
     do {
@@ -352,7 +363,7 @@ async function launchEepromTransfer(device, operation, configBuffer) {
 async function writeUca(device, configBuffer) {
     await uhk.writeConfig(device, configBuffer, false);
     await uhk.applyConfig(device);
-    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeUserConfig);
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.validatedUserConfig);
 }
 
 async function writeHca(device, isIso) {
@@ -374,7 +385,7 @@ async function writeHca(device, isIso) {
     const buffer = hardwareBuffer.getBufferContent();
 
     await uhk.writeConfig(device, buffer, true);
-    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.eepromTransfer.writeHardwareConfig);
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.hardwareConfig);
 }
 
 async function getModuleProperty(device, slotId, moduleProperty) {
@@ -460,24 +471,6 @@ uhk = exports = module.exports = moduleExports = {
     },
     configBufferIds,
     eepromOperations,
-    eepromTransfer: {
-        readHardwareConfig: {
-            operation: eepromOperations.read,
-            configBuffer: configBufferIds.hardwareConfig,
-        },
-        writeHardwareConfig: {
-            operation: eepromOperations.write,
-            configBuffer:configBufferIds.hardwareConfig,
-        },
-        readUserConfig: {
-            operation: eepromOperations.read,
-            configBuffer: configBufferIds.validatedUserConfig,
-        },
-        writeUserConfig: {
-            operation: eepromOperations.write,
-            configBuffer: configBufferIds.validatedUserConfig,
-        },
-    },
     kbootCommands: {
         idle: 0,
         ping: 1,
