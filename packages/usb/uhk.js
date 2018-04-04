@@ -1,7 +1,24 @@
 const util = require('util');
 const HID = require('node-hid');
-// const debug = process.env.DEBUG;
-const debug = true;
+const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
+const {getTransferBuffers, ConfigBufferId, UhkHidDevice, UsbCommand} = require('uhk-usb');
+const Logger = require('./logger');
+const debug = process.env.DEBUG;
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const kbootCommandIdToName = {
+    0: 'idle',
+    1: 'ping',
+    2: 'reset',
+};
+
+const eepromOperationIdToName = {
+    0: 'read',
+    1: 'write',
+}
 
 function bufferToString(buffer) {
     let str = '';
@@ -28,11 +45,27 @@ function uint32ToArray(value) {
 }
 
 function writeDevice(device, data, options={}) {
-    device.write(getTransferData(new Buffer(data)));
+    const dataBuffer = new Buffer(data);
+    if (!options.noDebug) {
+        writeLog('W: ', dataBuffer);
+    }
+    device.write(getTransferData(dataBuffer));
     if (options.noRead) {
         return Promise.resolve();
     }
-    return util.promisify(device.read.bind(device))();
+
+    return new Promise((resolve, reject) => {
+        device.read((err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                if (!options.noDebug) {
+                    writeLog('R: ', data);
+                }
+                resolve(data);
+            }
+        });
+    });
 }
 
 function getUhkDevice() {
@@ -119,11 +152,17 @@ function execRetry(command) {
     } while(code && --remainingRetries);
 }
 
-let configBufferIds = {
+const configBufferIds = {
     hardwareConfig: 0,
     stagingUserConfig: 1,
     validatedUserConfig: 2,
 };
+
+const configBufferIdToName = {
+    0: 'hardwareConfig',
+    1: 'stagingUserConfig',
+    2: 'validatedUserConfig',
+}
 
 let eepromOperations = {
     read: 0,
@@ -199,20 +238,24 @@ function reenumerate(enumerationMode) {
 };
 
 async function sendKbootCommandToModule(device, kbootCommandId, i2cAddress) {
+    writeLog(`T: sendKbootCommandToModule kbootCommandId:${kbootCommandIdToName[kbootCommandId]} i2cAddress:${i2cAddress}`);
     return await uhk.writeDevice(device, [uhk.usbCommands.sendKbootCommandToModule, kbootCommandId, parseInt(i2cAddress)])
 };
 
 async function jumpToModuleBootloader(device, moduleSlotId) {
+    writeLog(`T: jumpToModuleBootloader moduleSlotId:${moduleSlotId}`);
     await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
 };
 
 async function switchKeymap(device, keymapAbbreviation) {
+    writeLog(`T: switchKeymap keymapAbbreviation:${keymapAbbreviation}`);
     const keymapAbbreviationAscii = keymapAbbreviation.split('').map(char => char.charCodeAt(0));
     const payload = [uhk.usbCommands.switchKeymap, keymapAbbreviation.length, ...keymapAbbreviationAscii];
     return await uhk.writeDevice(device, payload);
 }
 
 async function waitForKbootIdle(device) {
+    writeLog(`T: waitForKbootIdle`);
     const intervalMs = 100;
     const pingMessageInterval = 500;
     let timeoutMs = 10000;
@@ -262,6 +305,7 @@ async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
     await uhk.reenumerate('normalKeyboard');
     device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
+    await sleep(1000);
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.idle, i2cAddress);
     device.close();
     config.verbose = false;
@@ -276,16 +320,18 @@ async function updateFirmwares(firmwarePath) {
     await uhk.updateModuleFirmware(uhk.moduleSlotToI2cAddress.leftHalf, uhk.moduleSlotToId.leftHalf, `${firmwarePath}/modules/uhk60-left.bin`);
 }
 
-async function writeUserConfig(device, configBuffer, isHardwareConfig) {
+async function writeConfig(device, configBuffer, isHardwareConfig) {
+    writeLog(`T: writeConfig isHardwareConfig:${isHardwareConfig}`);
     const chunkSize = 60;
     let offset = 0;
     let chunkSizeToRead;
     let buffer = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
-    const hardwareConfigMaxSize = buffer[1] + (buffer[2]<<8);
-    const userConfigMaxSize = buffer[3] + (buffer[4]<<8);
+    const hardwareConfigMaxSize = getUint16(buffer, 1);
+    const userConfigMaxSize = getUint16(buffer, 3);
     const configMaxSize = isHardwareConfig ? hardwareConfigMaxSize : userConfigMaxSize;
     const configSize = Math.min(configMaxSize, configBuffer.length);
 
+    writeLog('WR: ...');
     while (offset < configSize) {
         const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;
         chunkSizeToRead = Math.min(chunkSize, configSize - offset);
@@ -295,12 +341,60 @@ async function writeUserConfig(device, configBuffer, isHardwareConfig) {
         }
 
         buffer = [
-            ...[usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8],
+            usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8,
             ...configBuffer.slice(offset, offset+chunkSizeToRead)
         ];
-        await uhk.writeDevice(device, buffer)
+        await uhk.writeDevice(device, buffer, {noDebug:true})
         offset += chunkSizeToRead;
     }
+}
+
+async function applyConfig(device) {
+    writeLog(`T: applyConfig`);
+    await uhk.writeDevice(device, [uhk.usbCommands.applyConfig]);
+}
+
+async function launchEepromTransfer(device, operation, configBufferId) {
+    writeLog(`T: launchEepromTransfer operation:${eepromOperationIdToName[operation]}`);
+    const buffer = await uhk.writeDevice(device, [uhk.usbCommands.launchEepromTransfer, operation, configBufferId]);
+    isBusy = true;
+    writeLog(`T: getDeviceState`);
+    do {
+        const buffer = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceState]);
+        isBusy = buffer[1] === 1;
+    } while (isBusy);
+};
+
+async function writeUca(device, configBuffer) {
+    await uhk.writeConfig(device, configBuffer, false);
+    await uhk.applyConfig(device);
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.validatedUserConfig);
+}
+
+async function writeHca(device, isIso) {
+    const hardwareConfig = new HardwareConfiguration();
+
+    hardwareConfig.signature = 'UHK';
+    hardwareConfig.majorVersion = 1;
+    hardwareConfig.minorVersion = 0;
+    hardwareConfig.patchVersion = 0;
+    hardwareConfig.brandId = 0;
+    hardwareConfig.deviceId = 1;
+    hardwareConfig.uniqueId = Math.floor(2**32 * Math.random());
+    hardwareConfig.isVendorModeOn = false;
+    hardwareConfig.isIso = isIso;
+
+    const logger = new Logger();
+    const hardwareBuffer = new UhkBuffer();
+    hardwareConfig.toBinary(hardwareBuffer);
+    const buffer = hardwareBuffer.getBufferContent();
+
+    await uhk.writeConfig(device, buffer, true);
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.hardwareConfig);
+}
+
+async function getModuleProperty(device, slotId, moduleProperty) {
+    await writeDevice(device, [uhk.usbCommands.getModuleProperty, slotId, moduleProperty]);
 }
 
 uhk = exports = module.exports = moduleExports = {
@@ -324,7 +418,12 @@ uhk = exports = module.exports = moduleExports = {
     waitForKbootIdle,
     updateModuleFirmware,
     updateFirmwares,
-    writeUserConfig,
+    writeConfig,
+    applyConfig,
+    launchEepromTransfer,
+    writeUca,
+    writeHca,
+    getModuleProperty,
     usbCommands: {
         getDeviceProperty       : 0x00,
         reenumerate             : 0x01,
@@ -377,24 +476,6 @@ uhk = exports = module.exports = moduleExports = {
     },
     configBufferIds,
     eepromOperations,
-    eepromTransfer: {
-        readHardwareConfig: {
-            operation: eepromOperations.read,
-            configBuffer: configBufferIds.hardwareConfig,
-        },
-        writeHardwareConfig: {
-            operation: eepromOperations.write,
-            configBuffer:configBufferIds.hardwareConfig,
-        },
-        readUserConfig: {
-            operation: eepromOperations.read,
-            configBuffer: configBufferIds.validatedUserConfig,
-        },
-        writeUserConfig: {
-            operation: eepromOperations.write,
-            configBuffer: configBufferIds.validatedUserConfig,
-        },
-    },
     kbootCommands: {
         idle: 0,
         ping: 1,
@@ -440,7 +521,11 @@ function writeLog(prefix, buffer) {
     if (!debug) {
         return;
     }
-    console.log(prefix + bufferToString(buffer))
+    if (buffer) {
+        console.log(prefix + bufferToString(buffer))
+    } else {
+        console.log(prefix);
+    }
 }
 
 function checkModuleSlot(moduleSlot, mapping) {

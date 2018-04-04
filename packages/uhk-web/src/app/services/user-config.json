@@ -5572,7 +5572,10 @@
                 null,
                 null,
                 null,
-                null,
+                {
+                  "keyActionType": "switchKeymap",
+                  "keymapAbbreviation": "TES"
+                },
                 {
                   "keyActionType": "keystroke",
                   "type": "media",

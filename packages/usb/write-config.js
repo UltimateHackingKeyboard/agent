@@ -20,7 +20,7 @@ const uhk = require('./uhk');
     const configBin = program.args[0];
     const isHardwareConfig = program.hardwareConfig;
     const configTypeString = isHardwareConfig ? 'hardware' : 'user';
-    let configBuffer = fs.readFileSync(configBin);
+    const configBuffer = fs.readFileSync(configBin);
 
     await uhk.writeUserConfig(device, configBuffer, isHardwareConfig);
 })();
