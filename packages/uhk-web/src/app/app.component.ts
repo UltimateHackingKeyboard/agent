@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
@@ -14,7 +14,6 @@ import {
     saveToKeyboardState
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
-import { SaveUserConfigInBinaryFileAction, SaveUserConfigInJsonFileAction } from './store/actions/user-config';
 
 @Component({
     selector: 'main-app',

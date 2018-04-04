@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { DeviceConnectionState, IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import { DeviceConnectionState, IpcEvents, IpcResponse, LogService, SaveUserConfigurationData } from 'uhk-common';
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
@@ -26,8 +26,8 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.setPrivilegeOnLinux);
     }
 
-    saveUserConfiguration(buffer: Buffer): void {
-        this.ipcRenderer.send(IpcEvents.device.saveUserConfiguration, JSON.stringify(buffer));
+    saveUserConfiguration(data: SaveUserConfigurationData): void {
+        this.ipcRenderer.send(IpcEvents.device.saveUserConfiguration, JSON.stringify(data));
     }
 
     loadConfigurationFromKeyboard(): void {

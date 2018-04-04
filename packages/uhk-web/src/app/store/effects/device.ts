@@ -13,11 +13,18 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/switchMap';
 
-import { DeviceConnectionState, IpcResponse, NotificationType, UhkBuffer, UserConfiguration } from 'uhk-common';
+import {
+    DeviceConnectionState,
+    HardwareConfiguration,
+    IpcResponse,
+    NotificationType,
+    UserConfiguration
+} from 'uhk-common';
 import {
     ActionTypes,
     ConnectionStateChangedAction,
     HideSaveToKeyboardButton,
+    ResetUserConfigurationAction,
     SaveConfigurationAction,
     SaveConfigurationReplyAction,
     SaveToKeyboardSuccessAction,
@@ -99,9 +106,8 @@ export class DeviceEffects {
     saveConfiguration$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_CONFIGURATION)
         .withLatestFrom(this.store)
-        .map(([action, state]) => state.userConfiguration)
-        .do((userConfiguration: UserConfiguration) => {
-            setTimeout(() => this.sendUserConfigToKeyboard(userConfiguration), 100);
+        .do(([action, state]) => {
+            setTimeout(() => this.sendUserConfigToKeyboard(state.userConfiguration, state.app.hardwareConfig), 100);
         })
         .switchMap(() => Observable.empty());
 
@@ -166,8 +172,8 @@ export class DeviceEffects {
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
         .ofType<ApplyUserConfigurationFromFileAction
             | LoadResetUserConfigurationAction>(
-                UserConfigActions.LOAD_RESET_USER_CONFIGURATION,
-                UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
+            UserConfigActions.LOAD_RESET_USER_CONFIGURATION,
+            UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
         .map(action => action.payload)
         .switchMap((config: UserConfiguration) => {
             this.dataStorageRepository.saveConfig(config);
@@ -199,6 +205,15 @@ export class DeviceEffects {
         .ofType<UpdateFirmwareOkButtonAction>(ActionTypes.UPDATE_FIRMWARE_OK_BUTTON)
         .do(() => this.deviceRendererService.startConnectionPoller());
 
+    @Effect() restoreUserConfiguration$ = this.actions$
+        .ofType<ResetUserConfigurationAction>(ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP)
+        .withLatestFrom(this.store)
+        .map(([action, state]) => {
+            const config = new UserConfiguration().fromJsonObject(state.device.backupUserConfiguration);
+
+            return new LoadResetUserConfigurationAction(config);
+        });
+
     constructor(private actions$: Actions,
                 private router: Router,
                 private deviceRendererService: DeviceRendererService,
@@ -207,9 +222,10 @@ export class DeviceEffects {
                 private defaultUserConfigurationService: DefaultUserConfigurationService) {
     }
 
-    private sendUserConfigToKeyboard(userConfiguration: UserConfiguration): void {
-        const uhkBuffer = new UhkBuffer();
-        userConfiguration.toBinary(uhkBuffer);
-        this.deviceRendererService.saveUserConfiguration(uhkBuffer.getBufferContent());
+    private sendUserConfigToKeyboard(userConfiguration: UserConfiguration, hardwareConfig: HardwareConfiguration): void {
+        this.deviceRendererService.saveUserConfiguration({
+            uniqueId: hardwareConfig && hardwareConfig.uniqueId,
+            configuration: userConfiguration.toJsonObject()
+        });
     }
 }

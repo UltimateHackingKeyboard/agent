@@ -1,16 +1,18 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules } from 'uhk-common';
+import { HardwareModules, UserConfiguration } from 'uhk-common';
 
 import {
     ActionTypes,
     ConnectionStateChangedAction,
     HardwareModulesLoadedAction,
     SaveConfigurationAction,
+    StoreBackupUserConfigurationAction,
     UpdateFirmwareFailedAction
 } from '../actions/device';
 import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
+import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 
 export interface State {
     connected: boolean;
@@ -20,6 +22,8 @@ export interface State {
     firmwareUpdateFinished: boolean;
     modules: HardwareModules;
     log: Array<XtermLog>;
+    restoringUserConfiguration: boolean;
+    backupUserConfiguration?: UserConfiguration;
 }
 
 export const initialState: State = {
@@ -37,7 +41,8 @@ export const initialState: State = {
             firmwareVersion: ''
         }
     },
-    log: [{message: '', cssClass: XtermCssClass.standard}]
+    log: [{message: '', cssClass: XtermCssClass.standard}],
+    restoringUserConfiguration: false
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -87,7 +92,8 @@ export function reducer(state = initialState, action: Action) {
                     showButton: true,
                     text: 'Saved!',
                     action: null
-                }
+                },
+                restoringUserConfiguration: false
             };
         }
 
@@ -167,6 +173,19 @@ export function reducer(state = initialState, action: Action) {
                 modules: (action as HardwareModulesLoadedAction).payload
             };
 
+        case ActionTypes.RESET_USER_CONFIGURATION:
+        case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP:
+            return {
+                ...state,
+                restoringUserConfiguration: true
+            };
+
+        case ActionTypes.STORE_BACKUP_USER_CONFIGURATION:
+            return {
+                ...state,
+                backupUserConfiguration: (action as StoreBackupUserConfigurationAction).payload
+            };
+
         default:
             return state;
     }
@@ -179,3 +198,9 @@ export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
 export const firmwareOkButtonDisabled = (state: State) => !state.firmwareUpdateFinished;
 export const getHardwareModules = (state: State) => state.modules;
+export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
+    return {
+        restoringUserConfiguration: state.restoringUserConfiguration,
+        hasBackupUserConfiguration: !!state.backupUserConfiguration
+    };
+};

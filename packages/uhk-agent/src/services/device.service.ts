@@ -1,5 +1,15 @@
 import { ipcMain } from 'electron';
-import { ConfigurationReply, DeviceConnectionState, HardwareModules, IpcEvents, IpcResponse, LogService } from 'uhk-common';
+import {
+    ConfigurationReply,
+    DeviceConnectionState,
+    getHardwareConfigFromDeviceResponse,
+    HardwareModules,
+    IpcEvents,
+    IpcResponse,
+    LogService,
+    mapObjectToUserConfigBinaryBuffer,
+    SaveUserConfigurationData
+} from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,6 +24,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import { saveTmpFirmware } from '../util/save-extract-firmware';
 import { TmpFirmware } from '../models/tmp-firmware';
 import { QueueManager } from './queue-manager';
+import { backupUserConfiguration, getBackupUserConfigurationContent } from '../util/backup-user-confoguration';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -78,10 +89,14 @@ export class DeviceService {
                 rightModuleInfo: await this.operations.getRightModuleVersionInfo()
             };
 
+            const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
+            const uniqueId = hardwareConfig.uniqueId;
+
             response = {
                 success: true,
                 ...result,
-                modules
+                modules,
+                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId)
             };
         } catch (error) {
             response = {
@@ -162,10 +177,13 @@ export class DeviceService {
 
     private async saveUserConfiguration(event: Electron.Event, args: Array<string>): Promise<void> {
         const response = new IpcResponse();
-        const json = args[0];
+        const data: SaveUserConfigurationData = JSON.parse(args[0]);
 
         try {
-            await this.operations.saveUserConfiguration(json);
+            await backupUserConfiguration(data);
+
+            const buffer = mapObjectToUserConfigBinaryBuffer(data);
+            await this.operations.saveUserConfiguration(buffer);
 
             response.success = true;
         }

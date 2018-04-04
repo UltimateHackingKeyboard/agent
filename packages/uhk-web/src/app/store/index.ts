@@ -78,3 +78,4 @@ export const firmwareOkButtonDisabled = createSelector(deviceState, fromDevice.f
 // tslint:disable-next-line: max-line-length
 export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
 export const getHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
+export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);

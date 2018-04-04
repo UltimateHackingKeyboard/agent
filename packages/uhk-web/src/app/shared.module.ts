@@ -15,7 +15,8 @@ import {
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
     MouseSpeedComponent,
-    LEDBrightnessComponent
+    LEDBrightnessComponent,
+    RestoreConfigurationComponent
 } from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
@@ -173,7 +174,8 @@ import { Autofocus } from './directives/autofocus/autofocus.directive';
         XtermComponent,
         SliderWrapperComponent,
         EditableTextComponent,
-        Autofocus
+        Autofocus,
+        RestoreConfigurationComponent
     ],
     imports: [
         CommonModule,

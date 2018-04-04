@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectionState, IpcResponse, type } from 'uhk-common';
-import { HardwareModules } from '../../../../../uhk-common/src/models';
+import { DeviceConnectionState, HardwareModules, IpcResponse, type, UserConfiguration } from 'uhk-common';
 
 const PREFIX = '[device] ';
 
@@ -24,7 +23,9 @@ export const ActionTypes = {
     UPDATE_FIRMWARE_SUCCESS: type(PREFIX + 'update firmware success'),
     UPDATE_FIRMWARE_FAILED: type(PREFIX + 'update firmware failed'),
     UPDATE_FIRMWARE_OK_BUTTON: type(PREFIX + 'update firmware ok button click'),
-    MODULES_INFO_LOADED: type(PREFIX + 'module info loaded')
+    MODULES_INFO_LOADED: type(PREFIX + 'module info loaded'),
+    STORE_BACKUP_USER_CONFIGURATION: type(PREFIX + 'Store backup user configuration'),
+    RESTORE_CONFIGURATION_FROM_BACKUP: type(PREFIX + 'Restore configuration from backup')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -123,6 +124,17 @@ export class HardwareModulesLoadedAction implements Action {
     }
 }
 
+export class RestoreUserConfigurationFromBackupAction implements Action {
+    type = ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP;
+}
+
+export class StoreBackupUserConfigurationAction implements Action {
+    type = ActionTypes.STORE_BACKUP_USER_CONFIGURATION;
+
+    constructor(public payload: UserConfiguration) {
+    }
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -142,4 +154,6 @@ export type Actions
     | UpdateFirmwareFailedAction
     | UpdateFirmwareOkButtonAction
     | HardwareModulesLoadedAction
+    | RestoreUserConfigurationFromBackupAction
+    | StoreBackupUserConfigurationAction
     ;
