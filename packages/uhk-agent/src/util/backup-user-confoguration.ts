@@ -19,7 +19,10 @@ export const getBackupUserConfigurationContent = async (logService: LogService, 
         const backupFilePath = getBackupUserConfigurationPath(uniqueId);
 
         if (await fs.pathExists(backupFilePath)) {
-            return fs.readJSON(backupFilePath);
+            const json = fs.readJSON(backupFilePath);
+            new UserConfiguration().fromJsonObject(json);
+
+            return json;
         }
 
         return null;
