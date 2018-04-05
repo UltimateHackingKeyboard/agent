@@ -182,7 +182,7 @@ export class DeviceService {
         try {
             await backupUserConfiguration(data);
 
-            const buffer = mapObjectToUserConfigBinaryBuffer(data);
+            const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
 
             response.success = true;
