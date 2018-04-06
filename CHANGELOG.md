@@ -6,6 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.1.3] - 2018-04-06
+
+Firmware: 8.1.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.5)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+
+- Show the firmware versions of the left and right keyboard halves on the firmware page.
+- Fix menu scancode.
+- Make the tooltip text regarding non-US characters easier to understand.
+- On the Device Configuration page change terminology from download/upload to export/import for greater clarity.
+
 ## [1.1.2] - 2018-03-09
 
 Firmware: 8.1.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.4)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
