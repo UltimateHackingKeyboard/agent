@@ -20,7 +20,7 @@ export const getUserConfigFromDeviceResponse = (json: string): UserConfiguration
         return userConfig;
     }
 
-    return null;
+    throw Error('Invalid user configuration');
 };
 
 export const mapObjectToUserConfigBinaryBuffer = (obj: any): Buffer => {
