@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -9,9 +9,11 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
 
 @Component({
     selector: 'privilege-checker',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './privilege-checker.component.html',
     styleUrls: ['./privilege-checker.component.scss']
 })
+
 export class PrivilegeCheckerComponent implements OnInit, OnDestroy {
 
     state: PrivilagePageSate;

@@ -78,22 +78,15 @@ export class DeviceEffects {
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
         .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
         .map(action => action.payload)
-        .mergeMap((response: any): any => {
+        .map((response: any): any => {
             if (response.success) {
-                return [
-                    new ConnectionStateChangedAction({
-                        connected: true,
-                        hasPermission: true
-                    })
-                ];
+                return new ConnectionStateChangedAction({
+                    connected: true,
+                    hasPermission: true
+                });
             }
-            return [
-                new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: response.error.message || response.error
-                }),
-                new SetupPermissionErrorAction(response.error)
-            ];
+
+            return new SetupPermissionErrorAction(response.error);
         });
 
     @Effect({dispatch: false})

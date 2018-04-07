@@ -120,11 +120,19 @@ a.link-inline {
     cursor: pointer;
 }
 
+@mixin code-style() {
+    color: #6a737d;
+    background-color: #f6f8fa;
+    text-align: left;
+}
+
+code {
+    @include code-style();
+}
+
 pre {
     code {
-        color: #6a737d;
-        background-color: #f6f8fa;
-        text-align: left;
+        @include code-style();
     }
 }
 

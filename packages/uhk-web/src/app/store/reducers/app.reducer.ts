@@ -1,8 +1,14 @@
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
-import { VersionInformation } from 'uhk-common';
+import {
+    HardwareConfiguration,
+    Notification,
+    NotificationType,
+    runInElectron,
+    UserConfiguration,
+    VersionInformation
+} from 'uhk-common';
 
-import { HardwareConfiguration, Notification, NotificationType, runInElectron, UserConfiguration } from 'uhk-common';
 import { ActionTypes, ShowNotificationAction } from '../actions/app';
 import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes } from '../actions/device';
@@ -129,6 +135,12 @@ export function reducer(state = initialState, action: Action & { payload: any })
             return {
                 ...state,
                 permissionError: action.payload
+            };
+
+        case DeviceActionTypes.SET_PRIVILEGE_ON_LINUX:
+            return {
+                ...state,
+                permissionError: null
             };
 
         default:

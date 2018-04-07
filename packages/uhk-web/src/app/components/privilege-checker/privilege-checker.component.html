@@ -13,7 +13,9 @@
         </a>
 
         <div>
-            <p *ngIf="state.permissionSetupFailed">
+            <p class="privilege-error"
+               #privilegeError
+               *ngIf="state.permissionSetupFailed">
                 Agent wasn't able to set up permissions via PolicyKit. This is most likely because the
                 <code>polkit</code> package is not installed on your system.
             </p>
