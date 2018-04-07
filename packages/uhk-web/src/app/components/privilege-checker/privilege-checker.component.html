@@ -22,7 +22,8 @@
 
             <div *ngIf="state.showWhatWillThisDoContent">
                 Agent uses the following script to set up permissions. You can run it manually as root, then
-                <a class="link-inline">retry</a>
+                <a class="link-inline"
+                   (click)="retry()">retry</a>.
                 <div class="copy-container">
                     <span class="fa  fa-2x fa-copy"
                           ngxClipboard
