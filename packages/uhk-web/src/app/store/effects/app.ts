@@ -41,6 +41,13 @@ export class ApplicationEffects {
         });
 
     @Effect({dispatch: false})
+    appStartInfo$: Observable<Action> = this.actions$
+        .ofType(ActionTypes.LOAD_APP_START_INFO)
+        .do(() => {
+            this.appRendererService.getAppStartInfo();
+        });
+
+    @Effect({dispatch: false})
     showNotification$: Observable<Action> = this.actions$
         .ofType<ShowNotificationAction>(ActionTypes.APP_SHOW_NOTIFICATION)
         .map(action => action.payload)

@@ -5,12 +5,13 @@ import * as sudo from 'sudo-prompt';
 import { dirSync } from 'tmp';
 import { emptyDir, copy } from 'fs-extra';
 
-import { IpcEvents, LogService, IpcResponse } from 'uhk-common';
+import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common';
 
 export class SudoService {
     private rootDir: string;
 
-    constructor(private logService: LogService) {
+    constructor(private logService: LogService,
+                private options: CommandLineArgs) {
         if (isDev) {
             this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../');
         } else {
@@ -21,6 +22,19 @@ export class SudoService {
     }
 
     private async setPrivilege(event: Electron.Event) {
+        if (this.options.spe) {
+            const error = new Error('No polkit authentication agent found.');
+            this.logService.error('[SudoService] Simulate privilege escalation error ', error);
+
+            const response = new IpcResponse();
+            response.success = false;
+            response.error = {message: error.message};
+
+            event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
+
+            return;
+        }
+
         switch (process.platform) {
             case 'linux':
                 await this.setPrivilegeOnLinux(event);
@@ -28,7 +42,7 @@ export class SudoService {
             default:
                 const response: IpcResponse = {
                     success: false,
-                    error: { message: 'Permissions couldn\'t be set. Invalid platform: ' + process.platform }
+                    error: {message: 'Permissions couldn\'t be set. Invalid platform: ' + process.platform}
                 };
 
                 event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
@@ -39,7 +53,7 @@ export class SudoService {
     private async setPrivilegeOnLinux(event: Electron.Event) {
         const tmpDirectory = dirSync();
         const rulesDir = path.join(this.rootDir, 'rules');
-        this.logService.debug('[SudoService] Copy rules dir', { src: rulesDir, dst: tmpDirectory.name });
+        this.logService.debug('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
         await copy(rulesDir, tmpDirectory.name);
 
         const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
@@ -55,7 +69,7 @@ export class SudoService {
             if (error) {
                 this.logService.error('[SudoService] Error when set privilege: ', error);
                 response.success = false;
-                response.error = error;
+                response.error = {message: error.message};
             } else {
                 response.success = true;
             }

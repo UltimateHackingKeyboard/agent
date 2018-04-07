@@ -30,6 +30,7 @@
   },
   "scripts": {
     "start": "electron ./dist/electron-main.js",
+    "electron:spe": "electron ./dist/electron-main.js --spe",
     "build": "webpack && npm run install:build-deps && npm run build:usb && npm run download-firmware && npm run copy-blhost",
     "build:usb": "electron-rebuild -w node-hid -p -m ./dist",
     "install:build-deps": "cd ./dist && npm i",
