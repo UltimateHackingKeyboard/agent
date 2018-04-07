@@ -8,6 +8,7 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
 import { NouisliderModule } from 'ng2-nouislider';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
@@ -188,7 +189,8 @@ import { Autofocus } from './directives/autofocus/autofocus.directive';
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here
-        })
+        }),
+        ClipboardModule
     ],
     providers: [
         SvgModuleProviderService,

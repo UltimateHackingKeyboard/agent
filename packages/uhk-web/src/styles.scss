@@ -115,3 +115,43 @@ a.disabled {
         display: block;
     }
 }
+
+a.link-inline {
+    cursor: pointer;
+}
+
+@mixin code-style() {
+    color: #6a737d;
+    background-color: #f6f8fa;
+    text-align: left;
+}
+
+code {
+    @include code-style();
+}
+
+pre {
+    code {
+        @include code-style();
+    }
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.copy-container {
+    position: relative;
+
+    .fa-copy {
+        cursor: pointer;
+        color: #6a737d;
+        position: absolute;
+        right: 4px;
+        top: 4px;
+
+        &:hover {
+            color: darken(#6a737d, 15);
+        }
+    }
+}

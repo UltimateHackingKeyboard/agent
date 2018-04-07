@@ -38,7 +38,7 @@ import {
     UpdateFirmwareWithAction
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
-import { ShowNotificationAction } from '../actions/app';
+import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
 import { AppState } from '../index';
 import {
     ActionTypes as UserConfigActions,
@@ -85,21 +85,15 @@ export class DeviceEffects {
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
         .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
         .map(action => action.payload)
-        .mergeMap((response: any) => {
+        .map((response: any): any => {
             if (response.success) {
-                return [
-                    new ConnectionStateChangedAction({
-                        connected: true,
-                        hasPermission: true
-                    })
-                ];
+                return new ConnectionStateChangedAction({
+                    connected: true,
+                    hasPermission: true
+                });
             }
-            return [
-                <any>new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: response.error.message || response.error
-                })
-            ];
+
+            return new SetupPermissionErrorAction(response.error);
         });
 
     @Effect({dispatch: false})

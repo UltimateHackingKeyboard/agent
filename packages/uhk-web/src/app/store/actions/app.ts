@@ -17,7 +17,10 @@ export const ActionTypes = {
     DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action'),
     LOAD_HARDWARE_CONFIGURATION_SUCCESS: type(PREFIX + 'load hardware configuration success'),
     ELECTRON_MAIN_LOG_RECEIVED: type(PREFIX + 'Electron main log received'),
-    OPEN_URL_IN_NEW_WINDOW: type(PREFIX + 'Open URL in new Window')
+    OPEN_URL_IN_NEW_WINDOW: type(PREFIX + 'Open URL in new Window'),
+    PRIVILEGE_WHAT_WILL_THIS_DO: type(PREFIX + 'What will this do clicked'),
+    SETUP_PERMISSION_ERROR: type(PREFIX + 'Setup permission error'),
+    LOAD_APP_START_INFO: type(PREFIX + 'Load app start info')
 };
 
 export class AppBootsrappedAction implements Action {
@@ -31,25 +34,29 @@ export class AppStartedAction implements Action {
 export class ShowNotificationAction implements Action {
     type = ActionTypes.APP_SHOW_NOTIFICATION;
 
-    constructor(public payload: Notification) { }
+    constructor(public payload: Notification) {
+    }
 }
 
 export class ApplyCommandLineArgsAction implements Action {
     type = ActionTypes.APPLY_COMMAND_LINE_ARGS;
 
-    constructor(public payload: CommandLineArgs) { }
+    constructor(public payload: CommandLineArgs) {
+    }
 }
 
 export class ProcessAppStartInfoAction implements Action {
     type = ActionTypes.APP_PROCESS_START_INFO;
 
-    constructor(public payload: AppStartInfo) { }
+    constructor(public payload: AppStartInfo) {
+    }
 }
 
 export class UndoLastAction implements Action {
     type = ActionTypes.UNDO_LAST;
 
-    constructor(public payload: any) {}
+    constructor(public payload: any) {
+    }
 }
 
 export class UndoLastSuccessAction implements Action {
@@ -63,19 +70,37 @@ export class DismissUndoNotificationAction implements Action {
 export class LoadHardwareConfigurationSuccessAction implements Action {
     type = ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS;
 
-    constructor(public payload: HardwareConfiguration) {}
+    constructor(public payload: HardwareConfiguration) {
+    }
 }
 
 export class ElectronMainLogReceivedAction implements Action {
     type = ActionTypes.ELECTRON_MAIN_LOG_RECEIVED;
 
-    constructor(public payload: ElectronLogEntry) {}
+    constructor(public payload: ElectronLogEntry) {
+    }
 }
 
 export class OpenUrlInNewWindowAction implements Action {
     type = ActionTypes.OPEN_URL_IN_NEW_WINDOW;
 
-    constructor(public payload: string) {}
+    constructor(public payload: string) {
+    }
+}
+
+export class PrivilegeWhatWillThisDoAction implements Action {
+    type = ActionTypes.PRIVILEGE_WHAT_WILL_THIS_DO;
+}
+
+export class SetupPermissionErrorAction implements Action {
+    type = ActionTypes.SETUP_PERMISSION_ERROR;
+
+    constructor(public payload: string) {
+    }
+}
+
+export class LoadAppStartInfoAction implements Action {
+    type = ActionTypes.LOAD_APP_START_INFO;
 }
 
 export type Actions
@@ -90,4 +115,7 @@ export type Actions
     | LoadHardwareConfigurationSuccessAction
     | ElectronMainLogReceivedAction
     | OpenUrlInNewWindowAction
+    | PrivilegeWhatWillThisDoAction
+    | SetupPermissionErrorAction
+    | LoadAppStartInfoAction
     ;

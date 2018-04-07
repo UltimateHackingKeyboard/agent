@@ -9,3 +9,19 @@
 uhk-message {
     max-width: 50%;
 }
+
+.privilege-error {
+    animation: error-fade-in 2s;
+}
+
+@keyframes error-fade-in {
+    0% {
+        color: white;
+        background-color: red;
+    }
+
+    100% {
+        color: inherit;
+        background-color: inherit;
+    }
+}

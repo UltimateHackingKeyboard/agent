@@ -2,7 +2,7 @@
 /// <reference path="./custom_types/command-line-args.d.ts"/>
 
 import './polyfills';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 
 import * as path from 'path';
@@ -10,7 +10,7 @@ import * as url from 'url';
 import * as commandLineArgs from 'command-line-args';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
-import { LogRegExps } from 'uhk-common';
+import { CommandLineArgs, LogRegExps } from 'uhk-common';
 import { DeviceService } from './services/device.service';
 import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
@@ -18,13 +18,13 @@ import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import { UhkBlhost } from '../../uhk-usb/src';
 import * as isDev from 'electron-is-dev';
-import { CommandLineInputs } from './models/command-line-inputs';
 
 const optionDefinitions = [
-    {name: 'addons', type: Boolean}
+    {name: 'addons', type: Boolean},
+    {name: 'spe', type: Boolean} // simulate privilege escalation error
 ];
 
-const options: CommandLineInputs = commandLineArgs(optionDefinitions);
+const options: CommandLineArgs = commandLineArgs(optionDefinitions);
 
 // import './dev-extension';
 // require('electron-debug')({ showDevTools: true, enabled: true });
@@ -83,13 +83,13 @@ function createWindow() {
     });
     win.setMenuBarVisibility(false);
     win.maximize();
-    uhkHidDeviceService = new UhkHidDevice(logger);
+    uhkHidDeviceService = new UhkHidDevice(logger, options);
     uhkBlhost = new UhkBlhost(logger, packagesDir);
     uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
-    sudoService = new SudoService(logger);
+    sudoService = new SudoService(logger, options);
     // and load the index.html of the app.
 
     win.loadURL(url.format({
