@@ -79,7 +79,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        icon: 'assets/images/agent-icon.png'
+        icon: path.join(__dirname, 'renderer/assets/images/agent-icon.png')
     });
     win.setMenuBarVisibility(false);
     win.maximize();
