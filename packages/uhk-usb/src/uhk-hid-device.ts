@@ -1,5 +1,5 @@
 import { Device, devices, HID } from 'node-hid';
-import { LogService } from 'uhk-common';
+import { CommandLineArgs, LogService } from 'uhk-common';
 
 import {
     ConfigBufferId,
@@ -27,7 +27,8 @@ export class UhkHidDevice {
     private _device: HID;
     private _hasPermission = false;
 
-    constructor(private logService: LogService) {
+    constructor(private logService: LogService,
+                private options: CommandLineArgs) {
     }
 
     /**
@@ -38,6 +39,10 @@ export class UhkHidDevice {
      * @returns {boolean}
      */
     public hasPermission(): boolean {
+        if (this.options.spe) {
+            return false;
+        }
+
         try {
             if (this._hasPermission) {
                 return true;

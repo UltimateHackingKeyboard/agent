@@ -8,6 +8,7 @@ import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes } from '../actions/device';
 import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
+import { PrivilagePageSate } from '../../models/privilage-page-sate';
 
 export interface State {
     started: boolean;
@@ -19,6 +20,8 @@ export interface State {
     configLoading: boolean;
     hardwareConfig?: HardwareConfiguration;
     agentVersionInfo?: VersionInformation;
+    privilegeWhatWillThisDoClicked: boolean;
+    permissionError?: any;
 }
 
 export const initialState: State = {
@@ -27,7 +30,8 @@ export const initialState: State = {
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
     configLoading: true,
-    agentVersionInfo: getVersions()
+    agentVersionInfo: getVersions(),
+    privilegeWhatWillThisDoClicked: false
 };
 
 export function reducer(state = initialState, action: Action & { payload: any }) {
@@ -115,6 +119,18 @@ export function reducer(state = initialState, action: Action & { payload: any })
             };
         }
 
+        case ActionTypes.PRIVILEGE_WHAT_WILL_THIS_DO:
+            return {
+                ...state,
+                privilegeWhatWillThisDoClicked: true
+            };
+
+        case ActionTypes.SETUP_PERMISSION_ERROR:
+            return {
+                ...state,
+                permissionError: action.payload
+            };
+
         default:
             return state;
     }
@@ -134,3 +150,12 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
 };
 export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
 export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || {} as VersionInformation;
+export const getPrivilagePageState = (state: State): PrivilagePageSate => {
+    const permissionSetupFailed = !!state.permissionError;
+
+    return {
+        permissionSetupFailed,
+        showWhatWillThisDo: !state.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
+        showWhatWillThisDoContent: state.privilegeWhatWillThisDoClicked || permissionSetupFailed
+    };
+};

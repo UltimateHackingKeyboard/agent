@@ -1,4 +1,36 @@
-<span class="privilege-checker-wrapper">
-    <uhk-message header="Cannot talk to your UHK" subtitle="Your UHK has been detected, but its permissions are not set up yet, so Agent can't talk to it."></uhk-message>
-    <button class="btn btn-default btn-lg btn-primary" (click)="setUpPermissions()"> Set up permissions </button>
-</span>
+<div class="privilege-checker-wrapper">
+    <uhk-message header="Cannot talk to your UHK"
+                 subtitle="Your UHK has been detected, but its permissions are not set up yet, so Agent can't talk to it."></uhk-message>
+
+    <button class="btn btn-default btn-lg btn-primary"
+            (click)="setUpPermissions()"> Set up permissions
+    </button>
+
+    <div class="mt-10">
+        <a class="link-inline"
+           *ngIf="state.showWhatWillThisDo"
+           (click)="whatWillThisDo()">What will this do?
+        </a>
+
+        <div>
+            <p *ngIf="state.permissionSetupFailed">
+                Agent wasn't able to set up permissions via PolicyKit. This is most likely because the
+                <code>polkit</code> package is not installed on your system.
+            </p>
+
+            <div *ngIf="state.showWhatWillThisDoContent">
+                Agent uses the following script to set up permissions. You can run it manually as root, then
+                <a class="link-inline">retry</a>
+                <div class="copy-container">
+                    <span class="fa  fa-2x fa-copy"
+                          ngxClipboard
+                          [cbContent]="command"
+                          title="Copy to clipboard"
+                          data-toggle="tooltip"
+                          data-placement="top"></span>
+                    <pre><code>{{ command }}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

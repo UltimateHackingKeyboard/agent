@@ -51,6 +51,7 @@ export const getHardwareConfiguration = createSelector(appState, fromApp.getHard
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
+export const getPrivilegePageState = createSelector(appState, fromApp.getPrivilagePageState);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
