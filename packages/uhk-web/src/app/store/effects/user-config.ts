@@ -47,7 +47,7 @@ import {
 import {
     HardwareModulesLoadedAction,
     ShowSaveToKeyboardButtonAction,
-    StoreBackupUserConfigurationAction
+    HasBackupUserConfigurationAction
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
@@ -136,7 +136,11 @@ export class UserConfigEffects {
 
             } catch (err) {
                 this.logService.error('Eeprom user-config parse error:', err);
-                result.push(new StoreBackupUserConfigurationAction(data.backupConfiguration));
+                const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
+
+                result.push(new HasBackupUserConfigurationAction(!!data.backupConfiguration));
+                result.push(new LoadUserConfigSuccessAction(userConfig));
+
                 newPageDestination = ['/device/restore-user-configuration'];
             }
 

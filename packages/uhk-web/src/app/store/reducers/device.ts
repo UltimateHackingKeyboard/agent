@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules, UserConfiguration } from 'uhk-common';
+import { HardwareModules } from 'uhk-common';
 
 import {
     ActionTypes,
     ConnectionStateChangedAction,
     HardwareModulesLoadedAction,
     SaveConfigurationAction,
-    StoreBackupUserConfigurationAction,
+    HasBackupUserConfigurationAction,
     UpdateFirmwareFailedAction
 } from '../actions/device';
 import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
@@ -23,7 +23,7 @@ export interface State {
     modules: HardwareModules;
     log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
-    backupUserConfiguration?: UserConfiguration;
+    hasBackupUserConfiguration: boolean;
 }
 
 export const initialState: State = {
@@ -42,7 +42,8 @@ export const initialState: State = {
         }
     },
     log: [{message: '', cssClass: XtermCssClass.standard}],
-    restoringUserConfiguration: false
+    restoringUserConfiguration: false,
+    hasBackupUserConfiguration: false
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -180,10 +181,16 @@ export function reducer(state = initialState, action: Action) {
                 restoringUserConfiguration: true
             };
 
-        case ActionTypes.STORE_BACKUP_USER_CONFIGURATION:
+        case ActionTypes.HAS_BACKUP_USER_CONFIGURATION:
             return {
                 ...state,
-                backupUserConfiguration: (action as StoreBackupUserConfigurationAction).payload
+                hasBackupUserConfiguration: (action as HasBackupUserConfigurationAction).payload
+            };
+
+        case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS:
+            return {
+                ...state,
+                hasBackupUserConfiguration: false
             };
 
         default:
@@ -198,9 +205,10 @@ export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
 export const firmwareOkButtonDisabled = (state: State) => !state.firmwareUpdateFinished;
 export const getHardwareModules = (state: State) => state.modules;
+export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration;
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
     return {
         restoringUserConfiguration: state.restoringUserConfiguration,
-        hasBackupUserConfiguration: !!state.backupUserConfiguration
+        hasBackupUserConfiguration: state.hasBackupUserConfiguration
     };
 };

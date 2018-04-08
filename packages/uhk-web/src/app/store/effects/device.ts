@@ -25,6 +25,7 @@ import {
     ConnectionStateChangedAction,
     HideSaveToKeyboardButton,
     ResetUserConfigurationAction,
+    RestoreUserConfigurationFromBackupSuccessAction,
     SaveConfigurationAction,
     SaveConfigurationReplyAction,
     SaveToKeyboardSuccessAction,
@@ -128,8 +129,18 @@ export class DeviceEffects {
     @Effect()
     autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_TO_KEYBOARD_SUCCESS)
-        .switchMap(() => Observable.timer(1000)
-            .switchMap(() => Observable.of(new HideSaveToKeyboardButton()))
+        .withLatestFrom(this.store)
+        .switchMap(([action, state]) => Observable.timer(1000)
+            .mergeMap(() => {
+                const actions = [new HideSaveToKeyboardButton()];
+
+                if (state.device.hasBackupUserConfiguration) {
+                    actions.push(new RestoreUserConfigurationFromBackupSuccessAction());
+                    this.router.navigate(['/']);
+                }
+
+                return actions;
+            })
         );
 
     @Effect()
@@ -201,12 +212,7 @@ export class DeviceEffects {
 
     @Effect() restoreUserConfiguration$ = this.actions$
         .ofType<ResetUserConfigurationAction>(ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP)
-        .withLatestFrom(this.store)
-        .map(([action, state]) => {
-            const config = new UserConfiguration().fromJsonObject(state.device.backupUserConfiguration);
-
-            return new LoadResetUserConfigurationAction(config);
-        });
+        .map(() => new SaveConfigurationAction());
 
     constructor(private actions$: Actions,
                 private router: Router,

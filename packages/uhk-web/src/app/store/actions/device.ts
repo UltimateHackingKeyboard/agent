@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectionState, HardwareModules, IpcResponse, type, UserConfiguration } from 'uhk-common';
+import { DeviceConnectionState, HardwareModules, IpcResponse, type } from 'uhk-common';
 
 const PREFIX = '[device] ';
 
@@ -24,8 +24,9 @@ export const ActionTypes = {
     UPDATE_FIRMWARE_FAILED: type(PREFIX + 'update firmware failed'),
     UPDATE_FIRMWARE_OK_BUTTON: type(PREFIX + 'update firmware ok button click'),
     MODULES_INFO_LOADED: type(PREFIX + 'module info loaded'),
-    STORE_BACKUP_USER_CONFIGURATION: type(PREFIX + 'Store backup user configuration'),
-    RESTORE_CONFIGURATION_FROM_BACKUP: type(PREFIX + 'Restore configuration from backup')
+    HAS_BACKUP_USER_CONFIGURATION: type(PREFIX + 'Store backup user configuration'),
+    RESTORE_CONFIGURATION_FROM_BACKUP: type(PREFIX + 'Restore configuration from backup'),
+    RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS: type(PREFIX + 'Restore configuration from backup success')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -128,11 +129,15 @@ export class RestoreUserConfigurationFromBackupAction implements Action {
     type = ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP;
 }
 
-export class StoreBackupUserConfigurationAction implements Action {
-    type = ActionTypes.STORE_BACKUP_USER_CONFIGURATION;
+export class HasBackupUserConfigurationAction implements Action {
+    type = ActionTypes.HAS_BACKUP_USER_CONFIGURATION;
 
-    constructor(public payload: UserConfiguration) {
+    constructor(public payload: boolean) {
     }
+}
+
+export class RestoreUserConfigurationFromBackupSuccessAction implements Action {
+    type = ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS;
 }
 
 export type Actions
@@ -155,5 +160,6 @@ export type Actions
     | UpdateFirmwareOkButtonAction
     | HardwareModulesLoadedAction
     | RestoreUserConfigurationFromBackupAction
-    | StoreBackupUserConfigurationAction
+    | HasBackupUserConfigurationAction
+    | RestoreUserConfigurationFromBackupSuccessAction
     ;
