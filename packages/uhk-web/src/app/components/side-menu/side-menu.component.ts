@@ -62,6 +62,7 @@ export class SideMenuComponent implements AfterContentInit, OnInit, OnDestroy {
     ngOnInit(): void {
         this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
             this.state = data;
+            this.setDeviceName();
             this.cdRef.markForCheck();
         });
     }
