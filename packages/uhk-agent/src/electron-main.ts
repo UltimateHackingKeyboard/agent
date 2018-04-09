@@ -60,7 +60,25 @@ if (console.debug) {
     };
 }
 
+const isSecondInstance = app.makeSingleInstance(function (commandLine, workingDirectory) {
+    // Someone tried to run a second instance, we should focus our window.
+    if (win) {
+        if (win.isMinimized()) {
+            win.restore();
+        }
+        win.focus();
+    }
+});
+
+if (isSecondInstance) {
+    app.quit();
+}
+
 function createWindow() {
+    if (isSecondInstance) {
+        return;
+    }
+
     logger.info('[Electron Main] Create new window.');
     let packagesDir;
     if (isDev) {
