@@ -1,4 +1,4 @@
-class App {
+export class App {
     public static readonly appStarted = 'app-started';
     public static readonly getAppStartInfo = 'app-get-start-info';
     public static readonly getAppStartInfoReply = 'app-get-start-info-reply';
@@ -6,7 +6,7 @@ class App {
     public static readonly openUrl = 'open-url';
 }
 
-class AutoUpdate {
+export class AutoUpdate {
     public static readonly checkingForUpdate = 'checking-for-update';
     public static readonly updateAvailable = 'update-available';
     public static readonly updateNotAvailable = 'update-not-available';
@@ -18,7 +18,7 @@ class AutoUpdate {
     public static readonly checkForUpdateNotAvailable = 'check-for-update-not-available';
 }
 
-class Device {
+export class Device {
     public static readonly setPrivilegeOnLinux = 'set-privilege-on-linux';
     public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';
     public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';

@@ -4,7 +4,7 @@ import { KeyModifiers } from '../key-modifiers';
 import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action';
 import { KeystrokeType } from '../key-action';
 
-interface JsObjectKeyMacroAction {
+export interface JsObjectKeyMacroAction {
     macroActionType: string;
     action: string;
     type?: string;

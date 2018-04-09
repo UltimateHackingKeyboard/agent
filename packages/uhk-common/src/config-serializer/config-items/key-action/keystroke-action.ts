@@ -13,7 +13,7 @@ export enum KeystrokeActionFlag {
 
 const KEYSTROKE_ACTION_FLAG_LENGTH = 3;
 
-interface JsonObjectKeystrokeAction {
+export interface JsonObjectKeystrokeAction {
     keyActionType: string;
     scancode?: number;
     modifierMask?: number;

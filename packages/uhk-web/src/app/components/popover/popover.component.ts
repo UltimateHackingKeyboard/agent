@@ -79,8 +79,8 @@ export class PopoverComponent implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentKeymap: Keymap;
     @Input() currentLayer: number;
-    @Input() keyPosition: ClientRect;
-    @Input() wrapPosition: ClientRect;
+    @Input() keyPosition: any;
+    @Input() wrapPosition: any;
     @Input() visible: boolean;
 
     @Output() cancel = new EventEmitter<any>();

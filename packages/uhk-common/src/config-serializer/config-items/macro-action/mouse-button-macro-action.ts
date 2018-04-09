@@ -8,7 +8,7 @@ export enum MouseButtons {
     Right = 1 << 2
 }
 
-interface JsObjectMouseButtonMacroAction {
+export interface JsObjectMouseButtonMacroAction {
     macroActionType: string;
     action: string;
     mouseButtonsMask?: number;
