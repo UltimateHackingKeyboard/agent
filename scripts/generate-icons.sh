@@ -2,7 +2,7 @@
 
 # apt-get install inkscape imagemagick-6.q16 icnsutils
 
-agentIconSvg=../packages/uhk-web/src/svgs/keyboard/icons/agent-icon.svg
+agentIconSvg=../packages/uhk-web/src/svgs/icons/agent-icon.svg
 
 for size in 16 24 32 48 64 96 128 256 512 1024; do
     inkscape -z --export-png=../build/icons/${size}x${size}.png -w $size $agentIconSvg
