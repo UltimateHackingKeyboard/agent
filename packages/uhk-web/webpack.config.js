@@ -414,8 +414,8 @@ module.exports = {
             "filename": "scripts.bundle.js",
             "scripts": [
                 path.join(process.cwd(), "node_modules/bootstrap/dist/js/bootstrap.js"),
-                    path.join(process.cwd(), "node_modules/select2/dist/js/select2.full.js"),
-                        path.join(process.cwd(),  "node_modules/nouislider/distribute/nouislider.js")
+                path.join(process.cwd(), "node_modules/select2/dist/js/select2.full.js"),
+                path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.js")
             ],
             "basePath": path.resolve(process.cwd())
         }),
