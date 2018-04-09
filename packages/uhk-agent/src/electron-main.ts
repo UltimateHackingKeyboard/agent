@@ -133,13 +133,13 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    app.quit();
-});
-
-app.on('will-quit', () => {
     if (appUpdateService) {
         appUpdateService.saveFirtsRun();
     }
+    app.exit();
+});
+
+app.on('will-quit', () => {
 });
 
 app.on('activate', () => {
