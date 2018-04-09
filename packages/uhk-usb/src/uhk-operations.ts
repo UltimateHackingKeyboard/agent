@@ -105,8 +105,6 @@ export class UhkOperations {
      * @returns {Promise<Buffer>}
      */
     public async loadConfiguration(configBufferId: ConfigBufferId): Promise<string> {
-        let response = [];
-
         const configBufferIdToName = ['HardwareConfig', 'StagingUserConfig', 'ValidatedUserConfig'];
         const configName = configBufferIdToName[configBufferId];
 
@@ -140,7 +138,8 @@ export class UhkOperations {
                     }
                 }
             }
-            response = convertBufferToIntArray(configBuffer);
+            const response = convertBufferToIntArray(configBuffer);
+
             return Promise.resolve(JSON.stringify(response));
         } catch (error) {
             const errMsg = `[DeviceOperation] ${configName} from eeprom error`;
@@ -165,10 +164,10 @@ export class UhkOperations {
         return configSize;
     }
 
-    public async saveUserConfiguration(json: string): Promise<void> {
+    public async saveUserConfiguration(buffer: Buffer): Promise<void> {
         try {
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to keyboard');
-            await this.sendUserConfigToKeyboard(json);
+            await this.sendUserConfigToKeyboard(buffer);
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.device.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
         }
@@ -246,12 +245,11 @@ export class UhkOperations {
 
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
-     * @param {string} json - UserConfiguration in JSON format
+     * @param {Buffer} buffer - UserConfiguration buffer
      * @returns {Promise<void>}
      * @private
      */
-    private async sendUserConfigToKeyboard(json: string): Promise<void> {
-        const buffer: Buffer = new Buffer(JSON.parse(json).data);
+    private async sendUserConfigToKeyboard(buffer: Buffer): Promise<void> {
         const fragments = getTransferBuffers(UsbCommand.WriteStagingUserConfig, buffer);
         for (const fragment of fragments) {
             await this.device.write(fragment);

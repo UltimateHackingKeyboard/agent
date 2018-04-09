@@ -1,4 +1,5 @@
 import { HardwareModules } from './hardware-modules';
+import { UserConfiguration } from '../config-serializer/config-items';
 
 export interface ConfigurationReply {
     success: boolean;
@@ -6,4 +7,5 @@ export interface ConfigurationReply {
     hardwareConfiguration?: string;
     modules?: HardwareModules;
     error?: string;
+    backupConfiguration?: UserConfiguration;
 }

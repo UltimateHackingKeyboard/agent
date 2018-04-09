@@ -1,20 +1,27 @@
-import { AfterContentInit, Component, ElementRef, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import {
+    AfterContentInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnDestroy, OnInit,
+    Renderer2,
+    ViewChild
+} from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Keymap, Macro } from 'uhk-common';
 
 import { Store } from '@ngrx/store';
 
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 
-import { AppState, getDeviceName, runningInElectron, showAddonMenu, updatingFirmware } from '../../store';
+import { AppState, getSideMenuPageState } from '../../store';
 import { MacroActions } from '../../store/actions';
-import { getKeymaps, getMacros } from '../../store/reducers/user-configuration';
 import * as util from '../../util';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
+import { SideMenuPageState } from '../../models/side-menu-page-state';
 
 @Component({
     animations: [
@@ -30,24 +37,19 @@ import { RenameUserConfigurationAction } from '../../store/actions/user-config';
     ],
     selector: 'side-menu',
     templateUrl: './side-menu.component.html',
-    styleUrls: ['./side-menu.component.scss']
+    styleUrls: ['./side-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideMenuComponent implements AfterContentInit, OnDestroy {
-    showAddonMenu$: Observable<boolean>;
-    runInElectron$: Observable<boolean>;
-    updatingFirmware$: Observable<boolean>;
-
-    deviceName$: Observable<string>;
-    deviceNameSubscription: Subscription;
-    keymaps$: Observable<Keymap[]>;
-    macros$: Observable<Macro[]>;
+export class SideMenuComponent implements AfterContentInit, OnInit, OnDestroy {
+    state: SideMenuPageState;
     animation: { [key: string]: 'active' | 'inactive' };
-    deviceNameValue: string;
-    updatingFirmware = false;
-    updatingFirmwareSubscription: Subscription;
     @ViewChild('deviceName') deviceName: ElementRef;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer2) {
+    private stateSubscription: Subscription;
+
+    constructor(private store: Store<AppState>,
+                private renderer: Renderer2,
+                private cdRef: ChangeDetectorRef) {
         this.animation = {
             device: 'active',
             configuration: 'active',
@@ -55,20 +57,13 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
             macro: 'active',
             addon: 'active'
         };
+    }
 
-        this.keymaps$ = store.let(getKeymaps());
-        this.macros$ = store.let(getMacros());
-
-        this.showAddonMenu$ = this.store.select(showAddonMenu);
-        this.runInElectron$ = this.store.select(runningInElectron);
-        this.deviceName$ = store.select(getDeviceName);
-        this.deviceNameSubscription = this.deviceName$.subscribe(name => {
-            this.deviceNameValue = name;
+    ngOnInit(): void {
+        this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
+            this.state = data;
             this.setDeviceName();
-        });
-        this.updatingFirmware$ = store.select(updatingFirmware);
-        this.updatingFirmwareSubscription = this.updatingFirmware$.subscribe(updating => {
-            this.updatingFirmware = updating;
+            this.cdRef.markForCheck();
         });
     }
 
@@ -77,12 +72,13 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.deviceNameSubscription.unsubscribe();
-        this.updatingFirmwareSubscription.unsubscribe();
+        if (this.stateSubscription) {
+            this.stateSubscription.unsubscribe();
+        }
     }
 
     toggleHide(event: Event, type: string) {
-        if (this.updatingFirmware) {
+        if (this.state.updatingFirmware) {
             return;
         }
 
@@ -110,7 +106,7 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
     }
 
     editDeviceName(name: string): void {
-        if (!util.isValidName(name) || name.trim() === this.deviceNameValue) {
+        if (!util.isValidName(name) || name.trim() === this.state.deviceName) {
             this.setDeviceName();
             return;
         }
@@ -126,7 +122,7 @@ export class SideMenuComponent implements AfterContentInit, OnDestroy {
 
     private setDeviceName(): void {
         if (this.deviceName) {
-            this.renderer.setProperty(this.deviceName.nativeElement, 'value', this.deviceNameValue);
+            this.renderer.setProperty(this.deviceName.nativeElement, 'value', this.state.deviceName);
             this.calculateHeaderTextWidth(this.deviceName.nativeElement.value);
         }
     }

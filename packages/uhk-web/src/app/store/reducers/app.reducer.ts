@@ -152,7 +152,6 @@ export const showAddonMenu = (state: State) => state.showAddonMenu;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;
-export const getHardwareConfiguration = (state: State) => state.hardwareConfig;
 export const getKeyboardLayout = (state: State): KeyboardLayout => {
     if (state.hardwareConfig && state.hardwareConfig.isIso) {
         return KeyboardLayout.ISO;

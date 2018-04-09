@@ -494,5 +494,3 @@ function setKeyActionToLayer(newLayer: Layer, moduleIndex: number, keyIndex: num
     newModule.keyActions = newModule.keyActions.slice();
     newModule.keyActions[keyIndex] = newKeyAction;
 }
-
-export const getDeviceName = (state: UserConfiguration) => state.deviceName;

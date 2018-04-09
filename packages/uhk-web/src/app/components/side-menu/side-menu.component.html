@@ -5,6 +5,7 @@
             <input #deviceName cancelable
                    class="pane-title__name"
                    type="text"
+                   [readonly]="state.restoreUserConfiguration"
                    (change)="editDeviceName($event.target.value)"
                    (keyup.enter)="deviceName.blur()"
                    (keyup)="calculateHeaderTextWidth($event.target.value)">
@@ -17,33 +18,43 @@
                     <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'configuration')"></i>
                 </div>
                 <ul [@toggler]="animation['configuration']">
-                    <li class="sidebar__level-2--item">
+                    <li class="sidebar__level-2--item"
+                        *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/mouse-speed']"
-                               [class.disabled]="updatingFirmware$ | async">Mouse speed</a>
+                               [class.disabled]="state.updatingFirmware">Mouse speed</a>
                         </div>
                     </li>
-                    <li class="sidebar__level-2--item">
+                    <li class="sidebar__level-2--item"
+                        *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/led-brightness']"
-                               [class.disabled]="updatingFirmware$ | async">LED brightness</a>
+                               [class.disabled]="state.updatingFirmware">LED brightness</a>
                         </div>
                     </li>
-                    <li class="sidebar__level-2--item">
+                    <li class="sidebar__level-2--item"
+                        *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/configuration']"
-                               [class.disabled]="updatingFirmware$ | async">Configuration</a>
+                               [class.disabled]="state.updatingFirmware">Configuration</a>
+                        </div>
+                    </li>
+                    <li class="sidebar__level-2--item"
+                        *ngIf="state.restoreUserConfiguration">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/device/restore-user-configuration']">Fix configuration</a>
                         </div>
                     </li>
                     <li class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/device/firmware']"
-                               [class.disabled]="updatingFirmware$ | async">Firmware</a>
+                               [class.disabled]="state.updatingFirmware">Firmware</a>
                         </div>
                     </li>
                 </ul>
             </li>
-            <li class="sidebar__level-1--item">
+            <li class="sidebar__level-1--item"
+                *ngIf="!state.restoreUserConfiguration">
                 <div class="sidebar__level-1">
                     <i class="fa fa-keyboard-o"></i> Keymaps
                     <!--a [routerLink]="['/keymap/add']"
@@ -55,10 +66,10 @@
                        (click)="toggleHide($event, 'keymap')"></i>
                 </div>
                 <ul [@toggler]="animation['keymap']">
-                    <li *ngFor="let keymap of keymaps$ | async" class="sidebar__level-2--item">
+                    <li *ngFor="let keymap of state.keymaps" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/keymap', keymap.abbreviation]"
-                               [class.disabled]="updatingFirmware$ | async">{{keymap.name}}</a>
+                               [class.disabled]="state.updatingFirmware">{{keymap.name}}</a>
                             <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav"
                                title="This is the default keymap which gets activated when powering the keyboard."
                                data-toggle="tooltip" data-placement="bottom"></i>
@@ -66,26 +77,27 @@
                     </li>
                 </ul>
             </li>
-            <li class="sidebar__level-1--item">
+            <li class="sidebar__level-1--item"
+                *ngIf="!state.restoreUserConfiguration">
                 <div class="sidebar__level-1">
                     <i class="fa fa-play"></i> Macros
                     <a (click)="addMacro()"
                        class="btn btn-default pull-right btn-sm"
-                       [class.disabled]="updatingFirmware$ | async">
+                       [class.disabled]="state.updatingFirmware">
                         <i class="fa fa-plus"></i>
                     </a>
                     <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'macro')"></i>
                 </div>
                 <ul [@toggler]="animation['macro']">
-                    <li *ngFor="let macro of macros$ | async" class="sidebar__level-2--item">
+                    <li *ngFor="let macro of state.macros" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/macro', macro.id]"
-                               [class.disabled]="updatingFirmware$ | async">{{macro.name}}</a>
+                               [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
                         </div>
                     </li>
                 </ul>
             </li>
-            <li class="sidebar__level-1--item" *ngIf="showAddonMenu$ | async">
+            <li class="sidebar__level-1--item" *ngIf="state.showAddonMenu">
                 <div class="sidebar__level-1">
                     <i class="fa fa-puzzle-piece"></i> Add-on modules
                     <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
@@ -94,25 +106,25 @@
                     <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'Key cluster']"
-                               [class.disabled]="updatingFirmware$ | async">Key cluster</a>
+                               [class.disabled]="state.updatingFirmware">Key cluster</a>
                         </div>
                     </li>
                     <li class="sidebar__level-2--item" data-name="Trackball" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'Trackball']"
-                               [class.disabled]="updatingFirmware$ | async">Trackball</a>
+                               [class.disabled]="state.updatingFirmware">Trackball</a>
                         </div>
                     </li>
                     <li class="sidebar__level-2--item" data-name="Toucpad" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'Touchpad']"
-                               [class.disabled]="updatingFirmware$ | async">Touchpad</a>
+                               [class.disabled]="state.updatingFirmware">Touchpad</a>
                         </div>
                     </li>
                     <li class="sidebar__level-2--item" data-name="Trackpoint" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'Trackpoint']"
-                               [class.disabled]="updatingFirmware$ | async">Trackpoint</a>
+                               [class.disabled]="state.updatingFirmware">Trackpoint</a>
                         </div>
                     </li>
                 </ul>
@@ -123,19 +135,19 @@
         <div class="sidebar__level-0">
             <i class="uhk-icon uhk-icon-agent-icon"></i> Agent
             <i class="fa fa-chevron-up pull-right"
-                (click)="toggleHide($event, 'agent')"></i>
+               (click)="toggleHide($event, 'agent')"></i>
         </div>
         <ul [@toggler]="animation['agent']">
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/settings']"
-                       [class.disabled]="updatingFirmware$ | async">Settings</a>
+                       [class.disabled]="state.updatingFirmware">Settings</a>
                 </div>
             </li>
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/about']"
-                       [class.disabled]="updatingFirmware$ | async">About</a>
+                       [class.disabled]="state.updatingFirmware">About</a>
                 </div>
             </li>
         </ul>

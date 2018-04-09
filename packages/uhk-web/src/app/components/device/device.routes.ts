@@ -4,6 +4,7 @@ import { DeviceConfigurationComponent } from './configuration/device-configurati
 import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
 import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
 import { LEDBrightnessComponent } from './led-brightness/led-brightness.component';
+import { RestoreConfigurationComponent } from './restore-configuration/restore-configuration.component';
 
 export const deviceRoutes: Routes = [
     {
@@ -29,6 +30,10 @@ export const deviceRoutes: Routes = [
             {
                 path: 'firmware',
                 component: DeviceFirmwareComponent
+            },
+            {
+                path: 'restore-user-configuration',
+                component: RestoreConfigurationComponent
             }
         ]
     }

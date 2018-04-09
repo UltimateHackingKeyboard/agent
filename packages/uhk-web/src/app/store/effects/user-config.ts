@@ -15,8 +15,9 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/empty';
 
 import {
+    getHardwareConfigFromDeviceResponse,
+    getUserConfigFromDeviceResponse,
     ConfigurationReply,
-    HardwareConfiguration,
     LogService,
     NotificationType,
     UhkBuffer,
@@ -43,36 +44,17 @@ import {
     ShowNotificationAction,
     UndoLastAction
 } from '../actions/app';
-import { HardwareModulesLoadedAction, ShowSaveToKeyboardButtonAction } from '../actions/device';
+import {
+    HardwareModulesLoadedAction,
+    ShowSaveToKeyboardButtonAction,
+    HasBackupUserConfigurationAction
+} from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { UploadFileData } from '../../models/upload-file-data';
 
 @Injectable()
 export class UserConfigEffects {
-
-    private static getUserConfigFromDeviceResponse(json: string): UserConfiguration {
-        const data = JSON.parse(json);
-        const userConfig = new UserConfiguration();
-        userConfig.fromBinary(UhkBuffer.fromArray(data));
-
-        if (userConfig.userConfigMajorVersion > 0) {
-            return userConfig;
-        }
-
-        return null;
-    }
-
-    private static getHardwareConfigFromDeviceResponse(json: string): HardwareConfiguration {
-        const data = JSON.parse(json);
-        const hardwareConfig = new HardwareConfiguration();
-        hardwareConfig.fromBinary(UhkBuffer.fromArray(data));
-
-        if (hardwareConfig.uniqueId > 0) {
-            return hardwareConfig;
-        }
-        return null;
-    }
 
     @Effect() loadUserConfig$: Observable<Action> = defer(() => {
         return Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
@@ -146,23 +128,24 @@ export class UserConfigEffects {
             }
 
             const result = [];
+            let newPageDestination = ['/'];
+
             try {
-                const userConfig = UserConfigEffects.getUserConfigFromDeviceResponse(data.userConfiguration);
+                const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
                 result.push(new LoadUserConfigSuccessAction(userConfig));
 
             } catch (err) {
                 this.logService.error('Eeprom user-config parse error:', err);
-                result.push(
-                    new ShowNotificationAction({
-                        type: NotificationType.Error,
-                        message: err
-                    }));
+                const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
 
-                result.push(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
+                result.push(new HasBackupUserConfigurationAction(!!data.backupConfiguration));
+                result.push(new LoadUserConfigSuccessAction(userConfig));
+
+                newPageDestination = ['/device/restore-user-configuration'];
             }
 
             try {
-                const hardwareConfig = UserConfigEffects.getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+                const hardwareConfig = getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
                 result.push(new LoadHardwareConfigurationSuccessAction(hardwareConfig));
             } catch (err) {
                 this.logService.error('Eeprom hardware-config parse error:', err);
@@ -175,7 +158,7 @@ export class UserConfigEffects {
 
             result.push(new HardwareModulesLoadedAction(data.modules));
 
-            this.router.navigate(['/']);
+            this.router.navigate(newPageDestination);
 
             return result;
         });

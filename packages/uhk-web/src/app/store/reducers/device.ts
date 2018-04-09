@@ -6,11 +6,13 @@ import {
     ConnectionStateChangedAction,
     HardwareModulesLoadedAction,
     SaveConfigurationAction,
+    HasBackupUserConfigurationAction,
     UpdateFirmwareFailedAction
 } from '../actions/device';
 import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
+import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 
 export interface State {
     connected: boolean;
@@ -20,6 +22,8 @@ export interface State {
     firmwareUpdateFinished: boolean;
     modules: HardwareModules;
     log: Array<XtermLog>;
+    restoringUserConfiguration: boolean;
+    hasBackupUserConfiguration: boolean;
 }
 
 export const initialState: State = {
@@ -37,7 +41,9 @@ export const initialState: State = {
             firmwareVersion: ''
         }
     },
-    log: [{message: '', cssClass: XtermCssClass.standard}]
+    log: [{message: '', cssClass: XtermCssClass.standard}],
+    restoringUserConfiguration: false,
+    hasBackupUserConfiguration: false
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -87,7 +93,8 @@ export function reducer(state = initialState, action: Action) {
                     showButton: true,
                     text: 'Saved!',
                     action: null
-                }
+                },
+                restoringUserConfiguration: false
             };
         }
 
@@ -167,6 +174,25 @@ export function reducer(state = initialState, action: Action) {
                 modules: (action as HardwareModulesLoadedAction).payload
             };
 
+        case ActionTypes.RESET_USER_CONFIGURATION:
+        case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP:
+            return {
+                ...state,
+                restoringUserConfiguration: true
+            };
+
+        case ActionTypes.HAS_BACKUP_USER_CONFIGURATION:
+            return {
+                ...state,
+                hasBackupUserConfiguration: (action as HasBackupUserConfigurationAction).payload
+            };
+
+        case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS:
+            return {
+                ...state,
+                hasBackupUserConfiguration: false
+            };
+
         default:
             return state;
     }
@@ -179,3 +205,10 @@ export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
 export const firmwareOkButtonDisabled = (state: State) => !state.firmwareUpdateFinished;
 export const getHardwareModules = (state: State) => state.modules;
+export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration;
+export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
+    return {
+        restoringUserConfiguration: state.restoringUserConfiguration,
+        hasBackupUserConfiguration: state.hasBackupUserConfiguration
+    };
+};

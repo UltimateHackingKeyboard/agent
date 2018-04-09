@@ -1,0 +1,19 @@
+<h1>
+    <i class="fa fa-exclamation-circle"></i>
+    <span>Fix configuration</span>
+</h1>
+
+<p>
+    Your on-board device configuration is invalid.
+</p>
+<button class="btn btn-primary"
+        *ngIf="state.hasBackupUserConfiguration"
+        [disabled]="state.restoringUserConfiguration"
+        (click)="restoreUserConfiguration()"> Restore the last valid device configuration
+</button>
+
+<button class="btn btn-danger"
+        *ngIf="!state.hasBackupUserConfiguration"
+        [disabled]="state.restoringUserConfiguration"
+        (click)="resetUserConfiguration()">Reset device configuration
+</button>
