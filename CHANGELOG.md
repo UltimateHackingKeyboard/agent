@@ -6,6 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.1.4] - 2018-04-09
+
+Firmware: 8.1.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.5)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+
+- Handle privilege escalation gracefully on Linux even without PolicyKit.
+- Fix application icon path.
+- Replace application icon with a diagonal gradient based icon that should look better on desktop.
+- Make saving the configuration more robust, and add a configuration recovery screen.
+- Reposition the ISO key in the scancode list.
+
 ## [1.1.3] - 2018-04-06
 
 Firmware: 8.1.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.5)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
