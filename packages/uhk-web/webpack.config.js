@@ -413,11 +413,11 @@ module.exports = {
             "sourceMap": true,
             "filename": "scripts.bundle.js",
             "scripts": [
-                "/Users/Robi/Documents/Projects/GitHub/UltimateHackingKeyboard/uhk-agent/packages/uhk-web/node_modules/bootstrap/dist/js/bootstrap.js",
-                "/Users/Robi/Documents/Projects/GitHub/UltimateHackingKeyboard/uhk-agent/packages/uhk-web/node_modules/select2/dist/js/select2.full.js",
-                "/Users/Robi/Documents/Projects/GitHub/UltimateHackingKeyboard/uhk-agent/packages/uhk-web/node_modules/nouislider/distribute/nouislider.js"
+                path.join(process.cwd(), "node_modules/bootstrap/dist/js/bootstrap.js"),
+                    path.join(process.cwd(), "node_modules/select2/dist/js/select2.full.js"),
+                        path.join(process.cwd(),  "node_modules/nouislider/distribute/nouislider.js")
             ],
-            "basePath": "/Users/Robi/Documents/Projects/GitHub/UltimateHackingKeyboard/uhk-agent/packages/uhk-web"
+            "basePath": path.resolve(process.cwd())
         }),
         new CopyWebpackPlugin([
             {
