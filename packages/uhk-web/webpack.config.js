@@ -1,5 +1,3 @@
-const AOT_BUILD = process.env.AOT_BUILD;
-
 const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -459,14 +457,7 @@ module.exports = {
             "inject": true,
             "compile": true,
             "favicon": false,
-            "minify": !AOT_BUILD ? false : {
-                removeAttributeQuotes: true,
-                collapseWhitespace: true,
-                html5: true,
-                minifyCSS: true,
-                removeComments: true,
-                removeEmptyAttributes: true,
-            },
+            "minify": false,
             "cache": true,
             "showErrors": true,
             "chunks": "all",
@@ -530,7 +521,7 @@ module.exports = {
             },
             "sourceMap": true,
             "tsConfigPath": "src/tsconfig.app.json",
-            "skipCodeGeneration": !process.env.AOT_BUILD,
+            "skipCodeGeneration": true,
             "compilerOptions": {}
         })
     ],
