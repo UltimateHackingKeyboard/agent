@@ -6,6 +6,12 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.1.5] - 2018-04-10
+
+Firmware: 8.1.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.5)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+
+- Don't allow to run multiple instances of Agent at the same time, but rather focus the already existing Agent window.
+
 ## [1.1.4] - 2018-04-09
 
 Firmware: 8.1.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.5)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
