@@ -3,7 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "description": "Common Library contains the common code for uhk-agent (electron-main) and web (electron-renderer) modules",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "author": "Ultimate Gadget Laboratories",
   "repository": {
     "type": "git",

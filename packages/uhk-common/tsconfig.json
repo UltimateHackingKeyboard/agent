@@ -3,7 +3,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "./dist",
-    "declaration": false,
+    "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
