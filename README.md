@@ -33,9 +33,9 @@ For everyone else, use the appropriate package manager for your OS.
 ```
 git clone git@github.com:UltimateHackingKeyboard/agent.git
 cd agent
-npm install             # to install Node dependencies
-npm run build:electron  # to build the agent
-npm run electron        # to run the newly built agent
+npm install
+npm run build
+npm run electron
 ```
 
 At this point, Agent should be running on your machine.
