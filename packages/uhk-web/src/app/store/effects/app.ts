@@ -68,7 +68,8 @@ export class ApplicationEffects {
                 new ApplyCommandLineArgsAction(appInfo.commandLineArgs),
                 new ConnectionStateChangedAction({
                     connected: appInfo.deviceConnected,
-                    hasPermission: appInfo.hasPermission
+                    hasPermission: appInfo.hasPermission,
+                    bootloaderActive: appInfo.bootloaderActive
                 })
             ];
         });

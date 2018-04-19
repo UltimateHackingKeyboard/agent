@@ -1,0 +1,24 @@
+<div class="full-height">
+    <div class="flex-container">
+        <div>
+
+            <h1>
+                <i class="fa fa-wrench"></i>
+                <span>Fix device</span>
+            </h1>
+            <p>
+                Your device seems to be broken. No worries, Agent can fix it.
+            </p>
+            <p>
+                <button class="btn btn-primary"
+                        type="button"
+                        (click)="onRecoveryDevice()">Fix device
+                </button>
+            </p>
+
+            <div class="flex-grow" #scrollMe>
+                <xterm [logs]="xtermLog"></xterm>
+            </div>
+        </div>
+    </div>
+</div>

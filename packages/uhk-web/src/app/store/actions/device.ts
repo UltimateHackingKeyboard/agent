@@ -26,7 +26,8 @@ export const ActionTypes = {
     MODULES_INFO_LOADED: type(PREFIX + 'module info loaded'),
     HAS_BACKUP_USER_CONFIGURATION: type(PREFIX + 'Store backup user configuration'),
     RESTORE_CONFIGURATION_FROM_BACKUP: type(PREFIX + 'Restore configuration from backup'),
-    RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS: type(PREFIX + 'Restore configuration from backup success')
+    RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS: type(PREFIX + 'Restore configuration from backup success'),
+    RECOVERY_DEVICE: type(PREFIX + 'Recovery device')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -140,6 +141,10 @@ export class RestoreUserConfigurationFromBackupSuccessAction implements Action {
     type = ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS;
 }
 
+export class RecoveryDeviceAction implements Action {
+    type = ActionTypes.RECOVERY_DEVICE;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -162,4 +167,5 @@ export type Actions
     | RestoreUserConfigurationFromBackupAction
     | HasBackupUserConfigurationAction
     | RestoreUserConfigurationFromBackupSuccessAction
+    | RecoveryDeviceAction
     ;

@@ -1,6 +1,6 @@
 import { cloneDeep, isEqual } from 'lodash';
 import { Device, devices, HID } from 'node-hid';
-import { CommandLineArgs, LogService } from 'uhk-common';
+import { CommandLineArgs, DeviceConnectionState, LogService } from 'uhk-common';
 
 import {
     ConfigBufferId,
@@ -50,10 +50,6 @@ export class UhkHidDevice {
                 return true;
             }
 
-            if (!this.deviceConnected()) {
-                return true;
-            }
-
             this._hasPermission = this.getDevice() !== null;
             this.close();
 
@@ -69,15 +65,25 @@ export class UhkHidDevice {
      * Return with true is an UHK Device is connected to the computer.
      * @returns {boolean}
      */
-    public deviceConnected(): boolean {
-        const connected = devices().some((dev: Device) => dev.vendorId === Constants.VENDOR_ID &&
-            dev.productId === Constants.PRODUCT_ID);
+    public getDeviceConnectionState(): DeviceConnectionState {
+        const devs = devices();
+        const result: DeviceConnectionState = {
+            bootloaderActive: false,
+            connected: false,
+            hasPermission: this.hasPermission()
+        };
 
-        if (!connected) {
-            this._hasPermission = false;
+        for (const dev of devs) {
+            if (dev.vendorId === Constants.VENDOR_ID &&
+                dev.productId === Constants.PRODUCT_ID) {
+                result.connected = true;
+            } else if (dev.vendorId === Constants.VENDOR_ID &&
+                dev.productId === Constants.BOOTLOADER_ID) {
+                result.bootloaderActive = true;
+            }
         }
 
-        return connected;
+        return result;
     }
 
     /**

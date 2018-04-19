@@ -1,5 +1,6 @@
 import { Constants, UsbCommand } from './constants';
 import { LogService } from 'uhk-common';
+import { DeviceConnectionState } from '../../uhk-common/src/models/device-connection-state';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -95,3 +96,9 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
         }
     }
 }
+
+export const deviceConnectionStateComparer = (a: DeviceConnectionState, b: DeviceConnectionState): boolean => {
+    return a.hasPermission === b.hasPermission
+        && a.connected === b.connected
+        && a.bootloaderActive === b.bootloaderActive;
+};

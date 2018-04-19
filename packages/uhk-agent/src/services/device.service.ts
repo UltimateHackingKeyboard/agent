@@ -10,7 +10,7 @@ import {
     mapObjectToUserConfigBinaryBuffer,
     SaveUserConfigurationData
 } from 'uhk-common';
-import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
+import { deviceConnectionStateComparer, snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { emptyDir } from 'fs-extra';
@@ -70,6 +70,15 @@ export class DeviceService {
         });
 
         ipcMain.on(IpcEvents.device.startConnectionPoller, this.pollUhkDevice.bind(this));
+
+        ipcMain.on(IpcEvents.device.recoveryDevice, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.recoveryDevice,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
 
         logService.debug('[DeviceService] init success');
     }
@@ -148,6 +157,25 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
+    public async recoveryDevice(event: Electron.Event): Promise<void> {
+        const response = new IpcResponse();
+        try {
+            this.stopPollTimer();
+
+            await this.operations.updateRightFirmware();
+
+            response.success = true;
+        } catch (error) {
+            const err = {message: error.message, stack: error.stack};
+            this.logService.error('[DeviceService] updateFirmware error', err);
+
+            response.error = err;
+        }
+
+        await snooze(500);
+        event.sender.send(IpcEvents.device.updateFirmwareReply, response);
+    }
+
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
@@ -161,16 +189,11 @@ export class DeviceService {
 
         this.pollTimer$ = Observable.interval(1000)
             .startWith(0)
-            .map(() => this.device.deviceConnected())
-            .distinctUntilChanged()
-            .do((connected: boolean) => {
-                const response: DeviceConnectionState = {
-                    connected,
-                    hasPermission: this.device.hasPermission()
-                };
-
-                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, response);
-                this.logService.info('[DeviceService] Device connection state changed to:', response);
+            .map(() => this.device.getDeviceConnectionState())
+            .distinctUntilChanged<DeviceConnectionState>(deviceConnectionStateComparer)
+            .do((state: DeviceConnectionState) => {
+                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
+                this.logService.info('[DeviceService] Device connection state changed to:', state);
             })
             .subscribe();
     }
