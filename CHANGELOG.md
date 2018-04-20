@@ -6,6 +6,12 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.0] - 2018-04-20
+
+Firmware: 8.1.6 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.6)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+
+- Tweak the default mouse speed. This was necessary because the last firmware version adjusted speed multipliers. The mouse speed can be reset via the "Reset speeds to default" button of the "Mouse speed" page.
+
 ## [1.1.5] - 2018-04-10
 
 Firmware: 8.1.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.5)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
