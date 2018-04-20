@@ -8,7 +8,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 ## [1.2.0] - 2018-04-20
 
-Firmware: 8.1.6 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.6)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: 8.**2.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.0)] | Device Protocol: 4.**3.0** | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Tweak the default mouse speed. This was necessary because the last firmware version adjusted speed multipliers. The mouse speed can be reset via the "Reset speeds to default" button of the "Mouse speed" page.
 
@@ -62,7 +62,7 @@ Firmware: 8.1.**2** [[release](https://github.com/UltimateHackingKeyboard/firmwa
 
 ## [1.1.0] - 2018-01-15
 
-Firmware: 8.**1**.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.0)] | Device Protocol: 4.2.0 | User Config: 4.0.0 | Hardware Config: 1.0.0
+Firmware: 8.**1**.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.1.0)] | Device Protocol: 4.**2.0** | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Only accept device, keymap, and macro names upon editing if their trimmed length is non-zero.
 - Add diagnostics USB scripts, most notably /packages/usb/{get-i2c-health,set-i2c-baud-rate}.js, some utilizing new device protocol commands and properties. `DEVICEPROTOCOL:MINOR`
