@@ -129,7 +129,11 @@ module.exports = {
             "./src",
             "./node_modules"
         ],
-        "alias": rxPaths(),
+        "alias": {
+            ...rxPaths(),
+            'nouislider':path.join(projectRoot, 'node_modules/nouislider/distribute/nouislider.js'),
+            'ng2-nouislider':path.join(projectRoot, 'node_modules/ng2-nouislider/src/nouislider.js')
+        },
         "mainFields": [
             "browser",
             "module",
@@ -413,7 +417,7 @@ module.exports = {
             "scripts": [
                 path.join(process.cwd(), "node_modules/bootstrap/dist/js/bootstrap.js"),
                 path.join(process.cwd(), "node_modules/select2/dist/js/select2.full.js"),
-                path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.js")
+                // path.join(process.cwd(), "node_modules/nouislider/distribute/nouislider.js")
             ],
             "basePath": path.resolve(process.cwd())
         }),
