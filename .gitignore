@@ -1,8 +1,0 @@
-node_modules
-npm-debug.log
-.vscode
-dist
-.idea
-*.iml
-*.sublime-project
-*.sublime-workspace
