@@ -86,7 +86,7 @@
     "lint:ts:test-serializer": "tslint --project ./packages/test-serializer/tsconfig.json",
     "lint:ts:uhk-usb": "tslint --project ./packages/uhk-usb/tsconfig.json",
     "lint:style": "stylelint \"packages/uhk-agent/src/**/*.scss\" \"packages/uhk-web/src/**/*.scss\" --syntax scss",
-    "prebuild": "check-node-version --node 8",
+    "prebuild": "check-node-version --package",
     "build": "run-s build:common build:usb build:web build:electron",
     "build:web": "lerna exec --scope uhk-web npm run build",
     "build:electron": "cross-env AOT_BUILD=true run-s -sn build:electron:renderer build:electron:main",
