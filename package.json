@@ -100,7 +100,7 @@
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",
-    "clean": "lerna exec rimraf ./node_modules ./dist",
+    "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist",
     "predeploy-gh-pages": "run-s build:web",
     "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist"
   },
