@@ -67,7 +67,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     }
 
     getKeyMacroAction(): KeyMacroAction {
-        const keyMacroAction = Object.assign(new KeyMacroAction(), this.keypressTab.toKeyAction());
+        const keyMacroAction = new KeyMacroAction(this.keypressTab.toKeyAction() as any);
         keyMacroAction.action = this.getActionType(this.activeTab);
         return keyMacroAction;
     }

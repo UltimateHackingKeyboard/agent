@@ -1,4 +1,4 @@
-import { assertEnum, assertUInt8 } from '../../assert';
+import { assertEnum, assertUInt8, assertUInt16 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { KeyModifiers } from '../key-modifiers';
 import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action';
@@ -21,10 +21,22 @@ export class KeyMacroAction extends MacroAction {
     type: KeystrokeType;
 
     @assertUInt8
-    scancode: number;
-
-    @assertUInt8
     modifierMask: number;
+
+    @assertUInt16
+    private _scancode: number;
+
+    set scancode(scancode: number) {
+        this._scancode = scancode;
+        if (this.type !== KeystrokeType.shortMedia && this.type !== KeystrokeType.longMedia) {
+            return;
+        }
+        this.type = scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+    }
+
+    get scancode() {
+        return this._scancode;
+    }
 
     constructor(other?: KeyMacroAction) {
         super();
@@ -33,7 +45,7 @@ export class KeyMacroAction extends MacroAction {
         }
         this.action = other.action;
         this.type = other.type;
-        this.scancode = other.scancode;
+        this._scancode = other._scancode;
         this.modifierMask = other.modifierMask;
     }
 
@@ -45,7 +57,7 @@ export class KeyMacroAction extends MacroAction {
         } else {
             this.type = KeystrokeType[jsObject.type];
         }
-        this.scancode = jsObject.scancode;
+        this._scancode = jsObject.scancode;
         this.modifierMask = jsObject.modifierMask;
         return this;
     }
@@ -58,7 +70,7 @@ export class KeyMacroAction extends MacroAction {
         this.type = keyMacroType & 0b11;
         keyMacroType >>= 2;
         if (keyMacroType & 0b10) {
-            this.scancode = buffer.readUInt8();
+            this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
         }
         if (keyMacroType & 0b01) {
             this.modifierMask = buffer.readUInt8();
@@ -78,7 +90,7 @@ export class KeyMacroAction extends MacroAction {
             } else {
                 jsObject.type = KeystrokeType[this.type];
             }
-            jsObject.scancode = this.scancode;
+            jsObject.scancode = this._scancode;
         }
 
         if (this.hasModifiers()) {
@@ -98,7 +110,11 @@ export class KeyMacroAction extends MacroAction {
 
         buffer.writeUInt8(keyMacroType);
         if (this.hasScancode()) {
-            buffer.writeUInt8(this.scancode);
+            if (this.type === KeystrokeType.longMedia) {
+                buffer.writeUInt16(this.scancode);
+            } else {
+                buffer.writeUInt8(this.scancode);
+            }
         }
         if (this.hasModifiers()) {
             buffer.writeUInt8(this.modifierMask);
@@ -106,7 +122,7 @@ export class KeyMacroAction extends MacroAction {
     }
 
     toString(): string {
-        return `<KeyMacroAction action="${this.action}" scancode="${this.scancode}" modifierMask="${this.modifierMask}">`;
+        return `<KeyMacroAction action="${this.action}" scancode="${this._scancode}" modifierMask="${this.modifierMask}">`;
     }
 
     isModifierActive(modifier: KeyModifiers): boolean {
@@ -114,7 +130,7 @@ export class KeyMacroAction extends MacroAction {
     }
 
     hasScancode(): boolean {
-        return !!this.scancode;
+        return !!this._scancode;
     }
 
     hasModifiers(): boolean {
