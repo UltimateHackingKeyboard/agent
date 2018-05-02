@@ -115,7 +115,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         const scTypePair = this.toScancodeTypePair(this.selectedScancodeOption);
         keystrokeAction.scancode = scTypePair[0];
         if (scTypePair[1] === 'media') {
-            keystrokeAction.type = KeystrokeType.shortMedia;
+            keystrokeAction.type = keystrokeAction.scancode > 255 ? KeystrokeType.longMedia : KeystrokeType.shortMedia;
         } else {
             keystrokeAction.type = KeystrokeType[scTypePair[1]];
         }
