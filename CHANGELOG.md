@@ -11,6 +11,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 Firmware: 8.**2.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.0)] | Device Protocol: 4.**3.0** | User Config: 4.0.0 | Hardware Config: 1.0.0
 
 - Tweak the default mouse speed. This was necessary because the last firmware version adjusted speed multipliers. The mouse speed can be reset via the "Reset speeds to default" button of the "Mouse speed" page.
+- Make the newly added switch-keymap.js script utilize the new UsbCommandId_SwitchKeymap, allowing for programmatic keymap switching. `DEVICEPROTOCOL:MINOR`
 
 ## [1.1.5] - 2018-04-10
 
