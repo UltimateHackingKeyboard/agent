@@ -5,17 +5,8 @@
 
 Agent is the configuration application of the [Ultimate Hacking Keyboard](https://ultimatehackingkeyboard.com/).
 
-[Give it a whirl!](http://ultimatehackingkeyboard.github.io/agent/)
-
-## Two builds to rule them all
-
-It's worth mentioning that Agent has two builds.
-
-The **electron build** is the desktop application which is meant to be used if you have an actual UHK at hand. It starts with an opening screen which detects your UHK. You cannot get past this screen without connecting a UHK via USB.
-
-The **web build** is meant to be used for demonstration purposes, so people who don't yet own a UHK can get a feel of Agent and its capabilities in their browser. Eventually, WebUSB support will be added to the web build, making it able to communicate with the UHK. Given the sandboxed nature of browsers, the web build will always lack features that the electron build offers, so this won't make the electron build obsolete.
-
-The two builds share code as much as possible.
+* Try out the [web build of Agent](http://ultimatehackingkeyboard.github.io/agent/) in your browser. This is meant to be used for demonstration purposes.
+* Download the [desktop build of Agent](https://github.com/UltimateHackingKeyboard/agent/releases) from our releases page. Use this if you have an actual UHK at hand, or else you won't get past the opening screen!
 
 ## Building the electron application
 
