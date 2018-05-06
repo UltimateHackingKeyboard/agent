@@ -238,7 +238,10 @@ export class UhkHidDevice {
             const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
                 x.productId === Constants.PRODUCT_ID &&
-                ((x.usagePage === 128 && x.usage === 129) || x.interface === 0));
+                // hidapi can not read the interface number on Mac, so check the usage page and usage
+                ((x.usagePage === 128 && x.usage === 129) || // Old firmware
+                (x.usagePage === (0xFF00 | 0x00) && x.usage === 0x01) || // New firmware
+                x.interface === 0));
 
             if (!dev) {
                 this.logService.debug('[UhkHidDevice] UHK Device not found:');

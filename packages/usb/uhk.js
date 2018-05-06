@@ -71,7 +71,10 @@ function writeDevice(device, data, options={}) {
 function getUhkDevice() {
     const foundDevice = HID.devices().find(device =>
         device.vendorId === 0x1d50 && device.productId === 0x6122 &&
-        ((device.usagePage === 128 && device.usage === 129) || device.interface === 0));
+        // hidapi can not read the interface number on Mac, so check the usage page and usage
+        ((device.usagePage === 128 && device.usage === 129) || // Old firmware
+        (device.usagePage === (0xFF00 | 0x00) && device.usage === 0x01) || // New firmware
+        device.interface === 0));
 
     if (!foundDevice) {
         return null;
