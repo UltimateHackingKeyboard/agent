@@ -11,6 +11,7 @@
     "@types/node": "8.0.28"
   },
   "dependencies": {
+    "lodash-es": "^4.17.10",
     "node-hid": "0.5.7",
     "uhk-common": "1.0.0"
   }

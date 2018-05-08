@@ -1,3 +1,4 @@
+import { cloneDeep, isEqual } from 'lodash-es';
 import { Device, devices, HID } from 'node-hid';
 import { CommandLineArgs, LogService } from 'uhk-common';
 
@@ -24,6 +25,7 @@ export class UhkHidDevice {
      * Internal variable that represent the USB UHK device
      * @private
      */
+    private _prevDevices = {};
     private _device: HID;
     private _hasPermission = false;
 
@@ -233,7 +235,12 @@ export class UhkHidDevice {
     private connectToDevice(): HID {
         try {
             const devs = devices();
-            this.logService.debug('[UhkHidDevice] Available devices:', devs);
+            if (!isEqual(this._prevDevices, devs)) {
+                this.logService.debug('[UhkHidDevice] Available devices:', devs);
+                this._prevDevices = devs;
+            } else {
+                this.logService.debug('[UhkHidDevice] Available devices unchanged');
+            }
 
             const dev = devs.find((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
