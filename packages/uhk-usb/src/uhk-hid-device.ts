@@ -199,7 +199,7 @@ export class UhkHidDevice {
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
-        const moduleName = kbootKommandName(module);
+        const moduleName = kbootCommandName(module);
         this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
             transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
@@ -266,7 +266,7 @@ export class UhkHidDevice {
     }
 }
 
-function kbootKommandName(module: ModuleSlotToI2cAddress): string {
+function kbootCommandName(module: ModuleSlotToI2cAddress): string {
     switch (module) {
         case ModuleSlotToI2cAddress.leftHalf:
             return 'leftHalf';
