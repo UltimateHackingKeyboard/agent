@@ -191,8 +191,7 @@ async function updateDeviceFirmware(firmwareImage, extension) {
 
 // USB commands
 
-function reenumerate(enumerationMode) {
-    const bootloaderTimeoutMs = 5000;
+function reenumerate(enumerationMode, bootloaderTimeoutMs=5000) {
     const pollingIntervalMs = 100;
     let pollingTimeoutMs = 10000;
 

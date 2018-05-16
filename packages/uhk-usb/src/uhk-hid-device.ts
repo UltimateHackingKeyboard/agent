@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual } from 'lodash-es';
+import { cloneDeep, isEqual } from 'lodash';
 import { Device, devices, HID } from 'node-hid';
 import { CommandLineArgs, LogService } from 'uhk-common';
 
