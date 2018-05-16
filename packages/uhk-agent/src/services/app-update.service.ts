@@ -9,6 +9,9 @@ import { IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 
 export class AppUpdateService extends MainServiceBase {
+
+    private sendAutoUpdateNotification = false;
+
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
                 private app: Electron.App) {
@@ -24,16 +27,21 @@ export class AppUpdateService extends MainServiceBase {
 
     private initListeners() {
         autoUpdater.on('checking-for-update', () => {
+            this.logService.debug('[AppUpdateService] checking for update');
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkingForUpdate);
         });
 
         autoUpdater.on('update-available', async (ev: any, info: UpdateInfo) => {
+            this.logService.debug('[AppUpdateService] update available. Downloading started');
             await autoUpdater.downloadUpdate();
             this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
         });
 
         autoUpdater.on('update-not-available', (ev: any, info: UpdateInfo) => {
-            this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
+            if (this.sendAutoUpdateNotification) {
+                this.logService.debug('[AppUpdateService] update not available');
+                this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
+            }
         });
 
         autoUpdater.on('error', (ev: any, err: string) => {
@@ -51,6 +59,7 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         autoUpdater.on('update-downloaded', (ev: any, info: UpdateInfo) => {
+            this.logService.debug('[AppUpdateService] update downloaded');
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloaded, info);
         });
 
@@ -61,12 +70,15 @@ export class AppUpdateService extends MainServiceBase {
 
         ipcMain.on(IpcEvents.app.appStarted, () => {
             if (this.checkForUpdateAtStartup()) {
+                this.sendAutoUpdateNotification = false;
+                this.logService.debug('[AppUpdateService] app started. Automatically check for update.');
                 this.checkForUpdate();
             }
         });
 
         ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => {
             this.logService.debug('[AppUpdateService] checkForUpdate request from renderer process');
+            this.sendAutoUpdateNotification = true;
             this.checkForUpdate();
         });
     }
@@ -75,14 +87,22 @@ export class AppUpdateService extends MainServiceBase {
         if (isDev) {
             const msg = '[AppUpdateService] Application update is not working in dev mode.';
             this.logService.info(msg);
-            this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+
+            if (this.sendAutoUpdateNotification) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+            }
+
             return;
         }
 
         if (this.isFirstRun()) {
             const msg = '[AppUpdateService] Application update is skipping at first run.';
             this.logService.info(msg);
-            this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+
+            if (this.sendAutoUpdateNotification) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+            }
+
             return;
         }
 
