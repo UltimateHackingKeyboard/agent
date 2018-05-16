@@ -9,6 +9,9 @@ import { IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 
 export class AppUpdateService extends MainServiceBase {
+
+    private sendAutoUpdateNotification = false;
+
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
                 private app: Electron.App) {
@@ -33,7 +36,9 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         autoUpdater.on('update-not-available', (ev: any, info: UpdateInfo) => {
-            this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
+            if (this.sendAutoUpdateNotification) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
+            }
         });
 
         autoUpdater.on('error', (ev: any, err: string) => {
@@ -61,12 +66,14 @@ export class AppUpdateService extends MainServiceBase {
 
         ipcMain.on(IpcEvents.app.appStarted, () => {
             if (this.checkForUpdateAtStartup()) {
+                this.sendAutoUpdateNotification = false;
                 this.checkForUpdate();
             }
         });
 
         ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => {
             this.logService.debug('[AppUpdateService] checkForUpdate request from renderer process');
+            this.sendAutoUpdateNotification = true;
             this.checkForUpdate();
         });
     }
@@ -75,14 +82,22 @@ export class AppUpdateService extends MainServiceBase {
         if (isDev) {
             const msg = '[AppUpdateService] Application update is not working in dev mode.';
             this.logService.info(msg);
-            this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+
+            if (this.sendAutoUpdateNotification) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+            }
+
             return;
         }
 
         if (this.isFirstRun()) {
             const msg = '[AppUpdateService] Application update is skipping at first run.';
             this.logService.info(msg);
-            this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+
+            if (this.sendAutoUpdateNotification) {
+                this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
+            }
+
             return;
         }
 
