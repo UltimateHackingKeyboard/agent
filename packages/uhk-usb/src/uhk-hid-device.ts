@@ -50,8 +50,10 @@ export class UhkHidDevice {
                 return true;
             }
 
-            this._hasPermission = this.getDevice() !== null;
-            this.close();
+            const devs = devices();
+
+            this._hasPermission = devs.some((x: Device) => x.vendorId === Constants.VENDOR_ID &&
+                (x.productId === Constants.PRODUCT_ID || x.productId === Constants.BOOTLOADER_ID));
 
             return this._hasPermission;
         } catch (err) {
