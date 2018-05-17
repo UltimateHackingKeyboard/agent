@@ -5,17 +5,18 @@ import { deviceRoutes } from './components/device';
 import { addOnRoutes } from './components/add-on';
 import { keymapRoutes } from './components/keymap';
 import { macroRoutes } from './components/macro';
-import { PrivilegeCheckerComponent } from './components/privilege-checker/privilege-checker.component';
-import { MissingDeviceComponent } from './components/missing-device/missing-device.component';
+import { PrivilegeCheckerComponent } from './components/privilege-checker';
+import { MissingDeviceComponent } from './components/missing-device';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { MainPage } from './pages/main-page/main.page';
-import { agentRoutes } from './components/agent/agent.routes';
+import { agentRoutes } from './components/agent';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
+import { RecoveryModeComponent } from './components/device';
 
 const appRoutes: Routes = [
     {
@@ -32,6 +33,10 @@ const appRoutes: Routes = [
         path: 'loading',
         component: LoadingDevicePageComponent,
         canActivate: [UhkDeviceLoadedGuard]
+    },
+    {
+        path: 'recovery-device',
+        component: RecoveryModeComponent
     },
     {
         path: '',
