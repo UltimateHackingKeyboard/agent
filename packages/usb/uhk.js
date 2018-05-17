@@ -1,7 +1,5 @@
-const util = require('util');
 const HID = require('node-hid');
 const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
-const {getTransferBuffers, ConfigBufferId, UhkHidDevice, UsbCommand} = require('uhk-usb');
 const Logger = require('./logger');
 const debug = process.env.DEBUG;
 
@@ -18,7 +16,7 @@ const kbootCommandIdToName = {
 const eepromOperationIdToName = {
     0: 'read',
     1: 'write',
-}
+};
 
 function bufferToString(buffer) {
     let str = '';
