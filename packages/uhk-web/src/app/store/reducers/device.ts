@@ -202,6 +202,7 @@ export function reducer(state = initialState, action: Action) {
             return {
                 ...state,
                 recoveringDevice: true,
+                updatingFirmware: true,
                 log: [{message: '', cssClass: XtermCssClass.standard}]
             };
         }
