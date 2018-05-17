@@ -1,5 +1,10 @@
 <div>
     <h4>Type text</h4>
-    <textarea #macroTextInput name="macro-text" (change)="onTextChange()"
-    (keyup)="validate()" class="macro__text-input">{{ macroAction?.text }}</textarea>
+    <textarea #macroTextInput
+              name="macro-text"
+              (keydown)="onKeydown($event)"
+              (change)="onTextChange()"
+              (keyup)="validate()"
+              (paste)="onPaste($event)"
+              class="macro__text-input">{{ macroAction?.text }}</textarea>
 </div>
