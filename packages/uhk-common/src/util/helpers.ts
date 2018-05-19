@@ -5,10 +5,11 @@ export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfi
     const hardwareConfig = new HardwareConfiguration();
     hardwareConfig.fromBinary(UhkBuffer.fromArray(data));
 
-    if (hardwareConfig.uniqueId > 0) {
-        return hardwareConfig;
+    if (hardwareConfig.signature !== 'UHK') {
+        throw Error('Invalid hardware configuration');
     }
-    return null;
+
+    return hardwareConfig;
 };
 
 export const getUserConfigFromDeviceResponse = (json: string): UserConfiguration => {
