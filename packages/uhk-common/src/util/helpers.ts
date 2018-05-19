@@ -5,6 +5,10 @@ export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfi
     const hardwareConfig = new HardwareConfiguration();
     hardwareConfig.fromBinary(UhkBuffer.fromArray(data));
 
+    if (hardwareConfig.signature === 'FTY') {
+        throw Error('The device is in factory reset mode. Power-cycle the device to use it with Agent!');
+    }
+
     if (hardwareConfig.signature !== 'UHK') {
         throw Error('Invalid hardware configuration');
     }
