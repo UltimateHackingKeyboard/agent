@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import { XtermLog } from '../../../models/xterm-log';
-import { AppState, firmwareOkButtonDisabled, flashFirmwareButtonDisbabled, xtermLog } from '../../../store';
-import { RecoveryDeviceAction, UpdateFirmwareOkButtonAction } from '../../../store/actions/device';
+import { AppState, flashFirmwareButtonDisbabled, xtermLog } from '../../../store';
+import { RecoveryDeviceAction } from '../../../store/actions/device';
 
 @Component({
     selector: 'device-recovery-mode',
@@ -19,7 +19,6 @@ import { RecoveryDeviceAction, UpdateFirmwareOkButtonAction } from '../../../sto
 export class RecoveryModeComponent implements OnInit, OnDestroy {
     xtermLogSubscription: Subscription;
     flashFirmwareButtonDisbabled$: Observable<boolean>;
-    firmwareOkButtonDisabled$: Observable<boolean>;
 
     xtermLog: Array<XtermLog>;
 
@@ -31,7 +30,6 @@ export class RecoveryModeComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.flashFirmwareButtonDisbabled$ = this.store.select(flashFirmwareButtonDisbabled);
-        this.firmwareOkButtonDisabled$ = this.store.select(firmwareOkButtonDisabled);
         this.xtermLogSubscription = this.store.select(xtermLog)
             .subscribe(data => {
                 this.xtermLog = data;
@@ -54,9 +52,5 @@ export class RecoveryModeComponent implements OnInit, OnDestroy {
 
     onRecoveryDevice(): void {
         this.store.dispatch(new RecoveryDeviceAction());
-    }
-
-    onOkButtonClick(): void {
-        this.store.dispatch(new UpdateFirmwareOkButtonAction());
     }
 }
