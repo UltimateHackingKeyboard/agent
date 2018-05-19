@@ -2,7 +2,7 @@
 const uhk = require('./uhk');
 
 if (process.argv.length < 2) {
-    console.log(`use: write-hca {iso|ansi}`);
+    console.log(`use: write-hardware-config {iso|ansi}`);
     process.exit(1);
 }
 
