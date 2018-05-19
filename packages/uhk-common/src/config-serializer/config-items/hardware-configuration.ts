@@ -41,16 +41,20 @@ export class HardwareConfiguration {
     }
 
     fromBinary(buffer: UhkBuffer): HardwareConfiguration {
-        this.signature = buffer.readString();
-        this.majorVersion = buffer.readUInt8();
-        this.minorVersion = buffer.readUInt8();
-        this.patchVersion = buffer.readUInt8();
-        this.brandId = buffer.readUInt8();
-        this.deviceId = buffer.readUInt8();
-        this.uniqueId = buffer.readUInt32();
-        this.isVendorModeOn = buffer.readBoolean();
-        this.isIso = buffer.readBoolean();
-        return this;
+        try {
+            this.signature = buffer.readString();
+            this.majorVersion = buffer.readUInt8();
+            this.minorVersion = buffer.readUInt8();
+            this.patchVersion = buffer.readUInt8();
+            this.brandId = buffer.readUInt8();
+            this.deviceId = buffer.readUInt8();
+            this.uniqueId = buffer.readUInt32();
+            this.isVendorModeOn = buffer.readBoolean();
+            this.isIso = buffer.readBoolean();
+            return this;
+        } catch (e) {
+            throw new Error('Invalid hardware configuration');
+        }
     }
 
     toJsonObject(): any {
