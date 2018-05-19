@@ -28,7 +28,7 @@ export class AppService extends MainServiceBase {
                 addons: this.options.addons || false
             },
             deviceConnected: deviceConnectionState.connected,
-            hasPermission: this.uhkHidDeviceService.hasPermission(),
+            hasPermission: deviceConnectionState.hasPermission,
             bootloaderActive: deviceConnectionState.bootloaderActive
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);
