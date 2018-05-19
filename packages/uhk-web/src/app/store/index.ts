@@ -79,6 +79,7 @@ export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, de
 export const getHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);
+export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
 
 export const getSideMenuPageState = createSelector(
     showAddonMenu,

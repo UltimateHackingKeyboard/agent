@@ -4,4 +4,5 @@ export interface AppStartInfo {
     commandLineArgs: CommandLineArgs;
     deviceConnected: boolean;
     hasPermission: boolean;
+    bootloaderActive: boolean;
 }

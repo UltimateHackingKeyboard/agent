@@ -17,6 +17,7 @@ import { RestoreConfigurationState } from '../../models/restore-configuration-st
 export interface State {
     connected: boolean;
     hasPermission: boolean;
+    bootloaderActive: boolean;
     saveToKeyboard: ProgressButtonState;
     updatingFirmware: boolean;
     firmwareUpdateFinished: boolean;
@@ -29,6 +30,7 @@ export interface State {
 export const initialState: State = {
     connected: true,
     hasPermission: true,
+    bootloaderActive: false,
     saveToKeyboard: initProgressButtonState,
     updatingFirmware: false,
     firmwareUpdateFinished: false,
@@ -53,7 +55,8 @@ export function reducer(state = initialState, action: Action) {
             return {
                 ...state,
                 connected: data.connected,
-                hasPermission: data.hasPermission
+                hasPermission: data.hasPermission,
+                bootloaderActive: data.bootloaderActive
             };
         }
 
@@ -193,6 +196,13 @@ export function reducer(state = initialState, action: Action) {
                 hasBackupUserConfiguration: false
             };
 
+        case ActionTypes.RECOVERY_DEVICE: {
+            return {
+                ...state,
+                updatingFirmware: true,
+                log: [{message: '', cssClass: XtermCssClass.standard}]
+            };
+        }
         default:
             return state;
     }
@@ -212,3 +222,4 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
         hasBackupUserConfiguration: state.hasBackupUserConfiguration
     };
 };
+export const bootloaderActive = (state: State) => state.bootloaderActive;

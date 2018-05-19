@@ -17,7 +17,8 @@ import {
     DeviceFirmwareComponent,
     MouseSpeedComponent,
     LEDBrightnessComponent,
-    RestoreConfigurationComponent
+    RestoreConfigurationComponent,
+    RecoveryModeComponent
 } from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
@@ -105,6 +106,7 @@ import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { Autofocus } from './directives/autofocus/autofocus.directive';
+import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 
 @NgModule({
     declarations: [
@@ -176,7 +178,8 @@ import { Autofocus } from './directives/autofocus/autofocus.directive';
         SliderWrapperComponent,
         EditableTextComponent,
         Autofocus,
-        RestoreConfigurationComponent
+        RestoreConfigurationComponent,
+        RecoveryModeComponent
     ],
     imports: [
         CommonModule,
@@ -211,7 +214,8 @@ import { Autofocus } from './directives/autofocus/autofocus.directive';
         UhkDeviceInitializedGuard,
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
-        UhkDeviceLoadedGuard
+        UhkDeviceLoadedGuard,
+        UhkDeviceBootloaderNotActiveGuard
     ],
     exports: [
         UhkMessageComponent,

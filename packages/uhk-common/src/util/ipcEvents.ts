@@ -29,6 +29,7 @@ export class Device {
     public static readonly updateFirmware = 'device-update-firmware';
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
+    public static readonly recoveryDevice = 'device-recovery';
 }
 
 export class IpcEvents {

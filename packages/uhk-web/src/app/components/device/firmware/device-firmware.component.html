@@ -42,7 +42,7 @@
         <div class="flex-grow" #scrollMe>
             <xterm [logs]="xtermLog$ | async"></xterm>
         </div>
-        <div class="footer">
+        <div class="flex-footer">
             <button type="button"
                     class="btn btn-primary ok-button"
                     [disabled]="firmwareOkButtonDisabled$ | async"

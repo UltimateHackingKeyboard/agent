@@ -22,13 +22,14 @@ export class AppService extends MainServiceBase {
 
     private async handleAppStartInfo(event: Electron.Event) {
         this.logService.info('[AppService] getAppStartInfo');
-
+        const deviceConnectionState = this.uhkHidDeviceService.getDeviceConnectionState();
         const response: AppStartInfo = {
             commandLineArgs: {
                 addons: this.options.addons || false
             },
-            deviceConnected: this.uhkHidDeviceService.deviceConnected(),
-            hasPermission: this.uhkHidDeviceService.hasPermission()
+            deviceConnected: deviceConnectionState.connected,
+            hasPermission: deviceConnectionState.hasPermission,
+            bootloaderActive: deviceConnectionState.bootloaderActive
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);
         return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);

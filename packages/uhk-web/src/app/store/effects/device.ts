@@ -24,6 +24,7 @@ import {
     ActionTypes,
     ConnectionStateChangedAction,
     HideSaveToKeyboardButton,
+    RecoveryDeviceAction,
     ResetUserConfigurationAction,
     RestoreUserConfigurationFromBackupSuccessAction,
     SaveConfigurationAction,
@@ -60,6 +61,9 @@ export class DeviceEffects {
             if (!state.hasPermission) {
                 this.router.navigate(['/privilege']);
             }
+            else if (state.bootloaderActive) {
+                this.router.navigate(['/recovery-device']);
+            }
             else if (state.connected) {
                 this.router.navigate(['/']);
             }
@@ -90,7 +94,8 @@ export class DeviceEffects {
             if (response.success) {
                 return new ConnectionStateChangedAction({
                     connected: true,
-                    hasPermission: true
+                    hasPermission: true,
+                    bootloaderActive: false
                 });
             }
 
@@ -213,6 +218,10 @@ export class DeviceEffects {
     @Effect() restoreUserConfiguration$ = this.actions$
         .ofType<ResetUserConfigurationAction>(ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP)
         .map(() => new SaveConfigurationAction());
+
+    @Effect({dispatch: false}) recoveryDevice$ = this.actions$
+        .ofType<RecoveryDeviceAction>(ActionTypes.RECOVERY_DEVICE)
+        .do(() => this.deviceRendererService.recoveryDevice());
 
     constructor(private actions$: Actions,
                 private router: Router,

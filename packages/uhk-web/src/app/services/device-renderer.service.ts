@@ -46,6 +46,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.startConnectionPoller);
     }
 
+    recoveryDevice(): void {
+        this.ipcRenderer.send(IpcEvents.device.recoveryDevice);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
