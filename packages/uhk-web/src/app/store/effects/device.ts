@@ -23,7 +23,8 @@ import {
 import {
     ActionTypes,
     ConnectionStateChangedAction,
-    HideSaveToKeyboardButton, RecoveryDeviceAction,
+    HideSaveToKeyboardButton,
+    RecoveryDeviceAction,
     ResetUserConfigurationAction,
     RestoreUserConfigurationFromBackupSuccessAction,
     SaveConfigurationAction,
