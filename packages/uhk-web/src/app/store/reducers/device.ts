@@ -222,3 +222,4 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
         hasBackupUserConfiguration: state.hasBackupUserConfiguration
     };
 };
+export const bootloaderActive = (state: State) => state.bootloaderActive;

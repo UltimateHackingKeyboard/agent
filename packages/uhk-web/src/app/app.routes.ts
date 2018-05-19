@@ -17,6 +17,7 @@ import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 import { RecoveryModeComponent } from './components/device';
+import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 
 const appRoutes: Routes = [
     {
@@ -36,7 +37,8 @@ const appRoutes: Routes = [
     },
     {
         path: 'recovery-device',
-        component: RecoveryModeComponent
+        component: RecoveryModeComponent,
+        canActivate: [UhkDeviceBootloaderNotActiveGuard]
     },
     {
         path: '',
