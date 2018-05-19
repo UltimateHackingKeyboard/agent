@@ -17,5 +17,6 @@ const uhk = require('./uhk');
     const device = uhk.getUhkDevice();
     const configBuffer = fs.readFileSync(configPath);
     await uhk.writeConfig(device, configBuffer, false);
-    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.configBufferIds.stagingUserConfig);
+    await uhk.applyConfig(device);
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, uhk.configBufferIds.validatedUserConfig);
 })();

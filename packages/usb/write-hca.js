@@ -12,7 +12,8 @@ if (layout !== 'iso' && layout !== 'ansi') {
     process.exit(1);
 }
 
-uhk.writeHca(layout === 'iso')
+const device = uhk.getUhkDevice();
+uhk.writeHca(device, layout === 'iso')
     .catch((err)=>{
         console.error(err);
     });
