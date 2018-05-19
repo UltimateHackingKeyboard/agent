@@ -25,7 +25,6 @@ export interface State {
     log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
     hasBackupUserConfiguration: boolean;
-    recoveringDevice: boolean;
 }
 
 export const initialState: State = {
@@ -46,8 +45,7 @@ export const initialState: State = {
     },
     log: [{message: '', cssClass: XtermCssClass.standard}],
     restoringUserConfiguration: false,
-    hasBackupUserConfiguration: false,
-    recoveringDevice: false
+    hasBackupUserConfiguration: false
 };
 
 export function reducer(state = initialState, action: Action) {
@@ -201,7 +199,6 @@ export function reducer(state = initialState, action: Action) {
         case ActionTypes.RECOVERY_DEVICE: {
             return {
                 ...state,
-                recoveringDevice: true,
                 updatingFirmware: true,
                 log: [{message: '', cssClass: XtermCssClass.standard}]
             };

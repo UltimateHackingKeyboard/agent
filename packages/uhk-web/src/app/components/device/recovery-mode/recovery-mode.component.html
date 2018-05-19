@@ -12,6 +12,7 @@
             <p>
                 <button class="btn btn-primary"
                         type="button"
+                        [disabled]="flashFirmwareButtonDisbabled$ | async"
                         (click)="onRecoveryDevice()">Fix device
                 </button>
             </p>
@@ -20,6 +21,11 @@
             <xterm [logs]="xtermLog"></xterm>
         </div>
         <div class="flex-footer">
+            <button type="button"
+                    class="btn btn-primary ok-button"
+                    [disabled]="firmwareOkButtonDisabled$ | async"
+                    (click)="onOkButtonClick()">Reload
+            </button>
         </div>
     </div>
 </div>
