@@ -393,6 +393,12 @@ async function writeHca(device, isIso) {
     await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.hardwareConfig);
 }
 
+async function eraseHca(device) {
+    const buffer = new Buffer(Array(64).fill(0xff));
+    await uhk.writeConfig(device, buffer, true);
+    await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.hardwareConfig);
+}
+
 async function getModuleProperty(device, slotId, moduleProperty) {
     await writeDevice(device, [uhk.usbCommands.getModuleProperty, slotId, moduleProperty]);
 }
@@ -423,6 +429,7 @@ uhk = exports = module.exports = moduleExports = {
     launchEepromTransfer,
     writeUca,
     writeHca,
+    eraseHca,
     getModuleProperty,
     usbCommands: {
         getDeviceProperty       : 0x00,
