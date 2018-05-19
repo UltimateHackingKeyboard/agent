@@ -164,6 +164,10 @@ export class DeviceService {
 
             await this.operations.updateRightFirmware();
 
+            await snooze(500);
+
+            this.pollUhkDevice();
+
             response.success = true;
         } catch (error) {
             const err = {message: error.message, stack: error.stack};
