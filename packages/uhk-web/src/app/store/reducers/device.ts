@@ -132,12 +132,14 @@ export function reducer(state = initialState, action: Action) {
             return {
                 ...state,
                 updatingFirmware: false,
-                firmwareUpdateFinished: true
+                firmwareUpdateFinished: true,
+                modules: (action as UpdateFirmwareFailedAction).payload
             };
 
         case ActionTypes.UPDATE_FIRMWARE_FAILED: {
+            const data = (action as UpdateFirmwareFailedAction).payload;
             const logEntry = {
-                message: (action as UpdateFirmwareFailedAction).payload.message,
+                message: data.error.message,
                 cssClass: XtermCssClass.error
             };
 
@@ -145,6 +147,7 @@ export function reducer(state = initialState, action: Action) {
                 ...state,
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
+                modules: data.modules,
                 log: [...state.log, logEntry]
             };
         }

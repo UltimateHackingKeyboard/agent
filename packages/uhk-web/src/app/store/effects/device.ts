@@ -15,6 +15,7 @@ import 'rxjs/add/operator/switchMap';
 
 import {
     DeviceConnectionState,
+    FirmwareUpgradeIpcResponse,
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
@@ -34,7 +35,6 @@ import {
     SetPrivilegeOnLinuxReplyAction,
     UpdateFirmwareAction,
     UpdateFirmwareFailedAction,
-    UpdateFirmwareOkButtonAction,
     UpdateFirmwareReplyAction,
     UpdateFirmwareSuccessAction,
     UpdateFirmwareWithAction
@@ -203,17 +203,17 @@ export class DeviceEffects {
     @Effect() updateFirmwareReply$ = this.actions$
         .ofType<UpdateFirmwareReplyAction>(ActionTypes.UPDATE_FIRMWARE_REPLY)
         .map(action => action.payload)
-        .switchMap((response: IpcResponse) => {
+        .switchMap((response: FirmwareUpgradeIpcResponse)
+            : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction> => {
             if (response.success) {
-                return Observable.of(new UpdateFirmwareSuccessAction());
+                return Observable.of(new UpdateFirmwareSuccessAction(response.modules));
             }
 
-            return Observable.of(new UpdateFirmwareFailedAction(response.error));
+            return Observable.of(new UpdateFirmwareFailedAction({
+                error: response.error,
+                modules: response.modules
+            }));
         });
-
-    @Effect({dispatch: false}) updateFirmwareOkButton$ = this.actions$
-        .ofType<UpdateFirmwareOkButtonAction>(ActionTypes.UPDATE_FIRMWARE_OK_BUTTON)
-        .do(() => this.deviceRendererService.startConnectionPoller());
 
     @Effect() restoreUserConfiguration$ = this.actions$
         .ofType<ResetUserConfigurationAction>(ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP)
