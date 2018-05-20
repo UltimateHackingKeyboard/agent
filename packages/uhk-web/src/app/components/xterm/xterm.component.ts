@@ -9,4 +9,8 @@ import { XtermLog } from '../../models/xterm-log';
 })
 export class XtermComponent {
     @Input() logs: Array<XtermLog> = [];
+
+    getClipboardContent(): string {
+        return this.logs.reduce((value, line) => value + line.message + '\n', '');
+    }
 }

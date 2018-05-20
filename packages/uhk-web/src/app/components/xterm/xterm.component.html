@@ -1,5 +1,17 @@
-<div class="wrapper">
-    <ul class="list-unstyled">
-        <li *ngFor="let log of logs" [ngClass]="log.cssClass"><span>{{ log.message }}</span></li>
-    </ul>
+<div class="x-term-container">
+    <div class="x-term-wrapper">
+        <ul class="list-unstyled">
+            <li *ngFor="let log of logs" [ngClass]="log.cssClass"><span>{{ log.message }}</span></li>
+        </ul>
+    </div>
+    <div class="copy-container-wrapper">
+        <div class="copy-container">
+            <span class="fa  fa-2x fa-copy"
+                  ngxClipboard
+                  [cbContent]="getClipboardContent()"
+                  title="Copy to clipboard"
+                  data-toggle="tooltip"
+                  data-placement="top"></span>
+        </div>
+    </div>
 </div>

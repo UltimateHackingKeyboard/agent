@@ -1,9 +1,64 @@
+$scrollbar-color: #ffffff;
+$scrollbar-radius: 6px;
+
 :host {
-    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
 }
 
-.wrapper {
+.x-term-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+}
+
+.x-term-wrapper {
     background-color: black;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    scrollbar-face-color: $scrollbar-color;
+    scrollbar-shadow-color: $scrollbar-color;
+    scrollbar-highlight-color: $scrollbar-color;
+    scrollbar-3dlight-color: $scrollbar-color;
+    scrollbar-darkshadow-color: $scrollbar-color;
+    scrollbar-track-color: $scrollbar-color;
+    scrollbar-arrow-color: $scrollbar-color;
+
+    /* Let's get this party started */
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: $scrollbar-radius;
+        border-radius: $scrollbar-radius;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        -webkit-border-radius: $scrollbar-radius;
+        border-radius: $scrollbar-radius;
+        background: $scrollbar-color;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.copy-container-wrapper {
+    position: absolute;
+    top: 2px;
+    right: 14px;
 }
 
 .xterm-standard {
