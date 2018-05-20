@@ -1,5 +1,5 @@
 <div class="x-term-container">
-    <div class="x-term-wrapper">
+    <div class="x-term-wrapper" #scrollMe>
         <ul class="list-unstyled">
             <li *ngFor="let log of logs" [ngClass]="log.cssClass"><span>{{ log.message }}</span></li>
         </ul>

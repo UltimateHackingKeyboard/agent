@@ -17,8 +17,8 @@
                 </button>
             </p>
         </div>
-        <div class="flex-grow" #scrollMe>
-            <xterm [logs]="xtermLog"></xterm>
+        <div class="flex-grow">
+            <xterm [logs]="xtermLog$ | async"></xterm>
         </div>
         <div class="flex-footer">
         </div>
