@@ -6,13 +6,12 @@ import { HardwareModules, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
-    firmwareOkButtonDisabled,
     flashFirmwareButtonDisbabled,
     getAgentVersionInfo,
     getHardwareModules,
     xtermLog
 } from '../../../store';
-import { UpdateFirmwareAction, UpdateFirmwareOkButtonAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
+import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 
 @Component({
@@ -28,7 +27,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
     xtermLog$: Observable<Array<XtermLog>>;
     xtermLogSubscription: Subscription;
     getAgentVersionInfo$: Observable<VersionInformation>;
-    firmwareOkButtonDisabled$: Observable<boolean>;
     hardwareModulesSubscription: Subscription;
     hardwareModules: HardwareModules;
 
@@ -45,7 +43,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
             }
         });
         this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
-        this.firmwareOkButtonDisabled$ = store.select(firmwareOkButtonDisabled);
         this.hardwareModulesSubscription = store.select(getHardwareModules).subscribe(data => {
             this.hardwareModules = data;
         });
@@ -58,10 +55,6 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     onUpdateFirmware(): void {
         this.store.dispatch(new UpdateFirmwareAction());
-    }
-
-    onOkButtonClick(): void {
-        this.store.dispatch(new UpdateFirmwareOkButtonAction());
     }
 
     changeFile(event): void {
