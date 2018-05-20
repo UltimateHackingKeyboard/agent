@@ -180,7 +180,8 @@ export class DeviceService {
     }
 
     public async recoveryDevice(event: Electron.Event): Promise<void> {
-        const response = new IpcResponse();
+        const response = new FirmwareUpgradeIpcResponse();
+
         try {
             this.stopPollTimer();
 
@@ -190,11 +191,13 @@ export class DeviceService {
 
             this.pollUhkDevice();
 
+            response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {
             const err = {message: error.message, stack: error.stack};
             this.logService.error('[DeviceService] updateFirmware error', err);
 
+            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
