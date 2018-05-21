@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { HardwareModules, VersionInformation } from 'uhk-common';
+import { Constants } from 'uhk-common';
+import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 
 import {
     AppState,
@@ -59,5 +61,10 @@ export class DeviceFirmwareComponent implements OnDestroy {
             this.store.dispatch(new UpdateFirmwareWithAction(Array.prototype.slice.call(arrayBuffer)));
         }.bind(this);
         fileReader.readAsArrayBuffer(files[0]);
+    }
+
+    openFirmwareGitHubIssuePage(event): void {
+        event.preventDefault();
+        this.store.dispatch(new OpenUrlInNewWindowAction(Constants.FIRMWARE_GITHUB_ISSUE_URL));
     }
 }

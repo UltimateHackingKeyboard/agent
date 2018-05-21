@@ -12,14 +12,16 @@
                 Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the right keyboard half.
             </p>
 
-            <p>
-                <i>
-                    Please note that the firmware update process may sometimes fail. If if fails then
-                    simply retry until it succeeds. If the left half becomes unresponsive after a failed
-                    update then retry and follow the instructions displayed during the update to fix it.
-                    We'll make the firmware update process more robust.
-                </i>
-            </p>
+            If the update process fails, consider the following points:
+            <ol>
+                <li>Windows 7, Windows Vista, and Windows XP are not supported. Use Linux, OSX, Windows 10, or Windows 8.</li>
+                <li>Connect your UHK directly to the host computer. Don't use USB hubs or KVM switches.</li>
+                <li>Run Agent directly on the host operating system. Don't use VirtualBox or VMware Workstation.</li>
+                <li>Give a try to every USB port of your computer.</li>
+                <li>If the left half becomes unresponsive after a failed update then retry and follow the instructions displayed during the update to fix it.</li>
+                <li>If the above fails, retry a couple of times.</li>
+                <li>If everything else fails, please add a new comment to <a class="link-github" (click)="openFirmwareGitHubIssuePage($event)">the GitHub issue</a>, and attach the update log.</li>
+            </ol>
 
             <p>
                 <button class="btn btn-primary"
