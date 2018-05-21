@@ -50,10 +50,14 @@ export class UhkHidDevice {
                 return true;
             }
 
-            const devs = devices();
+            if (process.platform === 'linux') {
+                const devs = devices();
 
-            this._hasPermission = devs.some((x: Device) => x.vendorId === Constants.VENDOR_ID &&
-                (x.productId === Constants.PRODUCT_ID || x.productId === Constants.BOOTLOADER_ID));
+                this._hasPermission = devs.some((x: Device) => x.vendorId === Constants.VENDOR_ID &&
+                    (x.productId === Constants.PRODUCT_ID || x.productId === Constants.BOOTLOADER_ID));
+            } else {
+                this._hasPermission = true;
+            }
 
             return this._hasPermission;
         } catch (err) {
@@ -255,8 +259,8 @@ export class UhkHidDevice {
                 x.productId === Constants.PRODUCT_ID &&
                 // hidapi can not read the interface number on Mac, so check the usage page and usage
                 ((x.usagePage === 128 && x.usage === 129) || // Old firmware
-                (x.usagePage === (0xFF00 | 0x00) && x.usage === 0x01) || // New firmware
-                x.interface === 0));
+                    (x.usagePage === (0xFF00 | 0x00) && x.usage === 0x01) || // New firmware
+                    x.interface === 0));
 
             if (!dev) {
                 this.logService.debug('[UhkHidDevice] UHK Device not found:');
