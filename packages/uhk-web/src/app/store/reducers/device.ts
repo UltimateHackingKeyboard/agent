@@ -7,7 +7,8 @@ import {
     HardwareModulesLoadedAction,
     SaveConfigurationAction,
     HasBackupUserConfigurationAction,
-    UpdateFirmwareFailedAction
+    UpdateFirmwareFailedAction,
+    UpdateFirmwareSuccessAction
 } from '../actions/device';
 import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
@@ -19,6 +20,7 @@ export interface State {
     hasPermission: boolean;
     bootloaderActive: boolean;
     saveToKeyboard: ProgressButtonState;
+    savingToKeyboard: boolean;
     updatingFirmware: boolean;
     firmwareUpdateFinished: boolean;
     modules: HardwareModules;
@@ -32,6 +34,7 @@ export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
     saveToKeyboard: initProgressButtonState,
+    savingToKeyboard: false,
     updatingFirmware: false,
     firmwareUpdateFinished: false,
     modules: {
@@ -48,7 +51,7 @@ export const initialState: State = {
     hasBackupUserConfiguration: false
 };
 
-export function reducer(state = initialState, action: Action) {
+export function reducer(state = initialState, action: Action): State {
     switch (action.type) {
         case ActionTypes.CONNECTION_STATE_CHANGED: {
             const data = (<ConnectionStateChangedAction>action).payload;
@@ -133,7 +136,7 @@ export function reducer(state = initialState, action: Action) {
                 ...state,
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
-                modules: (action as UpdateFirmwareFailedAction).payload
+                modules: (action as UpdateFirmwareSuccessAction).payload
             };
 
         case ActionTypes.UPDATE_FIRMWARE_FAILED: {
@@ -216,7 +219,6 @@ export const isDeviceConnected = (state: State) => state.connected || state.upda
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
-export const firmwareOkButtonDisabled = (state: State) => !state.firmwareUpdateFinished;
 export const getHardwareModules = (state: State) => state.modules;
 export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration;
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {

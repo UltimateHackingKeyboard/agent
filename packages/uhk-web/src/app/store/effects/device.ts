@@ -14,7 +14,6 @@ import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/switchMap';
 
 import {
-    DeviceConnectionState,
     FirmwareUpgradeIpcResponse,
     HardwareConfiguration,
     IpcResponse,
@@ -41,7 +40,7 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState } from '../index';
+import { AppState, getRouterState } from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -56,8 +55,14 @@ export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
-        .map(action => action.payload)
-        .do((state: DeviceConnectionState) => {
+        .withLatestFrom(this.store.select(getRouterState))
+        .do(([action, route]) => {
+            const state = action.payload;
+
+            if (route.state && route.state.url.startsWith('/device/firmware')) {
+                return;
+            }
+
             if (!state.hasPermission) {
                 this.router.navigate(['/privilege']);
             }
@@ -71,7 +76,9 @@ export class DeviceEffects {
                 this.router.navigate(['/detection']);
             }
         })
-        .switchMap((state: DeviceConnectionState) => {
+        .switchMap(([action, route]) => {
+            const state = action.payload;
+
             if (state.connected && state.hasPermission) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }

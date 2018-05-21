@@ -3,7 +3,7 @@ import { Action } from '@ngrx/store';
 export interface ProgressButtonState {
     showButton: boolean;
     text: string;
-    showProgress: boolean;
+    showProgress?: boolean;
     action?: Action;
 }
 
