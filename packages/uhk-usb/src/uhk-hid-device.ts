@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import { Device, devices, HID } from 'node-hid';
 import { CommandLineArgs, DeviceConnectionState, LogService } from 'uhk-common';
 
@@ -151,6 +151,10 @@ export class UhkHidDevice {
             this.logService.debug('Keyboard is busy, wait...');
             await snooze(200);
         }
+    }
+
+    public resetDeviceCache(): void {
+        this._prevDevices = {};
     }
 
     async reenumerate(enumerationMode: EnumerationModes): Promise<void> {

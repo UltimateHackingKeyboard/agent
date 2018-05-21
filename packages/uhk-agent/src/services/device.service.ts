@@ -146,6 +146,7 @@ export class DeviceService {
         let firmwarePathData: TmpFirmware;
 
         try {
+            this.device.resetDeviceCache();
             this.stopPollTimer();
 
             if (args && args.length > 0) {
