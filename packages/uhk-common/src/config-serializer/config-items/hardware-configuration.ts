@@ -53,7 +53,7 @@ export class HardwareConfiguration {
             this.isIso = buffer.readBoolean();
             return this;
         } catch (e) {
-            throw new Error('Invalid hardware configuration');
+            throw new Error('Invalid hardware configuration (Index out of bounds)');
         }
     }
 
