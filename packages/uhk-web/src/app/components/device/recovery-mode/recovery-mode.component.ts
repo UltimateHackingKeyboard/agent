@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import { XtermLog } from '../../../models/xterm-log';
@@ -16,38 +15,17 @@ import { RecoveryDeviceAction } from '../../../store/actions/device';
         'class': 'container-fluid'
     }
 })
-export class RecoveryModeComponent implements OnInit, OnDestroy {
-    xtermLogSubscription: Subscription;
+export class RecoveryModeComponent implements OnInit {
     flashFirmwareButtonDisbabled$: Observable<boolean>;
 
-    xtermLog: Array<XtermLog>;
+    xtermLog$: Observable<Array<XtermLog>>;
 
-    @ViewChild('scrollMe') divElement: ElementRef;
-
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>) {
     }
 
     ngOnInit(): void {
         this.flashFirmwareButtonDisbabled$ = this.store.select(flashFirmwareButtonDisbabled);
-        this.xtermLogSubscription = this.store.select(xtermLog)
-            .subscribe(data => {
-                this.xtermLog = data;
-
-                this.cdRef.markForCheck();
-
-                if (this.divElement && this.divElement.nativeElement) {
-                    setTimeout(() => {
-                        this.divElement.nativeElement.scrollTop = this.divElement.nativeElement.scrollHeight;
-                    });
-                }
-            });
-    }
-
-    ngOnDestroy(): void {
-        if (this.xtermLogSubscription) {
-            this.xtermLogSubscription.unsubscribe();
-        }
+        this.xtermLog$ = this.store.select(xtermLog);
     }
 
     onRecoveryDevice(): void {

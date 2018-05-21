@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
-import { MetaReducer } from '@ngrx/store';
-import { RouterReducerState } from '@ngrx/router-store';
+import { ActionReducerMap, MetaReducer } from '@ngrx/store';
+import { RouterReducerState, routerReducer } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { Keymap, UserConfiguration } from 'uhk-common';
 
@@ -14,15 +14,6 @@ import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
 
-export const reducers = {
-    userConfiguration: fromUserConfig.reducer,
-    presetKeymaps: fromPreset.reducer,
-    autoUpdateSettings: autoUpdateSettings.reducer,
-    app: fromApp.reducer,
-    appUpdate: fromAppUpdate.reducer,
-    device: fromDevice.reducer
-};
-
 // State interface for the application
 export interface AppState {
     userConfiguration: UserConfiguration;
@@ -33,6 +24,16 @@ export interface AppState {
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
 }
+
+export const reducers: ActionReducerMap<AppState> = {
+    userConfiguration: fromUserConfig.reducer,
+    presetKeymaps: fromPreset.reducer,
+    autoUpdateSettings: autoUpdateSettings.reducer,
+    app: fromApp.reducer,
+    router: routerReducer,
+    appUpdate: fromAppUpdate.reducer,
+    device: fromDevice.reducer
+};
 
 export const metaReducers: MetaReducer<AppState>[] = environment.production
     ? []
@@ -73,7 +74,6 @@ export const saveToKeyboardState = createSelector(runningInElectron, saveToKeybo
 });
 export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
-export const firmwareOkButtonDisabled = createSelector(deviceState, fromDevice.firmwareOkButtonDisabled);
 // tslint:disable-next-line: max-line-length
 export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
 export const getHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
@@ -103,3 +103,5 @@ export const getSideMenuPageState = createSelector(
         };
     }
 );
+
+export const getRouterState = (state: AppState) => state.router;

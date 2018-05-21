@@ -36,7 +36,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
-import { AppState, getPrevUserConfiguration, getUserConfiguration } from '../index';
+import { AppState, getPrevUserConfiguration, getRouterState, getUserConfiguration } from '../index';
 import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
 import {
     DismissUndoNotificationAction,
@@ -118,8 +118,10 @@ export class UserConfigEffects {
 
     @Effect() loadConfigFromDeviceReply$ = this.actions$
         .ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY)
-        .map(action => action.payload)
-        .mergeMap((data: ConfigurationReply): any => {
+        .withLatestFrom(this.store.select(getRouterState))
+        .mergeMap(([action, route]): any => {
+            const data: ConfigurationReply = action.payload;
+
             if (!data.success) {
                 return [new ShowNotificationAction({
                     type: NotificationType.Error,
@@ -128,11 +130,15 @@ export class UserConfigEffects {
             }
 
             const result = [];
-            let newPageDestination = ['/'];
+            let newPageDestination: Array<string>;
 
             try {
                 const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
                 result.push(new LoadUserConfigSuccessAction(userConfig));
+
+                if (route.state && !route.state.url.startsWith('/device/firmware')) {
+                    newPageDestination = ['/'];
+                }
 
             } catch (err) {
                 this.logService.error('Eeprom user-config parse error:', err);
@@ -158,7 +164,9 @@ export class UserConfigEffects {
 
             result.push(new HardwareModulesLoadedAction(data.modules));
 
-            this.router.navigate(newPageDestination);
+            if (newPageDestination) {
+                this.router.navigate(newPageDestination);
+            }
 
             return result;
         });

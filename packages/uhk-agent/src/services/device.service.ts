@@ -2,6 +2,7 @@ import { ipcMain } from 'electron';
 import {
     ConfigurationReply,
     DeviceConnectionState,
+    FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
     HardwareModules,
     IpcEvents,
@@ -93,10 +94,7 @@ export class DeviceService {
         try {
             await this.device.waitUntilKeyboardBusy();
             const result = await this.operations.loadConfigurations();
-            const modules: HardwareModules = {
-                leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
-                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
-            };
+            const modules: HardwareModules = await this.getHardwareModules(false);
 
             const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
             const uniqueId = hardwareConfig.uniqueId;
@@ -119,13 +117,32 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
     }
 
+    public async getHardwareModules(catchError: boolean): Promise<HardwareModules> {
+        try {
+            await this.device.waitUntilKeyboardBusy();
+
+            return {
+                leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
+                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
+            };
+        }
+        catch (err) {
+            if (!catchError) {
+                return err;
+            }
+
+            this.logService.error('[DeviceService] Read hardware modules information failed', err);
+        }
+    }
+
     public close(): void {
         this.stopPollTimer();
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
 
     public async updateFirmware(event: Electron.Event, args?: Array<string>): Promise<void> {
-        const response = new IpcResponse();
+        const response = new FirmwareUpgradeIpcResponse();
+
         let firmwarePathData: TmpFirmware;
 
         try {
@@ -142,10 +159,12 @@ export class DeviceService {
             }
 
             response.success = true;
+            response.modules = await this.getHardwareModules(false);
         } catch (error) {
             const err = {message: error.message, stack: error.stack};
             this.logService.error('[DeviceService] updateFirmware error', err);
 
+            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
@@ -154,11 +173,15 @@ export class DeviceService {
         }
 
         await snooze(500);
+
+        this.pollUhkDevice();
+
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
     public async recoveryDevice(event: Electron.Event): Promise<void> {
-        const response = new IpcResponse();
+        const response = new FirmwareUpgradeIpcResponse();
+
         try {
             this.stopPollTimer();
 
@@ -168,11 +191,13 @@ export class DeviceService {
 
             this.pollUhkDevice();
 
+            response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {
             const err = {message: error.message, stack: error.stack};
             this.logService.error('[DeviceService] updateFirmware error', err);
 
+            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 

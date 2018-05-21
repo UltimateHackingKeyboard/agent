@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectionState, HardwareModules, IpcResponse, type } from 'uhk-common';
+import { DeviceConnectionState, FirmwareUpgradeIpcResponse, HardwareModules, IpcResponse, type } from 'uhk-common';
+import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 
 const PREFIX = '[device] ';
 
@@ -96,23 +97,21 @@ export class UpdateFirmwareWithAction implements Action {
 export class UpdateFirmwareReplyAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_REPLY;
 
-    constructor(public payload: IpcResponse) {
+    constructor(public payload: FirmwareUpgradeIpcResponse) {
     }
 }
 
 export class UpdateFirmwareSuccessAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_SUCCESS;
+    constructor(public payload: HardwareModules) {
+    }
 }
 
 export class UpdateFirmwareFailedAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_FAILED;
 
-    constructor(public payload: any) {
+    constructor(public payload: FirmwareUpgradeError) {
     }
-}
-
-export class UpdateFirmwareOkButtonAction implements Action {
-    type = ActionTypes.UPDATE_FIRMWARE_OK_BUTTON;
 }
 
 export class ResetMouseSpeedSettingsAction implements Action {
@@ -162,7 +161,6 @@ export type Actions
     | UpdateFirmwareReplyAction
     | UpdateFirmwareSuccessAction
     | UpdateFirmwareFailedAction
-    | UpdateFirmwareOkButtonAction
     | HardwareModulesLoadedAction
     | RestoreUserConfigurationFromBackupAction
     | HasBackupUserConfigurationAction

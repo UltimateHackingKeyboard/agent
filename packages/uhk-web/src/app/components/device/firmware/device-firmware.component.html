@@ -39,15 +39,10 @@
             </p>
         </div>
 
-        <div class="flex-grow" #scrollMe>
+        <div class="flex-grow">
             <xterm [logs]="xtermLog$ | async"></xterm>
         </div>
         <div class="flex-footer">
-            <button type="button"
-                    class="btn btn-primary ok-button"
-                    [disabled]="firmwareOkButtonDisabled$ | async"
-                    (click)="onOkButtonClick()">OK
-            </button>
         </div>
     </div>
 </div>
