@@ -9,6 +9,7 @@ import {
 } from './constants';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { snooze } from './util';
@@ -29,6 +30,7 @@ export class UhkOperations {
     }
 
     public async updateRightFirmware(firmwarePath = this.getFirmwarePath()) {
+        this.logService.debug(`[UhkOperations] Operating system: ${os.platform()} ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.debug('[UhkOperations] Start flashing right firmware');
         const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
 
