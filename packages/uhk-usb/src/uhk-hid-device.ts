@@ -13,7 +13,7 @@ import {
     ModuleSlotToId,
     UsbCommand
 } from './constants';
-import { bufferToString, getTransferData, retry, snooze } from './util';
+import { bufferToString, getTransferData, isUhkDevice, retry, snooze } from './util';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -50,14 +50,12 @@ export class UhkHidDevice {
                 return true;
             }
 
-            if (process.platform === 'linux') {
-                const devs = devices();
+            const dev = devices().find((x: Device) => isUhkDevice(x) || x.productId === Constants.BOOTLOADER_ID);
 
-                this._hasPermission = devs.some((x: Device) => x.vendorId === Constants.VENDOR_ID &&
-                    (x.productId === Constants.PRODUCT_ID || x.productId === Constants.BOOTLOADER_ID));
-            } else {
-                this._hasPermission = true;
-            }
+            const device = new HID(dev.path);
+            device.close();
+
+            this._hasPermission = true;
 
             return this._hasPermission;
         } catch (err) {
@@ -80,8 +78,7 @@ export class UhkHidDevice {
         };
 
         for (const dev of devs) {
-            if (dev.vendorId === Constants.VENDOR_ID &&
-                dev.productId === Constants.PRODUCT_ID) {
+            if (isUhkDevice(dev)) {
                 result.connected = true;
             } else if (dev.vendorId === Constants.VENDOR_ID &&
                 dev.productId === Constants.BOOTLOADER_ID) {
@@ -254,13 +251,7 @@ export class UhkHidDevice {
                 this.logService.debug('[UhkHidDevice] Available devices unchanged');
             }
 
-            const dev = devs.find((x: Device) =>
-                x.vendorId === Constants.VENDOR_ID &&
-                x.productId === Constants.PRODUCT_ID &&
-                // hidapi can not read the interface number on Mac, so check the usage page and usage
-                ((x.usagePage === 128 && x.usage === 129) || // Old firmware
-                    (x.usagePage === (0xFF00 | 0x00) && x.usage === 0x01) || // New firmware
-                    x.interface === 0));
+            const dev = devs.find(isUhkDevice);
 
             if (!dev) {
                 this.logService.debug('[UhkHidDevice] UHK Device not found:');

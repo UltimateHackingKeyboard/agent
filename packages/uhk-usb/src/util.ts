@@ -1,5 +1,7 @@
-import { Constants, UsbCommand } from './constants';
+import { Device } from 'node-hid';
 import { DeviceConnectionState, LogService } from 'uhk-common';
+
+import { Constants, UsbCommand } from './constants';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -100,4 +102,13 @@ export const deviceConnectionStateComparer = (a: DeviceConnectionState, b: Devic
     return a.hasPermission === b.hasPermission
         && a.connected === b.connected
         && a.bootloaderActive === b.bootloaderActive;
+};
+
+export const isUhkDevice = (dev: Device): boolean => {
+    return dev.vendorId === Constants.VENDOR_ID &&
+    dev.productId === Constants.PRODUCT_ID &&
+    // hidapi can not read the interface number on Mac, so check the usage page and usage
+    ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
+        (dev.usagePage === (0xFF00 | 0x00) && dev.usage === 0x01) || // New firmware
+        dev.interface === 0);
 };
