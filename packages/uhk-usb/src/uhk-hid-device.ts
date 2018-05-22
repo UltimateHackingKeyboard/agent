@@ -52,6 +52,10 @@ export class UhkHidDevice {
 
             const dev = devices().find((x: Device) => isUhkDevice(x) || x.productId === Constants.BOOTLOADER_ID);
 
+            if (!dev) {
+                return true;
+            }
+            
             const device = new HID(dev.path);
             device.close();
 
