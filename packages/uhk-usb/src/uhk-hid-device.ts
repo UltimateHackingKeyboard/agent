@@ -55,7 +55,7 @@ export class UhkHidDevice {
             if (!dev) {
                 return true;
             }
-            
+
             const device = new HID(dev.path);
             device.close();
 
