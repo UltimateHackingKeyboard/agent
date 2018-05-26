@@ -30,7 +30,7 @@ export class UhkOperations {
     }
 
     public async updateRightFirmware(firmwarePath = this.getFirmwarePath()) {
-        this.logService.debug(`[UhkOperations] Operating system: ${os.platform()} ${os.type()} ${os.release()} ${os.arch()}`);
+        this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.debug('[UhkOperations] Start flashing right firmware');
         const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
 
