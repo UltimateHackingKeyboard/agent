@@ -1,0 +1,9 @@
+<label class="btn btn-primary btn-file"
+       [class.disabled]="disabled">
+    {{ label }}
+    <input #inputControl
+           type="file"
+           [accept]="accept"
+           [disabled]="disabled"
+           (change)="changeFile($event)">
+</label>
