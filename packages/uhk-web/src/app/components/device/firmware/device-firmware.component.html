@@ -30,15 +30,10 @@
                         (click)="onUpdateFirmware()">
                     Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 </button>
-                <label class="btn btn-primary btn-file"
-                       [class.disabled]="flashFirmwareButtonDisbabled$ | async">
-                    Choose firmware file and flash it
-                    <input id="firmware-file-select"
-                           type="file"
-                           accept=".tar.bz2"
-                           [disabled]="flashFirmwareButtonDisbabled$ | async"
-                           (change)="changeFile($event)">
-                </label>
+                <file-upload [disabled]="flashFirmwareButtonDisbabled$ | async"
+                             (fileChanged)="changeFile($event)"
+                             accept=".tar.bz2"
+                             label="Choose firmware file and flash it"></file-upload>
             </p>
         </div>
 

@@ -15,6 +15,7 @@ import {
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
+import { UploadFileData } from '../../../models/upload-file-data';
 
 @Component({
     selector: 'device-firmware',
@@ -48,19 +49,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
         this.store.dispatch(new UpdateFirmwareAction());
     }
 
-    changeFile(event): void {
-        const files = event.srcElement.files;
-
-        if (files.length === 0) {
-            return;
-        }
-
-        const fileReader = new FileReader();
-        fileReader.onloadend = function () {
-            const arrayBuffer = new Uint8Array(fileReader.result);
-            this.store.dispatch(new UpdateFirmwareWithAction(Array.prototype.slice.call(arrayBuffer)));
-        }.bind(this);
-        fileReader.readAsArrayBuffer(files[0]);
+    changeFile(data: UploadFileData): void {
+        this.store.dispatch(new UpdateFirmwareWithAction(data.data));
     }
 
     openFirmwareGitHubIssuePage(event): void {

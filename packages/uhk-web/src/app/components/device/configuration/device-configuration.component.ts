@@ -8,6 +8,7 @@ import {
     SaveUserConfigInBinaryFileAction,
     SaveUserConfigInJsonFileAction
 } from '../../../store/actions/user-config';
+import { UploadFileData } from '../../../models/upload-file-data';
 
 @Component({
     selector: 'device-settings',
@@ -42,16 +43,7 @@ export class DeviceConfigurationComponent {
         }
     }
 
-    changeFile(event): void {
-        const files = event.srcElement.files;
-        const fileReader = new FileReader();
-        fileReader.onloadend = function () {
-            const arrayBuffer = new Uint8Array(fileReader.result);
-            this.store.dispatch(new LoadUserConfigurationFromFileAction({
-                filename: event.srcElement.value,
-                data: Array.from(arrayBuffer)
-            }));
-        }.bind(this);
-        fileReader.readAsArrayBuffer(files[0]);
+    changeFile(data: UploadFileData): void {
+        this.store.dispatch(new LoadUserConfigurationFromFileAction(data));
     }
 }

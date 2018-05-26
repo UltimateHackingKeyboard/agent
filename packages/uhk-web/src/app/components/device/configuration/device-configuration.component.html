@@ -14,11 +14,9 @@
         </button>
     </li>
     <li>
-        <label class="btn btn-default btn-file">
-            Import device configuration
-            <input type="file"
-                   (change)="changeFile($event)">
-        </label>
+        <file-upload (fileChanged)="changeFile($event)"
+                     label="Import device configuration">
+        </file-upload>
     </li>
     <li>
         <button class="btn btn-danger"

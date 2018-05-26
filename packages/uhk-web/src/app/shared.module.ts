@@ -107,6 +107,7 @@ import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapp
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { Autofocus } from './directives/autofocus/autofocus.directive';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
+import { FileUploadComponent } from './components/file-upload';
 
 @NgModule({
     declarations: [
@@ -179,7 +180,8 @@ import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloa
         EditableTextComponent,
         Autofocus,
         RestoreConfigurationComponent,
-        RecoveryModeComponent
+        RecoveryModeComponent,
+        FileUploadComponent
     ],
     imports: [
         CommonModule,
