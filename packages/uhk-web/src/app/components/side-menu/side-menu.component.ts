@@ -1,5 +1,4 @@
 import {
-    AfterContentInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -19,7 +18,6 @@ import 'rxjs/add/operator/let';
 
 import { AppState, getSideMenuPageState } from '../../store';
 import { MacroActions } from '../../store/actions';
-import * as util from '../../util';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 import { SideMenuPageState } from '../../models/side-menu-page-state';
 
@@ -40,7 +38,7 @@ import { SideMenuPageState } from '../../models/side-menu-page-state';
     styleUrls: ['./side-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideMenuComponent implements AfterContentInit, OnInit, OnDestroy {
+export class SideMenuComponent implements OnInit, OnDestroy {
     state: SideMenuPageState;
     animation: { [key: string]: 'active' | 'inactive' };
     @ViewChild('deviceName') deviceName: ElementRef;
@@ -62,13 +60,8 @@ export class SideMenuComponent implements AfterContentInit, OnInit, OnDestroy {
     ngOnInit(): void {
         this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
             this.state = data;
-            this.setDeviceName();
             this.cdRef.markForCheck();
         });
-    }
-
-    ngAfterContentInit(): void {
-        this.setDeviceName();
     }
 
     ngOnDestroy(): void {
@@ -106,24 +99,6 @@ export class SideMenuComponent implements AfterContentInit, OnInit, OnDestroy {
     }
 
     editDeviceName(name: string): void {
-        if (!util.isValidName(name) || name.trim() === this.state.deviceName) {
-            this.setDeviceName();
-            return;
-        }
         this.store.dispatch(new RenameUserConfigurationAction(name));
-    }
-
-    calculateHeaderTextWidth(text): void {
-        const htmlInput = this.deviceName.nativeElement as HTMLInputElement;
-        const maxWidth = htmlInput.parentElement.offsetWidth * 0.66;
-        const textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
-        this.renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
-    }
-
-    private setDeviceName(): void {
-        if (this.deviceName) {
-            this.renderer.setProperty(this.deviceName.nativeElement, 'value', this.state.deviceName);
-            this.calculateHeaderTextWidth(this.deviceName.nativeElement.value);
-        }
     }
 }
