@@ -101,6 +101,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
             return;
         }
 
+        this._originalModel = this._model;
         this._onChanged(this._model);
     }
 
