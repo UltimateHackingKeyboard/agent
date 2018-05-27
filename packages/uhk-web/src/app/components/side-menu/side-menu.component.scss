@@ -162,22 +162,3 @@ ul {
         }
     }
 }
-
-.pane-title {
-    margin-bottom: 1em;
-
-    &__name {
-        border: none;
-        border-bottom: 2px dotted #999;
-        padding: 0;
-        margin: 0 0.25rem;
-        text-overflow: ellipsis;
-        background-color: transparent;
-
-        &:focus {
-            box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
-            border-color: transparent;
-            background-color: transparent;
-        }
-    }
-}

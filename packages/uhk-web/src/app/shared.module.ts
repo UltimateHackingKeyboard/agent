@@ -108,6 +108,7 @@ import { EditableTextComponent } from './components/editable-text/editable-text.
 import { Autofocus } from './directives/autofocus/autofocus.directive';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 import { FileUploadComponent } from './components/file-upload';
+import { AutoGrowInputComponent } from './components/auto-grow-input';
 
 @NgModule({
     declarations: [
@@ -181,7 +182,8 @@ import { FileUploadComponent } from './components/file-upload';
         Autofocus,
         RestoreConfigurationComponent,
         RecoveryModeComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        AutoGrowInputComponent
     ],
     imports: [
         CommonModule,
