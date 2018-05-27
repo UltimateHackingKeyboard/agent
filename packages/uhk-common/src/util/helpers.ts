@@ -10,7 +10,7 @@ export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfi
     }
 
     if (hardwareConfig.signature !== 'UHK') {
-        throw Error('Invalid hardware configuration (Invalid signature)');
+        throw Error('Please power cycle your keyboard (Invalid hardware configuration: Invalid signature)');
     }
 
     return hardwareConfig;
