@@ -6,15 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.2.2] - 2018-05-22
+## [1.2.2] - 2018-05-27
 
-Firmware: 8.2.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.4)] | Device Protocol: 4.3.**1** | User Config: 4.0.**1** | Hardware Config: 1.0.0
+Firmware: 8.2.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.**1** | User Config: 4.0.**1** | Hardware Config: 1.0.0
 
 - Offer recovery for bricked right keyboard halfs.
 - Detect when the hardware configuration of a device is invalid and display a notification.
-- Only allow ASCII characters in type text macro actions.
-- Only send auto update notification when the user initiates the update.
 - Check if the keyboard is in factory reset mode and if so, display a relevant instruction.
+- Only allow ASCII characters in type text macro actions.
+- Allow uploading the same file multiple times in a row.
+- Only send auto update notification when the user initiates the update.
 - Update the firmware versions on the firmware update page right after firmware updates.
 - Add a lot of useful instructions to the firmware page to help users update the firmware.
 - Add the operating system and initial device list to the firmware update log.
