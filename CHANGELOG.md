@@ -8,10 +8,10 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 ## [1.2.2] - 2018-05-27
 
-Firmware: 8.2.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.**1** | User Config: 4.0.**1** | Hardware Config: 1.0.0
+Firmware: 8.2.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.**1** | User Config: 4.0.1 | Hardware Config: 1.0.0
 
 - Offer recovery for bricked right keyboard halfs.
-- Detect when the hardware configuration of a device is invalid and display a notification.
+- Detect when the hardware configuration of a device is invalid and display a notification. `DEVICEPROTOCOL:PATCH`
 - Check if the keyboard is in factory reset mode and if so, display a relevant instruction.
 - Only allow ASCII characters in type text macro actions.
 - Allow uploading the same file multiple times in a row.
