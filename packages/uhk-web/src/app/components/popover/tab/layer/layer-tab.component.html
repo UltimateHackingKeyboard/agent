@@ -17,7 +17,7 @@
             <ng-template ngSwitchDefault>layer by holding this key.</ng-template>
         </span>
         </div>
-        <div *ngIf="toggle === 'active'">
+        <div *ngIf="toggle === 'active' && allowLayerDoubleTap">
             <div class="checkbox">
                 <label>
                     <input type="checkbox"

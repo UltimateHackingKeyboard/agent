@@ -13,6 +13,7 @@ export type toggleType = 'active' | 'toggle';
 export class LayerTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentLayer: number;
+    @Input() allowLayerDoubleTap: boolean;
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
@@ -101,7 +102,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
         const keyAction = new SwitchLayerAction();
         if (this.toggle === 'toggle') {
             keyAction.switchLayerMode = SwitchLayerMode.toggle;
-        } else if (this.lockLayerWhenDoubleTapping) {
+        } else if (!this.allowLayerDoubleTap || this.lockLayerWhenDoubleTapping) {
             keyAction.switchLayerMode = SwitchLayerMode.holdAndDoubleTapToggle;
         } else {
             keyAction.switchLayerMode = SwitchLayerMode.hold;

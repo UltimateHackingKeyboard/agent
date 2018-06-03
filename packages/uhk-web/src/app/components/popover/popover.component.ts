@@ -27,7 +27,7 @@ import {
     SwitchLayerAction
 } from 'uhk-common';
 
-import { Tab } from './tab/tab';
+import { Tab } from './tab';
 
 import { AppState } from '../../store';
 import { getKeymaps } from '../../store/reducers/user-configuration';
@@ -82,6 +82,7 @@ export class PopoverComponent implements OnChanges {
     @Input() keyPosition: any;
     @Input() wrapPosition: any;
     @Input() visible: boolean;
+    @Input() allowLayerDoubleTap: boolean;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyAction>();
