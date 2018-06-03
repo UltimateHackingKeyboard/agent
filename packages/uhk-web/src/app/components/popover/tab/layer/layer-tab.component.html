@@ -1,19 +1,32 @@
 <ng-template [ngIf]="!isNotBase">
-    <select (change)="toggleChanged($event.target.value)">
-        <option *ngFor="let item of toggleData" [value]="item.id" [selected]="toggle === item.id">
-            {{ item.text }}
-        </option>
-    </select>
-    <span>the</span>
-    <select (change)="layerChanged($event.target.value)">
-        <option *ngFor="let item of layerData" [value]="item.id" [selected]="layer === item.id">
-            {{ item.text }}
-        </option>
-    </select>
-    <span [ngSwitch]="toggle">
-        <ng-template [ngSwitchCase]="true">layer by tapping this key.</ng-template>
-        <ng-template ngSwitchDefault>layer by holding this key.</ng-template>
-    </span>
+    <div>
+        <div>
+            <select (change)="toggleChanged($event.target.value)">
+                <option *ngFor="let item of toggleData" [value]="item.id" [selected]="toggle === item.id">
+                    {{ item.text }}
+                </option>
+            </select>
+            <span>the</span>
+            <select (change)="layerChanged($event.target.value)">
+                <option *ngFor="let item of layerData" [value]="item.id" [selected]="layer === item.id">
+                    {{ item.text }}
+                </option>
+            </select>
+            <span [ngSwitch]="toggle">
+            <ng-template [ngSwitchCase]="'toggle'">layer by tapping this key.</ng-template>
+            <ng-template ngSwitchDefault>layer by holding this key.</ng-template>
+        </span>
+        </div>
+        <div *ngIf="toggle === 'active'">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                           [(ngModel)]="lockLayerWhenDoubleTapping"> Lock layer when double tapping this key
+                    application start
+                </label>
+            </div>
+        </div>
+    </div>
 </ng-template>
 <ng-template [ngIf]="isNotBase">
     <span> Layer switching is only possible from the base layer. </span>

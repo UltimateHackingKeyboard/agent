@@ -17,13 +17,14 @@ import {
     MouseAction,
     PlayMacroAction,
     SwitchKeymapAction,
-    SwitchLayerAction
+    SwitchLayerAction,
+    SwitchLayerMode
 } from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';
 
-import { AppState } from '../../../../store/index';
+import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
 
 enum LabelTypes {
@@ -288,7 +289,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                     break;
             }
 
-            if (keyAction.isLayerToggleable) {
+            if (keyAction.switchLayerMode === SwitchLayerMode.toggle) {
                 this.labelType = LabelTypes.TextIcon;
                 this.labelSource = {
                     text: newLabelSource,

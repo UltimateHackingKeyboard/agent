@@ -32,7 +32,8 @@ import {
     PlayMacroAction,
     SecondaryRoleAction,
     SwitchKeymapAction,
-    SwitchLayerAction
+    SwitchLayerAction,
+    SwitchLayerMode
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -350,7 +351,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                     },
                     {
                         name: 'Toogle',
-                        value: switchLayerAction.isLayerToggleable ? 'On' : 'Off'
+                        value: switchLayerAction.switchLayerMode === SwitchLayerMode.toggle ? 'On' : 'Off'
                     }
                 ];
             return Observable.of(content);
