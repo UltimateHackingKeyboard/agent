@@ -70,7 +70,6 @@
     background-color: #f7f7f7;
     border-top: 1px solid #ebebeb;
     border-radius: 0 0 5px 5px;
-    text-align: right;
 }
 
 .popover-title {
@@ -131,5 +130,13 @@
         left: 0;
         top: 50%;
         margin-top: -1rem;
+    }
+}
+
+.popover-action-form {
+    margin-top: 4px;
+
+    label {
+        margin-right: 5px;
     }
 }
