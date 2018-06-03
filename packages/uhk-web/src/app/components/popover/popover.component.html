@@ -79,12 +79,14 @@
         <form class="form-inline d-inline-block popover-action-form">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox"> Remap on all keymaps
+                    <input type="checkbox"
+                            [(ngModel)]="remapOnAllKeymap"> Remap on all keymaps
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox"> Remap on all layers
+                    <input type="checkbox"
+                           [(ngModel)]="remapOnAllLayer"> Remap on all layers
                 </label>
             </div>
             <div class="d-inline-block">

@@ -139,7 +139,8 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             const keyIndex: number = action.payload.key;
             const layerIndex: number = action.payload.layer;
             const moduleIndex: number = action.payload.module;
-            const newKeyAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
+            const keyActionRemap = action.payload.keyAction;
+            const newKeyAction = KeyActionHelper.createKeyAction(keyActionRemap.action);
             const newKeymap: Keymap = Object.assign(new Keymap(), action.payload.keymap);
             newKeymap.layers = newKeymap.layers.slice();
 
@@ -153,7 +154,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 // on the target layer
                 else if (newKeyAction instanceof SwitchLayerAction) {
                     if (index - 1 === newKeyAction.layer) {
-                        const clonedAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
+                        const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
                         setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
                     } else {
                         setKeyActionToLayer(newLayer, moduleIndex, keyIndex, null);

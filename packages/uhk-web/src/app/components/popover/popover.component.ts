@@ -31,6 +31,7 @@ import { Tab } from './tab';
 
 import { AppState } from '../../store';
 import { getKeymaps } from '../../store/reducers/user-configuration';
+import { KeyActionRemap } from '../../models/key-action-remap';
 
 enum TabName {
     Keypress,
@@ -59,8 +60,8 @@ enum TabName {
             })),
             transition('opened => closed', [
                 animate('200ms ease-out', keyframes([
-                    style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
-                    style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1 })
+                    style({transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0}),
+                    style({transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1})
                 ]))
             ]),
             transition('closed => opened', [
@@ -68,8 +69,8 @@ enum TabName {
                     visibility: 'visible'
                 }),
                 animate('200ms ease-out', keyframes([
-                    style({ transform: 'translateY(30px)', opacity: 0, offset: 0 }),
-                    style({ transform: 'translateY(0)', opacity: 1, offset: 1 })
+                    style({transform: 'translateY(30px)', opacity: 0, offset: 0}),
+                    style({transform: 'translateY(0)', opacity: 1, offset: 1})
                 ]))
             ])
         ])
@@ -85,7 +86,7 @@ export class PopoverComponent implements OnChanges {
     @Input() allowLayerDoubleTap: boolean;
 
     @Output() cancel = new EventEmitter<any>();
-    @Output() remap = new EventEmitter<KeyAction>();
+    @Output() remap = new EventEmitter<KeyActionRemap>();
 
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('popover') popoverHost: ElementRef;
@@ -99,6 +100,9 @@ export class PopoverComponent implements OnChanges {
     topPosition: number = 0;
     leftPosition: number = 0;
     animationState: string;
+
+    remapOnAllKeymap: boolean;
+    remapOnAllLayer: boolean;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
@@ -156,8 +160,11 @@ export class PopoverComponent implements OnChanges {
     onRemapKey(): void {
         if (this.keyActionValid) {
             try {
-                const keyAction = this.selectedTab.toKeyAction();
-                this.remap.emit(keyAction);
+                this.remap.emit({
+                    remapOnAllKeymap: this.remapOnAllKeymap,
+                    remapOnAllLayer: this.remapOnAllLayer,
+                    action: this.selectedTab.toKeyAction()
+                });
             } catch (e) {
                 // TODO: show error dialog
                 console.error(e);
