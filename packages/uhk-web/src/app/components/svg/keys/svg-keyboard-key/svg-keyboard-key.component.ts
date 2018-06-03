@@ -295,6 +295,12 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                     text: newLabelSource,
                     icon: this.mapper.getIcon('toggle')
                 };
+            } else if (keyAction.switchLayerMode === SwitchLayerMode.holdAndDoubleTapToggle) {
+                this.labelType = LabelTypes.TextIcon;
+                this.labelSource = {
+                    text: newLabelSource,
+                    icon: this.mapper.getIcon('double-tap')
+                };
             } else {
                 this.labelType = LabelTypes.OneLineText;
                 this.labelSource = newLabelSource;
