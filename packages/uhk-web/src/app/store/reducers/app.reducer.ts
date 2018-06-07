@@ -1,6 +1,7 @@
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 import {
+    CommandLineArgs,
     HardwareConfiguration,
     Notification,
     NotificationType,
@@ -18,7 +19,7 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
 
 export interface State {
     started: boolean;
-    showAddonMenu: boolean;
+    commandLineArgs: CommandLineArgs;
     undoableNotification?: Notification;
     navigationCountAfterNotification: number;
     prevUserConfig?: UserConfiguration;
@@ -32,7 +33,7 @@ export interface State {
 
 export const initialState: State = {
     started: false,
-    showAddonMenu: false,
+    commandLineArgs: {},
     navigationCountAfterNotification: 0,
     runningInElectron: runInElectron(),
     configLoading: true,
@@ -52,7 +53,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         case ActionTypes.APPLY_COMMAND_LINE_ARGS: {
             return {
                 ...state,
-                showAddonMenu: action.payload.addons
+                commandLineArgs: action.payload
             };
         }
 
@@ -148,7 +149,8 @@ export function reducer(state = initialState, action: Action & { payload: any })
     }
 }
 
-export const showAddonMenu = (state: State) => state.showAddonMenu;
+export const showAddonMenu = (state: State) => state.commandLineArgs.addons;
+export const allowLayerDoubleTap = (state: State) => state.commandLineArgs.layerDoubleTap;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;

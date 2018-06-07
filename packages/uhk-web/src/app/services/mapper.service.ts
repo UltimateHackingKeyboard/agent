@@ -262,6 +262,7 @@ export class MapperService {
     private initNameToFileNames(): void {
         this.nameToFileName = new Map<string, string>();
         this.nameToFileName.set('toggle', 'icon-kbd__fn--toggle');
+        this.nameToFileName.set('double-tap', 'icon-kbd__fn--double-tap');
         this.nameToFileName.set('switch-keymap', 'icon-kbd__mod--switch-keymap');
         this.nameToFileName.set('macro', 'icon-icon__macro');
         this.nameToFileName.set('shift', 'icon-kbd__default--modifier-shift');

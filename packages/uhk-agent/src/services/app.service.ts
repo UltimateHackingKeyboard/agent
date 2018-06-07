@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, shell } from 'electron';
+import { ipcMain, shell } from 'electron';
 import { UhkHidDevice } from 'uhk-usb';
 
 import { AppStartInfo, IpcEvents, LogService } from 'uhk-common';
@@ -25,7 +25,8 @@ export class AppService extends MainServiceBase {
         const deviceConnectionState = this.uhkHidDeviceService.getDeviceConnectionState();
         const response: AppStartInfo = {
             commandLineArgs: {
-                addons: this.options.addons || false
+                addons: this.options.addons || false,
+                layerDoubleTap: this.options['layer-double-tap'] || false
             },
             deviceConnected: deviceConnectionState.connected,
             hasPermission: deviceConnectionState.hasPermission,

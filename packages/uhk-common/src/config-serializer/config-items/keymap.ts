@@ -127,7 +127,7 @@ export class Keymap {
                         if (currentLayerId - 1 === baseKeyAction.layer) {
                             if (currentKeyAction instanceof SwitchLayerAction) {
                                 if (currentKeyAction.layer === baseKeyAction.layer &&
-                                    currentKeyAction.isLayerToggleable === baseKeyAction.isLayerToggleable) {
+                                    currentKeyAction.switchLayerMode === baseKeyAction.switchLayerMode) {
                                     continue;
                                 }
                                 // tslint:disable-next-line: max-line-length

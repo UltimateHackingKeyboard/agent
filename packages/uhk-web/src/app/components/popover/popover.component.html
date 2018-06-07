@@ -55,6 +55,7 @@
         <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
                    [currentLayer]="currentLayer"
+                   [allowLayerDoubleTap]="allowLayerDoubleTap"
                    (validAction)="keyActionValid=$event"
         ></layer-tab>
         <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content"

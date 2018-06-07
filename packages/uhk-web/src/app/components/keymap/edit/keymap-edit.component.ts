@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
@@ -14,9 +14,8 @@ import 'rxjs/add/operator/combineLatest';
 
 import { saveAs } from 'file-saver';
 
-import { AppState, getKeyboardLayout } from '../../../store';
+import { allowLayerDoubleTap, AppState, getKeyboardLayout } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
-import { SvgKeyboardWrapComponent } from '../../svg/wrap';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { KeymapActions } from '../../../store/actions';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
@@ -31,13 +30,12 @@ import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription
 })
 export class KeymapEditComponent {
 
-    @ViewChild(SvgKeyboardWrapComponent) wrap: SvgKeyboardWrapComponent;
-
     keyboardSplit: boolean;
 
     deletable$: Observable<boolean>;
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
+    allowLayerDoubleTap$: Observable<boolean>;
 
     constructor(protected store: Store<AppState>,
                 route: ActivatedRoute) {
@@ -52,6 +50,7 @@ export class KeymapEditComponent {
             .map((keymaps: Keymap[]) => keymaps.length > 1);
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
+        this.allowLayerDoubleTap$ = store.select(allowLayerDoubleTap);
     }
 
     downloadKeymap() {

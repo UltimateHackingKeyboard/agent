@@ -179,12 +179,12 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -275,7 +275,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -356,7 +356,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -366,7 +366,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -507,7 +507,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -654,7 +654,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -732,7 +732,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -819,7 +819,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 null,
@@ -941,7 +941,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -1156,12 +1156,12 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -1252,7 +1252,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -1333,7 +1333,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -1343,7 +1343,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -1484,7 +1484,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -1641,7 +1641,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -1719,7 +1719,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -1806,7 +1806,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 null,
@@ -1928,7 +1928,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -2143,12 +2143,12 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -2239,7 +2239,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -2320,7 +2320,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -2330,7 +2330,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -2471,7 +2471,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -2618,7 +2618,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -2696,7 +2696,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -2783,7 +2783,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 null,
@@ -2902,7 +2902,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -3117,12 +3117,12 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -3213,7 +3213,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -3294,7 +3294,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -3304,7 +3304,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -3445,7 +3445,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -3602,7 +3602,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -3680,7 +3680,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -3767,7 +3767,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 null,
@@ -3886,7 +3886,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -4101,12 +4101,12 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4197,7 +4197,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4278,7 +4278,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4288,7 +4288,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -4429,7 +4429,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -4576,7 +4576,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -4654,7 +4654,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4741,7 +4741,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 null,
@@ -4854,7 +4854,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -5069,12 +5069,12 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5165,7 +5165,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5246,7 +5246,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5256,7 +5256,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -5397,7 +5397,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {
@@ -5554,7 +5554,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mod",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null
               ]
@@ -5635,7 +5635,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5722,7 +5722,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "fn",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 null,
@@ -5835,7 +5835,7 @@
                 {
                   "keyActionType": "switchLayer",
                   "layer": "mouse",
-                  "toggle": false
+                  "switchLayerMode": "holdAndDoubleTapToggle"
                 },
                 null,
                 {

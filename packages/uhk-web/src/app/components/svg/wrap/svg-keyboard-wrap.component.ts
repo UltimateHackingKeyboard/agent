@@ -32,7 +32,8 @@ import {
     PlayMacroAction,
     SecondaryRoleAction,
     SwitchKeymapAction,
-    SwitchLayerAction
+    SwitchLayerAction,
+    SwitchLayerMode
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -59,6 +60,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesSplit: boolean;
     @Input() keyboardLayout: KeyboardLayout.ANSI;
+    @Input() allowLayerDoubleTap: boolean;
+
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
     @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
@@ -350,7 +353,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                     },
                     {
                         name: 'Toogle',
-                        value: switchLayerAction.isLayerToggleable ? 'On' : 'Off'
+                        value: switchLayerAction.switchLayerMode === SwitchLayerMode.toggle ? 'On' : 'Off'
                     }
                 ];
             return Observable.of(content);

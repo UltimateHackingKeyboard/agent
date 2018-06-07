@@ -21,7 +21,9 @@ import * as isDev from 'electron-is-dev';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean},
-    {name: 'spe', type: Boolean} // simulate privilege escalation error
+    {name: 'spe', type: Boolean}, // simulate privilege escalation error
+    // show 'Lock layer when double tapping this key' checkbox on 'Layer' tab of the config popover
+    {name: 'layer-double-tap', type: Boolean}
 ];
 
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);

@@ -1,7 +1,9 @@
 import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { KeyAction, LayerName, SwitchLayerAction } from 'uhk-common';
+import { KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode } from 'uhk-common';
 
 import { Tab } from '../tab';
+
+export type toggleType = 'active' | 'toggle';
 
 @Component({
     selector: 'layer-tab',
@@ -11,16 +13,17 @@ import { Tab } from '../tab';
 export class LayerTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentLayer: number;
+    @Input() allowLayerDoubleTap: boolean;
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
-    toggleData: { id: boolean, text: string }[] = [
+    toggleData: { id: toggleType, text: string }[] = [
         {
-            id: false,
+            id: 'active',
             text: 'Activate'
         },
         {
-            id: true,
+            id: 'toggle',
             text: 'Toggle'
         }
     ];
@@ -40,12 +43,13 @@ export class LayerTabComponent extends Tab implements OnChanges {
         }
     ];
 
-    toggle: boolean;
+    toggle: toggleType;
     layer: LayerName;
+    lockLayerWhenDoubleTapping: boolean;
 
     constructor() {
         super();
-        this.toggle = false;
+        this.toggle = 'active';
         this.layer = LayerName.mod;
     }
 
@@ -71,14 +75,39 @@ export class LayerTabComponent extends Tab implements OnChanges {
         }
 
         const switchLayerAction: SwitchLayerAction = <SwitchLayerAction>keyAction;
-        this.toggle = switchLayerAction.isLayerToggleable;
+        switch (switchLayerAction.switchLayerMode) {
+            case SwitchLayerMode.holdAndDoubleTapToggle: {
+                this.toggle = 'active';
+                this.lockLayerWhenDoubleTapping = true;
+                break;
+            }
+
+            case SwitchLayerMode.hold: {
+                this.toggle = 'active';
+                this.lockLayerWhenDoubleTapping = false;
+                break;
+            }
+
+            default: {
+                this.toggle = 'toggle';
+                this.lockLayerWhenDoubleTapping = false;
+            }
+        }
+
         this.layer = switchLayerAction.layer;
         return true;
     }
 
     toKeyAction(): SwitchLayerAction {
         const keyAction = new SwitchLayerAction();
-        keyAction.isLayerToggleable = this.toggle;
+        if (this.toggle === 'toggle') {
+            keyAction.switchLayerMode = SwitchLayerMode.toggle;
+        } else if (!this.allowLayerDoubleTap || this.lockLayerWhenDoubleTapping) {
+            keyAction.switchLayerMode = SwitchLayerMode.holdAndDoubleTapToggle;
+        } else {
+            keyAction.switchLayerMode = SwitchLayerMode.hold;
+        }
+
         keyAction.layer = this.layer;
         if (!this.keyActionValid()) {
             throw new Error('KeyAction is invalid!');
@@ -86,8 +115,8 @@ export class LayerTabComponent extends Tab implements OnChanges {
         return keyAction;
     }
 
-    toggleChanged(value: string) {
-        this.toggle = value === 'true';
+    toggleChanged(value: toggleType) {
+        this.toggle = value;
     }
 
     layerChanged(value: number) {

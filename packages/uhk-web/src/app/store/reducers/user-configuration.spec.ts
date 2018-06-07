@@ -1,5 +1,13 @@
 import { reducer, initialState } from './user-configuration';
-import { KeystrokeAction, KeystrokeType, SwitchLayerAction, UserConfiguration, LayerName, Keymap } from 'uhk-common';
+import {
+    KeystrokeAction,
+    KeystrokeType,
+    SwitchLayerAction,
+    UserConfiguration,
+    LayerName,
+    Keymap,
+    SwitchLayerMode
+} from 'uhk-common';
 
 import { getDefaultUserConfig } from '../../../../test/user-config-helper';
 import { KeymapActions } from '../actions';
@@ -42,7 +50,11 @@ describe('user-configuration reducer', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const destinationLayerId = LayerName.mod;
-            const switchLayerAction = new SwitchLayerAction({isLayerToggleable: false, layer: destinationLayerId} as any);
+            const switchLayerAction = new SwitchLayerAction({
+                switchLayerMode: SwitchLayerMode.toggle,
+                layer: destinationLayerId
+            } as any);
+
             const saveKeyAction: KeymapActions.SaveKeyAction = {
                 type: KeymapActions.SAVE_KEY,
                 payload: {
@@ -81,7 +93,7 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'mod',
-                                                toggle: false
+                                                switchLayerMode: 1
                                             },
                                             {
                                                 keyActionType: 'keystroke',
@@ -89,9 +101,9 @@ describe('user-configuration reducer', () => {
                                                 scancode: 37
                                             },
                                             {
-                                                'keyActionType': 'switchLayer',
-                                                'layer': 'mod',
-                                                'toggle': false
+                                                keyActionType: 'switchLayer',
+                                                layer: 'mod',
+                                                switchLayerMode: 1
                                             }
                                         ]
                                     },
@@ -128,7 +140,7 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'mod',
-                                                toggle: false
+                                                switchLayerMode: 1
                                             },
                                             {
                                                 keyActionType: 'keystroke',
@@ -136,9 +148,9 @@ describe('user-configuration reducer', () => {
                                                 scancode: 65
                                             },
                                             {
-                                                'keyActionType': 'switchLayer',
-                                                'layer': 'mod',
-                                                'toggle': false
+                                                keyActionType: 'switchLayer',
+                                                layer: 'mod',
+                                                switchLayerMode: 1
                                             }
                                         ]
                                     },
@@ -219,7 +231,11 @@ describe('user-configuration reducer', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const destinationLayerId = LayerName.fn;
-            const switchLayerAction = new SwitchLayerAction({isLayerToggleable: false, layer: destinationLayerId} as any);
+            const switchLayerAction = new SwitchLayerAction({
+                switchLayerMode: SwitchLayerMode.toggle,
+                layer: destinationLayerId
+            } as any);
+
             const saveKeyAction: KeymapActions.SaveKeyAction = {
                 type: KeymapActions.SAVE_KEY,
                 payload: {
@@ -266,9 +282,9 @@ describe('user-configuration reducer', () => {
                                                 scancode: 37
                                             },
                                             {
-                                                'keyActionType': 'switchLayer',
-                                                'layer': 'fn',
-                                                'toggle': false
+                                                keyActionType: 'switchLayer',
+                                                layer: 'fn',
+                                                switchLayerMode: 1
                                             }
                                         ]
                                     },
@@ -345,7 +361,7 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'fn',
-                                                toggle: false
+                                                switchLayerMode: 1
                                             }
                                         ]
                                     },

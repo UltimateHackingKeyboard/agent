@@ -109,7 +109,7 @@ describe('keymap', () => {
                                     {
                                         keyActionType: 'switchLayer',
                                         layer: 'mod',
-                                        toggle: false
+                                        switchLayerMode: 'holdAndDoubleTapToggle'
                                     }
                                 ]
                             }]
@@ -121,7 +121,7 @@ describe('keymap', () => {
                                     {
                                         keyActionType: 'switchLayer',
                                         layer: 'mod',
-                                        toggle: false
+                                        switchLayerMode: 'holdAndDoubleTapToggle'
                                     }
                                 ]
                             }]
@@ -151,7 +151,7 @@ describe('keymap', () => {
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
         // tslint:disable-next-line: max-line-length
-        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> will be override with <SwitchLayerAction layer="0" toggle="false">');
+        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
     });
 
     it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', () => {
@@ -262,7 +262,7 @@ describe('keymap', () => {
                                     {
                                         keyActionType: 'switchLayer',
                                         layer: 'mod',
-                                        toggle: false
+                                        switchLayerMode: 'holdAndDoubleTapToggle'
                                     }
                                 ]
                             }]
@@ -274,7 +274,7 @@ describe('keymap', () => {
                                     {
                                         keyActionType: 'switchLayer',
                                         layer: 'mod',
-                                        toggle: false
+                                        switchLayerMode: 'holdAndDoubleTapToggle'
                                     }
                                 ]
                             }]
@@ -304,6 +304,6 @@ describe('keymap', () => {
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
         // tslint:disable-next-line: max-line-length
-        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. <SwitchLayerAction layer="1" toggle="false"> will be override with <SwitchLayerAction layer="0" toggle="false">');
+        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. <SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
     });
 });

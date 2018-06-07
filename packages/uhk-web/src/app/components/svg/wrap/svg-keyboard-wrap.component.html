@@ -13,8 +13,18 @@
                      (capture)="onCapture($event.moduleId, $event.keyId, $event.captured)"
                      (descriptionChanged)="onDescriptionChanged($event)"
     ></keyboard-slider>
-    <popover tabindex="0" [visible]="popoverShown" [keyPosition]="keyPosition" [wrapPosition]="wrapPosition" [defaultKeyAction]="popoverInitKeyAction"
-             [currentKeymap]="keymap" [currentLayer]="currentLayer" (cancel)="hidePopover()" (remap)="onRemap($event)"></popover>
+
+    <popover tabindex="0"
+             [visible]="popoverShown"
+             [keyPosition]="keyPosition"
+             [wrapPosition]="wrapPosition"
+             [defaultKeyAction]="popoverInitKeyAction"
+             [currentKeymap]="keymap"
+             [currentLayer]="currentLayer"
+             [allowLayerDoubleTap]="allowLayerDoubleTap"
+             (cancel)="hidePopover()"
+             (remap)="onRemap($event)"></popover>
+
     <div class="tooltip bottom"
          [class.in]="tooltipData.show"
          [style.top.px]="tooltipData.posTop"

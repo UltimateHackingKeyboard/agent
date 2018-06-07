@@ -44,6 +44,7 @@ export const getUserConfiguration = (state: AppState) => state.userConfiguration
 export const appState = (state: AppState) => state.app;
 
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
+export const allowLayerDoubleTap = createSelector(appState, fromApp.allowLayerDoubleTap);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
