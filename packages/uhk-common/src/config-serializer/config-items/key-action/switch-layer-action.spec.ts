@@ -11,8 +11,8 @@ describe('switch-layer-action', () => {
     });
 
     describe('toString', () => {
-        it('should return <SwitchLayerAction layer="0" toggle="false">', () => {
-            expect(action.toString()).toEqual('<SwitchLayerAction layer="0" switchLayerMode="2">');
+        it('should return <SwitchLayerAction layer="0" switchLayerMode="hold">', () => {
+            expect(action.toString()).toEqual('<SwitchLayerAction layer="0" switchLayerMode="hold">');
         });
     });
 

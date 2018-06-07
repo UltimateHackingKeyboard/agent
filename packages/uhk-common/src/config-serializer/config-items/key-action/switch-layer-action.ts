@@ -9,9 +9,9 @@ export enum LayerName {
 }
 
 export enum SwitchLayerMode {
-    holdAndDoubleTapToggle,
-    toggle,
-    hold
+    holdAndDoubleTapToggle = 'holdAndDoubleTapToggle',
+    toggle = 'toggle',
+    hold = 'hold'
 }
 
 export class SwitchLayerAction extends KeyAction {
@@ -49,7 +49,7 @@ export class SwitchLayerAction extends KeyAction {
     fromBinary(buffer: UhkBuffer): SwitchLayerAction {
         this.readAndAssertKeyActionId(buffer);
         this.layer = buffer.readUInt8();
-        this.switchLayerMode = buffer.readUInt8();
+        this.switchLayerMode = mapNumberToSwitchLayerMode(buffer.readUInt8());
         return this;
     }
 
@@ -64,7 +64,7 @@ export class SwitchLayerAction extends KeyAction {
     toBinary(buffer: UhkBuffer) {
         buffer.writeUInt8(KeyActionId.SwitchLayerAction);
         buffer.writeUInt8(this.layer);
-        buffer.writeUInt8(this.switchLayerMode);
+        buffer.writeUInt8(mapSwitchLayerModeToNumber(this.switchLayerMode));
     }
 
     toString(): string {
@@ -75,3 +75,35 @@ export class SwitchLayerAction extends KeyAction {
         return 'SwitchLayerAction';
     }
 }
+
+export const mapSwitchLayerModeToNumber = (switchLayerMode: SwitchLayerMode): number => {
+    switch (switchLayerMode) {
+        case SwitchLayerMode.holdAndDoubleTapToggle:
+            return 0;
+
+        case SwitchLayerMode.toggle:
+            return 1;
+
+        case SwitchLayerMode.hold:
+            return 2;
+
+        default:
+            throw new Error(`Can not map ${switchLayerMode} to number`);
+    }
+};
+
+export const mapNumberToSwitchLayerMode = (value: number): SwitchLayerMode => {
+    switch (value) {
+        case 0:
+            return SwitchLayerMode.holdAndDoubleTapToggle;
+
+        case 1:
+            return SwitchLayerMode.toggle;
+
+        case 2:
+            return SwitchLayerMode.hold;
+
+        default:
+            throw new Error(`Can not map "${value}" to SwitchLayerMode`);
+    }
+};
