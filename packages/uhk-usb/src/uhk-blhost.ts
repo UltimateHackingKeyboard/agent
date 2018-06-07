@@ -49,7 +49,7 @@ export class UhkBlhost {
 
                 self.logService.debug(`[blhost] FINISHED: ${code}`);
 
-                if (code !== null && code !== 0) {
+                if (code !== 0) {
                     return reject(new Error(`blhost error code:${code}`));
                 }
 
