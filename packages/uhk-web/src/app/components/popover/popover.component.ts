@@ -143,6 +143,8 @@ export class PopoverComponent implements OnChanges {
         if (change['visible']) {
             if (change['visible'].currentValue) {
                 this.animationState = 'opened';
+                this.remapOnAllKeymap = false;
+                this.remapOnAllLayer = false;
             } else {
                 this.animationState = 'closed';
             }
