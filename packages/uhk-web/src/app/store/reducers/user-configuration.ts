@@ -68,7 +68,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 break;
             }
 
-            const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
+            const newKeymap = Object.assign(new Keymap(), keymapToRename, {name});
 
             changedUserConfiguration.keymaps = insertItemInNameOrder(
                 state.keymaps,
@@ -140,34 +140,37 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             const layerIndex: number = action.payload.layer;
             const moduleIndex: number = action.payload.module;
             const keyActionRemap = action.payload.keyAction;
-            const newKeyAction = KeyActionHelper.createKeyAction(keyActionRemap.action);
+            const newKeyAction = keyActionRemap.action;
             const newKeymap: Keymap = action.payload.keymap;
 
             changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
                 if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
                     keymap = new Keymap(keymap);
 
-                    keymap.layers = newKeymap.layers.map((layer, index) => {
-                        const newLayer = new Layer(layer);
+                    keymap.layers = keymap.layers.map((layer, index) => {
+                        if (keyActionRemap.remapOnAllLayer || index === layerIndex) {
+                            layer = new Layer(layer);
+                            const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
 
-                        const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
-                        if ((keyActionRemap.remapOnAllLayer && !isSwitchLayerAction) || index === layerIndex) {
-                            setKeyActionToLayer(newLayer, moduleIndex, keyIndex, newKeyAction);
-                        }
-                        // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
-                        // on the target layer and remove SwitchLayerAction from other layers
-                        else if (isSwitchLayerAction) {
-                            if (index - 1 === (newKeyAction as SwitchLayerAction).layer) {
-                                const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
-                                setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
-                            } else {
-                                const actionOnLayer = newLayer.modules[moduleIndex].keyActions[keyIndex];
-                                if (actionOnLayer && actionOnLayer instanceof  SwitchLayerAction) {
-                                    setKeyActionToLayer(newLayer, moduleIndex, keyIndex, null);
+                            const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
+                            // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
+                            // on the target layer and remove SwitchLayerAction from other layers
+                            if (isSwitchLayerAction) {
+                                if (index - 1 === (newKeyAction as SwitchLayerAction).layer) {
+                                    setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                                } else {
+                                    const actionOnLayer = layer.modules[moduleIndex].keyActions[keyIndex];
+                                    if (actionOnLayer && actionOnLayer instanceof SwitchLayerAction) {
+                                        setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
+                                    }
                                 }
                             }
+                            else {
+                                setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                            }
                         }
-                        return newLayer;
+
+                        return layer;
                     });
                 }
 
