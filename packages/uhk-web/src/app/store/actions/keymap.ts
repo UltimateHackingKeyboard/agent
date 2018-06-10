@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
-import { KeyAction, Keymap, Macro } from 'uhk-common';
+import { Keymap, Macro } from 'uhk-common';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { ChangeKeymapDescription } from '../../models/ChangeKeymapDescription';
+import { KeyActionRemap } from '../../models/key-action-remap';
 
 export type KeymapAction =
     KeymapActions.AddKeymapAction |
@@ -60,7 +61,7 @@ export namespace KeymapActions {
             layer: number;
             module: number;
             key: number;
-            keyAction: KeyAction;
+            keyAction: KeyActionRemap;
         }
     };
 
@@ -172,7 +173,11 @@ export namespace KeymapActions {
         };
     }
 
-    export function saveKey(keymap: Keymap, layer: number, module: number, key: number, keyAction: KeyAction): SaveKeyAction {
+    export function saveKey(keymap: Keymap,
+                            layer: number,
+                            module: number,
+                            key: number,
+                            keyAction: KeyActionRemap): SaveKeyAction {
         return {
             type: KeymapActions.SAVE_KEY,
             payload: {

@@ -76,8 +76,41 @@
         ></none-tab>
     </div>
     <div class="popover-action">
-        <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel </button>
-        <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button" (click)="onRemapKey()"> Remap Key </button>
+        <form class="form-inline d-inline-block popover-action-form">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                           name="remapOnAllKeymap"
+                           [(ngModel)]="remapOnAllKeymap"> Remap on all keymaps
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                           name="remapOnAllLayer"
+                           [(ngModel)]="remapOnAllLayer"> Remap on all layers
+                </label>
+            </div>
+            <div class="d-inline-block">
+                <icon name="question-circle"
+                      data-toggle="tooltip"
+                      html="true"
+                      maxWidth="500"
+                      title="<ul class='no-indent text-left'>
+                <li>When 'Remap on all keymaps' is checked and the 'Remap key' button is clicked, remap the key on the current layer of all keymaps.</li>
+                <li>When 'Remap on all layers' is checked and the 'Remap key' button is clicked, remap the key on all layers of the current keymap.</li>
+                <li>When both 'Remap on all keymaps' and 'Remap on all layers' is checked and the 'Remap key' button is clicked, remap the key on all layers of all keymaps.</li>
+              </ul>"
+                      data-placement="bottom"></icon>
+            </div>
+        </form>
+
+        <div class="d-inline-block pull-right">
+            <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel</button>
+            <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button"
+                    (click)="onRemapKey()"> Remap Key
+            </button>
+        </div>
     </div>
 </div>
 <div class="popover-overlay" [class.display]="visible" (click)="onOverlay()"></div>

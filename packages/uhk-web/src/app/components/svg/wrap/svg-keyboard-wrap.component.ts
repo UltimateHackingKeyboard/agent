@@ -42,6 +42,7 @@ import { KeymapActions } from '../../../store/actions';
 import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
+import { KeyActionRemap } from '../../../models/key-action-remap';
 
 interface NameValuePair {
     name: string;
@@ -181,11 +182,15 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 this.currentLayer,
                 moduleId,
                 keyId,
-                keystrokeAction)
+                {
+                    remapOnAllKeymap: false,
+                    remapOnAllLayer: false,
+                    action: keystrokeAction
+                })
         );
     }
 
-    onRemap(keyAction: KeyAction): void {
+    onRemap(keyAction: KeyActionRemap): void {
         this.store.dispatch(
             KeymapActions.saveKey(
                 this.keymap,
