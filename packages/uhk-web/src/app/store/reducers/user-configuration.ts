@@ -68,7 +68,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 break;
             }
 
-            const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
+            const newKeymap = Object.assign(new Keymap(), keymapToRename, {name});
 
             changedUserConfiguration.keymaps = insertItemInNameOrder(
                 state.keymaps,
@@ -139,38 +139,46 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             const keyIndex: number = action.payload.key;
             const layerIndex: number = action.payload.layer;
             const moduleIndex: number = action.payload.module;
-            const newKeyAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
-            const newKeymap: Keymap = Object.assign(new Keymap(), action.payload.keymap);
-            newKeymap.layers = newKeymap.layers.slice();
-
-            newKeymap.layers = newKeymap.layers.map((layer, index) => {
-                const newLayer = Object.assign(new Layer(), layer);
-
-                if (index === layerIndex) {
-                    setKeyActionToLayer(newLayer, moduleIndex, keyIndex, newKeyAction);
-                }
-                // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
-                // on the target layer
-                else if (newKeyAction instanceof SwitchLayerAction) {
-                    if (index - 1 === newKeyAction.layer) {
-                        const clonedAction = KeyActionHelper.createKeyAction(action.payload.keyAction);
-                        setKeyActionToLayer(newLayer, moduleIndex, keyIndex, clonedAction);
-                    } else {
-                        setKeyActionToLayer(newLayer, moduleIndex, keyIndex, null);
-                    }
-                }
-                return newLayer;
-            });
+            const keyActionRemap = action.payload.keyAction;
+            const newKeyAction = keyActionRemap.action;
+            const newKeymap: Keymap = action.payload.keymap;
 
             changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
-                if (keymap.abbreviation === newKeymap.abbreviation) {
-                    keymap = newKeymap;
+                if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
+                    keymap = new Keymap(keymap);
+
+                    keymap.layers = keymap.layers.map((layer, index) => {
+                        if (keyActionRemap.remapOnAllLayer || index === layerIndex) {
+                            layer = new Layer(layer);
+                            const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
+
+                            const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
+                            // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
+                            // on the target layer and remove SwitchLayerAction from other layers
+                            if (isSwitchLayerAction) {
+                                if (index - 1 === (newKeyAction as SwitchLayerAction).layer) {
+                                    setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                                } else {
+                                    const actionOnLayer = layer.modules[moduleIndex].keyActions[keyIndex];
+                                    if (actionOnLayer && actionOnLayer instanceof SwitchLayerAction) {
+                                        setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
+                                    }
+                                }
+                            }
+                            else {
+                                setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                            }
+                        }
+
+                        return layer;
+                    });
                 }
 
                 return keymap;
             });
             break;
         }
+
         case KeymapActions.CHECK_MACRO:
             changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
                 keymap = Object.assign(new Keymap(), keymap);

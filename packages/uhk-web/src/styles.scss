@@ -73,6 +73,11 @@ ul.btn-list {
     }
 }
 
+ul.no-indent {
+    padding-left: 1em;
+    margin-bottom: 0;
+}
+
 .h1, .h2, .h3, h1, h2, h3 {
     margin-top: 10px;
 }
@@ -177,4 +182,8 @@ pre {
 
 .ok-button {
     min-width: 100px;
+}
+
+.d-inline-block {
+    display: inline-block;
 }

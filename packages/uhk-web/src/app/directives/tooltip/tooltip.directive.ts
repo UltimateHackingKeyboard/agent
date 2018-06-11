@@ -9,15 +9,10 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
     @HostBinding('attr.data-placement') placement: string;
     @Input('title') title: string;
     @Input('html') html: boolean;
+    @Input() maxWidth: number;
 
-    private customTooltipTemplate = `
-        <div class="tooltip">
-            <div class="tooltip-arrow"></div>
-            <div class="tooltip-inner"></div>
-        </div>
-    `;
-
-    constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer) { }
+    constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer) {
+    }
 
     ngAfterContentInit() {
         this.init();
@@ -33,7 +28,7 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
         (<any>jQuery(this.elementRef.nativeElement)).tooltip({
             placement: this.placement,
             html: this.html,
-            template: this.customTooltipTemplate,
+            template: this.getCustomTemplate(),
             title: this.title
         });
     }
@@ -42,12 +37,25 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
         (<any>jQuery(this.elementRef.nativeElement)).tooltip({
             placement: this.placement,
             html: this.html,
-            template: this.customTooltipTemplate,
+            template: this.getCustomTemplate(),
             title: this.title
         });
 
         (<any>jQuery(this.elementRef.nativeElement)
             .attr('title', this.title))
             .tooltip('fixTitle');
+    }
+
+    private getCustomTemplate(): string {
+        let style = '';
+
+        if (this.maxWidth) {
+            style = `style="max-width: ${this.maxWidth}px;"`;
+        }
+
+        return `<div class="tooltip">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-inner" ${style}></div>
+        </div>`;
     }
 }

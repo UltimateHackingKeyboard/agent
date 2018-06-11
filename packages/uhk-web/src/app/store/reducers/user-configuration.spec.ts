@@ -30,7 +30,11 @@ describe('user-configuration reducer', () => {
                     layer: 0,
                     module: 0,
                     key: 0,
-                    keyAction: keystrokeAction
+                    keyAction: {
+                        remapOnAllKeymap: false,
+                        remapOnAllLayer: false,
+                        action: keystrokeAction
+                    }
                 }
             };
             const result = reducer(state, saveKeyAction);
@@ -62,7 +66,12 @@ describe('user-configuration reducer', () => {
                     layer: 0,
                     module: 0,
                     key: 0,
-                    keyAction: switchLayerAction
+                    keyAction: {
+                        remapOnAllKeymap: false,
+                        remapOnAllLayer: false,
+                        action: switchLayerAction
+                    }
+
                 }
             };
             const result = reducer(state, saveKeyAction);
@@ -243,7 +252,12 @@ describe('user-configuration reducer', () => {
                     layer: 0,
                     module: 0,
                     key: 2,
-                    keyAction: switchLayerAction
+                    keyAction: {
+                        remapOnAllKeymap: false,
+                        remapOnAllLayer: false,
+                        action: switchLayerAction
+                    }
+
                 }
             };
             const result = reducer(state, saveKeyAction);
