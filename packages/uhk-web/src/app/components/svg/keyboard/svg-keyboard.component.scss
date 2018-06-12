@@ -8,3 +8,33 @@ editable-text {
     padding-right: 2em;
     display: block;
 }
+
+.separator-visible {
+    animation: visible-fade-in 1.5s;
+    opacity: 1;
+}
+
+@keyframes visible-fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.separator-hide {
+    animation: visible-fade-out 1.5s;
+    opacity: 0;
+}
+
+@keyframes visible-fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

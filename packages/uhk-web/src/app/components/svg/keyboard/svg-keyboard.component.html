@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="viewBox" height="100%" width="100%">
-    <svg:g svg-module *ngFor="let module of modules; let i = index"
+<svg xmlns="http://www.w3.org/2000/svg"
+     [attr.viewBox]="viewBox"
+     height="100%"
+     width="100%">
+    <svg:g svg-module
+           *ngFor="let module of modules; let i = index"
            [coverages]="module.coverages"
            [keyboardKeys]="module.keyboardKeys"
            [keybindAnimationEnabled]="keybindAnimationEnabled"
@@ -11,8 +15,11 @@
            [selected]="selectedKey?.moduleId === i"
            (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
-           (capture)="onCapture(i, $event.index, $event.captured)"
-    />
+           (capture)="onCapture(i, $event.index, $event.captured)" />
+
+    <svg:path [ngClass]="{'separator-visible': !halvesSplit, 'separator-hide': halvesSplit}"
+              [attr.d]="separator.d"
+              [attr.style]="separatorStyle" />
 </svg>
 <editable-text *ngIf="showDescription"
                [ngModel]="description"
