@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Module } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
+import { SvgSeparator } from '../separator';
 
 @Component({
     selector: 'svg-keyboard',
@@ -41,8 +43,11 @@ export class SvgKeyboardComponent implements OnInit {
     modules: SvgModule[];
     viewBox: string;
     moduleAnimationStates: string[];
+    separator: SvgSeparator;
+    separatorStyle: SafeStyle;
 
-    constructor(private svgModuleProvider: SvgModuleProviderService) {
+    constructor(private svgModuleProvider: SvgModuleProviderService,
+                private sanitizer: DomSanitizer) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
         this.halvesSplit = false;
@@ -98,5 +103,7 @@ export class SvgKeyboardComponent implements OnInit {
 
     private setModules() {
         this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout);
+        this.separator = this.svgModuleProvider.getSvgSeparator();
+        this.separatorStyle = this.sanitizer.bypassSecurityTrustStyle(this.separator.style);
     }
 }
