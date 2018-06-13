@@ -1,6 +1,5 @@
-import { isEqual } from 'lodash';
 import { Device, devices, HID } from 'node-hid';
-import { CommandLineArgs, DeviceConnectionState, LogService } from 'uhk-common';
+import { CommandLineArgs, DeviceConnectionState, isEqualArray, LogService } from 'uhk-common';
 
 import {
     ConfigBufferId,
@@ -25,7 +24,7 @@ export class UhkHidDevice {
      * Internal variable that represent the USB UHK device
      * @private
      */
-    private _prevDevices = {};
+    private _prevDevices = [];
     private _device: HID;
     private _hasPermission = false;
 
@@ -158,7 +157,7 @@ export class UhkHidDevice {
     }
 
     public resetDeviceCache(): void {
-        this._prevDevices = {};
+        this._prevDevices = [];
     }
 
     async reenumerate(enumerationMode: EnumerationModes): Promise<void> {
@@ -252,8 +251,11 @@ export class UhkHidDevice {
     private connectToDevice(): HID {
         try {
             const devs = devices();
-            if (!isEqual(this._prevDevices, devs)) {
-                this.logService.debug('[UhkHidDevice] Available devices:', devs);
+            if (!isEqualArray(this._prevDevices, devs)) {
+                this.logService.debug('[UhkHidDevice] Available devices:');
+                for (const logDevice of devs) {
+                    this.logService.debug(JSON.stringify(logDevice));
+                }
                 this._prevDevices = devs;
             } else {
                 this.logService.debug('[UhkHidDevice] Available devices unchanged');
@@ -266,7 +268,7 @@ export class UhkHidDevice {
                 return null;
             }
             const device = new HID(dev.path);
-            this.logService.debug('[UhkHidDevice] Used device:', dev);
+            this.logService.debug('[UhkHidDevice] Used device:', JSON.stringify(dev));
             return device;
         }
         catch (err) {
@@ -288,7 +290,7 @@ function kbootCommandName(module: ModuleSlotToI2cAddress): string {
         case ModuleSlotToI2cAddress.rightAddon:
             return 'rightAddon';
 
-        default :
+        default:
             return 'Unknown';
     }
 }
