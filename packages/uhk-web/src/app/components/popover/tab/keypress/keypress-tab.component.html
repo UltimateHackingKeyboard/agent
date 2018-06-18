@@ -9,7 +9,10 @@
     ></select2>
     <icon name="question-circle"
           data-toggle="tooltip"
-          title="Looking for a non-US character? Just pick the character of the desired key according to the US layout. For example, on US keyboards next to Tab there is the Q key, but it's й on Russian keyboards, so in this case choose Q instead of й in Agent."
+          html="true"
+          maxWidth="400"
+          title="<p>Looking for a non-US character? Just pick the character of the desired key according to the US layout.</p>
+                 <p>For example, on US keyboards next to Tab there is the Q key, but it's й on Russian keyboards, so in this case choose Q instead of й in Agent.</p>"
           data-placement="bottom"></icon>
     <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0"></capture-keystroke-button>
 </div>
