@@ -47,15 +47,17 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
     }
 
     private getCustomTemplate(): string {
-        let style = '';
+        let tooltipStyle = '';
+        let innerStyle = '';
 
         if (this.maxWidth) {
-            style = `style="max-width: ${this.maxWidth}px;"`;
+            tooltipStyle = `style="width: ${this.maxWidth}px;"`;
+            innerStyle = `style="max-width: ${this.maxWidth}px;"`;
         }
 
-        return `<div class="tooltip">
+        return `<div class="tooltip" ${tooltipStyle}>
             <div class="tooltip-arrow"></div>
-            <div class="tooltip-inner" ${style}></div>
+            <div class="tooltip-inner" ${innerStyle}></div>
         </div>`;
     }
 }
