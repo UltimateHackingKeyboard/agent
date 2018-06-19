@@ -6,6 +6,20 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.3] - 2018-06-19
+
+Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.1 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- Add checkboxes for remapping keys on all layers and/or all keymaps.
+- Add separator line between the keyboard halves.
+- Add double tap icon for switch layer actions.
+- Improve the looks and content of the tooltips of the key action popover.
+- Make the left keyboard half less likely to timeout during firmware update.
+- Terminate the firmware update process if blhost segfaults.
+- Replace the Linux x64 version of the blhost binary which should not make it segfault anymore.
+- Make the firmware update log shorter by listing one device per line and not repeating the list of available USB devices.
+- Make the firmware update help text shorter.
+
 ## [1.2.2] - 2018-05-27
 
 Firmware: 8.2.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.**1** | User Config: 4.0.1 | Hardware Config: 1.0.0
