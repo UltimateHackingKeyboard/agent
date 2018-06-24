@@ -22,6 +22,16 @@ import { SvgSeparator } from '../separator';
                 transform: 'translate(3%, 15%) rotate(-4deg) scale(0.92, 0.92)'
             })),
             transition('* <=> *', animate(500))
+        ]),
+        trigger('fadeSeparator', [
+            state('visible', style({
+                opacity: 1
+            })),
+            state('invisible', style({
+                opacity: 0
+            })),
+            transition('visible => invisible', animate(500)),
+            transition('invisible => visible', animate(1500))
         ])
     ]
 })
@@ -45,6 +55,7 @@ export class SvgKeyboardComponent implements OnInit {
     moduleAnimationStates: string[];
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
+    separatorAnimation = 'visible';
 
     constructor(private svgModuleProvider: SvgModuleProviderService,
                 private sanitizer: DomSanitizer) {
@@ -96,8 +107,10 @@ export class SvgKeyboardComponent implements OnInit {
     private updateModuleAnimationStates() {
         if (this.halvesSplit) {
             this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
+            this.separatorAnimation = 'invisible';
         } else {
             this.moduleAnimationStates = [];
+            this.separatorAnimation = 'visible';
         }
     }
 

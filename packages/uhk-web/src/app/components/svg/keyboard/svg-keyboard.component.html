@@ -17,7 +17,7 @@
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
            (capture)="onCapture(i, $event.index, $event.captured)" />
 
-    <svg:path [ngClass]="{'separator-visible': !halvesSplit, 'separator-hide': halvesSplit}"
+    <svg:path [@fadeSeparator]="separatorAnimation"
               [attr.d]="separator.d"
               [attr.style]="separatorStyle" />
 </svg>
