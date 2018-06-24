@@ -52,6 +52,7 @@ export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLay
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getPrivilegePageState = createSelector(appState, fromApp.getPrivilagePageState);
+export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
@@ -81,6 +82,7 @@ export const getHardwareModules = createSelector(deviceState, fromDevice.getHard
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
+export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firmwareUpgradeFailed);
 
 export const getSideMenuPageState = createSelector(
     showAddonMenu,
@@ -106,3 +108,9 @@ export const getSideMenuPageState = createSelector(
 );
 
 export const getRouterState = (state: AppState) => state.router;
+
+export const showUnsupportedOsToFirmwareUpgrade = createSelector(
+    runningOnNotSupportedWindows,
+    firmwareUpgradeFailed,
+    (isUnsupportedOs,
+     hasFirmwareUpgradeFailed) => isUnsupportedOs && hasFirmwareUpgradeFailed);

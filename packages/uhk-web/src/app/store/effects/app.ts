@@ -13,7 +13,7 @@ import 'rxjs/add/operator/catch';
 import { AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
 import {
     ActionTypes,
-    ApplyCommandLineArgsAction,
+    ApplyAppStartInfoAction,
     AppStartedAction,
     DismissUndoNotificationAction,
     OpenUrlInNewWindowAction,
@@ -65,7 +65,7 @@ export class ApplicationEffects {
         .mergeMap((appInfo: AppStartInfo) => {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
-                new ApplyCommandLineArgsAction(appInfo.commandLineArgs),
+                new ApplyAppStartInfoAction(appInfo),
                 new ConnectionStateChangedAction({
                     connected: appInfo.deviceConnected,
                     hasPermission: appInfo.hasPermission,

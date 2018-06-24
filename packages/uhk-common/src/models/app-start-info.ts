@@ -5,4 +5,6 @@ export interface AppStartInfo {
     deviceConnected: boolean;
     hasPermission: boolean;
     bootloaderActive: boolean;
+    platform: string;
+    osVersion: string;
 }

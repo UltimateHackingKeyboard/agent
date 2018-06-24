@@ -12,7 +12,7 @@
                 Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the right keyboard half.
             </p>
 
-            <p>Please note that firmware update doesn't work on Windows 7, Windows Vista, and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
+            <p *ngIf="showUnsupportedOsToFirmwareUpgrade$ | async">Firmware update doesn't work on Windows 7, Windows Vista, and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
 
             <p>If the update process fails, disconnect every USB device from your computer including USB hubs, KVM switches, and every USB device. Then connect only your UHK and retry.</p>
 
