@@ -106,7 +106,7 @@ function createWindow() {
     uhkHidDeviceService = new UhkHidDevice(logger, options);
     uhkBlhost = new UhkBlhost(logger, packagesDir);
     uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
-    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations);
+    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
     sudoService = new SudoService(logger, options);
