@@ -8,6 +8,5 @@
 }
 
 .uhk-icon-agent-icon {
-    @extend %svg-common;
-    background-position: 100% 0;
+    background: url('assets/images/agent-icon.png') no-repeat;
 }
