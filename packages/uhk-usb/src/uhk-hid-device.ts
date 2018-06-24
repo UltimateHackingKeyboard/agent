@@ -109,6 +109,7 @@ export class UhkHidDevice {
             device.read((err: any, receivedData: Array<number>) => {
                 if (err) {
                     this.logService.error('[UhkHidDevice] Transfer error: ', err);
+                    this.close();
                     return reject(err);
                 }
                 const logString = bufferToString(receivedData);
