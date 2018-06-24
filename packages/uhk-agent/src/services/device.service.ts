@@ -15,6 +15,7 @@ import { deviceConnectionStateComparer, snooze, UhkHidDevice, UhkOperations } fr
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { emptyDir } from 'fs-extra';
+import * as path from 'path';
 
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
@@ -22,10 +23,14 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { saveTmpFirmware } from '../util/save-extract-firmware';
 import { TmpFirmware } from '../models/tmp-firmware';
 import { QueueManager } from './queue-manager';
-import { backupUserConfiguration, getBackupUserConfigurationContent } from '../util/backup-user-confoguration';
+import {
+    backupUserConfiguration,
+    getBackupUserConfigurationContent,
+    getPackageJsonFromPathAsync,
+    saveTmpFirmware
+} from '../util';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -40,7 +45,8 @@ export class DeviceService {
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
                 private device: UhkHidDevice,
-                private operations: UhkOperations) {
+                private operations: UhkOperations,
+                private rootDir: string) {
         this.pollUhkDevice();
 
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
@@ -146,15 +152,27 @@ export class DeviceService {
         let firmwarePathData: TmpFirmware;
 
         try {
+            const hardwareModules = await this.getHardwareModules(false);
+            this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
+            this.logService.debug('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
+
             this.device.resetDeviceCache();
             this.stopPollTimer();
 
             if (args && args.length > 0) {
                 firmwarePathData = await saveTmpFirmware(args[0]);
+
+                const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
+                this.logService.debug('New firmware version:', packageJson.firmwareVersion);
+
                 await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
                 await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
             }
             else {
+                const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
+                const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
+                this.logService.debug('New firmware version:', packageJson.firmwareVersion);
+
                 await this.operations.updateRightFirmware();
                 await this.operations.updateLeftModule();
             }
