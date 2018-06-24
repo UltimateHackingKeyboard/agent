@@ -13,6 +13,7 @@ import {
     Module,
     NoneAction,
     PlayMacroAction,
+    SwitchKeymapAction,
     SwitchLayerAction,
     UserConfiguration
 } from 'uhk-common';
@@ -143,8 +144,14 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             const newKeyAction = keyActionRemap.action;
             const newKeymap: Keymap = action.payload.keymap;
             const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
+            const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
 
             changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
+                // SwitchKeymapAction not allow to refer to itself
+                if (isSwitchKeymapAction && keymap.abbreviation === newKeyAction.keymapAbbreviation) {
+                    return keymap;
+                }
+
                 if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
                     keymap = new Keymap(keymap);
 
