@@ -2,15 +2,15 @@ import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { HardwareModules, VersionInformation } from 'uhk-common';
-import { Constants } from 'uhk-common';
-import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
+import { Constants, HardwareModules, VersionInformation } from 'uhk-common';
 
+import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 import {
     AppState,
     flashFirmwareButtonDisbabled,
     getAgentVersionInfo,
     getHardwareModules,
+    showUnsupportedOsToFirmwareUpgrade,
     xtermLog
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
@@ -31,6 +31,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     getAgentVersionInfo$: Observable<VersionInformation>;
     hardwareModulesSubscription: Subscription;
     hardwareModules: HardwareModules;
+    showUnsupportedOsToFirmwareUpgrade$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
@@ -39,6 +40,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
         this.hardwareModulesSubscription = store.select(getHardwareModules).subscribe(data => {
             this.hardwareModules = data;
         });
+        this.showUnsupportedOsToFirmwareUpgrade$ = store.select(showUnsupportedOsToFirmwareUpgrade);
     }
 
     ngOnDestroy(): void {

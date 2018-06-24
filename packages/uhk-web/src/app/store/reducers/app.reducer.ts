@@ -1,6 +1,7 @@
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { Action } from '@ngrx/store';
 import {
+    AppStartInfo,
     CommandLineArgs,
     HardwareConfiguration,
     Notification,
@@ -29,6 +30,8 @@ export interface State {
     agentVersionInfo?: VersionInformation;
     privilegeWhatWillThisDoClicked: boolean;
     permissionError?: any;
+    platform?: string;
+    osVersion?: string;
 }
 
 export const initialState: State = {
@@ -50,10 +53,14 @@ export function reducer(state = initialState, action: Action & { payload: any })
             };
         }
 
-        case ActionTypes.APPLY_COMMAND_LINE_ARGS: {
+        case ActionTypes.APPLY_APP_START_INFO: {
+            const payload = action.payload as AppStartInfo;
+
             return {
                 ...state,
-                commandLineArgs: action.payload
+                commandLineArgs: payload.commandLineArgs,
+                platform: payload.platform,
+                osVersion: payload.osVersion
             };
         }
 
@@ -171,4 +178,16 @@ export const getPrivilagePageState = (state: State): PrivilagePageSate => {
         showWhatWillThisDo: !state.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
         showWhatWillThisDoContent: state.privilegeWhatWillThisDoClicked || permissionSetupFailed
     };
+};
+
+export const runningOnNotSupportedWindows = (state: State): boolean => {
+    if (!state.osVersion || state.platform !== 'win32') {
+        return false;
+    }
+
+    const version = state.osVersion.split('.');
+    const osMajor = +version[0];
+    const osMinor = +version[1];
+
+    return osMajor < 6 || (osMajor === 6 && osMinor < 2);
 };

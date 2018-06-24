@@ -1,5 +1,6 @@
 import { ipcMain, shell } from 'electron';
 import { UhkHidDevice } from 'uhk-usb';
+import * as os from 'os';
 
 import { AppStartInfo, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
@@ -30,7 +31,9 @@ export class AppService extends MainServiceBase {
             },
             deviceConnected: deviceConnectionState.connected,
             hasPermission: deviceConnectionState.hasPermission,
-            bootloaderActive: deviceConnectionState.bootloaderActive
+            bootloaderActive: deviceConnectionState.bootloaderActive,
+            platform: process.platform as string,
+            osVersion: os.release()
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);
         return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);

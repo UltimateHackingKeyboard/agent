@@ -23,6 +23,7 @@ export interface State {
     savingToKeyboard: boolean;
     updatingFirmware: boolean;
     firmwareUpdateFinished: boolean;
+    firmwareUpdateFailed?: boolean;
     modules: HardwareModules;
     log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
@@ -136,6 +137,7 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
+                firmwareUpdateFailed: false,
                 modules: (action as UpdateFirmwareSuccessAction).payload
             };
 
@@ -150,6 +152,7 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
+                firmwareUpdateFailed: true,
                 modules: data.modules,
                 log: [...state.log, logEntry]
             };
@@ -228,3 +231,4 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
     };
 };
 export const bootloaderActive = (state: State) => state.bootloaderActive;
+export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
