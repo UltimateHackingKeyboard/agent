@@ -6,6 +6,20 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.5] - 2018-06-26
+
+Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.1 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- When remapping a switch keymap action on all keymaps, don't set it on its own keymap.
+- Make the key action popver always contain the action of the current key, even after cancelled.
+- Include the firmware version to be updated to the firmware update log.
+- Update the Agent icon of the side menu and the about page.
+- When remapping a key, only flash the affected key instead of all keys.
+- Fade in/out the keyboard separator line only when splitting the keyboard.
+- Only show the unsupported OS message of the firmware page on relevant Windows versions.
+- Close and reopen USB device when an error occurs.
+- Temporarily remove the export keymap feature because it's useless until import is implemented.
+
 ## [1.2.4] - 2018-06-21
 
 Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.1 | User Config: 4.0.1 | Hardware Config: 1.0.0
