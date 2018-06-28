@@ -7,6 +7,7 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { Select2Module } from 'ng2-select2/ng2-select2';
+import { NgxSelectModule } from 'ngx-select-ex';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -192,6 +193,7 @@ import { AutoGrowInputComponent } from './components/auto-grow-input';
         DragulaModule,
         routing,
         Select2Module,
+        NgxSelectModule,
         NouisliderModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({

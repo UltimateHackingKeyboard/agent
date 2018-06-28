@@ -1,12 +1,26 @@
 <div class="scancode-options">
     <b class="setting-label">Scancode:</b>
-    <select2
-            [data]="scanCodeGroups"
-            [value]="selectedScancodeOption.id"
-            (valueChanged)="onScancodeChange($event)"
-            [width]="200"
-            [options]="options"
-    ></select2>
+    <div class="scancode-container">
+        <ngx-select [items]="scanCodeGroups"
+                    [ngModel]="selectedScancodeOption.id"
+                    size="small"
+                    optionValueField="id"
+                    optionTextField="text"
+                    optGroupLabelField="text"
+                    optGroupOptionsField="children"
+                    (select)="onScancodeChange($event)">
+
+            <ng-template ngx-select-option let-option let-text="text">
+                <span class="select2-item">
+                    <span>{{ option.text }}</span>
+                    <span class="scancode--searchterm">
+                        {{ option.data.additional?.explanation}}
+                    </span>
+                </span>
+            </ng-template>
+
+        </ngx-select>
+    </div>
     <icon name="question-circle"
           data-toggle="tooltip"
           html="true"

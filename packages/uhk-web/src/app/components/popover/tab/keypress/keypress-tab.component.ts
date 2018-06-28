@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Select2OptionData, Select2TemplateFunction } from 'ng2-select2';
+import { Select2OptionData } from 'ng2-select2';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -22,7 +22,6 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     scanCodeGroups: Array<Select2OptionData>;
     secondaryRoleGroups: Array<Select2OptionData>;
-    options: Select2Options;
 
     selectedScancodeOption: Select2OptionData;
     selectedSecondaryRoleIndex: number;
@@ -41,18 +40,6 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
-        this.options = {
-            templateResult: this.scanCodeTemplateResult,
-            matcher: (term: string, text: string, data: Select2OptionData) => {
-                let found = text.toUpperCase().indexOf(term.toUpperCase()) > -1;
-
-                if (!found && data.additional && data.additional.explanation) {
-                    found = data.additional.explanation.toUpperCase().indexOf(term.toUpperCase()) > -1;
-                }
-
-                return found;
-            }
-        };
     }
 
     ngOnChanges() {
@@ -134,25 +121,6 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
     }
 
-    scanCodeTemplateResult: Select2TemplateFunction = (state: Select2OptionData): JQuery | string => {
-        if (!state.id) {
-            return state.text;
-        }
-
-        if (state.additional && state.additional.explanation) {
-            return jQuery(
-                '<span class="select2-item">'
-                + '<span>' + state.text + '</span>'
-                + '<span class="scancode--searchterm"> '
-                + state.additional.explanation
-                + '</span>' +
-                '</span>'
-            );
-        } else {
-            return jQuery('<span class="select2-item">' + state.text + '</span>');
-        }
-    }
-
     toggleModifier(right: boolean, index: number) {
         const modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
         modifierSelects[index] = !modifierSelects[index];
@@ -164,11 +132,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.selectedSecondaryRoleIndex = +event.value;
     }
 
-    onScancodeChange(event: { value: string }) {
-        const id: string = event.value;
-
-        // ng2-select2 should provide the selectedOption in an upcoming release
-        // TODO: change this when it has become available
+    onScancodeChange(id: string) {
         this.selectedScancodeOption = this.findScancodeOptionById(id);
 
         this.validAction.emit(this.keyActionValid());
