@@ -8,6 +8,8 @@ import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 import {
     AppState,
     firmwareUpgradeAllowed,
+    firmwareUpgradeFailed,
+    firmwareUpgradeSuccess,
     flashFirmwareButtonDisbabled,
     getAgentVersionInfo,
     getHardwareModules,
@@ -34,6 +36,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
     hardwareModules: HardwareModules;
     runningOnNotSupportedWindows$: Observable<boolean>;
     firmwareUpgradeAllowed$: Observable<boolean>;
+    firmwareUpgradeFailed$: Observable<boolean>;
+    firmwareUpgradeSuccess$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
@@ -44,6 +48,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
         });
         this.runningOnNotSupportedWindows$ = store.select(runningOnNotSupportedWindows);
         this.firmwareUpgradeAllowed$ = store.select(firmwareUpgradeAllowed);
+        this.firmwareUpgradeFailed$ = store.select(firmwareUpgradeFailed);
+        this.firmwareUpgradeSuccess$ = store.select(firmwareUpgradeSuccess);
     }
 
     ngOnDestroy(): void {

@@ -24,6 +24,7 @@ export interface State {
     updatingFirmware: boolean;
     firmwareUpdateFinished: boolean;
     firmwareUpdateFailed?: boolean;
+    firmwareUpdateSuccess?: boolean;
     modules: HardwareModules;
     log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
@@ -129,6 +130,8 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 updatingFirmware: true,
                 firmwareUpdateFinished: false,
+                firmwareUpdateFailed: false,
+                firmwareUpdateSuccess: false,
                 log: [{message: 'Start flashing firmware', cssClass: XtermCssClass.standard}]
             };
 
@@ -137,7 +140,7 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
-                firmwareUpdateFailed: false,
+                firmwareUpdateSuccess: true,
                 modules: (action as UpdateFirmwareSuccessAction).payload
             };
 
@@ -232,3 +235,4 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
 };
 export const bootloaderActive = (state: State) => state.bootloaderActive;
 export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
+export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;

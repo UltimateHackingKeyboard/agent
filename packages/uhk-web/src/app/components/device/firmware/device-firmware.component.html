@@ -12,11 +12,8 @@
                 Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the right keyboard half.
             </p>
 
-            <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista, and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
-
-            <p *ngIf="firmwareUpgradeAllowed$ | async">If the update process fails, disconnect every USB device from your computer including USB hubs, KVM switches, and every USB device. Then connect only your UHK and retry.</p>
-
-            <p *ngIf="firmwareUpgradeAllowed$ | async">If you tried the above and the update still keeps failing, please <a class="link-github" (click)="openFirmwareGitHubIssuePage($event)">create a GitHub issue</a>, and attach the update log.</p>
+            <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,
+                and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
 
             <p *ngIf="firmwareUpgradeAllowed$ | async">
                 <button class="btn btn-primary"
@@ -29,6 +26,20 @@
                              accept=".tar.bz2"
                              label="Choose firmware file and flash it"></file-upload>
             </p>
+
+            <div *ngIf="firmwareUpgradeFailed$ | async"
+                 class="alert alert-danger"
+                 role="alert">
+                <p>Firmware update failed. Disconnect every USB device from your computer (including USB hubs, KVM switches, USB dongles, and everything else), then only connect your UHK and retry.</p>
+
+                <p>If you tried the above and the update still keeps failing, please<a class="link-github" (click)="openFirmwareGitHubIssuePage($event)">create a GitHub issue</a>, and attach the update log.</p>
+            </div>
+
+            <div *ngIf="firmwareUpgradeSuccess$ | async"
+                 class="alert alert-success"
+                 role="alert">
+                <p>Firmware update succeeded.</p>
+            </div>
         </div>
 
         <div class="flex-grow" *ngIf="firmwareUpgradeAllowed$ | async">
