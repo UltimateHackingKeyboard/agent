@@ -7,10 +7,11 @@ import { Constants, HardwareModules, VersionInformation } from 'uhk-common';
 import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 import {
     AppState,
+    firmwareUpgradeAllowed,
     flashFirmwareButtonDisbabled,
     getAgentVersionInfo,
     getHardwareModules,
-    showUnsupportedOsToFirmwareUpgrade,
+    runningOnNotSupportedWindows,
     xtermLog
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
@@ -31,7 +32,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
     getAgentVersionInfo$: Observable<VersionInformation>;
     hardwareModulesSubscription: Subscription;
     hardwareModules: HardwareModules;
-    showUnsupportedOsToFirmwareUpgrade$: Observable<boolean>;
+    runningOnNotSupportedWindows$: Observable<boolean>;
+    firmwareUpgradeAllowed$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
@@ -40,7 +42,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
         this.hardwareModulesSubscription = store.select(getHardwareModules).subscribe(data => {
             this.hardwareModules = data;
         });
-        this.showUnsupportedOsToFirmwareUpgrade$ = store.select(showUnsupportedOsToFirmwareUpgrade);
+        this.runningOnNotSupportedWindows$ = store.select(runningOnNotSupportedWindows);
+        this.firmwareUpgradeAllowed$ = store.select(firmwareUpgradeAllowed);
     }
 
     ngOnDestroy(): void {

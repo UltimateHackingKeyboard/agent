@@ -12,13 +12,13 @@
                 Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the right keyboard half.
             </p>
 
-            <p *ngIf="showUnsupportedOsToFirmwareUpgrade$ | async">Firmware update doesn't work on Windows 7, Windows Vista, and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
+            <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista, and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
 
-            <p>If the update process fails, disconnect every USB device from your computer including USB hubs, KVM switches, and every USB device. Then connect only your UHK and retry.</p>
+            <p *ngIf="firmwareUpgradeAllowed$ | async">If the update process fails, disconnect every USB device from your computer including USB hubs, KVM switches, and every USB device. Then connect only your UHK and retry.</p>
 
-            <p>If you tried the above and the update still keeps failing, please <a class="link-github" (click)="openFirmwareGitHubIssuePage($event)">create a GitHub issue</a>, and attach the update log.</p>
+            <p *ngIf="firmwareUpgradeAllowed$ | async">If you tried the above and the update still keeps failing, please <a class="link-github" (click)="openFirmwareGitHubIssuePage($event)">create a GitHub issue</a>, and attach the update log.</p>
 
-            <p>
+            <p *ngIf="firmwareUpgradeAllowed$ | async">
                 <button class="btn btn-primary"
                         [disabled]="flashFirmwareButtonDisbabled$ | async"
                         (click)="onUpdateFirmware()">
@@ -31,7 +31,7 @@
             </p>
         </div>
 
-        <div class="flex-grow">
+        <div class="flex-grow" *ngIf="firmwareUpgradeAllowed$ | async">
             <xterm [logs]="xtermLog$ | async"></xterm>
         </div>
         <div class="flex-footer">
