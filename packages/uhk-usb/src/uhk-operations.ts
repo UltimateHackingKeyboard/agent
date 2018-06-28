@@ -59,8 +59,9 @@ export class UhkOperations {
 
         const leftModuleBricked = await this.waitForKbootIdle();
         if (!leftModuleBricked) {
-            this.logService.error('[UhkOperations] Couldn\'t connect to the left keyboard half.');
-            return;
+            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
+            this.logService.error(msg);
+            throw new Error(msg);
         }
 
         await this.device.reenumerate(EnumerationModes.Buspal);
