@@ -4,12 +4,22 @@
 <ng-template [ngIf]="keymapOptions.length > 0">
     <div>
         <b>Switch to keymap:</b>
-        <select2
-                [data]="keymapOptions"
-                [value]="selectedKeymap?.abbreviation || -1"
-                (valueChanged)="onChange($event)"
-                [width]="'100%'"
-        ></select2>
+        <ngx-select [items]="keymapOptions"
+                    [ngModel]="selectedKeymap?.abbreviation || -1"
+                    size="small"
+                    optionValueField="id"
+                    optionTextField="text"
+                    (select)="onChange($event)">
+
+            <ng-template ngx-select-option let-option>
+                <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
+                    <span>{{ option.text }}</span>
+                    <span class="scancode--searchterm">
+                        {{ option.data.additional?.explanation}}
+                    </span>
+                </span>
+            </ng-template>
+        </ngx-select>
     </div>
     <div>
         <div class="empty" *ngIf="!selectedKeymap?.abbreviation">
