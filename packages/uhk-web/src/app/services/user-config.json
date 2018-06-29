@@ -689,8 +689,9 @@
                 null,
                 {
                   "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
+                  "type": "media",
+                  "scancode": 184,
+                  "modifierMask": 12
                 },
                 null,
                 {
@@ -2653,8 +2654,9 @@
                 null,
                 {
                   "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
+                  "type": "media",
+                  "scancode": 184,
+                  "modifierMask": 12
                 },
                 null,
                 {
@@ -4611,8 +4613,9 @@
                 null,
                 {
                   "keyActionType": "keystroke",
-                  "type": "system",
-                  "scancode": 130
+                  "type": "media",
+                  "scancode": 184,
+                  "modifierMask": 12
                 },
                 null,
                 {
