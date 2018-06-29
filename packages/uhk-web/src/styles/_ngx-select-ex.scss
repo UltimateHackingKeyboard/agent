@@ -1,5 +1,9 @@
 ngx-select,
 .ngx-select {
+    .ngx-select__toggle {
+        font-size: 14px;
+    }
+
     .dropdown-header {
         font-weight: bold;
         font-size: 1em;
