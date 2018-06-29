@@ -128,8 +128,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.validAction.emit(this.keyActionValid());
     }
 
-    onSecondaryRoleChange(event: { value: string }) {
-        this.selectedSecondaryRoleIndex = +event.value;
+    onSecondaryRoleChange(id: string) {
+        this.selectedSecondaryRoleIndex = +id;
     }
 
     onScancodeChange(id: string) {
