@@ -1,17 +1,35 @@
+ngx-select,
 .ngx-select {
     .dropdown-header {
         font-weight: bold;
         font-size: 1em;
         color: black;
-        padding-left: 8px;
-    }
-
-    .scancode--searchterm {
-        text-align: right;
-        color: #b7b7b7;
+        padding-left: 6px;
     }
 
     .dropdown-divider {
         display: none;
+    }
+
+    a {
+        &.ngx-select__item {
+            padding-right: 6px;
+            padding-left: 6px;
+        }
+
+        &.ngx-select__item_active {
+            background-color: #dddddd;
+        }
+    }
+
+    .indent-dropdown-item {
+        padding-left: 8px;
+        display: flex;
+        justify-content: space-between;
+
+        .scancode--searchterm {
+            text-align: right;
+            color: #b7b7b7;
+        }
     }
 }

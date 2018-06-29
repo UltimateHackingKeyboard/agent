@@ -10,8 +10,8 @@
                     optGroupOptionsField="children"
                     (select)="onScancodeChange($event)">
 
-            <ng-template ngx-select-option let-option let-text="text">
-                <span class="select2-item">
+            <ng-template ngx-select-option let-option>
+                <span [ngClass]="{'indent-dropdown-item':option.data.id !== '0'}">
                     <span>{{ option.text }}</span>
                     <span class="scancode--searchterm">
                         {{ option.data.additional?.explanation}}
