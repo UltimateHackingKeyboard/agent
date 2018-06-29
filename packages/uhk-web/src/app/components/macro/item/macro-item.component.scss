@@ -1,7 +1,6 @@
 @import '../../../../styles/variables';
 
 :host {
-    overflow: hidden;
     display: block;
 
     &.macro-item:first-of-type {

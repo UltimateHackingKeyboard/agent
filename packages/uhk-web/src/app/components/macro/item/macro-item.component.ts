@@ -45,6 +45,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     iconName: string;
     editing: boolean;
     newItem: boolean = false;
+    overflow = 'hidden';
 
     constructor(private mapper: MapperService) { }
 
@@ -53,6 +54,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
         if (!this.macroAction) {
             this.editing = true;
             this.newItem = true;
+            this.overflow = 'visible';
         }
     }
 
@@ -65,6 +67,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     saveEditedAction(editedAction: MacroAction): void {
         this.macroAction = editedAction;
         this.editing = false;
+        this.overflow = 'hidden';
         this.updateView();
         this.save.emit(editedAction);
     }
@@ -77,10 +80,12 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
         this.editing = true;
         this.edit.emit();
+        this.setOverflow('visible');
     }
 
     cancelEdit(): void {
         this.editing = false;
+        this.overflow = 'hidden';
         this.cancel.emit();
     }
 
@@ -201,5 +206,13 @@ export class MacroItemComponent implements OnInit, OnChanges {
             }
         });
         this.title += selectedButtonLabels.join(', ');
+    }
+
+    private setOverflow(value: string): void {
+        // tslint:disable: align
+        setTimeout(() => {
+            this.overflow = value;
+        }, 600);
+        // tslint:enable: align
     }
 }
