@@ -6,6 +6,7 @@
         <b>Switch to keymap:</b>
         <ngx-select [items]="keymapOptions"
                     [ngModel]="selectedKeymap?.abbreviation || -1"
+                    [autoActiveOnMouseEnter]="false"
                     size="small"
                     optionValueField="id"
                     optionTextField="text"

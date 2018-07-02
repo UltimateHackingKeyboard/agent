@@ -3,6 +3,7 @@
     <div class="scancode-container">
         <ngx-select [items]="scanCodeGroups"
                     [ngModel]="selectedScancodeOption.id"
+                    [autoActiveOnMouseEnter]="false"
                     size="small"
                     optionValueField="id"
                     optionTextField="text"
@@ -58,6 +59,7 @@
     <div class="secondary-role-groups-container">
         <ngx-select [items]="secondaryRoleGroups"
                     [ngModel]="selectedSecondaryRoleIndex.toString()"
+                    [autoActiveOnMouseEnter]="false"
                     size="small"
                     optionValueField="id"
                     optionTextField="text"
