@@ -1,6 +1,7 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { Action, Store } from '@ngrx/store';
 
 import 'rxjs/add/operator/last';
@@ -34,17 +35,35 @@ import { ProgressButtonState } from './store/reducers/progress-button-state';
             ])
     ]
 })
-export class MainAppComponent {
+export class MainAppComponent implements OnDestroy {
     showUpdateAvailable$: Observable<boolean>;
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
-    saveToKeyboardState$: Observable<ProgressButtonState>;
+    saveToKeyboardState: ProgressButtonState;
+
+    private saveToKeyboardStateSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
         this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
-        this.saveToKeyboardState$ = store.select(saveToKeyboardState);
+        this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)
+            .subscribe(data => this.saveToKeyboardState = data);
+    }
+
+    ngOnDestroy(): void {
+        this.saveToKeyboardStateSubscription.unsubscribe();
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (this.saveToKeyboardState.showButton &&
+            event.ctrlKey &&
+            event.key === 's' &&
+            !event.defaultPrevented) {
+            this.clickedOnProgressButton(this.saveToKeyboardState.action);
+            event.preventDefault();
+        }
     }
 
     updateApp() {

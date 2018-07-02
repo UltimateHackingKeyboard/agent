@@ -179,6 +179,17 @@ export class PopoverComponent implements OnChanges {
         this.cancel.emit();
     }
 
+    @HostListener('document:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (this.visible &&
+            event.ctrlKey &&
+            event.key === 'e' &&
+            !event.defaultPrevented) {
+            this.onRemapKey();
+            event.preventDefault();
+        }
+    }
+
     selectTab(tab: TabName): void {
         this.activeTab = tab;
     }
