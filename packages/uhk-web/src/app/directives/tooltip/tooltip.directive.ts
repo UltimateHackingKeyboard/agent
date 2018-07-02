@@ -1,3 +1,4 @@
+///<reference path="../../../../node_modules/@types/jquery/index.d.ts"/>
 import { AfterContentInit, Directive, ElementRef, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 

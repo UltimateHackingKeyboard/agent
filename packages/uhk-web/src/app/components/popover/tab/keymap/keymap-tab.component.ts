@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
 import { Keymap, KeyAction, SwitchKeymapAction } from 'uhk-common';
 
 import { Tab } from '../tab';
+import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
     selector: 'keymap-tab',
@@ -14,7 +14,7 @@ export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
 
-    keymapOptions: Array<Select2OptionData>;
+    keymapOptions: Array<SelectOptionData>;
     selectedKeymap: Keymap;
 
     constructor() {
@@ -25,7 +25,7 @@ export class KeymapTabComponent extends Tab implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.keymaps) {
             this.keymapOptions = this.keymaps
-                .map((keymap: Keymap): Select2OptionData => {
+                .map((keymap: Keymap): SelectOptionData => {
                     return {
                         id: keymap.abbreviation,
                         text: keymap.name
@@ -40,12 +40,11 @@ export class KeymapTabComponent extends Tab implements OnChanges {
         this.validAction.emit(true);
     }
 
-    // TODO: change to the correct type when the wrapper has added it.
-    onChange(event: any) {
-        if (event.value === '-1') {
+    onChange(event: string) {
+        if (event === '-1') {
             this.selectedKeymap = undefined;
         } else {
-            this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === event.value);
+            this.selectedKeymap = this.keymaps.find((keymap: Keymap) => keymap.abbreviation === event);
         }
     }
 

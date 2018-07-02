@@ -116,23 +116,6 @@
     }
 }
 
-.select2-item {
-    position: relative;
-    font-size: 1.5rem;
-
-    &.keymap-name--wrapper {
-        padding-left: 50px;
-    }
-
-    .layout-segment-code {
-        height: 2rem;
-        position: absolute;
-        left: 0;
-        top: 50%;
-        margin-top: -1rem;
-    }
-}
-
 .popover-action-form {
     margin-top: 4px;
 

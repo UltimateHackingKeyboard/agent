@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
 import { KeyAction, Macro, PlayMacroAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 
-import { AppState } from '../../../../store/index';
+import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
+import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
     selector: 'macro-tab',
@@ -18,7 +18,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     @Input() defaultKeyAction: KeyAction;
 
     macros: Macro[];
-    macroOptions: Array<Select2OptionData>;
+    macroOptions: Array<SelectOptionData>;
     selectedMacroIndex: number;
     private subscription: Subscription;
 
@@ -31,7 +31,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     }
 
     ngOnInit() {
-        this.macroOptions = this.macros.map(function (macro: Macro, index: number): Select2OptionData {
+        this.macroOptions = this.macros.map(function (macro: Macro, index: number): SelectOptionData {
             return {
                 id: index.toString(),
                 text: macro.name
@@ -44,9 +44,8 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         this.validAction.emit(true);
     }
 
-    // TODO: change to the correct type when the wrapper has added it.
-    onChange(event: any) {
-        this.selectedMacroIndex = +event.value;
+    onChange(id: string) {
+        this.selectedMacroIndex = +id;
     }
 
     keyActionValid(): boolean {
