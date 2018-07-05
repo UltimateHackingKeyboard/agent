@@ -9,6 +9,7 @@
               [keyboardLayout]="keyboardLayout"
               [description]="description"
               [showDescription]="true"
+              oncontextmenu="return false;"
               (keyClick)="keyClick.emit($event)"
               (keyHover)="keyHover.emit($event)"
               (capture)="capture.emit($event)"

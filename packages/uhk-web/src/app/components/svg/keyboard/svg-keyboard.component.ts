@@ -7,6 +7,12 @@ import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { SvgSeparator } from '../separator';
+import {
+    SvgKeyHoverEvent,
+    SvgKeyboardKeyClickEvent,
+    SvgKeyboardCaptureEvent,
+    SvgModuleKeyClickEvent
+} from '../../../models/svg-key-events';
 
 @Component({
     selector: 'svg-keyboard',
@@ -45,9 +51,9 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() showDescription = false;
-    @Output() keyClick = new EventEmitter();
-    @Output() keyHover = new EventEmitter();
-    @Output() capture = new EventEmitter();
+    @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
+    @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
+    @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
 
     modules: SvgModule[];
@@ -79,19 +85,17 @@ export class SvgKeyboardComponent implements OnInit {
         }
     }
 
-    onKeyClick(moduleId: number, keyId: number, keyTarget: HTMLElement): void {
+    onKeyClick(moduleId: number, event: SvgModuleKeyClickEvent): void {
         this.keyClick.emit({
-            moduleId,
-            keyId,
-            keyTarget
+            ...event,
+            moduleId
         });
     }
 
-    onCapture(moduleId: number, keyId: number, captured: { code: number, left: boolean[], right: boolean[] }): void {
+    onCapture(moduleId: number, event: SvgKeyboardCaptureEvent): void {
         this.capture.emit({
-            moduleId,
-            keyId,
-            captured
+            ...event,
+            moduleId
         });
     }
 

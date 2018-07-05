@@ -3,6 +3,11 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 import { Layer } from 'uhk-common';
 
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
+import {
+    SvgKeyboardCaptureEvent,
+    SvgKeyboardKeyClickEvent,
+    SvgKeyHoverEvent
+} from '../../../models/svg-key-events';
 
 type AnimationKeyboard =
     'init' |
@@ -82,9 +87,9 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
-    @Output() keyClick = new EventEmitter();
-    @Output() keyHover = new EventEmitter();
-    @Output() capture = new EventEmitter();
+    @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
+    @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
+    @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
 
     layerAnimationState: AnimationKeyboard[];
