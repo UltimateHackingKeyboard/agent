@@ -73,7 +73,7 @@ if (process.platform === 'darwin') {
     target = Platform.WINDOWS.createTarget('nsis', builder.Arch.ia32, builder.Arch.x64);
     artifactName += '-${arch}.${ext}';
 } else if (process.platform === 'linux') {
-    target = Platform.LINUX.createTarget();
+    target = Platform.LINUX.createTarget('AppImage');
     artifactName += '-${arch}.${ext}';
     extraResources.push('rules/setup-rules.sh');
     extraResources.push('rules/50-uhk60.rules');
