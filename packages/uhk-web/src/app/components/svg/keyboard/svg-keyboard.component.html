@@ -13,9 +13,9 @@
            [selectedKey]="selectedKey"
            [@split]="moduleAnimationStates[i]"
            [selected]="selectedKey?.moduleId === i"
-           (keyClick)="onKeyClick(i, $event.index, $event.keyTarget)"
+           (keyClick)="onKeyClick(i, $event)"
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
-           (capture)="onCapture(i, $event.index, $event.captured)" />
+           (capture)="onCapture(i, $event)" />
 
     <svg:path [@fadeSeparator]="separatorAnimation"
               [attr.d]="separator.d"

@@ -2,6 +2,12 @@ import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from 
 import { KeyAction } from 'uhk-common';
 
 import { SvgKeyboardKey } from '../keys';
+import {
+    SvgKeyCaptureEvent,
+    SvgKeyClickEvent,
+    SvgModuleCaptureEvent,
+    SvgModuleKeyClickEvent
+} from '../../../models/svg-key-events';
 
 @Component({
     selector: 'g[svg-module]',
@@ -17,18 +23,18 @@ export class SvgModuleComponent {
     @Input() selected: boolean;
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
-    @Output() keyClick = new EventEmitter();
+    @Output() keyClick = new EventEmitter<SvgModuleKeyClickEvent>();
     @Output() keyHover = new EventEmitter();
-    @Output() capture = new EventEmitter();
+    @Output() capture = new EventEmitter<SvgModuleCaptureEvent>();
 
     constructor() {
         this.keyboardKeys = [];
     }
 
-    onKeyClick(index: number, keyTarget: HTMLElement): void {
+    onKeyClick(keyId: number, event: SvgKeyClickEvent): void {
         this.keyClick.emit({
-            index,
-            keyTarget
+            ...event,
+            keyId
         });
     }
 
@@ -40,10 +46,10 @@ export class SvgModuleComponent {
         });
     }
 
-    onCapture(index: number, captured: {code: number, left: boolean[], right: boolean[]}) {
+    onCapture(keyId: number, event: SvgKeyCaptureEvent) {
         this.capture.emit({
-            index,
-            captured
+            ...event,
+            keyId
         });
     }
 }

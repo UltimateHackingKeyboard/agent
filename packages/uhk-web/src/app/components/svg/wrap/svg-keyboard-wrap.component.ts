@@ -43,6 +43,11 @@ import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
+import {
+    SvgKeyboardCaptureEvent,
+    SvgKeyboardKeyClickEvent,
+    SvgKeyHoverEvent
+} from '../../../models/svg-key-events';
 
 interface NameValuePair {
     name: string;
@@ -65,7 +70,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
-    @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
+    @ViewChild(PopoverComponent, {read: ElementRef}) popover: ElementRef;
 
     popoverShown: boolean;
     keyEditConfig: { moduleId: number, keyId: number };
@@ -82,6 +87,9 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     layers: Layer[];
     keyPosition: ClientRect;
     wrapPosition: ClientRect;
+    remapOnAllKeymap: boolean;
+    remapOnAllLayer: boolean;
+
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
 
@@ -139,36 +147,38 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     }
 
-    onKeyClick(moduleId: number, keyId: number, keyTarget: HTMLElement): void {
+    onKeyClick(event: SvgKeyboardKeyClickEvent): void {
         if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
-                moduleId,
-                keyId
+                moduleId: event.moduleId,
+                keyId: event.keyId
             };
-            this.selectedKey = { layerId: this.currentLayer, moduleId, keyId };
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
-            this.keyElement = keyTarget;
+            this.selectedKey = {layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId};
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
+            this.keyElement = event.keyTarget;
+            this.remapOnAllKeymap = event.shiftPressed;
+            this.remapOnAllLayer = event.altPressed;
             this.showPopover(keyActionToEdit);
         }
     }
 
-    onKeyHover(moduleId: number, event: MouseEvent, over: boolean, keyId: number): void {
+    onKeyHover(event: SvgKeyHoverEvent): void {
         if (this.tooltipEnabled) {
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[moduleId].keyActions[keyId];
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
 
-            if (over) {
-                this.showTooltip(keyActionToEdit, event);
+            if (event.over) {
+                this.showTooltip(keyActionToEdit, event.event);
             } else {
                 this.hideTooltip();
             }
         }
     }
 
-    onCapture(moduleId: number, keyId: number, captured: { code: number, left: boolean[], right: boolean[] }): void {
+    onCapture(event: SvgKeyboardCaptureEvent): void {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
-        const modifiers = captured.left.concat(captured.right).map(x => x ? 1 : 0);
+        const modifiers = event.captured.left.concat(event.captured.right).map(x => x ? 1 : 0);
 
-        keystrokeAction.scancode = captured.code;
+        keystrokeAction.scancode = event.captured.code;
         keystrokeAction.modifierMask = 0;
 
         for (let i = 0; i < modifiers.length; ++i) {
@@ -179,11 +189,11 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             KeymapActions.saveKey(
                 this.keymap,
                 this.currentLayer,
-                moduleId,
-                keyId,
+                event.moduleId,
+                event.keyId,
                 {
-                    remapOnAllKeymap: false,
-                    remapOnAllLayer: false,
+                    remapOnAllKeymap: event.shiftPressed,
+                    remapOnAllLayer: event.altPressed,
                     action: keystrokeAction
                 })
         );

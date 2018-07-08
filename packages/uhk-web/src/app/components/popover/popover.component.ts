@@ -84,6 +84,8 @@ export class PopoverComponent implements OnChanges {
     @Input() wrapPosition: any;
     @Input() visible: boolean;
     @Input() allowLayerDoubleTap: boolean;
+    @Input() remapOnAllKeymap: boolean;
+    @Input() remapOnAllLayer: boolean;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyActionRemap>();
@@ -100,9 +102,6 @@ export class PopoverComponent implements OnChanges {
     topPosition: number = 0;
     leftPosition: number = 0;
     animationState: string;
-
-    remapOnAllKeymap: boolean;
-    remapOnAllLayer: boolean;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
@@ -143,8 +142,6 @@ export class PopoverComponent implements OnChanges {
         if (change['visible']) {
             if (change['visible'].currentValue) {
                 this.animationState = 'opened';
-                this.remapOnAllKeymap = false;
-                this.remapOnAllLayer = false;
             } else {
                 this.animationState = 'closed';
             }
@@ -177,6 +174,14 @@ export class PopoverComponent implements OnChanges {
     @HostListener('keydown.escape')
     onEscape(): void {
         this.cancel.emit();
+    }
+
+    @HostListener('document:keydown.control.enter', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (this.visible) {
+            this.onRemapKey();
+            event.preventDefault();
+        }
     }
 
     selectTab(tab: TabName): void {

@@ -8,9 +8,9 @@
                      [halvesSplit]="halvesSplit"
                      [keyboardLayout]="keyboardLayout"
                      [description]="keymap.description"
-                     (keyClick)="onKeyClick($event.moduleId, $event.keyId, $event.keyTarget)"
-                     (keyHover)="onKeyHover($event.moduleId, $event.event, $event.over, $event.keyId)"
-                     (capture)="onCapture($event.moduleId, $event.keyId, $event.captured)"
+                     (keyClick)="onKeyClick($event)"
+                     (keyHover)="onKeyHover($event)"
+                     (capture)="onCapture($event)"
                      (descriptionChanged)="onDescriptionChanged($event)"
     ></keyboard-slider>
 
@@ -22,6 +22,8 @@
              [currentKeymap]="keymap"
              [currentLayer]="currentLayer"
              [allowLayerDoubleTap]="allowLayerDoubleTap"
+             [remapOnAllKeymap]="remapOnAllKeymap"
+             [remapOnAllLayer]="remapOnAllLayer"
              (cancel)="hidePopover()"
              (remap)="onRemap($event)"></popover>
 

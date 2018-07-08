@@ -26,6 +26,7 @@ import { MapperService } from '../../../../services/mapper.service';
 
 import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
+import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -82,8 +83,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() capturingEnabled: boolean;
     @Input() active: boolean;
 
-    @Output() keyClick = new EventEmitter();
-    @Output() capture = new EventEmitter();
+    @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
+    @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
 
     enumLabelTypes = LabelTypes;
 
@@ -96,6 +97,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     macros: Macro[];
     private subscription: Subscription;
     private scanCodePressed: boolean;
+    private pressedShiftLocation = -1;
+    private pressedAltLocation = -1;
+    private altPressed = false;
+    private shitPressed = false;
 
     constructor(
         private mapper: MapperService,
@@ -115,12 +120,16 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @HostListener('click')
     onClick() {
         this.reset();
-        this.keyClick.emit(this.element.nativeElement);
+        this.keyClick.emit({
+            keyTarget: this.element.nativeElement,
+            shiftPressed: this.pressedShiftLocation > -1,
+            altPressed: this.pressedAltLocation > -1
+        });
     }
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(e: MouseEvent) {
-        if ((e.which === 2 || e.button === 1) && this.capturingEnabled) {
+        if ((e.which === 2 || e.button === 2) && this.capturingEnabled) {
             e.preventDefault();
             this.renderer.invokeElementMethod(this.element.nativeElement, 'focus');
 
@@ -129,13 +138,29 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.recording = true;
                 this.recordAnimation = 'active';
+
+                if (this.pressedShiftLocation > -1) {
+                    this.shitPressed = true;
+                }
+
+                if (this.pressedAltLocation > -1) {
+                    this.altPressed = true;
+                }
             }
         }
     }
 
-    @HostListener('keyup', ['$event'])
+    @HostListener('document:keyup', ['$event'])
     onKeyUp(e: KeyboardEvent) {
-        if (this.scanCodePressed) {
+        if (e.keyCode === 18 && this.pressedAltLocation > -1) {
+            this.pressedAltLocation = -1;
+            e.preventDefault();
+        }
+        else if (e.keyCode === 16 && this.pressedShiftLocation > -1) {
+            this.pressedShiftLocation = -1;
+            e.preventDefault();
+        }
+        else if (this.scanCodePressed) {
             e.preventDefault();
             this.scanCodePressed = false;
         } else if (this.recording) {
@@ -144,7 +169,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    @HostListener('keydown', ['$event'])
+    @HostListener('document:keydown', ['$event'])
     onKeyDown(e: KeyboardEvent) {
         const code: number = e.keyCode;
 
@@ -152,10 +177,28 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             e.preventDefault();
 
             if (this.captureService.hasMap(code)) {
+                // If the Alt or Shift key not released after start the capturing
+                // then add them as a modifier
+                if (this.pressedShiftLocation > -1) {
+                    this.captureService.setModifier((this.pressedShiftLocation === 1), 16);
+                }
+
+                if (this.pressedAltLocation > -1) {
+                    this.captureService.setModifier((this.pressedAltLocation === 1), 18);
+                }
+
                 this.saveScanCode(this.captureService.getMap(code));
                 this.scanCodePressed = true;
             } else {
                 this.captureService.setModifier((e.location === 1), code);
+            }
+        } else {
+            if (e.keyCode === 16) {
+                this.pressedShiftLocation = e.location;
+            }
+
+            if (e.keyCode === 18) {
+                this.pressedAltLocation = e.location;
             }
         }
     }
@@ -198,22 +241,25 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.recording = false;
         this.changeAnimation = 'inactive';
         this.captureService.initModifiers();
+        this.shitPressed = false;
+        this.altPressed = false;
     }
 
     private saveScanCode(code = 0) {
-        this.recording = false;
-        this.changeAnimation = 'inactive';
-
         const left: boolean[] = this.captureService.getModifiers(true);
         const right: boolean[] = this.captureService.getModifiers(false);
 
         this.capture.emit({
-            code,
-            left,
-            right
+            captured: {
+                code,
+                left,
+                right
+            },
+            shiftPressed: this.shitPressed,
+            altPressed: this.altPressed
         });
 
-        this.captureService.initModifiers();
+        this.reset();
     }
 
     private setLabels(): void {
