@@ -100,7 +100,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
     private altPressed = false;
-    private shitPressed = false;
+    private shiftPressed = false;
 
     constructor(
         private mapper: MapperService,
@@ -140,7 +140,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.recordAnimation = 'active';
 
                 if (this.pressedShiftLocation > -1) {
-                    this.shitPressed = true;
+                    this.shiftPressed = true;
                 }
 
                 if (this.pressedAltLocation > -1) {
@@ -241,7 +241,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.recording = false;
         this.changeAnimation = 'inactive';
         this.captureService.initModifiers();
-        this.shitPressed = false;
+        this.shiftPressed = false;
         this.altPressed = false;
     }
 
@@ -255,7 +255,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 left,
                 right
             },
-            shiftPressed: this.shitPressed,
+            shiftPressed: this.shiftPressed,
             altPressed: this.altPressed
         });
 
