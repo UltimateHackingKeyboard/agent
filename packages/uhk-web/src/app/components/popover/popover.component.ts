@@ -176,12 +176,9 @@ export class PopoverComponent implements OnChanges {
         this.cancel.emit();
     }
 
-    @HostListener('document:keydown', ['$event'])
+    @HostListener('document:keydown.control.enter', ['$event'])
     onKeyDown(event: KeyboardEvent) {
-        if (this.visible &&
-            event.ctrlKey &&
-            event.key === 'e' &&
-            !event.defaultPrevented) {
+        if (this.visible) {
             this.onRemapKey();
             event.preventDefault();
         }
