@@ -11,7 +11,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.1 | User Config: 4.0.1 | Hardware Config: 1.0.0
 
 - When remapping a switch keymap action on all keymaps, don't set it on its own keymap.
-- Make the key action popver always contain the action of the current key, even after cancelled.
+- Make the key action popover always contain the action of the current key, even after cancelled.
 - Include the firmware version to be updated to the firmware update log.
 - Update the Agent icon of the side menu and the about page.
 - When remapping a key, only flash the affected key instead of all keys.
