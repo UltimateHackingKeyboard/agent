@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { KeyAction, MouseAction, MouseActionParam } from 'uhk-common';
 
 import { Tab } from '../tab';
 
 @Component({
     selector: 'mouse-tab',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './mouse-tab.component.html',
     styleUrls: ['./mouse-tab.component.scss']
 })

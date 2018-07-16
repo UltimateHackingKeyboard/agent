@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { KeyAction, Macro, PlayMacroAction } from 'uhk-common';
@@ -11,6 +11,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
     selector: 'macro-tab',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-tab.component.html',
     styleUrls: ['./macro-tab.component.scss']
 })
