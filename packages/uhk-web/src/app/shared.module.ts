@@ -68,7 +68,7 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
-import { CancelableDirective, TooltipDirective } from './directives';
+import { CancelableDirective, ExternalUrlDirective, TooltipDirective } from './directives';
 import { SafeStylePipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
@@ -109,6 +109,7 @@ import { Autofocus } from './directives/autofocus/autofocus.directive';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 import { FileUploadComponent } from './components/file-upload';
 import { AutoGrowInputComponent } from './components/auto-grow-input';
+import { HelpPageComponent } from './components/agent/help-page/help-page.component';
 
 @NgModule({
     declarations: [
@@ -183,7 +184,9 @@ import { AutoGrowInputComponent } from './components/auto-grow-input';
         RestoreConfigurationComponent,
         RecoveryModeComponent,
         FileUploadComponent,
-        AutoGrowInputComponent
+        AutoGrowInputComponent,
+        HelpPageComponent,
+        ExternalUrlDirective
     ],
     imports: [
         CommonModule,

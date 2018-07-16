@@ -144,6 +144,12 @@
             </li>
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                    <a [routerLink]="['/help']"
+                       [class.disabled]="state.updatingFirmware">Help</a>
+                </div>
+            </li>
+            <li class="sidebar__level-2--item">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/about']"
                        [class.disabled]="state.updatingFirmware">About</a>
                 </div>
