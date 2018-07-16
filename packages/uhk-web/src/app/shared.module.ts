@@ -109,6 +109,7 @@ import { Autofocus } from './directives/autofocus/autofocus.directive';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 import { FileUploadComponent } from './components/file-upload';
 import { AutoGrowInputComponent } from './components/auto-grow-input';
+import { HelpPageComponent } from './pages/help-page/help.page';
 
 @NgModule({
     declarations: [
@@ -183,7 +184,8 @@ import { AutoGrowInputComponent } from './components/auto-grow-input';
         RestoreConfigurationComponent,
         RecoveryModeComponent,
         FileUploadComponent,
-        AutoGrowInputComponent
+        AutoGrowInputComponent,
+        HelpPageComponent
     ],
     imports: [
         CommonModule,
