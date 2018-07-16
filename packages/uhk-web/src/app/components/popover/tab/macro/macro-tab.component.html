@@ -6,7 +6,7 @@
     <div class="macro-selector">
         <b> Play macro: </b>
         <ngx-select [items]="macroOptions"
-                    [ngModel]="macroOptions[selectedMacroIndex].id"
+                    [ngModel]="macroOptions[selectedMacroIndex]?.id"
                     [autoActiveOnMouseEnter]="false"
                     size="small"
                     optionValueField="id"

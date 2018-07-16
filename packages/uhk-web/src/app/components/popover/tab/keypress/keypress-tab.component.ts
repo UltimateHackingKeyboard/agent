@@ -177,6 +177,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private toScancodeTypePair(option: SelectOptionData): [number, string] {
+        if (!option) {
+            return [0, 'basic'];
+        }
+
         let scanCode: number;
         let type: string;
         if (option.additional) {
