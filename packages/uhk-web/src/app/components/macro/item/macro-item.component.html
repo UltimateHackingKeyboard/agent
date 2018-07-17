@@ -11,6 +11,7 @@
      [@toggler]="((editable && editing) || newItem) ? 'active' : 'inactive'"
      [style.overflow]="overflow">
     <macro-action-editor
+        *ngIf="editable || newItem"
         [macroAction]="macroAction"
         (cancel)="cancelEdit()"
         (save)="saveEditedAction($event)">
