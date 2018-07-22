@@ -450,6 +450,14 @@ uhk = exports = module.exports = moduleExports = {
         getSlaveI2cErrors       : 0x0f,
         setI2cBaudRate          : 0x10,
         switchKeymap            : 0x11,
+        getVariable             : 0x12,
+        setVariable             : 0x13,
+    },
+    usbVariables: {
+        testSwitches        : 0x00,
+        testUsbStack        : 0x01,
+        debounceTimePress   : 0x02,
+        debounceTimeRelease : 0x03,
     },
     enumerationModes: {
         bootloader: 0,
