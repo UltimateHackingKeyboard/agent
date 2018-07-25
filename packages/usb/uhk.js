@@ -453,12 +453,6 @@ uhk = exports = module.exports = moduleExports = {
         getVariable             : 0x12,
         setVariable             : 0x13,
     },
-    usbVariables: {
-        testSwitches        : 0x00,
-        testUsbStack        : 0x01,
-        debounceTimePress   : 0x02,
-        debounceTimeRelease : 0x03,
-    },
     enumerationModes: {
         bootloader: 0,
         buspal: 1,
