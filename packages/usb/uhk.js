@@ -477,6 +477,12 @@ uhk = exports = module.exports = moduleExports = {
         normalKeyboard: 0x6122,
         compatibleKeyboard: 0x6123,
     },
+    variableNameToId: {
+        testSwitches: 0,
+        testUsbStack: 1,
+        debounceTimePress: 2,
+        debounceTimeRelease: 3,
+    },
     vendorId: 0x1D50,
     devicePropertyIds: {
         deviceProtocolVersion: 0,

@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-
 const uhk = require('./uhk');
-const device = uhk.getUhkDevice();
-const sendData = new Buffer([uhk.usbCommands.getVariable, +process.argv[2]]);
 
-console.log(sendData);
-device.write(uhk.getTransferData(sendData));
-const receivedBuffer = Buffer.from(device.readSync());
-console.log(receivedBuffer[1]);
+(async function() {
+    const device = uhk.getUhkDevice();
+    const variableName = process.argv[2];
+    const variableId = uhk.variableNameToId[variableName];
 
+    if (variableId === undefined) {
+        console.log(`The specified variable does not exist. Specify one of ${Object.keys(uhk.variableNameToId).join(', ')}`);
+        process.exit(1);
+    }
+
+    const receivedBuffer = await uhk.writeDevice(device, [uhk.usbCommands.getVariable, variableId]);
+    console.log(receivedBuffer[1]);
+})();
