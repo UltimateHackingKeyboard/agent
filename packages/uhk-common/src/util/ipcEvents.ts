@@ -30,6 +30,7 @@ export class Device {
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
     public static readonly recoveryDevice = 'device-recovery';
+    public static readonly enableUsbStackTest = 'enable-usb-stack-test';
 }
 
 export class IpcEvents {

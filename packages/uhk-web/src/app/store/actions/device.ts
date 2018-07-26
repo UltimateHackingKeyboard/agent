@@ -28,7 +28,8 @@ export const ActionTypes = {
     HAS_BACKUP_USER_CONFIGURATION: type(PREFIX + 'Store backup user configuration'),
     RESTORE_CONFIGURATION_FROM_BACKUP: type(PREFIX + 'Restore configuration from backup'),
     RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS: type(PREFIX + 'Restore configuration from backup success'),
-    RECOVERY_DEVICE: type(PREFIX + 'Recovery device')
+    RECOVERY_DEVICE: type(PREFIX + 'Recovery device'),
+    ENABLE_USB_STACK_TEST: type(PREFIX + 'USB stack test')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -144,6 +145,10 @@ export class RecoveryDeviceAction implements Action {
     type = ActionTypes.RECOVERY_DEVICE;
 }
 
+export class EnableUsbStackTestAction implements Action {
+    type = ActionTypes.ENABLE_USB_STACK_TEST;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -166,4 +171,5 @@ export type Actions
     | HasBackupUserConfigurationAction
     | RestoreUserConfigurationFromBackupSuccessAction
     | RecoveryDeviceAction
+    | EnableUsbStackTestAction
     ;

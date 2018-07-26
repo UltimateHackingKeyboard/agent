@@ -23,7 +23,12 @@ export enum UsbCommand {
     GetDebugBuffer           = 0x0b,
     GetAdcValue              = 0x0c,
     SetLedPwmBrightness      = 0x0d,
-    GetModuleProperty        = 0x0e
+    GetModuleProperty        = 0x0e,
+    GetSlaveI2cErrors        = 0x0f,
+    SetI2cBaudRate           = 0x10,
+    SwitchKeymap             = 0x11,
+    GetVariable              = 0x12,
+    SetVariable              = 0x13
 }
 
 export enum EepromOperation {
@@ -85,4 +90,11 @@ export enum KbootCommands {
 
 export enum ModulePropertyId {
     protocolVersions = 0
+}
+
+export enum UsbVariables {
+    testSwitches = 0,
+    testUsbStack = 1,
+    debounceTimePress = 2,
+    debounceTimeRelease = 3
 }

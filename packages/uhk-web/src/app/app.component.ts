@@ -7,6 +7,7 @@ import { Action, Store } from '@ngrx/store';
 import 'rxjs/add/operator/last';
 
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
+import { EnableUsbStackTestAction } from './store/actions/device';
 import {
     AppState,
     getShowAppUpdateAvailable,
@@ -64,6 +65,16 @@ export class MainAppComponent implements OnDestroy {
             this.clickedOnProgressButton(this.saveToKeyboardState.action);
             event.preventDefault();
         }
+
+        if (event.shiftKey &&
+            event.ctrlKey &&
+            event.altKey &&
+            event.metaKey &&
+            event.key === '|' &&
+            !event.defaultPrevented) {
+            this.enableUsbStackTest();
+            event.preventDefault();
+        }
     }
 
     updateApp() {
@@ -76,5 +87,9 @@ export class MainAppComponent implements OnDestroy {
 
     clickedOnProgressButton(action: Action) {
         return this.store.dispatch(action);
+    }
+
+    enableUsbStackTest() {
+        this.store.dispatch(new EnableUsbStackTestAction());
     }
 }

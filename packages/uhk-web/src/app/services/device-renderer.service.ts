@@ -50,6 +50,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.recoveryDevice);
     }
 
+    enableUsbStackTest(): void {
+        this.ipcRenderer.send(IpcEvents.device.enableUsbStackTest);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));

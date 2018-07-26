@@ -10,7 +10,8 @@ import {
     KbootCommands,
     ModuleSlotToI2cAddress,
     ModuleSlotToId,
-    UsbCommand
+    UsbCommand,
+    UsbVariables
 } from './constants';
 import { bufferToString, getTransferData, isUhkDevice, retry, snooze } from './util';
 
@@ -130,6 +131,11 @@ export class UhkHidDevice {
 
     public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
         await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
+        await this.waitUntilKeyboardBusy();
+    }
+
+    public async enableUsbStackTest(): Promise<void> {
+        await this.write(new Buffer([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
         await this.waitUntilKeyboardBusy();
     }
 

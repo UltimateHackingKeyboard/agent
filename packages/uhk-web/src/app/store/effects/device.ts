@@ -23,6 +23,7 @@ import {
 import {
     ActionTypes,
     ConnectionStateChangedAction,
+    EnableUsbStackTestAction,
     HideSaveToKeyboardButton,
     RecoveryDeviceAction,
     ResetUserConfigurationAction,
@@ -229,6 +230,10 @@ export class DeviceEffects {
     @Effect({dispatch: false}) recoveryDevice$ = this.actions$
         .ofType<RecoveryDeviceAction>(ActionTypes.RECOVERY_DEVICE)
         .do(() => this.deviceRendererService.recoveryDevice());
+
+    @Effect({dispatch: false}) enableUsbStackTest$ = this.actions$
+        .ofType<EnableUsbStackTestAction>(ActionTypes.ENABLE_USB_STACK_TEST)
+        .do(() => this.deviceRendererService.enableUsbStackTest());
 
     constructor(private actions$: Actions,
                 private router: Router,

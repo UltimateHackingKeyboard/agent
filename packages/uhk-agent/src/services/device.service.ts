@@ -87,6 +87,15 @@ export class DeviceService {
             });
         });
 
+        ipcMain.on(IpcEvents.device.enableUsbStackTest, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.enableUsbStackTest,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
         logService.debug('[DeviceService] init success');
     }
 
@@ -222,6 +231,10 @@ export class DeviceService {
 
         await snooze(500);
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
+    }
+
+    public async enableUsbStackTest(event: Electron.Event) {
+        await this.device.enableUsbStackTest();
     }
 
     /**
