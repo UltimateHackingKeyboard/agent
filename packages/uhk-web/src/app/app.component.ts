@@ -68,7 +68,6 @@ export class MainAppComponent implements OnDestroy {
 
         if (event.shiftKey &&
             event.ctrlKey &&
-            event.altKey &&
             event.metaKey &&
             event.key === '|' &&
             !event.defaultPrevented) {
