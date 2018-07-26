@@ -6,6 +6,24 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.6] - 2018-07-26
+
+Firmware: 8.**4.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.4.0)] | Device Protocol: 4.**4.0** | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- Replace the Linux blhost binary with a statically compiled version that doesn't use special instructions and shouldn't segfault.
+- Keep the current layer when changing keymaps.
+- Fix the sleep key of Mac keymaps.
+- Add help page.
+- Add "save to keyboard" and "remap key" shortcuts.
+- Build only AppImages for Linux.
+- Replace ng2-select2 widgets with ngx-select-ex that always shows up in the correct position.
+- Improve the phrasing of the firmware update error message.
+- Tweak unsupported Windows firmware update notification.
+- Hide the Settings menu until auto update is implemented.
+- Don't scroll when the macro tab of the key action popover gets selected.
+- Add keyboard shortcut for enabling the USB stack test mode of the firmware. `DEVICEPROTOCOL:MINOR`
+- Tone down the color of the separator line.
+
 ## [1.2.5] - 2018-06-26
 
 Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.3.1 | User Config: 4.0.1 | Hardware Config: 1.0.0
