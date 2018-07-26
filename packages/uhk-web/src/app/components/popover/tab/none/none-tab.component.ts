@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { Tab } from '../tab';
 
 @Component({
     selector: 'none-tab',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './none-tab.component.html',
     styleUrls: ['./none-tab.component.scss']
 })

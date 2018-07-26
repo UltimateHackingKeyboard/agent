@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -7,6 +7,7 @@ export type toggleType = 'active' | 'toggle';
 
 @Component({
     selector: 'layer-tab',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './layer-tab.component.html',
     styleUrls: ['./layer-tab.component.scss']
 })

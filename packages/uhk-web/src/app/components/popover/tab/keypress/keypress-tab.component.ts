@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -7,6 +7,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
     selector: 'keypress-tab',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './keypress-tab.component.html',
     styleUrls: ['./keypress-tab.component.scss']
 })
@@ -176,6 +177,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private toScancodeTypePair(option: SelectOptionData): [number, string] {
+        if (!option) {
+            return [0, 'basic'];
+        }
+
         let scanCode: number;
         let type: string;
         if (option.additional) {
