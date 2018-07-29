@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+$grid-gutter-width: 30px;
+$zindex-navbar-fixed: 1030;
+@import '~spacing-bootstrap-3/spacing';
+
 @import './styles/variables';
 @import '~angular-notifier/styles';
 @import '~font-awesome/scss/font-awesome';

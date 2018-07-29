@@ -1,5 +1,5 @@
 <label *ngIf="label">
-    <span>{{label}}</span>
+    <span [innerHtml]="label"></span>
     <icon name="question-circle"
             data-toggle="tooltip"
             [title]="tooltip"
