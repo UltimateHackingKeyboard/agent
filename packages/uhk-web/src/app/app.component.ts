@@ -74,6 +74,14 @@ export class MainAppComponent implements OnDestroy {
             this.enableUsbStackTest();
             event.preventDefault();
         }
+
+        if (runningInElectron &&
+            event.ctrlKey &&
+            event.key === 'q' &&
+            !event.defaultPrevented) {
+            window.close();
+            event.preventDefault();
+        }
     }
 
     updateApp() {
