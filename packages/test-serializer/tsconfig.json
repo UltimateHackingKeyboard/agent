@@ -1,11 +1,9 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
+    "experimentalDecorators": true
   }
 }
