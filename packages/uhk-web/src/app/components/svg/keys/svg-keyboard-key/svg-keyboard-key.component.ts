@@ -125,6 +125,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             shiftPressed: this.pressedShiftLocation > -1,
             altPressed: this.pressedAltLocation > -1
         });
+        this.pressedShiftLocation = -1;
+        this.pressedAltLocation = -1;
     }
 
     @HostListener('mousedown', ['$event'])

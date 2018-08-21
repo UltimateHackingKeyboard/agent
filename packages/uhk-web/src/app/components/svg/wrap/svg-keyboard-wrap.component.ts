@@ -48,6 +48,7 @@ import {
     SvgKeyboardKeyClickEvent,
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
+import { RemapInfo } from '../../../models/remap-info';
 
 interface NameValuePair {
     name: string;
@@ -87,8 +88,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     layers: Layer[];
     keyPosition: ClientRect;
     wrapPosition: ClientRect;
-    remapOnAllKeymap: boolean;
-    remapOnAllLayer: boolean;
+    remapInfo: RemapInfo = {
+        remapOnAllKeymap: false,
+        remapOnAllLayer: false
+    };
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
@@ -156,8 +159,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             this.selectedKey = {layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId};
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
             this.keyElement = event.keyTarget;
-            this.remapOnAllKeymap = event.shiftPressed;
-            this.remapOnAllLayer = event.altPressed;
+            this.remapInfo = {
+                remapOnAllKeymap: event.shiftPressed,
+                remapOnAllLayer: event.altPressed
+            };
             this.showPopover(keyActionToEdit);
         }
     }
