@@ -32,6 +32,7 @@ import { Tab } from './tab';
 import { AppState } from '../../store';
 import { getKeymaps } from '../../store/reducers/user-configuration';
 import { KeyActionRemap } from '../../models/key-action-remap';
+import { RemapInfo } from '../../models/remap-info';
 
 enum TabName {
     Keypress,
@@ -84,8 +85,7 @@ export class PopoverComponent implements OnChanges {
     @Input() wrapPosition: any;
     @Input() visible: boolean;
     @Input() allowLayerDoubleTap: boolean;
-    @Input() remapOnAllKeymap: boolean;
-    @Input() remapOnAllLayer: boolean;
+    @Input() remapInfo: RemapInfo;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyActionRemap>();
@@ -160,8 +160,8 @@ export class PopoverComponent implements OnChanges {
         if (this.keyActionValid) {
             try {
                 this.remap.emit({
-                    remapOnAllKeymap: this.remapOnAllKeymap,
-                    remapOnAllLayer: this.remapOnAllLayer,
+                    remapOnAllKeymap: this.remapInfo.remapOnAllKeymap,
+                    remapOnAllLayer: this.remapInfo.remapOnAllLayer,
                     action: this.selectedTab.toKeyAction()
                 });
             } catch (e) {
