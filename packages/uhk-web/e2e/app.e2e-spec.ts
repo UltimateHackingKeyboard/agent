@@ -7,8 +7,8 @@ describe('web App', () => {
     page = new WebPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display default device name', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    expect(page.getDeviceName()).toEqual('My UHK');
   });
 });

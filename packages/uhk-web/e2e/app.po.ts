@@ -5,7 +5,8 @@ export class WebPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  getDeviceName() {
+    return element(by.css('body > main-app > side-menu > ul > li:nth-child(1) > div > auto-grow-input > input'))
+        .getAttribute('value');
   }
 }
