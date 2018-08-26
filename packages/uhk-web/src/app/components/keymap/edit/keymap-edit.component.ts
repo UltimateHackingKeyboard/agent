@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
@@ -24,6 +24,7 @@ import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription
     selector: 'keymap-edit',
     templateUrl: './keymap-edit.component.html',
     styleUrls: ['./keymap-edit.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         'class': 'container-fluid'
     }
