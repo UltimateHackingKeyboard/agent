@@ -5,7 +5,7 @@ import { SvgKeyboardKey } from '../keys';
 import {
     SvgKeyCaptureEvent,
     SvgKeyClickEvent,
-    SvgModuleCaptureEvent,
+        SvgModuleCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
 
@@ -14,6 +14,7 @@ import { KeymapActions } from '../../../store/actions';
     selector: 'keymap-add',
     templateUrl: './keymap-add.component.html',
     styleUrls: ['./keymap-add.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         'class': 'container-fluid'
     }

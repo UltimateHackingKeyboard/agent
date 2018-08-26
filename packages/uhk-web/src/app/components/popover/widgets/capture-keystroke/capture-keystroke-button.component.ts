@@ -1,10 +1,11 @@
-import { Component, EventEmitter, HostListener, Output, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CaptureService } from '../../../../services/capture.service';
 
 @Component({
     selector: 'capture-keystroke-button',
     templateUrl: './capture-keystroke-button.component.html',
-    styleUrls: ['./capture-keystroke-button.component.scss']
+    styleUrls: ['./capture-keystroke-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CaptureKeystrokeButtonComponent {
     @Input() isLink = false;

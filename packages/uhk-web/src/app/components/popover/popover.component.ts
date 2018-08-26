@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
     EventEmitter,
@@ -47,6 +48,7 @@ enum TabName {
     selector: 'popover',
     templateUrl: './popover.component.html',
     styleUrls: ['./popover.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('popover', [
             state('closed', style({
