@@ -17,6 +17,7 @@ import { ActionTypes as DeviceActionTypes } from '../actions/device';
 import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
 import { PrivilagePageSate } from '../../models/privilage-page-sate';
+import { OperationSystem } from '../../models/operation-system';
 
 export interface State {
     started: boolean;
@@ -190,4 +191,31 @@ export const runningOnNotSupportedWindows = (state: State): boolean => {
     const osMinor = +version[1];
 
     return osMajor < 6 || (osMajor === 6 && osMinor < 2);
+};
+
+export const getOperationSystem = (state: State): OperationSystem => {
+    if (state.runningInElectron) {
+        switch (state.platform) {
+            case 'darwin':
+                return OperationSystem.Mac;
+
+            case 'win32':
+                return OperationSystem.Windows;
+
+            default:
+                return OperationSystem.Linux;
+        }
+    }
+
+    const platform = navigator.platform.toLowerCase();
+
+    if (platform.indexOf('mac') > -1) {
+        return OperationSystem.Mac;
+    }
+
+    if (platform.indexOf('win') > -1) {
+        return OperationSystem.Windows;
+    }
+
+    return OperationSystem.Linux;
 };
