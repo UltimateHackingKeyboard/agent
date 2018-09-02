@@ -1,16 +1,6 @@
 import {
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    Renderer,
-    SimpleChange
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
+    SimpleChange, ChangeDetectionStrategy
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
 
@@ -20,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import {
     KeyAction,
-    KeyModifierValues,
+    KeyModifiers,
     KeystrokeAction,
     LayerName,
     Macro,
@@ -305,20 +295,20 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 }
             } else if (keyAction.hasOnlyOneActiveModifier() && !keyAction.hasScancode()) {
                 switch (keyAction.modifierMask) {
-                    case KeyModifierValues.leftCtrl:
-                    case KeyModifierValues.rightCtrl:
+                    case KeyModifiers.leftCtrl:
+                    case KeyModifiers.rightCtrl:
                         this.labelSource = ['Ctrl'];
                         break;
-                    case KeyModifierValues.leftShift:
-                    case KeyModifierValues.rightShift:
+                    case KeyModifiers.leftShift:
+                    case KeyModifiers.rightShift:
                         this.labelSource = ['Shift'];
                         break;
-                    case KeyModifierValues.leftAlt:
-                    case KeyModifierValues.rightAlt:
+                    case KeyModifiers.leftAlt:
+                    case KeyModifiers.rightAlt:
                         this.labelSource = [this.mapper.getOsSpecificText('Alt')];
                         break;
-                    case KeyModifierValues.leftGui:
-                    case KeyModifierValues.rightGui:
+                    case KeyModifiers.leftGui:
+                    case KeyModifiers.rightGui:
                         if (this.mapper.getOperationSystem() === OperationSystem.Windows) {
                             this.labelSource = this.mapper.getIcon('command');
                             this.labelType = LabelTypes.SingleIcon;

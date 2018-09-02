@@ -26,10 +26,7 @@
             <h4 *ngIf="activeTab === TabName.Tap">Tap key</h4>
             <h4 *ngIf="activeTab === TabName.Press">Press key</h4>
             <h4 *ngIf="activeTab === TabName.Release">Release key</h4>
-            <keypress-tab #keypressTab
-                          [defaultKeyAction]="defaultKeyAction"
-                          [keyModifiers]="keyModifiers"
-                          [secondaryRoleEnabled]="false"
+            <keypress-tab #keypressTab [defaultKeyAction]="defaultKeyAction" [secondaryRoleEnabled]="false"
                           (validAction)="validate()"></keypress-tab>
         </div>
     </div>

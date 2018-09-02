@@ -13,7 +13,6 @@
     <macro-action-editor
         *ngIf="editable || newItem"
         [macroAction]="macroAction"
-        [keyModifiers]="keyModifiers"
         (cancel)="cancelEdit()"
         (save)="saveEditedAction($event)">
     </macro-action-editor>

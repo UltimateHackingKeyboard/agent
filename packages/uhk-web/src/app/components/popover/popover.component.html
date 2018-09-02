@@ -50,7 +50,6 @@
         <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content"
                       [defaultKeyAction]="defaultKeyAction"
                       [secondaryRoleEnabled]="true"
-                      [keyModifiers]="keyModifiers$ | async"
                       (validAction)="keyActionValid=$event"
         ></keypress-tab>
         <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"

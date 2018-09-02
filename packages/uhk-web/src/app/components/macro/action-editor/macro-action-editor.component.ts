@@ -8,8 +8,7 @@ import {
     MoveMouseMacroAction,
     MouseButtonMacroAction,
     TextMacroAction,
-    MacroActionHelper,
-    KeyModifiers
+    MacroActionHelper
 } from 'uhk-common';
 import { MacroDelayTabComponent, MacroMouseTabComponent, MacroKeyTabComponent, MacroTextTabComponent } from './tab';
 
@@ -28,7 +27,6 @@ enum TabName {
 })
 export class MacroActionEditorComponent implements OnInit {
     @Input() macroAction: MacroAction;
-    @Input() keyModifiers: KeyModifiers;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();

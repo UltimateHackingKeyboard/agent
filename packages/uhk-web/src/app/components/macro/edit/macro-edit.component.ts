@@ -1,14 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { KeyModifiers, Macro, MacroAction } from 'uhk-common';
+import { Macro, MacroAction } from 'uhk-common';
 
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/pluck';
 
 import { MacroActions } from '../../../store/actions';
-import { AppState, getKeyModifiers } from '../../../store';
+import { AppState } from '../../../store';
 import { getMacro } from '../../../store/reducers/user-configuration';
 
 @Component({
@@ -23,7 +22,6 @@ export class MacroEditComponent implements OnDestroy {
     macro: Macro;
     isNew: boolean;
     macroId: number;
-    keyModifiers$: Observable<KeyModifiers>;
 
     private subscription: Subscription;
     constructor(private store: Store<AppState>, public route: ActivatedRoute) {
@@ -39,7 +37,6 @@ export class MacroEditComponent implements OnDestroy {
             });
 
         this.isNew = this.route.snapshot.params['empty'] === 'new';
-        this.keyModifiers$ = store.select(getKeyModifiers);
     }
 
     ngOnDestroy() {

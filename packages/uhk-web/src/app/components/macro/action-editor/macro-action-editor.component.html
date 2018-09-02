@@ -30,11 +30,7 @@
         </div>
         <div class="col-xs-12 col-lg-9 editor__tabs" [ngSwitch]="activeTab">
             <macro-text-tab #tab *ngSwitchCase="TabName.Text" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-text-tab>
-            <macro-key-tab #tab
-                           *ngSwitchCase="TabName.Keypress"
-                           [macroAction]="editableMacroAction"
-                           [keyModifiers]="keyModifiers"
-                           (valid)="onValid($event)"></macro-key-tab>
+            <macro-key-tab #tab *ngSwitchCase="TabName.Keypress" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-key-tab>
             <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-mouse-tab>
             <macro-delay-tab #tab *ngSwitchCase="TabName.Delay" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-delay-tab>
         </div>

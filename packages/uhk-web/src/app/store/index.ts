@@ -54,7 +54,6 @@ export const deviceConfigurationLoaded = createSelector(appState, fromApp.device
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getPrivilegePageState = createSelector(appState, fromApp.getPrivilagePageState);
 export const getOperationSystem = createSelector(appState, fromSelectors.getOperationSystem);
-export const getKeyModifiers = createSelector(appState, fromSelectors.getKeyModifiers);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
 

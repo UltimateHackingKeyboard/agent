@@ -127,6 +127,13 @@ export class MapperService {
             this.osSpecificTexts.set('Enter', 'Return');
             this.osSpecificTexts.set('Alt', 'Option');
             this.osSpecificTexts.set('Super', 'Cmd');
+            this.osSpecificTexts.set('LSuper', 'LCmd');
+            this.osSpecificTexts.set('RSuper', 'RCmd');
+            this.osSpecificTexts.set('LAlt', 'LOption');
+            this.osSpecificTexts.set('RAlt', 'ROption');
+        } else if (this.operationSystem === OperationSystem.Windows) {
+            this.osSpecificTexts.set('LSuper', 'LWindows');
+            this.osSpecificTexts.set('RSuper', 'RWindows');
         }
     }
 

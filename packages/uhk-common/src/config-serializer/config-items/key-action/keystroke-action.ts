@@ -1,6 +1,6 @@
 import { assertEnum, assertUInt8 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
-import { KeyModifierValues } from '../key-modifiers';
+import { KeyModifiers } from '../key-modifiers';
 import { SecondaryRoleAction } from '../secondary-role-action';
 import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { KeystrokeType } from './keystroke-type';
@@ -179,7 +179,7 @@ export class KeystrokeAction extends KeyAction {
         return `<KeystrokeAction ${properties.join(' ')}>`;
     }
 
-    isActive(modifier: KeyModifierValues): boolean {
+    isActive(modifier: KeyModifiers): boolean {
         return (this.modifierMask & modifier) > 0;
     }
 

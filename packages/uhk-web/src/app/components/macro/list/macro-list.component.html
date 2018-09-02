@@ -7,7 +7,6 @@
                         [editable]="true"
                         [deletable]="true"
                         [movable]="true"
-                        [keyModifiers]="keyModifiers"
                         (save)="saveAction($event, macroActionIndex)"
                         (edit)="editAction(macroActionIndex)"
                         (cancel)="cancelAction()"
@@ -21,7 +20,6 @@
                         [editable]="true"
                         [deletable]="false"
                         [movable]="false"
-                        [keyModifiers]="keyModifiers"
                         (save)="addNewAction($event)"
                         (cancel)="hideNewAction()"
             ></macro-item>

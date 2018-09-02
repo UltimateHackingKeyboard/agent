@@ -4,7 +4,6 @@ import {
     DelayMacroAction,
     KeyMacroAction,
     KeyModifiers,
-    KeyModifierValues,
     MacroAction,
     MouseButtonMacroAction,
     MoveMouseMacroAction,
@@ -36,7 +35,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() editable: boolean;
     @Input() deletable: boolean;
     @Input() movable: boolean;
-    @Input() keyModifiers: KeyModifiers;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
@@ -154,9 +152,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
         if (action.hasModifiers()) {
             // Tap/press/release modifiers
-            for (let i = KeyModifierValues.leftCtrl; i <= KeyModifierValues.rightGui; i <<= 1) {
+            for (let i = KeyModifiers.leftCtrl; i <= KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
-                    this.title += ' ' + KeyModifierValues[i];
+                    this.title += ' ' + KeyModifiers[i];
                 }
             }
         }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-import { KeyMacroAction, KeyModifiers, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
+import { KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 import { KeypressTabComponent, Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 
@@ -21,8 +21,6 @@ enum TabName {
 })
 export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: KeyMacroAction;
-    @Input() keyModifiers: KeyModifiers;
-
     @ViewChild('tab') selectedTab: Tab;
     @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
 
