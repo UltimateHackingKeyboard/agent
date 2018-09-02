@@ -98,8 +98,6 @@ export class MapperService {
         if (mappedIconName) {
             return 'assets/compiled_sprite.svg#' + mappedIconName;
         }
-
-        return;
     }
 
     public modifierMapper(x: number) {
