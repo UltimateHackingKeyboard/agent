@@ -1,6 +1,16 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
-    SimpleChange, ChangeDetectionStrategy
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    Renderer,
+    SimpleChange
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
 
@@ -27,6 +37,7 @@ import { MapperService } from '../../../../services/mapper.service';
 import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
+import { OperationSystem } from '../../../../models/operation-system';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -293,29 +304,32 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             } else if (keyAction.hasOnlyOneActiveModifier() && !keyAction.hasScancode()) {
-                newLabelSource = [];
                 switch (keyAction.modifierMask) {
                     case KeyModifierValues.leftCtrl:
                     case KeyModifierValues.rightCtrl:
-                        newLabelSource.push('Ctrl');
+                        this.labelSource = ['Ctrl'];
                         break;
                     case KeyModifierValues.leftShift:
                     case KeyModifierValues.rightShift:
-                        newLabelSource.push('Shift');
+                        this.labelSource = ['Shift'];
                         break;
                     case KeyModifierValues.leftAlt:
                     case KeyModifierValues.rightAlt:
-                        newLabelSource.push('Alt');
+                        this.labelSource = [this.mapper.getOsSpecificText('Alt')];
                         break;
                     case KeyModifierValues.leftGui:
                     case KeyModifierValues.rightGui:
-                        newLabelSource.push('Super');
+                        if (this.mapper.getOperationSystem() === OperationSystem.Windows) {
+                            this.labelSource = this.mapper.getIcon('command');
+                            this.labelType = LabelTypes.SingleIcon;
+                        } else {
+                            this.labelSource = [this.mapper.getOsSpecificText('Super')];
+                        }
                         break;
                     default:
-                        newLabelSource.push('Undefined');
+                        this.labelSource = ['Undefined'];
                         break;
                 }
-                this.labelSource = newLabelSource;
             } else {
                 this.labelType = LabelTypes.KeystrokeKey;
                 this.labelSource = this.keyAction;

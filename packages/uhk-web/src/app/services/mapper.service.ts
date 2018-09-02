@@ -1,22 +1,37 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { KeystrokeType } from 'uhk-common';
+import { Subscription } from 'rxjs/Subscription';
+
+import { AppState, getOperationSystem } from '../store';
+import { OperationSystem } from '../models/operation-system';
 
 @Injectable()
 export class MapperService {
 
     private basicScanCodeTextMap: Map<number, string[]>;
     private mediaScanCodeTextMap: Map<number, string[]>;
-    private sytemScanCodeTextMap: Map<number, string[]>;
+    private systemScanCodeTextMap: Map<number, string[]>;
 
     private basicScancodeIcons: Map<number, string>;
     private mediaScancodeIcons: Map<number, string>;
     private systemScancodeIcons: Map<number, string>;
     private nameToFileName: Map<string, string>;
+    private osSpecificTexts: Map<string, string>;
 
-    constructor() {
-        this.initScanCodeTextMap();
-        this.initScancodeIcons();
-        this.initNameToFileNames();
+    private operationSystem: OperationSystem;
+    private osSubscription: Subscription;
+
+    constructor(private store: Store<AppState>) {
+        this.osSubscription = store
+            .select(getOperationSystem)
+            .subscribe(os => {
+                this.operationSystem = os;
+                this.initOsSpecificText();
+                this.initScanCodeTextMap();
+                this.initScancodeIcons();
+                this.initNameToFileNames();
+            });
     }
 
     public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
@@ -27,7 +42,7 @@ export class MapperService {
                 map = this.mediaScanCodeTextMap;
                 break;
             case KeystrokeType.system:
-                map = this.sytemScanCodeTextMap;
+                map = this.systemScanCodeTextMap;
                 break;
             default:
                 map = this.basicScanCodeTextMap;
@@ -79,7 +94,12 @@ export class MapperService {
     }
 
     public getIcon(iconName: string): string {
-        return 'assets/compiled_sprite.svg#' + this.nameToFileName.get(iconName);
+        const mappedIconName = this.nameToFileName.get(iconName);
+        if (mappedIconName) {
+            return 'assets/compiled_sprite.svg#' + mappedIconName;
+        }
+
+        return;
     }
 
     public modifierMapper(x: number) {
@@ -87,6 +107,26 @@ export class MapperService {
             return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
         } else {
             return x;
+        }
+    }
+
+    public getOperationSystem(): OperationSystem {
+        return this.operationSystem;
+    }
+
+    public getOsSpecificText(key: string): string {
+        const text = this.osSpecificTexts.get(key);
+
+        return text ? text : key;
+    }
+
+    private initOsSpecificText(): void {
+        this.osSpecificTexts = new Map<string, string>();
+
+        if (this.operationSystem === OperationSystem.Mac) {
+            this.osSpecificTexts.set('Enter', 'Return');
+            this.osSpecificTexts.set('Alt', 'Option');
+            this.osSpecificTexts.set('Super', 'Cmd');
         }
     }
 
@@ -129,7 +169,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(37, ['8', '*']);
         this.basicScanCodeTextMap.set(38, ['9', '(']);
         this.basicScanCodeTextMap.set(39, ['0', ')']);
-        this.basicScanCodeTextMap.set(40, ['Enter']);
+        this.basicScanCodeTextMap.set(40, [this.getOsSpecificText('Enter')]);
         this.basicScanCodeTextMap.set(41, ['Esc']);
         this.basicScanCodeTextMap.set(42, ['Backspace']);
         this.basicScanCodeTextMap.set(43, ['Tab']);
@@ -177,7 +217,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(85, ['*']);
         this.basicScanCodeTextMap.set(86, ['-']);
         this.basicScanCodeTextMap.set(87, ['+']);
-        this.basicScanCodeTextMap.set(88, ['Enter']);
+        this.basicScanCodeTextMap.set(88, [this.getOsSpecificText('Enter')]);
         this.basicScanCodeTextMap.set(89, ['end', '1']);
         this.basicScanCodeTextMap.set(90, ['2']);
         this.basicScanCodeTextMap.set(91, ['pgdn', '3']);
@@ -224,10 +264,10 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(394, ['Launch Email Client']);
         this.mediaScanCodeTextMap.set(402, ['Launch Calculator']);
 
-        this.sytemScanCodeTextMap = new Map<number, string[]>();
-        this.sytemScanCodeTextMap.set(129, ['Power Down']);
-        this.sytemScanCodeTextMap.set(130, ['Sleep']);
-        this.sytemScanCodeTextMap.set(131, ['Wake Up']);
+        this.systemScanCodeTextMap = new Map<number, string[]>();
+        this.systemScanCodeTextMap.set(129, ['Power Down']);
+        this.systemScanCodeTextMap.set(130, ['Sleep']);
+        this.systemScanCodeTextMap.set(131, ['Wake Up']);
     }
 
     private initScancodeIcons(): void {
@@ -266,8 +306,12 @@ export class MapperService {
         this.nameToFileName.set('switch-keymap', 'icon-kbd__mod--switch-keymap');
         this.nameToFileName.set('macro', 'icon-icon__macro');
         this.nameToFileName.set('shift', 'icon-kbd__default--modifier-shift');
-        this.nameToFileName.set('option', 'icon-kbd__default--modifier-option');
-        this.nameToFileName.set('command', 'icon-kbd__default--modifier-command');
+        if (this.operationSystem === OperationSystem.Mac) {
+            this.nameToFileName.set('option', 'icon-kbd__default--modifier-option');
+            this.nameToFileName.set('command', 'icon-kbd__default--modifier-command');
+        } else if (this.operationSystem === OperationSystem.Windows) {
+            this.nameToFileName.set('command', 'icon-kbd__default--modifier-windows');
+        }
         this.nameToFileName.set('mouse', 'icon-kbd__mouse');
         this.nameToFileName.set('left-arrow', 'icon-kbd__mod--arrow-left');
         this.nameToFileName.set('right-arrow', 'icon-kbd__mod--arrow-right');

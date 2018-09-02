@@ -28,10 +28,13 @@
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="option.width" [attr.height]="option.height" [attr.x]="option.x" [attr.y]="option.y"
         preserveAspectRatio="none" [class.disabled]="option.disabled">
-        <svg:use [attr.xlink:href]="modifierIconNames.option" />
+        <svg:use *ngIf="modifierIconNames.option" [attr.xlink:href]="modifierIconNames.option" />
+        <svg:text *ngIf="!modifierIconNames.option" [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">A</svg:text>
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="command.width" [attr.height]="command.height" [attr.x]="command.x" [attr.y]="command.y"
         preserveAspectRatio="none" [class.disabled]="command.disabled">
-        <svg:use [attr.xlink:href]="modifierIconNames.command" />
+        <svg:use *ngIf="modifierIconNames.command" [attr.xlink:href]="modifierIconNames.command" />
+        <svg:text *ngIf="!modifierIconNames.command" [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">S</svg:text>
+
     </svg>
 </svg>
