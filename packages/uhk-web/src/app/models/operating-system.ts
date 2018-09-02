@@ -1,4 +1,4 @@
-export enum OperationSystem {
+export enum OperatingSystem {
     Linux,
     Mac,
     Windows

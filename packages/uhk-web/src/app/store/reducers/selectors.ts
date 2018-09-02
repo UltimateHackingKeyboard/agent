@@ -1,1 +1,1 @@
-export * from './get-operation-system.selector';
+export * from './get-operating-system.selector';

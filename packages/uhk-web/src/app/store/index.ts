@@ -53,7 +53,7 @@ export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLay
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getPrivilegePageState = createSelector(appState, fromApp.getPrivilagePageState);
-export const getOperationSystem = createSelector(appState, fromSelectors.getOperationSystem);
+export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
 

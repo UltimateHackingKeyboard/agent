@@ -27,7 +27,7 @@ import { MapperService } from '../../../../services/mapper.service';
 import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
-import { OperationSystem } from '../../../../models/operation-system';
+import { OperatingSystem } from '../../../../models/operating-system';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -309,7 +309,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                         break;
                     case KeyModifiers.leftGui:
                     case KeyModifiers.rightGui:
-                        if (this.mapper.getOperationSystem() === OperationSystem.Windows) {
+                        if (this.mapper.getOperatingSystem() === OperatingSystem.Windows) {
                             this.labelSource = this.mapper.getIcon('command');
                             this.labelType = LabelTypes.SingleIcon;
                         } else {

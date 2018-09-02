@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { KeystrokeType } from 'uhk-common';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AppState, getOperationSystem } from '../store';
-import { OperationSystem } from '../models/operation-system';
+import { AppState, getOperatingSystem } from '../store';
+import { OperatingSystem } from '../models/operating-system';
 
 @Injectable()
 export class MapperService {
@@ -19,14 +19,14 @@ export class MapperService {
     private nameToFileName: Map<string, string>;
     private osSpecificTexts: Map<string, string>;
 
-    private operationSystem: OperationSystem;
+    private operatingSystem: OperatingSystem;
     private osSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
         this.osSubscription = store
-            .select(getOperationSystem)
+            .select(getOperatingSystem)
             .subscribe(os => {
-                this.operationSystem = os;
+                this.operatingSystem = os;
                 this.initOsSpecificText();
                 this.initScanCodeTextMap();
                 this.initScancodeIcons();
@@ -108,8 +108,8 @@ export class MapperService {
         }
     }
 
-    public getOperationSystem(): OperationSystem {
-        return this.operationSystem;
+    public getOperatingSystem(): OperatingSystem {
+        return this.operatingSystem;
     }
 
     public getOsSpecificText(key: string): string {
@@ -121,7 +121,7 @@ export class MapperService {
     private initOsSpecificText(): void {
         this.osSpecificTexts = new Map<string, string>();
 
-        if (this.operationSystem === OperationSystem.Mac) {
+        if (this.operatingSystem === OperatingSystem.Mac) {
             this.osSpecificTexts.set('Enter', 'Return');
             this.osSpecificTexts.set('Alt', 'Option');
             this.osSpecificTexts.set('Super', 'Cmd');
@@ -129,7 +129,7 @@ export class MapperService {
             this.osSpecificTexts.set('RSuper', 'RCmd');
             this.osSpecificTexts.set('LAlt', 'LOption');
             this.osSpecificTexts.set('RAlt', 'ROption');
-        } else if (this.operationSystem === OperationSystem.Windows) {
+        } else if (this.operatingSystem === OperatingSystem.Windows) {
             this.osSpecificTexts.set('LSuper', 'LWindows');
             this.osSpecificTexts.set('RSuper', 'RWindows');
         }
@@ -311,10 +311,10 @@ export class MapperService {
         this.nameToFileName.set('switch-keymap', 'icon-kbd__mod--switch-keymap');
         this.nameToFileName.set('macro', 'icon-icon__macro');
         this.nameToFileName.set('shift', 'icon-kbd__default--modifier-shift');
-        if (this.operationSystem === OperationSystem.Mac) {
+        if (this.operatingSystem === OperatingSystem.Mac) {
             this.nameToFileName.set('option', 'icon-kbd__default--modifier-option');
             this.nameToFileName.set('command', 'icon-kbd__default--modifier-command');
-        } else if (this.operationSystem === OperationSystem.Windows) {
+        } else if (this.operatingSystem === OperatingSystem.Windows) {
             this.nameToFileName.set('command', 'icon-kbd__default--modifier-windows');
         }
         this.nameToFileName.set('mouse', 'icon-kbd__mouse');
