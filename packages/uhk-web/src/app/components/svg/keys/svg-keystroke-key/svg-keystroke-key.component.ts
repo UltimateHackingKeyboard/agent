@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { KeyModifiers, KeystrokeAction } from 'uhk-common';
+import { KeyModifierValues, KeystrokeAction } from 'uhk-common';
 
 import { MapperService } from '../../../../services/mapper.service';
 
@@ -149,10 +149,10 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             this.labelType = 'empty';
         }
 
-        this.shift.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftShift | KeyModifiers.rightShift);
-        this.control.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftCtrl | KeyModifiers.rightCtrl);
-        this.option.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftAlt | KeyModifiers.rightAlt);
-        this.command.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftGui | KeyModifiers.rightGui);
+        this.shift.disabled = !this.keystrokeAction.isActive(KeyModifierValues.leftShift | KeyModifierValues.rightShift);
+        this.control.disabled = !this.keystrokeAction.isActive(KeyModifierValues.leftCtrl | KeyModifierValues.rightCtrl);
+        this.option.disabled = !this.keystrokeAction.isActive(KeyModifierValues.leftAlt | KeyModifierValues.rightAlt);
+        this.command.disabled = !this.keystrokeAction.isActive(KeyModifierValues.leftGui | KeyModifierValues.rightGui);
 
     }
 

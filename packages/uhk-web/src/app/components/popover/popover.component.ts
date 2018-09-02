@@ -21,6 +21,7 @@ import 'rxjs/add/operator/map';
 import {
     KeyAction,
     Keymap,
+    KeyModifiers,
     KeystrokeAction,
     MouseAction,
     PlayMacroAction,
@@ -30,7 +31,7 @@ import {
 
 import { Tab } from './tab';
 
-import { AppState } from '../../store';
+import { AppState, getKeyModifiers } from '../../store';
 import { getKeymaps } from '../../store/reducers/user-configuration';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
@@ -104,6 +105,7 @@ export class PopoverComponent implements OnChanges {
     topPosition: number = 0;
     leftPosition: number = 0;
     animationState: string;
+    keyModifiers$: Observable<KeyModifiers>;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
@@ -114,6 +116,7 @@ export class PopoverComponent implements OnChanges {
             .map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
                 keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation)
             );
+        this.keyModifiers$ = store.select(getKeyModifiers);
     }
 
     ngOnChanges(change: SimpleChanges) {

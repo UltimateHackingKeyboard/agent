@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
-import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { KeyAction, KeyModifiers, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
@@ -14,12 +14,13 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() secondaryRoleEnabled: boolean;
+    @Input() keyModifiers: KeyModifiers;
 
-    leftModifiers: string[];
-    rightModifiers: string[];
+    leftModifiers: string[] = [];
+    rightModifiers: string[] = [];
 
-    leftModifierSelects: boolean[];
-    rightModifierSelects: boolean[];
+    leftModifierSelects: boolean[] = [];
+    rightModifierSelects: boolean[] = [];
 
     scanCodeGroups: Array<SelectOptionData>;
     secondaryRoleGroups: Array<SelectOptionData>;
@@ -29,21 +30,24 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     constructor(private mapper: MapperService) {
         super();
-        this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
-        this.rightModifiers = ['RShift', 'RCtrl', 'RSuper', 'RAlt'];
         this.scanCodeGroups = [{
             id: '0',
             text: 'None'
         }];
         this.scanCodeGroups = this.scanCodeGroups.concat(SCANCODES);
         this.secondaryRoleGroups = SECONDARY_ROLES;
-        this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
-        this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.keyModifiers) {
+            this.leftModifiers = this.keyModifiers.lefts.map(x => x.buttonGroupText);
+            this.rightModifiers = this.keyModifiers.rights.map(x => x.buttonGroupText);
+            this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
+            this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
+        }
+
         this.fromKeyAction(this.defaultKeyAction);
         this.validAction.emit(this.keyActionValid());
     }

@@ -1,6 +1,6 @@
 import { assertEnum, assertUInt8, assertUInt16 } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
-import { KeyModifiers } from '../key-modifiers';
+import { KeyModifierValues } from '../key-modifiers';
 import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action';
 import { KeystrokeType } from '../key-action';
 
@@ -125,7 +125,7 @@ export class KeyMacroAction extends MacroAction {
         return `<KeyMacroAction action="${this.action}" scancode="${this._scancode}" modifierMask="${this.modifierMask}">`;
     }
 
-    isModifierActive(modifier: KeyModifiers): boolean {
+    isModifierActive(modifier: KeyModifierValues): boolean {
         return (this.modifierMask & modifier) > 0;
     }
 

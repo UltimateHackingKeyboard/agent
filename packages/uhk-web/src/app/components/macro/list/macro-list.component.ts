@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
-import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
+import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction, KeyModifiers } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
 import { MacroItemComponent } from '../item';
@@ -35,6 +35,8 @@ import { MacroItemComponent } from '../item';
 })
 export class MacroListComponent {
     @Input() macro: Macro;
+    @Input() keyModifiers: KeyModifiers;
+
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
     @Output() add = new EventEmitter();

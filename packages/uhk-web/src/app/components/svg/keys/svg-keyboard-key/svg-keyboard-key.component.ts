@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import {
     KeyAction,
-    KeyModifiers,
+    KeyModifierValues,
     KeystrokeAction,
     LayerName,
     Macro,
@@ -295,20 +295,20 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             } else if (keyAction.hasOnlyOneActiveModifier() && !keyAction.hasScancode()) {
                 newLabelSource = [];
                 switch (keyAction.modifierMask) {
-                    case KeyModifiers.leftCtrl:
-                    case KeyModifiers.rightCtrl:
+                    case KeyModifierValues.leftCtrl:
+                    case KeyModifierValues.rightCtrl:
                         newLabelSource.push('Ctrl');
                         break;
-                    case KeyModifiers.leftShift:
-                    case KeyModifiers.rightShift:
+                    case KeyModifierValues.leftShift:
+                    case KeyModifierValues.rightShift:
                         newLabelSource.push('Shift');
                         break;
-                    case KeyModifiers.leftAlt:
-                    case KeyModifiers.rightAlt:
+                    case KeyModifierValues.leftAlt:
+                    case KeyModifierValues.rightAlt:
                         newLabelSource.push('Alt');
                         break;
-                    case KeyModifiers.leftGui:
-                    case KeyModifiers.rightGui:
+                    case KeyModifierValues.leftGui:
+                    case KeyModifierValues.rightGui:
                         newLabelSource.push('Super');
                         break;
                     default:
