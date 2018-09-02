@@ -10,6 +10,7 @@ import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
+import * as fromSelectors from './reducers/selectors';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
@@ -52,6 +53,7 @@ export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLay
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getPrivilegePageState = createSelector(appState, fromApp.getPrivilagePageState);
+export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
 

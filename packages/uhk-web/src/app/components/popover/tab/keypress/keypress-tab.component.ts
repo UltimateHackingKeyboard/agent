@@ -29,8 +29,18 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     constructor(private mapper: MapperService) {
         super();
-        this.leftModifiers = ['LShift', 'LCtrl', 'LSuper', 'LAlt'];
-        this.rightModifiers = ['RShift', 'RCtrl', 'RSuper', 'RAlt'];
+        this.leftModifiers = [
+            'LShift',
+            'LCtrl',
+            mapper.getOsSpecificText('LSuper'),
+            mapper.getOsSpecificText('LAlt')
+        ];
+        this.rightModifiers = [
+            'RShift',
+            'RCtrl',
+            mapper.getOsSpecificText('RSuper'),
+            mapper.getOsSpecificText('RAlt')
+        ];
         this.scanCodeGroups = [{
             id: '0',
             text: 'None'

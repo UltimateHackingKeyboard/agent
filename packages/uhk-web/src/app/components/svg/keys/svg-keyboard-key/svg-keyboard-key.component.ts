@@ -27,6 +27,7 @@ import { MapperService } from '../../../../services/mapper.service';
 import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
+import { OperatingSystem } from '../../../../models/operating-system';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -293,29 +294,32 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             } else if (keyAction.hasOnlyOneActiveModifier() && !keyAction.hasScancode()) {
-                newLabelSource = [];
                 switch (keyAction.modifierMask) {
                     case KeyModifiers.leftCtrl:
                     case KeyModifiers.rightCtrl:
-                        newLabelSource.push('Ctrl');
+                        this.labelSource = ['Ctrl'];
                         break;
                     case KeyModifiers.leftShift:
                     case KeyModifiers.rightShift:
-                        newLabelSource.push('Shift');
+                        this.labelSource = ['Shift'];
                         break;
                     case KeyModifiers.leftAlt:
                     case KeyModifiers.rightAlt:
-                        newLabelSource.push('Alt');
+                        this.labelSource = [this.mapper.getOsSpecificText('Alt')];
                         break;
                     case KeyModifiers.leftGui:
                     case KeyModifiers.rightGui:
-                        newLabelSource.push('Super');
+                        if (this.mapper.getOperatingSystem() === OperatingSystem.Windows) {
+                            this.labelSource = this.mapper.getIcon('command');
+                            this.labelType = LabelTypes.SingleIcon;
+                        } else {
+                            this.labelSource = [this.mapper.getOsSpecificText('Super')];
+                        }
                         break;
                     default:
-                        newLabelSource.push('Undefined');
+                        this.labelSource = ['Undefined'];
                         break;
                 }
-                this.labelSource = newLabelSource;
             } else {
                 this.labelType = LabelTypes.KeystrokeKey;
                 this.labelSource = this.keyAction;
