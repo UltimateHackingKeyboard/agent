@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
 
 import { isRectangleAsSecondaryRoleKey } from '../util';
 import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
@@ -8,7 +8,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
     templateUrl: './svg-text-icon-key.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgTextIconKeyComponent implements OnInit {
+export class SvgTextIconKeyComponent implements OnChanges {
     @Input() width: number;
     @Input() height: number;
     @Input() text: string;
@@ -27,7 +27,11 @@ export class SvgTextIconKeyComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() {
+    ngOnChanges(changes: SimpleChanges): void {
+        this.calculatePositions();
+    }
+
+    calculatePositions(): void {
         let textYModifier = 0;
         let secondaryYModifier = 0;
 

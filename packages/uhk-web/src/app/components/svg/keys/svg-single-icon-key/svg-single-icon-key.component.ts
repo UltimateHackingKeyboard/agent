@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
 
 import { isRectangleAsSecondaryRoleKey } from '../util';
 import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
@@ -8,7 +8,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
     templateUrl: './svg-single-icon-key.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgSingleIconKeyComponent implements OnInit {
+export class SvgSingleIconKeyComponent implements OnChanges {
     @Input() width: number;
     @Input() height: number;
     @Input() icon: string;
@@ -18,14 +18,19 @@ export class SvgSingleIconKeyComponent implements OnInit {
     svgWidth: number;
     secondaryTextY: number;
     secondaryHeight: number;
+
     constructor() { }
 
-    ngOnInit() {
+    ngOnChanges(changes: SimpleChanges): void {
+        this.calculatePositions();
+    }
+
+    calculatePositions(): void {
         let textYModifier = 0;
         let secondaryYModifier = 0;
 
         if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
-            textYModifier =  this.height / 5;
+            textYModifier = this.height / 5;
             secondaryYModifier = 5;
         }
 
