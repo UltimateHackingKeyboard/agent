@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { KeyModifiers, KeystrokeAction } from 'uhk-common';
 
 import { MapperService } from '../../../../services/mapper.service';
@@ -27,7 +27,7 @@ class SvgAttributes {
     styleUrls: ['./svg-keystroke-key.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
+export class SvgKeystrokeKeyComponent implements OnChanges {
     @Input() height: number;
     @Input() width: number;
     @Input() keystrokeAction: KeystrokeAction;
@@ -63,12 +63,43 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         this.command = new SvgAttributes();
     }
 
-    ngOnInit() {
+    ngOnChanges() {
+        if (this.keystrokeAction.hasScancode()) {
+            const scancode: number = this.keystrokeAction.scancode;
+            this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
+            if (this.labelSource) {
+                this.labelType = 'icon';
+            } else {
+                let newLabelSource: string[];
+                newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
+                if (newLabelSource) {
+                    if (newLabelSource.length === 1) {
+                        this.labelSource = newLabelSource[0];
+                        this.labelType = 'one-line';
+                    } else {
+                        this.labelSource = newLabelSource;
+                        this.labelType = 'two-line';
+                    }
+                }
+            }
+        } else {
+            this.labelType = 'empty';
+        }
+
+        this.shift.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftShift | KeyModifiers.rightShift);
+        this.control.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftCtrl | KeyModifiers.rightCtrl);
+        this.option.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftAlt | KeyModifiers.rightAlt);
+        this.command.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftGui | KeyModifiers.rightGui);
+
+        this.calculatePositions();
+    }
+
+    private calculatePositions(): void {
         let textYModifier = 0;
         let secondaryYModifier = 0;
 
         if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
-            textYModifier =  this.height / 5;
+            textYModifier = this.height / 5;
             secondaryYModifier = 5;
         }
 
@@ -145,35 +176,4 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         this.textContainer.width = this.width;
         this.textContainer.height = this.height;
     }
-
-    ngOnChanges() {
-        if (this.keystrokeAction.hasScancode()) {
-            const scancode: number = this.keystrokeAction.scancode;
-            this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
-            if (this.labelSource) {
-                this.labelType = 'icon';
-            } else {
-                let newLabelSource: string[];
-                newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
-                if (newLabelSource) {
-                    if (newLabelSource.length === 1) {
-                        this.labelSource = newLabelSource[0];
-                        this.labelType = 'one-line';
-                    } else {
-                        this.labelSource = newLabelSource;
-                        this.labelType = 'two-line';
-                    }
-                }
-            }
-        } else {
-            this.labelType = 'empty';
-        }
-
-        this.shift.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftShift | KeyModifiers.rightShift);
-        this.control.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftCtrl | KeyModifiers.rightCtrl);
-        this.option.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftAlt | KeyModifiers.rightAlt);
-        this.command.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftGui | KeyModifiers.rightGui);
-
-    }
-
 }
