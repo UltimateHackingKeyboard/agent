@@ -37,7 +37,8 @@
         <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
                [height]="height"
                [width]="width"
-               [texts]="labelSource">
+               [texts]="labelSource"
+               [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-text-icon-key *ngSwitchCase="enumLabelTypes.TextIcon"
                [height]="height"

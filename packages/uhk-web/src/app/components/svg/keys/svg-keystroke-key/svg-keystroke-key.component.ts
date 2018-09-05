@@ -73,12 +73,18 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
                 let newLabelSource: string[];
                 newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
                 if (newLabelSource) {
-                    if (newLabelSource.length === 1) {
+                    if (this.secondaryText && newLabelSource.length === 2) {
                         this.labelSource = newLabelSource[0];
                         this.labelType = 'one-line';
-                    } else {
-                        this.labelSource = newLabelSource;
-                        this.labelType = 'two-line';
+                    }
+                    else {
+                        if (newLabelSource.length === 1) {
+                            this.labelSource = newLabelSource[0];
+                            this.labelType = 'one-line';
+                        } else {
+                            this.labelSource = newLabelSource;
+                            this.labelType = 'two-line';
+                        }
                     }
                 }
             }
