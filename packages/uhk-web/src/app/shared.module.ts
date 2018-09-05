@@ -59,6 +59,7 @@ import {
     SvgMouseScrollKeyComponent,
     SvgMouseSpeedKeyComponent,
     SvgOneLineTextKeyComponent,
+    SvgSecondaryRoleComponent,
     SvgSingleIconKeyComponent,
     SvgSwitchKeymapKeyComponent,
     SvgTextIconKeyComponent,
@@ -186,7 +187,8 @@ import { HelpPageComponent } from './components/agent/help-page/help-page.compon
         FileUploadComponent,
         AutoGrowInputComponent,
         HelpPageComponent,
-        ExternalUrlDirective
+        ExternalUrlDirective,
+        SvgSecondaryRoleComponent
     ],
     imports: [
         CommonModule,

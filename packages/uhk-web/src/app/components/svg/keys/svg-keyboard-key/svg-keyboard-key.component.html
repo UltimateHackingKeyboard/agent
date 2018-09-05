@@ -25,12 +25,14 @@
         <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
                [height]="height"
                [width]="width"
-               [keystrokeAction]="labelSource">
+               [keystrokeAction]="labelSource"
+               [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
                [height]="height"
                [width]="width"
-               [text]="labelSource">
+               [text]="labelSource"
+               [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
                [height]="height"
@@ -41,18 +43,21 @@
                [height]="height"
                [width]="width"
                [text]="labelSource.text"
-               [icon]="labelSource.icon">
+               [icon]="labelSource.icon"
+               [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-icon-text-key *ngSwitchCase="enumLabelTypes.IconText"
                [height]="height"
                [width]="width"
                [icon]="labelSource.icon"
-               [text]="labelSource.text">
+               [text]="labelSource.text"
+               [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-single-icon-key *ngSwitchCase="enumLabelTypes.SingleIcon"
                [height]="height"
                [width]="width"
-               [icon]="labelSource">
+               [icon]="labelSource"
+               [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-switch-keymap-key *ngSwitchCase="enumLabelTypes.SwitchKeymap"
                [height]="height"

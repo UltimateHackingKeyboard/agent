@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { KeystrokeType } from 'uhk-common';
+import { KeystrokeType, SecondaryRoleAction } from 'uhk-common';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState, getOperatingSystem } from '../store';
@@ -18,6 +18,7 @@ export class MapperService {
     private systemScancodeIcons: Map<number, string>;
     private nameToFileName: Map<string, string>;
     private osSpecificTexts: Map<string, string>;
+    private secondaryRoleTexts: Map<number, string>;
 
     private operatingSystem: OperatingSystem;
     private osSubscription: Subscription;
@@ -31,6 +32,7 @@ export class MapperService {
                 this.initScanCodeTextMap();
                 this.initScancodeIcons();
                 this.initNameToFileNames();
+                this.initSecondaryRoleTexts();
             });
     }
 
@@ -116,6 +118,10 @@ export class MapperService {
         const text = this.osSpecificTexts.get(key);
 
         return text ? text : key;
+    }
+
+    public getSecondaryRoleText(secondaryRoleAction: SecondaryRoleAction): string {
+        return this.secondaryRoleTexts.get(secondaryRoleAction);
     }
 
     private initOsSpecificText(): void {
@@ -328,4 +334,18 @@ export class MapperService {
         this.nameToFileName.set('scroll-up', 'icon-kbd__mouse--scroll-up');
     }
 
+    private initSecondaryRoleTexts(): void {
+        this.secondaryRoleTexts = new Map<number, string>();
+        this.secondaryRoleTexts.set(0, 'LCtrl');
+        this.secondaryRoleTexts.set(1, 'LShift');
+        this.secondaryRoleTexts.set(2, 'LAlt');
+        this.secondaryRoleTexts.set(3, 'LSuper');
+        this.secondaryRoleTexts.set(4, 'RCtrl');
+        this.secondaryRoleTexts.set(5, 'RShift');
+        this.secondaryRoleTexts.set(6, 'RAlt');
+        this.secondaryRoleTexts.set(7, 'RSuper');
+        this.secondaryRoleTexts.set(8, 'Mod');
+        this.secondaryRoleTexts.set(9, 'Fn');
+        this.secondaryRoleTexts.set(10, 'Mouse');
+    }
 }

@@ -37,3 +37,10 @@
         <svg:text *ngIf="!modifierIconNames.command" [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">S</svg:text>
     </svg>
 </svg>
+<svg:g svg-secondary-role
+       *ngIf="secondaryText"
+       [height]="20"
+       [width]="secondaryTextWidth"
+       [y]="secondaryTextY"
+       [text]="secondaryText">
+</svg:g>

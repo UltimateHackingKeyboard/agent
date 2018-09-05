@@ -1,4 +1,6 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { isRectangleAsSecondaryRoleKey } from '../util';
+import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 
 @Component({
     selector: 'g[svg-one-line-text-key]',
@@ -9,14 +11,28 @@ export class SvgOneLineTextKeyComponent implements OnInit {
     @Input() height: number;
     @Input() width: number;
     @Input() text: string;
+    @Input() secondaryText: string;
 
     textY: number;
     spanX: number;
+    secondaryTextY: number;
+    secondaryHeight: number;
 
     constructor() { }
 
     ngOnInit() {
-        this.textY = this.height / 2;
+        let textYModifier = 0;
+        let secondaryYModifier = 0;
+
+        if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
+            textYModifier =  this.height / 5;
+            secondaryYModifier = 5;
+        }
+
+        this.textY = this.height / 2 - textYModifier;
         this.spanX = this.width / 2;
+
+        this.secondaryHeight = this.height / 4;
+        this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
     }
 }

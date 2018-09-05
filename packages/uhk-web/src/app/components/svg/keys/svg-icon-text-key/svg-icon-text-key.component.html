@@ -11,3 +11,10 @@
     [attr.font-size]="11">
         <tspan [attr.x]="spanX">{{ text }}</tspan>
 </svg:text>
+<svg:g svg-secondary-role
+       *ngIf="secondaryText"
+       [height]="20"
+       [width]="width"
+       [y]="secondaryTextY"
+       [text]="secondaryText">
+</svg:g>

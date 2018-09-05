@@ -1,6 +1,13 @@
- <svg:text
+<svg:text
     [attr.x]="0"
     [attr.y]="textY"
     [attr.text-anchor]="'middle'">
-        <tspan [attr.x]="spanX" dy="0">{{ text }}</tspan>
- </svg:text>
+    <tspan [attr.x]="spanX" dy="0">{{ text }}</tspan>
+</svg:text>
+<svg:g svg-secondary-role
+       *ngIf="secondaryText"
+       [height]="20"
+       [width]="width"
+       [y]="secondaryTextY"
+       [text]="secondaryText">
+</svg:g>

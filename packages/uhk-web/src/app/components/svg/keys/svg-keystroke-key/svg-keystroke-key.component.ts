@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@a
 import { KeyModifiers, KeystrokeAction } from 'uhk-common';
 
 import { MapperService } from '../../../../services/mapper.service';
+import { isRectangleAsSecondaryRoleKey } from '../util';
+import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 
 class SvgAttributes {
     width: number;
@@ -29,6 +31,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     @Input() height: number;
     @Input() width: number;
     @Input() keystrokeAction: KeystrokeAction;
+    @Input() secondaryText: string;
 
     viewBox: string;
     textContainer: SvgAttributes;
@@ -46,6 +49,9 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         option?: string,
         command?: string
     };
+    secondaryTextY: number;
+    secondaryTextWidth: number;
+    secondaryHeight: number;
 
     constructor(private mapper: MapperService) {
         this.modifierIconNames = {};
@@ -58,6 +64,17 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        let textYModifier = 0;
+        let secondaryYModifier = 0;
+
+        if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
+            textYModifier =  this.height / 5;
+            secondaryYModifier = 5;
+        }
+
+        this.secondaryHeight = this.secondaryText ? this.height / 4 : 0;
+        this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
+
         this.viewBox = [0, 0, this.width, this.height].join(' ');
         this.modifierIconNames.shift = this.mapper.getIcon('shift');
         this.modifierIconNames.option = this.mapper.getIcon('option');
@@ -66,6 +83,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         const bottomSideMode: boolean = this.width < this.height * 1.8;
 
         const heightWidthRatio = this.height / this.width;
+        this.secondaryTextWidth = this.width;
 
         if (bottomSideMode) {
             const maxIconWidth = this.width / 4;
@@ -75,7 +93,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             const iconHeight = iconScalingFactor * maxIconHeight;
             this.modifierContainer.width = this.width;
             this.modifierContainer.height = this.height / 5;
-            this.modifierContainer.y = this.height - this.modifierContainer.height;
+            this.modifierContainer.y = this.height - this.modifierContainer.height - this.secondaryHeight;
             this.shift.width = iconWidth;
             this.shift.height = iconHeight;
             this.shift.x = (maxIconWidth - iconWidth) / 2;
@@ -92,7 +110,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             this.command.height = iconHeight;
             this.command.x = this.option.x + maxIconWidth;
             this.command.y = this.shift.y;
-            this.textContainer.y = -this.modifierContainer.height / 2;
+            this.textContainer.y = -this.modifierContainer.height / 2 - this.secondaryHeight / 2;
         } else {
             this.modifierContainer.width = this.width / 4;
             this.modifierContainer.height = this.height;
@@ -120,8 +138,10 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             this.command.x = this.option.x + this.width / 2;
             this.command.y = this.option.y;
             this.textContainer.x = -this.modifierContainer.width / 2;
+            this.secondaryTextWidth = this.width - this.modifierContainer.width;
         }
 
+        this.textContainer.y -= textYModifier;
         this.textContainer.width = this.width;
         this.textContainer.height = this.height;
     }
