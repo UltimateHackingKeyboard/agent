@@ -116,6 +116,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
         this.modifierIconNames.shift = this.mapper.getIcon('shift');
         this.modifierIconNames.option = this.mapper.getIcon('option');
         this.modifierIconNames.command = this.mapper.getIcon('command');
+        this.textContainer.y = 0;
 
         const bottomSideMode: boolean = this.width < this.height * 1.8;
 
