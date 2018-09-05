@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 
 import { getContentWidth } from '../../../../util';
 
@@ -11,7 +20,7 @@ const SECONDARY_STYLE: CSSStyleDeclaration = {
     templateUrl: './svg-secondary-role.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgSecondaryRoleComponent implements OnInit {
+export class SvgSecondaryRoleComponent implements OnInit, OnChanges {
     @Input() height: number;
     @Input() width: number;
     @Input() y: number;
@@ -27,11 +36,17 @@ export class SvgSecondaryRoleComponent implements OnInit {
     ngOnInit(): void {
         this.viewBox = [0, 0, this.width, this.height].join(' ');
         this.textY = this.height / 2 - 2;
+    }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.text) {
+            this.calculateTextPosition();
+        }
+    }
+
+    private calculateTextPosition(): void {
         const textWidth = getContentWidth(SECONDARY_STYLE, this.text) + this.textIndent;
         const translateValue = Math.max(0, (this.width - textWidth) / 2);
         this.transform = `translate(${ translateValue },0)`;
     }
-
-
 }
