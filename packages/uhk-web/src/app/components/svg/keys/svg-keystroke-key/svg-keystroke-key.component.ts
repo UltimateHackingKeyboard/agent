@@ -132,7 +132,6 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
         this.modifierIconNames.command = this.mapper.getIcon('command');
         this.textContainer.y = 0;
 
-
         const heightWidthRatio = this.height / this.width;
         this.secondaryTextWidth = this.width;
 
