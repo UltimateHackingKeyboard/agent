@@ -52,6 +52,8 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     secondaryTextY: number;
     secondaryTextWidth: number;
     secondaryHeight: number;
+    thisSecondaryRoleText: string;
+    subComponentSecondaryRoleText: string;
 
     constructor(private mapper: MapperService) {
         this.modifierIconNames = {};
@@ -64,6 +66,23 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     }
 
     ngOnChanges() {
+        this.calculatePositions();
+    }
+
+    private calculatePositions(): void {
+        let textYModifier = 0;
+        let secondaryYModifier = 0;
+        this.thisSecondaryRoleText = this.secondaryText;
+        this.subComponentSecondaryRoleText = null;
+
+        const bottomSideMode: boolean = this.width < this.height * 1.8;
+        const isRectangleAsSecondaryRole = isRectangleAsSecondaryRoleKey(this.width, this.height);
+
+        if (this.secondaryText && isRectangleAsSecondaryRole) {
+            textYModifier = this.height / 5;
+            secondaryYModifier = 5;
+        }
+
         if (this.keystrokeAction.hasScancode()) {
             const scancode: number = this.keystrokeAction.scancode;
             this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
@@ -74,8 +93,15 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
                 newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
                 if (newLabelSource) {
                     if (this.secondaryText && newLabelSource.length === 2) {
-                        this.labelSource = newLabelSource[0];
-                        this.labelType = 'one-line';
+                        if (isRectangleAsSecondaryRole || bottomSideMode) {
+                            this.labelSource = newLabelSource[0];
+                            this.labelType = 'one-line';
+                        } else {
+                            this.labelSource = newLabelSource;
+                            this.labelType = 'two-line';
+                            this.thisSecondaryRoleText = null;
+                            this.subComponentSecondaryRoleText = this.secondaryText;
+                        }
                     }
                     else {
                         if (newLabelSource.length === 1) {
@@ -97,18 +123,6 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
         this.option.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftAlt | KeyModifiers.rightAlt);
         this.command.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftGui | KeyModifiers.rightGui);
 
-        this.calculatePositions();
-    }
-
-    private calculatePositions(): void {
-        let textYModifier = 0;
-        let secondaryYModifier = 0;
-
-        if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
-            textYModifier = this.height / 5;
-            secondaryYModifier = 5;
-        }
-
         this.secondaryHeight = this.secondaryText ? this.height / 4 : 0;
         this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
 
@@ -118,7 +132,6 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
         this.modifierIconNames.command = this.mapper.getIcon('command');
         this.textContainer.y = 0;
 
-        const bottomSideMode: boolean = this.width < this.height * 1.8;
 
         const heightWidthRatio = this.height / this.width;
         this.secondaryTextWidth = this.width;
