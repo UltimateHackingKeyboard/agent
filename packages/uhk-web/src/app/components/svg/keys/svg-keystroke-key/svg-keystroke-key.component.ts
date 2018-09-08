@@ -1,7 +1,9 @@
-import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { KeyModifiers, KeystrokeAction } from 'uhk-common';
 
 import { MapperService } from '../../../../services/mapper.service';
+import { isRectangleAsSecondaryRoleKey } from '../util';
+import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 
 class SvgAttributes {
     width: number;
@@ -25,10 +27,11 @@ class SvgAttributes {
     styleUrls: ['./svg-keystroke-key.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
+export class SvgKeystrokeKeyComponent implements OnChanges {
     @Input() height: number;
     @Input() width: number;
     @Input() keystrokeAction: KeystrokeAction;
+    @Input() secondaryText: string;
 
     viewBox: string;
     textContainer: SvgAttributes;
@@ -46,6 +49,11 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         option?: string,
         command?: string
     };
+    secondaryTextY: number;
+    secondaryTextWidth: number;
+    secondaryHeight: number;
+    thisSecondaryRoleText: string;
+    subComponentSecondaryRoleText: string;
 
     constructor(private mapper: MapperService) {
         this.modifierIconNames = {};
@@ -57,15 +65,75 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
         this.command = new SvgAttributes();
     }
 
-    ngOnInit() {
+    ngOnChanges() {
+        this.calculatePositions();
+    }
+
+    private calculatePositions(): void {
+        let textYModifier = 0;
+        let secondaryYModifier = 0;
+        this.thisSecondaryRoleText = this.secondaryText;
+        this.subComponentSecondaryRoleText = null;
+
+        const bottomSideMode: boolean = this.width < this.height * 1.8;
+        const isRectangleAsSecondaryRole = isRectangleAsSecondaryRoleKey(this.width, this.height);
+
+        if (this.secondaryText && isRectangleAsSecondaryRole) {
+            textYModifier = this.height / 5;
+            secondaryYModifier = 5;
+        }
+
+        if (this.keystrokeAction.hasScancode()) {
+            const scancode: number = this.keystrokeAction.scancode;
+            this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
+            if (this.labelSource) {
+                this.labelType = 'icon';
+            } else {
+                let newLabelSource: string[];
+                newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
+                if (newLabelSource) {
+                    if (this.secondaryText && newLabelSource.length === 2) {
+                        if (isRectangleAsSecondaryRole || bottomSideMode) {
+                            this.labelSource = newLabelSource[0];
+                            this.labelType = 'one-line';
+                        } else {
+                            this.labelSource = newLabelSource;
+                            this.labelType = 'two-line';
+                            this.thisSecondaryRoleText = null;
+                            this.subComponentSecondaryRoleText = this.secondaryText;
+                        }
+                    }
+                    else {
+                        if (newLabelSource.length === 1) {
+                            this.labelSource = newLabelSource[0];
+                            this.labelType = 'one-line';
+                        } else {
+                            this.labelSource = newLabelSource;
+                            this.labelType = 'two-line';
+                        }
+                    }
+                }
+            }
+        } else {
+            this.labelType = 'empty';
+        }
+
+        this.shift.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftShift | KeyModifiers.rightShift);
+        this.control.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftCtrl | KeyModifiers.rightCtrl);
+        this.option.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftAlt | KeyModifiers.rightAlt);
+        this.command.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftGui | KeyModifiers.rightGui);
+
+        this.secondaryHeight = this.secondaryText ? this.height / 4 : 0;
+        this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
+
         this.viewBox = [0, 0, this.width, this.height].join(' ');
         this.modifierIconNames.shift = this.mapper.getIcon('shift');
         this.modifierIconNames.option = this.mapper.getIcon('option');
         this.modifierIconNames.command = this.mapper.getIcon('command');
-
-        const bottomSideMode: boolean = this.width < this.height * 1.8;
+        this.textContainer.y = 0;
 
         const heightWidthRatio = this.height / this.width;
+        this.secondaryTextWidth = this.width;
 
         if (bottomSideMode) {
             const maxIconWidth = this.width / 4;
@@ -75,7 +143,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             const iconHeight = iconScalingFactor * maxIconHeight;
             this.modifierContainer.width = this.width;
             this.modifierContainer.height = this.height / 5;
-            this.modifierContainer.y = this.height - this.modifierContainer.height;
+            this.modifierContainer.y = this.height - this.modifierContainer.height - this.secondaryHeight;
             this.shift.width = iconWidth;
             this.shift.height = iconHeight;
             this.shift.x = (maxIconWidth - iconWidth) / 2;
@@ -92,7 +160,7 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             this.command.height = iconHeight;
             this.command.x = this.option.x + maxIconWidth;
             this.command.y = this.shift.y;
-            this.textContainer.y = -this.modifierContainer.height / 2;
+            this.textContainer.y = -this.modifierContainer.height / 2 - this.secondaryHeight / 2;
         } else {
             this.modifierContainer.width = this.width / 4;
             this.modifierContainer.height = this.height;
@@ -120,40 +188,11 @@ export class SvgKeystrokeKeyComponent implements OnInit, OnChanges {
             this.command.x = this.option.x + this.width / 2;
             this.command.y = this.option.y;
             this.textContainer.x = -this.modifierContainer.width / 2;
+            this.secondaryTextWidth = this.width - this.modifierContainer.width;
         }
 
+        this.textContainer.y -= textYModifier;
         this.textContainer.width = this.width;
         this.textContainer.height = this.height;
     }
-
-    ngOnChanges() {
-        if (this.keystrokeAction.hasScancode()) {
-            const scancode: number = this.keystrokeAction.scancode;
-            this.labelSource = this.mapper.scanCodeToSvgImagePath(scancode, this.keystrokeAction.type);
-            if (this.labelSource) {
-                this.labelType = 'icon';
-            } else {
-                let newLabelSource: string[];
-                newLabelSource = this.mapper.scanCodeToText(scancode, this.keystrokeAction.type);
-                if (newLabelSource) {
-                    if (newLabelSource.length === 1) {
-                        this.labelSource = newLabelSource[0];
-                        this.labelType = 'one-line';
-                    } else {
-                        this.labelSource = newLabelSource;
-                        this.labelType = 'two-line';
-                    }
-                }
-            }
-        } else {
-            this.labelType = 'empty';
-        }
-
-        this.shift.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftShift | KeyModifiers.rightShift);
-        this.control.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftCtrl | KeyModifiers.rightCtrl);
-        this.option.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftAlt | KeyModifiers.rightAlt);
-        this.command.disabled = !this.keystrokeAction.isActive(KeyModifiers.leftGui | KeyModifiers.rightGui);
-
-    }
-
 }

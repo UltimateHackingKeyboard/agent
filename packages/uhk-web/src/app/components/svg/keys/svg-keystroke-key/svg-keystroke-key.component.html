@@ -13,7 +13,8 @@
     <svg:g svg-two-line-text-key *ngSwitchCase="'two-line'"
             [height]="height"
             [width]="width"
-            [texts]="labelSource">
+            [texts]="labelSource"
+            [secondaryText]="subComponentSecondaryRoleText">
     </svg:g>
 </svg>
 <svg [attr.viewBox]="viewBox" [attr.width]="modifierContainer.width" [attr.height]="modifierContainer.height" [attr.x]="modifierContainer.x"
@@ -37,3 +38,10 @@
         <svg:text *ngIf="!modifierIconNames.command" [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">S</svg:text>
     </svg>
 </svg>
+<svg:g svg-secondary-role
+       *ngIf="thisSecondaryRoleText"
+       [height]="20"
+       [width]="secondaryTextWidth"
+       [y]="secondaryTextY"
+       [text]="thisSecondaryRoleText">
+</svg:g>

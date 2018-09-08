@@ -95,6 +95,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     labelType: LabelTypes;
 
     labelSource: any;
+    secondaryText: string;
     macros: Macro[];
     private subscription: Subscription;
     private scanCodePressed: boolean;
@@ -266,17 +267,18 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private setLabels(): void {
+        this.labelType = LabelTypes.OneLineText;
+        this.labelSource = undefined;
+        this.secondaryText = undefined;
+
         if (!this.keyAction) {
-            this.labelSource = undefined;
-            this.labelType = LabelTypes.OneLineText;
             return;
         }
-
-        this.labelType = LabelTypes.OneLineText;
 
         if (this.keyAction instanceof KeystrokeAction) {
             const keyAction: KeystrokeAction = this.keyAction as KeystrokeAction;
             let newLabelSource: string[];
+            this.secondaryText = this.mapper.getSecondaryRoleText(keyAction.secondaryRoleAction);
 
             if (!keyAction.hasActiveModifier() && keyAction.hasScancode()) {
                 const scancode: number = keyAction.scancode;

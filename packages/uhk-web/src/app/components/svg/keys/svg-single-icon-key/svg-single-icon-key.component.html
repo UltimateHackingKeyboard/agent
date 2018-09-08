@@ -4,3 +4,10 @@
          [attr.x]="svgWidth"
          [attr.y]="svgHeight">
 </svg:use>
+<svg:g svg-secondary-role
+       *ngIf="secondaryText"
+       [height]="20"
+       [width]="width"
+       [y]="secondaryTextY"
+       [text]="secondaryText">
+</svg:g>
