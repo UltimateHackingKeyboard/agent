@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { KeystrokeType, SecondaryRoleAction } from 'uhk-common';
+import { KeyModifiers, KeystrokeType, SecondaryRoleAction } from 'uhk-common';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState, getOperatingSystem } from '../store';
 import { OperatingSystem } from '../models/operating-system';
+import { KeyModifierModel } from '../models/key-modifier-model';
 
 @Injectable()
 export class MapperService {
@@ -122,6 +123,56 @@ export class MapperService {
 
     public getSecondaryRoleText(secondaryRoleAction: SecondaryRoleAction): string {
         return this.secondaryRoleTexts.get(secondaryRoleAction);
+    }
+
+    public getLeftKeyModifiers(): KeyModifierModel[] {
+        return [
+            {
+                text: 'LShift',
+                value: KeyModifiers.leftShift,
+                checked: false
+            },
+            {
+                text: 'LCtrl',
+                value: KeyModifiers.leftCtrl,
+                checked: false
+            },
+            {
+                text: this.getOsSpecificText('LAlt'),
+                value: KeyModifiers.leftAlt,
+                checked: false
+            },
+            {
+                text: this.getOsSpecificText('LSuper'),
+                value: KeyModifiers.leftGui,
+                checked: false
+            }
+        ];
+    }
+
+    public getRightKeyModifiers(): KeyModifierModel[] {
+        return [
+            {
+                text: 'RShift',
+                value: KeyModifiers.rightShift,
+                checked: false
+            },
+            {
+                text: 'RCtrl',
+                value: KeyModifiers.rightCtrl,
+                checked: false
+            },
+            {
+                text: this.getOsSpecificText('RAlt'),
+                value: KeyModifiers.rightAlt,
+                checked: false
+            },
+            {
+                text: this.getOsSpecificText('RSuper'),
+                value: KeyModifiers.rightGui,
+                checked: false
+            }
+        ];
     }
 
     private initOsSpecificText(): void {

@@ -1,3 +1,5 @@
+import { KeyModifierModel } from './key-modifier-model';
+
 export interface SvgKeyClickEvent {
     keyTarget: HTMLElement;
     shiftPressed?: boolean;
@@ -14,8 +16,8 @@ export interface SvgKeyboardKeyClickEvent extends SvgModuleKeyClickEvent {
 
 export interface KeyCaptureData {
     code: number;
-    left: boolean[];
-    right: boolean[];
+    left: KeyModifierModel[];
+    right: KeyModifierModel[];
 }
 
 export interface SvgKeyCaptureEvent {

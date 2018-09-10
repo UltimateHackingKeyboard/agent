@@ -28,6 +28,7 @@ import { AppState } from '../../../../store';
 import { getMacros } from '../../../../store/reducers/user-configuration';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
+import { KeyModifierModel } from '../../../../models/key-modifier-model';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -250,8 +251,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private saveScanCode(code = 0) {
-        const left: boolean[] = this.captureService.getModifiers(true);
-        const right: boolean[] = this.captureService.getModifiers(false);
+        const left: KeyModifierModel[] = this.captureService.getModifiers(true);
+        const right: KeyModifierModel[] = this.captureService.getModifiers(false);
 
         this.capture.emit({
             captured: {

@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 
+import { MapperService } from './mapper.service';
+import { KeyModifiers } from 'uhk-common';
+import { KeyModifierModel } from '../models/key-modifier-model';
+
 @Injectable()
 export class CaptureService {
     private mapping: Map<number, number>;
-    private leftModifiers: Map<number, boolean>;
-    private rightModifiers: Map<number, boolean>;
+    private readonly leftModifiers: Map<number, KeyModifierModel>;
+    private readonly rightModifiers: Map<number, KeyModifierModel>;
 
-    constructor() {
-        this.leftModifiers = new Map<number, boolean>();
-        this.rightModifiers = new Map<number, boolean>();
+    constructor(private mapper: MapperService) {
+        this.leftModifiers = new Map<number, KeyModifierModel>();
+        this.rightModifiers = new Map<number, KeyModifierModel>();
         this.mapping = new Map<number, number>();
     }
 
@@ -21,26 +25,61 @@ export class CaptureService {
     }
 
     public setModifier(left: boolean, code: number) {
-        return left ? this.leftModifiers.set(code, true) : this.rightModifiers.set(code, true);
+        const map = left ? this.leftModifiers : this.rightModifiers;
+        map.get(code).checked = true;
     }
 
     public getModifiers(left: boolean) {
-        return left ? this.reMap(this.leftModifiers) : this.reMap(this.rightModifiers);
+        const map = left ? this.leftModifiers : this.rightModifiers;
+
+        return Array.from(map.values());
     }
 
     public initModifiers() {
-        this.leftModifiers.set(16, false); // Shift
-        this.leftModifiers.set(17, false); // Ctrl
-        this.leftModifiers.set(18, false); // Alt
-        this.leftModifiers.set(91, false); // Super
+        this.leftModifiers.set(16, {
+            text: 'LShift',
+            value: KeyModifiers.leftShift,
+            checked: false
+        });
+        this.leftModifiers.set(17, {
+            text: 'LCtrl',
+            value: KeyModifiers.leftCtrl,
+            checked: false
+        });
+        this.leftModifiers.set(18, {
+            text: this.mapper.getOsSpecificText('LAlt'),
+            value: KeyModifiers.leftAlt,
+            checked: false
+        });
+        this.leftModifiers.set(91, {
+            text: this.mapper.getOsSpecificText('LSuper'),
+            value: KeyModifiers.leftGui,
+            checked: false
+        });
 
-        this.rightModifiers.set(16, false); // Shift
-        this.rightModifiers.set(17, false); // Ctrl
-        this.rightModifiers.set(18, false); // Alt
-        this.rightModifiers.set(91, false); // Super
+        this.rightModifiers.set(16, {
+            text: 'RShift',
+            value: KeyModifiers.rightShift,
+            checked: false
+        });
+        this.rightModifiers.set(17, {
+            text: 'RCtrl',
+            value: KeyModifiers.rightCtrl,
+            checked: false
+        });
+        this.rightModifiers.set(18, {
+            text: this.mapper.getOsSpecificText('RAlt'),
+            value: KeyModifiers.rightAlt,
+            checked: false
+        });
+        this.rightModifiers.set(91, {
+            text: this.mapper.getOsSpecificText('RSuper'),
+            value: KeyModifiers.rightGui,
+            checked: false
+        });
     }
 
-    public populateMapping () {
+    public populateMapping() {
         this.mapping.set(8, 42);   // Backspace
         this.mapping.set(9, 43);   // Tab
         this.mapping.set(13, 40);  // Enter
@@ -135,9 +174,5 @@ export class CaptureService {
         this.mapping.set(220, 49); // Back slash
         this.mapping.set(221, 48); // Close bracket
         this.mapping.set(222, 52); // Single quote
-    }
-
-    private reMap(value: Map<number, boolean>): boolean[] {
-        return [value.get(16), value.get(17), value.get(91), value.get(18)];
     }
 }

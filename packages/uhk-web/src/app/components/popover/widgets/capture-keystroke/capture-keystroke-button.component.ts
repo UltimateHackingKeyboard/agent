@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CaptureService } from '../../../../services/capture.service';
+import { KeyModifierModel } from '../../../../models/key-modifier-model';
 
 @Component({
     selector: 'capture-keystroke-button',
@@ -68,8 +69,8 @@ export class CaptureKeystrokeButtonComponent {
 
     private saveScanCode(code?: number) {
         this.record = false;
-        const left: boolean[] = this.captureService.getModifiers(true);
-        const right: boolean[] = this.captureService.getModifiers(false);
+        const left: KeyModifierModel[] = this.captureService.getModifiers(true);
+        const right: KeyModifierModel[] = this.captureService.getModifiers(false);
 
         this.capture.emit({
             code,

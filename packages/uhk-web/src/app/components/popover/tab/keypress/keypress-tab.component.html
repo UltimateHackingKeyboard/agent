@@ -36,20 +36,20 @@
     <div class="btn-toolbar modifiers">
         <div class="btn-group btn-group-sm modifiers__left">
             <button type="button" class="btn btn-default"
-                    *ngFor="let modifier of leftModifiers; let index = index"
-                    [class.btn-primary]="leftModifierSelects[index]"
-                    (click)="toggleModifier(false, index)"
+                    *ngFor="let modifier of leftModifiers; trackBy:modifiersTrackBy"
+                    [class.btn-primary]="modifier.checked"
+                    (click)="toggleModifier(modifier)"
             >
-                {{modifier}}
+                {{ modifier.text }}
             </button>
         </div>
         <div class="btn-group btn-group-sm modifiers__right">
             <button type="button" class="btn btn-default"
-                    *ngFor="let modifier of rightModifiers; let index = index"
-                    [class.btn-primary]="rightModifierSelects[index]"
-                    (click)="toggleModifier(true, index)"
+                    *ngFor="let modifier of rightModifiers; trackBy:modifiersTrackBy"
+                    [class.btn-primary]="modifier.checked"
+                    (click)="toggleModifier(modifier)"
             >
-                {{modifier}}
+                {{ modifier.text }}
             </button>
         </div>
     </div>
