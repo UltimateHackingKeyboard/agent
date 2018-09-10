@@ -4,6 +4,8 @@ import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES }
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
 import { SelectOptionData } from '../../../../models/select-option-data';
+import { KeyModifierModel } from '../../../../models/key-modifier-model';
+import { mapLeftRigthModifierToKeyActionModifier } from '../../../../util';
 
 @Component({
     selector: 'keypress-tab',
@@ -15,11 +17,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() secondaryRoleEnabled: boolean;
 
-    leftModifiers: string[];
-    rightModifiers: string[];
-
-    leftModifierSelects: boolean[];
-    rightModifierSelects: boolean[];
+    leftModifiers: KeyModifierModel[];
+    rightModifiers: KeyModifierModel[];
 
     scanCodeGroups: Array<SelectOptionData>;
     secondaryRoleGroups: Array<SelectOptionData>;
@@ -29,26 +28,15 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     constructor(private mapper: MapperService) {
         super();
-        this.leftModifiers = [
-            'LShift',
-            'LCtrl',
-            mapper.getOsSpecificText('LAlt'),
-            mapper.getOsSpecificText('LSuper')
-        ];
-        this.rightModifiers = [
-            'RShift',
-            'RCtrl',
-            mapper.getOsSpecificText('RAlt'),
-            mapper.getOsSpecificText('RSuper')
-        ];
+        this.leftModifiers = mapper.getLeftKeyModifiers();
+        this.rightModifiers = mapper.getRightKeyModifiers();
+
         this.scanCodeGroups = [{
             id: '0',
             text: 'None'
         }];
         this.scanCodeGroups = this.scanCodeGroups.concat(SCANCODES);
         this.secondaryRoleGroups = SECONDARY_ROLES;
-        this.leftModifierSelects = Array(this.leftModifiers.length).fill(false);
-        this.rightModifierSelects = Array(this.rightModifiers.length).fill(false);
         this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
     }
@@ -66,15 +54,15 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         return (keystrokeAction) ? (keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0) : false;
     }
 
-    onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
+    onKeysCapture(event: { code: number, left: KeyModifierModel[], right: KeyModifierModel[] }) {
         if (event.code) {
             this.selectedScancodeOption = this.findScancodeOptionByScancode(event.code, KeystrokeType.basic);
         } else {
             this.selectedScancodeOption = this.scanCodeGroups[0];
         }
 
-        this.leftModifierSelects = event.left;
-        this.rightModifierSelects = event.right;
+        this.leftModifiers = event.left;
+        this.rightModifiers = event.right;
         this.validAction.emit(this.keyActionValid());
     }
 
@@ -86,16 +74,12 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         // Restore selectedScancodeOption
         this.selectedScancodeOption = this.findScancodeOptionByScancode(keystrokeAction.scancode || 0, keystrokeAction.type);
 
-        const leftModifiersLength: number = this.leftModifiers.length;
-
-        // Restore modifiers
-        for (let i = 0; i < leftModifiersLength; ++i) {
-            this.leftModifierSelects[this.mapper.modifierMapper(i)] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
+        for (const modifier of this.leftModifiers) {
+            modifier.checked = (keystrokeAction.modifierMask & modifier.value) > 0;
         }
 
-        for (let i = leftModifiersLength; i < leftModifiersLength + this.rightModifierSelects.length; ++i) {
-            const index: number = this.mapper.modifierMapper(i) - leftModifiersLength;
-            this.rightModifierSelects[index] = ((keystrokeAction.modifierMask >> i) & 1) === 1;
+        for (const modifier of this.rightModifiers) {
+            modifier.checked = (keystrokeAction.modifierMask & modifier.value) > 0;
         }
 
         // Restore secondaryRoleAction
@@ -117,11 +101,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         } else {
             keystrokeAction.type = KeystrokeType[scTypePair[1]];
         }
-        keystrokeAction.modifierMask = 0;
-        const modifiers = this.leftModifierSelects.concat(this.rightModifierSelects).map(x => x ? 1 : 0);
-        for (let i = 0; i < modifiers.length; ++i) {
-            keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
-        }
+        keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(this.leftModifiers, this.rightModifiers);
 
         keystrokeAction.secondaryRoleAction = this.selectedSecondaryRoleIndex === -1
             ? undefined
@@ -132,9 +112,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
     }
 
-    toggleModifier(right: boolean, index: number) {
-        const modifierSelects: boolean[] = right ? this.rightModifierSelects : this.leftModifierSelects;
-        modifierSelects[index] = !modifierSelects[index];
+    toggleModifier(modifier: KeyModifierModel): void {
+        modifier.checked = !modifier.checked;
 
         this.validAction.emit(this.keyActionValid());
     }
@@ -147,6 +126,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.selectedScancodeOption = this.findScancodeOptionById(id);
 
         this.validAction.emit(this.keyActionValid());
+    }
+
+    modifiersTrackBy(index: number, modifier: KeyModifierModel): string {
+        return `${modifier.value}${modifier.checked}`;
     }
 
     private findScancodeOptionBy(predicate: (option: SelectOptionData) => boolean): SelectOptionData {
