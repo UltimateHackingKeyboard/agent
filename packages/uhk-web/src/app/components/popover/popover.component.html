@@ -47,7 +47,7 @@
         </ul>
     </div>
     <div [ngSwitch]="activeTab">
-        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content"
+        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content pr-10"
                       [defaultKeyAction]="defaultKeyAction"
                       [secondaryRoleEnabled]="true"
                       (validAction)="keyActionValid=$event"
