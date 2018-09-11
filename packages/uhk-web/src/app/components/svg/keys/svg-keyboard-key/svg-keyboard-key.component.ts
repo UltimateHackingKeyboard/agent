@@ -120,13 +120,13 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.scanCodePressed = false;
     }
 
-    @HostListener('click')
-    onClick() {
+    @HostListener('click', ['$event'])
+    onClick(e: MouseEvent) {
         this.reset();
         this.keyClick.emit({
             keyTarget: this.element.nativeElement,
-            shiftPressed: this.pressedShiftLocation > -1,
-            altPressed: this.pressedAltLocation > -1
+            shiftPressed: e.shiftKey,
+            altPressed: e.altKey
         });
         this.pressedShiftLocation = -1;
         this.pressedAltLocation = -1;
@@ -143,14 +143,8 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.recording = true;
                 this.recordAnimation = 'active';
-
-                if (this.pressedShiftLocation > -1) {
-                    this.shiftPressed = true;
-                }
-
-                if (this.pressedAltLocation > -1) {
-                    this.altPressed = true;
-                }
+                this.shiftPressed = e.shiftKey;
+                this.altPressed = e.altKey;
             }
         }
     }
