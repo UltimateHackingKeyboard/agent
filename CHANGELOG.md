@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.9] - 2018-09-13
+
+Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- Display OS-specific modifiers.
+- Display secondary roles.
+- Don't trigger "Remap on all layers" after leaving Agent with Alt+Tab.
+
 ## [1.2.8] - 2018-08-26
 
 Firmware: 8.**2.5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
