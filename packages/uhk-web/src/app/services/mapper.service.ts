@@ -261,7 +261,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(67, ['F10']);
         this.basicScanCodeTextMap.set(68, ['F11']);
         this.basicScanCodeTextMap.set(69, ['F12']);
-        this.basicScanCodeTextMap.set(70, ['PrtScn']);
+        this.basicScanCodeTextMap.set(70, ['PrtScn', 'SysRq']);
         this.basicScanCodeTextMap.set(71, ['Scroll Lock']);
         this.basicScanCodeTextMap.set(72, ['Pause']);
         this.basicScanCodeTextMap.set(73, ['Insert']);
