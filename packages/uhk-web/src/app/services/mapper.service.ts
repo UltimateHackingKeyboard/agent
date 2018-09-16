@@ -262,7 +262,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(68, ['F11']);
         this.basicScanCodeTextMap.set(69, ['F12']);
         this.basicScanCodeTextMap.set(70, ['PrtScn', 'SysRq']);
-        this.basicScanCodeTextMap.set(71, ['Scroll Lock']);
+        this.basicScanCodeTextMap.set(71, ['ScrLk']);
         this.basicScanCodeTextMap.set(72, ['Pause']);
         this.basicScanCodeTextMap.set(73, ['Insert']);
         this.basicScanCodeTextMap.set(74, ['Home']);
@@ -274,7 +274,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(80, ['Left Arrow']);
         this.basicScanCodeTextMap.set(81, ['Down Arrow']);
         this.basicScanCodeTextMap.set(82, ['Up Arrow']);
-        this.basicScanCodeTextMap.set(83, ['Num Lock']);
+        this.basicScanCodeTextMap.set(83, ['NumLk']);
         this.basicScanCodeTextMap.set(84, ['/']);
         this.basicScanCodeTextMap.set(85, ['*']);
         this.basicScanCodeTextMap.set(86, ['-']);
