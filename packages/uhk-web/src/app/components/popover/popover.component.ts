@@ -194,6 +194,10 @@ export class PopoverComponent implements OnChanges {
         this.cancel.emit(undefined);
     }
 
+    remapInfoChange(): void {
+        this.selectedTab.remapInfoChanged(this.remapInfo);
+    }
+
     private calculatePosition() {
         const offsetLeft: number = this.wrapPosition.left + 265; // 265 is a width of the side menu with a margin
         const popover: HTMLElement = this.popoverHost.nativeElement;

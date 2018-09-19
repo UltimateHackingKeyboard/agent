@@ -92,6 +92,11 @@
           data-placement="bottom"></icon>
 </div>
 
+<div *ngIf="warningVisible" class="alert alert-warning remap-warning" role="alert">
+    You're about to remap a modifier key only on this layer. You probably want to remap it on all layers. If so, check
+    the <strong>Remap on all layers</strong> checkbox below.
+</div>
+
 <div class="disabled-state--text">
     <i class="fa fa-info-circle"></i>
     When a key is configured as layer switcher key, you can't assign other functions to it.
