@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges } from '@angular/core';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -6,6 +6,7 @@ import { MapperService } from '../../../../services/mapper.service';
 import { SelectOptionData } from '../../../../models/select-option-data';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRigthModifierToKeyActionModifier } from '../../../../util';
+import { RemapInfo } from '../../../../models/remap-info';
 
 @Component({
     selector: 'keypress-tab',
@@ -16,6 +17,8 @@ import { mapLeftRigthModifierToKeyActionModifier } from '../../../../util';
 export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() secondaryRoleEnabled: boolean;
+    @Input() allowRemapOnAllKeymapWarning: boolean;
+    @Input() remapInfo: RemapInfo;
 
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
@@ -25,8 +28,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     selectedScancodeOption: SelectOptionData;
     selectedSecondaryRoleIndex: number;
+    warningVisible: boolean;
 
-    constructor(private mapper: MapperService) {
+    constructor(private mapper: MapperService,
+                private cdRef: ChangeDetectorRef) {
         super();
         this.leftModifiers = mapper.getLeftKeyModifiers();
         this.rightModifiers = mapper.getRightKeyModifiers();
@@ -43,7 +48,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     ngOnChanges() {
         this.fromKeyAction(this.defaultKeyAction);
-        this.validAction.emit(this.keyActionValid());
+        this.keyActionChanged();
     }
 
     keyActionValid(keystrokeAction?: KeystrokeAction): boolean {
@@ -63,7 +68,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         this.leftModifiers = event.left;
         this.rightModifiers = event.right;
-        this.validAction.emit(this.keyActionValid());
+        this.keyActionChanged();
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -114,8 +119,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     toggleModifier(modifier: KeyModifierModel): void {
         modifier.checked = !modifier.checked;
-
-        this.validAction.emit(this.keyActionValid());
+        this.keyActionChanged();
     }
 
     onSecondaryRoleChange(id: string) {
@@ -125,11 +129,18 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     onScancodeChange(id: string) {
         this.selectedScancodeOption = this.findScancodeOptionById(id);
 
-        this.validAction.emit(this.keyActionValid());
+        this.keyActionChanged();
     }
 
     modifiersTrackBy(index: number, modifier: KeyModifierModel): string {
         return `${modifier.value}${modifier.checked}`;
+    }
+
+    remapInfoChanged(remapInfo: RemapInfo): void {
+        this.remapInfo = remapInfo;
+        const keystrokeAction = this.toKeyAction();
+        this.calculateRemapOnAllLayerWarningVisibility(keystrokeAction);
+        this.cdRef.markForCheck();
     }
 
     private findScancodeOptionBy(predicate: (option: SelectOptionData) => boolean): SelectOptionData {
@@ -189,4 +200,18 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         return [scanCode, type];
     }
 
+    private keyActionChanged(): void {
+        const keystrokeAction = this.toKeyAction();
+        this.validAction.emit(this.keyActionValid(keystrokeAction));
+        this.calculateRemapOnAllLayerWarningVisibility(keystrokeAction);
+    }
+
+    private calculateRemapOnAllLayerWarningVisibility(keystrokeAction: KeystrokeAction): void {
+        this.warningVisible = this.allowRemapOnAllKeymapWarning &&
+            this.remapInfo &&
+            !this.remapInfo.remapOnAllLayer &&
+            keystrokeAction &&
+            !keystrokeAction.hasScancode() &&
+            keystrokeAction.hasOnlyOneActiveModifier();
+    }
 }

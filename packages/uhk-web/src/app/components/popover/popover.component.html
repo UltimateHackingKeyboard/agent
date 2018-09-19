@@ -50,6 +50,8 @@
         <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content pr-10"
                       [defaultKeyAction]="defaultKeyAction"
                       [secondaryRoleEnabled]="true"
+                      [allowRemapOnAllKeymapWarning]="true"
+                      [remapInfo]="remapInfo"
                       (validAction)="keyActionValid=$event"
         ></keypress-tab>
         <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"
@@ -88,7 +90,8 @@
                 <label>
                     <input type="checkbox"
                            name="remapOnAllLayer"
-                           [(ngModel)]="remapInfo.remapOnAllLayer"> Remap on all layers
+                           [(ngModel)]="remapInfo.remapOnAllLayer"
+                           (ngModelChange)="remapInfoChange()"> Remap on all layers
                 </label>
             </div>
             <div class="d-inline-block">
