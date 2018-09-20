@@ -48,11 +48,13 @@
     </div>
     <div [ngSwitch]="activeTab">
         <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content pr-10"
-                      [defaultKeyAction]="defaultKeyAction"
+                      [defaultKeyAction]="shadowKeyAction"
                       [secondaryRoleEnabled]="true"
                       [allowRemapOnAllKeymapWarning]="true"
                       [remapInfo]="remapInfo"
+                      [showLayerSwitcherInSecondaryRoles]="currentLayer === 0"
                       (validAction)="keyActionValid=$event"
+                      (keyActionChange)="keystrokeActionChange($event)"
         ></keypress-tab>
         <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
@@ -87,10 +89,11 @@
                 </label>
             </div>
             <div class="checkbox">
-                <label>
+                <label [ngClass]="{ disabled: disableRemapOnAllLayer }">
                     <input type="checkbox"
                            name="remapOnAllLayer"
                            [(ngModel)]="remapInfo.remapOnAllLayer"
+                           [disabled]="disableRemapOnAllLayer"
                            (ngModelChange)="remapInfoChange()"> Remap on all layers
                 </label>
             </div>

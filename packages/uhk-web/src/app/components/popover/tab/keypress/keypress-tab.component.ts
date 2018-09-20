@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -7,6 +16,16 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRigthModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
+
+export const secondaryRoleFilter = (showLayerSwitchers: boolean) => {
+    return (data): boolean => {
+        if (showLayerSwitchers) {
+            return data;
+        }
+
+        return data.text !== 'Layer switcher';
+    };
+};
 
 @Component({
     selector: 'keypress-tab',
@@ -19,12 +38,15 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() secondaryRoleEnabled: boolean;
     @Input() allowRemapOnAllKeymapWarning: boolean;
     @Input() remapInfo: RemapInfo;
+    @Input() showLayerSwitcherInSecondaryRoles: boolean;
+
+    @Output() keyActionChange = new EventEmitter<KeystrokeAction>();
 
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
 
     scanCodeGroups: Array<SelectOptionData>;
-    secondaryRoleGroups: Array<SelectOptionData>;
+    secondaryRoleGroups: Array<SelectOptionData> = [];
 
     selectedScancodeOption: SelectOptionData;
     selectedSecondaryRoleIndex: number;
@@ -41,14 +63,16 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             text: 'None'
         }];
         this.scanCodeGroups = this.scanCodeGroups.concat(SCANCODES);
-        this.secondaryRoleGroups = SECONDARY_ROLES;
         this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.showLayerSwitcherInSecondaryRoles) {
+            this.fillSecondaryRoles();
+        }
         this.fromKeyAction(this.defaultKeyAction);
-        this.keyActionChanged();
+        this.keyActionChanged(false);
     }
 
     keyActionValid(keystrokeAction?: KeystrokeAction): boolean {
@@ -124,6 +148,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     onSecondaryRoleChange(id: string) {
         this.selectedSecondaryRoleIndex = +id;
+        this.keyActionChanged();
     }
 
     onScancodeChange(id: string) {
@@ -200,10 +225,14 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         return [scanCode, type];
     }
 
-    private keyActionChanged(): void {
+    private keyActionChanged(dispatch = true): void {
         const keystrokeAction = this.toKeyAction();
         this.validAction.emit(this.keyActionValid(keystrokeAction));
         this.calculateRemapOnAllLayerWarningVisibility(keystrokeAction);
+
+        if (dispatch) {
+            this.keyActionChange.emit(keystrokeAction);
+        }
     }
 
     private calculateRemapOnAllLayerWarningVisibility(keystrokeAction: KeystrokeAction): void {
@@ -213,5 +242,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             keystrokeAction &&
             !keystrokeAction.hasScancode() &&
             keystrokeAction.hasOnlyOneActiveModifier();
+    }
+
+    private fillSecondaryRoles(): void {
+        this.secondaryRoleGroups = SECONDARY_ROLES
+            .filter(secondaryRoleFilter(this.showLayerSwitcherInSecondaryRoles));
     }
 }

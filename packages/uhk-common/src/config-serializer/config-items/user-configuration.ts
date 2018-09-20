@@ -1,9 +1,11 @@
-import { assertUInt8, assertUInt16 } from '../assert';
+import { assertUInt16, assertUInt8 } from '../assert';
 import { UhkBuffer } from '../uhk-buffer';
 import { Keymap } from './keymap';
 import { Macro } from './macro';
 import { ModuleConfiguration } from './module-configuration';
 import { ConfigSerializer } from '../config-serializer';
+import { KeystrokeAction } from './key-action';
+import { SecondaryRoleAction } from './secondary-role-action';
 
 export class UserConfiguration {
 
@@ -102,7 +104,9 @@ export class UserConfiguration {
             return macro;
         });
         this.keymaps = jsonObject.keymaps.map((keymap: any) => new Keymap().fromJsonObject(keymap, this.macros));
+        this.clean();
         this.recalculateConfigurationLength();
+
         return this;
     }
 
@@ -137,6 +141,8 @@ export class UserConfiguration {
         });
         this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+        this.clean();
 
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
@@ -220,6 +226,32 @@ export class UserConfiguration {
     private setDefaultDeviceName(): void {
         if (!this.deviceName || this.deviceName.trim().length === 0) {
             this.deviceName = 'My UHK';
+        }
+    }
+
+    /* Remove not allowed settings/bugs
+     * 1. Layer Switcher secondary roles allowed only on base layers
+     */
+    private clean(): void {
+        for (const keymap of this.keymaps) {
+            for (let layerId = 1; layerId < keymap.layers.length; layerId++) {
+                const layer = keymap.layers[layerId];
+
+                for (const module of layer.modules) {
+                    for (let keyActionId = 0; keyActionId < module.keyActions.length; keyActionId++) {
+                        const keyAction = module.keyActions[keyActionId];
+                        if (!keyAction || !(keyAction instanceof KeystrokeAction)) {
+                            continue;
+                        }
+
+                        if (keyAction.secondaryRoleAction === SecondaryRoleAction.fn ||
+                            keyAction.secondaryRoleAction === SecondaryRoleAction.mod ||
+                            keyAction.secondaryRoleAction === SecondaryRoleAction.mouse) {
+                            (keyAction as any)._secondaryRoleAction = undefined;
+                        }
+                    }
+                }
+            }
         }
     }
 }

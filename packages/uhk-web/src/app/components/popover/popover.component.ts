@@ -1,5 +1,6 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -24,6 +25,7 @@ import {
     KeystrokeAction,
     MouseAction,
     PlayMacroAction,
+    SecondaryRoleAction,
     SwitchKeymapAction,
     SwitchLayerAction
 } from 'uhk-common';
@@ -104,10 +106,13 @@ export class PopoverComponent implements OnChanges {
     topPosition: number = 0;
     leftPosition: number = 0;
     animationState: string;
+    shadowKeyAction: KeyAction;
+    disableRemapOnAllLayer = false;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
-    constructor(store: Store<AppState>) {
+    constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef) {
         this.animationState = 'closed';
         this.keymaps$ = store.let(getKeymaps())
             .combineLatest(this.currentKeymap$)
@@ -123,8 +128,10 @@ export class PopoverComponent implements OnChanges {
 
         if (change['defaultKeyAction']) {
             let tab: TabName;
+            this.disableRemapOnAllLayer = false;
 
             if (this.defaultKeyAction instanceof KeystrokeAction) {
+                this.keystrokeActionChange(this.defaultKeyAction);
                 tab = TabName.Keypress;
             } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
                 tab = TabName.Layer;
@@ -188,6 +195,9 @@ export class PopoverComponent implements OnChanges {
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        if (tab === TabName.Keypress) {
+            this.keystrokeActionChange(this.defaultKeyAction as KeystrokeAction);
+        }
     }
 
     onOverlay() {
@@ -196,6 +206,26 @@ export class PopoverComponent implements OnChanges {
 
     remapInfoChange(): void {
         this.selectedTab.remapInfoChanged(this.remapInfo);
+    }
+
+    keystrokeActionChange(keystrokeAction: KeystrokeAction): void {
+        this.shadowKeyAction = keystrokeAction;
+        const disableRemapOnAllLayer =
+            keystrokeAction &&
+            this.currentLayer === 0 &&
+            (keystrokeAction.secondaryRoleAction === SecondaryRoleAction.fn ||
+                keystrokeAction.secondaryRoleAction === SecondaryRoleAction.mod ||
+                keystrokeAction.secondaryRoleAction === SecondaryRoleAction.mouse);
+
+        if (this.disableRemapOnAllLayer !== disableRemapOnAllLayer) {
+            this.disableRemapOnAllLayer = disableRemapOnAllLayer;
+
+            if (disableRemapOnAllLayer) {
+                this.remapInfo.remapOnAllLayer = false;
+            }
+
+            this.cdRef.markForCheck();
+        }
     }
 
     private calculatePosition() {
