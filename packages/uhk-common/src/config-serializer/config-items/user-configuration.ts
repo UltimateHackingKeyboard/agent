@@ -92,7 +92,7 @@ export class UserConfiguration {
         this.mouseMoveAcceleratedSpeed = jsonObject.mouseMoveAcceleratedSpeed;
         this.mouseScrollInitialSpeed = jsonObject.mouseScrollInitialSpeed;
         this.mouseScrollAcceleration = jsonObject.mouseScrollAcceleration;
-        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollAcceleration;
+        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
         this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
         this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
