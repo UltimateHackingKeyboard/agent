@@ -14,7 +14,7 @@
   "mouseMoveAcceleratedSpeed": 64,
   "mouseScrollInitialSpeed": 20,
   "mouseScrollAcceleration": 20,
-  "mouseScrollDeceleratedSpeed": 20,
+  "mouseScrollDeceleratedSpeed": 10,
   "mouseScrollBaseSpeed": 20,
   "mouseScrollAcceleratedSpeed": 50,
   "moduleConfigurations": [],
