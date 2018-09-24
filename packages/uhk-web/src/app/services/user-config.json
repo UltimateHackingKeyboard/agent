@@ -595,8 +595,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
@@ -1581,8 +1580,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
@@ -2576,8 +2574,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
@@ -3559,8 +3556,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
@@ -4551,8 +4547,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
@@ -5528,8 +5523,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
@@ -6513,8 +6507,7 @@
                 {
                   "keyActionType": "keystroke",
                   "type": "basic",
-                  "scancode": 57,
-                  "modifierMask": 1
+                  "scancode": 57
                 },
                 {
                   "keyActionType": "keystroke",
