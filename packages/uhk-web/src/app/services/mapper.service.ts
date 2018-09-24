@@ -326,6 +326,9 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(394, ['Launch Email Client']);
         this.mediaScanCodeTextMap.set(402, ['Launch Calculator']);
 
+        this.mediaScanCodeTextMap.set(548, ['Hist -']);
+        this.mediaScanCodeTextMap.set(549, ['Hist +']);
+
         this.systemScanCodeTextMap = new Map<number, string[]>();
         this.systemScanCodeTextMap.set(129, ['Power Down']);
         this.systemScanCodeTextMap.set(130, ['Sleep']);

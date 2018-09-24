@@ -509,6 +509,22 @@
                     "type": "media",
                     "scancode": 138
                 }
+            },
+            {
+                "id": "145",
+                "text": "History Back",
+                "additional": {
+                    "type": "media",
+                    "scancode": 548
+                }
+            },
+            {
+                "id": "146",
+                "text": "History Forward",
+                "additional": {
+                    "type": "media",
+                    "scancode": 549
+                }
             }
         ]
     },
