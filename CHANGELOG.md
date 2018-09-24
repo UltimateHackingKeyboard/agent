@@ -6,6 +6,21 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.10] - 2018-09-24
+
+Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- Add History Back and History Forward scancodes.
+- Save the actual decelerated scroll speed instead of using the accelerated scroll speed by accident.
+- Allow layer switcher secondary roles only on the base layer.
+- When remapping modifiers, display a warning suggesting to remap them on all layers.
+- Display more exact instructions on the permission setup screen.
+- Set the decelerated scroll speed of the default configuration from 20 to 10.
+- Map Caps Lock without Ctrl on default keymaps.
+- Rename "Scroll Lock" to "ScrLk" and "Num Lock" to "NumLk" on keys to avoid text overlap.
+- In the scancode select2, display "Print Screen SysRq" and add SysRq above PrtScn when rendering the key.
+- Fix left and right direction titles for mouse movement macro actions.
+
 ## [1.2.9] - 2018-09-13
 
 Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
