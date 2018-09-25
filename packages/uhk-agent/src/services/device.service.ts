@@ -31,6 +31,7 @@ import {
     getPackageJsonFromPathAsync,
     saveTmpFirmware
 } from '../util';
+import { getVersions } from '../../../uhk-web/src/app/util';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -161,6 +162,7 @@ export class DeviceService {
         let firmwarePathData: TmpFirmware;
 
         try {
+            this.logService.debug('Agent version:', getVersions().version);
             const hardwareModules = await this.getHardwareModules(false);
             this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
             this.logService.debug('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
