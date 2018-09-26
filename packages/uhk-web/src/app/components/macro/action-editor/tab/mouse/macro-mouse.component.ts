@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import {
+    MacroMouseSubAction,
+    MouseButtons,
     MouseButtonMacroAction,
     MoveMouseMacroAction,
-    ScrollMouseMacroAction,
-    MacroMouseSubAction
+    ScrollMouseMacroAction
 } from 'uhk-common';
 import { Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
@@ -33,6 +34,7 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
     @ViewChild('tab') selectedTab: Tab;
 
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
+    MouseButtons = MouseButtons;
     TabName = TabName;
     /* tslint:enable:variable-name */
     activeTab: TabName;

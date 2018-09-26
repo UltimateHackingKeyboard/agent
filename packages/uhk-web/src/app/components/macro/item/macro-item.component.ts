@@ -5,6 +5,7 @@ import {
     KeyMacroAction,
     KeyModifiers,
     MacroAction,
+    MouseButtons,
     MouseButtonMacroAction,
     MoveMouseMacroAction,
     ScrollMouseMacroAction,
@@ -197,12 +198,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
             this.title = 'Release mouse button: ';
         }
 
-        const buttonLabels: string[] = ['Left', 'Middle', 'Right'];
         const selectedButtons: boolean[] = action.getMouseButtons();
         const selectedButtonLabels: string[] = [];
         selectedButtons.forEach((isSelected, idx) => {
-            if (isSelected && buttonLabels[idx]) {
-                selectedButtonLabels.push(buttonLabels[idx]);
+            if (isSelected && MouseButtons[idx]) {
+                selectedButtonLabels.push(MouseButtons[idx]);
             }
         });
         this.title += selectedButtonLabels.join(', ');
