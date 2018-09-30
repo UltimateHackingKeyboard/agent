@@ -1,7 +1,14 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
-import { DeviceConnectionState, IpcEvents, IpcResponse, LogService, SaveUserConfigurationData } from 'uhk-common';
+import {
+    DeviceConnectionState,
+    IpcEvents,
+    IpcResponse,
+    LogService,
+    SaveUserConfigurationData,
+    UpdateFirmwareData
+} from 'uhk-common';
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
@@ -34,12 +41,8 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.loadConfigurations);
     }
 
-    updateFirmware(data?: Array<number>): void {
-        if (data) {
-            this.ipcRenderer.send(IpcEvents.device.updateFirmware, JSON.stringify(data));
-        } else {
-            this.ipcRenderer.send(IpcEvents.device.updateFirmware);
-        }
+    updateFirmware(data: UpdateFirmwareData): void {
+        this.ipcRenderer.send(IpcEvents.device.updateFirmware, JSON.stringify(data));
     }
 
     startConnectionPoller(): void {

@@ -6,7 +6,7 @@ import * as decompressTarbz from 'decompress-tarbz2';
 
 import { TmpFirmware } from '../models/tmp-firmware';
 
-export async function saveTmpFirmware(data: string): Promise<TmpFirmware> {
+export async function saveTmpFirmware(data: Array<number>): Promise<TmpFirmware> {
     const tmpDirectory = dirSync();
     const zipFilePath = path.join(tmpDirectory.name, 'firmware.bz2');
 
@@ -21,10 +21,9 @@ export async function saveTmpFirmware(data: string): Promise<TmpFirmware> {
     };
 }
 
-function writeDataToFile(data: string, filePath: string): Promise<void> {
+function writeDataToFile(data: Array<number>, filePath: string): Promise<void> {
     return new Promise((resolve, reject) => {
-        const array: Array<number> = JSON.parse(data);
-        const buffer = new Buffer(array);
+        const buffer = new Buffer(data);
 
         fs.writeFile(filePath, buffer, err => {
             if (err) {
