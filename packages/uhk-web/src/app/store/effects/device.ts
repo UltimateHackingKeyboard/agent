@@ -50,6 +50,7 @@ import {
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
+import { getVersions } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
@@ -201,12 +202,17 @@ export class DeviceEffects {
 
     @Effect({dispatch: false}) updateFirmware$ = this.actions$
         .ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE)
-        .do(() => this.deviceRendererService.updateFirmware());
+        .do(() => this.deviceRendererService.updateFirmware({
+            versionInformation: getVersions()
+        }));
 
     @Effect({dispatch: false}) updateFirmwareWith$ = this.actions$
         .ofType<UpdateFirmwareWithAction>(ActionTypes.UPDATE_FIRMWARE_WITH)
         .map(action => action.payload)
-        .do(data => this.deviceRendererService.updateFirmware(data));
+        .do(data => this.deviceRendererService.updateFirmware({
+            versionInformation: getVersions(),
+            firmware: data
+        }));
 
     @Effect() updateFirmwareReply$ = this.actions$
         .ofType<UpdateFirmwareReplyAction>(ActionTypes.UPDATE_FIRMWARE_REPLY)

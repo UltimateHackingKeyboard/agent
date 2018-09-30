@@ -9,7 +9,8 @@ import {
     IpcResponse,
     LogService,
     mapObjectToUserConfigBinaryBuffer,
-    SaveUserConfigurationData
+    SaveUserConfigurationData,
+    UpdateFirmwareData
 } from 'uhk-common';
 import { deviceConnectionStateComparer, snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
@@ -31,7 +32,6 @@ import {
     getPackageJsonFromPathAsync,
     saveTmpFirmware
 } from '../util';
-import { getVersions } from '../../../uhk-web/src/app/util';
 
 /**
  * IpcMain pair of the UHK Communication
@@ -158,11 +158,12 @@ export class DeviceService {
 
     public async updateFirmware(event: Electron.Event, args?: Array<string>): Promise<void> {
         const response = new FirmwareUpgradeIpcResponse();
+        const data: UpdateFirmwareData = JSON.parse(args[0]);
 
         let firmwarePathData: TmpFirmware;
 
         try {
-            this.logService.debug('Agent version:', getVersions().version);
+            this.logService.debug('Agent version:', data.versionInformation.version);
             const hardwareModules = await this.getHardwareModules(false);
             this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
             this.logService.debug('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
@@ -170,8 +171,8 @@ export class DeviceService {
             this.device.resetDeviceCache();
             this.stopPollTimer();
 
-            if (args && args.length > 0) {
-                firmwarePathData = await saveTmpFirmware(args[0]);
+            if (data.firmware) {
+                firmwarePathData = await saveTmpFirmware(data.firmware);
 
                 const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
