@@ -19,6 +19,12 @@ let config = {
             'sprite': 'compiled_sprite.svg',
             bust: false
         }
+    },
+    svg: { // General options for created SVG files
+        namespaceIDs: true,
+        rootAttributes: {
+            "xmlns:xlink":"http://www.w3.org/1999/xlink"
+        }
     }
 };
 

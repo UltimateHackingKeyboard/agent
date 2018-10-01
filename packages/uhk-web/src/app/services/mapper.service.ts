@@ -337,6 +337,8 @@ export class MapperService {
 
     private initScancodeIcons(): void {
         this.basicScancodeIcons = new Map<number, string>();
+        this.basicScancodeIcons.set(42, 'icon-kbd__backspace');
+        this.basicScancodeIcons.set(57, 'icon-kbd__caps-lock');
         this.basicScancodeIcons.set(79, 'icon-kbd__mod--arrow-right');
         this.basicScancodeIcons.set(80, 'icon-kbd__mod--arrow-left');
         this.basicScancodeIcons.set(81, 'icon-kbd__mod--arrow-down');
