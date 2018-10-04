@@ -476,6 +476,7 @@ uhk = exports = module.exports = moduleExports = {
         testUsbStack: 1,
         debounceTimePress: 2,
         debounceTimeRelease: 3,
+        usbReportSemaphore: 4,
     },
     vendorId: 0x1D50,
     devicePropertyIds: {
