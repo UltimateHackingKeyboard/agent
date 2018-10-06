@@ -1,1 +1,8 @@
-If you're using Karabiner Elements on your Mac, then stop here! Make sure to close Karabiner Elements, then try to reproduce the issue again, even if you think that Karabiner Elements shouldn't be the cause. Karabiner Elements is the source of numerous problems, and we don't want to receive any more reports it causes.
+Before submitting a new issue, make sure to do the following:
+
+1. If you're using Karabiner Elements on your Mac, close it!
+2. Install the latest Agent:
+   https://github.com/UltimateHackingKeyboard/agent/releases/latest
+3. Use Agent to update to the latest firmware:
+   https://github.com/UltimateHackingKeyboard/firmware/releases/latest
+4. Try to reproduce the issue, and only report it if it still persists.
