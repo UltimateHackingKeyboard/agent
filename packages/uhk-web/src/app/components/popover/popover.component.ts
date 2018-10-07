@@ -46,6 +46,13 @@ enum TabName {
     None
 }
 
+export interface TabHeader {
+    text: string;
+    icon: string;
+    tabName: TabName;
+    disabled?: boolean;
+}
+
 @Component({
     selector: 'popover',
     templateUrl: './popover.component.html',
@@ -108,6 +115,38 @@ export class PopoverComponent implements OnChanges {
     animationState: string;
     shadowKeyAction: KeyAction;
     disableRemapOnAllLayer = false;
+    tabHeaders: TabHeader[] = [
+        {
+            tabName: TabName.Keypress,
+            icon: 'fa-keyboard-o',
+            text: 'Keypress'
+        },
+        {
+            tabName: TabName.Layer,
+            icon: 'fa-clone',
+            text: 'Layer'
+        },
+        {
+            tabName: TabName.Mouse,
+            icon: 'fa-mouse-pointer',
+            text: 'Mouse'
+        },
+        {
+            tabName: TabName.Macro,
+            icon: 'fa-play',
+            text: 'Macro'
+        },
+        {
+            tabName: TabName.Keymap,
+            icon: 'fa-keyboard-o',
+            text: 'Keymap'
+        },
+        {
+            tabName: TabName.None,
+            icon: 'fa-ban',
+            text: 'None'
+        }
+    ];
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
@@ -127,24 +166,30 @@ export class PopoverComponent implements OnChanges {
         }
 
         if (change['defaultKeyAction']) {
-            let tab: TabName;
+            let tab: TabHeader;
             this.disableRemapOnAllLayer = false;
 
             if (this.defaultKeyAction instanceof KeystrokeAction) {
                 this.keystrokeActionChange(this.defaultKeyAction);
-                tab = TabName.Keypress;
+                tab = this.tabHeaders[0];
             } else if (this.defaultKeyAction instanceof SwitchLayerAction) {
-                tab = TabName.Layer;
+                tab = this.tabHeaders[1];
             } else if (this.defaultKeyAction instanceof MouseAction) {
-                tab = TabName.Mouse;
+                tab = this.tabHeaders[2];
             } else if (this.defaultKeyAction instanceof PlayMacroAction) {
-                tab = TabName.Macro;
+                tab = this.tabHeaders[3];
             } else if (this.defaultKeyAction instanceof SwitchKeymapAction) {
-                tab = TabName.Keymap;
+                tab = this.tabHeaders[4];
             } else {
-                tab = TabName.None;
+                tab = this.tabHeaders[5];
             }
 
+            for (const tabHeader of this.tabHeaders) {
+                const allowOnlyLayerTab = tab.tabName === TabName.Layer && this.currentLayer !== 0;
+
+                tabHeader.disabled = allowOnlyLayerTab && tabHeader.tabName !== TabName.Layer;
+                console.log(tabHeader);
+            }
             this.selectTab(tab);
         }
 
@@ -193,9 +238,13 @@ export class PopoverComponent implements OnChanges {
         }
     }
 
-    selectTab(tab: TabName): void {
-        this.activeTab = tab;
-        if (tab === TabName.Keypress) {
+    selectTab(tab: TabHeader): void {
+        if (tab.disabled) {
+            return;
+        }
+
+        this.activeTab = tab.tabName;
+        if (tab.tabName === TabName.Keypress) {
             this.keystrokeActionChange(this.defaultKeyAction as KeystrokeAction);
         }
     }
@@ -226,6 +275,15 @@ export class PopoverComponent implements OnChanges {
 
             this.cdRef.markForCheck();
         }
+    }
+
+    setKeyActionValidState($event: boolean): void {
+        this.keyActionValid = $event;
+        this.cdRef.markForCheck();
+    }
+
+    trackTabHeader(index: number, tabItem: TabHeader): string {
+        return tabItem.tabName.toString();
     }
 
     private calculatePosition() {
