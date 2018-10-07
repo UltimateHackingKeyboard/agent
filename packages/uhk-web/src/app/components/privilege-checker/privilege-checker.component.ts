@@ -22,7 +22,9 @@ export class PrivilegeCheckerComponent implements OnInit, OnDestroy {
 # Ultimate Hacking Keyboard rules
 # These are the udev rules for accessing the USB interfaces of the UHK as non-root users.
 # Copy this file to /etc/udev/rules.d and physically reconnect the UHK afterwards.
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="612[0-7]", MODE:="0666"
+SUBSYSTEM=="input", GROUP="input", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="612[0-7]", MODE:="0666", GROUP="plugdev"
+KERNEL=="hidraw*", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="612[0-7]", MODE="0666", GROUP="plugdev"
 EOF
 udevadm trigger
 udevadm settle`;
