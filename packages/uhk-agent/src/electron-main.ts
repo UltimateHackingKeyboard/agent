@@ -18,6 +18,7 @@ import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import { UhkBlhost } from '../../uhk-usb/src';
 import * as isDev from 'electron-is-dev';
+import { setMenu } from './electron-menu';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean},
@@ -101,7 +102,7 @@ function createWindow() {
         },
         icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
     });
-    win.setMenuBarVisibility(false);
+    setMenu(win);
     win.maximize();
     uhkHidDeviceService = new UhkHidDevice(logger, options);
     uhkBlhost = new UhkBlhost(logger, packagesDir);
