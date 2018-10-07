@@ -8,8 +8,9 @@
     [attr.x]="0"
     [attr.y]="textY"
     [attr.text-anchor]="'middle'"
-    [attr.font-size]="11">
-        <tspan [attr.x]="spanX">{{ text }}</tspan>
+    [attr.font-size]="fontSize">
+        <tspan [attr.x]="spanX" [attr.dy]="text1Y">{{ text1 }}</tspan>
+        <tspan [attr.x]="spanX" [attr.dy]="text2Y">{{ text2 }}</tspan>
 </svg:text>
 <svg:g svg-secondary-role
        *ngIf="secondaryText"
