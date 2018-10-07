@@ -28,9 +28,11 @@ export class CaptureKeystrokeButtonComponent {
     onKeyUp(e: KeyboardEvent) {
         if (this.scanCodePressed) {
             e.preventDefault();
+            e.stopPropagation();
             this.scanCodePressed = false;
         } else if (this.record && !this.first) {
             e.preventDefault();
+            e.stopPropagation();
             this.saveScanCode();
         }
     }
