@@ -11,7 +11,7 @@
     "@types/node": "8.0.28"
   },
   "dependencies": {
-    "node-hid": "0.5.7",
+    "node-hid": "0.7.3",
     "uhk-common": "1.0.0"
   }
 }
