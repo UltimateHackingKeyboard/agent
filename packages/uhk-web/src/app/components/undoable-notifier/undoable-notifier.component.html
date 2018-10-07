@@ -1,5 +1,8 @@
 <div class="pull-right">
-    <div class="alert alert-warning alert-dismissible" role="alert" [@slideInOut]="slideInOut">
+    <div *ngIf="text"
+         [@slideInOut]
+         class="alert alert-warning alert-dismissible"
+         role="alert">
         <button type="button"
                 class="close"
                 aria-label="Close"
