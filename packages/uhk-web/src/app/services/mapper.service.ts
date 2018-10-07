@@ -352,6 +352,7 @@ export class MapperService {
         this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');
         this.mediaScancodeIcons.set(182, 'icon-kbd__media--prev');
         this.mediaScancodeIcons.set(184, 'icon-kbd__fn--eject');
+        this.mediaScancodeIcons.set(205, 'icon-kbd__play-pause');
         this.mediaScancodeIcons.set(226, 'icon-kbd__media--mute');
         this.mediaScancodeIcons.set(233, 'icon-kbd__media--vol-up');
         this.mediaScancodeIcons.set(234, 'icon-kbd__media--vol-down');
