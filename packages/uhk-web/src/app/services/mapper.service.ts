@@ -316,7 +316,6 @@ export class MapperService {
         this.mediaScanCodeTextMap.set(182, ['Prev']);
         this.mediaScanCodeTextMap.set(183, ['Stop']);
         this.mediaScanCodeTextMap.set(184, ['Eject']);
-        this.mediaScanCodeTextMap.set(204, ['Eject', 'Stop']);
         this.mediaScanCodeTextMap.set(205, ['Pause', 'Play']);
         this.mediaScanCodeTextMap.set(226, ['Mute']);
         this.mediaScanCodeTextMap.set(233, ['Vol +']);

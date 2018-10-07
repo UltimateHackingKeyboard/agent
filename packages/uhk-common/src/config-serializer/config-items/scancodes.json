@@ -455,14 +455,6 @@
                 }
             },
             {
-                "id": "132",
-                "text": "Stop/Eject",
-                "additional": {
-                    "type": "media",
-                    "scancode": 204
-                }
-            },
-            {
                 "id": "133",
                 "text": "Play/Pause",
                 "additional": {

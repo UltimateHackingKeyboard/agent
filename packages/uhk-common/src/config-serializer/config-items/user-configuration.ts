@@ -4,8 +4,9 @@ import { Keymap } from './keymap';
 import { Macro } from './macro';
 import { ModuleConfiguration } from './module-configuration';
 import { ConfigSerializer } from '../config-serializer';
-import { KeystrokeAction } from './key-action';
+import { KeystrokeAction, NoneAction } from './key-action';
 import { SecondaryRoleAction } from './secondary-role-action';
+import { isScancodeExists } from './scancode-checker';
 
 export class UserConfiguration {
 
@@ -248,6 +249,10 @@ export class UserConfiguration {
                             keyAction.secondaryRoleAction === SecondaryRoleAction.mod ||
                             keyAction.secondaryRoleAction === SecondaryRoleAction.mouse) {
                             (keyAction as any)._secondaryRoleAction = undefined;
+                        }
+
+                        if (keyAction.hasScancode() && !isScancodeExists(keyAction.scancode)) {
+                            module.keyActions[keyActionId] = new NoneAction();
                         }
                     }
                 }
