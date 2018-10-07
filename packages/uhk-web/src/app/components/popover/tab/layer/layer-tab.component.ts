@@ -63,7 +63,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
             this.isNotBase = this.currentLayer > 0;
         }
 
-        this.validAction.emit(true);
+        this.validAction.emit(!this.isNotBase);
     }
 
     keyActionValid(): boolean {

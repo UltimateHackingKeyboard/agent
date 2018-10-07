@@ -8,40 +8,14 @@
     <div class="arrowCustom"></div>
     <div class="popover-title menu-tabs">
         <ul class="nav nav-tabs popover-menu">
-            <li #keypress [class.active]="activeTab === tabName.Keypress" (click)="selectTab(tabName.Keypress)">
+            <li *ngFor="let tab of tabHeaders; trackBy:trackTabHeader"
+                [class.active]="activeTab === tab.tabName"
+                [class.disabled]="tab.disabled"
+                (click)="selectTab(tab)">
                 <a class="menu-tabs--item">
-                    <i class="fa fa-keyboard-o"></i>
-                    <span>Keypress</span>
-                </a>
-            </li>
-            <li #layer [class.active]="activeTab === tabName.Layer" (click)="selectTab(tabName.Layer)">
-                <a class="menu-tabs--item">
-                    <i class="fa fa-clone"></i>
-                    <span>Layer</span>
-                </a>
-            </li>
-            <li #mouse [class.active]="activeTab === tabName.Mouse" (click)="selectTab(tabName.Mouse)">
-                <a class="menu-tabs--item">
-                    <i class="fa fa-mouse-pointer"></i>
-                    <span>Mouse</span>
-                </a>
-            </li>
-            <li #macro [class.active]="activeTab === tabName.Macro" (click)="selectTab(tabName.Macro)">
-                <a class="menu-tabs--item">
-                    <i class="fa fa-play"></i>
-                    <span>Macro</span>
-                </a>
-            </li>
-            <li #keymap [class.active]="activeTab === tabName.Keymap" (click)="selectTab(tabName.Keymap)">
-                <a class="menu-tabs--item">
-                    <i class="fa fa-keyboard-o"></i>
-                    <span>Keymap</span>
-                </a>
-            </li>
-            <li #none [class.active]="activeTab === tabName.None" (click)="selectTab(tabName.None)">
-                <a class="menu-tabs--item">
-                    <i class="fa fa-ban"></i>
-                    <span>None</span>
+                    <i class="fa"
+                       [ngClass]="tab.icon"></i>
+                    <span>{{ tab.text }}</span>
                 </a>
             </li>
         </ul>
@@ -53,30 +27,30 @@
                       [allowRemapOnAllKeymapWarning]="true"
                       [remapInfo]="remapInfo"
                       [showLayerSwitcherInSecondaryRoles]="currentLayer === 0"
-                      (validAction)="keyActionValid=$event"
+                      (validAction)="setKeyActionValidState($event)"
                       (keyActionChange)="keystrokeActionChange($event)"
         ></keypress-tab>
         <layer-tab #tab *ngSwitchCase="tabName.Layer" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
                    [currentLayer]="currentLayer"
                    [allowLayerDoubleTap]="allowLayerDoubleTap"
-                   (validAction)="keyActionValid=$event"
+                   (validAction)="setKeyActionValidState($event)"
         ></layer-tab>
         <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
-                   (validAction)="keyActionValid=$event"
+                   (validAction)="setKeyActionValidState($event)"
         ></mouse-tab>
         <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
-                   (validAction)="keyActionValid=$event"
+                   (validAction)="setKeyActionValidState($event)"
         ></macro-tab>
         <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content"
                     [defaultKeyAction]="defaultKeyAction"
                     [keymaps]="keymaps$ | async"
-                    (validAction)="keyActionValid=$event"
+                    (validAction)="setKeyActionValidState($event)"
         ></keymap-tab>
         <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"
-                  (validAction)="keyActionValid=$event"
+                  (validAction)="setKeyActionValidState($event)"
         ></none-tab>
     </div>
     <div class="popover-action">

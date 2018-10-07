@@ -28,6 +28,11 @@
 
 .nav-tabs > li {
     overflow: hidden;
+    cursor: pointer;
+
+    &.disabled {
+        cursor: not-allowed;
+    }
 }
 
 .arrowCustom {
@@ -85,7 +90,6 @@
             .menu-tabs--item {
                 display: flex;
                 align-items: center;
-                cursor: pointer;
 
                 i {
                     margin-right: 0.25em;
