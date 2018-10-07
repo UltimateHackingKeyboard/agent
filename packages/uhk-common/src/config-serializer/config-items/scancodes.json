@@ -495,14 +495,6 @@
                 }
             },
             {
-                "id": "138",
-                "text": "WWW",
-                "additional": {
-                    "type": "media",
-                    "scancode": 138
-                }
-            },
-            {
                 "id": "145",
                 "text": "History Back",
                 "additional": {
@@ -523,14 +515,6 @@
     {
         "text": "Launch application",
         "children": [
-            {
-                "id": "142",
-                "text": "Launch Web Browser",
-                "additional": {
-                    "type": "media",
-                    "scancode": 406
-                }
-            },
             {
                 "id": "143",
                 "text": "Launch Email Client",
