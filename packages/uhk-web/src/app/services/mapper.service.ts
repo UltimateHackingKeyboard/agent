@@ -309,20 +309,17 @@ export class MapperService {
         this.basicScanCodeTextMap.set(177, ['000']);
 
         this.mediaScanCodeTextMap = new Map<number, string[]>();
-        this.mediaScanCodeTextMap.set(138, ['WWW']);
         this.mediaScanCodeTextMap.set(176, ['Play']);
         this.mediaScanCodeTextMap.set(177, ['Pause']);
         this.mediaScanCodeTextMap.set(181, ['Next']);
         this.mediaScanCodeTextMap.set(182, ['Prev']);
         this.mediaScanCodeTextMap.set(183, ['Stop']);
         this.mediaScanCodeTextMap.set(184, ['Eject']);
-        this.mediaScanCodeTextMap.set(204, ['Eject', 'Stop']);
         this.mediaScanCodeTextMap.set(205, ['Pause', 'Play']);
         this.mediaScanCodeTextMap.set(226, ['Mute']);
         this.mediaScanCodeTextMap.set(233, ['Vol +']);
         this.mediaScanCodeTextMap.set(234, ['Vol -']);
 
-        this.mediaScanCodeTextMap.set(406, ['Launch Web Browser']);
         this.mediaScanCodeTextMap.set(394, ['Launch Email Client']);
         this.mediaScanCodeTextMap.set(402, ['Launch Calculator']);
 
@@ -346,7 +343,6 @@ export class MapperService {
         this.basicScancodeIcons.set(101, 'icon-kbd__mod--menu');
 
         this.mediaScancodeIcons = new Map<number, string>();
-        this.mediaScancodeIcons.set(138, 'icon-kbd__fn--browser');
         this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
         this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
         this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');
@@ -357,7 +353,6 @@ export class MapperService {
         this.mediaScancodeIcons.set(233, 'icon-kbd__media--vol-up');
         this.mediaScancodeIcons.set(234, 'icon-kbd__media--vol-down');
 
-        this.mediaScancodeIcons.set(406, 'icon-kbd__media--web-browser');
         this.mediaScancodeIcons.set(394, 'icon-kbd__media--email-client');
         this.mediaScancodeIcons.set(402, 'icon-kbd__media--calculator');
 
