@@ -679,5 +679,26 @@
                 "text": "."
             }
         ]
+    },
+    {
+        "text": "Language",
+        "children": [
+            {
+                "id": "145",
+                "text": "Han/Yeong",
+                "additional": {
+                    "type": "language",
+                    "scancode": 144
+                }
+            },
+            {
+                "id": "146",
+                "text": "Hanja",
+                "additional": {
+                    "type": "language",
+                    "scancode": 145
+                }
+            }
+        ]
     }
 ]
