@@ -16,6 +16,7 @@ export class SvgSingleIconKeyComponent implements OnChanges {
 
     svgHeight: number;
     svgWidth: number;
+    svgX: number;
     secondaryTextY: number;
     secondaryHeight: number;
 
@@ -34,8 +35,9 @@ export class SvgSingleIconKeyComponent implements OnChanges {
             secondaryYModifier = 5;
         }
 
-        this.svgWidth = this.width / 3;
+        this.svgWidth = this.width / 2.075;
         this.svgHeight = this.height / 3;
+        this.svgX = (this.width - this.svgWidth) / 2;
         this.secondaryHeight = this.height / 4;
         this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
     }
