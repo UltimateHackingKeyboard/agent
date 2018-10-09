@@ -679,5 +679,50 @@
                 "text": "."
             }
         ]
+    },
+    {
+        "text": "International",
+        "children": [
+            {
+                "id": "235",
+                "text": "International 1",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 135
+                }
+            },
+            {
+                "id": "236",
+                "text": "International 2",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 136
+                }
+            },
+            {
+                "id": "237",
+                "text": "International 3",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 137
+                }
+            },
+            {
+                "id": "244",
+                "text": "Language 1",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 144
+                }
+            },
+            {
+                "id": "245",
+                "text": "Language 2",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 145
+                }
+            }
+        ]
     }
 ]

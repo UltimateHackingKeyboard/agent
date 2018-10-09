@@ -305,6 +305,11 @@ export class MapperService {
         this.basicScanCodeTextMap.set(113, ['F22']);
         this.basicScanCodeTextMap.set(114, ['F23']);
         this.basicScanCodeTextMap.set(115, ['F24']);
+        this.basicScanCodeTextMap.set(135, ['Int1']);
+        this.basicScanCodeTextMap.set(136, ['Int2']);
+        this.basicScanCodeTextMap.set(137, ['Int3']);
+        this.basicScanCodeTextMap.set(144, ['Lang1']);
+        this.basicScanCodeTextMap.set(145, ['Lang2']);
         this.basicScanCodeTextMap.set(176, ['00']);
         this.basicScanCodeTextMap.set(177, ['000']);
 
