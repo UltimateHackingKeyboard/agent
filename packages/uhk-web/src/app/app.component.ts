@@ -13,7 +13,8 @@ import {
     getShowAppUpdateAvailable,
     deviceConfigurationLoaded,
     runningInElectron,
-    saveToKeyboardState
+    saveToKeyboardState,
+    keypressCapturing
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 
@@ -42,7 +43,9 @@ export class MainAppComponent implements OnDestroy {
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
 
+    private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
+    private keypressCapturingSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
@@ -50,10 +53,13 @@ export class MainAppComponent implements OnDestroy {
         this.runningInElectron$ = store.select(runningInElectron);
         this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)
             .subscribe(data => this.saveToKeyboardState = data);
+        this.keypressCapturingSubscription = store.select(keypressCapturing)
+            .subscribe(data => this.keypressCapturing = data);
     }
 
     ngOnDestroy(): void {
         this.saveToKeyboardStateSubscription.unsubscribe();
+        this.keypressCapturingSubscription.unsubscribe();
     }
 
     @HostListener('document:keydown', ['$event'])
@@ -61,7 +67,8 @@ export class MainAppComponent implements OnDestroy {
         if (this.saveToKeyboardState.showButton &&
             event.ctrlKey &&
             event.key === 's' &&
-            !event.defaultPrevented) {
+            !event.defaultPrevented &&
+            !this.keypressCapturing) {
             this.clickedOnProgressButton(this.saveToKeyboardState.action);
             event.preventDefault();
         }
