@@ -20,7 +20,9 @@ export const ActionTypes = {
     OPEN_URL_IN_NEW_WINDOW: type(PREFIX + 'Open URL in new Window'),
     PRIVILEGE_WHAT_WILL_THIS_DO: type(PREFIX + 'What will this do clicked'),
     SETUP_PERMISSION_ERROR: type(PREFIX + 'Setup permission error'),
-    LOAD_APP_START_INFO: type(PREFIX + 'Load app start info')
+    LOAD_APP_START_INFO: type(PREFIX + 'Load app start info'),
+    START_KEYPRESS_CAPTURING: type(PREFIX + 'Start keypress capturing'),
+    STOP_KEYPRESS_CAPTURING: type(PREFIX + 'Stop keypress capturing')
 };
 
 export class AppBootsrappedAction implements Action {
@@ -103,6 +105,14 @@ export class LoadAppStartInfoAction implements Action {
     type = ActionTypes.LOAD_APP_START_INFO;
 }
 
+export class StartKeypressCapturingAction implements Action {
+    type = ActionTypes.START_KEYPRESS_CAPTURING;
+}
+
+export class StopKeypressCapturingAction implements Action {
+    type = ActionTypes.STOP_KEYPRESS_CAPTURING;
+}
+
 export type Actions
     = AppStartedAction
     | AppBootsrappedAction
@@ -118,4 +128,6 @@ export type Actions
     | PrivilegeWhatWillThisDoAction
     | SetupPermissionErrorAction
     | LoadAppStartInfoAction
+    | StartKeypressCapturingAction
+    | StopKeypressCapturingAction
     ;
