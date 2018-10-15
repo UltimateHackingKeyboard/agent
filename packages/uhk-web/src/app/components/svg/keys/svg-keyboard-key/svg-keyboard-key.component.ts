@@ -29,6 +29,7 @@ import { getMacros } from '../../../../store/reducers/user-configuration';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
+import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -107,7 +108,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(
         private mapper: MapperService,
-        store: Store<AppState>,
+        private store: Store<AppState>,
         private element: ElementRef,
         private captureService: CaptureService,
         private renderer: Renderer
@@ -145,6 +146,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.recordAnimation = 'active';
                 this.shiftPressed = e.shiftKey;
                 this.altPressed = e.altKey;
+                this.store.dispatch(new StartKeypressCapturingAction());
             }
         }
     }
@@ -242,6 +244,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.captureService.initModifiers();
         this.shiftPressed = false;
         this.altPressed = false;
+        this.store.dispatch(new StopKeypressCapturingAction());
     }
 
     private saveScanCode(code = 0) {

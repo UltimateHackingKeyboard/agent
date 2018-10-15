@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import { CaptureService } from '../../../../services/capture.service';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
+import { AppState } from '../../../../store';
+import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 
 @Component({
     selector: 'capture-keystroke-button',
@@ -17,7 +21,8 @@ export class CaptureKeystrokeButtonComponent {
     private first: boolean; // enable usage of Enter to start capturing
     private scanCodePressed: boolean;
 
-    constructor(private captureService: CaptureService) {
+    constructor(private captureService: CaptureService,
+                private store: Store<AppState>) {
         this.record = false;
         this.captureService.initModifiers();
         this.captureService.populateMapping();
@@ -28,9 +33,11 @@ export class CaptureKeystrokeButtonComponent {
     onKeyUp(e: KeyboardEvent) {
         if (this.scanCodePressed) {
             e.preventDefault();
+            e.stopPropagation();
             this.scanCodePressed = false;
         } else if (this.record && !this.first) {
             e.preventDefault();
+            e.stopPropagation();
             this.saveScanCode();
         }
     }
@@ -54,6 +61,7 @@ export class CaptureKeystrokeButtonComponent {
         } else if (code === enter) {
             this.record = true;
             this.first = true;
+            this.store.dispatch(new StartKeypressCapturingAction());
         }
     }
 
@@ -65,6 +73,7 @@ export class CaptureKeystrokeButtonComponent {
 
     start(): void {
         this.record = true;
+        this.store.dispatch(new StartKeypressCapturingAction());
     }
 
     private saveScanCode(code?: number) {
@@ -84,5 +93,6 @@ export class CaptureKeystrokeButtonComponent {
     private reset() {
         this.first = false;
         this.captureService.initModifiers();
+        this.store.dispatch(new StopKeypressCapturingAction());
     }
 }

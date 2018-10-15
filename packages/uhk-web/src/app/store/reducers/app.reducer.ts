@@ -32,6 +32,7 @@ export interface State {
     permissionError?: any;
     platform?: string;
     osVersion?: string;
+    keypressCapturing: boolean;
 }
 
 export const initialState: State = {
@@ -41,7 +42,8 @@ export const initialState: State = {
     runningInElectron: runInElectron(),
     configLoading: true,
     agentVersionInfo: getVersions(),
-    privilegeWhatWillThisDoClicked: false
+    privilegeWhatWillThisDoClicked: false,
+    keypressCapturing: false
 };
 
 export function reducer(state = initialState, action: Action & { payload: any }) {
@@ -151,6 +153,18 @@ export function reducer(state = initialState, action: Action & { payload: any })
                 permissionError: null
             };
 
+        case ActionTypes.START_KEYPRESS_CAPTURING:
+            return {
+                ...state,
+                keypressCapturing: true
+            };
+
+        case ActionTypes.STOP_KEYPRESS_CAPTURING:
+            return {
+                ...state,
+                keypressCapturing: false
+            };
+
         default:
             return state;
     }
@@ -191,3 +205,5 @@ export const runningOnNotSupportedWindows = (state: State): boolean => {
 
     return osMajor < 6 || (osMajor === 6 && osMinor < 2);
 };
+
+export const keypressCapturing = (state: State): boolean => state.keypressCapturing;
