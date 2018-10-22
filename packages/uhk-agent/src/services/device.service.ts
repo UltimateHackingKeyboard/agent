@@ -1,4 +1,5 @@
 import { ipcMain } from 'electron';
+import { isEqual } from 'lodash';
 import {
     ConfigurationReply,
     DeviceConnectionState,
@@ -12,15 +13,16 @@ import {
     SaveUserConfigurationData,
     UpdateFirmwareData
 } from 'uhk-common';
-import { deviceConnectionStateComparer, snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
+import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
 
 import 'rxjs/add/observable/interval';
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/distinctUntilChanged';
 
@@ -253,8 +255,8 @@ export class DeviceService {
 
         this.pollTimer$ = Observable.interval(1000)
             .startWith(0)
-            .map(() => this.device.getDeviceConnectionState())
-            .distinctUntilChanged<DeviceConnectionState>(deviceConnectionStateComparer)
+            .switchMap(() => Observable.fromPromise(this.device.getDeviceConnectionStateAsync()))
+            .distinctUntilChanged<DeviceConnectionState>(isEqual)
             .do((state: DeviceConnectionState) => {
                 this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
                 this.logService.info('[DeviceService] Device connection state changed to:', state);

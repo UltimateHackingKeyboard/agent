@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules } from 'uhk-common';
+import { HardwareModules, UdevRulesInfo } from 'uhk-common';
 
 import {
     ActionTypes,
     ConnectionStateChangedAction,
     HardwareModulesLoadedAction,
-    SaveConfigurationAction,
     HasBackupUserConfigurationAction,
+    SaveConfigurationAction,
     UpdateFirmwareFailedAction,
     UpdateFirmwareSuccessAction
 } from '../actions/device';
@@ -19,6 +19,7 @@ export interface State {
     connected: boolean;
     hasPermission: boolean;
     bootloaderActive: boolean;
+    udevRuleInfo: UdevRulesInfo;
     saveToKeyboard: ProgressButtonState;
     savingToKeyboard: boolean;
     updatingFirmware: boolean;
@@ -35,6 +36,7 @@ export const initialState: State = {
     connected: true,
     hasPermission: true,
     bootloaderActive: false,
+    udevRuleInfo: UdevRulesInfo.Unkonwn,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
     updatingFirmware: false,
@@ -61,7 +63,8 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 connected: data.connected,
                 hasPermission: data.hasPermission,
-                bootloaderActive: data.bootloaderActive
+                bootloaderActive: data.bootloaderActive,
+                udevRuleInfo: data.udevRulesInfo
             };
         }
 
@@ -236,3 +239,4 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
 export const bootloaderActive = (state: State) => state.bootloaderActive;
 export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
+export const showUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;

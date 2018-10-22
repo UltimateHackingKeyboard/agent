@@ -18,6 +18,7 @@ import {
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
+    UdevRulesInfo,
     UserConfiguration
 } from 'uhk-common';
 import {
@@ -104,7 +105,8 @@ export class DeviceEffects {
                 return new ConnectionStateChangedAction({
                     connected: true,
                     hasPermission: true,
-                    bootloaderActive: false
+                    bootloaderActive: false,
+                    udevRulesInfo: UdevRulesInfo.Ok
                 });
             }
 

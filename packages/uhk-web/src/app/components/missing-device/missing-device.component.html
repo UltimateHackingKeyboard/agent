@@ -1,1 +1,5 @@
 <uhk-message header="Cannot find your UHK" subtitle="Please plug it in!"></uhk-message>
+<div *ngIf="showUdevInfo$ | async" class="mt-10">
+    You seem to have an old udev rule file installed. New Agent versions require an updated udev rule file to find your UHK.
+    <udev-rules></udev-rules>
+</div>

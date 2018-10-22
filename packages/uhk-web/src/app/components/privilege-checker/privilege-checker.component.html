@@ -22,21 +22,7 @@
 
             <div *ngIf="state.showWhatWillThisDoContent">
                 If you want to set up permissions manually:
-                <ol>
-                    <li>Open a terminal.</li>
-                    <li>Run <code>su</code> to become root.</li>
-                    <li>Paste the following script, and <a class="link-inline" (click)="retry()">retry</a>.</li>
-                </ol>
-
-                <div class="copy-container">
-                    <span class="fa  fa-2x fa-copy"
-                          ngxClipboard
-                          [cbContent]="command"
-                          title="Copy to clipboard"
-                          data-toggle="tooltip"
-                          data-placement="top"></span>
-                    <pre><code>{{ command }}</code></pre>
-                </div>
+                <udev-rules></udev-rules>
             </div>
         </div>
     </div>

@@ -88,6 +88,7 @@ export const getRestoreUserConfiguration = createSelector(deviceState, fromDevic
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
 export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firmwareUpgradeFailed);
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
+export const showUdevRules = createSelector(deviceState, fromDevice.showUdevRules);
 
 export const getSideMenuPageState = createSelector(
     showAddonMenu,
