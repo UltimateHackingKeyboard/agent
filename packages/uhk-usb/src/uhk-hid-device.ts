@@ -50,7 +50,11 @@ export class UhkHidDevice {
                 return true;
             }
 
-            const dev = devices().find((x: Device) => isUhkDevice(x) || x.productId === Constants.BOOTLOADER_ID);
+            this.logService.debug('[UhkHidDevice] Devices before check permission:');
+            const devs = devices();
+            this.logDevices(devs);
+
+            const dev = devs.find((x: Device) => isUhkDevice(x) || x.productId === Constants.BOOTLOADER_ID);
 
             if (!dev) {
                 return true;
@@ -260,9 +264,7 @@ export class UhkHidDevice {
             const devs = devices();
             if (!isEqualArray(this._prevDevices, devs)) {
                 this.logService.debug('[UhkHidDevice] Available devices:');
-                for (const logDevice of devs) {
-                    this.logService.debug(JSON.stringify(logDevice));
-                }
+                this.logDevices(devs);
                 this._prevDevices = devs;
             } else {
                 this.logService.debug('[UhkHidDevice] Available devices unchanged');
@@ -283,6 +285,12 @@ export class UhkHidDevice {
         }
 
         return null;
+    }
+
+    private logDevices(devs: Array<Device>): void {
+        for (const logDevice of devs) {
+            this.logService.debug(JSON.stringify(logDevice));
+        }
     }
 }
 
