@@ -9,7 +9,6 @@ import {
     OnChanges,
     OnInit,
     Output,
-    Renderer,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
@@ -100,8 +99,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     constructor(
         private store: Store<AppState>,
         private mapper: MapperService,
-        private element: ElementRef,
-        private renderer: Renderer
+        private element: ElementRef
     ) {
         this.keyEditConfig = {
             moduleId: undefined,
@@ -216,7 +214,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.keyPosition = this.keyElement.getBoundingClientRect();
         this.popoverInitKeyAction = keyAction;
         this.popoverShown = true;
-        this.renderer.invokeElementMethod(this.popover.nativeElement, 'focus');
+        this.popover.nativeElement.focus();
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {

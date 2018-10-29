@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Renderer } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
     selector: '[cancelable]'
@@ -7,15 +7,15 @@ export class CancelableDirective {
 
     private originalValue: string;
 
-    constructor(private elementRef: ElementRef, private renderer: Renderer) { }
+    constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
 
     @HostListener('focus') onFocus(): void {
         this.originalValue = this.elementRef.nativeElement.value;
     }
 
     @HostListener('keyup.escape') onEscape(): void {
-        this.renderer.setElementProperty(this.elementRef.nativeElement, 'value', this.originalValue);
-        this.renderer.invokeElementMethod(this.elementRef.nativeElement, 'blur');
+        this.renderer.setProperty(this.elementRef.nativeElement, 'value', this.originalValue);
+        this.elementRef.nativeElement.blur();
     }
 
 }

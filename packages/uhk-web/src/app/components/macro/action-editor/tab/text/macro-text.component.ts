@@ -4,7 +4,6 @@ import {
     Component,
     ElementRef,
     Input,
-    Renderer,
     ViewChild
 } from '@angular/core';
 import { TextMacroAction } from 'uhk-common';
@@ -23,14 +22,14 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
     @Input() macroAction: TextMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
-    constructor(private renderer: Renderer) { super(); }
+    constructor() { super(); }
 
     ngOnInit() {
         this.init();
     }
 
     ngAfterViewInit() {
-        this.renderer.invokeElementMethod(this.input.nativeElement, 'focus');
+        this.input.nativeElement.focus();
     }
 
     onTextChange() {

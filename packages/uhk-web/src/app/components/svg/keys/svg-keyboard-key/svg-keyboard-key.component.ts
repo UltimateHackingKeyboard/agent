@@ -1,5 +1,5 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer,
+    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output,
     SimpleChange, ChangeDetectionStrategy
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
@@ -110,8 +110,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private mapper: MapperService,
         private store: Store<AppState>,
         private element: ElementRef,
-        private captureService: CaptureService,
-        private renderer: Renderer
+        private captureService: CaptureService
     ) {
         this.subscription = store.let(getMacros())
             .subscribe((macros: Macro[]) => this.macros = macros);
@@ -137,7 +136,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     onMouseDown(e: MouseEvent) {
         if ((e.which === 2 || e.button === 2) && this.capturingEnabled) {
             e.preventDefault();
-            this.renderer.invokeElementMethod(this.element.nativeElement, 'focus');
+            this.element.nativeElement.focus();
 
             if (this.recording) {
                 this.reset();
