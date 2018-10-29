@@ -66,18 +66,15 @@ export class DeviceEffects {
                 return;
             }
 
-            if (!state.hasPermission) {
-                this.router.navigate(['/privilege']);
+            if (state.bootloaderActive) {
+                return this.router.navigate(['/recovery-device']);
             }
-            else if (state.bootloaderActive) {
-                this.router.navigate(['/recovery-device']);
+
+            if (state.connected) {
+                return this.router.navigate(['/']);
             }
-            else if (state.connected) {
-                this.router.navigate(['/']);
-            }
-            else {
-                this.router.navigate(['/detection']);
-            }
+
+            return this.router.navigate(['/privilege']);
         })
         .switchMap(([action, route]) => {
             const state = action.payload;

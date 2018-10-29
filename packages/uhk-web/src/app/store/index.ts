@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
-import { RouterReducerState, routerReducer } from '@ngrx/router-store';
+import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { HardwareModules, Keymap, UserConfiguration } from 'uhk-common';
 
@@ -14,6 +14,7 @@ import * as fromSelectors from './reducers/selectors';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
+import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
 
 // State interface for the application
@@ -52,7 +53,6 @@ export const runningInElectron = createSelector(appState, fromApp.runningInElect
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
-export const getPrivilegePageState = createSelector(appState, fromApp.getPrivilagePageState);
 export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const keypressCapturing = createSelector(appState, fromApp.keypressCapturing);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
@@ -71,9 +71,6 @@ export const deviceConnected = createSelector(runningInElectron, isDeviceConnect
     return !electron ? true : connected;
 });
 export const devicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
-export const hasDevicePermission = createSelector(runningInElectron, devicePermission, (electron, permission) => {
-    return !electron ? true : permission;
-});
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
     return electron ? state : initProgressButtonState;
@@ -88,7 +85,18 @@ export const getRestoreUserConfiguration = createSelector(deviceState, fromDevic
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
 export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firmwareUpgradeFailed);
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
-export const showUdevRules = createSelector(deviceState, fromDevice.showUdevRules);
+export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
+
+export const getPrivilegePageState = createSelector(appState, getUpdateUdevRules, (app, updateUdevRules): PrivilagePageSate => {
+    const permissionSetupFailed = !!app.permissionError;
+
+    return {
+        permissionSetupFailed,
+        updateUdevRules,
+        showWhatWillThisDo: !app.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
+        showWhatWillThisDoContent: app.privilegeWhatWillThisDoClicked || permissionSetupFailed
+    };
+});
 
 export const getSideMenuPageState = createSelector(
     showAddonMenu,

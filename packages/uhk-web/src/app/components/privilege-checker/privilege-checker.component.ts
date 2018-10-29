@@ -6,6 +6,7 @@ import { AppState, getPrivilegePageState } from '../../store';
 import { SetPrivilegeOnLinuxAction } from '../../store/actions/device';
 import { LoadAppStartInfoAction, PrivilegeWhatWillThisDoAction } from '../../store/actions/app';
 import { PrivilagePageSate } from '../../models/privilage-page-sate';
+import { UdevRulesInfo } from 'uhk-common';
 
 @Component({
     selector: 'privilege-checker',

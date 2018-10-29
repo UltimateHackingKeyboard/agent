@@ -3,7 +3,9 @@
                  subtitle="Your UHK has been detected, but its permissions are not set up yet, so Agent can't talk to it."></uhk-message>
 
     <button class="btn btn-default btn-lg btn-primary"
-            (click)="setUpPermissions()"> Set up permissions
+            (click)="setUpPermissions()">
+        <span *ngIf="!state.updateUdevRules">Set up permissions</span>
+        <span *ngIf="state.updateUdevRules">Update udev rule file</span>
     </button>
 
     <div class="mt-10">

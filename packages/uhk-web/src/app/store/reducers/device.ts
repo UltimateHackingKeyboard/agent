@@ -239,4 +239,4 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
 export const bootloaderActive = (state: State) => state.bootloaderActive;
 export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
-export const showUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
+export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
