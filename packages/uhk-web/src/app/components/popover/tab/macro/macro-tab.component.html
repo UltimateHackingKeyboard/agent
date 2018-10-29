@@ -2,7 +2,7 @@
     <span> No macros are available to choose from. Create a macro first! </span>
 </ng-template>
 <ng-template [ngIf]="macroOptions.length > 0">
-    <p><i>Please note that macro playback is not implemented yet. You can bind macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
+    <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can bind macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
     <div class="macro-selector">
         <b> Play macro: </b>
         <ngx-select [items]="macroOptions"

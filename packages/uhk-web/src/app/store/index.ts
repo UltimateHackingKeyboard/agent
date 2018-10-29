@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { RouterReducerState, routerReducer } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { Keymap, UserConfiguration } from 'uhk-common';
+import { HardwareModules, Keymap, UserConfiguration } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
@@ -14,6 +14,7 @@ import * as fromSelectors from './reducers/selectors';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
+import { isVersionGte } from '../util';
 
 // State interface for the application
 export interface AppState {
@@ -113,3 +114,14 @@ export const getSideMenuPageState = createSelector(
 );
 
 export const getRouterState = (state: AppState) => state.router;
+
+export const macroPlaybackSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
+    return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
+});
+export const layerDoubleTapSupported = createSelector(
+    allowLayerDoubleTap,
+    getHardwareModules,
+    (allowLayerDoubleTab, hardwareModules: HardwareModules): boolean => {
+        return allowLayerDoubleTab || isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
+    }
+);

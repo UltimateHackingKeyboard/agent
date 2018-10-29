@@ -35,6 +35,7 @@ import { MacroItemComponent } from '../item';
 })
 export class MacroListComponent {
     @Input() macro: Macro;
+    @Input() macroPlaybackSupported: boolean;
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
     @Output() add = new EventEmitter();

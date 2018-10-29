@@ -14,7 +14,7 @@ import 'rxjs/add/operator/combineLatest';
 
 import { saveAs } from 'file-saver';
 
-import { allowLayerDoubleTap, AppState, getKeyboardLayout } from '../../../store';
+import { layerDoubleTapSupported, AppState, getKeyboardLayout } from '../../../store';
 import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { KeymapActions } from '../../../store/actions';
@@ -51,7 +51,7 @@ export class KeymapEditComponent {
             .map((keymaps: Keymap[]) => keymaps.length > 1);
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
-        this.allowLayerDoubleTap$ = store.select(allowLayerDoubleTap);
+        this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
     }
 
     downloadKeymap() {

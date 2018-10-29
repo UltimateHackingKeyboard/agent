@@ -1,3 +1,4 @@
+import * as semver from 'semver';
 import { VersionInformation } from 'uhk-common';
 
 const collectVersions = (): VersionInformation => {
@@ -19,4 +20,12 @@ export const getVersions = (): VersionInformation => {
         versions = collectVersions();
     }
     return versions;
+};
+
+export const isVersionGte = (v1: string, v2: string): boolean => {
+    if (!v1) {
+        return false;
+    }
+
+    return semver.gte(v1, v2);
 };
