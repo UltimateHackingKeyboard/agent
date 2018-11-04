@@ -22,9 +22,7 @@ import { setMenu } from './electron-menu';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean},
-    {name: 'spe', type: Boolean}, // simulate privilege escalation error
-    // show 'Lock layer when double tapping this key' checkbox on 'Layer' tab of the config popover
-    {name: 'layer-double-tap', type: Boolean}
+    {name: 'spe', type: Boolean} // simulate privilege escalation error
 ];
 
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);

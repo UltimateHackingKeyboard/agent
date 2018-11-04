@@ -46,7 +46,6 @@ export const getUserConfiguration = (state: AppState) => state.userConfiguration
 export const appState = (state: AppState) => state.app;
 
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
-export const allowLayerDoubleTap = createSelector(appState, fromApp.allowLayerDoubleTap);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
@@ -119,9 +118,8 @@ export const macroPlaybackSupported = createSelector(getHardwareModules, (hardwa
     return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
 });
 export const layerDoubleTapSupported = createSelector(
-    allowLayerDoubleTap,
     getHardwareModules,
-    (allowLayerDoubleTab, hardwareModules: HardwareModules): boolean => {
-        return allowLayerDoubleTab || isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
+    (hardwareModules: HardwareModules): boolean => {
+        return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
     }
 );
