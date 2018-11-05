@@ -1,6 +1,6 @@
 <div class="row list-container">
     <div class="col-xs-10 col-xs-offset-1 list-group">
-    <p><i>Please note that macro playback is not implemented yet. You can create macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
+    <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can create macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
         <div class="macro-actions-container" [dragula]="'macroActions'" [dragulaModel]="macro.macroActions">
             <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index"
                         [macroAction]="macroAction"

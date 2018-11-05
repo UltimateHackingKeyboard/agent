@@ -17,6 +17,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 })
 export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestroy {
     @Input() defaultKeyAction: KeyAction;
+    @Input() macroPlaybackSupported: boolean;
 
     macros: Macro[];
     macroOptions: Array<SelectOptionData>;

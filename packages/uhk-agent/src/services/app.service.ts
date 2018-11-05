@@ -26,8 +26,7 @@ export class AppService extends MainServiceBase {
         const deviceConnectionState = this.uhkHidDeviceService.getDeviceConnectionState();
         const response: AppStartInfo = {
             commandLineArgs: {
-                addons: this.options.addons || false,
-                layerDoubleTap: this.options['layer-double-tap'] || false
+                addons: this.options.addons || false
             },
             deviceConnected: deviceConnectionState.connected,
             hasPermission: deviceConnectionState.hasPermission,
