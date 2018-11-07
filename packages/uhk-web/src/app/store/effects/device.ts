@@ -81,7 +81,9 @@ export class DeviceEffects {
             return this.router.navigate(['/detection']);
         })
         .switchMap(([action, route, connected]) => {
-            if (connected) {
+            const payload = action.payload;
+
+            if (connected && payload.hasPermission) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }
 
