@@ -66,15 +66,19 @@ export class DeviceEffects {
                 return;
             }
 
+            if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
+                return this.router.navigate(['/privilege']);
+            }
+
             if (state.bootloaderActive) {
                 return this.router.navigate(['/recovery-device']);
             }
 
-            if (state.connected) {
+            if (state.connected && state.zeroInterfaceAvailable) {
                 return this.router.navigate(['/']);
             }
 
-            return this.router.navigate(['/privilege']);
+            return this.router.navigate(['/detection']);
         })
         .switchMap(([action, route]) => {
             const state = action.payload;
@@ -99,12 +103,7 @@ export class DeviceEffects {
         .map(action => action.payload)
         .map((response: any): any => {
             if (response.success) {
-                return new ConnectionStateChangedAction({
-                    connected: true,
-                    hasPermission: true,
-                    bootloaderActive: false,
-                    udevRulesInfo: UdevRulesInfo.Ok
-                });
+                return Observable.empty();
             }
 
             return new SetupPermissionErrorAction(response.error);

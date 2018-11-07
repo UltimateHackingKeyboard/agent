@@ -90,10 +90,14 @@ import { UhkMessageComponent } from './components/uhk-message';
 import { AppRendererService } from './services/app-renderer.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { IpcCommonRenderer } from './services/ipc-common-renderer';
+import { MissingDeviceComponent } from './components/missing-device';
 import { PrivilegeCheckerComponent } from './components/privilege-checker';
+import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
+import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { MainPage } from './pages/main-page/main.page';
 import { DeviceRendererService } from './services/device-renderer.service';
+import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { ProgressButtonComponent } from './components/progress-button/progress-button.component';
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
@@ -170,6 +174,7 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         UhkHeader,
         UpdateAvailableComponent,
         UhkMessageComponent,
+        MissingDeviceComponent,
         PrivilegeCheckerComponent,
         MainPage,
         ProgressButtonComponent,
@@ -215,7 +220,10 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         AppRendererService,
         IpcCommonRenderer,
         DeviceRendererService,
+        UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
+        UhkDeviceInitializedGuard,
+        UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
         UhkDeviceLoadedGuard,
         UhkDeviceBootloaderNotActiveGuard

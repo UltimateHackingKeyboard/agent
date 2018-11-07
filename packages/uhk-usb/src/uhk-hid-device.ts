@@ -15,7 +15,7 @@ import {
     UsbCommand,
     UsbVariables
 } from './constants';
-import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, retry, snooze } from './util';
+import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -58,7 +58,7 @@ export class UhkHidDevice {
             const devs = devices();
             this.logDevices(devs);
 
-            const dev = devs.find((x: Device) => isUhkDevice(x) || x.productId === Constants.BOOTLOADER_ID);
+            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || x.productId === Constants.BOOTLOADER_ID);
 
             if (!dev) {
                 return true;
@@ -86,6 +86,7 @@ export class UhkHidDevice {
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             connected: false,
+            zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
             udevRulesInfo: await this.getUdevInfoAsync()
         };
@@ -93,6 +94,10 @@ export class UhkHidDevice {
         for (const dev of devs) {
             if (isUhkDevice(dev)) {
                 result.connected = true;
+            }
+
+            if (isUhkZeroInterface(dev)) {
+                result.zeroInterfaceAvailable = true;
             } else if (dev.vendorId === Constants.VENDOR_ID &&
                 dev.productId === Constants.BOOTLOADER_ID) {
                 result.bootloaderActive = true;
@@ -275,7 +280,7 @@ export class UhkHidDevice {
                 this.logService.debug('[UhkHidDevice] Available devices unchanged');
             }
 
-            const dev = devs.find(isUhkDevice);
+            const dev = devs.find(isUhkZeroInterface);
 
             if (!dev) {
                 this.logService.debug('[UhkHidDevice] UHK Device not found:');

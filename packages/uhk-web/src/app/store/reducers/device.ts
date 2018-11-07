@@ -14,11 +14,13 @@ import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../act
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
+import { MissingDeviceState } from '../../models/missing-device-state';
 
 export interface State {
     connected: boolean;
     hasPermission: boolean;
     bootloaderActive: boolean;
+    zeroInterfaceAvailable: boolean;
     udevRuleInfo: UdevRulesInfo;
     saveToKeyboard: ProgressButtonState;
     savingToKeyboard: boolean;
@@ -36,6 +38,7 @@ export const initialState: State = {
     connected: true,
     hasPermission: true,
     bootloaderActive: false,
+    zeroInterfaceAvailable: true,
     udevRuleInfo: UdevRulesInfo.Unkonwn,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
@@ -63,6 +66,7 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 connected: data.connected,
                 hasPermission: data.hasPermission,
+                zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
                 udevRuleInfo: data.udevRulesInfo
             };
@@ -225,7 +229,20 @@ export function reducer(state = initialState, action: Action): State {
 
 export const updatingFirmware = (state: State) => state.updatingFirmware;
 export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
-export const hasDevicePermission = (state: State) => state.hasPermission;
+export const hasDevicePermission = (state: State) => state.udevRuleInfo === UdevRulesInfo.Ok;
+export const getMissingDeviceState = (state: State): MissingDeviceState => {
+    if (state.connected && !state.zeroInterfaceAvailable) {
+        return {
+            header: 'Please reconnect it!',
+            subtitle: 'Your UHK has been detected, but its permissions are not set up yet, so Agent can\'t talk to it.'
+        };
+    }
+
+    return {
+        header: 'Cannot find your UHK',
+        subtitle: 'Please plug it in!'
+    };
+};
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
 export const getHardwareModules = (state: State) => state.modules;

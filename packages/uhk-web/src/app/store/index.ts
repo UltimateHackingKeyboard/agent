@@ -66,11 +66,21 @@ export const getAutoUpdateSettings = createSelector(appUpdateSettingsState, auto
 export const getCheckingForUpdate = createSelector(appUpdateSettingsState, autoUpdateSettings.checkingForUpdate);
 
 export const deviceState = (state: AppState) => state.device;
-export const isDeviceConnected = createSelector(deviceState, fromDevice.isDeviceConnected);
-export const deviceConnected = createSelector(runningInElectron, isDeviceConnected, (electron, connected) => {
-    return !electron ? true : connected;
-});
-export const devicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
+export const deviceConnected = createSelector(
+    runningInElectron, deviceState, appState,
+    (electron, device, app) => {
+        if (!electron) {
+            return true;
+        }
+
+        if (app.platform === 'linux') {
+            return device.connected && (device.zeroInterfaceAvailable || device.updatingFirmware);
+        }
+
+        return device.connected;
+    });
+export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
+export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
     return electron ? state : initProgressButtonState;
