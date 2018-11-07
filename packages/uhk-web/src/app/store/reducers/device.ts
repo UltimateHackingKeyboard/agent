@@ -233,8 +233,8 @@ export const hasDevicePermission = (state: State) => state.udevRuleInfo === Udev
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (state.connected && !state.zeroInterfaceAvailable) {
         return {
-            header: 'Please reconnect it!',
-            subtitle: 'Your UHK has been detected, but its permissions are not set up yet, so Agent can\'t talk to it.'
+            header: 'Cannot find your UHK',
+            subtitle: 'Please reconnect it!'
         };
     }
 
