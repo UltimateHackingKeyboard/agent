@@ -42,7 +42,7 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState, getRouterState } from '../index';
+import { AppState, deviceConnected, getRouterState } from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -58,7 +58,7 @@ export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
-        .withLatestFrom(this.store.select(getRouterState))
+        .withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected))
         .do(([action, route]) => {
             const state = action.payload;
 
@@ -80,10 +80,8 @@ export class DeviceEffects {
 
             return this.router.navigate(['/detection']);
         })
-        .switchMap(([action, route]) => {
-            const state = action.payload;
-
-            if (state.connected && state.hasPermission) {
+        .switchMap(([action, route, connected]) => {
+            if (connected) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }
 
