@@ -84,7 +84,7 @@ export class DeviceEffects {
         .switchMap(([action, route, connected]) => {
             const payload = action.payload;
 
-            if (connected && payload.hasPermission) {
+            if (connected && payload.hasPermission && payload.udevRulesInfo === UdevRulesInfo.Ok) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }
 
