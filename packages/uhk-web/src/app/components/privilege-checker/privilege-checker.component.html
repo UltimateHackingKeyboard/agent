@@ -6,7 +6,7 @@
         You seem to have an old udev rule file installed. New Agent versions require and updated udev rule file to find your UHK.
     </div>
 
-    <button class="btn btn-default btn-lg btn-primary"
+    <button class="btn btn-default btn-lg btn-primary mt-10"
             (click)="setUpPermissions()">
         <span *ngIf="!state.updateUdevRules">Set up permissions</span>
         <span *ngIf="state.updateUdevRules">Update udev rule file</span>
