@@ -67,7 +67,7 @@ export class DeviceEffects {
                 return;
             }
 
-            if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
+            if (!state.hasPermission || !state.zeroInterfaceAvailable) {
                 return this.router.navigate(['/privilege']);
             }
 
@@ -84,7 +84,7 @@ export class DeviceEffects {
         .switchMap(([action, route, connected]) => {
             const payload = action.payload;
 
-            if (connected && payload.hasPermission && payload.udevRulesInfo === UdevRulesInfo.Ok) {
+            if (connected && payload.hasPermission && payload.zeroInterfaceAvailable) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }
 
