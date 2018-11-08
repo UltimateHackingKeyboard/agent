@@ -102,13 +102,13 @@ export class DeviceEffects {
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
         .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
         .map(action => action.payload)
-        .map((response: any): any => {
+        .switchMap((response: any): any => {
             if (response.success) {
                 this.appRendererService.getAppStartInfo();
                 return Observable.empty();
             }
 
-            return new SetupPermissionErrorAction(response.error);
+            return Observable.of(new SetupPermissionErrorAction(response.error));
         });
 
     @Effect({dispatch: false})
