@@ -40,6 +40,7 @@ import {
     UpdateFirmwareSuccessAction,
     UpdateFirmwareWithAction
 } from '../actions/device';
+import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
 import { AppState, deviceConnected, getRouterState } from '../index';
@@ -103,6 +104,7 @@ export class DeviceEffects {
         .map(action => action.payload)
         .map((response: any): any => {
             if (response.success) {
+                this.appRendererService.getAppStartInfo();
                 return Observable.empty();
             }
 
@@ -241,6 +243,7 @@ export class DeviceEffects {
 
     constructor(private actions$: Actions,
                 private router: Router,
+                private appRendererService: AppRendererService,
                 private deviceRendererService: DeviceRendererService,
                 private store: Store<AppState>,
                 private dataStorageRepository: DataStorageRepositoryService,
