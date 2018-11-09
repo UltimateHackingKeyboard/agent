@@ -1,5 +1,7 @@
 import { Device } from 'node-hid';
-import { DeviceConnectionState, LogService } from 'uhk-common';
+import { readFile } from 'fs-extra';
+import { EOL } from 'os';
+import { LogService } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants';
 
@@ -98,17 +100,25 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
     }
 }
 
-export const deviceConnectionStateComparer = (a: DeviceConnectionState, b: DeviceConnectionState): boolean => {
-    return a.hasPermission === b.hasPermission
-        && a.connected === b.connected
-        && a.bootloaderActive === b.bootloaderActive;
-};
-
-export const isUhkDevice = (dev: Device): boolean => {
+export const isUhkZeroInterface = (dev: Device): boolean => {
     return dev.vendorId === Constants.VENDOR_ID &&
     dev.productId === Constants.PRODUCT_ID &&
     // hidapi can not read the interface number on Mac, so check the usage page and usage
     ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
         (dev.usagePage === (0xFF00 | 0x00) && dev.usage === 0x01) || // New firmware
         dev.interface === 0);
+};
+
+export const isUhkDevice = (dev: Device): boolean => {
+    return dev.vendorId === Constants.VENDOR_ID &&
+        (dev.productId === Constants.PRODUCT_ID || dev.productId === Constants.BOOTLOADER_ID);
+};
+
+export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {
+    const fileContent = await readFile(filePath, {encoding: 'utf-8'});
+
+    return fileContent
+        .split(EOL)
+        .map(x => x.trim())
+        .filter(x => !x.startsWith('#') && x.length > 0);
 };

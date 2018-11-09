@@ -183,15 +183,6 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
 };
 export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
 export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || {} as VersionInformation;
-export const getPrivilagePageState = (state: State): PrivilagePageSate => {
-    const permissionSetupFailed = !!state.permissionError;
-
-    return {
-        permissionSetupFailed,
-        showWhatWillThisDo: !state.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
-        showWhatWillThisDoContent: state.privilegeWhatWillThisDoClicked || permissionSetupFailed
-    };
-};
 
 export const runningOnNotSupportedWindows = (state: State): boolean => {
     if (!state.osVersion || state.platform !== 'win32') {

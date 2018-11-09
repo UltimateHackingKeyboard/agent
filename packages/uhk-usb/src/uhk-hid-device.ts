@@ -1,5 +1,7 @@
 import { Device, devices, HID } from 'node-hid';
-import { CommandLineArgs, DeviceConnectionState, isEqualArray, LogService } from 'uhk-common';
+import { pathExists } from 'fs-extra';
+import * as path from 'path';
+import { CommandLineArgs, DeviceConnectionState, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
     ConfigBufferId,
@@ -13,7 +15,7 @@ import {
     UsbCommand,
     UsbVariables
 } from './constants';
-import { bufferToString, getTransferData, isUhkDevice, retry, snooze } from './util';
+import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -28,9 +30,11 @@ export class UhkHidDevice {
     private _prevDevices = [];
     private _device: HID;
     private _hasPermission = false;
+    private _udevRulesInfo = UdevRulesInfo.Unkonwn;
 
     constructor(private logService: LogService,
-                private options: CommandLineArgs) {
+                private options: CommandLineArgs,
+                private rootDir: string) {
     }
 
     /**
@@ -54,7 +58,7 @@ export class UhkHidDevice {
             const devs = devices();
             this.logDevices(devs);
 
-            const dev = devs.find((x: Device) => isUhkDevice(x) || x.productId === Constants.BOOTLOADER_ID);
+            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || x.productId === Constants.BOOTLOADER_ID);
 
             if (!dev) {
                 return true;
@@ -74,20 +78,26 @@ export class UhkHidDevice {
     }
 
     /**
-     * Return with true is an UHK Device is connected to the computer.
-     * @returns {boolean}
+     * Return with the USB device communication sate.
+     * @returns {DeviceConnectionState}
      */
-    public getDeviceConnectionState(): DeviceConnectionState {
+    public async getDeviceConnectionStateAsync(): Promise<DeviceConnectionState> {
         const devs = devices();
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             connected: false,
-            hasPermission: this.hasPermission()
+            zeroInterfaceAvailable: false,
+            hasPermission: this.hasPermission(),
+            udevRulesInfo: await this.getUdevInfoAsync()
         };
 
         for (const dev of devs) {
             if (isUhkDevice(dev)) {
                 result.connected = true;
+            }
+
+            if (isUhkZeroInterface(dev)) {
+                result.zeroInterfaceAvailable = true;
             } else if (dev.vendorId === Constants.VENDOR_ID &&
                 dev.productId === Constants.BOOTLOADER_ID) {
                 result.bootloaderActive = true;
@@ -270,7 +280,7 @@ export class UhkHidDevice {
                 this.logService.debug('[UhkHidDevice] Available devices unchanged');
             }
 
-            const dev = devs.find(isUhkDevice);
+            const dev = devs.find(isUhkZeroInterface);
 
             if (!dev) {
                 this.logService.debug('[UhkHidDevice] UHK Device not found:');
@@ -279,8 +289,7 @@ export class UhkHidDevice {
             const device = new HID(dev.path);
             this.logService.debug('[UhkHidDevice] Used device:', JSON.stringify(dev));
             return device;
-        }
-        catch (err) {
+        } catch (err) {
             this.logService.error('[UhkHidDevice] Can not create device:', err);
         }
 
@@ -291,6 +300,31 @@ export class UhkHidDevice {
         for (const logDevice of devs) {
             this.logService.debug(JSON.stringify(logDevice));
         }
+    }
+
+    private async getUdevInfoAsync(): Promise<UdevRulesInfo> {
+        if (this._udevRulesInfo === UdevRulesInfo.Ok) {
+            return UdevRulesInfo.Ok;
+        }
+
+        if (process.platform === 'win32' || process.platform === 'darwin') {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (!(await pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
+            return UdevRulesInfo.NeedToSetup;
+        }
+
+        const expectedUdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60.rules'));
+        const currentUdevSettings = await getFileContentAsync('/etc/udev/rules.d/50-uhk60.rules');
+
+        if (isEqualArray(expectedUdevSettings, currentUdevSettings)) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        return UdevRulesInfo.Different;
     }
 }
 

@@ -1,10 +1,9 @@
 import { CommandLineArgs } from './command-line-args';
+import { DeviceConnectionState } from './device-connection-state';
 
 export interface AppStartInfo {
     commandLineArgs: CommandLineArgs;
-    deviceConnected: boolean;
-    hasPermission: boolean;
-    bootloaderActive: boolean;
+    deviceConnectionState: DeviceConnectionState;
     platform: string;
     osVersion: string;
 }

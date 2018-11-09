@@ -102,7 +102,7 @@ function createWindow() {
     });
     setMenu(win);
     win.maximize();
-    uhkHidDeviceService = new UhkHidDevice(logger, options);
+    uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
     uhkBlhost = new UhkBlhost(logger, packagesDir);
     uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);

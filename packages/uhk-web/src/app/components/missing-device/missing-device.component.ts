@@ -1,14 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/Subscription';
 
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/ignoreElements';
-import 'rxjs/add/operator/takeWhile';
+import { AppState, getMissingDeviceState } from '../../store';
+import { MissingDeviceState } from '../../models/missing-device-state';
 
 @Component({
     selector: 'missing-device',
     templateUrl: './missing-device.component.html'
 })
-export class MissingDeviceComponent {
+export class MissingDeviceComponent implements OnDestroy {
 
-    constructor() {}
+    state: MissingDeviceState;
+
+    private stateSubscription: Subscription;
+
+    constructor(private store: Store<AppState>) {
+        this.stateSubscription = this.store
+            .select(getMissingDeviceState)
+            .subscribe(state => this.state = state);
+    }
+
+    ngOnDestroy(): void {
+        this.stateSubscription.unsubscribe();
+    }
 }

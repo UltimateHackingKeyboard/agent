@@ -18,6 +18,7 @@ import {
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
+    UdevRulesInfo,
     UserConfiguration
 } from 'uhk-common';
 import {
@@ -39,9 +40,10 @@ import {
     UpdateFirmwareSuccessAction,
     UpdateFirmwareWithAction
 } from '../actions/device';
+import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState, getRouterState } from '../index';
+import { AppState, deviceConnected, getRouterState } from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -57,7 +59,7 @@ export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
-        .withLatestFrom(this.store.select(getRouterState))
+        .withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected))
         .do(([action, route]) => {
             const state = action.payload;
 
@@ -65,23 +67,24 @@ export class DeviceEffects {
                 return;
             }
 
-            if (!state.hasPermission) {
-                this.router.navigate(['/privilege']);
+            if (!state.hasPermission || !state.zeroInterfaceAvailable) {
+                return this.router.navigate(['/privilege']);
             }
-            else if (state.bootloaderActive) {
-                this.router.navigate(['/recovery-device']);
-            }
-            else if (state.connected) {
-                this.router.navigate(['/']);
-            }
-            else {
-                this.router.navigate(['/detection']);
-            }
-        })
-        .switchMap(([action, route]) => {
-            const state = action.payload;
 
-            if (state.connected && state.hasPermission) {
+            if (state.bootloaderActive) {
+                return this.router.navigate(['/recovery-device']);
+            }
+
+            if (state.connected && state.zeroInterfaceAvailable) {
+                return this.router.navigate(['/']);
+            }
+
+            return this.router.navigate(['/detection']);
+        })
+        .switchMap(([action, route, connected]) => {
+            const payload = action.payload;
+
+            if (connected && payload.hasPermission && payload.zeroInterfaceAvailable) {
                 return Observable.of(new LoadConfigFromDeviceAction());
             }
 
@@ -99,16 +102,13 @@ export class DeviceEffects {
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
         .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
         .map(action => action.payload)
-        .map((response: any): any => {
+        .switchMap((response: any): any => {
             if (response.success) {
-                return new ConnectionStateChangedAction({
-                    connected: true,
-                    hasPermission: true,
-                    bootloaderActive: false
-                });
+                this.appRendererService.getAppStartInfo();
+                return Observable.empty();
             }
 
-            return new SetupPermissionErrorAction(response.error);
+            return Observable.of(new SetupPermissionErrorAction(response.error));
         });
 
     @Effect({dispatch: false})
@@ -243,6 +243,7 @@ export class DeviceEffects {
 
     constructor(private actions$: Actions,
                 private router: Router,
+                private appRendererService: AppRendererService,
                 private deviceRendererService: DeviceRendererService,
                 private store: Store<AppState>,
                 private dataStorageRepository: DataStorageRepositoryService,

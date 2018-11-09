@@ -66,11 +66,7 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ApplyAppStartInfoAction(appInfo),
-                new ConnectionStateChangedAction({
-                    connected: appInfo.deviceConnected,
-                    hasPermission: appInfo.hasPermission,
-                    bootloaderActive: appInfo.bootloaderActive
-                })
+                new ConnectionStateChangedAction(appInfo.deviceConnectionState)
             ];
         });
 

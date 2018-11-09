@@ -111,6 +111,7 @@ import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloa
 import { FileUploadComponent } from './components/file-upload';
 import { AutoGrowInputComponent } from './components/auto-grow-input';
 import { HelpPageComponent } from './components/agent/help-page/help-page.component';
+import { UdevRulesComponent } from './components/udev-rules/udev-rules.component';
 
 @NgModule({
     declarations: [
@@ -188,7 +189,8 @@ import { HelpPageComponent } from './components/agent/help-page/help-page.compon
         AutoGrowInputComponent,
         HelpPageComponent,
         ExternalUrlDirective,
-        SvgSecondaryRoleComponent
+        SvgSecondaryRoleComponent,
+        UdevRulesComponent
     ],
     imports: [
         CommonModule,
