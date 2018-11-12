@@ -175,6 +175,13 @@ export class MapperService {
         ];
     }
 
+    public getOsSpecificModifierTextByValue(value: KeyModifiers): string {
+        const keyModifier = [...this.getLeftKeyModifiers(), ...this.getRightKeyModifiers()]
+            .find(modifier => modifier.value === value);
+
+        return (keyModifier || {text: ''}).text;
+    }
+
     private initOsSpecificText(): void {
         this.osSpecificTexts = new Map<string, string>();
 
