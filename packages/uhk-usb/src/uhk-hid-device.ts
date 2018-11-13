@@ -1,6 +1,7 @@
 import { Device, devices, HID } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
+import { platform } from 'os';
 import { CommandLineArgs, DeviceConnectionState, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
@@ -272,10 +273,20 @@ export class UhkHidDevice {
     private connectToDevice(): HID {
         try {
             const devs = devices();
-            if (!isEqualArray(this._prevDevices, devs)) {
+            let compareDevices = devs as any;
+
+            if (platform() === 'linux') {
+                compareDevices = devs.map(x => ({
+                    productId: x.productId,
+                    vendorId: x.vendorId,
+                    interface: x.interface
+                }));
+            }
+
+            if (!isEqualArray(this._prevDevices, compareDevices)) {
                 this.logService.debug('[UhkHidDevice] Available devices:');
                 this.logDevices(devs);
-                this._prevDevices = devs;
+                this._prevDevices = compareDevices;
             } else {
                 this.logService.debug('[UhkHidDevice] Available devices unchanged');
             }
