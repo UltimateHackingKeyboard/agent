@@ -6,6 +6,26 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.12] - 2018-11-14
+
+Firmware: 8.**5.3** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.3)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- When the firmware of the right keyboard half is larger or equal than 8.4.3 then display the "Lock layer when double tapping this key" checkbox and remove "... macro playback is not implemented yet..." notices.
+- Upgrade to node-hid 0.7.3 which utilizes the hidraw USB driver on Linux instead of libusb.
+- Update udev rules for the new hidraw based node-hid.
+- Improve the "Cannot find your UHK" and the privilege escalation screens to show more relevant messages when transitioning from the libusb based node-hid to the hidraw based node-hid.
+- Fix the rendering of macro actions, so that their text doesn't overlap.
+- Add "International {1,2,3}" and "Language {1,2}" keypress actions.
+- Add icon for the Play/Pause keypress action.
+- Remove the Stop/Eject keypress action.
+- Make the "Type text" macro action accept clipboard data on Mac.
+- Display "You can't change this mapping because on the base layer a layer switcher key targets this key." in the key action popover whenever it applies.
+- Fix UI bug which could be triggered by tapping Tab in the keymap abbreviation input.
+- Don't trigger Agent shortcuts when capturing keypresses.
+- Log USB device list before checking permissions.
+- Show OS-specific modifiers in the title bar of macro actions.
+- Only show the device list on Linux when the list actually changes.
+
 ## [1.2.11] - 2018-10-03
 
 Firmware: 8.2.5 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.2.5)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
