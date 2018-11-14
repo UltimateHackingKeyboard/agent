@@ -102,14 +102,6 @@ if (TEST_BUILD || gitTag) {
     builder.build({
         dir: DIR,
         targets: target,
-        appMetadata: {
-            main: 'electron-main.js',
-            name: 'UHK Agent',
-            author: {
-                name: 'Ultimate Gadget Laboratories'
-            },
-            version: rootJson.version
-        },
         config: {
             directories: {
                 app: electron_build_folder
