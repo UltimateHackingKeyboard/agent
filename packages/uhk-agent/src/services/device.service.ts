@@ -220,10 +220,6 @@ export class DeviceService {
 
             await this.operations.updateRightFirmware();
 
-            await snooze(500);
-
-            this.pollUhkDevice();
-
             response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {

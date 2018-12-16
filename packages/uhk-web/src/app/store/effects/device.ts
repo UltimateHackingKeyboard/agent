@@ -18,7 +18,6 @@ import {
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
-    UdevRulesInfo,
     UserConfiguration
 } from 'uhk-common';
 import {
@@ -67,12 +66,16 @@ export class DeviceEffects {
                 return;
             }
 
-            if (!state.hasPermission || !state.zeroInterfaceAvailable) {
+            if (!state.hasPermission) {
                 return this.router.navigate(['/privilege']);
             }
 
             if (state.bootloaderActive) {
                 return this.router.navigate(['/recovery-device']);
+            }
+
+            if (!state.zeroInterfaceAvailable) {
+                return this.router.navigate(['/privilege']);
             }
 
             if (state.connected && state.zeroInterfaceAvailable) {
@@ -240,6 +243,10 @@ export class DeviceEffects {
     @Effect({dispatch: false}) enableUsbStackTest$ = this.actions$
         .ofType<EnableUsbStackTestAction>(ActionTypes.ENABLE_USB_STACK_TEST)
         .do(() => this.deviceRendererService.enableUsbStackTest());
+
+    @Effect({dispatch: false}) startConnectionPoller$ = this.actions$
+        .ofType(ActionTypes.START_CONNECTION_POLLER)
+        .do(() => this.deviceRendererService.startConnectionPoller());
 
     constructor(private actions$: Actions,
                 private router: Router,
