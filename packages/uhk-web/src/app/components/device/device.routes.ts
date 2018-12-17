@@ -5,7 +5,6 @@ import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
 import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
 import { LEDBrightnessComponent } from './led-brightness/led-brightness.component';
 import { RestoreConfigurationComponent } from './restore-configuration/restore-configuration.component';
-import { RecoveryModeComponent } from './recovery-mode/recovery-mode.component';
 
 export const deviceRoutes: Routes = [
     {
@@ -35,10 +34,6 @@ export const deviceRoutes: Routes = [
             {
                 path: 'restore-user-configuration',
                 component: RestoreConfigurationComponent
-            },
-            {
-                path: 'recovery-mode',
-                component: RecoveryModeComponent
             }
         ]
     }

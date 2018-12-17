@@ -15,6 +15,11 @@
                         [disabled]="flashFirmwareButtonDisbabled$ | async"
                         (click)="onRecoveryDevice()">Fix device
                 </button>
+                <button class="btn btn-default"
+                        type="button"
+                        [disabled]="updatingFirmware$ | async"
+                        (click)="onClose()">Close
+                </button>
             </p>
         </div>
         <div class="flex-grow">

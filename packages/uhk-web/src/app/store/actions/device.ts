@@ -29,7 +29,8 @@ export const ActionTypes = {
     RESTORE_CONFIGURATION_FROM_BACKUP: type(PREFIX + 'Restore configuration from backup'),
     RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS: type(PREFIX + 'Restore configuration from backup success'),
     RECOVERY_DEVICE: type(PREFIX + 'Recovery device'),
-    ENABLE_USB_STACK_TEST: type(PREFIX + 'USB stack test')
+    ENABLE_USB_STACK_TEST: type(PREFIX + 'USB stack test'),
+    START_CONNECTION_POLLER: type(PREFIX + 'Start connection poller')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -104,6 +105,7 @@ export class UpdateFirmwareReplyAction implements Action {
 
 export class UpdateFirmwareSuccessAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_SUCCESS;
+
     constructor(public payload: HardwareModules) {
     }
 }
@@ -149,6 +151,10 @@ export class EnableUsbStackTestAction implements Action {
     type = ActionTypes.ENABLE_USB_STACK_TEST;
 }
 
+export class StartConnectionPollerAction implements Action {
+    type = ActionTypes.START_CONNECTION_POLLER;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -172,4 +178,5 @@ export type Actions
     | RestoreUserConfigurationFromBackupSuccessAction
     | RecoveryDeviceAction
     | EnableUsbStackTestAction
+    | StartConnectionPollerAction
     ;
