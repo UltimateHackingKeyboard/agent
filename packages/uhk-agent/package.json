@@ -20,6 +20,7 @@
     "node-hid": "0.7.3",
     "sudo-prompt": "7.0.0",
     "tmp": "0.0.33",
+    "tslib": "1.9.3",
     "uhk-common": "^1.0.0",
     "uhk-usb": "^1.0.0"
   },
