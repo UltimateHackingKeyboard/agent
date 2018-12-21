@@ -18,6 +18,9 @@
     "test": "jasmine-ts --config=jasmine.json",
     "coverage": "nyc jasmine-ts --config=jasmine.json"
   },
+  "dependencies": {
+    "tslib": "1.9.3"
+  },
   "license": "GPL-3.0",
   "nyc": {
     "extension": [
