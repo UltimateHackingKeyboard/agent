@@ -1,5 +1,8 @@
 import { HardwareModuleInfo, LogService, UhkBuffer } from 'uhk-common';
+import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
+
 import {
+    Constants,
     EnumerationModes,
     EnumerationNameToProductId,
     KbootCommands,
@@ -12,14 +15,8 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
-import { snooze } from './util';
-import {
-    convertBufferToIntArray,
-    getTransferBuffers,
-    DevicePropertyIds,
-    UsbCommand,
-    ConfigBufferId
-} from '../index';
+import { readBootloaderFirmwareFromHexFileAsync, snooze } from './util';
+import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
 export class UhkOperations {
@@ -32,22 +29,37 @@ export class UhkOperations {
     public async updateRightFirmware(firmwarePath = this.getFirmwarePath()) {
         this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.debug('[UhkOperations] Start flashing right firmware');
-        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
 
+        this.logService.info('[UhkOperations] Reenumerate bootloader');
         await this.device.reenumerate(EnumerationModes.Bootloader);
         this.device.close();
-        await this.blhost.runBlhostCommand([...prefix, 'flash-security-disable', '0403020108070605']);
-        await this.blhost.runBlhostCommand([...prefix, 'flash-erase-region', '0xc000', '475136']);
-        await this.blhost.runBlhostCommand([...prefix, 'flash-image', `"${firmwarePath}"`]);
-        await this.blhost.runBlhostCommand([...prefix, 'reset']);
+        const kboot = new KBoot(new UsbPeripheral({ productId: Constants.BOOTLOADER_ID, vendorId: Constants.VENDOR_ID }));
+        this.logService.info('[UhkOperations] Flash security disable');
+        await kboot.flashSecurityDisable([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
+        this.logService.info('[UhkOperations] Flash erase region');
+        await kboot.flashEraseRegion(0xc000, 475136);
+
+        this.logService.debug('[UhkOperations] Read RIGHT firmware from file');
+        const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
+        this.logService.info('[UhkOperations] Write memory');
+        for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
+            const dataOption: DataOption = {
+                startAddress,
+                data
+            };
+
+            await kboot.writeMemory(dataOption);
+        }
+
+        this.logService.info('[UhkOperations] Reset bootloader');
+        await kboot.reset();
+        this.logService.info('[UhkOperations] Close communication channels');
+        kboot.close();
         this.logService.debug('[UhkOperations] Right firmware successfully flashed');
     }
 
     public async updateLeftModule(firmwarePath = this.getLeftModuleFirmwarePath()) {
         this.logService.debug('[UhkOperations] Start flashing left module firmware');
-
-        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.buspal.toString(16)}`];
-        const buspalPrefix = [...prefix, `--buspal i2c,${ModuleSlotToI2cAddress.leftHalf}`];
 
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
@@ -66,10 +78,43 @@ export class UhkOperations {
 
         await this.device.reenumerate(EnumerationModes.Buspal);
         this.device.close();
-        await this.blhost.runBlhostCommandRetry([...buspalPrefix, 'get-property', '1']);
-        await this.blhost.runBlhostCommand([...buspalPrefix, 'flash-erase-all-unsecure']);
-        await this.blhost.runBlhostCommand([...buspalPrefix, 'write-memory', '0x0', `"${firmwarePath}"`]);
-        await this.blhost.runBlhostCommand([...prefix, 'reset']);
+
+        let tryCount = 0;
+        const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+        const kboot = new KBoot(usbPeripheral);
+        while (true) {
+            try {
+                this.logService.debug('[UhkOperations] Try to connect to the LEFT keyboard');
+                await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
+                await kboot.getProperty(Properties.BootloaderVersion);
+                break;
+            } catch {
+                if (tryCount > 100) {
+                    throw new Error('Can not connect to the LEFT keyboard');
+                }
+            } finally {
+                kboot.close();
+            }
+            await snooze(100);
+            tryCount++;
+        }
+        this.logService.debug('[UhkOperations] Flash erase all on LEFT keyboard');
+        await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
+        await kboot.flashEraseAllUnsecure();
+
+        this.logService.debug('[UhkOperations] Read LEFT firmware from file');
+        const configData = fs.readFileSync(firmwarePath);
+
+        this.logService.debug('[UhkOperations] Write memory');
+        await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
+        await kboot.writeMemory({ startAddress: 0, data: configData });
+
+        this.logService.debug('[UhkOperations] Reset LEFT keyboard');
+        await kboot.reset();
+
+        this.logService.info('[UhkOperations] Close communication channels');
+        kboot.close();
+
         await snooze(1000);
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
@@ -173,8 +218,7 @@ export class UhkOperations {
             await this.sendUserConfigToKeyboard(buffer);
             this.logService.debug('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.device.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
-        }
-        catch (error) {
+        } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
         } finally {
@@ -221,8 +265,7 @@ export class UhkOperations {
                 moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
                 firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
             };
-        }
-        catch (error) {
+        } catch (error) {
             this.logService.error('[DeviceOperation] Could not read left module version information', error);
         }
 

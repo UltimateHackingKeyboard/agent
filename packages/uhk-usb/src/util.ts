@@ -1,6 +1,7 @@
 import { Device } from 'node-hid';
 import { readFile } from 'fs-extra';
 import { EOL } from 'os';
+import MemoryMap from 'nrf-intel-hex';
 import { LogService } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants';
@@ -121,4 +122,11 @@ export const getFileContentAsync = async (filePath: string): Promise<Array<strin
         .split(EOL)
         .map(x => x.trim())
         .filter(x => !x.startsWith('#') && x.length > 0);
+};
+
+export const readBootloaderFirmwareFromHexFileAsync = async (hexFilePath: string): Promise<Map<any, any>> => {
+    const fileContent = await readFile(hexFilePath, { encoding: 'utf8' });
+    const memoryMap = MemoryMap.fromHex(fileContent);
+
+    return memoryMap;
 };

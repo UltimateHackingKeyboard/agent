@@ -150,6 +150,11 @@ export class DeviceService {
             }
 
             this.logService.error('[DeviceService] Read hardware modules information failed', err);
+
+            return {
+                leftModuleInfo: {},
+                rightModuleInfo: {}
+            };
         }
     }
 
@@ -170,8 +175,8 @@ export class DeviceService {
             this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
             this.logService.debug('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
 
-            this.device.resetDeviceCache();
             this.stopPollTimer();
+            this.device.resetDeviceCache();
 
             if (data.firmware) {
                 firmwarePathData = await saveTmpFirmware(data.firmware);
