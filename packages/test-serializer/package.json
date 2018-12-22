@@ -19,6 +19,7 @@
   "devDependencies": {
   },
   "scripts": {
-    "test": "jasmine-ts --config=jasmine.json"
+    "test": "jasmine-ts --config=jasmine.json",
+    "lint": "tslint --project tsconfig.json"
   }
 }

@@ -16,7 +16,8 @@
     "copy:scancodes": "copyfiles ./src/config-serializer/config-items/scancodes.json dist",
     "copy:secondary-roles": "copyfiles ./src/config-serializer/config-items/secondaryRole.json dist",
     "test": "jasmine-ts --config=jasmine.json",
-    "coverage": "nyc jasmine-ts --config=jasmine.json"
+    "coverage": "nyc jasmine-ts --config=jasmine.json",
+    "lint": "tslint --project tsconfig.json"
   },
   "dependencies": {
     "tslib": "1.9.3"
