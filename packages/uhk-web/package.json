@@ -5,13 +5,17 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --aot --base-href=\"\"",
-    "test": "ng test --watch false",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "build:renderer": "webpack --config webpack.config.js",
+    "build": "run-p -sn build:*",
+    "build:web": "ng build --prod --aot --base-href=\"\"",
+    "build:renderer": "cross-env AOT_BUILD=true webpack --config webpack.config.js",
     "server:renderer": "webpack --config webpack.config.js --watch",
-    "pree2e": "webdriver-manager update --standalone false --gecko false --quiet"
+    "test-skip": "ng test --watch false",
+    "lint": "run-p -snc lint:*",
+    "lint:ng": "ng lint",
+    "lint:renderer": "tslint --project src/tsconfig.renderer.json",
+    "lint:style": "stylelint \"src/**/*.scss\" --syntax scss",
+    "pree2e": "webdriver-manager update --standalone false --gecko false --quiet",
+    "e2e": "ng e2e"
   },
   "private": true,
   "devDependencies": {

@@ -34,6 +34,7 @@
     "electron:spe": "electron ./dist/electron-main.js --spe",
     "build": "webpack && npm run install:build-deps && npm run build:usb && npm run download-firmware && npm run copy-to-tmp-folder",
     "build:usb": "electron-rebuild -w node-hid -p -m ./dist",
+    "lint": "tslint --project tsconfig.json",
     "install:build-deps": "cd ./dist && npm i",
     "download-firmware": "node ../../scripts/download-firmware.js",
     "copy-to-tmp-folder": "node ../../scripts/copy-to-tmp-folder.js"

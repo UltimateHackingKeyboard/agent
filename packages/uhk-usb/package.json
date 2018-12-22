@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "tslint --project tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "8.0.28"
