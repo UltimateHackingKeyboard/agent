@@ -80,7 +80,6 @@ export class UhkOperations {
         this.device.close();
         this.logService.info('[UhkOperations] Waiting for buspal');
         await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
-        await snooze(1000);
         let tryCount = 0;
         const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
         const kboot = new KBoot(usbPeripheral);

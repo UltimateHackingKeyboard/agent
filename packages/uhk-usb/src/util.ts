@@ -140,6 +140,8 @@ export const waitForDevice = async (vendorId: number, productId: number): Promis
             .some(dev => dev.vendorId === vendorId && dev.productId === productId);
 
         if (isAvailable) {
+            await snooze(1000);
+
             return;
         }
 

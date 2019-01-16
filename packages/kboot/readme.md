@@ -44,6 +44,10 @@ If someone needs other commands, (s)he can easily implement it based on existing
   const kboot = new KBoot(usbPeripheral);
   // Call the command
   const version = await kboot.getBootloaderVersion();
+  // ... more commands
+  
+  // Close the communication channel. Release resources
+  kboot.close();
 ```
 
 If you have to communicate other I2C device over USB call `kboot.configureI2c(i2cId)` before the command.
