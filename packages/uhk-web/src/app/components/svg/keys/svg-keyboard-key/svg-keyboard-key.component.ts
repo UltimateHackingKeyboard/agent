@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { Key } from 'ts-keycode-enum';
+
 import {
     KeyAction,
     KeyModifiers,
@@ -174,7 +176,14 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         const code: number = e.keyCode;
 
         if (this.recording) {
-            e.preventDefault();
+            event.preventDefault();
+
+            // Stop recording on pressing Escape.
+            if (code === Key.Escape) {
+                this.reset();
+
+                return;
+            }
 
             if (this.captureService.hasMap(code)) {
                 // If the Alt or Shift key not released after start the capturing
