@@ -8,6 +8,7 @@ import { convertLittleEndianNumber, convertToHexString, deviceFinder, encodeComm
 import { decodeCommandResponse } from './util/usb/decode-command-response';
 import { validateCommandParams } from './util/usb/encode-command-option';
 import { Commands, ResponseTags } from './enums';
+import { snooze } from './util/snooze';
 
 const logger = debug('kboot:usb');
 const WRITE_DATA_STREAM_PACKAGE_LENGTH = 32;
@@ -262,5 +263,3 @@ export class UsbPeripheral implements Peripheral {
         return commandResponse;
     }
 }
-
-const snooze = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
