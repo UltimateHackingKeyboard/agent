@@ -22,6 +22,6 @@
   "peer-dependencies": {},
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
-    "lint": "tslint ./tsconfig.json"
+    "lint": "tslint --project  tsconfig.json"
   }
 }
