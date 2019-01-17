@@ -3,7 +3,7 @@ Javascript implementation of the Kinetis Bootloader protocol
 
 Based on the [Kinetis Bootloader v2.0.0 Reference Manual](https://www.google.com/url?q=https://github.com/UltimateHackingKeyboard/bootloader/blob/master/doc/Kinetis%2520Bootloader%2520v2.0.0%2520Reference%2520Manual.pdf&sa=D&source=hangouts&ust=1545651170104000&usg=AFQjCNGgRIbro08hQ5MuAr-YtNkd4-ROJQ)
 
-## Supported direct communication channels/protocols
+## Supported communication channels/protocols
 - [x] USB
 - [ ] I2C
 - [ ] SPI
@@ -39,7 +39,7 @@ If someone needs other commands, (s)he can easily implement it based on existing
 
 ```Typescript
   // Initialize peripheral
-  const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+  const usbPeripheral = new UsbPeripheral({ productId: 1, vendorId: 1 });
   // Initialize Kboot
   const kboot = new KBoot(usbPeripheral);
   // Call the command
@@ -53,10 +53,13 @@ If someone needs other commands, (s)he can easily implement it based on existing
 If you have to communicate other I2C device over USB call `kboot.configureI2c(i2cId)` before the command.
 
 ```Typescript
-  const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+  const usbPeripheral = new UsbPeripheral({ productId: 1, vendorId: 1 });
   const kboot = new KBoot(usbPeripheral);
   
   // Get the bootloader version of I2C device
   await kboot.configureI2c(i2cId);
   const version = await kboot.getBootloaderVersion();
 ```
+
+## TODO
+- [ ] Improve exception handling
