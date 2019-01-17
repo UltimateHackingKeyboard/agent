@@ -3,7 +3,7 @@ import { BootloaderVersion, UsbPeripheral } from '../src';
 import { KBoot } from '../src/kboot';
 import { DataOption } from '../index';
 
-describe('UHK Integration tests', () => {
+xdescribe('UHK Integration tests', () => {
     describe('bootloader', () => {
         let usb: UsbPeripheral;
         let kboot: KBoot;
