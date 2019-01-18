@@ -1,6 +1,7 @@
-import { Device } from 'node-hid';
+import { Device, devices } from 'node-hid';
 import { readFile } from 'fs-extra';
 import { EOL } from 'os';
+import MemoryMap from 'nrf-intel-hex';
 import { LogService } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants';
@@ -121,4 +122,31 @@ export const getFileContentAsync = async (filePath: string): Promise<Array<strin
         .split(EOL)
         .map(x => x.trim())
         .filter(x => !x.startsWith('#') && x.length > 0);
+};
+
+export const readBootloaderFirmwareFromHexFileAsync = async (hexFilePath: string): Promise<Map<any, any>> => {
+    const fileContent = await readFile(hexFilePath, { encoding: 'utf8' });
+    const memoryMap = MemoryMap.fromHex(fileContent);
+
+    return memoryMap;
+};
+
+export const waitForDevice = async (vendorId: number, productId: number): Promise<void> => {
+    const startTime = new Date().getTime() + 15000;
+
+    while (startTime > new Date().getTime()) {
+
+        const isAvailable = devices()
+            .some(dev => dev.vendorId === vendorId && dev.productId === productId);
+
+        if (isAvailable) {
+            await snooze(1000);
+
+            return;
+        }
+
+        await snooze(250);
+    }
+
+    throw new Error(`Cannot find device with vendorId: ${vendorId}, productId: ${productId}`);
 };

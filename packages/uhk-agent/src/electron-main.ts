@@ -16,7 +16,6 @@ import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
-import { UhkBlhost } from '../../uhk-usb/src';
 import * as isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 
@@ -36,7 +35,6 @@ let win: Electron.BrowserWindow;
 autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
-let uhkBlhost: UhkBlhost;
 let uhkHidDeviceService: UhkHidDevice;
 let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
@@ -103,8 +101,7 @@ function createWindow() {
     setMenu(win);
     win.maximize();
     uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
-    uhkBlhost = new UhkBlhost(logger, packagesDir);
-    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
+    uhkOperations = new UhkOperations(logger, uhkHidDeviceService, packagesDir);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
