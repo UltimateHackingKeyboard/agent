@@ -7,7 +7,7 @@
             [width]="key.width" [height]="key.height"
             [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
             [attr.fill]="key.fill"
-            [attr.tabindex]="0"
+            tabindex="-1"
             [keyAction]="keyActions[i]"
             [active]="selected && i == selectedKey.keyId"
             [keybindAnimationEnabled]="keybindAnimationEnabled"
@@ -16,6 +16,5 @@
             (capture)="onCapture(i, $event)"
             (mouseenter)="onKeyHover(i, $event, true)"
             (mouseleave)="onKeyHover(i, $event, false)"
-            [attr.tabindex]="-1"
     />
 </ng-container>
