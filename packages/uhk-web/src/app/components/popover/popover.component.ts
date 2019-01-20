@@ -163,12 +163,13 @@ export class PopoverComponent implements OnChanges {
     }
 
     ngOnChanges(change: SimpleChanges) {
+        let tab: TabHeader;
+
         if (this.keyPosition && this.wrapPosition && (change['keyPosition'] || change['wrapPosition'])) {
             this.calculatePosition();
         }
 
         if (change['defaultKeyAction']) {
-            let tab: TabHeader;
             this.disableRemapOnAllLayer = false;
 
             if (this.defaultKeyAction instanceof KeystrokeAction) {
@@ -192,12 +193,13 @@ export class PopoverComponent implements OnChanges {
                 tabHeader.disabled = allowOnlyLayerTab && tabHeader.tabName !== TabName.Layer;
                 console.log(tabHeader);
             }
-            this.selectTab(tab);
         }
 
         if (change['visible']) {
             if (change['visible'].currentValue) {
                 this.animationState = 'opened';
+
+                this.selectTab(tab);
             } else {
                 this.animationState = 'closed';
             }
