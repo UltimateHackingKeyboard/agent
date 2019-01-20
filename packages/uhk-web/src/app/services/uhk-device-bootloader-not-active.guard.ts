@@ -3,8 +3,7 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
+import { tap } from 'rxjs/operators';
 
 import { AppState, bootloaderActive } from '../store';
 
@@ -15,10 +14,12 @@ export class UhkDeviceBootloaderNotActiveGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         return this.store.select(bootloaderActive)
-            .do(active => {
-                if (!active) {
-                    this.router.navigate(['/']);
-                }
-            });
+            .pipe(
+                tap(active => {
+                    if (!active) {
+                        this.router.navigate(['/']);
+                    }
+                })
+            );
     }
 }

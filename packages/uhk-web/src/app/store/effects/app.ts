@@ -2,13 +2,8 @@ import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
+import { map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/catch';
 
 import { AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
 import {
@@ -32,13 +27,15 @@ export class ApplicationEffects {
     @Effect()
     appStart$: Observable<Action> = this.actions$
         .ofType(ActionTypes.APP_BOOTSRAPPED)
-        .startWith(new AppStartedAction())
-        .do(() => {
-            this.logService.info('Renderer appStart effect start');
-            this.appUpdateRendererService.sendAppStarted();
-            this.appRendererService.getAppStartInfo();
-            this.logService.info('Renderer appStart effect end');
-        });
+        .pipe(
+            startWith(new AppStartedAction()),
+            tap(() => {
+                this.logService.info('Renderer appStart effect start');
+                this.appUpdateRendererService.sendAppStarted();
+                this.appRendererService.getAppStartInfo();
+                this.logService.info('Renderer appStart effect end');
+            })
+        );
 
     @Effect({dispatch: false})
     appStartInfo$: Observable<Action> = this.actions$
@@ -50,13 +47,15 @@ export class ApplicationEffects {
     @Effect({dispatch: false})
     showNotification$: Observable<Action> = this.actions$
         .ofType<ShowNotificationAction>(ActionTypes.APP_SHOW_NOTIFICATION)
-        .map(action => action.payload)
-        .do((notification: Notification) => {
-            if (notification.type === NotificationType.Undoable) {
-                return;
-            }
-            this.notifierService.notify(notification.type, notification.message);
-        });
+        .pipe(
+            map(action => action.payload),
+            tap((notification: Notification) => {
+                if (notification.type === NotificationType.Undoable) {
+                    return;
+                }
+                this.notifierService.notify(notification.type, notification.message);
+            })
+        );
 
     @Effect()
     processStartInfo$: Observable<Action> = this.actions$
@@ -77,16 +76,18 @@ export class ApplicationEffects {
 
     @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
         .ofType<OpenUrlInNewWindowAction>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
-        .withLatestFrom(this.store.select(runningInElectron))
-        .do(([action, inElectron]) => {
-            const url = action.payload;
+        .pipe(
+            withLatestFrom(this.store.select(runningInElectron)),
+            tap(([action, inElectron]) => {
+                const url = action.payload;
 
-            if (inElectron) {
-                this.appRendererService.openUrl(url);
-            } else {
-                window.open(url, '_blank');
-            }
-        });
+                if (inElectron) {
+                    this.appRendererService.openUrl(url);
+                } else {
+                    window.open(url, '_blank');
+                }
+            })
+        );
 
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,

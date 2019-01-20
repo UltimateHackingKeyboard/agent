@@ -3,8 +3,7 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
+import { map, tap } from 'rxjs/operators';
 
 import { AppState, deviceConfigurationLoaded } from '../store';
 
@@ -15,11 +14,13 @@ export class UhkDeviceLoadedGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         return this.store.select(deviceConfigurationLoaded)
-            .do(loaded => {
-                if (loaded) {
-                    this.router.navigate(['/']);
-                }
-            })
-            .map(loaded => !loaded);
+            .pipe(
+                tap(loaded => {
+                    if (loaded) {
+                        this.router.navigate(['/']);
+                    }
+                }),
+                map(loaded => !loaded)
+            );
     }
 }

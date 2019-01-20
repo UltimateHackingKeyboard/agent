@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import { map, tap } from 'rxjs/operators';
 
 import { AppState, deviceConnected } from '../store/index';
 
@@ -14,11 +14,13 @@ export class UhkDeviceConnectedGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         return this.store.select(deviceConnected)
-            .do(connected => {
-                if (connected) {
-                    this.router.navigate(['/']);
-                }
-            })
-            .map(connected => !connected);
+            .pipe(
+                tap(connected => {
+                    if (connected) {
+                        this.router.navigate(['/']);
+                    }
+                }),
+                map(connected => !connected)
+            );
     }
 }

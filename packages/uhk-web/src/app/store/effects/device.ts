@@ -3,15 +3,10 @@ import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/timer';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/withLatestFrom';
-import 'rxjs/add/operator/switchMap';
+import { of } from 'rxjs/observable/of';
+import { empty } from 'rxjs/observable/empty';
+import { timer } from 'rxjs/observable/timer';
+import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import {
     FirmwareUpgradeIpcResponse,
@@ -58,195 +53,228 @@ export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
         .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
-        .withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected))
-        .do(([action, route]) => {
-            const state = action.payload;
+        .pipe(
+            withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected)),
+            tap(([action, route]) => {
+                const state = action.payload;
 
-            if (route.state && route.state.url.startsWith('/device/firmware')) {
-                return;
-            }
+                if (route.state && route.state.url.startsWith('/device/firmware')) {
+                    return;
+                }
 
-            if (!state.hasPermission) {
-                return this.router.navigate(['/privilege']);
-            }
+                if (!state.hasPermission) {
+                    return this.router.navigate(['/privilege']);
+                }
 
-            if (state.bootloaderActive) {
-                return this.router.navigate(['/recovery-device']);
-            }
+                if (state.bootloaderActive) {
+                    return this.router.navigate(['/recovery-device']);
+                }
 
-            if (!state.zeroInterfaceAvailable) {
-                return this.router.navigate(['/privilege']);
-            }
+                if (!state.zeroInterfaceAvailable) {
+                    return this.router.navigate(['/privilege']);
+                }
 
-            if (state.connected && state.zeroInterfaceAvailable) {
-                return this.router.navigate(['/']);
-            }
+                if (state.connected && state.zeroInterfaceAvailable) {
+                    return this.router.navigate(['/']);
+                }
 
-            return this.router.navigate(['/detection']);
-        })
-        .switchMap(([action, route, connected]) => {
-            const payload = action.payload;
+                return this.router.navigate(['/detection']);
+            }),
+            switchMap(([action, route, connected]) => {
+                const payload = action.payload;
 
-            if (connected && payload.hasPermission && payload.zeroInterfaceAvailable) {
-                return Observable.of(new LoadConfigFromDeviceAction());
-            }
+                if (connected && payload.hasPermission && payload.zeroInterfaceAvailable) {
+                    return Observable.of(new LoadConfigFromDeviceAction());
+                }
 
-            return Observable.empty();
-        });
+                return empty();
+            })
+        );
 
-    @Effect({dispatch: false})
+    @Effect({ dispatch: false })
     setPrivilegeOnLinux$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SET_PRIVILEGE_ON_LINUX)
-        .do(() => {
-            this.deviceRendererService.setPrivilegeOnLinux();
-        });
+        .pipe(
+            tap(() => {
+                this.deviceRendererService.setPrivilegeOnLinux();
+            })
+        );
 
     @Effect()
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
         .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
-        .map(action => action.payload)
-        .switchMap((response: any): any => {
-            if (response.success) {
-                this.appRendererService.getAppStartInfo();
-                return Observable.empty();
-            }
+        .pipe(
+            map(action => action.payload),
+            switchMap((response: any): any => {
+                if (response.success) {
+                    this.appRendererService.getAppStartInfo();
+                    return empty();
+                }
 
-            return Observable.of(new SetupPermissionErrorAction(response.error));
-        });
+                return of(new SetupPermissionErrorAction(response.error));
+            })
+        );
 
-    @Effect({dispatch: false})
+    @Effect({ dispatch: false })
     saveConfiguration$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_CONFIGURATION)
-        .withLatestFrom(this.store)
-        .do(([action, state]) => {
-            setTimeout(() => this.sendUserConfigToKeyboard(state.userConfiguration, state.app.hardwareConfig), 100);
-        })
-        .switchMap(() => Observable.empty());
+        .pipe(
+            withLatestFrom(this.store),
+            tap(([action, state]) => {
+                setTimeout(() => this.sendUserConfigToKeyboard(state.userConfiguration, state.app.hardwareConfig), 100);
+            }),
+            switchMap(() => empty())
+        );
 
     @Effect()
     saveConfigurationReply$: Observable<Action> = this.actions$
         .ofType<SaveConfigurationReplyAction>(ActionTypes.SAVE_CONFIGURATION_REPLY)
-        .map(action => action.payload)
-        .mergeMap((response: IpcResponse) => {
-            if (response.success) {
-                return [
-                    new SaveToKeyboardSuccessAction()
-                ];
-            }
+        .pipe(
+            map(action => action.payload),
+            mergeMap((response: IpcResponse) => {
+                if (response.success) {
+                    return [
+                        new SaveToKeyboardSuccessAction()
+                    ];
+                }
 
-            return [
-                new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: response.error.message
-                }),
-                new SaveToKeyboardSuccessFailed()
-            ];
-        });
+                return [
+                    new ShowNotificationAction({
+                        type: NotificationType.Error,
+                        message: response.error.message
+                    }),
+                    new SaveToKeyboardSuccessFailed()
+                ];
+            })
+        );
 
     @Effect()
     autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
         .ofType(ActionTypes.SAVE_TO_KEYBOARD_SUCCESS)
-        .withLatestFrom(this.store)
-        .switchMap(([action, state]) => Observable.timer(1000)
-            .mergeMap(() => {
-                const actions = [new HideSaveToKeyboardButton()];
+        .pipe(
+            withLatestFrom(this.store),
+            switchMap(([action, state]) => timer(1000)
+                .mergeMap(() => {
+                    const actions = [new HideSaveToKeyboardButton()];
 
-                if (state.device.hasBackupUserConfiguration) {
-                    actions.push(new RestoreUserConfigurationFromBackupSuccessAction());
-                    this.router.navigate(['/']);
-                }
+                    if (state.device.hasBackupUserConfiguration) {
+                        actions.push(new RestoreUserConfigurationFromBackupSuccessAction());
+                        this.router.navigate(['/']);
+                    }
 
-                return actions;
-            })
+                    return actions;
+                })
+            )
         );
 
     @Effect()
     resetMouseSpeedSettings$: Observable<Action> = this.actions$
         .ofType(ActionTypes.RESET_MOUSE_SPEED_SETTINGS)
-        .switchMap(() => {
-            const config = this.defaultUserConfigurationService.getDefault();
-            const mouseSpeedDefaultSettings = {};
-            const mouseSpeedProps = [
-                'mouseMoveInitialSpeed',
-                'mouseMoveAcceleration',
-                'mouseMoveDeceleratedSpeed',
-                'mouseMoveBaseSpeed',
-                'mouseMoveAcceleratedSpeed',
-                'mouseScrollInitialSpeed',
-                'mouseScrollAcceleration',
-                'mouseScrollDeceleratedSpeed',
-                'mouseScrollBaseSpeed',
-                'mouseScrollAcceleratedSpeed'
-            ];
-            mouseSpeedProps.forEach(prop => {
-                mouseSpeedDefaultSettings[prop] = config[prop];
-            });
-            return Observable.of(new LoadResetUserConfigurationAction(<UserConfiguration>mouseSpeedDefaultSettings));
-        });
+        .pipe(
+            switchMap(() => {
+                const config = this.defaultUserConfigurationService.getDefault();
+                const mouseSpeedDefaultSettings = {};
+                const mouseSpeedProps = [
+                    'mouseMoveInitialSpeed',
+                    'mouseMoveAcceleration',
+                    'mouseMoveDeceleratedSpeed',
+                    'mouseMoveBaseSpeed',
+                    'mouseMoveAcceleratedSpeed',
+                    'mouseScrollInitialSpeed',
+                    'mouseScrollAcceleration',
+                    'mouseScrollDeceleratedSpeed',
+                    'mouseScrollBaseSpeed',
+                    'mouseScrollAcceleratedSpeed'
+                ];
+                mouseSpeedProps.forEach(prop => {
+                    mouseSpeedDefaultSettings[prop] = config[prop];
+                });
+                return of(new LoadResetUserConfigurationAction(<UserConfiguration>mouseSpeedDefaultSettings));
+            })
+        );
 
     @Effect() resetUserConfiguration$: Observable<Action> = this.actions$
         .ofType(ActionTypes.RESET_USER_CONFIGURATION)
-        .switchMap(() => {
-            const config = this.defaultUserConfigurationService.getDefault();
-            return Observable.of(new LoadResetUserConfigurationAction(config));
-        });
+        .pipe(
+            switchMap(() => {
+                const config = this.defaultUserConfigurationService.getDefault();
+                return of(new LoadResetUserConfigurationAction(config));
+            })
+        );
 
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
         .ofType<ApplyUserConfigurationFromFileAction
             | LoadResetUserConfigurationAction>(
             UserConfigActions.LOAD_RESET_USER_CONFIGURATION,
             UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
-        .map(action => action.payload)
-        .switchMap((config: UserConfiguration) => {
-            this.dataStorageRepository.saveConfig(config);
+        .pipe(
+            map(action => action.payload),
+            switchMap((config: UserConfiguration) => {
+                this.dataStorageRepository.saveConfig(config);
 
-            return Observable.of(new SaveConfigurationAction());
-        });
+                return of(new SaveConfigurationAction());
+            })
+        );
 
-    @Effect({dispatch: false}) updateFirmware$ = this.actions$
+    @Effect({ dispatch: false }) updateFirmware$ = this.actions$
         .ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE)
-        .do(() => this.deviceRendererService.updateFirmware({
-            versionInformation: getVersions()
-        }));
+        .pipe(
+            tap(() => this.deviceRendererService.updateFirmware({
+                versionInformation: getVersions()
+            }))
+        );
 
-    @Effect({dispatch: false}) updateFirmwareWith$ = this.actions$
+    @Effect({ dispatch: false }) updateFirmwareWith$ = this.actions$
         .ofType<UpdateFirmwareWithAction>(ActionTypes.UPDATE_FIRMWARE_WITH)
-        .map(action => action.payload)
-        .do(data => this.deviceRendererService.updateFirmware({
-            versionInformation: getVersions(),
-            firmware: data
-        }));
+        .pipe(
+            map(action => action.payload),
+            tap(data => this.deviceRendererService.updateFirmware({
+                versionInformation: getVersions(),
+                firmware: data
+            }))
+        );
 
     @Effect() updateFirmwareReply$ = this.actions$
         .ofType<UpdateFirmwareReplyAction>(ActionTypes.UPDATE_FIRMWARE_REPLY)
-        .map(action => action.payload)
-        .switchMap((response: FirmwareUpgradeIpcResponse)
-            : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction> => {
-            if (response.success) {
-                return Observable.of(new UpdateFirmwareSuccessAction(response.modules));
-            }
+        .pipe(
+            map(action => action.payload),
+            switchMap((response: FirmwareUpgradeIpcResponse)
+                : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction> => {
 
-            return Observable.of(new UpdateFirmwareFailedAction({
-                error: response.error,
-                modules: response.modules
-            }));
-        });
+                if (response.success) {
+                    return Observable.of(new UpdateFirmwareSuccessAction(response.modules));
+                }
+
+                return of(new UpdateFirmwareFailedAction({
+                    error: response.error,
+                    modules: response.modules
+                }));
+            })
+        );
 
     @Effect() restoreUserConfiguration$ = this.actions$
         .ofType<ResetUserConfigurationAction>(ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP)
-        .map(() => new SaveConfigurationAction());
+        .pipe(
+            map(() => new SaveConfigurationAction())
+        );
 
-    @Effect({dispatch: false}) recoveryDevice$ = this.actions$
+    @Effect({ dispatch: false }) recoveryDevice$ = this.actions$
         .ofType<RecoveryDeviceAction>(ActionTypes.RECOVERY_DEVICE)
-        .do(() => this.deviceRendererService.recoveryDevice());
+        .pipe(
+            tap(() => this.deviceRendererService.recoveryDevice())
+        );
 
-    @Effect({dispatch: false}) enableUsbStackTest$ = this.actions$
+    @Effect({ dispatch: false }) enableUsbStackTest$ = this.actions$
         .ofType<EnableUsbStackTestAction>(ActionTypes.ENABLE_USB_STACK_TEST)
-        .do(() => this.deviceRendererService.enableUsbStackTest());
+        .pipe(
+            tap(() => this.deviceRendererService.enableUsbStackTest())
+        );
 
-    @Effect({dispatch: false}) startConnectionPoller$ = this.actions$
+    @Effect({ dispatch: false }) startConnectionPoller$ = this.actions$
         .ofType(ActionTypes.START_CONNECTION_POLLER)
-        .do(() => this.deviceRendererService.startConnectionPoller());
+        .pipe(
+            tap(() => this.deviceRendererService.startConnectionPoller())
+        );
 
     constructor(private actions$: Actions,
                 private router: Router,

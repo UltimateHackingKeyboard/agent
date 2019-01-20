@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
-
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/withLatestFrom';
-import 'rxjs/add/operator/map';
+import { map, startWith, switchMap, withLatestFrom } from 'rxjs/operators';
 
 import { NotificationType } from 'uhk-common';
 
@@ -27,32 +23,38 @@ import { ShowNotificationAction } from '../actions/app';
 export class AutoUpdateSettingsEffects {
     @Effect() loadUserConfig$: Observable<Action> = this.actions$
         .ofType(ActionTypes.LOAD_AUTO_UPDATE_SETTINGS)
-        .startWith(new LoadAutoUpdateSettingsAction())
-        .switchMap(() => {
-            let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
-            if (!settings) {
-                settings = initialState;
-            }
-            return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
-        });
+        .pipe(
+            startWith(new LoadAutoUpdateSettingsAction()),
+            switchMap(() => {
+                let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
+                if (!settings) {
+                    settings = initialState;
+                }
+                return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
+            })
+        );
 
     @Effect() saveAutoUpdateConfig$: Observable<Action> = this.actions$
         .ofType(ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP, ActionTypes.TOGGLE_PRE_RELEASE_FLAG)
-        .withLatestFrom(this.store.select(getAutoUpdateSettings))
-        .map(([action, config]) => {
-            this.dataStorageRepository.saveAutoUpdateSettings(config);
-            return new SaveAutoUpdateSettingsSuccessAction();
-        });
+        .pipe(
+            withLatestFrom(this.store.select(getAutoUpdateSettings)),
+            map(([action, config]) => {
+                this.dataStorageRepository.saveAutoUpdateSettings(config);
+                return new SaveAutoUpdateSettingsSuccessAction();
+            })
+        );
 
     @Effect() sendNotification$: Observable<Action> = this.actions$
         .ofType(ActionTypes.CHECK_FOR_UPDATE_FAILED, ActionTypes.CHECK_FOR_UPDATE_SUCCESS)
-        .map(toPayload)
-        .map((message: string) => {
-            return new ShowNotificationAction({
-                type: NotificationType.Info,
-                message
-            });
-        });
+        .pipe(
+            map(toPayload),
+            map((message: string) => {
+                return new ShowNotificationAction({
+                    type: NotificationType.Info,
+                    message
+                });
+            })
+        );
 
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,

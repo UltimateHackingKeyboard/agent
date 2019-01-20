@@ -4,8 +4,7 @@ import { Keymap } from 'uhk-common';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/combineLatest';
-import 'rxjs/add/operator/publishReplay';
+import { combineLatest, publishReplay, refCount } from 'rxjs/operators';
 
 import { AppState } from '../../../store';
 import { KeymapActions } from '../../../store/actions';
@@ -29,11 +28,13 @@ export class KeymapAddComponent {
         this.filterExpression$ = new BehaviorSubject('');
 
         this.presets$ = this.presetsAll$
-            .combineLatest(this.filterExpression$, (keymaps: Keymap[], filterExpression: string) => {
-                return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
-            })
-            .publishReplay(1)
-            .refCount();
+            .pipe(
+                combineLatest(this.filterExpression$, (keymaps: Keymap[], filterExpression: string) => {
+                    return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
+                }),
+                publishReplay(1),
+                refCount()
+            );
     }
 
     filterKeyboards(filterExpression: string) {

@@ -3,15 +3,14 @@ import { CanActivate, Router } from '@angular/router';
 import { Keymap } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { switchMap, tap } from 'rxjs/operators';
 
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/let';
-import 'rxjs/add/operator/switchMap';
 
 import { Store } from '@ngrx/store';
 
-import { AppState } from '../../../store/index';
+import { AppState } from '../../../store';
 import { getKeymaps } from '../../../store/reducers/user-configuration';
 
 @Injectable()
@@ -22,12 +21,14 @@ export class KeymapEditGuard implements CanActivate {
     canActivate(): Observable<boolean> {
         return this.store
             .let(getKeymaps())
-            .do((keymaps: Keymap[]) => {
-                const defaultKeymap = keymaps.find(keymap => keymap.isDefault);
-                if (defaultKeymap) {
-                    this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
-                }
-            })
-            .switchMap(() => Observable.of(false));
+            .pipe(
+                tap((keymaps: Keymap[]) => {
+                    const defaultKeymap = keymaps.find(keymap => keymap.isDefault);
+                    if (defaultKeymap) {
+                        this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
+                    }
+                }),
+                switchMap(() => of(false))
+            );
     }
 }

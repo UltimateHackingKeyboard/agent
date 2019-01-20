@@ -4,8 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Action, Store } from '@ngrx/store';
 
-import 'rxjs/add/operator/last';
-
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
 import { EnableUsbStackTestAction } from './store/actions/device';
 import {

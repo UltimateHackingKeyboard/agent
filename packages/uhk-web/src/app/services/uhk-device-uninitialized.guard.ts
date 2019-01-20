@@ -2,23 +2,24 @@ import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { tap } from 'rxjs/operators';
 
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-
-import { AppState, hasDevicePermission } from '../store/index';
+import { AppState, hasDevicePermission } from '../store';
 
 @Injectable()
 export class UhkDeviceUninitializedGuard implements CanActivate {
 
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {
+    }
 
     canActivate(): Observable<boolean> {
         return this.store.select(hasDevicePermission)
-            .do(hasPermission => {
-                if (!hasPermission) {
-                    this.router.navigate(['/privilege']);
-                }
-            });
+            .pipe(
+                tap(hasPermission => {
+                    if (!hasPermission) {
+                        this.router.navigate(['/privilege']);
+                    }
+                })
+            );
     }
 }

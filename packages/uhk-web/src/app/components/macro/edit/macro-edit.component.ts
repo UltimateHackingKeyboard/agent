@@ -5,7 +5,7 @@ import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/pluck';
+import { pluck, switchMap } from 'rxjs/operators';
 
 import { MacroActions } from '../../../store/actions';
 import { AppState, macroPlaybackSupported } from '../../../store';
@@ -26,14 +26,17 @@ export class MacroEditComponent implements OnDestroy {
     macroPlaybackSupported$: Observable<boolean>;
 
     private subscription: Subscription;
+
     constructor(private store: Store<AppState>, public route: ActivatedRoute) {
         this.subscription = route
             .params
-            .pluck<{}, string>('id')
-            .switchMap((id: string) => {
-                this.macroId = +id;
-                return store.let(getMacro(this.macroId));
-            })
+            .pipe(
+                pluck<{}, string>('id'),
+                switchMap((id: string) => {
+                    this.macroId = +id;
+                    return store.let(getMacro(this.macroId));
+                })
+            )
             .subscribe((macro: Macro) => {
                 this.macro = macro;
             });

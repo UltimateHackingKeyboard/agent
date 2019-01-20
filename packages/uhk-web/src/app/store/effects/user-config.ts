@@ -3,16 +3,10 @@ import { Router } from '@angular/router';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { defer } from 'rxjs/observable/defer';
+import { of } from 'rxjs/observable/of';
+import { map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/withLatestFrom';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/empty';
 
 import {
     getHardwareConfigFromDeviceResponse,
@@ -57,7 +51,7 @@ import { UploadFileData } from '../../models/upload-file-data';
 export class UserConfigEffects {
 
     @Effect() loadUserConfig$: Observable<Action> = defer(() => {
-        return Observable.of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
+        return of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
     });
 
     @Effect() saveUserConfig$: Observable<Action> = (this.actions$
@@ -66,160 +60,175 @@ export class UserConfigEffects {
             KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.EDIT_DESCRIPTION,
             MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
             MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION,
-            ActionTypes.RENAME_USER_CONFIGURATION, ActionTypes.SET_USER_CONFIGURATION_VALUE) as
-        Observable<KeymapAction | MacroAction | RenameUserConfigurationAction>)
-        .withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration))
-        .mergeMap(([action, config, prevUserConfiguration]) => {
-            config.recalculateConfigurationLength();
-            this.dataStorageRepository.saveConfig(config);
+            ActionTypes.RENAME_USER_CONFIGURATION, ActionTypes.SET_USER_CONFIGURATION_VALUE
+        ) as Observable<KeymapAction | MacroAction | RenameUserConfigurationAction>)
+        .pipe(
+            withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
+            mergeMap(([action, config, prevUserConfiguration]) => {
+                config.recalculateConfigurationLength();
+                this.dataStorageRepository.saveConfig(config);
 
-            if (action.type === KeymapActions.REMOVE || action.type === MacroActions.REMOVE) {
-                const text = action.type === KeymapActions.REMOVE ? 'Keymap' : 'Macro';
-                const pathPrefix = action.type === KeymapActions.REMOVE ? 'keymap' : 'macro';
-                const payload: UndoUserConfigData = {
-                    path: `/${pathPrefix}/${action.payload}`,
-                    config: prevUserConfiguration.toJsonObject()
-                };
+                if (action.type === KeymapActions.REMOVE || action.type === MacroActions.REMOVE) {
+                    const text = action.type === KeymapActions.REMOVE ? 'Keymap' : 'Macro';
+                    const pathPrefix = action.type === KeymapActions.REMOVE ? 'keymap' : 'macro';
+                    const payload: UndoUserConfigData = {
+                        path: `/${pathPrefix}/${action.payload}`,
+                        config: prevUserConfiguration.toJsonObject()
+                    };
+
+                    return [
+                        new SaveUserConfigSuccessAction(config),
+                        new ShowNotificationAction({
+                            type: NotificationType.Undoable,
+                            message: `${text} has been deleted`,
+                            extra: {
+                                payload,
+                                type: KeymapActions.UNDO_LAST_ACTION
+                            }
+                        }),
+                        new ShowSaveToKeyboardButtonAction()
+                    ];
+                }
 
                 return [
                     new SaveUserConfigSuccessAction(config),
-                    new ShowNotificationAction({
-                        type: NotificationType.Undoable,
-                        message: `${text} has been deleted`,
-                        extra: {
-                            payload,
-                            type: KeymapActions.UNDO_LAST_ACTION
-                        }
-                    }),
+                    new DismissUndoNotificationAction(),
                     new ShowSaveToKeyboardButtonAction()
                 ];
-            }
-
-            return [
-                new SaveUserConfigSuccessAction(config),
-                new DismissUndoNotificationAction(),
-                new ShowSaveToKeyboardButtonAction()
-            ];
-        });
+            })
+        );
 
     @Effect() undoUserConfig$: Observable<Action> = this.actions$
         .ofType<UndoLastAction>(KeymapActions.UNDO_LAST_ACTION)
-        .map(action => action.payload)
-        .mergeMap((payload: UndoUserConfigData) => {
-            const config = new UserConfiguration().fromJsonObject(payload.config);
-            this.dataStorageRepository.saveConfig(config);
-            this.router.navigate([payload.path]);
-            return [new LoadUserConfigSuccessAction(config)];
-        });
+        .pipe(
+            map(action => action.payload),
+            mergeMap((payload: UndoUserConfigData) => {
+                const config = new UserConfiguration().fromJsonObject(payload.config);
+                this.dataStorageRepository.saveConfig(config);
+                this.router.navigate([payload.path]);
 
-    @Effect({dispatch: false}) loadConfigFromDevice$ = this.actions$
+                return [new LoadUserConfigSuccessAction(config)];
+            })
+        );
+
+    @Effect({ dispatch: false }) loadConfigFromDevice$ = this.actions$
         .ofType(ActionTypes.LOAD_CONFIG_FROM_DEVICE)
-        .do(() => this.deviceRendererService.loadConfigurationFromKeyboard());
+        .pipe(
+            tap(() => this.deviceRendererService.loadConfigurationFromKeyboard())
+        );
 
     @Effect() loadConfigFromDeviceReply$ = this.actions$
         .ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY)
-        .withLatestFrom(this.store.select(getRouterState))
-        .mergeMap(([action, route]): any => {
-            const data: ConfigurationReply = action.payload;
+        .pipe(
+            withLatestFrom(this.store.select(getRouterState)),
+            mergeMap(([action, route]): any => {
+                const data: ConfigurationReply = action.payload;
 
-            if (!data.success) {
-                return [new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: data.error
-                })];
-            }
-
-            const result = [];
-            let newPageDestination: Array<string>;
-
-            try {
-                const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
-                result.push(new LoadUserConfigSuccessAction(userConfig));
-
-                if (route.state && !route.state.url.startsWith('/device/firmware')) {
-                    newPageDestination = ['/'];
+                if (!data.success) {
+                    return [new ShowNotificationAction({
+                        type: NotificationType.Error,
+                        message: data.error
+                    })];
                 }
 
-            } catch (err) {
-                this.logService.error('Eeprom user-config parse error:', err);
-                const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
+                const result = [];
+                let newPageDestination: Array<string>;
 
-                result.push(new HasBackupUserConfigurationAction(!!data.backupConfiguration));
-                result.push(new LoadUserConfigSuccessAction(userConfig));
+                try {
+                    const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
+                    result.push(new LoadUserConfigSuccessAction(userConfig));
 
-                newPageDestination = ['/device/restore-user-configuration'];
-            }
+                    if (route.state && !route.state.url.startsWith('/device/firmware')) {
+                        newPageDestination = ['/'];
+                    }
 
-            try {
-                const hardwareConfig = getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
-                result.push(new LoadHardwareConfigurationSuccessAction(hardwareConfig));
-            } catch (err) {
-                this.logService.error('Eeprom hardware-config parse error:', err);
-                result.push(
-                    new ShowNotificationAction({
-                        type: NotificationType.Error,
-                        message: err
-                    }));
-            }
+                } catch (err) {
+                    this.logService.error('Eeprom user-config parse error:', err);
+                    const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
 
-            result.push(new HardwareModulesLoadedAction(data.modules));
+                    result.push(new HasBackupUserConfigurationAction(!!data.backupConfiguration));
+                    result.push(new LoadUserConfigSuccessAction(userConfig));
 
-            if (newPageDestination) {
-                this.router.navigate(newPageDestination);
-            }
+                    newPageDestination = ['/device/restore-user-configuration'];
+                }
 
-            return result;
-        });
+                try {
+                    const hardwareConfig = getHardwareConfigFromDeviceResponse(data.hardwareConfiguration);
+                    result.push(new LoadHardwareConfigurationSuccessAction(hardwareConfig));
+                } catch (err) {
+                    this.logService.error('Eeprom hardware-config parse error:', err);
+                    result.push(
+                        new ShowNotificationAction({
+                            type: NotificationType.Error,
+                            message: err
+                        }));
+                }
 
-    @Effect({dispatch: false}) saveUserConfigInJsonFile$ = this.actions$
+                result.push(new HardwareModulesLoadedAction(data.modules));
+
+                if (newPageDestination) {
+                    this.router.navigate(newPageDestination);
+                }
+
+                return result;
+            })
+        );
+
+    @Effect({ dispatch: false }) saveUserConfigInJsonFile$ = this.actions$
         .ofType(ActionTypes.SAVE_USER_CONFIG_IN_JSON_FILE)
-        .withLatestFrom(this.store.select(getUserConfiguration))
-        .do(([action, userConfiguration]) => {
-            const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
-            const asBlob = new Blob([asString], {type: 'text/plain'});
-            saveAs(asBlob, 'UserConfiguration.json');
-        });
+        .pipe(
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            tap(([action, userConfiguration]) => {
+                const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
+                const asBlob = new Blob([asString], { type: 'text/plain' });
+                saveAs(asBlob, 'UserConfiguration.json');
+            })
+        );
 
-    @Effect({dispatch: false}) saveUserConfigInBinFile$ = this.actions$
+    @Effect({ dispatch: false }) saveUserConfigInBinFile$ = this.actions$
         .ofType(ActionTypes.SAVE_USER_CONFIG_IN_BIN_FILE)
-        .withLatestFrom(this.store.select(getUserConfiguration))
-        .do(([action, userConfiguration]) => {
-            const uhkBuffer = new UhkBuffer();
-            userConfiguration.toBinary(uhkBuffer);
-            const blob = new Blob([uhkBuffer.getBufferContent()]);
-            saveAs(blob, 'UserConfiguration.bin');
-        });
+        .pipe(
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            tap(([action, userConfiguration]) => {
+                const uhkBuffer = new UhkBuffer();
+                userConfiguration.toBinary(uhkBuffer);
+                const blob = new Blob([uhkBuffer.getBufferContent()]);
+                saveAs(blob, 'UserConfiguration.bin');
+            })
+        );
 
     @Effect() loadUserConfigurationFromFile$ = this.actions$
         .ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LOAD_USER_CONFIGURATION_FROM_FILE)
-        .map(action => action.payload)
-        .map((info: UploadFileData) => {
-            try {
-                const userConfig = new UserConfiguration();
+        .pipe(
+            map(action => action.payload),
+            map((info: UploadFileData) => {
+                try {
+                    const userConfig = new UserConfiguration();
 
-                if (info.filename.endsWith('.bin')) {
-                    userConfig.fromBinary(UhkBuffer.fromArray(info.data));
-                } else {
-                    const buffer = new Buffer(info.data);
-                    const json = buffer.toString();
-                    userConfig.fromJsonObject(JSON.parse(json));
+                    if (info.filename.endsWith('.bin')) {
+                        userConfig.fromBinary(UhkBuffer.fromArray(info.data));
+                    } else {
+                        const buffer = new Buffer(info.data);
+                        const json = buffer.toString();
+                        userConfig.fromJsonObject(JSON.parse(json));
+                    }
+
+                    if (userConfig.userConfigMajorVersion) {
+                        return new ApplyUserConfigurationFromFileAction(userConfig);
+                    }
+
+                    return new ShowNotificationAction({
+                        type: NotificationType.Error,
+                        message: 'Invalid configuration specified.'
+                    });
+                } catch (err) {
+                    return new ShowNotificationAction({
+                        type: NotificationType.Error,
+                        message: 'Invalid configuration specified.'
+                    });
                 }
-
-                if (userConfig.userConfigMajorVersion) {
-                    return new ApplyUserConfigurationFromFileAction(userConfig);
-                }
-
-                return new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: 'Invalid configuration specified.'
-                });
-            } catch (err) {
-                return new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message: 'Invalid configuration specified.'
-                });
-            }
-        });
+            })
+        );
 
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,
