@@ -4,13 +4,8 @@ import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/first';
+import { combineLatest, first, map, pluck, publishReplay, refCount, switchMap } from 'rxjs/operators';
 import 'rxjs/add/operator/let';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/publishReplay';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/pluck';
-import 'rxjs/add/operator/combineLatest';
 
 import { saveAs } from 'file-saver';
 
@@ -42,13 +37,17 @@ export class KeymapEditComponent {
                 route: ActivatedRoute) {
         this.keymap$ = route
             .params
-            .pluck<{}, string>('abbr')
-            .switchMap((abbr: string) => store.let(getKeymap(abbr)))
-            .publishReplay(1)
-            .refCount();
+            .pipe(
+                pluck<{}, string>('abbr'),
+                switchMap((abbr: string) => store.let(getKeymap(abbr))),
+                publishReplay(1),
+                refCount()
+            );
 
         this.deletable$ = store.let(getKeymaps())
-            .map((keymaps: Keymap[]) => keymaps.length > 1);
+            .pipe(
+                map((keymaps: Keymap[]) => keymaps.length > 1)
+            );
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
@@ -56,17 +55,21 @@ export class KeymapEditComponent {
 
     downloadKeymap() {
         const exportableJSON$: Observable<string> = this.keymap$
-            .switchMap(keymap => this.toExportableJSON(keymap))
-            .map(exportableJSON => JSON.stringify(exportableJSON));
+            .pipe(
+                switchMap(keymap => this.toExportableJSON(keymap)),
+                map(exportableJSON => JSON.stringify(exportableJSON))
+            );
 
         this.keymap$
-            .combineLatest(exportableJSON$)
-            .first()
+            .pipe(
+                combineLatest(exportableJSON$),
+                first()
+            )
             .subscribe(latest => {
                 const keymap = latest[0];
                 const exportableJSON = latest[1];
                 const fileName = keymap.name + '_keymap.json';
-                saveAs(new Blob([exportableJSON], {type: 'application/json'}), fileName);
+                saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
             });
     }
 
@@ -82,18 +85,20 @@ export class KeymapEditComponent {
     private toExportableJSON(keymap: Keymap): Observable<any> {
         return this.store
             .let(getUserConfiguration())
-            .first()
-            .map(userConfiguration => {
-                return {
-                    site: 'https://ultimatehackingkeyboard.com',
-                    description: 'Ultimate Hacking Keyboard keymap',
-                    keyboardModel: 'UHK60',
-                    userConfigMajorVersion: userConfiguration.userConfigMajorVersion,
-                    userConfigMinorVersion: userConfiguration.userConfigMinorVersion,
-                    userConfigPatchVersion: userConfiguration.userConfigPatchVersion,
-                    objectType: 'keymap',
-                    objectValue: keymap.toJsonObject()
-                };
-            });
+            .pipe(
+                first(),
+                map(userConfiguration => {
+                    return {
+                        site: 'https://ultimatehackingkeyboard.com',
+                        description: 'Ultimate Hacking Keyboard keymap',
+                        keyboardModel: 'UHK60',
+                        userConfigMajorVersion: userConfiguration.userConfigMajorVersion,
+                        userConfigMinorVersion: userConfiguration.userConfigMinorVersion,
+                        userConfigPatchVersion: userConfiguration.userConfigPatchVersion,
+                        objectType: 'keymap',
+                        objectValue: keymap.toJsonObject()
+                    };
+                })
+            );
     }
 }

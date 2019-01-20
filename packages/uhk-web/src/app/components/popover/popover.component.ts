@@ -16,8 +16,7 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/combineLatest';
-import 'rxjs/add/operator/map';
+import { combineLatest, map } from 'rxjs/operators';
 
 import {
     KeyAction,
@@ -155,9 +154,10 @@ export class PopoverComponent implements OnChanges {
                 private cdRef: ChangeDetectorRef) {
         this.animationState = 'closed';
         this.keymaps$ = store.let(getKeymaps())
-            .combineLatest(this.currentKeymap$)
-            .map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
-                keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation)
+            .pipe(
+                combineLatest(this.currentKeymap$),
+                map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
+                        keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation))
             );
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
     }

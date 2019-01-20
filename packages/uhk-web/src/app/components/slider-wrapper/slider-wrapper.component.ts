@@ -3,8 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NouisliderComponent } from 'ng2-nouislider';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export interface SliderPips {
     mode: string;
@@ -80,9 +79,10 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
         if (!this.changeObserver$) {
             Observable.create(observer => {
                 this.changeObserver$ = observer;
-            }).debounceTime(this.changeDebounceTime)
-            .distinctUntilChanged()
-            .subscribe(this.propagateChange);
+            }).pipe(
+                debounceTime(this.changeDebounceTime),
+                distinctUntilChanged()
+            ).subscribe(this.propagateChange);
 
             return; // No change event on first change as the value is just being set
         }

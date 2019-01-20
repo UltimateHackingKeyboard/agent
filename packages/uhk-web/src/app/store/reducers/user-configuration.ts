@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/map';
+import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operators';
 
 import {
     KeyAction,
@@ -360,29 +360,37 @@ export function getKeymap(abbr: string) {
     }
 
     return (state$: Observable<AppState>) => getKeymaps()(state$)
-        .map((keymaps: Keymap[]) =>
-            keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
+        .pipe(
+            map((keymaps: Keymap[]) =>
+                keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
+            )
         );
 }
 
 export function getDefaultKeymap() {
     return (state$: Observable<AppState>) => getKeymaps()(state$)
-        .map((keymaps: Keymap[]) =>
-            keymaps.find((keymap: Keymap) => keymap.isDefault)
+        .pipe(
+            map((keymaps: Keymap[]) =>
+                keymaps.find((keymap: Keymap) => keymap.isDefault)
+            )
         );
 }
 
 export function getMacros(): (state$: Observable<AppState>) => Observable<Macro[]> {
     return (state$: Observable<AppState>) => state$
-        .map(state => state.userConfiguration.macros);
+        .pipe(
+            map(state => state.userConfiguration.macros)
+        );
 }
 
 export function getMacro(id: number) {
     if (isNaN(id)) {
-        return () => Observable.of<Macro>(undefined);
+        return () => of<Macro>(undefined);
     } else {
         return (state$: Observable<AppState>) => getMacros()(state$)
-            .map((macros: Macro[]) => macros.find((macro: Macro) => macro.id === id));
+            .pipe(
+                map((macros: Macro[]) => macros.find((macro: Macro) => macro.id === id))
+            );
     }
 }
 

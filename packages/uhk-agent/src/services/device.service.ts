@@ -14,17 +14,12 @@ import {
     UpdateFirmwareData
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { interval } from 'rxjs/observable/interval';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
-
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/distinctUntilChanged';
 
 import { TmpFirmware } from '../models/tmp-firmware';
 import { QueueManager } from './queue-manager';
@@ -254,14 +249,16 @@ export class DeviceService {
             return;
         }
 
-        this.pollTimer$ = Observable.interval(1000)
-            .startWith(0)
-            .switchMap(() => Observable.fromPromise(this.device.getDeviceConnectionStateAsync()))
-            .distinctUntilChanged<DeviceConnectionState>(isEqual)
-            .do((state: DeviceConnectionState) => {
-                this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
-                this.logService.info('[DeviceService] Device connection state changed to:', state);
-            })
+        this.pollTimer$ = interval(1000)
+            .pipe(
+                startWith(0),
+                switchMap(() => fromPromise(this.device.getDeviceConnectionStateAsync())),
+                distinctUntilChanged<DeviceConnectionState>(isEqual),
+                tap((state: DeviceConnectionState) => {
+                    this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
+                    this.logService.info('[DeviceService] Device connection state changed to:', state);
+                })
+            )
             .subscribe();
     }
 

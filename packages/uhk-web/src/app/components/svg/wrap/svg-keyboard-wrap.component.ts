@@ -14,8 +14,8 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/map';
+import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import {
@@ -319,40 +319,44 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             const playMacroAction: PlayMacroAction = keyAction;
             return this.store
                 .select(appState => appState.userConfiguration.macros)
-                .map(macroState => macroState.find(macro => {
-                    return macro.id === playMacroAction.macroId;
-                }).name)
-                .map(macroName => {
-                    const content: NameValuePair[] = [
-                        {
-                            name: 'Action type',
-                            value: 'Play macro'
-                        },
-                        {
-                            name: 'Macro name',
-                            value: macroName
-                        }
-                    ];
-                    return content;
-                });
+                .pipe(
+                    map(macroState => macroState.find(macro => {
+                        return macro.id === playMacroAction.macroId;
+                    }).name),
+                    map(macroName => {
+                        const content: NameValuePair[] = [
+                            {
+                                name: 'Action type',
+                                value: 'Play macro'
+                            },
+                            {
+                                name: 'Macro name',
+                                value: macroName
+                            }
+                        ];
+                        return content;
+                    })
+                );
         } else if (keyAction instanceof SwitchKeymapAction) {
             const switchKeymapAction: SwitchKeymapAction = keyAction;
             return this.store
                 .select(appState => appState.userConfiguration.keymaps)
-                .map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name)
-                .map(keymapName => {
-                    const content: NameValuePair[] = [
-                        {
-                            name: 'Action type',
-                            value: 'Switch keymap'
-                        },
-                        {
-                            name: 'Keymap',
-                            value: keymapName
-                        }
-                    ];
-                    return content;
-                });
+                .pipe(
+                    map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name),
+                    map(keymapName => {
+                        const content: NameValuePair[] = [
+                            {
+                                name: 'Action type',
+                                value: 'Switch keymap'
+                            },
+                            {
+                                name: 'Keymap',
+                                value: keymapName
+                            }
+                        ];
+                        return content;
+                    })
+                );
         } else if (keyAction instanceof SwitchLayerAction) {
             const switchLayerAction: SwitchLayerAction = keyAction;
             const content: NameValuePair[] =
@@ -370,9 +374,9 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                         value: switchLayerAction.switchLayerMode === SwitchLayerMode.toggle ? 'On' : 'Off'
                     }
                 ];
-            return Observable.of(content);
+            return of(content);
         }
 
-        return Observable.of([]);
+        return of([]);
     }
 }

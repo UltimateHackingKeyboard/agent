@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/pluck';
+import { pluck } from 'rxjs/operators';
 
 @Component({
     selector: 'add-on',
@@ -18,6 +18,8 @@ export class AddOnComponent {
     constructor(route: ActivatedRoute) {
         this.name$ = route
             .params
-            .pluck<{}, string>('name');
+            .pipe(
+                pluck<{}, string>('name')
+            );
     }
 }
