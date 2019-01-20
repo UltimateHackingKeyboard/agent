@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
@@ -46,7 +47,7 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
-import { AboutComponent, SettingsComponent } from './components/agent';
+import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
 import { SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
@@ -164,6 +165,7 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         MacroNotFoundComponent,
         AddOnComponent,
         AboutComponent,
+        ContributorBadgeComponent,
         SettingsComponent,
         KeyboardSliderComponent,
         CancelableDirective,
@@ -204,7 +206,8 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here
         }),
-        ClipboardModule
+        ClipboardModule,
+        HttpClientModule
     ],
     providers: [
         SvgModuleProviderService,
