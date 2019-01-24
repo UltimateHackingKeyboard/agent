@@ -41,7 +41,7 @@
     "decompress": "4.2.0",
     "decompress-tarbz2": "4.1.1",
     "devtron": "1.4.0",
-    "electron": "1.8.7",
+    "electron": "2.0.16",
     "electron-builder": "20.34.0",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
