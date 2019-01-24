@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { Key } from 'ts-keycode-enum';
+
 import { MapperService } from './mapper.service';
 import { KeyModifiers } from 'uhk-common';
 import { KeyModifierModel } from '../models/key-modifier-model';
@@ -36,43 +38,43 @@ export class CaptureService {
     }
 
     public initModifiers() {
-        this.leftModifiers.set(16, {
+        this.leftModifiers.set(Key.Shift, {
             text: 'LShift',
             value: KeyModifiers.leftShift,
             checked: false
         });
-        this.leftModifiers.set(17, {
+        this.leftModifiers.set(Key.Ctrl, {
             text: 'LCtrl',
             value: KeyModifiers.leftCtrl,
             checked: false
         });
-        this.leftModifiers.set(18, {
+        this.leftModifiers.set(Key.Alt, {
             text: this.mapper.getOsSpecificText('LAlt'),
             value: KeyModifiers.leftAlt,
             checked: false
         });
-        this.leftModifiers.set(91, {
+        this.leftModifiers.set(Key.LeftWindowKey, {
             text: this.mapper.getOsSpecificText('LSuper'),
             value: KeyModifiers.leftGui,
             checked: false
         });
 
-        this.rightModifiers.set(16, {
+        this.rightModifiers.set(Key.Shift, {
             text: 'RShift',
             value: KeyModifiers.rightShift,
             checked: false
         });
-        this.rightModifiers.set(17, {
+        this.rightModifiers.set(Key.Ctrl, {
             text: 'RCtrl',
             value: KeyModifiers.rightCtrl,
             checked: false
         });
-        this.rightModifiers.set(18, {
+        this.rightModifiers.set(Key.Alt, {
             text: this.mapper.getOsSpecificText('RAlt'),
             value: KeyModifiers.rightAlt,
             checked: false
         });
-        this.rightModifiers.set(91, {
+        this.rightModifiers.set(Key.LeftWindowKey, {
             text: this.mapper.getOsSpecificText('RSuper'),
             value: KeyModifiers.rightGui,
             checked: false
@@ -80,99 +82,99 @@ export class CaptureService {
     }
 
     public populateMapping() {
-        this.mapping.set(8, 42);   // Backspace
-        this.mapping.set(9, 43);   // Tab
-        this.mapping.set(13, 40);  // Enter
-        this.mapping.set(19, 72);  // Pause/break
-        this.mapping.set(20, 57);  // Caps lock
-        this.mapping.set(27, 41);  // Escape
-        this.mapping.set(32, 44);  // (space)
-        this.mapping.set(33, 75);  // Page up
-        this.mapping.set(34, 78);  // Page down
-        this.mapping.set(35, 77);  // End
-        this.mapping.set(36, 74);  // Home
-        this.mapping.set(37, 80);  // Left arrow
-        this.mapping.set(38, 82);  // Up arrow
-        this.mapping.set(39, 79);  // Right arrow
-        this.mapping.set(40, 81);  // Down arrow
-        this.mapping.set(45, 73);  // Insert
-        this.mapping.set(46, 76);  // Delete
-        this.mapping.set(48, 39);  // 0
-        this.mapping.set(49, 30);  // 1
-        this.mapping.set(50, 31);  // 2
-        this.mapping.set(51, 32);  // 3
-        this.mapping.set(52, 33);  // 4
-        this.mapping.set(53, 34);  // 5
-        this.mapping.set(54, 35);  // 6
-        this.mapping.set(55, 36);  // 7
-        this.mapping.set(56, 37);  // 8
-        this.mapping.set(57, 38);  // 9
-        this.mapping.set(65, 4);   // A
-        this.mapping.set(66, 5);   // B
-        this.mapping.set(67, 6);   // C
-        this.mapping.set(68, 7);   // D
-        this.mapping.set(69, 8);   // E
-        this.mapping.set(70, 9);   // F
-        this.mapping.set(71, 10);  // G
-        this.mapping.set(72, 11);  // H
-        this.mapping.set(73, 12);  // I
-        this.mapping.set(74, 13);  // J
-        this.mapping.set(75, 14);  // K
-        this.mapping.set(76, 15);  // L
-        this.mapping.set(77, 16);  // M
-        this.mapping.set(78, 17);  // N
-        this.mapping.set(79, 18);  // O
-        this.mapping.set(80, 19);  // P
-        this.mapping.set(81, 20);  // Q
-        this.mapping.set(82, 21);  // R
-        this.mapping.set(83, 22);  // S
-        this.mapping.set(84, 23);  // T
-        this.mapping.set(85, 24);  // U
-        this.mapping.set(86, 25);  // V
-        this.mapping.set(87, 26);  // W
-        this.mapping.set(88, 27);  // X
-        this.mapping.set(89, 28);  // Y
-        this.mapping.set(90, 29);  // Z
-        this.mapping.set(93, 101);  // Menu
-        this.mapping.set(96, 98);  // Num pad 0
-        this.mapping.set(97, 89);  // Num pad 1
-        this.mapping.set(98, 90);  // Num pad 2
-        this.mapping.set(99, 91);  // Num pad 3
-        this.mapping.set(100, 92); // Num pad 4
-        this.mapping.set(101, 93); // Num pad 5
-        this.mapping.set(102, 94); // Num pad 6
-        this.mapping.set(103, 95); // Num pad 7
-        this.mapping.set(104, 96); // Num pad 8
-        this.mapping.set(105, 97); // Num pad 9
-        this.mapping.set(106, 85); // Multiply
-        this.mapping.set(107, 87); // Add
-        this.mapping.set(109, 86); // Subtract
-        this.mapping.set(110, 99); // Decimal point
-        this.mapping.set(111, 84); // Divide
-        this.mapping.set(112, 58); // F1
-        this.mapping.set(113, 59); // F2
-        this.mapping.set(114, 60); // F3
-        this.mapping.set(115, 61); // F4
-        this.mapping.set(116, 62); // F5
-        this.mapping.set(117, 63); // F6
-        this.mapping.set(118, 64); // F7
-        this.mapping.set(119, 65); // F8
-        this.mapping.set(120, 66); // F9
-        this.mapping.set(121, 67); // F10
-        this.mapping.set(122, 68); // F11
-        this.mapping.set(123, 69); // F12
-        this.mapping.set(144, 83); // Num lock
-        this.mapping.set(145, 71); // Scroll lock
-        this.mapping.set(186, 51); // Semi-colon
-        this.mapping.set(187, 46); // Equal sign
-        this.mapping.set(188, 54); // Comma
-        this.mapping.set(189, 45); // Dash
-        this.mapping.set(190, 55); // Period
-        this.mapping.set(191, 56); // Forward slash
-        this.mapping.set(192, 53); // Grave accent
-        this.mapping.set(219, 47); // Open bracket
-        this.mapping.set(220, 49); // Back slash
-        this.mapping.set(221, 48); // Close bracket
-        this.mapping.set(222, 52); // Single quote
+        this.mapping.set(Key.Backspace, 42);
+        this.mapping.set(Key.Tab, 43);
+        this.mapping.set(Key.Enter, 40);
+        this.mapping.set(Key.PauseBreak, 72);
+        this.mapping.set(Key.CapsLock, 57);
+        this.mapping.set(Key.Escape, 41);
+        this.mapping.set(Key.Space, 44);
+        this.mapping.set(Key.PageUp, 75);
+        this.mapping.set(Key.PageDown, 78);
+        this.mapping.set(Key.End, 77);
+        this.mapping.set(Key.Home, 74);
+        this.mapping.set(Key.LeftArrow, 80);
+        this.mapping.set(Key.UpArrow, 82);
+        this.mapping.set(Key.RightArrow, 79);
+        this.mapping.set(Key.DownArrow, 81);
+        this.mapping.set(Key.Insert, 73);
+        this.mapping.set(Key.Delete, 76);
+        this.mapping.set(Key.Zero, 39);
+        this.mapping.set(Key.One, 30);
+        this.mapping.set(Key.Two, 31);
+        this.mapping.set(Key.Three, 32);
+        this.mapping.set(Key.Four, 33);
+        this.mapping.set(Key.Five, 34);
+        this.mapping.set(Key.Six, 35);
+        this.mapping.set(Key.Seven, 36);
+        this.mapping.set(Key.Eight, 37);
+        this.mapping.set(Key.Nine, 38);
+        this.mapping.set(Key.A, 4);
+        this.mapping.set(Key.B, 5);
+        this.mapping.set(Key.C, 6);
+        this.mapping.set(Key.D, 7);
+        this.mapping.set(Key.E, 8);
+        this.mapping.set(Key.F, 9);
+        this.mapping.set(Key.G, 10);
+        this.mapping.set(Key.H, 11);
+        this.mapping.set(Key.I, 12);
+        this.mapping.set(Key.J, 13);
+        this.mapping.set(Key.K, 14);
+        this.mapping.set(Key.L, 15);
+        this.mapping.set(Key.M, 16);
+        this.mapping.set(Key.N, 17);
+        this.mapping.set(Key.O, 18);
+        this.mapping.set(Key.P, 19);
+        this.mapping.set(Key.Q, 20);
+        this.mapping.set(Key.R, 21);
+        this.mapping.set(Key.S, 22);
+        this.mapping.set(Key.T, 23);
+        this.mapping.set(Key.U, 24);
+        this.mapping.set(Key.V, 25);
+        this.mapping.set(Key.W, 26);
+        this.mapping.set(Key.X, 27);
+        this.mapping.set(Key.Y, 28);
+        this.mapping.set(Key.Z, 29);
+        this.mapping.set(Key.SelectKey, 101);
+        this.mapping.set(Key.Numpad0, 98);
+        this.mapping.set(Key.Numpad1, 89);
+        this.mapping.set(Key.Numpad2, 90);
+        this.mapping.set(Key.Numpad3, 91);
+        this.mapping.set(Key.Numpad4, 92);
+        this.mapping.set(Key.Numpad5, 93);
+        this.mapping.set(Key.Numpad6, 94);
+        this.mapping.set(Key.Numpad7, 95);
+        this.mapping.set(Key.Numpad8, 96);
+        this.mapping.set(Key.Numpad9, 97);
+        this.mapping.set(Key.Multiply, 85);
+        this.mapping.set(Key.Add, 87);
+        this.mapping.set(Key.Subtract, 86);
+        this.mapping.set(Key.DecimalPoint, 99);
+        this.mapping.set(Key.Divide, 84);
+        this.mapping.set(Key.F1, 58);
+        this.mapping.set(Key.F2, 59);
+        this.mapping.set(Key.F3, 60);
+        this.mapping.set(Key.F4, 61);
+        this.mapping.set(Key.F5, 62);
+        this.mapping.set(Key.F6, 63);
+        this.mapping.set(Key.F7, 64);
+        this.mapping.set(Key.F8, 65);
+        this.mapping.set(Key.F9, 66);
+        this.mapping.set(Key.F10, 67);
+        this.mapping.set(Key.F11, 68);
+        this.mapping.set(Key.F12, 69);
+        this.mapping.set(Key.NumLock, 83);
+        this.mapping.set(Key.ScrollLock, 71);
+        this.mapping.set(Key.SemiColon, 51);
+        this.mapping.set(Key.Equals, 46);
+        this.mapping.set(Key.Comma, 54);
+        this.mapping.set(Key.Dash, 45);
+        this.mapping.set(Key.Period, 55);
+        this.mapping.set(Key.ForwardSlash, 56);
+        this.mapping.set(Key.GraveAccent, 53);
+        this.mapping.set(Key.OpenBracket, 47);
+        this.mapping.set(220, 49); // Backslash
+        this.mapping.set(Key.ClosedBracket, 48);
+        this.mapping.set(Key.Quote, 52);
     }
 }
