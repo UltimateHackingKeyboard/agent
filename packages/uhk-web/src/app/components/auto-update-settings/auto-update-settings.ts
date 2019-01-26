@@ -9,13 +9,11 @@ import { State } from '../../store/reducers/auto-update-settings';
 })
 export class AutoUpdateSettings {
 
-    @Input() version: string;
     @Input() settings: State | undefined;
     @Input() checkingForUpdate: boolean;
 
     @Output() toggleCheckForUpdateOnStartUp = new EventEmitter<boolean>();
-    @Output() toggleUsePreReleaseUpdate = new EventEmitter<boolean>();
-    @Output() checkForUpdate = new EventEmitter();
+    @Output() checkForUpdate = new EventEmitter<boolean>();
 
     constructor() {
     }
@@ -24,11 +22,7 @@ export class AutoUpdateSettings {
         this.toggleCheckForUpdateOnStartUp.emit(value);
     }
 
-    emitUsePreReleaseUpdate(value: boolean) {
-        this.toggleUsePreReleaseUpdate.emit(value);
-    }
-
-    emitCheckForUpdate() {
-        this.checkForUpdate.emit();
+    emitCheckForUpdate($event: MouseEvent) {
+        this.checkForUpdate.emit($event.shiftKey);
     }
 }

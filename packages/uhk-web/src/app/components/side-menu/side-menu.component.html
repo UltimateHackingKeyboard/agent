@@ -136,12 +136,12 @@
                (click)="toggleHide($event, 'agent')"></i>
         </div>
         <ul [@toggler]="animation['agent']">
-            <!--li class="sidebar__level-2--item">
+            <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/settings']"
                        [class.disabled]="state.updatingFirmware">Settings</a>
                 </div>
-            </li-->
+            </li>
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/help']"

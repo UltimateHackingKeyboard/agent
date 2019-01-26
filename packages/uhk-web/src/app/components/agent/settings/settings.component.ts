@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { AutoUpdateSettings } from 'uhk-common';
 
 import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../../store';
 import {
     CheckForUpdateNowAction,
-    ToggleCheckForUpdateOnStartupAction,
-    TogglePreReleaseFlagAction
+    ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
-import { AutoUpdateSettings } from '../../../models/auto-update-settings';
-import { getVersions } from '../../../util';
 
 @Component({
     selector: 'settings',
@@ -20,7 +18,6 @@ import { getVersions } from '../../../util';
     }
 })
 export class SettingsComponent {
-    version: string = getVersions().version;
     autoUpdateSettings$: Observable<AutoUpdateSettings>;
     checkingForUpdate$: Observable<boolean>;
 
@@ -33,11 +30,7 @@ export class SettingsComponent {
         this.store.dispatch(new ToggleCheckForUpdateOnStartupAction(value));
     }
 
-    toogleUsePreReleaseUpdate(value: boolean) {
-        this.store.dispatch(new TogglePreReleaseFlagAction(value));
-    }
-
-    checkForUpdate() {
-        this.store.dispatch(new CheckForUpdateNowAction());
+    checkForUpdate(allowPrerelease: boolean): void {
+        this.store.dispatch(new CheckForUpdateNowAction(allowPrerelease));
     }
 }

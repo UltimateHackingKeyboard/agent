@@ -4,10 +4,8 @@
         <span class="macro__name pane-title__name">Settings</span>
     </h1>
 </div>
-<auto-update-settings [version]="version"
-                      [settings]="autoUpdateSettings$ | async"
+<auto-update-settings [settings]="autoUpdateSettings$ | async"
                       [checkingForUpdate]="checkingForUpdate$ | async"
                       (toggleCheckForUpdateOnStartUp)="toogleCheckForUpdateOnStartUp($event)"
-                      (toggleUsePreReleaseUpdate)="toogleUsePreReleaseUpdate($event)"
-                      (checkForUpdate)="checkForUpdate()">
+                      (checkForUpdate)="checkForUpdate($event)">
 </auto-update-settings>

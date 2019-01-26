@@ -1,5 +1,15 @@
-<div class="app-update-available-wrapper">
-    New version available.
-    <button type="button" (click)="updateApp.emit()" class="btn btn-primary">Update</button>
-    <button type="button" (click)="doNotUpdateApp.emit()" class="btn btn-default">Close</button>
+<div class="app-update-available-wrapper" role="alert">
+        Agent {{ updateInfo.version }} has been <span *ngIf="updateInfo.isPrerelease">pre-</span>released.
+
+        <button type="button"
+                class="btn btn-link underline"
+                (click)="updateApp.emit()" >Update now!</button>
+
+        <button type="button"
+                class="btn btn-link pull-right"
+                data-dismiss="alert"
+                aria-label="Close"
+                (click)="doNotUpdateApp.emit()">
+            <span aria-hidden="true">&times;</span>
+        </button>
 </div>

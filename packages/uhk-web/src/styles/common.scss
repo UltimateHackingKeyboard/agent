@@ -1,3 +1,5 @@
+@import './variables';
+
 %btn-link {
     padding: 7px 0;
     text-decoration: none;
@@ -6,5 +8,17 @@
 
     &:focus {
         outline: none;
+    }
+}
+
+@mixin updatePanelVisible() {
+    transition-timing-function: ease-out;
+    transition: 0.5s;
+    margin-top: 0;
+
+    &.update-panel-visible {
+        transition-timing-function: ease-in;
+        transition: 0.5s;
+        margin-top: $main-content-top-margin-on-update;
     }
 }

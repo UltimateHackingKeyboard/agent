@@ -32,8 +32,8 @@ export class AppUpdateRendererService {
         this.ipcRenderer.send(IpcEvents.autoUpdater.updateAndRestart);
     }
 
-    checkForUpdate() {
-        this.ipcRenderer.send(IpcEvents.autoUpdater.checkForUpdate);
+    checkForUpdate(allowPrerelease: boolean): void {
+        this.ipcRenderer.send(IpcEvents.autoUpdater.checkForUpdate, allowPrerelease);
     }
 
     private registerEvents() {
@@ -57,7 +57,7 @@ export class AppUpdateRendererService {
 
         this.ipcRenderer.on(IpcEvents.autoUpdater.autoUpdateDownloaded, (event: string, arg: any) => {
             this.writeUpdateState(IpcEvents.autoUpdater.autoUpdateDownloaded, arg);
-            this.dispachStoreAction(new UpdateDownloadedAction());
+            this.dispachStoreAction(new UpdateDownloadedAction(arg));
         });
 
         this.ipcRenderer.on(IpcEvents.autoUpdater.checkForUpdateNotAvailable, (event: string, arg: any) => {

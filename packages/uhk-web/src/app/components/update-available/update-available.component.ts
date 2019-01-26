@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { UpdateInfo } from '../../models/update-info';
 
 @Component({
     selector: 'app-update-available',
@@ -7,6 +9,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpdateAvailableComponent {
+    @Input() updateInfo: UpdateInfo;
+
     @Output() updateApp = new EventEmitter<null>();
     @Output() doNotUpdateApp = new EventEmitter<null>();
 }

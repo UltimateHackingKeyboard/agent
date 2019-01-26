@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Action, Store } from '@ngrx/store';
 import { map, startWith, switchMap, withLatestFrom } from 'rxjs/operators';
 
-import { NotificationType } from 'uhk-common';
+import { AutoUpdateSettings, NotificationType } from 'uhk-common';
 
 import {
     ActionTypes,
@@ -16,7 +16,6 @@ import {
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { AppState, getAutoUpdateSettings } from '../index';
 import { initialState } from '../reducers/auto-update-settings';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
 import { ShowNotificationAction } from '../actions/app';
 
 @Injectable()

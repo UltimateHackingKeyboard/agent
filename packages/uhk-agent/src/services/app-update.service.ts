@@ -5,7 +5,7 @@ import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
 import * as storage from 'electron-settings';
 
-import { IpcEvents, LogService } from 'uhk-common';
+import { AutoUpdateSettings, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 
 export class AppUpdateService extends MainServiceBase {
@@ -76,14 +76,17 @@ export class AppUpdateService extends MainServiceBase {
             }
         });
 
-        ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, () => {
-            this.logService.debug('[AppUpdateService] checkForUpdate request from renderer process');
+        ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, (event: Electron.Event, args: any[]) => {
+            const allowPrerelease: boolean = args[0];
+            // tslint:disable-next-line:max-line-length
+            const logMsg = `[AppUpdateService] checkForUpdate request from renderer process. Allow prerelease: ${allowPrerelease}`;
+            this.logService.debug(logMsg);
             this.sendAutoUpdateNotification = true;
-            this.checkForUpdate();
+            this.checkForUpdate(allowPrerelease);
         });
     }
 
-    private checkForUpdate() {
+    private checkForUpdate(allowPrerelease = false): void {
         if (isDev) {
             const msg = '[AppUpdateService] Application update is not working in dev mode.';
             this.logService.info(msg);
@@ -106,7 +109,7 @@ export class AppUpdateService extends MainServiceBase {
             return;
         }
 
-        autoUpdater.allowPrerelease = this.allowPreRelease();
+        autoUpdater.allowPrerelease = allowPrerelease;
         autoUpdater.checkForUpdates()
             .then(() => {
                 this.logService.debug('[AppUpdateService] checkForUpdate success');
@@ -127,12 +130,6 @@ export class AppUpdateService extends MainServiceBase {
         return firstRunVersion !== this.app.getVersion();
     }
 
-    private allowPreRelease() {
-        const autoUpdateSettings = this.getAutoUpdateSettings();
-
-        return autoUpdateSettings && autoUpdateSettings.usePreReleaseUpdate;
-    }
-
     private checkForUpdateAtStartup() {
         const autoUpdateSettings = this.getAutoUpdateSettings();
         const checkForUpdate = autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
@@ -142,10 +139,10 @@ export class AppUpdateService extends MainServiceBase {
         return checkForUpdate;
     }
 
-    private getAutoUpdateSettings() {
+    private getAutoUpdateSettings(): AutoUpdateSettings {
         const value = storage.get('auto-update-settings');
         if (!value) {
-            return {checkForUpdateOnStartUp: false, usePreReleaseUpdate: false};
+            return {checkForUpdateOnStartUp: false};
         }
 
         return JSON.parse(<string>value);

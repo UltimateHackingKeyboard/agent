@@ -1,10 +1,15 @@
-<app-update-available *ngIf="showUpdateAvailable$ | async"
+<app-update-available *ngIf="showUpdateAvailable"
+                      [@updateAvailable]
+                      [updateInfo]="updateInfo$ | async"
                       (updateApp)="updateApp()"
                       (doNotUpdateApp)="doNotUpdateApp()">
 </app-update-available>
 
-<side-menu *ngIf="deviceConfigurationLoaded$ | async"></side-menu>
-<div id="main-content" class="main-content">
+<side-menu *ngIf="deviceConfigurationLoaded$ | async"
+           [class.update-panel-visible]="showUpdateAvailable"></side-menu>
+<div id="main-content"
+     class="main-content"
+     [class.update-panel-visible]="showUpdateAvailable">
     <router-outlet></router-outlet>
 </div>
 <notifier-container></notifier-container>

@@ -4,6 +4,7 @@ $zindex-navbar-fixed: 1030;
 @import '~spacing-bootstrap-3/spacing';
 
 @import './styles/variables';
+@import './styles/common';
 @import '~angular-notifier/styles';
 @import '~font-awesome/scss/font-awesome';
 @import './styles/tooltip';
@@ -44,12 +45,24 @@ html, body {
 
 .main-content {
     height: 100%;
+    top: 0;
+
+    @include updatePanelVisible();
 }
 
 .main-page-content {
     margin-left: 250px;
     overflow-x: hidden;
     min-height: 100%;
+}
+
+app-update-available {
+    position: fixed;
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 200;
 }
 
 .nav-pills > li > a {
