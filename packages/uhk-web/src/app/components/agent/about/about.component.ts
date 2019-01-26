@@ -6,10 +6,10 @@ import { Constants } from 'uhk-common';
 
 import { getVersions } from '../../../util';
 
-import { AppState, contributors } from './../../../store';
-import { State } from './../../../store/reducers/contributors.reducer';
-import { OpenUrlInNewWindowAction } from './../../../store/actions/app';
-import { GetAgentContributorsAction } from './../../../store/actions/contributors.action';
+import { AppState, contributors } from '../../../store';
+import { State } from '../../../store/reducers/contributors.reducer';
+import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
+import { GetAgentContributorsAction } from '../../../store/actions/contributors.action';
 
 @Component({
     selector: 'about-page',

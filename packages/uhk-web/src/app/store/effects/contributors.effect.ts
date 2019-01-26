@@ -6,11 +6,10 @@ import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
-import { map, switchMap, catchError, reduce, mergeMap, take, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap, catchError, reduce, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 import { Constants } from 'uhk-common';
 
-import { State } from './../reducers/contributors.reducer';
 import { AppState, contributors } from '../index';
 import { UHKContributor } from '../../models/uhk-contributor';
 import {
@@ -55,8 +54,11 @@ export class ContributorsEffect {
                 );
             }),
             map(
-                (contributorsWithAvatars: UHKContributor[]) =>
-                    new AgentContributorsAvailableAction(contributorsWithAvatars)
+                (contributorsWithAvatars: UHKContributor[]) => {
+                    contributorsWithAvatars = contributorsWithAvatars.sort((a, b) => b.contributions - a.contributions);
+
+                    return new AgentContributorsAvailableAction(contributorsWithAvatars);
+                }
             ),
             catchError(error => of(new AgentContributorsNotAvailableAction(error)))
         );

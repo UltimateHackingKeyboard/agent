@@ -1,5 +1,5 @@
 import { Actions, ActionTypes } from '../actions/contributors.action';
-import { AgentContributorsAvailableAction, AgentContributorsNotAvailableAction } from './../actions/contributors.action';
+import { AgentContributorsAvailableAction, AgentContributorsNotAvailableAction } from '../actions/contributors.action';
 import { UHKContributor } from '../../models/uhk-contributor';
 
 export interface State {

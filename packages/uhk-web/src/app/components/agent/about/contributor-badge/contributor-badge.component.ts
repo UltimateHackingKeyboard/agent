@@ -1,8 +1,8 @@
 import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { AppState } from './../../../../store/index';
-import { OpenUrlInNewWindowAction } from './../../../../store/actions/app';
+import { AppState } from '../../../../store/index';
+import { OpenUrlInNewWindowAction } from '../../../../store/actions/app';
 
 import { UHKContributor } from '../../../../models/uhk-contributor';
 
