@@ -16,7 +16,6 @@ import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes } from '../actions/device';
 import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
-import { PrivilagePageSate } from '../../models/privilage-page-sate';
 
 export interface State {
     started: boolean;

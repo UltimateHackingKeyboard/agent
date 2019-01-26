@@ -7,6 +7,7 @@ import { HardwareModules, Keymap, UserConfiguration } from 'uhk-common';
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
 import * as fromAppUpdate from './reducers/app-update.reducer';
+import * as fromContributors from './reducers/contributors.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
@@ -26,6 +27,7 @@ export interface AppState {
     router: RouterReducerState<RouterStateUrl>;
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
+    contributors: fromContributors.State;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -35,7 +37,8 @@ export const reducers: ActionReducerMap<AppState> = {
     app: fromApp.reducer,
     router: routerReducer,
     appUpdate: fromAppUpdate.reducer,
-    device: fromDevice.reducer
+    device: fromDevice.reducer,
+    contributors: fromContributors.reducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = environment.production
@@ -56,6 +59,7 @@ export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVers
 export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const keypressCapturing = createSelector(appState, fromApp.keypressCapturing);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
+export const contributors = (state: AppState) => state.contributors;
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;

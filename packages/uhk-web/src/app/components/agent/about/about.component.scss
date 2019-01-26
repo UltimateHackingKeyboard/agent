@@ -5,16 +5,12 @@
     width: 100%;
 }
 
-.agent {
-    &-version {
-        margin-bottom: 1rem;
-
-        span {
-            font-weight: bold;
-        }
-    }
-}
-
 .link-github {
     cursor: pointer;
+}
+
+contributor-badge {
+    display: block;
+    margin: 0.5em auto;
+    min-width: 12em;
 }
