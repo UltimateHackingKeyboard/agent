@@ -5,6 +5,7 @@ import { KeymapEffects } from './keymap';
 import { UserConfigEffects } from './user-config';
 import { ApplicationEffects } from './app';
 import { AppUpdateEffect } from './app-update';
+import { ContributorsEffect } from './contributors.effect';
 
 export * from './keymap';
 export * from './macro';
@@ -19,5 +20,6 @@ export const effects = [
     KeymapEffects,
     MacroEffects,
     AutoUpdateSettingsEffects,
-    DeviceEffects
+    DeviceEffects,
+    ContributorsEffect
 ];

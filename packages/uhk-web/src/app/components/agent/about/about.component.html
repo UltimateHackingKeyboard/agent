@@ -5,20 +5,39 @@
 </div>
 <div>
     <div class="col-xs-12 text-center">
-        <div class="form-group">The configurator of the Ultimate Hacking Keyboard</div>
         <div class="form-group">
-            <div>Agent version: <span class="text-bold">{{ version }}</span></div>
-            <a class="link-github" [href]="agentGithubUrl" externalUrl>Agent on GitHub</a>
+            The configurator of the Ultimate Hacking Keyboard
         </div>
-        <ng-container *ngIf="contributors$ | async">
-            <div class="form-group">Created by Ultimate Gadget Laboratories and its awesome contributors:</div>
-            <div class="form-group row">
-                <div class="col-xs-8 col-xs-offset-2">
-                    <ng-container *ngFor="let contributor of contributors$ | async">
-                        <contributor-badge class="col-xs-2 text-left" [contributor]="contributor"></contributor-badge>
-                    </ng-container>
+        <div class="form-group">
+            <div>
+                Agent version: <span class="text-bold">{{ version }}</span>
+            </div>
+            <a class="link-github" [href]="agentGithubUrl" (click)="openUrlInBrowser($event)">Agent on GitHub</a>
+        </div>
+        <ng-container *ngIf="(state$ | async) as state">
+            <div class="form-group">
+                Created by Ultimate Gadget Laboratories and its awesome contributors:
+            </div>
+            <div *ngIf="!state.isLoading && !state.error; else loading">
+                <div class="form-group row">
+                    <div class="col-xs-8 col-xs-offset-2">
+                        <contributor-badge *ngFor="let contributor of state.contributors" class="col-xs-2 text-left" [contributor]="contributor"></contributor-badge>
+                    </div>
                 </div>
             </div>
+            <ng-template #loading>
+                <div class="form-group">
+                    Loading...
+                </div>
+            </ng-template>
+            <ng-template #loading>
+                <div *ngIf="!state.error" class="form-group">
+                    Loading...
+                </div>
+                <div *ngIf="state.error" class="form-group">
+                    We experienced a problem while fetching contributor list. <a [href]="agentContributorsUrl" (click)="openUrlInBrowser($event)">Check Contributors page on GitHub!</a>
+                </div>
+            </ng-template>
         </ng-container>
         <div class="form-group">May the UHK be with you!</div>
     </div>

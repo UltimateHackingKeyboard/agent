@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { catchError } from 'rxjs/operators/catchError';
-import { of } from 'rxjs/observable/of';
 
 import { Constants } from 'uhk-common';
 
-import { UHKContributor } from '../../../models/uhk-contributor';
 import { getVersions } from '../../../util';
+
+import { AppState, contributors } from './../../../store';
+import { State } from './../../../store/reducers/contributors.reducer';
+import { OpenUrlInNewWindowAction } from './../../../store/actions/app';
+import { GetAgentContributorsAction } from './../../../store/actions/contributors.action';
 
 @Component({
     selector: 'about-page',
@@ -21,15 +22,21 @@ import { getVersions } from '../../../util';
 export class AboutComponent implements OnInit {
     version: string = getVersions().version;
     agentGithubUrl = Constants.AGENT_GITHUB_URL;
-    contributors$: Observable<UHKContributor[]>;
+    agentContributorsUrl = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
+    state$: Observable<State>;
 
-    constructor(private http: HttpClient) {
+    constructor(private store: Store<AppState>) {
     }
 
     ngOnInit() {
-        this.contributors$ =
-            this.http.get<UHKContributor[]>('http://api.github.com/repos/UltimateHackingKeyboard/agent/contributors').pipe(
-                catchError(error => of(null))
-            );
+        this.state$ = this.store.select(contributors);
+
+        this.store.dispatch(new GetAgentContributorsAction());
+    }
+
+    openUrlInBrowser(event: Event): void {
+        event.preventDefault();
+
+        this.store.dispatch(new OpenUrlInNewWindowAction((event.target as Element).getAttribute('href')));
     }
 }
