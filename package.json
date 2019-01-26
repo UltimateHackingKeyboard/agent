@@ -52,7 +52,7 @@
     "exports-loader": "0.6.3",
     "file-loader": "0.10.0",
     "fs-extra": "5.0.0",
-    "gh-pages": "1.1.0",
+    "gh-pages": "2.0.1",
     "jasmine": "2.8.0",
     "jasmine-core": "2.8.0",
     "jasmine-node": "2.0.1",

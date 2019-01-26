@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { Key } from 'ts-keycode-enum';
+
 import {
     KeyAction,
     KeyModifiers,
@@ -152,11 +154,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     @HostListener('document:keyup', ['$event'])
     onKeyUp(e: KeyboardEvent) {
-        if (e.keyCode === 18 && this.pressedAltLocation > -1) {
+        if (e.keyCode === Key.Alt && this.pressedAltLocation > -1) {
             this.pressedAltLocation = -1;
             e.preventDefault();
         }
-        else if (e.keyCode === 16 && this.pressedShiftLocation > -1) {
+        else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
             this.pressedShiftLocation = -1;
             e.preventDefault();
         }
@@ -180,11 +182,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 // If the Alt or Shift key not released after start the capturing
                 // then add them as a modifier
                 if (this.pressedShiftLocation > -1) {
-                    this.captureService.setModifier((this.pressedShiftLocation === 1), 16);
+                    this.captureService.setModifier((this.pressedShiftLocation === 1), Key.Shift);
                 }
 
                 if (this.pressedAltLocation > -1) {
-                    this.captureService.setModifier((this.pressedAltLocation === 1), 18);
+                    this.captureService.setModifier((this.pressedAltLocation === 1), Key.Alt);
                 }
 
                 this.saveScanCode(this.captureService.getMap(code));
@@ -193,11 +195,11 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.captureService.setModifier((e.location === 1), code);
             }
         } else {
-            if (e.keyCode === 16) {
+            if (e.keyCode === Key.Shift) {
                 this.pressedShiftLocation = e.location;
             }
 
-            if (e.keyCode === 18) {
+            if (e.keyCode === Key.Alt) {
                 this.pressedAltLocation = e.location;
             }
         }

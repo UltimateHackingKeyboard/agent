@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { Key } from 'ts-keycode-enum';
+
 import { CaptureService } from '../../../../services/capture.service';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { AppState } from '../../../../store';
@@ -45,7 +47,6 @@ export class CaptureKeystrokeButtonComponent {
     @HostListener('keydown', ['$event'])
     onKeyDown(e: KeyboardEvent) {
         const code: number = e.keyCode;
-        const enter = 13;
 
         if (this.record) {
             e.preventDefault();
@@ -58,7 +59,7 @@ export class CaptureKeystrokeButtonComponent {
             } else {
                 this.captureService.setModifier((e.location === 1), code);
             }
-        } else if (code === enter) {
+        } else if (code === Key.Enter) {
             this.record = true;
             this.first = true;
             this.store.dispatch(new StartKeypressCapturingAction());
