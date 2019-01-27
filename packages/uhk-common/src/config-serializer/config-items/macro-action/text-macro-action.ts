@@ -2,7 +2,6 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class TextMacroAction extends MacroAction {
-
     text: string;
 
     constructor(other?: TextMacroAction) {
@@ -28,7 +27,7 @@ export class TextMacroAction extends MacroAction {
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.TextMacroAction,
-            text: this.text
+            text: this.text,
         };
     }
 

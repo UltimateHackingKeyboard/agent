@@ -19,7 +19,7 @@ import {
     MouseSpeedComponent,
     LEDBrightnessComponent,
     RestoreConfigurationComponent,
-    RecoveryModeComponent
+    RecoveryModeComponent,
 } from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
 import { LayersComponent } from './components/layers';
@@ -33,7 +33,7 @@ import {
     MacroListComponent,
     MacroMouseTabComponent,
     MacroNotFoundComponent,
-    MacroTextTabComponent
+    MacroTextTabComponent,
 } from './components/macro';
 import { NotificationComponent } from './components/notification';
 import { PopoverComponent } from './components/popover';
@@ -43,7 +43,7 @@ import {
     LayerTabComponent,
     MacroTabComponent,
     MouseTabComponent,
-    NoneTabComponent
+    NoneTabComponent,
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
@@ -64,7 +64,7 @@ import {
     SvgSingleIconKeyComponent,
     SvgSwitchKeymapKeyComponent,
     SvgTextIconKeyComponent,
-    SvgTwoLineTextKeyComponent
+    SvgTwoLineTextKeyComponent,
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
@@ -192,7 +192,7 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         HelpPageComponent,
         ExternalUrlDirective,
         SvgSecondaryRoleComponent,
-        UdevRulesComponent
+        UdevRulesComponent,
     ],
     imports: [
         CommonModule,
@@ -204,10 +204,10 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         NouisliderModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({
-            confirmButtonType: 'danger' // set defaults here
+            confirmButtonType: 'danger', // set defaults here
         }),
         ClipboardModule,
-        HttpClientModule
+        HttpClientModule,
     ],
     providers: [
         SvgModuleProviderService,
@@ -229,12 +229,8 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
         UhkDeviceLoadedGuard,
-        UhkDeviceBootloaderNotActiveGuard
+        UhkDeviceBootloaderNotActiveGuard,
     ],
-    exports: [
-        UhkMessageComponent,
-        MainAppComponent
-    ]
+    exports: [UhkMessageComponent, MainAppComponent],
 })
-export class SharedModule {
-}
+export class SharedModule {}

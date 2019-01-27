@@ -28,7 +28,6 @@ describe('Test Serializer', () => {
 
         const buffersContentsAreEqual: boolean = Buffer.compare(config1BufferContent, config2BufferContent) === 0;
         expect(buffersContentsAreEqual).toBe(true);
-
     });
 
     it('check json serializer', () => {

@@ -3,7 +3,6 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class MoveMouseMacroAction extends MacroAction {
-
     @assertInt16
     x: number;
 
@@ -37,7 +36,7 @@ export class MoveMouseMacroAction extends MacroAction {
         return {
             macroActionType: macroActionType.MoveMouseMacroAction,
             x: this.x,
-            y: this.y
+            y: this.y,
         };
     }
 

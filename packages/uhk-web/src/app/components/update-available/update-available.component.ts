@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
     selector: 'app-update-available',
     templateUrl: './update-available.component.html',
     styleUrls: ['./update-available.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdateAvailableComponent {
     @Output() updateApp = new EventEmitter<null>();

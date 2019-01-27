@@ -12,7 +12,7 @@ function convertMs(milliseconds) {
     minutes = minutes % 60;
     days = Math.floor(hours / 24);
     hours = hours % 24;
-    return {days, hours, minutes, seconds};
+    return { days, hours, minutes, seconds };
 }
 
 let buffer = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.uptime]);
@@ -22,4 +22,9 @@ let response = device.readSync();
 //console.log(Buffer.from(response));
 let uptimeMs = uhk.getUint32(response, 1);
 let uptime = convertMs(uptimeMs);
-console.log(`Uptime: ${uptime.days}d ${String(uptime.hours).padStart(2, '0')}:${String(uptime.minutes).padStart(2, '0')}:${String(uptime.seconds).padStart(2, '0')}`)
+console.log(
+    `Uptime: ${uptime.days}d ${String(uptime.hours).padStart(2, '0')}:${String(uptime.minutes).padStart(
+        2,
+        '0',
+    )}:${String(uptime.seconds).padStart(2, '0')}`,
+);

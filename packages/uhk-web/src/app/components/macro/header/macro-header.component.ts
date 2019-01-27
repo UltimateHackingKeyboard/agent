@@ -8,7 +8,7 @@ import {
     OnChanges,
     Renderer2,
     SimpleChanges,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Macro } from 'uhk-common';
@@ -21,14 +21,14 @@ import * as util from '../../../util';
     selector: 'macro-header',
     templateUrl: './macro-header.component.html',
     styleUrls: ['./macro-header.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
     @ViewChild('macroName') macroName: ElementRef;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer2) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer2) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.isNew) {
@@ -82,5 +82,4 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
         this.renderer.setProperty(this.macroName.nativeElement, 'value', this.macro.name);
         this.calculateHeaderTextWidth(this.macro.name);
     }
-
 }

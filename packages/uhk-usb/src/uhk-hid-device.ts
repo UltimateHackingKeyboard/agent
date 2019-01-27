@@ -14,9 +14,17 @@ import {
     ModuleSlotToI2cAddress,
     ModuleSlotToId,
     UsbCommand,
-    UsbVariables
+    UsbVariables,
 } from './constants';
-import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
+import {
+    bufferToString,
+    getFileContentAsync,
+    getTransferData,
+    isUhkDevice,
+    isUhkZeroInterface,
+    retry,
+    snooze,
+} from './util';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -33,10 +41,7 @@ export class UhkHidDevice {
     private _hasPermission = false;
     private _udevRulesInfo = UdevRulesInfo.Unkonwn;
 
-    constructor(private logService: LogService,
-                private options: CommandLineArgs,
-                private rootDir: string) {
-    }
+    constructor(private logService: LogService, private options: CommandLineArgs, private rootDir: string) {}
 
     /**
      * Return true if the app has right to communicate over the USB.
@@ -89,7 +94,7 @@ export class UhkHidDevice {
             connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
-            udevRulesInfo: await this.getUdevInfoAsync()
+            udevRulesInfo: await this.getUdevInfoAsync(),
         };
 
         for (const dev of devs) {
@@ -99,8 +104,7 @@ export class UhkHidDevice {
 
             if (isUhkZeroInterface(dev)) {
                 result.zeroInterfaceAvailable = true;
-            } else if (dev.vendorId === Constants.VENDOR_ID &&
-                dev.productId === Constants.BOOTLOADER_ID) {
+            } else if (dev.vendorId === Constants.VENDOR_ID && dev.productId === Constants.BOOTLOADER_ID) {
                 result.bootloaderActive = true;
             }
         }
@@ -190,9 +194,9 @@ export class UhkHidDevice {
             UsbCommand.Reenumerate,
             enumerationMode,
             BOOTLOADER_TIMEOUT_MS & 0xff,
-            (BOOTLOADER_TIMEOUT_MS & 0xff << 8) >> 8,
-            (BOOTLOADER_TIMEOUT_MS & 0xff << 16) >> 16,
-            (BOOTLOADER_TIMEOUT_MS & 0xff << 24) >> 24
+            (BOOTLOADER_TIMEOUT_MS & (0xff << 8)) >> 8,
+            (BOOTLOADER_TIMEOUT_MS & (0xff << 16)) >> 16,
+            (BOOTLOADER_TIMEOUT_MS & (0xff << 24)) >> 24,
         ]);
 
         const enumeratedProductId = enumerationModeIdToProductId[enumerationMode.toString()];
@@ -203,9 +207,9 @@ export class UhkHidDevice {
             const devs = devices();
             this.logService.silly('[UhkHidDevice] reenumeration devices', devs);
 
-            const inBootloaderMode = devs.some((x: Device) =>
-                x.vendorId === Constants.VENDOR_ID &&
-                x.productId === enumeratedProductId);
+            const inBootloaderMode = devs.some(
+                (x: Device) => x.vendorId === Constants.VENDOR_ID && x.productId === enumeratedProductId,
+            );
 
             if (inBootloaderMode) {
                 this.logService.debug(`[UhkHidDevice] reenumeration devices up`);
@@ -238,7 +242,9 @@ export class UhkHidDevice {
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
         const moduleName = kbootCommandName(module);
-        this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
+        this.logService.debug(
+            `[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`,
+        );
         if (command === KbootCommands.idle) {
             transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
         } else {
@@ -248,7 +254,9 @@ export class UhkHidDevice {
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
-        this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
+        this.logService.debug(
+            `[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`,
+        );
         const transfer = new Buffer([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
     }
@@ -279,7 +287,7 @@ export class UhkHidDevice {
                 compareDevices = devs.map(x => ({
                     productId: x.productId,
                     vendorId: x.vendorId,
-                    interface: x.interface
+                    interface: x.interface,
                 }));
             }
 

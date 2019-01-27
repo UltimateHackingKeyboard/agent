@@ -5,7 +5,7 @@ import {
     MouseButtons,
     MouseButtonMacroAction,
     MoveMouseMacroAction,
-    ScrollMouseMacroAction
+    ScrollMouseMacroAction,
 } from 'uhk-common';
 import { Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
@@ -17,17 +17,14 @@ enum TabName {
     Scroll,
     Click,
     Hold,
-    Release
+    Release,
 }
 
 @Component({
     selector: 'macro-mouse-tab',
     templateUrl: './macro-mouse.component.html',
-    styleUrls: [
-        '../../macro-action-editor.component.scss',
-        './macro-mouse.component.scss'
-    ],
-    host: {'class': 'macro__mouse'}
+    styleUrls: ['../../macro-action-editor.component.scss', './macro-mouse.component.scss'],
+    host: { class: 'macro__mouse' },
 })
 export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: MouseMacroAction;
@@ -132,14 +129,23 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
         switch (this.macroAction.constructor) {
             case MoveMouseMacroAction:
             case ScrollMouseMacroAction:
-                const {x, y} = this.macroAction as MoveMouseMacroAction;
-                return x !== undefined && x !== null && y !== undefined && y !== null &&
-                    (x !== 0 || y !== 0) && x < 10000 && x > -10000 && y < 10000 && y > -10000;
+                const { x, y } = this.macroAction as MoveMouseMacroAction;
+                return (
+                    x !== undefined &&
+                    x !== null &&
+                    y !== undefined &&
+                    y !== null &&
+                    (x !== 0 || y !== 0) &&
+                    x < 10000 &&
+                    x > -10000 &&
+                    y < 10000 &&
+                    y > -10000
+                );
             case MouseButtonMacroAction:
-                const {mouseButtonsMask} = this.macroAction as MouseButtonMacroAction;
+                const { mouseButtonsMask } = this.macroAction as MouseButtonMacroAction;
                 return !!mouseButtonsMask;
             default:
                 return true;
         }
-    }
+    };
 }

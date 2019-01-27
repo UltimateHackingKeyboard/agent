@@ -8,8 +8,7 @@ import { BootloaderVersion, CommandOption, CommandResponse, DataOption } from '.
 const logger = debug('kboot');
 
 export class KBoot {
-    constructor(private peripheral: Peripheral) {
-    }
+    constructor(private peripheral: Peripheral) {}
 
     open(): void {
         this.peripheral.open();
@@ -23,10 +22,7 @@ export class KBoot {
     async getProperty(property: Properties, memoryId = MemoryIds.Internal): Promise<CommandResponse> {
         const command: CommandOption = {
             command: Commands.GetProperty,
-            params: [
-                ...pack(property, { bits: 32 }),
-                ...pack(memoryId, { bits: 32 })
-            ]
+            params: [...pack(property, { bits: 32 }), ...pack(memoryId, { bits: 32 })],
         };
 
         const response = await this.peripheral.sendCommand(command);
@@ -53,7 +49,7 @@ export class KBoot {
             bugfix: response.raw[12],
             minor: response.raw[13],
             major: response.raw[14],
-            protocolName: String.fromCharCode(response.raw[15])
+            protocolName: String.fromCharCode(response.raw[15]),
         };
         logger('bootloader version %o');
 
@@ -70,7 +66,7 @@ export class KBoot {
 
         const command: CommandOption = {
             command: Commands.FlashSecurityDisable,
-            params: [...key]
+            params: [...key],
         };
 
         const response = await this.peripheral.sendCommand(command);
@@ -87,10 +83,7 @@ export class KBoot {
     async flashEraseRegion(startAddress: number, count: number): Promise<void> {
         const command: CommandOption = {
             command: Commands.FlashEraseRegion,
-            params: [
-                ...pack(startAddress, { bits: 32 }),
-                ...pack(count, { bits: 32 })
-            ]
+            params: [...pack(startAddress, { bits: 32 }), ...pack(count, { bits: 32 })],
         };
 
         const response = await this.peripheral.sendCommand(command);
@@ -107,7 +100,7 @@ export class KBoot {
     async flashEraseAllUnsecure(): Promise<void> {
         const command: CommandOption = {
             command: Commands.FlashEraseAllUnsecure,
-            params: []
+            params: [],
         };
 
         const response = await this.peripheral.sendCommand(command);
@@ -135,7 +128,7 @@ export class KBoot {
     async reset(): Promise<void> {
         const command: CommandOption = {
             command: Commands.Reset,
-            params: []
+            params: [],
         };
 
         let response: CommandResponse;
@@ -168,17 +161,13 @@ export class KBoot {
      * @param [speed=64] - Speed of the I2C
      */
     async configureI2c(address: number, speed = 64): Promise<void> {
-
         if (address > 127) {
             throw new Error('Only 7-bit i2c address is supported');
         }
 
         const command: CommandOption = {
             command: Commands.ConfigureI2c,
-            params: [
-                ...pack(address, { bits: 32 }),
-                ...pack(speed, { bits: 32 })
-            ]
+            params: [...pack(address, { bits: 32 }), ...pack(speed, { bits: 32 })],
         };
 
         const response = await this.peripheral.sendCommand(command);

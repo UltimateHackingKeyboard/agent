@@ -11,38 +11,38 @@ export interface State {
 export const initialState: State = {
     isLoading: false,
     contributors: [],
-    error: null
+    error: null,
 };
 
 export function reducer(state = initialState, action: Actions) {
     switch (action.type) {
         case ActionTypes.GET_AGENT_CONTRIBUTORS: {
             return {
-                ...state
-             };
+                ...state,
+            };
         }
 
         case ActionTypes.FETCH_AGENT_CONTRIBUTORS: {
             return {
                 ...state,
-                isLoading: true
-             };
+                isLoading: true,
+            };
         }
 
         case ActionTypes.AGENT_CONTRIBUTORS_AVAILABLE: {
             return {
                 ...state,
                 contributors: (<AgentContributorsAvailableAction>action).payload,
-                isLoading: false
-             };
+                isLoading: false,
+            };
         }
 
         case ActionTypes.AGENT_CONTRIBUTORS_NOT_AVAILABLE: {
             return {
                 ...state,
                 error: (<AgentContributorsNotAvailableAction>action).payload,
-                isLoading: false
-             };
+                isLoading: false,
+            };
         }
 
         default:

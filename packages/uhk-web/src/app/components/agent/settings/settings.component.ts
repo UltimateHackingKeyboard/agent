@@ -6,7 +6,7 @@ import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../../
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction,
-    TogglePreReleaseFlagAction
+    TogglePreReleaseFlagAction,
 } from '../../../store/actions/auto-update-settings';
 import { AutoUpdateSettings } from '../../../models/auto-update-settings';
 import { getVersions } from '../../../util';
@@ -16,8 +16,8 @@ import { getVersions } from '../../../util';
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
     host: {
-        'class': 'container-fluid'
-    }
+        class: 'container-fluid',
+    },
 })
 export class SettingsComponent {
     version: string = getVersions().version;

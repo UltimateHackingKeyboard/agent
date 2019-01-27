@@ -11,7 +11,7 @@ const device = uhk.getUhkDevice();
     }
 
     const bufferIdArg = process.argv[3];
-    const bufferId = uhk.configBufferIds[bufferIdArg]
+    const bufferId = uhk.configBufferIds[bufferIdArg];
     if (bufferId === undefined) {
         console.error(`Invalid bufferId: Gotta provide one of ${Object.keys(uhk.configBufferIds).join(', ')}`);
         process.exit(1);

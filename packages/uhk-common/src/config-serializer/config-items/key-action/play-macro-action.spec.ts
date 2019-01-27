@@ -3,8 +3,8 @@ import { PlayMacroAction } from './play-macro-action';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('play-action', () => {
-    const macros = [{id: 1}, {id: 2}];
-    const userConfiguration = {macros};
+    const macros = [{ id: 1 }, { id: 2 }];
+    const userConfiguration = { macros };
 
     it('should be instantiate', () => {
         const action = new PlayMacroAction();

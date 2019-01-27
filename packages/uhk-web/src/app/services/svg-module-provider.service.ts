@@ -6,7 +6,6 @@ import { convertXmlToSvgSeparator, SvgSeparator } from '../components/svg/separa
 
 @Injectable()
 export class SvgModuleProviderService {
-
     private ansiLeft: SvgModule;
     private isoLeft: SvgModule;
     private right: SvgModule;
@@ -18,7 +17,9 @@ export class SvgModuleProviderService {
 
     getSvgSeparator(): SvgSeparator {
         if (!this.separator) {
-            this.separator = convertXmlToSvgSeparator(require('xml-loader!../../devices/uhk60-right/separator.xml').svg);
+            this.separator = convertXmlToSvgSeparator(
+                require('xml-loader!../../devices/uhk60-right/separator.xml').svg,
+            );
         }
 
         return this.separator;
@@ -38,7 +39,6 @@ export class SvgModuleProviderService {
     }
 
     private getRightModule(): SvgModule {
-
         if (!this.right) {
             this.right = new SvgModule(require('xml-loader!../../devices/uhk60-right/layout.xml').svg);
         }

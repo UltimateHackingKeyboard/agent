@@ -12,7 +12,7 @@ export const encodeCommandOption = (option: CommandOption): number[] => {
         option.command,
         option.hasDataPhase ? 1 : 0,
         0, // Reserved. Should be 0
-        option.params ? option.params.length / 4 >> 0 : 0 // number of parameters
+        option.params ? (option.params.length / 4) >> 0 : 0, // number of parameters
     ];
 
     if (option.params) {
@@ -22,11 +22,10 @@ export const encodeCommandOption = (option: CommandOption): number[] => {
     const header = [
         1, // Communication channel
         0, // TODO: What is it?
-        ...pack(payload.length, { bits: 16 }) // payload length in 2 byte
+        ...pack(payload.length, { bits: 16 }), // payload length in 2 byte
     ];
 
-    const placeholders = new Array(32 - payload.length)
-        .fill(0);
+    const placeholders = new Array(32 - payload.length).fill(0);
 
     return [...header, ...payload, ...placeholders];
 };

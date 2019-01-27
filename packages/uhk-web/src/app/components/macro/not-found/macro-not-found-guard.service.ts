@@ -13,20 +13,17 @@ import { getMacros } from '../../../store/reducers/user-configuration';
 
 @Injectable()
 export class MacroNotFoundGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store
-            .let(getMacros())
-            .pipe(
-                map((macros: Macro[]) => {
-                    const hasMacros = macros.length > 0;
-                    if (hasMacros) {
-                        this.router.navigate(['/macro', macros[0].id]);
-                    }
-                    return !hasMacros;
-                })
-            );
+        return this.store.let(getMacros()).pipe(
+            map((macros: Macro[]) => {
+                const hasMacros = macros.length > 0;
+                if (hasMacros) {
+                    this.router.navigate(['/macro', macros[0].id]);
+                }
+                return !hasMacros;
+            }),
+        );
     }
 }

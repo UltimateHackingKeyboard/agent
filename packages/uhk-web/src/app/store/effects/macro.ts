@@ -13,32 +13,24 @@ import { findNewItem } from '../../util';
 
 @Injectable()
 export class MacroEffects {
+    @Effect({ dispatch: false }) remove$: any = this.actions$.ofType<MacroAction>(MacroActions.REMOVE).pipe(
+        tap(action => this.store.dispatch(KeymapActions.checkMacro(action.payload))),
+        withLatestFrom(this.store),
+        map(([action, state]) => state.userConfiguration.macros),
+        tap(macros => {
+            if (macros.length === 0) {
+                return this.router.navigate(['/macro']);
+            }
 
-    @Effect({ dispatch: false }) remove$: any = this.actions$
-        .ofType<MacroAction>(MacroActions.REMOVE)
-        .pipe(
-            tap(action => this.store.dispatch(KeymapActions.checkMacro(action.payload))),
-            withLatestFrom(this.store),
-            map(([action, state]) => state.userConfiguration.macros),
-            tap(macros => {
-                    if (macros.length === 0) {
-                        return this.router.navigate(['/macro']);
-                    }
-
-                    return this.router.navigate(['/macro', macros[0].id]);
-                }
-            )
-        );
+            return this.router.navigate(['/macro', macros[0].id]);
+        }),
+    );
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
         .ofType<MacroAction>(MacroActions.ADD, MacroActions.DUPLICATE)
         .pipe(
-            withLatestFrom(this.store.let(getMacros())
-                .pipe(
-                    pairwise()
-                )
-            ),
-            map(([action, latest]) => ([action, latest[0], latest[1]])),
+            withLatestFrom(this.store.let(getMacros()).pipe(pairwise())),
+            map(([action, latest]) => [action, latest[0], latest[1]]),
             tap(([action, prevMacros, newMacros]: [Action, Macro[], Macro[]]) => {
                 const newMacro = findNewItem(prevMacros, newMacros);
                 const commands = ['/macro', newMacro.id];
@@ -46,11 +38,8 @@ export class MacroEffects {
                     commands.push('new');
                 }
                 this.router.navigate(commands);
-            })
+            }),
         );
 
-    constructor(private actions$: Actions,
-                private router: Router,
-                private store: Store<AppState>) {
-    }
+    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
 }

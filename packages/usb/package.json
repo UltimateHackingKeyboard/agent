@@ -1,23 +1,23 @@
 {
-  "name": "agent-usb",
-  "version": "1.0.0",
-  "description": "Agent USB scripts",
-  "main": "uhk.js",
-  "license": "GPL-3.0",
-  "devDependencies": {
-    "@types/node": "8.0.28",
-    "shx": "0.2.2",
-    "typescript": "2.6.2"
-  },
-  "dependencies": {
-    "chalk": "2.1.0",
-    "commander": "^2.11.0",
-    "decompress": "^4.2.0",
-    "decompress-tarbz2": "^4.1.1",
-    "node-hid": "0.7.3",
-    "shelljs": "^0.7.8",
-    "tmp": "0.0.33",
-    "uhk-common": "1.0.0",
-    "uhk-usb": "1.0.0"
-  }
+    "name": "agent-usb",
+    "version": "1.0.0",
+    "description": "Agent USB scripts",
+    "main": "uhk.js",
+    "license": "GPL-3.0",
+    "devDependencies": {
+        "@types/node": "8.0.28",
+        "shx": "0.2.2",
+        "typescript": "2.6.2"
+    },
+    "dependencies": {
+        "chalk": "2.1.0",
+        "commander": "^2.11.0",
+        "decompress": "^4.2.0",
+        "decompress-tarbz2": "^4.1.1",
+        "node-hid": "0.7.3",
+        "shelljs": "^0.7.8",
+        "tmp": "0.0.33",
+        "uhk-common": "1.0.0",
+        "uhk-usb": "1.0.0"
+    }
 }

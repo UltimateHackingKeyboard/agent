@@ -18,7 +18,7 @@ export const ActionTypes = {
     RENAME_USER_CONFIGURATION: type(PREFIX + 'Rename user configuration'),
     SET_USER_CONFIGURATION_VALUE: type(PREFIX + 'Set user configuration value'),
     LOAD_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Load user configuration from file'),
-    APPLY_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Apply user configuration from file')
+    APPLY_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Apply user configuration from file'),
 };
 
 export class LoadUserConfigAction implements Action {
@@ -32,22 +32,19 @@ export class LoadConfigFromDeviceAction implements Action {
 export class LoadConfigFromDeviceReplyAction implements Action {
     type = ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY;
 
-    constructor(public payload: ConfigurationReply) {
-    }
+    constructor(public payload: ConfigurationReply) {}
 }
 
 export class LoadUserConfigSuccessAction implements Action {
     type = ActionTypes.LOAD_USER_CONFIG_SUCCESS;
 
-    constructor(public payload: UserConfiguration) {
-    }
+    constructor(public payload: UserConfiguration) {}
 }
 
 export class SaveUserConfigSuccessAction implements Action {
     type = ActionTypes.SAVE_USER_CONFIG_SUCCESS;
 
-    constructor(public payload: UserConfiguration) {
-    }
+    constructor(public payload: UserConfiguration) {}
 }
 
 export class SaveUserConfigInJsonFileAction implements Action {
@@ -61,40 +58,35 @@ export class SaveUserConfigInBinaryFileAction implements Action {
 export class LoadResetUserConfigurationAction implements Action {
     type = ActionTypes.LOAD_RESET_USER_CONFIGURATION;
 
-    constructor(public payload: UserConfiguration) {
-    }
+    constructor(public payload: UserConfiguration) {}
 }
 
 export class RenameUserConfigurationAction implements Action {
     type = ActionTypes.RENAME_USER_CONFIGURATION;
 
-    constructor(public payload: string) {
-    }
+    constructor(public payload: string) {}
 }
 
 export class SetUserConfigurationValueAction implements Action {
     type = ActionTypes.SET_USER_CONFIGURATION_VALUE;
 
-    constructor(public payload: UserConfigurationValue) {
-    }
+    constructor(public payload: UserConfigurationValue) {}
 }
 
 export class LoadUserConfigurationFromFileAction implements Action {
     type = ActionTypes.LOAD_USER_CONFIGURATION_FROM_FILE;
 
-    constructor(public payload: UploadFileData) {
-    }
+    constructor(public payload: UploadFileData) {}
 }
 
 export class ApplyUserConfigurationFromFileAction implements Action {
     type = ActionTypes.APPLY_USER_CONFIGURATION_FROM_FILE;
 
-    constructor(public payload: UserConfiguration) {
-    }
+    constructor(public payload: UserConfiguration) {}
 }
 
-export type Actions
-    = LoadUserConfigAction
+export type Actions =
+    | LoadUserConfigAction
     | LoadUserConfigSuccessAction
     | SaveUserConfigSuccessAction
     | LoadConfigFromDeviceAction
@@ -105,5 +97,4 @@ export type Actions
     | RenameUserConfigurationAction
     | SetUserConfigurationValueAction
     | LoadUserConfigurationFromFileAction
-    | ApplyUserConfigurationFromFileAction
-    ;
+    | ApplyUserConfigurationFromFileAction;

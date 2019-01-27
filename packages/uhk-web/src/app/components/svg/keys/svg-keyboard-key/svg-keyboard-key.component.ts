@@ -1,6 +1,15 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output,
-    SimpleChange, ChangeDetectionStrategy
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChange,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
 
@@ -20,7 +29,7 @@ import {
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    SwitchLayerMode
+    SwitchLayerMode,
 } from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
@@ -41,7 +50,7 @@ enum LabelTypes {
     TextIcon,
     SingleIcon,
     SwitchKeymap,
-    IconText
+    IconText,
 }
 
 @Component({
@@ -50,32 +59,41 @@ enum LabelTypes {
             transition('inactive => active', [
                 style({ fill: '#fff' }),
                 group([
-                    animate('1s ease-out', style({
-                        fill: '#333'
-                    }))
-                ])
-            ])
+                    animate(
+                        '1s ease-out',
+                        style({
+                            fill: '#333',
+                        }),
+                    ),
+                ]),
+            ]),
         ]),
         trigger('active', [
             // http://colorblendy.com/#!/multiply/4099e5/cccccc
             state('1', style({ fill: '#4099e5' })), // Signature blue color blending
             transition('1 => *', animate('200ms')),
-            transition('* => 1', animate('0ms')) // Instant color to blue
+            transition('* => 1', animate('0ms')), // Instant color to blue
         ]),
         trigger('recording', [
-            state('inactive', style({
-                fill: 'rgba(204, 0, 0, 1)'
-            })),
-            state('active', style({
-                fill: 'rgba(204, 0, 0, 0.6)'
-            })),
-            transition('inactive <=> active', animate('600ms ease-in-out'))
-        ])
+            state(
+                'inactive',
+                style({
+                    fill: 'rgba(204, 0, 0, 1)',
+                }),
+            ),
+            state(
+                'active',
+                style({
+                    fill: 'rgba(204, 0, 0, 0.6)',
+                }),
+            ),
+            transition('inactive <=> active', animate('600ms ease-in-out')),
+        ]),
     ],
     selector: 'g[svg-keyboard-key]',
     templateUrl: './svg-keyboard-key.component.html',
     styleUrls: ['./svg-keyboard-key.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() id: string;
@@ -112,10 +130,9 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private mapper: MapperService,
         private store: Store<AppState>,
         private element: ElementRef,
-        private captureService: CaptureService
+        private captureService: CaptureService,
     ) {
-        this.subscription = store.let(getMacros())
-            .subscribe((macros: Macro[]) => this.macros = macros);
+        this.subscription = store.let(getMacros()).subscribe((macros: Macro[]) => (this.macros = macros));
 
         this.reset();
         this.captureService.populateMapping();
@@ -128,7 +145,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.keyClick.emit({
             keyTarget: this.element.nativeElement,
             shiftPressed: e.shiftKey,
-            altPressed: e.altKey
+            altPressed: e.altKey,
         });
         this.pressedShiftLocation = -1;
         this.pressedAltLocation = -1;
@@ -157,12 +174,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         if (e.keyCode === Key.Alt && this.pressedAltLocation > -1) {
             this.pressedAltLocation = -1;
             e.preventDefault();
-        }
-        else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
+        } else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
             this.pressedShiftLocation = -1;
             e.preventDefault();
-        }
-        else if (this.scanCodePressed) {
+        } else if (this.scanCodePressed) {
             e.preventDefault();
             this.scanCodePressed = false;
         } else if (this.recording) {
@@ -182,17 +197,17 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 // If the Alt or Shift key not released after start the capturing
                 // then add them as a modifier
                 if (this.pressedShiftLocation > -1) {
-                    this.captureService.setModifier((this.pressedShiftLocation === 1), Key.Shift);
+                    this.captureService.setModifier(this.pressedShiftLocation === 1, Key.Shift);
                 }
 
                 if (this.pressedAltLocation > -1) {
-                    this.captureService.setModifier((this.pressedAltLocation === 1), Key.Alt);
+                    this.captureService.setModifier(this.pressedAltLocation === 1, Key.Alt);
                 }
 
                 this.saveScanCode(this.captureService.getMap(code));
                 this.scanCodePressed = true;
             } else {
-                this.captureService.setModifier((e.location === 1), code);
+                this.captureService.setModifier(e.location === 1, code);
             }
         } else {
             if (e.keyCode === Key.Shift) {
@@ -256,10 +271,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             captured: {
                 code,
                 left,
-                right
+                right,
             },
             shiftPressed: this.shiftPressed,
-            altPressed: this.altPressed
+            altPressed: this.altPressed,
         });
 
         this.reset();
@@ -346,13 +361,13 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 this.labelType = LabelTypes.TextIcon;
                 this.labelSource = {
                     text: newLabelSource,
-                    icon: this.mapper.getIcon('toggle')
+                    icon: this.mapper.getIcon('toggle'),
                 };
             } else if (keyAction.switchLayerMode === SwitchLayerMode.holdAndDoubleTapToggle) {
                 this.labelType = LabelTypes.TextIcon;
                 this.labelSource = {
                     text: newLabelSource,
-                    icon: this.mapper.getIcon('double-tap')
+                    icon: this.mapper.getIcon('double-tap'),
                 };
             } else {
                 this.labelType = LabelTypes.OneLineText;
@@ -368,7 +383,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             this.labelType = LabelTypes.IconText;
             this.labelSource = {
                 icon: this.mapper.getIcon('macro'),
-                text: macro.name
+                text: macro.name,
             };
         } else if (this.keyAction instanceof MouseAction) {
             this.labelType = LabelTypes.MouseKey;

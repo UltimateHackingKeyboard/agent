@@ -1,25 +1,25 @@
 export function assertUInt8(target: any, key: string) {
-    return assertInteger(target, key, 0, 0xFF);
+    return assertInteger(target, key, 0, 0xff);
 }
 
 export function assertInt8(target: any, key: string) {
-    return assertInteger(target, key, -0x80, 0x7F);
+    return assertInteger(target, key, -0x80, 0x7f);
 }
 
 export function assertUInt16(target: any, key: string) {
-    return assertInteger(target, key, 0, 0xFFFF);
+    return assertInteger(target, key, 0, 0xffff);
 }
 
 export function assertInt16(target: any, key: string) {
-    return assertInteger(target, key, -0x8000, 0x7FFF);
+    return assertInteger(target, key, -0x8000, 0x7fff);
 }
 
 export function assertUInt32(target: any, key: string) {
-    return assertInteger(target, key, 0, 0xFFFFFFFF);
+    return assertInteger(target, key, 0, 0xffffffff);
 }
 
 export function assertInt32(target: any, key: string) {
-    return assertInteger(target, key, -0x80000000, 0x7FFFFFFF);
+    return assertInteger(target, key, -0x80000000, 0x7fffffff);
 }
 
 export function assertCompactLength(target: any, key: string) {
@@ -47,7 +47,7 @@ function assertInteger(target: any, key: string, min: number, max: number) {
         get: getter,
         set: setter,
         enumerable: true,
-        configurable: true
+        configurable: true,
     });
 }
 
@@ -72,7 +72,7 @@ export function assertEnum<E>(enumerated: E) {
             get: getter,
             set: setter,
             enumerable: true,
-            configurable: true
+            configurable: true,
         });
     };
 }

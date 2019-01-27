@@ -6,9 +6,7 @@ require('shelljs/global');
 config.fatal = true;
 const extension = '.hex';
 
-program
-    .usage(`firmwareImage${extension}`)
-    .parse(process.argv)
+program.usage(`firmwareImage${extension}`).parse(process.argv);
 
 const firmwareImage = program.args[0];
 uhk.updateDeviceFirmware(firmwareImage, extension);

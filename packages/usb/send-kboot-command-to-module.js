@@ -4,12 +4,14 @@ const program = require('commander');
 const path = require('path');
 
 program
-    .usage(`command [moduleSlot]
+    .usage(
+        `command [moduleSlot]
 
   command: ${Object.keys(uhk.kbootCommands).join(' | ')}
   moduleSlot: ${Object.keys(uhk.moduleSlotToI2cAddress).join(' | ')}
-  moduleSlot is always required, except for the idle command.`)
-    .parse(process.argv)
+  moduleSlot is always required, except for the idle command.`,
+    )
+    .parse(process.argv);
 
 const kbootCommand = program.args[0];
 if (!kbootCommand) {

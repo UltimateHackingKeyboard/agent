@@ -6,7 +6,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 @Component({
     selector: 'g[svg-single-icon-key]',
     templateUrl: './svg-single-icon-key.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgSingleIconKeyComponent implements OnChanges {
     @Input() width: number;
@@ -20,7 +20,7 @@ export class SvgSingleIconKeyComponent implements OnChanges {
     secondaryTextY: number;
     secondaryHeight: number;
 
-    constructor() { }
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();

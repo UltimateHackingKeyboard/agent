@@ -8,7 +8,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
     selector: 'keymap-tab',
     templateUrl: './keymap-tab.component.html',
     styleUrls: ['./keymap-tab.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -24,13 +24,14 @@ export class KeymapTabComponent extends Tab implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.keymaps) {
-            this.keymapOptions = this.keymaps
-                .map((keymap: Keymap): SelectOptionData => {
+            this.keymapOptions = this.keymaps.map(
+                (keymap: Keymap): SelectOptionData => {
                     return {
                         id: keymap.abbreviation,
-                        text: keymap.name
+                        text: keymap.name,
                     };
-                });
+                },
+            );
             if (this.keymaps.length > 0) {
                 this.selectedKeymap = this.keymaps[0];
             }
@@ -58,8 +59,9 @@ export class KeymapTabComponent extends Tab implements OnChanges {
         }
 
         const switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
-        this.selectedKeymap = this.keymaps
-            .find((keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation);
+        this.selectedKeymap = this.keymaps.find(
+            (keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation,
+        );
     }
 
     toKeyAction(): SwitchKeymapAction {

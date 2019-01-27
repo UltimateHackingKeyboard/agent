@@ -10,10 +10,10 @@ export interface State extends AutoUpdateSettings {
 export const initialState: State = {
     checkForUpdateOnStartUp: false,
     usePreReleaseUpdate: false,
-    checkingForUpdate: false
+    checkingForUpdate: false,
 };
 
-export function reducer(state = initialState, action: Action & { payload?: any}): State {
+export function reducer(state = initialState, action: Action & { payload?: any }): State {
     switch (action.type) {
         case ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP: {
             return Object.assign({}, state, { checkForUpdateOnStartUp: action.payload });
@@ -28,7 +28,7 @@ export function reducer(state = initialState, action: Action & { payload?: any})
         }
 
         case ActionTypes.CHECK_FOR_UPDATE_NOW: {
-            return Object.assign({}, state, { checkingForUpdate: true});
+            return Object.assign({}, state, { checkingForUpdate: true });
         }
 
         case UpdateActions.UPDATE_ERROR:
@@ -44,7 +44,7 @@ export function reducer(state = initialState, action: Action & { payload?: any})
 
 export const getUpdateSettings = (state: State) => ({
     checkForUpdateOnStartUp: state.checkForUpdateOnStartUp,
-    usePreReleaseUpdate: state.usePreReleaseUpdate
+    usePreReleaseUpdate: state.usePreReleaseUpdate,
 });
 
 export const checkingForUpdate = (state: State) => state.checkingForUpdate;

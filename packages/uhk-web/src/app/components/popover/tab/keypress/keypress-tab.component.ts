@@ -6,7 +6,7 @@ import {
     Input,
     OnChanges,
     Output,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
@@ -31,7 +31,7 @@ export const secondaryRoleFilter = (showLayerSwitchers: boolean) => {
     selector: 'keypress-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './keypress-tab.component.html',
-    styleUrls: ['./keypress-tab.component.scss']
+    styleUrls: ['./keypress-tab.component.scss'],
 })
 export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -52,16 +52,17 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     selectedSecondaryRoleIndex: number;
     warningVisible: boolean;
 
-    constructor(private mapper: MapperService,
-                private cdRef: ChangeDetectorRef) {
+    constructor(private mapper: MapperService, private cdRef: ChangeDetectorRef) {
         super();
         this.leftModifiers = mapper.getLeftKeyModifiers();
         this.rightModifiers = mapper.getRightKeyModifiers();
 
-        this.scanCodeGroups = [{
-            id: '0',
-            text: 'None'
-        }];
+        this.scanCodeGroups = [
+            {
+                id: '0',
+                text: 'None',
+            },
+        ];
         this.scanCodeGroups = this.scanCodeGroups.concat(SCANCODES);
         this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
@@ -80,10 +81,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             keystrokeAction = this.toKeyAction();
         }
 
-        return (keystrokeAction) ? (keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0) : false;
+        return keystrokeAction ? keystrokeAction.scancode > 0 || keystrokeAction.modifierMask > 0 : false;
     }
 
-    onKeysCapture(event: { code: number, left: KeyModifierModel[], right: KeyModifierModel[] }) {
+    onKeysCapture(event: { code: number; left: KeyModifierModel[]; right: KeyModifierModel[] }) {
         if (event.code) {
             this.selectedScancodeOption = this.findScancodeOptionByScancode(event.code, KeystrokeType.basic);
         } else {
@@ -101,7 +102,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
         const keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
         // Restore selectedScancodeOption
-        this.selectedScancodeOption = this.findScancodeOptionByScancode(keystrokeAction.scancode || 0, keystrokeAction.type);
+        this.selectedScancodeOption = this.findScancodeOptionByScancode(
+            keystrokeAction.scancode || 0,
+            keystrokeAction.type,
+        );
 
         for (const modifier of this.leftModifiers) {
             modifier.checked = (keystrokeAction.modifierMask & modifier.value) > 0;
@@ -132,9 +136,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
         keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(this.leftModifiers, this.rightModifiers);
 
-        keystrokeAction.secondaryRoleAction = this.selectedSecondaryRoleIndex === -1
-            ? undefined
-            : this.mapper.modifierMapper(this.selectedSecondaryRoleIndex);
+        keystrokeAction.secondaryRoleAction =
+            this.selectedSecondaryRoleIndex === -1
+                ? undefined
+                : this.mapper.modifierMapper(this.selectedSecondaryRoleIndex);
 
         if (this.keyActionValid(keystrokeAction)) {
             return keystrokeAction;
@@ -192,7 +197,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): SelectOptionData {
         const typeToFind: string =
-            (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) ? 'media' : KeystrokeType[type];
+            type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia ? 'media' : KeystrokeType[type];
         return this.findScancodeOptionBy((option: SelectOptionData) => {
             const additional = option.additional;
             if (additional && additional.scancode === scancode && additional.type === typeToFind) {
@@ -236,7 +241,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private calculateRemapOnAllLayerWarningVisibility(keystrokeAction: KeystrokeAction): void {
-        this.warningVisible = this.allowRemapOnAllKeymapWarning &&
+        this.warningVisible =
+            this.allowRemapOnAllKeymapWarning &&
             this.remapInfo &&
             !this.remapInfo.remapOnAllLayer &&
             keystrokeAction &&
@@ -245,7 +251,6 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private fillSecondaryRoles(): void {
-        this.secondaryRoleGroups = SECONDARY_ROLES
-            .filter(secondaryRoleFilter(this.showLayerSwitcherInSecondaryRoles));
+        this.secondaryRoleGroups = SECONDARY_ROLES.filter(secondaryRoleFilter(this.showLayerSwitcherInSecondaryRoles));
     }
 }

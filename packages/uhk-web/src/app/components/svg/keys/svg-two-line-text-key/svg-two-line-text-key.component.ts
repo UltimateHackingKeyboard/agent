@@ -4,7 +4,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 @Component({
     selector: 'g[svg-two-line-text-key]',
     templateUrl: './svg-two-line-text-key.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgTwoLineTextKeyComponent implements OnChanges {
     @Input() height: number;
@@ -33,7 +33,7 @@ export class SvgTwoLineTextKeyComponent implements OnChanges {
         let textContainerHeight = this.height;
 
         if (this.secondaryText) {
-            textYModifier =  this.height / 5;
+            textYModifier = this.height / 5;
             secondaryYModifier = 0;
             this.secondaryHeight = this.height / 4;
             textContainerHeight -= this.secondaryHeight;

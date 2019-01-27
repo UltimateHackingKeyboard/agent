@@ -5,7 +5,7 @@ import { UploadFileData } from '../../models/upload-file-data';
 @Component({
     selector: 'file-upload',
     templateUrl: './file-upload.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileUploadComponent {
     @Input() label = 'Select file';
@@ -22,13 +22,13 @@ export class FileUploadComponent {
         }
 
         const fileReader = new FileReader();
-        fileReader.onloadend = function () {
+        fileReader.onloadend = function() {
             const arrayBuffer = new Uint8Array(fileReader.result);
             const target = event.target || event.srcElement || event.currentTarget;
             target.value = null;
             this.fileChanged.emit({
                 filename: event.srcElement.value,
-                data: Array.from(arrayBuffer)
+                data: Array.from(arrayBuffer),
             });
         }.bind(this);
         fileReader.readAsArrayBuffer(files[0]);

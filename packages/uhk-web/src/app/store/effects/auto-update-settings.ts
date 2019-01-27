@@ -10,7 +10,7 @@ import {
     ActionTypes,
     LoadAutoUpdateSettingsAction,
     LoadAutoUpdateSettingsSuccessAction,
-    SaveAutoUpdateSettingsSuccessAction
+    SaveAutoUpdateSettingsSuccessAction,
 } from '../actions/auto-update-settings';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -21,18 +21,16 @@ import { ShowNotificationAction } from '../actions/app';
 
 @Injectable()
 export class AutoUpdateSettingsEffects {
-    @Effect() loadUserConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_AUTO_UPDATE_SETTINGS)
-        .pipe(
-            startWith(new LoadAutoUpdateSettingsAction()),
-            switchMap(() => {
-                let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
-                if (!settings) {
-                    settings = initialState;
-                }
-                return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
-            })
-        );
+    @Effect() loadUserConfig$: Observable<Action> = this.actions$.ofType(ActionTypes.LOAD_AUTO_UPDATE_SETTINGS).pipe(
+        startWith(new LoadAutoUpdateSettingsAction()),
+        switchMap(() => {
+            let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
+            if (!settings) {
+                settings = initialState;
+            }
+            return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
+        }),
+    );
 
     @Effect() saveAutoUpdateConfig$: Observable<Action> = this.actions$
         .ofType(ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP, ActionTypes.TOGGLE_PRE_RELEASE_FLAG)
@@ -41,7 +39,7 @@ export class AutoUpdateSettingsEffects {
             map(([action, config]) => {
                 this.dataStorageRepository.saveAutoUpdateSettings(config);
                 return new SaveAutoUpdateSettingsSuccessAction();
-            })
+            }),
         );
 
     @Effect() sendNotification$: Observable<Action> = this.actions$
@@ -51,13 +49,14 @@ export class AutoUpdateSettingsEffects {
             map((message: string) => {
                 return new ShowNotificationAction({
                     type: NotificationType.Info,
-                    message
+                    message,
                 });
-            })
+            }),
         );
 
-    constructor(private actions$: Actions,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private store: Store<AppState>) {
-    }
+    constructor(
+        private actions$: Actions,
+        private dataStorageRepository: DataStorageRepositoryService,
+        private store: Store<AppState>,
+    ) {}
 }

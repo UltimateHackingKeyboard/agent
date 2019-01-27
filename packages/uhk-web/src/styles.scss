@@ -11,7 +11,8 @@ $zindex-navbar-fixed: 1030;
 @import './styles/side-menu';
 @import './styles/ngx-select-ex';
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
 }
@@ -67,11 +68,16 @@ ul.no-indent {
     margin-bottom: 0;
 }
 
-.h1, .h2, .h3, h1, h2, h3 {
+.h1,
+.h2,
+.h3,
+h1,
+h2,
+h3 {
     margin-top: 10px;
 }
 
-input[type=file] {
+input[type='file'] {
     display: inline-block;
 }
 
@@ -94,7 +100,7 @@ a.disabled {
     position: relative;
     overflow: hidden;
 
-    input[type=file] {
+    input[type='file'] {
         position: absolute;
         top: 0;
         right: 0;

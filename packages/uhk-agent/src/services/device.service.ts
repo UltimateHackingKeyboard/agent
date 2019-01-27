@@ -11,7 +11,7 @@ import {
     LogService,
     mapObjectToUserConfigBinaryBuffer,
     SaveUserConfigurationData,
-    UpdateFirmwareData
+    UpdateFirmwareData,
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Subscription } from 'rxjs/Subscription';
@@ -27,7 +27,7 @@ import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
     getPackageJsonFromPathAsync,
-    saveTmpFirmware
+    saveTmpFirmware,
 } from '../util';
 
 /**
@@ -40,11 +40,13 @@ export class DeviceService {
     private pollTimer$: Subscription;
     private queueManager = new QueueManager();
 
-    constructor(private logService: LogService,
-                private win: Electron.BrowserWindow,
-                private device: UhkHidDevice,
-                private operations: UhkOperations,
-                private rootDir: string) {
+    constructor(
+        private logService: LogService,
+        private win: Electron.BrowserWindow,
+        private device: UhkHidDevice,
+        private operations: UhkOperations,
+        private rootDir: string,
+    ) {
         this.pollUhkDevice();
 
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
@@ -52,7 +54,7 @@ export class DeviceService {
                 method: this.saveUserConfiguration,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -61,7 +63,7 @@ export class DeviceService {
                 method: this.loadConfigurations,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -70,7 +72,7 @@ export class DeviceService {
                 method: this.updateFirmware,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -81,7 +83,7 @@ export class DeviceService {
                 method: this.recoveryDevice,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -90,7 +92,7 @@ export class DeviceService {
                 method: this.enableUsbStackTest,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -116,12 +118,12 @@ export class DeviceService {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId)
+                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId),
             };
         } catch (error) {
             response = {
                 success: false,
-                error: error.message
+                error: error.message,
             };
         } finally {
             this.device.close();
@@ -136,10 +138,9 @@ export class DeviceService {
 
             return {
                 leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
-                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
+                rightModuleInfo: await this.operations.getRightModuleVersionInfo(),
             };
-        }
-        catch (err) {
+        } catch (err) {
             if (!catchError) {
                 return err;
             }
@@ -148,7 +149,7 @@ export class DeviceService {
 
             return {
                 leftModuleInfo: {},
-                rightModuleInfo: {}
+                rightModuleInfo: {},
             };
         }
     }
@@ -181,8 +182,7 @@ export class DeviceService {
 
                 await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
                 await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
-            }
-            else {
+            } else {
                 const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
                 const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
@@ -194,7 +194,7 @@ export class DeviceService {
             response.success = true;
             response.modules = await this.getHardwareModules(false);
         } catch (error) {
-            const err = {message: error.message, stack: error.stack};
+            const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
             response.modules = await this.getHardwareModules(true);
@@ -223,7 +223,7 @@ export class DeviceService {
             response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {
-            const err = {message: error.message, stack: error.stack};
+            const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
             response.modules = await this.getHardwareModules(true);
@@ -257,7 +257,7 @@ export class DeviceService {
                 tap((state: DeviceConnectionState) => {
                     this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
                     this.logService.info('[DeviceService] Device connection state changed to:', state);
-                })
+                }),
             )
             .subscribe();
     }
@@ -273,10 +273,9 @@ export class DeviceService {
             await this.operations.saveUserConfiguration(buffer);
 
             response.success = true;
-        }
-        catch (error) {
+        } catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
-            response.error = {message: error.message};
+            response.error = { message: error.message };
         } finally {
             this.device.close();
         }
@@ -293,6 +292,5 @@ export class DeviceService {
 
         this.pollTimer$.unsubscribe();
         this.pollTimer$ = null;
-
     }
 }

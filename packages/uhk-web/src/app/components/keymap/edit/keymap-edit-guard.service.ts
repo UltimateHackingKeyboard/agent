@@ -15,20 +15,17 @@ import { getKeymaps } from '../../../store/reducers/user-configuration';
 
 @Injectable()
 export class KeymapEditGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store
-            .let(getKeymaps())
-            .pipe(
-                tap((keymaps: Keymap[]) => {
-                    const defaultKeymap = keymaps.find(keymap => keymap.isDefault);
-                    if (defaultKeymap) {
-                        this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
-                    }
-                }),
-                switchMap(() => of(false))
-            );
+        return this.store.let(getKeymaps()).pipe(
+            tap((keymaps: Keymap[]) => {
+                const defaultKeymap = keymaps.find(keymap => keymap.isDefault);
+                if (defaultKeymap) {
+                    this.router.navigate(['/keymap', defaultKeymap.abbreviation]);
+                }
+            }),
+            switchMap(() => of(false)),
+        );
     }
 }

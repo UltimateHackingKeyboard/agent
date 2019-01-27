@@ -3,8 +3,8 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { UserConfiguration } from '../user-configuration';
 
 export enum KeyActionId {
-    NoneAction                   = 0,
-    KeystrokeAction              = 1,
+    NoneAction = 0,
+    KeystrokeAction = 1,
     /*
         1 - 31 are reserved for KeystrokeAction
         5 bits:
@@ -13,24 +13,23 @@ export enum KeyActionId {
             3: Do we have secondaryRole?
             4-5: What kind of keystroke? (basic, short/long media, system)
     */
-    LastKeystrokeAction          = 31, // TODO: remove this after refactoring the keyActionId check
-    SwitchLayerAction            = 32,
-    SwitchKeymapAction           = 33,
-    MouseAction                  = 34,
-    PlayMacroAction              = 35
+    LastKeystrokeAction = 31, // TODO: remove this after refactoring the keyActionId check
+    SwitchLayerAction = 32,
+    SwitchKeymapAction = 33,
+    MouseAction = 34,
+    PlayMacroAction = 35,
 }
 
 export let keyActionType = {
-    NoneAction                   : 'none',
-    KeystrokeAction              : 'keystroke',
-    SwitchLayerAction            : 'switchLayer',
-    SwitchKeymapAction           : 'switchKeymap',
-    MouseAction                  : 'mouse',
-    PlayMacroAction              : 'playMacro'
+    NoneAction: 'none',
+    KeystrokeAction: 'keystroke',
+    SwitchLayerAction: 'switchLayer',
+    SwitchKeymapAction: 'switchKeymap',
+    MouseAction: 'mouse',
+    PlayMacroAction: 'playMacro',
 };
 
 export abstract class KeyAction {
-
     assertKeyActionType(jsObject: any): void {
         const keyActionClassname: string = this.getName();
         const keyActionTypeString: string = keyActionType[keyActionClassname];

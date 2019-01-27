@@ -3,16 +3,16 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
-    forwardRef, HostListener,
+    forwardRef,
+    HostListener,
     Input,
     Renderer2,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as util from '../../util';
 
-const noop = (_: any) => {
-};
+const noop = (_: any) => {};
 
 @Component({
     selector: 'auto-grow-input',
@@ -22,9 +22,9 @@ const noop = (_: any) => {
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => AutoGrowInputComponent),
-            multi: true
-        }
-    ]
+            multi: true,
+        },
+    ],
 })
 export class AutoGrowInputComponent implements ControlValueAccessor {
     @Input() maxParentWidthPercent = 1;
@@ -51,9 +51,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
     private _onChanged = noop;
     private _onTouched = noop;
 
-    constructor(private _cdRef: ChangeDetectorRef,
-                private _renderer: Renderer2) {
-    }
+    constructor(private _cdRef: ChangeDetectorRef, private _renderer: Renderer2) {}
 
     registerOnChange(fn: any): void {
         this._onChanged = fn;

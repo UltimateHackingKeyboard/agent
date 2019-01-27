@@ -8,7 +8,7 @@ import {
     KbootCommands,
     ModulePropertyId,
     ModuleSlotToI2cAddress,
-    ModuleSlotToId
+    ModuleSlotToId,
 } from './constants';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -19,10 +19,7 @@ import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransfer
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
 export class UhkOperations {
-    constructor(private logService: LogService,
-                private device: UhkHidDevice,
-                private rootDir: string) {
-    }
+    constructor(private logService: LogService, private device: UhkHidDevice, private rootDir: string) {}
 
     public async updateRightFirmware(firmwarePath = this.getFirmwarePath()) {
         this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
@@ -31,7 +28,9 @@ export class UhkOperations {
         this.logService.info('[UhkOperations] Reenumerate bootloader');
         await this.device.reenumerate(EnumerationModes.Bootloader);
         this.device.close();
-        const kboot = new KBoot(new UsbPeripheral({ productId: Constants.BOOTLOADER_ID, vendorId: Constants.VENDOR_ID }));
+        const kboot = new KBoot(
+            new UsbPeripheral({ productId: Constants.BOOTLOADER_ID, vendorId: Constants.VENDOR_ID }),
+        );
         this.logService.info('[UhkOperations] Waiting for bootloader');
         await waitForDevice(Constants.VENDOR_ID, Constants.BOOTLOADER_ID);
         this.logService.info('[UhkOperations] Flash security disable');
@@ -45,7 +44,7 @@ export class UhkOperations {
         for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
             const dataOption: DataOption = {
                 startAddress,
-                data
+                data,
             };
 
             await kboot.writeMemory(dataOption);
@@ -71,7 +70,7 @@ export class UhkOperations {
 
         const leftModuleBricked = await this.waitForKbootIdle();
         if (!leftModuleBricked) {
-            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
+            const msg = "[UhkOperations] Couldn't connect to the left keyboard half.";
             this.logService.error(msg);
             throw new Error(msg);
         }
@@ -81,7 +80,10 @@ export class UhkOperations {
         this.logService.info('[UhkOperations] Waiting for buspal');
         await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
         let tryCount = 0;
-        const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+        const usbPeripheral = new UsbPeripheral({
+            productId: EnumerationNameToProductId.buspal,
+            vendorId: Constants.VENDOR_ID,
+        });
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
@@ -143,7 +145,7 @@ export class UhkOperations {
 
             return {
                 userConfiguration,
-                hardwareConfiguration
+                hardwareConfiguration,
             };
         } finally {
             this.device.close();
@@ -171,8 +173,13 @@ export class UhkOperations {
             this.logService.debug(`[DeviceOperation] USB[T]: Read ${configName} from keyboard`);
             while (offset < configSize) {
                 const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
-                const writeBuffer = Buffer.from(
-                    [UsbCommand.ReadConfig, configBufferId, chunkSizeToRead, offset & 0xff, offset >> 8]);
+                const writeBuffer = Buffer.from([
+                    UsbCommand.ReadConfig,
+                    configBufferId,
+                    chunkSizeToRead,
+                    offset & 0xff,
+                    offset >> 8,
+                ]);
                 const readBuffer = await this.device.write(writeBuffer);
                 configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
@@ -182,8 +189,10 @@ export class UhkOperations {
                     configSize = readBuffer[7] + (readBuffer[8] << 8);
                     this.logService.debug(`[DeviceOperation] userConfigSize: ${configSize}`);
                     if (originalConfigSize < configSize) {
-                        this.logService.debug(`[DeviceOperation] userConfigSize should never be larger than getConfigSize()! ` +
-                            `Overriding configSize with getConfigSize()`);
+                        this.logService.debug(
+                            `[DeviceOperation] userConfigSize should never be larger than getConfigSize()! ` +
+                                `Overriding configSize with getConfigSize()`,
+                        );
                         configSize = originalConfigSize;
                     }
                 }
@@ -232,7 +241,9 @@ export class UhkOperations {
         const timeoutTime = new Date(new Date().getTime() + 30000);
 
         while (new Date() < timeoutTime) {
-            const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
+            const buffer = await this.device.write(
+                new Buffer([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]),
+            );
             this.device.close();
 
             if (buffer[1] === 0) {
@@ -240,7 +251,9 @@ export class UhkOperations {
             }
 
             // tslint:disable-next-line: max-line-length
-            this.logService.info('[DeviceOperation] Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.');
+            this.logService.info(
+                '[DeviceOperation] Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.',
+            );
 
             await snooze(1000);
         }
@@ -255,7 +268,7 @@ export class UhkOperations {
             const command = new Buffer([
                 UsbCommand.GetModuleProperty,
                 ModuleSlotToId.leftHalf,
-                ModulePropertyId.protocolVersions
+                ModulePropertyId.protocolVersions,
             ]);
 
             const buffer = await this.device.write(command);
@@ -265,7 +278,7 @@ export class UhkOperations {
 
             return {
                 moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             };
         } catch (error) {
             this.logService.error('[DeviceOperation] Could not read left module version information', error);
@@ -273,7 +286,7 @@ export class UhkOperations {
 
         return {
             moduleProtocolVersion: '',
-            firmwareVersion: ''
+            firmwareVersion: '',
         };
     }
 
@@ -287,7 +300,7 @@ export class UhkOperations {
         uhkBuffer.readUInt8();
 
         return {
-            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
         };
     }
 

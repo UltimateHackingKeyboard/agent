@@ -5,7 +5,6 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { UserConfiguration } from '../user-configuration';
 
 export class SwitchKeymapAction extends KeyAction {
-
     keymapAbbreviation: string;
 
     constructor(parameter?: SwitchKeymapAction | Keymap | string) {
@@ -31,12 +30,14 @@ export class SwitchKeymapAction extends KeyAction {
     toJsonObject(): any {
         return {
             keyActionType: keyActionType.SwitchKeymapAction,
-            keymapAbbreviation: this.keymapAbbreviation
+            keymapAbbreviation: this.keymapAbbreviation,
         };
     }
 
     toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
-        const keymapIndex = userConfiguration.keymaps.findIndex(keymap => keymap.abbreviation === this.keymapAbbreviation);
+        const keymapIndex = userConfiguration.keymaps.findIndex(
+            keymap => keymap.abbreviation === this.keymapAbbreviation,
+        );
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
         buffer.writeUInt8(keymapIndex);
     }
@@ -58,7 +59,6 @@ export class SwitchKeymapAction extends KeyAction {
 }
 
 export class UnresolvedSwitchKeymapAction extends KeyAction {
-
     @assertUInt8
     keymapIndex: number;
 
@@ -79,7 +79,9 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
     }
 
     toJsonObject(): any {
-        throw new Error('UnresolvedSwitchKeymapAction cannot be serialized directly. Convert it to SwitchKeymapAction first.');
+        throw new Error(
+            'UnresolvedSwitchKeymapAction cannot be serialized directly. Convert it to SwitchKeymapAction first.',
+        );
     }
 
     resolve(keymaps: Keymap[]): SwitchKeymapAction {

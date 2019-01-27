@@ -11,7 +11,7 @@ export const ActionTypes = {
     GET_AGENT_CONTRIBUTORS: type(PREFIX + 'Get'),
     FETCH_AGENT_CONTRIBUTORS: type(PREFIX + 'Fetch'),
     AGENT_CONTRIBUTORS_AVAILABLE: type(PREFIX + 'Available'),
-    AGENT_CONTRIBUTORS_NOT_AVAILABLE: type(PREFIX + 'Not available')
+    AGENT_CONTRIBUTORS_NOT_AVAILABLE: type(PREFIX + 'Not available'),
 };
 
 export class GetAgentContributorsAction implements Action {
@@ -24,8 +24,7 @@ export class FetchAgentContributorsAction implements Action {
 export class AgentContributorsAvailableAction implements Action {
     type = ActionTypes.AGENT_CONTRIBUTORS_AVAILABLE;
 
-    constructor(public payload: UHKContributor[]) {
-    }
+    constructor(public payload: UHKContributor[]) {}
 }
 
 export class AgentContributorsNotAvailableAction implements Action {
@@ -36,8 +35,8 @@ export class AgentContributorsNotAvailableAction implements Action {
     }
 }
 
-export type Actions
-    = FetchAgentContributorsAction
+export type Actions =
+    | FetchAgentContributorsAction
     | AgentContributorsAvailableAction
     | AgentContributorsNotAvailableAction
     | FetchAgentContributorsAction

@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const program = require('commander');
-const uhk = require('./uhk')
+const uhk = require('./uhk');
 require('shelljs/global');
 
 (async function() {
     config.fatal = true;
 
-    program
-        .usage(`firmwarePath`)
-        .parse(process.argv);
+    program.usage(`firmwarePath`).parse(process.argv);
 
     if (program.args.length < 1) {
         console.error('No firmware path specified.');
@@ -35,6 +33,6 @@ require('shelljs/global');
     await uhk.writeUca(device, configBuffer);
     await uhk.writeHca(device, isIso);
     await uhk.switchKeymap(device, 'TES');
-    console.log('All done!')
+    console.log('All done!');
     config.verbose = false;
 })();

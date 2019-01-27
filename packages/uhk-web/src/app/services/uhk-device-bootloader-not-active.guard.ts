@@ -9,17 +9,15 @@ import { AppState, bootloaderActive } from '../store';
 
 @Injectable()
 export class UhkDeviceBootloaderNotActiveGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store.select(bootloaderActive)
-            .pipe(
-                tap(active => {
-                    if (!active) {
-                        this.router.navigate(['/']);
-                    }
-                })
-            );
+        return this.store.select(bootloaderActive).pipe(
+            tap(active => {
+                if (!active) {
+                    this.router.navigate(['/']);
+                }
+            }),
+        );
     }
 }

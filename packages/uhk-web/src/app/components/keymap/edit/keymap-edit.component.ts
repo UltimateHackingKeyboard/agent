@@ -21,11 +21,10 @@ import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription
     styleUrls: ['./keymap-edit.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
-        'class': 'container-fluid'
-    }
+        class: 'container-fluid',
+    },
 })
 export class KeymapEditComponent {
-
     keyboardSplit: boolean;
 
     deletable$: Observable<boolean>;
@@ -33,37 +32,30 @@ export class KeymapEditComponent {
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
 
-    constructor(protected store: Store<AppState>,
-                route: ActivatedRoute) {
-        this.keymap$ = route
-            .params
-            .pipe(
-                pluck<{}, string>('abbr'),
-                switchMap((abbr: string) => store.let(getKeymap(abbr))),
-                publishReplay(1),
-                refCount()
-            );
+    constructor(protected store: Store<AppState>, route: ActivatedRoute) {
+        this.keymap$ = route.params.pipe(
+            pluck<{}, string>('abbr'),
+            switchMap((abbr: string) => store.let(getKeymap(abbr))),
+            publishReplay(1),
+            refCount(),
+        );
 
-        this.deletable$ = store.let(getKeymaps())
-            .pipe(
-                map((keymaps: Keymap[]) => keymaps.length > 1)
-            );
+        this.deletable$ = store.let(getKeymaps()).pipe(map((keymaps: Keymap[]) => keymaps.length > 1));
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
     }
 
     downloadKeymap() {
-        const exportableJSON$: Observable<string> = this.keymap$
-            .pipe(
-                switchMap(keymap => this.toExportableJSON(keymap)),
-                map(exportableJSON => JSON.stringify(exportableJSON))
-            );
+        const exportableJSON$: Observable<string> = this.keymap$.pipe(
+            switchMap(keymap => this.toExportableJSON(keymap)),
+            map(exportableJSON => JSON.stringify(exportableJSON)),
+        );
 
         this.keymap$
             .pipe(
                 combineLatest(exportableJSON$),
-                first()
+                first(),
             )
             .subscribe(latest => {
                 const keymap = latest[0];
@@ -83,22 +75,20 @@ export class KeymapEditComponent {
     }
 
     private toExportableJSON(keymap: Keymap): Observable<any> {
-        return this.store
-            .let(getUserConfiguration())
-            .pipe(
-                first(),
-                map(userConfiguration => {
-                    return {
-                        site: 'https://ultimatehackingkeyboard.com',
-                        description: 'Ultimate Hacking Keyboard keymap',
-                        keyboardModel: 'UHK60',
-                        userConfigMajorVersion: userConfiguration.userConfigMajorVersion,
-                        userConfigMinorVersion: userConfiguration.userConfigMinorVersion,
-                        userConfigPatchVersion: userConfiguration.userConfigPatchVersion,
-                        objectType: 'keymap',
-                        objectValue: keymap.toJsonObject()
-                    };
-                })
-            );
+        return this.store.let(getUserConfiguration()).pipe(
+            first(),
+            map(userConfiguration => {
+                return {
+                    site: 'https://ultimatehackingkeyboard.com',
+                    description: 'Ultimate Hacking Keyboard keymap',
+                    keyboardModel: 'UHK60',
+                    userConfigMajorVersion: userConfiguration.userConfigMajorVersion,
+                    userConfigMinorVersion: userConfiguration.userConfigMinorVersion,
+                    userConfigPatchVersion: userConfiguration.userConfigPatchVersion,
+                    objectType: 'keymap',
+                    objectValue: keymap.toJsonObject(),
+                };
+            }),
+        );
     }
 }

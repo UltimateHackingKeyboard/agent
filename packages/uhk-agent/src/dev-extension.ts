@@ -7,9 +7,7 @@ import { app } from 'electron';
 import * as isDev from 'electron-is-dev';
 
 if (isDev) {
-
     app.once('ready', () => {
-
         const { default: installExtension, REDUX_DEVTOOLS } = require('electron-devtools-installer');
 
         installExtension(REDUX_DEVTOOLS)
@@ -18,5 +16,4 @@ if (isDev) {
 
         require('electron-debug')({ showDevTools: true });
     });
-
 }

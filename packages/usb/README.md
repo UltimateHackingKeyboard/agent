@@ -7,10 +7,12 @@
 ## Driver requirements
 
 ### Linux
+
 Default driver.
 
 ### Windows
-Inorder to make the usb lib work, the WinUsb driver should be installed (only) for interface 0, the rest should be the default HidUsb. 
+
+Inorder to make the usb lib work, the WinUsb driver should be installed (only) for interface 0, the rest should be the default HidUsb.
 
 1. Download [zadig](http://zadig.akeo.ie/)
 2. Install WinUsb for Ultimate Hacking Keyboard (Interface 0)

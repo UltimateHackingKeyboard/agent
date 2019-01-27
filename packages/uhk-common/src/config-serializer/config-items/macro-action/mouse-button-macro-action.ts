@@ -5,7 +5,7 @@ import { MacroAction, MacroActionId, MacroMouseSubAction, macroActionType } from
 export enum MouseButtons {
     Left = 0,
     Right = 1,
-    Middle = 2
+    Middle = 2,
 }
 
 export interface JsObjectMouseButtonMacroAction {
@@ -48,7 +48,7 @@ export class MouseButtonMacroAction extends MacroAction {
         return {
             macroActionType: macroActionType.MouseButtonMacroAction,
             action: MacroMouseSubAction[this.action],
-            mouseButtonsMask: this.mouseButtonsMask
+            mouseButtonsMask: this.mouseButtonsMask,
         };
     }
 

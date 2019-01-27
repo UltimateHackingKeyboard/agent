@@ -25,7 +25,7 @@ class SvgAttributes {
     selector: 'g[svg-keystroke-key]',
     templateUrl: './svg-keystroke-key.component.html',
     styleUrls: ['./svg-keystroke-key.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgKeystrokeKeyComponent implements OnChanges {
     @Input() height: number;
@@ -45,9 +45,9 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     labelType: 'empty' | 'one-line' | 'two-line' | 'icon';
 
     modifierIconNames: {
-        shift?: string,
-        option?: string,
-        command?: string
+        shift?: string;
+        option?: string;
+        command?: string;
     };
     secondaryTextY: number;
     secondaryTextWidth: number;
@@ -102,8 +102,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
                             this.thisSecondaryRoleText = null;
                             this.subComponentSecondaryRoleText = this.secondaryText;
                         }
-                    }
-                    else {
+                    } else {
                         if (newLabelSource.length === 1) {
                             this.labelSource = newLabelSource[0];
                             this.labelType = 'one-line';

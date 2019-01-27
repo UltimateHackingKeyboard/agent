@@ -8,7 +8,7 @@ import {
     NotificationType,
     runInElectron,
     UserConfiguration,
-    VersionInformation
+    VersionInformation,
 } from 'uhk-common';
 
 import { ActionTypes, ShowNotificationAction } from '../actions/app';
@@ -42,7 +42,7 @@ export const initialState: State = {
     configLoading: true,
     agentVersionInfo: getVersions(),
     privilegeWhatWillThisDoClicked: false,
-    keypressCapturing: false
+    keypressCapturing: false,
 };
 
 export function reducer(state = initialState, action: Action & { payload: any }) {
@@ -50,7 +50,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         case ActionTypes.APP_STARTED: {
             return {
                 ...state,
-                started: true
+                started: true,
             };
         }
 
@@ -61,7 +61,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
                 ...state,
                 commandLineArgs: payload.commandLineArgs,
                 platform: payload.platform,
-                osVersion: payload.osVersion
+                osVersion: payload.osVersion,
             };
         }
 
@@ -73,7 +73,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
             return {
                 ...state,
                 undoableNotification: currentAction.payload,
-                navigationCountAfterNotification: 0
+                navigationCountAfterNotification: 0,
             };
         }
 
@@ -81,7 +81,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
         case ROUTER_NAVIGATION: {
-            const newState = {...state};
+            const newState = { ...state };
             newState.navigationCountAfterNotification++;
 
             if (newState.navigationCountAfterNotification > 1) {
@@ -95,7 +95,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         case ActionTypes.DISMISS_UNDO_NOTIFICATION: {
             return {
                 ...state,
-                undoableNotification: null
+                undoableNotification: null,
             };
         }
 
@@ -104,7 +104,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
             return {
                 ...state,
                 prevUserConfig: action.payload,
-                configLoading: false
+                configLoading: false,
             };
         }
 
@@ -112,56 +112,55 @@ export function reducer(state = initialState, action: Action & { payload: any })
         case UserConfigActionTypes.LOAD_USER_CONFIG: {
             return {
                 ...state,
-                configLoading: true
+                configLoading: true,
             };
         }
 
         case ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS:
             return {
                 ...state,
-                hardwareConfig: action.payload
+                hardwareConfig: action.payload,
             };
 
         case DeviceActionTypes.CONNECTION_STATE_CHANGED: {
-
             if (action.payload === true) {
                 return state;
             }
 
             return {
                 ...state,
-                hardwareConfig: null
+                hardwareConfig: null,
             };
         }
 
         case ActionTypes.PRIVILEGE_WHAT_WILL_THIS_DO:
             return {
                 ...state,
-                privilegeWhatWillThisDoClicked: true
+                privilegeWhatWillThisDoClicked: true,
             };
 
         case ActionTypes.SETUP_PERMISSION_ERROR:
             return {
                 ...state,
-                permissionError: action.payload
+                permissionError: action.payload,
             };
 
         case DeviceActionTypes.SET_PRIVILEGE_ON_LINUX:
             return {
                 ...state,
-                permissionError: null
+                permissionError: null,
             };
 
         case ActionTypes.START_KEYPRESS_CAPTURING:
             return {
                 ...state,
-                keypressCapturing: true
+                keypressCapturing: true,
             };
 
         case ActionTypes.STOP_KEYPRESS_CAPTURING:
             return {
                 ...state,
-                keypressCapturing: false
+                keypressCapturing: false,
             };
 
         default:
@@ -180,8 +179,8 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
 
     return KeyboardLayout.ANSI;
 };
-export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
-export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || {} as VersionInformation;
+export const deviceConfigurationLoaded = (state: State) => (!state.runningInElectron ? true : !!state.hardwareConfig);
+export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || ({} as VersionInformation);
 
 export const runningOnNotSupportedWindows = (state: State): boolean => {
     if (!state.osVersion || state.platform !== 'win32') {

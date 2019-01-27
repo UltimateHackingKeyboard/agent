@@ -17,7 +17,7 @@ import {
     AgentContributorsNotAvailableAction,
     GetAgentContributorsAction,
     ActionTypes,
-    FetchAgentContributorsAction
+    FetchAgentContributorsAction,
 } from '../actions/contributors.action';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class ContributorsEffect {
                     return new FetchAgentContributorsAction();
                 }
                 return new AgentContributorsAvailableAction(state.contributors);
-            })
+            }),
         );
 
     @Effect() fetchContributors$: Observable<Action> = this.actions$
@@ -48,19 +48,17 @@ export class ContributorsEffect {
                             contributor.avatar = blob;
 
                             return contributor;
-                        }
+                        },
                     ),
-                    reduce((acc: UHKContributor[], curr) => [...acc, curr], [])
+                    reduce((acc: UHKContributor[], curr) => [...acc, curr], []),
                 );
             }),
-            map(
-                (contributorsWithAvatars: UHKContributor[]) => {
-                    contributorsWithAvatars = contributorsWithAvatars.sort((a, b) => b.contributions - a.contributions);
+            map((contributorsWithAvatars: UHKContributor[]) => {
+                contributorsWithAvatars = contributorsWithAvatars.sort((a, b) => b.contributions - a.contributions);
 
-                    return new AgentContributorsAvailableAction(contributorsWithAvatars);
-                }
-            ),
-            catchError(error => of(new AgentContributorsNotAvailableAction(error)))
+                return new AgentContributorsAvailableAction(contributorsWithAvatars);
+            }),
+            catchError(error => of(new AgentContributorsNotAvailableAction(error))),
         );
 
     constructor(private store: Store<AppState>, private actions$: Actions, private http: HttpClient) {}

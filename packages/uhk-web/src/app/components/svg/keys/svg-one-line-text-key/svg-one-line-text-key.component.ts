@@ -6,7 +6,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 @Component({
     selector: 'g[svg-one-line-text-key]',
     templateUrl: './svg-one-line-text-key.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgOneLineTextKeyComponent implements OnChanges {
     @Input() height: number;
@@ -19,7 +19,7 @@ export class SvgOneLineTextKeyComponent implements OnChanges {
     secondaryTextY: number;
     secondaryHeight: number;
 
-    constructor() { }
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();

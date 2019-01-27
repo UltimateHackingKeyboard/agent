@@ -5,14 +5,7 @@ const uhk = require('./uhk');
 function slaveI2cErrorBufferToString(buffer, slaveId) {
     let statusCount = buffer[1];
 
-    const slaveIdToName = [
-        'leftHalf',
-        'leftAddon',
-        'rightAddon',
-        'rightLedDriver',
-        'leftLedDriver',
-        'kboot',
-    ];
+    const slaveIdToName = ['leftHalf', 'leftAddon', 'rightAddon', 'rightLedDriver', 'leftLedDriver', 'kboot'];
 
     let str = `${slaveIdToName[slaveId].padEnd(14)}: `;
 
@@ -28,9 +21,9 @@ function slaveI2cErrorBufferToString(buffer, slaveId) {
         20001: 'idleCycle',
     };
 
-    for (let i=0; i<statusCount; i++) {
-        let status = uhk.getUint32(buffer, i*8+2);
-        let count = uhk.getUint32(buffer, i*8+4+2);
+    for (let i = 0; i < statusCount; i++) {
+        let status = uhk.getUint32(buffer, i * 8 + 2);
+        let count = uhk.getUint32(buffer, i * 8 + 4 + 2);
         str += `${statusCodesToStrings[status]}:${count} `;
     }
 
@@ -46,7 +39,7 @@ function convertMs(milliseconds) {
     minutes = minutes % 60;
     days = Math.floor(hours / 24);
     hours = hours % 24;
-    return {days, hours, minutes, seconds};
+    return { days, hours, minutes, seconds };
 }
 
 const device = uhk.getUhkDevice();
@@ -55,15 +48,24 @@ device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceProperty, 
 let response = device.readSync();
 let uptimeMs = uhk.getUint32(response, 1);
 let uptime = convertMs(uptimeMs);
-console.log(`uptime: ${uptime.days}d ${String(uptime.hours).padStart(2, '0')}:${String(uptime.minutes).padStart(2, '0')}:${String(uptime.seconds).padStart(2, '0')}`)
+console.log(
+    `uptime: ${uptime.days}d ${String(uptime.hours).padStart(2, '0')}:${String(uptime.minutes).padStart(
+        2,
+        '0',
+    )}:${String(uptime.seconds).padStart(2, '0')}`,
+);
 
 device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.i2cBaudRate])));
 response = device.readSync();
 let requestedBaudRate = uhk.getUint32(response, 2);
 let actualBaudRate = uhk.getUint32(response, 6);
-console.log(`requestedBaudRate:${requestedBaudRate} | actualBaudRate:${actualBaudRate} | I2C0_F:0b${response[1].toString(2).padStart(8, '0')}`)
+console.log(
+    `requestedBaudRate:${requestedBaudRate} | actualBaudRate:${actualBaudRate} | I2C0_F:0b${response[1]
+        .toString(2)
+        .padStart(8, '0')}`,
+);
 
-for (let slaveId=0; slaveId<6; slaveId++) {
+for (let slaveId = 0; slaveId < 6; slaveId++) {
     device.write(uhk.getTransferData(new Buffer([uhk.usbCommands.getSlaveI2cErrors, slaveId])));
     let response = Buffer.from(device.readSync());
     let str = slaveI2cErrorBufferToString(response, slaveId);

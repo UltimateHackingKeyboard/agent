@@ -9,7 +9,7 @@ import {
     MouseButtonMacroAction,
     MoveMouseMacroAction,
     ScrollMouseMacroAction,
-    TextMacroAction
+    TextMacroAction,
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -17,19 +17,25 @@ import { MapperService } from '../../../services/mapper.service';
 @Component({
     animations: [
         trigger('toggler', [
-            state('inactive', style({
-                height: '0px'
-            })),
-            state('active', style({
-                height: '*'
-            })),
-            transition('inactive <=> active', animate('500ms ease-out'))
-        ])
+            state(
+                'inactive',
+                style({
+                    height: '0px',
+                }),
+            ),
+            state(
+                'active',
+                style({
+                    height: '*',
+                }),
+            ),
+            transition('inactive <=> active', animate('500ms ease-out')),
+        ]),
     ],
     selector: 'macro-item',
     templateUrl: './macro-item.component.html',
     styleUrls: ['./macro-item.component.scss'],
-    host: { 'class': 'macro-item' }
+    host: { class: 'macro-item' },
 })
 export class MacroItemComponent implements OnInit, OnChanges {
     @Input() macroAction: MacroAction;
@@ -48,7 +54,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     newItem: boolean = false;
     overflow = 'hidden';
 
-    constructor(private mapper: MapperService) { }
+    constructor(private mapper: MapperService) {}
 
     ngOnInit() {
         this.updateView();
@@ -116,7 +122,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
             // Mouse button clicked/held/released
             const action: MouseButtonMacroAction = this.macroAction as MouseButtonMacroAction;
             this.setMouseButtonActionContent(action);
-        } else if (this.macroAction instanceof MoveMouseMacroAction || this.macroAction instanceof ScrollMouseMacroAction) {
+        } else if (
+            this.macroAction instanceof MoveMouseMacroAction ||
+            this.macroAction instanceof ScrollMouseMacroAction
+        ) {
             // Mouse moved or scrolled
             this.setMouseMoveScrollActionContent(this.macroAction);
         } else {
@@ -145,7 +154,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.hasScancode()) {
-            const scancode: string = (this.mapper.scanCodeToText(action.scancode, action.type) || ['Unknown']).join(' ');
+            const scancode: string = (this.mapper.scanCodeToText(action.scancode, action.type) || ['Unknown']).join(
+                ' ',
+            );
             if (scancode) {
                 this.title += scancode;
             }
@@ -181,7 +192,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
             needAnd = true;
         }
         if (Math.abs(typedAction.y) !== 0) {
-            this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(typedAction.y)}px ${typedAction.y > 0 ? 'downward' : 'upward'}`;
+            this.title += ` ${needAnd ? 'and' : 'by'} ${Math.abs(typedAction.y)}px ${
+                typedAction.y > 0 ? 'downward' : 'upward'
+            }`;
         }
     }
 

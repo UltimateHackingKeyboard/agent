@@ -9,29 +9,41 @@ import { MacroItemComponent } from '../item';
 @Component({
     animations: [
         trigger('toggler', [
-            state('inactive', style({
-                height: '0px'
-            })),
-            state('active', style({
-                height: '*'
-            })),
-            transition('inactive <=> active', animate('500ms ease-out'))
+            state(
+                'inactive',
+                style({
+                    height: '0px',
+                }),
+            ),
+            state(
+                'active',
+                style({
+                    height: '*',
+                }),
+            ),
+            transition('inactive <=> active', animate('500ms ease-out')),
         ]),
         trigger('togglerNew', [
-            state('void', style({
-                height: '0px'
-            })),
-            state('active', style({
-                height: '*'
-            })),
+            state(
+                'void',
+                style({
+                    height: '0px',
+                }),
+            ),
+            state(
+                'active',
+                style({
+                    height: '*',
+                }),
+            ),
             transition(':enter', animate('500ms ease-out')),
-            transition(':leave', animate('500ms ease-out'))
-        ])
+            transition(':leave', animate('500ms ease-out')),
+        ]),
     ],
     selector: 'macro-list',
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss'],
-    viewProviders: [DragulaService]
+    viewProviders: [DragulaService],
 })
 export class MacroListComponent {
     @Input() macro: Macro;
@@ -48,15 +60,12 @@ export class MacroListComponent {
     private activeEdit: number = undefined;
     private dragIndex: number;
 
-    constructor(
-        private mapper: MapperService,
-        private dragulaService: DragulaService
-    ) {
+    constructor(private mapper: MapperService, private dragulaService: DragulaService) {
         /* tslint:disable:no-unused-variable: Used by Dragula. */
         dragulaService.setOptions('macroActions', {
-            moves: function (el: any, container: any, handle: any) {
+            moves: function(el: any, container: any, handle: any) {
                 return handle.className.includes('action--movable');
-            }
+            },
         });
 
         dragulaService.drag.subscribe((value: any) => {
@@ -68,7 +77,7 @@ export class MacroListComponent {
                 this.reorder.emit({
                     macroId: this.macro.id,
                     oldIndex: this.dragIndex,
-                    newIndex: +value[4].getAttribute('data-index')
+                    newIndex: +value[4].getAttribute('data-index'),
                 });
             }
         });
@@ -88,7 +97,7 @@ export class MacroListComponent {
     addNewAction(macroAction: MacroAction) {
         this.add.emit({
             macroId: this.macro.id,
-            action: macroAction
+            action: macroAction,
         });
 
         this.newMacro = undefined;
@@ -110,7 +119,7 @@ export class MacroListComponent {
         this.edit.emit({
             macroId: this.macro.id,
             index: index,
-            action: macroAction
+            action: macroAction,
         });
 
         this.hideActiveEditor();
@@ -120,27 +129,27 @@ export class MacroListComponent {
         this.delete.emit({
             macroId: this.macro.id,
             index: index,
-            action: macroAction
+            action: macroAction,
         });
 
         this.hideActiveEditor();
     }
 
-    onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
+    onKeysCapture(event: { code: number; left: boolean[]; right: boolean[] }) {
         const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event));
         keyMacroAction.action = MacroKeySubAction.tap;
 
         this.add.emit({
             macroId: this.macro.id,
-            action: keyMacroAction
+            action: keyMacroAction,
         });
     }
 
-    private toKeyAction(event: { code: number, left: boolean[], right: boolean[] }): KeystrokeAction {
+    private toKeyAction(event: { code: number; left: boolean[]; right: boolean[] }): KeystrokeAction {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
         keystrokeAction.scancode = event.code;
         keystrokeAction.modifierMask = 0;
-        const modifiers = event.left.concat(event.right).map(x => x ? 1 : 0);
+        const modifiers = event.left.concat(event.right).map(x => (x ? 1 : 0));
         for (let i = 0; i < modifiers.length; ++i) {
             keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
         }

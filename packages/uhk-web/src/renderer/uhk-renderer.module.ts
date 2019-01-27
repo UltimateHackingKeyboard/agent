@@ -24,17 +24,16 @@ import { effects } from '../app/store/effects';
         StoreModule.forRoot(reducers),
         StoreRouterConnectingModule,
         StoreDevtoolsModule.instrument({
-            maxAge: 10
+            maxAge: 10,
         }),
-        EffectsModule.forRoot(effects)
+        EffectsModule.forRoot(effects),
     ],
     providers: [
-        {provide: DataStorageRepositoryService, useClass: ElectronDataStorageRepositoryService},
-        {provide: IpcCommonRenderer, useClass: IpcUhkRenderer},
-        {provide: LogService, useClass: ElectronLogService},
-        {provide: ErrorHandler, useClass: ElectronErrorHandlerService}
+        { provide: DataStorageRepositoryService, useClass: ElectronDataStorageRepositoryService },
+        { provide: IpcCommonRenderer, useClass: IpcUhkRenderer },
+        { provide: LogService, useClass: ElectronLogService },
+        { provide: ErrorHandler, useClass: ElectronErrorHandlerService },
     ],
-    bootstrap: [MainAppComponent]
+    bootstrap: [MainAppComponent],
 })
-export class UhkRendererModule {
-}
+export class UhkRendererModule {}

@@ -8,10 +8,12 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
 
 @Injectable()
 export class AppRendererService {
-    constructor(private store: Store<AppState>,
-                private zone: NgZone,
-                private ipcRenderer: IpcCommonRenderer,
-                private logService: LogService) {
+    constructor(
+        private store: Store<AppState>,
+        private zone: NgZone,
+        private ipcRenderer: IpcCommonRenderer,
+        private logService: LogService,
+    ) {
         this.registerEvents();
         this.logService.info('[AppRendererService] init success ');
     }
@@ -37,7 +39,7 @@ export class AppRendererService {
         });
 
         this.ipcRenderer.on('__ELECTRON_LOG_RENDERER__', (event: string, level: string, message: string) => {
-            this.zone.run(() => this.store.dispatch(new ElectronMainLogReceivedAction({level, message})));
+            this.zone.run(() => this.store.dispatch(new ElectronMainLogReceivedAction({ level, message })));
         });
     }
 

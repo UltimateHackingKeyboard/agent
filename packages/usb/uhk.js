@@ -1,5 +1,5 @@
 const HID = require('node-hid');
-const {HardwareConfiguration, UhkBuffer} = require('uhk-common');
+const { HardwareConfiguration, UhkBuffer } = require('uhk-common');
 const Logger = require('./logger');
 const debug = process.env.DEBUG;
 
@@ -31,18 +31,18 @@ function bufferToString(buffer) {
 }
 
 function getUint16(buffer, offset) {
-    return (buffer[offset]) + (buffer[offset+1] * 2**8);
+    return buffer[offset] + buffer[offset + 1] * 2 ** 8;
 }
 
 function getUint32(buffer, offset) {
-    return (buffer[offset]) + (buffer[offset+1] * 2**8) + (buffer[offset+2] * 2**16) + (buffer[offset+3] * 2**24);
+    return buffer[offset] + buffer[offset + 1] * 2 ** 8 + buffer[offset + 2] * 2 ** 16 + buffer[offset + 3] * 2 ** 24;
 }
 
 function uint32ToArray(value) {
     return [(value >> 0) & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff];
 }
 
-function writeDevice(device, data, options={}) {
+function writeDevice(device, data, options = {}) {
     const dataBuffer = new Buffer(data);
     if (!options.noDebug) {
         writeLog('W: ', dataBuffer);
@@ -67,12 +67,15 @@ function writeDevice(device, data, options={}) {
 }
 
 function getUhkDevice() {
-    const foundDevice = HID.devices().find(device =>
-        device.vendorId === 0x1d50 && device.productId === 0x6122 &&
-        // hidapi can not read the interface number on Mac, so check the usage page and usage
-        ((device.usagePage === 128 && device.usage === 129) || // Old firmware
-        (device.usagePage === (0xFF00 | 0x00) && device.usage === 0x01) || // New firmware
-        device.interface === 0));
+    const foundDevice = HID.devices().find(
+        device =>
+            device.vendorId === 0x1d50 &&
+            device.productId === 0x6122 &&
+            // hidapi can not read the interface number on Mac, so check the usage page and usage
+            ((device.usagePage === 128 && device.usage === 129) || // Old firmware
+            (device.usagePage === (0xff00 | 0x00) && device.usage === 0x01) || // New firmware
+                device.interface === 0),
+    );
 
     if (!foundDevice) {
         return null;
@@ -89,8 +92,7 @@ function getUhkDevice() {
 }
 
 function getBootloaderDevice() {
-    const foundDevice = HID.devices().find(device =>
-        device.vendorId === 0x1d50 && device.productId === 0x6120);
+    const foundDevice = HID.devices().find(device => device.vendorId === 0x1d50 && device.productId === 0x6120);
 
     if (!foundDevice) {
         return null;
@@ -120,7 +122,7 @@ function getBlhostCmd(pid) {
     let blhostPath;
     switch (process.platform) {
         case 'linux':
-            const arch = exec('uname -m', {silent:true}).stdout.trim();
+            const arch = exec('uname -m', { silent: true }).stdout.trim();
             blhostPath = `linux/${arch}/blhost`;
             break;
         case 'darwin':
@@ -144,13 +146,13 @@ function execRetry(command) {
     let code;
     do {
         if (!firstRun) {
-            console.log(`Retrying ${command}`)
+            console.log(`Retrying ${command}`);
         }
         config.fatal = !remainingRetries;
         code = exec(command).code;
         config.fatal = true;
         firstRun = false;
-    } while(code && --remainingRetries);
+    } while (code && --remainingRetries);
 }
 
 const configBufferIds = {
@@ -163,7 +165,7 @@ const configBufferIdToName = {
     0: 'hardwareConfig',
     1: 'stagingUserConfig',
     2: 'validatedUserConfig',
-}
+};
 
 let eepromOperations = {
     read: 0,
@@ -185,11 +187,11 @@ async function updateDeviceFirmware(firmwareImage, extension) {
 
     config.verbose = false;
     echo('Firmware updated successfully.');
-};
+}
 
 // USB commands
 
-function reenumerate(enumerationMode, bootloaderTimeoutMs=5000) {
+function reenumerate(enumerationMode, bootloaderTimeoutMs = 5000) {
     const pollingIntervalMs = 100;
     let pollingTimeoutMs = 10000;
 
@@ -209,8 +211,11 @@ function reenumerate(enumerationMode, bootloaderTimeoutMs=5000) {
         const intervalId = setInterval(async function() {
             pollingTimeoutMs -= pollingIntervalMs;
 
-            const foundDevice = HID.devices().find(device =>
-                device.vendorId === exports.vendorId && device.productId === exports.enumerationModeIdToProductId[enumerationModeId]);
+            const foundDevice = HID.devices().find(
+                device =>
+                    device.vendorId === exports.vendorId &&
+                    device.productId === exports.enumerationModeIdToProductId[enumerationModeId],
+            );
 
             if (foundDevice) {
                 console.log(`${enumerationMode} is up`);
@@ -229,23 +234,32 @@ function reenumerate(enumerationMode, bootloaderTimeoutMs=5000) {
             let device = exports.getUhkDevice();
             if (device && !jumped) {
                 console.log(`UHK found, reenumerating as ${enumerationMode}`);
-                await writeDevice(device, [exports.usbCommands.reenumerate, enumerationModeId, ...uint32ToArray(bootloaderTimeoutMs)], {noRead:true});
+                await writeDevice(
+                    device,
+                    [exports.usbCommands.reenumerate, enumerationModeId, ...uint32ToArray(bootloaderTimeoutMs)],
+                    { noRead: true },
+                );
                 jumped = true;
             }
-
         }, pollingIntervalMs);
-    })
-};
+    });
+}
 
 async function sendKbootCommandToModule(device, kbootCommandId, i2cAddress) {
-    writeLog(`T: sendKbootCommandToModule kbootCommandId:${kbootCommandIdToName[kbootCommandId]} i2cAddress:${i2cAddress}`);
-    return await uhk.writeDevice(device, [uhk.usbCommands.sendKbootCommandToModule, kbootCommandId, parseInt(i2cAddress)])
-};
+    writeLog(
+        `T: sendKbootCommandToModule kbootCommandId:${kbootCommandIdToName[kbootCommandId]} i2cAddress:${i2cAddress}`,
+    );
+    return await uhk.writeDevice(device, [
+        uhk.usbCommands.sendKbootCommandToModule,
+        kbootCommandId,
+        parseInt(i2cAddress),
+    ]);
+}
 
 async function jumpToModuleBootloader(device, moduleSlotId) {
     writeLog(`T: jumpToModuleBootloader moduleSlotId:${moduleSlotId}`);
     await uhk.writeDevice(device, [uhk.usbCommands.jumpToModuleBootloader, moduleSlotId]);
-};
+}
 
 async function switchKeymap(device, keymapAbbreviation) {
     writeLog(`T: switchKeymap keymapAbbreviation:${keymapAbbreviation}`);
@@ -262,7 +276,10 @@ async function waitForKbootIdle(device) {
 
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async function() {
-            const response = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.currentKbootCommand]);
+            const response = await uhk.writeDevice(device, [
+                uhk.usbCommands.getDeviceProperty,
+                uhk.devicePropertyIds.currentKbootCommand,
+            ]);
             const currentKbootCommand = response[1];
             if (currentKbootCommand == 0) {
                 console.log('Bootloader pinged.');
@@ -270,8 +287,10 @@ async function waitForKbootIdle(device) {
                 clearInterval(intervalId);
                 return;
             } else if (timeoutMs % pingMessageInterval === 0) {
-                console.log("Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.");
-            };
+                console.log(
+                    'Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.',
+                );
+            }
 
             timeoutMs -= intervalMs;
 
@@ -310,14 +329,18 @@ async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
     device.close();
     config.verbose = false;
     echo('Firmware updated successfully.');
-};
+}
 
 async function updateFirmwares(firmwarePath) {
     console.log('Updating right firmware');
     await uhk.updateDeviceFirmware(`${firmwarePath}/devices/uhk60-right/firmware.hex`, 'hex');
     await uhk.reenumerate('normalKeyboard');
     console.log('Updating left firmware');
-    await uhk.updateModuleFirmware(uhk.moduleSlotToI2cAddress.leftHalf, uhk.moduleSlotToId.leftHalf, `${firmwarePath}/modules/uhk60-left.bin`);
+    await uhk.updateModuleFirmware(
+        uhk.moduleSlotToI2cAddress.leftHalf,
+        uhk.moduleSlotToId.leftHalf,
+        `${firmwarePath}/modules/uhk60-left.bin`,
+    );
 }
 
 async function writeConfig(device, configBuffer, isHardwareConfig) {
@@ -333,7 +356,9 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
 
     writeLog('WR: ...');
     while (offset < configSize) {
-        const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;
+        const usbCommand = isHardwareConfig
+            ? uhk.usbCommands.writeHardwareConfig
+            : uhk.usbCommands.writeStagingUserConfig;
         chunkSizeToRead = Math.min(chunkSize, configSize - offset);
 
         if (chunkSizeToRead === 0) {
@@ -341,10 +366,13 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
         }
 
         buffer = [
-            usbCommand, chunkSizeToRead, offset & 0xff, offset >> 8,
-            ...configBuffer.slice(offset, offset+chunkSizeToRead)
+            usbCommand,
+            chunkSizeToRead,
+            offset & 0xff,
+            offset >> 8,
+            ...configBuffer.slice(offset, offset + chunkSizeToRead),
         ];
-        await uhk.writeDevice(device, buffer, {noDebug:true})
+        await uhk.writeDevice(device, buffer, { noDebug: true });
         offset += chunkSizeToRead;
     }
 }
@@ -363,7 +391,7 @@ async function launchEepromTransfer(device, operation, configBufferId) {
         const buffer = await uhk.writeDevice(device, [uhk.usbCommands.getDeviceState]);
         isBusy = buffer[1] === 1;
     } while (isBusy);
-};
+}
 
 async function writeUca(device, configBuffer) {
     await uhk.writeConfig(device, configBuffer, false);
@@ -380,7 +408,7 @@ async function writeHca(device, isIso) {
     hardwareConfig.patchVersion = 0;
     hardwareConfig.brandId = 0;
     hardwareConfig.deviceId = 1;
-    hardwareConfig.uniqueId = Math.floor(2**32 * Math.random());
+    hardwareConfig.uniqueId = Math.floor(2 ** 32 * Math.random());
     hardwareConfig.isVendorModeOn = false;
     hardwareConfig.isIso = isIso;
 
@@ -432,26 +460,26 @@ uhk = exports = module.exports = moduleExports = {
     eraseHca,
     getModuleProperty,
     usbCommands: {
-        getDeviceProperty       : 0x00,
-        reenumerate             : 0x01,
-        jumpToModuleBootloader  : 0x02,
+        getDeviceProperty: 0x00,
+        reenumerate: 0x01,
+        jumpToModuleBootloader: 0x02,
         sendKbootCommandToModule: 0x03,
-        readConfig              : 0x04,
-        writeHardwareConfig     : 0x05,
-        writeStagingUserConfig  : 0x06,
-        applyConfig             : 0x07,
-        launchEepromTransfer    : 0x08,
-        getDeviceState          : 0x09,
-        setTestLed              : 0x0a,
-        getDebugBuffer          : 0x0b,
-        getAdcValue             : 0x0c,
-        setLedPwmBrightness     : 0x0d,
-        getModuleProperty       : 0x0e,
-        getSlaveI2cErrors       : 0x0f,
-        setI2cBaudRate          : 0x10,
-        switchKeymap            : 0x11,
-        getVariable             : 0x12,
-        setVariable             : 0x13,
+        readConfig: 0x04,
+        writeHardwareConfig: 0x05,
+        writeStagingUserConfig: 0x06,
+        applyConfig: 0x07,
+        launchEepromTransfer: 0x08,
+        getDeviceState: 0x09,
+        setTestLed: 0x0a,
+        getDebugBuffer: 0x0b,
+        getAdcValue: 0x0c,
+        setLedPwmBrightness: 0x0d,
+        getModuleProperty: 0x0e,
+        getSlaveI2cErrors: 0x0f,
+        setI2cBaudRate: 0x10,
+        switchKeymap: 0x11,
+        getVariable: 0x12,
+        setVariable: 0x13,
     },
     enumerationModes: {
         bootloader: 0,
@@ -478,7 +506,7 @@ uhk = exports = module.exports = moduleExports = {
         debounceTimeRelease: 3,
         usbReportSemaphore: 4,
     },
-    vendorId: 0x1D50,
+    vendorId: 0x1d50,
     devicePropertyIds: {
         deviceProtocolVersion: 0,
         protocolVersions: 1,
@@ -510,11 +538,11 @@ uhk = exports = module.exports = moduleExports = {
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,
     sendLog: sendLog,
-    readLog: readLog
+    readLog: readLog,
 };
 
 function convertBufferToIntArray(buffer) {
-    return Array.prototype.slice.call(buffer, 0)
+    return Array.prototype.slice.call(buffer, 0);
 }
 
 function getTransferData(buffer) {
@@ -526,11 +554,11 @@ function getTransferData(buffer) {
 }
 
 function readLog(buffer) {
-    writeLog('USB[R]: ', buffer)
+    writeLog('USB[R]: ', buffer);
 }
 
 function sendLog(buffer) {
-    writeLog('USB[W]: ', buffer)
+    writeLog('USB[W]: ', buffer);
 }
 
 function writeLog(prefix, buffer) {
@@ -538,7 +566,7 @@ function writeLog(prefix, buffer) {
         return;
     }
     if (buffer) {
-        console.log(prefix + bufferToString(buffer))
+        console.log(prefix + bufferToString(buffer));
     } else {
         console.log(prefix);
     }

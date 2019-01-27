@@ -5,7 +5,7 @@ export class SvgModule {
     keyboardKeys: SvgKeyboardKey[];
     attributes: any;
 
-    constructor(obj: { rect: any[], path: any[], $: Object }) {
+    constructor(obj: { rect: any[]; path: any[]; $: Object }) {
         let index: number;
         const keys = obj.rect.map(rect => rect.$);
         this.keyboardKeys = [];

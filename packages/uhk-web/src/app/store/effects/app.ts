@@ -14,7 +14,7 @@ import {
     OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
-    UndoLastAction
+    UndoLastAction,
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
@@ -23,28 +23,23 @@ import { AppState, runningInElectron } from '../index';
 
 @Injectable()
 export class ApplicationEffects {
-
     @Effect()
-    appStart$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.APP_BOOTSRAPPED)
-        .pipe(
-            startWith(new AppStartedAction()),
-            tap(() => {
-                this.logService.info('Renderer appStart effect start');
-                this.appUpdateRendererService.sendAppStarted();
-                this.appRendererService.getAppStartInfo();
-                this.logService.info('Renderer appStart effect end');
-            })
-        );
-
-    @Effect({dispatch: false})
-    appStartInfo$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_APP_START_INFO)
-        .do(() => {
+    appStart$: Observable<Action> = this.actions$.ofType(ActionTypes.APP_BOOTSRAPPED).pipe(
+        startWith(new AppStartedAction()),
+        tap(() => {
+            this.logService.info('Renderer appStart effect start');
+            this.appUpdateRendererService.sendAppStarted();
             this.appRendererService.getAppStartInfo();
-        });
+            this.logService.info('Renderer appStart effect end');
+        }),
+    );
 
-    @Effect({dispatch: false})
+    @Effect({ dispatch: false })
+    appStartInfo$: Observable<Action> = this.actions$.ofType(ActionTypes.LOAD_APP_START_INFO).do(() => {
+        this.appRendererService.getAppStartInfo();
+    });
+
+    @Effect({ dispatch: false })
     showNotification$: Observable<Action> = this.actions$
         .ofType<ShowNotificationAction>(ActionTypes.APP_SHOW_NOTIFICATION)
         .pipe(
@@ -54,7 +49,7 @@ export class ApplicationEffects {
                     return;
                 }
                 this.notifierService.notify(notification.type, notification.message);
-            })
+            }),
         );
 
     @Effect()
@@ -65,7 +60,7 @@ export class ApplicationEffects {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
             return [
                 new ApplyAppStartInfoAction(appInfo),
-                new ConnectionStateChangedAction(appInfo.deviceConnectionState)
+                new ConnectionStateChangedAction(appInfo.deviceConnectionState),
             ];
         });
 
@@ -74,7 +69,7 @@ export class ApplicationEffects {
         .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
-    @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
+    @Effect({ dispatch: false }) openUrlInNewWindow$ = this.actions$
         .ofType<OpenUrlInNewWindowAction>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
         .pipe(
             withLatestFrom(this.store.select(runningInElectron)),
@@ -86,14 +81,15 @@ export class ApplicationEffects {
                 } else {
                     window.open(url, '_blank');
                 }
-            })
+            }),
         );
 
-    constructor(private actions$: Actions,
-                private notifierService: NotifierService,
-                private appUpdateRendererService: AppUpdateRendererService,
-                private appRendererService: AppRendererService,
-                private logService: LogService,
-                private store: Store<AppState>) {
-    }
+    constructor(
+        private actions$: Actions,
+        private notifierService: NotifierService,
+        private appUpdateRendererService: AppUpdateRendererService,
+        private appRendererService: AppRendererService,
+        private logService: LogService,
+        private store: Store<AppState>,
+    ) {}
 }

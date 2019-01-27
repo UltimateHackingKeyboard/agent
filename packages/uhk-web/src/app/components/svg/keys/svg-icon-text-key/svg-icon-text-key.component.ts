@@ -7,7 +7,7 @@ import { getContentWidth } from '../../../../util';
 @Component({
     selector: 'g[svg-icon-text-key]',
     templateUrl: './svg-icon-text-key.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgIconTextKeyComponent implements OnChanges {
     @Input() width: number;
@@ -31,8 +31,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
     text2: string;
     text2Y: number;
 
-    constructor() {
-    }
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();
@@ -64,7 +63,8 @@ export class SvgIconTextKeyComponent implements OnChanges {
 
         if (this.secondaryText) {
             this.secondaryHeight = this.height / 4;
-            this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
+            this.secondaryTextY =
+                this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;
         } else {
             this.secondaryHeight = 0;
             this.secondaryTextY = 0;
@@ -103,7 +103,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
 
     private getText(startPosition: number): string {
         const style: CSSStyleDeclaration = {
-            font: `${this.fontSize}px Helvetica`
+            font: `${this.fontSize}px Helvetica`,
         } as any;
 
         let result = '';
@@ -117,7 +117,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
                 continue;
             }
 
-            const newText = result += char;
+            const newText = (result += char);
             const textWidth = getContentWidth(style, newText);
 
             if (char === ' ') {

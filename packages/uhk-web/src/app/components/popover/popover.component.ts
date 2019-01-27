@@ -9,7 +9,7 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
@@ -26,7 +26,7 @@ import {
     PlayMacroAction,
     SecondaryRoleAction,
     SwitchKeymapAction,
-    SwitchLayerAction
+    SwitchLayerAction,
 } from 'uhk-common';
 
 import { Tab } from './tab';
@@ -42,7 +42,7 @@ enum TabName {
     Mouse,
     Macro,
     Keymap,
-    None
+    None,
 }
 
 export interface TabHeader {
@@ -59,33 +59,45 @@ export interface TabHeader {
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('popover', [
-            state('closed', style({
-                transform: 'translateY(30px)',
-                visibility: 'hidden',
-                opacity: 0
-            })),
-            state('opened', style({
-                transform: 'translateY(0)',
-                visibility: 'visible',
-                opacity: 1
-            })),
+            state(
+                'closed',
+                style({
+                    transform: 'translateY(30px)',
+                    visibility: 'hidden',
+                    opacity: 0,
+                }),
+            ),
+            state(
+                'opened',
+                style({
+                    transform: 'translateY(0)',
+                    visibility: 'visible',
+                    opacity: 1,
+                }),
+            ),
             transition('opened => closed', [
-                animate('200ms ease-out', keyframes([
-                    style({transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0}),
-                    style({transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1})
-                ]))
+                animate(
+                    '200ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
+                        style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1 }),
+                    ]),
+                ),
             ]),
             transition('closed => opened', [
                 style({
-                    visibility: 'visible'
+                    visibility: 'visible',
                 }),
-                animate('200ms ease-out', keyframes([
-                    style({transform: 'translateY(30px)', opacity: 0, offset: 0}),
-                    style({transform: 'translateY(0)', opacity: 1, offset: 1})
-                ]))
-            ])
-        ])
-    ]
+                animate(
+                    '200ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateY(30px)', opacity: 0, offset: 0 }),
+                        style({ transform: 'translateY(0)', opacity: 1, offset: 1 }),
+                    ]),
+                ),
+            ]),
+        ]),
+    ],
 })
 export class PopoverComponent implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -118,47 +130,46 @@ export class PopoverComponent implements OnChanges {
         {
             tabName: TabName.Keypress,
             icon: 'fa-keyboard-o',
-            text: 'Keypress'
+            text: 'Keypress',
         },
         {
             tabName: TabName.Layer,
             icon: 'fa-clone',
-            text: 'Layer'
+            text: 'Layer',
         },
         {
             tabName: TabName.Mouse,
             icon: 'fa-mouse-pointer',
-            text: 'Mouse'
+            text: 'Mouse',
         },
         {
             tabName: TabName.Macro,
             icon: 'fa-play',
-            text: 'Macro'
+            text: 'Macro',
         },
         {
             tabName: TabName.Keymap,
             icon: 'fa-keyboard-o',
-            text: 'Keymap'
+            text: 'Keymap',
         },
         {
             tabName: TabName.None,
             icon: 'fa-ban',
-            text: 'None'
-        }
+            text: 'None',
+        },
     ];
     macroPlaybackSupported$: Observable<boolean>;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private cdRef: ChangeDetectorRef) {
         this.animationState = 'closed';
-        this.keymaps$ = store.let(getKeymaps())
-            .pipe(
-                combineLatest(this.currentKeymap$),
-                map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
-                        keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation))
-            );
+        this.keymaps$ = store.let(getKeymaps()).pipe(
+            combineLatest(this.currentKeymap$),
+            map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
+                keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation),
+            ),
+        );
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
     }
 
@@ -220,7 +231,7 @@ export class PopoverComponent implements OnChanges {
                 this.remap.emit({
                     remapOnAllKeymap: this.remapInfo.remapOnAllKeymap,
                     remapOnAllLayer: this.remapInfo.remapOnAllLayer,
-                    action: this.selectedTab.toKeyAction()
+                    action: this.selectedTab.toKeyAction(),
                 });
             } catch (e) {
                 // TODO: show error dialog
@@ -293,10 +304,10 @@ export class PopoverComponent implements OnChanges {
     private calculatePosition() {
         const offsetLeft: number = this.wrapPosition.left + 265; // 265 is a width of the side menu with a margin
         const popover: HTMLElement = this.popoverHost.nativeElement;
-        let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
+        let newLeft: number = this.keyPosition.left + this.keyPosition.width / 2;
 
         this.leftArrow = newLeft < offsetLeft;
-        this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
+        this.rightArrow = newLeft + popover.offsetWidth > offsetLeft + this.wrapPosition.width;
 
         if (this.leftArrow) {
             newLeft = this.keyPosition.left;

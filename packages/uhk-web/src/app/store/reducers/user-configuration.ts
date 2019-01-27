@@ -15,7 +15,7 @@ import {
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    UserConfiguration
+    UserConfiguration,
 } from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
@@ -33,9 +33,13 @@ export function reducer(state = initialState, action: Action & { payload?: any }
         case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
             Object.assign(changedUserConfiguration, action.payload);
             changedUserConfiguration.keymaps = [...changedUserConfiguration.keymaps];
-            changedUserConfiguration.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
+            changedUserConfiguration.keymaps.sort((first: Keymap, second: Keymap) =>
+                first.name.localeCompare(second.name),
+            );
             changedUserConfiguration.macros = [...changedUserConfiguration.macros];
-            changedUserConfiguration.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
+            changedUserConfiguration.macros.sort((first: Macro, second: Macro) =>
+                first.name.localeCompare(second.name),
+            );
             return changedUserConfiguration;
         }
 
@@ -44,7 +48,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             const newKeymap: Keymap = new Keymap(action.payload);
             newKeymap.abbreviation = generateAbbr(state.keymaps, newKeymap.abbreviation);
             newKeymap.name = generateName(state.keymaps, newKeymap.name);
-            newKeymap.isDefault = (state.keymaps.length === 0);
+            newKeymap.isDefault = state.keymaps.length === 0;
 
             changedUserConfiguration.keymaps = insertItemInNameOrder(state.keymaps, newKeymap);
             break;
@@ -69,12 +73,12 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 break;
             }
 
-            const newKeymap = Object.assign(new Keymap(), keymapToRename, {name});
+            const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
 
             changedUserConfiguration.keymaps = insertItemInNameOrder(
                 state.keymaps,
                 newKeymap,
-                keymap => keymap.abbreviation !== newKeymap.abbreviation
+                keymap => keymap.abbreviation !== newKeymap.abbreviation,
             );
             break;
         }
@@ -123,7 +127,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             // If deleted one is default set default keymap to the first on the list of keymaps
             if (isDefault && filtered.length > 0) {
                 filtered[0] = Object.assign(new Keymap(), filtered[0], {
-                    isDefault: true
+                    isDefault: true,
                 });
             }
 
@@ -168,8 +172,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                                         setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                             }
                         }
@@ -219,7 +222,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
 
             const duplicate = state.macros.some((macro: Macro) => {
                 if (macro.id === action.payload.id) {
-                   macroToRename = macro;
+                    macroToRename = macro;
                 }
 
                 return macro.id !== action.payload.id && macro.name === name;
@@ -230,7 +233,11 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const newMacro = Object.assign(new Macro(), macroToRename, { name });
-            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro, macro => macro.id !== newMacro.id);
+            changedUserConfiguration.macros = insertItemInNameOrder(
+                state.macros,
+                newMacro,
+                macro => macro.id !== newMacro.id,
+            );
             break;
         }
 
@@ -242,7 +249,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 const keymap = changedUserConfiguration.keymaps[k];
                 let hasChanges = false;
 
-                for (const layer of  keymap.layers) {
+                for (const layer of keymap.layers) {
                     for (const module of layer.modules) {
                         for (let ka = 0; ka < module.keyActions.length; ka++) {
                             const keyAction = module.keyActions[ka];
@@ -302,11 +309,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                     }
 
                     macro = new Macro(macro);
-                    macro.macroActions.splice(
-                        newIndex,
-                        0,
-                        macro.macroActions.splice(action.payload.oldIndex, 1)[0]
-                    );
+                    macro.macroActions.splice(newIndex, 0, macro.macroActions.splice(action.payload.oldIndex, 1)[0]);
                 }
 
                 return macro;
@@ -345,13 +348,11 @@ export function reducer(state = initialState, action: Action & { payload?: any }
 }
 
 export function getUserConfiguration(): (state$: Observable<AppState>) => Observable<UserConfiguration> {
-    return (state$: Observable<AppState>) => state$
-        .map(state => state.userConfiguration);
+    return (state$: Observable<AppState>) => state$.map(state => state.userConfiguration);
 }
 
 export function getKeymaps(): (state$: Observable<AppState>) => Observable<Keymap[]> {
-    return (state$: Observable<AppState>) => state$
-        .map(state => state.userConfiguration.keymaps);
+    return (state$: Observable<AppState>) => state$.map(state => state.userConfiguration.keymaps);
 }
 
 export function getKeymap(abbr: string) {
@@ -359,38 +360,27 @@ export function getKeymap(abbr: string) {
         return getDefaultKeymap();
     }
 
-    return (state$: Observable<AppState>) => getKeymaps()(state$)
-        .pipe(
-            map((keymaps: Keymap[]) =>
-                keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
-            )
+    return (state$: Observable<AppState>) =>
+        getKeymaps()(state$).pipe(
+            map((keymaps: Keymap[]) => keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)),
         );
 }
 
 export function getDefaultKeymap() {
-    return (state$: Observable<AppState>) => getKeymaps()(state$)
-        .pipe(
-            map((keymaps: Keymap[]) =>
-                keymaps.find((keymap: Keymap) => keymap.isDefault)
-            )
-        );
+    return (state$: Observable<AppState>) =>
+        getKeymaps()(state$).pipe(map((keymaps: Keymap[]) => keymaps.find((keymap: Keymap) => keymap.isDefault)));
 }
 
 export function getMacros(): (state$: Observable<AppState>) => Observable<Macro[]> {
-    return (state$: Observable<AppState>) => state$
-        .pipe(
-            map(state => state.userConfiguration.macros)
-        );
+    return (state$: Observable<AppState>) => state$.pipe(map(state => state.userConfiguration.macros));
 }
 
 export function getMacro(id: number) {
     if (isNaN(id)) {
         return () => of<Macro>(undefined);
     } else {
-        return (state$: Observable<AppState>) => getMacros()(state$)
-            .pipe(
-                map((macros: Macro[]) => macros.find((macro: Macro) => macro.id === id))
-            );
+        return (state$: Observable<AppState>) =>
+            getMacros()(state$).pipe(map((macros: Macro[]) => macros.find((macro: Macro) => macro.id === id)));
     }
 }
 
@@ -443,7 +433,9 @@ function generateMacroId(macros: Macro[]) {
 }
 
 function insertItemInNameOrder<T extends { name: string }>(
-    items: T[], newItem: T, keepItem: (item: T) => boolean = () => true
+    items: T[],
+    newItem: T,
+    keepItem: (item: T) => boolean = () => true,
 ): T[] {
     const newItems: T[] = [];
     let added = false;
@@ -465,9 +457,9 @@ function insertItemInNameOrder<T extends { name: string }>(
 
 function checkExistence(layers: Layer[], property: string, value: any): Layer[] {
     const keyActionsToClear: {
-        layerIdx: number,
-        moduleIdx: number,
-        keyActionIdx: number
+        layerIdx: number;
+        moduleIdx: number;
+        keyActionIdx: number;
     }[] = [];
     for (let layerIdx = 0; layerIdx < layers.length; ++layerIdx) {
         const modules = layers[layerIdx].modules;
@@ -479,7 +471,7 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
                     keyActionsToClear.push({
                         layerIdx,
                         moduleIdx,
-                        keyActionIdx
+                        keyActionIdx,
                     });
                 }
             }

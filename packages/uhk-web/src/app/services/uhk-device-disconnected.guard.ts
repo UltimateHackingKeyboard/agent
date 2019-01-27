@@ -9,17 +9,15 @@ import { Store } from '@ngrx/store';
 
 @Injectable()
 export class UhkDeviceDisconnectedGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store.select(deviceConnected)
-            .pipe(
-                tap(connected => {
-                    if (!connected) {
-                        this.router.navigate(['/detection']);
-                    }
-                })
-            );
+        return this.store.select(deviceConnected).pipe(
+            tap(connected => {
+                if (!connected) {
+                    this.router.navigate(['/detection']);
+                }
+            }),
+        );
     }
 }

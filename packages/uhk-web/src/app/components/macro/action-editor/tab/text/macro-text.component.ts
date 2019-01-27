@@ -1,11 +1,4 @@
-import {
-    OnInit,
-    AfterViewInit,
-    Component,
-    ElementRef,
-    Input,
-    ViewChild
-} from '@angular/core';
+import { OnInit, AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TextMacroAction } from 'uhk-common';
 
 import { MacroBaseComponent } from '../macro-base.component';
@@ -16,13 +9,15 @@ const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
     selector: 'macro-text-tab',
     templateUrl: './macro-text.component.html',
     styleUrls: ['./macro-text.component.scss'],
-    host: { 'class': 'macro__text' }
+    host: { class: 'macro__text' },
 })
 export class MacroTextTabComponent extends MacroBaseComponent implements OnInit, AfterViewInit {
     @Input() macroAction: TextMacroAction;
     @ViewChild('macroTextInput') input: ElementRef;
 
-    constructor() { super(); }
+    constructor() {
+        super();
+    }
 
     ngOnInit() {
         this.init();
@@ -57,7 +52,7 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
 
         const textarea: HTMLTextAreaElement = this.input.nativeElement;
         const data = $event.clipboardData.getData('text/plain');
-        const text = data && data.replace(NON_ASCII_REGEXP, '') || '';
+        const text = (data && data.replace(NON_ASCII_REGEXP, '')) || '';
         if (text.length === 0) {
             return;
         }
@@ -78,6 +73,5 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
         if (!this.macroAction) {
             this.macroAction = new TextMacroAction();
         }
-    }
-
+    };
 }

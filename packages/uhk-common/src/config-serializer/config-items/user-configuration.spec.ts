@@ -28,7 +28,7 @@ describe('user-configuration', () => {
             mouseScrollAcceleratedSpeed: 50,
             moduleConfigurations: [],
             macros: [],
-            keymaps: []
+            keymaps: [],
         });
     });
 
@@ -60,16 +60,18 @@ describe('user-configuration', () => {
                     abbreviation: 'QWR',
                     name: 'QWERTY',
                     description: '',
-                    layers: [{
-                        modules: [{
-                            id: 0,
-                            keyActions: [
-                                null
-                            ]
-                        }]
-                    }]
-                }
-            ]
+                    layers: [
+                        {
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
         });
     });
 
@@ -78,7 +80,7 @@ describe('user-configuration', () => {
             userConfigVersion: 1,
             moduleConfigurations: [],
             macros: [],
-            keymaps: []
+            keymaps: [],
         };
 
         const config = new UserConfiguration();
@@ -86,7 +88,6 @@ describe('user-configuration', () => {
 
         expect(config.deviceName).toEqual('My UHK');
     });
-
 });
 
 function jsonTester(json: any): void {

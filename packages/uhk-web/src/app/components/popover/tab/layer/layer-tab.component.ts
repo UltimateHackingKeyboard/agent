@@ -9,7 +9,7 @@ export type toggleType = 'active' | 'toggle';
     selector: 'layer-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './layer-tab.component.html',
-    styleUrls: ['./layer-tab.component.scss']
+    styleUrls: ['./layer-tab.component.scss'],
 })
 export class LayerTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -18,30 +18,30 @@ export class LayerTabComponent extends Tab implements OnChanges {
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
-    toggleData: { id: toggleType, text: string }[] = [
+    toggleData: { id: toggleType; text: string }[] = [
         {
             id: 'active',
-            text: 'Activate'
+            text: 'Activate',
         },
         {
             id: 'toggle',
-            text: 'Toggle'
-        }
+            text: 'Toggle',
+        },
     ];
 
-    layerData: { id: number, text: string }[] = [
+    layerData: { id: number; text: string }[] = [
         {
             id: 0,
-            text: 'Mod'
+            text: 'Mod',
         },
         {
             id: 1,
-            text: 'Fn'
+            text: 'Fn',
         },
         {
             id: 2,
-            text: 'Mouse'
-        }
+            text: 'Mouse',
+        },
     ];
 
     toggle: toggleType;

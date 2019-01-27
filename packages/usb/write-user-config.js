@@ -4,9 +4,7 @@ const program = require('commander');
 const uhk = require('./uhk');
 
 (async function() {
-    program
-        .usage(`configPath`)
-        .parse(process.argv);
+    program.usage(`configPath`).parse(process.argv);
 
     if (program.args.length < 1) {
         console.error('No configPath path specified.');

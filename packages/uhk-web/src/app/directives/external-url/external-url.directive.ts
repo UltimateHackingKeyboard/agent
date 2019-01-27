@@ -5,12 +5,10 @@ import { AppState } from '../../store';
 import { OpenUrlInNewWindowAction } from '../../store/actions/app';
 
 @Directive({
-    selector: 'a[externalUrl]'
+    selector: 'a[externalUrl]',
 })
 export class ExternalUrlDirective {
-    constructor(private el: ElementRef,
-                private store: Store<AppState>) {
-    }
+    constructor(private el: ElementRef, private store: Store<AppState>) {}
 
     @HostListener('click', ['$event'])
     onClick($event: MouseEvent): void {

@@ -9,7 +9,7 @@ const collectVersions = (): VersionInformation => {
         deviceProtocolVersion: pkgJson['deviceProtocolVersion'],
         moduleProtocolVersion: pkgJson['moduleProtocolVersion'],
         userConfigVersion: pkgJson['userConfigVersion'],
-        hardwareConfigVersion: pkgJson['hardwareConfigVersion']
+        hardwareConfigVersion: pkgJson['hardwareConfigVersion'],
     };
 };
 

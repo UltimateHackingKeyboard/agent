@@ -5,7 +5,6 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { UserConfiguration } from '../user-configuration';
 
 export class PlayMacroAction extends KeyAction {
-
     @assertUInt8
     macroId: number;
 
@@ -37,7 +36,7 @@ export class PlayMacroAction extends KeyAction {
     toJsonObject(macros: Macro[]): any {
         return {
             keyActionType: keyActionType.PlayMacroAction,
-            macroIndex: macros.findIndex(macro => macro.id === this.macroId)
+            macroIndex: macros.findIndex(macro => macro.id === this.macroId),
         };
     }
 

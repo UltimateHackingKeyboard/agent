@@ -5,13 +5,13 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
 export enum LayerName {
     mod,
     fn,
-    mouse
+    mouse,
 }
 
 export enum SwitchLayerMode {
     holdAndDoubleTapToggle = 'holdAndDoubleTapToggle',
     toggle = 'toggle',
-    hold = 'hold'
+    hold = 'hold',
 }
 
 export const mapSwitchLayerModeToNumber = (switchLayerMode: SwitchLayerMode): number => {
@@ -47,7 +47,6 @@ export const mapNumberToSwitchLayerMode = (value: number): SwitchLayerMode => {
 };
 
 export class SwitchLayerAction extends KeyAction {
-
     @assertEnum(SwitchLayerMode)
     switchLayerMode: SwitchLayerMode;
 
@@ -70,8 +69,7 @@ export class SwitchLayerAction extends KeyAction {
         // Backward compatibility when "switchLayerMode" was a boolean type as "toggle"
         if (typeof jsonObject.toggle === 'boolean') {
             this.switchLayerMode = jsonObject.toggle ? SwitchLayerMode.toggle : SwitchLayerMode.holdAndDoubleTapToggle;
-        }
-        else {
+        } else {
             this.switchLayerMode = jsonObject.switchLayerMode;
         }
 
@@ -89,7 +87,7 @@ export class SwitchLayerAction extends KeyAction {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
             layer: LayerName[this.layer],
-            switchLayerMode: this.switchLayerMode
+            switchLayerMode: this.switchLayerMode,
         };
     }
 

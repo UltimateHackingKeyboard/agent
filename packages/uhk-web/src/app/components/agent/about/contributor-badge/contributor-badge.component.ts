@@ -9,7 +9,7 @@ import { UHKContributor } from '../../../../models/uhk-contributor';
 @Component({
     selector: 'contributor-badge',
     templateUrl: './contributor-badge.component.html',
-    styleUrls: ['./contributor-badge.component.scss']
+    styleUrls: ['./contributor-badge.component.scss'],
 })
 export class ContributorBadgeComponent implements OnInit {
     @Input() contributor: UHKContributor;
@@ -27,8 +27,7 @@ export class ContributorBadgeComponent implements OnInit {
         return this.contributor.html_url;
     }
 
-    constructor(private store: Store<AppState>) {
-    }
+    constructor(private store: Store<AppState>) {}
 
     ngOnInit(): void {
         (this.badge.nativeElement as HTMLImageElement).src = URL.createObjectURL(this.contributor.avatar);

@@ -5,7 +5,7 @@ import { MapperService } from '../../../../services/mapper.service';
 @Component({
     selector: 'g[svg-mouse-scroll-key]',
     templateUrl: './svg-mouse-scroll-key.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgMouseScrollKeyComponent implements OnChanges {
     @Input() direction: string;
@@ -13,7 +13,7 @@ export class SvgMouseScrollKeyComponent implements OnChanges {
     mouseIcon: string;
     directionIcon: string;
 
-    constructor(private mapper: MapperService) { }
+    constructor(private mapper: MapperService) {}
 
     ngOnChanges() {
         this.mouseIcon = this.mapper.getIcon('mouse');

@@ -9,7 +9,6 @@ import { SecondaryRoleAction } from './secondary-role-action';
 import { isScancodeExists } from './scancode-checker';
 
 export class UserConfiguration {
-
     @assertUInt16
     userConfigMajorVersion: number;
 
@@ -172,9 +171,11 @@ export class UserConfiguration {
             mouseScrollDeceleratedSpeed: this.mouseScrollDeceleratedSpeed,
             mouseScrollBaseSpeed: this.mouseScrollBaseSpeed,
             mouseScrollAcceleratedSpeed: this.mouseScrollAcceleratedSpeed,
-            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
+            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration =>
+                moduleConfiguration.toJsonObject(),
+            ),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
-            macros: this.macros.map(macro => macro.toJsonObject())
+            macros: this.macros.map(macro => macro.toJsonObject()),
         };
     }
 
@@ -245,9 +246,11 @@ export class UserConfiguration {
                             continue;
                         }
 
-                        if (keyAction.secondaryRoleAction === SecondaryRoleAction.fn ||
+                        if (
+                            keyAction.secondaryRoleAction === SecondaryRoleAction.fn ||
                             keyAction.secondaryRoleAction === SecondaryRoleAction.mod ||
-                            keyAction.secondaryRoleAction === SecondaryRoleAction.mouse) {
+                            keyAction.secondaryRoleAction === SecondaryRoleAction.mouse
+                        ) {
                             (keyAction as any)._secondaryRoleAction = undefined;
                         }
 

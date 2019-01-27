@@ -15,8 +15,8 @@ const MOUSE_MOVE_VALUE_MULTIPLIER = 25;
     templateUrl: './mouse-speed.component.html',
     styleUrls: ['./mouse-speed.component.scss'],
     host: {
-        'class': 'container-fluid'
-    }
+        class: 'container-fluid',
+    },
 })
 export class MouseSpeedComponent implements OnInit, OnDestroy {
     public moveProps = [
@@ -25,36 +25,36 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
             title: 'Initial speed',
             tooltip: 'When mouse movement begins, this is the starting speed.',
             valueUnit: 'px/s',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseMoveBaseSpeed',
             title: 'Base speed',
             tooltip: 'This speed is reached after the initial moving speed sufficiently ramps up.',
             valueUnit: 'px/s',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseMoveAcceleration',
             title: 'Acceleration',
             tooltip: 'The rate of acceleration from the initial movement speed to the base speed.',
             valueUnit: 'px/s²',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseMoveDeceleratedSpeed',
             title: 'Decelerated speed',
             tooltip: 'This speed is used while moving with the <i>decelerate key</i> pressed.',
             valueUnit: 'px/s',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseMoveAcceleratedSpeed',
             title: 'Accelerated speed',
             tooltip: 'This speed is used while moving with the <i>accelerate key</i> pressed.',
             valueUnit: 'px/s',
-            value: 0
-        }
+            value: 0,
+        },
     ];
 
     public scrollProps = [
@@ -63,61 +63,64 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
             title: 'Initial speed',
             tooltip: 'When mouse scrolling begins, this is the starting speed.',
             valueUnit: 'pulse/s',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseScrollBaseSpeed',
             title: 'Base speed',
             tooltip: 'This speed is reached after the initial scrolling speed sufficiently ramps up.',
             valueUnit: 'pulse/s',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseScrollAcceleration',
             title: 'Acceleration',
             tooltip: 'The rate of acceleration from the initial scrolling speed to the base speed.',
             valueUnit: 'pulse/s²',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseScrollDeceleratedSpeed',
             title: 'Decelerated speed',
             tooltip: 'This speed is used while scrolling with the <i>decelerate key</i> pressed.',
             valueUnit: 'pulse/s',
-            value: 0
+            value: 0,
         },
         {
             prop: 'mouseScrollAcceleratedSpeed',
             title: 'Accelerated speed',
             tooltip: 'This speed is used while scrolling with the <i>accelerate key</i> pressed.',
             valueUnit: 'pulse/s',
-            value: 0
-        }
+            value: 0,
+        },
     ];
 
     public sliderPips: SliderPips = {
         mode: 'positions',
         values: [0, 50, 100],
         density: 6,
-        stepped: true
+        stepped: true,
     };
 
     public moveSettings: SliderProps = {
         min: MOUSE_MOVE_VALUE_MULTIPLIER,
         max: 6375,
-        step: MOUSE_MOVE_VALUE_MULTIPLIER
+        step: MOUSE_MOVE_VALUE_MULTIPLIER,
     };
 
     public scrollSettings: SliderProps = {
         min: 1,
         max: 255,
-        step: 1
+        step: 1,
     };
 
     private userConfig$: Store<UserConfiguration>;
     private userConfigSubscription: Subscription;
 
-    constructor(private store: Store<AppState>, private defaultUserConfigurationService: DefaultUserConfigurationService) {}
+    constructor(
+        private store: Store<AppState>,
+        private defaultUserConfigurationService: DefaultUserConfigurationService,
+    ) {}
 
     ngOnInit(): void {
         this.userConfig$ = this.store.select(getUserConfiguration);
@@ -136,13 +139,15 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     }
 
     onSetPropertyValue(propertyName: string, value: number): void {
-        this.store.dispatch(new SetUserConfigurationValueAction({
-            propertyName,
-            value: propertyName.indexOf('mouseMove') !== -1 ? value / MOUSE_MOVE_VALUE_MULTIPLIER : value
-        }));
+        this.store.dispatch(
+            new SetUserConfigurationValueAction({
+                propertyName,
+                value: propertyName.indexOf('mouseMove') !== -1 ? value / MOUSE_MOVE_VALUE_MULTIPLIER : value,
+            }),
+        );
     }
 
     resetToDefault() {
-       this.store.dispatch(new ResetMouseSpeedSettingsAction());
+        this.store.dispatch(new ResetMouseSpeedSettingsAction());
     }
 }

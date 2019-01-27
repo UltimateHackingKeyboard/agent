@@ -8,7 +8,6 @@ import { DelayMacroAction } from './delay-macro-action';
 import { TextMacroAction } from './text-macro-action';
 
 export class Helper {
-
     static createMacroAction(source: MacroAction | UhkBuffer | any): MacroAction {
         if (source instanceof MacroAction) {
             return Helper.fromMacroAction(source);
@@ -23,7 +22,10 @@ export class Helper {
         const macroActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
-        if (macroActionFirstByte >= MacroActionId.KeyMacroAction && macroActionFirstByte <= MacroActionId.LastKeyMacroAction) {
+        if (
+            macroActionFirstByte >= MacroActionId.KeyMacroAction &&
+            macroActionFirstByte <= MacroActionId.LastKeyMacroAction
+        ) {
             return new KeyMacroAction().fromBinary(buffer);
         } else if (
             macroActionFirstByte >= MacroActionId.MouseButtonMacroAction &&
@@ -64,7 +66,7 @@ export class Helper {
     }
 
     private static fromJSONObject(macroAction: any): MacroAction {
-       switch (macroAction.macroActionType) {
+        switch (macroAction.macroActionType) {
             case macroActionType.KeyMacroAction:
                 return new KeyMacroAction().fromJsonObject(macroAction);
             case macroActionType.MouseButtonMacroAction:

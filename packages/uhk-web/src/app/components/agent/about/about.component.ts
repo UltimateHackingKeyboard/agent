@@ -16,8 +16,8 @@ import { GetAgentContributorsAction } from '../../../store/actions/contributors.
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss'],
     host: {
-        'class': 'container-fluid'
-    }
+        class: 'container-fluid',
+    },
 })
 export class AboutComponent implements OnInit {
     version: string = getVersions().version;
@@ -25,8 +25,7 @@ export class AboutComponent implements OnInit {
     agentContributorsUrl = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
     state$: Observable<State>;
 
-    constructor(private store: Store<AppState>) {
-    }
+    constructor(private store: Store<AppState>) {}
 
     ngOnInit() {
         this.state$ = this.store.select(contributors);

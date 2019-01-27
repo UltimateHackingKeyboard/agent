@@ -8,7 +8,7 @@ import {
     HasBackupUserConfigurationAction,
     SaveConfigurationAction,
     UpdateFirmwareFailedAction,
-    UpdateFirmwareSuccessAction
+    UpdateFirmwareSuccessAction,
 } from '../actions/device';
 import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
@@ -47,15 +47,15 @@ export const initialState: State = {
     modules: {
         leftModuleInfo: {
             firmwareVersion: '',
-            moduleProtocolVersion: ''
+            moduleProtocolVersion: '',
         },
         rightModuleInfo: {
-            firmwareVersion: ''
-        }
+            firmwareVersion: '',
+        },
     },
-    log: [{message: '', cssClass: XtermCssClass.standard}],
+    log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
-    hasBackupUserConfiguration: false
+    hasBackupUserConfiguration: false,
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -68,14 +68,14 @@ export function reducer(state = initialState, action: Action): State {
                 hasPermission: data.hasPermission,
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
-                udevRuleInfo: data.udevRulesInfo
+                udevRuleInfo: data.udevRulesInfo,
             };
         }
 
         case ActionTypes.SAVING_CONFIGURATION: {
             return {
                 ...state,
-                savingToKeyboard: true
+                savingToKeyboard: true,
             };
         }
 
@@ -85,8 +85,8 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new SaveConfigurationAction()
-                }
+                    action: new SaveConfigurationAction(),
+                },
             };
         }
 
@@ -96,8 +96,8 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Saving',
-                    showProgress: true
-                }
+                    showProgress: true,
+                },
             };
         }
 
@@ -107,9 +107,9 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Saved!',
-                    action: null
+                    action: null,
                 },
-                restoringUserConfiguration: false
+                restoringUserConfiguration: false,
             };
         }
 
@@ -119,15 +119,15 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new SaveConfigurationAction()
-                }
+                    action: new SaveConfigurationAction(),
+                },
             };
         }
 
         case ActionTypes.HIDE_SAVE_TO_KEYBOARD_BUTTON: {
             return {
                 ...state,
-                saveToKeyboard: initProgressButtonState
+                saveToKeyboard: initProgressButtonState,
             };
         }
 
@@ -139,7 +139,7 @@ export function reducer(state = initialState, action: Action): State {
                 firmwareUpdateFinished: false,
                 firmwareUpdateFailed: false,
                 firmwareUpdateSuccess: false,
-                log: [{message: 'Start flashing firmware', cssClass: XtermCssClass.standard}]
+                log: [{ message: 'Start flashing firmware', cssClass: XtermCssClass.standard }],
             };
 
         case ActionTypes.UPDATE_FIRMWARE_SUCCESS:
@@ -148,14 +148,14 @@ export function reducer(state = initialState, action: Action): State {
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
                 firmwareUpdateSuccess: true,
-                modules: (action as UpdateFirmwareSuccessAction).payload
+                modules: (action as UpdateFirmwareSuccessAction).payload,
             };
 
         case ActionTypes.UPDATE_FIRMWARE_FAILED: {
             const data = (action as UpdateFirmwareFailedAction).payload;
             const logEntry = {
                 message: data.error.message,
-                cssClass: XtermCssClass.error
+                cssClass: XtermCssClass.error,
             };
 
             return {
@@ -164,7 +164,7 @@ export function reducer(state = initialState, action: Action): State {
                 firmwareUpdateFinished: true,
                 firmwareUpdateFailed: true,
                 modules: data.modules,
-                log: [...state.log, logEntry]
+                log: [...state.log, logEntry],
             };
         }
 
@@ -181,45 +181,45 @@ export function reducer(state = initialState, action: Action): State {
 
             const logEntry = {
                 message: payload.message,
-                cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard
+                cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard,
             };
 
             return {
                 ...state,
-                log: [...state.log, logEntry]
+                log: [...state.log, logEntry],
             };
         }
 
         case ActionTypes.MODULES_INFO_LOADED:
             return {
                 ...state,
-                modules: (action as HardwareModulesLoadedAction).payload
+                modules: (action as HardwareModulesLoadedAction).payload,
             };
 
         case ActionTypes.RESET_USER_CONFIGURATION:
         case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP:
             return {
                 ...state,
-                restoringUserConfiguration: true
+                restoringUserConfiguration: true,
             };
 
         case ActionTypes.HAS_BACKUP_USER_CONFIGURATION:
             return {
                 ...state,
-                hasBackupUserConfiguration: (action as HasBackupUserConfigurationAction).payload
+                hasBackupUserConfiguration: (action as HasBackupUserConfigurationAction).payload,
             };
 
         case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS:
             return {
                 ...state,
-                hasBackupUserConfiguration: false
+                hasBackupUserConfiguration: false,
             };
 
         case ActionTypes.RECOVERY_DEVICE: {
             return {
                 ...state,
                 updatingFirmware: true,
-                log: [{message: '', cssClass: XtermCssClass.standard}]
+                log: [{ message: '', cssClass: XtermCssClass.standard }],
             };
         }
         default:
@@ -234,13 +234,13 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (state.connected && !state.zeroInterfaceAvailable) {
         return {
             header: 'Cannot find your UHK',
-            subtitle: 'Please reconnect it!'
+            subtitle: 'Please reconnect it!',
         };
     }
 
     return {
         header: 'Cannot find your UHK',
-        subtitle: 'Please plug it in!'
+        subtitle: 'Please plug it in!',
     };
 };
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
@@ -250,7 +250,7 @@ export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUs
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
     return {
         restoringUserConfiguration: state.restoringUserConfiguration,
-        hasBackupUserConfiguration: state.hasBackupUserConfiguration
+        hasBackupUserConfiguration: state.hasBackupUserConfiguration,
     };
 };
 export const bootloaderActive = (state: State) => state.bootloaderActive;

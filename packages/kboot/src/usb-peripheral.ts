@@ -72,10 +72,7 @@ export class UsbPeripheral implements Peripheral {
                 const command: CommandOption = {
                     command: Commands.WriteMemory,
                     hasDataPhase: true,
-                    params: [
-                        ...pack(option.startAddress, { bits: 32 }),
-                        ...pack(option.data.length, { bits: 32 })
-                    ]
+                    params: [...pack(option.startAddress, { bits: 32 }), ...pack(option.data.length, { bits: 32 })],
                 };
 
                 const firsCommandResponse = await this.sendCommand(command);
@@ -84,7 +81,9 @@ export class UsbPeripheral implements Peripheral {
                 }
 
                 if (firsCommandResponse.code !== 0) {
-                    return reject(new Error(`Non zero write memory response! Response code: ${firsCommandResponse.code}`));
+                    return reject(
+                        new Error(`Non zero write memory response! Response code: ${firsCommandResponse.code}`),
+                    );
                 }
 
                 for (let i = 0; i < option.data.length; i = i + WRITE_DATA_STREAM_PACKAGE_LENGTH) {
@@ -101,7 +100,7 @@ export class UsbPeripheral implements Peripheral {
                         0,
                         slice.length,
                         0, // TODO: What is it?
-                        ...slice
+                        ...slice,
                     ];
 
                     logger('send data %o', convertToHexString(writeData));
@@ -123,7 +122,6 @@ export class UsbPeripheral implements Peripheral {
                 logger('Can not write memory data %O', err);
                 reject(err);
             }
-
         });
     }
 
@@ -132,10 +130,7 @@ export class UsbPeripheral implements Peripheral {
             try {
                 const command: CommandOption = {
                     command: Commands.ReadMemory,
-                    params: [
-                        ...pack(startAddress, { bits: 32 }),
-                        ...pack(count, { bits: 32 })
-                    ]
+                    params: [...pack(startAddress, { bits: 32 }), ...pack(count, { bits: 32 })],
                 };
 
                 this._resetDataBuffer();
@@ -146,7 +141,9 @@ export class UsbPeripheral implements Peripheral {
                 }
 
                 if (firsCommandResponse.code !== 0) {
-                    return reject(new Error(`Non zero read memory response! Response code: ${firsCommandResponse.code}`));
+                    return reject(
+                        new Error(`Non zero read memory response! Response code: ${firsCommandResponse.code}`),
+                    );
                 }
 
                 const byte4Number = firsCommandResponse.raw.slice(12, 15);
@@ -216,7 +213,6 @@ export class UsbPeripheral implements Peripheral {
         return new Promise<Buffer>(async (resolve, reject) => {
             const startTime = new Date();
             while (startTime.getTime() + timeout > new Date().getTime()) {
-
                 if (this._hidError) {
                     const err = this._hidError;
 

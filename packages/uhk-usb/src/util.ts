@@ -30,10 +30,11 @@ export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer)
     const fragments: Buffer[] = [];
     const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
     for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
-        const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
-            ? MAX_SENDING_PAYLOAD_SIZE
-            : configBuffer.length - offset;
-        const header = new Buffer([usbCommand, length, offset & 0xFF, offset >> 8]);
+        const length =
+            offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
+                ? MAX_SENDING_PAYLOAD_SIZE
+                : configBuffer.length - offset;
+        const header = new Buffer([usbCommand, length, offset & 0xff, offset >> 8]);
         fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
     }
 
@@ -85,7 +86,6 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
         } catch (err) {
             retryCount++;
             if (retryCount >= maxTry) {
-
                 if (logService) {
                     // logService.error(`[retry] failed and no try rerun FUNCTION:\n ${command}, \n retry: ${retryCount}`);
                 }
@@ -102,21 +102,25 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
 }
 
 export const isUhkZeroInterface = (dev: Device): boolean => {
-    return dev.vendorId === Constants.VENDOR_ID &&
-    dev.productId === Constants.PRODUCT_ID &&
-    // hidapi can not read the interface number on Mac, so check the usage page and usage
-    ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
-        (dev.usagePage === (0xFF00 | 0x00) && dev.usage === 0x01) || // New firmware
-        dev.interface === 0);
+    return (
+        dev.vendorId === Constants.VENDOR_ID &&
+        dev.productId === Constants.PRODUCT_ID &&
+        // hidapi can not read the interface number on Mac, so check the usage page and usage
+        ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
+        (dev.usagePage === (0xff00 | 0x00) && dev.usage === 0x01) || // New firmware
+            dev.interface === 0)
+    );
 };
 
 export const isUhkDevice = (dev: Device): boolean => {
-    return dev.vendorId === Constants.VENDOR_ID &&
-        (dev.productId === Constants.PRODUCT_ID || dev.productId === Constants.BOOTLOADER_ID);
+    return (
+        dev.vendorId === Constants.VENDOR_ID &&
+        (dev.productId === Constants.PRODUCT_ID || dev.productId === Constants.BOOTLOADER_ID)
+    );
 };
 
 export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {
-    const fileContent = await readFile(filePath, {encoding: 'utf-8'});
+    const fileContent = await readFile(filePath, { encoding: 'utf-8' });
 
     return fileContent
         .split(EOL)
@@ -135,9 +139,7 @@ export const waitForDevice = async (vendorId: number, productId: number): Promis
     const startTime = new Date().getTime() + 15000;
 
     while (startTime > new Date().getTime()) {
-
-        const isAvailable = devices()
-            .some(dev => dev.vendorId === vendorId && dev.productId === productId);
+        const isAvailable = devices().some(dev => dev.vendorId === vendorId && dev.productId === productId);
 
         if (isAvailable) {
             await snooze(1000);

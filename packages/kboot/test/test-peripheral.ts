@@ -1,17 +1,15 @@
 import { CommandOption, CommandResponse, DataOption, Peripheral, ResponseCodes, ResponseTags } from '../src';
 
 export class TestPeripheral implements Peripheral {
-    close(): void {
-    }
+    close(): void {}
 
-    open(): void {
-    }
+    open(): void {}
 
     sendCommand(options: CommandOption): Promise<CommandResponse> {
         const response = {
             tag: ResponseTags.Generic,
             code: ResponseCodes.Success,
-            raw: new Buffer(0)
+            raw: new Buffer(0),
         };
 
         return Promise.resolve(response);

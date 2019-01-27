@@ -11,7 +11,7 @@ import {
     SvgKeyHoverEvent,
     SvgKeyboardKeyClickEvent,
     SvgKeyboardCaptureEvent,
-    SvgModuleKeyClickEvent
+    SvgModuleKeyClickEvent,
 } from '../../../models/svg-key-events';
 
 @Component({
@@ -21,31 +21,43 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('split', [
-            state('rotateLeft', style({
-                transform: 'translate(-3%, 15%) rotate(4deg) scale(0.92, 0.92)'
-            })),
-            state('rotateRight', style({
-                transform: 'translate(3%, 15%) rotate(-4deg) scale(0.92, 0.92)'
-            })),
-            transition('* <=> *', animate(500))
+            state(
+                'rotateLeft',
+                style({
+                    transform: 'translate(-3%, 15%) rotate(4deg) scale(0.92, 0.92)',
+                }),
+            ),
+            state(
+                'rotateRight',
+                style({
+                    transform: 'translate(3%, 15%) rotate(-4deg) scale(0.92, 0.92)',
+                }),
+            ),
+            transition('* <=> *', animate(500)),
         ]),
         trigger('fadeSeparator', [
-            state('visible', style({
-                opacity: 1
-            })),
-            state('invisible', style({
-                opacity: 0
-            })),
+            state(
+                'visible',
+                style({
+                    opacity: 1,
+                }),
+            ),
+            state(
+                'invisible',
+                style({
+                    opacity: 0,
+                }),
+            ),
             transition('visible => invisible', animate(500)),
-            transition('invisible => visible', animate(1500))
-        ])
-    ]
+            transition('invisible => visible', animate(1500)),
+        ]),
+    ],
 })
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
-    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selectedKey: { layerId: number; moduleId: number; keyId: number };
     @Input() selected: boolean;
     @Input() halvesSplit: boolean;
     @Input() keyboardLayout = KeyboardLayout.ANSI;
@@ -63,8 +75,7 @@ export class SvgKeyboardComponent implements OnInit {
     separatorStyle: SafeStyle;
     separatorAnimation = 'visible';
 
-    constructor(private svgModuleProvider: SvgModuleProviderService,
-                private sanitizer: DomSanitizer) {
+    constructor(private svgModuleProvider: SvgModuleProviderService, private sanitizer: DomSanitizer) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
         this.halvesSplit = false;
@@ -88,14 +99,14 @@ export class SvgKeyboardComponent implements OnInit {
     onKeyClick(moduleId: number, event: SvgModuleKeyClickEvent): void {
         this.keyClick.emit({
             ...event,
-            moduleId
+            moduleId,
         });
     }
 
     onCapture(moduleId: number, event: SvgKeyboardCaptureEvent): void {
         this.capture.emit({
             ...event,
-            moduleId
+            moduleId,
         });
     }
 
@@ -104,7 +115,7 @@ export class SvgKeyboardComponent implements OnInit {
             moduleId,
             event,
             over,
-            keyId
+            keyId,
         });
     }
 

@@ -14,14 +14,12 @@ import { AppUpdateRendererService } from '../../services/app-update-renderer.ser
 @Injectable()
 export class AppUpdateEffect {
     @Effect({ dispatch: false })
-    appStart$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.UPDATE_APP)
-        .pipe(
-            first(),
-            tap(() => {
-                this.appUpdateRendererService.sendUpdateAndRestartApp();
-            })
-        );
+    appStart$: Observable<Action> = this.actions$.ofType(ActionTypes.UPDATE_APP).pipe(
+        first(),
+        tap(() => {
+            this.appUpdateRendererService.sendUpdateAndRestartApp();
+        }),
+    );
 
     @Effect({ dispatch: false }) checkForUpdate$: Observable<Action> = this.actions$
         .ofType(AutoUpdateActionTypes.CHECK_FOR_UPDATE_NOW)
@@ -29,24 +27,22 @@ export class AppUpdateEffect {
             tap(() => {
                 this.logService.debug('[AppUpdateEffect] call checkForUpdate');
                 this.appUpdateRendererService.checkForUpdate();
-            })
+            }),
         );
 
-    @Effect() handleError$: Observable<Action> = this.actions$
-        .ofType<UpdateErrorAction>(ActionTypes.UPDATE_ERROR)
-        .pipe(
-            map(action => action.payload),
-            map((message: string) => {
-                return new ShowNotificationAction({
-                    type: NotificationType.Error,
-                    message
-                });
-            })
-        );
+    @Effect() handleError$: Observable<Action> = this.actions$.ofType<UpdateErrorAction>(ActionTypes.UPDATE_ERROR).pipe(
+        map(action => action.payload),
+        map((message: string) => {
+            return new ShowNotificationAction({
+                type: NotificationType.Error,
+                message,
+            });
+        }),
+    );
 
-    constructor(private actions$: Actions,
-                private appUpdateRendererService: AppUpdateRendererService,
-                private logService: LogService) {
-    }
-
+    constructor(
+        private actions$: Actions,
+        private appUpdateRendererService: AppUpdateRendererService,
+        private logService: LogService,
+    ) {}
 }

@@ -7,17 +7,14 @@ import { MacroBaseComponent } from '../macro-base.component';
 enum TabName {
     Tap,
     Press,
-    Release
+    Release,
 }
 
 @Component({
     selector: 'macro-key-tab',
     templateUrl: './macro-key.component.html',
-    styleUrls: [
-        '../../macro-action-editor.component.scss',
-        './macro-key.component.scss'
-    ],
-    host: { 'class': 'macro__mouse' }
+    styleUrls: ['../../macro-action-editor.component.scss', './macro-key.component.scss'],
+    host: { class: 'macro__mouse' },
 })
 export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: KeyMacroAction;
@@ -75,6 +72,5 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     isMacroValid = () => {
         const keyMacroAction = this.getKeyMacroAction();
         return !!keyMacroAction.scancode || !!keyMacroAction.modifierMask;
-    }
-
+    };
 }

@@ -3,7 +3,6 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class DelayMacroAction extends MacroAction {
-
     @assertUInt16
     delay: number;
 
@@ -30,7 +29,7 @@ export class DelayMacroAction extends MacroAction {
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.DelayMacroAction,
-            delay: this.delay
+            delay: this.delay,
         };
     }
 

@@ -89,7 +89,9 @@ describe('keystroke-action', () => {
                 action.modifierMask = value;
             }
 
-            expect(test).toThrow(`KeystrokeAction.modifierMask: Integer ${value} is outside the valid [0, 255] interval`);
+            expect(test).toThrow(
+                `KeystrokeAction.modifierMask: Integer ${value} is outside the valid [0, 255] interval`,
+            );
         });
 
         it('should throw an error when value > 255', () => {
@@ -100,7 +102,9 @@ describe('keystroke-action', () => {
                 action.modifierMask = value;
             }
 
-            expect(test).toThrow(`KeystrokeAction.modifierMask: Integer ${value} is outside the valid [0, 255] interval`);
+            expect(test).toThrow(
+                `KeystrokeAction.modifierMask: Integer ${value} is outside the valid [0, 255] interval`,
+            );
         });
     });
 
@@ -182,7 +186,7 @@ describe('keystroke-action', () => {
                 type: 'basic',
                 scancode: 100,
                 modifierMask: 10,
-                secondaryRoleAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt',
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -202,7 +206,7 @@ describe('keystroke-action', () => {
                 type: 'system',
                 scancode: 100,
                 modifierMask: 10,
-                secondaryRoleAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt',
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -222,7 +226,7 @@ describe('keystroke-action', () => {
                 type: 'media',
                 scancode: 100,
                 modifierMask: 10,
-                secondaryRoleAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt',
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -242,7 +246,7 @@ describe('keystroke-action', () => {
                 type: 'media',
                 scancode: 256,
                 modifierMask: 10,
-                secondaryRoleAction: 'leftAlt'
+                secondaryRoleAction: 'leftAlt',
             };
             const action = new KeystrokeAction();
             action.fromJsonObject(jsObject);
@@ -257,47 +261,25 @@ describe('keystroke-action', () => {
         });
     });
 
-    describe('fromBinary', () => {
+    describe('fromBinary', () => {});
 
-    });
+    describe('toJsonObject', () => {});
 
-    describe('toJsonObject', () => {
+    describe('toBinary', () => {});
 
-    });
+    describe('toString', () => {});
 
-    describe('toBinary', () => {
+    describe('isActive', () => {});
 
-    });
+    describe('hasActiveModifier', () => {});
 
-    describe('toString', () => {
+    describe('hasSecondaryRoleAction', () => {});
 
-    });
+    describe('hasScancode', () => {});
 
-    describe('isActive', () => {
+    describe('hasOnlyOneActiveModifier', () => {});
 
-    });
+    describe('getModifierList', () => {});
 
-    describe('hasActiveModifier', () => {
-
-    });
-
-    describe('hasSecondaryRoleAction', () => {
-
-    });
-
-    describe('hasScancode', () => {
-
-    });
-
-    describe('hasOnlyOneActiveModifier', () => {
-
-    });
-
-    describe('getModifierList', () => {
-
-    });
-
-    describe('getName', () => {
-
-    });
+    describe('getName', () => {});
 });

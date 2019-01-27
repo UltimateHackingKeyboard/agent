@@ -14,14 +14,13 @@ export const ActionTypes = {
     TOGGLE_PRE_RELEASE_FLAG: type(PREFIX + 'Toggle pre release update flag'),
     LOAD_AUTO_UPDATE_SETTINGS: type(PREFIX + 'Load auto update settings'),
     LOAD_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Load auto update settings success'),
-    SAVE_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Save auto update settings success')
+    SAVE_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Save auto update settings success'),
 };
 
 export class ToggleCheckForUpdateOnStartupAction implements Action {
     type = ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP;
 
-    constructor(public payload: boolean) {
-    }
+    constructor(public payload: boolean) {}
 }
 
 export class CheckForUpdateNowAction implements Action {
@@ -30,22 +29,19 @@ export class CheckForUpdateNowAction implements Action {
 
 export class CheckForUpdateSuccessAction implements Action {
     type = ActionTypes.CHECK_FOR_UPDATE_SUCCESS;
-    constructor(public payload?: string) {
-    }
+    constructor(public payload?: string) {}
 }
 
 export class CheckForUpdateFailedAction implements Action {
     type = ActionTypes.CHECK_FOR_UPDATE_FAILED;
 
-    constructor(public payload: any) {
-    }
+    constructor(public payload: any) {}
 }
 
 export class TogglePreReleaseFlagAction implements Action {
     type = ActionTypes.TOGGLE_PRE_RELEASE_FLAG;
 
-    constructor(public payload: boolean) {
-    }
+    constructor(public payload: boolean) {}
 }
 
 export class LoadAutoUpdateSettingsAction implements Action {
@@ -55,16 +51,15 @@ export class LoadAutoUpdateSettingsAction implements Action {
 export class LoadAutoUpdateSettingsSuccessAction implements Action {
     type = ActionTypes.LOAD_AUTO_UPDATE_SETTINGS_SUCCESS;
 
-    constructor(public payload: AutoUpdateSettings) {
-    }
+    constructor(public payload: AutoUpdateSettings) {}
 }
 
 export class SaveAutoUpdateSettingsSuccessAction implements Action {
     type = ActionTypes.SAVE_AUTO_UPDATE_SETTINGS_SUCCESS;
 }
 
-export type Actions
-    = ToggleCheckForUpdateOnStartupAction
+export type Actions =
+    | ToggleCheckForUpdateOnStartupAction
     | CheckForUpdateNowAction
     | CheckForUpdateSuccessAction
     | CheckForUpdateFailedAction

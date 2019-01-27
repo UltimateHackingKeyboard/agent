@@ -2,7 +2,6 @@ import { assertUInt8, assertUInt32 } from '../assert';
 import { UhkBuffer } from '../uhk-buffer';
 
 export class HardwareConfiguration {
-
     signature: string;
 
     @assertUInt8
@@ -67,7 +66,7 @@ export class HardwareConfiguration {
             deviceId: this.deviceId,
             uniqueId: this.uniqueId,
             isVendorModeOn: this.isVendorModeOn,
-            isIso: this.isIso
+            isIso: this.isIso,
         };
     }
 

@@ -11,25 +11,20 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
     selector: 'privilege-checker',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './privilege-checker.component.html',
-    styleUrls: ['./privilege-checker.component.scss']
+    styleUrls: ['./privilege-checker.component.scss'],
 })
-
 export class PrivilegeCheckerComponent implements OnInit, OnDestroy {
-
     state: PrivilagePageSate;
 
     private stateSubscription: Subscription;
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-    }
+    constructor(private store: Store<AppState>, private cdRef: ChangeDetectorRef) {}
 
     ngOnInit(): void {
-        this.stateSubscription = this.store.select(getPrivilegePageState)
-            .subscribe(state => {
-                this.state = state;
-                this.cdRef.markForCheck();
-            });
+        this.stateSubscription = this.store.select(getPrivilegePageState).subscribe(state => {
+            this.state = state;
+            this.cdRef.markForCheck();
+        });
     }
 
     ngOnDestroy(): void {

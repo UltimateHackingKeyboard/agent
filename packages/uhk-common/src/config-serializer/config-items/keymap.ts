@@ -5,7 +5,6 @@ import { KeyActionHelper, SwitchLayerAction } from './key-action';
 import { UserConfiguration } from './user-configuration';
 
 export class Keymap {
-
     name: string;
 
     description: string;
@@ -56,7 +55,7 @@ export class Keymap {
             abbreviation: this.abbreviation,
             name: this.name,
             description: this.description,
-            layers: this.layers.map(layer => layer.toJsonObject(macros))
+            layers: this.layers.map(layer => layer.toJsonObject(macros)),
         };
     }
 
@@ -117,7 +116,9 @@ export class Keymap {
                     const currentLayer = this.layers[currentLayerId];
                     if (currentLayer.modules.length < moduleId) {
                         // TODO: What should we do???
-                        console.error(`${this.name}.layers[${currentLayerId}] has not enough module. Need: ${moduleId}`);
+                        console.error(
+                            `${this.name}.layers[${currentLayerId}] has not enough module. Need: ${moduleId}`,
+                        );
                         continue;
                     }
                     const currentModule = currentLayer.modules[moduleId];
@@ -126,27 +127,37 @@ export class Keymap {
                     if (baseKeyAction instanceof SwitchLayerAction) {
                         if (currentLayerId - 1 === baseKeyAction.layer) {
                             if (currentKeyAction instanceof SwitchLayerAction) {
-                                if (currentKeyAction.layer === baseKeyAction.layer &&
-                                    currentKeyAction.switchLayerMode === baseKeyAction.switchLayerMode) {
+                                if (
+                                    currentKeyAction.layer === baseKeyAction.layer &&
+                                    currentKeyAction.switchLayerMode === baseKeyAction.switchLayerMode
+                                ) {
                                     continue;
                                 }
                                 // tslint:disable-next-line: max-line-length
-                                const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                const error =
+                                    `${
+                                        this.name
+                                    }.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
                                     ` is different switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
                                 console.warn(error);
                             } else {
                                 // tslint:disable-next-line: max-line-length
-                                const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                                const error =
+                                    `${
+                                        this.name
+                                    }.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
                                     ` is not switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
                                 console.warn(error);
                             }
                             currentModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction);
                         }
-                    }
-                    else {
+                    } else {
                         if (currentKeyAction instanceof SwitchLayerAction) {
                             // tslint:disable-next-line: max-line-length
-                            const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
+                            const error =
+                                `${
+                                    this.name
+                                }.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
                                 ` is switch layer action, but the base key action is not switch layer action, so will delete`;
                             console.warn(error);
                             currentModule.keyActions[keyActionId] = null;

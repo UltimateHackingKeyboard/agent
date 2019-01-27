@@ -15,11 +15,10 @@ export enum MouseActionParam {
     scrollLeft,
     scrollRight,
     accelerate,
-    decelerate
+    decelerate,
 }
 
 export class MouseAction extends KeyAction {
-
     @assertEnum(MouseActionParam)
     mouseAction: MouseActionParam;
 
@@ -46,7 +45,7 @@ export class MouseAction extends KeyAction {
     toJsonObject(): any {
         return {
             keyActionType: keyActionType.MouseAction,
-            mouseAction: MouseActionParam[this.mouseAction]
+            mouseAction: MouseActionParam[this.mouseAction],
         };
     }
 

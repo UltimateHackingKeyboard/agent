@@ -6,8 +6,7 @@ export class DefaultUserConfigurationService {
     private _defaultConfig: UserConfiguration;
 
     constructor() {
-        this._defaultConfig = new UserConfiguration()
-            .fromJsonObject(require('./user-config.json'));
+        this._defaultConfig = new UserConfiguration().fromJsonObject(require('./user-config.json'));
     }
 
     getDefault(): UserConfiguration {

@@ -4,7 +4,6 @@ import { Module } from './module';
 import { UserConfiguration } from './user-configuration';
 
 export class Layer {
-
     modules: Module[];
 
     constructor(layers?: Layer) {
@@ -28,7 +27,7 @@ export class Layer {
 
     toJsonObject(macros?: Macro[]): any {
         return {
-            modules: this.modules.map(module => module.toJsonObject(macros))
+            modules: this.modules.map(module => module.toJsonObject(macros)),
         };
     }
 
@@ -62,5 +61,4 @@ export class Layer {
         }
         return this;
     }
-
 }

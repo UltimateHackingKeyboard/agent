@@ -1,4 +1,4 @@
-const {LogService, LogRegExps} = require('uhk-common');
+const { LogService, LogRegExps } = require('uhk-common');
 const chalk = require('chalk');
 
 class Logger extends LogService {
@@ -15,7 +15,7 @@ class Logger extends LogService {
             console.log(chalk.green(msg));
         } else if (LogRegExps.errorRegExp.test(msg)) {
             console.log(chalk.red(msg));
-        }else if (LogRegExps.transferRegExp.test(msg)) {
+        } else if (LogRegExps.transferRegExp.test(msg)) {
             console.log(chalk.yellow(msg));
         } else {
             console.log(...args);

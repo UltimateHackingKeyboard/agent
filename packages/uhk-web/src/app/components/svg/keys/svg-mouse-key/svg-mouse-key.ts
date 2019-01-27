@@ -5,14 +5,14 @@ import { MouseAction, MouseActionParam } from 'uhk-common';
 @Component({
     selector: 'g[svg-mouse-key]',
     templateUrl: './svg-mouse-key.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgMouseKeyComponent implements OnChanges {
     @Input() mouseAction: MouseAction;
     type: 'click' | 'scroll' | 'move' | 'speed';
     param: any;
 
-    constructor() { }
+    constructor() {}
 
     ngOnChanges() {
         switch (this.mouseAction.mouseAction) {

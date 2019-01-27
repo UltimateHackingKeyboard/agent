@@ -14,7 +14,7 @@ import {
     getAgentVersionInfo,
     getHardwareModules,
     runningOnNotSupportedWindows,
-    xtermLog
+    xtermLog,
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
@@ -25,8 +25,8 @@ import { UploadFileData } from '../../../models/upload-file-data';
     templateUrl: './device-firmware.component.html',
     styleUrls: ['./device-firmware.component.scss'],
     host: {
-        'class': 'container-fluid'
-    }
+        class: 'container-fluid',
+    },
 })
 export class DeviceFirmwareComponent implements OnDestroy {
     flashFirmwareButtonDisbabled$: Observable<boolean>;

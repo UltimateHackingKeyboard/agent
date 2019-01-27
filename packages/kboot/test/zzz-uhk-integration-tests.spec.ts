@@ -28,7 +28,7 @@ xdescribe('UHK Integration tests', () => {
                 protocolName: 'K',
                 major: 2,
                 minor: 0,
-                bugfix: 0
+                bugfix: 0,
             };
             const version = await kboot.getBootloaderVersion();
 
@@ -38,19 +38,15 @@ xdescribe('UHK Integration tests', () => {
         it('disable flash security', () => {
             const backdoorKey = [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08];
 
-            return kboot
-                .flashSecurityDisable(backdoorKey)
-                .catch(err => {
-                    expect(err).toBeFalsy();
-                });
+            return kboot.flashSecurityDisable(backdoorKey).catch(err => {
+                expect(err).toBeFalsy();
+            });
         });
 
         it('flash erase region', () => {
-            return kboot
-                .flashEraseRegion(0xc000, 475136)
-                .catch(err => {
-                    expect(err).toBeFalsy();
-                });
+            return kboot.flashEraseRegion(0xc000, 475136).catch(err => {
+                expect(err).toBeFalsy();
+            });
         });
 
         it('read memory', () => {
@@ -71,7 +67,7 @@ xdescribe('UHK Integration tests', () => {
             for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
                 const dataOption: DataOption = {
                     startAddress,
-                    data
+                    data,
                 };
 
                 await kboot.writeMemory(dataOption);
