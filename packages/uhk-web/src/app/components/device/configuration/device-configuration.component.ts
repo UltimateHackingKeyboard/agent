@@ -6,7 +6,7 @@ import { ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
     SaveUserConfigInBinaryFileAction,
-    SaveUserConfigInJsonFileAction
+    SaveUserConfigInJsonFileAction,
 } from '../../../store/actions/user-config';
 import { UploadFileData } from '../../../models/upload-file-data';
 

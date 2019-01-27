@@ -27,7 +27,7 @@ export class TextMacroAction extends MacroAction {
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.TextMacroAction,
-            text: this.text
+            text: this.text,
         };
     }
 

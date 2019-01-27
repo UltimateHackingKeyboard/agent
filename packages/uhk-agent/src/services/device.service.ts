@@ -11,7 +11,7 @@ import {
     LogService,
     mapObjectToUserConfigBinaryBuffer,
     SaveUserConfigurationData,
-    UpdateFirmwareData
+    UpdateFirmwareData,
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { Subscription } from 'rxjs/Subscription';
@@ -27,7 +27,7 @@ import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
     getPackageJsonFromPathAsync,
-    saveTmpFirmware
+    saveTmpFirmware,
 } from '../util';
 
 /**
@@ -54,7 +54,7 @@ export class DeviceService {
                 method: this.saveUserConfiguration,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -63,7 +63,7 @@ export class DeviceService {
                 method: this.loadConfigurations,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -72,7 +72,7 @@ export class DeviceService {
                 method: this.updateFirmware,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -83,7 +83,7 @@ export class DeviceService {
                 method: this.recoveryDevice,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -92,7 +92,7 @@ export class DeviceService {
                 method: this.enableUsbStackTest,
                 bind: this,
                 params: args,
-                asynchronous: true
+                asynchronous: true,
             });
         });
 
@@ -118,12 +118,12 @@ export class DeviceService {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId)
+                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId),
             };
         } catch (error) {
             response = {
                 success: false,
-                error: error.message
+                error: error.message,
             };
         } finally {
             this.device.close();
@@ -138,7 +138,7 @@ export class DeviceService {
 
             return {
                 leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
-                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
+                rightModuleInfo: await this.operations.getRightModuleVersionInfo(),
             };
         } catch (err) {
             if (!catchError) {
@@ -149,7 +149,7 @@ export class DeviceService {
 
             return {
                 leftModuleInfo: {},
-                rightModuleInfo: {}
+                rightModuleInfo: {},
             };
         }
     }
@@ -257,7 +257,7 @@ export class DeviceService {
                 tap((state: DeviceConnectionState) => {
                     this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
                     this.logService.info('[DeviceService] Device connection state changed to:', state);
-                })
+                }),
             )
             .subscribe();
     }

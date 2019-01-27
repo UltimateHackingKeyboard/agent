@@ -14,9 +14,17 @@ import {
     ModuleSlotToI2cAddress,
     ModuleSlotToId,
     UsbCommand,
-    UsbVariables
+    UsbVariables,
 } from './constants';
-import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
+import {
+    bufferToString,
+    getFileContentAsync,
+    getTransferData,
+    isUhkDevice,
+    isUhkZeroInterface,
+    retry,
+    snooze,
+} from './util';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -86,7 +94,7 @@ export class UhkHidDevice {
             connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
-            udevRulesInfo: await this.getUdevInfoAsync()
+            udevRulesInfo: await this.getUdevInfoAsync(),
         };
 
         for (const dev of devs) {
@@ -234,7 +242,9 @@ export class UhkHidDevice {
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
         const moduleName = kbootCommandName(module);
-        this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
+        this.logService.debug(
+            `[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`,
+        );
         if (command === KbootCommands.idle) {
             transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
         } else {
@@ -244,7 +254,9 @@ export class UhkHidDevice {
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
-        this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
+        this.logService.debug(
+            `[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`,
+        );
         const transfer = new Buffer([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
     }
@@ -275,7 +287,7 @@ export class UhkHidDevice {
                 compareDevices = devs.map(x => ({
                     productId: x.productId,
                     vendorId: x.vendorId,
-                    interface: x.interface
+                    interface: x.interface,
                 }));
             }
 

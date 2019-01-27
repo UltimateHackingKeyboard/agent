@@ -18,21 +18,21 @@ export namespace MacroActions {
 
     export function addMacro(): MacroAction {
         return {
-            type: MacroActions.ADD
+            type: MacroActions.ADD,
         };
     }
 
     export function removeMacro(macroId: number): MacroAction {
         return {
             type: MacroActions.REMOVE,
-            payload: macroId
+            payload: macroId,
         };
     }
 
     export function duplicateMacro(macro: Macro): MacroAction {
         return {
             type: MacroActions.DUPLICATE,
-            payload: macro
+            payload: macro,
         };
     }
 
@@ -41,8 +41,8 @@ export namespace MacroActions {
             type: MacroActions.EDIT_NAME,
             payload: {
                 id: id,
-                name: name
-            }
+                name: name,
+            },
         };
     }
 
@@ -51,8 +51,8 @@ export namespace MacroActions {
             type: MacroActions.ADD_ACTION,
             payload: {
                 id: id,
-                action: action
-            }
+                action: action,
+            },
         };
     }
 
@@ -62,8 +62,8 @@ export namespace MacroActions {
             payload: {
                 id: id,
                 index: index,
-                action: action
-            }
+                action: action,
+            },
         };
     }
 
@@ -73,8 +73,8 @@ export namespace MacroActions {
             payload: {
                 id: id,
                 index: index,
-                action: action
-            }
+                action: action,
+            },
         };
     }
 
@@ -84,8 +84,8 @@ export namespace MacroActions {
             payload: {
                 id: id,
                 oldIndex: oldIndex,
-                newIndex: newIndex
-            }
+                newIndex: newIndex,
+            },
         };
     }
 }

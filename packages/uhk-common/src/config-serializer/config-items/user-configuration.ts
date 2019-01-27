@@ -171,9 +171,11 @@ export class UserConfiguration {
             mouseScrollDeceleratedSpeed: this.mouseScrollDeceleratedSpeed,
             mouseScrollBaseSpeed: this.mouseScrollBaseSpeed,
             mouseScrollAcceleratedSpeed: this.mouseScrollAcceleratedSpeed,
-            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
+            moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration =>
+                moduleConfiguration.toJsonObject(),
+            ),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
-            macros: this.macros.map(macro => macro.toJsonObject())
+            macros: this.macros.map(macro => macro.toJsonObject()),
         };
     }
 

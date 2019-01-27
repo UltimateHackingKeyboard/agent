@@ -11,7 +11,7 @@ import {
     SvgKeyHoverEvent,
     SvgKeyboardKeyClickEvent,
     SvgKeyboardCaptureEvent,
-    SvgModuleKeyClickEvent
+    SvgModuleKeyClickEvent,
 } from '../../../models/svg-key-events';
 
 @Component({
@@ -49,9 +49,9 @@ import {
                 })
             ),
             transition('visible => invisible', animate(500)),
-            transition('invisible => visible', animate(1500))
-        ])
-    ]
+            transition('invisible => visible', animate(1500)),
+        ]),
+    ],
 })
 export class SvgKeyboardComponent implements OnInit {
     @Input() moduleConfig: Module[];
@@ -99,14 +99,14 @@ export class SvgKeyboardComponent implements OnInit {
     onKeyClick(moduleId: number, event: SvgModuleKeyClickEvent): void {
         this.keyClick.emit({
             ...event,
-            moduleId
+            moduleId,
         });
     }
 
     onCapture(moduleId: number, event: SvgKeyboardCaptureEvent): void {
         this.capture.emit({
             ...event,
-            moduleId
+            moduleId,
         });
     }
 
@@ -115,7 +115,7 @@ export class SvgKeyboardComponent implements OnInit {
             moduleId,
             event,
             over,
-            keyId
+            keyId,
         });
     }
 

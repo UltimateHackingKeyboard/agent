@@ -55,7 +55,7 @@ export class Keymap {
             abbreviation: this.abbreviation,
             name: this.name,
             description: this.description,
-            layers: this.layers.map(layer => layer.toJsonObject(macros))
+            layers: this.layers.map(layer => layer.toJsonObject(macros)),
         };
     }
 
@@ -116,7 +116,9 @@ export class Keymap {
                     const currentLayer = this.layers[currentLayerId];
                     if (currentLayer.modules.length < moduleId) {
                         // TODO: What should we do???
-                        console.error(`${this.name}.layers[${currentLayerId}] has not enough module. Need: ${moduleId}`);
+                        console.error(
+                            `${this.name}.layers[${currentLayerId}] has not enough module. Need: ${moduleId}`,
+                        );
                         continue;
                     }
                     const currentModule = currentLayer.modules[moduleId];

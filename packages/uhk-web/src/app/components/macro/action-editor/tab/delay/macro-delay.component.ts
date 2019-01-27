@@ -46,5 +46,7 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
         this.validate();
     }
 
-    isMacroValid = () => this.macroAction.delay !== 0;
+    isMacroValid() {
+        return this.macroAction.delay !== 0;
+    }
 }

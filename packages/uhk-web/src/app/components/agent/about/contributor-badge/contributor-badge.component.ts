@@ -9,7 +9,7 @@ import { UHKContributor } from '../../../../models/uhk-contributor';
 @Component({
     selector: 'contributor-badge',
     templateUrl: './contributor-badge.component.html',
-    styleUrls: ['./contributor-badge.component.scss']
+    styleUrls: ['./contributor-badge.component.scss'],
 })
 export class ContributorBadgeComponent implements OnInit {
     @Input() contributor: UHKContributor;

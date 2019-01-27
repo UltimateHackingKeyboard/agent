@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
     selector: 'layers',
     templateUrl: './layers.component.html',
-    styleUrls: ['./layers.component.scss']
+    styleUrls: ['./layers.component.scss'],
 })
 export class LayersComponent {
     @Input() current: number;
@@ -23,7 +23,7 @@ export class LayersComponent {
 
         this.select.emit({
             oldIndex: this.current,
-            index: index
+            index: index,
         });
 
         this.current = index;

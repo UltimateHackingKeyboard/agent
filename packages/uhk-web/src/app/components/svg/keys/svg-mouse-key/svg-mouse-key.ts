@@ -5,7 +5,7 @@ import { MouseAction, MouseActionParam } from 'uhk-common';
 @Component({
     selector: 'g[svg-mouse-key]',
     templateUrl: './svg-mouse-key.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgMouseKeyComponent implements OnChanges {
     @Input() mouseAction: MouseAction;

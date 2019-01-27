@@ -40,11 +40,14 @@ export class Module {
         return {
             id: this.id,
             keyActions: this.keyActions.map(keyAction => {
-                if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
+                if (
+                    keyAction &&
+                    (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))
+                ) {
                     return keyAction.toJsonObject(macros);
                 }
                 return null;
-            })
+            }),
         };
     }
 

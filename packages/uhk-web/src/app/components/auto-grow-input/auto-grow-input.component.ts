@@ -7,7 +7,7 @@ import {
     HostListener,
     Input,
     Renderer2,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as util from '../../util';
@@ -22,9 +22,9 @@ const noop = (_: any) => {};
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => AutoGrowInputComponent),
-            multi: true
-        }
-    ]
+            multi: true,
+        },
+    ],
 })
 export class AutoGrowInputComponent implements ControlValueAccessor {
     @Input() maxParentWidthPercent = 1;

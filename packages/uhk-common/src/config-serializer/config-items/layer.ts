@@ -27,7 +27,7 @@ export class Layer {
 
     toJsonObject(macros?: Macro[]): any {
         return {
-            modules: this.modules.map(module => module.toJsonObject(macros))
+            modules: this.modules.map(module => module.toJsonObject(macros)),
         };
     }
 

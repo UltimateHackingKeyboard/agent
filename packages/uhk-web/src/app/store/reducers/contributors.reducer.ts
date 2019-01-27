@@ -11,7 +11,7 @@ export interface State {
 export const initialState: State = {
     isLoading: false,
     contributors: [],
-    error: null
+    error: null,
 };
 
 export function reducer(state = initialState, action: Actions) {

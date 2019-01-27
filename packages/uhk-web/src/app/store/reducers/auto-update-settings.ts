@@ -10,7 +10,7 @@ export interface State extends AutoUpdateSettings {
 export const initialState: State = {
     checkForUpdateOnStartUp: false,
     usePreReleaseUpdate: false,
-    checkingForUpdate: false
+    checkingForUpdate: false,
 };
 
 export function reducer(state = initialState, action: Action & { payload?: any }): State {
@@ -44,7 +44,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
 
 export const getUpdateSettings = (state: State) => ({
     checkForUpdateOnStartUp: state.checkForUpdateOnStartUp,
-    usePreReleaseUpdate: state.usePreReleaseUpdate
+    usePreReleaseUpdate: state.usePreReleaseUpdate,
 });
 
 export const checkingForUpdate = (state: State) => state.checkingForUpdate;

@@ -41,43 +41,43 @@ export class CaptureService {
         this.leftModifiers.set(Key.Shift, {
             text: 'LShift',
             value: KeyModifiers.leftShift,
-            checked: false
+            checked: false,
         });
         this.leftModifiers.set(Key.Ctrl, {
             text: 'LCtrl',
             value: KeyModifiers.leftCtrl,
-            checked: false
+            checked: false,
         });
         this.leftModifiers.set(Key.Alt, {
             text: this.mapper.getOsSpecificText('LAlt'),
             value: KeyModifiers.leftAlt,
-            checked: false
+            checked: false,
         });
         this.leftModifiers.set(Key.LeftWindowKey, {
             text: this.mapper.getOsSpecificText('LSuper'),
             value: KeyModifiers.leftGui,
-            checked: false
+            checked: false,
         });
 
         this.rightModifiers.set(Key.Shift, {
             text: 'RShift',
             value: KeyModifiers.rightShift,
-            checked: false
+            checked: false,
         });
         this.rightModifiers.set(Key.Ctrl, {
             text: 'RCtrl',
             value: KeyModifiers.rightCtrl,
-            checked: false
+            checked: false,
         });
         this.rightModifiers.set(Key.Alt, {
             text: this.mapper.getOsSpecificText('RAlt'),
             value: KeyModifiers.rightAlt,
-            checked: false
+            checked: false,
         });
         this.rightModifiers.set(Key.LeftWindowKey, {
             text: this.mapper.getOsSpecificText('RSuper'),
             value: KeyModifiers.rightGui,
-            checked: false
+            checked: false,
         });
     }
 

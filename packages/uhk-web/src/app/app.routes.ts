@@ -23,22 +23,22 @@ const appRoutes: Routes = [
     {
         path: 'detection',
         component: MissingDeviceComponent,
-        canActivate: [UhkDeviceConnectedGuard, UhkDeviceUninitializedGuard]
+        canActivate: [UhkDeviceConnectedGuard, UhkDeviceUninitializedGuard],
     },
     {
         path: 'privilege',
         component: PrivilegeCheckerComponent,
-        canActivate: [UhkDeviceInitializedGuard]
+        canActivate: [UhkDeviceInitializedGuard],
     },
     {
         path: 'loading',
         component: LoadingDevicePageComponent,
-        canActivate: [UhkDeviceLoadedGuard]
+        canActivate: [UhkDeviceLoadedGuard],
     },
     {
         path: 'recovery-device',
         component: RecoveryModeComponent,
-        canActivate: [UhkDeviceBootloaderNotActiveGuard]
+        canActivate: [UhkDeviceBootloaderNotActiveGuard],
     },
     {
         path: '',

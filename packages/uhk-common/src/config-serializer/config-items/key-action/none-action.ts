@@ -20,7 +20,7 @@ export class NoneAction extends KeyAction {
 
     toJsonObject(): any {
         return {
-            keyActionType: keyActionType.NoneAction
+            keyActionType: keyActionType.NoneAction,
         };
     }
 

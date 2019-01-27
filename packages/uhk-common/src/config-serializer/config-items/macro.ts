@@ -30,7 +30,9 @@ export class Macro {
         this.isLooped = jsonObject.isLooped;
         this.isPrivate = jsonObject.isPrivate;
         this.name = jsonObject.name;
-        this.macroActions = jsonObject.macroActions.map((macroAction: any) => MacroActionHelper.createMacroAction(macroAction));
+        this.macroActions = jsonObject.macroActions.map((macroAction: any) =>
+            MacroActionHelper.createMacroAction(macroAction),
+        );
         return this;
     }
 
@@ -51,7 +53,7 @@ export class Macro {
             isLooped: this.isLooped,
             isPrivate: this.isPrivate,
             name: this.name,
-            macroActions: this.macroActions.map(macroAction => macroAction.toJsonObject())
+            macroActions: this.macroActions.map(macroAction => macroAction.toJsonObject()),
         };
     }
 

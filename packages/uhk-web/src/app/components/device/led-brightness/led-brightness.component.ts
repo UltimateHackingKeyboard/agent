@@ -23,7 +23,7 @@ export class LEDBrightnessComponent implements OnInit, OnDestroy {
         mode: 'positions',
         values: [0, 50, 100],
         density: 6,
-        stepped: true
+        stepped: true,
     };
 
     private userConfig$: Store<UserConfiguration>;

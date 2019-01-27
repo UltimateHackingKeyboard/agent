@@ -22,7 +22,7 @@ export const encodeCommandOption = (option: CommandOption): number[] => {
     const header = [
         1, // Communication channel
         0, // TODO: What is it?
-        ...pack(payload.length, { bits: 16 }) // payload length in 2 byte
+        ...pack(payload.length, { bits: 16 }), // payload length in 2 byte
     ];
 
     const placeholders = new Array(32 - payload.length).fill(0);

@@ -3,7 +3,7 @@ import { AfterContentInit, Directive, ElementRef, HostBinding, Input, OnChanges,
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Directive({
-    selector: '[data-toggle="tooltip"]'
+    selector: '[data-toggle="tooltip"]',
 })
 export class TooltipDirective implements AfterContentInit, OnChanges {
     @HostBinding('attr.data-placement') placement: string;
@@ -28,7 +28,7 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
             placement: this.placement,
             html: this.html,
             template: this.getCustomTemplate(),
-            title: this.title
+            title: this.title,
         });
     }
 
@@ -37,7 +37,7 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
             placement: this.placement,
             html: this.html,
             template: this.getCustomTemplate(),
-            title: this.title
+            title: this.title,
         });
 
         (<any>jQuery(this.elementRef.nativeElement).attr('title', this.title)).tooltip('fixTitle');

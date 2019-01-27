@@ -22,7 +22,10 @@ export class Helper {
         const macroActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
-        if (macroActionFirstByte >= MacroActionId.KeyMacroAction && macroActionFirstByte <= MacroActionId.LastKeyMacroAction) {
+        if (
+            macroActionFirstByte >= MacroActionId.KeyMacroAction &&
+            macroActionFirstByte <= MacroActionId.LastKeyMacroAction
+        ) {
             return new KeyMacroAction().fromBinary(buffer);
         } else if (
             macroActionFirstByte >= MacroActionId.MouseButtonMacroAction &&

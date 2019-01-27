@@ -38,7 +38,7 @@ export class MacroEffects {
                     commands.push('new');
                 }
                 this.router.navigate(commands);
-            })
+            }),
         );
 
     constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {}
