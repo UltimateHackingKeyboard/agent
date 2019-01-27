@@ -1,13 +1,13 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "sourceMap": true,
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es2016",
-    "importHelpers": true
-  }
+    "compileOnSave": false,
+    "compilerOptions": {
+        "sourceMap": true,
+        "declaration": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es2016",
+        "importHelpers": true
+    }
 }

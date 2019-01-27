@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
     templateUrl: './macro-not-found.component.html',
     styleUrls: ['./macro-not-found.component.scss']
 })
-export class MacroNotFoundComponent { }
+export class MacroNotFoundComponent {}

@@ -13,7 +13,7 @@ export const initialState: State = {
     checkingForUpdate: false
 };
 
-export function reducer(state = initialState, action: Action & { payload?: any}): State {
+export function reducer(state = initialState, action: Action & { payload?: any }): State {
     switch (action.type) {
         case ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP: {
             return Object.assign({}, state, { checkForUpdateOnStartUp: action.payload });
@@ -28,7 +28,7 @@ export function reducer(state = initialState, action: Action & { payload?: any})
         }
 
         case ActionTypes.CHECK_FOR_UPDATE_NOW: {
-            return Object.assign({}, state, { checkingForUpdate: true});
+            return Object.assign({}, state, { checkingForUpdate: true });
         }
 
         case UpdateActions.UPDATE_ERROR:

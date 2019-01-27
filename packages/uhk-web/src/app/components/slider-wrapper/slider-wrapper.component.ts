@@ -24,9 +24,7 @@ export interface SliderProps {
     selector: 'slider-wrapper',
     templateUrl: './slider-wrapper.component.html',
     styleUrls: ['./slider-wrapper.component.scss'],
-    providers: [
-        { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SliderWrapperComponent), multi: true }
-    ]
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SliderWrapperComponent), multi: true }]
 })
 export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent) slider: NouisliderComponent;
@@ -79,10 +77,12 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
         if (!this.changeObserver$) {
             Observable.create(observer => {
                 this.changeObserver$ = observer;
-            }).pipe(
-                debounceTime(this.changeDebounceTime),
-                distinctUntilChanged()
-            ).subscribe(this.propagateChange);
+            })
+                .pipe(
+                    debounceTime(this.changeDebounceTime),
+                    distinctUntilChanged()
+                )
+                .subscribe(this.propagateChange);
 
             return; // No change event on first change as the value is just being set
         }

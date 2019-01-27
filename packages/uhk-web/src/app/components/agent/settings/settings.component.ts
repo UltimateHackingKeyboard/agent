@@ -16,7 +16,7 @@ import { getVersions } from '../../../util';
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class SettingsComponent {

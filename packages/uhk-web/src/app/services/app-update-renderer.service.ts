@@ -18,9 +18,7 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
  */
 @Injectable()
 export class AppUpdateRendererService {
-    constructor(private store: Store<AppState>,
-                private zone: NgZone,
-                private ipcRenderer: IpcCommonRenderer) {
+    constructor(private store: Store<AppState>, private zone: NgZone, private ipcRenderer: IpcCommonRenderer) {
         this.registerEvents();
     }
 

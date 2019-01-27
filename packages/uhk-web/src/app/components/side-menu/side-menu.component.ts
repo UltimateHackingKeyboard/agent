@@ -3,7 +3,8 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
-    OnDestroy, OnInit,
+    OnDestroy,
+    OnInit,
     Renderer2,
     ViewChild
 } from '@angular/core';
@@ -21,12 +22,18 @@ import { SideMenuPageState } from '../../models/side-menu-page-state';
 @Component({
     animations: [
         trigger('toggler', [
-            state('inactive', style({
-                height: '0px'
-            })),
-            state('active', style({
-                height: '*'
-            })),
+            state(
+                'inactive',
+                style({
+                    height: '0px'
+                })
+            ),
+            state(
+                'active',
+                style({
+                    height: '*'
+                })
+            ),
             transition('inactive <=> active', animate('500ms ease-out'))
         ])
     ],
@@ -42,9 +49,7 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 
     private stateSubscription: Subscription;
 
-    constructor(private store: Store<AppState>,
-                private renderer: Renderer2,
-                private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
         this.animation = {
             device: 'active',
             configuration: 'active',

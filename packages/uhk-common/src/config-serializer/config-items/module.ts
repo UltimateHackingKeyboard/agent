@@ -5,7 +5,6 @@ import { Macro } from './macro';
 import { UserConfiguration } from './user-configuration';
 
 export class Module {
-
     @assertUInt8
     id: number;
 
@@ -71,7 +70,9 @@ export class Module {
         let keyActions: KeyAction[];
         let keyActionModified = false;
         this.keyActions.forEach((keyAction, index) => {
-            if (!keyAction) { return; }
+            if (!keyAction) {
+                return;
+            }
             const newKeyAction = keyAction.renameKeymap(oldAbbr, newAbbr);
             if (newKeyAction !== keyAction) {
                 if (!keyActionModified) {
@@ -88,5 +89,4 @@ export class Module {
         }
         return this;
     }
-
 }

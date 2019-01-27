@@ -7,11 +7,9 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconComponent implements OnInit {
-
     @Input() name: string;
 
-    constructor() { }
+    constructor() {}
 
-    ngOnInit() { }
-
+    ngOnInit() {}
 }

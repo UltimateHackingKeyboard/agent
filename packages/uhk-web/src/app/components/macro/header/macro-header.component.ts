@@ -28,7 +28,7 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     @Input() isNew: boolean;
     @ViewChild('macroName') macroName: ElementRef;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer2) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer2) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.isNew) {
@@ -82,5 +82,4 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
         this.renderer.setProperty(this.macroName.nativeElement, 'value', this.macro.name);
         this.calculateHeaderTextWidth(this.macro.name);
     }
-
 }

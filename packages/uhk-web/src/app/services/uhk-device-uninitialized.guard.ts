@@ -8,18 +8,15 @@ import { AppState, hasDevicePermission } from '../store';
 
 @Injectable()
 export class UhkDeviceUninitializedGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) {
-    }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store.select(hasDevicePermission)
-            .pipe(
-                tap(hasPermission => {
-                    if (!hasPermission) {
-                        this.router.navigate(['/privilege']);
-                    }
-                })
-            );
+        return this.store.select(hasDevicePermission).pipe(
+            tap(hasPermission => {
+                if (!hasPermission) {
+                    this.router.navigate(['/privilege']);
+                }
+            })
+        );
     }
 }

@@ -2,7 +2,6 @@ import { Keymap } from './config-items/keymap';
 import { UnresolvedSwitchKeymapAction } from './config-items/key-action';
 
 export namespace ConfigSerializer {
-
     export function resolveSwitchKeymapActions(keymaps: Keymap[]) {
         for (const keymap of keymaps) {
             for (const layer of keymap.layers) {

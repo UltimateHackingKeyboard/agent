@@ -5,9 +5,7 @@ export const angularNotifierConfig: NotifierOptions = {
         autoHide: false
     },
     position: {
-
         horizontal: {
-
             /**
              * Defines the horizontal position on the screen
              * @type {'left' | 'middle' | 'right'}
@@ -19,11 +17,9 @@ export const angularNotifierConfig: NotifierOptions = {
              * @type {number}
              */
             distance: 12
-
         },
 
         vertical: {
-
             /**
              * Defines the vertical position on the screen
              * @type {'top' | 'bottom'}
@@ -41,7 +37,6 @@ export const angularNotifierConfig: NotifierOptions = {
              * @type {number}
              */
             gap: 10
-
         }
     }
 };

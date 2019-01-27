@@ -3,7 +3,8 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
-    forwardRef, HostListener,
+    forwardRef,
+    HostListener,
     Input,
     Renderer2,
     ViewChild
@@ -11,8 +12,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as util from '../../util';
 
-const noop = (_: any) => {
-};
+const noop = (_: any) => {};
 
 @Component({
     selector: 'auto-grow-input',
@@ -51,9 +51,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
     private _onChanged = noop;
     private _onTouched = noop;
 
-    constructor(private _cdRef: ChangeDetectorRef,
-                private _renderer: Renderer2) {
-    }
+    constructor(private _cdRef: ChangeDetectorRef, private _renderer: Renderer2) {}
 
     registerOnChange(fn: any): void {
         this._onChanged = fn;

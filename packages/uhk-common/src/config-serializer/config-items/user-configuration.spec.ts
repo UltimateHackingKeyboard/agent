@@ -60,14 +60,16 @@ describe('user-configuration', () => {
                     abbreviation: 'QWR',
                     name: 'QWERTY',
                     description: '',
-                    layers: [{
-                        modules: [{
-                            id: 0,
-                            keyActions: [
-                                null
+                    layers: [
+                        {
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
                             ]
-                        }]
-                    }]
+                        }
+                    ]
                 }
             ]
         });
@@ -86,7 +88,6 @@ describe('user-configuration', () => {
 
         expect(config.deviceName).toEqual('My UHK');
     });
-
 });
 
 function jsonTester(json: any): void {

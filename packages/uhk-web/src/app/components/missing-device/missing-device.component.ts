@@ -10,15 +10,12 @@ import { MissingDeviceState } from '../../models/missing-device-state';
     templateUrl: './missing-device.component.html'
 })
 export class MissingDeviceComponent implements OnDestroy {
-
     state: MissingDeviceState;
 
     private stateSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
-        this.stateSubscription = this.store
-            .select(getMissingDeviceState)
-            .subscribe(state => this.state = state);
+        this.stateSubscription = this.store.select(getMissingDeviceState).subscribe(state => (this.state = state));
     }
 
     ngOnDestroy(): void {

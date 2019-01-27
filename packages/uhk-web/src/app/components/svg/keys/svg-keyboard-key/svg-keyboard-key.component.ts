@@ -1,6 +1,15 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output,
-    SimpleChange, ChangeDetectionStrategy
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChange,
+    ChangeDetectionStrategy
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
 
@@ -50,9 +59,12 @@ enum LabelTypes {
             transition('inactive => active', [
                 style({ fill: '#fff' }),
                 group([
-                    animate('1s ease-out', style({
-                        fill: '#333'
-                    }))
+                    animate(
+                        '1s ease-out',
+                        style({
+                            fill: '#333'
+                        })
+                    )
                 ])
             ])
         ]),
@@ -63,12 +75,18 @@ enum LabelTypes {
             transition('* => 1', animate('0ms')) // Instant color to blue
         ]),
         trigger('recording', [
-            state('inactive', style({
-                fill: 'rgba(204, 0, 0, 1)'
-            })),
-            state('active', style({
-                fill: 'rgba(204, 0, 0, 0.6)'
-            })),
+            state(
+                'inactive',
+                style({
+                    fill: 'rgba(204, 0, 0, 1)'
+                })
+            ),
+            state(
+                'active',
+                style({
+                    fill: 'rgba(204, 0, 0, 0.6)'
+                })
+            ),
             transition('inactive <=> active', animate('600ms ease-in-out'))
         ])
     ],
@@ -114,8 +132,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private element: ElementRef,
         private captureService: CaptureService
     ) {
-        this.subscription = store.let(getMacros())
-            .subscribe((macros: Macro[]) => this.macros = macros);
+        this.subscription = store.let(getMacros()).subscribe((macros: Macro[]) => (this.macros = macros));
 
         this.reset();
         this.captureService.populateMapping();
@@ -157,12 +174,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         if (e.keyCode === Key.Alt && this.pressedAltLocation > -1) {
             this.pressedAltLocation = -1;
             e.preventDefault();
-        }
-        else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
+        } else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
             this.pressedShiftLocation = -1;
             e.preventDefault();
-        }
-        else if (this.scanCodePressed) {
+        } else if (this.scanCodePressed) {
             e.preventDefault();
             this.scanCodePressed = false;
         } else if (this.recording) {
@@ -182,17 +197,17 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
                 // If the Alt or Shift key not released after start the capturing
                 // then add them as a modifier
                 if (this.pressedShiftLocation > -1) {
-                    this.captureService.setModifier((this.pressedShiftLocation === 1), Key.Shift);
+                    this.captureService.setModifier(this.pressedShiftLocation === 1, Key.Shift);
                 }
 
                 if (this.pressedAltLocation > -1) {
-                    this.captureService.setModifier((this.pressedAltLocation === 1), Key.Alt);
+                    this.captureService.setModifier(this.pressedAltLocation === 1, Key.Alt);
                 }
 
                 this.saveScanCode(this.captureService.getMap(code));
                 this.scanCodePressed = true;
             } else {
-                this.captureService.setModifier((e.location === 1), code);
+                this.captureService.setModifier(e.location === 1, code);
             }
         } else {
             if (e.keyCode === Key.Shift) {

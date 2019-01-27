@@ -11,7 +11,7 @@ export async function saveTmpFirmware(data: Array<number>): Promise<TmpFirmware>
     const zipFilePath = path.join(tmpDirectory.name, 'firmware.bz2');
 
     await writeDataToFile(data, zipFilePath);
-    await decompress(zipFilePath, tmpDirectory.name, {plugins: [decompressTarbz()]});
+    await decompress(zipFilePath, tmpDirectory.name, { plugins: [decompressTarbz()] });
 
     return {
         tmpDirectory,

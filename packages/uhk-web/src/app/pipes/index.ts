@@ -1,1 +1,1 @@
-export  { SafeStylePipe } from './safe-style.pipe';
+export { SafeStylePipe } from './safe-style.pipe';

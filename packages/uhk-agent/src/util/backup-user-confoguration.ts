@@ -11,7 +11,7 @@ export const getBackupUserConfigurationPath = (uniqueId: number): string => {
 
 export const backupUserConfiguration = (data: SaveUserConfigurationData): Promise<void> => {
     const backupFilePath = getBackupUserConfigurationPath(data.uniqueId);
-    return fs.writeJSON(backupFilePath, data.configuration, {spaces: 2});
+    return fs.writeJSON(backupFilePath, data.configuration, { spaces: 2 });
 };
 
 export const getBackupUserConfigurationContent = async (logService: LogService, uniqueId: number): Promise<UserConfiguration> => {
@@ -27,6 +27,6 @@ export const getBackupUserConfigurationContent = async (logService: LogService, 
 
         return null;
     } catch (error) {
-        logService.error('Can not load backup user configuration for device', {uniqueId, error});
+        logService.error('Can not load backup user configuration for device', { uniqueId, error });
     }
 };

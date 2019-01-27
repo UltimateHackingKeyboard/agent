@@ -24,13 +24,14 @@ export class KeymapTabComponent extends Tab implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.keymaps) {
-            this.keymapOptions = this.keymaps
-                .map((keymap: Keymap): SelectOptionData => {
+            this.keymapOptions = this.keymaps.map(
+                (keymap: Keymap): SelectOptionData => {
                     return {
                         id: keymap.abbreviation,
                         text: keymap.name
                     };
-                });
+                }
+            );
             if (this.keymaps.length > 0) {
                 this.selectedKeymap = this.keymaps[0];
             }
@@ -58,8 +59,9 @@ export class KeymapTabComponent extends Tab implements OnChanges {
         }
 
         const switchKeymapAction: SwitchKeymapAction = <SwitchKeymapAction>keyAction;
-        this.selectedKeymap = this.keymaps
-            .find((keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation);
+        this.selectedKeymap = this.keymaps.find(
+            (keymap: Keymap) => keymap.abbreviation === switchKeymapAction.keymapAbbreviation
+        );
     }
 
     toKeyAction(): SwitchKeymapAction {

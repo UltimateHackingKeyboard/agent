@@ -8,9 +8,7 @@ import { OpenUrlInNewWindowAction } from '../../store/actions/app';
     selector: 'a[externalUrl]'
 })
 export class ExternalUrlDirective {
-    constructor(private el: ElementRef,
-                private store: Store<AppState>) {
-    }
+    constructor(private el: ElementRef, private store: Store<AppState>) {}
 
     @HostListener('click', ['$event'])
     onClick($event: MouseEvent): void {

@@ -4,10 +4,7 @@ import { SwitchKeymapAction } from './switch-keymap-action';
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('switch-keymap-action', () => {
     const userConfiguration = {
-        keymaps: [
-            {abbreviation: 'AB1'},
-            {abbreviation: 'AB2'}
-        ]
+        keymaps: [{ abbreviation: 'AB1' }, { abbreviation: 'AB2' }]
     };
 
     it('should be instantiate', () => {

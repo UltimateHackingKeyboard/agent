@@ -5,7 +5,6 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { UserConfiguration } from '../user-configuration';
 
 export class PlayMacroAction extends KeyAction {
-
     @assertUInt8
     macroId: number;
 

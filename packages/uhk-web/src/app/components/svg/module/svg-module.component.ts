@@ -5,7 +5,7 @@ import { SvgKeyboardKey } from '../keys';
 import {
     SvgKeyCaptureEvent,
     SvgKeyClickEvent,
-        SvgModuleCaptureEvent,
+    SvgModuleCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
 
@@ -19,7 +19,7 @@ export class SvgModuleComponent {
     @Input() coverages: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
-    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selectedKey: { layerId: number; moduleId: number; keyId: number };
     @Input() selected: boolean;
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;

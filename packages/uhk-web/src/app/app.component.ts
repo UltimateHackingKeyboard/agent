@@ -22,17 +22,16 @@ import { ProgressButtonState } from './store/reducers/progress-button-state';
     styleUrls: ['./app.component.scss'],
     encapsulation: ViewEncapsulation.None,
     animations: [
-        trigger(
-            'showSaveToKeyboardButton', [
-                transition(':enter', [
-                    style({transform: 'translateY(100%)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
-                ]),
-                transition(':leave', [
-                    style({transform: 'translateY(0)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
-                ])
+        trigger('showSaveToKeyboardButton', [
+            transition(':enter', [
+                style({ transform: 'translateY(100%)' }),
+                animate('400ms ease-in-out', style({ transform: 'translateY(0)' }))
+            ]),
+            transition(':leave', [
+                style({ transform: 'translateY(0)' }),
+                animate('400ms ease-in-out', style({ transform: 'translateY(100%)' }))
             ])
+        ])
     ]
 })
 export class MainAppComponent implements OnDestroy {
@@ -49,10 +48,10 @@ export class MainAppComponent implements OnDestroy {
         this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
         this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
-        this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)
-            .subscribe(data => this.saveToKeyboardState = data);
-        this.keypressCapturingSubscription = store.select(keypressCapturing)
-            .subscribe(data => this.keypressCapturing = data);
+        this.saveToKeyboardStateSubscription = store
+            .select(saveToKeyboardState)
+            .subscribe(data => (this.saveToKeyboardState = data));
+        this.keypressCapturingSubscription = store.select(keypressCapturing).subscribe(data => (this.keypressCapturing = data));
     }
 
     ngOnDestroy(): void {
@@ -62,20 +61,18 @@ export class MainAppComponent implements OnDestroy {
 
     @HostListener('document:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
-        if (this.saveToKeyboardState.showButton &&
+        if (
+            this.saveToKeyboardState.showButton &&
             event.ctrlKey &&
             event.key === 's' &&
             !event.defaultPrevented &&
-            !this.keypressCapturing) {
+            !this.keypressCapturing
+        ) {
             this.clickedOnProgressButton(this.saveToKeyboardState.action);
             event.preventDefault();
         }
 
-        if (event.shiftKey &&
-            event.ctrlKey &&
-            event.metaKey &&
-            event.key === '|' &&
-            !event.defaultPrevented) {
+        if (event.shiftKey && event.ctrlKey && event.metaKey && event.key === '|' && !event.defaultPrevented) {
             this.enableUsbStackTest();
             event.preventDefault();
         }

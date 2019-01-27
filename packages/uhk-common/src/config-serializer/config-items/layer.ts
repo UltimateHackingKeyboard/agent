@@ -4,7 +4,6 @@ import { Module } from './module';
 import { UserConfiguration } from './user-configuration';
 
 export class Layer {
-
     modules: Module[];
 
     constructor(layers?: Layer) {
@@ -62,5 +61,4 @@ export class Layer {
         }
         return this;
     }
-
 }

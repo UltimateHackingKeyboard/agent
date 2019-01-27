@@ -19,10 +19,7 @@ import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransfer
 import { LoadConfigurationsResult } from './models/load-configurations-result';
 
 export class UhkOperations {
-    constructor(private logService: LogService,
-                private device: UhkHidDevice,
-                private rootDir: string) {
-    }
+    constructor(private logService: LogService, private device: UhkHidDevice, private rootDir: string) {}
 
     public async updateRightFirmware(firmwarePath = this.getFirmwarePath()) {
         this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
@@ -71,7 +68,7 @@ export class UhkOperations {
 
         const leftModuleBricked = await this.waitForKbootIdle();
         if (!leftModuleBricked) {
-            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
+            const msg = "[UhkOperations] Couldn't connect to the left keyboard half.";
             this.logService.error(msg);
             throw new Error(msg);
         }
@@ -81,7 +78,10 @@ export class UhkOperations {
         this.logService.info('[UhkOperations] Waiting for buspal');
         await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
         let tryCount = 0;
-        const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+        const usbPeripheral = new UsbPeripheral({
+            productId: EnumerationNameToProductId.buspal,
+            vendorId: Constants.VENDOR_ID
+        });
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
@@ -171,8 +171,13 @@ export class UhkOperations {
             this.logService.debug(`[DeviceOperation] USB[T]: Read ${configName} from keyboard`);
             while (offset < configSize) {
                 const chunkSizeToRead = Math.min(chunkSize, configSize - offset);
-                const writeBuffer = Buffer.from(
-                    [UsbCommand.ReadConfig, configBufferId, chunkSizeToRead, offset & 0xff, offset >> 8]);
+                const writeBuffer = Buffer.from([
+                    UsbCommand.ReadConfig,
+                    configBufferId,
+                    chunkSizeToRead,
+                    offset & 0xff,
+                    offset >> 8
+                ]);
                 const readBuffer = await this.device.write(writeBuffer);
                 configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
@@ -182,8 +187,10 @@ export class UhkOperations {
                     configSize = readBuffer[7] + (readBuffer[8] << 8);
                     this.logService.debug(`[DeviceOperation] userConfigSize: ${configSize}`);
                     if (originalConfigSize < configSize) {
-                        this.logService.debug(`[DeviceOperation] userConfigSize should never be larger than getConfigSize()! ` +
-                            `Overriding configSize with getConfigSize()`);
+                        this.logService.debug(
+                            `[DeviceOperation] userConfigSize should never be larger than getConfigSize()! ` +
+                                `Overriding configSize with getConfigSize()`
+                        );
                         configSize = originalConfigSize;
                     }
                 }
@@ -239,8 +246,10 @@ export class UhkOperations {
                 return true;
             }
 
-            // tslint:disable-next-line: max-line-length
-            this.logService.info('[DeviceOperation] Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.');
+            this.logService.info(
+                '[DeviceOperation] Cannot ping the bootloader. Please reconnect the left keyboard half. ' +
+                'It probably needs several tries, so keep reconnecting until you see this message.'
+            );
 
             await snooze(1000);
         }

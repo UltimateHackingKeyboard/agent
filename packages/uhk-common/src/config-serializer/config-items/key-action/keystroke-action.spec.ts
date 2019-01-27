@@ -257,47 +257,25 @@ describe('keystroke-action', () => {
         });
     });
 
-    describe('fromBinary', () => {
+    describe('fromBinary', () => {});
 
-    });
+    describe('toJsonObject', () => {});
 
-    describe('toJsonObject', () => {
+    describe('toBinary', () => {});
 
-    });
+    describe('toString', () => {});
 
-    describe('toBinary', () => {
+    describe('isActive', () => {});
 
-    });
+    describe('hasActiveModifier', () => {});
 
-    describe('toString', () => {
+    describe('hasSecondaryRoleAction', () => {});
 
-    });
+    describe('hasScancode', () => {});
 
-    describe('isActive', () => {
+    describe('hasOnlyOneActiveModifier', () => {});
 
-    });
+    describe('getModifierList', () => {});
 
-    describe('hasActiveModifier', () => {
-
-    });
-
-    describe('hasSecondaryRoleAction', () => {
-
-    });
-
-    describe('hasScancode', () => {
-
-    });
-
-    describe('hasOnlyOneActiveModifier', () => {
-
-    });
-
-    describe('getModifierList', () => {
-
-    });
-
-    describe('getName', () => {
-
-    });
+    describe('getName', () => {});
 });

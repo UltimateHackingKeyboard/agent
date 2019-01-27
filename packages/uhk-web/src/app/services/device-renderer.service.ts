@@ -21,10 +21,12 @@ import { LoadConfigFromDeviceReplyAction } from '../store/actions/user-config';
 
 @Injectable()
 export class DeviceRendererService {
-    constructor(private store: Store<AppState>,
-                private zone: NgZone,
-                private ipcRenderer: IpcCommonRenderer,
-                private logService: LogService) {
+    constructor(
+        private store: Store<AppState>,
+        private zone: NgZone,
+        private ipcRenderer: IpcCommonRenderer,
+        private logService: LogService
+    ) {
         this.registerEvents();
         this.logService.info('[DeviceRendererService] init success ');
     }

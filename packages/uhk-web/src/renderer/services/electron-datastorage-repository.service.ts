@@ -28,9 +28,7 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
     // TODO: Throw error when save user config from electron-datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    saveConfig(config: UserConfiguration): void {
-
-    }
+    saveConfig(config: UserConfiguration): void {}
 
     getAutoUpdateSettings(): AutoUpdateSettings {
         return ElectronDataStorageRepositoryService.getValue('auto-update-settings');

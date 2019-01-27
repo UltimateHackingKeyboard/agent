@@ -6,9 +6,7 @@ import { Component } from '@angular/core';
     styles: [':host{height:100%; width:100%}']
 })
 export class MainPage {
-
-    constructor() {
-    }
+    constructor() {}
 
     onActivate(e, outlet) {
         outlet.scrollIntoView();

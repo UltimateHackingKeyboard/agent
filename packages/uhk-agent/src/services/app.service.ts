@@ -8,11 +8,13 @@ import { DeviceService } from './device.service';
 import { CommandLineInputs } from '../models/command-line-inputs';
 
 export class AppService extends MainServiceBase {
-    constructor(protected logService: LogService,
-                protected win: Electron.BrowserWindow,
-                private deviceService: DeviceService,
-                private options: CommandLineInputs,
-                private uhkHidDeviceService: UhkHidDevice) {
+    constructor(
+        protected logService: LogService,
+        protected win: Electron.BrowserWindow,
+        private deviceService: DeviceService,
+        private options: CommandLineInputs,
+        private uhkHidDeviceService: UhkHidDevice
+    ) {
         super(logService, win);
 
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));

@@ -23,7 +23,7 @@ enum TabName {
     selector: 'macro-action-editor',
     templateUrl: './macro-action-editor.component.html',
     styleUrls: ['./macro-action-editor.component.scss'],
-    host: { 'class': 'macro-action-editor' }
+    host: { class: 'macro-action-editor' }
 })
 export class MacroActionEditorComponent implements OnInit {
     @Input() macroAction: MacroAction;
@@ -57,9 +57,10 @@ export class MacroActionEditorComponent implements OnInit {
     onSaveClick(): void {
         try {
             // TODO: Refactor after getKeyMacroAction has been added to all tabs
-            const action = this.selectedTab instanceof MacroKeyTabComponent ?
-                this.selectedTab.getKeyMacroAction() :
-                this.selectedTab.macroAction;
+            const action =
+                this.selectedTab instanceof MacroKeyTabComponent
+                    ? this.selectedTab.getKeyMacroAction()
+                    : this.selectedTab.macroAction;
             this.save.emit(action);
         } catch (e) {
             // TODO: show error dialog
@@ -67,7 +68,7 @@ export class MacroActionEditorComponent implements OnInit {
         }
     }
 
-    onValid = (isMacroValid: boolean) => this.isSelectedMacroValid = isMacroValid;
+    onValid = (isMacroValid: boolean) => (this.isSelectedMacroValid = isMacroValid);
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
@@ -86,9 +87,11 @@ export class MacroActionEditorComponent implements OnInit {
             return TabName.Text;
         } else if (action instanceof KeyMacroAction) {
             return TabName.Keypress;
-        } else if (action instanceof MouseButtonMacroAction ||
+        } else if (
+            action instanceof MouseButtonMacroAction ||
             action instanceof MoveMouseMacroAction ||
-            action instanceof ScrollMouseMacroAction) {
+            action instanceof ScrollMouseMacroAction
+        ) {
             return TabName.Mouse;
         }
         return undefined;
@@ -98,5 +101,4 @@ export class MacroActionEditorComponent implements OnInit {
         const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
         this.editableMacroAction = MacroActionHelper.createMacroAction(macroAction);
     }
-
 }

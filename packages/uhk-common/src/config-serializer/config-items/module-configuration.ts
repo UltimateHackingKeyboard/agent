@@ -2,7 +2,6 @@ import { assertUInt8, assertUInt16 } from '../assert';
 import { UhkBuffer } from '../uhk-buffer';
 
 export class ModuleConfiguration {
-
     /*
      * module id enumeration is a separate story
      */

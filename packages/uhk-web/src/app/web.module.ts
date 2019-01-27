@@ -23,5 +23,4 @@ import { effects } from './store/effects';
     ],
     bootstrap: [MainAppComponent]
 })
-export class WebModule {
-}
+export class WebModule {}

@@ -53,7 +53,7 @@ export const initialState: State = {
             firmwareVersion: ''
         }
     },
-    log: [{message: '', cssClass: XtermCssClass.standard}],
+    log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
     hasBackupUserConfiguration: false
 };
@@ -139,7 +139,7 @@ export function reducer(state = initialState, action: Action): State {
                 firmwareUpdateFinished: false,
                 firmwareUpdateFailed: false,
                 firmwareUpdateSuccess: false,
-                log: [{message: 'Start flashing firmware', cssClass: XtermCssClass.standard}]
+                log: [{ message: 'Start flashing firmware', cssClass: XtermCssClass.standard }]
             };
 
         case ActionTypes.UPDATE_FIRMWARE_SUCCESS:
@@ -219,7 +219,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 updatingFirmware: true,
-                log: [{message: '', cssClass: XtermCssClass.standard}]
+                log: [{ message: '', cssClass: XtermCssClass.standard }]
             };
         }
         default:

@@ -9,7 +9,6 @@ import { SecondaryRoleAction } from './secondary-role-action';
 import { isScancodeExists } from './scancode-checker';
 
 export class UserConfiguration {
-
     @assertUInt16
     userConfigMajorVersion: number;
 
@@ -245,9 +244,11 @@ export class UserConfiguration {
                             continue;
                         }
 
-                        if (keyAction.secondaryRoleAction === SecondaryRoleAction.fn ||
+                        if (
+                            keyAction.secondaryRoleAction === SecondaryRoleAction.fn ||
                             keyAction.secondaryRoleAction === SecondaryRoleAction.mod ||
-                            keyAction.secondaryRoleAction === SecondaryRoleAction.mouse) {
+                            keyAction.secondaryRoleAction === SecondaryRoleAction.mouse
+                        ) {
                             (keyAction as any)._secondaryRoleAction = undefined;
                         }
 

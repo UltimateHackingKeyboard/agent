@@ -9,18 +9,16 @@ import { AppState, deviceConfigurationLoaded } from '../store';
 
 @Injectable()
 export class UhkDeviceLoadedGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store.select(deviceConfigurationLoaded)
-            .pipe(
-                tap(loaded => {
-                    if (loaded) {
-                        this.router.navigate(['/']);
-                    }
-                }),
-                map(loaded => !loaded)
-            );
+        return this.store.select(deviceConfigurationLoaded).pipe(
+            tap(loaded => {
+                if (loaded) {
+                    this.router.navigate(['/']);
+                }
+            }),
+            map(loaded => !loaded)
+        );
     }
 }

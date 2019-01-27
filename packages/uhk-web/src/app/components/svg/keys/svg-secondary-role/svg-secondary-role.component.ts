@@ -47,6 +47,6 @@ export class SvgSecondaryRoleComponent implements OnInit, OnChanges {
     private calculateTextPosition(): void {
         const textWidth = getContentWidth(SECONDARY_STYLE, this.text) + this.textIndent;
         const translateValue = Math.max(0, (this.width - textWidth) / 2);
-        this.transform = `translate(${ translateValue },0)`;
+        this.transform = `translate(${translateValue},0)`;
     }
 }

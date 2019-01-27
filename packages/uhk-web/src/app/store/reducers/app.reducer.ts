@@ -81,7 +81,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
         case ROUTER_NAVIGATION: {
-            const newState = {...state};
+            const newState = { ...state };
             newState.navigationCountAfterNotification++;
 
             if (newState.navigationCountAfterNotification > 1) {
@@ -123,7 +123,6 @@ export function reducer(state = initialState, action: Action & { payload: any })
             };
 
         case DeviceActionTypes.CONNECTION_STATE_CHANGED: {
-
             if (action.payload === true) {
                 return state;
             }
@@ -180,8 +179,8 @@ export const getKeyboardLayout = (state: State): KeyboardLayout => {
 
     return KeyboardLayout.ANSI;
 };
-export const deviceConfigurationLoaded = (state: State) => !state.runningInElectron ? true : !!state.hardwareConfig;
-export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || {} as VersionInformation;
+export const deviceConfigurationLoaded = (state: State) => (!state.runningInElectron ? true : !!state.hardwareConfig);
+export const getAgentVersionInfo = (state: State) => state.agentVersionInfo || ({} as VersionInformation);
 
 export const runningOnNotSupportedWindows = (state: State): boolean => {
     if (!state.osVersion || state.platform !== 'win32') {

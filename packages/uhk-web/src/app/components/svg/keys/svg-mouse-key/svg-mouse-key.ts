@@ -12,7 +12,7 @@ export class SvgMouseKeyComponent implements OnChanges {
     type: 'click' | 'scroll' | 'move' | 'speed';
     param: any;
 
-    constructor() { }
+    constructor() {}
 
     ngOnChanges() {
         switch (this.mouseAction.mouseAction) {

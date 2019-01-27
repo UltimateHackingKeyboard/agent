@@ -18,7 +18,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
-    toggleData: { id: toggleType, text: string }[] = [
+    toggleData: { id: toggleType; text: string }[] = [
         {
             id: 'active',
             text: 'Activate'
@@ -29,7 +29,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
         }
     ];
 
-    layerData: { id: number, text: string }[] = [
+    layerData: { id: number; text: string }[] = [
         {
             id: 0,
             text: 'Mod'

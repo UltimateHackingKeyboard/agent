@@ -6,9 +6,7 @@ require('shelljs/global');
 const extension = '.bin';
 config.fatal = true;
 
-program
-    .usage(`moduleSlot firmwareImage${extension}`)
-    .parse(process.argv)
+program.usage(`moduleSlot firmwareImage${extension}`).parse(process.argv);
 
 let moduleSlot = program.args[0];
 const moduleSlotId = uhk.checkModuleSlot(moduleSlot, uhk.moduleSlotToId);

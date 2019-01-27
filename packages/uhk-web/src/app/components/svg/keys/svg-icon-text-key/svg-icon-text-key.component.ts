@@ -31,8 +31,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
     text2: string;
     text2Y: number;
 
-    constructor() {
-    }
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();
@@ -117,7 +116,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
                 continue;
             }
 
-            const newText = result += char;
+            const newText = (result += char);
             const textWidth = getContentWidth(style, newText);
 
             if (char === ' ') {

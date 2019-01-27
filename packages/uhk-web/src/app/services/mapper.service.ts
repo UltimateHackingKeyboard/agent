@@ -9,7 +9,6 @@ import { KeyModifierModel } from '../models/key-modifier-model';
 
 @Injectable()
 export class MapperService {
-
     private basicScanCodeTextMap: Map<number, string[]>;
     private mediaScanCodeTextMap: Map<number, string[]>;
     private systemScanCodeTextMap: Map<number, string[]>;
@@ -25,16 +24,14 @@ export class MapperService {
     private osSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
-        this.osSubscription = store
-            .select(getOperatingSystem)
-            .subscribe(os => {
-                this.operatingSystem = os;
-                this.initOsSpecificText();
-                this.initScanCodeTextMap();
-                this.initScancodeIcons();
-                this.initNameToFileNames();
-                this.initSecondaryRoleTexts();
-            });
+        this.osSubscription = store.select(getOperatingSystem).subscribe(os => {
+            this.operatingSystem = os;
+            this.initOsSpecificText();
+            this.initScanCodeTextMap();
+            this.initScancodeIcons();
+            this.initNameToFileNames();
+            this.initSecondaryRoleTexts();
+        });
     }
 
     public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
@@ -176,10 +173,11 @@ export class MapperService {
     }
 
     public getOsSpecificModifierTextByValue(value: KeyModifiers): string {
-        const keyModifier = [...this.getLeftKeyModifiers(), ...this.getRightKeyModifiers()]
-            .find(modifier => modifier.value === value);
+        const keyModifier = [...this.getLeftKeyModifiers(), ...this.getRightKeyModifiers()].find(
+            modifier => modifier.value === value
+        );
 
-        return (keyModifier || {text: ''}).text;
+        return (keyModifier || { text: '' }).text;
     }
 
     private initOsSpecificText(): void {
@@ -250,7 +248,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(49, ['\\', '|']);
         this.basicScanCodeTextMap.set(50, ['NON_US_HASHMARK_AND_TILDE']);
         this.basicScanCodeTextMap.set(51, [';', ':']);
-        this.basicScanCodeTextMap.set(52, ['\'', '"']);
+        this.basicScanCodeTextMap.set(52, ["'", '"']);
         this.basicScanCodeTextMap.set(53, ['`', '~']);
         this.basicScanCodeTextMap.set(54, [',', '<']);
         this.basicScanCodeTextMap.set(55, ['.', '>']);

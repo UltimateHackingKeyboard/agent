@@ -11,7 +11,6 @@ import { NoneAction } from './none-action';
 import { isScancodeExists } from '../scancode-checker';
 
 export class Helper {
-
     static createKeyAction(source: KeyAction | UhkBuffer | any, macros?: Macro[]): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
@@ -99,7 +98,9 @@ export class Helper {
 }
 
 function isValidKeystrokeAction(keystrokeAction: KeystrokeAction): boolean {
-    return keystrokeAction.hasSecondaryRoleAction() ||
+    return (
+        keystrokeAction.hasSecondaryRoleAction() ||
         keystrokeAction.hasActiveModifier() ||
-        keystrokeAction.hasScancode() && isScancodeExists(keystrokeAction.scancode);
+        (keystrokeAction.hasScancode() && isScancodeExists(keystrokeAction.scancode))
+    );
 }

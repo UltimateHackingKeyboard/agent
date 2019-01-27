@@ -6,8 +6,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     templateUrl: './help-page.component.html',
     styleUrls: ['./help-page.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
-export class HelpPageComponent {
-}
+export class HelpPageComponent {}

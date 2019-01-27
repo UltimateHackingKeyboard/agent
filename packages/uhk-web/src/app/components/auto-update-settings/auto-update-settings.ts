@@ -8,7 +8,6 @@ import { State } from '../../store/reducers/auto-update-settings';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoUpdateSettings {
-
     @Input() version: string;
     @Input() settings: State | undefined;
     @Input() checkingForUpdate: boolean;
@@ -17,8 +16,7 @@ export class AutoUpdateSettings {
     @Output() toggleUsePreReleaseUpdate = new EventEmitter<boolean>();
     @Output() checkForUpdate = new EventEmitter();
 
-    constructor() {
-    }
+    constructor() {}
 
     emitCheckForUpdateOnStartUp(value: boolean) {
         this.toggleCheckForUpdateOnStartUp.emit(value);

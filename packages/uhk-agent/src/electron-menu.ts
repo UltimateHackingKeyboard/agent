@@ -11,19 +11,11 @@ export const setMenu = (win: BrowserWindow): void => {
     const template = [
         {
             label: app.getName(),
-            submenu: [
-                {role: 'quit'}
-            ]
+            submenu: [{ role: 'quit' }]
         },
         {
             label: 'Edit',
-            submenu: [
-                {role: 'cut'},
-                {role: 'copy'},
-                {role: 'paste'},
-                {role: 'delete'},
-                {role: 'selectall'}
-            ]
+            submenu: [{ role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'delete' }, { role: 'selectall' }]
         }
     ];
 

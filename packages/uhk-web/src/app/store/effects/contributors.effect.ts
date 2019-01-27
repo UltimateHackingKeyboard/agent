@@ -53,13 +53,11 @@ export class ContributorsEffect {
                     reduce((acc: UHKContributor[], curr) => [...acc, curr], [])
                 );
             }),
-            map(
-                (contributorsWithAvatars: UHKContributor[]) => {
-                    contributorsWithAvatars = contributorsWithAvatars.sort((a, b) => b.contributions - a.contributions);
+            map((contributorsWithAvatars: UHKContributor[]) => {
+                contributorsWithAvatars = contributorsWithAvatars.sort((a, b) => b.contributions - a.contributions);
 
-                    return new AgentContributorsAvailableAction(contributorsWithAvatars);
-                }
-            ),
+                return new AgentContributorsAvailableAction(contributorsWithAvatars);
+            }),
             catchError(error => of(new AgentContributorsNotAvailableAction(error)))
         );
 

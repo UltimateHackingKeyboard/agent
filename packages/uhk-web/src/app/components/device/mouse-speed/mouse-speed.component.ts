@@ -15,7 +15,7 @@ const MOUSE_MOVE_VALUE_MULTIPLIER = 25;
     templateUrl: './mouse-speed.component.html',
     styleUrls: ['./mouse-speed.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class MouseSpeedComponent implements OnInit, OnDestroy {
@@ -136,13 +136,15 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     }
 
     onSetPropertyValue(propertyName: string, value: number): void {
-        this.store.dispatch(new SetUserConfigurationValueAction({
-            propertyName,
-            value: propertyName.indexOf('mouseMove') !== -1 ? value / MOUSE_MOVE_VALUE_MULTIPLIER : value
-        }));
+        this.store.dispatch(
+            new SetUserConfigurationValueAction({
+                propertyName,
+                value: propertyName.indexOf('mouseMove') !== -1 ? value / MOUSE_MOVE_VALUE_MULTIPLIER : value
+            })
+        );
     }
 
     resetToDefault() {
-       this.store.dispatch(new ResetMouseSpeedSettingsAction());
+        this.store.dispatch(new ResetMouseSpeedSettingsAction());
     }
 }

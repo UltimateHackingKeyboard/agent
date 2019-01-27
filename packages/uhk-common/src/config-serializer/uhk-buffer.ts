@@ -1,5 +1,4 @@
 export class UhkBuffer {
-
     static simpleElementWriter<T>(buffer: UhkBuffer, element: T): void {
         (<any>element).toBinary(buffer); // TODO: Remove any
     }
@@ -23,8 +22,8 @@ export class UhkBuffer {
     }
 
     private static eepromSize = 32 * 1024;
-    private static maxCompactLength = 0xFFFF;
-    private static longCompactLengthPrefix = 0xFF;
+    private static maxCompactLength = 0xffff;
+    private static longCompactLengthPrefix = 0xff;
     private static stringEncoding = 'utf8';
     private static isFirstElementToDump = false;
 
@@ -228,5 +227,4 @@ export class UhkBuffer {
             UhkBuffer.isFirstElementToDump = false;
         }
     }
-
 }

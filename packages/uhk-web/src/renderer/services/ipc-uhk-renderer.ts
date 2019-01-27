@@ -11,5 +11,4 @@ export class IpcUhkRenderer implements IpcCommonRenderer {
         ipcRenderer.on(channel, listener);
         return this;
     }
-
 }

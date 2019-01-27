@@ -26,14 +26,13 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
 
     constructor(store: Store<AppState>) {
         super();
-        this.subscription = store.let(getMacros())
-            .subscribe((macros: Macro[]) => this.macros = macros);
+        this.subscription = store.let(getMacros()).subscribe((macros: Macro[]) => (this.macros = macros));
         this.macroOptions = [];
         this.selectedMacroIndex = 0;
     }
 
     ngOnInit() {
-        this.macroOptions = this.macros.map(function (macro: Macro, index: number): SelectOptionData {
+        this.macroOptions = this.macros.map(function(macro: Macro, index: number): SelectOptionData {
             return {
                 id: index.toString(),
                 text: macro.name

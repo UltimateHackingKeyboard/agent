@@ -28,7 +28,6 @@ const DEFAULT_TRASH_TITLE = '<span class="text-nowrap">Delete keymap</span>';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeymapHeaderComponent implements OnChanges {
-
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
     @Output() downloadClick = new EventEmitter<void>();
@@ -39,7 +38,7 @@ export class KeymapHeaderComponent implements OnChanges {
     starTitle: string;
     trashTitle: string = DEFAULT_TRASH_TITLE;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer2) { }
+    constructor(private store: Store<AppState>, private renderer: Renderer2) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap']) {

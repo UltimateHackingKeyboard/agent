@@ -15,7 +15,7 @@ import { KeymapActions } from '../../../store/actions';
     styleUrls: ['./keymap-add.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class KeymapAddComponent {
@@ -27,14 +27,13 @@ export class KeymapAddComponent {
         this.presetsAll$ = store.select((appState: AppState) => appState.presetKeymaps);
         this.filterExpression$ = new BehaviorSubject('');
 
-        this.presets$ = this.presetsAll$
-            .pipe(
-                combineLatest(this.filterExpression$, (keymaps: Keymap[], filterExpression: string) => {
-                    return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
-                }),
-                publishReplay(1),
-                refCount()
-            );
+        this.presets$ = this.presetsAll$.pipe(
+            combineLatest(this.filterExpression$, (keymaps: Keymap[], filterExpression: string) => {
+                return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
+            }),
+            publishReplay(1),
+            refCount()
+        );
     }
 
     filterKeyboards(filterExpression: string) {

@@ -4,7 +4,7 @@ const program = require('commander');
 const tmp = require('tmp');
 const decompress = require('decompress');
 const decompressTarbz = require('decompress-tarbz2');
-const uhk = require('./uhk')
+const uhk = require('./uhk');
 require('shelljs/global');
 
 (async function() {
@@ -13,7 +13,10 @@ require('shelljs/global');
 
         program
             .usage(`firmwarePath`)
-            .option('-u, --overwrite-user-config', 'Overwrite the user configuration with the one that is bundled with the firmware')
+            .option(
+                '-u, --overwrite-user-config',
+                'Overwrite the user configuration with the one that is bundled with the firmware'
+            )
             .parse(process.argv);
 
         if (program.args.length == 0) {
@@ -26,7 +29,7 @@ require('shelljs/global');
         // If a tarball is specified then extract it and override firmwarePath with the target directory name.
         if (test('-f', firmwarePath)) {
             const tmpObj = tmp.dirSync();
-            await decompress(firmwarePath, tmpObj.name, {plugins: [decompressTarbz()]});
+            await decompress(firmwarePath, tmpObj.name, { plugins: [decompressTarbz()] });
             firmwarePath = tmpObj.name;
         }
         config.verbose = true;

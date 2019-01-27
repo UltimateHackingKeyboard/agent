@@ -20,8 +20,8 @@ import * as isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 
 const optionDefinitions = [
-    {name: 'addons', type: Boolean},
-    {name: 'spe', type: Boolean} // simulate privilege escalation error
+    { name: 'addons', type: Boolean },
+    { name: 'spe', type: Boolean } // simulate privilege escalation error
 ];
 
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);
@@ -59,7 +59,7 @@ if (console.debug) {
     };
 }
 
-const isSecondInstance = app.makeSingleInstance(function (commandLine, workingDirectory) {
+const isSecondInstance = app.makeSingleInstance(function(commandLine, workingDirectory) {
     // Someone tried to run a second instance, we should focus our window.
     if (win) {
         if (win.isMinimized()) {
@@ -108,11 +108,13 @@ function createWindow() {
     sudoService = new SudoService(logger, options);
     // and load the index.html of the app.
 
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, 'renderer/index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
+    win.loadURL(
+        url.format({
+            pathname: path.join(__dirname, 'renderer/index.html'),
+            protocol: 'file:',
+            slashes: true
+        })
+    );
 
     win.on('page-title-updated', (event: any) => {
         event.preventDefault();
@@ -134,8 +136,7 @@ function createWindow() {
         sudoService = null;
     });
 
-    win.webContents.on('did-finish-load', () => {
-    });
+    win.webContents.on('did-finish-load', () => {});
 
     win.webContents.on('crashed', (event: any) => {
         logger.error(event);
@@ -155,8 +156,7 @@ app.on('window-all-closed', () => {
     app.exit();
 });
 
-app.on('will-quit', () => {
-});
+app.on('will-quit', () => {});
 
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the

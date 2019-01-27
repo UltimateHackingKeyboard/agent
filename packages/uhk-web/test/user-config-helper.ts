@@ -43,9 +43,9 @@ const defaultUserConfig = {
                                     scancode: 37
                                 },
                                 {
-                                    'keyActionType': 'switchLayer',
-                                    'layer': 'mod',
-                                    'toggle': false
+                                    keyActionType: 'switchLayer',
+                                    layer: 'mod',
+                                    toggle: false
                                 }
                             ]
                         },
@@ -115,11 +115,7 @@ const defaultUserConfig = {
                     modules: [
                         {
                             id: 0,
-                            keyActions: [
-                                null,
-                                null,
-                                null
-                            ]
+                            keyActions: [null, null, null]
                         },
                         {
                             id: 1,
@@ -138,19 +134,11 @@ const defaultUserConfig = {
                     modules: [
                         {
                             id: 0,
-                            keyActions: [
-                                null,
-                                null,
-                                null
-                            ]
+                            keyActions: [null, null, null]
                         },
                         {
                             id: 1,
-                            keyActions: [
-                                null,
-                                null,
-                                null
-                            ]
+                            keyActions: [null, null, null]
                         }
                     ]
                 }

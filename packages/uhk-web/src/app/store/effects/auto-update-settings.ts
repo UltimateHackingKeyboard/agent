@@ -21,18 +21,16 @@ import { ShowNotificationAction } from '../actions/app';
 
 @Injectable()
 export class AutoUpdateSettingsEffects {
-    @Effect() loadUserConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_AUTO_UPDATE_SETTINGS)
-        .pipe(
-            startWith(new LoadAutoUpdateSettingsAction()),
-            switchMap(() => {
-                let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
-                if (!settings) {
-                    settings = initialState;
-                }
-                return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
-            })
-        );
+    @Effect() loadUserConfig$: Observable<Action> = this.actions$.ofType(ActionTypes.LOAD_AUTO_UPDATE_SETTINGS).pipe(
+        startWith(new LoadAutoUpdateSettingsAction()),
+        switchMap(() => {
+            let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
+            if (!settings) {
+                settings = initialState;
+            }
+            return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
+        })
+    );
 
     @Effect() saveAutoUpdateConfig$: Observable<Action> = this.actions$
         .ofType(ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP, ActionTypes.TOGGLE_PRE_RELEASE_FLAG)
@@ -56,8 +54,9 @@ export class AutoUpdateSettingsEffects {
             })
         );
 
-    constructor(private actions$: Actions,
-                private dataStorageRepository: DataStorageRepositoryService,
-                private store: Store<AppState>) {
-    }
+    constructor(
+        private actions$: Actions,
+        private dataStorageRepository: DataStorageRepositoryService,
+        private store: Store<AppState>
+    ) {}
 }

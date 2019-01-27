@@ -15,13 +15,11 @@ import { UploadFileData } from '../../../models/upload-file-data';
     templateUrl: './device-configuration.component.html',
     styleUrls: ['./device-configuration.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class DeviceConfigurationComponent {
-
-    constructor(private store: Store<AppState>) {
-    }
+    constructor(private store: Store<AppState>) {}
 
     resetUserConfiguration() {
         this.store.dispatch(new ResetUserConfigurationAction());

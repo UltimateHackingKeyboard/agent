@@ -5,9 +5,7 @@ require('shelljs/global');
 
 config.fatal = true;
 
-program
-    .usage(`firmwarePath {iso|ansi}`)
-    .parse(process.argv);
+program.usage(`firmwarePath {iso|ansi}`).parse(process.argv);
 
 if (program.args.length !== 2) {
     console.error('Both firmwarePath and layout must be specified.');

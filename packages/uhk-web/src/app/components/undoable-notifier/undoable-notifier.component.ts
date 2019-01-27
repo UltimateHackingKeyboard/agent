@@ -9,17 +9,16 @@ import { Notification } from 'uhk-common';
     styleUrls: ['./undoable-notifier.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
-        trigger(
-            'slideInOut', [
-                transition(':enter', [
-                    style({transform: 'translateX(100%)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateX(0)'}))
-                ]),
-                transition(':leave', [
-                    style({transform: 'translateX(0)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateX(100%)'}))
-                ])
+        trigger('slideInOut', [
+            transition(':enter', [
+                style({ transform: 'translateX(100%)' }),
+                animate('400ms ease-in-out', style({ transform: 'translateX(0)' }))
+            ]),
+            transition(':leave', [
+                style({ transform: 'translateX(0)' }),
+                animate('400ms ease-in-out', style({ transform: 'translateX(100%)' }))
             ])
+        ])
     ]
 })
 export class UndoableNotifierComponent implements OnChanges {

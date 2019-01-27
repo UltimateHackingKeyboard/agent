@@ -1,5 +1,5 @@
 export namespace Constants {
-    export const VENDOR_ID = 0x1D50;
+    export const VENDOR_ID = 0x1d50;
     export const PRODUCT_ID = 0x6122;
     export const BOOTLOADER_ID = 0x6120;
     export const MAX_PAYLOAD_SIZE = 64;
@@ -9,26 +9,26 @@ export namespace Constants {
  * UHK USB Communications command. All communication package should have start with a command code.
  */
 export enum UsbCommand {
-    GetProperty              = 0x00,
-    Reenumerate              = 0x01,
-    JumpToModuleBootloader   = 0x02,
+    GetProperty = 0x00,
+    Reenumerate = 0x01,
+    JumpToModuleBootloader = 0x02,
     SendKbootCommandToModule = 0x03,
-    ReadConfig               = 0x04,
-    WriteHardwareConfig      = 0x05,
-    WriteStagingUserConfig   = 0x06,
-    ApplyConfig              = 0x07,
-    LaunchEepromTransfer     = 0x08,
-    GetDeviceState           = 0x09,
-    SetTestLed               = 0x0a,
-    GetDebugBuffer           = 0x0b,
-    GetAdcValue              = 0x0c,
-    SetLedPwmBrightness      = 0x0d,
-    GetModuleProperty        = 0x0e,
-    GetSlaveI2cErrors        = 0x0f,
-    SetI2cBaudRate           = 0x10,
-    SwitchKeymap             = 0x11,
-    GetVariable              = 0x12,
-    SetVariable              = 0x13
+    ReadConfig = 0x04,
+    WriteHardwareConfig = 0x05,
+    WriteStagingUserConfig = 0x06,
+    ApplyConfig = 0x07,
+    LaunchEepromTransfer = 0x08,
+    GetDeviceState = 0x09,
+    SetTestLed = 0x0a,
+    GetDebugBuffer = 0x0b,
+    GetAdcValue = 0x0c,
+    SetLedPwmBrightness = 0x0d,
+    GetModuleProperty = 0x0e,
+    GetSlaveI2cErrors = 0x0f,
+    SetI2cBaudRate = 0x10,
+    SwitchKeymap = 0x11,
+    GetVariable = 0x12,
+    SetVariable = 0x13
 }
 
 export enum EepromOperation {

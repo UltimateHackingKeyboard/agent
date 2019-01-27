@@ -2,7 +2,6 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class TextMacroAction extends MacroAction {
-
     text: string;
 
     constructor(other?: TextMacroAction) {

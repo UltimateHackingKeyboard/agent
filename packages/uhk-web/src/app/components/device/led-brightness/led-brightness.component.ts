@@ -12,7 +12,7 @@ import { UserConfiguration } from 'uhk-common';
     templateUrl: './led-brightness.component.html',
     styleUrls: ['./led-brightness.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class LEDBrightnessComponent implements OnInit, OnDestroy {
@@ -45,9 +45,11 @@ export class LEDBrightnessComponent implements OnInit, OnDestroy {
     }
 
     onSetPropertyValue(propertyName: string, value: number): void {
-        this.store.dispatch(new SetUserConfigurationValueAction({
-            propertyName,
-            value
-        }));
+        this.store.dispatch(
+            new SetUserConfigurationValueAction({
+                propertyName,
+                value
+            })
+        );
     }
 }

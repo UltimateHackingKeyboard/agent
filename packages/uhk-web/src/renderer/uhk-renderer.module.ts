@@ -29,12 +29,11 @@ import { effects } from '../app/store/effects';
         EffectsModule.forRoot(effects)
     ],
     providers: [
-        {provide: DataStorageRepositoryService, useClass: ElectronDataStorageRepositoryService},
-        {provide: IpcCommonRenderer, useClass: IpcUhkRenderer},
-        {provide: LogService, useClass: ElectronLogService},
-        {provide: ErrorHandler, useClass: ElectronErrorHandlerService}
+        { provide: DataStorageRepositoryService, useClass: ElectronDataStorageRepositoryService },
+        { provide: IpcCommonRenderer, useClass: IpcUhkRenderer },
+        { provide: LogService, useClass: ElectronLogService },
+        { provide: ErrorHandler, useClass: ElectronErrorHandlerService }
     ],
     bootstrap: [MainAppComponent]
 })
-export class UhkRendererModule {
-}
+export class UhkRendererModule {}

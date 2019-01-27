@@ -47,7 +47,6 @@ export const mapNumberToSwitchLayerMode = (value: number): SwitchLayerMode => {
 };
 
 export class SwitchLayerAction extends KeyAction {
-
     @assertEnum(SwitchLayerMode)
     switchLayerMode: SwitchLayerMode;
 
@@ -70,8 +69,7 @@ export class SwitchLayerAction extends KeyAction {
         // Backward compatibility when "switchLayerMode" was a boolean type as "toggle"
         if (typeof jsonObject.toggle === 'boolean') {
             this.switchLayerMode = jsonObject.toggle ? SwitchLayerMode.toggle : SwitchLayerMode.holdAndDoubleTapToggle;
-        }
-        else {
+        } else {
             this.switchLayerMode = jsonObject.switchLayerMode;
         }
 

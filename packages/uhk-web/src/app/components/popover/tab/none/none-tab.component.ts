@@ -9,7 +9,6 @@ import { Tab } from '../tab';
     styleUrls: ['./none-tab.component.scss']
 })
 export class NoneTabComponent extends Tab implements OnInit {
-
     ngOnInit() {
         this.validAction.emit(true);
     }
@@ -25,5 +24,4 @@ export class NoneTabComponent extends Tab implements OnInit {
     toKeyAction(): undefined {
         return undefined;
     }
-
 }

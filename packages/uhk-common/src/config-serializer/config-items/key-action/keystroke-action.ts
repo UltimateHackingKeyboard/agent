@@ -24,7 +24,6 @@ export interface JsonObjectKeystrokeAction {
 const MODIFIERS = ['LCtrl', 'LShift', 'LAlt', 'LSuper', 'RCtrl', 'RShift', 'RAlt', 'RSuper'];
 
 export class KeystrokeAction extends KeyAction {
-
     set scancode(scancode: number) {
         this._scancode = scancode;
         if (this.type !== KeystrokeType.shortMedia && this.type !== KeystrokeType.longMedia) {
@@ -129,23 +128,23 @@ export class KeystrokeAction extends KeyAction {
     toBinary(buffer: UhkBuffer) {
         let flags = 0;
         const toWrite: {
-            data: number,
-            long: boolean
+            data: number;
+            long: boolean;
         }[] = [];
 
         if (this.hasScancode()) {
             flags |= KeystrokeActionFlag.scancode;
-            toWrite.push({data: this._scancode, long: this.type === KeystrokeType.longMedia});
+            toWrite.push({ data: this._scancode, long: this.type === KeystrokeType.longMedia });
         }
 
         if (this.hasActiveModifier()) {
             flags |= KeystrokeActionFlag.modifierMask;
-            toWrite.push({data: this.modifierMask, long: false});
+            toWrite.push({ data: this.modifierMask, long: false });
         }
 
         if (this.hasSecondaryRoleAction()) {
             flags |= KeystrokeActionFlag.secondaryRoleAction;
-            toWrite.push({data: this.secondaryRoleAction, long: false});
+            toWrite.push({ data: this.secondaryRoleAction, long: false });
         }
 
         const TYPE_OFFSET = flags + (this.type << KEYSTROKE_ACTION_FLAG_LENGTH);
@@ -159,7 +158,6 @@ export class KeystrokeAction extends KeyAction {
                 buffer.writeUInt8(toWrite[i].data);
             }
         }
-
     }
 
     toString(): string {
@@ -196,7 +194,7 @@ export class KeystrokeAction extends KeyAction {
     }
 
     hasOnlyOneActiveModifier(): boolean {
-        return this.modifierMask !== 0 && !(this.modifierMask & this.modifierMask - 1);
+        return this.modifierMask !== 0 && !(this.modifierMask & (this.modifierMask - 1));
     }
 
     getModifierList(): string[] {

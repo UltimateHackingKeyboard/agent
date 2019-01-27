@@ -4,7 +4,6 @@ import { MacroAction } from './macro-action';
 import { Helper as MacroActionHelper } from './macro-action/helper';
 
 export class Macro {
-
     @assertUInt8
     id: number;
 

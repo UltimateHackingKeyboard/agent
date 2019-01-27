@@ -6,14 +6,12 @@ import { DomSanitizer } from '@angular/platform-browser';
     selector: '[data-toggle="tooltip"]'
 })
 export class TooltipDirective implements AfterContentInit, OnChanges {
-
     @HostBinding('attr.data-placement') placement: string;
     @Input('title') title: string;
     @Input('html') html: boolean;
     @Input() maxWidth: number;
 
-    constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer) {
-    }
+    constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer) {}
 
     ngAfterContentInit() {
         this.init();
@@ -42,9 +40,7 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
             title: this.title
         });
 
-        (<any>jQuery(this.elementRef.nativeElement)
-            .attr('title', this.title))
-            .tooltip('fixTitle');
+        (<any>jQuery(this.elementRef.nativeElement).attr('title', this.title)).tooltip('fixTitle');
     }
 
     private getCustomTemplate(): string {

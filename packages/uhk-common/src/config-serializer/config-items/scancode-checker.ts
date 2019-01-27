@@ -17,8 +17,7 @@ function fillScancodeMap(): void {
         for (const child of scanGroup.children) {
             if (child.additional && child.additional.scancode) {
                 scancodeMap.set(child.additional.scancode, child);
-            }
-            else {
+            } else {
                 scancodeMap.set(Number.parseInt(child.id), child);
             }
         }

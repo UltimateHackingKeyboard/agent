@@ -3,27 +3,28 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 let config = {
-    'dest': 'packages/uhk-web/src/assets/',
+    dest: 'packages/uhk-web/src/assets/',
     log: 'verbose',
-    'shape': {
-        'id': {
-            'generator': function (name) {
+    shape: {
+        id: {
+            generator: function(name) {
                 return 'icon-' + path.basename(name).slice(0, -4);
             }
         }
     },
-    'mode': {
-        'defs': {
-            'inline': true,
-            'dest': './',
-            'sprite': 'compiled_sprite.svg',
+    mode: {
+        defs: {
+            inline: true,
+            dest: './',
+            sprite: 'compiled_sprite.svg',
             bust: false
         }
     },
-    svg: { // General options for created SVG files
+    svg: {
+        // General options for created SVG files
         namespaceIDs: true,
         rootAttributes: {
-            "xmlns:xlink":"http://www.w3.org/1999/xlink"
+            'xmlns:xlink': 'http://www.w3.org/1999/xlink'
         }
     }
 };
@@ -37,18 +38,18 @@ spriter.compile(writeResultFiles);
 
 // Register scss icon
 config = {
-    'dest': 'packages/uhk-web/src/styles/uhk-icons/',
+    dest: 'packages/uhk-web/src/styles/uhk-icons/',
     log: 'verbose',
-    'shape': {
-        'id': {
-            'generator': function (name) {
+    shape: {
+        id: {
+            generator: function(name) {
                 return 'icon-' + path.basename(name).slice(0, -4);
             }
         }
     },
-    'mode': {
-        'css': {
-            'dest': './',
+    mode: {
+        css: {
+            dest: './',
             prefix: '.uhk-%s',
             sprite: 'uhk-css.svg',
             bust: false,
@@ -68,7 +69,7 @@ addInputSvgs(path.join(__dirname, '../packages/uhk-web/src/svgs/icons'));
 spriter.compile(writeResultFiles);
 
 // Helper functions
-function addInputSvgs (dir) {
+function addInputSvgs(dir) {
     fs.readdirSync(dir).forEach(file => {
         const fullPath = path.join(dir, file);
         const stat = fs.statSync(fullPath);
@@ -76,18 +77,17 @@ function addInputSvgs (dir) {
             return addInputSvgs(fullPath);
         }
         if (path.extname(file) === '.svg') {
-            spriter.add(fullPath, file, fs.readFileSync(fullPath, {encoding: 'utf-8'}));
+            spriter.add(fullPath, file, fs.readFileSync(fullPath, { encoding: 'utf-8' }));
         }
     });
 }
 
-function writeResultFiles (error, result) {
+function writeResultFiles(error, result) {
     if (error) {
         return console.error(error);
     }
     // Run through all configured output modes
     for (const mode in result) {
-
         // Run through all created resources and write them to disk
         for (const type in result[mode]) {
             mkdirp.sync(path.dirname(result[mode][type].path));

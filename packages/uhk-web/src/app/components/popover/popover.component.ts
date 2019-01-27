@@ -59,30 +59,42 @@ export interface TabHeader {
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('popover', [
-            state('closed', style({
-                transform: 'translateY(30px)',
-                visibility: 'hidden',
-                opacity: 0
-            })),
-            state('opened', style({
-                transform: 'translateY(0)',
-                visibility: 'visible',
-                opacity: 1
-            })),
+            state(
+                'closed',
+                style({
+                    transform: 'translateY(30px)',
+                    visibility: 'hidden',
+                    opacity: 0
+                })
+            ),
+            state(
+                'opened',
+                style({
+                    transform: 'translateY(0)',
+                    visibility: 'visible',
+                    opacity: 1
+                })
+            ),
             transition('opened => closed', [
-                animate('200ms ease-out', keyframes([
-                    style({transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0}),
-                    style({transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1})
-                ]))
+                animate(
+                    '200ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
+                        style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1 })
+                    ])
+                )
             ]),
             transition('closed => opened', [
                 style({
                     visibility: 'visible'
                 }),
-                animate('200ms ease-out', keyframes([
-                    style({transform: 'translateY(30px)', opacity: 0, offset: 0}),
-                    style({transform: 'translateY(0)', opacity: 1, offset: 1})
-                ]))
+                animate(
+                    '200ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateY(30px)', opacity: 0, offset: 0 }),
+                        style({ transform: 'translateY(0)', opacity: 1, offset: 1 })
+                    ])
+                )
             ])
         ])
     ]
@@ -150,15 +162,14 @@ export class PopoverComponent implements OnChanges {
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private cdRef: ChangeDetectorRef) {
         this.animationState = 'closed';
-        this.keymaps$ = store.let(getKeymaps())
-            .pipe(
-                combineLatest(this.currentKeymap$),
-                map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
-                        keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation))
-            );
+        this.keymaps$ = store.let(getKeymaps()).pipe(
+            combineLatest(this.currentKeymap$),
+            map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
+                keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation)
+            )
+        );
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
     }
 
@@ -293,10 +304,10 @@ export class PopoverComponent implements OnChanges {
     private calculatePosition() {
         const offsetLeft: number = this.wrapPosition.left + 265; // 265 is a width of the side menu with a margin
         const popover: HTMLElement = this.popoverHost.nativeElement;
-        let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
+        let newLeft: number = this.keyPosition.left + this.keyPosition.width / 2;
 
         this.leftArrow = newLeft < offsetLeft;
-        this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
+        this.rightArrow = newLeft + popover.offsetWidth > offsetLeft + this.wrapPosition.width;
 
         if (this.leftArrow) {
             newLeft = this.keyPosition.left;

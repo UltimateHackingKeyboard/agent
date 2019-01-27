@@ -31,44 +31,48 @@ describe('keymap', () => {
                     description: '',
                     layers: [
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'mod',
-                                        toggle: false
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'mod',
+                                            toggle: false
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'keystroke',
-                                        type: 'basic',
-                                        scancode: 44
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'keystroke',
+                                            type: 'basic',
+                                            scancode: 44
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         }
                     ]
                 }
@@ -103,44 +107,48 @@ describe('keymap', () => {
                     description: '',
                     layers: [
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'mod',
-                                        switchLayerMode: 'holdAndDoubleTapToggle'
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'mod',
+                                            switchLayerMode: 'holdAndDoubleTapToggle'
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'mod',
-                                        switchLayerMode: 'holdAndDoubleTapToggle'
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'mod',
+                                            switchLayerMode: 'holdAndDoubleTapToggle'
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         }
                     ]
                 }
@@ -150,8 +158,10 @@ describe('keymap', () => {
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
-        // tslint:disable-next-line: max-line-length
-        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
+        expect(console.warn).toHaveBeenCalledWith(
+            'QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> ' +
+            'will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">'
+        );
     });
 
     it('should normalize SwitchLayerAction if non base layer action is other SwitchLayerAction', () => {
@@ -184,44 +194,48 @@ describe('keymap', () => {
                     description: '',
                     layers: [
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'mod',
-                                        toggle: false
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'mod',
+                                            toggle: false
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'fn',
-                                        toggle: false
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'fn',
+                                            toggle: false
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         }
                     ]
                 }
@@ -256,44 +270,48 @@ describe('keymap', () => {
                     description: '',
                     layers: [
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'mod',
-                                        switchLayerMode: 'holdAndDoubleTapToggle'
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'mod',
+                                            switchLayerMode: 'holdAndDoubleTapToggle'
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    {
-                                        keyActionType: 'switchLayer',
-                                        layer: 'mod',
-                                        switchLayerMode: 'holdAndDoubleTapToggle'
-                                    }
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [
+                                        {
+                                            keyActionType: 'switchLayer',
+                                            layer: 'mod',
+                                            switchLayerMode: 'holdAndDoubleTapToggle'
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         },
                         {
-                            modules: [{
-                                id: 0,
-                                keyActions: [
-                                    null
-                                ]
-                            }]
+                            modules: [
+                                {
+                                    id: 0,
+                                    keyActions: [null]
+                                }
+                            ]
                         }
                     ]
                 }
@@ -303,7 +321,10 @@ describe('keymap', () => {
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
-        // tslint:disable-next-line: max-line-length
-        expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. <SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
+        expect(console.warn).toHaveBeenCalledWith(
+            'QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. ' +
+            '<SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with ' +
+            '<SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">'
+        );
     });
 });

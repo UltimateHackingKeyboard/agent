@@ -2,9 +2,7 @@
 const uhk = require('./uhk');
 const program = require('commander');
 
-program
-    .option('-t, --timeout <ms>', 'Bootloader timeout in ms', 5000)
-    .parse(process.argv);
+program.option('-t, --timeout <ms>', 'Bootloader timeout in ms', 5000).parse(process.argv);
 
 const enumerationMode = program.args[0];
 

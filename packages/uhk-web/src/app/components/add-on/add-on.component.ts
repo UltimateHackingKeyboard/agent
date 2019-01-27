@@ -9,17 +9,13 @@ import { pluck } from 'rxjs/operators';
     templateUrl: './add-on.component.html',
     styleUrls: ['./add-on.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class AddOnComponent {
     name$: Observable<string>;
 
     constructor(route: ActivatedRoute) {
-        this.name$ = route
-            .params
-            .pipe(
-                pluck<{}, string>('name')
-            );
+        this.name$ = route.params.pipe(pluck<{}, string>('name'));
     }
 }

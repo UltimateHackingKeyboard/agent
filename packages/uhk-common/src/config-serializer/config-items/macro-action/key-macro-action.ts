@@ -13,7 +13,6 @@ export interface JsObjectKeyMacroAction {
 }
 
 export class KeyMacroAction extends MacroAction {
-
     @assertEnum(MacroKeySubAction)
     action: MacroKeySubAction;
 

@@ -3,7 +3,6 @@ import { UhkBuffer } from '../../uhk-buffer';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class DelayMacroAction extends MacroAction {
-
     @assertUInt16
     delay: number;
 

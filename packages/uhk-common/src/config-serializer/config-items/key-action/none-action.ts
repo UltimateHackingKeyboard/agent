@@ -8,7 +8,6 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
  */
 
 export class NoneAction extends KeyAction {
-
     fromJsonObject(jsonObject: any): NoneAction {
         this.assertKeyActionType(jsonObject);
         return this;

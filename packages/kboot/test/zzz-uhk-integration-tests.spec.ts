@@ -38,19 +38,15 @@ xdescribe('UHK Integration tests', () => {
         it('disable flash security', () => {
             const backdoorKey = [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08];
 
-            return kboot
-                .flashSecurityDisable(backdoorKey)
-                .catch(err => {
-                    expect(err).toBeFalsy();
-                });
+            return kboot.flashSecurityDisable(backdoorKey).catch(err => {
+                expect(err).toBeFalsy();
+            });
         });
 
         it('flash erase region', () => {
-            return kboot
-                .flashEraseRegion(0xc000, 475136)
-                .catch(err => {
-                    expect(err).toBeFalsy();
-                });
+            return kboot.flashEraseRegion(0xc000, 475136).catch(err => {
+                expect(err).toBeFalsy();
+            });
         });
 
         it('read memory', () => {

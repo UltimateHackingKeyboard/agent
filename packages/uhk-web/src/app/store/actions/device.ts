@@ -40,29 +40,25 @@ export class SetPrivilegeOnLinuxAction implements Action {
 export class SetPrivilegeOnLinuxReplyAction implements Action {
     type = ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY;
 
-    constructor(public payload: IpcResponse) {
-    }
+    constructor(public payload: IpcResponse) {}
 }
 
 export class ConnectionStateChangedAction implements Action {
     type = ActionTypes.CONNECTION_STATE_CHANGED;
 
-    constructor(public payload: DeviceConnectionState) {
-    }
+    constructor(public payload: DeviceConnectionState) {}
 }
 
 export class SaveConfigurationAction implements Action {
     type = ActionTypes.SAVE_CONFIGURATION;
 
-    constructor() {
-    }
+    constructor() {}
 }
 
 export class SaveConfigurationReplyAction implements Action {
     type = ActionTypes.SAVE_CONFIGURATION_REPLY;
 
-    constructor(public payload: IpcResponse) {
-    }
+    constructor(public payload: IpcResponse) {}
 }
 
 export class ShowSaveToKeyboardButtonAction implements Action {
@@ -92,29 +88,25 @@ export class UpdateFirmwareAction implements Action {
 export class UpdateFirmwareWithAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_WITH;
 
-    constructor(public payload: Array<number>) {
-    }
+    constructor(public payload: Array<number>) {}
 }
 
 export class UpdateFirmwareReplyAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_REPLY;
 
-    constructor(public payload: FirmwareUpgradeIpcResponse) {
-    }
+    constructor(public payload: FirmwareUpgradeIpcResponse) {}
 }
 
 export class UpdateFirmwareSuccessAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_SUCCESS;
 
-    constructor(public payload: HardwareModules) {
-    }
+    constructor(public payload: HardwareModules) {}
 }
 
 export class UpdateFirmwareFailedAction implements Action {
     type = ActionTypes.UPDATE_FIRMWARE_FAILED;
 
-    constructor(public payload: FirmwareUpgradeError) {
-    }
+    constructor(public payload: FirmwareUpgradeError) {}
 }
 
 export class ResetMouseSpeedSettingsAction implements Action {
@@ -124,8 +116,7 @@ export class ResetMouseSpeedSettingsAction implements Action {
 export class HardwareModulesLoadedAction implements Action {
     type = ActionTypes.MODULES_INFO_LOADED;
 
-    constructor(public payload: HardwareModules) {
-    }
+    constructor(public payload: HardwareModules) {}
 }
 
 export class RestoreUserConfigurationFromBackupAction implements Action {
@@ -135,8 +126,7 @@ export class RestoreUserConfigurationFromBackupAction implements Action {
 export class HasBackupUserConfigurationAction implements Action {
     type = ActionTypes.HAS_BACKUP_USER_CONFIGURATION;
 
-    constructor(public payload: boolean) {
-    }
+    constructor(public payload: boolean) {}
 }
 
 export class RestoreUserConfigurationFromBackupSuccessAction implements Action {
@@ -155,8 +145,8 @@ export class StartConnectionPollerAction implements Action {
     type = ActionTypes.START_CONNECTION_POLLER;
 }
 
-export type Actions
-    = SetPrivilegeOnLinuxAction
+export type Actions =
+    | SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction
     | ShowSaveToKeyboardButtonAction
@@ -178,5 +168,4 @@ export type Actions
     | RestoreUserConfigurationFromBackupSuccessAction
     | RecoveryDeviceAction
     | EnableUsbStackTestAction
-    | StartConnectionPollerAction
-    ;
+    | StartConnectionPollerAction;

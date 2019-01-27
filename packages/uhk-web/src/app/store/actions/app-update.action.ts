@@ -39,8 +39,8 @@ export class UpdateErrorAction implements Action {
     constructor(public payload: any) {}
 }
 
-export type Actions
-    = UpdateAvailableAction
+export type Actions =
+    | UpdateAvailableAction
     | UpdateAppAction
     | DoNotUpdateAppAction
     | UpdateDownloadedAction

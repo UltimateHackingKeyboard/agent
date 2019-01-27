@@ -36,29 +36,25 @@ export class AppStartedAction implements Action {
 export class ShowNotificationAction implements Action {
     type = ActionTypes.APP_SHOW_NOTIFICATION;
 
-    constructor(public payload: Notification) {
-    }
+    constructor(public payload: Notification) {}
 }
 
 export class ApplyAppStartInfoAction implements Action {
     type = ActionTypes.APPLY_APP_START_INFO;
 
-    constructor(public payload: AppStartInfo) {
-    }
+    constructor(public payload: AppStartInfo) {}
 }
 
 export class ProcessAppStartInfoAction implements Action {
     type = ActionTypes.APP_PROCESS_START_INFO;
 
-    constructor(public payload: AppStartInfo) {
-    }
+    constructor(public payload: AppStartInfo) {}
 }
 
 export class UndoLastAction implements Action {
     type = ActionTypes.UNDO_LAST;
 
-    constructor(public payload: any) {
-    }
+    constructor(public payload: any) {}
 }
 
 export class UndoLastSuccessAction implements Action {
@@ -72,22 +68,19 @@ export class DismissUndoNotificationAction implements Action {
 export class LoadHardwareConfigurationSuccessAction implements Action {
     type = ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS;
 
-    constructor(public payload: HardwareConfiguration) {
-    }
+    constructor(public payload: HardwareConfiguration) {}
 }
 
 export class ElectronMainLogReceivedAction implements Action {
     type = ActionTypes.ELECTRON_MAIN_LOG_RECEIVED;
 
-    constructor(public payload: ElectronLogEntry) {
-    }
+    constructor(public payload: ElectronLogEntry) {}
 }
 
 export class OpenUrlInNewWindowAction implements Action {
     type = ActionTypes.OPEN_URL_IN_NEW_WINDOW;
 
-    constructor(public payload: string) {
-    }
+    constructor(public payload: string) {}
 }
 
 export class PrivilegeWhatWillThisDoAction implements Action {
@@ -97,8 +90,7 @@ export class PrivilegeWhatWillThisDoAction implements Action {
 export class SetupPermissionErrorAction implements Action {
     type = ActionTypes.SETUP_PERMISSION_ERROR;
 
-    constructor(public payload: string) {
-    }
+    constructor(public payload: string) {}
 }
 
 export class LoadAppStartInfoAction implements Action {
@@ -113,8 +105,8 @@ export class StopKeypressCapturingAction implements Action {
     type = ActionTypes.STOP_KEYPRESS_CAPTURING;
 }
 
-export type Actions
-    = AppStartedAction
+export type Actions =
+    | AppStartedAction
     | AppBootsrappedAction
     | ShowNotificationAction
     | ApplyAppStartInfoAction
@@ -129,5 +121,4 @@ export type Actions
     | SetupPermissionErrorAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
-    | StopKeypressCapturingAction
-    ;
+    | StopKeypressCapturingAction;

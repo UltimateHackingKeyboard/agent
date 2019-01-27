@@ -3,19 +3,9 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 import { Layer } from 'uhk-common';
 
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
-import {
-    SvgKeyboardCaptureEvent,
-    SvgKeyboardKeyClickEvent,
-    SvgKeyHoverEvent
-} from '../../../models/svg-key-events';
+import { SvgKeyboardCaptureEvent, SvgKeyboardKeyClickEvent, SvgKeyHoverEvent } from '../../../models/svg-key-events';
 
-type AnimationKeyboard =
-    'init' |
-    'initOut' |
-    'leftIn' |
-    'leftOut' |
-    'rightIn' |
-    'rightOut';
+type AnimationKeyboard = 'init' | 'initOut' | 'leftIn' | 'leftOut' | 'rightIn' | 'rightOut';
 
 @Component({
     selector: 'keyboard-slider',
@@ -25,55 +15,79 @@ type AnimationKeyboard =
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
-            state('init', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('initOut', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
-            state('leftIn, rightIn', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('leftOut', style({
-                transform: 'translateX(-101%)',
-                left: '0'
-            })),
-            state('rightOut', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
+            state(
+                'init',
+                style({
+                    transform: 'translateX(-50%)',
+                    left: '50%'
+                })
+            ),
+            state(
+                'initOut',
+                style({
+                    transform: 'translateX(0)',
+                    left: '101%'
+                })
+            ),
+            state(
+                'leftIn, rightIn',
+                style({
+                    transform: 'translateX(-50%)',
+                    left: '50%'
+                })
+            ),
+            state(
+                'leftOut',
+                style({
+                    transform: 'translateX(-101%)',
+                    left: '0'
+                })
+            ),
+            state(
+                'rightOut',
+                style({
+                    transform: 'translateX(0)',
+                    left: '101%'
+                })
+            ),
             transition('initOut => leftIn, leftOut => leftIn, rightOut => leftIn', [
-                animate('400ms ease-out', keyframes([
-                    style({transform: 'translateX(0%)', left: '101%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
+                animate(
+                    '400ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateX(0%)', left: '101%', offset: 0 }),
+                        style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                    ])
+                )
             ]),
             transition('init => leftOut, leftIn => leftOut, rightIn => leftOut', [
-                animate('400ms ease-out', keyframes([
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(-101%)', left: '0%', offset: 1})
-                ]))
+                animate(
+                    '400ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
+                        style({ transform: 'translateX(-101%)', left: '0%', offset: 1 })
+                    ])
+                )
             ]),
             transition('* => rightIn', [
-                animate('400ms ease-out', keyframes([
-                    style({transform: 'translateX(-101%)', left: '0%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
+                animate(
+                    '400ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateX(-101%)', left: '0%', offset: 0 }),
+                        style({ transform: 'translateX(-50%)', left: '50%', offset: 1 })
+                    ])
+                )
             ]),
             transition('* => rightOut', [
-                animate('400ms ease-out', keyframes([
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(0%)', left: '101%', offset: 1})
-                ]))
+                animate(
+                    '400ms ease-out',
+                    keyframes([
+                        style({ transform: 'translateX(-50%)', left: '50%', offset: 0 }),
+                        style({ transform: 'translateX(0%)', left: '101%', offset: 1 })
+                    ])
+                )
             ]),
             transition(':leave', [
-                animate('2000ms ease-out', keyframes([
-                    style({opacity: 1, offset: 0}),
-                    style({opacity: 0, offset: 1})
-                ]))
+                animate('2000ms ease-out', keyframes([style({ opacity: 1, offset: 0 }), style({ opacity: 0, offset: 1 })]))
             ])
         ])
     ]
@@ -84,7 +98,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Input() halvesSplit: boolean;
-    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selectedKey: { layerId: number; moduleId: number; keyId: number };
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
@@ -103,8 +117,7 @@ export class KeyboardSliderComponent implements OnChanges {
         if (layerChange) {
             // turn off the routing navigation from non keymap route
             if (changes['layers']) {
-            }
-            else {
+            } else {
                 const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
                 this.onLayerChange(prevValue, layerChange.currentValue);
             }

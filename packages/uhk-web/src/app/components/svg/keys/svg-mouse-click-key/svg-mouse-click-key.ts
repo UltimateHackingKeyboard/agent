@@ -16,5 +16,5 @@ export class SvgMouseClickKeyComponent implements OnInit {
         this.icon = this.mapper.getIcon('mouse');
     }
 
-    ngOnInit() { }
+    ngOnInit() {}
 }

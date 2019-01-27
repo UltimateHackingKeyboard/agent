@@ -20,7 +20,7 @@ export class SvgSingleIconKeyComponent implements OnChanges {
     secondaryTextY: number;
     secondaryHeight: number;
 
-    constructor() { }
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();

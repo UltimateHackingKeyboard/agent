@@ -6,7 +6,6 @@ import { convertXmlToSvgSeparator, SvgSeparator } from '../components/svg/separa
 
 @Injectable()
 export class SvgModuleProviderService {
-
     private ansiLeft: SvgModule;
     private isoLeft: SvgModule;
     private right: SvgModule;
@@ -38,7 +37,6 @@ export class SvgModuleProviderService {
     }
 
     private getRightModule(): SvgModule {
-
         if (!this.right) {
             this.right = new SvgModule(require('xml-loader!../../devices/uhk60-right/layout.xml').svg);
         }

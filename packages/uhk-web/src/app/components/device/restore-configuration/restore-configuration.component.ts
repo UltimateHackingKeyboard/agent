@@ -11,7 +11,7 @@ import { RestoreConfigurationState } from '../../../models/restore-configuration
     templateUrl: './restore-configuration.component.html',
     styleUrls: ['./restore-configuration.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class RestoreConfigurationComponent implements OnInit, OnDestroy {
@@ -19,9 +19,7 @@ export class RestoreConfigurationComponent implements OnInit, OnDestroy {
 
     private stateSubscription: Subscription;
 
-    constructor(private store: Store<AppState>,
-                private cdRef: ChangeDetectorRef) {
-    }
+    constructor(private store: Store<AppState>, private cdRef: ChangeDetectorRef) {}
 
     ngOnDestroy(): void {
         if (this.stateSubscription) {
@@ -30,12 +28,10 @@ export class RestoreConfigurationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.stateSubscription = this.store
-            .select(getBackupUserConfigurationState)
-            .subscribe(data => {
-                this.state = data;
-                this.cdRef.markForCheck();
-            });
+        this.stateSubscription = this.store.select(getBackupUserConfigurationState).subscribe(data => {
+            this.state = data;
+            this.cdRef.markForCheck();
+        });
     }
 
     resetUserConfiguration() {

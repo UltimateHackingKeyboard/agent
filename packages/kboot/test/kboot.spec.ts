@@ -16,7 +16,44 @@ describe('kboot', () => {
                 code: ResponseCodes.Success,
                 tag: ResponseTags.Property,
                 // tslint:disable-next-line:max-line-length
-                raw: Buffer.from([0x03, 0x00, 0x0c, 0x00, 0xa7, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+                raw: Buffer.from([
+                    0x03,
+                    0x00,
+                    0x0c,
+                    0x00,
+                    0xa7,
+                    0x00,
+                    0x00,
+                    0x02,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x02,
+                    0x4b,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00
+                ])
             };
             spyOn(testPeripheral, 'sendCommand').and.returnValue(Promise.resolve(sendCommandResponse));
             const version = await kboot.getBootloaderVersion();

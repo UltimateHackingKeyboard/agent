@@ -13,7 +13,7 @@ describe('node-action', () => {
     describe('fromJsonObject', () => {
         it('should map null', () => {
             const action = new NoneAction();
-            expect(action.fromJsonObject({keyActionType: keyActionType.NoneAction})).toEqual(new NoneAction());
+            expect(action.fromJsonObject({ keyActionType: keyActionType.NoneAction })).toEqual(new NoneAction());
         });
     });
 

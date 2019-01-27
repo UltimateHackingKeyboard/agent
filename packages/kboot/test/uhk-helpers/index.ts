@@ -15,13 +15,10 @@ export const reenumerate = (mode: UhkReenumerationModes): void => {
     const reenumerateScriptFile = join(USB_SCRIPTS_DIR, 'reenumerate.js');
     const command = [reenumerateScriptFile, mode.toString()].join(' ');
 
-    execSync(
-        command,
-        {
-            cwd: USB_SCRIPTS_DIR,
-            stdio: [0, 1, 2]
-        }
-    );
+    execSync(command, {
+        cwd: USB_SCRIPTS_DIR,
+        stdio: [0, 1, 2]
+    });
 };
 
 export const readBootloaderFirmwareFromHexFile = (): Map<any, any> => {

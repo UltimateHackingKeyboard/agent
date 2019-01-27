@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    Input,
-    OnInit,
-    ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DelayMacroAction } from 'uhk-common';
 
 import { MacroBaseComponent } from '../macro-base.component';
@@ -16,7 +9,7 @@ const INITIAL_DELAY = 0.5; // In seconds
     selector: 'macro-delay-tab',
     templateUrl: './macro-delay.component.html',
     styleUrls: ['./macro-delay.component.scss'],
-    host: { 'class': 'macro__delay' },
+    host: { class: 'macro__delay' },
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit {
@@ -36,7 +29,9 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
 
     private _delay: number;
 
-    constructor() { super(); }
+    constructor() {
+        super();
+    }
 
     ngOnInit() {
         if (!this.macroAction) {
@@ -52,5 +47,4 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
     }
 
     isMacroValid = () => this.macroAction.delay !== 0;
-
 }

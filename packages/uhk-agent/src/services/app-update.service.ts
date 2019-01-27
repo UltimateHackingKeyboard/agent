@@ -9,12 +9,9 @@ import { IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 
 export class AppUpdateService extends MainServiceBase {
-
     private sendAutoUpdateNotification = false;
 
-    constructor(protected logService: LogService,
-                protected win: Electron.BrowserWindow,
-                private app: Electron.App) {
+    constructor(protected logService: LogService, protected win: Electron.BrowserWindow, private app: Electron.App) {
         super(logService, win);
 
         this.initListeners();
@@ -107,7 +104,8 @@ export class AppUpdateService extends MainServiceBase {
         }
 
         autoUpdater.allowPrerelease = this.allowPreRelease();
-        autoUpdater.checkForUpdates()
+        autoUpdater
+            .checkForUpdates()
             .then(() => {
                 this.logService.debug('[AppUpdateService] checkForUpdate success');
             })
@@ -137,7 +135,10 @@ export class AppUpdateService extends MainServiceBase {
         const autoUpdateSettings = this.getAutoUpdateSettings();
         const checkForUpdate = autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
 
-        this.logService.debug('[AppUpdateService] check for update at startup:', {checkForUpdate, autoUpdateSettings});
+        this.logService.debug('[AppUpdateService] check for update at startup:', {
+            checkForUpdate,
+            autoUpdateSettings
+        });
 
         return checkForUpdate;
     }
@@ -145,10 +146,9 @@ export class AppUpdateService extends MainServiceBase {
     private getAutoUpdateSettings() {
         const value = storage.get('auto-update-settings');
         if (!value) {
-            return {checkForUpdateOnStartUp: false, usePreReleaseUpdate: false};
+            return { checkForUpdateOnStartUp: false, usePreReleaseUpdate: false };
         }
 
         return JSON.parse(<string>value);
     }
-
 }

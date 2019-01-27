@@ -20,14 +20,7 @@ if (status != 0) {
 function slaveI2cErrorBufferToString(buffer) {
     let statusCount = buffer[1];
 
-    const slaveIdToName = [
-        'leftHalf',
-        'leftAddon',
-        'rightAddon',
-        'rightLedDriver',
-        'leftLedDriver',
-        'kboot',
-    ];
+    const slaveIdToName = ['leftHalf', 'leftAddon', 'rightAddon', 'rightLedDriver', 'leftLedDriver', 'kboot'];
 
     let str = `${slaveIdToName[slaveId].padEnd(14)}: `;
 
@@ -40,12 +33,12 @@ function slaveI2cErrorBufferToString(buffer) {
         1103: 'arbitrationLost',
         1104: 'timeout',
         20000: 'idleSlave',
-        20001: 'idleCycle',
+        20001: 'idleCycle'
     };
 
-    for (let i=0; i<statusCount; i++) {
-        let status = uhk.getUint32(buffer, i*8+2);
-        let count = uhk.getUint32(buffer, i*8+4+2);
+    for (let i = 0; i < statusCount; i++) {
+        let status = uhk.getUint32(buffer, i * 8 + 2);
+        let count = uhk.getUint32(buffer, i * 8 + 4 + 2);
         str += `${statusCodesToStrings[status]}:${count} `;
     }
 

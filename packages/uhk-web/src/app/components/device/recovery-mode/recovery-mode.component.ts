@@ -12,7 +12,7 @@ import { RecoveryDeviceAction, StartConnectionPollerAction } from '../../../stor
     templateUrl: './recovery-mode.component.html',
     styleUrls: ['./recovery-mode.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class RecoveryModeComponent implements OnInit {
@@ -21,8 +21,7 @@ export class RecoveryModeComponent implements OnInit {
 
     xtermLog$: Observable<Array<XtermLog>>;
 
-    constructor(private store: Store<AppState>) {
-    }
+    constructor(private store: Store<AppState>) {}
 
     ngOnInit(): void {
         this.flashFirmwareButtonDisbabled$ = this.store.select(flashFirmwareButtonDisbabled);

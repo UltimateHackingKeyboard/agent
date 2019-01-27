@@ -42,11 +42,7 @@ import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
-import {
-    SvgKeyboardCaptureEvent,
-    SvgKeyboardKeyClickEvent,
-    SvgKeyHoverEvent
-} from '../../../models/svg-key-events';
+import { SvgKeyboardCaptureEvent, SvgKeyboardKeyClickEvent, SvgKeyHoverEvent } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
 import { mapLeftRigthModifierToKeyActionModifier } from '../../../util';
 
@@ -71,19 +67,19 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
-    @ViewChild(PopoverComponent, {read: ElementRef}) popover: ElementRef;
+    @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 
     popoverShown: boolean;
-    keyEditConfig: { moduleId: number, keyId: number };
-    selectedKey: { layerId: number, moduleId: number, keyId: number };
+    keyEditConfig: { moduleId: number; keyId: number };
+    selectedKey: { layerId: number; moduleId: number; keyId: number };
     popoverInitKeyAction: KeyAction;
     keybindAnimationEnabled: boolean;
     currentLayer: number = 0;
     tooltipData: {
-        posTop: number,
-        posLeft: number,
-        content: Observable<NameValuePair[]>,
-        show: boolean
+        posTop: number;
+        posLeft: number;
+        content: Observable<NameValuePair[]>;
+        show: boolean;
     };
     layers: Layer[];
     keyPosition: ClientRect;
@@ -96,11 +92,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
 
-    constructor(
-        private store: Store<AppState>,
-        private mapper: MapperService,
-        private element: ElementRef
-    ) {
+    constructor(private store: Store<AppState>, private mapper: MapperService, private element: ElementRef) {
         this.keyEditConfig = {
             moduleId: undefined,
             keyId: undefined
@@ -139,14 +131,15 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         if (keymapChanges) {
             this.popoverShown = false;
             this.layers = this.keymap.layers;
-            if (keymapChanges.isFirstChange() ||
-                keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation) {
+            if (
+                keymapChanges.isFirstChange() ||
+                keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation
+            ) {
                 this.keybindAnimationEnabled = keymapChanges.isFirstChange();
             } else {
                 this.keybindAnimationEnabled = true;
             }
         }
-
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
@@ -155,7 +148,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 moduleId: event.moduleId,
                 keyId: event.keyId
             };
-            this.selectedKey = {layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId};
+            this.selectedKey = { layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId };
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
             this.keyElement = event.keyTarget;
             this.remapInfo = {
@@ -185,16 +178,11 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(event.captured.left, event.captured.right);
 
         this.store.dispatch(
-            KeymapActions.saveKey(
-                this.keymap,
-                this.currentLayer,
-                event.moduleId,
-                event.keyId,
-                {
-                    remapOnAllKeymap: event.shiftPressed,
-                    remapOnAllLayer: event.altPressed,
-                    action: keystrokeAction
-                })
+            KeymapActions.saveKey(this.keymap, this.currentLayer, event.moduleId, event.keyId, {
+                remapOnAllKeymap: event.shiftPressed,
+                remapOnAllLayer: event.altPressed,
+                action: keystrokeAction
+            })
         );
     }
 
@@ -205,7 +193,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 this.currentLayer,
                 this.keyEditConfig.moduleId,
                 this.keyEditConfig.keyId,
-                keyAction)
+                keyAction
+            )
         );
         this.hidePopover();
     }
@@ -222,13 +211,13 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             return;
         }
 
-        const el: Element = event.target as Element || event.srcElement;
+        const el: Element = (event.target as Element) || event.srcElement;
         const position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
         let posTop: number = this.tooltipData.posTop;
 
         if (el.tagName === 'g') {
-            posLeft = position.left + (position.width / 2);
+            posLeft = position.left + position.width / 2;
             posTop = position.top + position.height;
         }
 
@@ -276,8 +265,9 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
             if (keystrokeAction.hasScancode()) {
                 let value: string = keystrokeAction.scancode.toString();
-                const scanCodeTexts: string = (this.mapper.scanCodeToText(keystrokeAction.scancode, keystrokeAction.type) || [])
-                    .join(', ');
+                const scanCodeTexts: string = (
+                    this.mapper.scanCodeToText(keystrokeAction.scancode, keystrokeAction.type) || []
+                ).join(', ');
                 if (scanCodeTexts.length > 0) {
                     value += ' (' + scanCodeTexts + ')';
                 }
@@ -303,26 +293,28 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             return Observable.of(content);
         } else if (keyAction instanceof MouseAction) {
             const mouseAction: MouseAction = keyAction;
-            const content: NameValuePair[] =
-                [
-                    {
-                        name: 'Action type',
-                        value: 'Mouse'
-                    },
-                    {
-                        name: 'Action',
-                        value: camelCaseToSentence(MouseActionParam[mouseAction.mouseAction])
-                    }
-                ];
+            const content: NameValuePair[] = [
+                {
+                    name: 'Action type',
+                    value: 'Mouse'
+                },
+                {
+                    name: 'Action',
+                    value: camelCaseToSentence(MouseActionParam[mouseAction.mouseAction])
+                }
+            ];
             return Observable.of(content);
         } else if (keyAction instanceof PlayMacroAction) {
             const playMacroAction: PlayMacroAction = keyAction;
             return this.store
                 .select(appState => appState.userConfiguration.macros)
                 .pipe(
-                    map(macroState => macroState.find(macro => {
-                        return macro.id === playMacroAction.macroId;
-                    }).name),
+                    map(
+                        macroState =>
+                            macroState.find(macro => {
+                                return macro.id === playMacroAction.macroId;
+                            }).name
+                    ),
                     map(macroName => {
                         const content: NameValuePair[] = [
                             {
@@ -359,21 +351,20 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 );
         } else if (keyAction instanceof SwitchLayerAction) {
             const switchLayerAction: SwitchLayerAction = keyAction;
-            const content: NameValuePair[] =
-                [
-                    {
-                        name: 'Action type',
-                        value: 'Switch layer'
-                    },
-                    {
-                        name: 'Layer',
-                        value: capitalizeFirstLetter(LayerName[switchLayerAction.layer])
-                    },
-                    {
-                        name: 'Toogle',
-                        value: switchLayerAction.switchLayerMode === SwitchLayerMode.toggle ? 'On' : 'Off'
-                    }
-                ];
+            const content: NameValuePair[] = [
+                {
+                    name: 'Action type',
+                    value: 'Switch layer'
+                },
+                {
+                    name: 'Layer',
+                    value: capitalizeFirstLetter(LayerName[switchLayerAction.layer])
+                },
+                {
+                    name: 'Toogle',
+                    value: switchLayerAction.switchLayerMode === SwitchLayerMode.toggle ? 'On' : 'Off'
+                }
+            ];
             return of(content);
         }
 

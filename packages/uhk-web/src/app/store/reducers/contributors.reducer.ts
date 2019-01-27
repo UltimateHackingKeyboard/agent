@@ -19,14 +19,14 @@ export function reducer(state = initialState, action: Actions) {
         case ActionTypes.GET_AGENT_CONTRIBUTORS: {
             return {
                 ...state
-             };
+            };
         }
 
         case ActionTypes.FETCH_AGENT_CONTRIBUTORS: {
             return {
                 ...state,
                 isLoading: true
-             };
+            };
         }
 
         case ActionTypes.AGENT_CONTRIBUTORS_AVAILABLE: {
@@ -34,7 +34,7 @@ export function reducer(state = initialState, action: Actions) {
                 ...state,
                 contributors: (<AgentContributorsAvailableAction>action).payload,
                 isLoading: false
-             };
+            };
         }
 
         case ActionTypes.AGENT_CONTRIBUTORS_NOT_AVAILABLE: {
@@ -42,7 +42,7 @@ export function reducer(state = initialState, action: Actions) {
                 ...state,
                 error: (<AgentContributorsNotAvailableAction>action).payload,
                 isLoading: false
-             };
+            };
         }
 
         default:

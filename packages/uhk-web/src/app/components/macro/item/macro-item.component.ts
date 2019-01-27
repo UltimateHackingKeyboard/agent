@@ -17,19 +17,25 @@ import { MapperService } from '../../../services/mapper.service';
 @Component({
     animations: [
         trigger('toggler', [
-            state('inactive', style({
-                height: '0px'
-            })),
-            state('active', style({
-                height: '*'
-            })),
+            state(
+                'inactive',
+                style({
+                    height: '0px'
+                })
+            ),
+            state(
+                'active',
+                style({
+                    height: '*'
+                })
+            ),
             transition('inactive <=> active', animate('500ms ease-out'))
         ])
     ],
     selector: 'macro-item',
     templateUrl: './macro-item.component.html',
     styleUrls: ['./macro-item.component.scss'],
-    host: { 'class': 'macro-item' }
+    host: { class: 'macro-item' }
 })
 export class MacroItemComponent implements OnInit, OnChanges {
     @Input() macroAction: MacroAction;
@@ -48,7 +54,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     newItem: boolean = false;
     overflow = 'hidden';
 
-    constructor(private mapper: MapperService) { }
+    constructor(private mapper: MapperService) {}
 
     ngOnInit() {
         this.updateView();

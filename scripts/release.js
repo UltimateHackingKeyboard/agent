@@ -33,13 +33,13 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({branchName, pullRequestNr, gitTag, repoName});
+console.log({ branchName, pullRequestNr, gitTag, repoName });
 
-const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
+const isReleaseCommit = TEST_BUILD || (branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent');
 
 if (!isReleaseCommit) {
     console.log('It is not a release task. Skipping publish.');
-    process.exit(0)
+    process.exit(0);
 }
 
 // if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
@@ -51,7 +51,7 @@ if (!isReleaseCommit) {
 // }
 
 const path = require('path');
-const builder = require("electron-builder");
+const builder = require('electron-builder');
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
 
@@ -88,7 +88,9 @@ if (process.platform === 'darwin' && process.env.CI) {
     exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${decryptedFile} -d`);
 } else if (process.platform === 'win32') {
     // decrypt windows certificate
-    exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
+    exec(
+        'openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d'
+    );
 }
 
 if (TEST_BUILD || gitTag) {
@@ -97,45 +99,44 @@ if (TEST_BUILD || gitTag) {
 
     // Add firmware to extra resources
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
-    extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
+    extraResources.push({ from: extractedFirmwareDir, to: 'packages/' });
 
-    builder.build({
-        dir: DIR,
-        targets: target,
-        config: {
-            directories: {
-                app: electron_build_folder
-            },
-            appId: 'com.ultimategadgetlabs.agent',
-            productName: 'UHK Agent',
-            mac: {
-                category: 'public.app-category.utilities',
-                extraResources,
-                identity: 'CMXCBCFHDG',
-                cscLink: path.join(__dirname, 'certs/mac-cert.p12')
-            },
-            win: {
-                extraResources,
-                publisherName: 'Ultimate Gadget Laboratories Kft.',
-                certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
-            },
-            linux: {
-                extraResources
-            },
-            publish: 'github',
-            artifactName,
-            files: [
-                '**/*'
-            ]
-        },
-    })
+    builder
+        .build({
+            dir: DIR,
+            targets: target,
+            config: {
+                directories: {
+                    app: electron_build_folder
+                },
+                appId: 'com.ultimategadgetlabs.agent',
+                productName: 'UHK Agent',
+                mac: {
+                    category: 'public.app-category.utilities',
+                    extraResources,
+                    identity: 'CMXCBCFHDG',
+                    cscLink: path.join(__dirname, 'certs/mac-cert.p12')
+                },
+                win: {
+                    extraResources,
+                    publisherName: 'Ultimate Gadget Laboratories Kft.',
+                    certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
+                },
+                linux: {
+                    extraResources
+                },
+                publish: 'github',
+                artifactName,
+                files: ['**/*']
+            }
+        })
         .then(() => {
             console.log('Packing success.');
         })
-        .catch((error) => {
+        .catch(error => {
             console.error(`${error}`);
             process.exit(1);
-        })
+        });
 } else {
     console.log('No git tag');
     // TODO: Need it?
@@ -147,5 +148,5 @@ function update2ndPackageJson(rootJson) {
     const json = require(jsonPath);
 
     json.version = rootJson.version;
-    jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
+    jsonfile.writeFileSync(jsonPath, json, { spaces: 2 });
 }

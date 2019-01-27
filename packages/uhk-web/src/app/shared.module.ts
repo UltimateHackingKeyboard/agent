@@ -231,10 +231,6 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         UhkDeviceLoadedGuard,
         UhkDeviceBootloaderNotActiveGuard
     ],
-    exports: [
-        UhkMessageComponent,
-        MainAppComponent
-    ]
+    exports: [UhkMessageComponent, MainAppComponent]
 })
-export class SharedModule {
-}
+export class SharedModule {}

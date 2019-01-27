@@ -16,7 +16,7 @@ import { getMacro } from '../../../store/reducers/user-configuration';
     templateUrl: './macro-edit.component.html',
     styleUrls: ['./macro-edit.component.scss'],
     host: {
-        'class': 'container-fluid'
+        class: 'container-fluid'
     }
 })
 export class MacroEditComponent implements OnDestroy {
@@ -28,8 +28,7 @@ export class MacroEditComponent implements OnDestroy {
     private subscription: Subscription;
 
     constructor(private store: Store<AppState>, public route: ActivatedRoute) {
-        this.subscription = route
-            .params
+        this.subscription = route.params
             .pipe(
                 pluck<{}, string>('id'),
                 switchMap((id: string) => {

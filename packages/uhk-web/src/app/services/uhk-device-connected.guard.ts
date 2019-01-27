@@ -9,18 +9,16 @@ import { AppState, deviceConnected } from '../store/index';
 
 @Injectable()
 export class UhkDeviceConnectedGuard implements CanActivate {
-
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router) {}
 
     canActivate(): Observable<boolean> {
-        return this.store.select(deviceConnected)
-            .pipe(
-                tap(connected => {
-                    if (connected) {
-                        this.router.navigate(['/']);
-                    }
-                }),
-                map(connected => !connected)
-            );
+        return this.store.select(deviceConnected).pipe(
+            tap(connected => {
+                if (connected) {
+                    this.router.navigate(['/']);
+                }
+            }),
+            map(connected => !connected)
+        );
     }
 }

@@ -22,7 +22,7 @@ describe('user-configuration reducer', () => {
         it('should process KeyStrokeAction', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
             const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
-            const keystrokeAction = new KeystrokeAction({_scancode: 100, type: KeystrokeType.basic} as any);
+            const keystrokeAction = new KeystrokeAction({ _scancode: 100, type: KeystrokeType.basic } as any);
             const saveKeyAction: KeymapActions.SaveKeyAction = {
                 type: KeymapActions.SAVE_KEY,
                 payload: {
@@ -71,7 +71,6 @@ describe('user-configuration reducer', () => {
                         remapOnAllLayer: false,
                         action: switchLayerAction
                     }
-
                 }
             };
             const result = reducer(state, saveKeyAction);
@@ -187,11 +186,7 @@ describe('user-configuration reducer', () => {
                                     {
                                         id: 0,
                                         pointerRole: 'move',
-                                        keyActions: [
-                                            null,
-                                            null,
-                                            null
-                                        ]
+                                        keyActions: [null, null, null]
                                     },
                                     {
                                         id: 1,
@@ -212,20 +207,12 @@ describe('user-configuration reducer', () => {
                                     {
                                         id: 0,
                                         pointerRole: 'move',
-                                        keyActions: [
-                                            null,
-                                            null,
-                                            null
-                                        ]
+                                        keyActions: [null, null, null]
                                     },
                                     {
                                         id: 1,
                                         pointerRole: 'move',
-                                        keyActions: [
-                                            null,
-                                            null,
-                                            null
-                                        ]
+                                        keyActions: [null, null, null]
                                     }
                                 ]
                             }
@@ -257,7 +244,6 @@ describe('user-configuration reducer', () => {
                         remapOnAllLayer: false,
                         action: switchLayerAction
                     }
-
                 }
             };
             const result = reducer(state, saveKeyAction);
@@ -398,20 +384,12 @@ describe('user-configuration reducer', () => {
                                     {
                                         id: 0,
                                         pointerRole: 'move',
-                                        keyActions: [
-                                            null,
-                                            null,
-                                            null
-                                        ]
+                                        keyActions: [null, null, null]
                                     },
                                     {
                                         id: 1,
                                         pointerRole: 'move',
-                                        keyActions: [
-                                            null,
-                                            null,
-                                            null
-                                        ]
+                                        keyActions: [null, null, null]
                                     }
                                 ]
                             }
@@ -421,6 +399,5 @@ describe('user-configuration reducer', () => {
                 macros: []
             });
         });
-
     });
 });

@@ -19,7 +19,6 @@ export enum MouseActionParam {
 }
 
 export class MouseAction extends KeyAction {
-
     @assertEnum(MouseActionParam)
     mouseAction: MouseActionParam;
 

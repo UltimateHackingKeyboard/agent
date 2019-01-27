@@ -10,8 +10,7 @@ import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common'
 export class SudoService {
     private rootDir: string;
 
-    constructor(private logService: LogService,
-                private options: CommandLineArgs) {
+    constructor(private logService: LogService, private options: CommandLineArgs) {
         if (isDev) {
             this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../');
         } else {
@@ -28,7 +27,7 @@ export class SudoService {
 
             const response = new IpcResponse();
             response.success = false;
-            response.error = {message: error.message};
+            response.error = { message: error.message };
 
             event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
 
@@ -42,7 +41,7 @@ export class SudoService {
             default:
                 const response: IpcResponse = {
                     success: false,
-                    error: {message: 'Permissions couldn\'t be set. Invalid platform: ' + process.platform}
+                    error: { message: "Permissions couldn't be set. Invalid platform: " + process.platform }
                 };
 
                 event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
@@ -53,7 +52,7 @@ export class SudoService {
     private async setPrivilegeOnLinux(event: Electron.Event) {
         const tmpDirectory = dirSync();
         const rulesDir = path.join(this.rootDir, 'rules');
-        this.logService.debug('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
+        this.logService.debug('[SudoService] Copy rules dir', { src: rulesDir, dst: tmpDirectory.name });
         await copy(rulesDir, tmpDirectory.name);
 
         const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
@@ -69,7 +68,7 @@ export class SudoService {
             if (error) {
                 this.logService.error('[SudoService] Error when set privilege: ', error);
                 response.success = false;
-                response.error = {message: error.message};
+                response.error = { message: error.message };
             } else {
                 response.success = true;
             }

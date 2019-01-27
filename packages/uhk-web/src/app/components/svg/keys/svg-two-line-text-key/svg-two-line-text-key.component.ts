@@ -33,7 +33,7 @@ export class SvgTwoLineTextKeyComponent implements OnChanges {
         let textContainerHeight = this.height;
 
         if (this.secondaryText) {
-            textYModifier =  this.height / 5;
+            textYModifier = this.height / 5;
             secondaryYModifier = 0;
             this.secondaryHeight = this.height / 4;
             textContainerHeight -= this.secondaryHeight;

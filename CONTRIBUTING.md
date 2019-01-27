@@ -20,4 +20,3 @@ Contributors are most welcome and appreciated beyond words!
 2. run `$ npm run sprites`
 
 The icon available as .uhk-icon-<filename without extension> css selector.
-

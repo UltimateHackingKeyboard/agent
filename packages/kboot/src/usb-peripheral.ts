@@ -72,10 +72,7 @@ export class UsbPeripheral implements Peripheral {
                 const command: CommandOption = {
                     command: Commands.WriteMemory,
                     hasDataPhase: true,
-                    params: [
-                        ...pack(option.startAddress, { bits: 32 }),
-                        ...pack(option.data.length, { bits: 32 })
-                    ]
+                    params: [...pack(option.startAddress, { bits: 32 }), ...pack(option.data.length, { bits: 32 })]
                 };
 
                 const firsCommandResponse = await this.sendCommand(command);
@@ -123,7 +120,6 @@ export class UsbPeripheral implements Peripheral {
                 logger('Can not write memory data %O', err);
                 reject(err);
             }
-
         });
     }
 
@@ -132,10 +128,7 @@ export class UsbPeripheral implements Peripheral {
             try {
                 const command: CommandOption = {
                     command: Commands.ReadMemory,
-                    params: [
-                        ...pack(startAddress, { bits: 32 }),
-                        ...pack(count, { bits: 32 })
-                    ]
+                    params: [...pack(startAddress, { bits: 32 }), ...pack(count, { bits: 32 })]
                 };
 
                 this._resetDataBuffer();
@@ -216,7 +209,6 @@ export class UsbPeripheral implements Peripheral {
         return new Promise<Buffer>(async (resolve, reject) => {
             const startTime = new Date();
             while (startTime.getTime() + timeout > new Date().getTime()) {
-
                 if (this._hidError) {
                     const err = this._hidError;
 

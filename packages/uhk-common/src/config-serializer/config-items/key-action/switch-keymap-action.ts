@@ -5,7 +5,6 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
 import { UserConfiguration } from '../user-configuration';
 
 export class SwitchKeymapAction extends KeyAction {
-
     keymapAbbreviation: string;
 
     constructor(parameter?: SwitchKeymapAction | Keymap | string) {
@@ -58,7 +57,6 @@ export class SwitchKeymapAction extends KeyAction {
 }
 
 export class UnresolvedSwitchKeymapAction extends KeyAction {
-
     @assertUInt8
     keymapIndex: number;
 

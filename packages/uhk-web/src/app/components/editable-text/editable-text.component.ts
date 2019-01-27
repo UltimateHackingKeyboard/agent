@@ -6,12 +6,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     templateUrl: './editable-text.component.html',
     styleUrls: ['./editable-text.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => EditableTextComponent), multi: true}
-    ]
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => EditableTextComponent), multi: true }]
 })
 export class EditableTextComponent implements ControlValueAccessor {
-
     @Input() placeholder = 'No editable content';
     text: string;
     originalText: string;
@@ -25,9 +22,7 @@ export class EditableTextComponent implements ControlValueAccessor {
         return this.text && this.text.replace(/\n/g, '<br>');
     }
 
-    constructor(private cdr: ChangeDetectorRef) {
-
-    }
+    constructor(private cdr: ChangeDetectorRef) {}
 
     writeValue(obj: any): void {
         if (this.text === obj) {
@@ -42,8 +37,7 @@ export class EditableTextComponent implements ControlValueAccessor {
         this.textChange = fn;
     }
 
-    registerOnTouched(fn: any): void {
-    }
+    registerOnTouched(fn: any): void {}
 
     saveText(): void {
         this.originalText = null;
@@ -77,6 +71,5 @@ export class EditableTextComponent implements ControlValueAccessor {
         return !this.editing && !!this.text;
     }
 
-    private textChange: any = () => {
-    }
+    private textChange: any = () => {};
 }

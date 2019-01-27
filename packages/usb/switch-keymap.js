@@ -11,5 +11,5 @@ const uhk = require('./uhk');
 
     const device = uhk.getUhkDevice();
     const sendData = await uhk.switchKeymap(device, keymapAbbreviation);
-    console.log(sendData)
+    console.log(sendData);
 })();

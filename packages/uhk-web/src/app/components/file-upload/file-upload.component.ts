@@ -22,7 +22,7 @@ export class FileUploadComponent {
         }
 
         const fileReader = new FileReader();
-        fileReader.onloadend = function () {
+        fileReader.onloadend = function() {
             const arrayBuffer = new Uint8Array(fileReader.result);
             const target = event.target || event.srcElement || event.currentTarget;
             target.value = null;

@@ -4,7 +4,7 @@ import { keyActionType } from './key-action';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('switch-layer-action', () => {
-    const action = new SwitchLayerAction(<SwitchLayerAction>{layer: 0, switchLayerMode: SwitchLayerMode.hold});
+    const action = new SwitchLayerAction(<SwitchLayerAction>{ layer: 0, switchLayerMode: SwitchLayerMode.hold });
 
     it('should be instantiate', () => {
         expect(new SwitchLayerAction()).toBeTruthy();
@@ -35,14 +35,14 @@ describe('switch-layer-action', () => {
     describe('backward compatibility of the "toggle" property ', () => {
         it('should map toggle=false to SwitchLayerMode.holdAndDoubleTapToggle', () => {
             const oldAction = new SwitchLayerAction();
-            oldAction.fromJsonObject({keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: false});
+            oldAction.fromJsonObject({ keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: false });
 
             expect(oldAction.switchLayerMode).toEqual(SwitchLayerMode.holdAndDoubleTapToggle);
         });
 
         it('should map toggle=true to SwitchLayerMode.toggle', () => {
             const oldAction = new SwitchLayerAction();
-            oldAction.fromJsonObject({keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: true});
+            oldAction.fromJsonObject({ keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: true });
 
             expect(oldAction.switchLayerMode).toEqual(SwitchLayerMode.toggle);
         });

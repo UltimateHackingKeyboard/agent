@@ -13,7 +13,7 @@ export class SvgMouseMoveKeyComponent implements OnChanges {
     mouseIcon: string;
     directionIcon: string;
 
-    constructor(private mapper: MapperService) { }
+    constructor(private mapper: MapperService) {}
 
     ngOnChanges() {
         this.mouseIcon = this.mapper.getIcon('mouse');

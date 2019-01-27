@@ -13,7 +13,6 @@ if (layout !== 'iso' && layout !== 'ansi') {
 }
 
 const device = uhk.getUhkDevice();
-uhk.writeHca(device, layout === 'iso')
-    .catch((err)=>{
-        console.error(err);
-    });
+uhk.writeHca(device, layout === 'iso').catch(err => {
+    console.error(err);
+});

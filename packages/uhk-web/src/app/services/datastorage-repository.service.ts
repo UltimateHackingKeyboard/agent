@@ -5,7 +5,6 @@ import { AutoUpdateSettings } from '../models/auto-update-settings';
 
 @Injectable()
 export class DataStorageRepositoryService {
-
     getConfig(): UserConfiguration {
         return JSON.parse(localStorage.getItem('config'));
     }

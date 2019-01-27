@@ -3,22 +3,21 @@ const uhk = require('./uhk');
 const device = uhk.getUhkDevice();
 
 function getUint32(buffer, offset) {
-    return (buffer[offset]) + (buffer[offset+1] << 8) + (buffer[offset+2] << 16) + (buffer[offset+3] << 24);
+    return buffer[offset] + (buffer[offset + 1] << 8) + (buffer[offset + 2] << 16) + (buffer[offset + 3] << 24);
 }
 
 function getUint16(buffer, offset) {
-    return (buffer[offset]) + (buffer[offset+1] << 8);
+    return buffer[offset] + (buffer[offset + 1] << 8);
 }
 
 let prevGeneric, prevBasic, prevMedia, prevSystem, prevMouse;
 function getDebugInfo() {
-
     const payload = new Buffer([uhk.usbCommands.getDebugBuffer]);
-//    console.log(payload)
-//    console.log('Sending ', uhk.bufferToString(payload));
+    //    console.log(payload)
+    //    console.log('Sending ', uhk.bufferToString(payload));
     device.write(uhk.getTransferData(payload));
     const rxBuffer = Buffer.from(device.readSync());
-//    console.log('Received', uhk.bufferToString(rxBuffer));
+    //    console.log('Received', uhk.bufferToString(rxBuffer));
 
     const I2C_Watchdog = getUint32(rxBuffer, 1);
     const I2cSlaveScheduler_Counter = getUint32(rxBuffer, 5);
@@ -47,11 +46,11 @@ function getDebugInfo() {
     process.stdout.write(`UsbMouse:${UsbMouseActionCounter}`);
     process.stdout.write('\n');
 
-//    process.stdout.write(`generic:${UsbGenericHidActionCounter - prevGeneric} `)
-//    process.stdout.write(`basic:${UsbBasicKeyboardActionCounter - prevBasic} `)
-//    process.stdout.write(`basic:${UsbMediaKeyboardActionCounter - prevMedia} `)
-//    process.stdout.write(`basic:${UsbSystemKeyboardActionCounter - prevSystem} `)
-//    process.stdout.write(`basic:${UsbMouseActionCounter - prevMouse} `)
+    //    process.stdout.write(`generic:${UsbGenericHidActionCounter - prevGeneric} `)
+    //    process.stdout.write(`basic:${UsbBasicKeyboardActionCounter - prevBasic} `)
+    //    process.stdout.write(`basic:${UsbMediaKeyboardActionCounter - prevMedia} `)
+    //    process.stdout.write(`basic:${UsbSystemKeyboardActionCounter - prevSystem} `)
+    //    process.stdout.write(`basic:${UsbMouseActionCounter - prevMouse} `)
 
     prevGeneric = UsbGenericHidActionCounter;
     prevBasic = UsbBasicKeyboardActionCounter;

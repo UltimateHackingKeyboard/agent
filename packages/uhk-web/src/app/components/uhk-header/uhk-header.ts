@@ -25,5 +25,4 @@ export class UhkHeader {
     onDismissLastNotification(): void {
         this.store.dispatch(new DismissUndoNotificationAction());
     }
-
 }

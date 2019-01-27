@@ -27,8 +27,7 @@ export class ContributorBadgeComponent implements OnInit {
         return this.contributor.html_url;
     }
 
-    constructor(private store: Store<AppState>) {
-    }
+    constructor(private store: Store<AppState>) {}
 
     ngOnInit(): void {
         (this.badge.nativeElement as HTMLImageElement).src = URL.createObjectURL(this.contributor.avatar);

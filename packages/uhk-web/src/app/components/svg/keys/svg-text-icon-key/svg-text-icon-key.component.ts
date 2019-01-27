@@ -25,7 +25,7 @@ export class SvgTextIconKeyComponent implements OnChanges {
     secondaryTextY: number;
     secondaryHeight: number;
 
-    constructor() { }
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();
@@ -36,17 +36,17 @@ export class SvgTextIconKeyComponent implements OnChanges {
         let secondaryYModifier = 0;
 
         if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
-            textYModifier =  this.height / 5;
+            textYModifier = this.height / 5;
             secondaryYModifier = 5;
         }
 
         this.useWidth = this.width / 3;
         this.useHeight = this.height / 3;
-        this.useX = (this.width > 2 * this.height) ? this.width * 0.6 : this.width / 3;
-        this.useY = (this.width > 2 * this.height) ? this.height / 3 : this.height / 2;
-        this.textY = ((this.width > 2 * this.height) ? this.height / 2 : this.height / 3) - textYModifier;
-        this.textAnchor = (this.width > 2 * this.height) ? 'end' : 'middle';
-        this.spanX = (this.width > 2 * this.height) ? 0.6 * this.width : this.width / 2;
+        this.useX = this.width > 2 * this.height ? this.width * 0.6 : this.width / 3;
+        this.useY = this.width > 2 * this.height ? this.height / 3 : this.height / 2;
+        this.textY = (this.width > 2 * this.height ? this.height / 2 : this.height / 3) - textYModifier;
+        this.textAnchor = this.width > 2 * this.height ? 'end' : 'middle';
+        this.spanX = this.width > 2 * this.height ? 0.6 * this.width : this.width / 2;
 
         this.secondaryHeight = this.height / 4;
         this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;

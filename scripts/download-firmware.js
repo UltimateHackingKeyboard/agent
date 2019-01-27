@@ -10,8 +10,7 @@ async function downloadFirmware(version) {
     const outputDir = path.join(__dirname, `../tmp`);
     const output = path.join(outputDir, `uhk-firmware-${version}.tar.bz2`);
 
-    if (!fs.existsSync(outputDir))
-        fs.mkdirSync(outputDir);
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
     await downloadFile(url, output);
 
@@ -26,12 +25,12 @@ async function downloadFile(url, output) {
         r.on('end', () => {
             resolve(output);
         });
-        r.on('error', (error) => {
+        r.on('error', error => {
             reject(error);
         });
 
         r.pipe(fs.createWriteStream(output));
-    })
+    });
 }
 
 (async function main() {
@@ -42,7 +41,7 @@ async function downloadFile(url, output) {
 
     // Download the firmware and add as extra resources
     const firmwarePath = await downloadFirmware(agentJson.firmwareVersion);
-    await decompress(firmwarePath, extractedFirmwareDir, {plugins: [decompressTarbz()]});
+    await decompress(firmwarePath, extractedFirmwareDir, { plugins: [decompressTarbz()] });
 
     await fse.remove(firmwarePath);
 })();
