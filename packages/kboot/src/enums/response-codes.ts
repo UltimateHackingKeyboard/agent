@@ -72,5 +72,5 @@ export enum ResponseCodes {
     AppCrcCheckFailed = 10401,
     AppCrcCheckInactive = 10402,
     AppCrcCheckInvalid = 10403,
-    AppCrcCheckOutOfRange = 10404,
+    AppCrcCheckOutOfRange = 10404
 }

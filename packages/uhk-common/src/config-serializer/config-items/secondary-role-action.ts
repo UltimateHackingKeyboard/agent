@@ -9,5 +9,5 @@ export enum SecondaryRoleAction {
     rightSuper,
     mod,
     fn,
-    mouse,
+    mouse
 }

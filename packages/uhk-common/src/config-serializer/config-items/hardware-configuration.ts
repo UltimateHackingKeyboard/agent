@@ -66,7 +66,7 @@ export class HardwareConfiguration {
             deviceId: this.deviceId,
             uniqueId: this.uniqueId,
             isVendorModeOn: this.isVendorModeOn,
-            isIso: this.isIso,
+            isIso: this.isIso
         };
     }
 

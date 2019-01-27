@@ -7,14 +7,14 @@ export const macroRoutes: Routes = [
     {
         path: 'macro',
         component: MacroNotFoundComponent,
-        canActivate: [MacroNotFoundGuard],
+        canActivate: [MacroNotFoundGuard]
     },
     {
         path: 'macro/:id',
-        component: MacroEditComponent,
+        component: MacroEditComponent
     },
     {
         path: 'macro/:id/:empty',
-        component: MacroEditComponent,
-    },
+        component: MacroEditComponent
+    }
 ];

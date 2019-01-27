@@ -7,7 +7,7 @@ export enum UhkReenumerationModes {
     Bootloader = 'bootloader',
     Buspal = 'buspal',
     NormalKeyboard = 'normalKeyboard',
-    CompatibleKeyboard = 'compatibleKeyboard',
+    CompatibleKeyboard = 'compatibleKeyboard'
 }
 
 const USB_SCRIPTS_DIR = join(__dirname, '../../../usb');

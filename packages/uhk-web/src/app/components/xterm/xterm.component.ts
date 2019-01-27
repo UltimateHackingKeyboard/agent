@@ -1,19 +1,11 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    Input,
-    OnChanges,
-    SimpleChanges,
-    ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { XtermLog } from '../../models/xterm-log';
 
 @Component({
     selector: 'xterm',
     templateUrl: './xterm.component.html',
     styleUrls: ['./xterm.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class XtermComponent implements OnChanges {
     @Input() logs: Array<XtermLog> = [];

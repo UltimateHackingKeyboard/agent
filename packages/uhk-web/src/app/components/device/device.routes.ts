@@ -13,28 +13,28 @@ export const deviceRoutes: Routes = [
             {
                 path: '',
                 redirectTo: 'configuration',
-                pathMatch: 'full',
+                pathMatch: 'full'
             },
             {
                 path: 'configuration',
-                component: DeviceConfigurationComponent,
+                component: DeviceConfigurationComponent
             },
             {
                 path: 'mouse-speed',
-                component: MouseSpeedComponent,
+                component: MouseSpeedComponent
             },
             {
                 path: 'led-brightness',
-                component: LEDBrightnessComponent,
+                component: LEDBrightnessComponent
             },
             {
                 path: 'firmware',
-                component: DeviceFirmwareComponent,
+                component: DeviceFirmwareComponent
             },
             {
                 path: 'restore-user-configuration',
-                component: RestoreConfigurationComponent,
-            },
-        ],
-    },
+                component: RestoreConfigurationComponent
+            }
+        ]
+    }
 ];

@@ -6,19 +6,19 @@ import {
     OnChanges,
     OnInit,
     SimpleChanges,
-    ViewChild,
+    ViewChild
 } from '@angular/core';
 
 import { getContentWidth } from '../../../../util';
 
 const SECONDARY_STYLE: CSSStyleDeclaration = {
-    font: '12px Helvetica',
+    font: '12px Helvetica'
 } as any;
 
 @Component({
     selector: 'g[svg-secondary-role]',
     templateUrl: './svg-secondary-role.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgSecondaryRoleComponent implements OnInit, OnChanges {
     @Input() height: number;

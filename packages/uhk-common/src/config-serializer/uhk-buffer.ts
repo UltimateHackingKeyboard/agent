@@ -183,7 +183,7 @@ export class UhkBuffer {
 
     writeArray<T>(
         array: T[],
-        elementWriter: (buffer: UhkBuffer, element: T, index?: number) => void = UhkBuffer.simpleElementWriter,
+        elementWriter: (buffer: UhkBuffer, element: T, index?: number) => void = UhkBuffer.simpleElementWriter
     ): void {
         const length = array.length;
         this.writeCompactLength(length);

@@ -13,6 +13,6 @@ export const decodeCommandResponse = (response: Buffer): CommandResponse => {
     return {
         code: getResponseCode(response),
         tag: getResponseTag(response),
-        raw: response,
+        raw: response
     };
 };

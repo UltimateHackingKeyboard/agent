@@ -9,7 +9,7 @@ export interface State {
 export const initialState: State = {
     updateAvailable: false,
     updateDownloaded: false,
-    doNotUpdateApp: false,
+    doNotUpdateApp: false
 };
 
 export function reducer(state = initialState, action: Actions) {

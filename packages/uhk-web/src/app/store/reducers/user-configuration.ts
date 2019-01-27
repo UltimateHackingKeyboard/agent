@@ -15,7 +15,7 @@ import {
     PlayMacroAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    UserConfiguration,
+    UserConfiguration
 } from 'uhk-common';
 import { KeymapActions, MacroActions } from '../actions';
 import { AppState } from '../index';
@@ -33,13 +33,9 @@ export function reducer(state = initialState, action: Action & { payload?: any }
         case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
             Object.assign(changedUserConfiguration, action.payload);
             changedUserConfiguration.keymaps = [...changedUserConfiguration.keymaps];
-            changedUserConfiguration.keymaps.sort((first: Keymap, second: Keymap) =>
-                first.name.localeCompare(second.name),
-            );
+            changedUserConfiguration.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
             changedUserConfiguration.macros = [...changedUserConfiguration.macros];
-            changedUserConfiguration.macros.sort((first: Macro, second: Macro) =>
-                first.name.localeCompare(second.name),
-            );
+            changedUserConfiguration.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
             return changedUserConfiguration;
         }
 
@@ -78,7 +74,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             changedUserConfiguration.keymaps = insertItemInNameOrder(
                 state.keymaps,
                 newKeymap,
-                keymap => keymap.abbreviation !== newKeymap.abbreviation,
+                keymap => keymap.abbreviation !== newKeymap.abbreviation
             );
             break;
         }
@@ -127,7 +123,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             // If deleted one is default set default keymap to the first on the list of keymaps
             if (isDefault && filtered.length > 0) {
                 filtered[0] = Object.assign(new Keymap(), filtered[0], {
-                    isDefault: true,
+                    isDefault: true
                 });
             }
 
@@ -233,11 +229,7 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const newMacro = Object.assign(new Macro(), macroToRename, { name });
-            changedUserConfiguration.macros = insertItemInNameOrder(
-                state.macros,
-                newMacro,
-                macro => macro.id !== newMacro.id,
-            );
+            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro, macro => macro.id !== newMacro.id);
             break;
         }
 
@@ -469,7 +461,7 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
                     keyActionsToClear.push({
                         layerIdx,
                         moduleIdx,
-                        keyActionIdx,
+                        keyActionIdx
                     });
                 }
             }

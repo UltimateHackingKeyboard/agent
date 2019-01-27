@@ -9,7 +9,7 @@ import { DismissUndoNotificationAction, UndoLastAction } from '../../store/actio
 @Component({
     selector: 'uhk-header',
     templateUrl: './uhk-header.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UhkHeader {
     undoableNotification$: Observable<Notification>;

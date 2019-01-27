@@ -4,7 +4,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
     selector: 'uhk-message',
     templateUrl: './uhk-message.component.html',
     styleUrls: ['./uhk-message.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UhkMessageComponent {
     @Input() header: string;

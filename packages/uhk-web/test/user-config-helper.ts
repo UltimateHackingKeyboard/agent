@@ -35,12 +35,12 @@ const defaultUserConfig = {
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 36,
+                                    scancode: 36
                                 },
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 37,
+                                    scancode: 37
                                 },
                                 {
                                     keyActionType: 'switchLayer',
@@ -55,21 +55,21 @@ const defaultUserConfig = {
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 53,
+                                    scancode: 53
                                 },
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 30,
+                                    scancode: 30
                                 },
-                                null,
-                            ],
+                                null
+                            ]
                         },
                         {
                             id: 2,
-                            keyActions: [],
-                        },
-                    ],
+                            keyActions: []
+                        }
+                    ]
                 },
                 {
                     modules: [
@@ -79,19 +79,19 @@ const defaultUserConfig = {
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 64,
+                                    scancode: 64
                                 },
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 65,
+                                    scancode: 65
                                 },
                                 {
                                     keyActionType: 'switchLayer',
                                     layer: 'mod',
-                                    toggle: false,
-                                },
-                            ],
+                                    toggle: false
+                                }
+                            ]
                         },
                         {
                             id: 1,
@@ -99,17 +99,17 @@ const defaultUserConfig = {
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 41,
+                                    scancode: 41
                                 },
                                 {
                                     keyActionType: 'keystroke',
                                     type: 'basic',
-                                    scancode: 58,
+                                    scancode: 58
                                 },
-                                null,
-                            ],
-                        },
-                    ],
+                                null
+                            ]
+                        }
+                    ]
                 },
                 {
                     modules: [
@@ -123,12 +123,12 @@ const defaultUserConfig = {
                                 null,
                                 {
                                     keyActionType: 'switchKeymap',
-                                    keymapAbbreviation: 'DVO',
+                                    keymapAbbreviation: 'DVO'
                                 },
-                                null,
-                            ],
-                        },
-                    ],
+                                null
+                            ]
+                        }
+                    ]
                 },
                 {
                     modules: [
@@ -145,7 +145,7 @@ const defaultUserConfig = {
             ]
         }
     ],
-    macros: [],
+    macros: []
 };
 
 export function getDefaultUserConfig() {

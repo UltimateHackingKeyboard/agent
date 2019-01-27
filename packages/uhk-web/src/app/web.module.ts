@@ -17,10 +17,10 @@ import { effects } from './store/effects';
         StoreModule.forRoot(reducers),
         StoreRouterConnectingModule,
         StoreDevtoolsModule.instrument({
-            maxAge: 10,
+            maxAge: 10
         }),
-        EffectsModule.forRoot(effects),
+        EffectsModule.forRoot(effects)
     ],
-    bootstrap: [MainAppComponent],
+    bootstrap: [MainAppComponent]
 })
 export class WebModule {}

@@ -6,7 +6,7 @@ import {
     OnDestroy,
     OnInit,
     Renderer2,
-    ViewChild,
+    ViewChild
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -40,7 +40,7 @@ import { SideMenuPageState } from '../../models/side-menu-page-state';
     selector: 'side-menu',
     templateUrl: './side-menu.component.html',
     styleUrls: ['./side-menu.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideMenuComponent implements OnInit, OnDestroy {
     state: SideMenuPageState;
@@ -55,7 +55,7 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             configuration: 'active',
             keymap: 'active',
             macro: 'active',
-            addon: 'active',
+            addon: 'active'
         };
     }
 

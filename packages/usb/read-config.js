@@ -20,9 +20,7 @@ const configSize = Math.min(configMaxSize, configBuffer.length);
 
 console.log(`${configTypeString}configSize:`, configSize);
 while (offset < configSize) {
-    const configBufferId = isHardwareConfig
-        ? uhk.configBufferIds.hardwareConfig
-        : uhk.configBufferIds.validatedUserConfig;
+    const configBufferId = isHardwareConfig ? uhk.configBufferIds.hardwareConfig : uhk.configBufferIds.validatedUserConfig;
     chunkSizeToRead = Math.min(chunkSize, configSize - offset);
     buffer = Buffer.from([uhk.usbCommands.readConfig, configBufferId, chunkSizeToRead, offset & 0xff, offset >> 8]);
     console.log('write to keyboard', uhk.bufferToString(buffer));

@@ -49,7 +49,7 @@ export class KBoot {
             bugfix: response.raw[12],
             minor: response.raw[13],
             major: response.raw[14],
-            protocolName: String.fromCharCode(response.raw[15]),
+            protocolName: String.fromCharCode(response.raw[15])
         };
         logger('bootloader version %o');
 
@@ -66,7 +66,7 @@ export class KBoot {
 
         const command: CommandOption = {
             command: Commands.FlashSecurityDisable,
-            params: [...key],
+            params: [...key]
         };
 
         const response = await this.peripheral.sendCommand(command);
@@ -100,7 +100,7 @@ export class KBoot {
     async flashEraseAllUnsecure(): Promise<void> {
         const command: CommandOption = {
             command: Commands.FlashEraseAllUnsecure,
-            params: [],
+            params: []
         };
 
         const response = await this.peripheral.sendCommand(command);
@@ -128,7 +128,7 @@ export class KBoot {
     async reset(): Promise<void> {
         const command: CommandOption = {
             command: Commands.Reset,
-            params: [],
+            params: []
         };
 
         let response: CommandResponse;

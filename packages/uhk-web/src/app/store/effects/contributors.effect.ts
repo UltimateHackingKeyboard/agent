@@ -17,7 +17,7 @@ import {
     AgentContributorsNotAvailableAction,
     GetAgentContributorsAction,
     ActionTypes,
-    FetchAgentContributorsAction,
+    FetchAgentContributorsAction
 } from '../actions/contributors.action';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class ContributorsEffect {
                     return new FetchAgentContributorsAction();
                 }
                 return new AgentContributorsAvailableAction(state.contributors);
-            }),
+            })
         );
 
     @Effect() fetchContributors$: Observable<Action> = this.actions$
@@ -48,9 +48,9 @@ export class ContributorsEffect {
                             contributor.avatar = blob;
 
                             return contributor;
-                        },
+                        }
                     ),
-                    reduce((acc: UHKContributor[], curr) => [...acc, curr], []),
+                    reduce((acc: UHKContributor[], curr) => [...acc, curr], [])
                 );
             }),
             map((contributorsWithAvatars: UHKContributor[]) => {

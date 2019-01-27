@@ -6,7 +6,7 @@ import {
     Input,
     OnChanges,
     Output,
-    SimpleChanges,
+    SimpleChanges
 } from '@angular/core';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
 
@@ -31,7 +31,7 @@ export const secondaryRoleFilter = (showLayerSwitchers: boolean) => {
     selector: 'keypress-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './keypress-tab.component.html',
-    styleUrls: ['./keypress-tab.component.scss'],
+    styleUrls: ['./keypress-tab.component.scss']
 })
 export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -102,10 +102,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         }
         const keystrokeAction: KeystrokeAction = <KeystrokeAction>keyAction;
         // Restore selectedScancodeOption
-        this.selectedScancodeOption = this.findScancodeOptionByScancode(
-            keystrokeAction.scancode || 0,
-            keystrokeAction.type,
-        );
+        this.selectedScancodeOption = this.findScancodeOptionByScancode(keystrokeAction.scancode || 0, keystrokeAction.type);
 
         for (const modifier of this.leftModifiers) {
             modifier.checked = (keystrokeAction.modifierMask & modifier.value) > 0;

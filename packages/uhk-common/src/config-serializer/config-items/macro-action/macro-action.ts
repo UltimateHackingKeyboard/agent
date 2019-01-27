@@ -26,13 +26,13 @@ export enum MacroActionId {
 export enum MacroKeySubAction {
     tap = 0,
     press = 1,
-    release = 2,
+    release = 2
 }
 
 export enum MacroMouseSubAction {
     click = 0,
     hold = 1,
-    release = 2,
+    release = 2
 }
 
 export let macroActionType = {
@@ -58,10 +58,7 @@ export abstract class MacroAction {
         const readMacroActionId: MacroActionId = buffer.readUInt8();
         const macroActionId: MacroActionId = MacroActionId[classname];
         if (macroActionId === MacroActionId.KeyMacroAction) {
-            if (
-                readMacroActionId < MacroActionId.KeyMacroAction ||
-                readMacroActionId > MacroActionId.LastKeyMacroAction
-            ) {
+            if (readMacroActionId < MacroActionId.KeyMacroAction || readMacroActionId > MacroActionId.LastKeyMacroAction) {
                 throw `Invalid ${classname} first byte: ${readMacroActionId}`;
             }
         } else if (macroActionId === MacroActionId.MouseButtonMacroAction) {

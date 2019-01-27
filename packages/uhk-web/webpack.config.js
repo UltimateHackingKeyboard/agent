@@ -68,14 +68,14 @@ const postcssPlugins = function(loader) {
                         resolve(content);
                     });
                 });
-            },
+            }
         }),
         postcssUrl({
             filter: ({ url }) => url.startsWith('~'),
             url: ({ url }) => {
                 const fullPath = path.join(projectRoot, 'node_modules', url.substr(1));
                 return path.relative(loader.context, fullPath).replace(/\\/g, '/');
-            },
+            }
         }),
         postcssUrl([
             {
@@ -93,7 +93,7 @@ const postcssPlugins = function(loader) {
                         // Also dedupe multiple slashes into single ones.
                         return `/${baseHref}/${deployUrl}/${url}`.replace(/\/\/+/g, '/');
                     }
-                },
+                }
             },
             {
                 // TODO: inline .cur if not supporting IE (use browserslist to check)
@@ -458,7 +458,7 @@ module.exports = {
                 } else {
                     return 0;
                 }
-            },
+            }
         }),
         new BaseHrefWebpackPlugin({ baseHref: '' }),
         new CommonsChunkPlugin({

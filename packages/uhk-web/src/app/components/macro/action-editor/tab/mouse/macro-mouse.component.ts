@@ -5,7 +5,7 @@ import {
     MouseButtons,
     MouseButtonMacroAction,
     MoveMouseMacroAction,
-    ScrollMouseMacroAction,
+    ScrollMouseMacroAction
 } from 'uhk-common';
 import { Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
@@ -17,7 +17,7 @@ enum TabName {
     Scroll,
     Click,
     Hold,
-    Release,
+    Release
 }
 
 @Component({
@@ -147,5 +147,5 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
             default:
                 return true;
         }
-    };
+    }
 }

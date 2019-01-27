@@ -6,7 +6,7 @@ import {
     UserConfiguration,
     LayerName,
     Keymap,
-    SwitchLayerMode,
+    SwitchLayerMode
 } from 'uhk-common';
 
 import { getDefaultUserConfig } from '../../../../test/user-config-helper';
@@ -33,9 +33,9 @@ describe('user-configuration reducer', () => {
                     keyAction: {
                         remapOnAllKeymap: false,
                         remapOnAllLayer: false,
-                        action: keystrokeAction,
-                    },
-                },
+                        action: keystrokeAction
+                    }
+                }
             };
             const result = reducer(state, saveKeyAction);
             const expectedKeyAction = <KeystrokeAction>result.keymaps[0].layers[0].modules[0].keyActions[0];
@@ -56,7 +56,7 @@ describe('user-configuration reducer', () => {
             const destinationLayerId = LayerName.mod;
             const switchLayerAction = new SwitchLayerAction({
                 switchLayerMode: SwitchLayerMode.toggle,
-                layer: destinationLayerId,
+                layer: destinationLayerId
             } as any);
 
             const saveKeyAction: KeymapActions.SaveKeyAction = {
@@ -82,8 +82,8 @@ describe('user-configuration reducer', () => {
                         id: 1,
                         initialPointerSpeed: 1,
                         pointerAcceleration: 5,
-                        maxPointerSpeed: 200,
-                    },
+                        maxPointerSpeed: 200
+                    }
                 ],
                 keymaps: [
                     {
@@ -101,19 +101,19 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'mod',
-                                                switchLayerMode: 1,
+                                                switchLayerMode: 1
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 37,
+                                                scancode: 37
                                             },
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'mod',
-                                                switchLayerMode: 1,
-                                            },
-                                        ],
+                                                switchLayerMode: 1
+                                            }
+                                        ]
                                     },
                                     {
                                         id: 1,
@@ -122,22 +122,22 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 53,
+                                                scancode: 53
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 30,
+                                                scancode: 30
                                             },
-                                            null,
-                                        ],
+                                            null
+                                        ]
                                     },
                                     {
                                         id: 2,
                                         pointerRole: 'scroll',
-                                        keyActions: [],
-                                    },
-                                ],
+                                        keyActions: []
+                                    }
+                                ]
                             },
                             {
                                 modules: [
@@ -148,19 +148,19 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'mod',
-                                                switchLayerMode: 1,
+                                                switchLayerMode: 1
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 65,
+                                                scancode: 65
                                             },
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'mod',
-                                                switchLayerMode: 1,
-                                            },
-                                        ],
+                                                switchLayerMode: 1
+                                            }
+                                        ]
                                     },
                                     {
                                         id: 1,
@@ -169,17 +169,17 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 41,
+                                                scancode: 41
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 58,
+                                                scancode: 58
                                             },
-                                            null,
-                                        ],
-                                    },
-                                ],
+                                            null
+                                        ]
+                                    }
+                                ]
                             },
                             {
                                 modules: [
@@ -195,12 +195,12 @@ describe('user-configuration reducer', () => {
                                             null,
                                             {
                                                 keyActionType: 'switchKeymap',
-                                                keymapAbbreviation: 'DVO',
+                                                keymapAbbreviation: 'DVO'
                                             },
-                                            null,
-                                        ],
-                                    },
-                                ],
+                                            null
+                                        ]
+                                    }
+                                ]
                             },
                             {
                                 modules: [
@@ -219,7 +219,7 @@ describe('user-configuration reducer', () => {
                         ]
                     }
                 ],
-                macros: [],
+                macros: []
             });
         });
 
@@ -229,7 +229,7 @@ describe('user-configuration reducer', () => {
             const destinationLayerId = LayerName.fn;
             const switchLayerAction = new SwitchLayerAction({
                 switchLayerMode: SwitchLayerMode.toggle,
-                layer: destinationLayerId,
+                layer: destinationLayerId
             } as any);
 
             const saveKeyAction: KeymapActions.SaveKeyAction = {
@@ -255,8 +255,8 @@ describe('user-configuration reducer', () => {
                         id: 1,
                         initialPointerSpeed: 1,
                         pointerAcceleration: 5,
-                        maxPointerSpeed: 200,
-                    },
+                        maxPointerSpeed: 200
+                    }
                 ],
                 keymaps: [
                     {
@@ -274,19 +274,19 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 36,
+                                                scancode: 36
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 37,
+                                                scancode: 37
                                             },
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'fn',
-                                                switchLayerMode: 1,
-                                            },
-                                        ],
+                                                switchLayerMode: 1
+                                            }
+                                        ]
                                     },
                                     {
                                         id: 1,
@@ -295,22 +295,22 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 53,
+                                                scancode: 53
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 30,
+                                                scancode: 30
                                             },
-                                            null,
-                                        ],
+                                            null
+                                        ]
                                     },
                                     {
                                         id: 2,
                                         pointerRole: 'scroll',
-                                        keyActions: [],
-                                    },
-                                ],
+                                        keyActions: []
+                                    }
+                                ]
                             },
                             {
                                 modules: [
@@ -321,15 +321,15 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 64,
+                                                scancode: 64
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 65,
+                                                scancode: 65
                                             },
-                                            null,
-                                        ],
+                                            null
+                                        ]
                                     },
                                     {
                                         id: 1,
@@ -338,17 +338,17 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 41,
+                                                scancode: 41
                                             },
                                             {
                                                 keyActionType: 'keystroke',
                                                 type: 'basic',
-                                                scancode: 58,
+                                                scancode: 58
                                             },
-                                            null,
-                                        ],
-                                    },
-                                ],
+                                            null
+                                        ]
+                                    }
+                                ]
                             },
                             {
                                 modules: [
@@ -361,9 +361,9 @@ describe('user-configuration reducer', () => {
                                             {
                                                 keyActionType: 'switchLayer',
                                                 layer: 'fn',
-                                                switchLayerMode: 1,
-                                            },
-                                        ],
+                                                switchLayerMode: 1
+                                            }
+                                        ]
                                     },
                                     {
                                         id: 1,
@@ -372,12 +372,12 @@ describe('user-configuration reducer', () => {
                                             null,
                                             {
                                                 keyActionType: 'switchKeymap',
-                                                keymapAbbreviation: 'DVO',
+                                                keymapAbbreviation: 'DVO'
                                             },
-                                            null,
-                                        ],
-                                    },
-                                ],
+                                            null
+                                        ]
+                                    }
+                                ]
                             },
                             {
                                 modules: [
@@ -396,7 +396,7 @@ describe('user-configuration reducer', () => {
                         ]
                     }
                 ],
-                macros: [],
+                macros: []
             });
         });
     });

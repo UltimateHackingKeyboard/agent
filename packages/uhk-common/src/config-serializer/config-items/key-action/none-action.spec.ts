@@ -21,7 +21,7 @@ describe('node-action', () => {
         it('should work', () => {
             const action = new NoneAction();
             expect(action.toJsonObject()).toEqual({
-                keyActionType: keyActionType.NoneAction,
+                keyActionType: keyActionType.NoneAction
             });
         });
     });

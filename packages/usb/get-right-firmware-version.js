@@ -28,13 +28,7 @@ const hardwareConfigMinorVersion = uhk.getUint16(response, 27);
 const hardwareConfigPatchVersion = uhk.getUint16(response, 29);
 
 console.log(`firmwareVersion: ${firmwareMajorVersion}.${firmwareMinorVersion}.${firmwarePatchVersion}`);
-console.log(
-    `deviceProtocolVersion: ${deviceProtocolMajorVersion}.${deviceProtocolMinorVersion}.${deviceProtocolPatchVersion}`,
-);
-console.log(
-    `moduleProtocolVersion: ${moduleProtocolMajorVersion}.${moduleProtocolMinorVersion}.${moduleProtocolPatchVersion}`,
-);
+console.log(`deviceProtocolVersion: ${deviceProtocolMajorVersion}.${deviceProtocolMinorVersion}.${deviceProtocolPatchVersion}`);
+console.log(`moduleProtocolVersion: ${moduleProtocolMajorVersion}.${moduleProtocolMinorVersion}.${moduleProtocolPatchVersion}`);
 console.log(`userConfigVersion: ${userConfigMajorVersion}.${userConfigMinorVersion}.${userConfigPatchVersion}`);
-console.log(
-    `hardwareConfigVersion: ${hardwareConfigMajorVersion}.${hardwareConfigMinorVersion}.${hardwareConfigPatchVersion}`,
-);
+console.log(`hardwareConfigVersion: ${hardwareConfigMajorVersion}.${hardwareConfigMinorVersion}.${hardwareConfigPatchVersion}`);

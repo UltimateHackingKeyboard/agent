@@ -11,7 +11,7 @@ export const ActionTypes = {
     GET_AGENT_CONTRIBUTORS: type(PREFIX + 'Get'),
     FETCH_AGENT_CONTRIBUTORS: type(PREFIX + 'Fetch'),
     AGENT_CONTRIBUTORS_AVAILABLE: type(PREFIX + 'Available'),
-    AGENT_CONTRIBUTORS_NOT_AVAILABLE: type(PREFIX + 'Not available'),
+    AGENT_CONTRIBUTORS_NOT_AVAILABLE: type(PREFIX + 'Not available')
 };
 
 export class GetAgentContributorsAction implements Action {

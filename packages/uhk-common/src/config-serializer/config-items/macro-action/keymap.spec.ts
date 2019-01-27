@@ -160,7 +160,7 @@ describe('keymap', () => {
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
         expect(console.warn).toHaveBeenCalledWith(
             'QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> ' +
-            'will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">'
+                'will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">'
         );
     });
 
@@ -323,8 +323,8 @@ describe('keymap', () => {
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
         expect(console.warn).toHaveBeenCalledWith(
             'QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. ' +
-            '<SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with ' +
-            '<SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">'
+                '<SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with ' +
+                '<SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">'
         );
     });
 });

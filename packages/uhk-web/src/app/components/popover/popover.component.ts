@@ -9,7 +9,7 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    ViewChild,
+    ViewChild
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
@@ -26,7 +26,7 @@ import {
     PlayMacroAction,
     SecondaryRoleAction,
     SwitchKeymapAction,
-    SwitchLayerAction,
+    SwitchLayerAction
 } from 'uhk-common';
 
 import { Tab } from './tab';
@@ -42,7 +42,7 @@ enum TabName {
     Mouse,
     Macro,
     Keymap,
-    None,
+    None
 }
 
 export interface TabHeader {
@@ -86,7 +86,7 @@ export interface TabHeader {
             ]),
             transition('closed => opened', [
                 style({
-                    visibility: 'visible',
+                    visibility: 'visible'
                 }),
                 animate(
                     '200ms ease-out',
@@ -130,33 +130,33 @@ export class PopoverComponent implements OnChanges {
         {
             tabName: TabName.Keypress,
             icon: 'fa-keyboard-o',
-            text: 'Keypress',
+            text: 'Keypress'
         },
         {
             tabName: TabName.Layer,
             icon: 'fa-clone',
-            text: 'Layer',
+            text: 'Layer'
         },
         {
             tabName: TabName.Mouse,
             icon: 'fa-mouse-pointer',
-            text: 'Mouse',
+            text: 'Mouse'
         },
         {
             tabName: TabName.Macro,
             icon: 'fa-play',
-            text: 'Macro',
+            text: 'Macro'
         },
         {
             tabName: TabName.Keymap,
             icon: 'fa-keyboard-o',
-            text: 'Keymap',
+            text: 'Keymap'
         },
         {
             tabName: TabName.None,
             icon: 'fa-ban',
-            text: 'None',
-        },
+            text: 'None'
+        }
     ];
     macroPlaybackSupported$: Observable<boolean>;
 
@@ -231,7 +231,7 @@ export class PopoverComponent implements OnChanges {
                 this.remap.emit({
                     remapOnAllKeymap: this.remapInfo.remapOnAllKeymap,
                     remapOnAllLayer: this.remapInfo.remapOnAllLayer,
-                    action: this.selectedTab.toKeyAction(),
+                    action: this.selectedTab.toKeyAction()
                 });
             } catch (e) {
                 // TODO: show error dialog

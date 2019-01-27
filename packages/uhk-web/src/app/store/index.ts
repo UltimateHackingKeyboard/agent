@@ -38,7 +38,7 @@ export const reducers: ActionReducerMap<AppState> = {
     router: routerReducer,
     appUpdate: fromAppUpdate.reducer,
     device: fromDevice.reducer,
-    contributors: fromContributors.reducer,
+    contributors: fromContributors.reducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = environment.production ? [] : [storeFreeze];
@@ -223,9 +223,9 @@ export const getSideMenuPageState = createSelector(
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
             macros: userConfiguration.macros,
-            restoreUserConfiguration,
+            restoreUserConfiguration
         };
-    },
+    }
 );
 
 export const getRouterState = (state: AppState) => state.router;
@@ -240,5 +240,5 @@ export const layerDoubleTapSupported = createSelector(
     getHardwareModules,
     (hardwareModules: HardwareModules): boolean => {
         return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
-    },
+    }
 );

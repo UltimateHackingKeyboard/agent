@@ -18,7 +18,7 @@ export const ActionTypes = {
     RENAME_USER_CONFIGURATION: type(PREFIX + 'Rename user configuration'),
     SET_USER_CONFIGURATION_VALUE: type(PREFIX + 'Set user configuration value'),
     LOAD_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Load user configuration from file'),
-    APPLY_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Apply user configuration from file'),
+    APPLY_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Apply user configuration from file')
 };
 
 export class LoadUserConfigAction implements Action {

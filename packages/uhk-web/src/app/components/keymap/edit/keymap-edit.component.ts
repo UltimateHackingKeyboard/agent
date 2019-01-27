@@ -55,7 +55,7 @@ export class KeymapEditComponent {
         this.keymap$
             .pipe(
                 combineLatest(exportableJSON$),
-                first(),
+                first()
             )
             .subscribe(latest => {
                 const keymap = latest[0];

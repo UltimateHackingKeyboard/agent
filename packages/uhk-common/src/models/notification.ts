@@ -4,7 +4,7 @@ export enum NotificationType {
     Error = 'error',
     Warning = 'warning',
     Info = 'info',
-    Undoable = 'undoable',
+    Undoable = 'undoable'
 }
 
 export interface Notification {

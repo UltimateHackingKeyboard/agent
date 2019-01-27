@@ -6,7 +6,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 @Component({
     selector: 'g[svg-text-icon-key]',
     templateUrl: './svg-text-icon-key.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgTextIconKeyComponent implements OnChanges {
     @Input() width: number;

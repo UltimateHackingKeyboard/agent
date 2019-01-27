@@ -14,7 +14,7 @@ import {
     getAgentVersionInfo,
     getHardwareModules,
     runningOnNotSupportedWindows,
-    xtermLog,
+    xtermLog
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';

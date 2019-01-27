@@ -19,5 +19,5 @@ export enum Commands {
     ReliableUpdate = 0x12,
     ConfigureI2c = 0xc1,
     ConfigureSpi = 0xc2,
-    ConfigureCan = 0xc3,
+    ConfigureCan = 0xc3
 }

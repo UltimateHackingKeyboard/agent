@@ -58,7 +58,7 @@ export class SudoService {
         const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
 
         const options = {
-            name: 'Setting UHK access rules',
+            name: 'Setting UHK access rules'
         };
         const command = `sh ${scriptPath}`;
         this.logService.debug('[SudoService] Set privilege command: ', command);

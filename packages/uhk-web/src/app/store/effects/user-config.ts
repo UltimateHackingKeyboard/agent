@@ -15,7 +15,7 @@ import {
     LogService,
     NotificationType,
     UhkBuffer,
-    UserConfiguration,
+    UserConfiguration
 } from 'uhk-common';
 
 import {
@@ -25,7 +25,7 @@ import {
     LoadUserConfigSuccessAction,
     LoadUserConfigurationFromFileAction,
     RenameUserConfigurationAction,
-    SaveUserConfigSuccessAction,
+    SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -36,7 +36,7 @@ import {
     DismissUndoNotificationAction,
     LoadHardwareConfigurationSuccessAction,
     ShowNotificationAction,
-    UndoLastAction,
+    UndoLastAction
 } from '../actions/app';
 import { HardwareModulesLoadedAction, ShowSaveToKeyboardButtonAction, HasBackupUserConfigurationAction } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
@@ -221,15 +221,15 @@ export class UserConfigEffects {
 
                     return new ShowNotificationAction({
                         type: NotificationType.Error,
-                        message: 'Invalid configuration specified.',
+                        message: 'Invalid configuration specified.'
                     });
                 } catch (err) {
                     return new ShowNotificationAction({
                         type: NotificationType.Error,
-                        message: 'Invalid configuration specified.',
+                        message: 'Invalid configuration specified.'
                     });
                 }
-            }),
+            })
         );
 
     constructor(

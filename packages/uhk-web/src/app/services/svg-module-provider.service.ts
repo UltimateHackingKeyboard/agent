@@ -17,9 +17,7 @@ export class SvgModuleProviderService {
 
     getSvgSeparator(): SvgSeparator {
         if (!this.separator) {
-            this.separator = convertXmlToSvgSeparator(
-                require('xml-loader!../../devices/uhk60-right/separator.xml').svg,
-            );
+            this.separator = convertXmlToSvgSeparator(require('xml-loader!../../devices/uhk60-right/separator.xml').svg);
         }
 
         return this.separator;

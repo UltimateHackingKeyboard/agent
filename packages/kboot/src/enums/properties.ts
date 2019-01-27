@@ -22,5 +22,5 @@ export enum Properties {
     FlashReadMargin = 0x16,
     QspiInitStatus = 0x17,
     TargetVersion = 0x18,
-    ExternalMemoryAttributes = 0x19,
+    ExternalMemoryAttributes = 0x19
 }

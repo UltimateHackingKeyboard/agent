@@ -9,7 +9,7 @@ export class TestPeripheral implements Peripheral {
         const response = {
             tag: ResponseTags.Generic,
             code: ResponseCodes.Success,
-            raw: new Buffer(0),
+            raw: new Buffer(0)
         };
 
         return Promise.resolve(response);

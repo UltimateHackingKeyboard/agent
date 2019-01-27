@@ -34,7 +34,7 @@ export class MacroEditComponent implements OnDestroy {
                 switchMap((id: string) => {
                     this.macroId = +id;
                     return store.let(getMacro(this.macroId));
-                }),
+                })
             )
             .subscribe((macro: Macro) => {
                 this.macro = macro;

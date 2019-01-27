@@ -14,7 +14,7 @@ export const ActionTypes = {
     TOGGLE_PRE_RELEASE_FLAG: type(PREFIX + 'Toggle pre release update flag'),
     LOAD_AUTO_UPDATE_SETTINGS: type(PREFIX + 'Load auto update settings'),
     LOAD_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Load auto update settings success'),
-    SAVE_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Save auto update settings success'),
+    SAVE_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Save auto update settings success')
 };
 
 export class ToggleCheckForUpdateOnStartupAction implements Action {

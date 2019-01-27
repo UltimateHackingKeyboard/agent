@@ -10,7 +10,7 @@ import {
     ActionTypes,
     LoadAutoUpdateSettingsAction,
     LoadAutoUpdateSettingsSuccessAction,
-    SaveAutoUpdateSettingsSuccessAction,
+    SaveAutoUpdateSettingsSuccessAction
 } from '../actions/auto-update-settings';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -39,7 +39,7 @@ export class AutoUpdateSettingsEffects {
             map(([action, config]) => {
                 this.dataStorageRepository.saveAutoUpdateSettings(config);
                 return new SaveAutoUpdateSettingsSuccessAction();
-            }),
+            })
         );
 
     @Effect() sendNotification$: Observable<Action> = this.actions$
@@ -49,9 +49,9 @@ export class AutoUpdateSettingsEffects {
             map((message: string) => {
                 return new ShowNotificationAction({
                     type: NotificationType.Info,
-                    message,
+                    message
                 });
-            }),
+            })
         );
 
     constructor(

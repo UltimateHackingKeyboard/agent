@@ -22,7 +22,7 @@ export const ActionTypes = {
     SETUP_PERMISSION_ERROR: type(PREFIX + 'Setup permission error'),
     LOAD_APP_START_INFO: type(PREFIX + 'Load app start info'),
     START_KEYPRESS_CAPTURING: type(PREFIX + 'Start keypress capturing'),
-    STOP_KEYPRESS_CAPTURING: type(PREFIX + 'Stop keypress capturing'),
+    STOP_KEYPRESS_CAPTURING: type(PREFIX + 'Stop keypress capturing')
 };
 
 export class AppBootsrappedAction implements Action {

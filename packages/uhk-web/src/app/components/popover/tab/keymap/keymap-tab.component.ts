@@ -8,7 +8,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
     selector: 'keymap-tab',
     templateUrl: './keymap-tab.component.html',
     styleUrls: ['./keymap-tab.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
@@ -28,7 +28,7 @@ export class KeymapTabComponent extends Tab implements OnChanges {
                 (keymap: Keymap): SelectOptionData => {
                     return {
                         id: keymap.abbreviation,
-                        text: keymap.name,
+                        text: keymap.name
                     };
                 }
             );

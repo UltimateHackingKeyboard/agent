@@ -14,10 +14,7 @@ export const backupUserConfiguration = (data: SaveUserConfigurationData): Promis
     return fs.writeJSON(backupFilePath, data.configuration, { spaces: 2 });
 };
 
-export const getBackupUserConfigurationContent = async (
-    logService: LogService,
-    uniqueId: number,
-): Promise<UserConfiguration> => {
+export const getBackupUserConfigurationContent = async (logService: LogService, uniqueId: number): Promise<UserConfiguration> => {
     try {
         const backupFilePath = getBackupUserConfigurationPath(uniqueId);
 

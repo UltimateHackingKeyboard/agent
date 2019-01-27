@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
-    selector: '[cancelable]',
+    selector: '[cancelable]'
 })
 export class CancelableDirective {
     private originalValue: string;

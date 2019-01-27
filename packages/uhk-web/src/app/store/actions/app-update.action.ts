@@ -10,7 +10,7 @@ export const ActionTypes = {
     DO_NOT_UPDATE_APP: type(PREFIX + 'do not update app'),
     UPDATE_DOWNLOADED: type(PREFIX + 'update downloaded'),
     UPDATING: type(PREFIX + 'updating'),
-    UPDATE_ERROR: type(PREFIX + 'error'),
+    UPDATE_ERROR: type(PREFIX + 'error')
 };
 
 export class UpdateAvailableAction implements Action {

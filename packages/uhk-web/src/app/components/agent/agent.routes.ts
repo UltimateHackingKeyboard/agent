@@ -7,14 +7,14 @@ import { HelpPageComponent } from './help-page/help-page.component';
 export const agentRoutes: Routes = [
     {
         path: 'settings',
-        component: SettingsComponent,
+        component: SettingsComponent
     },
     {
         path: 'help',
-        component: HelpPageComponent,
+        component: HelpPageComponent
     },
     {
         path: 'about',
-        component: AboutComponent,
-    },
+        component: AboutComponent
+    }
 ];

@@ -46,7 +46,7 @@ function assertInteger(target: any, key: string, min: number, max: number) {
         get: getter,
         set: setter,
         enumerable: true,
-        configurable: true,
+        configurable: true
     });
 }
 
@@ -71,7 +71,7 @@ export function assertEnum<E>(enumerated: E) {
             get: getter,
             set: setter,
             enumerable: true,
-            configurable: true,
+            configurable: true
         });
     };
 }

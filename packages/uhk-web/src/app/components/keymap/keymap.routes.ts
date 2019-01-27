@@ -8,19 +8,19 @@ export const keymapRoutes: Routes = [
     {
         path: '',
         redirectTo: 'keymap',
-        pathMatch: 'full',
+        pathMatch: 'full'
     },
     {
         path: 'keymap',
         component: KeymapEditComponent,
-        canActivate: [KeymapEditGuard],
+        canActivate: [KeymapEditGuard]
     },
     {
         path: 'keymap/add',
-        component: KeymapAddComponent,
+        component: KeymapAddComponent
     },
     {
         path: 'keymap/:abbr',
-        component: KeymapEditComponent,
-    },
+        component: KeymapEditComponent
+    }
 ];

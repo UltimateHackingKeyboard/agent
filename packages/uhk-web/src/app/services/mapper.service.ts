@@ -127,23 +127,23 @@ export class MapperService {
             {
                 text: 'LShift',
                 value: KeyModifiers.leftShift,
-                checked: false,
+                checked: false
             },
             {
                 text: 'LCtrl',
                 value: KeyModifiers.leftCtrl,
-                checked: false,
+                checked: false
             },
             {
                 text: this.getOsSpecificText('LAlt'),
                 value: KeyModifiers.leftAlt,
-                checked: false,
+                checked: false
             },
             {
                 text: this.getOsSpecificText('LSuper'),
                 value: KeyModifiers.leftGui,
-                checked: false,
-            },
+                checked: false
+            }
         ];
     }
 
@@ -152,23 +152,23 @@ export class MapperService {
             {
                 text: 'RShift',
                 value: KeyModifiers.rightShift,
-                checked: false,
+                checked: false
             },
             {
                 text: 'RCtrl',
                 value: KeyModifiers.rightCtrl,
-                checked: false,
+                checked: false
             },
             {
                 text: this.getOsSpecificText('RAlt'),
                 value: KeyModifiers.rightAlt,
-                checked: false,
+                checked: false
             },
             {
                 text: this.getOsSpecificText('RSuper'),
                 value: KeyModifiers.rightGui,
-                checked: false,
-            },
+                checked: false
+            }
         ];
     }
 

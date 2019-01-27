@@ -24,9 +24,9 @@ import { effects } from '../app/store/effects';
         StoreModule.forRoot(reducers),
         StoreRouterConnectingModule,
         StoreDevtoolsModule.instrument({
-            maxAge: 10,
+            maxAge: 10
         }),
-        EffectsModule.forRoot(effects),
+        EffectsModule.forRoot(effects)
     ],
     providers: [
         { provide: DataStorageRepositoryService, useClass: ElectronDataStorageRepositoryService },
@@ -34,6 +34,6 @@ import { effects } from '../app/store/effects';
         { provide: LogService, useClass: ElectronLogService },
         { provide: ErrorHandler, useClass: ElectronErrorHandlerService }
     ],
-    bootstrap: [MainAppComponent],
+    bootstrap: [MainAppComponent]
 })
 export class UhkRendererModule {}

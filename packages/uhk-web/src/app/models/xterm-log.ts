@@ -5,7 +5,7 @@ export interface XtermLog {
 
 export enum XtermCssClass {
     standard = 'xterm-standard',
-    error = 'xterm-error',
+    error = 'xterm-error'
 }
 
 export interface ElectronLogEntry {

@@ -12,7 +12,7 @@ import {
     deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState,
-    keypressCapturing,
+    keypressCapturing
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 

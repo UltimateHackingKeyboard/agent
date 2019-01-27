@@ -12,5 +12,5 @@ export enum UdevRulesInfo {
     /**
      * Udev rules exist but different than expected on Linux
      */
-    Different,
+    Different
 }

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
     selector: 'udev-rules',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: './udev-rules.component.html',
+    templateUrl: './udev-rules.component.html'
 })
 export class UdevRulesComponent {
     command = `cat <<EOF >/etc/udev/rules.d/50-uhk60.rules

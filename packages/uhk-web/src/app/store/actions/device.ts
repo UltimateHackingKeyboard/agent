@@ -30,7 +30,7 @@ export const ActionTypes = {
     RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS: type(PREFIX + 'Restore configuration from backup success'),
     RECOVERY_DEVICE: type(PREFIX + 'Recovery device'),
     ENABLE_USB_STACK_TEST: type(PREFIX + 'USB stack test'),
-    START_CONNECTION_POLLER: type(PREFIX + 'Start connection poller'),
+    START_CONNECTION_POLLER: type(PREFIX + 'Start connection poller')
 };
 
 export class SetPrivilegeOnLinuxAction implements Action {

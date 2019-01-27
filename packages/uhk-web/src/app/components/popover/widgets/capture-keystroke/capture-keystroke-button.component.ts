@@ -12,7 +12,7 @@ import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../..
     selector: 'capture-keystroke-button',
     templateUrl: './capture-keystroke-button.component.html',
     styleUrls: ['./capture-keystroke-button.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CaptureKeystrokeButtonComponent {
     @Input() isLink = false;
@@ -84,7 +84,7 @@ export class CaptureKeystrokeButtonComponent {
         this.capture.emit({
             code,
             left,
-            right,
+            right
         });
 
         this.reset();

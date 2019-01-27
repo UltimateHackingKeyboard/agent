@@ -7,7 +7,7 @@ import { ProgressButtonState, initProgressButtonState } from '../../store/reduce
     selector: 'progress-button',
     templateUrl: './progress-button.component.html',
     styleUrls: ['./progress-button.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProgressButtonComponent {
     @Input() state: ProgressButtonState = initProgressButtonState;

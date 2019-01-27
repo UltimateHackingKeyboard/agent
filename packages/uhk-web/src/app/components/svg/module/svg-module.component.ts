@@ -13,7 +13,7 @@ import {
     selector: 'g[svg-module]',
     templateUrl: './svg-module.component.html',
     styleUrls: ['./svg-module.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgModuleComponent {
     @Input() coverages: any[];
@@ -34,7 +34,7 @@ export class SvgModuleComponent {
     onKeyClick(keyId: number, event: SvgKeyClickEvent): void {
         this.keyClick.emit({
             ...event,
-            keyId,
+            keyId
         });
     }
 
@@ -42,14 +42,14 @@ export class SvgModuleComponent {
         this.keyHover.emit({
             index,
             event,
-            over,
+            over
         });
     }
 
     onCapture(keyId: number, event: SvgKeyCaptureEvent) {
         this.capture.emit({
             ...event,
-            keyId,
+            keyId
         });
     }
 }

@@ -36,7 +36,7 @@ export class ScrollMouseMacroAction extends MacroAction {
         return {
             macroActionType: macroActionType.ScrollMouseMacroAction,
             x: this.x,
-            y: this.y,
+            y: this.y
         };
     }
 

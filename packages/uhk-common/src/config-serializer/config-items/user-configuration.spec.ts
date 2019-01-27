@@ -28,7 +28,7 @@ describe('user-configuration', () => {
             mouseScrollAcceleratedSpeed: 50,
             moduleConfigurations: [],
             macros: [],
-            keymaps: [],
+            keymaps: []
         });
     });
 
@@ -80,7 +80,7 @@ describe('user-configuration', () => {
             userConfigVersion: 1,
             moduleConfigurations: [],
             macros: [],
-            keymaps: [],
+            keymaps: []
         };
 
         const config = new UserConfiguration();

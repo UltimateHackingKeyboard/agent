@@ -111,42 +111,42 @@ export namespace KeymapActions {
 
     export function loadKeymaps(): Action {
         return {
-            type: KeymapActions.LOAD_KEYMAPS,
+            type: KeymapActions.LOAD_KEYMAPS
         };
     }
 
     export function loadKeymapsSuccess(keymaps: Keymap[]): LoadKeymapSuccessAction {
         return {
             type: KeymapActions.LOAD_KEYMAPS_SUCCESS,
-            payload: keymaps,
+            payload: keymaps
         };
     }
 
     export function addKeymap(item: Keymap): AddKeymapAction {
         return {
             type: KeymapActions.ADD,
-            payload: item,
+            payload: item
         };
     }
 
     export function setDefault(abbr: string): SetDefaultAction {
         return {
             type: KeymapActions.SET_DEFAULT,
-            payload: abbr,
+            payload: abbr
         };
     }
 
     export function removeKeymap(abbr: string): RemoveKeymapAction {
         return {
             type: KeymapActions.REMOVE,
-            payload: abbr,
+            payload: abbr
         };
     }
 
     export function duplicateKeymap(keymap: Keymap): DuplicateKeymapAction {
         return {
             type: KeymapActions.DUPLICATE,
-            payload: keymap,
+            payload: keymap
         };
     }
 
@@ -155,8 +155,8 @@ export namespace KeymapActions {
             type: KeymapActions.EDIT_NAME,
             payload: {
                 abbr: abbr,
-                name: name,
-            },
+                name: name
+            }
         };
     }
 
@@ -166,8 +166,8 @@ export namespace KeymapActions {
             payload: {
                 name,
                 abbr,
-                newAbbr,
-            },
+                newAbbr
+            }
         };
     }
 
@@ -185,15 +185,15 @@ export namespace KeymapActions {
                 layer,
                 module,
                 key,
-                keyAction,
-            },
+                keyAction
+            }
         };
     }
 
     export function checkMacro(macro: Macro): CheckMacroAction {
         return {
             type: KeymapActions.CHECK_MACRO,
-            payload: macro,
+            payload: macro
         };
     }
 }
