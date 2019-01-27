@@ -7,7 +7,7 @@ import { MacroBaseComponent } from '../macro-base.component';
 enum TabName {
     Tap,
     Press,
-    Release
+    Release,
 }
 
 @Component({

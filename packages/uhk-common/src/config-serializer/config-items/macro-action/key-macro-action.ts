@@ -80,7 +80,7 @@ export class KeyMacroAction extends MacroAction {
     toJsonObject(): any {
         const jsObject: JsObjectKeyMacroAction = {
             macroActionType: macroActionType.KeyMacroAction,
-            action: MacroKeySubAction[this.action]
+            action: MacroKeySubAction[this.action],
         };
 
         if (this.hasScancode()) {
@@ -121,7 +121,9 @@ export class KeyMacroAction extends MacroAction {
     }
 
     toString(): string {
-        return `<KeyMacroAction action="${this.action}" scancode="${this._scancode}" modifierMask="${this.modifierMask}">`;
+        return `<KeyMacroAction action="${this.action}" scancode="${this._scancode}" modifierMask="${
+            this.modifierMask
+        }">`;
     }
 
     isModifierActive(modifier: KeyModifiers): boolean {

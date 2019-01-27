@@ -25,7 +25,7 @@ class SvgAttributes {
     selector: 'g[svg-keystroke-key]',
     templateUrl: './svg-keystroke-key.component.html',
     styleUrls: ['./svg-keystroke-key.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgKeystrokeKeyComponent implements OnChanges {
     @Input() height: number;

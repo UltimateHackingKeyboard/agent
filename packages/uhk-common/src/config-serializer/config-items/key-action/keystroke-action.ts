@@ -8,7 +8,7 @@ import { KeystrokeType } from './keystroke-type';
 export enum KeystrokeActionFlag {
     scancode = 1 << 0,
     modifierMask = 1 << 1,
-    secondaryRoleAction = 1 << 2
+    secondaryRoleAction = 1 << 2,
 }
 
 const KEYSTROKE_ACTION_FLAG_LENGTH = 3;
@@ -101,7 +101,7 @@ export class KeystrokeAction extends KeyAction {
 
     toJsonObject(): JsonObjectKeystrokeAction {
         const jsonObject: JsonObjectKeystrokeAction = {
-            keyActionType: keyActionType.KeystrokeAction
+            keyActionType: keyActionType.KeystrokeAction,
         };
 
         if (this.type === KeystrokeType.shortMedia || this.type === KeystrokeType.longMedia) {

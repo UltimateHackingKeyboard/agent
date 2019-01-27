@@ -350,7 +350,9 @@ async function writeConfig(device, configBuffer, isHardwareConfig) {
 
     writeLog('WR: ...');
     while (offset < configSize) {
-        const usbCommand = isHardwareConfig ? uhk.usbCommands.writeHardwareConfig : uhk.usbCommands.writeStagingUserConfig;
+        const usbCommand = isHardwareConfig
+            ? uhk.usbCommands.writeHardwareConfig
+            : uhk.usbCommands.writeStagingUserConfig;
         chunkSizeToRead = Math.min(chunkSize, configSize - offset);
 
         if (chunkSizeToRead === 0) {
@@ -530,7 +532,7 @@ uhk = exports = module.exports = moduleExports = {
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,
     sendLog: sendLog,
-    readLog: readLog
+    readLog: readLog,
 };
 
 function convertBufferToIntArray(buffer) {

@@ -5,13 +5,13 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action';
 export enum LayerName {
     mod,
     fn,
-    mouse
+    mouse,
 }
 
 export enum SwitchLayerMode {
     holdAndDoubleTapToggle = 'holdAndDoubleTapToggle',
     toggle = 'toggle',
-    hold = 'hold'
+    hold = 'hold',
 }
 
 export const mapSwitchLayerModeToNumber = (switchLayerMode: SwitchLayerMode): number => {
@@ -87,7 +87,7 @@ export class SwitchLayerAction extends KeyAction {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
             layer: LayerName[this.layer],
-            switchLayerMode: this.switchLayerMode
+            switchLayerMode: this.switchLayerMode,
         };
     }
 

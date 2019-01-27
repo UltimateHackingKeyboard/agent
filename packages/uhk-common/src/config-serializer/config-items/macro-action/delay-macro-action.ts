@@ -29,7 +29,7 @@ export class DelayMacroAction extends MacroAction {
     toJsonObject(): any {
         return {
             macroActionType: macroActionType.DelayMacroAction,
-            delay: this.delay
+            delay: this.delay,
         };
     }
 

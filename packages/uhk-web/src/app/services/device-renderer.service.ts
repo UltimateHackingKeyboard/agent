@@ -7,7 +7,7 @@ import {
     IpcResponse,
     LogService,
     SaveUserConfigurationData,
-    UpdateFirmwareData
+    UpdateFirmwareData,
 } from 'uhk-common';
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
@@ -15,7 +15,7 @@ import {
     ConnectionStateChangedAction,
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction,
-    UpdateFirmwareReplyAction
+    UpdateFirmwareReplyAction,
 } from '../store/actions/device';
 import { LoadConfigFromDeviceReplyAction } from '../store/actions/user-config';
 
@@ -60,9 +60,12 @@ export class DeviceRendererService {
     }
 
     private registerEvents(): void {
-        this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
-            this.dispachStoreAction(new ConnectionStateChangedAction(arg));
-        });
+        this.ipcRenderer.on(
+            IpcEvents.device.deviceConnectionStateChanged,
+            (event: string, arg: DeviceConnectionState) => {
+                this.dispachStoreAction(new ConnectionStateChangedAction(arg));
+            },
+        );
 
         this.ipcRenderer.on(IpcEvents.device.setPrivilegeOnLinuxReply, (event: string, response: IpcResponse) => {
             this.dispachStoreAction(new SetPrivilegeOnLinuxReplyAction(response));

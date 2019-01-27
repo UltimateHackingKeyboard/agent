@@ -81,7 +81,9 @@ export class UsbPeripheral implements Peripheral {
                 }
 
                 if (firsCommandResponse.code !== 0) {
-                    return reject(new Error(`Non zero write memory response! Response code: ${firsCommandResponse.code}`));
+                    return reject(
+                        new Error(`Non zero write memory response! Response code: ${firsCommandResponse.code}`),
+                    );
                 }
 
                 for (let i = 0; i < option.data.length; i = i + WRITE_DATA_STREAM_PACKAGE_LENGTH) {
@@ -98,7 +100,7 @@ export class UsbPeripheral implements Peripheral {
                         0,
                         slice.length,
                         0, // TODO: What is it?
-                        ...slice
+                        ...slice,
                     ];
 
                     logger('send data %o', convertToHexString(writeData));
@@ -139,7 +141,9 @@ export class UsbPeripheral implements Peripheral {
                 }
 
                 if (firsCommandResponse.code !== 0) {
-                    return reject(new Error(`Non zero read memory response! Response code: ${firsCommandResponse.code}`));
+                    return reject(
+                        new Error(`Non zero read memory response! Response code: ${firsCommandResponse.code}`),
+                    );
                 }
 
                 const byte4Number = firsCommandResponse.raw.slice(12, 15);

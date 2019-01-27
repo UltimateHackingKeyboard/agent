@@ -9,7 +9,7 @@ import {
     Output,
     Renderer2,
     SimpleChanges,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { Keymap } from 'uhk-common';
 
@@ -25,7 +25,7 @@ const DEFAULT_TRASH_TITLE = '<span class="text-nowrap">Delete keymap</span>';
     selector: 'keymap-header',
     templateUrl: './keymap-header.component.html',
     styleUrls: ['./keymap-header.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeymapHeaderComponent implements OnChanges {
     @Input() keymap: Keymap;

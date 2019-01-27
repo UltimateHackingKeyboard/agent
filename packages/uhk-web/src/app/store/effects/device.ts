@@ -26,7 +26,7 @@ import {
     UpdateFirmwareFailedAction,
     UpdateFirmwareReplyAction,
     UpdateFirmwareSuccessAction,
-    UpdateFirmwareWithAction
+    UpdateFirmwareWithAction,
 } from '../actions/device';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
@@ -36,7 +36,7 @@ import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
     LoadConfigFromDeviceAction,
-    LoadResetUserConfigurationAction
+    LoadResetUserConfigurationAction,
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -82,7 +82,7 @@ export class DeviceEffects {
                 }
 
                 return empty();
-            })
+            }),
         );
 
     @Effect({ dispatch: false })
@@ -131,11 +131,11 @@ export class DeviceEffects {
                 return [
                     new ShowNotificationAction({
                         type: NotificationType.Error,
-                        message: response.error.message
+                        message: response.error.message,
                     }),
-                    new SaveToKeyboardSuccessFailed()
+                    new SaveToKeyboardSuccessFailed(),
                 ];
-            })
+            }),
         );
 
     @Effect()
@@ -197,7 +197,7 @@ export class DeviceEffects {
                 this.dataStorageRepository.saveConfig(config);
 
                 return of(new SaveConfigurationAction());
-            })
+            }),
         );
 
     @Effect({ dispatch: false }) updateFirmware$ = this.actions$.ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE).pipe(
@@ -267,7 +267,7 @@ export class DeviceEffects {
     private sendUserConfigToKeyboard(userConfiguration: UserConfiguration, hardwareConfig: HardwareConfiguration): void {
         this.deviceRendererService.saveUserConfiguration({
             uniqueId: hardwareConfig && hardwareConfig.uniqueId,
-            configuration: userConfiguration.toJsonObject()
+            configuration: userConfiguration.toJsonObject(),
         });
     }
 }

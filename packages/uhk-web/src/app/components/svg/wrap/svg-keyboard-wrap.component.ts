@@ -10,7 +10,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
@@ -32,7 +32,7 @@ import {
     SecondaryRoleAction,
     SwitchKeymapAction,
     SwitchLayerAction,
-    SwitchLayerMode
+    SwitchLayerMode,
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -55,7 +55,7 @@ interface NameValuePair {
     selector: 'svg-keyboard-wrap',
     templateUrl: './svg-keyboard-wrap.component.html',
     styleUrls: ['./svg-keyboard-wrap.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
@@ -86,7 +86,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     wrapPosition: ClientRect;
     remapInfo: RemapInfo = {
         remapOnAllKeymap: false,
-        remapOnAllLayer: false
+        remapOnAllLayer: false,
     };
 
     private wrapHost: HTMLElement;
@@ -95,14 +95,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     constructor(private store: Store<AppState>, private mapper: MapperService, private element: ElementRef) {
         this.keyEditConfig = {
             moduleId: undefined,
-            keyId: undefined
+            keyId: undefined,
         };
 
         this.tooltipData = {
             posTop: 0,
             posLeft: 0,
             content: Observable.of([]),
-            show: false
+            show: false,
         };
     }
 
@@ -146,14 +146,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         if (!this.popoverShown && this.popoverEnabled) {
             this.keyEditConfig = {
                 moduleId: event.moduleId,
-                keyId: event.keyId
+                keyId: event.keyId,
             };
             this.selectedKey = { layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId };
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
             this.keyElement = event.keyTarget;
             this.remapInfo = {
                 remapOnAllKeymap: event.shiftPressed,
-                remapOnAllLayer: event.altPressed
+                remapOnAllLayer: event.altPressed,
             };
             this.showPopover(keyActionToEdit);
         }
@@ -161,7 +161,9 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     onKeyHover(event: SvgKeyHoverEvent): void {
         if (this.tooltipEnabled) {
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[
+                event.keyId
+            ];
 
             if (event.over) {
                 this.showTooltip(keyActionToEdit, event.event);
@@ -175,7 +177,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
 
         keystrokeAction.scancode = event.captured.code;
-        keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(event.captured.left, event.captured.right);
+        keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(
+            event.captured.left,
+            event.captured.right,
+        );
 
         this.store.dispatch(
             KeymapActions.saveKey(this.keymap, this.currentLayer, event.moduleId, event.keyId, {
@@ -225,7 +230,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             posLeft: posLeft,
             posTop: posTop,
             content: this.getKeyActionContent(keyAction),
-            show: true
+            show: true,
         };
     }
 
@@ -250,7 +255,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     onDescriptionChanged(description: string): void {
         this.descriptionChanged.emit({
             description,
-            abbr: this.keymap.abbreviation
+            abbr: this.keymap.abbreviation,
         });
     }
 
@@ -260,7 +265,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             const content: NameValuePair[] = [];
             content.push({
                 name: 'Action type',
-                value: 'Keystroke'
+                value: 'Keystroke',
             });
 
             if (keystrokeAction.hasScancode()) {
@@ -273,21 +278,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                 }
                 content.push({
                     name: 'Scancode',
-                    value
+                    value,
                 });
             }
 
             if (keystrokeAction.hasActiveModifier()) {
                 content.push({
                     name: 'Modifiers',
-                    value: keystrokeAction.getModifierList().join(', ')
+                    value: keystrokeAction.getModifierList().join(', '),
                 });
             }
 
             if (keystrokeAction.hasSecondaryRoleAction()) {
                 content.push({
                     name: 'Secondary role',
-                    value: SecondaryRoleAction[keystrokeAction.secondaryRoleAction]
+                    value: SecondaryRoleAction[keystrokeAction.secondaryRoleAction],
                 });
             }
             return Observable.of(content);
@@ -319,35 +324,38 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                         const content: NameValuePair[] = [
                             {
                                 name: 'Action type',
-                                value: 'Play macro'
+                                value: 'Play macro',
                             },
                             {
                                 name: 'Macro name',
-                                value: macroName
-                            }
+                                value: macroName,
+                            },
                         ];
                         return content;
-                    })
+                    }),
                 );
         } else if (keyAction instanceof SwitchKeymapAction) {
             const switchKeymapAction: SwitchKeymapAction = keyAction;
             return this.store
                 .select(appState => appState.userConfiguration.keymaps)
                 .pipe(
-                    map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name),
+                    map(
+                        keymaps =>
+                            keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name,
+                    ),
                     map(keymapName => {
                         const content: NameValuePair[] = [
                             {
                                 name: 'Action type',
-                                value: 'Switch keymap'
+                                value: 'Switch keymap',
                             },
                             {
                                 name: 'Keymap',
-                                value: keymapName
-                            }
+                                value: keymapName,
+                            },
                         ];
                         return content;
-                    })
+                    }),
                 );
         } else if (keyAction instanceof SwitchLayerAction) {
             const switchLayerAction: SwitchLayerAction = keyAction;

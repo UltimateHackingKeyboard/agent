@@ -1,4 +1,13 @@
-import { BootloaderVersion, CommandResponse, Commands, KBoot, Peripheral, Properties, ResponseCodes, ResponseTags } from '../src';
+import {
+    BootloaderVersion,
+    CommandResponse,
+    Commands,
+    KBoot,
+    Peripheral,
+    Properties,
+    ResponseCodes,
+    ResponseTags,
+} from '../src';
 import { TestPeripheral } from './test-peripheral';
 
 describe('kboot', () => {
@@ -61,12 +70,12 @@ describe('kboot', () => {
                 protocolName: 'K',
                 major: 2,
                 minor: 0,
-                bugfix: 0
+                bugfix: 0,
             };
             expect(version).toEqual(expectedVersion);
             expect(testPeripheral.sendCommand).toHaveBeenCalledWith({
                 command: Commands.GetProperty,
-                params: [1, 0, 0, 0, 0, 0, 0, 0]
+                params: [1, 0, 0, 0, 0, 0, 0, 0],
             });
         });
     });

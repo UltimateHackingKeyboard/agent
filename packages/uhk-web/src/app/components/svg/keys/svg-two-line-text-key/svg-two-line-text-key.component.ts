@@ -4,7 +4,7 @@ import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 @Component({
     selector: 'g[svg-two-line-text-key]',
     templateUrl: './svg-two-line-text-key.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgTwoLineTextKeyComponent implements OnChanges {
     @Input() height: number;

@@ -5,7 +5,7 @@ describe('usb encodeCommandOption', () => {
     it('should convert correctly', () => {
         const option: CommandOption = {
             command: Commands.GetProperty,
-            params: [1, 0, 0, 0, 0, 0, 0, 0]
+            params: [1, 0, 0, 0, 0, 0, 0, 0],
         };
 
         const result = encodeCommandOption(option);

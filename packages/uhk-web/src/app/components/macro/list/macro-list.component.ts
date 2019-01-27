@@ -37,13 +37,13 @@ import { MacroItemComponent } from '../item';
                 })
             ),
             transition(':enter', animate('500ms ease-out')),
-            transition(':leave', animate('500ms ease-out'))
-        ])
+            transition(':leave', animate('500ms ease-out')),
+        ]),
     ],
     selector: 'macro-list',
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss'],
-    viewProviders: [DragulaService]
+    viewProviders: [DragulaService],
 })
 export class MacroListComponent {
     @Input() macro: Macro;
@@ -65,7 +65,7 @@ export class MacroListComponent {
         dragulaService.setOptions('macroActions', {
             moves: function(el: any, container: any, handle: any) {
                 return handle.className.includes('action--movable');
-            }
+            },
         });
 
         dragulaService.drag.subscribe((value: any) => {
@@ -77,7 +77,7 @@ export class MacroListComponent {
                 this.reorder.emit({
                     macroId: this.macro.id,
                     oldIndex: this.dragIndex,
-                    newIndex: +value[4].getAttribute('data-index')
+                    newIndex: +value[4].getAttribute('data-index'),
                 });
             }
         });
@@ -97,7 +97,7 @@ export class MacroListComponent {
     addNewAction(macroAction: MacroAction) {
         this.add.emit({
             macroId: this.macro.id,
-            action: macroAction
+            action: macroAction,
         });
 
         this.newMacro = undefined;
@@ -119,7 +119,7 @@ export class MacroListComponent {
         this.edit.emit({
             macroId: this.macro.id,
             index: index,
-            action: macroAction
+            action: macroAction,
         });
 
         this.hideActiveEditor();
@@ -129,7 +129,7 @@ export class MacroListComponent {
         this.delete.emit({
             macroId: this.macro.id,
             index: index,
-            action: macroAction
+            action: macroAction,
         });
 
         this.hideActiveEditor();
@@ -141,7 +141,7 @@ export class MacroListComponent {
 
         this.add.emit({
             macroId: this.macro.id,
-            action: keyMacroAction
+            action: keyMacroAction,
         });
     }
 

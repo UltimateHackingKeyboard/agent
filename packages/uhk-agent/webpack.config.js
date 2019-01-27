@@ -38,8 +38,8 @@ module.exports = {
         new ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)@angular/,
-            webpackHelper.root(__dirname, './src') // location of your src
-        )
+            webpackHelper.root(__dirname, './src'), // location of your src
+        ),
     ],
     node: {
         __dirname: false,

@@ -28,7 +28,7 @@ xdescribe('UHK Integration tests', () => {
                 protocolName: 'K',
                 major: 2,
                 minor: 0,
-                bugfix: 0
+                bugfix: 0,
             };
             const version = await kboot.getBootloaderVersion();
 
@@ -67,7 +67,7 @@ xdescribe('UHK Integration tests', () => {
             for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
                 const dataOption: DataOption = {
                     startAddress,
-                    data
+                    data,
                 };
 
                 await kboot.writeMemory(dataOption);

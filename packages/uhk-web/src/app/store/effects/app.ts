@@ -14,7 +14,7 @@ import {
     OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
     ShowNotificationAction,
-    UndoLastAction
+    UndoLastAction,
 } from '../actions/app';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
@@ -76,7 +76,7 @@ export class ApplicationEffects {
                 } else {
                     window.open(url, '_blank');
                 }
-            })
+            }),
         );
 
     constructor(

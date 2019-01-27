@@ -13,7 +13,7 @@ import { SelectOptionData } from '../../../../models/select-option-data';
     selector: 'macro-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-tab.component.html',
-    styleUrls: ['./macro-tab.component.scss']
+    styleUrls: ['./macro-tab.component.scss'],
 })
 export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestroy {
     @Input() defaultKeyAction: KeyAction;
@@ -35,7 +35,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         this.macroOptions = this.macros.map(function(macro: Macro, index: number): SelectOptionData {
             return {
                 id: index.toString(),
-                text: macro.name
+                text: macro.name,
             };
         });
     }

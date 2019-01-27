@@ -94,9 +94,9 @@ function createWindow() {
         width: 1024,
         height: 768,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
         },
-        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
+        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
     });
     setMenu(win);
     win.maximize();

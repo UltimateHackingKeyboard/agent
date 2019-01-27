@@ -21,5 +21,5 @@ export const effects = [
     MacroEffects,
     AutoUpdateSettingsEffects,
     DeviceEffects,
-    ContributorsEffect
+    ContributorsEffect,
 ];

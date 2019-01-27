@@ -29,10 +29,10 @@ export class AppService extends MainServiceBase {
         const response: AppStartInfo = {
             deviceConnectionState,
             commandLineArgs: {
-                addons: this.options.addons || false
+                addons: this.options.addons || false,
             },
             platform: process.platform as string,
-            osVersion: os.release()
+            osVersion: os.release(),
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);
         return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);

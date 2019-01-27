@@ -10,5 +10,5 @@ export interface ProgressButtonState {
 export const initProgressButtonState = {
     showButton: false,
     text: null,
-    showProgress: false
+    showProgress: false,
 };

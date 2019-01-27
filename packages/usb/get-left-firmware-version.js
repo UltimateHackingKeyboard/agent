@@ -18,5 +18,7 @@ const firmwareMajorVersion = uhk.getUint16(response, 8);
 const firmwareMinorVersion = uhk.getUint16(response, 10);
 const firmwarePatchVersion = uhk.getUint16(response, 12);
 
-console.log(`moduleProtocolVersion: ${moduleProtocolMajorVersion}.${moduleProtocolMinorVersion}.${moduleProtocolPatchVersion}`);
+console.log(
+    `moduleProtocolVersion: ${moduleProtocolMajorVersion}.${moduleProtocolMinorVersion}.${moduleProtocolPatchVersion}`,
+);
 console.log(`firmwareVersion: ${firmwareMajorVersion}.${firmwareMinorVersion}.${firmwarePatchVersion}`);

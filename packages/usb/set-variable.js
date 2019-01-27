@@ -7,7 +7,9 @@ const uhk = require('./uhk');
     const variableId = uhk.variableNameToId[variableName];
 
     if (variableId === undefined) {
-        console.log(`The specified variable does not exist. Specify one of ${Object.keys(uhk.variableNameToId).join(', ')}`);
+        console.log(
+            `The specified variable does not exist. Specify one of ${Object.keys(uhk.variableNameToId).join(', ')}`,
+        );
         process.exit(1);
     }
 

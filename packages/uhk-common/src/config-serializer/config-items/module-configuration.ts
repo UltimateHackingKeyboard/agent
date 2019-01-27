@@ -70,7 +70,7 @@ export class ModuleConfiguration {
             angularShift: this.angularShift,
             modeLayerPointerFunction: this.modLayerPointerFunction,
             fnLayerPointerFunction: this.fnLayerPointerFunction,
-            mouseLayerPointerFunction: this.mouseLayerPointerFunction
+            mouseLayerPointerFunction: this.mouseLayerPointerFunction,
         };
     }
 

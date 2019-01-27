@@ -7,7 +7,7 @@ import { Tab } from '../tab';
     selector: 'mouse-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './mouse-tab.component.html',
-    styleUrls: ['./mouse-tab.component.scss']
+    styleUrls: ['./mouse-tab.component.scss'],
 })
 export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
