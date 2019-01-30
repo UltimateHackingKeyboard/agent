@@ -18,6 +18,7 @@ import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
 import * as isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
+import { loadWindowState, saveWindowState } from './util/window';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean},
@@ -88,18 +89,28 @@ function createWindow() {
 
     logger.info(`[Electron Main] packagesDir: ${packagesDir}`);
 
+    const loadedWindowState = loadWindowState();
+
     // Create the browser window.
     win = new BrowserWindow({
         title: 'UHK Agent',
-        width: 1024,
-        height: 768,
+        x: loadedWindowState.x,
+        y: loadedWindowState.y,
+        width: loadedWindowState.width,
+        height: loadedWindowState.height,
         webPreferences: {
             nodeIntegration: true
         },
         icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
     });
+
+    if (loadedWindowState.isFullScreen) {
+        win.setFullScreen(true);
+    } else if (loadedWindowState.isMaximized) {
+        win.maximize();
+    }
+
     setMenu(win);
-    win.maximize();
     uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
     uhkOperations = new UhkOperations(logger, uhkHidDeviceService, packagesDir);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);
@@ -140,6 +151,10 @@ function createWindow() {
     win.webContents.on('crashed', (event: any) => {
         logger.error(event);
     });
+
+    win.on('close', () => saveWindowState(win));
+    win.on('resize', () => saveWindowState(win));
+    win.on('move', () => saveWindowState(win));
 }
 
 // This method will be called when Electron has finished
