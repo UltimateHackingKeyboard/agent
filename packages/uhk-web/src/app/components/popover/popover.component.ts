@@ -191,7 +191,6 @@ export class PopoverComponent implements OnChanges {
                 const allowOnlyLayerTab = tab.tabName === TabName.Layer && this.currentLayer !== 0;
 
                 tabHeader.disabled = allowOnlyLayerTab && tabHeader.tabName !== TabName.Layer;
-                console.log(tabHeader);
             }
         }
 
