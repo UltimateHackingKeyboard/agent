@@ -7,7 +7,7 @@ import { first, map, tap } from 'rxjs/operators';
 import { LogService, NotificationType } from 'uhk-common';
 
 import { ActionTypes, UpdateErrorAction } from '../actions/app-update.action';
-import { ActionTypes as AutoUpdateActionTypes } from '../actions/auto-update-settings';
+import { ActionTypes as AutoUpdateActionTypes, CheckForUpdateNowAction } from '../actions/auto-update-settings';
 import { ShowNotificationAction } from '../actions/app';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 
@@ -23,12 +23,13 @@ export class AppUpdateEffect {
             })
         );
 
-    @Effect({ dispatch: false }) checkForUpdate$: Observable<Action> = this.actions$
-        .ofType(AutoUpdateActionTypes.CHECK_FOR_UPDATE_NOW)
+    @Effect({ dispatch: false }) checkForUpdate$ = this.actions$
+        .ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CHECK_FOR_UPDATE_NOW)
         .pipe(
-            tap(() => {
+            map(action => action.payload),
+            tap((allowPrerelease: boolean) => {
                 this.logService.debug('[AppUpdateEffect] call checkForUpdate');
-                this.appUpdateRendererService.checkForUpdate();
+                this.appUpdateRendererService.checkForUpdate(allowPrerelease);
             })
         );
 

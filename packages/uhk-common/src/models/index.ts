@@ -1,3 +1,4 @@
+export * from './auto-update-settings';
 export * from './command-line-args';
 export * from './notification';
 export * from './ipc-response';

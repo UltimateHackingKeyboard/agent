@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { type } from 'uhk-common';
+import { UpdateInfo } from '../../models/update-info';
 
 const PREFIX = '[app-update] ';
 
@@ -27,6 +28,9 @@ export class DoNotUpdateAppAction implements Action {
 
 export class UpdateDownloadedAction implements Action {
     type = ActionTypes.UPDATE_DOWNLOADED;
+
+    constructor(public payload: UpdateInfo) {
+    }
 }
 
 export class UpdatingAction implements Action {

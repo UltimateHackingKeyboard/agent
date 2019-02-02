@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { type } from 'uhk-common';
-import { AutoUpdateSettings } from '../../models/auto-update-settings';
+import { AutoUpdateSettings, type } from 'uhk-common';
 
 const PREFIX = '[app-update-config] ';
 
@@ -26,6 +25,9 @@ export class ToggleCheckForUpdateOnStartupAction implements Action {
 
 export class CheckForUpdateNowAction implements Action {
     type = ActionTypes.CHECK_FOR_UPDATE_NOW;
+
+    constructor(public payload?: boolean) {
+    }
 }
 
 export class CheckForUpdateSuccessAction implements Action {

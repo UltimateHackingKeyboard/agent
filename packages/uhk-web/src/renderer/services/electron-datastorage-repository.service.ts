@@ -1,8 +1,7 @@
 import * as storage from 'electron-settings';
 
-import { UserConfiguration } from 'uhk-common';
+import { AutoUpdateSettings, UserConfiguration } from 'uhk-common';
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
-import { AutoUpdateSettings } from '../../app/models/auto-update-settings';
 
 export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
     static getValue(key: string): any {

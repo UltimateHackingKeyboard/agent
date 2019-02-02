@@ -64,6 +64,7 @@ export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindow
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
+export const getUpdateInfo = createSelector(appUpdateState, fromAppUpdate.getUpdateInfo);
 
 export const appUpdateSettingsState = (state: AppState) => state.autoUpdateSettings;
 export const getAutoUpdateSettings = createSelector(appUpdateSettingsState, autoUpdateSettings.getUpdateSettings);

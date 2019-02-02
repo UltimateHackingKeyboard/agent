@@ -12,9 +12,11 @@ import {
     deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState,
-    keypressCapturing
+    keypressCapturing,
+    getUpdateInfo
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
+import { UpdateInfo } from './models/update-info';
 
 @Component({
     selector: 'main-app',
@@ -32,11 +34,22 @@ import { ProgressButtonState } from './store/reducers/progress-button-state';
                     style({transform: 'translateY(0)'}),
                     animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
                 ])
+            ]),
+        trigger('updateAvailable', [
+            transition(':enter', [
+                style({transform: 'translateY(-45px)'}),
+                animate('500ms ease-out', style({transform: 'translateY(0)'}))
+            ]),
+            transition(':leave', [
+                style({transform: 'translateY(0)'}),
+                animate('500ms ease-out', style({transform: 'translateY(-45px)'}))
             ])
+        ])
     ]
 })
 export class MainAppComponent implements OnDestroy {
-    showUpdateAvailable$: Observable<boolean>;
+    showUpdateAvailable: boolean;
+    updateInfo$: Observable<UpdateInfo>;
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
@@ -44,9 +57,12 @@ export class MainAppComponent implements OnDestroy {
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
+    private showUpdateAvailableSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
-        this.showUpdateAvailable$ = store.select(getShowAppUpdateAvailable);
+        this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
+            .subscribe(data => this.showUpdateAvailable = data);
+        this.updateInfo$ = store.select(getUpdateInfo);
         this.deviceConfigurationLoaded$ = store.select(deviceConfigurationLoaded);
         this.runningInElectron$ = store.select(runningInElectron);
         this.saveToKeyboardStateSubscription = store.select(saveToKeyboardState)
@@ -58,6 +74,7 @@ export class MainAppComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.saveToKeyboardStateSubscription.unsubscribe();
         this.keypressCapturingSubscription.unsubscribe();
+        this.showUpdateAvailableSubscription.unsubscribe();
     }
 
     @HostListener('document:keydown', ['$event'])

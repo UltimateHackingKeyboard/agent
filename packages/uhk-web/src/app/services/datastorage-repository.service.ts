@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserConfiguration } from 'uhk-common';
-
-import { AutoUpdateSettings } from '../models/auto-update-settings';
+import { AutoUpdateSettings, UserConfiguration } from 'uhk-common';
 
 @Injectable()
 export class DataStorageRepositoryService {
