@@ -1,5 +1,6 @@
-import { Actions, ActionTypes, UpdateDownloadedAction } from '../actions/app-update.action';
+import * as AppUpdate from '../actions/app-update.action';
 import { UpdateInfo } from '../../models/update-info';
+import { UpdateDownloadedAction } from '../actions/app-update.action';
 
 export interface State {
     updateAvailable: boolean;
@@ -18,22 +19,22 @@ export const initialState: State = {
     }
 };
 
-export function reducer(state = initialState, action: Actions) {
+export function reducer(state = initialState, action: AppUpdate.Actions) {
     switch (action.type) {
-        case ActionTypes.UPDATE_AVAILABLE:
+        case AppUpdate.ActionTypes.UpdateAvailable:
             return {
                 ...state,
                 updateAvailable: true
             };
 
-        case ActionTypes.UPDATE_DOWNLOADED:
+        case AppUpdate.ActionTypes.UpdateDownloaded:
             return {
                 ...state,
                 updateDownloaded: true,
                 updateInfo: (action as UpdateDownloadedAction).payload
             };
 
-        case ActionTypes.DO_NOT_UPDATE_APP:
+        case AppUpdate.ActionTypes.DoNotUpdateApp:
             return {
                 ...state,
                 doNotUpdateApp: true

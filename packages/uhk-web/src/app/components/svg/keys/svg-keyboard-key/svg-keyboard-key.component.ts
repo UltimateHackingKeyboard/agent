@@ -26,8 +26,7 @@ import {
 import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';
 
-import { AppState } from '../../../../store';
-import { getMacros } from '../../../../store/reducers/user-configuration';
+import { AppState, getMacros } from '../../../../store';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
@@ -114,7 +113,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private element: ElementRef,
         private captureService: CaptureService
     ) {
-        this.subscription = store.let(getMacros())
+        this.subscription = store.select(getMacros)
             .subscribe((macros: Macro[]) => this.macros = macros);
 
         this.reset();

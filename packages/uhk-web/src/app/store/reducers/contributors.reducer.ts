@@ -1,5 +1,4 @@
-import { Actions, ActionTypes } from '../actions/contributors.action';
-import { AgentContributorsAvailableAction, AgentContributorsNotAvailableAction } from '../actions/contributors.action';
+import * as Contributors from '../actions/contributors.action';
 import { UHKContributor } from '../../models/uhk-contributor';
 
 export interface State {
@@ -14,33 +13,33 @@ export const initialState: State = {
     error: null
 };
 
-export function reducer(state = initialState, action: Actions) {
+export function reducer(state = initialState, action: Contributors.Actions) {
     switch (action.type) {
-        case ActionTypes.GET_AGENT_CONTRIBUTORS: {
+        case Contributors.ActionTypes.GetAgentContributors: {
             return {
                 ...state
              };
         }
 
-        case ActionTypes.FETCH_AGENT_CONTRIBUTORS: {
+        case Contributors.ActionTypes.FetchAgentContributors: {
             return {
                 ...state,
                 isLoading: true
              };
         }
 
-        case ActionTypes.AGENT_CONTRIBUTORS_AVAILABLE: {
+        case Contributors.ActionTypes.AgentContributorsAvailable: {
             return {
                 ...state,
-                contributors: (<AgentContributorsAvailableAction>action).payload,
+                contributors: (<Contributors.AgentContributorsAvailableAction>action).payload,
                 isLoading: false
              };
         }
 
-        case ActionTypes.AGENT_CONTRIBUTORS_NOT_AVAILABLE: {
+        case Contributors.ActionTypes.AgentContributorsNotAvailable: {
             return {
                 ...state,
-                error: (<AgentContributorsNotAvailableAction>action).payload,
+                error: (<Contributors.AgentContributorsNotAvailableAction>action).payload,
                 isLoading: false
              };
         }

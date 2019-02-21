@@ -36,8 +36,8 @@ import {
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
-import { AppState } from '../../../store';
-import { KeymapActions } from '../../../store/actions';
+import { AppState, getKeymaps, getMacros } from '../../../store';
+import { SaveKeyAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
@@ -71,7 +71,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
-    @ViewChild(PopoverComponent, {read: ElementRef}) popover: ElementRef;
+    @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
 
     popoverShown: boolean;
     keyEditConfig: { moduleId: number, keyId: number };
@@ -185,27 +185,29 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(event.captured.left, event.captured.right);
 
         this.store.dispatch(
-            KeymapActions.saveKey(
-                this.keymap,
-                this.currentLayer,
-                event.moduleId,
-                event.keyId,
-                {
+            new SaveKeyAction({
+                keymap: this.keymap,
+                layer: this.currentLayer,
+                module: event.moduleId,
+                key: event.keyId,
+                keyAction: {
                     remapOnAllKeymap: event.shiftPressed,
                     remapOnAllLayer: event.altPressed,
                     action: keystrokeAction
-                })
+                }
+            })
         );
     }
 
     onRemap(keyAction: KeyActionRemap): void {
         this.store.dispatch(
-            KeymapActions.saveKey(
-                this.keymap,
-                this.currentLayer,
-                this.keyEditConfig.moduleId,
-                this.keyEditConfig.keyId,
-                keyAction)
+            new SaveKeyAction({
+                keymap: this.keymap,
+                layer: this.currentLayer,
+                module: this.keyEditConfig.moduleId,
+                key: this.keyEditConfig.keyId,
+                keyAction
+            })
         );
         this.hidePopover();
     }
@@ -318,7 +320,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         } else if (keyAction instanceof PlayMacroAction) {
             const playMacroAction: PlayMacroAction = keyAction;
             return this.store
-                .select(appState => appState.userConfiguration.macros)
+                .select(getMacros)
                 .pipe(
                     map(macroState => macroState.find(macro => {
                         return macro.id === playMacroAction.macroId;
@@ -340,7 +342,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         } else if (keyAction instanceof SwitchKeymapAction) {
             const switchKeymapAction: SwitchKeymapAction = keyAction;
             return this.store
-                .select(appState => appState.userConfiguration.keymaps)
+                .select(getKeymaps)
                 .pipe(
                     map(keymaps => keymaps.find(keymap => keymap.abbreviation === switchKeymapAction.keymapAbbreviation).name),
                     map(keymapName => {

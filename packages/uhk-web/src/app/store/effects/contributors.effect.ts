@@ -23,7 +23,7 @@ import {
 @Injectable()
 export class ContributorsEffect {
     @Effect() getContributors$: Observable<Action> = this.actions$
-        .ofType<GetAgentContributorsAction>(ActionTypes.GET_AGENT_CONTRIBUTORS)
+        .ofType<GetAgentContributorsAction>(ActionTypes.GetAgentContributors)
         .pipe(
             withLatestFrom(this.store.select(contributors)),
             map(([action, state]) => {
@@ -35,7 +35,7 @@ export class ContributorsEffect {
         );
 
     @Effect() fetchContributors$: Observable<Action> = this.actions$
-        .ofType<FetchAgentContributorsAction>(ActionTypes.FETCH_AGENT_CONTRIBUTORS)
+        .ofType<FetchAgentContributorsAction>(ActionTypes.FetchAgentContributors)
         .pipe(
             mergeMap(() => this.http.get<UHKContributor[]>(Constants.AGENT_CONTRIBUTORS_GITHUB_API_URL)),
             switchMap((response: UHKContributor[]) => {

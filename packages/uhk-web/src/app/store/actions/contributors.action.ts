@@ -1,35 +1,30 @@
 import { Action } from '@ngrx/store';
 
-import { type } from 'uhk-common';
-
 import { UHKContributor } from '../../models/uhk-contributor';
 
-const PREFIX = '[contributors] ';
-
-// tslint:disable-next-line:variable-name
-export const ActionTypes = {
-    GET_AGENT_CONTRIBUTORS: type(PREFIX + 'Get'),
-    FETCH_AGENT_CONTRIBUTORS: type(PREFIX + 'Fetch'),
-    AGENT_CONTRIBUTORS_AVAILABLE: type(PREFIX + 'Available'),
-    AGENT_CONTRIBUTORS_NOT_AVAILABLE: type(PREFIX + 'Not available')
-};
+export enum ActionTypes {
+    GetAgentContributors = '[contributors] Get',
+    FetchAgentContributors = '[contributors] Fetch',
+    AgentContributorsAvailable = '[contributors] Available',
+    AgentContributorsNotAvailable = '[contributors] Not available'
+}
 
 export class GetAgentContributorsAction implements Action {
-    type = ActionTypes.GET_AGENT_CONTRIBUTORS;
+    type = ActionTypes.GetAgentContributors;
 }
 export class FetchAgentContributorsAction implements Action {
-    type = ActionTypes.FETCH_AGENT_CONTRIBUTORS;
+    type = ActionTypes.FetchAgentContributors;
 }
 
 export class AgentContributorsAvailableAction implements Action {
-    type = ActionTypes.AGENT_CONTRIBUTORS_AVAILABLE;
+    type = ActionTypes.AgentContributorsAvailable;
 
     constructor(public payload: UHKContributor[]) {
     }
 }
 
 export class AgentContributorsNotAvailableAction implements Action {
-    type = ActionTypes.AGENT_CONTRIBUTORS_NOT_AVAILABLE;
+    type = ActionTypes.AgentContributorsNotAvailable;
 
     constructor(public payload: Error) {
         console.error(payload);

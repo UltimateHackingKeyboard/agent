@@ -5,8 +5,7 @@ import { KeyAction, Macro, PlayMacroAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 
-import { AppState } from '../../../../store';
-import { getMacros } from '../../../../store/reducers/user-configuration';
+import { AppState, getMacros } from '../../../../store';
 import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
@@ -26,7 +25,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
 
     constructor(store: Store<AppState>) {
         super();
-        this.subscription = store.let(getMacros())
+        this.subscription = store.select(getMacros)
             .subscribe((macros: Macro[]) => this.macros = macros);
         this.macroOptions = [];
         this.selectedMacroIndex = 0;

@@ -1,5 +1,4 @@
-import { createSelector } from 'reselect';
-import { ActionReducerMap, MetaReducer } from '@ngrx/store';
+import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { HardwareModules, Keymap, UserConfiguration } from 'uhk-common';
@@ -20,7 +19,7 @@ import { isVersionGte } from '../util';
 
 // State interface for the application
 export interface AppState {
-    userConfiguration: UserConfiguration;
+    userConfiguration: fromUserConfig.State;
     presetKeymaps: Keymap[];
     autoUpdateSettings: autoUpdateSettings.State;
     app: fromApp.State;
@@ -45,10 +44,18 @@ export const metaReducers: MetaReducer<AppState>[] = environment.production
     ? []
     : [storeFreeze];
 
-export const getUserConfiguration = (state: AppState) => state.userConfiguration;
+export const userConfigState = (state: AppState) => state.userConfiguration;
+
+export const getUserConfiguration = createSelector(userConfigState, fromUserConfig.getUserConfiguration);
+export const getKeymaps = createSelector(userConfigState, fromUserConfig.getKeymaps);
+export const getDefaultKeymap = createSelector(userConfigState, fromUserConfig.getDefaultKeymap);
+export const getSelectedKeymap = createSelector(userConfigState, fromUserConfig.getSelectedKeymap);
+export const getMacros = createSelector(userConfigState, fromUserConfig.getMacros);
+export const getSelectedMacro = createSelector(userConfigState, fromUserConfig.getSelectedMacro);
+export const isKeymapDeletable = createSelector(userConfigState, fromUserConfig.isKeymapDeletable);
+export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro);
 
 export const appState = (state: AppState) => state.app;
-
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);

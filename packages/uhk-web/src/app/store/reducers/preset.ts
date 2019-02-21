@@ -1,13 +1,13 @@
 import { Keymap } from 'uhk-common';
 
-import { KeymapAction, KeymapActions } from '../actions';
+import * as Keymaps from '../actions/keymap';
 
 export const initialState: Keymap[] = [];
 
-export function reducer(state = initialState, action: KeymapAction): Keymap[] {
+export function reducer(state = initialState, action: Keymaps.Actions): Keymap[] {
     switch (action.type) {
-        case KeymapActions.LOAD_KEYMAPS_SUCCESS: {
-            return (action as KeymapActions.LoadKeymapSuccessAction).payload ;
+        case Keymaps.ActionTypes.LoadKeymapsSuccess: {
+            return (action as Keymaps.LoadKeymapSuccessAction).payload ;
         }
 
         default:

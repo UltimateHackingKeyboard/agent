@@ -15,7 +15,7 @@ import { AppUpdateRendererService } from '../../services/app-update-renderer.ser
 export class AppUpdateEffect {
     @Effect({ dispatch: false })
     appStart$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.UPDATE_APP)
+        .ofType(ActionTypes.UpdateApp)
         .pipe(
             first(),
             tap(() => {
@@ -24,7 +24,7 @@ export class AppUpdateEffect {
         );
 
     @Effect({ dispatch: false }) checkForUpdate$ = this.actions$
-        .ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CHECK_FOR_UPDATE_NOW)
+        .ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow)
         .pipe(
             map(action => action.payload),
             tap((allowPrerelease: boolean) => {
@@ -34,7 +34,7 @@ export class AppUpdateEffect {
         );
 
     @Effect() handleError$: Observable<Action> = this.actions$
-        .ofType<UpdateErrorAction>(ActionTypes.UPDATE_ERROR)
+        .ofType<UpdateErrorAction>(ActionTypes.UpdateError)
         .pipe(
             map(action => action.payload),
             map((message: string) => {
