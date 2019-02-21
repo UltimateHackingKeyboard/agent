@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash-es/cloneDeep';
+import { cloneDeep } from 'lodash';
 
 const defaultUserConfig = {
     userConfigMajorVersion: 3,
