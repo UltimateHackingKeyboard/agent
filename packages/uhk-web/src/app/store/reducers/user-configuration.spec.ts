@@ -10,7 +10,7 @@ import {
 } from 'uhk-common';
 
 import { getDefaultUserConfig } from '../../../../test/user-config-helper';
-import { KeymapActions } from '../actions';
+import * as Keymaps from '../actions/keymap';
 
 describe('user-configuration reducer', () => {
     it('should be initiate with default state', () => {
@@ -21,10 +21,10 @@ describe('user-configuration reducer', () => {
     describe('SAVE_KEY', () => {
         it('should process KeyStrokeAction', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
-            const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
-            const keystrokeAction = new KeystrokeAction({_scancode: 100, type: KeystrokeType.basic} as any);
-            const saveKeyAction: KeymapActions.SaveKeyAction = {
-                type: KeymapActions.SAVE_KEY,
+            const state = { userConfiguration: new UserConfiguration().fromJsonObject(getDefaultUserConfig()) };
+            const keystrokeAction = new KeystrokeAction({ _scancode: 100, type: KeystrokeType.basic } as any);
+            const saveKeyAction: Keymaps.SaveKeyAction = {
+                type: Keymaps.ActionTypes.SaveKey,
                 payload: {
                     keymap: new Keymap(defaultUserConfig.keymaps[0]),
                     layer: 0,
@@ -37,7 +37,7 @@ describe('user-configuration reducer', () => {
                     }
                 }
             };
-            const result = reducer(state, saveKeyAction);
+            const result = reducer(state, saveKeyAction).userConfiguration;
             const expectedKeyAction = <KeystrokeAction>result.keymaps[0].layers[0].modules[0].keyActions[0];
             expect(expectedKeyAction).toEqual(keystrokeAction);
             expect(result).not.toBe(defaultUserConfig);
@@ -52,15 +52,15 @@ describe('user-configuration reducer', () => {
 
         it('should copy the SwitchLayerAction to the destination layer', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
-            const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
+            const state = { userConfiguration: new UserConfiguration().fromJsonObject(getDefaultUserConfig()) };
             const destinationLayerId = LayerName.mod;
             const switchLayerAction = new SwitchLayerAction({
                 switchLayerMode: SwitchLayerMode.toggle,
                 layer: destinationLayerId
             } as any);
 
-            const saveKeyAction: KeymapActions.SaveKeyAction = {
-                type: KeymapActions.SAVE_KEY,
+            const saveKeyAction: Keymaps.SaveKeyAction = {
+                type: Keymaps.ActionTypes.SaveKey,
                 payload: {
                     keymap: new Keymap(defaultUserConfig.keymaps[0]),
                     layer: 0,
@@ -74,7 +74,7 @@ describe('user-configuration reducer', () => {
 
                 }
             };
-            const result = reducer(state, saveKeyAction);
+            const result = reducer(state, saveKeyAction).userConfiguration;
             expect(result).not.toBe(defaultUserConfig);
             expect(result.toJsonObject()).toEqual({
                 userConfigVersion: 4,
@@ -238,15 +238,15 @@ describe('user-configuration reducer', () => {
 
         it('should copy the SwitchLayerAction to the destination layer and clear the modified', () => {
             const defaultUserConfig = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
-            const state = new UserConfiguration().fromJsonObject(getDefaultUserConfig());
+            const state = { userConfiguration: new UserConfiguration().fromJsonObject(getDefaultUserConfig()) };
             const destinationLayerId = LayerName.fn;
             const switchLayerAction = new SwitchLayerAction({
                 switchLayerMode: SwitchLayerMode.toggle,
                 layer: destinationLayerId
             } as any);
 
-            const saveKeyAction: KeymapActions.SaveKeyAction = {
-                type: KeymapActions.SAVE_KEY,
+            const saveKeyAction: Keymaps.SaveKeyAction = {
+                type: Keymaps.ActionTypes.SaveKey,
                 payload: {
                     keymap: new Keymap(defaultUserConfig.keymaps[0]),
                     layer: 0,
@@ -260,7 +260,7 @@ describe('user-configuration reducer', () => {
 
                 }
             };
-            const result = reducer(state, saveKeyAction);
+            const result = reducer(state, saveKeyAction).userConfiguration;
             expect(result).not.toBe(defaultUserConfig);
             expect(result.toJsonObject()).toEqual({
                 userConfigVersion: 4,

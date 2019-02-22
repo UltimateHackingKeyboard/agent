@@ -1,9 +1,3 @@
-import { Action } from '@ngrx/store';
-
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { map } from 'rxjs/operators';
-
 import {
     KeyAction,
     KeyActionHelper,
@@ -17,102 +11,148 @@ import {
     SwitchLayerAction,
     UserConfiguration
 } from 'uhk-common';
-import { KeymapActions, MacroActions } from '../actions';
-import { AppState } from '../index';
-import { ActionTypes } from '../actions/user-config';
+import * as KeymapActions from '../actions/keymap';
+import * as MacroActions from '../actions/macro';
+import * as UserConfig from '../actions/user-config';
 import { isValidName } from '../../util';
 
-export const initialState: UserConfiguration = new UserConfiguration();
+export interface State {
+    userConfiguration: UserConfiguration;
+    selectedKeymapAbbr?: string;
+    selectedMacroId?: number;
+}
 
-export function reducer(state = initialState, action: Action & { payload?: any }): UserConfiguration {
-    const changedUserConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state);
+export const initialState: State = {
+    userConfiguration: new UserConfiguration()
+};
 
+export function reducer(
+    state = initialState,
+    action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions
+): State {
     switch (action.type) {
-        case ActionTypes.APPLY_USER_CONFIGURATION_FROM_FILE:
-        case ActionTypes.LOAD_RESET_USER_CONFIGURATION:
-        case ActionTypes.LOAD_USER_CONFIG_SUCCESS: {
-            Object.assign(changedUserConfiguration, action.payload);
-            changedUserConfiguration.keymaps = [...changedUserConfiguration.keymaps];
-            changedUserConfiguration.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name));
-            changedUserConfiguration.macros = [...changedUserConfiguration.macros];
-            changedUserConfiguration.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name));
-            return changedUserConfiguration;
+        case UserConfig.ActionTypes.ApplyUserConfigurationFromFile:
+        case UserConfig.ActionTypes.LoadResetUserConfiguration:
+        case UserConfig.ActionTypes.LoadUserConfigSuccess: {
+            const userConfig = (action as UserConfig.LoadUserConfigSuccessAction).payload;
+
+            const userConfiguration = Object.assign(new UserConfiguration(), {
+                ...state.userConfiguration,
+                ...userConfig,
+                keymaps: userConfig.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name)),
+                macros: userConfig.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name))
+            });
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
 
-        case KeymapActions.ADD:
-        case KeymapActions.DUPLICATE: {
-            const newKeymap: Keymap = new Keymap(action.payload);
-            newKeymap.abbreviation = generateAbbr(state.keymaps, newKeymap.abbreviation);
-            newKeymap.name = generateName(state.keymaps, newKeymap.name);
-            newKeymap.isDefault = (state.keymaps.length === 0);
+        case KeymapActions.ActionTypes.Add:
+        case KeymapActions.ActionTypes.Duplicate: {
+            const newKeymap: Keymap = new Keymap((action as KeymapActions.AddKeymapAction).payload);
+            newKeymap.abbreviation = generateAbbr(state.userConfiguration.keymaps, newKeymap.abbreviation);
+            newKeymap.name = generateName(state.userConfiguration.keymaps, newKeymap.name);
+            newKeymap.isDefault = (state.userConfiguration.keymaps.length === 0);
 
-            changedUserConfiguration.keymaps = insertItemInNameOrder(state.keymaps, newKeymap);
-            break;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = insertItemInNameOrder(state.userConfiguration.keymaps, newKeymap);
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
-        case KeymapActions.EDIT_NAME: {
-            if (!isValidName(action.payload.name)) {
+
+        case KeymapActions.ActionTypes.EditName: {
+            const payload = (action as KeymapActions.EditKeymapNameAction).payload;
+
+            if (!isValidName(payload.name)) {
                 break;
             }
 
-            const name: string = action.payload.name.trim();
+            const name: string = payload.name.trim();
             let keymapToRename: Keymap = null;
 
-            const duplicate = state.keymaps.some((keymap: Keymap) => {
-                if (keymap.abbreviation === action.payload.abbr) {
+            const duplicate = state.userConfiguration.keymaps.some((keymap: Keymap) => {
+                if (keymap.abbreviation === payload.abbr) {
                     keymapToRename = keymap;
                 }
 
-                return keymap.name === name && keymap.abbreviation !== action.payload.abbr;
+                return keymap.name === name && keymap.abbreviation !== payload.abbr;
             });
 
             if (duplicate) {
                 break;
             }
 
-            const newKeymap = Object.assign(new Keymap(), keymapToRename, {name});
+            const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
 
-            changedUserConfiguration.keymaps = insertItemInNameOrder(
-                state.keymaps,
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = insertItemInNameOrder(
+                state.userConfiguration.keymaps,
                 newKeymap,
                 keymap => keymap.abbreviation !== newKeymap.abbreviation
             );
-            break;
-        }
-        case KeymapActions.EDIT_ABBR: {
-            const abbr: string = action.payload.newAbbr.toUpperCase();
 
-            const duplicate = state.keymaps.some((keymap: Keymap) => {
-                return keymap.name !== action.payload.name && keymap.abbreviation === abbr;
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case KeymapActions.ActionTypes.EditAbbr: {
+            const payload = (action as KeymapActions.EditKeymapAbbreviationAction).payload;
+            const abbr: string = payload.newAbbr.toUpperCase();
+
+            const duplicate = state.userConfiguration.keymaps.some((keymap: Keymap) => {
+                return keymap.name !== payload.name && keymap.abbreviation === abbr;
             });
 
-            changedUserConfiguration.keymaps = state.keymaps.map((keymap: Keymap) => {
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = state.userConfiguration.keymaps.map((keymap: Keymap) => {
                 keymap = Object.assign(new Keymap(), keymap);
-                if (!duplicate && keymap.abbreviation === action.payload.abbr) {
+                if (!duplicate && keymap.abbreviation === payload.abbr) {
                     keymap.abbreviation = abbr;
                 } else {
-                    keymap = keymap.renameKeymap(action.payload.abbr, action.payload.newAbbr);
+                    keymap = keymap.renameKeymap(payload.abbr, payload.newAbbr);
                 }
 
                 return keymap;
             });
-            break;
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
 
-        case KeymapActions.SET_DEFAULT:
-            changedUserConfiguration.keymaps = state.keymaps.map((keymap: Keymap) => {
-                if (keymap.abbreviation === action.payload || keymap.isDefault) {
+        case KeymapActions.ActionTypes.SetDefault: {
+            const payload = (action as KeymapActions.SetDefaultKeymapAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = state.userConfiguration.keymaps.map((keymap: Keymap) => {
+                if (keymap.abbreviation === payload || keymap.isDefault) {
                     keymap = Object.assign(new Keymap(), keymap);
-                    keymap.isDefault = keymap.abbreviation === action.payload;
+                    keymap.isDefault = keymap.abbreviation === payload;
                 }
 
                 return keymap;
             });
-            break;
-        case KeymapActions.REMOVE:
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case KeymapActions.ActionTypes.Remove: {
+            const payload = (action as KeymapActions.RemoveKeymapAction).payload;
+
             let isDefault: boolean;
 
-            const filtered: Keymap[] = state.keymaps.filter((keymap: Keymap) => {
-                if (keymap.abbreviation === action.payload) {
+            const filtered: Keymap[] = state.userConfiguration.keymaps.filter((keymap: Keymap) => {
+                if (keymap.abbreviation === payload) {
                     isDefault = keymap.isDefault;
                     return false;
                 }
@@ -128,27 +168,35 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             // Check for the deleted keymap in other keymaps
-            changedUserConfiguration.keymaps = filtered.map(keymap => {
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = filtered.map(keymap => {
                 keymap = Object.assign(new Keymap(), keymap);
-                keymap.layers = checkExistence(keymap.layers, 'keymapAbbreviation', action.payload);
+                keymap.layers = checkExistence(keymap.layers, 'keymapAbbreviation', payload);
 
                 return keymap;
             });
-            break;
 
-        case KeymapActions.SAVE_KEY: {
-            const keyIndex: number = action.payload.key;
-            const layerIndex: number = action.payload.layer;
-            const moduleIndex: number = action.payload.module;
-            const keyActionRemap = action.payload.keyAction;
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case KeymapActions.ActionTypes.SaveKey: {
+            const payload = (action as KeymapActions.SaveKeyAction).payload;
+            const keyIndex: number = payload.key;
+            const layerIndex: number = payload.layer;
+            const moduleIndex: number = payload.module;
+            const keyActionRemap = payload.keyAction;
             const newKeyAction = keyActionRemap.action;
-            const newKeymap: Keymap = action.payload.keymap;
+            const newKeymap: Keymap = payload.keymap;
             const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
             const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
 
-            changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
                 // SwitchKeymapAction not allow to refer to itself
-                if (isSwitchKeymapAction && keymap.abbreviation === newKeyAction.keymapAbbreviation) {
+                if (isSwitchKeymapAction && keymap.abbreviation === (newKeyAction as any).keymapAbbreviation) {
                     return keymap;
                 }
 
@@ -180,49 +228,76 @@ export function reducer(state = initialState, action: Action & { payload?: any }
 
                 return keymap;
             });
-            break;
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
 
-        case KeymapActions.CHECK_MACRO:
-            changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
+        case KeymapActions.ActionTypes.CheckMacro: {
+            const payload = (action as KeymapActions.CheckMacroAction).payload;
+
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
                 keymap = Object.assign(new Keymap(), keymap);
-                keymap.layers = checkExistence(keymap.layers, '_macroId', action.payload);
+                keymap.layers = checkExistence(keymap.layers, '_macroId', payload);
                 return keymap;
             });
-            break;
-        case MacroActions.ADD: {
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.Add: {
             const newMacro = new Macro();
-            newMacro.id = generateMacroId(state.macros);
-            newMacro.name = generateName(state.macros, 'New macro');
+            newMacro.id = generateMacroId(state.userConfiguration.macros);
+            newMacro.name = generateName(state.userConfiguration.macros, 'New macro');
             newMacro.isLooped = false;
             newMacro.isPrivate = true;
             newMacro.macroActions = [];
 
-            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro);
-            break;
-        }
-        case MacroActions.DUPLICATE: {
-            const newMacro = new Macro(action.payload);
-            newMacro.name = generateName(state.macros, newMacro.name);
-            newMacro.id = generateMacroId(state.macros);
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = insertItemInNameOrder(state.userConfiguration.macros, newMacro);
 
-            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro);
-            break;
+            return {
+                ...state,
+                userConfiguration
+            };
         }
-        case MacroActions.EDIT_NAME: {
-            if (!isValidName(action.payload.name)) {
+
+        case MacroActions.ActionTypes.Duplicate: {
+            const payload = (action as MacroActions.DuplicateMacroAction).payload;
+            const newMacro = new Macro(payload);
+            newMacro.name = generateName(state.userConfiguration.macros, newMacro.name);
+            newMacro.id = generateMacroId(state.userConfiguration.macros);
+
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = insertItemInNameOrder(state.userConfiguration.macros, newMacro);
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.EditName: {
+            const payload = (action as MacroActions.EditMacroNameAction).payload;
+            if (!isValidName(payload.name)) {
                 break;
             }
 
-            const name: string = action.payload.name.trim();
+            const name: string = payload.name.trim();
             let macroToRename: Macro = null;
 
-            const duplicate = state.macros.some((macro: Macro) => {
-                if (macro.id === action.payload.id) {
-                   macroToRename = macro;
+            const duplicate = state.userConfiguration.macros.some((macro: Macro) => {
+                if (macro.id === payload.id) {
+                    macroToRename = macro;
                 }
 
-                return macro.id !== action.payload.id && macro.name === name;
+                return macro.id !== payload.id && macro.name === name;
             });
 
             if (duplicate) {
@@ -230,16 +305,25 @@ export function reducer(state = initialState, action: Action & { payload?: any }
             }
 
             const newMacro = Object.assign(new Macro(), macroToRename, { name });
-            changedUserConfiguration.macros = insertItemInNameOrder(state.macros, newMacro, macro => macro.id !== newMacro.id);
-            break;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = insertItemInNameOrder(
+                state.userConfiguration.macros,
+                newMacro,
+                macro => macro.id !== newMacro.id);
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
 
-        case MacroActions.REMOVE:
-            const macroId = action.payload;
-            changedUserConfiguration.macros = state.macros.filter((macro: Macro) => macro.id !== macroId);
+        case MacroActions.ActionTypes.Remove: {
+            const macroId = (action as MacroActions.RemoveMacroAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = state.userConfiguration.macros.filter((macro: Macro) => macro.id !== macroId);
 
-            for (let k = 0; k < changedUserConfiguration.keymaps.length; k++) {
-                const keymap = changedUserConfiguration.keymaps[k];
+            for (let k = 0; k < userConfiguration.keymaps.length; k++) {
+                const keymap = userConfiguration.keymaps[k];
                 let hasChanges = false;
 
                 for (const layer of  keymap.layers) {
@@ -256,48 +340,80 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                 }
 
                 if (hasChanges) {
-                    changedUserConfiguration.keymaps[k] = new Keymap(keymap);
+                    userConfiguration.keymaps[k] = new Keymap(keymap);
                 }
             }
-            break;
 
-        case MacroActions.ADD_ACTION:
-            changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
-                if (macro.id === action.payload.id) {
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.AddAction: {
+            const payload = (action as MacroActions.AddMacroActionAction).payload;
+
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
+                if (macro.id === payload.id) {
                     macro = new Macro(macro);
-                    macro.macroActions.push(action.payload.action);
+                    macro.macroActions.push(payload.action);
                 }
 
                 return macro;
             });
-            break;
-        case MacroActions.SAVE_ACTION:
-            changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
-                if (macro.id === action.payload.id) {
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.SaveAction: {
+            const payload = (action as MacroActions.SaveMacroActionAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
+                if (macro.id === payload.id) {
                     macro = new Macro(macro);
-                    macro.macroActions[action.payload.index] = action.payload.action;
+                    macro.macroActions[payload.index] = payload.action;
                 }
 
                 return macro;
             });
-            break;
-        case MacroActions.DELETE_ACTION:
-            changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
-                if (macro.id === action.payload.id) {
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.DeleteAction: {
+            const payload = (action as MacroActions.DeleteMacroActionAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
+                if (macro.id === payload.id) {
                     macro = new Macro(macro);
-                    macro.macroActions.splice(action.payload.index, 1);
+                    macro.macroActions.splice(payload.index, 1);
                 }
 
                 return macro;
             });
-            break;
-        case MacroActions.REORDER_ACTION:
-            changedUserConfiguration.macros = state.macros.map((macro: Macro) => {
-                if (macro.id === action.payload.id) {
-                    let newIndex: number = action.payload.newIndex;
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.ReorderAction: {
+            const payload = (action as MacroActions.ReorderMacroActionAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
+                if (macro.id === payload.id) {
+                    let newIndex: number = payload.newIndex;
 
                     // We need to reduce the new index for one when we are moving action down
-                    if (newIndex > action.payload.oldIndex) {
+                    if (newIndex > payload.oldIndex) {
                         --newIndex;
                     }
 
@@ -305,94 +421,100 @@ export function reducer(state = initialState, action: Action & { payload?: any }
                     macro.macroActions.splice(
                         newIndex,
                         0,
-                        macro.macroActions.splice(action.payload.oldIndex, 1)[0]
+                        macro.macroActions.splice(payload.oldIndex, 1)[0]
                     );
                 }
 
                 return macro;
             });
-            break;
 
-        case ActionTypes.RENAME_USER_CONFIGURATION: {
-            if (isValidName(action.payload)) {
-                changedUserConfiguration.deviceName = action.payload.trim();
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case UserConfig.ActionTypes.RenameUserConfiguration: {
+            const payload = (action as UserConfig.RenameUserConfigurationAction).payload;
+
+            if (isValidName(payload)) {
+                const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+                userConfiguration.deviceName = payload.trim();
+
+                return {
+                    ...state,
+                    userConfiguration
+                };
             }
-            break;
+
+            return state;
         }
 
-        case ActionTypes.SET_USER_CONFIGURATION_VALUE: {
-            changedUserConfiguration[action.payload.propertyName] = action.payload.value;
-            break;
+        case UserConfig.ActionTypes.SetUserConfigurationValue: {
+            const payload = (action as UserConfig.SetUserConfigurationValueAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration[payload.propertyName] = payload.value;
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
 
-        case KeymapActions.EDIT_DESCRIPTION: {
+        case KeymapActions.ActionTypes.EditDescription: {
             const data = (action as KeymapActions.EditDescriptionAction).payload;
 
-            changedUserConfiguration.keymaps = state.keymaps.map(keymap => {
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === data.abbr) {
                     keymap.description = data.description;
                 }
                 return keymap;
             });
-            break;
+
+            return {
+                ...state,
+                userConfiguration
+            };
         }
 
+        case KeymapActions.ActionTypes.Select:
+            return {
+                ...state,
+                selectedKeymapAbbr: (action as KeymapActions.SelectKeymapAction).payload
+            };
+
+        case MacroActions.ActionTypes.Select:
+            return {
+                ...state,
+                selectedMacroId: (action as MacroActions.SelectMacroAction).payload
+            };
+
         default:
-            break;
-    }
-
-    return changedUserConfiguration;
-}
-
-export function getUserConfiguration(): (state$: Observable<AppState>) => Observable<UserConfiguration> {
-    return (state$: Observable<AppState>) => state$
-        .map(state => state.userConfiguration);
-}
-
-export function getKeymaps(): (state$: Observable<AppState>) => Observable<Keymap[]> {
-    return (state$: Observable<AppState>) => state$
-        .map(state => state.userConfiguration.keymaps);
-}
-
-export function getKeymap(abbr: string) {
-    if (abbr === undefined) {
-        return getDefaultKeymap();
-    }
-
-    return (state$: Observable<AppState>) => getKeymaps()(state$)
-        .pipe(
-            map((keymaps: Keymap[]) =>
-                keymaps.find((keymap: Keymap) => keymap.abbreviation === abbr)
-            )
-        );
-}
-
-export function getDefaultKeymap() {
-    return (state$: Observable<AppState>) => getKeymaps()(state$)
-        .pipe(
-            map((keymaps: Keymap[]) =>
-                keymaps.find((keymap: Keymap) => keymap.isDefault)
-            )
-        );
-}
-
-export function getMacros(): (state$: Observable<AppState>) => Observable<Macro[]> {
-    return (state$: Observable<AppState>) => state$
-        .pipe(
-            map(state => state.userConfiguration.macros)
-        );
-}
-
-export function getMacro(id: number) {
-    if (isNaN(id)) {
-        return () => of<Macro>(undefined);
-    } else {
-        return (state$: Observable<AppState>) => getMacros()(state$)
-            .pipe(
-                map((macros: Macro[]) => macros.find((macro: Macro) => macro.id === id))
-            );
+            return state;
     }
 }
+
+export const getUserConfiguration = (state: State): UserConfiguration => state.userConfiguration;
+export const getKeymaps = (state: State): Keymap[] => state.userConfiguration.keymaps;
+export const getDefaultKeymap = (state: State): Keymap => state.userConfiguration.keymaps.find(keymap => keymap.isDefault);
+export const getSelectedKeymap = (state: State): Keymap => {
+    if (state.selectedKeymapAbbr === undefined) {
+        return getDefaultKeymap(state);
+    }
+
+    return state.userConfiguration.keymaps.find(keymap => keymap.abbreviation === state.selectedKeymapAbbr);
+};
+export const getMacros = (state: State): Macro[] => state.userConfiguration.macros;
+export const getSelectedMacro = (state: State): Macro => {
+    if (isNaN(state.selectedMacroId)) {
+        return undefined;
+    }
+
+    return state.userConfiguration.macros.find(macro => macro.id === state.selectedMacroId);
+};
+export const isKeymapDeletable = (state: State): boolean => state.userConfiguration.keymaps.length > 1;
+export const hasMacro = (state: State): boolean => state.userConfiguration.macros.length > 0;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

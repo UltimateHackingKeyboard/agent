@@ -1,93 +1,90 @@
 import { Action } from '@ngrx/store';
-import { type, UserConfiguration, ConfigurationReply } from 'uhk-common';
+import { UserConfiguration, ConfigurationReply } from 'uhk-common';
 import { UserConfigurationValue } from '../../models/user-configuration-value';
 import { UploadFileData } from '../../models/upload-file-data';
 
-const PREFIX = '[user-config] ';
-
-// tslint:disable-next-line:variable-name
-export const ActionTypes = {
-    LOAD_USER_CONFIG: type(PREFIX + 'Load User Config'),
-    LOAD_CONFIG_FROM_DEVICE: type(PREFIX + 'Load User Config from Device'),
-    LOAD_CONFIG_FROM_DEVICE_REPLY: type(PREFIX + 'Load User Config from Device reply'),
-    LOAD_USER_CONFIG_SUCCESS: type(PREFIX + 'Load User Config Success'),
-    SAVE_USER_CONFIG_SUCCESS: type(PREFIX + 'Save User Config Success'),
-    SAVE_USER_CONFIG_IN_JSON_FILE: type(PREFIX + 'Save User Config in JSON file'),
-    SAVE_USER_CONFIG_IN_BIN_FILE: type(PREFIX + 'Save User Config in binary file'),
-    LOAD_RESET_USER_CONFIGURATION: type(PREFIX + 'Load reset user configuration'),
-    RENAME_USER_CONFIGURATION: type(PREFIX + 'Rename user configuration'),
-    SET_USER_CONFIGURATION_VALUE: type(PREFIX + 'Set user configuration value'),
-    LOAD_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Load user configuration from file'),
-    APPLY_USER_CONFIGURATION_FROM_FILE: type(PREFIX + 'Apply user configuration from file')
-};
+export enum ActionTypes {
+    LoadUserConfig = '[user-config] Load User Config',
+    LoadConfigFromDevice = '[user-config] Load User Config from Device',
+    LoadConfigFromDeviceReply = '[user-config] Load User Config from Device reply',
+    LoadUserConfigSuccess = '[user-config] Load User Config Success',
+    SaveUserConfigSuccess = '[user-config] Save User Config Success',
+    SaveUserConfigInJsonFile = '[user-config] Save User Config in JSON file',
+    SaveUserConfigInBinFile = '[user-config] Save User Config in binary file',
+    LoadResetUserConfiguration = '[user-config] Load reset user configuration',
+    RenameUserConfiguration = '[user-config] Rename user configuration',
+    SetUserConfigurationValue = '[user-config] Set user configuration value',
+    LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
+    ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file'
+}
 
 export class LoadUserConfigAction implements Action {
-    type = ActionTypes.LOAD_USER_CONFIG;
+    type = ActionTypes.LoadUserConfig;
 }
 
 export class LoadConfigFromDeviceAction implements Action {
-    type = ActionTypes.LOAD_CONFIG_FROM_DEVICE;
+    type = ActionTypes.LoadConfigFromDevice;
 }
 
 export class LoadConfigFromDeviceReplyAction implements Action {
-    type = ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY;
+    type = ActionTypes.LoadConfigFromDeviceReply;
 
     constructor(public payload: ConfigurationReply) {
     }
 }
 
 export class LoadUserConfigSuccessAction implements Action {
-    type = ActionTypes.LOAD_USER_CONFIG_SUCCESS;
+    type = ActionTypes.LoadUserConfigSuccess;
 
     constructor(public payload: UserConfiguration) {
     }
 }
 
 export class SaveUserConfigSuccessAction implements Action {
-    type = ActionTypes.SAVE_USER_CONFIG_SUCCESS;
+    type = ActionTypes.SaveUserConfigSuccess;
 
     constructor(public payload: UserConfiguration) {
     }
 }
 
 export class SaveUserConfigInJsonFileAction implements Action {
-    type = ActionTypes.SAVE_USER_CONFIG_IN_JSON_FILE;
+    type = ActionTypes.SaveUserConfigInJsonFile;
 }
 
 export class SaveUserConfigInBinaryFileAction implements Action {
-    type = ActionTypes.SAVE_USER_CONFIG_IN_BIN_FILE;
+    type = ActionTypes.SaveUserConfigInBinFile;
 }
 
 export class LoadResetUserConfigurationAction implements Action {
-    type = ActionTypes.LOAD_RESET_USER_CONFIGURATION;
+    type = ActionTypes.LoadResetUserConfiguration;
 
     constructor(public payload: UserConfiguration) {
     }
 }
 
 export class RenameUserConfigurationAction implements Action {
-    type = ActionTypes.RENAME_USER_CONFIGURATION;
+    type = ActionTypes.RenameUserConfiguration;
 
     constructor(public payload: string) {
     }
 }
 
 export class SetUserConfigurationValueAction implements Action {
-    type = ActionTypes.SET_USER_CONFIGURATION_VALUE;
+    type = ActionTypes.SetUserConfigurationValue;
 
     constructor(public payload: UserConfigurationValue) {
     }
 }
 
 export class LoadUserConfigurationFromFileAction implements Action {
-    type = ActionTypes.LOAD_USER_CONFIGURATION_FROM_FILE;
+    type = ActionTypes.LoadUserConfigurationFromFile;
 
     constructor(public payload: UploadFileData) {
     }
 }
 
 export class ApplyUserConfigurationFromFileAction implements Action {
-    type = ActionTypes.APPLY_USER_CONFIGURATION_FROM_FILE;
+    type = ActionTypes.ApplyUserConfigurationFromFile;
 
     constructor(public payload: UserConfiguration) {
     }

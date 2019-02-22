@@ -3,13 +3,17 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Macro, MacroAction } from 'uhk-common';
 
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { pluck, switchMap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
-import { MacroActions } from '../../../store/actions';
-import { AppState, macroPlaybackSupported } from '../../../store';
-import { getMacro } from '../../../store/reducers/user-configuration';
+import {
+    AddMacroActionAction,
+    DeleteMacroActionAction,
+    ReorderMacroActionAction,
+    SaveMacroActionAction,
+    SelectMacroAction
+} from '../../../store/actions/macro';
+import { AppState, getSelectedMacro, macroPlaybackSupported } from '../../../store';
+import { pluck } from 'rxjs/operators';
 
 @Component({
     selector: 'macro-edit',
@@ -25,18 +29,20 @@ export class MacroEditComponent implements OnDestroy {
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
 
-    private subscription: Subscription;
+    private selectedMacroSubscription: Subscription;
+    private routeSubscription: Subscription;
 
-    constructor(private store: Store<AppState>, public route: ActivatedRoute) {
-        this.subscription = route
+    constructor(private store: Store<AppState>,
+                public route: ActivatedRoute) {
+
+        this.routeSubscription = route
             .params
             .pipe(
-                pluck<{}, string>('id'),
-                switchMap((id: string) => {
-                    this.macroId = +id;
-                    return store.let(getMacro(this.macroId));
-                })
+                pluck<{}, string>('id')
             )
+            .subscribe(id => store.dispatch(new SelectMacroAction(+id)));
+
+        this.selectedMacroSubscription = store.select(getSelectedMacro)
             .subscribe((macro: Macro) => {
                 this.macro = macro;
             });
@@ -46,22 +52,23 @@ export class MacroEditComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.selectedMacroSubscription.unsubscribe();
+        this.routeSubscription.unsubscribe();
     }
 
     addAction(macroId: number, action: MacroAction) {
-        this.store.dispatch(MacroActions.addMacroAction(macroId, action));
+        this.store.dispatch(new AddMacroActionAction({ id: macroId, action }));
     }
 
     editAction(macroId: number, index: number, action: MacroAction) {
-        this.store.dispatch(MacroActions.saveMacroAction(macroId, index, action));
+        this.store.dispatch(new SaveMacroActionAction({ id: macroId, index, action }));
     }
 
     deleteAction(macroId: number, index: number, action: MacroAction) {
-        this.store.dispatch(MacroActions.deleteMacroAction(macroId, index, action));
+        this.store.dispatch(new DeleteMacroActionAction({ id: macroId, index, action }));
     }
 
     reorderAction(macroId: number, oldIndex: number, newIndex: number) {
-        this.store.dispatch(MacroActions.reorderMacroAction(macroId, oldIndex, newIndex));
+        this.store.dispatch(new ReorderMacroActionAction({ id: macroId, oldIndex, newIndex }));
     }
 }

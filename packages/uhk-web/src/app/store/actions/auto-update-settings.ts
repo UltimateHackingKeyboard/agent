@@ -1,68 +1,65 @@
 import { Action } from '@ngrx/store';
 
-import { AutoUpdateSettings, type } from 'uhk-common';
+import { AutoUpdateSettings } from 'uhk-common';
 
-const PREFIX = '[app-update-config] ';
-
-// tslint:disable-next-line:variable-name
-export const ActionTypes = {
-    TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP: type(PREFIX + 'Check for update on startup'),
-    CHECK_FOR_UPDATE_NOW: type(PREFIX + 'Check for update now'),
-    CHECK_FOR_UPDATE_SUCCESS: type(PREFIX + 'Check for update success'),
-    CHECK_FOR_UPDATE_FAILED: type(PREFIX + 'Check for update faild'),
-    TOGGLE_PRE_RELEASE_FLAG: type(PREFIX + 'Toggle pre release update flag'),
-    LOAD_AUTO_UPDATE_SETTINGS: type(PREFIX + 'Load auto update settings'),
-    LOAD_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Load auto update settings success'),
-    SAVE_AUTO_UPDATE_SETTINGS_SUCCESS: type(PREFIX + 'Save auto update settings success')
-};
+export enum ActionTypes {
+    ToggleCheckForUpdateOnStartup = '[app-update-config] Check for update on startup',
+    CheckForUpdateNow = '[app-update-config] Check for update now',
+    CheckForUpdateSuccess = '[app-update-config] Check for update success',
+    CheckForUpdateFailed = '[app-update-config] Check for update failed',
+    TogglePreReleaseFlag = '[app-update-config] Toggle pre release update flag',
+    LoadAutoUpdateSettings = '[app-update-config] Load auto update settings',
+    LoadAutoUpdateSettingSuccess = '[app-update-config] Load auto update settings success',
+    SaveAutoUpdateSettingSuccess = '[app-update-config] Save auto update settings success'
+}
 
 export class ToggleCheckForUpdateOnStartupAction implements Action {
-    type = ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP;
+    type = ActionTypes.ToggleCheckForUpdateOnStartup;
 
     constructor(public payload: boolean) {
     }
 }
 
 export class CheckForUpdateNowAction implements Action {
-    type = ActionTypes.CHECK_FOR_UPDATE_NOW;
+    type = ActionTypes.CheckForUpdateNow;
 
     constructor(public payload?: boolean) {
     }
 }
 
 export class CheckForUpdateSuccessAction implements Action {
-    type = ActionTypes.CHECK_FOR_UPDATE_SUCCESS;
+    type = ActionTypes.CheckForUpdateSuccess;
     constructor(public payload?: string) {
     }
 }
 
 export class CheckForUpdateFailedAction implements Action {
-    type = ActionTypes.CHECK_FOR_UPDATE_FAILED;
+    type = ActionTypes.CheckForUpdateFailed;
 
     constructor(public payload: any) {
     }
 }
 
 export class TogglePreReleaseFlagAction implements Action {
-    type = ActionTypes.TOGGLE_PRE_RELEASE_FLAG;
+    type = ActionTypes.TogglePreReleaseFlag;
 
     constructor(public payload: boolean) {
     }
 }
 
 export class LoadAutoUpdateSettingsAction implements Action {
-    type = ActionTypes.LOAD_AUTO_UPDATE_SETTINGS_SUCCESS;
+    type = ActionTypes.LoadAutoUpdateSettingSuccess;
 }
 
 export class LoadAutoUpdateSettingsSuccessAction implements Action {
-    type = ActionTypes.LOAD_AUTO_UPDATE_SETTINGS_SUCCESS;
+    type = ActionTypes.LoadAutoUpdateSettingSuccess;
 
     constructor(public payload: AutoUpdateSettings) {
     }
 }
 
 export class SaveAutoUpdateSettingsSuccessAction implements Action {
-    type = ActionTypes.SAVE_AUTO_UPDATE_SETTINGS_SUCCESS;
+    type = ActionTypes.SaveAutoUpdateSettingSuccess;
 }
 
 export type Actions

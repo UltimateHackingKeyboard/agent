@@ -1,16 +1,8 @@
 import { Action } from '@ngrx/store';
 import { HardwareModules, UdevRulesInfo } from 'uhk-common';
 
-import {
-    ActionTypes,
-    ConnectionStateChangedAction,
-    HardwareModulesLoadedAction,
-    HasBackupUserConfigurationAction,
-    SaveConfigurationAction,
-    UpdateFirmwareFailedAction,
-    UpdateFirmwareSuccessAction
-} from '../actions/device';
-import { ActionTypes as AppActions, ElectronMainLogReceivedAction } from '../actions/app';
+import * as Device from '../actions/device';
+import * as App from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
@@ -60,8 +52,8 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: Action): State {
     switch (action.type) {
-        case ActionTypes.CONNECTION_STATE_CHANGED: {
-            const data = (<ConnectionStateChangedAction>action).payload;
+        case Device.ActionTypes.ConnectionStateChanged: {
+            const data = (<Device.ConnectionStateChangedAction>action).payload;
             return {
                 ...state,
                 connected: data.connected,
@@ -72,25 +64,25 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case ActionTypes.SAVING_CONFIGURATION: {
+        case Device.ActionTypes.SavingConfiguration: {
             return {
                 ...state,
                 savingToKeyboard: true
             };
         }
 
-        case ActionTypes.SHOW_SAVE_TO_KEYBOARD_BUTTON: {
+        case Device.ActionTypes.ShowSaveToKeyboardButton: {
             return {
                 ...state,
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new SaveConfigurationAction()
+                    action: new Device.SaveConfigurationAction()
                 }
             };
         }
 
-        case ActionTypes.SAVE_CONFIGURATION: {
+        case Device.ActionTypes.SaveConfiguration: {
             return {
                 ...state,
                 saveToKeyboard: {
@@ -101,7 +93,7 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case ActionTypes.SAVE_TO_KEYBOARD_SUCCESS: {
+        case Device.ActionTypes.SaveToKeyboardSuccess: {
             return {
                 ...state,
                 saveToKeyboard: {
@@ -113,26 +105,26 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case ActionTypes.SAVE_TO_KEYBOARD_FAILED: {
+        case Device.ActionTypes.SaveToKeyboardFailed: {
             return {
                 ...state,
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new SaveConfigurationAction()
+                    action: new Device.SaveConfigurationAction()
                 }
             };
         }
 
-        case ActionTypes.HIDE_SAVE_TO_KEYBOARD_BUTTON: {
+        case Device.ActionTypes.HideSaveToKeyboardButton: {
             return {
                 ...state,
                 saveToKeyboard: initProgressButtonState
             };
         }
 
-        case ActionTypes.UPDATE_FIRMWARE_WITH:
-        case ActionTypes.UPDATE_FIRMWARE:
+        case Device.ActionTypes.UpdateFirmwareWith:
+        case Device.ActionTypes.UpdateFirmware:
             return {
                 ...state,
                 updatingFirmware: true,
@@ -142,17 +134,17 @@ export function reducer(state = initialState, action: Action): State {
                 log: [{message: 'Start flashing firmware', cssClass: XtermCssClass.standard}]
             };
 
-        case ActionTypes.UPDATE_FIRMWARE_SUCCESS:
+        case Device.ActionTypes.UpdateFirmwareSuccess:
             return {
                 ...state,
                 updatingFirmware: false,
                 firmwareUpdateFinished: true,
                 firmwareUpdateSuccess: true,
-                modules: (action as UpdateFirmwareSuccessAction).payload
+                modules: (action as Device.UpdateFirmwareSuccessAction).payload
             };
 
-        case ActionTypes.UPDATE_FIRMWARE_FAILED: {
-            const data = (action as UpdateFirmwareFailedAction).payload;
+        case Device.ActionTypes.UpdateFirmwareFailed: {
+            const data = (action as Device.UpdateFirmwareFailedAction).payload;
             const logEntry = {
                 message: data.error.message,
                 cssClass: XtermCssClass.error
@@ -168,12 +160,12 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case AppActions.ELECTRON_MAIN_LOG_RECEIVED: {
+        case App.ActionTypes.ElectronMainLogReceived: {
             if (!state.updatingFirmware) {
                 return state;
             }
 
-            const payload = (action as ElectronMainLogReceivedAction).payload;
+            const payload = (action as App.ElectronMainLogReceivedAction).payload;
 
             if (payload.message.indexOf('UHK Device not found:') > -1) {
                 return state;
@@ -190,32 +182,32 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case ActionTypes.MODULES_INFO_LOADED:
+        case Device.ActionTypes.ModulesInfoLoaded:
             return {
                 ...state,
-                modules: (action as HardwareModulesLoadedAction).payload
+                modules: (action as Device.HardwareModulesLoadedAction).payload
             };
 
-        case ActionTypes.RESET_USER_CONFIGURATION:
-        case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP:
+        case Device.ActionTypes.ResetUserConfiguration:
+        case Device.ActionTypes.RestoreConfigurationFromBackup:
             return {
                 ...state,
                 restoringUserConfiguration: true
             };
 
-        case ActionTypes.HAS_BACKUP_USER_CONFIGURATION:
+        case Device.ActionTypes.HasBackupUserConfiguration:
             return {
                 ...state,
-                hasBackupUserConfiguration: (action as HasBackupUserConfigurationAction).payload
+                hasBackupUserConfiguration: (action as Device.HasBackupUserConfigurationAction).payload
             };
 
-        case ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP_SUCCESS:
+        case Device.ActionTypes.RestoreConfigurationFromBackupSuccess:
             return {
                 ...state,
                 hasBackupUserConfiguration: false
             };
 
-        case ActionTypes.RECOVERY_DEVICE: {
+        case Device.ActionTypes.RecoveryDevice: {
             return {
                 ...state,
                 updatingFirmware: true,

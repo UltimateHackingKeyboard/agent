@@ -9,30 +9,29 @@ import { map, pairwise, startWith, switchMap, tap, withLatestFrom } from 'rxjs/o
 
 import { Keymap } from 'uhk-common';
 import { findNewItem } from '../../util';
-import { KeymapActions } from '../actions';
-import { AppState } from '../index';
-import { getKeymaps } from '../reducers/user-configuration';
+import * as Keymaps from '../actions/keymap';
+import { AppState, getKeymaps } from '../index';
 
 @Injectable()
 export class KeymapEffects {
 
     @Effect() loadKeymaps$: Observable<Action> = this.actions$
-        .ofType(KeymapActions.LOAD_KEYMAPS)
+        .ofType(Keymaps.ActionTypes.LoadKeymaps)
         .pipe(
-            startWith(KeymapActions.loadKeymaps()),
+            startWith(new Keymaps.LoadKeymapsAction()),
             switchMap(() => {
                 const presetsRequireContext = (<any>require).context('../../../res/presets', false, /.json$/);
                 const uhkPresets = presetsRequireContext.keys().map(presetsRequireContext) // load the presets into an array
                     .map((keymap: any) => new Keymap().fromJsonObject(keymap));
 
-                return of(KeymapActions.loadKeymapsSuccess(uhkPresets));
+                return of(new Keymaps.LoadKeymapSuccessAction(uhkPresets));
             })
         );
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
-        .ofType(KeymapActions.ADD, KeymapActions.DUPLICATE)
+        .ofType(Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate)
         .pipe(
-            withLatestFrom(this.store.let(getKeymaps())
+            withLatestFrom(this.store.select(getKeymaps)
                 .pipe(
                     pairwise()
                 )
@@ -45,10 +44,10 @@ export class KeymapEffects {
         );
 
     @Effect({ dispatch: false }) remove$: any = this.actions$
-        .ofType(KeymapActions.REMOVE)
+        .ofType(Keymaps.ActionTypes.Remove)
         .pipe(
-            withLatestFrom(this.store),
-            map(latest => latest[1].userConfiguration.keymaps),
+            withLatestFrom(this.store.select(getKeymaps)),
+            map(latest => latest[1]),
             tap(keymaps => {
                 if (keymaps.length === 0) {
                     this.router.navigate(['/keymap/add']);
@@ -60,11 +59,11 @@ export class KeymapEffects {
         );
 
     @Effect({ dispatch: false }) editAbbr$: any = this.actions$
-        .ofType(KeymapActions.EDIT_ABBR)
+        .ofType(Keymaps.ActionTypes.EditAbbr)
         .pipe(
-            withLatestFrom(this.store),
-            tap(([action, store]: [KeymapActions.EditKeymapAbbreviationAction, AppState]) => {
-                for (const keymap of store.userConfiguration.keymaps) {
+            withLatestFrom(this.store.select(getKeymaps)),
+            tap(([action, keymaps]: [Keymaps.EditKeymapAbbreviationAction, Keymap[]]) => {
+                for (const keymap of keymaps) {
                     if (keymap.name === action.payload.name && keymap.abbreviation === action.payload.newAbbr) {
                         this.router.navigate(['/keymap', action.payload.newAbbr]);
                         return;

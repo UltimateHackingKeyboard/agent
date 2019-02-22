@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState, getSideMenuPageState } from '../../store';
-import { MacroActions } from '../../store/actions';
+import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 import { SideMenuPageState } from '../../models/side-menu-page-state';
 
@@ -92,7 +92,7 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     }
 
     addMacro() {
-        this.store.dispatch(MacroActions.addMacro());
+        this.store.dispatch(new AddMacroAction());
     }
 
     editDeviceName(name: string): void {

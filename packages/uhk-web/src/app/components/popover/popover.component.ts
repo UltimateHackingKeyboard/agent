@@ -31,8 +31,7 @@ import {
 
 import { Tab } from './tab';
 
-import { AppState, macroPlaybackSupported } from '../../store';
-import { getKeymaps } from '../../store/reducers/user-configuration';
+import { AppState, getKeymaps, macroPlaybackSupported } from '../../store';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 
@@ -153,7 +152,7 @@ export class PopoverComponent implements OnChanges {
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
         this.animationState = 'closed';
-        this.keymaps$ = store.let(getKeymaps())
+        this.keymaps$ = store.select(getKeymaps)
             .pipe(
                 combineLatest(this.currentKeymap$),
                 map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>

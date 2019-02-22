@@ -26,7 +26,7 @@ export class ApplicationEffects {
 
     @Effect()
     appStart$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.APP_BOOTSRAPPED)
+        .ofType(ActionTypes.AppBootstrapped)
         .pipe(
             startWith(new AppStartedAction()),
             tap(() => {
@@ -39,14 +39,14 @@ export class ApplicationEffects {
 
     @Effect({dispatch: false})
     appStartInfo$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_APP_START_INFO)
+        .ofType(ActionTypes.LoadAppStartInfo)
         .do(() => {
             this.appRendererService.getAppStartInfo();
         });
 
     @Effect({dispatch: false})
     showNotification$: Observable<Action> = this.actions$
-        .ofType<ShowNotificationAction>(ActionTypes.APP_SHOW_NOTIFICATION)
+        .ofType<ShowNotificationAction>(ActionTypes.AppShowNotification)
         .pipe(
             map(action => action.payload),
             tap((notification: Notification) => {
@@ -59,7 +59,7 @@ export class ApplicationEffects {
 
     @Effect()
     processStartInfo$: Observable<Action> = this.actions$
-        .ofType<ProcessAppStartInfoAction>(ActionTypes.APP_PROCESS_START_INFO)
+        .ofType<ProcessAppStartInfoAction>(ActionTypes.AppProcessStartInfo)
         .map(action => action.payload)
         .mergeMap((appInfo: AppStartInfo) => {
             this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
@@ -70,12 +70,12 @@ export class ApplicationEffects {
         });
 
     @Effect() undoLastNotification$: Observable<Action> = this.actions$
-        .ofType<UndoLastAction>(ActionTypes.UNDO_LAST)
+        .ofType<UndoLastAction>(ActionTypes.UndoLast)
         .map(action => action.payload)
         .mergeMap((action: Action) => [action, new DismissUndoNotificationAction()]);
 
     @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
-        .ofType<OpenUrlInNewWindowAction>(ActionTypes.OPEN_URL_IN_NEW_WINDOW)
+        .ofType<OpenUrlInNewWindowAction>(ActionTypes.OpenUrlInNewWindow)
         .pipe(
             withLatestFrom(this.store.select(runningInElectron)),
             tap(([action, inElectron]) => {

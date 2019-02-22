@@ -52,7 +52,7 @@ import { getVersions } from '../../util';
 export class DeviceEffects {
     @Effect()
     deviceConnectionStateChange$: Observable<Action> = this.actions$
-        .ofType<ConnectionStateChangedAction>(ActionTypes.CONNECTION_STATE_CHANGED)
+        .ofType<ConnectionStateChangedAction>(ActionTypes.ConnectionStateChanged)
         .pipe(
             withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected)),
             tap(([action, route]) => {
@@ -93,7 +93,7 @@ export class DeviceEffects {
 
     @Effect({ dispatch: false })
     setPrivilegeOnLinux$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SET_PRIVILEGE_ON_LINUX)
+        .ofType(ActionTypes.SetPrivilegeOnLinux)
         .pipe(
             tap(() => {
                 this.deviceRendererService.setPrivilegeOnLinux();
@@ -102,7 +102,7 @@ export class DeviceEffects {
 
     @Effect()
     setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
-        .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SET_PRIVILEGE_ON_LINUX_REPLY)
+        .ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SetPrivilegeOnLinuxReply)
         .pipe(
             map(action => action.payload),
             switchMap((response: any): any => {
@@ -117,18 +117,21 @@ export class DeviceEffects {
 
     @Effect({ dispatch: false })
     saveConfiguration$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SAVE_CONFIGURATION)
+        .ofType(ActionTypes.SaveConfiguration)
         .pipe(
             withLatestFrom(this.store),
             tap(([action, state]) => {
-                setTimeout(() => this.sendUserConfigToKeyboard(state.userConfiguration, state.app.hardwareConfig), 100);
+                setTimeout(() => this.sendUserConfigToKeyboard(
+                    state.userConfiguration.userConfiguration,
+                    state.app.hardwareConfig),
+                           100);
             }),
             switchMap(() => empty())
         );
 
     @Effect()
     saveConfigurationReply$: Observable<Action> = this.actions$
-        .ofType<SaveConfigurationReplyAction>(ActionTypes.SAVE_CONFIGURATION_REPLY)
+        .ofType<SaveConfigurationReplyAction>(ActionTypes.SaveConfigurationReply)
         .pipe(
             map(action => action.payload),
             mergeMap((response: IpcResponse) => {
@@ -150,7 +153,7 @@ export class DeviceEffects {
 
     @Effect()
     autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.SAVE_TO_KEYBOARD_SUCCESS)
+        .ofType(ActionTypes.SaveToKeyboardSuccess)
         .pipe(
             withLatestFrom(this.store),
             switchMap(([action, state]) => timer(1000)
@@ -169,7 +172,7 @@ export class DeviceEffects {
 
     @Effect()
     resetMouseSpeedSettings$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.RESET_MOUSE_SPEED_SETTINGS)
+        .ofType(ActionTypes.ResetMouseSpeedSettings)
         .pipe(
             switchMap(() => {
                 const config = this.defaultUserConfigurationService.getDefault();
@@ -194,7 +197,7 @@ export class DeviceEffects {
         );
 
     @Effect() resetUserConfiguration$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.RESET_USER_CONFIGURATION)
+        .ofType(ActionTypes.ResetUserConfiguration)
         .pipe(
             switchMap(() => {
                 const config = this.defaultUserConfigurationService.getDefault();
@@ -205,8 +208,8 @@ export class DeviceEffects {
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
         .ofType<ApplyUserConfigurationFromFileAction
             | LoadResetUserConfigurationAction>(
-            UserConfigActions.LOAD_RESET_USER_CONFIGURATION,
-            UserConfigActions.APPLY_USER_CONFIGURATION_FROM_FILE)
+            UserConfigActions.LoadResetUserConfiguration,
+            UserConfigActions.ApplyUserConfigurationFromFile)
         .pipe(
             map(action => action.payload),
             switchMap((config: UserConfiguration) => {
@@ -217,7 +220,7 @@ export class DeviceEffects {
         );
 
     @Effect({ dispatch: false }) updateFirmware$ = this.actions$
-        .ofType<UpdateFirmwareAction>(ActionTypes.UPDATE_FIRMWARE)
+        .ofType<UpdateFirmwareAction>(ActionTypes.UpdateFirmware)
         .pipe(
             tap(() => this.deviceRendererService.updateFirmware({
                 versionInformation: getVersions()
@@ -225,7 +228,7 @@ export class DeviceEffects {
         );
 
     @Effect({ dispatch: false }) updateFirmwareWith$ = this.actions$
-        .ofType<UpdateFirmwareWithAction>(ActionTypes.UPDATE_FIRMWARE_WITH)
+        .ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith)
         .pipe(
             map(action => action.payload),
             tap(data => this.deviceRendererService.updateFirmware({
@@ -235,7 +238,7 @@ export class DeviceEffects {
         );
 
     @Effect() updateFirmwareReply$ = this.actions$
-        .ofType<UpdateFirmwareReplyAction>(ActionTypes.UPDATE_FIRMWARE_REPLY)
+        .ofType<UpdateFirmwareReplyAction>(ActionTypes.UpdateFirmwareReply)
         .pipe(
             map(action => action.payload),
             switchMap((response: FirmwareUpgradeIpcResponse)
@@ -253,25 +256,25 @@ export class DeviceEffects {
         );
 
     @Effect() restoreUserConfiguration$ = this.actions$
-        .ofType<ResetUserConfigurationAction>(ActionTypes.RESTORE_CONFIGURATION_FROM_BACKUP)
+        .ofType<ResetUserConfigurationAction>(ActionTypes.RestoreConfigurationFromBackup)
         .pipe(
             map(() => new SaveConfigurationAction())
         );
 
     @Effect({ dispatch: false }) recoveryDevice$ = this.actions$
-        .ofType<RecoveryDeviceAction>(ActionTypes.RECOVERY_DEVICE)
+        .ofType<RecoveryDeviceAction>(ActionTypes.RecoveryDevice)
         .pipe(
             tap(() => this.deviceRendererService.recoveryDevice())
         );
 
     @Effect({ dispatch: false }) enableUsbStackTest$ = this.actions$
-        .ofType<EnableUsbStackTestAction>(ActionTypes.ENABLE_USB_STACK_TEST)
+        .ofType<EnableUsbStackTestAction>(ActionTypes.EnableUsbStackTest)
         .pipe(
             tap(() => this.deviceRendererService.enableUsbStackTest())
         );
 
     @Effect({ dispatch: false }) startConnectionPoller$ = this.actions$
-        .ofType(ActionTypes.START_CONNECTION_POLLER)
+        .ofType(ActionTypes.StartConnectionPoller)
         .pipe(
             tap(() => this.deviceRendererService.startConnectionPoller())
         );

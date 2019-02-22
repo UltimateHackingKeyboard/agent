@@ -1,121 +1,118 @@
 import { Action } from '@ngrx/store';
 
-import { AppStartInfo, HardwareConfiguration, Notification, type } from 'uhk-common';
+import { AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 
-const PREFIX = '[app] ';
+export enum ActionTypes {
+    AppBootstrapped = '[app] bootstrapped',
+    AppStarted = '[app] started',
+    AppShowNotification = '[app] show notification',
+    ApplyAppStartInfo = '[app] apply command line args',
+    AppProcessStartInfo = '[app] process start info',
+    UndoLast = '[app] undo last action',
+    UndoLastSuccess = '[app] undo last action success',
+    DismissUndoNotification = '[app] dismiss notification action',
+    LoadHardwareConfigurationSuccess = '[app] load hardware configuration success',
+    ElectronMainLogReceived = '[app] Electron main log received',
+    OpenUrlInNewWindow = '[app] Open URL in new Window',
+    PrivilegeWhatWillThisDo = '[app] What will this do clicked',
+    SetupPermissionError = '[app] Setup permission error',
+    LoadAppStartInfo = '[app] Load app start info',
+    StartKeypressCapturing = '[app] Start keypress capturing',
+    StopKeypressCapturing = '[app] Stop keypress capturing'
+}
 
-// tslint:disable-next-line:variable-name
-export const ActionTypes = {
-    APP_BOOTSRAPPED: type(PREFIX + 'bootstrapped'),
-    APP_STARTED: type(PREFIX + 'started'),
-    APP_SHOW_NOTIFICATION: type(PREFIX + 'show notification'),
-    APPLY_APP_START_INFO: type(PREFIX + 'apply command line args'),
-    APP_PROCESS_START_INFO: type(PREFIX + 'process start info'),
-    UNDO_LAST: type(PREFIX + 'undo last action'),
-    UNDO_LAST_SUCCESS: type(PREFIX + 'undo last action success'),
-    DISMISS_UNDO_NOTIFICATION: type(PREFIX + 'dismiss notification action'),
-    LOAD_HARDWARE_CONFIGURATION_SUCCESS: type(PREFIX + 'load hardware configuration success'),
-    ELECTRON_MAIN_LOG_RECEIVED: type(PREFIX + 'Electron main log received'),
-    OPEN_URL_IN_NEW_WINDOW: type(PREFIX + 'Open URL in new Window'),
-    PRIVILEGE_WHAT_WILL_THIS_DO: type(PREFIX + 'What will this do clicked'),
-    SETUP_PERMISSION_ERROR: type(PREFIX + 'Setup permission error'),
-    LOAD_APP_START_INFO: type(PREFIX + 'Load app start info'),
-    START_KEYPRESS_CAPTURING: type(PREFIX + 'Start keypress capturing'),
-    STOP_KEYPRESS_CAPTURING: type(PREFIX + 'Stop keypress capturing')
-};
-
-export class AppBootsrappedAction implements Action {
-    type = ActionTypes.APP_BOOTSRAPPED;
+export class AppBootstrappedAction implements Action {
+    type = ActionTypes.AppBootstrapped;
 }
 
 export class AppStartedAction implements Action {
-    type = ActionTypes.APP_STARTED;
+    type = ActionTypes.AppStarted;
 }
 
 export class ShowNotificationAction implements Action {
-    type = ActionTypes.APP_SHOW_NOTIFICATION;
+    type = ActionTypes.AppShowNotification;
 
     constructor(public payload: Notification) {
     }
 }
 
 export class ApplyAppStartInfoAction implements Action {
-    type = ActionTypes.APPLY_APP_START_INFO;
+    type = ActionTypes.ApplyAppStartInfo;
 
     constructor(public payload: AppStartInfo) {
     }
 }
 
 export class ProcessAppStartInfoAction implements Action {
-    type = ActionTypes.APP_PROCESS_START_INFO;
+    type = ActionTypes.AppProcessStartInfo;
 
     constructor(public payload: AppStartInfo) {
     }
 }
 
 export class UndoLastAction implements Action {
-    type = ActionTypes.UNDO_LAST;
+    type = ActionTypes.UndoLast;
 
     constructor(public payload: any) {
     }
 }
 
 export class UndoLastSuccessAction implements Action {
-    type = ActionTypes.UNDO_LAST_SUCCESS;
+    type = ActionTypes.UndoLastSuccess;
 }
 
 export class DismissUndoNotificationAction implements Action {
-    type = ActionTypes.DISMISS_UNDO_NOTIFICATION;
+    type = ActionTypes.DismissUndoNotification;
 }
 
 export class LoadHardwareConfigurationSuccessAction implements Action {
-    type = ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS;
+    type = ActionTypes.LoadHardwareConfigurationSuccess;
 
     constructor(public payload: HardwareConfiguration) {
     }
 }
 
 export class ElectronMainLogReceivedAction implements Action {
-    type = ActionTypes.ELECTRON_MAIN_LOG_RECEIVED;
+    type = ActionTypes.ElectronMainLogReceived;
 
     constructor(public payload: ElectronLogEntry) {
     }
 }
 
 export class OpenUrlInNewWindowAction implements Action {
-    type = ActionTypes.OPEN_URL_IN_NEW_WINDOW;
+    type = ActionTypes.OpenUrlInNewWindow;
 
     constructor(public payload: string) {
     }
 }
 
 export class PrivilegeWhatWillThisDoAction implements Action {
-    type = ActionTypes.PRIVILEGE_WHAT_WILL_THIS_DO;
+    type = ActionTypes.PrivilegeWhatWillThisDo;
 }
 
 export class SetupPermissionErrorAction implements Action {
-    type = ActionTypes.SETUP_PERMISSION_ERROR;
+    type = ActionTypes.SetupPermissionError;
 
     constructor(public payload: string) {
     }
 }
 
 export class LoadAppStartInfoAction implements Action {
-    type = ActionTypes.LOAD_APP_START_INFO;
+    type = ActionTypes.LoadAppStartInfo;
 }
 
 export class StartKeypressCapturingAction implements Action {
-    type = ActionTypes.START_KEYPRESS_CAPTURING;
+    type = ActionTypes.StartKeypressCapturing;
 }
 
 export class StopKeypressCapturingAction implements Action {
-    type = ActionTypes.STOP_KEYPRESS_CAPTURING;
+    type = ActionTypes.StopKeypressCapturing;
 }
 
 export type Actions
     = AppStartedAction
-    | AppBootsrappedAction
+    | AppBootstrappedAction
     | ShowNotificationAction
     | ApplyAppStartInfoAction
     | ProcessAppStartInfoAction

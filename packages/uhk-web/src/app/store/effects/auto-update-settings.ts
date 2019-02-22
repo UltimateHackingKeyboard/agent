@@ -21,7 +21,7 @@ import { ShowNotificationAction } from '../actions/app';
 @Injectable()
 export class AutoUpdateSettingsEffects {
     @Effect() loadUserConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LOAD_AUTO_UPDATE_SETTINGS)
+        .ofType(ActionTypes.LoadAutoUpdateSettings)
         .pipe(
             startWith(new LoadAutoUpdateSettingsAction()),
             switchMap(() => {
@@ -34,7 +34,7 @@ export class AutoUpdateSettingsEffects {
         );
 
     @Effect() saveAutoUpdateConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP, ActionTypes.TOGGLE_PRE_RELEASE_FLAG)
+        .ofType(ActionTypes.ToggleCheckForUpdateOnStartup, ActionTypes.TogglePreReleaseFlag)
         .pipe(
             withLatestFrom(this.store.select(getAutoUpdateSettings)),
             map(([action, config]) => {
@@ -44,7 +44,7 @@ export class AutoUpdateSettingsEffects {
         );
 
     @Effect() sendNotification$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.CHECK_FOR_UPDATE_FAILED, ActionTypes.CHECK_FOR_UPDATE_SUCCESS)
+        .ofType(ActionTypes.CheckForUpdateFailed, ActionTypes.CheckForUpdateSuccess)
         .pipe(
             map(toPayload),
             map((message: string) => {

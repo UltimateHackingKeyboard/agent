@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, publishReplay, refCount } from 'rxjs/operators';
 
 import { AppState } from '../../../store';
-import { KeymapActions } from '../../../store/actions';
+import { AddKeymapAction } from '../../../store/actions/keymap';
 
 @Component({
     selector: 'keymap-add',
@@ -42,6 +41,6 @@ export class KeymapAddComponent {
     }
 
     addKeymap(keymap: Keymap) {
-        this.store.dispatch(KeymapActions.addKeymap(keymap));
+        this.store.dispatch(new AddKeymapAction(keymap));
     }
 }

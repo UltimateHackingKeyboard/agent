@@ -16,7 +16,13 @@ import { Keymap } from 'uhk-common';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../store';
-import { KeymapActions } from '../../../store/actions';
+import {
+    DuplicateKeymapAction,
+    EditKeymapAbbreviationAction,
+    EditKeymapNameAction,
+    RemoveKeymapAction,
+    SetDefaultKeymapAction
+} from '../../../store/actions/keymap';
 import * as util from '../../../util';
 
 const DEFAULT_TRASH_TITLE = '<span class="text-nowrap">Delete keymap</span>';
@@ -59,18 +65,18 @@ export class KeymapHeaderComponent implements OnChanges {
 
     setDefault() {
         if (!this.keymap.isDefault) {
-            this.store.dispatch(KeymapActions.setDefault(this.keymap.abbreviation));
+            this.store.dispatch(new SetDefaultKeymapAction(this.keymap.abbreviation));
         }
     }
 
     removeKeymap() {
         if (this.deletable) {
-            this.store.dispatch(KeymapActions.removeKeymap(this.keymap.abbreviation));
+            this.store.dispatch(new RemoveKeymapAction(this.keymap.abbreviation));
         }
     }
 
     duplicateKeymap() {
-        this.store.dispatch(KeymapActions.duplicateKeymap(this.keymap));
+        this.store.dispatch(new DuplicateKeymapAction(this.keymap));
     }
 
     editKeymapName(name: string) {
@@ -79,7 +85,7 @@ export class KeymapHeaderComponent implements OnChanges {
             return;
         }
 
-        this.store.dispatch(KeymapActions.editKeymapName(this.keymap.abbreviation, name));
+        this.store.dispatch(new EditKeymapNameAction({ abbr: this.keymap.abbreviation, name }));
     }
 
     editKeymapAbbr(newAbbr: string) {
@@ -91,7 +97,11 @@ export class KeymapHeaderComponent implements OnChanges {
         }
 
         newAbbr = newAbbr.toUpperCase();
-        this.store.dispatch(KeymapActions.editKeymapAbbr(this.keymap.name, this.keymap.abbreviation, newAbbr));
+        this.store.dispatch(new EditKeymapAbbreviationAction({
+            name: this.keymap.name,
+            abbr: this.keymap.abbreviation,
+            newAbbr
+        }));
     }
 
     setKeymapTitle(): void {

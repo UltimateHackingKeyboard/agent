@@ -1,44 +1,41 @@
 import { Action } from '@ngrx/store';
-import { type } from 'uhk-common';
+
 import { UpdateInfo } from '../../models/update-info';
 
-const PREFIX = '[app-update] ';
-
-// tslint:disable-next-line:variable-name
-export const ActionTypes = {
-    UPDATE_AVAILABLE: type(PREFIX + 'update available'),
-    UPDATE_APP: type(PREFIX + 'update app'),
-    DO_NOT_UPDATE_APP: type(PREFIX + 'do not update app'),
-    UPDATE_DOWNLOADED: type(PREFIX + 'update downloaded'),
-    UPDATING: type(PREFIX + 'updating'),
-    UPDATE_ERROR: type(PREFIX + 'error')
-};
+export enum ActionTypes {
+    UpdateAvailable = '[app-update] update available',
+    UpdateApp = '[app-update] update app',
+    DoNotUpdateApp = '[app-update] do not update app',
+    UpdateDownloaded = '[app-update] update downloaded',
+    Updating = '[app-update] updating',
+    UpdateError = '[app-update] error'
+}
 
 export class UpdateAvailableAction implements Action {
-    type = ActionTypes.UPDATE_AVAILABLE;
+    type = ActionTypes.UpdateAvailable;
 }
 
 export class UpdateAppAction implements Action {
-    type = ActionTypes.UPDATE_APP;
+    type = ActionTypes.UpdateApp;
 }
 
 export class DoNotUpdateAppAction implements Action {
-    type = ActionTypes.DO_NOT_UPDATE_APP;
+    type = ActionTypes.DoNotUpdateApp;
 }
 
 export class UpdateDownloadedAction implements Action {
-    type = ActionTypes.UPDATE_DOWNLOADED;
+    type = ActionTypes.UpdateDownloaded;
 
     constructor(public payload: UpdateInfo) {
     }
 }
 
 export class UpdatingAction implements Action {
-    type = ActionTypes.UPDATING;
+    type = ActionTypes.Updating;
 }
 
 export class UpdateErrorAction implements Action {
-    type = ActionTypes.UPDATE_ERROR;
+    type = ActionTypes.UpdateError;
 
     constructor(public payload: any) {}
 }

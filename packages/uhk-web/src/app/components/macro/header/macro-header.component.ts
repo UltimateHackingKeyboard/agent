@@ -13,7 +13,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Macro } from 'uhk-common';
 
-import { MacroActions } from '../../../store/actions';
+import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
 import { AppState } from '../../../store';
 import * as util from '../../../util';
 
@@ -51,11 +51,11 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     }
 
     removeMacro() {
-        this.store.dispatch(MacroActions.removeMacro(this.macro.id));
+        this.store.dispatch(new RemoveMacroAction(this.macro.id));
     }
 
     duplicateMacro() {
-        this.store.dispatch(MacroActions.duplicateMacro(this.macro));
+        this.store.dispatch(new DuplicateMacroAction(this.macro));
     }
 
     editMacroName(name: string) {
@@ -64,7 +64,7 @@ export class MacroHeaderComponent implements AfterViewInit, OnChanges {
             return;
         }
 
-        this.store.dispatch(MacroActions.editMacroName(this.macro.id, name));
+        this.store.dispatch(new EditMacroNameAction({ id: this.macro.id, name }));
     }
 
     calculateHeaderTextWidth(text): void {

@@ -1,8 +1,7 @@
-import { Action } from '@ngrx/store';
 import { AutoUpdateSettings } from 'uhk-common';
 
-import { ActionTypes } from '../actions/auto-update-settings';
-import { ActionTypes as UpdateActions } from '../actions/app-update.action';
+import * as AutoUpdate from '../actions/auto-update-settings';
+import * as AppUpdate from '../actions/app-update.action';
 
 export interface State extends AutoUpdateSettings {
     checkingForUpdate: boolean;
@@ -14,28 +13,43 @@ export const initialState: State = {
     checkingForUpdate: false
 };
 
-export function reducer(state = initialState, action: Action & { payload?: any}): State {
+export function reducer(state = initialState, action: AutoUpdate.Actions | AppUpdate.Actions): State {
     switch (action.type) {
-        case ActionTypes.TOGGLE_CHECK_FOR_UPDATE_ON_STARTUP: {
-            return Object.assign({}, state, { checkForUpdateOnStartUp: action.payload });
+        case AutoUpdate.ActionTypes.ToggleCheckForUpdateOnStartup: {
+            return {
+                ...state,
+                checkForUpdateOnStartUp: (action as AutoUpdate.ToggleCheckForUpdateOnStartupAction).payload
+            };
         }
 
-        case ActionTypes.TOGGLE_PRE_RELEASE_FLAG: {
-            return Object.assign({}, state, { usePreReleaseUpdate: action.payload });
+        case AutoUpdate.ActionTypes.TogglePreReleaseFlag: {
+            return {
+                ...state,
+                usePreReleaseUpdate: (action as AutoUpdate.TogglePreReleaseFlagAction).payload
+            };
         }
 
-        case ActionTypes.LOAD_AUTO_UPDATE_SETTINGS_SUCCESS: {
-            return Object.assign({}, action.payload);
+        case AutoUpdate.ActionTypes.LoadAutoUpdateSettingSuccess: {
+            return {
+                ...state,
+                ...(action as AutoUpdate.LoadAutoUpdateSettingsSuccessAction).payload
+            };
         }
 
-        case ActionTypes.CHECK_FOR_UPDATE_NOW: {
-            return Object.assign({}, state, { checkingForUpdate: true});
+        case AutoUpdate.ActionTypes.CheckForUpdateNow: {
+            return {
+                ...state,
+                checkingForUpdate: true
+            };
         }
 
-        case UpdateActions.UPDATE_ERROR:
-        case ActionTypes.CHECK_FOR_UPDATE_SUCCESS:
-        case ActionTypes.CHECK_FOR_UPDATE_FAILED: {
-            return Object.assign({}, state, { checkingForUpdate: false });
+        case AppUpdate.ActionTypes.UpdateError:
+        case AutoUpdate.ActionTypes.CheckForUpdateSuccess:
+        case AutoUpdate.ActionTypes.CheckForUpdateFailed: {
+            return {
+                ...state,
+                checkingForUpdate: false
+            };
         }
 
         default:

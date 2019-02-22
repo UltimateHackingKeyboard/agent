@@ -8,8 +8,7 @@ import 'rxjs/add/operator/let';
 
 import { Store } from '@ngrx/store';
 
-import { AppState } from '../../../store/index';
-import { getMacros } from '../../../store/reducers/user-configuration';
+import { AppState, getMacros } from '../../../store';
 
 @Injectable()
 export class MacroNotFoundGuard implements CanActivate {
@@ -18,7 +17,7 @@ export class MacroNotFoundGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         return this.store
-            .let(getMacros())
+            .select(getMacros)
             .pipe(
                 map((macros: Macro[]) => {
                     const hasMacros = macros.length > 0;

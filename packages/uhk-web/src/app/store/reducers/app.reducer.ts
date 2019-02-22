@@ -1,7 +1,5 @@
-import { ROUTER_NAVIGATION } from '@ngrx/router-store';
-import { Action } from '@ngrx/store';
+import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
-    AppStartInfo,
     CommandLineArgs,
     HardwareConfiguration,
     Notification,
@@ -11,9 +9,9 @@ import {
     VersionInformation
 } from 'uhk-common';
 
-import { ActionTypes, ShowNotificationAction } from '../actions/app';
-import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
-import { ActionTypes as DeviceActionTypes } from '../actions/device';
+import * as App from '../actions/app';
+import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } from '../actions/user-config';
+import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
 import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
 
@@ -45,17 +43,19 @@ export const initialState: State = {
     keypressCapturing: false
 };
 
-export function reducer(state = initialState, action: Action & { payload: any }) {
+export function reducer(
+    state = initialState,
+    action: App.Actions | RouterNavigationAction | SaveUserConfigSuccessAction | ConnectionStateChangedAction): State {
     switch (action.type) {
-        case ActionTypes.APP_STARTED: {
+        case App.ActionTypes.AppStarted: {
             return {
                 ...state,
                 started: true
             };
         }
 
-        case ActionTypes.APPLY_APP_START_INFO: {
-            const payload = action.payload as AppStartInfo;
+        case App.ActionTypes.ApplyAppStartInfo: {
+            const payload = (action as App.ApplyAppStartInfoAction).payload;
 
             return {
                 ...state,
@@ -65,8 +65,8 @@ export function reducer(state = initialState, action: Action & { payload: any })
             };
         }
 
-        case ActionTypes.APP_SHOW_NOTIFICATION: {
-            const currentAction = <ShowNotificationAction>action;
+        case App.ActionTypes.AppShowNotification: {
+            const currentAction = <App.ShowNotificationAction>action;
             if (currentAction.payload.type !== NotificationType.Undoable) {
                 return state;
             }
@@ -81,7 +81,7 @@ export function reducer(state = initialState, action: Action & { payload: any })
         // When deleted a keymap or macro the app automaticaly navigate to other keymap, or macro, so
         // so we have to count the navigations and when reach the 2nd then remove the dialog.
         case ROUTER_NAVIGATION: {
-            const newState = {...state};
+            const newState = { ...state };
             newState.navigationCountAfterNotification++;
 
             if (newState.navigationCountAfterNotification > 1) {
@@ -91,40 +91,41 @@ export function reducer(state = initialState, action: Action & { payload: any })
             return newState;
         }
 
-        case ActionTypes.UNDO_LAST_SUCCESS:
-        case ActionTypes.DISMISS_UNDO_NOTIFICATION: {
+        case App.ActionTypes.UndoLastSuccess:
+        case App.ActionTypes.DismissUndoNotification: {
             return {
                 ...state,
                 undoableNotification: null
             };
         }
 
-        case UserConfigActionTypes.LOAD_USER_CONFIG_SUCCESS:
-        case UserConfigActionTypes.SAVE_USER_CONFIG_SUCCESS: {
+        case UserConfigActionTypes.LoadUserConfigSuccess:
+        case UserConfigActionTypes.SaveUserConfigSuccess: {
             return {
                 ...state,
-                prevUserConfig: action.payload,
+                prevUserConfig: (action as SaveUserConfigSuccessAction).payload,
                 configLoading: false
             };
         }
 
-        case UserConfigActionTypes.LOAD_CONFIG_FROM_DEVICE:
-        case UserConfigActionTypes.LOAD_USER_CONFIG: {
+        case UserConfigActionTypes.LoadConfigFromDevice:
+        case UserConfigActionTypes.LoadUserConfig: {
             return {
                 ...state,
                 configLoading: true
             };
         }
 
-        case ActionTypes.LOAD_HARDWARE_CONFIGURATION_SUCCESS:
+        case App.ActionTypes.LoadHardwareConfigurationSuccess:
             return {
                 ...state,
-                hardwareConfig: action.payload
+                hardwareConfig: (action as App.LoadHardwareConfigurationSuccessAction).payload
             };
 
-        case DeviceActionTypes.CONNECTION_STATE_CHANGED: {
+        case DeviceActionTypes.ConnectionStateChanged: {
+            const connectionState = (action as ConnectionStateChangedAction).payload;
 
-            if (action.payload === true) {
+            if (connectionState && connectionState.connected === true) {
                 return state;
             }
 
@@ -134,31 +135,31 @@ export function reducer(state = initialState, action: Action & { payload: any })
             };
         }
 
-        case ActionTypes.PRIVILEGE_WHAT_WILL_THIS_DO:
+        case App.ActionTypes.PrivilegeWhatWillThisDo:
             return {
                 ...state,
                 privilegeWhatWillThisDoClicked: true
             };
 
-        case ActionTypes.SETUP_PERMISSION_ERROR:
+        case App.ActionTypes.SetupPermissionError:
             return {
                 ...state,
-                permissionError: action.payload
+                permissionError: (action as App.SetupPermissionErrorAction).payload
             };
 
-        case DeviceActionTypes.SET_PRIVILEGE_ON_LINUX:
+        case DeviceActionTypes.SetPrivilegeOnLinux:
             return {
                 ...state,
                 permissionError: null
             };
 
-        case ActionTypes.START_KEYPRESS_CAPTURING:
+        case App.ActionTypes.StartKeypressCapturing:
             return {
                 ...state,
                 keypressCapturing: true
             };
 
-        case ActionTypes.STOP_KEYPRESS_CAPTURING:
+        case App.ActionTypes.StopKeypressCapturing:
             return {
                 ...state,
                 keypressCapturing: false

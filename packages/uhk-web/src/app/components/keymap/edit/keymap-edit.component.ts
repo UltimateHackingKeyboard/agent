@@ -1,18 +1,23 @@
-import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
 
-import { Observable } from 'rxjs/Observable';
-import { combineLatest, first, map, pluck, publishReplay, refCount, switchMap } from 'rxjs/operators';
-import 'rxjs/add/operator/let';
+import { Observable, Subscription } from 'rxjs';
+import { combineLatest, first, map, pluck, switchMap } from 'rxjs/operators';
 
 import { saveAs } from 'file-saver';
 
-import { layerDoubleTapSupported, AppState, getKeyboardLayout } from '../../../store';
-import { getKeymap, getKeymaps, getUserConfiguration } from '../../../store/reducers/user-configuration';
+import {
+    getUserConfiguration,
+    getSelectedKeymap,
+    isKeymapDeletable,
+    layerDoubleTapSupported,
+    AppState,
+    getKeyboardLayout
+} from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
-import { KeymapActions } from '../../../store/actions';
+import { EditDescriptionAction, SelectKeymapAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 
 @Component({
@@ -24,7 +29,7 @@ import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription
         'class': 'container-fluid'
     }
 })
-export class KeymapEditComponent {
+export class KeymapEditComponent implements OnDestroy {
 
     keyboardSplit: boolean;
 
@@ -33,24 +38,27 @@ export class KeymapEditComponent {
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
 
+    private routeSubscription: Subscription;
+
     constructor(protected store: Store<AppState>,
                 route: ActivatedRoute) {
-        this.keymap$ = route
+        this.routeSubscription = route
             .params
             .pipe(
-                pluck<{}, string>('abbr'),
-                switchMap((abbr: string) => store.let(getKeymap(abbr))),
-                publishReplay(1),
-                refCount()
-            );
+                pluck<{}, string>('abbr')
+            )
+            .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 
-        this.deletable$ = store.let(getKeymaps())
-            .pipe(
-                map((keymaps: Keymap[]) => keymaps.length > 1)
-            );
+        this.keymap$ = store.select(getSelectedKeymap);
+
+        this.deletable$ = store.select(isKeymapDeletable);
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
+    }
+
+    ngOnDestroy(): void {
+        this.routeSubscription.unsubscribe();
     }
 
     downloadKeymap() {
@@ -79,12 +87,12 @@ export class KeymapEditComponent {
     }
 
     descriptionChanged(event: ChangeKeymapDescription): void {
-        this.store.dispatch(new KeymapActions.EditDescriptionAction(event));
+        this.store.dispatch(new EditDescriptionAction(event));
     }
 
     private toExportableJSON(keymap: Keymap): Observable<any> {
         return this.store
-            .let(getUserConfiguration())
+            .select(getUserConfiguration)
             .pipe(
                 first(),
                 map(userConfiguration => {

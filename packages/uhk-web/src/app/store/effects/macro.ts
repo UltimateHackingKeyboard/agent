@@ -6,20 +6,20 @@ import { Store, Action } from '@ngrx/store';
 import { map, pairwise, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Macro } from 'uhk-common';
-import { KeymapActions, MacroAction, MacroActions } from '../actions';
-import { AppState } from '../index';
-import { getMacros } from '../reducers/user-configuration';
+import * as Keymaps from '../actions/keymap';
+import * as Macros from '../actions/macro';
+import { AppState, getMacros } from '..';
 import { findNewItem } from '../../util';
 
 @Injectable()
 export class MacroEffects {
 
     @Effect({ dispatch: false }) remove$: any = this.actions$
-        .ofType<MacroAction>(MacroActions.REMOVE)
+        .ofType<Macros.RemoveMacroAction>(Macros.ActionTypes.Remove)
         .pipe(
-            tap(action => this.store.dispatch(KeymapActions.checkMacro(action.payload))),
-            withLatestFrom(this.store),
-            map(([action, state]) => state.userConfiguration.macros),
+            tap(action => this.store.dispatch(new Keymaps.CheckMacroAction(action.payload))),
+            withLatestFrom(this.store.select(getMacros)),
+            map(([action, macros]) => macros),
             tap(macros => {
                     if (macros.length === 0) {
                         return this.router.navigate(['/macro']);
@@ -31,9 +31,9 @@ export class MacroEffects {
         );
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
-        .ofType<MacroAction>(MacroActions.ADD, MacroActions.DUPLICATE)
+        .ofType(Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate)
         .pipe(
-            withLatestFrom(this.store.let(getMacros())
+            withLatestFrom(this.store.select(getMacros)
                 .pipe(
                     pairwise()
                 )
@@ -42,7 +42,7 @@ export class MacroEffects {
             tap(([action, prevMacros, newMacros]: [Action, Macro[], Macro[]]) => {
                 const newMacro = findNewItem(prevMacros, newMacros);
                 const commands = ['/macro', newMacro.id];
-                if (action.type === MacroActions.ADD) {
+                if (action.type === Macros.ActionTypes.Add) {
                     commands.push('new');
                 }
                 this.router.navigate(commands);

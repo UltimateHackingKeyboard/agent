@@ -31,7 +31,8 @@ import {
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { AppState, getPrevUserConfiguration, getRouterState, getUserConfiguration } from '../index';
-import { KeymapAction, KeymapActions, MacroAction, MacroActions } from '../actions';
+import * as Keymaps from '../actions/keymap';
+import * as Macros from '../actions/macro';
 import {
     DismissUndoNotificationAction,
     LoadHardwareConfigurationSuccessAction,
@@ -56,23 +57,25 @@ export class UserConfigEffects {
 
     @Effect() saveUserConfig$: Observable<Action> = (this.actions$
         .ofType(
-            KeymapActions.ADD, KeymapActions.DUPLICATE, KeymapActions.EDIT_NAME, KeymapActions.EDIT_ABBR,
-            KeymapActions.SET_DEFAULT, KeymapActions.REMOVE, KeymapActions.SAVE_KEY, KeymapActions.EDIT_DESCRIPTION,
-            MacroActions.ADD, MacroActions.DUPLICATE, MacroActions.EDIT_NAME, MacroActions.REMOVE, MacroActions.ADD_ACTION,
-            MacroActions.SAVE_ACTION, MacroActions.DELETE_ACTION, MacroActions.REORDER_ACTION,
-            ActionTypes.RENAME_USER_CONFIGURATION, ActionTypes.SET_USER_CONFIGURATION_VALUE
-        ) as Observable<KeymapAction | MacroAction | RenameUserConfigurationAction>)
+            Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate, Keymaps.ActionTypes.EditName, Keymaps.ActionTypes.EditAbbr,
+            Keymaps.ActionTypes.SetDefault, Keymaps.ActionTypes.Remove, Keymaps.ActionTypes.SaveKey,
+            Keymaps.ActionTypes.EditDescription,
+            Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate, Macros.ActionTypes.EditName, Macros.ActionTypes.Remove,
+            Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
+            Macros.ActionTypes.ReorderAction,
+            ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue
+        ) as Observable<Keymaps.Actions | Macros.Actions | RenameUserConfigurationAction>)
         .pipe(
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {
                 config.recalculateConfigurationLength();
                 this.dataStorageRepository.saveConfig(config);
 
-                if (action.type === KeymapActions.REMOVE || action.type === MacroActions.REMOVE) {
-                    const text = action.type === KeymapActions.REMOVE ? 'Keymap' : 'Macro';
-                    const pathPrefix = action.type === KeymapActions.REMOVE ? 'keymap' : 'macro';
+                if (action.type === Keymaps.ActionTypes.Remove || action.type === Macros.ActionTypes.Remove) {
+                    const text = action.type === Keymaps.ActionTypes.Remove ? 'Keymap' : 'Macro';
+                    const pathPrefix = action.type === Keymaps.ActionTypes.Remove ? 'keymap' : 'macro';
                     const payload: UndoUserConfigData = {
-                        path: `/${pathPrefix}/${action.payload}`,
+                        path: `/${pathPrefix}/${(action as Keymaps.RemoveKeymapAction | Macros.RemoveMacroAction).payload}`,
                         config: prevUserConfiguration.toJsonObject()
                     };
 
@@ -83,7 +86,7 @@ export class UserConfigEffects {
                             message: `${text} has been deleted`,
                             extra: {
                                 payload,
-                                type: KeymapActions.UNDO_LAST_ACTION
+                                type: Keymaps.ActionTypes.UndoLastAction
                             }
                         }),
                         new ShowSaveToKeyboardButtonAction()
@@ -99,7 +102,7 @@ export class UserConfigEffects {
         );
 
     @Effect() undoUserConfig$: Observable<Action> = this.actions$
-        .ofType<UndoLastAction>(KeymapActions.UNDO_LAST_ACTION)
+        .ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction)
         .pipe(
             map(action => action.payload),
             mergeMap((payload: UndoUserConfigData) => {
@@ -112,13 +115,13 @@ export class UserConfigEffects {
         );
 
     @Effect({ dispatch: false }) loadConfigFromDevice$ = this.actions$
-        .ofType(ActionTypes.LOAD_CONFIG_FROM_DEVICE)
+        .ofType(ActionTypes.LoadConfigFromDevice)
         .pipe(
             tap(() => this.deviceRendererService.loadConfigurationFromKeyboard())
         );
 
     @Effect() loadConfigFromDeviceReply$ = this.actions$
-        .ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LOAD_CONFIG_FROM_DEVICE_REPLY)
+        .ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LoadConfigFromDeviceReply)
         .pipe(
             withLatestFrom(this.store.select(getRouterState)),
             mergeMap(([action, route]): any => {
@@ -175,7 +178,7 @@ export class UserConfigEffects {
         );
 
     @Effect({ dispatch: false }) saveUserConfigInJsonFile$ = this.actions$
-        .ofType(ActionTypes.SAVE_USER_CONFIG_IN_JSON_FILE)
+        .ofType(ActionTypes.SaveUserConfigInJsonFile)
         .pipe(
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([action, userConfiguration]) => {
@@ -186,7 +189,7 @@ export class UserConfigEffects {
         );
 
     @Effect({ dispatch: false }) saveUserConfigInBinFile$ = this.actions$
-        .ofType(ActionTypes.SAVE_USER_CONFIG_IN_BIN_FILE)
+        .ofType(ActionTypes.SaveUserConfigInBinFile)
         .pipe(
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([action, userConfiguration]) => {
@@ -198,7 +201,7 @@ export class UserConfigEffects {
         );
 
     @Effect() loadUserConfigurationFromFile$ = this.actions$
-        .ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LOAD_USER_CONFIGURATION_FROM_FILE)
+        .ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile)
         .pipe(
             map(action => action.payload),
             map((info: UploadFileData) => {

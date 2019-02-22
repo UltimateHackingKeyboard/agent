@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
-import { DefaultUserConfigurationService } from '../../../services/default-user-configuration.service';
 import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
 import { Subscription } from 'rxjs/Subscription';
 import { UserConfiguration } from 'uhk-common';
@@ -117,7 +116,8 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     private userConfig$: Store<UserConfiguration>;
     private userConfigSubscription: Subscription;
 
-    constructor(private store: Store<AppState>, private defaultUserConfigurationService: DefaultUserConfigurationService) {}
+    constructor(private store: Store<AppState>) {
+    }
 
     ngOnInit(): void {
         this.userConfig$ = this.store.select(getUserConfiguration);
@@ -132,7 +132,9 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.userConfigSubscription.unsubscribe();
+        if (this.userConfigSubscription) {
+            this.userConfigSubscription.unsubscribe();
+        }
     }
 
     onSetPropertyValue(propertyName: string, value: number): void {
@@ -143,6 +145,6 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     }
 
     resetToDefault() {
-       this.store.dispatch(new ResetMouseSpeedSettingsAction());
+        this.store.dispatch(new ResetMouseSpeedSettingsAction());
     }
 }
