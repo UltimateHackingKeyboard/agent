@@ -31,7 +31,7 @@ export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
     zeroInterfaceAvailable: true,
-    udevRuleInfo: UdevRulesInfo.Unkonwn,
+    udevRuleInfo: UdevRulesInfo.Unknown,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
     updatingFirmware: false,

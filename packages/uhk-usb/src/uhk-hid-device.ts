@@ -31,7 +31,7 @@ export class UhkHidDevice {
     private _prevDevices = [];
     private _device: HID;
     private _hasPermission = false;
-    private _udevRulesInfo = UdevRulesInfo.Unkonwn;
+    private _udevRulesInfo = UdevRulesInfo.Unknown;
 
     constructor(private logService: LogService,
                 private options: CommandLineArgs,

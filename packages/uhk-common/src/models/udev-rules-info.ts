@@ -3,14 +3,14 @@
  * Only on Linux need extra udev rules.
  */
 export enum UdevRulesInfo {
-    Unkonwn,
-    Ok,
+    Unknown = 'Unknown',
+    Ok = 'Ok',
     /**
      * Udev rules not exists need to setup on Linux
      */
-    NeedToSetup,
+    NeedToSetup = 'NeedToSetup',
     /**
      * Udev rules exist but different than expected on Linux
      */
-    Different
+    Different = 'Different'
 }
