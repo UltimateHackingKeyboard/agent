@@ -3,7 +3,7 @@
  * Only on Linux need extra udev rules.
  */
 export enum UdevRulesInfo {
-    Unkonwn = 'Unkonwn',
+    Unknown = 'Unknown',
     Ok = 'Ok',
     /**
      * Udev rules not exists need to setup on Linux
