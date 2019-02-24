@@ -70,10 +70,6 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (!state.zeroInterfaceAvailable) {
-                    return this.router.navigate(['/privilege']);
-                }
-
                 if (state.connected && state.zeroInterfaceAvailable) {
                     return this.router.navigate(['/']);
                 }
