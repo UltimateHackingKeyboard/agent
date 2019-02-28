@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, forwardRef, Input, Output, OnDestroy, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NouisliderComponent } from 'ng2-nouislider';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Observable, Observer } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export interface SliderPips {

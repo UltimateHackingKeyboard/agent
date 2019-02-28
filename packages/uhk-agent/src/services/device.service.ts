@@ -14,7 +14,7 @@ import {
     UpdateFirmwareData
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { interval } from 'rxjs/observable/interval';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';

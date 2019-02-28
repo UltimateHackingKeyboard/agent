@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { DragulaService } from 'ng2-dragula';
 import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -53,17 +53,17 @@ export class MacroListComponent {
         private dragulaService: DragulaService
     ) {
         /* tslint:disable:no-unused-variable: Used by Dragula. */
-        dragulaService.setOptions('macroActions', {
+        dragulaService.createGroup('macroActions', {
             moves: function (el: any, container: any, handle: any) {
                 return handle.className.includes('action--movable');
             }
         });
 
-        dragulaService.drag.subscribe((value: any) => {
+        dragulaService.drag('macroActions').subscribe((value: any) => {
             this.dragIndex = +value[1].getAttribute('data-index');
         });
 
-        dragulaService.drop.subscribe((value: any) => {
+        dragulaService.drop('macroActions').subscribe((value: any) => {
             if (value[4]) {
                 this.reorder.emit({
                     macroId: this.macro.id,

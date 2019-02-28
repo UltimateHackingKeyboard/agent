@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
+import { pluck } from 'rxjs/operators';
 
 import {
     AddMacroActionAction,
@@ -13,7 +14,6 @@ import {
     SelectMacroAction
 } from '../../../store/actions/macro';
 import { AppState, getSelectedMacro, macroPlaybackSupported } from '../../../store';
-import { pluck } from 'rxjs/operators';
 
 @Component({
     selector: 'macro-edit',

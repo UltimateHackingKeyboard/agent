@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { AppState, getBackupUserConfigurationState } from '../../../store';
 import { ResetUserConfigurationAction, RestoreUserConfigurationFromBackupAction } from '../../../store/actions/device';

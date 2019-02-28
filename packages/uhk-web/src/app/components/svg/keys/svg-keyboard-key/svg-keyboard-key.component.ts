@@ -6,7 +6,7 @@ import { animate, group, state, style, transition, trigger } from '@angular/anim
 
 import { Store } from '@ngrx/store';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Key } from 'ts-keycode-enum';
 

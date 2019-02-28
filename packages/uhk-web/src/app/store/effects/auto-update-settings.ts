@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, toPayload } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Observable, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { map, startWith, switchMap, withLatestFrom } from 'rxjs/operators';
 
@@ -10,7 +10,9 @@ import {
     ActionTypes,
     LoadAutoUpdateSettingsAction,
     LoadAutoUpdateSettingsSuccessAction,
-    SaveAutoUpdateSettingsSuccessAction
+    SaveAutoUpdateSettingsSuccessAction,
+    CheckForUpdateSuccessAction,
+    CheckForUpdateFailedAction
 } from '../actions/auto-update-settings';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -21,21 +23,21 @@ import { ShowNotificationAction } from '../actions/app';
 @Injectable()
 export class AutoUpdateSettingsEffects {
     @Effect() loadUserConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.LoadAutoUpdateSettings)
         .pipe(
+            ofType(ActionTypes.LoadAutoUpdateSettings),
             startWith(new LoadAutoUpdateSettingsAction()),
             switchMap(() => {
                 let settings: AutoUpdateSettings = this.dataStorageRepository.getAutoUpdateSettings();
                 if (!settings) {
                     settings = initialState;
                 }
-                return Observable.of(new LoadAutoUpdateSettingsSuccessAction(settings));
+                return of(new LoadAutoUpdateSettingsSuccessAction(settings));
             })
         );
 
     @Effect() saveAutoUpdateConfig$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.ToggleCheckForUpdateOnStartup, ActionTypes.TogglePreReleaseFlag)
         .pipe(
+            ofType(ActionTypes.ToggleCheckForUpdateOnStartup, ActionTypes.TogglePreReleaseFlag),
             withLatestFrom(this.store.select(getAutoUpdateSettings)),
             map(([action, config]) => {
                 this.dataStorageRepository.saveAutoUpdateSettings(config);
@@ -44,9 +46,10 @@ export class AutoUpdateSettingsEffects {
         );
 
     @Effect() sendNotification$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.CheckForUpdateFailed, ActionTypes.CheckForUpdateSuccess)
         .pipe(
-            map(toPayload),
+            ofType<CheckForUpdateSuccessAction | CheckForUpdateFailedAction>(
+                ActionTypes.CheckForUpdateFailed, ActionTypes.CheckForUpdateSuccess),
+            map(action => action.payload),
             map((message: string) => {
                 return new ShowNotificationAction({
                     type: NotificationType.Info,

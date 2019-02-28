@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Observable } from 'rxjs';
 import { first, map, tap } from 'rxjs/operators';
 
 import { LogService, NotificationType } from 'uhk-common';
@@ -15,8 +15,8 @@ import { AppUpdateRendererService } from '../../services/app-update-renderer.ser
 export class AppUpdateEffect {
     @Effect({ dispatch: false })
     appStart$: Observable<Action> = this.actions$
-        .ofType(ActionTypes.UpdateApp)
         .pipe(
+            ofType(ActionTypes.UpdateApp),
             first(),
             tap(() => {
                 this.appUpdateRendererService.sendUpdateAndRestartApp();
@@ -24,8 +24,8 @@ export class AppUpdateEffect {
         );
 
     @Effect({ dispatch: false }) checkForUpdate$ = this.actions$
-        .ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow)
         .pipe(
+            ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow),
             map(action => action.payload),
             tap((allowPrerelease: boolean) => {
                 this.logService.debug('[AppUpdateEffect] call checkForUpdate');
@@ -34,8 +34,8 @@ export class AppUpdateEffect {
         );
 
     @Effect() handleError$: Observable<Action> = this.actions$
-        .ofType<UpdateErrorAction>(ActionTypes.UpdateError)
         .pipe(
+            ofType<UpdateErrorAction>(ActionTypes.UpdateError),
             map(action => action.payload),
             map((message: string) => {
                 return new ShowNotificationAction({

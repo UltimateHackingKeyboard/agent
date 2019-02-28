@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { AppState, getMissingDeviceState } from '../../store';
 import { MissingDeviceState } from '../../models/missing-device-state';

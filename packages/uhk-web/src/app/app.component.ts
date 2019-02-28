@@ -1,7 +1,6 @@
 import { Component, HostListener, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';

@@ -23,7 +23,7 @@ export class FileUploadComponent {
 
         const fileReader = new FileReader();
         fileReader.onloadend = function () {
-            const arrayBuffer = new Uint8Array(fileReader.result);
+            const arrayBuffer = new Uint8Array(fileReader.result as ArrayBuffer);
             const target = event.target || event.srcElement || event.currentTarget;
             target.value = null;
             this.fileChanged.emit({

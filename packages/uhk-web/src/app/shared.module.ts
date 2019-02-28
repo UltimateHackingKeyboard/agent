@@ -6,8 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
-import { DragulaModule } from 'ng2-dragula/ng2-dragula';
-import { NgxSelectModule } from '@ert78gb/ngx-select-ex';
+import { DragulaModule } from 'ng2-dragula';
+import { NgxSelectModule } from 'ngx-select-ex';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
 
@@ -198,9 +198,13 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         CommonModule,
         BrowserAnimationsModule,
         FormsModule,
-        DragulaModule,
+        DragulaModule.forRoot(),
         routing,
-        NgxSelectModule,
+        NgxSelectModule.forRoot({
+            keepSelectedItems: true,
+            optionValueField: 'id',
+            optionTextField: 'text'
+        }),
         NouisliderModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({
