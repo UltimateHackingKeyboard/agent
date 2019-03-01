@@ -37,7 +37,7 @@ export class ApplicationEffects {
             })
         );
 
-    @Effect({dispatch: false})
+    @Effect({ dispatch: false })
     appStartInfo$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.LoadAppStartInfo),
@@ -46,7 +46,7 @@ export class ApplicationEffects {
             })
         );
 
-    @Effect({dispatch: false})
+    @Effect({ dispatch: false })
     showNotification$: Observable<Action> = this.actions$
         .pipe(
             ofType<ShowNotificationAction>(ActionTypes.AppShowNotification),
@@ -80,7 +80,7 @@ export class ApplicationEffects {
             mergeMap((action: Action) => [action, new DismissUndoNotificationAction()])
         );
 
-    @Effect({dispatch: false}) openUrlInNewWindow$ = this.actions$
+    @Effect({ dispatch: false }) openUrlInNewWindow$ = this.actions$
         .pipe(
             ofType<OpenUrlInNewWindowAction>(ActionTypes.OpenUrlInNewWindow),
             withLatestFrom(this.store.select(runningInElectron)),

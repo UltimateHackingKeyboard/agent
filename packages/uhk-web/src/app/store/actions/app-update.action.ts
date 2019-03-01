@@ -37,7 +37,8 @@ export class UpdatingAction implements Action {
 export class UpdateErrorAction implements Action {
     type = ActionTypes.UpdateError;
 
-    constructor(public payload: any) {}
+    constructor(public payload: any) {
+    }
 }
 
 export type Actions

@@ -117,7 +117,7 @@ export class DeviceEffects {
                 setTimeout(() => this.sendUserConfigToKeyboard(
                     state.userConfiguration.userConfiguration,
                     state.app.hardwareConfig),
-                           100);
+                    100);
             }),
             switchMap(() => EMPTY
             )
@@ -137,9 +137,9 @@ export class DeviceEffects {
 
                 return [
                     new ShowNotificationAction({
-                                                   type: NotificationType.Error,
-                                                   message: response.error.message
-                                               }),
+                        type: NotificationType.Error,
+                        message: response.error.message
+                    }),
                     new SaveToKeyboardSuccessFailed()
                 ];
             })
@@ -219,8 +219,8 @@ export class DeviceEffects {
         .pipe(
             ofType<UpdateFirmwareAction>(ActionTypes.UpdateFirmware),
             tap(() => this.deviceRendererService.updateFirmware({
-                                                                    versionInformation: getVersions()
-                                                                }))
+                versionInformation: getVersions()
+            }))
         );
 
     @Effect({ dispatch: false }) updateFirmwareWith$ = this.actions$
@@ -228,9 +228,9 @@ export class DeviceEffects {
             ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith),
             map(action => action.payload),
             tap(data => this.deviceRendererService.updateFirmware({
-                                                                      versionInformation: getVersions(),
-                                                                      firmware: data
-                                                                  }))
+                versionInformation: getVersions(),
+                firmware: data
+            }))
         );
 
     @Effect() updateFirmwareReply$ = this.actions$
@@ -238,16 +238,16 @@ export class DeviceEffects {
             ofType<UpdateFirmwareReplyAction>(ActionTypes.UpdateFirmwareReply),
             map(action => action.payload),
             switchMap((response: FirmwareUpgradeIpcResponse)
-                          : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction> => {
+                : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction> => {
 
                 if (response.success) {
                     return of(new UpdateFirmwareSuccessAction(response.modules));
                 }
 
                 return of(new UpdateFirmwareFailedAction({
-                                                             error: response.error,
-                                                             modules: response.modules
-                                                         }));
+                    error: response.error,
+                    modules: response.modules
+                }));
             })
         );
 
@@ -286,8 +286,8 @@ export class DeviceEffects {
 
     private sendUserConfigToKeyboard(userConfiguration: UserConfiguration, hardwareConfig: HardwareConfiguration): void {
         this.deviceRendererService.saveUserConfiguration({
-                                                             uniqueId: hardwareConfig && hardwareConfig.uniqueId,
-                                                             configuration: userConfiguration.toJsonObject()
-                                                         });
+            uniqueId: hardwareConfig && hardwareConfig.uniqueId,
+            configuration: userConfiguration.toJsonObject()
+        });
     }
 }

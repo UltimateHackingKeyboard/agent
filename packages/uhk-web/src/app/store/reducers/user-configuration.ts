@@ -216,8 +216,7 @@ export function reducer(
                                         setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                             }
                         }

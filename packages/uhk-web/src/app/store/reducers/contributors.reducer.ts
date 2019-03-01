@@ -18,14 +18,14 @@ export function reducer(state = initialState, action: Contributors.Actions) {
         case Contributors.ActionTypes.GetAgentContributors: {
             return {
                 ...state
-             };
+            };
         }
 
         case Contributors.ActionTypes.FetchAgentContributors: {
             return {
                 ...state,
                 isLoading: true
-             };
+            };
         }
 
         case Contributors.ActionTypes.AgentContributorsAvailable: {
@@ -33,7 +33,7 @@ export function reducer(state = initialState, action: Contributors.Actions) {
                 ...state,
                 contributors: (<Contributors.AgentContributorsAvailableAction>action).payload,
                 isLoading: false
-             };
+            };
         }
 
         case Contributors.ActionTypes.AgentContributorsNotAvailable: {
@@ -41,7 +41,7 @@ export function reducer(state = initialState, action: Contributors.Actions) {
                 ...state,
                 error: (<Contributors.AgentContributorsNotAvailableAction>action).payload,
                 isLoading: false
-             };
+            };
         }
 
         default:
