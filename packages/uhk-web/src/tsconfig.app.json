@@ -13,6 +13,6 @@
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
-    "preserveWhitespaces": false
+    "preserveWhitespaces": true
   }
 }
