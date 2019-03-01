@@ -1,13 +1,16 @@
 import {
-    Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output,
-    SimpleChange, ChangeDetectionStrategy
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    Output,
+    ChangeDetectionStrategy,
+    SimpleChanges
 } from '@angular/core';
 import { animate, group, state, style, transition, trigger } from '@angular/animations';
-
 import { Store } from '@ngrx/store';
-
-import { Subscription } from 'rxjs';
-
 import { Key } from 'ts-keycode-enum';
 
 import {
@@ -26,7 +29,7 @@ import {
 import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';
 
-import { AppState, getMacros } from '../../../../store';
+import { AppState } from '../../../../store';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
@@ -76,7 +79,7 @@ enum LabelTypes {
     styleUrls: ['./svg-keyboard-key.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
+export class SvgKeyboardKeyComponent implements OnChanges {
     @Input() id: string;
     @Input() rx: string;
     @Input() ry: string;
@@ -86,6 +89,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Input() active: boolean;
+    @Input() macroMap = new Map<number, Macro>();
 
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
@@ -99,9 +103,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
 
     labelSource: any;
     secondaryText: string;
-    macros: Macro[];
-    private subscription: Subscription;
-    private scanCodePressed: boolean;
+    private scanCodePressed = false;
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
     private altPressed = false;
@@ -113,12 +115,6 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         private element: ElementRef,
         private captureService: CaptureService
     ) {
-        this.subscription = store.select(getMacros)
-            .subscribe((macros: Macro[]) => this.macros = macros);
-
-        this.reset();
-        this.captureService.populateMapping();
-        this.scanCodePressed = false;
     }
 
     @HostListener('click', ['$event'])
@@ -156,12 +152,10 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         if (e.keyCode === Key.Alt && this.pressedAltLocation > -1) {
             this.pressedAltLocation = -1;
             e.preventDefault();
-        }
-        else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
+        } else if (e.keyCode === Key.Shift && this.pressedShiftLocation > -1) {
             this.pressedShiftLocation = -1;
             e.preventDefault();
-        }
-        else if (this.scanCodePressed) {
+        } else if (this.scanCodePressed) {
             e.preventDefault();
             this.scanCodePressed = false;
         } else if (this.recording) {
@@ -209,21 +203,13 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
         this.reset();
     }
 
-    ngOnInit() {
-        this.setLabels();
-    }
-
-    ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
+    ngOnChanges(changes: SimpleChanges) {
         if (changes['keyAction']) {
             this.setLabels();
             if (this.keybindAnimationEnabled) {
                 this.changeAnimation = 'active';
             }
         }
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
     }
 
     onChangeAnimationDone() {
@@ -363,7 +349,7 @@ export class SvgKeyboardKeyComponent implements OnInit, OnChanges, OnDestroy {
             this.labelSource = keyAction.keymapAbbreviation;
         } else if (this.keyAction instanceof PlayMacroAction) {
             const keyAction: PlayMacroAction = this.keyAction as PlayMacroAction;
-            const macro: Macro = this.macros.find((_macro: Macro) => _macro.id === keyAction.macroId);
+            const macro: Macro = this.macroMap.get(keyAction.macroId);
             this.labelType = LabelTypes.IconText;
             this.labelSource = {
                 icon: this.mapper.getIcon('macro'),

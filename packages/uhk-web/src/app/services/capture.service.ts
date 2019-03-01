@@ -16,6 +16,7 @@ export class CaptureService {
         this.leftModifiers = new Map<number, KeyModifierModel>();
         this.rightModifiers = new Map<number, KeyModifierModel>();
         this.mapping = new Map<number, number>();
+        this.populateMapping();
     }
 
     public getMap(code: number) {

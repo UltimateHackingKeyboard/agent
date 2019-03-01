@@ -12,6 +12,7 @@
             [active]="selected && i == selectedKey.keyId"
             [keybindAnimationEnabled]="keybindAnimationEnabled"
             [capturingEnabled]="capturingEnabled"
+            [macroMap]="macroMap"
             (keyClick)="onKeyClick(i, $event)"
             (capture)="onCapture(i, $event)"
             (mouseenter)="onKeyHover(i, $event, true)"

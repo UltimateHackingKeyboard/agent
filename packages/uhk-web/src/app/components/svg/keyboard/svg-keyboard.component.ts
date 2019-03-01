@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Module } from 'uhk-common';
@@ -41,7 +41,7 @@ import {
         ])
     ]
 })
-export class SvgKeyboardComponent implements OnInit {
+export class SvgKeyboardComponent {
     @Input() moduleConfig: Module[];
     @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
@@ -69,10 +69,6 @@ export class SvgKeyboardComponent implements OnInit {
         this.viewBox = '-520 582 1100 470';
         this.halvesSplit = false;
         this.moduleAnimationStates = [];
-    }
-
-    ngOnInit() {
-        this.setModules();
     }
 
     ngOnChanges(changes: SimpleChanges) {

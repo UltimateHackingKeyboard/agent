@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
@@ -37,11 +37,14 @@ export class KeymapEditComponent implements OnDestroy {
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
+    keymap: Keymap;
 
     private routeSubscription: Subscription;
+    private keymapSubscription: Subscription;
 
     constructor(protected store: Store<AppState>,
-                route: ActivatedRoute) {
+                route: ActivatedRoute,
+                private cdRef: ChangeDetectorRef) {
         this.routeSubscription = route
             .params
             .pipe(
@@ -50,6 +53,11 @@ export class KeymapEditComponent implements OnDestroy {
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 
         this.keymap$ = store.select(getSelectedKeymap);
+        this.keymapSubscription = this.keymap$
+            .subscribe(keymap => {
+                this.keymap = keymap;
+                this.cdRef.markForCheck();
+            });
 
         this.deletable$ = store.select(isKeymapDeletable);
 
@@ -59,6 +67,7 @@ export class KeymapEditComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         this.routeSubscription.unsubscribe();
+        this.keymapSubscription.unsubscribe();
     }
 
     downloadKeymap() {

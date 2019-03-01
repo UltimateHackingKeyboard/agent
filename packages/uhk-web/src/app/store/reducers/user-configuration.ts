@@ -514,7 +514,10 @@ export const getSelectedMacro = (state: State): Macro => {
 };
 export const isKeymapDeletable = (state: State): boolean => state.userConfiguration.keymaps.length > 1;
 export const hasMacro = (state: State): boolean => state.userConfiguration.macros.length > 0;
-
+export const reduceMacroToMap = (map: Map<number, Macro>, macro: Macro) => map.set(macro.id, macro);
+export const getMacroMap = (state: State): Map<number, Macro> => {
+    return state.userConfiguration.macros.reduce(reduceMacroToMap, new Map());
+};
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let position = 0;
