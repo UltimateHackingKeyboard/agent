@@ -161,7 +161,7 @@ export class PopoverComponent implements OnChanges {
     }
 
     ngOnChanges(change: SimpleChanges) {
-        let tab: TabHeader;
+        let tab: TabHeader = this.tabHeaders[5];
 
         if (this.keyPosition && this.wrapPosition && (change['keyPosition'] || change['wrapPosition'])) {
             this.calculatePosition();
