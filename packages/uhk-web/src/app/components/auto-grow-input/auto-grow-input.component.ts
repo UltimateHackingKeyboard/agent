@@ -78,7 +78,6 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
     }
 
     writeValue(obj: any): void {
-        console.log('write', new Date());
         if (this.model === obj) {
             return;
         }
