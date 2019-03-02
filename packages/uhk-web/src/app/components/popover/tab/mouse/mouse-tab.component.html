@@ -80,6 +80,27 @@
                     [class.btn-primary]="mouseActionParam === MouseActionParam.rightClick"
                     (click)="setMouseActionParam(MouseActionParam.rightClick)">Right</button>
         </div>
+        <div class="additional-keys">
+            <div class="btn-group col-xs-12" role="group">
+                <button type="button" class="btn btn-default col-xs-4"
+                        [class.btn-primary]="mouseActionParam === MouseActionParam.leftClick"
+                        (click)="setMouseActionParam(MouseActionParam.button4)">Button 4</button>
+                <button type="button" class="btn btn-default col-xs-4"
+                        [class.btn-primary]="mouseActionParam === MouseActionParam.leftClick"
+                        (click)="setMouseActionParam(MouseActionParam.button5)">Button 5</button>
+                <button type="button" class="btn btn-default col-xs-4"
+                        [class.btn-primary]="mouseActionParam === MouseActionParam.leftClick"
+                        (click)="setMouseActionParam(MouseActionParam.button6)">Button 6</button>
+            </div>
+            <div class="btn-group col-xs-12" role="group">
+                <button type="button" class="btn btn-default col-xs-6"
+                        [class.btn-primary]="mouseActionParam === MouseActionParam.leftClick"
+                        (click)="setMouseActionParam(MouseActionParam.button7)">Button 7</button>
+                <button type="button" class="btn btn-default col-xs-6"
+                        [class.btn-primary]="mouseActionParam === MouseActionParam.leftClick"
+                        (click)="setMouseActionParam(MouseActionParam.button8)">Button 8</button>
+            </div>
+        </div>
     </div>
     <div *ngSwitchCase="3" class="mouse__config mouse__config--speed text-center">
         <div class="help-text--mouse-speed text-left">

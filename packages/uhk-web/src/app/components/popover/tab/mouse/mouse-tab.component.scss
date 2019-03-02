@@ -54,6 +54,36 @@
     }
 }
 
+.mouse__config--click {
+    .additional-keys {
+        display: inline-block;
+        margin-top: 1rem;
+
+        .btn-group:first-child {
+            .btn {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+        }
+
+        .btn-group:last-child {
+            .btn {
+                border-top: 0;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+
+                &:last-child {
+                    right: 1px;
+                }
+            }
+        }
+
+        // .btn {
+        //     margin-top: 1rem;
+        // }
+    }
+}
+
 .mouse__config--speed {
     .btn-default {
         font-size: 25px;
