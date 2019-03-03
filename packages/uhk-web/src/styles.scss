@@ -128,16 +128,6 @@ a.link-inline {
     cursor: pointer;
 }
 
-.btn-line {
-    .btn {
-        margin-right: 5px;
-
-        &:last-child {
-            margin-right: 0;
-        }
-    }
-}
-
 @mixin code-style() {
     color: #6a737d;
     background-color: #f6f8fa;

@@ -15,7 +15,7 @@
             <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,
                 and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
 
-            <p *ngIf="firmwareUpgradeAllowed$ | async" class="btn-line">
+            <p *ngIf="firmwareUpgradeAllowed$ | async">
                 <button class="btn btn-primary"
                         [disabled]="flashFirmwareButtonDisbabled$ | async"
                         (click)="onUpdateFirmware()">
