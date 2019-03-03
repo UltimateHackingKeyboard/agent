@@ -15,15 +15,18 @@ import * as KeymapActions from '../actions/keymap';
 import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
 import { isValidName } from '../../util';
+import { defaultLastEditKey, LastEditedKey } from '../../models';
 
 export interface State {
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
+    lastEditedKey: LastEditedKey;
 }
 
 export const initialState: State = {
-    userConfiguration: new UserConfiguration()
+    userConfiguration: new UserConfiguration(),
+    lastEditedKey: defaultLastEditKey()
 };
 
 export function reducer(
@@ -230,7 +233,11 @@ export function reducer(
 
             return {
                 ...state,
-                userConfiguration
+                userConfiguration,
+                lastEditedKey: {
+                    key: 'key-' + (keyIndex + 1),
+                    moduleId: moduleIndex
+                }
             };
         }
 
@@ -480,7 +487,8 @@ export function reducer(
         case KeymapActions.ActionTypes.Select:
             return {
                 ...state,
-                selectedKeymapAbbr: (action as KeymapActions.SelectKeymapAction).payload
+                selectedKeymapAbbr: (action as KeymapActions.SelectKeymapAction).payload,
+                lastEditedKey: defaultLastEditKey()
             };
 
         case MacroActions.ActionTypes.Select:
@@ -518,6 +526,8 @@ export const reduceMacroToMap = (map: Map<number, Macro>, macro: Macro) => map.s
 export const getMacroMap = (state: State): Map<number, Macro> => {
     return state.userConfiguration.macros.reduce(reduceMacroToMap, new Map());
 };
+export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
+
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let position = 0;

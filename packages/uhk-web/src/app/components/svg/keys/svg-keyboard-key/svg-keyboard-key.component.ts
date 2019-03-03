@@ -7,9 +7,10 @@ import {
     OnChanges,
     Output,
     ChangeDetectionStrategy,
-    SimpleChanges
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
-import { animate, group, state, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Store } from '@ngrx/store';
 import { Key } from 'ts-keycode-enum';
 
@@ -48,22 +49,6 @@ enum LabelTypes {
 
 @Component({
     animations: [
-        trigger('change', [
-            transition('inactive => active', [
-                style({ fill: '#fff' }),
-                group([
-                    animate('1s ease-out', style({
-                        fill: '#333'
-                    }))
-                ])
-            ])
-        ]),
-        trigger('active', [
-            // http://colorblendy.com/#!/multiply/4099e5/cccccc
-            state('1', style({ fill: '#4099e5' })), // Signature blue color blending
-            transition('1 => *', animate('200ms')),
-            transition('* => 1', animate('0ms')) // Instant color to blue
-        ]),
         trigger('recording', [
             state('inactive', style({
                 fill: 'rgba(204, 0, 0, 1)'
@@ -86,17 +71,18 @@ export class SvgKeyboardKeyComponent implements OnChanges {
     @Input() height: number;
     @Input() width: number;
     @Input() keyAction: KeyAction;
-    @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Input() active: boolean;
     @Input() macroMap = new Map<number, Macro>();
+    @Input() blink: boolean;
 
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
 
+    @ViewChild('svgRec') svgRec: ElementRef<HTMLElement>;
+
     enumLabelTypes = LabelTypes;
 
-    changeAnimation: string = 'inactive';
     recordAnimation: string;
     recording: boolean;
     labelType: LabelTypes;
@@ -206,14 +192,11 @@ export class SvgKeyboardKeyComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keyAction']) {
             this.setLabels();
-            if (this.keybindAnimationEnabled) {
-                this.changeAnimation = 'active';
-            }
         }
-    }
 
-    onChangeAnimationDone() {
-        this.changeAnimation = 'inactive';
+        if (changes['blink'] && changes['blink'].currentValue) {
+            this.blinkSvgRec();
+        }
     }
 
     onRecordingAnimationDone() {
@@ -226,7 +209,6 @@ export class SvgKeyboardKeyComponent implements OnChanges {
 
     private reset() {
         this.recording = false;
-        this.changeAnimation = 'inactive';
         this.captureService.initModifiers();
         this.shiftPressed = false;
         this.altPressed = false;
@@ -360,6 +342,17 @@ export class SvgKeyboardKeyComponent implements OnChanges {
             this.labelSource = this.keyAction;
         } else {
             this.labelSource = undefined;
+        }
+    }
+
+    private blinkSvgRec(): void {
+        if (this.svgRec) {
+            this.svgRec.nativeElement.classList.remove('blink');
+            setTimeout(() => {
+                if (this.svgRec) {
+                    this.svgRec.nativeElement.classList.add('blink');
+                }
+            }, 10);
         }
     }
 }

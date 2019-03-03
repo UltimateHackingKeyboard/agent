@@ -1,4 +1,7 @@
-<svg:rect [id]="id"
+<svg:rect #svgRec
+          class="svg-rec"
+          [class.active]="active"
+          [id]="id"
           [attr.rx]="rx"
           [attr.ry]="ry"
           [attr.height]="height"

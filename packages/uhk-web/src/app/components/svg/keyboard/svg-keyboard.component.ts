@@ -13,6 +13,7 @@ import {
     SvgKeyboardCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
+import { LastEditedKey } from '../../../models';
 
 @Component({
     selector: 'svg-keyboard',
@@ -43,7 +44,6 @@ import {
 })
 export class SvgKeyboardComponent {
     @Input() moduleConfig: Module[];
-    @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
@@ -51,6 +51,7 @@ export class SvgKeyboardComponent {
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() showDescription = false;
+    @Input() lastEditedKey: LastEditedKey;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();

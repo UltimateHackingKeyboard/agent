@@ -48,6 +48,7 @@ import {
 } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
 import { mapLeftRigthModifierToKeyActionModifier } from '../../../util';
+import { LastEditedKey } from '../../../models';
 
 interface NameValuePair {
     name: string;
@@ -67,6 +68,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() halvesSplit: boolean;
     @Input() keyboardLayout: KeyboardLayout.ANSI;
     @Input() allowLayerDoubleTap: boolean;
+    @Input() lastEditedKey: LastEditedKey;
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
@@ -76,7 +78,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     keyEditConfig: { moduleId: number, keyId: number };
     selectedKey: { layerId: number, moduleId: number, keyId: number };
     popoverInitKeyAction: KeyAction;
-    keybindAnimationEnabled: boolean;
     currentLayer: number = 0;
     tooltipData: {
         posTop: number,
@@ -138,14 +139,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         if (keymapChanges) {
             this.popoverShown = false;
             this.layers = this.keymap.layers;
-            if (keymapChanges.isFirstChange() ||
-                keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation) {
-                this.keybindAnimationEnabled = keymapChanges.isFirstChange();
-            } else {
-                this.keybindAnimationEnabled = true;
-            }
         }
-
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {

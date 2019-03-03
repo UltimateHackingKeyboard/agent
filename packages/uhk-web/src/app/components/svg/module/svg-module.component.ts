@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    Output,
+    ChangeDetectionStrategy
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { KeyAction, Macro } from 'uhk-common';
 import { Subscription } from 'rxjs';
@@ -24,8 +31,9 @@ export class SvgModuleComponent implements OnDestroy {
     @Input() keyActions: KeyAction[];
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
-    @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
+    @Input() lastEdited: boolean;
+    @Input() lastEditedKeyId: string;
     @Output() keyClick = new EventEmitter<SvgModuleKeyClickEvent>();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter<SvgModuleCaptureEvent>();
@@ -63,5 +71,9 @@ export class SvgModuleComponent implements OnDestroy {
             ...event,
             keyId
         });
+    }
+
+    keyboardKeysTrackBy(index: number, key: SvgKeyboardKey): string {
+        return `${index}`;
     }
 }

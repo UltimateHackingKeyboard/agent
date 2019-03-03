@@ -14,11 +14,13 @@ import {
     isKeymapDeletable,
     layerDoubleTapSupported,
     AppState,
-    getKeyboardLayout
+    getKeyboardLayout,
+    lastEditedKey
 } from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { EditDescriptionAction, SelectKeymapAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
+import { LastEditedKey } from '../../../models';
 
 @Component({
     selector: 'keymap-edit',
@@ -37,6 +39,7 @@ export class KeymapEditComponent implements OnDestroy {
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
+    lastEditedKey$: Observable<LastEditedKey>;
     keymap: Keymap;
 
     private routeSubscription: Subscription;
@@ -63,6 +66,7 @@ export class KeymapEditComponent implements OnDestroy {
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
+        this.lastEditedKey$ = store.select(lastEditedKey);
     }
 
     ngOnDestroy(): void {

@@ -6,6 +6,7 @@
                        [halvesSplit]="keyboardSplit"
                        [keyboardLayout]="keyboardLayout$ | async"
                        [allowLayerDoubleTap]="allowLayerDoubleTap$ | async"
+                       [lastEditedKey]="lastEditedKey$ | async"
                        (descriptionChanged)="descriptionChanged($event)"></svg-keyboard-wrap>
 </ng-template>
 
