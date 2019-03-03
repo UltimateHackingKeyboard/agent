@@ -12,8 +12,8 @@
            [selectedKey]="selectedKey"
            [@split]="moduleAnimationStates[i]"
            [selected]="selectedKey?.moduleId === i"
-           [lastEdited]="lastEditedKey.moduleId === i"
-           [lastEditedKeyId]="lastEditedKey.key"
+           [lastEdited]="lastEditedKey?.moduleId === i"
+           [lastEditedKeyId]="lastEditedKey?.key"
            (keyClick)="onKeyClick(i, $event)"
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
            (capture)="onCapture(i, $event)" />

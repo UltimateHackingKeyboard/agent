@@ -72,6 +72,10 @@ export class SvgKeyboardComponent {
         this.moduleAnimationStates = [];
     }
 
+    ngOnInit() {
+        this.setModules();
+    }
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes.halvesSplit) {
             this.updateModuleAnimationStates();
