@@ -11,7 +11,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 import { Store } from '@ngrx/store';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { AppState, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';

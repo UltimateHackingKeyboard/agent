@@ -1,14 +1,15 @@
-<ng-template [ngIf]="keymap$ | async">
-    <keymap-header [keymap]="keymap$ | async"
+<ng-template [ngIf]="keymap">
+    <keymap-header [keymap]="keymap"
                    [deletable]="deletable$ | async"
                    (downloadClick)="downloadKeymap()"></keymap-header>
-    <svg-keyboard-wrap [keymap]="keymap$ | async"
+    <svg-keyboard-wrap [keymap]="keymap"
                        [halvesSplit]="keyboardSplit"
                        [keyboardLayout]="keyboardLayout$ | async"
                        [allowLayerDoubleTap]="allowLayerDoubleTap$ | async"
+                       [lastEditedKey]="lastEditedKey$ | async"
                        (descriptionChanged)="descriptionChanged($event)"></svg-keyboard-wrap>
 </ng-template>
 
-<div *ngIf="!(keymap$ | async)" class="not-found">
+<div *ngIf="!keymap" class="not-found">
     Sorry, there is no keymap with this abbreviation.
 </div>

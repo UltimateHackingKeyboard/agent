@@ -1,13 +1,23 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
-import { KeyAction } from 'uhk-common';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    Output,
+    ChangeDetectionStrategy
+} from '@angular/core';
+import { Store } from '@ngrx/store';
+import { KeyAction, Macro } from 'uhk-common';
+import { Subscription } from 'rxjs';
 
 import { SvgKeyboardKey } from '../keys';
 import {
     SvgKeyCaptureEvent,
     SvgKeyClickEvent,
-        SvgModuleCaptureEvent,
+    SvgModuleCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
+import { AppState, getMacroMap } from '../../../store';
 
 @Component({
     selector: 'g[svg-module]',
@@ -15,20 +25,30 @@ import {
     styleUrls: ['./svg-module.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgModuleComponent {
+export class SvgModuleComponent implements OnDestroy {
     @Input() coverages: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
-    @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
+    @Input() lastEdited: boolean;
+    @Input() lastEditedKeyId: string;
     @Output() keyClick = new EventEmitter<SvgModuleKeyClickEvent>();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter<SvgModuleCaptureEvent>();
 
-    constructor() {
+    private macroMap: Map<number, Macro>;
+    private macroMapSubscription: Subscription;
+
+    constructor(private store: Store<AppState>) {
         this.keyboardKeys = [];
+        this.macroMapSubscription = store.select(getMacroMap)
+            .subscribe(map => this.macroMap = map);
+    }
+
+    ngOnDestroy(): void {
+        this.macroMapSubscription.unsubscribe();
     }
 
     onKeyClick(keyId: number, event: SvgKeyClickEvent): void {
@@ -51,5 +71,9 @@ export class SvgModuleComponent {
             ...event,
             keyId
         });
+    }
+
+    keyboardKeysTrackBy(index: number, key: SvgKeyboardKey): string {
+        return `${index}`;
     }
 }

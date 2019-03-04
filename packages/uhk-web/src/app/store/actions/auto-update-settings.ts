@@ -29,6 +29,7 @@ export class CheckForUpdateNowAction implements Action {
 
 export class CheckForUpdateSuccessAction implements Action {
     type = ActionTypes.CheckForUpdateSuccess;
+
     constructor(public payload?: string) {
     }
 }

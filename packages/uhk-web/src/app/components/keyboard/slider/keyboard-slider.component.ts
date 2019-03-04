@@ -8,6 +8,7 @@ import {
     SvgKeyboardKeyClickEvent,
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
+import { LastEditedKey } from '../../../models';
 
 type AnimationKeyboard =
     'init' |
@@ -81,12 +82,12 @@ type AnimationKeyboard =
 export class KeyboardSliderComponent implements OnChanges {
     @Input() layers: Layer[];
     @Input() currentLayer: number;
-    @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Input() halvesSplit: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
+    @Input() lastEditedKey: LastEditedKey;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();

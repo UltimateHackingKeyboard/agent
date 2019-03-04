@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Keymap } from 'uhk-common';
 
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';

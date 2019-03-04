@@ -1,3 +1,6 @@
+// / need to load the buffer package from dependency instead of use node default buffer
+import { Buffer } from 'buffer/';
+
 export class UhkBuffer {
 
     static simpleElementWriter<T>(buffer: UhkBuffer, element: T): void {

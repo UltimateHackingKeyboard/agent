@@ -16,5 +16,8 @@
       "@angular/*": ["../node_modules/@angular/*"],
       "rxjs/*": ["../node_modules/rxjs/*"]
     }
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true
   }
 }

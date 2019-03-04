@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Keymap } from 'uhk-common';
@@ -14,11 +14,13 @@ import {
     isKeymapDeletable,
     layerDoubleTapSupported,
     AppState,
-    getKeyboardLayout
+    getKeyboardLayout,
+    lastEditedKey
 } from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { EditDescriptionAction, SelectKeymapAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
+import { LastEditedKey } from '../../../models';
 
 @Component({
     selector: 'keymap-edit',
@@ -37,11 +39,15 @@ export class KeymapEditComponent implements OnDestroy {
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
+    lastEditedKey$: Observable<LastEditedKey>;
+    keymap: Keymap;
 
     private routeSubscription: Subscription;
+    private keymapSubscription: Subscription;
 
     constructor(protected store: Store<AppState>,
-                route: ActivatedRoute) {
+                route: ActivatedRoute,
+                private cdRef: ChangeDetectorRef) {
         this.routeSubscription = route
             .params
             .pipe(
@@ -50,15 +56,22 @@ export class KeymapEditComponent implements OnDestroy {
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 
         this.keymap$ = store.select(getSelectedKeymap);
+        this.keymapSubscription = this.keymap$
+            .subscribe(keymap => {
+                this.keymap = keymap;
+                this.cdRef.markForCheck();
+            });
 
         this.deletable$ = store.select(isKeymapDeletable);
 
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
+        this.lastEditedKey$ = store.select(lastEditedKey);
     }
 
     ngOnDestroy(): void {
         this.routeSubscription.unsubscribe();
+        this.keymapSubscription.unsubscribe();
     }
 
     downloadKeymap() {

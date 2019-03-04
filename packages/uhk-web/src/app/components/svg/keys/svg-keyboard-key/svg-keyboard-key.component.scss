@@ -10,3 +10,27 @@
         fill: #494949;
     }
 }
+
+.svg-rec {
+    transition-timing-function: ease-out;
+    transition: 0.2s;
+
+    &.active {
+        fill: #4099e5;
+        transition-timing-function: ease-in;
+        transition: 0s;
+    }
+
+    &.blink {
+        animation: blinkingRec 1s 1 ease-out;
+    }
+}
+
+@keyframes blinkingRec {
+    0% {
+        fill: #ffffff;
+    }
+    100% {
+        fill: #333333;
+    }
+}

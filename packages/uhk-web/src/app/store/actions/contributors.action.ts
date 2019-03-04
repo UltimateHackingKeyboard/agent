@@ -12,6 +12,7 @@ export enum ActionTypes {
 export class GetAgentContributorsAction implements Action {
     type = ActionTypes.GetAgentContributors;
 }
+
 export class FetchAgentContributorsAction implements Action {
     type = ActionTypes.FetchAgentContributors;
 }

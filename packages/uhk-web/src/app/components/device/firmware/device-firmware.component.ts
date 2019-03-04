@@ -1,7 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
 import { Constants, HardwareModules, VersionInformation } from 'uhk-common';
 
 import { OpenUrlInNewWindowAction } from '../../../store/actions/app';

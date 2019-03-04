@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { KeyModifiers, KeystrokeType, SecondaryRoleAction } from 'uhk-common';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { AppState, getOperatingSystem } from '../store';
 import { OperatingSystem } from '../models/operating-system';

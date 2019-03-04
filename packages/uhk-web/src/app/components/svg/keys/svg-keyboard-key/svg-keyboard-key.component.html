@@ -1,6 +1,6 @@
-<svg:rect [@change]="changeAnimation"
-          (@change.done)="onChangeAnimationDone()"
-          [@active]="active"
+<svg:rect #svgRec
+          class="svg-rec"
+          [class.active]="active"
           [id]="id"
           [attr.rx]="rx"
           [attr.ry]="ry"

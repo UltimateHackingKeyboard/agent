@@ -40,7 +40,7 @@
       true,
       "ban-single-arg-parens"
     ],
-    "radix": true,
+    "radix": false,
     "switch-default": true,
     "triple-equals": true,
     "eofline": true,
@@ -63,7 +63,6 @@
     "align": [
       true,
       "parameters",
-      "arguments",
       "statements"
     ],
     "comment-format": [

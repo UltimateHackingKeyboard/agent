@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { XtermLog } from '../../../models/xterm-log';
 import { AppState, flashFirmwareButtonDisbabled, updatingFirmware, xtermLog } from '../../../store';

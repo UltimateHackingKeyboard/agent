@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Module } from 'uhk-common';
@@ -13,6 +13,7 @@ import {
     SvgKeyboardCaptureEvent,
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
+import { LastEditedKey } from '../../../models';
 
 @Component({
     selector: 'svg-keyboard',
@@ -41,9 +42,8 @@ import {
         ])
     ]
 })
-export class SvgKeyboardComponent implements OnInit {
+export class SvgKeyboardComponent {
     @Input() moduleConfig: Module[];
-    @Input() keybindAnimationEnabled: boolean;
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
@@ -51,6 +51,7 @@ export class SvgKeyboardComponent implements OnInit {
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() showDescription = false;
+    @Input() lastEditedKey: LastEditedKey;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();

@@ -14,8 +14,7 @@ import {
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, map } from 'rxjs/operators';
 
 import {
@@ -162,7 +161,7 @@ export class PopoverComponent implements OnChanges {
     }
 
     ngOnChanges(change: SimpleChanges) {
-        let tab: TabHeader;
+        let tab: TabHeader = this.tabHeaders[5];
 
         if (this.keyPosition && this.wrapPosition && (change['keyPosition'] || change['wrapPosition'])) {
             this.calculatePosition();

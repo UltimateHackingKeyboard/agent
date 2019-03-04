@@ -54,6 +54,8 @@ export const getMacros = createSelector(userConfigState, fromUserConfig.getMacro
 export const getSelectedMacro = createSelector(userConfigState, fromUserConfig.getSelectedMacro);
 export const isKeymapDeletable = createSelector(userConfigState, fromUserConfig.isKeymapDeletable);
 export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro);
+export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMacroMap);
+export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
 
 export const appState = (state: AppState) => state.app;
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);

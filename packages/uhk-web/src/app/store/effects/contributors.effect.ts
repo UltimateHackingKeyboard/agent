@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { of } from 'rxjs/observable/of';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, catchError, reduce, mergeMap, withLatestFrom } from 'rxjs/operators';
 
 import { Constants } from 'uhk-common';
@@ -23,8 +21,8 @@ import {
 @Injectable()
 export class ContributorsEffect {
     @Effect() getContributors$: Observable<Action> = this.actions$
-        .ofType<GetAgentContributorsAction>(ActionTypes.GetAgentContributors)
         .pipe(
+            ofType<GetAgentContributorsAction>(ActionTypes.GetAgentContributors),
             withLatestFrom(this.store.select(contributors)),
             map(([action, state]) => {
                 if (state.contributors.length === 0) {
@@ -35,8 +33,8 @@ export class ContributorsEffect {
         );
 
     @Effect() fetchContributors$: Observable<Action> = this.actions$
-        .ofType<FetchAgentContributorsAction>(ActionTypes.FetchAgentContributors)
         .pipe(
+            ofType<FetchAgentContributorsAction>(ActionTypes.FetchAgentContributors),
             mergeMap(() => this.http.get<UHKContributor[]>(Constants.AGENT_CONTRIBUTORS_GITHUB_API_URL)),
             switchMap((response: UHKContributor[]) => {
                 return from(response).pipe(
@@ -63,5 +61,6 @@ export class ContributorsEffect {
             catchError(error => of(new AgentContributorsNotAvailableAction(error)))
         );
 
-    constructor(private store: Store<AppState>, private actions$: Actions, private http: HttpClient) {}
+    constructor(private store: Store<AppState>, private actions$: Actions, private http: HttpClient) {
+    }
 }

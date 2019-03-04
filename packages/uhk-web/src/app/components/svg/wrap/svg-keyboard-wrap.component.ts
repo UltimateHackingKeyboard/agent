@@ -13,8 +13,7 @@ import {
     ViewChild
 } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
@@ -49,6 +48,7 @@ import {
 } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
 import { mapLeftRigthModifierToKeyActionModifier } from '../../../util';
+import { LastEditedKey } from '../../../models';
 
 interface NameValuePair {
     name: string;
@@ -68,6 +68,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() halvesSplit: boolean;
     @Input() keyboardLayout: KeyboardLayout.ANSI;
     @Input() allowLayerDoubleTap: boolean;
+    @Input() lastEditedKey: LastEditedKey;
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
@@ -77,7 +78,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     keyEditConfig: { moduleId: number, keyId: number };
     selectedKey: { layerId: number, moduleId: number, keyId: number };
     popoverInitKeyAction: KeyAction;
-    keybindAnimationEnabled: boolean;
     currentLayer: number = 0;
     tooltipData: {
         posTop: number,
@@ -109,7 +109,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         this.tooltipData = {
             posTop: 0,
             posLeft: 0,
-            content: Observable.of([]),
+            content: of([]),
             show: false
         };
     }
@@ -139,14 +139,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         if (keymapChanges) {
             this.popoverShown = false;
             this.layers = this.keymap.layers;
-            if (keymapChanges.isFirstChange() ||
-                keymapChanges.previousValue.abbreviation !== keymapChanges.currentValue.abbreviation) {
-                this.keybindAnimationEnabled = keymapChanges.isFirstChange();
-            } else {
-                this.keybindAnimationEnabled = true;
-            }
         }
-
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
@@ -302,7 +295,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                     value: SecondaryRoleAction[keystrokeAction.secondaryRoleAction]
                 });
             }
-            return Observable.of(content);
+            return of(content);
         } else if (keyAction instanceof MouseAction) {
             const mouseAction: MouseAction = keyAction;
             const content: NameValuePair[] =
@@ -316,7 +309,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
                         value: camelCaseToSentence(MouseActionParam[mouseAction.mouseAction])
                     }
                 ];
-            return Observable.of(content);
+            return of(content);
         } else if (keyAction instanceof PlayMacroAction) {
             const playMacroAction: PlayMacroAction = keyAction;
             return this.store

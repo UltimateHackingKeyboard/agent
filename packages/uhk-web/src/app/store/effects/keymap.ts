@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { map, pairwise, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Keymap } from 'uhk-common';
@@ -16,8 +15,8 @@ import { AppState, getKeymaps } from '../index';
 export class KeymapEffects {
 
     @Effect() loadKeymaps$: Observable<Action> = this.actions$
-        .ofType(Keymaps.ActionTypes.LoadKeymaps)
         .pipe(
+            ofType(Keymaps.ActionTypes.LoadKeymaps),
             startWith(new Keymaps.LoadKeymapsAction()),
             switchMap(() => {
                 const presetsRequireContext = (<any>require).context('../../../res/presets', false, /.json$/);
@@ -29,8 +28,8 @@ export class KeymapEffects {
         );
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
-        .ofType(Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate)
         .pipe(
+            ofType(Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate),
             withLatestFrom(this.store.select(getKeymaps)
                 .pipe(
                     pairwise()
@@ -44,8 +43,8 @@ export class KeymapEffects {
         );
 
     @Effect({ dispatch: false }) remove$: any = this.actions$
-        .ofType(Keymaps.ActionTypes.Remove)
         .pipe(
+            ofType(Keymaps.ActionTypes.Remove),
             withLatestFrom(this.store.select(getKeymaps)),
             map(latest => latest[1]),
             tap(keymaps => {
@@ -59,8 +58,8 @@ export class KeymapEffects {
         );
 
     @Effect({ dispatch: false }) editAbbr$: any = this.actions$
-        .ofType(Keymaps.ActionTypes.EditAbbr)
         .pipe(
+            ofType(Keymaps.ActionTypes.EditAbbr),
             withLatestFrom(this.store.select(getKeymaps)),
             tap(([action, keymaps]: [Keymaps.EditKeymapAbbreviationAction, Keymap[]]) => {
                 for (const keymap of keymaps) {
@@ -72,5 +71,6 @@ export class KeymapEffects {
             })
         );
 
-    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) { }
+    constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {
+    }
 }

@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
-import { defer } from 'rxjs/observable/defer';
-import { of } from 'rxjs/observable/of';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { defer, Observable, of } from 'rxjs';
 import { map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
@@ -55,17 +53,17 @@ export class UserConfigEffects {
         return of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
     });
 
-    @Effect() saveUserConfig$: Observable<Action> = (this.actions$
-        .ofType(
-            Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate, Keymaps.ActionTypes.EditName, Keymaps.ActionTypes.EditAbbr,
-            Keymaps.ActionTypes.SetDefault, Keymaps.ActionTypes.Remove, Keymaps.ActionTypes.SaveKey,
-            Keymaps.ActionTypes.EditDescription,
-            Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate, Macros.ActionTypes.EditName, Macros.ActionTypes.Remove,
-            Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
-            Macros.ActionTypes.ReorderAction,
-            ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue
-        ) as Observable<Keymaps.Actions | Macros.Actions | RenameUserConfigurationAction>)
+    @Effect() saveUserConfig$: Observable<Action> = this.actions$
         .pipe(
+            ofType(
+                Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate, Keymaps.ActionTypes.EditName,
+                Keymaps.ActionTypes.EditAbbr, Keymaps.ActionTypes.SetDefault, Keymaps.ActionTypes.Remove,
+                Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.EditDescription,
+                Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate, Macros.ActionTypes.EditName, Macros.ActionTypes.Remove,
+                Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
+                Macros.ActionTypes.ReorderAction,
+                ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue
+            ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {
                 config.recalculateConfigurationLength();
@@ -102,8 +100,8 @@ export class UserConfigEffects {
         );
 
     @Effect() undoUserConfig$: Observable<Action> = this.actions$
-        .ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction)
         .pipe(
+            ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction),
             map(action => action.payload),
             mergeMap((payload: UndoUserConfigData) => {
                 const config = new UserConfiguration().fromJsonObject(payload.config);
@@ -115,14 +113,14 @@ export class UserConfigEffects {
         );
 
     @Effect({ dispatch: false }) loadConfigFromDevice$ = this.actions$
-        .ofType(ActionTypes.LoadConfigFromDevice)
         .pipe(
+            ofType(ActionTypes.LoadConfigFromDevice),
             tap(() => this.deviceRendererService.loadConfigurationFromKeyboard())
         );
 
     @Effect() loadConfigFromDeviceReply$ = this.actions$
-        .ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LoadConfigFromDeviceReply)
         .pipe(
+            ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LoadConfigFromDeviceReply),
             withLatestFrom(this.store.select(getRouterState)),
             mergeMap(([action, route]): any => {
                 const data: ConfigurationReply = action.payload;
@@ -178,8 +176,8 @@ export class UserConfigEffects {
         );
 
     @Effect({ dispatch: false }) saveUserConfigInJsonFile$ = this.actions$
-        .ofType(ActionTypes.SaveUserConfigInJsonFile)
         .pipe(
+            ofType(ActionTypes.SaveUserConfigInJsonFile),
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([action, userConfiguration]) => {
                 const asString = JSON.stringify(userConfiguration.toJsonObject(), null, 2);
@@ -189,8 +187,8 @@ export class UserConfigEffects {
         );
 
     @Effect({ dispatch: false }) saveUserConfigInBinFile$ = this.actions$
-        .ofType(ActionTypes.SaveUserConfigInBinFile)
         .pipe(
+            ofType(ActionTypes.SaveUserConfigInBinFile),
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([action, userConfiguration]) => {
                 const uhkBuffer = new UhkBuffer();
@@ -201,8 +199,8 @@ export class UserConfigEffects {
         );
 
     @Effect() loadUserConfigurationFromFile$ = this.actions$
-        .ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile)
         .pipe(
+            ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
             map(action => action.payload),
             map((info: UploadFileData) => {
                 try {

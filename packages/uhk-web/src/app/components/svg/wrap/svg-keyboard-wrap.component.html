@@ -2,12 +2,12 @@
     <layers [class.disabled]="popoverShown" (select)="selectLayer($event.index)" [current]="currentLayer"></layers>
     <keyboard-slider [layers]="layers"
                      [currentLayer]="currentLayer"
-                     [keybindAnimationEnabled]="keybindAnimationEnabled"
                      [capturingEnabled]="popoverEnabled"
                      [selectedKey]="selectedKey"
                      [halvesSplit]="halvesSplit"
                      [keyboardLayout]="keyboardLayout"
                      [description]="keymap.description"
+                     [lastEditedKey]="lastEditedKey"
                      (keyClick)="onKeyClick($event)"
                      (keyHover)="onKeyHover($event)"
                      (capture)="onCapture($event)"

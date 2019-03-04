@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
 import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
 import { UserConfiguration } from 'uhk-common';
 import { ResetMouseSpeedSettingsAction } from '../../../store/actions/device';
 
@@ -113,7 +113,7 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
         step: 1
     };
 
-    private userConfig$: Store<UserConfiguration>;
+    private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
