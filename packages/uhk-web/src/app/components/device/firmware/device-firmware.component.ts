@@ -36,7 +36,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareUpgradeAllowed$: Observable<boolean>;
     firmwareUpgradeFailed$: Observable<boolean>;
     firmwareUpgradeSuccess$: Observable<boolean>;
-    firmwareGithubIssueUrl: string = FIRMWARE_GITHUB_ISSUE_URL;
+    firmwareGithubIssueUrl: string;
 
     constructor(private store: Store<AppState>) {
         this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
@@ -49,6 +49,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
         this.firmwareUpgradeAllowed$ = store.select(firmwareUpgradeAllowed);
         this.firmwareUpgradeFailed$ = store.select(firmwareUpgradeFailed);
         this.firmwareUpgradeSuccess$ = store.select(firmwareUpgradeSuccess);
+        this.firmwareGithubIssueUrl = Constants.FIRMWARE_GITHUB_ISSUE_URL;
     }
 
     ngOnDestroy(): void {
