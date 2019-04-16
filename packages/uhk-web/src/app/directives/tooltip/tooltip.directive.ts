@@ -2,6 +2,9 @@
 import { AfterContentInit, Directive, ElementRef, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+const TOOLTIP_SANITAZER_WHITE_LIST = (<any>$.fn).tooltip.Constructor.DEFAULTS.whiteList;
+TOOLTIP_SANITAZER_WHITE_LIST.div.push('style');
+
 @Directive({
     selector: '[data-toggle="tooltip"]'
 })
@@ -39,7 +42,8 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
             placement: this.placement,
             html: this.html,
             template: this.getCustomTemplate(),
-            title: this.title
+            title: this.title,
+            whiteList: TOOLTIP_SANITAZER_WHITE_LIST
         });
 
         (<any>jQuery(this.elementRef.nativeElement)
