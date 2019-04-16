@@ -60,12 +60,6 @@ export class TooltipDirective implements AfterContentInit, OnChanges {
             innerStyle = `style="max-width: ${this.maxWidth}px;"`;
         }
 
-        console.log({
-            title: this.title,
-            tooltipStyle,
-            innerStyle
-        });
-
         return `<div class="tooltip" ${tooltipStyle}>
             <div class="tooltip-arrow"></div>
             <div class="tooltip-inner" ${innerStyle}></div>
