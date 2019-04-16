@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { Constants } from 'uhk-common';
-
 @Component({
     selector: 'help-page',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,5 +10,4 @@ import { Constants } from 'uhk-common';
     }
 })
 export class HelpPageComponent {
-    agentHelpAccentCharsUrl: string = Constants.AGENT_HELP_ACCENT_CHARS_URL;
 }
