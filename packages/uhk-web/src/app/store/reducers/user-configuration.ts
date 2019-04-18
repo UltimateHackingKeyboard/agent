@@ -195,6 +195,8 @@ export function reducer(
             const newKeymap: Keymap = payload.keymap;
             const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
             const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
+            const oldKeyAction = newKeymap.layers[layerIndex].modules[moduleIndex].keyActions[keyIndex];
+            const oldKeyIsSwitchLayerAction = oldKeyAction instanceof SwitchLayerAction;
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
@@ -222,6 +224,8 @@ export function reducer(
                             } else {
                                 setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                             }
+                        } else if (oldKeyIsSwitchLayerAction && index - 1 === (oldKeyAction as SwitchLayerAction).layer) {
+                            setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                         }
 
                         return layer;
