@@ -328,9 +328,11 @@ export class UhkHidDevice {
         }
 
         const expectedUdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60.rules'));
+        const v2UdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60_v2.rules'));
         const currentUdevSettings = await getFileContentAsync('/etc/udev/rules.d/50-uhk60.rules');
 
-        if (isEqualArray(expectedUdevSettings, currentUdevSettings)) {
+        if (isEqualArray(expectedUdevSettings, currentUdevSettings) ||
+            isEqualArray(v2UdevSettings, currentUdevSettings)) {
             this._udevRulesInfo = UdevRulesInfo.Ok;
             return UdevRulesInfo.Ok;
         }
