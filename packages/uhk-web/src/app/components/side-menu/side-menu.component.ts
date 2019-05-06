@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs';
 
-import { AppState, getSideMenuPageState } from '../../store';
+import { AppState, getSideMenuPageState, macrosInUse } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
 import { SideMenuPageState } from '../../models/side-menu-page-state';
@@ -41,10 +41,13 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     @ViewChild('deviceName') deviceName: ElementRef;
 
     private stateSubscription: Subscription;
+    private macroInUseSubscription: Subscription;
+    private macrosInUse;
 
     constructor(private store: Store<AppState>,
                 private renderer: Renderer2,
                 private cdRef: ChangeDetectorRef) {
+        this.macrosInUse = null;
         this.animation = {
             device: 'active',
             configuration: 'active',
@@ -59,12 +62,22 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             this.state = data;
             this.cdRef.markForCheck();
         });
+        this.macroInUseSubscription = this.store.select(macrosInUse)
+            .subscribe(macros => {
+              this.macrosInUse = macros;
+              console.log('macros', macros);
+            });
     }
 
     ngOnDestroy(): void {
         if (this.stateSubscription) {
             this.stateSubscription.unsubscribe();
         }
+    }
+
+    getMacroUsageCount(macroId) {
+      console.log('this.macros', this.macrosInUse);
+      return this.macrosInUse.filter(m => m.macroId === macroId).length;
     }
 
     toggleHide(event: Event, type: string) {
