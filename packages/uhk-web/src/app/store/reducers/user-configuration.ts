@@ -528,8 +528,8 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
 };
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
 
-export const macrosInUse = (state: State): Array<object> => {
-  let macrosInUse = [];
+export const getMacroUsage = (state: State): Array<object> => {
+  let macros = [];
   let maps = state.userConfiguration.keymaps;
   for (let mapsi = 0; mapsi < maps.length; mapsi++) {
     let map = maps[mapsi];
@@ -540,7 +540,7 @@ export const macrosInUse = (state: State): Array<object> => {
         for (let keysi = 0; keysi < module.keyActions.length; keysi++) {
           let key = module.keyActions[keysi];
           if (key && key.hasOwnProperty('_macroId')) {
-            macrosInUse.push({
+            macros.push({
               mapName: maps[mapsi].name,
               layerIndex: layersi,
               moduleIndex: modulesi,
@@ -552,7 +552,7 @@ export const macrosInUse = (state: State): Array<object> => {
       }
     }
   }
-  return macrosInUse;
+  return macros;
 }
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
