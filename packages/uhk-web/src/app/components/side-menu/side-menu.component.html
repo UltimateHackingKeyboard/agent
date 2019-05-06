@@ -90,8 +90,11 @@
                     <li *ngFor="let macro of state.macros" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/macro', macro.id]"
-                               [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
-                            <span class="sidebar__macro_count badge">{{getMacroUsageCount(macro.id)}}</span>
+                               [class.disabled]="state.updatingFirmware">{{macro.name}}
+                               <span class="sidebar__macro_count badge"
+                                  title="This is the number of times the macro is used across all keymaps."
+                                  data-toggle="tooltip" data-placement="bottom">{{getMacroUsageCount(macro.id)}}</span>
+                            </a>
                         </div>
                     </li>
                 </ul>
