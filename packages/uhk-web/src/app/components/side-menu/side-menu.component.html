@@ -91,7 +91,7 @@
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/macro', macro.id]"
                                [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
-                            <span class="badge text-align-right">{{getMacroUsageCount(macro.id)}}</span>
+                            <span class="sidebar__macro_count badge">{{getMacroUsageCount(macro.id)}}</span>
                         </div>
                     </li>
                 </ul>
