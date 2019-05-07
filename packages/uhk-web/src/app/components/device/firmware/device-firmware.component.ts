@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Constants, HardwareModules, VersionInformation } from 'uhk-common';
 
-import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 import {
     AppState,
     firmwareUpgradeAllowed,
@@ -37,6 +36,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareUpgradeAllowed$: Observable<boolean>;
     firmwareUpgradeFailed$: Observable<boolean>;
     firmwareUpgradeSuccess$: Observable<boolean>;
+    firmwareGithubIssueUrl: string;
 
     constructor(private store: Store<AppState>) {
         this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
@@ -49,6 +49,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
         this.firmwareUpgradeAllowed$ = store.select(firmwareUpgradeAllowed);
         this.firmwareUpgradeFailed$ = store.select(firmwareUpgradeFailed);
         this.firmwareUpgradeSuccess$ = store.select(firmwareUpgradeSuccess);
+        this.firmwareGithubIssueUrl = Constants.FIRMWARE_GITHUB_ISSUE_URL;
     }
 
     ngOnDestroy(): void {
@@ -61,10 +62,5 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     changeFile(data: UploadFileData): void {
         this.store.dispatch(new UpdateFirmwareWithAction(data.data));
-    }
-
-    openFirmwareGitHubIssuePage(event): void {
-        event.preventDefault();
-        this.store.dispatch(new OpenUrlInNewWindowAction(Constants.FIRMWARE_GITHUB_ISSUE_URL));
     }
 }

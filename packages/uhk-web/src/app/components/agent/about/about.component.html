@@ -12,7 +12,7 @@
             <div>
                 Agent version: <span class="text-bold">{{ version }}</span>
             </div>
-            <a class="link-github" [href]="agentGithubUrl" (click)="openUrlInBrowser($event)">Agent on GitHub</a>
+            <a class="link-github" [href]="agentGithubUrl" externalUrl>Agent on GitHub</a>
         </div>
         <ng-container *ngIf="(state$ | async) as state">
             <div class="form-group">
@@ -35,7 +35,7 @@
                     Loading...
                 </div>
                 <div *ngIf="state.error" class="form-group">
-                    We experienced a problem while fetching contributor list. <a [href]="agentContributorsUrl" (click)="openUrlInBrowser($event)">Check Contributors page on GitHub!</a>
+                    We experienced a problem while fetching contributor list. <a [href]="agentContributorsUrl" externalUrl>Check Contributors page on GitHub!</a>
                 </div>
             </ng-template>
         </ng-container>

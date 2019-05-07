@@ -14,6 +14,15 @@ export class ExternalUrlDirective {
 
     @HostListener('click', ['$event'])
     onClick($event: MouseEvent): void {
+        this.openUrl($event);
+    }
+
+    @HostListener('auxclick', ['$event'])
+    onAuxClick($event: MouseEvent): void {
+        this.openUrl($event);
+    }
+
+    openUrl($event: MouseEvent): void {
         $event.preventDefault();
         $event.stopPropagation();
 
