@@ -529,23 +529,23 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
 
 export const getMacroUsage = (state: State): Array<object> => {
-    let macros = [];
-    let maps = state.userConfiguration.keymaps;
+    const macros = [];
+    const maps = state.userConfiguration.keymaps;
     for (let mapsi = 0; mapsi < maps.length; mapsi++) {
-        let map = maps[mapsi];
+        const map = maps[mapsi];
         for (let layersi = 0; layersi < map.layers.length; layersi++) {
-            let layer = map.layers[layersi];
+            const layer = map.layers[layersi];
             for (let modulesi = 0; modulesi < layer.modules.length; modulesi++) {
-                let module = layer.modules[modulesi];
+                const module = layer.modules[modulesi];
                 for (let keysi = 0; keysi < module.keyActions.length; keysi++) {
-                    let key = module.keyActions[keysi];
+                    const key = module.keyActions[keysi];
                     if (key && key.hasOwnProperty('_macroId')) {
                         macros.push({
                             mapName: maps[mapsi].name,
                             layerIndex: layersi,
                             moduleIndex: modulesi,
                             keyIndex: keysi,
-                            macroId: key['_macroId'],
+                            macroId: key['_macroId']
                         });
                     }
                 }
@@ -553,7 +553,7 @@ export const getMacroUsage = (state: State): Array<object> => {
         }
     }
     return macros;
-}
+};
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
