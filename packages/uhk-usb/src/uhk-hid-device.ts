@@ -346,11 +346,11 @@ function kbootCommandName(module: ModuleSlotToI2cAddress): string {
         case ModuleSlotToI2cAddress.leftHalf:
             return 'leftHalf';
 
-        case ModuleSlotToI2cAddress.leftAddon:
-            return 'leftAddon';
+        case ModuleSlotToI2cAddress.leftModule:
+            return 'leftModule';
 
-        case ModuleSlotToI2cAddress.rightAddon:
-            return 'rightAddon';
+        case ModuleSlotToI2cAddress.rightModule:
+            return 'rightModule';
 
         default:
             return 'Unknown';

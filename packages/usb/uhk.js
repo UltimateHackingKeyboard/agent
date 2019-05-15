@@ -499,13 +499,13 @@ uhk = exports = module.exports = moduleExports = {
     },
     moduleSlotToI2cAddress: {
         leftHalf: '0x10',
-        leftAddon: '0x20',
-        rightAddon: '0x30',
+        leftModule: '0x20',
+        rightModule: '0x30',
     },
     moduleSlotToId: {
         leftHalf: 1,
-        leftAddon: 2,
-        rightAddon: 3,
+        leftModule: 2,
+        rightModule: 3,
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,

@@ -7,8 +7,8 @@ function slaveI2cErrorBufferToString(buffer, slaveId) {
 
     const slaveIdToName = [
         'leftHalf',
-        'leftAddon',
-        'rightAddon',
+        'leftModule',
+        'rightModule',
         'rightLedDriver',
         'leftLedDriver',
         'kboot',
