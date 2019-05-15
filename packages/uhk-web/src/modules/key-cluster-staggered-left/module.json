@@ -2,7 +2,7 @@
     "moduleId": 2,
     "name": "key-cluster-staggered-left",
     "description": "Left key cluster",
-    "slot": "left-addon",
+    "slot": "left-module",
     "keyCount": 5,
     "pointerCount": 1
 }
