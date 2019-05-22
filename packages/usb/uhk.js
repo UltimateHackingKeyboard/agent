@@ -303,6 +303,7 @@ async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
     exec(`${blhostUsb} reset`);
 
     await uhk.reenumerate('normalKeyboard');
+    await sleep(1000);
     device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
     await sleep(1000);
