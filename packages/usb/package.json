@@ -6,7 +6,6 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "@types/node": "8.0.28",
-    "node-gyp": "^4.0.0",
     "shx": "0.2.2",
     "typescript": "2.6.2"
   },
@@ -20,9 +19,5 @@
     "tmp": "0.0.33",
     "uhk-common": "1.0.0",
     "uhk-usb": "1.0.0"
-  },
-  "scripts": {
-    "build": "npm run build:usb",
-    "build:usb": "cd node_modules/node-hid && node-gyp rebuild"
   }
 }
