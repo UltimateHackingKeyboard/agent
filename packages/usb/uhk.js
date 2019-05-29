@@ -43,7 +43,7 @@ function uint32ToArray(value) {
 }
 
 function writeDevice(device, data, options={}) {
-    const dataBuffer = new Buffer(data);
+    const dataBuffer = Buffer.from(data);
     if (!options.noDebug) {
         writeLog('W: ', dataBuffer);
     }
@@ -396,7 +396,7 @@ async function writeHca(device, isIso) {
 }
 
 async function eraseHca(device) {
-    const buffer = new Buffer(Array(64).fill(0xff));
+    const buffer = Buffer.from(Array(64).fill(0xff));
     await uhk.writeConfig(device, buffer, true);
     await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.hardwareConfig);
 }

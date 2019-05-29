@@ -23,7 +23,7 @@ export async function saveTmpFirmware(data: Array<number>): Promise<TmpFirmware>
 
 function writeDataToFile(data: Array<number>, filePath: string): Promise<void> {
     return new Promise((resolve, reject) => {
-        const buffer = new Buffer(data);
+        const buffer = Buffer.from(data);
 
         fs.writeFile(filePath, buffer, err => {
             if (err) {

@@ -7,10 +7,10 @@ const chunkSize = 63;
 let isHardwareConfig = process.argv[2] === 'h';
 let configTypeString = isHardwareConfig ? 'hardware' : 'user';
 let offset = 0;
-let configBuffer = new Buffer(0);
+let configBuffer = Buffer.alloc(0);
 let chunkSizeToRead;
 
-const payload = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
+const payload = Buffer.from([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
 device.write(uhk.getTransferData(payload));
 let buffer = Buffer.from(device.readSync());
 const hardwareConfigMaxSize = buffer[1] + (buffer[2]<<8);
@@ -27,7 +27,7 @@ while (offset < configSize) {
     device.write(uhk.getTransferData(buffer));
     buffer = Buffer.from(device.readSync());
     console.log('read-config-chunk', uhk.bufferToString(buffer));
-    configBuffer = Buffer.concat([configBuffer, new Buffer(buffer.slice(1, chunkSizeToRead + 1))]);
+    configBuffer = Buffer.concat([configBuffer, Buffer.from(buffer.slice(1, chunkSizeToRead + 1))]);
     offset += chunkSizeToRead
 }
 console.log('read ', uhk.bufferToString(configBuffer));
