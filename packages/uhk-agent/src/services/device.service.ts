@@ -14,9 +14,7 @@ import {
     UpdateFirmwareData
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
-import { Subscription } from 'rxjs';
-import { interval } from 'rxjs/observable/interval';
-import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Subscription, interval, from } from 'rxjs';
 import { distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
@@ -252,7 +250,7 @@ export class DeviceService {
         this.pollTimer$ = interval(1000)
             .pipe(
                 startWith(0),
-                switchMap(() => fromPromise(this.device.getDeviceConnectionStateAsync())),
+                switchMap(() => from(this.device.getDeviceConnectionStateAsync())),
                 distinctUntilChanged<DeviceConnectionState>(isEqual),
                 tap((state: DeviceConnectionState) => {
                     this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);

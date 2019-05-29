@@ -15,7 +15,7 @@
   },
   "license": "GPL-3.0",
   "engines": {
-    "node": ">=8.12.0 <9.0.0",
+    "node": ">=10.2.1 <11.0.0",
     "npm": ">=6.4.0 <7.0.0"
   },
   "devDependencies": {
@@ -41,12 +41,12 @@
     "decompress": "4.2.0",
     "decompress-tarbz2": "4.1.1",
     "devtron": "1.4.0",
-    "electron": "2.0.16",
+    "electron": "3.1.10",
     "electron-builder": "20.34.0",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
     "electron-log": "2.2.16",
-    "electron-rebuild": "1.8.2",
+    "electron-rebuild": "1.8.5",
     "electron-settings": "3.1.4",
     "electron-updater": "2.21.4",
     "exports-loader": "0.6.3",
@@ -100,6 +100,5 @@
     "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist ./tmp",
     "predeploy-gh-pages": "lerna run build:web --scope=uhk-web",
     "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist"
-  },
-  "dependencies": {}
+  }
 }
