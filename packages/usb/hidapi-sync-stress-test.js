@@ -6,7 +6,7 @@ let counter = 1;
 
 while (true) {
     console.log(`hidapi sync test ${counter++}`);
-    const sendData = new Buffer([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
+    const sendData = Buffer.from([uhk.usbCommands.getDeviceProperty, uhk.devicePropertyIds.configSizes]);
     device.write(uhk.getTransferData(sendData));
     device.readSync()
 }

@@ -13,7 +13,7 @@ function getUint16(buffer, offset) {
 let prevGeneric, prevBasic, prevMedia, prevSystem, prevMouse;
 function getDebugInfo() {
 
-    const payload = new Buffer([uhk.usbCommands.getDebugBuffer]);
+    const payload = Buffer.from([uhk.usbCommands.getDebugBuffer]);
 //    console.log(payload)
 //    console.log('Sending ', uhk.bufferToString(payload));
     device.write(uhk.getTransferData(payload));

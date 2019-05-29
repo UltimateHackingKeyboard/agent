@@ -145,12 +145,12 @@ export class UhkHidDevice {
     }
 
     public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
-        await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
+        await this.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
         await this.waitUntilKeyboardBusy();
     }
 
     public async enableUsbStackTest(): Promise<void> {
-        await this.write(new Buffer([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
+        await this.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
         await this.waitUntilKeyboardBusy();
     }
 
@@ -169,7 +169,7 @@ export class UhkHidDevice {
 
     public async waitUntilKeyboardBusy(): Promise<void> {
         while (true) {
-            const buffer = await this.write(new Buffer([UsbCommand.GetDeviceState]));
+            const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
             if (buffer[1] === 0) {
                 break;
             }
@@ -186,7 +186,7 @@ export class UhkHidDevice {
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.debug(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}`);
 
-        const message = new Buffer([
+        const message = Buffer.from([
             UsbCommand.Reenumerate,
             enumerationMode,
             BOOTLOADER_TIMEOUT_MS & 0xff,
@@ -240,16 +240,16 @@ export class UhkHidDevice {
         const moduleName = kbootCommandName(module);
         this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
-            transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
-            transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command, module]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, module]);
         }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
         this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
-        const transfer = new Buffer([UsbCommand.JumpToModuleBootloader, module]);
+        const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
     }
 

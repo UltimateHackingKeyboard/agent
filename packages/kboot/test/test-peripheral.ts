@@ -11,7 +11,7 @@ export class TestPeripheral implements Peripheral {
         const response = {
             tag: ResponseTags.Generic,
             code: ResponseCodes.Success,
-            raw: new Buffer(0)
+            raw: Buffer.alloc(0)
         };
 
         return Promise.resolve(response);
@@ -22,6 +22,6 @@ export class TestPeripheral implements Peripheral {
     }
 
     readMemory(startAddress: number, count: number): Promise<Buffer> {
-        return Promise.resolve(new Buffer(0));
+        return Promise.resolve(Buffer.alloc(0));
     }
 }

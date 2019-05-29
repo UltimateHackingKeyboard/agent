@@ -43,8 +43,8 @@ export class UsbPeripheral implements Peripheral {
             throw new Error('USB device can not be found');
         }
 
-        this._responseBuffer = new Buffer(0);
-        this._dataBuffer = new Buffer(0);
+        this._responseBuffer = Buffer.alloc(0);
+        this._dataBuffer = Buffer.alloc(0);
 
         this._device = new HID(device.path);
         this._device.on('data', this._usbDataListener.bind(this));
@@ -228,9 +228,9 @@ export class UsbPeripheral implements Peripheral {
                     const data = buffer.slice(0, byte);
 
                     if (buffer.length === byte) {
-                        this[bufferName] = new Buffer(0);
+                        this[bufferName] = Buffer.alloc(0);
                     } else {
-                        const newDataBuffer = new Buffer(buffer.length - byte);
+                        const newDataBuffer = Buffer.alloc(buffer.length - byte);
                         buffer.copy(newDataBuffer, 0, byte);
                         this[bufferName] = newDataBuffer;
                     }
@@ -248,11 +248,11 @@ export class UsbPeripheral implements Peripheral {
     }
 
     private _resetDataBuffer(): void {
-        this._dataBuffer = new Buffer(0);
+        this._dataBuffer = Buffer.alloc(0);
     }
 
     private _resetResponseBuffer(): void {
-        this._responseBuffer = new Buffer(0);
+        this._responseBuffer = Buffer.alloc(0);
     }
 
     private async _getNextCommandResponse(): Promise<CommandResponse> {
