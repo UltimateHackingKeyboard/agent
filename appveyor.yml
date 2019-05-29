@@ -7,7 +7,7 @@ environment:
     secure: 3IebpEKmC39codi1wT6dXx8mql4/mCL1JzZ7lir7GQ5MWRnCxlED2OXbiKHHigDV
   CSC_LINK: c:\projects\uhk-agent\scripts\certs\windows-cert.p12
   matrix:
-    - nodejs_version: "8"
+    - nodejs_version: "10.2.1"
 
 cache:
   - node_modules -> package.json
@@ -24,6 +24,7 @@ install:
   - choco install chromium
   - set CI=true
   - set PATH=%APPDATA%\npm;%PATH%
+  - npm install -g npm@6.4.0
   - node -v
   - npm -v
   - appveyor-retry npm install
