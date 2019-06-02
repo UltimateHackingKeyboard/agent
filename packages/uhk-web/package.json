@@ -1,7 +1,7 @@
 {
   "name": "uhk-web",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
