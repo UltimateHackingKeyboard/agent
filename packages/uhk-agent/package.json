@@ -25,9 +25,6 @@
     "uhk-usb": "^1.0.0"
   },
   "devDependencies": {
-    "@types/decompress": "4.2.0",
-    "@types/node": "8.0.33",
-    "@types/tmp": "0.0.33"
   },
   "scripts": {
     "start": "electron ./dist/electron-main.js",
