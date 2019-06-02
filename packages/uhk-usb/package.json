@@ -9,7 +9,6 @@
     "lint": "tslint --project tsconfig.json"
   },
   "devDependencies": {
-    "@types/node": "8.0.28"
   },
   "dependencies": {
     "kboot": "0.0.0",
