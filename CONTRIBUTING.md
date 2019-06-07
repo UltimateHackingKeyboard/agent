@@ -2,7 +2,7 @@
 
 Before contributing to this project, you must sign [the CLA](/cla/cla-1.0.0.md).
 
-To sign the CLA, add your GitHub username to the end of CLA. Make sure that the usernames remain alphabetically sorted.
+To sign the CLA, add your GitHub username to the end of the CLA. Make sure that the usernames remain alphabetically sorted.
 
 Then create a pull request with the title:
 
