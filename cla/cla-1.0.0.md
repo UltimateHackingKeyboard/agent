@@ -98,6 +98,6 @@ IF THE DISCLAIMER AND DAMAGE WAIVER MENTIONED IN SECTION 4. AND SECTION 5. CANNO
 I have read this Agreement, and fully agree to it by signing it with my GitHub username:
 
 - @attilacsanyi
+- @ert78gb
 - @mondalaci
 - @NejcZdovc
-- @ert78gb
