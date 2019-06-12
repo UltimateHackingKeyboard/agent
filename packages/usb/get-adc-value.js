@@ -4,7 +4,7 @@ const uhk = require('./uhk');
 const device = uhk.getUhkDevice();
 
 function getAdcValue() {
-    const data = uhk.getTransferData(new Buffer([uhk.usbCommands.getAdcValue]));
+    const data = uhk.getTransferData(Buffer.from([uhk.usbCommands.getAdcValue]));
     console.log('Sending ', data);
     device.write(data);
     const receivedBuffer = Buffer.from(device.readSync());

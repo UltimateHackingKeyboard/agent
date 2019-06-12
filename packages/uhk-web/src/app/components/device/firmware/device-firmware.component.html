@@ -32,7 +32,7 @@
                  role="alert">
                 <p>Firmware update failed. Disconnect every USB device from your computer (including USB hubs, KVM switches, USB dongles, and everything else), then connect only your UHK and retry.</p>
 
-                <p>If you've tried the above and the update still keeps failing, please <a class="link-github" (click)="openFirmwareGitHubIssuePage($event)">create a GitHub issue</a>, and attach the update log.</p>
+                <p>If you've tried the above and the update still keeps failing, please <a class="link-github" [href]="firmwareGithubIssueUrl" externalUrl>create a GitHub issue</a>, and attach the update log.</p>
             </div>
 
             <div *ngIf="firmwareUpgradeSuccess$ | async"

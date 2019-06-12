@@ -5,7 +5,7 @@ const uhk = require('./uhk');
 const slaveId = parseInt(process.argv[2]);
 
 const device = uhk.getUhkDevice();
-const sendData = new Buffer([uhk.usbCommands.getSlaveI2cErrors, slaveId]);
+const sendData = Buffer.from([uhk.usbCommands.getSlaveI2cErrors, slaveId]);
 device.write(uhk.getTransferData(sendData));
 const response = Buffer.from(device.readSync());
 
@@ -22,8 +22,8 @@ function slaveI2cErrorBufferToString(buffer) {
 
     const slaveIdToName = [
         'leftHalf',
-        'leftAddon',
-        'rightAddon',
+        'leftModule',
+        'rightModule',
         'rightLedDriver',
         'leftLedDriver',
         'kboot',

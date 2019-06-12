@@ -209,7 +209,7 @@ export class UserConfigEffects {
                     if (info.filename.endsWith('.bin')) {
                         userConfig.fromBinary(UhkBuffer.fromArray(info.data));
                     } else {
-                        const buffer = new Buffer(info.data);
+                        const buffer = Buffer.from(info.data);
                         const json = buffer.toString();
                         userConfig.fromJsonObject(JSON.parse(json));
                     }

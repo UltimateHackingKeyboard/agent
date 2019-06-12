@@ -72,14 +72,14 @@ export enum EnumerationNameToProductId {
 
 export enum ModuleSlotToI2cAddress {
     leftHalf = 0x10,
-    leftAddon = 0x20,
-    rightAddon = 0x30
+    leftModule = 0x20,
+    rightModule = 0x30
 }
 
 export enum ModuleSlotToId {
     leftHalf = 1,
-    leftAddon = 2,
-    rightAddon = 3
+    leftModule = 2,
+    rightModule = 3
 }
 
 export enum KbootCommands {

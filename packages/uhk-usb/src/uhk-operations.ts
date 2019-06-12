@@ -165,7 +165,7 @@ export class UhkOperations {
             this.logService.debug(`[DeviceOperation] getConfigSize() configSize: ${configSize}`);
             const chunkSize = 63;
             let offset = 0;
-            let configBuffer = new Buffer(0);
+            let configBuffer = Buffer.alloc(0);
             let firstRead = true;
 
             this.logService.debug(`[DeviceOperation] USB[T]: Read ${configName} from keyboard`);
@@ -174,7 +174,7 @@ export class UhkOperations {
                 const writeBuffer = Buffer.from(
                     [UsbCommand.ReadConfig, configBufferId, chunkSizeToRead, offset & 0xff, offset >> 8]);
                 const readBuffer = await this.device.write(writeBuffer);
-                configBuffer = Buffer.concat([configBuffer, new Buffer(readBuffer.slice(1, chunkSizeToRead + 1))]);
+                configBuffer = Buffer.concat([configBuffer, Buffer.from(readBuffer.slice(1, chunkSizeToRead + 1))]);
                 offset += chunkSizeToRead;
 
                 if (firstRead && configBufferId !== ConfigBufferId.hardwareConfig) {
@@ -203,7 +203,7 @@ export class UhkOperations {
      * @returns {Promise<number>}
      */
     public async getConfigSizeFromKeyboard(configBufferId: ConfigBufferId): Promise<number> {
-        const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, DevicePropertyIds.ConfigSizes]));
+        const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ConfigSizes]));
         this.device.close();
         const hardwareConfigSize = buffer[1] + (buffer[2] << 8);
         const userConfigSize = buffer[3] + (buffer[4] << 8);
@@ -232,7 +232,7 @@ export class UhkOperations {
         const timeoutTime = new Date(new Date().getTime() + 30000);
 
         while (new Date() < timeoutTime) {
-            const buffer = await this.device.write(new Buffer([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
+            const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.CurrentKbootCommand]));
             this.device.close();
 
             if (buffer[1] === 0) {
@@ -252,7 +252,7 @@ export class UhkOperations {
         try {
             this.logService.debug('[DeviceOperation] USB[T]: Read left module version information');
 
-            const command = new Buffer([
+            const command = Buffer.from([
                 UsbCommand.GetModuleProperty,
                 ModuleSlotToId.leftHalf,
                 ModulePropertyId.protocolVersions
@@ -280,7 +280,7 @@ export class UhkOperations {
     public async getRightModuleVersionInfo(): Promise<HardwareModuleInfo> {
         this.logService.debug('[DeviceOperation] USB[T]: Read right module version information');
 
-        const command = new Buffer([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
+        const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
         const buffer = await this.device.write(command);
         const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
         // skip the first byte
@@ -303,7 +303,7 @@ export class UhkOperations {
             await this.device.write(fragment);
         }
         this.logService.debug('[DeviceOperation] USB[T]: Apply user configuration to keyboard');
-        const applyBuffer = new Buffer([UsbCommand.ApplyConfig]);
+        const applyBuffer = Buffer.from([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
     }
 

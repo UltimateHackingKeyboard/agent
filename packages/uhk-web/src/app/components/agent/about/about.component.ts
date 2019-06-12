@@ -8,7 +8,6 @@ import { getVersions } from '../../../util';
 
 import { AppState, contributors } from '../../../store';
 import { State } from '../../../store/reducers/contributors.reducer';
-import { OpenUrlInNewWindowAction } from '../../../store/actions/app';
 import { GetAgentContributorsAction } from '../../../store/actions/contributors.action';
 
 @Component({
@@ -21,8 +20,8 @@ import { GetAgentContributorsAction } from '../../../store/actions/contributors.
 })
 export class AboutComponent implements OnInit {
     version: string = getVersions().version;
-    agentGithubUrl = Constants.AGENT_GITHUB_URL;
-    agentContributorsUrl = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
+    agentGithubUrl: string = Constants.AGENT_GITHUB_URL;
+    agentContributorsUrl: string = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
     state$: Observable<State>;
 
     constructor(private store: Store<AppState>) {
@@ -32,11 +31,5 @@ export class AboutComponent implements OnInit {
         this.state$ = this.store.select(contributors);
 
         this.store.dispatch(new GetAgentContributorsAction());
-    }
-
-    openUrlInBrowser(event: Event): void {
-        event.preventDefault();
-
-        this.store.dispatch(new OpenUrlInNewWindowAction((event.target as Element).getAttribute('href')));
     }
 }

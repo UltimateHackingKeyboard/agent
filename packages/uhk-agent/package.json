@@ -17,7 +17,7 @@
     "command-line-args": "4.0.7",
     "decompress": "4.2.0",
     "decompress-bzip2": "4.0.0",
-    "node-hid": "0.7.3",
+    "node-hid": "0.7.8",
     "sudo-prompt": "7.0.0",
     "tmp": "0.0.33",
     "tslib": "1.9.3",
@@ -25,9 +25,6 @@
     "uhk-usb": "^1.0.0"
   },
   "devDependencies": {
-    "@types/decompress": "4.2.0",
-    "@types/node": "8.0.33",
-    "@types/tmp": "0.0.33"
   },
   "scripts": {
     "start": "electron ./dist/electron-main.js",

@@ -2,7 +2,7 @@
     "moduleId": 4,
     "name": "trackpoint-staggered-right",
     "description": "Right trackpoint",
-    "slot": "right-addon",
+    "slot": "right-module",
     "keyCount": 3,
     "pointerCount": 1
 }

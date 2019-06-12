@@ -33,7 +33,7 @@ export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer)
         const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
             ? MAX_SENDING_PAYLOAD_SIZE
             : configBuffer.length - offset;
-        const header = new Buffer([usbCommand, length, offset & 0xFF, offset >> 8]);
+        const header = Buffer.from([usbCommand, length, offset & 0xFF, offset >> 8]);
         fragments.push(Buffer.concat([header, configBuffer.slice(offset, offset + length)]));
     }
 
