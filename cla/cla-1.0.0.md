@@ -99,7 +99,7 @@ I have read this Agreement, and fully agree to it by signing it with my GitHub u
 
 - @attilacsanyi
 - @cokert
+- @dgyimesi
 - @ert78gb
 - @mondalaci
 - @NejcZdovc
-- @dgyimesi
