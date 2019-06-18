@@ -103,5 +103,6 @@ I have read this Agreement, and fully agree to it by signing it with my GitHub u
 - @dgyimesi
 - @ert78gb
 - @fjozsef
+- @laxu
 - @mondalaci
 - @NejcZdovc
