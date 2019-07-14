@@ -4,7 +4,7 @@
   "author": "Ultimate Gadget Laboratories",
   "main": "electron/dist/electron-main.js",
   "version": "1.2.13",
-  "firmwareVersion": "8.5.3",
+  "firmwareVersion": "8.5.4",
   "deviceProtocolVersion": "4.4.0",
   "userConfigVersion": "4.0.1",
   "hardwareConfigVersion": "1.0.0",
