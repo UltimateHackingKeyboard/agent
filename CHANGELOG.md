@@ -6,9 +6,9 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.2.14] - 2019-07-14
+## [1.2.13] - 2019-07-14
 
-Device Protocol: 4.5.0 | Module Protocol: 4.0.0 | User Config: 4.1.0 | Hardware Config: 1.0.0
+Firmware: 8.5.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.4)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
 
 - Implement the Kinetis bootloader protocol natively instead of relying on blhost.
 - Fix device recovery mode.
@@ -23,13 +23,6 @@ Device Protocol: 4.5.0 | Module Protocol: 4.0.0 | User Config: 4.1.0 | Hardware 
 - Add top auto-update notification bar.
 - Save window state when closing Agent.
 - Hide USB usage data in console.
-
-## [1.2.13] - 2019-01-07
-
-Firmware: 8.**5.3** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.3)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
-
-- Fix device recovery mode
-- Renew mac code sign certificate
 
 ## [1.2.12] - 2018-11-14
 
