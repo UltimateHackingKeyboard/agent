@@ -2,6 +2,8 @@
 const uhk = require('./uhk');
 const device = uhk.getUhkDevice();
 
+process.on('unhandledRejection', e => {throw e});
+
 (async function() {
     const operationArg = process.argv[2];
     const operation = uhk.eepromOperations[operationArg];
