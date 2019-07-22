@@ -1,4 +1,5 @@
 import { UdevRulesInfo } from './udev-rules-info';
+import { HalvesInfo } from './halves-info';
 
 export interface DeviceConnectionState {
     connected: boolean;
@@ -6,4 +7,5 @@ export interface DeviceConnectionState {
     bootloaderActive: boolean;
     zeroInterfaceAvailable: boolean;
     udevRulesInfo: UdevRulesInfo;
+    halvesInfo: HalvesInfo;
 }

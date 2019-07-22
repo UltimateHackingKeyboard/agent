@@ -20,6 +20,7 @@ import { Store } from '@ngrx/store';
 import {
     camelCaseToSentence,
     capitalizeFirstLetter,
+    HalvesInfo,
     KeyAction,
     Keymap,
     KeystrokeAction,
@@ -65,7 +66,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
-    @Input() halvesSplit: boolean;
+    @Input() halvesInfo: HalvesInfo;
     @Input() keyboardLayout: KeyboardLayout.ANSI;
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;

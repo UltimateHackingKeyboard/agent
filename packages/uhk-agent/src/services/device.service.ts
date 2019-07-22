@@ -14,8 +14,6 @@ import {
     UpdateFirmwareData
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
-import { Subscription, interval, from } from 'rxjs';
-import { distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
 
@@ -35,7 +33,8 @@ import {
  * - Read UserConfiguration from the UHK Device
  */
 export class DeviceService {
-    private pollTimer$: Subscription;
+    private _pollerAllowed: boolean;
+    private _uhkDevicePolling: boolean;
     private queueManager = new QueueManager();
 
     constructor(private logService: LogService,
@@ -43,7 +42,11 @@ export class DeviceService {
                 private device: UhkHidDevice,
                 private operations: UhkOperations,
                 private rootDir: string) {
-        this.pollUhkDevice();
+        this.startPollUhkDevice();
+        this.uhkDevicePoller()
+            .catch(error => {
+                this.logService.error('[DeviceService] UHK Device poller error', error);
+            });
 
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
             this.queueManager.add({
@@ -72,7 +75,7 @@ export class DeviceService {
             });
         });
 
-        ipcMain.on(IpcEvents.device.startConnectionPoller, this.pollUhkDevice.bind(this));
+        ipcMain.on(IpcEvents.device.startConnectionPoller, this.startPollUhkDevice.bind(this));
 
         ipcMain.on(IpcEvents.device.recoveryDevice, (...args: any[]) => {
             this.queueManager.add({
@@ -103,6 +106,8 @@ export class DeviceService {
         let response: ConfigurationReply;
 
         try {
+            await this.stopPollUhkDevice();
+
             await this.device.waitUntilKeyboardBusy();
             const result = await this.operations.loadConfigurations();
             const modules: HardwareModules = await this.getHardwareModules(false);
@@ -123,6 +128,7 @@ export class DeviceService {
             };
         } finally {
             this.device.close();
+            this.startPollUhkDevice();
         }
 
         event.sender.send(IpcEvents.device.loadConfigurationReply, JSON.stringify(response));
@@ -136,8 +142,7 @@ export class DeviceService {
                 leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
                 rightModuleInfo: await this.operations.getRightModuleVersionInfo()
             };
-        }
-        catch (err) {
+        } catch (err) {
             if (!catchError) {
                 return err;
             }
@@ -151,8 +156,8 @@ export class DeviceService {
         }
     }
 
-    public close(): void {
-        this.stopPollTimer();
+    public async close(): Promise<void> {
+        await this.stopPollUhkDevice();
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
 
@@ -168,7 +173,7 @@ export class DeviceService {
             this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
             this.logService.debug('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
 
-            this.stopPollTimer();
+            await this.stopPollUhkDevice();
             this.device.resetDeviceCache();
 
             if (data.firmware) {
@@ -179,8 +184,7 @@ export class DeviceService {
 
                 await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
                 await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
-            }
-            else {
+            } else {
                 const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
                 const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
@@ -192,7 +196,7 @@ export class DeviceService {
             response.success = true;
             response.modules = await this.getHardwareModules(false);
         } catch (error) {
-            const err = {message: error.message, stack: error.stack};
+            const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
             response.modules = await this.getHardwareModules(true);
@@ -205,7 +209,7 @@ export class DeviceService {
 
         await snooze(500);
 
-        this.pollUhkDevice();
+        this.startPollUhkDevice();
 
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
@@ -214,14 +218,14 @@ export class DeviceService {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
-            this.stopPollTimer();
+            await this.stopPollUhkDevice();
 
             await this.operations.updateRightFirmware();
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {
-            const err = {message: error.message, stack: error.stack};
+            const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
             response.modules = await this.getHardwareModules(true);
@@ -236,28 +240,51 @@ export class DeviceService {
         await this.device.enableUsbStackTest();
     }
 
+    private startPollUhkDevice(): void {
+        this._pollerAllowed = true;
+    }
+
+    private async stopPollUhkDevice(): Promise<void> {
+        return new Promise<void>(async resolve => {
+            this._pollerAllowed = false;
+
+            while (true) {
+                if (!this._uhkDevicePolling) {
+                    return resolve();
+                }
+
+                await snooze(100);
+            }
+        });
+    }
+
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
-     * Every second check the HID device list.
+     * The halves are connected and merged or not.
+     * Every 250ms check the HID device list.
      * @private
      */
-    private pollUhkDevice(): void {
-        if (this.pollTimer$) {
-            return;
-        }
+    private async uhkDevicePoller(): Promise<void> {
+        let savedState: DeviceConnectionState;
 
-        this.pollTimer$ = interval(1000)
-            .pipe(
-                startWith(0),
-                switchMap(() => from(this.device.getDeviceConnectionStateAsync())),
-                distinctUntilChanged<DeviceConnectionState>(isEqual),
-                tap((state: DeviceConnectionState) => {
+        while (true) {
+            if (this._pollerAllowed) {
+
+                this._uhkDevicePolling = true;
+
+                const state = await this.device.getDeviceConnectionStateAsync();
+                if (!isEqual(state, savedState)) {
+                    savedState = state;
                     this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
                     this.logService.info('[DeviceService] Device connection state changed to:', state);
-                })
-            )
-            .subscribe();
+                }
+
+                this._uhkDevicePolling = false;
+            }
+
+            await snooze(250);
+        }
     }
 
     private async saveUserConfiguration(event: Electron.Event, args: Array<string>): Promise<void> {
@@ -265,32 +292,23 @@ export class DeviceService {
         const data: SaveUserConfigurationData = JSON.parse(args[0]);
 
         try {
+            await this.stopPollUhkDevice();
             await backupUserConfiguration(data);
 
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
 
             response.success = true;
-        }
-        catch (error) {
+        } catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
-            response.error = {message: error.message};
+            response.error = { message: error.message };
         } finally {
             this.device.close();
+            this.startPollUhkDevice();
         }
 
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
 
         return Promise.resolve();
-    }
-
-    private stopPollTimer(): void {
-        if (!this.pollTimer$) {
-            return;
-        }
-
-        this.pollTimer$.unsubscribe();
-        this.pollTimer$ = null;
-
     }
 }

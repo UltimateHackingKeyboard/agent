@@ -3,7 +3,7 @@
                    [deletable]="deletable$ | async"
                    (downloadClick)="downloadKeymap()"></keymap-header>
     <svg-keyboard-wrap [keymap]="keymap"
-                       [halvesSplit]="keyboardSplit"
+                       [halvesInfo]="halvesInfo$ | async"
                        [keyboardLayout]="keyboardLayout$ | async"
                        [allowLayerDoubleTap]="allowLayerDoubleTap$ | async"
                        [lastEditedKey]="lastEditedKey$ | async"

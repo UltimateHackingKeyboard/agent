@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
-import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import {
     FirmwareUpgradeIpcResponse,
@@ -72,6 +72,14 @@ export class DeviceEffects {
                 }
 
                 return this.router.navigate(['/detection']);
+            }),
+            distinctUntilChanged((
+                [prevAction, prevRoute, prevConnected],
+                [currAction, currRoute, currConnected]) => {
+
+                return prevConnected === currConnected &&
+                    prevAction.payload.hasPermission === currAction.payload.hasPermission &&
+                    prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable;
             }),
             switchMap(([action, route, connected]) => {
                 const payload = action.payload;
