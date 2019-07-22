@@ -62,7 +62,7 @@
     "jasmine-node": "3.0.0",
     "jasmine-ts": "0.3.0",
     "jsonfile": "4.0.0",
-    "lerna": "3.14.1",
+    "lerna": "3.16.1",
     "lodash": "4.17.15",
     "mkdirp": "0.5.1",
     "node-hid": "0.7.8",
