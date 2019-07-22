@@ -14,7 +14,8 @@ export enum ActionTypes {
     SaveToKeyboardFailed = '[device] save to keyboard failed',
     HideSaveToKeyboardButton = '[device] hide save to keyboard button',
     ResetUserConfiguration = '[device] reset user configuration',
-    ResetMouseSpeedSettings = '[device] reset mouse speed settings',
+    ResetPcMouseSpeedSettings = '[device] reset PC mouse speed settings',
+    ResetMacMouseSpeedSettings = '[device] reset Mac mouse speed settings',
     UpdateFirmware = '[device] update firmware',
     UpdateFirmwareWith = '[device] update firmware with',
     UpdateFirmwareReply = '[device] update firmware reply',
@@ -113,8 +114,12 @@ export class UpdateFirmwareFailedAction implements Action {
     }
 }
 
-export class ResetMouseSpeedSettingsAction implements Action {
-    type = ActionTypes.ResetMouseSpeedSettings;
+export class ResetPcMouseSpeedSettingsAction implements Action {
+    type = ActionTypes.ResetPcMouseSpeedSettings;
+}
+
+export class ResetMacMouseSpeedSettingsAction implements Action {
+    type = ActionTypes.ResetMacMouseSpeedSettings;
 }
 
 export class HardwareModulesLoadedAction implements Action {
@@ -161,7 +166,8 @@ export type Actions
     | SaveToKeyboardSuccessAction
     | SaveToKeyboardSuccessFailed
     | HideSaveToKeyboardButton
-    | ResetMouseSpeedSettingsAction
+    | ResetPcMouseSpeedSettingsAction
+    | ResetMacMouseSpeedSettingsAction
     | ResetUserConfigurationAction
     | UpdateFirmwareAction
     | UpdateFirmwareWithAction
