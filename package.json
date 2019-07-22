@@ -63,7 +63,7 @@
     "jasmine-ts": "0.3.0",
     "jsonfile": "4.0.0",
     "lerna": "3.14.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "mkdirp": "0.5.1",
     "node-hid": "0.7.8",
     "npm-run-all": "4.0.2",
