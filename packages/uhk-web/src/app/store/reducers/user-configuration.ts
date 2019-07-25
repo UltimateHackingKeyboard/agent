@@ -362,7 +362,7 @@ export function reducer(
                 const keymap = userConfiguration.keymaps[k];
                 let hasChanges = false;
 
-                for (const layer of  keymap.layers) {
+                for (const layer of keymap.layers) {
                     for (const module of layer.modules) {
                         for (let ka = 0; ka < module.keyActions.length; ka++) {
                             const keyAction = module.keyActions[ka];
