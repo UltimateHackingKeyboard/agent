@@ -118,13 +118,13 @@ function createWindow() {
     });
 
     // Emitted when the window is closed.
-    win.on('closed', () => {
+    win.on('closed', async () => {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         logger.info('[Electron Main] win closed');
         win = null;
-        deviceService.close();
+        await deviceService.close();
         deviceService = null;
         appUpdateService = null;
         appService = null;

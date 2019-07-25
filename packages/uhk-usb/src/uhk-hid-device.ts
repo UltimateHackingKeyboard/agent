@@ -2,7 +2,7 @@ import { Device, devices, HID } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
 import { platform } from 'os';
-import { CommandLineArgs, DeviceConnectionState, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
+import { CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
     ConfigBufferId,
@@ -89,7 +89,8 @@ export class UhkHidDevice {
             connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
-            udevRulesInfo: await this.getUdevInfoAsync()
+            udevRulesInfo: await this.getUdevInfoAsync(),
+            halvesInfo: { areHalvesMerged: true, isLeftHalfConnected: true }
         };
 
         for (const dev of devs) {
@@ -103,6 +104,12 @@ export class UhkHidDevice {
                 dev.productId === Constants.BOOTLOADER_ID) {
                 result.bootloaderActive = true;
             }
+        }
+
+        if (result.connected && result.hasPermission && result.zeroInterfaceAvailable) {
+            result.halvesInfo = await this.getHalvesStates();
+        } else if (!result.connected) {
+            this._device = undefined;
         }
 
         return result;
@@ -251,6 +258,15 @@ export class UhkHidDevice {
         this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
+    }
+
+    async getHalvesStates(): Promise<HalvesInfo> {
+        const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
+
+        return {
+            areHalvesMerged: buffer[2] !== 0,
+            isLeftHalfConnected: buffer[3] !== 0
+        };
     }
 
     /**

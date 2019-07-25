@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { Module } from 'uhk-common';
+import { HalvesInfo, Module } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
@@ -23,12 +23,22 @@ import { LastEditedKey } from '../../../models';
     animations: [
         trigger('split', [
             state('rotateLeft', style({
-                transform: 'translate(-3%, 15%) rotate(4deg) scale(0.92, 0.92)'
+                transform: 'translate(2%, 30%) rotate(10.8deg) scale(0.80, 0.80)'
             })),
             state('rotateRight', style({
-                transform: 'translate(3%, 15%) rotate(-4deg) scale(0.92, 0.92)'
+                transform: 'translate(-2%, 30.7%) rotate(-10deg) scale(0.80, 0.80)'
             })),
             transition('* <=> *', animate(500))
+        ]),
+        trigger('fadeKeyboard', [
+            state('visible', style({
+                opacity: 1
+            })),
+            state('invisible', style({
+                opacity: 0
+            })),
+            transition('visible => invisible', animate(500)),
+            transition('invisible => visible', animate(500))
         ]),
         trigger('fadeSeparator', [
             state('visible', style({
@@ -37,8 +47,8 @@ import { LastEditedKey } from '../../../models';
             state('invisible', style({
                 opacity: 0
             })),
-            transition('visible => invisible', animate(500)),
-            transition('invisible => visible', animate(1500))
+            transition('visible => invisible', animate('200ms')),
+            transition('invisible => visible', animate('200ms 500ms'))
         ])
     ]
 })
@@ -47,7 +57,7 @@ export class SvgKeyboardComponent {
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
-    @Input() halvesSplit: boolean;
+    @Input() halvesInfo: HalvesInfo;
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() showDescription = false;
@@ -60,6 +70,7 @@ export class SvgKeyboardComponent {
     modules: SvgModule[];
     viewBox: string;
     moduleAnimationStates: string[];
+    moduleVisibilityAnimationStates: string[];
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
     separatorAnimation = 'visible';
@@ -68,7 +79,6 @@ export class SvgKeyboardComponent {
                 private sanitizer: DomSanitizer) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
-        this.halvesSplit = false;
         this.moduleAnimationStates = [];
     }
 
@@ -77,7 +87,7 @@ export class SvgKeyboardComponent {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.halvesSplit) {
+        if (changes.halvesInfo) {
             this.updateModuleAnimationStates();
         }
 
@@ -110,12 +120,19 @@ export class SvgKeyboardComponent {
     }
 
     private updateModuleAnimationStates() {
-        if (this.halvesSplit) {
-            this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
-            this.separatorAnimation = 'invisible';
-        } else {
+        if (this.halvesInfo.areHalvesMerged) {
             this.moduleAnimationStates = [];
             this.separatorAnimation = 'visible';
+        } else {
+            this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
+            this.separatorAnimation = 'invisible';
+        }
+
+        if (this.halvesInfo.isLeftHalfConnected) {
+            this.moduleVisibilityAnimationStates = ['visible', 'visible'];
+        } else {
+            this.moduleVisibilityAnimationStates = ['visible', 'invisible'];
+
         }
     }
 

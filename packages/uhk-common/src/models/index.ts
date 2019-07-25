@@ -11,3 +11,4 @@ export * from './hardware-module-info';
 export * from './save-user-configuration-data';
 export * from './udev-rules-info';
 export * from './update-firmware-data';
+export * from './halves-info';

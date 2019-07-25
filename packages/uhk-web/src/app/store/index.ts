@@ -110,6 +110,7 @@ export const bootloaderActive = createSelector(deviceState, fromDevice.bootloade
 export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firmwareUpgradeFailed);
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
+export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 
 export const getPrivilegePageState = createSelector(appState, getUpdateUdevRules, (app, updateUdevRules): PrivilagePageSate => {
     const permissionSetupFailed = !!app.permissionError;

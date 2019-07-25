@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules, UdevRulesInfo } from 'uhk-common';
+import { HardwareModules, UdevRulesInfo, HalvesInfo } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import * as App from '../actions/app';
@@ -24,6 +24,7 @@ export interface State {
     log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
     hasBackupUserConfiguration: boolean;
+    halvesInfo: HalvesInfo;
 }
 
 export const initialState: State = {
@@ -47,7 +48,8 @@ export const initialState: State = {
     },
     log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
-    hasBackupUserConfiguration: false
+    hasBackupUserConfiguration: false,
+    halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: true }
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -60,7 +62,8 @@ export function reducer(state = initialState, action: Action): State {
                 hasPermission: data.hasPermission,
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
-                udevRuleInfo: data.udevRulesInfo
+                udevRuleInfo: data.udevRulesInfo,
+                halvesInfo: data.halvesInfo
             };
         }
 
@@ -249,3 +252,4 @@ export const bootloaderActive = (state: State) => state.bootloaderActive;
 export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
 export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
+export const halvesInfo = (state: State) => state.halvesInfo;

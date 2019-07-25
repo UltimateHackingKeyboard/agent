@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Keymap } from 'uhk-common';
+import { HalvesInfo, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
 import { combineLatest, first, map, pluck, switchMap } from 'rxjs/operators';
@@ -15,7 +15,8 @@ import {
     layerDoubleTapSupported,
     AppState,
     getKeyboardLayout,
-    lastEditedKey
+    lastEditedKey,
+    getHalvesInfo
 } from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { EditDescriptionAction, SelectKeymapAction } from '../../../store/actions/keymap';
@@ -33,13 +34,12 @@ import { LastEditedKey } from '../../../models';
 })
 export class KeymapEditComponent implements OnDestroy {
 
-    keyboardSplit: boolean;
-
     deletable$: Observable<boolean>;
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
     lastEditedKey$: Observable<LastEditedKey>;
+    halvesInfo$: Observable<HalvesInfo>;
     keymap: Keymap;
 
     private routeSubscription: Subscription;
@@ -67,6 +67,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.keyboardLayout$ = store.select(getKeyboardLayout);
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
         this.lastEditedKey$ = store.select(lastEditedKey);
+        this.halvesInfo$ = store.select(getHalvesInfo);
     }
 
     ngOnDestroy(): void {
@@ -92,11 +93,6 @@ export class KeymapEditComponent implements OnDestroy {
                 const fileName = keymap.name + '_keymap.json';
                 saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
             });
-    }
-
-    @HostListener('window:keydown.alt.s', ['$event'])
-    toggleKeyboardSplit() {
-        this.keyboardSplit = !this.keyboardSplit;
     }
 
     descriptionChanged(event: ChangeKeymapDescription): void {
