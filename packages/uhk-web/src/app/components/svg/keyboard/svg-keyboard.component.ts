@@ -23,14 +23,14 @@ import { LastEditedKey } from '../../../models';
     animations: [
         trigger('split', [
             state('rotateLeft', style({
-                transform: 'translate(-3%, 15%) rotate(4deg) scale(0.92, 0.92)'
+                transform: 'translate(2%, 30%) rotate(10.8deg) scale(0.80, 0.80)'
             })),
             state('rotateRight', style({
-                transform: 'translate(3%, 15%) rotate(-4deg) scale(0.92, 0.92)'
+                transform: 'translate(-2%, 30.7%) rotate(-10deg) scale(0.80, 0.80)'
             })),
             transition('* <=> *', animate(500))
         ]),
-        trigger('fadeSeparator', [
+        trigger('fadeKeyboard', [
             state('visible', style({
                 opacity: 1
             })),
@@ -39,6 +39,16 @@ import { LastEditedKey } from '../../../models';
             })),
             transition('visible => invisible', animate(500)),
             transition('invisible => visible', animate(1500))
+        ]),
+        trigger('fadeSeparator', [
+            state('visible', style({
+                opacity: 1
+            })),
+            state('invisible', style({
+                opacity: 0
+            })),
+            transition('visible => invisible', animate('200ms')),
+            transition('invisible => visible', animate('200ms 500ms'))
         ])
     ]
 })
