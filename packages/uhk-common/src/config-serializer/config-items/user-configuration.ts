@@ -7,8 +7,9 @@ import { ConfigSerializer } from '../config-serializer';
 import { KeystrokeAction, NoneAction } from './key-action';
 import { SecondaryRoleAction } from './secondary-role-action';
 import { isScancodeExists } from './scancode-checker';
+import { MouseSpeedConfiguration } from './mouse-speed-configuration';
 
-export class UserConfiguration {
+export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16
     userConfigMajorVersion: number;

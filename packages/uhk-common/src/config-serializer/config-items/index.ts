@@ -8,6 +8,7 @@ export * from './secondary-role-action';
 export * from './macro';
 export * from './module';
 export * from './module-configuration';
+export * from './mouse-speed-configuration';
 export * from './user-configuration';
 
 export const SCANCODES = require('./scancodes.json');
