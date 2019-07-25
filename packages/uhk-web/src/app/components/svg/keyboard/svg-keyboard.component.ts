@@ -38,7 +38,7 @@ import { LastEditedKey } from '../../../models';
                 opacity: 0
             })),
             transition('visible => invisible', animate(500)),
-            transition('invisible => visible', animate(1500))
+            transition('invisible => visible', animate(500))
         ]),
         trigger('fadeSeparator', [
             state('visible', style({
