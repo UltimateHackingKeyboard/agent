@@ -26,4 +26,5 @@
 <editable-text *ngIf="showDescription"
                [ngModel]="description"
                (ngModelChange)="descriptionChanged.emit($event)"
+               [@moveDescription]="descriptionAnimation"
                placeholder="No description provided for this keymap."></editable-text>
