@@ -1,7 +1,7 @@
 const SVGSpriter = require('svg-sprite');
 const path = require('path');
-const mkdirp = require('mkdirp');
-const fs = require('fs');
+const fs = require('fs-extra');
+
 let config = {
     'dest': 'packages/uhk-web/src/assets/',
     log: 'verbose',
@@ -90,7 +90,7 @@ function writeResultFiles (error, result) {
 
         // Run through all created resources and write them to disk
         for (const type in result[mode]) {
-            mkdirp.sync(path.dirname(result[mode][type].path));
+            fs.ensureDirSync(path.dirname(result[mode][type].path));
             fs.writeFileSync(result[mode][type].path, result[mode][type].contents);
         }
     }
