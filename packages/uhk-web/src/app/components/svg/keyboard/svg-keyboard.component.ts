@@ -55,7 +55,7 @@ import { LastEditedKey } from '../../../models';
                 'margin-top': '0.5em'
             })),
             state('up', style({
-                'margin-top': '-7.2%'
+                'margin-top': '-6.5%'
             })),
             transition('down => up', animate(500)),
             transition('up => down', animate(500))
