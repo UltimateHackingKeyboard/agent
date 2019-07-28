@@ -45,7 +45,6 @@ addons:
 
 install:
   - nvm install
-  - npm install -g npm@6.4.0
   - npm install
 
 before_script:

@@ -43,7 +43,6 @@
     "@ngrx/store-log-monitor": "3.0.2",
     "angular-confirmation-popover": "4.2.0",
     "angular-notifier": "4.1.1",
-    "autoprefixer": "^7.2.3",
     "bootstrap": "3.4.1",
     "codelyzer": "4.5.0",
     "dragula": "3.7.2",

@@ -20,14 +20,14 @@
     "node-hid": "0.7.8",
     "sudo-prompt": "7.0.0",
     "tmp": "0.0.33",
-    "tslib": "1.9.3",
+    "tslib": "1.10.0",
     "uhk-common": "^1.0.0",
     "uhk-usb": "^1.0.0"
   },
   "devDependencies": {
   },
   "scripts": {
-    "start": "electron ./dist/electron-main.js",
+    "start": "cross-env DEBUG=kboot* electron ./dist/electron-main.js",
     "electron:spe": "electron ./dist/electron-main.js --spe",
     "build": "webpack && npm run install:build-deps && npm run build:usb && npm run download-firmware && npm run copy-to-tmp-folder",
     "build:usb": "electron-rebuild -w node-hid -p -m ./dist",
