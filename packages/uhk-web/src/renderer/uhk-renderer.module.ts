@@ -22,7 +22,7 @@ import { effects } from '../app/store/effects';
         SharedModule,
         routing,
         StoreModule.forRoot(reducers),
-        StoreRouterConnectingModule,
+        StoreRouterConnectingModule.forRoot(),
         StoreDevtoolsModule.instrument({
             maxAge: 10
         }),

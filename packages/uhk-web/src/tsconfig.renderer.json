@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "baseUrl": "./",
-    "target": "es6",
+    "target": "es5", // Until https://github.com/electron/electron/issues/12011 not working without custom protocol
     "types": ["node"],
     "lib": [
       "es2016",

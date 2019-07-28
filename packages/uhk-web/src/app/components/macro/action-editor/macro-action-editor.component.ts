@@ -31,7 +31,8 @@ export class MacroActionEditorComponent implements OnInit {
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
 
-    @ViewChild('tab') selectedTab: MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
+    // tslint:disable-next-line:max-line-length
+    @ViewChild('tab', { static: false }) selectedTab: MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
 
     editableMacroAction: MacroAction;
     activeTab: TabName;

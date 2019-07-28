@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import {
     MacroMouseSubAction,
@@ -7,7 +7,6 @@ import {
     MoveMouseMacroAction,
     ScrollMouseMacroAction
 } from 'uhk-common';
-import { Tab } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 
 type MouseMacroAction = MouseButtonMacroAction | MoveMouseMacroAction | ScrollMouseMacroAction;
@@ -31,7 +30,6 @@ enum TabName {
 })
 export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: MouseMacroAction;
-    @ViewChild('tab') selectedTab: Tab;
 
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     MouseButtons = MouseButtons;

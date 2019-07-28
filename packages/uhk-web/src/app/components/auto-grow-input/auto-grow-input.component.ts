@@ -30,7 +30,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
     @Input() maxParentWidthPercent = 1;
     @Input() css: string;
 
-    @ViewChild('inputControl') inputControl: ElementRef;
+    @ViewChild('inputControl', { static: true }) inputControl: ElementRef;
 
     disabled: boolean;
 

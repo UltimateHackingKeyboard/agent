@@ -21,8 +21,7 @@ enum TabName {
 })
 export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: KeyMacroAction;
-    @ViewChild('tab') selectedTab: Tab;
-    @ViewChild('keypressTab') keypressTab: KeypressTabComponent;
+    @ViewChild('keypressTab', { static: true }) keypressTab: KeypressTabComponent;
 
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     TabName = TabName;

@@ -25,17 +25,17 @@
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="control.width" [attr.height]="control.height" [attr.x]="control.x" [attr.y]="control.y"
         preserveAspectRatio="none" [class.disabled]="control.disabled">
-        <svg:text [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">C</svg:text>
+        <svg:text text-anchor="middle" alignment-baseline="middle" x="50" y="55">C</svg:text>
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="option.width" [attr.height]="option.height" [attr.x]="option.x" [attr.y]="option.y"
         preserveAspectRatio="none" [class.disabled]="option.disabled">
         <svg:use *ngIf="modifierIconNames.option" [attr.xlink:href]="modifierIconNames.option" />
-        <svg:text *ngIf="!modifierIconNames.option" [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">A</svg:text>
+        <svg:text *ngIf="!modifierIconNames.option" text-anchor="middle" alignment-baseline="middle" x="50" y="55">A</svg:text>
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="command.width" [attr.height]="command.height" [attr.x]="command.x" [attr.y]="command.y"
         preserveAspectRatio="none" [class.disabled]="command.disabled">
         <svg:use *ngIf="modifierIconNames.command" [attr.xlink:href]="modifierIconNames.command" />
-        <svg:text *ngIf="!modifierIconNames.command" [attr.text-anchor]="'middle'" [attr.x]="50" [attr.y]="50">S</svg:text>
+        <svg:text *ngIf="!modifierIconNames.command" text-anchor="middle" alignment-baseline="middle" x="50" y="55">S</svg:text>
     </svg>
 </svg>
 <svg:g svg-secondary-role
