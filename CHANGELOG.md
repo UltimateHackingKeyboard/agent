@@ -13,7 +13,9 @@ Firmware: 8.5.**4** [[release](https://github.com/UltimateHackingKeyboard/firmwa
 - Implement the Kinetis bootloader protocol natively instead of relying on blhost.
 - Fix device recovery mode.
 - Correctly display whether the UHK is detected.
+- Animate keyboard splitting, merging, and the presence of the left half.
 - Don't disable input in the key action popover after adding a layer switch action, deleting it, and trying to edit it on its layer.
+- Provide reasonable default mouse settings for Macs.
 - Don't change tab immediately upon closing the key action popover.
 - Fix UI glitch that occurrs when hitting Tab after updating keymap description.
 - Make the Agent icon slightly smaller to be consistent with most application icons.
