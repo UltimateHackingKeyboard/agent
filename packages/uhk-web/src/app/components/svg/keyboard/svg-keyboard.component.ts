@@ -52,7 +52,7 @@ import { LastEditedKey } from '../../../models';
         ]),
         trigger('moveDescription', [
             state('down', style({
-                'margin-top': 0
+                'margin-top': '0.5em'
             })),
             state('up', style({
                 'margin-top': '-7.2%'
