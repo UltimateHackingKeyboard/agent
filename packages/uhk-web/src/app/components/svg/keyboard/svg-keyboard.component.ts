@@ -49,6 +49,16 @@ import { LastEditedKey } from '../../../models';
             })),
             transition('visible => invisible', animate('200ms')),
             transition('invisible => visible', animate('200ms 500ms'))
+        ]),
+        trigger('moveDescription', [
+            state('down', style({
+                'margin-top': '0.5em'
+            })),
+            state('up', style({
+                'margin-top': '-6.5%'
+            })),
+            transition('down => up', animate(500)),
+            transition('up => down', animate(500))
         ])
     ]
 })
@@ -74,6 +84,7 @@ export class SvgKeyboardComponent {
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
     separatorAnimation = 'visible';
+    descriptionAnimation = 'down';
 
     constructor(private svgModuleProvider: SvgModuleProviderService,
                 private sanitizer: DomSanitizer) {
@@ -123,9 +134,11 @@ export class SvgKeyboardComponent {
         if (this.halvesInfo.areHalvesMerged) {
             this.moduleAnimationStates = [];
             this.separatorAnimation = 'visible';
+            this.descriptionAnimation = 'down';
         } else {
             this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
             this.separatorAnimation = 'invisible';
+            this.descriptionAnimation = 'up';
         }
 
         if (this.halvesInfo.isLeftHalfConnected) {
