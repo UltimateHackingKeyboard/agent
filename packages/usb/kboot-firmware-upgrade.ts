@@ -7,6 +7,11 @@ const rootDir = path.join(__dirname, '../../tmp');
 const uhkHidDevice = new UhkHidDevice(logService, {}, rootDir);
 const uhkOperations = new UhkOperations(logService, uhkHidDevice, rootDir);
 
+process.on('uncaughtException', error => {
+    console.error('uncaughtException',  error);
+    process.exit(1);
+});
+
 process.on('unhandledRejection', (reason: any, promise: Promise<any>): void => {
     console.error('unhandledRejection', { reason, promise });
 });
