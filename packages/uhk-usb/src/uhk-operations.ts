@@ -93,7 +93,6 @@ export class UhkOperations {
                 if (tryCount > 100) {
                     throw new Error('Can not connect to the LEFT keyboard');
                 }
-            } finally {
                 kboot.close();
             }
             await snooze(100);
@@ -101,8 +100,8 @@ export class UhkOperations {
         }
 
         // https://github.com/node-hid/node-hid/issues/230
-        this.logService.debug('[UhkOperations] Wait 2 sec to prevent node-hid race condition');
-        await snooze(2000);
+        this.logService.debug('[UhkOperations] Wait 1 sec to prevent node-hid race condition');
+        await snooze(1000);
 
         this.logService.debug('[UhkOperations] Flash erase all on LEFT keyboard');
         await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
