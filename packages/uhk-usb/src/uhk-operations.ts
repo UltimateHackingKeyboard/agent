@@ -99,6 +99,10 @@ export class UhkOperations {
             tryCount++;
         }
 
+        // https://github.com/node-hid/node-hid/issues/230
+        this.logService.debug('[UhkOperations] Wait 1 sec to prevent node-hid race condition');
+        await snooze(1000);
+
         this.logService.debug('[UhkOperations] Flash erase all on LEFT keyboard');
         await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
         await kboot.flashEraseAllUnsecure();
