@@ -12,15 +12,19 @@ export class KBoot {
     }
 
     open(): void {
+        logger('Open peripheral');
         this.peripheral.open();
     }
 
     close(): void {
+        logger('Close peripheral');
         this.peripheral.close();
     }
 
     // ================= Read properties ==================
     async getProperty(property: Properties, memoryId = MemoryIds.Internal): Promise<CommandResponse> {
+        logger('Start read memory %o', { property, memoryId });
+
         const command: CommandOption = {
             command: Commands.GetProperty,
             params: [
@@ -32,14 +36,17 @@ export class KBoot {
         const response = await this.peripheral.sendCommand(command);
 
         if (response.tag !== ResponseTags.Property) {
+            logger('Response tag is not property response: %d', property);
             throw new Error('Response tag is not property response');
         }
 
         if (response.code === ResponseCodes.UnknownProperty) {
+            logger('Unknown property %d', response.code);
             throw new Error('Unknown property!');
         }
 
         if (response.code !== ResponseCodes.Success) {
+            logger('Unknown error %d', response.code);
             throw new Error(`Unknown error. Error code:${response.code}`);
         }
 
@@ -47,6 +54,8 @@ export class KBoot {
     }
 
     async getBootloaderVersion(): Promise<BootloaderVersion> {
+        logger('Start to read Bootloader Version');
+
         const response = await this.getProperty(Properties.BootloaderVersion);
 
         const version: BootloaderVersion = {
@@ -64,7 +73,9 @@ export class KBoot {
     // ================= End read properties ==================
 
     async flashSecurityDisable(key: number[]): Promise<void> {
+        logger('Start flash security disable %o', { key });
         if (key.length !== 8) {
+            logger('Error: Flash security key must be 8 byte. %o', key);
             throw new Error('Flash security key must be 8 byte');
         }
 
@@ -76,15 +87,18 @@ export class KBoot {
         const response = await this.peripheral.sendCommand(command);
 
         if (response.tag !== ResponseTags.Generic) {
+            logger('Response tag is not generic response: %d', response.tag);
             throw new Error('Response tag is not generic response');
         }
 
         if (response.code !== ResponseCodes.Success) {
+            logger('Can not disable flash security: %d', response.code);
             throw new Error(`Can not disable flash security`);
         }
     }
 
     async flashEraseRegion(startAddress: number, count: number): Promise<void> {
+        logger('Start flash erase region');
         const command: CommandOption = {
             command: Commands.FlashEraseRegion,
             params: [
@@ -96,15 +110,18 @@ export class KBoot {
         const response = await this.peripheral.sendCommand(command);
 
         if (response.tag !== ResponseTags.Generic) {
+            logger('Response tag is not generic response: %d', response.tag);
             throw new Error('Response tag is not generic response');
         }
 
         if (response.code !== ResponseCodes.Success) {
-            throw new Error(`Can not disable flash security`);
+            logger('Can not flash erase region: %d', response.code);
+            throw new Error(`Can not flash erase region`);
         }
     }
 
     async flashEraseAllUnsecure(): Promise<void> {
+        logger('Start flash erase all unsecure');
         const command: CommandOption = {
             command: Commands.FlashEraseAllUnsecure,
             params: []
@@ -113,19 +130,23 @@ export class KBoot {
         const response = await this.peripheral.sendCommand(command);
 
         if (response.tag !== ResponseTags.Generic) {
+            logger('Response tag is not generic response: %d', response.tag);
             throw new Error('Response tag is not generic response');
         }
 
         if (response.code !== ResponseCodes.Success) {
-            throw new Error(`Can not disable flash security`);
+            logger('Can not flash erase all unsecure: %d', response.code);
+            throw new Error(`Can not flash erase all unsecure`);
         }
     }
 
     async readMemory(startAddress: number, count: number): Promise<any> {
+        logger('Start read memory %o', { startAddress, count });
         return this.peripheral.readMemory(startAddress, count);
     }
 
     async writeMemory(options: DataOption): Promise<void> {
+        logger('Start write memory %o', { options });
         return this.peripheral.writeMemory(options);
     }
 
@@ -133,6 +154,7 @@ export class KBoot {
      * Reset the bootloader
      */
     async reset(): Promise<void> {
+        logger('Start reset the bootloader');
         const command: CommandOption = {
             command: Commands.Reset,
             params: []
@@ -154,10 +176,12 @@ export class KBoot {
         }
 
         if (response.tag !== ResponseTags.Generic) {
+            logger('Response tag is not generic response: %d', response.tag);
             throw new Error('Response tag is not generic response');
         }
 
         if (response.code !== ResponseCodes.Success) {
+            logger('Unknown error %d', response.code);
             throw new Error(`Unknown error. Error code:${response.code}`);
         }
     }
@@ -168,8 +192,9 @@ export class KBoot {
      * @param [speed=64] - Speed of the I2C
      */
     async configureI2c(address: number, speed = 64): Promise<void> {
-
+        logger('Start configure I2C', { address, speed });
         if (address > 127) {
+            logger('Only 7-bit i2c address is supported');
             throw new Error('Only 7-bit i2c address is supported');
         }
 
@@ -184,10 +209,12 @@ export class KBoot {
         const response = await this.peripheral.sendCommand(command);
 
         if (response.tag !== ResponseTags.Generic) {
+            logger('Response tag is not generic response: %d', response.tag);
             throw new Error('Response tag is not generic response');
         }
 
         if (response.code !== ResponseCodes.Success) {
+            logger('Unknown error %d', response.code);
             throw new Error(`Unknown error. Error code:${response.code}`);
         }
     }
