@@ -222,6 +222,7 @@ export class UsbPeripheral implements Peripheral {
     }
 
     private _readFromBuffer(bufferName: string, byte: number, timeout: number): Promise<Buffer> {
+        logger('start read from buffer %o', { bufferName, byte, timeout });
         return new Promise<Buffer>(async (resolve, reject) => {
             const startTime = new Date();
             while (startTime.getTime() + timeout > new Date().getTime()) {
@@ -266,6 +267,7 @@ export class UsbPeripheral implements Peripheral {
     }
 
     private async _getNextCommandResponse(): Promise<CommandResponse> {
+        logger('Start read next command response');
         const response = await this._readFromCommandStream();
         const commandResponse = decodeCommandResponse(response);
         logger('next command response: %o', commandResponse);
