@@ -15,8 +15,8 @@
   },
   "license": "GPL-3.0",
   "engines": {
-    "node": ">=10.2.1 <11.0.0",
-    "npm": ">=6.4.0 <7.0.0"
+    "node": ">=12.0.0 <13.0.0",
+    "npm": ">=6.9.0 <7.0.0"
   },
   "devDependencies": {
     "@types/decompress": "4.2.0",
@@ -44,7 +44,7 @@
     "decompress": "4.2.0",
     "decompress-tarbz2": "4.1.1",
     "devtron": "1.4.0",
-    "electron": "4.2.8",
+    "electron": "5.0.9",
     "electron-builder": "20.34.0",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",

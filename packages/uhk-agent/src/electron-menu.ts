@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, systemPreferences } from 'electron';
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron';
 import * as isDev from 'electron-is-dev';
 
 export const setMenu = (win: BrowserWindow): void => {
@@ -8,7 +8,7 @@ export const setMenu = (win: BrowserWindow): void => {
         return;
     }
 
-    const template = [
+    const template: MenuItemConstructorOptions[] = [
         {
             label: app.getName(),
             submenu: [
