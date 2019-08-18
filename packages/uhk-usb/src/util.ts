@@ -1,7 +1,7 @@
 import { Device, devices } from 'node-hid';
 import { readFile } from 'fs-extra';
 import { EOL } from 'os';
-import * as MemoryMap from 'nrf-intel-hex';
+import MemoryMap from 'nrf-intel-hex';
 import { LogService } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants';
