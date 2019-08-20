@@ -8,4 +8,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(UhkRendererModule);
+platformBrowserDynamic().bootstrapModule(UhkRendererModule, {
+    preserveWhitespaces: true
+});
