@@ -91,6 +91,7 @@ export class SvgKeyboardComponent {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
         this.moduleAnimationStates = [];
+        this.moduleVisibilityAnimationStates = [];
     }
 
     ngOnInit() {
