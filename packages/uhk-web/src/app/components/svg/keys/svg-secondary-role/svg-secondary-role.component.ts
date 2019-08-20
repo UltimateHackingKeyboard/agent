@@ -1,12 +1,10 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    ElementRef,
     Input,
     OnChanges,
     OnInit,
-    SimpleChanges,
-    ViewChild
+    SimpleChanges
 } from '@angular/core';
 
 import { getContentWidth } from '../../../../util';
@@ -18,6 +16,7 @@ const SECONDARY_STYLE: CSSStyleDeclaration = {
 @Component({
     selector: 'g[svg-secondary-role]',
     templateUrl: './svg-secondary-role.component.html',
+    styleUrls: ['./svg-secondary-role.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgSecondaryRoleComponent implements OnInit, OnChanges {
@@ -25,8 +24,6 @@ export class SvgSecondaryRoleComponent implements OnInit, OnChanges {
     @Input() width: number;
     @Input() y: number;
     @Input() text: string;
-
-    @ViewChild('secondary') svgElement: ElementRef;
 
     viewBox: string;
     textY: number;

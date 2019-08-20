@@ -26,7 +26,7 @@ import * as util from '../../../util';
 export class MacroHeaderComponent implements AfterViewInit, OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
-    @ViewChild('macroName') macroName: ElementRef;
+    @ViewChild('macroName', { static: true }) macroName: ElementRef;
 
     constructor(private store: Store<AppState>, private renderer: Renderer2) { }
 

@@ -5,7 +5,9 @@ import { WebModule } from './app/web.module';
 import { environment } from './environments/environment';
 
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(WebModule);
+platformBrowserDynamic().bootstrapModule(WebModule, {
+    preserveWhitespaces: true
+});

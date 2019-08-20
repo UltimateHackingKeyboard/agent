@@ -18,7 +18,7 @@ export class SvgSwitchKeymapKeyComponent implements OnInit {
     useX: number;
     useY: number;
     textY: number;
-    spanX: number;
+    textX: number;
 
     constructor(private mapperService: MapperService) { }
 
@@ -30,6 +30,6 @@ export class SvgSwitchKeymapKeyComponent implements OnInit {
         this.useX = this.width * 3 / 8;
         this.useY = this.height / 5;
         this.textY = this.height * 2 / 3;
-        this.spanX = this.width / 2;
+        this.textX = this.width / 2;
     }
 }

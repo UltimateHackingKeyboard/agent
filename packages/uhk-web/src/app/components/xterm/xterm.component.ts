@@ -10,7 +10,7 @@ import { XtermLog } from '../../models/xterm-log';
 export class XtermComponent implements OnChanges {
     @Input() logs: Array<XtermLog> = [];
 
-    @ViewChild('scrollMe') divElement: ElementRef;
+    @ViewChild('scrollMe', { static: false }) divElement: ElementRef;
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.logs && this.divElement && this.divElement.nativeElement) {

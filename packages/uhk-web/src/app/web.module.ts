@@ -15,7 +15,7 @@ import { effects } from './store/effects';
         BrowserModule,
         SharedModule,
         StoreModule.forRoot(reducers),
-        StoreRouterConnectingModule,
+        StoreRouterConnectingModule.forRoot(),
         StoreDevtoolsModule.instrument({
             maxAge: 10
         }),

@@ -73,7 +73,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
-    @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
+    @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 
     popoverShown: boolean;
     keyEditConfig: { moduleId: number, keyId: number };
@@ -218,7 +218,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             return;
         }
 
-        const el: Element = event.target as Element || event.srcElement;
+        const el = event.target as Element;
         const position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
         let posTop: number = this.tooltipData.posTop;
