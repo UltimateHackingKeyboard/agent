@@ -14,8 +14,8 @@ export class SvgOneLineTextKeyComponent implements OnChanges {
     @Input() text: string;
     @Input() secondaryText: string;
 
+    textX: number;
     textY: number;
-    spanX: number;
     secondaryTextY: number;
     secondaryHeight: number;
 
@@ -34,8 +34,8 @@ export class SvgOneLineTextKeyComponent implements OnChanges {
             secondaryYModifier = 5;
         }
 
+        this.textX = this.width / 2;
         this.textY = this.height / 2 - textYModifier;
-        this.spanX = this.width / 2;
 
         this.secondaryHeight = this.height / 4;
         this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;

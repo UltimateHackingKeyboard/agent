@@ -46,7 +46,6 @@ export class MacroListComponent {
     newMacro: Macro = undefined;
     showNew: boolean = false;
     private activeEdit: number = undefined;
-    private dragIndex: number;
 
     constructor(
         private mapper: MapperService,
@@ -59,16 +58,18 @@ export class MacroListComponent {
             }
         });
 
-        dragulaService.drag('macroActions').subscribe((value: any) => {
-            this.dragIndex = +value[1].getAttribute('data-index');
-        });
+        dragulaService.drop('macroActions').subscribe(value => {
+            if (value.el) {
+                let newIndex = this.macroItems.length - 1;
 
-        dragulaService.drop('macroActions').subscribe((value: any) => {
-            if (value[4]) {
+                if (value.sibling) {
+                    newIndex = (+value.sibling.getAttribute('data-index') - 1);
+                }
+
                 this.reorder.emit({
                     macroId: this.macro.id,
-                    oldIndex: this.dragIndex,
-                    newIndex: +value[4].getAttribute('data-index')
+                    oldIndex: +value.el.getAttribute('data-index'),
+                    newIndex
                 });
             }
         });

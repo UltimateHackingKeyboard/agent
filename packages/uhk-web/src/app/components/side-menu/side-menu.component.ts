@@ -2,10 +2,9 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    ElementRef,
-    OnDestroy, OnInit,
-    Renderer2,
-    ViewChild
+    OnDestroy,
+    OnInit,
+    Renderer2
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -38,7 +37,6 @@ import { SideMenuPageState } from '../../models/side-menu-page-state';
 export class SideMenuComponent implements OnInit, OnDestroy {
     state: SideMenuPageState;
     animation: { [key: string]: 'active' | 'inactive' };
-    @ViewChild('deviceName') deviceName: ElementRef;
 
     private stateSubscription: Subscription;
 

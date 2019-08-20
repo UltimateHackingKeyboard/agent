@@ -79,7 +79,7 @@ export class SvgKeyboardKeyComponent implements OnChanges {
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
 
-    @ViewChild('svgRec') svgRec: ElementRef<HTMLElement>;
+    @ViewChild('svgRec', { static: false }) svgRec: ElementRef<HTMLElement>;
 
     enumLabelTypes = LabelTypes;
 

@@ -1,10 +1,8 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    ElementRef,
     Input,
-    OnInit,
-    ViewChild
+    OnInit
 } from '@angular/core';
 import { DelayMacroAction } from 'uhk-common';
 
@@ -21,7 +19,6 @@ const INITIAL_DELAY = 0.5; // In seconds
 })
 export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: DelayMacroAction;
-    @ViewChild('macroDelayInput') input: ElementRef;
 
     presets: number[] = [0.1, 0.5, 1, 5, 10];
 

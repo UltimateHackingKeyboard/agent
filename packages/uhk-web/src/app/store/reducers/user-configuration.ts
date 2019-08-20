@@ -446,16 +446,9 @@ export function reducer(
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
                 if (macro.id === payload.id) {
-                    let newIndex: number = payload.newIndex;
-
-                    // We need to reduce the new index for one when we are moving action down
-                    if (newIndex > payload.oldIndex) {
-                        --newIndex;
-                    }
-
                     macro = new Macro(macro);
                     macro.macroActions.splice(
-                        newIndex,
+                        payload.newIndex,
                         0,
                         macro.macroActions.splice(payload.oldIndex, 1)[0]
                     );

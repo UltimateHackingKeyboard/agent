@@ -20,7 +20,7 @@ const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 })
 export class MacroTextTabComponent extends MacroBaseComponent implements OnInit, AfterViewInit {
     @Input() macroAction: TextMacroAction;
-    @ViewChild('macroTextInput') input: ElementRef;
+    @ViewChild('macroTextInput', { static: false } ) input: ElementRef;
 
     constructor() { super(); }
 
