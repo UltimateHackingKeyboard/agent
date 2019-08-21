@@ -49,7 +49,7 @@ export const initialState: State = {
     log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
     hasBackupUserConfiguration: false,
-    halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: true }
+    halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: false }
 };
 
 export function reducer(state = initialState, action: Action): State {
