@@ -30,23 +30,23 @@ export class SvgMouseKeyComponent implements OnChanges {
                 break;
             case MouseActionParam.button4:
                 this.type = 'click';
-                this.param = '4';
+                this.param = 'Button 4';
                 break;
             case MouseActionParam.button5:
                 this.type = 'click';
-                this.param = '5';
+                this.param = 'Button 5';
                 break;
             case MouseActionParam.button6:
                 this.type = 'click';
-                this.param = '6';
+                this.param = 'Button 6';
                 break;
             case MouseActionParam.button7:
                 this.type = 'click';
-                this.param = '7';
+                this.param = 'Button 7';
                 break;
             case MouseActionParam.button8:
                 this.type = 'click';
-                this.param = '8';
+                this.param = 'Button 8';
                 break;
             case MouseActionParam.scrollDown:
                 this.type = 'scroll';
