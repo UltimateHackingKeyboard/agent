@@ -62,6 +62,11 @@ export class MouseTabComponent extends Tab implements OnChanges {
             case MouseActionParam.leftClick:
             case MouseActionParam.middleClick:
             case MouseActionParam.rightClick:
+            case MouseActionParam.button4:
+            case MouseActionParam.button5:
+            case MouseActionParam.button6:
+            case MouseActionParam.button7:
+            case MouseActionParam.button8:
                 this.selectedPageIndex = 2;
                 break;
             case MouseActionParam.decelerate:
