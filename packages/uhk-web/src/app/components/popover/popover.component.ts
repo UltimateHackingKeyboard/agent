@@ -98,8 +98,8 @@ export class PopoverComponent implements OnChanges {
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyActionRemap>();
 
-    @ViewChild('tab') selectedTab: Tab;
-    @ViewChild('popover') popoverHost: ElementRef;
+    @ViewChild('tab', { static: false }) selectedTab: Tab;
+    @ViewChild('popover', { static: false }) popoverHost: ElementRef;
 
     tabName = TabName;
     keyActionValid: boolean;

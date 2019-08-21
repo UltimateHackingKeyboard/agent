@@ -27,13 +27,11 @@ export class SvgTwoLineTextKeyComponent implements OnChanges {
     }
 
     calculatePositions(): void {
-        let textYModifier = 0;
         let secondaryYModifier = 0;
         this.secondaryHeight = 0;
         let textContainerHeight = this.height;
 
         if (this.secondaryText) {
-            textYModifier =  this.height / 5;
             secondaryYModifier = 0;
             this.secondaryHeight = this.height / 4;
             textContainerHeight -= this.secondaryHeight;
@@ -43,7 +41,7 @@ export class SvgTwoLineTextKeyComponent implements OnChanges {
         this.spanX = this.width / 2;
         this.spanYs = [];
         for (let i = 0; i < this.texts.length; ++i) {
-            this.spanYs.push((0.75 - i * 0.5) * textContainerHeight);
+            this.spanYs.push((0.85 - i * 0.5) * textContainerHeight);
         }
 
         this.secondaryTextY = this.height - this.secondaryHeight - SECONDARY_ROLE_BOTTOM_MARGIN - secondaryYModifier;

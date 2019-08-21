@@ -14,8 +14,10 @@ import {
 import * as KeymapActions from '../actions/keymap';
 import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
+import * as DeviceActions from '../actions/device';
 import { isValidName } from '../../util';
 import { defaultLastEditKey, LastEditedKey } from '../../models';
+import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 
 export interface State {
     userConfiguration: UserConfiguration;
@@ -31,7 +33,7 @@ export const initialState: State = {
 
 export function reducer(
     state = initialState,
-    action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions
+    action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
         case UserConfig.ActionTypes.ApplyUserConfigurationFromFile:
@@ -51,6 +53,30 @@ export function reducer(
                 userConfiguration
             };
         }
+
+        case DeviceActions.ActionTypes.ResetPcMouseSpeedSettings:
+            return {
+                ...state,
+                userConfiguration: Object.assign(
+                    new UserConfiguration(),
+                    {
+                        ...state.userConfiguration,
+                        ...getDefaultPcMouseSpeeds()
+                    }
+                )
+            };
+
+        case DeviceActions.ActionTypes.ResetMacMouseSpeedSettings:
+            return {
+                ...state,
+                userConfiguration: Object.assign(
+                    new UserConfiguration(),
+                    {
+                        ...state.userConfiguration,
+                        ...getDefaultMacMouseSpeeds()
+                    }
+                )
+            };
 
         case KeymapActions.ActionTypes.Add:
         case KeymapActions.ActionTypes.Duplicate: {
@@ -195,6 +221,8 @@ export function reducer(
             const newKeymap: Keymap = payload.keymap;
             const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
             const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
+            const oldKeyAction = newKeymap.layers[layerIndex].modules[moduleIndex].keyActions[keyIndex];
+            const oldKeyIsSwitchLayerAction = oldKeyAction instanceof SwitchLayerAction;
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
@@ -222,6 +250,8 @@ export function reducer(
                             } else {
                                 setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                             }
+                        } else if (oldKeyIsSwitchLayerAction && index - 1 === (oldKeyAction as SwitchLayerAction).layer) {
+                            setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                         }
 
                         return layer;
@@ -332,7 +362,7 @@ export function reducer(
                 const keymap = userConfiguration.keymaps[k];
                 let hasChanges = false;
 
-                for (const layer of  keymap.layers) {
+                for (const layer of keymap.layers) {
                     for (const module of layer.modules) {
                         for (let ka = 0; ka < module.keyActions.length; ka++) {
                             const keyAction = module.keyActions[ka];
@@ -416,16 +446,9 @@ export function reducer(
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
                 if (macro.id === payload.id) {
-                    let newIndex: number = payload.newIndex;
-
-                    // We need to reduce the new index for one when we are moving action down
-                    if (newIndex > payload.oldIndex) {
-                        --newIndex;
-                    }
-
                     macro = new Macro(macro);
                     macro.macroActions.splice(
-                        newIndex,
+                        payload.newIndex,
                         0,
                         macro.macroActions.splice(payload.oldIndex, 1)[0]
                     );

@@ -39,8 +39,8 @@ export class KeymapHeaderComponent implements OnChanges {
     @Input() deletable: boolean;
     @Output() downloadClick = new EventEmitter<void>();
 
-    @ViewChild('name') keymapName: ElementRef;
-    @ViewChild('abbr') keymapAbbr: ElementRef;
+    @ViewChild('name', { static: true }) keymapName: ElementRef;
+    @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef;
 
     starTitle: string;
     trashTitle: string = DEFAULT_TRASH_TITLE;

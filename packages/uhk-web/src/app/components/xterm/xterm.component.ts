@@ -10,13 +10,11 @@ import { XtermLog } from '../../models/xterm-log';
 export class XtermComponent implements OnChanges {
     @Input() logs: Array<XtermLog> = [];
 
-    @ViewChild('scrollMe') divElement: ElementRef;
+    @ViewChild('scrollMe', { static: false }) divElement: ElementRef;
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.logs && this.divElement && this.divElement.nativeElement) {
-            setTimeout(() => {
-                this.divElement.nativeElement.scrollTop = this.divElement.nativeElement.scrollHeight;
-            });
+        if (changes.logs) {
+            this.scrollToTheEnd();
         }
     }
 
@@ -24,4 +22,11 @@ export class XtermComponent implements OnChanges {
         return this.logs.reduce((value, line) => value + line.message + '\n', '');
     }
 
+    scrollToTheEnd(): void {
+        setTimeout(() => {
+            if (this.divElement && this.divElement.nativeElement) {
+                this.divElement.nativeElement.scrollTop = this.divElement.nativeElement.scrollHeight;
+            }
+        });
+    }
 }

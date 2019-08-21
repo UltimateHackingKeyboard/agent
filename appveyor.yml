@@ -7,7 +7,7 @@ environment:
     secure: 3IebpEKmC39codi1wT6dXx8mql4/mCL1JzZ7lir7GQ5MWRnCxlED2OXbiKHHigDV
   CSC_LINK: c:\projects\uhk-agent\scripts\certs\windows-cert.p12
   matrix:
-    - nodejs_version: "8"
+    - nodejs_version: "12.0.0"
 
 cache:
   - node_modules -> package.json

@@ -15,6 +15,7 @@
     <textarea class="text-editor"
               [(ngModel)]="text"
               autofocus
+              (keydown.escape)="cancelEditText()"
               (keydown.control.enter)="keydownEnter()"
               (keydown.alt.enter)="keydownEnter()"></textarea>
     <div class="pull-right buttons">

@@ -9,15 +9,11 @@
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
   "license": "GPL-3.0",
-  "engines": {
-    "node": ">=8.12.0 <9.0.0",
-    "npm": ">=6.4.1 <7.0.0"
-  },
   "dependencies": {
     "debug": "^4.1.1",
     "byte-data": "^16.0.3",
-    "tslib": "^1.9.3",
-    "node-hid": ">= 0.7.3"
+    "tslib": "^1.10.0",
+    "node-hid": ">= 0.7.9"
   },
   "peer-dependencies": {},
   "scripts": {

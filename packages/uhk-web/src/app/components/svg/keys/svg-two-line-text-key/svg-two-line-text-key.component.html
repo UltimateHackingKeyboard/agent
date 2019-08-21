@@ -1,12 +1,12 @@
 <svg:text
     [attr.x]="0"
     [attr.y]="textY"
-    [attr.text-anchor]="'middle'">
+    text-anchor="middle"
+    alignment-baseline="middle">
          <tspan
                 *ngFor="let text of texts; let index = index"
                 [attr.x]="spanX"
                 [attr.y]="spanYs[index]"
-                dy="0"
                 >{{ text }}</tspan>
  </svg:text>
 <svg:g svg-secondary-role

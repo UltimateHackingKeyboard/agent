@@ -60,19 +60,7 @@ if (console.debug) {
     };
 }
 
-const isSecondInstance = app.makeSingleInstance(function (commandLine, workingDirectory) {
-    // Someone tried to run a second instance, we should focus our window.
-    if (win) {
-        if (win.isMinimized()) {
-            win.restore();
-        }
-        win.focus();
-    }
-});
-
-if (isSecondInstance) {
-    app.quit();
-}
+const isSecondInstance = !app.requestSingleInstanceLock();
 
 function createWindow() {
     if (isSecondInstance) {
@@ -130,13 +118,13 @@ function createWindow() {
     });
 
     // Emitted when the window is closed.
-    win.on('closed', () => {
+    win.on('closed', async () => {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         logger.info('[Electron Main] win closed');
         win = null;
-        deviceService.close();
+        await deviceService.close();
         deviceService = null;
         appUpdateService = null;
         appService = null;
@@ -157,29 +145,43 @@ function createWindow() {
     win.on('move', () => saveWindowState(win));
 }
 
+if (isSecondInstance) {
+    app.quit();
+} else {
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+    app.on('ready', createWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
-    if (appUpdateService) {
-        appUpdateService.saveFirtsRun();
-    }
-    app.exit();
-});
+    app.on('window-all-closed', () => {
+        if (appUpdateService) {
+            appUpdateService.saveFirtsRun();
+        }
+        app.exit();
+    });
 
-app.on('will-quit', () => {
-});
+    app.on('will-quit', () => {
+    });
 
-app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-        createWindow();
-    }
-});
+    app.on('activate', () => {
+        // On macOS it's common to re-create a window in the app when the
+        // dock icon is clicked and there are no other windows open.
+        if (win === null) {
+            createWindow();
+        }
+    });
 
+    app.on('second-instance', () => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (win) {
+            if (win.isMinimized()) {
+                win.restore();
+            }
+            win.focus();
+        }
+    });
+}
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here

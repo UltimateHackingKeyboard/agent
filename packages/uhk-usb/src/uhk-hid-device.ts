@@ -2,7 +2,7 @@ import { Device, devices, HID } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
 import { platform } from 'os';
-import { CommandLineArgs, DeviceConnectionState, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
+import { CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
     ConfigBufferId,
@@ -89,7 +89,8 @@ export class UhkHidDevice {
             connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
-            udevRulesInfo: await this.getUdevInfoAsync()
+            udevRulesInfo: await this.getUdevInfoAsync(),
+            halvesInfo: { areHalvesMerged: true, isLeftHalfConnected: true }
         };
 
         for (const dev of devs) {
@@ -103,6 +104,12 @@ export class UhkHidDevice {
                 dev.productId === Constants.BOOTLOADER_ID) {
                 result.bootloaderActive = true;
             }
+        }
+
+        if (result.connected && result.hasPermission && result.zeroInterfaceAvailable) {
+            result.halvesInfo = await this.getHalvesStates();
+        } else if (!result.connected) {
+            this._device = undefined;
         }
 
         return result;
@@ -145,12 +152,12 @@ export class UhkHidDevice {
     }
 
     public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
-        await this.write(new Buffer([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
+        await this.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
         await this.waitUntilKeyboardBusy();
     }
 
     public async enableUsbStackTest(): Promise<void> {
-        await this.write(new Buffer([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
+        await this.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
         await this.waitUntilKeyboardBusy();
     }
 
@@ -169,7 +176,7 @@ export class UhkHidDevice {
 
     public async waitUntilKeyboardBusy(): Promise<void> {
         while (true) {
-            const buffer = await this.write(new Buffer([UsbCommand.GetDeviceState]));
+            const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
             if (buffer[1] === 0) {
                 break;
             }
@@ -186,7 +193,7 @@ export class UhkHidDevice {
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.debug(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}`);
 
-        const message = new Buffer([
+        const message = Buffer.from([
             UsbCommand.Reenumerate,
             enumerationMode,
             BOOTLOADER_TIMEOUT_MS & 0xff,
@@ -240,17 +247,26 @@ export class UhkHidDevice {
         const moduleName = kbootCommandName(module);
         this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
-            transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
-            transfer = new Buffer([UsbCommand.SendKbootCommandToModule, command, module]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, module]);
         }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
         this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
-        const transfer = new Buffer([UsbCommand.JumpToModuleBootloader, module]);
+        const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
+    }
+
+    async getHalvesStates(): Promise<HalvesInfo> {
+        const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
+
+        return {
+            areHalvesMerged: buffer[2] !== 0,
+            isLeftHalfConnected: buffer[3] !== 0
+        };
     }
 
     /**
@@ -328,9 +344,11 @@ export class UhkHidDevice {
         }
 
         const expectedUdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60.rules'));
+        const v2UdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60_v2.rules'));
         const currentUdevSettings = await getFileContentAsync('/etc/udev/rules.d/50-uhk60.rules');
 
-        if (isEqualArray(expectedUdevSettings, currentUdevSettings)) {
+        if (isEqualArray(expectedUdevSettings, currentUdevSettings) ||
+            isEqualArray(v2UdevSettings, currentUdevSettings)) {
             this._udevRulesInfo = UdevRulesInfo.Ok;
             return UdevRulesInfo.Ok;
         }
@@ -344,11 +362,11 @@ function kbootCommandName(module: ModuleSlotToI2cAddress): string {
         case ModuleSlotToI2cAddress.leftHalf:
             return 'leftHalf';
 
-        case ModuleSlotToI2cAddress.leftAddon:
-            return 'leftAddon';
+        case ModuleSlotToI2cAddress.leftModule:
+            return 'leftModule';
 
-        case ModuleSlotToI2cAddress.rightAddon:
-            return 'rightAddon';
+        case ModuleSlotToI2cAddress.rightModule:
+            return 'rightModule';
 
         default:
             return 'Unknown';

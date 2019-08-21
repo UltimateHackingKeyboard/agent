@@ -6,3 +6,5 @@ Before submitting a new issue, make sure to do the following:
 3. Use Agent to update to the latest firmware:
    https://github.com/UltimateHackingKeyboard/firmware/releases/latest
 4. Try to reproduce the issue, and only report it if it still persists.
+
+`npm audit` related issues will be closed due to https://github.com/UltimateHackingKeyboard/agent/blob/master/NPM_UPDATES.md

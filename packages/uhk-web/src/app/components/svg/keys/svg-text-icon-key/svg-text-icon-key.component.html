@@ -1,9 +1,10 @@
- <svg:text
-    [attr.x]="0"
+<svg:text
+    [attr.x]="textX"
     [attr.y]="textY"
-    [attr.text-anchor]="textAnchor">
-        <tspan [attr.x]="spanX">{{ text }}</tspan>
- </svg:text>
+    [attr.text-anchor]="textAnchor"
+    alignment-baseline="middle">
+    {{ text }}
+</svg:text>
 <svg:use [attr.xlink:href]="icon"
         [attr.width]="useWidth"
         [attr.height]="useHeight"

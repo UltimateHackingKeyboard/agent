@@ -5,7 +5,7 @@ import { SetUserConfigurationValueAction } from '../../../store/actions/user-con
 import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
 import { Observable, Subscription } from 'rxjs';
 import { UserConfiguration } from 'uhk-common';
-import { ResetMouseSpeedSettingsAction } from '../../../store/actions/device';
+import { ResetPcMouseSpeedSettingsAction, ResetMacMouseSpeedSettingsAction } from '../../../store/actions/device';
 
 const MOUSE_MOVE_VALUE_MULTIPLIER = 25;
 
@@ -144,7 +144,11 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
         }));
     }
 
-    resetToDefault() {
-        this.store.dispatch(new ResetMouseSpeedSettingsAction());
+    resetToPcDefault() {
+        this.store.dispatch(new ResetPcMouseSpeedSettingsAction());
+    }
+
+    resetToMacDefault() {
+        this.store.dispatch(new ResetMacMouseSpeedSettingsAction());
     }
 }

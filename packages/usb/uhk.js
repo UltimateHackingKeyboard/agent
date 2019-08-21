@@ -43,7 +43,7 @@ function uint32ToArray(value) {
 }
 
 function writeDevice(device, data, options={}) {
-    const dataBuffer = new Buffer(data);
+    const dataBuffer = Buffer.from(data);
     if (!options.noDebug) {
         writeLog('W: ', dataBuffer);
     }
@@ -178,6 +178,7 @@ async function updateDeviceFirmware(firmwareImage, extension) {
     config.verbose = true;
 
     await uhk.reenumerate('bootloader');
+    await sleep(1000);
     exec(`${blhost} flash-security-disable 0403020108070605`);
     exec(`${blhost} flash-erase-region 0xc000 475136`);
     exec(`${blhost} flash-image ${firmwareImage}`);
@@ -303,6 +304,7 @@ async function updateModuleFirmware(i2cAddress, moduleSlotId, firmwareImage) {
     exec(`${blhostUsb} reset`);
 
     await uhk.reenumerate('normalKeyboard');
+    await sleep(1000);
     device = uhk.getUhkDevice();
     await uhk.sendKbootCommandToModule(device, uhk.kbootCommands.reset, i2cAddress);
     await sleep(1000);
@@ -394,7 +396,7 @@ async function writeHca(device, isIso) {
 }
 
 async function eraseHca(device) {
-    const buffer = new Buffer(Array(64).fill(0xff));
+    const buffer = Buffer.from(Array(64).fill(0xff));
     await uhk.writeConfig(device, buffer, true);
     await uhk.launchEepromTransfer(device, uhk.eepromOperations.write, configBufferIds.hardwareConfig);
 }
@@ -499,13 +501,13 @@ uhk = exports = module.exports = moduleExports = {
     },
     moduleSlotToI2cAddress: {
         leftHalf: '0x10',
-        leftAddon: '0x20',
-        rightAddon: '0x30',
+        leftModule: '0x20',
+        rightModule: '0x30',
     },
     moduleSlotToId: {
         leftHalf: 1,
-        leftAddon: 2,
-        rightAddon: 3,
+        leftModule: 2,
+        rightModule: 3,
     },
     leftLedDriverAddress: 0b1110100,
     rightLedDriverAddress: 0b1110111,

@@ -20,6 +20,7 @@ import { Store } from '@ngrx/store';
 import {
     camelCaseToSentence,
     capitalizeFirstLetter,
+    HalvesInfo,
     KeyAction,
     Keymap,
     KeystrokeAction,
@@ -65,14 +66,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
-    @Input() halvesSplit: boolean;
+    @Input() halvesInfo: HalvesInfo;
     @Input() keyboardLayout: KeyboardLayout.ANSI;
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
 
-    @ViewChild(PopoverComponent, { read: ElementRef }) popover: ElementRef;
+    @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 
     popoverShown: boolean;
     keyEditConfig: { moduleId: number, keyId: number };
@@ -217,7 +218,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             return;
         }
 
-        const el: Element = event.target as Element || event.srcElement;
+        const el = event.target as Element;
         const position: ClientRect = el.getBoundingClientRect();
         let posLeft: number = this.tooltipData.posLeft;
         let posTop: number = this.tooltipData.posTop;

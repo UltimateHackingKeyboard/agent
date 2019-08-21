@@ -33,18 +33,19 @@ export class UsbPeripheral implements Peripheral {
         logger('Available devices');
         const device = devices()
             .map(x => {
-                logger('%O', x);
+                logger('%o', x);
 
                 return x;
             })
             .find(deviceFinder(this.options));
 
         if (!device) {
+            logger('USB device can not be found %o', this.options);
             throw new Error('USB device can not be found');
         }
 
-        this._responseBuffer = new Buffer(0);
-        this._dataBuffer = new Buffer(0);
+        this._responseBuffer = Buffer.alloc(0);
+        this._dataBuffer = Buffer.alloc(0);
 
         this._device = new HID(device.path);
         this._device.on('data', this._usbDataListener.bind(this));
@@ -80,10 +81,12 @@ export class UsbPeripheral implements Peripheral {
 
                 const firsCommandResponse = await this.sendCommand(command);
                 if (firsCommandResponse.tag !== ResponseTags.Generic) {
+                    logger('Invalid write memory response! %o', firsCommandResponse);
                     return reject(new Error('Invalid write memory response!'));
                 }
 
                 if (firsCommandResponse.code !== 0) {
+                    logger('Non zero write memory response! %o', firsCommandResponse);
                     return reject(new Error(`Non zero write memory response! Response code: ${firsCommandResponse.code}`));
                 }
 
@@ -110,10 +113,12 @@ export class UsbPeripheral implements Peripheral {
 
                 const secondCommandResponse = await this._getNextCommandResponse();
                 if (secondCommandResponse.tag !== ResponseTags.Generic) {
+                    logger('Invalid write memory final response %o', secondCommandResponse);
                     return reject(new Error('Invalid write memory final response!'));
                 }
 
                 if (secondCommandResponse.code !== 0) {
+                    logger('Non zero write memory final response %o', secondCommandResponse);
                     const msg = `Non zero write memory final response! Response code: ${secondCommandResponse.code}`;
                     return reject(new Error(msg));
                 }
@@ -142,10 +147,12 @@ export class UsbPeripheral implements Peripheral {
                 this._resetResponseBuffer();
                 const firsCommandResponse = await this.sendCommand(command);
                 if (firsCommandResponse.tag !== ResponseTags.ReadMemory) {
+                    logger('Invalid read memory response %o', firsCommandResponse);
                     return reject(new Error('Invalid read memory response!'));
                 }
 
                 if (firsCommandResponse.code !== 0) {
+                    logger('Non zero read memory response %o', firsCommandResponse);
                     return reject(new Error(`Non zero read memory response! Response code: ${firsCommandResponse.code}`));
                 }
 
@@ -155,10 +162,12 @@ export class UsbPeripheral implements Peripheral {
 
                 const secondCommandResponse = await this._getNextCommandResponse();
                 if (secondCommandResponse.tag !== ResponseTags.Generic) {
+                    logger('Invalid read memory final response %o', secondCommandResponse);
                     return reject(new Error('Invalid read memory final response!'));
                 }
 
                 if (secondCommandResponse.code !== 0) {
+                    logger('Non zero read memory final response %o', secondCommandResponse);
                     const msg = `Non zero read memory final response! Response code: ${secondCommandResponse.code}`;
                     return reject(new Error(msg));
                 }
@@ -228,9 +237,9 @@ export class UsbPeripheral implements Peripheral {
                     const data = buffer.slice(0, byte);
 
                     if (buffer.length === byte) {
-                        this[bufferName] = new Buffer(0);
+                        this[bufferName] = Buffer.alloc(0);
                     } else {
-                        const newDataBuffer = new Buffer(buffer.length - byte);
+                        const newDataBuffer = Buffer.alloc(buffer.length - byte);
                         buffer.copy(newDataBuffer, 0, byte);
                         this[bufferName] = newDataBuffer;
                     }
@@ -243,16 +252,17 @@ export class UsbPeripheral implements Peripheral {
                 await snooze(100);
             }
 
+            logger('Timeout while try to read from buffer');
             reject(new Error('Timeout while try to read from buffer'));
         });
     }
 
     private _resetDataBuffer(): void {
-        this._dataBuffer = new Buffer(0);
+        this._dataBuffer = Buffer.alloc(0);
     }
 
     private _resetResponseBuffer(): void {
-        this._responseBuffer = new Buffer(0);
+        this._responseBuffer = Buffer.alloc(0);
     }
 
     private async _getNextCommandResponse(): Promise<CommandResponse> {

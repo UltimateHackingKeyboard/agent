@@ -3,6 +3,8 @@ const fs = require('fs');
 const program = require('commander');
 const uhk = require('./uhk');
 
+process.on('unhandledRejection', e => {throw e});
+
 (async function() {
     program
         .usage(`configPath`)

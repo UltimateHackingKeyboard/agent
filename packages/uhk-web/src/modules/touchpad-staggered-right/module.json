@@ -2,7 +2,7 @@
     "moduleId": 5,
     "name": "touchpad-stagered-right",
     "description": "Right touchpad",
-    "slot": "right-addon",
+    "slot": "right-module",
     "keyCount": 1,
     "pointerCount": 1
 }

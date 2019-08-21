@@ -40,7 +40,7 @@ export class UhkBuffer {
     constructor() {
         this.offset = 0;
         this.bytesToBacktrack = 0;
-        this.buffer = new Buffer(UhkBuffer.eepromSize);
+        this.buffer = Buffer.alloc(UhkBuffer.eepromSize);
         this.buffer.fill(0);
     }
 

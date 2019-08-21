@@ -1,8 +1,7 @@
-import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { AppState } from '../../../../store/index';
-import { OpenUrlInNewWindowAction } from '../../../../store/actions/app';
+import { AppState } from '../../../../store';
 
 import { UHKContributor } from '../../../../models/uhk-contributor';
 
@@ -11,9 +10,9 @@ import { UHKContributor } from '../../../../models/uhk-contributor';
     templateUrl: './contributor-badge.component.html',
     styleUrls: ['./contributor-badge.component.scss']
 })
-export class ContributorBadgeComponent implements OnInit {
+export class ContributorBadgeComponent implements AfterViewInit {
     @Input() contributor: UHKContributor;
-    @ViewChild('badge') badge: ElementRef;
+    @ViewChild('badge', { static: false }) badge: ElementRef;
 
     get name(): string {
         return this.contributor.login;
@@ -30,13 +29,7 @@ export class ContributorBadgeComponent implements OnInit {
     constructor(private store: Store<AppState>) {
     }
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         (this.badge.nativeElement as HTMLImageElement).src = URL.createObjectURL(this.contributor.avatar);
-    }
-
-    openUrlInBrowser(event: Event): void {
-        event.preventDefault();
-
-        this.store.dispatch(new OpenUrlInNewWindowAction((event.target as Element).getAttribute('href')));
     }
 }

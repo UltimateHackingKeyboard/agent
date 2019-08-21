@@ -5,8 +5,9 @@
         [attr.y]="useY">
 </svg:use>
 <svg:text
-    [attr.x]="0"
+    [attr.x]="textX"
     [attr.y]="textY"
-    [attr.text-anchor]="'middle'">
-        <tspan [attr.x]="spanX">{{ abbreviation }}</tspan>
+    text-anchor="middle"
+    alignment-baseline="middle">
+    {{ abbreviation }}
 </svg:text>

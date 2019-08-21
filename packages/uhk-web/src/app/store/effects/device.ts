@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
-import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import {
     FirmwareUpgradeIpcResponse,
@@ -34,7 +34,7 @@ import {
 import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState, deviceConnected, getRouterState } from '../index';
+import { AppState, deviceConnected, getRouterState, getUserConfiguration } from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -72,6 +72,14 @@ export class DeviceEffects {
                 }
 
                 return this.router.navigate(['/detection']);
+            }),
+            distinctUntilChanged((
+                [prevAction, prevRoute, prevConnected],
+                [currAction, currRoute, currConnected]) => {
+
+                return prevConnected === currConnected &&
+                    prevAction.payload.hasPermission === currAction.payload.hasPermission &&
+                    prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable;
             }),
             switchMap(([action, route, connected]) => {
                 const payload = action.payload;
@@ -169,27 +177,12 @@ export class DeviceEffects {
     @Effect()
     resetMouseSpeedSettings$: Observable<Action> = this.actions$
         .pipe(
-            ofType(ActionTypes.ResetMouseSpeedSettings),
-            switchMap(() => {
-                const config = this.defaultUserConfigurationService.getDefault();
-                const mouseSpeedDefaultSettings = {};
-                const mouseSpeedProps = [
-                    'mouseMoveInitialSpeed',
-                    'mouseMoveAcceleration',
-                    'mouseMoveDeceleratedSpeed',
-                    'mouseMoveBaseSpeed',
-                    'mouseMoveAcceleratedSpeed',
-                    'mouseScrollInitialSpeed',
-                    'mouseScrollAcceleration',
-                    'mouseScrollDeceleratedSpeed',
-                    'mouseScrollBaseSpeed',
-                    'mouseScrollAcceleratedSpeed'
-                ];
-                mouseSpeedProps.forEach(prop => {
-                    mouseSpeedDefaultSettings[prop] = config[prop];
-                });
-                return of(new LoadResetUserConfigurationAction(<UserConfiguration>mouseSpeedDefaultSettings));
-            })
+            ofType(
+                ActionTypes.ResetPcMouseSpeedSettings,
+                ActionTypes.ResetMacMouseSpeedSettings
+            ),
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            map(([action, config]) => new LoadResetUserConfigurationAction(config))
         );
 
     @Effect() resetUserConfiguration$: Observable<Action> = this.actions$

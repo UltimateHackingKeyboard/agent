@@ -6,12 +6,23 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.2.13] - 2019-01-07
+## [1.2.13] - 2019-07-14
 
-Firmware: 8.**5.3** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.3)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+Firmware: 8.5.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.4)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
 
-- Fix device recovery mode
-- Renew mac code sign certificate
+- Implement the Kinetis bootloader protocol natively instead of relying on blhost.
+- Fix device recovery mode.
+- Correctly display whether the UHK is detected.
+- Don't disable input in the key action popover after adding a layer switch action, deleting it, and trying to edit it on its layer.
+- Don't change tab immediately upon closing the key action popover.
+- Fix UI glitch that occurrs when hitting Tab after updating keymap description.
+- Make the Agent icon slightly smaller to be consistent with most application icons.
+- Redesign the About page.
+- Link the UHK knowledgebase from the help page.
+- Make the middle mouse button not open new windows on links in Agent.
+- Add top auto-update notification bar.
+- Save window state when closing Agent.
+- Hide USB usage data in console.
 
 ## [1.2.12] - 2018-11-14
 

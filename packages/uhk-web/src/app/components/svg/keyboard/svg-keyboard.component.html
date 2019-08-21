@@ -11,6 +11,7 @@
            [keyActions]="moduleConfig[i].keyActions"
            [selectedKey]="selectedKey"
            [@split]="moduleAnimationStates[i]"
+           [@fadeKeyboard]="moduleVisibilityAnimationStates[i]"
            [selected]="selectedKey?.moduleId === i"
            [lastEdited]="lastEditedKey?.moduleId === i"
            [lastEditedKeyId]="lastEditedKey?.key"
@@ -25,4 +26,5 @@
 <editable-text *ngIf="showDescription"
                [ngModel]="description"
                (ngModelChange)="descriptionChanged.emit($event)"
+               [@moveDescription]="descriptionAnimation"
                placeholder="No description provided for this keymap."></editable-text>
