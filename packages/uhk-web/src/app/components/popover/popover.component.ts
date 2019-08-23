@@ -30,7 +30,7 @@ import {
 
 import { Tab } from './tab';
 
-import { AppState, getKeymaps, macroPlaybackSupported } from '../../store';
+import { AppState, extraMouseButtonsSupported, getKeymaps, macroPlaybackSupported } from '../../store';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 
@@ -145,6 +145,7 @@ export class PopoverComponent implements OnChanges {
         }
     ];
     macroPlaybackSupported$: Observable<boolean>;
+    extraMouseButtonsSupported$: Observable<boolean>;
 
     private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
 
@@ -158,6 +159,7 @@ export class PopoverComponent implements OnChanges {
                         keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation))
             );
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
+        this.extraMouseButtonsSupported$ = store.select(extraMouseButtonsSupported);
     }
 
     ngOnChanges(change: SimpleChanges) {

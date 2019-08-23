@@ -157,3 +157,6 @@ export const layerDoubleTapSupported = createSelector(
         return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
     }
 );
+export const extraMouseButtonsSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
+    return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.1.1');
+});
