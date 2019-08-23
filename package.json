@@ -19,7 +19,7 @@
     "npm": ">=6.9.0 <7.0.0"
   },
   "devDependencies": {
-    "@types/decompress": "4.2.0",
+    "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
     "@types/file-saver": "0.0.1",
@@ -101,6 +101,7 @@
     "release": "node ./scripts/release.js",
     "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist ./tmp",
     "predeploy-gh-pages": "lerna run build:web --scope=uhk-web",
-    "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist"
+    "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist",
+    "convert-user-config-to-bin": "node -r ts-node/register ./packages/usb/user-config-json-to-bin.ts"
   }
 }
