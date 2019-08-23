@@ -158,7 +158,7 @@ export const layerDoubleTapSupported = createSelector(
     }
 );
 export const extraMouseButtonsSupported = createSelector(getUserConfiguration, (userConfig: UserConfiguration): boolean => {
-    return userConfig.userConfigMajorVersion >= 4 &&
-        userConfig.userConfigMinorVersion >= 1 &&
-        userConfig.userConfigPatchVersion >= 1;
+    // tslint:disable-next-line:max-line-length
+    const version = `${userConfig.userConfigMajorVersion}.${userConfig.userConfigMinorVersion}.${userConfig.userConfigPatchVersion}`;
+    return isVersionGte(version, '4.1.1');
 });
