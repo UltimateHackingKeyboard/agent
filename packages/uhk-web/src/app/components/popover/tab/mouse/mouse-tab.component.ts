@@ -11,6 +11,7 @@ import { Tab } from '../tab';
 })
 export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
+    @Input() extraMouseButtonsSupported: boolean;
 
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     MouseActionParam = MouseActionParam;

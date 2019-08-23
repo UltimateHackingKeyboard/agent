@@ -38,6 +38,7 @@
         ></layer-tab>
         <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
+                   [extraMouseButtonsSupported]="extraMouseButtonsSupported$ | async"
                    (validAction)="setKeyActionValidState($event)"
         ></mouse-tab>
         <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content"

@@ -80,7 +80,7 @@
                     [class.btn-primary]="mouseActionParam === MouseActionParam.rightClick"
                     (click)="setMouseActionParam(MouseActionParam.rightClick)">Right</button>
         </div>
-        <div class="additional-keys">
+        <div class="additional-keys" *ngIf="extraMouseButtonsSupported">
             <div class="btn-group col-xs-12" role="group">
                 <button type="button" class="btn btn-default col-xs-4"
                         [class.btn-primary]="mouseActionParam === MouseActionParam.button4"
