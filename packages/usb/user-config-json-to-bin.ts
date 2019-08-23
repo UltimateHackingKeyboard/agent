@@ -1,6 +1,3 @@
-#!/usr/bin/env ts-node
-///<reference path="./node_modules/@types/node/index.d.ts"/>
-
 import { UhkBuffer, UserConfiguration } from 'uhk-common';
 import * as fs from 'fs';
 

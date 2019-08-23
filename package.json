@@ -101,6 +101,7 @@
     "release": "node ./scripts/release.js",
     "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist ./tmp",
     "predeploy-gh-pages": "lerna run build:web --scope=uhk-web",
-    "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist"
+    "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist",
+    "convert-user-config-to-bin": "node -r ts-node/register ./packages/usb/user-config-json-to-bin.ts"
   }
 }
