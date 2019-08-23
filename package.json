@@ -19,7 +19,7 @@
     "npm": ">=6.9.0 <7.0.0"
   },
   "devDependencies": {
-    "@types/decompress": "4.2.0",
+    "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
     "@types/file-saver": "0.0.1",
