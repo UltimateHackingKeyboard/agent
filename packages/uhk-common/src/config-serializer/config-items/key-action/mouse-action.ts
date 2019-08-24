@@ -15,7 +15,12 @@ export enum MouseActionParam {
     scrollLeft,
     scrollRight,
     accelerate,
-    decelerate
+    decelerate,
+    button4,
+    button5,
+    button6,
+    button7,
+    button8
 }
 
 export class MouseAction extends KeyAction {

@@ -1,4 +1,4 @@
-import { HardwareModuleInfo, LogService, UhkBuffer } from 'uhk-common';
+import { LeftModuleInfo, LogService, RightModuleInfo, UhkBuffer } from 'uhk-common';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
@@ -248,7 +248,7 @@ export class UhkOperations {
         return false;
     }
 
-    public async getLeftModuleVersionInfo(): Promise<HardwareModuleInfo> {
+    public async getLeftModuleVersionInfo(): Promise<LeftModuleInfo> {
         try {
             this.logService.debug('[DeviceOperation] USB[T]: Read left module version information');
 
@@ -277,7 +277,7 @@ export class UhkOperations {
         };
     }
 
-    public async getRightModuleVersionInfo(): Promise<HardwareModuleInfo> {
+    public async getRightModuleVersionInfo(): Promise<RightModuleInfo> {
         this.logService.debug('[DeviceOperation] USB[T]: Read right module version information');
 
         const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
@@ -287,7 +287,11 @@ export class UhkOperations {
         uhkBuffer.readUInt8();
 
         return {
-            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            userConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
         };
     }
 
