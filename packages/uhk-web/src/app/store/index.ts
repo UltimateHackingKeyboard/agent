@@ -1,7 +1,7 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { HardwareModules, Keymap, UserConfiguration } from 'uhk-common';
+import { HardwareModules, Keymap, UserConfiguration, PlayMacroAction } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
@@ -16,6 +16,7 @@ import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
+import { SideMenuPageState, MacroMenuItem } from '../models';
 
 // State interface for the application
 export interface AppState {
@@ -123,6 +124,35 @@ export const getPrivilegePageState = createSelector(appState, getUpdateUdevRules
     };
 });
 
+export const getMacroMenuItems = (userConfiguration: UserConfiguration): MacroMenuItem[] => {
+    const macroMap = userConfiguration.macros.reduce((map, macro) => {
+        return map.set(macro.id, {
+            id: macro.id,
+            name: macro.name,
+            usageCount: 0
+        });
+    }, new Map<number, MacroMenuItem>());
+
+    for (const keymap of userConfiguration.keymaps) {
+        for (const layer of keymap.layers) {
+            for (const module of layer.modules) {
+                for (const keyAction of module.keyActions) {
+                    if (!(keyAction instanceof PlayMacroAction)) {
+                        continue;
+                    }
+
+                    const menuItem = macroMap.get(keyAction.macroId);
+                    menuItem.usageCount++;
+                }
+            }
+        }
+    }
+
+    return Array
+        .from(macroMap.values())
+        .sort((first: MacroMenuItem, second: MacroMenuItem) => first.name.localeCompare(second.name));
+};
+
 export const getSideMenuPageState = createSelector(
     showAddonMenu,
     runningInElectron,
@@ -133,14 +163,14 @@ export const getSideMenuPageState = createSelector(
      runningInElectronValue: boolean,
      updatingFirmwareValue: boolean,
      userConfiguration: UserConfiguration,
-     restoreUserConfiguration: boolean) => {
+     restoreUserConfiguration: boolean): SideMenuPageState => {
         return {
             showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
-            macros: userConfiguration.macros,
+            macros: getMacroMenuItems(userConfiguration),
             restoreUserConfiguration
         };
     }
