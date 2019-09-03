@@ -9,4 +9,5 @@ export interface SideMenuPageState {
     keymaps: Keymap[];
     macros: MacroMenuItem[];
     restoreUserConfiguration: boolean;
+    macroUsageCountVisible: boolean;
 }
