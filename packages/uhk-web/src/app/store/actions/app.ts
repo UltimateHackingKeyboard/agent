@@ -19,7 +19,9 @@ export enum ActionTypes {
     SetupPermissionError = '[app] Setup permission error',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
-    StopKeypressCapturing = '[app] Stop keypress capturing'
+    StopKeypressCapturing = '[app] Stop keypress capturing',
+    KeyDown = '[app] Key down',
+    KeyUp = '[app] Key up'
 }
 
 export class AppBootstrappedAction implements Action {
@@ -110,6 +112,18 @@ export class StopKeypressCapturingAction implements Action {
     type = ActionTypes.StopKeypressCapturing;
 }
 
+export class KeyDownAction implements Action {
+    readonly type = ActionTypes.KeyDown;
+
+    constructor(public payload: KeyboardEvent) {}
+}
+
+export class KeyUpAction implements Action {
+    readonly type = ActionTypes.KeyUp;
+
+    constructor(public payload: KeyboardEvent) {}
+}
+
 export type Actions
     = AppStartedAction
     | AppBootstrappedAction
@@ -127,4 +141,6 @@ export type Actions
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
     | StopKeypressCapturingAction
+    | KeyDownAction
+    | KeyUpAction
     ;
