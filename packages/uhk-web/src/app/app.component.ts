@@ -16,6 +16,7 @@ import {
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
+import { KeyUpAction, KeyDownAction } from './store/actions/app';
 
 @Component({
     selector: 'main-app',
@@ -95,6 +96,13 @@ export class MainAppComponent implements OnDestroy {
             this.enableUsbStackTest();
             event.preventDefault();
         }
+
+        this.store.dispatch(new KeyDownAction(event));
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    onKeyUp(event: KeyboardEvent) {
+        this.store.dispatch(new KeyUpAction(event));
     }
 
     updateApp() {
