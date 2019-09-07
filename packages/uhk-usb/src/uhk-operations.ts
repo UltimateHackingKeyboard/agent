@@ -96,7 +96,7 @@ export class UhkOperations {
                 }
                 kboot.close();
             }
-            await snooze(100);
+            await snooze(250);
             tryCount++;
         }
 
