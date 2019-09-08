@@ -94,9 +94,10 @@ export class UhkOperations {
                 if (tryCount > 100) {
                     throw new Error('Can not connect to the LEFT keyboard');
                 }
+                await snooze(1000);
                 kboot.close();
+                await snooze(1000);
             }
-            await snooze(250);
             tryCount++;
         }
 

@@ -55,6 +55,8 @@ export class UsbPeripheral implements Peripheral {
     close(): void {
         if (this._device) {
             this._device.close();
+            this._device.removeAllListeners('data');
+            this._device.removeAllListeners('error');
             this._device = undefined;
         }
     }

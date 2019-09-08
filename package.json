@@ -30,7 +30,7 @@
     "@types/jsonfile": "5.0.0",
     "@types/lodash": "4.14.136",
     "@types/node": "8.0.53",
-    "@types/node-hid": "0.7.0",
+    "@types/node-hid": "0.7.2",
     "@types/request": "2.0.8",
     "@types/semver": "5.5.0",
     "@types/tmp": "0.0.33",

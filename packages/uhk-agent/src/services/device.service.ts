@@ -38,10 +38,10 @@ export class DeviceService {
     private queueManager = new QueueManager();
 
     constructor(private logService: LogService,
-                private win: Electron.BrowserWindow,
-                private device: UhkHidDevice,
-                private operations: UhkOperations,
-                private rootDir: string) {
+        private win: Electron.BrowserWindow,
+        private device: UhkHidDevice,
+        private operations: UhkOperations,
+        private rootDir: string) {
         this.startPollUhkDevice();
         this.uhkDevicePoller()
             .catch(error => {
@@ -272,12 +272,16 @@ export class DeviceService {
             if (this._pollerAllowed) {
 
                 this._uhkDevicePolling = true;
+                try {
 
-                const state = await this.device.getDeviceConnectionStateAsync();
-                if (!isEqual(state, savedState)) {
-                    savedState = state;
-                    this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
-                    this.logService.info('[DeviceService] Device connection state changed to:', state);
+                    const state = await this.device.getDeviceConnectionStateAsync();
+                    if (!isEqual(state, savedState)) {
+                        savedState = state;
+                        this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
+                        this.logService.info('[DeviceService] Device connection state changed to:', state);
+                    }
+                } catch (err) {
+                    this.logService.error('[DeviceService] Device connection state query error', err);
                 }
 
                 this._uhkDevicePolling = false;
