@@ -38,10 +38,10 @@ export class DeviceService {
     private queueManager = new QueueManager();
 
     constructor(private logService: LogService,
-        private win: Electron.BrowserWindow,
-        private device: UhkHidDevice,
-        private operations: UhkOperations,
-        private rootDir: string) {
+                private win: Electron.BrowserWindow,
+                private device: UhkHidDevice,
+                private operations: UhkOperations,
+                private rootDir: string) {
         this.startPollUhkDevice();
         this.uhkDevicePoller()
             .catch(error => {
@@ -270,7 +270,6 @@ export class DeviceService {
 
         while (true) {
             if (this._pollerAllowed) {
-
                 this._uhkDevicePolling = true;
                 try {
 
@@ -283,10 +282,9 @@ export class DeviceService {
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
-
-                this._uhkDevicePolling = false;
             }
 
+            this._uhkDevicePolling = false;
             await snooze(250);
         }
     }

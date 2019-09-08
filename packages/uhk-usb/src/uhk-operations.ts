@@ -82,10 +82,9 @@ export class UhkOperations {
         await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
         let tryCount = 0;
         const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
-        let kboot: KBoot;
+        const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
-                kboot = new KBoot(usbPeripheral);
                 this.logService.debug('[UhkOperations] Try to connect to the LEFT keyboard');
                 await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
                 await kboot.getProperty(Properties.BootloaderVersion);
@@ -94,9 +93,7 @@ export class UhkOperations {
                 if (tryCount > 100) {
                     throw new Error('Can not connect to the LEFT keyboard');
                 }
-                await snooze(1000);
-                kboot.close();
-                await snooze(1000);
+                await snooze(2000);
             }
             tryCount++;
         }
