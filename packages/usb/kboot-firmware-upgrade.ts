@@ -17,8 +17,8 @@ process.on('unhandledRejection', (reason: any, promise: Promise<any>): void => {
 });
 
 uhkOperations
-    .updateRightFirmware()
-    .then(() => uhkOperations.updateLeftModule())
+    .updateRightFirmwareWithKboot()
+    .then(() => uhkOperations.updateLeftModuleWithKboot())
     .then(() => console.log('Firmware upgrade finished'))
     .catch(error => {
         console.error(error);

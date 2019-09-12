@@ -182,15 +182,15 @@ export class DeviceService {
                 const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                await this.operations.updateRightFirmware(firmwarePathData.rightFirmwarePath);
-                await this.operations.updateLeftModule(firmwarePathData.leftFirmwarePath);
+                await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
+                await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
             } else {
                 const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
                 const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                await this.operations.updateRightFirmware();
-                await this.operations.updateLeftModule();
+                await this.operations.updateRightFirmwareWithKboot();
+                await this.operations.updateLeftModuleWithKboot();
             }
 
             response.success = true;
@@ -220,7 +220,7 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            await this.operations.updateRightFirmware();
+            await this.operations.updateRightFirmwareWithKboot();
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;

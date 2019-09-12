@@ -24,7 +24,7 @@ export class UhkOperations {
                 private rootDir: string) {
     }
 
-    public async updateRightFirmware(firmwarePath = this.getFirmwarePath()) {
+    public async updateRightFirmwareWithKboot(firmwarePath = this.getFirmwarePath()) {
         this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.debug('[UhkOperations] Start flashing right firmware');
 
@@ -58,7 +58,7 @@ export class UhkOperations {
         this.logService.debug('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateLeftModule(firmwarePath = this.getLeftModuleFirmwarePath()) {
+    public async updateLeftModuleWithKboot(firmwarePath = this.getLeftModuleFirmwarePath()) {
         this.logService.debug('[UhkOperations] Start flashing left module firmware');
 
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
