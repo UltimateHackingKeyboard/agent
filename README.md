@@ -12,7 +12,7 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 
 ### Step 1: Build Dependencies
 
-You'll need Node.js LTS. Use your OS package manager to install it. [Check the NodeJS site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both. Should you need multiple Node.js versions on the same computer, use Node Version Manager for [Mac/Linux](https://github.com/creationix/nvm) or for [Windows](https://github.com/coreybutler/nvm-windows)
+You'll need Node.js 12. Use your OS package manager to install it. [Check the NodeJS site for more info.](https://nodejs.org/en/download/package-manager/ "Installing Node.js via package manager") Mac OS users can simply `brew install node` to get both. Should you need multiple Node.js versions on the same computer, use Node Version Manager for [Mac/Linux](https://github.com/creationix/nvm) or for [Windows](https://github.com/coreybutler/nvm-windows)
 
 You'll also need `libusb`.
 On debian-based linux distros, `apt-get install libusb-dev libudev-dev g++` is sufficient.
