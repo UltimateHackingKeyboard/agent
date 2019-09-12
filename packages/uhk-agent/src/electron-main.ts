@@ -11,6 +11,7 @@ import * as commandLineArgs from 'command-line-args';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { CommandLineArgs, LogRegExps } from 'uhk-common';
+import { UhkBlhost } from 'uhk-usb';
 import { DeviceService } from './services/device.service';
 import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
@@ -22,7 +23,8 @@ import { loadWindowState, saveWindowState } from './util/window';
 
 const optionDefinitions = [
     {name: 'addons', type: Boolean},
-    {name: 'spe', type: Boolean} // simulate privilege escalation error
+    {name: 'spe', type: Boolean}, // simulate privilege escalation error
+    {name: 'useKboot', type: Boolean} // If it is true use kboot package instead of blhost for firmware upgrade
 ];
 
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);
@@ -36,6 +38,7 @@ let win: Electron.BrowserWindow;
 autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
+let uhkBlhost: UhkBlhost;
 let uhkHidDeviceService: UhkHidDevice;
 let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
@@ -100,8 +103,9 @@ function createWindow() {
 
     setMenu(win);
     uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
-    uhkOperations = new UhkOperations(logger, uhkHidDeviceService, packagesDir);
-    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);
+    uhkBlhost = new UhkBlhost(logger, packagesDir);
+    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
+    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir, options);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
     sudoService = new SudoService(logger, options);

@@ -13,6 +13,7 @@ import {
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
+import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
@@ -20,8 +21,64 @@ import { LoadConfigurationsResult } from './models/load-configurations-result';
 
 export class UhkOperations {
     constructor(private logService: LogService,
+                private blhost: UhkBlhost,
                 private device: UhkHidDevice,
                 private rootDir: string) {
+    }
+
+    public async updateRightFirmwareWithBlhost(firmwarePath = this.getFirmwarePath()) {
+        this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
+        this.logService.debug('[UhkOperations] Start flashing right firmware');
+        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
+
+        await this.device.reenumerate(EnumerationModes.Bootloader);
+        this.device.close();
+        await this.blhost.runBlhostCommand([...prefix, 'flash-security-disable', '0403020108070605']);
+        await this.blhost.runBlhostCommand([...prefix, 'flash-erase-region', '0xc000', '475136']);
+        await this.blhost.runBlhostCommand([...prefix, 'flash-image', `"${firmwarePath}"`]);
+        await this.blhost.runBlhostCommand([...prefix, 'reset']);
+        this.logService.debug('[UhkOperations] Right firmware successfully flashed');
+    }
+
+    public async updateLeftModuleWithBlhost(firmwarePath = this.getLeftModuleFirmwarePath()) {
+        this.logService.debug('[UhkOperations] Start flashing left module firmware');
+
+        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.buspal.toString(16)}`];
+        const buspalPrefix = [...prefix, `--buspal i2c,${ModuleSlotToI2cAddress.leftHalf}`];
+
+        await this.device.reenumerate(EnumerationModes.NormalKeyboard);
+        this.device.close();
+        await snooze(1000);
+        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
+        await snooze(1000);
+        await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
+        this.device.close();
+
+        const leftModuleBricked = await this.waitForKbootIdle();
+        if (!leftModuleBricked) {
+            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
+            this.logService.error(msg);
+            throw new Error(msg);
+        }
+
+        await this.device.reenumerate(EnumerationModes.Buspal);
+        this.device.close();
+        await this.blhost.runBlhostCommandRetry([...buspalPrefix, 'get-property', '1']);
+        await this.blhost.runBlhostCommand([...buspalPrefix, 'flash-erase-all-unsecure']);
+        await this.blhost.runBlhostCommand([...buspalPrefix, 'write-memory', '0x0', `"${firmwarePath}"`]);
+        await this.blhost.runBlhostCommand([...prefix, 'reset']);
+        await snooze(1000);
+        await this.device.reenumerate(EnumerationModes.NormalKeyboard);
+        this.device.close();
+        await snooze(1000);
+        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset, 100);
+        this.device.close();
+        await snooze(1000);
+        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
+        this.device.close();
+
+        this.logService.debug('[UhkOperations] Left firmware successfully flashed');
+        this.logService.debug('[UhkOperations] Both left and right firmwares successfully flashed');
     }
 
     public async updateRightFirmwareWithKboot(firmwarePath = this.getFirmwarePath()) {
@@ -61,6 +118,7 @@ export class UhkOperations {
     public async updateLeftModuleWithKboot(firmwarePath = this.getLeftModuleFirmwarePath()) {
         this.logService.debug('[UhkOperations] Start flashing left module firmware');
 
+        const i2cAddressOfLeftModule = Number.parseInt(ModuleSlotToI2cAddress.leftHalf, 16);
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
         await snooze(1000);
@@ -86,7 +144,7 @@ export class UhkOperations {
         while (true) {
             try {
                 this.logService.debug('[UhkOperations] Try to connect to the LEFT keyboard');
-                await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
+                await kboot.configureI2c(i2cAddressOfLeftModule);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 break;
             } catch {
@@ -103,14 +161,14 @@ export class UhkOperations {
         await snooze(1000);
 
         this.logService.debug('[UhkOperations] Flash erase all on LEFT keyboard');
-        await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
+        await kboot.configureI2c(i2cAddressOfLeftModule);
         await kboot.flashEraseAllUnsecure();
 
         this.logService.debug('[UhkOperations] Read LEFT firmware from file');
         const configData = fs.readFileSync(firmwarePath);
 
         this.logService.debug('[UhkOperations] Write memory');
-        await kboot.configureI2c(ModuleSlotToI2cAddress.leftHalf);
+        await kboot.configureI2c(i2cAddressOfLeftModule);
         await kboot.writeMemory({ startAddress: 0, data: configData });
 
         this.logService.debug('[UhkOperations] Reset LEFT keyboard');

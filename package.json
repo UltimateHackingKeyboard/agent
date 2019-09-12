@@ -91,6 +91,7 @@
     "server:electron": "lerna exec --scope uhk-web npm run server:renderer",
     "electron": "lerna exec --scope uhk-agent npm start",
     "electron:spe": "lerna exec --scope uhk-agent npm run electron:spe",
+    "electron:kboot": "lerna exec --scope uhk-agent npm run electron:kboot",
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",

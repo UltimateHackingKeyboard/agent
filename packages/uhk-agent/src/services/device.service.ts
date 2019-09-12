@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { isEqual } from 'lodash';
 import {
+    CommandLineArgs,
     ConfigurationReply,
     DeviceConnectionState,
     FirmwareUpgradeIpcResponse,
@@ -41,7 +42,8 @@ export class DeviceService {
                 private win: Electron.BrowserWindow,
                 private device: UhkHidDevice,
                 private operations: UhkOperations,
-                private rootDir: string) {
+                private rootDir: string,
+                private options: CommandLineArgs) {
         this.startPollUhkDevice();
         this.uhkDevicePoller()
             .catch(error => {
@@ -182,15 +184,25 @@ export class DeviceService {
                 const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
-                await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
+                if (this.options.useKboot) {
+                    await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
+                    await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
+                } else {
+                    await this.operations.updateRightFirmwareWithBlhost(firmwarePathData.rightFirmwarePath);
+                    await this.operations.updateLeftModuleWithBlhost(firmwarePathData.leftFirmwarePath);
+                }
             } else {
                 const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
                 const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                await this.operations.updateRightFirmwareWithKboot();
-                await this.operations.updateLeftModuleWithKboot();
+                if (this.options.useKboot) {
+                    await this.operations.updateRightFirmwareWithKboot();
+                    await this.operations.updateLeftModuleWithKboot();
+                } else {
+                    await this.operations.updateRightFirmwareWithBlhost();
+                    await this.operations.updateLeftModuleWithBlhost();
+                }
             }
 
             response.success = true;
@@ -220,7 +232,11 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            await this.operations.updateRightFirmwareWithKboot();
+            if (this.options.useKboot) {
+                await this.operations.updateRightFirmwareWithKboot();
+            } else {
+                await this.operations.updateRightFirmwareWithBlhost();
+            }
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;

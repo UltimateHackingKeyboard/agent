@@ -249,7 +249,7 @@ export class UhkHidDevice {
         if (command === KbootCommands.idle) {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
-            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, module]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, Number.parseInt(module, 16)]);
         }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }

@@ -10,6 +10,13 @@ const promises = [];
 
 promises.push(
     fse.copy(
+        path.join(__dirname, '../packages/usb/blhost'),
+        path.join(__dirname, '../tmp/packages/blhost'),
+        copyOptions)
+);
+
+promises.push(
+    fse.copy(
         path.join(__dirname, '../rules'),
         path.join(__dirname, '../tmp/rules'),
         copyOptions)
