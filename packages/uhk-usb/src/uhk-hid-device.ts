@@ -208,7 +208,7 @@ export class UhkHidDevice {
 
         while (new Date().getTime() - startTime.getTime() < 20000) {
             const devs = devices();
-            this.logService.silly('[UhkHidDevice] reenumeration devices', devs);
+            this.logService.debug('[UhkHidDevice] reenumeration devices', devs);
 
             const inBootloaderMode = devs.some((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
@@ -219,7 +219,7 @@ export class UhkHidDevice {
                 return;
             }
 
-            this.logService.silly(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
+            this.logService.debug(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
             await snooze(100);
 
             if (!jumped) {
@@ -232,7 +232,7 @@ export class UhkHidDevice {
                     device.close();
                     jumped = true;
                 } else {
-                    this.logService.silly(`[UhkHidDevice] USB[T]: Enumerate device is not ready yet}`);
+                    this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device is not ready yet}`);
                 }
             }
         }
@@ -249,7 +249,7 @@ export class UhkHidDevice {
         if (command === KbootCommands.idle) {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
-            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, module]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, Number.parseInt(module, 16)]);
         }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }

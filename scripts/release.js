@@ -96,7 +96,7 @@ if (TEST_BUILD || gitTag) {
     const rootJson = require('../package.json');
     update2ndPackageJson(rootJson);
 
-    // Add firmware to extra resources
+    // Add firmware and blhost to extra resources
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
     extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
 

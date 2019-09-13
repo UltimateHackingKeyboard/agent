@@ -71,9 +71,9 @@ export enum EnumerationNameToProductId {
 }
 
 export enum ModuleSlotToI2cAddress {
-    leftHalf = 0x10,
-    leftModule = 0x20,
-    rightModule = 0x30
+    leftHalf = '0x10',
+    leftModule = '0x20',
+    rightModule = '0x30'
 }
 
 export enum ModuleSlotToId {
