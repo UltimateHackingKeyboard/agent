@@ -10,12 +10,13 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 Firmware: 8.5.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.4)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
 
-- Implement the Kinetis bootloader protocol natively instead of relying on blhost.
 - Fix device recovery mode.
 - Correctly display whether the UHK is detected.
 - Animate keyboard splitting, merging, and the presence of the left half.
+- Show all the 8 mouse buttons if firmware <=8.6.0 is used.
 - Don't disable input in the key action popover after adding a layer switch action, deleting it, and trying to edit it on its layer.
 - Provide reasonable default mouse settings for Macs.
+- Show per macro usage count when Alt is held.
 - Don't change tab immediately upon closing the key action popover.
 - Fix UI glitch that occurrs when hitting Tab after updating keymap description.
 - Make the Agent icon slightly smaller to be consistent with most application icons.
