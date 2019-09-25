@@ -8,7 +8,7 @@ export interface CommandLineArgs {
      */
     spe?: boolean;
     /**
-     * If it is true use kboot package instead of blhost for firmware upgrade
+     * The driver which is used for firmware upgrade
      */
-    useKboot?: boolean;
+    usbDriver?: 'blhost' | 'kboot';
 }
