@@ -24,7 +24,7 @@ import { loadWindowState, saveWindowState } from './util/window';
 const optionDefinitions = [
     {name: 'addons', type: Boolean},
     {name: 'spe', type: Boolean}, // simulate privilege escalation error
-    {name: 'useKboot', type: Boolean} // If it is true use kboot package instead of blhost for firmware upgrade
+    {name: 'usbDriver', type: String}
 ];
 
 const options: CommandLineArgs = commandLineArgs(optionDefinitions);

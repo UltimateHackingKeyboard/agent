@@ -17,6 +17,7 @@ import {
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
+import { platform } from 'os';
 
 import { TmpFirmware } from '../models/tmp-firmware';
 import { QueueManager } from './queue-manager';
@@ -184,7 +185,7 @@ export class DeviceService {
                 const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                if (this.options.useKboot) {
+                if (this.useKboot()) {
                     await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
                     await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
                 } else {
@@ -196,7 +197,7 @@ export class DeviceService {
                 const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                if (this.options.useKboot) {
+                if (this.useKboot()) {
                     await this.operations.updateRightFirmwareWithKboot();
                     await this.operations.updateLeftModuleWithKboot();
                 } else {
@@ -232,7 +233,7 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            if (this.options.useKboot) {
+            if (this.useKboot()) {
                 await this.operations.updateRightFirmwareWithKboot();
             } else {
                 await this.operations.updateRightFirmwareWithBlhost();
@@ -328,5 +329,18 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
 
         return Promise.resolve();
+    }
+
+    private useKboot(): boolean {
+        switch (this.options.usbDriver) {
+            case 'blhost':
+                return false;
+
+            case 'kboot':
+                return true;
+
+            default:
+                return platform() !== 'win32';
+        }
     }
 }
