@@ -9,7 +9,7 @@
         (add)="addAction($event.macroId, $event.action)"
         (edit)="editAction($event.macroId, $event.index, $event.action)"
         (delete)="deleteAction($event.macroId, $event.index, $event.action)"
-        (reorder)="reorderAction($event.macroId, $event.oldIndex, $event.newIndex)"
+        (reorder)="reorderAction($event.macroId, $event.macroActions)"
     ></macro-list>
 </ng-template>
 

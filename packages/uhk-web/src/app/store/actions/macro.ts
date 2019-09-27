@@ -70,7 +70,7 @@ export class DeleteMacroActionAction implements Action {
 export class ReorderMacroActionAction implements Action {
     type = ActionTypes.ReorderAction;
 
-    constructor(public payload: { id: number, oldIndex: number, newIndex: number }) {
+    constructor(public payload: { id: number, macroActions: ConfigItemMacroAction[] }) {
     }
 }
 

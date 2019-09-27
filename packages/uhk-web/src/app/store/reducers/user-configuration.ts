@@ -447,11 +447,7 @@ export function reducer(
             userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
                 if (macro.id === payload.id) {
                     macro = new Macro(macro);
-                    macro.macroActions.splice(
-                        payload.newIndex,
-                        0,
-                        macro.macroActions.splice(payload.oldIndex, 1)[0]
-                    );
+                    macro.macroActions = payload.macroActions;
                 }
 
                 return macro;
