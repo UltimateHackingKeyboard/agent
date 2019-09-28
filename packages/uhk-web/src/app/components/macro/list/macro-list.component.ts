@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DragulaService } from 'ng2-dragula';
 import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
@@ -30,8 +29,7 @@ import { MacroItemComponent } from '../item';
     ],
     selector: 'macro-list',
     templateUrl: './macro-list.component.html',
-    styleUrls: ['./macro-list.component.scss'],
-    viewProviders: [DragulaService]
+    styleUrls: ['./macro-list.component.scss']
 })
 export class MacroListComponent {
     @Input() macro: Macro;
@@ -47,32 +45,7 @@ export class MacroListComponent {
     showNew: boolean = false;
     private activeEdit: number = undefined;
 
-    constructor(
-        private mapper: MapperService,
-        private dragulaService: DragulaService
-    ) {
-        /* tslint:disable:no-unused-variable: Used by Dragula. */
-        dragulaService.createGroup('macroActions', {
-            moves: function (el: any, container: any, handle: any) {
-                return handle.className.includes('action--movable');
-            }
-        });
-
-        dragulaService.drop('macroActions').subscribe(value => {
-            if (value.el) {
-                let newIndex = this.macroItems.length - 1;
-
-                if (value.sibling) {
-                    newIndex = (+value.sibling.getAttribute('data-index') - 1);
-                }
-
-                this.reorder.emit({
-                    macroId: this.macro.id,
-                    oldIndex: +value.el.getAttribute('data-index'),
-                    newIndex
-                });
-            }
-        });
+    constructor(private mapper: MapperService) {
     }
 
     showNewAction() {
@@ -134,6 +107,13 @@ export class MacroListComponent {
         this.add.emit({
             macroId: this.macro.id,
             action: keyMacroAction
+        });
+    }
+
+    macroActionReordered(macroActions: MacroAction[]): void {
+        this.reorder.emit({
+            macroId: this.macro.id,
+            macroActions
         });
     }
 

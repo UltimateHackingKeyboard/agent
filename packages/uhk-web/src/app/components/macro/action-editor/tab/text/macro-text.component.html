@@ -3,7 +3,7 @@
     <textarea #macroTextInput
               name="macro-text"
               (keydown)="onKeydown($event)"
-              (change)="onTextChange()"
+              (input)="onTextChange()"
               (keyup)="validate()"
               (paste)="onPaste($event)"
               class="macro__text-input">{{ macroAction?.text }}</textarea>

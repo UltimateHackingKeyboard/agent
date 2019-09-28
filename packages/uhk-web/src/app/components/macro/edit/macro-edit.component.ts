@@ -68,7 +68,7 @@ export class MacroEditComponent implements OnDestroy {
         this.store.dispatch(new DeleteMacroActionAction({ id: macroId, index, action }));
     }
 
-    reorderAction(macroId: number, oldIndex: number, newIndex: number) {
-        this.store.dispatch(new ReorderMacroActionAction({ id: macroId, oldIndex, newIndex }));
+    reorderAction(macroId: number, macroActions: MacroAction[]) {
+        this.store.dispatch(new ReorderMacroActionAction({ id: macroId, macroActions }));
     }
 }
