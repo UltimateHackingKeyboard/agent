@@ -6,9 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.14] - 2019-10-04
+
+Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- Use native kboot firmware update on Linux and Mac. Use blhost on Windows.
+- Allow .tar.bz2 firmware file selection on Mac.
+- Fix macro reordering.
+
 ## [1.2.13] - 2019-09-13
 
-Firmware: 8.5.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.5.4)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+Firmware: 8.**6.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
 
 - Fix device recovery mode.
 - Correctly display whether the UHK is detected.
