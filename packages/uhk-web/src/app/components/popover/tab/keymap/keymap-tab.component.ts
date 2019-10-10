@@ -13,26 +13,19 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 export class KeymapTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() keymaps: Keymap[];
+    @Input() keymapOptions: SelectOptionData[];
 
-    keymapOptions: Array<SelectOptionData>;
     selectedKeymap: Keymap;
 
     constructor() {
         super();
-        this.keymapOptions = [];
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.keymaps) {
-            this.keymapOptions = this.keymaps
-                .map((keymap: Keymap): SelectOptionData => {
-                    return {
-                        id: keymap.abbreviation,
-                        text: keymap.name
-                    };
-                });
-            if (this.keymaps.length > 0) {
-                this.selectedKeymap = this.keymaps[0];
+            if (this.keymapOptions.length > 0) {
+                const firstNotDisabledKeyOption = this.keymapOptions.find(option => !option.disabled);
+                this.selectedKeymap = this.keymaps.find(keymap => keymap.abbreviation === firstNotDisabledKeyOption.id);
             }
         }
 
