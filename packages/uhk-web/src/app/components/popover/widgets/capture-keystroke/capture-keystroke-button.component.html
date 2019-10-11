@@ -3,13 +3,14 @@
     'btn-link link--capture-keystroke': isLink,
     'btn-default': !record && !isLink,
     'btn-info': record && !isLink
-}" (click)="start()">
-<i class="fa fa-circle"></i>
+}" (click)="start($event)">
+    <i class="fa fa-circle"></i>
 
-<ng-template [ngIf]="!record">
-{{ captureText }}
-</ng-template>
+    <ng-template [ngIf]="!record">
+    {{ captureText }}
+    </ng-template>
 
-<ng-template [ngIf]="record">
-Capturing ...
-</ng-template>
+    <ng-template [ngIf]="record">
+    Capturing ...
+    </ng-template>
+</button>

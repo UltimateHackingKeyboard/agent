@@ -73,7 +73,8 @@ export class CaptureKeystrokeButtonComponent {
         this.reset();
     }
 
-    start(): void {
+    start(event: MouseEvent): void {
+        (event.target as HTMLButtonElement).focus();
         this.record = true;
         this.store.dispatch(new StartKeypressCapturingAction());
     }
