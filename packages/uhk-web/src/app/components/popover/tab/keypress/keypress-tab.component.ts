@@ -14,7 +14,7 @@ import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
 import { SelectOptionData } from '../../../../models/select-option-data';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
-import { mapLeftRigthModifierToKeyActionModifier } from '../../../../util';
+import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
 
 export const secondaryRoleFilter = (showLayerSwitchers: boolean) => {
@@ -130,7 +130,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         } else {
             keystrokeAction.type = KeystrokeType[scTypePair[1]];
         }
-        keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(this.leftModifiers, this.rightModifiers);
+        keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(this.leftModifiers, this.rightModifiers);
 
         keystrokeAction.secondaryRoleAction = this.selectedSecondaryRoleIndex === -1
             ? undefined

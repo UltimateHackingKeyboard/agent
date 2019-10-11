@@ -5,6 +5,7 @@ import { Key } from 'ts-keycode-enum';
 
 import { CaptureService } from '../../../../services/capture.service';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
+import { KeyCaptureData } from '../../../../models/svg-key-events';
 import { AppState } from '../../../../store';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 
@@ -17,7 +18,7 @@ import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../..
 export class CaptureKeystrokeButtonComponent {
     @Input() isLink = false;
     @Input() captureText = 'Capture keystroke';
-    @Output() capture = new EventEmitter<any>();
+    @Output() capture = new EventEmitter<KeyCaptureData>();
 
     record: boolean;
     private first: boolean; // enable usage of Enter to start capturing
@@ -72,7 +73,8 @@ export class CaptureKeystrokeButtonComponent {
         this.reset();
     }
 
-    start(): void {
+    start(event: MouseEvent): void {
+        (event.target as HTMLButtonElement).focus();
         this.record = true;
         this.store.dispatch(new StartKeypressCapturingAction());
     }

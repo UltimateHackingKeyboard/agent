@@ -48,7 +48,7 @@ import {
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
-import { mapLeftRigthModifierToKeyActionModifier } from '../../../util';
+import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { LastEditedKey } from '../../../models';
 
 interface NameValuePair {
@@ -176,7 +176,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
 
         keystrokeAction.scancode = event.captured.code;
-        keystrokeAction.modifierMask = mapLeftRigthModifierToKeyActionModifier(event.captured.left, event.captured.right);
+        keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.captured.left, event.captured.right);
 
         this.store.dispatch(
             new SaveKeyAction({

@@ -4,6 +4,8 @@ import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction 
 
 import { MapperService } from '../../../services/mapper.service';
 import { MacroItemComponent } from '../item';
+import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
+import { KeyCaptureData } from '../../../models/svg-key-events';
 
 @Component({
     animations: [
@@ -100,7 +102,7 @@ export class MacroListComponent {
         this.hideActiveEditor();
     }
 
-    onKeysCapture(event: { code: number, left: boolean[], right: boolean[] }) {
+    onKeysCapture(event: KeyCaptureData) {
         const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event));
         keyMacroAction.action = MacroKeySubAction.tap;
 
@@ -117,14 +119,12 @@ export class MacroListComponent {
         });
     }
 
-    private toKeyAction(event: { code: number, left: boolean[], right: boolean[] }): KeystrokeAction {
+    private toKeyAction(event: KeyCaptureData): KeystrokeAction {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
         keystrokeAction.scancode = event.code;
         keystrokeAction.modifierMask = 0;
-        const modifiers = event.left.concat(event.right).map(x => x ? 1 : 0);
-        for (let i = 0; i < modifiers.length; ++i) {
-            keystrokeAction.modifierMask |= modifiers[i] << this.mapper.modifierMapper(i);
-        }
+        keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.left, event.right);
+
         return keystrokeAction;
     }
 
