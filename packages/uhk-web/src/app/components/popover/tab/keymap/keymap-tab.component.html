@@ -13,12 +13,17 @@
                     (select)="onChange($event)">
 
             <ng-template ngx-select-option let-option>
-                <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
-                    <span>{{ option.text }}</span>
-                    <span class="scancode--searchterm">
-                        {{ option.data.additional?.explanation}}
+                <div [ngClass]="{'text-muted': option.disabled}">
+                    <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
+                            <span>{{ option.text }}</span>
+                            <span class="scancode--searchterm">
+                                {{ option.data.additional?.explanation}}
+                            </span>
                     </span>
-                </span>
+                    <small *ngIf="option.disabled">
+                        You can only switch to this keymap from other keymaps.
+                    </small>
+                </div>
             </ng-template>
         </ngx-select>
     </div>

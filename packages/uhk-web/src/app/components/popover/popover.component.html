@@ -49,6 +49,7 @@
         <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content"
                     [defaultKeyAction]="defaultKeyAction"
                     [keymaps]="keymaps$ | async"
+                    [keymapOptions]="keymapOptions$ | async"
                     (validAction)="setKeyActionValidState($event)"
         ></keymap-tab>
         <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"

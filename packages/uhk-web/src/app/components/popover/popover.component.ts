@@ -14,8 +14,7 @@ import {
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { combineLatest, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import {
     KeyAction,
@@ -30,9 +29,10 @@ import {
 
 import { Tab } from './tab';
 
-import { AppState, extraMouseButtonsSupported, getKeymaps, macroPlaybackSupported } from '../../store';
+import { AppState, extraMouseButtonsSupported, getKeymapOptions, getKeymaps, macroPlaybackSupported } from '../../store';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
+import { SelectOptionData } from '../../models/select-option-data';
 
 enum TabName {
     Keypress,
@@ -105,6 +105,7 @@ export class PopoverComponent implements OnChanges {
     keyActionValid: boolean;
     activeTab: TabName;
     keymaps$: Observable<Keymap[]>;
+    keymapOptions$: Observable<SelectOptionData[]>;
     leftArrow: boolean = false;
     rightArrow: boolean = false;
     topPosition: number = 0;
@@ -147,17 +148,11 @@ export class PopoverComponent implements OnChanges {
     macroPlaybackSupported$: Observable<boolean>;
     extraMouseButtonsSupported$: Observable<boolean>;
 
-    private readonly currentKeymap$ = new BehaviorSubject<Keymap>(undefined);
-
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
         this.animationState = 'closed';
-        this.keymaps$ = store.select(getKeymaps)
-            .pipe(
-                combineLatest(this.currentKeymap$),
-                map(([keymaps, currentKeymap]: [Keymap[], Keymap]) =>
-                        keymaps.filter((keymap: Keymap) => currentKeymap.abbreviation !== keymap.abbreviation))
-            );
+        this.keymaps$ = store.select(getKeymaps);
+        this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
         this.extraMouseButtonsSupported$ = store.select(extraMouseButtonsSupported);
     }
@@ -202,10 +197,6 @@ export class PopoverComponent implements OnChanges {
             } else {
                 this.animationState = 'closed';
             }
-        }
-
-        if (change.currentKeymap) {
-            this.currentKeymap$.next(this.currentKeymap);
         }
     }
 

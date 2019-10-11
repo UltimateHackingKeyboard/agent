@@ -17,6 +17,7 @@ import { RouterStateUrl } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
 import { SideMenuPageState, MacroMenuItem } from '../models';
+import { SelectOptionData } from '../models/select-option-data';
 
 // State interface for the application
 export interface AppState {
@@ -57,6 +58,15 @@ export const isKeymapDeletable = createSelector(userConfigState, fromUserConfig.
 export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro);
 export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMacroMap);
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
+export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
+    return keymaps.map(keymap => {
+        return {
+            id: keymap.abbreviation,
+            text: keymap.name,
+            disabled: keymap.abbreviation === selectedKeymap.abbreviation
+        };
+    });
+});
 
 export const appState = (state: AppState) => state.app;
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
