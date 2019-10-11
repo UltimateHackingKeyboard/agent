@@ -23,7 +23,7 @@ export const setMenu = (win: BrowserWindow): void => {
                 {role: 'paste'},
                 {role: 'delete'},
                 {role: 'selectall'}
-            ]
+            ] as MenuItemConstructorOptions[]
         }
     ];
 

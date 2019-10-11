@@ -7,7 +7,7 @@ export class IpcUhkRenderer implements IpcCommonRenderer {
         ipcRenderer.send(channel, args);
     }
 
-    public on(channel: string, listener: Function): this {
+    public on(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void): this {
         ipcRenderer.on(channel, listener);
         return this;
     }
