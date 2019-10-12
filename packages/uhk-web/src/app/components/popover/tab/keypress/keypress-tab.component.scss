@@ -4,15 +4,20 @@
     position: relative;
 
     .scancode-options {
+        display: flex;
+        align-items: center;
+
         margin-bottom: 10px;
         margin-top: 2px;
         > b {
-            position: relative;
             top: 2px;
+            margin-right: 0.6em;
         }
 
         icon {
             display: inline-block;
+            margin-left: 0.6em;
+            margin-right: 0.6em;
         };
     }
 
