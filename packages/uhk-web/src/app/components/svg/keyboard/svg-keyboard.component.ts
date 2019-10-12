@@ -28,7 +28,8 @@ import { LastEditedKey } from '../../../models';
             state('rotateRight', style({
                 transform: 'translate(-2%, 30.7%) rotate(-10deg) scale(0.80, 0.80)'
             })),
-            transition('* <=> *', animate(500))
+            transition('merged <=> rotateLeft', animate(500)),
+            transition('merged <=> rotateRight', animate(500))
         ]),
         trigger('fadeKeyboard', [
             state('visible', style({
@@ -133,7 +134,7 @@ export class SvgKeyboardComponent {
 
     private updateModuleAnimationStates() {
         if (this.halvesInfo.areHalvesMerged) {
-            this.moduleAnimationStates = [];
+            this.moduleAnimationStates = ['merged', 'merged'];
             this.separatorAnimation = 'visible';
             this.descriptionAnimation = 'down';
         } else {
