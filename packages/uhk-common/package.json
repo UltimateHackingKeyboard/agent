@@ -20,7 +20,7 @@
     "lint": "tslint --project tsconfig.json"
   },
   "dependencies": {
-    "buffer": "5.2.1",
+    "buffer": "5.4.3",
     "tslib": "1.10.0"
   },
   "license": "GPL-3.0",

@@ -34,7 +34,6 @@
     "@types/request": "2.0.8",
     "@types/semver": "5.5.0",
     "@types/tmp": "0.0.33",
-    "buffer": "5.0.6",
     "check-node-version": "4.0.1",
     "copy-webpack-plugin": "5.0.0",
     "copyfiles": "2.1.1",
