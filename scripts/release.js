@@ -149,7 +149,7 @@ async function afterPack(context) {
         return;
 
     const sourceExecutable = path.join(context.appOutDir, 'uhk-agent');
-    const targetExecutable = path.join(context.appOutDir, 'the-uhk-agent');
+    const targetExecutable = path.join(context.appOutDir, 'uhk-agent-ui');
     const launcherScript = path.join(__dirname, 'launcher-script.sh');
     const chromeSandbox = path.join(context.appOutDir, 'chrome-sandbox');
 

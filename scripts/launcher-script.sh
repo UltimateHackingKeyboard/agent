@@ -2,4 +2,4 @@
 set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-exec "$SCRIPT_DIR/the-uhk-agent" --no-sandbox "$@"
+exec "$SCRIPT_DIR/uhk-agent-ui" --no-sandbox "$@"
