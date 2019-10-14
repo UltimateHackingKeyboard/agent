@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.2.15] - 2019-10-14
+
+Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+
+- Fix Linux SUID issue by using the --no-sandbox Electron option.
+- Fix keyboard description z-index issue.
+- Fix macro keystroke modifier capture.
+- Fix 1px select2 UI glitch in the key action popover.
+- Gray out the current keymap in keymap tab dropdown list.
+- Only animate the halves when they get merged or split.
+
 ## [1.2.14] - 2019-10-04
 
 Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
