@@ -3,8 +3,6 @@ const jsonfile = require('jsonfile');
 const exec = require('child_process').execSync;
 
 const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machine
-// set true if running on your dev mac machine where yarn is installed or not need to install
-const RUNNING_IN_DEV_MODE = process.env.RUNNING_IN_DEV_MODE === 'true';
 const DIR = process.env.DIR;
 
 // electron-builder security override.
@@ -33,7 +31,7 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 }
 
-console.log({branchName, pullRequestNr, gitTag, repoName});
+console.log({ branchName, pullRequestNr, gitTag, repoName });
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
@@ -42,16 +40,10 @@ if (!isReleaseCommit) {
     process.exit(0)
 }
 
-// if (process.platform === 'darwin' && !RUNNING_IN_DEV_MODE) {
-//     exec('brew install yarn --without-node');
-// }
-
-// if (!RUNNING_IN_DEV_MODE) {
-//     exec("yarn add electron-builder");
-// }
-
 const path = require('path');
 const builder = require("electron-builder");
+const fs = require('fs-extra');
+
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
 
@@ -98,12 +90,13 @@ if (TEST_BUILD || gitTag) {
 
     // Add firmware and blhost to extra resources
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
-    extraResources.push({from: extractedFirmwareDir, to: 'packages/'});
+    extraResources.push({ from: extractedFirmwareDir, to: 'packages/' });
 
     builder.build({
         dir: DIR,
         targets: target,
         config: {
+            afterPack,
             directories: {
                 app: electron_build_folder
             },
@@ -148,5 +141,25 @@ function update2ndPackageJson(rootJson) {
     const json = require(jsonPath);
 
     json.version = rootJson.version;
-    jsonfile.writeFileSync(jsonPath, json, {spaces: 2})
+    jsonfile.writeFileSync(jsonPath, json, { spaces: 2 })
+}
+
+async function afterPack(context) {
+    if (process.platform !== 'linux')
+        return;
+
+    const sourceExecutable = path.join(context.appOutDir, 'uhk-agent');
+    const targetExecutable = path.join(context.appOutDir, 'uhk-agent-ui');
+    const launcherScript = path.join(__dirname, 'launcher-script.sh');
+    const chromeSandbox = path.join(context.appOutDir, 'chrome-sandbox');
+
+    // rename uhk-agent to the-uhk-agent
+    await fs.rename(sourceExecutable, targetExecutable);
+
+    // copy launcher script to uhk-agent
+    await fs.copy(launcherScript, sourceExecutable);
+    await fs.chmod(sourceExecutable, 0o755);
+
+    // remove the chrome-sandbox file since we explicitly disable it
+    await fs.unlink(chromeSandbox);
 }
