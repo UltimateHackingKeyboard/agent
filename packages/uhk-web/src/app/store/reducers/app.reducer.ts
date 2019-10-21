@@ -30,7 +30,6 @@ export interface State {
     platform?: string;
     osVersion?: string;
     keypressCapturing: boolean;
-    macroUsageCountVisible: boolean;
 }
 
 export const initialState: State = {
@@ -41,8 +40,7 @@ export const initialState: State = {
     configLoading: true,
     agentVersionInfo: getVersions(),
     privilegeWhatWillThisDoClicked: false,
-    keypressCapturing: false,
-    macroUsageCountVisible: false
+    keypressCapturing: false
 };
 
 export function reducer(
@@ -158,8 +156,7 @@ export function reducer(
         case App.ActionTypes.StartKeypressCapturing:
             return {
                 ...state,
-                keypressCapturing: true,
-                macroUsageCountVisible: false
+                keypressCapturing: true
             };
 
         case App.ActionTypes.StopKeypressCapturing:
@@ -167,24 +164,6 @@ export function reducer(
                 ...state,
                 keypressCapturing: false
             };
-
-        case App.ActionTypes.KeyDown: {
-            const event = (action as App.KeyDownAction).payload;
-
-            return {
-                ...state,
-                macroUsageCountVisible: !state.keypressCapturing && !event.defaultPrevented && event.altKey
-            };
-        }
-
-        case App.ActionTypes.KeyUp: {
-            const event = (action as App.KeyDownAction).payload;
-
-            return {
-                ...state,
-                macroUsageCountVisible: event.altKey
-            };
-        }
 
         default:
             return state;
@@ -218,4 +197,3 @@ export const runningOnNotSupportedWindows = (state: State): boolean => {
 };
 
 export const keypressCapturing = (state: State): boolean => state.keypressCapturing;
-export const macroUsageCountVisible = (state: State): boolean => state.macroUsageCountVisible;
