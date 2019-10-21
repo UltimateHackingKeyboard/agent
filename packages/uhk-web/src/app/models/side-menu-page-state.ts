@@ -1,4 +1,4 @@
-import { Keymap, Macro } from 'uhk-common';
+import { Keymap } from 'uhk-common';
 import { MacroMenuItem } from './macro-menu-item';
 
 export interface SideMenuPageState {
@@ -9,5 +9,4 @@ export interface SideMenuPageState {
     keymaps: Keymap[];
     macros: MacroMenuItem[];
     restoreUserConfiguration: boolean;
-    macroUsageCountVisible: boolean;
 }

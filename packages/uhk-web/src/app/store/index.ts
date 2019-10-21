@@ -78,7 +78,6 @@ export const deviceConfigurationLoaded = createSelector(appState, fromApp.device
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
 export const keypressCapturing = createSelector(appState, fromApp.keypressCapturing);
-export const getMacroUsageCountVisible = createSelector(appState, fromApp.macroUsageCountVisible);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 export const contributors = (state: AppState) => state.contributors;
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
@@ -170,13 +169,11 @@ export const getSideMenuPageState = createSelector(
     updatingFirmware,
     getUserConfiguration,
     getRestoreUserConfiguration,
-    getMacroUsageCountVisible,
     (showAddonMenuValue: boolean,
      runningInElectronValue: boolean,
      updatingFirmwareValue: boolean,
      userConfiguration: UserConfiguration,
-     restoreUserConfiguration: boolean,
-     macroUsageCountVisible): SideMenuPageState => {
+     restoreUserConfiguration: boolean): SideMenuPageState => {
         return {
             showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
@@ -184,8 +181,7 @@ export const getSideMenuPageState = createSelector(
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
             macros: getMacroMenuItems(userConfiguration),
-            restoreUserConfiguration,
-            macroUsageCountVisible
+            restoreUserConfiguration
         };
     }
 );

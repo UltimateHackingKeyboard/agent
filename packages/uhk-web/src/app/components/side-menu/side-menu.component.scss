@@ -136,6 +136,10 @@ ul {
     &__level-2 {
         &:hover {
             background-color: rgba(0, 0, 0, 0.05);
+
+            .sidebar__macro_count {
+                visibility: visible;
+            }
         }
 
         &.active {
@@ -153,6 +157,7 @@ ul {
         position: absolute;
         right: 11px;
         top: 1px;
+        visibility: hidden;
     }
 }
 
