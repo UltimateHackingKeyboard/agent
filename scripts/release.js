@@ -43,6 +43,7 @@ if (!isReleaseCommit) {
 const path = require('path');
 const builder = require("electron-builder");
 const fs = require('fs-extra');
+const { notarize } = require('electron-notarize');
 
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
@@ -97,6 +98,7 @@ if (TEST_BUILD || gitTag) {
         targets: target,
         config: {
             afterPack,
+            afterSign,
             directories: {
                 app: electron_build_folder
             },
@@ -106,7 +108,11 @@ if (TEST_BUILD || gitTag) {
                 category: 'public.app-category.utilities',
                 extraResources,
                 identity: 'CMXCBCFHDG',
-                cscLink: path.join(__dirname, 'certs/mac-cert.p12')
+                cscLink: path.join(__dirname, 'certs/mac-cert.p12'),
+                hardenedRuntime: true,
+                gatekeeperAssess: false,
+                entitlements: path.join(__dirname, 'entitlements.mac.plist'),
+                entitlementsInherit: path.join(__dirname, 'entitlements.mac.plist')
             },
             win: {
                 extraResources,
@@ -162,4 +168,20 @@ async function afterPack(context) {
 
     // remove the chrome-sandbox file since we explicitly disable it
     await fs.unlink(chromeSandbox);
+}
+
+async function afterSign(context) {
+    const { electronPlatformName, appOutDir } = context;
+    if (electronPlatformName !== 'darwin') {
+        return;
+    }
+
+    const appName = context.packager.appInfo.productFilename;
+
+    return await notarize({
+        appBundleId: 'com.ultimategadgetlabs.agent',
+        appPath: `${appOutDir}/${appName}.app`,
+        appleId: process.env.APPLE_ID,
+        appleIdPassword: process.env.APPLE_ID_PASS,
+    });
 }
