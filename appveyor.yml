@@ -1,5 +1,4 @@
-os: unstable
-platform: x64
+image: Visual Studio 2017
 
 clone_folder: c:\projects\uhk-agent
 
