@@ -22,13 +22,18 @@
 
         </ngx-select>
     </div>
-    <icon name="question-circle"
-          data-toggle="tooltip"
-          html="true"
-          maxWidth="330"
-          title="<p>Looking for a non-US character? Just pick the character of the desired key according to the US layout.</p>
-                 <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the semicolon key, so choose semicolon in this dropdown.</p>"
-          data-placement="bottom"></icon>
+    <a class="btn btn-black-link btn-padding-0"
+       href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
+       externalUrl>
+        <icon name="question-circle"
+              data-toggle="tooltip"
+              html="true"
+              maxWidth="330"
+              title="<p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the label if your computer uses layout different from en-US. In such case, you need to pick the character of the desired key according to the en-US layout.</p>
+                     <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the semicolon key, so choose semicolon in this dropdown.</p>
+                     <p>Click to learn more about mappings and scancodes.</p>"
+              data-placement="bottom"></icon>
+    </a>
     <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0"></capture-keystroke-button>
 </div>
 <div class="modifier-options">
