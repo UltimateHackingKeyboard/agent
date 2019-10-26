@@ -1,4 +1,5 @@
 image: Visual Studio 2017
+platform: x64
 
 clone_folder: c:\projects\uhk-agent
 
@@ -17,7 +18,7 @@ build: off
 shallow_clone: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version x64
   - choco install chromium
   - set CI=true
   - set PATH=%APPDATA%\npm;%PATH%
