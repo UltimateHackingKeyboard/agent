@@ -6,7 +6,7 @@ The configuration of the UHK is unusually complex for a keyboard, and is compose
 
 ## Setup
 
-Given that the development dependencies are installed on your system you should be able to run the configuration serializer tester test by running `npm run test` in this directorx.
+Given that the development dependencies are installed on your system you should be able to run the configuration serializer tester test by running `npm run test` in this directory.
 
 ## Configuration representations
 
