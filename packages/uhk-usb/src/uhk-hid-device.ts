@@ -17,6 +17,7 @@ import {
     UsbVariables
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
+import { GetDeviceOptions } from './models';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -223,7 +224,7 @@ export class UhkHidDevice {
             await snooze(100);
 
             if (!jumped) {
-                const device = this.getDevice();
+                const device = this.getDevice({ errorLogLevel: 'debug'});
                 if (device) {
                     const data = getTransferData(message);
                     this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
@@ -232,7 +233,7 @@ export class UhkHidDevice {
                     device.close();
                     jumped = true;
                 } else {
-                    this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device is not ready yet}`);
+                    this.logService.debug('[UhkHidDevice] USB[T]: Enumerate device is not ready yet');
                 }
             }
         }
@@ -274,9 +275,9 @@ export class UhkHidDevice {
      * @returns {HID}
      * @private
      */
-    private getDevice() {
+    private getDevice(options?: GetDeviceOptions) {
         if (!this._device) {
-            this._device = this.connectToDevice();
+            this._device = this.connectToDevice(options);
         }
 
         return this._device;
@@ -286,7 +287,7 @@ export class UhkHidDevice {
      * Initialize new UHK HID device.
      * @returns {HID}
      */
-    private connectToDevice(): HID {
+    private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): HID {
         try {
             const devs = devices();
             let compareDevices = devs as any;
@@ -317,7 +318,7 @@ export class UhkHidDevice {
             this.logService.debug('[UhkHidDevice] Used device:', JSON.stringify(dev));
             return device;
         } catch (err) {
-            this.logService.error('[UhkHidDevice] Can not create device:', err);
+            this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
         }
 
         return null;
