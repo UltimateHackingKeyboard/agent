@@ -157,7 +157,7 @@ export class UhkOperations {
         }
 
         // https://github.com/node-hid/node-hid/issues/230
-        this.logService.debug('[UhkOperations] Wait 1 sec to prevent node-hid race condition');
+        this.logService.debug('[UhkOperations] Waiting 1s to prevent node-hid race condition');
         await snooze(1000);
 
         this.logService.debug('[UhkOperations] Flash erase all on LEFT keyboard');

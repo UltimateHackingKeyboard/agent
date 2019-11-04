@@ -56,7 +56,7 @@ export class UhkHidDevice {
                 return true;
             }
 
-            this.logService.debug('[UhkHidDevice] Devices before check permission:');
+            this.logService.debug('[UhkHidDevice] Devices before checking permission:');
             const devs = devices();
             this.logDevices(devs);
 
@@ -209,14 +209,14 @@ export class UhkHidDevice {
 
         while (new Date().getTime() - startTime.getTime() < 20000) {
             const devs = devices();
-            this.logService.debug('[UhkHidDevice] reenumeration devices', devs);
+            this.logService.debug('[UhkHidDevice] Reenumerating devices', devs);
 
             const inBootloaderMode = devs.some((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
                 x.productId === enumeratedProductId);
 
             if (inBootloaderMode) {
-                this.logService.debug(`[UhkHidDevice] reenumeration devices up`);
+                this.logService.debug(`[UhkHidDevice] Reenumerating devices`);
                 return;
             }
 
@@ -227,13 +227,13 @@ export class UhkHidDevice {
                 const device = this.getDevice({ errorLogLevel: 'debug'});
                 if (device) {
                     const data = getTransferData(message);
-                    this.logService.debug(`[UhkHidDevice] USB[T]: Enumerate device. Mode: ${reenumMode}`);
+                    this.logService.debug(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     device.write(data);
                     device.close();
                     jumped = true;
                 } else {
-                    this.logService.debug('[UhkHidDevice] USB[T]: Enumerate device is not ready yet');
+                    this.logService.debug('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
                 }
             }
         }
