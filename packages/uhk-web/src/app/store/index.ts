@@ -108,7 +108,7 @@ export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDev
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
-    return electron ? state : initProgressButtonState;
+    return electron ? state : state;
 });
 export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);

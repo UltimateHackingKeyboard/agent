@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectionState, FirmwareUpgradeIpcResponse, HardwareModules, IpcResponse } from 'uhk-common';
+import { DeviceConnectionState, FirmwareUpgradeIpcResponse, HardwareModules, IpcResponse, UserConfiguration } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 
 export enum ActionTypes {
@@ -64,6 +64,9 @@ export class SaveConfigurationReplyAction implements Action {
 
 export class ShowSaveToKeyboardButtonAction implements Action {
     type = ActionTypes.ShowSaveToKeyboardButton;
+
+    constructor(public payload: UserConfiguration) {
+    }
 }
 
 export class SaveToKeyboardSuccessAction implements Action {

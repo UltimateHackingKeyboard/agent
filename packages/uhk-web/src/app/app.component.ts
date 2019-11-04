@@ -24,8 +24,7 @@ import { KeyUpAction, KeyDownAction } from './store/actions/app';
     styleUrls: ['./app.component.scss'],
     encapsulation: ViewEncapsulation.None,
     animations: [
-        trigger(
-            'showSaveToKeyboardButton', [
+        trigger('showSaveToKeyboardButton', [
                 transition(':enter', [
                     style({transform: 'translateY(100%)'}),
                     animate('400ms ease-in-out', style({transform: 'translateY(0)'}))

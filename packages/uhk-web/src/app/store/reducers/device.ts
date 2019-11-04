@@ -7,6 +7,7 @@ import { initProgressButtonState, ProgressButtonState } from './progress-button-
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
+import { ShowSaveToKeyboardButtonAction } from '../actions/device';
 
 export interface State {
     connected: boolean;
@@ -75,10 +76,13 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.ShowSaveToKeyboardButton: {
+            const data = (<ShowSaveToKeyboardButtonAction>action).payload;
+
             return {
                 ...state,
                 saveToKeyboard: {
                     showButton: true,
+                    // firstAttemptOfSaveToKeyboard: !data.everAttemptedSavingToKeyboard,
                     text: 'Save to keyboard',
                     action: new Device.SaveConfigurationAction()
                 }

@@ -199,6 +199,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt8(this.mouseScrollDeceleratedSpeed);
         buffer.writeUInt8(this.mouseScrollBaseSpeed);
         buffer.writeUInt8(this.mouseScrollAcceleratedSpeed);
+        // buffer.writeUInt8(+this.everAttemptedSavingToKeyboard);
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {

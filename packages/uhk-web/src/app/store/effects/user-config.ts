@@ -87,14 +87,14 @@ export class UserConfigEffects {
                                 type: Keymaps.ActionTypes.UndoLastAction
                             }
                         }),
-                        new ShowSaveToKeyboardButtonAction()
+                        new ShowSaveToKeyboardButtonAction(config)
                     ];
                 }
 
                 return [
                     new SaveUserConfigSuccessAction(config),
                     new DismissUndoNotificationAction(),
-                    new ShowSaveToKeyboardButtonAction()
+                    new ShowSaveToKeyboardButtonAction(config)
                 ];
             })
         );

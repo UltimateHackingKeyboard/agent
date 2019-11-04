@@ -36,6 +36,13 @@ export function reducer(
     action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
+        case DeviceActions.ActionTypes.SaveToKeyboardSuccess:
+            // state.userConfiguration.everAttemptedSavingToKeyboard = true;
+
+            return {
+                ...state
+            };
+
         case UserConfig.ActionTypes.ApplyUserConfigurationFromFile:
         case UserConfig.ActionTypes.LoadResetUserConfiguration:
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {

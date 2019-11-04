@@ -113,6 +113,7 @@ import { FileUploadComponent } from './components/file-upload';
 import { AutoGrowInputComponent } from './components/auto-grow-input';
 import { HelpPageComponent } from './components/agent/help-page/help-page.component';
 import { UdevRulesComponent } from './components/udev-rules/udev-rules.component';
+import { HighlightArrowComponent } from './components/highlight-arrow/highlight-arrow.component';
 
 @NgModule({
     declarations: [
@@ -192,7 +193,8 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
         HelpPageComponent,
         ExternalUrlDirective,
         SvgSecondaryRoleComponent,
-        UdevRulesComponent
+        UdevRulesComponent,
+        HighlightArrowComponent
     ],
     imports: [
         CommonModule,

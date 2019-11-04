@@ -1,6 +1,6 @@
 import * as storage from 'electron-settings';
 
-import { AutoUpdateSettings, UserConfiguration } from 'uhk-common';
+import { AutoUpdateSettings, UserConfiguration, UserHistory } from 'uhk-common';
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
 
 export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
@@ -37,5 +37,13 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
 
     saveAutoUpdateSettings(settings: AutoUpdateSettings): void {
         ElectronDataStorageRepositoryService.saveValue('auto-update-settings', settings);
+    }
+
+    getUserHistory(): UserHistory {
+        return ElectronDataStorageRepositoryService.getValue('user-history');
+    }
+
+    setUserHistory(history: UserHistory): void {
+        ElectronDataStorageRepositoryService.saveValue('user-history', JSON.stringify(history));
     }
 }
