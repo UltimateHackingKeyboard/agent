@@ -1,19 +1,18 @@
-import { AutoUpdateSettings } from 'uhk-common';
-
 import * as AutoUpdate from '../actions/auto-update-settings';
 import * as AppUpdate from '../actions/app-update.action';
+import * as App from '../actions/app';
 
-export interface State extends AutoUpdateSettings {
+export interface State {
+    checkForUpdateOnStartUp: boolean;
     checkingForUpdate: boolean;
 }
 
 export const initialState: State = {
     checkForUpdateOnStartUp: false,
-    usePreReleaseUpdate: false,
     checkingForUpdate: false
 };
 
-export function reducer(state = initialState, action: AutoUpdate.Actions | AppUpdate.Actions): State {
+export function reducer(state = initialState, action: AutoUpdate.Actions | AppUpdate.Actions | App.Actions): State {
     switch (action.type) {
         case AutoUpdate.ActionTypes.ToggleCheckForUpdateOnStartup: {
             return {
@@ -22,17 +21,12 @@ export function reducer(state = initialState, action: AutoUpdate.Actions | AppUp
             };
         }
 
-        case AutoUpdate.ActionTypes.TogglePreReleaseFlag: {
-            return {
-                ...state,
-                usePreReleaseUpdate: (action as AutoUpdate.TogglePreReleaseFlagAction).payload
-            };
-        }
+        case App.ActionTypes.LoadApplicationSettingsSuccess: {
+            const { checkForUpdateOnStartUp = true } = (action as App.LoadApplicationSettingsSuccessAction).payload;
 
-        case AutoUpdate.ActionTypes.LoadAutoUpdateSettingSuccess: {
             return {
                 ...state,
-                ...(action as AutoUpdate.LoadAutoUpdateSettingsSuccessAction).payload
+                checkForUpdateOnStartUp
             };
         }
 
@@ -56,10 +50,3 @@ export function reducer(state = initialState, action: AutoUpdate.Actions | AppUp
             return state;
     }
 }
-
-export const getUpdateSettings = (state: State) => ({
-    checkForUpdateOnStartUp: state.checkForUpdateOnStartUp,
-    usePreReleaseUpdate: state.usePreReleaseUpdate
-});
-
-export const checkingForUpdate = (state: State) => state.checkingForUpdate;

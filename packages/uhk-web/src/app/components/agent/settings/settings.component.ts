@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AutoUpdateSettings } from 'uhk-common';
 
-import { AppState, getAutoUpdateSettings, getCheckingForUpdate } from '../../../store';
+import { AppState, appUpdateSettingsState } from '../../../store';
+import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
@@ -18,15 +18,13 @@ import {
     }
 })
 export class SettingsComponent {
-    autoUpdateSettings$: Observable<AutoUpdateSettings>;
-    checkingForUpdate$: Observable<boolean>;
+    updateSettingsState$: Observable<UpdateSettingsState>;
 
     constructor(private store: Store<AppState>) {
-        this.autoUpdateSettings$ = store.select(getAutoUpdateSettings);
-        this.checkingForUpdate$ = store.select(getCheckingForUpdate);
+        this.updateSettingsState$ = store.select(appUpdateSettingsState);
     }
 
-    toogleCheckForUpdateOnStartUp(value: boolean) {
+    toggleCheckForUpdateOnStartUp(value: boolean) {
         this.store.dispatch(new ToggleCheckForUpdateOnStartupAction(value));
     }
 

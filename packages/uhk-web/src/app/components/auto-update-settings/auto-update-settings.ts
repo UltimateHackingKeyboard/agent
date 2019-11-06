@@ -9,8 +9,7 @@ import { State } from '../../store/reducers/auto-update-settings';
 })
 export class AutoUpdateSettings {
 
-    @Input() settings: State | undefined;
-    @Input() checkingForUpdate: boolean;
+    @Input() state: State;
 
     @Output() toggleCheckForUpdateOnStartUp = new EventEmitter<boolean>();
     @Output() checkForUpdate = new EventEmitter<boolean>();
