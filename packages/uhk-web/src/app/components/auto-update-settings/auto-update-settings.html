@@ -3,7 +3,7 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox"
-                       [checked]="settings.checkForUpdateOnStartUp"
+                       [checked]="state.checkForUpdateOnStartUp"
                        (change)="emitCheckForUpdateOnStartUp($event.target.checked)"> Automatically check for update on
                 application start
             </label>
@@ -11,7 +11,7 @@
 
         <button class="btn btn-link" (click)="emitCheckForUpdate($event)">
             Check for update
-            <span *ngIf="checkingForUpdate"
+            <span *ngIf="state.checkingForUpdate"
                   class="fa fa-spinner fa-spin"></span>
         </button>
     </div>
