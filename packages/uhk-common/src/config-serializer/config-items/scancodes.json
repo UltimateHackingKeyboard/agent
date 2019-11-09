@@ -708,6 +708,22 @@
                 }
             },
             {
+                "id": "238",
+                "text": "International 4",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 138
+                }
+            },
+            {
+                "id": "239",
+                "text": "International 5",
+                "additional": {
+                    "type": "basic",
+                    "scancode": 139
+                }
+            },
+            {
                 "id": "244",
                 "text": "Language 1",
                 "additional": {

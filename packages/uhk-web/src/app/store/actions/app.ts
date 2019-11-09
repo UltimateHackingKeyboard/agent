@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 
 export enum ActionTypes {
@@ -13,6 +13,9 @@ export enum ActionTypes {
     UndoLastSuccess = '[app] undo last action success',
     DismissUndoNotification = '[app] dismiss notification action',
     LoadHardwareConfigurationSuccess = '[app] load hardware configuration success',
+    LoadApplicationSettings = '[app] Load application settings',
+    LoadApplicationSettingsSuccess = '[app] Load application settings success',
+    SaveApplicationSettingsSuccess = '[app] Save application settings success',
     ElectronMainLogReceived = '[app] Electron main log received',
     OpenUrlInNewWindow = '[app] Open URL in new Window',
     PrivilegeWhatWillThisDo = '[app] What will this do clicked',
@@ -75,6 +78,21 @@ export class LoadHardwareConfigurationSuccessAction implements Action {
     }
 }
 
+export class LoadApplicationSettingsAction implements Action {
+    type = ActionTypes.LoadApplicationSettings;
+}
+
+export class LoadApplicationSettingsSuccessAction implements Action {
+    type = ActionTypes.LoadApplicationSettingsSuccess;
+
+    constructor(public payload: ApplicationSettings) {
+    }
+}
+
+export class SaveApplicationSettingsSuccessAction implements Action {
+    type = ActionTypes.SaveApplicationSettingsSuccess;
+}
+
 export class ElectronMainLogReceivedAction implements Action {
     type = ActionTypes.ElectronMainLogReceived;
 
@@ -134,6 +152,9 @@ export type Actions
     | UndoLastSuccessAction
     | DismissUndoNotificationAction
     | LoadHardwareConfigurationSuccessAction
+    | LoadApplicationSettingsAction
+    | LoadApplicationSettingsSuccessAction
+    | SaveApplicationSettingsSuccessAction
     | ElectronMainLogReceivedAction
     | OpenUrlInNewWindowAction
     | PrivilegeWhatWillThisDoAction

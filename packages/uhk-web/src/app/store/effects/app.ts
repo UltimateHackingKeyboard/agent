@@ -5,21 +5,25 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 
-import { AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
 import {
     ActionTypes,
     ApplyAppStartInfoAction,
     AppStartedAction,
     DismissUndoNotificationAction,
+    LoadApplicationSettingsSuccessAction,
     OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
+    SaveApplicationSettingsSuccessAction,
     ShowNotificationAction,
     UndoLastAction
 } from '../actions/app';
+import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-settings';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { ConnectionStateChangedAction } from '../actions/device';
-import { AppState, runningInElectron } from '../index';
+import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
+import { AppState, getApplicationSettings, runningInElectron } from '../index';
+import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 
 @Injectable()
 export class ApplicationEffects {
@@ -34,6 +38,11 @@ export class ApplicationEffects {
                 this.appUpdateRendererService.sendAppStarted();
                 this.appRendererService.getAppStartInfo();
                 this.logService.info('Renderer appStart effect end');
+            }),
+            map(() => {
+                const settings = this.dataStorageRepository.getApplicationSettings();
+
+                return new LoadApplicationSettingsSuccessAction(settings);
             })
         );
 
@@ -95,11 +104,26 @@ export class ApplicationEffects {
             })
         );
 
+    @Effect() saveApplicationSettings$ = this.actions$
+        .pipe(
+            ofType(
+                UpdateActionTypes.ToggleCheckForUpdateOnStartup
+            ),
+            withLatestFrom(this.store.select(getApplicationSettings)),
+            map(([, config]) => config),
+            map((config: ApplicationSettings) => {
+                this.dataStorageRepository.saveApplicationSettings(config);
+
+                return new SaveApplicationSettingsSuccessAction();
+            })
+        );
+
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
                 private logService: LogService,
-                private store: Store<AppState>) {
+                private store: Store<AppState>,
+                private dataStorageRepository: DataStorageRepositoryService) {
     }
 }

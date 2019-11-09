@@ -31,7 +31,10 @@ export function reducer(state = initialState, action: AppUpdate.Actions) {
             return {
                 ...state,
                 updateDownloaded: true,
-                updateInfo: (action as UpdateDownloadedAction).payload
+                updateInfo: (action as UpdateDownloadedAction).payload || {
+                    isPrerelease: false,
+                    version: ''
+                }
             };
 
         case AppUpdate.ActionTypes.DoNotUpdateApp:

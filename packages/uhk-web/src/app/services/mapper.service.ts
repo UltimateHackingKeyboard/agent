@@ -315,6 +315,8 @@ export class MapperService {
         this.basicScanCodeTextMap.set(135, ['Int1']);
         this.basicScanCodeTextMap.set(136, ['Int2']);
         this.basicScanCodeTextMap.set(137, ['Int3']);
+        this.basicScanCodeTextMap.set(138, ['Int4']);
+        this.basicScanCodeTextMap.set(139, ['Int5']);
         this.basicScanCodeTextMap.set(144, ['Lang1']);
         this.basicScanCodeTextMap.set(145, ['Lang2']);
         this.basicScanCodeTextMap.set(176, ['00']);

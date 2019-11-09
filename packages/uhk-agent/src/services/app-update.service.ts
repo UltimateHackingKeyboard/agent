@@ -1,11 +1,11 @@
-import { ipcMain, BrowserWindow } from 'electron';
+import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
 import * as settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
 import * as storage from 'electron-settings';
 
-import { AutoUpdateSettings, IpcEvents, LogService } from 'uhk-common';
+import { ApplicationSettings, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 
 export class AppUpdateService extends MainServiceBase {
@@ -131,18 +131,17 @@ export class AppUpdateService extends MainServiceBase {
     }
 
     private checkForUpdateAtStartup() {
-        const autoUpdateSettings = this.getAutoUpdateSettings();
-        const checkForUpdate = autoUpdateSettings && autoUpdateSettings.checkForUpdateOnStartUp;
+        const { checkForUpdateOnStartUp = true } = this.getApplicationSettings();
 
-        this.logService.debug('[AppUpdateService] check for update at startup:', {checkForUpdate, autoUpdateSettings});
+        this.logService.debug('[AppUpdateService] check for update at startup:', { checkForUpdateOnStartUp });
 
-        return checkForUpdate;
+        return checkForUpdateOnStartUp;
     }
 
-    private getAutoUpdateSettings(): AutoUpdateSettings {
-        const value = storage.get('auto-update-settings');
+    private getApplicationSettings(): ApplicationSettings {
+        const value = storage.get('application-settings');
         if (!value) {
-            return {checkForUpdateOnStartUp: false};
+            return {checkForUpdateOnStartUp: true};
         }
 
         return JSON.parse(<string>value);

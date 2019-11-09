@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AutoUpdateSettings, UserConfiguration, UserHistory } from 'uhk-common';
+import { ApplicationSettings, UserConfiguration } from 'uhk-common';
 
 @Injectable()
 export class DataStorageRepositoryService {
@@ -12,19 +12,11 @@ export class DataStorageRepositoryService {
         localStorage.setItem('config', JSON.stringify(config.toJsonObject()));
     }
 
-    getAutoUpdateSettings(): AutoUpdateSettings {
-        return JSON.parse(localStorage.getItem('auto-update-settings'));
+    getApplicationSettings(): ApplicationSettings {
+        return JSON.parse(localStorage.getItem('application-settings'));
     }
 
-    saveAutoUpdateSettings(settings: AutoUpdateSettings): void {
-        localStorage.setItem('auto-update-settings', JSON.stringify(settings));
-    }
-
-    getUserHistory(): UserHistory {
-        return JSON.parse(localStorage.getItem('user-history'));
-    }
-
-    setUserHistory(history: UserHistory): void {
-        localStorage.setItem('user-history', JSON.stringify(history));
+    saveApplicationSettings(settings: ApplicationSettings): void {
+        localStorage.setItem('application-settings', JSON.stringify(settings));
     }
 }

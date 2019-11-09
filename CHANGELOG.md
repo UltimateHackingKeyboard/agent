@@ -6,11 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.2.16] - 2019-10-15
+## [1.2.16] - 2019-11-05
 
 Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
 
+- Add International 4 and International 5 scancodes.
 - Fix digital signature issue on Mac OS 10.15 Catalina.
+- Only display macro usage counts on hover.
+- Add help tooltip for macro text actions.
+- Improve the scancode tooltip of the key action popover.
+- Improve the phrasing of firmware update messages and the firmware update error message.
 
 ## [1.2.15] - 2019-10-14
 

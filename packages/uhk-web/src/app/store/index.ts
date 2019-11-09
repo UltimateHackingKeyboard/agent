@@ -1,7 +1,7 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { HardwareModules, Keymap, UserConfiguration, PlayMacroAction } from 'uhk-common';
+import { ApplicationSettings, HardwareModules, Keymap, UserConfiguration, PlayMacroAction } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
@@ -87,8 +87,6 @@ export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppU
 export const getUpdateInfo = createSelector(appUpdateState, fromAppUpdate.getUpdateInfo);
 
 export const appUpdateSettingsState = (state: AppState) => state.autoUpdateSettings;
-export const getAutoUpdateSettings = createSelector(appUpdateSettingsState, autoUpdateSettings.getUpdateSettings);
-export const getCheckingForUpdate = createSelector(appUpdateSettingsState, autoUpdateSettings.checkingForUpdate);
 
 export const deviceState = (state: AppState) => state.device;
 export const deviceConnected = createSelector(
@@ -200,3 +198,11 @@ export const layerDoubleTapSupported = createSelector(
 export const extraMouseButtonsSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
     return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.1.1');
 });
+
+export const getApplicationSettings = createSelector(
+    appUpdateSettingsState,
+    (updateSettingsState): ApplicationSettings => {
+        return {
+            checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp
+        };
+    });
