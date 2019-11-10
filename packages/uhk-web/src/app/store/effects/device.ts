@@ -68,7 +68,17 @@ export class DeviceEffects {
                 }
 
                 if (state.connected && state.zeroInterfaceAvailable) {
-                    return this.router.navigate(['/']);
+                    const allowDefaultNavigation = [
+                        '/detection',
+                        '/privilege',
+                        '/loading'
+                    ].some(start => route.state.url.startsWith(start));
+
+                    if (allowDefaultNavigation) {
+                        return this.router.navigate(['/']);
+                    }
+
+                    return;
                 }
 
                 return this.router.navigate(['/detection']);
