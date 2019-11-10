@@ -12,5 +12,4 @@ export * from './right-module-info';
 export * from './save-user-configuration-data';
 export * from './udev-rules-info';
 export * from './update-firmware-data';
-export * from './user-history';
 export * from './halves-info';

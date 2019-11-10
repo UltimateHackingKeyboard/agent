@@ -40,7 +40,10 @@ export class ApplicationEffects {
                 this.logService.info('Renderer appStart effect end');
             }),
             map(() => {
-                const settings = this.dataStorageRepository.getApplicationSettings();
+                const settings = this.dataStorageRepository.getApplicationSettings() || {
+                    checkForUpdateOnStartUp: true,
+                    everAttemptedSavingToKeyboard: false
+                };
 
                 return new LoadApplicationSettingsSuccessAction(settings);
             })
@@ -107,7 +110,9 @@ export class ApplicationEffects {
     @Effect() saveApplicationSettings$ = this.actions$
         .pipe(
             ofType(
-                UpdateActionTypes.ToggleCheckForUpdateOnStartup
+                UpdateActionTypes.ToggleCheckForUpdateOnStartup,
+                DeviceActionTypes.SaveToKeyboardSuccess,
+                DeviceActionTypes.SaveToKeyboardFailed
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),

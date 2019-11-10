@@ -12,7 +12,8 @@ import {
     runningInElectron,
     saveToKeyboardState,
     keypressCapturing,
-    getUpdateInfo
+    getUpdateInfo,
+    firstAttemptOfSaveToKeyboard
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
@@ -52,6 +53,7 @@ export class MainAppComponent implements OnDestroy {
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
+    firstAttemptOfSaveToKeyboard$: Observable<boolean>;
 
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
@@ -68,6 +70,7 @@ export class MainAppComponent implements OnDestroy {
             .subscribe(data => this.saveToKeyboardState = data);
         this.keypressCapturingSubscription = store.select(keypressCapturing)
             .subscribe(data => this.keypressCapturing = data);
+        this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
     }
 
     ngOnDestroy(): void {

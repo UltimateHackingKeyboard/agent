@@ -13,7 +13,7 @@
     <router-outlet></router-outlet>
 </div>
 <notifier-container></notifier-container>
-<highlight-arrow *ngIf="saveToKeyboardState.firstAttemptOfSaveToKeyboard"></highlight-arrow>
+<highlight-arrow *ngIf="firstAttemptOfSaveToKeyboard$ | async"></highlight-arrow>
 <progress-button class="save-to-keyboard-button"
                  *ngIf="saveToKeyboardState.showButton"
                  [@showSaveToKeyboardButton]

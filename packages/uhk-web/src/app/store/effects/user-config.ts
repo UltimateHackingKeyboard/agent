@@ -22,7 +22,6 @@ import {
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
     LoadUserConfigurationFromFileAction,
-    RenameUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
@@ -87,14 +86,14 @@ export class UserConfigEffects {
                                 type: Keymaps.ActionTypes.UndoLastAction
                             }
                         }),
-                        new ShowSaveToKeyboardButtonAction(config)
+                        new ShowSaveToKeyboardButtonAction()
                     ];
                 }
 
                 return [
                     new SaveUserConfigSuccessAction(config),
                     new DismissUndoNotificationAction(),
-                    new ShowSaveToKeyboardButtonAction(config)
+                    new ShowSaveToKeyboardButtonAction()
                 ];
             })
         );
