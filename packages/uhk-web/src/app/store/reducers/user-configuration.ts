@@ -36,7 +36,6 @@ export function reducer(
     action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
-
         case UserConfig.ActionTypes.ApplyUserConfigurationFromFile:
         case UserConfig.ActionTypes.LoadResetUserConfiguration:
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {
