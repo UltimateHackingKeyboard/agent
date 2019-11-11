@@ -40,7 +40,10 @@ export class ApplicationEffects {
                 this.logService.info('Renderer appStart effect end');
             }),
             map(() => {
-                const settings = this.dataStorageRepository.getApplicationSettings();
+                const settings = this.dataStorageRepository.getApplicationSettings() || {
+                    checkForUpdateOnStartUp: true,
+                    everAttemptedSavingToKeyboard: false
+                };
 
                 return new LoadApplicationSettingsSuccessAction(settings);
             })
