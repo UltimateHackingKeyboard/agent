@@ -44,6 +44,12 @@ import { KeyUpAction, KeyDownAction } from './store/actions/app';
                 style({transform: 'translateY(0)'}),
                 animate('500ms ease-out', style({transform: 'translateY(-45px)'}))
             ])
+        ]),
+        trigger('highlightArrow', [
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('500ms ease-out', style({ opacity: 0 }))
+            ])
         ])
     ]
 })
