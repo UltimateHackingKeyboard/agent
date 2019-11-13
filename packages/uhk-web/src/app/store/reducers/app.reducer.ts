@@ -176,8 +176,7 @@ export function reducer(
             };
         }
 
-        case DeviceActionTypes.SaveToKeyboardSuccess:
-        case DeviceActionTypes.SaveToKeyboardFailed:
+        case DeviceActionTypes.SaveConfiguration:
             return {
                 ...state,
                 everAttemptedSavingToKeyboard: true

@@ -111,8 +111,7 @@ export class ApplicationEffects {
         .pipe(
             ofType(
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
-                DeviceActionTypes.SaveToKeyboardSuccess,
-                DeviceActionTypes.SaveToKeyboardFailed
+                DeviceActionTypes.SaveConfiguration
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),
