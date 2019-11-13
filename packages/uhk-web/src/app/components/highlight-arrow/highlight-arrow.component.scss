@@ -2,7 +2,44 @@
     position: fixed;
     font-size: 5rem;
     color: #337ab7;
-    bottom: 0;
+    bottom: 34px;
     right: calc((150px + 5rem) / 3);
     opacity: 0;
+    animation: highlight-arrow-easeOutBounce 5s;
+}
+
+@keyframes highlight-arrow-easeOutBounce {
+    0% {
+        transform: translateY(-200px);
+        opacity: 1;
+    }
+
+    24% {
+        transform: translateY(0);
+    }
+
+    36% {
+        transform: translateY(-150px);
+    }
+
+    48% {
+        transform: translateY(0);
+    }
+
+    60% {
+        transform: translateY(-100px);
+    }
+
+    82% {
+        transform: translateY(0);
+    }
+
+    99% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 0;
+    }
 }
