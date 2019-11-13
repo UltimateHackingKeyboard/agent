@@ -30,6 +30,7 @@ export interface State {
     platform?: string;
     osVersion?: string;
     keypressCapturing: boolean;
+    everAttemptedSavingToKeyboard: boolean;
 }
 
 export const initialState: State = {
@@ -40,7 +41,8 @@ export const initialState: State = {
     configLoading: true,
     agentVersionInfo: getVersions(),
     privilegeWhatWillThisDoClicked: false,
-    keypressCapturing: false
+    keypressCapturing: false,
+    everAttemptedSavingToKeyboard: false
 };
 
 export function reducer(
@@ -165,6 +167,21 @@ export function reducer(
                 keypressCapturing: false
             };
 
+        case App.ActionTypes.LoadApplicationSettingsSuccess: {
+            const { everAttemptedSavingToKeyboard = true } = (action as App.LoadApplicationSettingsSuccessAction).payload;
+
+            return {
+                ...state,
+                everAttemptedSavingToKeyboard
+            };
+        }
+
+        case DeviceActionTypes.SaveConfiguration:
+            return {
+                ...state,
+                everAttemptedSavingToKeyboard: true
+            };
+
         default:
             return state;
     }
@@ -197,3 +214,4 @@ export const runningOnNotSupportedWindows = (state: State): boolean => {
 };
 
 export const keypressCapturing = (state: State): boolean => state.keypressCapturing;
+export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;

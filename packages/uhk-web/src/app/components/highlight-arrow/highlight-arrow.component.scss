@@ -1,0 +1,24 @@
+.highlight-arrow {
+    position: fixed;
+    font-size: 5rem;
+    color: #337ab7;
+    bottom: 34px;
+    right: calc((125px + 5rem) / 3);
+    opacity: 1;
+    z-index: 1;
+    animation: highlight-arrow-easeOutBounce 2s ease-in-out infinite;
+}
+
+@keyframes highlight-arrow-easeOutBounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-100px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}

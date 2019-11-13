@@ -110,7 +110,8 @@ export class ApplicationEffects {
     @Effect() saveApplicationSettings$ = this.actions$
         .pipe(
             ofType(
-                UpdateActionTypes.ToggleCheckForUpdateOnStartup
+                UpdateActionTypes.ToggleCheckForUpdateOnStartup,
+                DeviceActionTypes.SaveConfiguration
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),

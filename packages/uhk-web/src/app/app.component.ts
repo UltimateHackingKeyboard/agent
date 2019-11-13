@@ -12,7 +12,8 @@ import {
     runningInElectron,
     saveToKeyboardState,
     keypressCapturing,
-    getUpdateInfo
+    getUpdateInfo,
+    firstAttemptOfSaveToKeyboard
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
@@ -24,8 +25,7 @@ import { KeyUpAction, KeyDownAction } from './store/actions/app';
     styleUrls: ['./app.component.scss'],
     encapsulation: ViewEncapsulation.None,
     animations: [
-        trigger(
-            'showSaveToKeyboardButton', [
+        trigger('showSaveToKeyboardButton', [
                 transition(':enter', [
                     style({transform: 'translateY(100%)'}),
                     animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
@@ -44,6 +44,12 @@ import { KeyUpAction, KeyDownAction } from './store/actions/app';
                 style({transform: 'translateY(0)'}),
                 animate('500ms ease-out', style({transform: 'translateY(-45px)'}))
             ])
+        ]),
+        trigger('highlightArrow', [
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('500ms ease-out', style({ opacity: 0 }))
+            ])
         ])
     ]
 })
@@ -53,6 +59,7 @@ export class MainAppComponent implements OnDestroy {
     deviceConfigurationLoaded$: Observable<boolean>;
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
+    firstAttemptOfSaveToKeyboard$: Observable<boolean>;
 
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
@@ -69,6 +76,7 @@ export class MainAppComponent implements OnDestroy {
             .subscribe(data => this.saveToKeyboardState = data);
         this.keypressCapturingSubscription = store.select(keypressCapturing)
             .subscribe(data => this.keypressCapturing = data);
+        this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
     }
 
     ngOnDestroy(): void {

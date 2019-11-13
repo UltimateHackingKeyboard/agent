@@ -141,7 +141,10 @@ export class AppUpdateService extends MainServiceBase {
     private getApplicationSettings(): ApplicationSettings {
         const value = storage.get('application-settings');
         if (!value) {
-            return {checkForUpdateOnStartUp: true};
+            return {
+                checkForUpdateOnStartUp: true,
+                everAttemptedSavingToKeyboard: false
+            };
         }
 
         return JSON.parse(<string>value);

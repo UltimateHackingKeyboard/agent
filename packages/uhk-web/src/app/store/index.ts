@@ -81,6 +81,7 @@ export const keypressCapturing = createSelector(appState, fromApp.keypressCaptur
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 export const contributors = (state: AppState) => state.contributors;
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
+export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
@@ -107,6 +108,13 @@ export const getMissingDeviceState = createSelector(deviceState, fromDevice.getM
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
     return electron ? state : initProgressButtonState;
+});
+export const firstAttemptOfSaveToKeyboard = createSelector(
+    runningInElectron,
+    getEverAttemptedSavingToKeyboard,
+    saveToKeyboardState,
+    (electron, everAttemptedSavingToKeyboard, saveToKeyboard): boolean => {
+    return electron ? !everAttemptedSavingToKeyboard && saveToKeyboard.showButton : false;
 });
 export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
@@ -201,8 +209,12 @@ export const extraMouseButtonsSupported = createSelector(getHardwareModules, (ha
 
 export const getApplicationSettings = createSelector(
     appUpdateSettingsState,
-    (updateSettingsState): ApplicationSettings => {
+    appState,
+    (updateSettingsState,
+     app
+    ): ApplicationSettings => {
         return {
-            checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp
+            checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
+            everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard
         };
     });

@@ -22,7 +22,6 @@ import {
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
     LoadUserConfigurationFromFileAction,
-    RenameUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 

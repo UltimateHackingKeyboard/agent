@@ -135,10 +135,9 @@ export class DeviceEffects {
                 setTimeout(() => this.sendUserConfigToKeyboard(
                     state.userConfiguration.userConfiguration,
                     state.app.hardwareConfig),
-                    100);
+                100);
             }),
-            switchMap(() => EMPTY
-            )
+            switchMap(() => EMPTY)
         );
 
     @Effect()
