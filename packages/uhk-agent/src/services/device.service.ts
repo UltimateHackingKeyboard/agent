@@ -105,7 +105,7 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(event: Electron.Event): Promise<void> {
+    public async loadConfigurations(event: Electron.IpcMainEvent): Promise<void> {
         let response: ConfigurationReply;
 
         try {
@@ -164,7 +164,7 @@ export class DeviceService {
         this.logService.info('[DeviceService] Device connection checker stopped.');
     }
 
-    public async updateFirmware(event: Electron.Event, args?: Array<string>): Promise<void> {
+    public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
         const response = new FirmwareUpgradeIpcResponse();
         const data: UpdateFirmwareData = JSON.parse(args[0]);
 
@@ -227,7 +227,7 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
-    public async recoveryDevice(event: Electron.Event): Promise<void> {
+    public async recoveryDevice(event: Electron.IpcMainEvent): Promise<void> {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
@@ -306,7 +306,7 @@ export class DeviceService {
         }
     }
 
-    private async saveUserConfiguration(event: Electron.Event, args: Array<string>): Promise<void> {
+    private async saveUserConfiguration(event: Electron.IpcMainEvent, args: Array<string>): Promise<void> {
         const response = new IpcResponse();
         const data: SaveUserConfigurationData = JSON.parse(args[0]);
 

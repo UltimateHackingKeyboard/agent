@@ -21,7 +21,7 @@ export class AppService extends MainServiceBase {
         logService.info('[AppService] init success');
     }
 
-    private async handleAppStartInfo(event: Electron.Event) {
+    private async handleAppStartInfo(event: Electron.IpcMainEvent) {
         this.logService.info('[AppService] getAppStartInfo');
         const deviceConnectionState = await this.uhkHidDeviceService.getDeviceConnectionStateAsync();
         const response: AppStartInfo = {

@@ -21,7 +21,7 @@ export class SudoService {
         ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilege.bind(this));
     }
 
-    private async setPrivilege(event: Electron.Event) {
+    private async setPrivilege(event: Electron.IpcMainEvent) {
         if (this.options.spe) {
             const error = new Error('No polkit authentication agent found.');
             this.logService.error('[SudoService] Simulate privilege escalation error ', error);
@@ -50,7 +50,7 @@ export class SudoService {
         }
     }
 
-    private async setPrivilegeOnLinux(event: Electron.Event) {
+    private async setPrivilegeOnLinux(event: Electron.IpcMainEvent) {
         const tmpDirectory = dirSync();
         const rulesDir = path.join(this.rootDir, 'rules');
         this.logService.debug('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
