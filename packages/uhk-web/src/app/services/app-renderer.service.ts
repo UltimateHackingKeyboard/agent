@@ -36,8 +36,14 @@ export class AppRendererService {
             this.dispachStoreAction(new ProcessAppStartInfoAction(arg));
         });
 
-        this.ipcRenderer.on('__ELECTRON_LOG_RENDERER__', (event: string, level: string, message: string) => {
-            this.zone.run(() => this.store.dispatch(new ElectronMainLogReceivedAction({level, message})));
+        this.ipcRenderer.on('__ELECTRON_LOG_RENDERER_CONSOLE__', (event: string, { level, data }) => {
+            const message = [];
+
+            for (const item of data) {
+                message.push( typeof item === 'string' ? item : JSON.stringify(item));
+            }
+
+            this.zone.run(() => this.store.dispatch(new ElectronMainLogReceivedAction({ level, message: message.join(' ') })));
         });
     }
 
