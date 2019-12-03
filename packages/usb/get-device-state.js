@@ -11,7 +11,9 @@ function readKeyboardState() {
     const isEepromBusy = receivedBuffer[1] !== 0 ? 'yes' : 'no ';
     const areHalvesMerged = receivedBuffer[2] !== 0 ? 'yes' : 'no ';
     const isLeftHalfConnected = receivedBuffer[3] !== 0 ? 'yes' : 'no ';
-    console.log(`isEepromBusy: ${isEepromBusy} | areHalvesMerged: ${areHalvesMerged} | isLeftHalfConnected:${isLeftHalfConnected}`);
+    const activeLayerNumber = receivedBuffer[6];
+    const activelayerName = ['base', 'mod', 'fn', 'mouse'][activeLayerNumber];
+    console.log(`isEepromBusy: ${isEepromBusy} | areHalvesMerged: ${areHalvesMerged} | isLeftHalfConnected:${isLeftHalfConnected} | ${activelayerName} layer`);
     setTimeout(readKeyboardState, 500)
 }
 
