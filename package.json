@@ -23,7 +23,7 @@
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
     "@types/file-saver": "0.0.1",
-    "@types/fs-extra": "8.0.0",
+    "@types/fs-extra": "8.0.1",
     "@types/jasmine": "3.3.12",
     "@types/jasminewd2": "2.0.3",
     "@types/jquery": "3.3.29",
