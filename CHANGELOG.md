@@ -6,9 +6,18 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.3.0] - 2019-12-08
+
+Firmware: 8.**7.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.**6.0** | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Don't jump to the default keymap but stay on the current one upon merging or splitting the keyboard halves.
+- Display an animated arrow pointing to the "Save to keyboard" button when showing it for the first time.
+- Don't relist devices during firmware updates if the device list is unchanged.
+- Make get-device-state.js display the actual layer. `DEVICEPROTOCOL:MINOR`
+
 ## [1.2.16] - 2019-11-05
 
-Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Add International 4 and International 5 scancodes.
 - Fix digital signature issue on Mac OS 10.15 Catalina.
@@ -19,7 +28,7 @@ Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 
 ## [1.2.15] - 2019-10-14
 
-Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Fix Linux SUID issue by using the --no-sandbox Electron option.
 - Fix keyboard description z-index issue.
@@ -30,7 +39,7 @@ Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 
 ## [1.2.14] - 2019-10-04
 
-Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Use native kboot firmware update on Linux and Mac. Use blhost on Windows.
 - Allow .tar.bz2 firmware file selection on Mac.
@@ -38,12 +47,12 @@ Firmware: 8.6.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 
 ## [1.2.13] - 2019-09-13
 
-Firmware: 8.**6.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.0.1 | Hardware Config: 1.0.0
+Firmware: 8.**6.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.6.0)] | Device Protocol: 4.4.0 | User Config: 4.**1.1** | Hardware Config: 1.0.0
 
 - Fix device recovery mode.
 - Correctly display whether the UHK is detected.
 - Animate keyboard splitting, merging, and the presence of the left half.
-- Show all the 8 mouse buttons if firmware <=8.6.0 is used.
+- Show all the 8 mouse buttons if firmware <=8.6.0 is used. `USERCONFIG:MINOR`
 - Don't disable input in the key action popover after adding a layer switch action, deleting it, and trying to edit it on its layer.
 - Provide reasonable default mouse settings for Macs.
 - Show per macro usage count when Alt is held.
