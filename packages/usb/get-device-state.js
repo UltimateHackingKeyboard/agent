@@ -3,7 +3,7 @@ const uhk = require('./uhk');
 const device = uhk.getUhkDevice();
 
 const moduleIdToString = [
-    'UnknownModule',
+    'NoModule',
     'LeftKeyboardHalf',
     'KeyClusterLeft',
     'TrackballRight',
