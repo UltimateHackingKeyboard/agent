@@ -301,7 +301,7 @@ export class UhkOperations {
             }
 
             // tslint:disable-next-line: max-line-length
-            this.logService.info('[DeviceOperation] Cannot ping the bootloader. Please reconnect the left keyboard half. It probably needs several tries, so keep reconnecting until you see this message.');
+            this.logService.info('[DeviceOperation] Cannot ping the bootloader. Please remove the bridge cable, and keep reconnecting the left keyboard half until you see this message.');
 
             await snooze(1000);
         }
