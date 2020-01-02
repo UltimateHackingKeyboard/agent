@@ -10,7 +10,8 @@ import {
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
-    UserConfiguration
+    UserConfiguration,
+    UdevRulesInfo
 } from 'uhk-common';
 import {
     ActionTypes,
@@ -59,7 +60,7 @@ export class DeviceEffects {
                     return;
                 }
 
-                if (!state.hasPermission) {
+                if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
                     return this.router.navigate(['/privilege']);
                 }
 
@@ -89,12 +90,16 @@ export class DeviceEffects {
 
                 return prevConnected === currConnected &&
                     prevAction.payload.hasPermission === currAction.payload.hasPermission &&
-                    prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable;
+                    prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable &&
+                    prevAction.payload.udevRulesInfo === currAction.payload.udevRulesInfo;
             }),
             switchMap(([action, route, connected]) => {
                 const payload = action.payload;
 
-                if (connected && payload.hasPermission && payload.zeroInterfaceAvailable) {
+                if (connected
+                    && payload.hasPermission
+                    && payload.zeroInterfaceAvailable
+                    && payload.udevRulesInfo === UdevRulesInfo.Ok) {
                     return of(new LoadConfigFromDeviceAction());
                 }
 
