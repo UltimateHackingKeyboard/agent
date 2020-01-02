@@ -70,7 +70,6 @@ if (process.platform === 'darwin') {
     artifactName += '-${arch}.${ext}';
     extraResources.push('rules/setup-rules.sh');
     extraResources.push('rules/50-uhk60.rules');
-    extraResources.push('rules/50-uhk60_v2.rules');
 } else {
     console.error(`I dunno how to publish a release for ${process.platform} :(`);
     process.exit(1);
