@@ -17,6 +17,7 @@ import {
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
+import * as fs from 'fs';
 import { platform } from 'os';
 
 import { TmpFirmware } from '../models/tmp-firmware';
@@ -171,6 +172,10 @@ export class DeviceService {
         let firmwarePathData: TmpFirmware;
 
         try {
+            firmwarePathData = data.uploadFile
+                ? await saveTmpFirmware(data.uploadFile)
+                : this.getDefaultFirmwarePathData();
+
             this.logService.debug('Agent version:', data.versionInformation.version);
             const hardwareModules = await this.getHardwareModules(false);
             this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
@@ -179,31 +184,15 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             this.device.resetDeviceCache();
 
-            if (data.uploadFile) {
-                firmwarePathData = await saveTmpFirmware(data.uploadFile);
+            const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
+            this.logService.debug('New firmware version:', packageJson.firmwareVersion);
 
-                const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
-                this.logService.debug('New firmware version:', packageJson.firmwareVersion);
-
-                if (this.useKboot()) {
-                    await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
-                    await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
-                } else {
-                    await this.operations.updateRightFirmwareWithBlhost(firmwarePathData.rightFirmwarePath);
-                    await this.operations.updateLeftModuleWithBlhost(firmwarePathData.leftFirmwarePath);
-                }
+            if (this.useKboot()) {
+                await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
+                await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
             } else {
-                const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
-                const packageJson = await getPackageJsonFromPathAsync(packageJsonPath);
-                this.logService.debug('New firmware version:', packageJson.firmwareVersion);
-
-                if (this.useKboot()) {
-                    await this.operations.updateRightFirmwareWithKboot();
-                    await this.operations.updateLeftModuleWithKboot();
-                } else {
-                    await this.operations.updateRightFirmwareWithBlhost();
-                    await this.operations.updateLeftModuleWithBlhost();
-                }
+                await this.operations.updateRightFirmwareWithBlhost(firmwarePathData.rightFirmwarePath);
+                await this.operations.updateLeftModuleWithBlhost(firmwarePathData.leftFirmwarePath);
             }
 
             response.success = true;
@@ -216,7 +205,7 @@ export class DeviceService {
             response.error = err;
         }
 
-        if (firmwarePathData) {
+        if (firmwarePathData.tmpDirectory) {
             await emptyDir(firmwarePathData.tmpDirectory.name);
         }
 
@@ -231,12 +220,13 @@ export class DeviceService {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
+            const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
             await this.stopPollUhkDevice();
 
             if (this.useKboot()) {
-                await this.operations.updateRightFirmwareWithKboot();
+                await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
             } else {
-                await this.operations.updateRightFirmwareWithBlhost();
+                await this.operations.updateRightFirmwareWithBlhost(firmwarePathData.rightFirmwarePath);
             }
 
             response.modules = await this.getHardwareModules(false);
@@ -342,5 +332,43 @@ export class DeviceService {
             default:
                 return platform() !== 'win32';
         }
+    }
+
+    private getDefaultFirmwarePathData(): TmpFirmware {
+        return {
+            leftFirmwarePath: this.getLeftModuleFirmwarePath(),
+            rightFirmwarePath: this.getFirmwarePath(),
+            packageJsonPath: this.getPackageJsonFirmwarePath()
+        };
+    }
+
+    private getFirmwarePath(): string {
+        const firmware = path.join(this.rootDir, 'packages/firmware/devices/uhk60-right/firmware.hex');
+
+        if (fs.existsSync(firmware)) {
+            return firmware;
+        }
+
+        throw new Error(`Could not found firmware ${firmware}`);
+    }
+
+    private getLeftModuleFirmwarePath(): string {
+        const firmware = path.join(this.rootDir, 'packages/firmware/modules/uhk60-left.bin');
+
+        if (fs.existsSync(firmware)) {
+            return firmware;
+        }
+
+        throw new Error(`Could not found left module firmware ${firmware}`);
+    }
+
+    private getPackageJsonFirmwarePath(): string {
+        const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
+
+        if (fs.existsSync(packageJsonPath)) {
+            return packageJsonPath;
+        }
+
+        throw new Error(`Could not found package.json of firmware ${packageJsonPath}`);
     }
 }

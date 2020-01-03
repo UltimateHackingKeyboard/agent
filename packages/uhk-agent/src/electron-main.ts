@@ -104,7 +104,7 @@ function createWindow() {
     setMenu(win);
     uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
     uhkBlhost = new UhkBlhost(logger, packagesDir);
-    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService, packagesDir);
+    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir, options);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);

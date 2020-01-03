@@ -4,5 +4,5 @@ export interface TmpFirmware {
     rightFirmwarePath: string;
     leftFirmwarePath: string;
     packageJsonPath: string;
-    tmpDirectory: SynchrounousResult;
+    tmpDirectory?: SynchrounousResult;
 }
