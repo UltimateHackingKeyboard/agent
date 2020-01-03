@@ -17,16 +17,15 @@ import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
-import { LoadConfigurationsResult } from './models/load-configurations-result';
+import { LoadConfigurationsResult } from './models';
 
 export class UhkOperations {
     constructor(private logService: LogService,
                 private blhost: UhkBlhost,
-                private device: UhkHidDevice,
-                private rootDir: string) {
+                private device: UhkHidDevice) {
     }
 
-    public async updateRightFirmwareWithBlhost(firmwarePath = this.getFirmwarePath()) {
+    public async updateRightFirmwareWithBlhost(firmwarePath: string): Promise<void> {
         this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.debug('[UhkOperations] Start flashing right firmware');
         const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
@@ -40,7 +39,7 @@ export class UhkOperations {
         this.logService.debug('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateLeftModuleWithBlhost(firmwarePath = this.getLeftModuleFirmwarePath()) {
+    public async updateLeftModuleWithBlhost(firmwarePath: string): Promise<void> {
         this.logService.debug('[UhkOperations] Start flashing left module firmware');
 
         const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.buspal.toString(16)}`];
@@ -81,7 +80,7 @@ export class UhkOperations {
         this.logService.debug('[UhkOperations] Both left and right firmwares successfully flashed');
     }
 
-    public async updateRightFirmwareWithKboot(firmwarePath = this.getFirmwarePath()) {
+    public async updateRightFirmwareWithKboot(firmwarePath: string): Promise<void> {
         this.logService.debug(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.debug('[UhkOperations] Start flashing right firmware');
 
@@ -115,7 +114,7 @@ export class UhkOperations {
         this.logService.debug('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateLeftModuleWithKboot(firmwarePath = this.getLeftModuleFirmwarePath()) {
+    public async updateLeftModuleWithKboot(firmwarePath: string): Promise<void> {
         this.logService.debug('[UhkOperations] Start flashing left module firmware');
 
         const i2cAddressOfLeftModule = Number.parseInt(ModuleSlotToI2cAddress.leftHalf, 16);
@@ -370,25 +369,5 @@ export class UhkOperations {
         this.logService.debug('[DeviceOperation] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = Buffer.from([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
-    }
-
-    private getFirmwarePath(): string {
-        const firmware = path.join(this.rootDir, 'packages/firmware/devices/uhk60-right/firmware.hex');
-
-        if (fs.existsSync(firmware)) {
-            return firmware;
-        }
-
-        throw new Error(`Could not found firmware ${firmware}`);
-    }
-
-    private getLeftModuleFirmwarePath(): string {
-        const firmware = path.join(this.rootDir, 'packages/firmware/modules/uhk60-left.bin');
-
-        if (fs.existsSync(firmware)) {
-            return firmware;
-        }
-
-        throw new Error(`Could not found firmware ${firmware}`);
     }
 }
