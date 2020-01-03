@@ -26,6 +26,7 @@ import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
     getPackageJsonFromPathAsync,
+    sanityCheckFirmwareAsync,
     saveTmpFirmware
 } from '../util';
 
@@ -176,6 +177,7 @@ export class DeviceService {
                 ? await saveTmpFirmware(data.uploadFile)
                 : this.getDefaultFirmwarePathData();
 
+            await sanityCheckFirmwareAsync(firmwarePathData);
             this.logService.debug('Agent version:', data.versionInformation.version);
             const hardwareModules = await this.getHardwareModules(false);
             this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
@@ -205,8 +207,8 @@ export class DeviceService {
             response.error = err;
         }
 
-        if (firmwarePathData.tmpDirectory) {
-            await emptyDir(firmwarePathData.tmpDirectory.name);
+        if (data.uploadFile) {
+            await emptyDir(firmwarePathData.tmpDirectory);
         }
 
         await snooze(500);
@@ -221,6 +223,7 @@ export class DeviceService {
 
         try {
             const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
+            await sanityCheckFirmwareAsync(firmwarePathData);
             await this.stopPollUhkDevice();
 
             if (this.useKboot()) {
@@ -338,7 +341,8 @@ export class DeviceService {
         return {
             leftFirmwarePath: this.getLeftModuleFirmwarePath(),
             rightFirmwarePath: this.getFirmwarePath(),
-            packageJsonPath: this.getPackageJsonFirmwarePath()
+            packageJsonPath: this.getPackageJsonFirmwarePath(),
+            tmpDirectory: path.join(this.rootDir, 'packages/firmware')
         };
     }
 
