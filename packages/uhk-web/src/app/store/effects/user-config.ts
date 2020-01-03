@@ -13,6 +13,7 @@ import {
     LogService,
     NotificationType,
     UhkBuffer,
+    UploadFileData,
     UserConfiguration
 } from 'uhk-common';
 
@@ -43,7 +44,6 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
-import { UploadFileData } from '../../models/upload-file-data';
 
 @Injectable()
 export class UserConfigEffects {

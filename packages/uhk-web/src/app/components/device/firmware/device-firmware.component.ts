@@ -1,7 +1,7 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { Constants, HardwareModules, VersionInformation } from 'uhk-common';
+import { Constants, HardwareModules, UploadFileData, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
@@ -16,7 +16,6 @@ import {
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
-import { UploadFileData } from '../../../models/upload-file-data';
 import { XtermComponent } from '../../xterm/xterm.component';
 
 @Component({
@@ -73,7 +72,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     }
 
     changeFile(data: UploadFileData): void {
-        this.store.dispatch(new UpdateFirmwareWithAction(data.data));
+        this.store.dispatch(new UpdateFirmwareWithAction(data));
     }
 
     private scrollToTheEndOfTheLogs(): void {
