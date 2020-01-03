@@ -234,9 +234,9 @@ export class DeviceEffects {
         .pipe(
             ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith),
             map(action => action.payload),
-            tap(data => this.deviceRendererService.updateFirmware({
+            tap(uploadFile => this.deviceRendererService.updateFirmware({
                 versionInformation: getVersions(),
-                firmware: data
+                uploadFile
             }))
         );
 

@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
-import { UserConfiguration, ConfigurationReply } from 'uhk-common';
+import { UserConfiguration, ConfigurationReply, UploadFileData } from 'uhk-common';
 import { UserConfigurationValue } from '../../models/user-configuration-value';
-import { UploadFileData } from '../../models/upload-file-data';
 
 export enum ActionTypes {
     LoadUserConfig = '[user-config] Load User Config',

@@ -3,15 +3,34 @@ import * as path from 'path';
 import { dirSync } from 'tmp';
 import * as decompress from 'decompress';
 import * as decompressTarbz from 'decompress-tarbz2';
+import * as decompressTargz from 'decompress-targz';
+import { extname } from 'path';
+import { UploadFileData } from 'uhk-common';
 
 import { TmpFirmware } from '../models/tmp-firmware';
 
-export async function saveTmpFirmware(data: Array<number>): Promise<TmpFirmware> {
+export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirmware> {
     const tmpDirectory = dirSync();
-    const zipFilePath = path.join(tmpDirectory.name, 'firmware.bz2');
+    const extension = extname(fileData.filename);
+    const zipFilePath = path.join(tmpDirectory.name, `firmware${extension}`);
 
-    await writeDataToFile(data, zipFilePath);
-    await decompress(zipFilePath, tmpDirectory.name, {plugins: [decompressTarbz()]});
+    await writeDataToFile(fileData.data, zipFilePath);
+
+    switch (extension) {
+
+        case '.bz2': {
+            await decompress(zipFilePath, tmpDirectory.name, { plugins: [decompressTarbz()] });
+            break;
+        }
+
+        case '.gz': {
+            await decompress(zipFilePath, tmpDirectory.name, { plugins: [decompressTargz()] });
+            break;
+        }
+
+        default:
+            throw new Error(`Unsupported firmware file extension: ${extension}`);
+    }
 
     return {
         tmpDirectory,

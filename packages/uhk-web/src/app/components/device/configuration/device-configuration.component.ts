@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { UploadFileData } from 'uhk-common';
 
 import { AppState } from '../../../store';
 import { ResetUserConfigurationAction } from '../../../store/actions/device';
@@ -8,7 +9,6 @@ import {
     SaveUserConfigInBinaryFileAction,
     SaveUserConfigInJsonFileAction
 } from '../../../store/actions/user-config';
-import { UploadFileData } from '../../../models/upload-file-data';
 
 @Component({
     selector: 'device-settings',

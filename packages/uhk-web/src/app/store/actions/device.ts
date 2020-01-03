@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectionState, FirmwareUpgradeIpcResponse, HardwareModules, IpcResponse } from 'uhk-common';
+import { DeviceConnectionState, FirmwareUpgradeIpcResponse, HardwareModules, IpcResponse, UploadFileData } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 
 export enum ActionTypes {
@@ -89,7 +89,7 @@ export class UpdateFirmwareAction implements Action {
 export class UpdateFirmwareWithAction implements Action {
     type = ActionTypes.UpdateFirmwareWith;
 
-    constructor(public payload: Array<number>) {
+    constructor(public payload: UploadFileData) {
     }
 }
 

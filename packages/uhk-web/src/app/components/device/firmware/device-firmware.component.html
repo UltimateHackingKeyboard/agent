@@ -23,7 +23,7 @@
                 </button>
                 <file-upload [disabled]="flashFirmwareButtonDisbabled$ | async"
                              (fileChanged)="changeFile($event)"
-                             accept=".bz2"
+                             accept=".bz2,.gz"
                              label="Choose firmware file and flash it"></file-upload>
             </p>
 

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { UploadFileData } from '../../models/upload-file-data';
+import { UploadFileData } from 'uhk-common';
 
 @Component({
     selector: 'file-upload',
@@ -25,11 +24,12 @@ export class FileUploadComponent {
         fileReader.onloadend = function () {
             const arrayBuffer = new Uint8Array(fileReader.result as ArrayBuffer);
             const target = event.target || event.srcElement || event.currentTarget;
-            target.value = null;
             this.fileChanged.emit({
-                filename: event.srcElement.value,
+                filename: target.value,
                 data: Array.from(arrayBuffer)
             });
+
+            target.value = null;
         }.bind(this);
         fileReader.readAsArrayBuffer(files[0]);
     }

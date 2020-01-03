@@ -179,8 +179,8 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             this.device.resetDeviceCache();
 
-            if (data.firmware) {
-                firmwarePathData = await saveTmpFirmware(data.firmware);
+            if (data.uploadFile) {
+                firmwarePathData = await saveTmpFirmware(data.uploadFile);
 
                 const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
                 this.logService.debug('New firmware version:', packageJson.firmwareVersion);
