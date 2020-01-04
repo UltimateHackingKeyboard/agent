@@ -1,4 +1,3 @@
-import { gt } from 'semver';
 import { exists } from 'fs';
 import { join } from 'path';
 import { promisify } from 'util';
@@ -26,16 +25,8 @@ async function checkPackageJsonSection(packageJson: any, sectionName: string, fi
         throw new Error(`Cannot found "${section}" section of the package.json of the firmware`);
     }
 
-    if (gt(packageJson.firmwareVersion, '8.7.0')) {
-        await checkSourceExists(section, sectionName, firmwareDir);
-    }
-}
-
-async function checkSourceExists(data: Array<{ source: string }>, sectionName: string, firmwareDir: string): Promise<void> {
-    for (const entry of data) {
-        const filePath = join(firmwareDir, sectionName, entry.source);
-        if (!(await existsAsync(filePath))) {
-            throw new Error(`Cannot found source of the firmware ${filePath}`);
-        }
+    const sectionDir = join(firmwareDir, sectionName);
+    if (!(await existsAsync(sectionDir))) {
+        throw new Error(`Cannot found directory of the firmware "${sectionName}"`);
     }
 }
