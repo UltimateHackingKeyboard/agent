@@ -1,7 +1,7 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { ApplicationSettings, HardwareModules, Keymap, UserConfiguration, PlayMacroAction } from 'uhk-common';
+import { ApplicationSettings, HardwareModules, Keymap, UserConfiguration, PlayMacroAction, UhkBuffer } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
@@ -128,6 +128,24 @@ export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firm
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
+export const getConfigSizesState = createSelector(deviceState, getUserConfiguration, runningInElectron,
+    (deviceStateData, userConfig, isRunningInElectron) => {
+        const formatNumber = new Intl.NumberFormat(undefined, {
+            useGrouping: true
+        }).format;
+        const maxValue = deviceStateData.configSizes.userConfig;
+        const uhkBuffer = new UhkBuffer();
+        userConfig.toBinary(uhkBuffer);
+        const currentValue = uhkBuffer.getBufferContent().length;
+
+        return {
+            currentValue,
+            maxValue,
+            loading: isRunningInElectron && deviceStateData.readingConfigSizes,
+            minValue: 0,
+            text: `${formatNumber(currentValue)} of ${formatNumber(maxValue)} bytes on storage in used`
+        };
+    });
 
 export const getPrivilegePageState = createSelector(appState, getUpdateUdevRules, (app, updateUdevRules): PrivilagePageSate => {
     const permissionSetupFailed = !!app.permissionError;

@@ -282,6 +282,12 @@ export class DeviceEffects {
             tap(() => this.deviceRendererService.startConnectionPoller())
         );
 
+    @Effect({ dispatch: false }) readConfigSizes$ = this.actions$
+        .pipe(
+            ofType(ActionTypes.ReadConfigSizes),
+            tap(() => this.deviceRendererService.readConfigSizes())
+        );
+
     constructor(private actions$: Actions,
                 private router: Router,
                 private appRendererService: AppRendererService,

@@ -1,5 +1,6 @@
 export * from './application-settings';
 export * from './command-line-args';
+export * from './config-sizes-info';
 export * from './notification';
 export * from './ipc-response';
 export * from './app-start-info';

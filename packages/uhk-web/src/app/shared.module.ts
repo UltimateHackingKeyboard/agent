@@ -114,6 +114,7 @@ import { AutoGrowInputComponent } from './components/auto-grow-input';
 import { HelpPageComponent } from './components/agent/help-page/help-page.component';
 import { UdevRulesComponent } from './components/udev-rules/udev-rules.component';
 import { HighlightArrowComponent } from './components/highlight-arrow/highlight-arrow.component';
+import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-bar.component';
 
 @NgModule({
     declarations: [
@@ -175,6 +176,7 @@ import { HighlightArrowComponent } from './components/highlight-arrow/highlight-
         AutoUpdateSettings,
         UndoableNotifierComponent,
         UhkHeader,
+        UhkProgressBarComponent,
         UpdateAvailableComponent,
         UhkMessageComponent,
         MissingDeviceComponent,

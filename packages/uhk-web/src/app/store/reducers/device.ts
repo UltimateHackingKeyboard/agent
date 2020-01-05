@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules, UdevRulesInfo, HalvesInfo } from 'uhk-common';
+import { HardwareModules, UdevRulesInfo, HalvesInfo, ConfigSizesInfo } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import * as App from '../actions/app';
@@ -7,6 +7,7 @@ import { initProgressButtonState, ProgressButtonState } from './progress-button-
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
+import { ReadConfigSizesReplyAction } from '../actions/device';
 
 export interface State {
     connected: boolean;
@@ -25,6 +26,8 @@ export interface State {
     restoringUserConfiguration: boolean;
     hasBackupUserConfiguration: boolean;
     halvesInfo: HalvesInfo;
+    readingConfigSizes: boolean;
+    configSizes: ConfigSizesInfo;
 }
 
 export const initialState: State = {
@@ -49,7 +52,9 @@ export const initialState: State = {
     log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
     hasBackupUserConfiguration: false,
-    halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: false }
+    halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: false },
+    readingConfigSizes: false,
+    configSizes: { userConfig: 32704, hardwareConfig: 64 }
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -217,6 +222,20 @@ export function reducer(state = initialState, action: Action): State {
                 log: [{ message: '', cssClass: XtermCssClass.standard }]
             };
         }
+
+        case Device.ActionTypes.ReadConfigSizes:
+            return {
+                ...state,
+                readingConfigSizes: true
+            };
+
+        case Device.ActionTypes.ReadConfigSizesReply:
+            return {
+                ...state,
+                readingConfigSizes: false,
+                configSizes: (action as ReadConfigSizesReplyAction).payload
+            };
+
         default:
             return state;
     }

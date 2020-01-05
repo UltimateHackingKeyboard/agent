@@ -100,6 +100,15 @@ export class DeviceService {
             });
         });
 
+        ipcMain.on(IpcEvents.device.readConfigSizes, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.readConfigSizes,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
         logService.debug('[DeviceService] init success');
     }
 
@@ -248,6 +257,11 @@ export class DeviceService {
 
     public async enableUsbStackTest(event: Electron.Event) {
         await this.device.enableUsbStackTest();
+    }
+
+    public async readConfigSizes(event: Electron.IpcMainEvent): Promise<void> {
+        const configSizes = await this.operations.getConfigSizesFromKeyboard();
+        event.sender.send(IpcEvents.device.readConfigSizesReply, JSON.stringify(configSizes));
     }
 
     private startPollUhkDevice(): void {
