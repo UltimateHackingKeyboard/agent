@@ -32,7 +32,7 @@
     "@types/node": "8.0.53",
     "@types/node-hid": "0.7.2",
     "@types/request": "2.0.8",
-    "@types/semver": "5.5.0",
+    "@types/semver": "6.2.0",
     "@types/tmp": "0.0.33",
     "check-node-version": "4.0.1",
     "copy-webpack-plugin": "5.1.1",
