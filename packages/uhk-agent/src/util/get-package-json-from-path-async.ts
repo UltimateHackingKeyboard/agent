@@ -7,7 +7,14 @@ export const getPackageJsonFromPathAsync = async (filePath: string): Promise<any
                 return reject(err);
             }
 
-            resolve(JSON.parse(data));
+            let json: any;
+            try {
+                json = JSON.parse(data);
+            } catch (e) {
+                return reject(e);
+            }
+
+            return resolve(json);
         });
     });
 };
