@@ -1,0 +1,12 @@
+<div class="progress-bar-container">
+    <div class="progress">
+        <div class="progress-bar"
+             role="progressbar"
+             [attr.aria-valuenow]="state.currentValue"
+             [attr.aria-valuemin]="state.minValue"
+             [attr.aria-valuemax]="state.maxValue"
+             [style.width]="getStyleWidth()">
+        </div>
+    </div>
+    <div class="progress-text">{{ state.text }}</div>
+</div>

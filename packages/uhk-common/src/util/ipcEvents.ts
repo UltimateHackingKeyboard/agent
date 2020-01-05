@@ -31,6 +31,8 @@ export class Device {
     public static readonly startConnectionPoller = 'device-start-connection-poller';
     public static readonly recoveryDevice = 'device-recovery';
     public static readonly enableUsbStackTest = 'enable-usb-stack-test';
+    public static readonly readConfigSizes = 'device-read-config-sizes';
+    public static readonly readConfigSizesReply = 'device-read-config-sizes-reply';
 }
 
 export class IpcEvents {

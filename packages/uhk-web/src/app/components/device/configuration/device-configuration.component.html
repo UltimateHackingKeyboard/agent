@@ -7,6 +7,14 @@
     The device configuration contains all the keymaps, macros, and settings that are stored on the device.
 </p>
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 pl-0">
+            <uhk-progress-bar [state]="configSizesState$ | async"></uhk-progress-bar>
+        </div>
+    </div>
+</div>
+
 <ul class="list-unstyled btn-list">
     <li>
         <button class="btn btn-primary"

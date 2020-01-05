@@ -13,6 +13,7 @@ import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ConnectionStateChangedAction,
+    ReadConfigSizesReplyAction,
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction,
     UpdateFirmwareReplyAction
@@ -57,6 +58,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.enableUsbStackTest);
     }
 
+    readConfigSizes(): void {
+        this.ipcRenderer.send(IpcEvents.device.readConfigSizes);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
@@ -76,6 +81,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareReply, (event: string, response: IpcResponse) => {
             this.dispachStoreAction(new UpdateFirmwareReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.readConfigSizesReply, (event: string, response: string) => {
+            this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response)));
         });
     }
 

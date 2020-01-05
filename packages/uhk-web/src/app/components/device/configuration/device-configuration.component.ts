@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { UploadFileData } from 'uhk-common';
 
-import { AppState } from '../../../store';
-import { ResetUserConfigurationAction } from '../../../store/actions/device';
+import { AppState, getConfigSizesState } from '../../../store';
+import { ReadConfigSizesAction, ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
     SaveUserConfigInBinaryFileAction,
     SaveUserConfigInJsonFileAction
 } from '../../../store/actions/user-config';
+import { UhkProgressBarState } from '../../../models/uhk-progress-bar-state';
 
 @Component({
     selector: 'device-settings',
@@ -18,9 +20,15 @@ import {
         'class': 'container-fluid'
     }
 })
-export class DeviceConfigurationComponent {
+export class DeviceConfigurationComponent implements OnInit {
+    configSizesState$: Observable<UhkProgressBarState>;
 
     constructor(private store: Store<AppState>) {
+        this.configSizesState$ = this.store.select(getConfigSizesState);
+    }
+
+    ngOnInit(): void {
+        this.store.dispatch(new ReadConfigSizesAction());
     }
 
     resetUserConfiguration() {

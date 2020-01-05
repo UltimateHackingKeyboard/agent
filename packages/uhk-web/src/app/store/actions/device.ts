@@ -1,5 +1,12 @@
 import { Action } from '@ngrx/store';
-import { DeviceConnectionState, FirmwareUpgradeIpcResponse, HardwareModules, IpcResponse, UploadFileData } from 'uhk-common';
+import {
+    ConfigSizesInfo,
+    DeviceConnectionState,
+    FirmwareUpgradeIpcResponse,
+    HardwareModules,
+    IpcResponse,
+    UploadFileData
+} from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 
 export enum ActionTypes {
@@ -27,7 +34,9 @@ export enum ActionTypes {
     RestoreConfigurationFromBackupSuccess = '[device] Restore configuration from backup success',
     RecoveryDevice = '[device] Recovery device',
     EnableUsbStackTest = '[device] USB stack test',
-    StartConnectionPoller = '[device] Start connection poller'
+    StartConnectionPoller = '[device] Start connection poller',
+    ReadConfigSizes = '[device] Read config sizes',
+    ReadConfigSizesReply = '[device] Read config sizes reply'
 }
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -156,6 +165,17 @@ export class StartConnectionPollerAction implements Action {
     type = ActionTypes.StartConnectionPoller;
 }
 
+export class ReadConfigSizesAction implements Action {
+    type = ActionTypes.ReadConfigSizes;
+}
+
+export class ReadConfigSizesReplyAction implements Action {
+    type = ActionTypes.ReadConfigSizesReply;
+
+    constructor(public payload: ConfigSizesInfo) {
+    }
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -181,4 +201,6 @@ export type Actions
     | RecoveryDeviceAction
     | EnableUsbStackTestAction
     | StartConnectionPollerAction
+    | ReadConfigSizesAction
+    | ReadConfigSizesReplyAction
     ;

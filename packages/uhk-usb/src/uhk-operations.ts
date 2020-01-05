@@ -1,4 +1,4 @@
-import { LeftModuleInfo, LogService, RightModuleInfo, UhkBuffer } from 'uhk-common';
+import { ConfigSizesInfo, LeftModuleInfo, LogService, RightModuleInfo, UhkBuffer } from 'uhk-common';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
@@ -263,15 +263,22 @@ export class UhkOperations {
      * @returns {Promise<number>}
      */
     public async getConfigSizeFromKeyboard(configBufferId: ConfigBufferId): Promise<number> {
-        const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ConfigSizes]));
-        this.device.close();
-        const hardwareConfigSize = buffer[1] + (buffer[2] << 8);
-        const userConfigSize = buffer[3] + (buffer[4] << 8);
+        const configSizes = await this.getConfigSizesFromKeyboard();
         const isHardwareConfig = configBufferId === ConfigBufferId.hardwareConfig;
-        const configSize = isHardwareConfig ? hardwareConfigSize : userConfigSize;
+        const configSize = isHardwareConfig ? configSizes.hardwareConfig : configSizes.userConfig;
         const configString = isHardwareConfig ? 'Hardware' : 'User';
         this.logService.debug(`[DeviceOperation] ${configString} config size:`, configSize);
         return configSize;
+    }
+
+    public async getConfigSizesFromKeyboard(): Promise<ConfigSizesInfo> {
+        const buffer = await this.device.write(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ConfigSizes]));
+        this.device.close();
+
+        return {
+            hardwareConfig: buffer[1] + (buffer[2] << 8),
+            userConfig:  buffer[3] + (buffer[4] << 8)
+        };
     }
 
     public async saveUserConfiguration(buffer: Buffer): Promise<void> {
