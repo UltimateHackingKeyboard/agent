@@ -143,7 +143,7 @@ export const getConfigSizesState = createSelector(deviceState, getUserConfigurat
             maxValue,
             loading: isRunningInElectron && deviceStateData.readingConfigSizes,
             minValue: 0,
-            text: `${formatNumber(currentValue)} of ${formatNumber(maxValue)} bytes on storage in used`
+            text: `${formatNumber(currentValue)} of ${formatNumber(maxValue)} bytes on-board storage in used`
         };
     });
 
