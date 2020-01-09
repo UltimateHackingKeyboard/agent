@@ -40,7 +40,7 @@
     "core-js": "2.4.1",
     "cross-env": "5.0.5",
     "decompress": "4.2.0",
-    "decompress-tarbz2": "4.1.1",
+    "decompress-targz": "^4.1.1",
     "devtron": "1.4.0",
     "electron": "6.1.5",
     "electron-builder": "21.2.0",
