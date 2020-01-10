@@ -10,8 +10,8 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 Firmware: 8.7.**1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.1)] | Device Protocol: 4.6.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
-- Fix Linux udev rule premissions, so that device files are not world-writable anymore. Agent checks the udev file, and overwrites the old one upon startup.
-- Display on-board storage on the Configuration page.
+- Fix Linux udev rule permissions, so that /dev/input event devices are not world readable/writable anymore. Agent checks the udev file, and overwrites the old one upon startup.
+- Display the available on-board storage space on the device configuration page.
 - Support tar.gz firmware files.
 - Sanity-check firmware files before update.
 - Provide more explicit firmware recovery message.
