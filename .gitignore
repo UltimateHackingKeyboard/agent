@@ -1,6 +1,5 @@
 node_modules
 *-debug.log
-.vscode
 dist
 .idea
 *.iml
