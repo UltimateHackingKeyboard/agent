@@ -6,12 +6,14 @@ import { dirSync } from 'tmp';
 import { emptyDir, copy } from 'fs-extra';
 
 import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common';
+import { DeviceService } from './device.service';
 
 export class SudoService {
     private rootDir: string;
 
     constructor(private logService: LogService,
-                private options: CommandLineArgs) {
+                private options: CommandLineArgs,
+                private deviceService: DeviceService) {
         if (isDev) {
             this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../');
         } else {
@@ -51,6 +53,7 @@ export class SudoService {
     }
 
     private async setPrivilegeOnLinux(event: Electron.IpcMainEvent) {
+        await this.deviceService.stopPollUhkDevice();
         const tmpDirectory = dirSync();
         const rulesDir = path.join(this.rootDir, 'rules');
         this.logService.debug('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
@@ -75,6 +78,7 @@ export class SudoService {
             }
 
             await emptyDir(tmpDirectory.name);
+            this.deviceService.startPollUhkDevice();
             event.sender.send(IpcEvents.device.setPrivilegeOnLinuxReply, response);
         });
     }
