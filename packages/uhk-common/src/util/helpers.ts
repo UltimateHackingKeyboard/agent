@@ -31,7 +31,7 @@ export const getUserConfigFromDeviceResponse = (json: string): UserConfiguration
 export const mapObjectToUserConfigBinaryBuffer = (obj: any): Buffer => {
     const configuration = new UserConfiguration();
     configuration.fromJsonObject(obj);
-    const buffer = new UhkBuffer();
+    const buffer = new UhkBuffer(32768);
     configuration.toBinary(buffer);
 
     return buffer.getBufferContent();

@@ -16,7 +16,7 @@ import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
-import { SideMenuPageState, MacroMenuItem } from '../models';
+import { SideMenuPageState, MacroMenuItem, OutOfSpaceWarningData, UhkProgressBarState } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
 
 // State interface for the application
@@ -105,17 +105,6 @@ export const deviceConnected = createSelector(
     });
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
-export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
-export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, (electron, state) => {
-    return electron ? state : initProgressButtonState;
-});
-export const firstAttemptOfSaveToKeyboard = createSelector(
-    runningInElectron,
-    getEverAttemptedSavingToKeyboard,
-    saveToKeyboardState,
-    (electron, everAttemptedSavingToKeyboard, saveToKeyboard): boolean => {
-    return electron ? !everAttemptedSavingToKeyboard && saveToKeyboard.showButton : false;
-});
 export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
 // tslint:disable-next-line: max-line-length
@@ -128,25 +117,51 @@ export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firm
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
-export const getConfigSizesState = createSelector(deviceState, getUserConfiguration, runningInElectron,
-    (deviceStateData, userConfig, isRunningInElectron) => {
+export const getUserConfigSize = createSelector(getUserConfiguration, userConfig => {
+    const uhkBuffer = new UhkBuffer();
+    userConfig.toBinary(uhkBuffer);
+    return uhkBuffer.getBufferContent().length;
+});
+export const getConfigSizesState = createSelector(deviceState, getUserConfigSize, runningInElectron,
+    (deviceStateData, userConfigSize, isRunningInElectron) => {
         const formatNumber = new Intl.NumberFormat(undefined, {
             useGrouping: true
         }).format;
         const maxValue = deviceStateData.configSizes.userConfig;
-        const uhkBuffer = new UhkBuffer();
-        userConfig.toBinary(uhkBuffer);
-        const currentValue = uhkBuffer.getBufferContent().length;
 
         return {
-            currentValue,
+            currentValue: userConfigSize,
             maxValue,
             loading: isRunningInElectron && deviceStateData.readingConfigSizes,
             minValue: 0,
-            text: `${formatNumber(currentValue)} of ${formatNumber(maxValue)} bytes on-board storage in used`
+            text: `${formatNumber(userConfigSize)} of ${formatNumber(maxValue)} bytes on-board storage in used`
         };
     });
+export const getOutOfSpaceWaringData = createSelector(getConfigSizesState,
+    (configSizeState: UhkProgressBarState): OutOfSpaceWarningData => ({
+        currentValue: configSizeState.currentValue,
+        maxValue: configSizeState.maxValue,
+        show: configSizeState.currentValue > configSizeState.maxValue
+    }));
+export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
+export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, getOutOfSpaceWaringData,
+    (electron, saveToKeyboard, outOfSpaceWarning) => {
+        if (!electron) {
+            return initProgressButtonState;
+        }
 
+        return {
+            ...saveToKeyboard,
+            showButton: saveToKeyboard.showButton && !outOfSpaceWarning.show
+        };
+    });
+export const firstAttemptOfSaveToKeyboard = createSelector(
+    runningInElectron,
+    getEverAttemptedSavingToKeyboard,
+    saveToKeyboardState,
+    (electron, everAttemptedSavingToKeyboard, saveToKeyboard): boolean => {
+        return electron ? !everAttemptedSavingToKeyboard && saveToKeyboard.showButton : false;
+    });
 export const getPrivilegePageState = createSelector(appState, getUpdateUdevRules, (app, updateUdevRules): PrivilagePageSate => {
     const permissionSetupFailed = !!app.permissionError;
 
