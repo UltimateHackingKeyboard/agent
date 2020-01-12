@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { ApplicationSettings, AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
+import { NavigationPayload } from '../../models';
 
 export enum ActionTypes {
     AppBootstrapped = '[app] bootstrapped',
@@ -24,7 +25,8 @@ export enum ActionTypes {
     StartKeypressCapturing = '[app] Start keypress capturing',
     StopKeypressCapturing = '[app] Stop keypress capturing',
     KeyDown = '[app] Key down',
-    KeyUp = '[app] Key up'
+    KeyUp = '[app] Key up',
+    NavigateTo = '[app] NavigateTo'
 }
 
 export class AppBootstrappedAction implements Action {
@@ -142,6 +144,12 @@ export class KeyUpAction implements Action {
     constructor(public payload: KeyboardEvent) {}
 }
 
+export class NavigateTo implements Action {
+    readonly type = ActionTypes.NavigateTo;
+
+    constructor(public payload: NavigationPayload) {}
+}
+
 export type Actions
     = AppStartedAction
     | AppBootstrappedAction
@@ -164,4 +172,5 @@ export type Actions
     | StopKeypressCapturingAction
     | KeyDownAction
     | KeyUpAction
+    | NavigateTo
     ;

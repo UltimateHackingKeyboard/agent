@@ -108,7 +108,7 @@ function createWindow() {
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir, options);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService);
-    sudoService = new SudoService(logger, options);
+    sudoService = new SudoService(logger, options, deviceService);
     // and load the index.html of the app.
 
     win.loadURL(url.format({

@@ -35,7 +35,8 @@ import {
     DismissUndoNotificationAction,
     LoadHardwareConfigurationSuccessAction,
     ShowNotificationAction,
-    UndoLastAction
+    UndoLastAction,
+    NavigateTo
 } from '../actions/app';
 import {
     HardwareModulesLoadedAction,
@@ -167,7 +168,7 @@ export class UserConfigEffects {
                 result.push(new HardwareModulesLoadedAction(data.modules));
 
                 if (newPageDestination) {
-                    this.router.navigate(newPageDestination);
+                    result.push(new NavigateTo({ commands: newPageDestination }));
                 }
 
                 return result;
