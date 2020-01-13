@@ -65,6 +65,15 @@ app-update-available {
     z-index: 200;
 }
 
+out-of-space-warning {
+    position: fixed;
+    display: block;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 200;
+}
+
 .nav-pills > li > a {
     cursor: pointer;
 }

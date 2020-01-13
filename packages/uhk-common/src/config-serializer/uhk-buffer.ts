@@ -25,7 +25,6 @@ export class UhkBuffer {
         return uhkBuffer;
     }
 
-    private static eepromSize = 32 * 1024;
     private static maxCompactLength = 0xFFFF;
     private static longCompactLengthPrefix = 0xFF;
     private static stringEncoding = 'utf8';
@@ -37,10 +36,10 @@ export class UhkBuffer {
     private buffer: Buffer;
     private bytesToBacktrack: number;
 
-    constructor() {
+    constructor(private eepromSize = 65536) {
         this.offset = 0;
         this.bytesToBacktrack = 0;
-        this.buffer = Buffer.alloc(UhkBuffer.eepromSize);
+        this.buffer = Buffer.alloc(eepromSize);
         this.buffer.fill(0);
     }
 

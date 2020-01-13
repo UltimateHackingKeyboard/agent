@@ -13,11 +13,13 @@ import {
     saveToKeyboardState,
     keypressCapturing,
     getUpdateInfo,
-    firstAttemptOfSaveToKeyboard
+    firstAttemptOfSaveToKeyboard,
+    getOutOfSpaceWaringData
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
 import { KeyUpAction, KeyDownAction } from './store/actions/app';
+import { OutOfSpaceWarningData } from './models';
 
 @Component({
     selector: 'main-app',
@@ -35,6 +37,16 @@ import { KeyUpAction, KeyDownAction } from './store/actions/app';
                     animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
                 ])
             ]),
+        trigger('showOutOfSpaceWarning', [
+            transition(':enter', [
+                style({transform: 'translateY(100%)'}),
+                animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
+            ]),
+            transition(':leave', [
+                style({transform: 'translateY(0)'}),
+                animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
+            ])
+        ]),
         trigger('updateAvailable', [
             transition(':enter', [
                 style({transform: 'translateY(-45px)'}),
@@ -60,11 +72,13 @@ export class MainAppComponent implements OnDestroy {
     runningInElectron$: Observable<boolean>;
     saveToKeyboardState: ProgressButtonState;
     firstAttemptOfSaveToKeyboard$: Observable<boolean>;
+    outOfSpaceWarning: OutOfSpaceWarningData;
 
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
     private showUpdateAvailableSubscription: Subscription;
+    private outOfSpaceWarningSubscription: Subscription;
 
     constructor(private store: Store<AppState>) {
         this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
@@ -77,12 +91,15 @@ export class MainAppComponent implements OnDestroy {
         this.keypressCapturingSubscription = store.select(keypressCapturing)
             .subscribe(data => this.keypressCapturing = data);
         this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
+        this.outOfSpaceWarningSubscription = store.select(getOutOfSpaceWaringData)
+            .subscribe(data => this.outOfSpaceWarning = data);
     }
 
     ngOnDestroy(): void {
         this.saveToKeyboardStateSubscription.unsubscribe();
         this.keypressCapturingSubscription.unsubscribe();
         this.showUpdateAvailableSubscription.unsubscribe();
+        this.outOfSpaceWarningSubscription.unsubscribe();
     }
 
     @HostListener('document:keydown', ['$event'])

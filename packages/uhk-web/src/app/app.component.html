@@ -19,3 +19,6 @@
                  [@showSaveToKeyboardButton]
                  [state]="saveToKeyboardState"
                  (clicked)="clickedOnProgressButton($event)"></progress-button>
+<out-of-space-warning *ngIf="outOfSpaceWarning.show"
+                      [@showOutOfSpaceWarning]
+                      [state]="outOfSpaceWarning"></out-of-space-warning>
