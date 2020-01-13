@@ -264,16 +264,19 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.readConfigSizesReply, JSON.stringify(configSizes));
     }
 
-    private startPollUhkDevice(): void {
+    public startPollUhkDevice(): void {
+        this.logService.info('[DeviceService] start poll UHK Device');
         this._pollerAllowed = true;
     }
 
-    private async stopPollUhkDevice(): Promise<void> {
+    public async stopPollUhkDevice(): Promise<void> {
+        this.logService.info('[DeviceService] stop poll UHK Device');
         return new Promise<void>(async resolve => {
             this._pollerAllowed = false;
 
             while (true) {
                 if (!this._uhkDevicePolling) {
+                    this.logService.info('[DeviceService] stopped poll UHK Device');
                     return resolve();
                 }
 

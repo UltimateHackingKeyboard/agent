@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
@@ -12,6 +13,7 @@ import {
     AppStartedAction,
     DismissUndoNotificationAction,
     LoadApplicationSettingsSuccessAction,
+    NavigateTo,
     OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
     SaveApplicationSettingsSuccessAction,
@@ -122,12 +124,25 @@ export class ApplicationEffects {
             })
         );
 
+    @Effect({ dispatch: false }) navigateTo$ = this.actions$
+        .pipe(
+            ofType<NavigateTo>(ActionTypes.NavigateTo),
+            map(action => action.payload),
+            tap(payload => {
+                setTimeout(() => {
+                    this.logService.info('[AppEffects] navigate to', payload);
+                    this.router.navigate(payload.commands, payload.extras);
+                }, 10);
+            })
+        );
+
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,
                 private appUpdateRendererService: AppUpdateRendererService,
                 private appRendererService: AppRendererService,
                 private logService: LogService,
                 private store: Store<AppState>,
-                private dataStorageRepository: DataStorageRepositoryService) {
+                private dataStorageRepository: DataStorageRepositoryService,
+                private router: Router) {
     }
 }
