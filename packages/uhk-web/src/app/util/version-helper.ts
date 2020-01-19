@@ -1,4 +1,4 @@
-import * as semver from 'semver';
+import * as semver from 'semver/preload';
 import { VersionInformation } from 'uhk-common';
 
 const collectVersions = (): VersionInformation => {
