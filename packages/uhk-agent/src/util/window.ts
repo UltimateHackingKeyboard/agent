@@ -37,6 +37,9 @@ export const loadWindowState = (): Partial<WindowState> => {
             return getDefaultWindowState();
         }
 
+        loadedState.width = loadedState.width < 1024 ? 1024 : loadedState.width;
+        loadedState.height = loadedState.height < 768 ? 768 : loadedState.height;
+
         const visible = windowVisibleOnScreen(loadedState);
         logger.log('[WindowState] loaded settings is visible', visible);
 
