@@ -1,19 +1,22 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, Input } from '@angular/core';
 
 @Component({
     selector: 'udev-rules',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './udev-rules.component.html'
 })
-export class UdevRulesComponent {
-    command = `cat <<EOF >/etc/udev/rules.d/50-uhk60.rules
-# Ultimate Hacking Keyboard rules
-# These are the udev rules for accessing the USB interfaces of the UHK as non-root users.
-# Copy this file to /etc/udev/rules.d and physically reconnect the UHK afterwards.
-SUBSYSTEM=="input", GROUP="input", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="612[0-7]", MODE="0660"
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="612[0-7]", TAG+="uaccess"
-KERNEL=="hidraw*", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="612[0-7]", TAG+="uaccess"
+export class UdevRulesComponent implements OnChanges {
+    @Input() udevFileContent: string;
+
+    command = '';
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.udevFileContent) {
+            this.command = `cat <<EOF >/etc/udev/rules.d/50-uhk60.rules
+${changes.udevFileContent.currentValue}
 EOF
 udevadm trigger
 udevadm settle`;
+        }
+    }
 }

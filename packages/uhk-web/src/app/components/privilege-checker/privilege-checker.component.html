@@ -28,7 +28,7 @@
 
             <div *ngIf="state.showWhatWillThisDoContent">
                 If you want to set up permissions manually:
-                <udev-rules></udev-rules>
+                <udev-rules [udevFileContent]="state.udevFileContent"></udev-rules>
             </div>
         </div>
     </div>

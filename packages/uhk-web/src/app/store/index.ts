@@ -82,6 +82,7 @@ export const runningOnNotSupportedWindows = createSelector(appState, fromApp.run
 export const contributors = (state: AppState) => state.contributors;
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
 export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
+export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
@@ -162,12 +163,15 @@ export const firstAttemptOfSaveToKeyboard = createSelector(
     (electron, everAttemptedSavingToKeyboard, saveToKeyboard): boolean => {
         return electron ? !everAttemptedSavingToKeyboard && saveToKeyboard.showButton : false;
     });
-export const getPrivilegePageState = createSelector(appState, getUpdateUdevRules, (app, updateUdevRules): PrivilagePageSate => {
+export const getPrivilegePageState = createSelector(
+    appState, getUpdateUdevRules, getUdevFileContent,
+    (app, updateUdevRules, udevFileContent): PrivilagePageSate => {
     const permissionSetupFailed = !!app.permissionError;
 
     return {
         permissionSetupFailed,
         updateUdevRules,
+        udevFileContent,
         showWhatWillThisDo: !app.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
         showWhatWillThisDoContent: app.privilegeWhatWillThisDoClicked || permissionSetupFailed
     };

@@ -6,4 +6,5 @@ export interface AppStartInfo {
     deviceConnectionState: DeviceConnectionState;
     platform: string;
     osVersion: string;
+    udevFileContent: string;
 }
