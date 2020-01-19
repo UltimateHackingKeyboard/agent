@@ -6,7 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.3.1] - 2019-01-09
+## [1.3.2] - 2019-01-20
+
+Firmware: 8.7.**0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.6.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Make udev rule update procedure reliable.
+- Use the same udev rules as shown in the update instructions.
+- Display out of space warning when relevant.
+- Don't save too small window size.
+
+## [1.3.1] - 2020-01-09
 
 Firmware: 8.7.**1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.1)] | Device Protocol: 4.6.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
