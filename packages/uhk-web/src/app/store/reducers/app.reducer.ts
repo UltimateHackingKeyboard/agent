@@ -31,6 +31,7 @@ export interface State {
     osVersion?: string;
     keypressCapturing: boolean;
     everAttemptedSavingToKeyboard: boolean;
+    udevFileContent: string;
 }
 
 export const initialState: State = {
@@ -42,7 +43,8 @@ export const initialState: State = {
     agentVersionInfo: getVersions(),
     privilegeWhatWillThisDoClicked: false,
     keypressCapturing: false,
-    everAttemptedSavingToKeyboard: false
+    everAttemptedSavingToKeyboard: false,
+    udevFileContent: ''
 };
 
 export function reducer(
@@ -63,7 +65,8 @@ export function reducer(
                 ...state,
                 commandLineArgs: payload.commandLineArgs,
                 platform: payload.platform,
-                osVersion: payload.osVersion
+                osVersion: payload.osVersion,
+                udevFileContent: payload.udevFileContent
             };
         }
 
@@ -215,3 +218,4 @@ export const runningOnNotSupportedWindows = (state: State): boolean => {
 
 export const keypressCapturing = (state: State): boolean => state.keypressCapturing;
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
+export const getUdevFileContent = (state: State): string => state.udevFileContent;

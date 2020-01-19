@@ -1,5 +1,4 @@
 import { ipcMain, app } from 'electron';
-import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 import { dirSync } from 'tmp';
@@ -9,16 +8,11 @@ import { CommandLineArgs, IpcEvents, LogService, IpcResponse } from 'uhk-common'
 import { DeviceService } from './device.service';
 
 export class SudoService {
-    private rootDir: string;
 
     constructor(private logService: LogService,
                 private options: CommandLineArgs,
-                private deviceService: DeviceService) {
-        if (isDev) {
-            this.rootDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../');
-        } else {
-            this.rootDir = path.dirname(app.getAppPath());
-        }
+                private deviceService: DeviceService,
+                private rootDir: string) {
         this.logService.info('[SudoService] App root dir: ', this.rootDir);
         ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilege.bind(this));
     }

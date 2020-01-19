@@ -6,13 +6,15 @@ import { AppStartInfo, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
 import { CommandLineInputs } from '../models/command-line-inputs';
+import { getUdevFileContentAsync } from '../util';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
                 private deviceService: DeviceService,
                 private options: CommandLineInputs,
-                private uhkHidDeviceService: UhkHidDevice) {
+                private uhkHidDeviceService: UhkHidDevice,
+                private rootDir: string) {
         super(logService, win);
 
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
@@ -30,7 +32,8 @@ export class AppService extends MainServiceBase {
                 addons: this.options.addons || false
             },
             platform: process.platform as string,
-            osVersion: os.release()
+            osVersion: os.release(),
+            udevFileContent: await getUdevFileContentAsync(this.rootDir)
         };
         this.logService.info('[AppService] getAppStartInfo response:', response);
         return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);
