@@ -43,7 +43,7 @@
     "decompress-targz": "^4.1.1",
     "devtron": "1.4.0",
     "electron": "6.1.5",
-    "electron-builder": "22.2.0",
+    "electron-builder": "21.1.6",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
     "electron-log": "3.0.8",
