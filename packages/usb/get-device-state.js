@@ -26,7 +26,8 @@ function readKeyboardState() {
     console.log('Received', uhk.bufferToString(receivedBuffer));
     const isEepromBusy = receivedBuffer[1] !== 0 ? 'yes' : 'no ';
     const areHalvesMerged = receivedBuffer[2] !== 0 ? 'yes' : 'no ';
-    const activeLayerNumber = receivedBuffer[6];
+    const activeLayerNumber = receivedBuffer[6] & 0x7f;
+    const activeLayerToggled = receivedBuffer[6] & 0x80;
     const activelayerName = layerNumberToString[activeLayerNumber];
     console.log(
 `isEepromBusy: ${isEepromBusy} | \
@@ -34,7 +35,7 @@ areHalvesMerged: ${areHalvesMerged} | \
 leftKeyboardHalfSlot:${moduleIdToString[receivedBuffer[3]]} | \
 leftModuleSlot:${moduleIdToString[receivedBuffer[4]]} | \
 rightModuleSlot:${moduleIdToString[receivedBuffer[5]]} | \
-layer:${activelayerName}`
+layer:${activelayerName} ${activeLayerToggled ? 'toggled' : ''}`
     );
     setTimeout(readKeyboardState, 500)
 }
