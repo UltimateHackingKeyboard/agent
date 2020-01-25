@@ -10,6 +10,7 @@ import * as fromContributors from './reducers/contributors.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
+import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
 import * as fromSelectors from './reducers/selectors';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
@@ -29,6 +30,7 @@ export interface AppState {
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
     contributors: fromContributors.State;
+    userConfigurationHistory: fromUserConfigHistory.State;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -39,7 +41,8 @@ export const reducers: ActionReducerMap<AppState> = {
     router: routerReducer,
     appUpdate: fromAppUpdate.reducer,
     device: fromDevice.reducer,
-    contributors: fromContributors.reducer
+    contributors: fromContributors.reducer,
+    userConfigurationHistory: fromUserConfigHistory.reducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = environment.production
@@ -255,3 +258,5 @@ export const getApplicationSettings = createSelector(
             everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard
         };
     });
+
+export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;

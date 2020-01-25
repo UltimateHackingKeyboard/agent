@@ -116,6 +116,7 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
 import { HighlightArrowComponent } from './components/highlight-arrow/highlight-arrow.component';
 import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-bar.component';
 import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
+import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 
 @NgModule({
     declarations: [
@@ -198,7 +199,8 @@ import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
         SvgSecondaryRoleComponent,
         UdevRulesComponent,
         HighlightArrowComponent,
-        OutOfSpaceWarningComponent
+        OutOfSpaceWarningComponent,
+        UserConfigurationHistoryComponent
     ],
     imports: [
         CommonModule,

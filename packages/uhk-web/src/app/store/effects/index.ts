@@ -6,6 +6,7 @@ import { UserConfigEffects } from './user-config';
 import { ApplicationEffects } from './app';
 import { AppUpdateEffect } from './app-update';
 import { ContributorsEffect } from './contributors.effect';
+import { UserConfigurationHistoryEffects } from './user-configuration-history.effects';
 
 export * from './keymap';
 export * from './macro';
@@ -21,5 +22,6 @@ export const effects = [
     MacroEffects,
     AutoUpdateSettingsEffects,
     DeviceEffects,
-    ContributorsEffect
+    ContributorsEffect,
+    UserConfigurationHistoryEffects
 ];

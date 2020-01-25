@@ -12,7 +12,8 @@ import {
     LogService,
     mapObjectToUserConfigBinaryBuffer,
     SaveUserConfigurationData,
-    UpdateFirmwareData
+    UpdateFirmwareData,
+    UploadFileData
 } from 'uhk-common';
 import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
@@ -25,9 +26,10 @@ import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
-    getPackageJsonFromPathAsync,
+    getPackageJsonFromPathAsync, getUserConfigFromHistoryAsync, loadUserConfigHistoryAsync,
     sanityCheckFirmwareAsync,
-    saveTmpFirmware
+    saveTmpFirmware,
+    saveUserConfigHistoryAsync
 } from '../util';
 
 /**
@@ -108,6 +110,9 @@ export class DeviceService {
                 asynchronous: true
             });
         });
+
+        ipcMain.on(IpcEvents.device.getUserConfigFromHistory, this.getUserConfigFromHistory.bind(this));
+        ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
 
         logService.debug('[DeviceService] init success');
     }
@@ -327,6 +332,8 @@ export class DeviceService {
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
 
+            await saveUserConfigHistoryAsync(buffer);
+
             response.success = true;
         } catch (error) {
             this.logService.error('[DeviceService] Transferring error', error);
@@ -391,5 +398,20 @@ export class DeviceService {
         }
 
         throw new Error(`Could not found package.json of firmware ${packageJsonPath}`);
+    }
+
+    private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]): Promise<void> {
+        const response: UploadFileData = {
+            filename,
+            data: await getUserConfigFromHistoryAsync(filename)
+        };
+
+        event.sender.send(IpcEvents.device.getUserConfigFromHistoryReply, response);
+    }
+
+    private async loadUserConfigFromHistory(event: Electron.IpcMainEvent): Promise<void> {
+        const files = await loadUserConfigHistoryAsync();
+
+        event.sender.send(IpcEvents.device.loadUserConfigHistoryReply, files);
     }
 }
