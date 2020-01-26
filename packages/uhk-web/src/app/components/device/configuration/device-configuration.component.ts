@@ -59,7 +59,10 @@ export class DeviceConfigurationComponent implements OnInit {
     }
 
     changeFile(data: UploadFileData): void {
-        this.store.dispatch(new LoadUserConfigurationFromFileAction(data));
+        this.store.dispatch(new LoadUserConfigurationFromFileAction({
+            ...data,
+            saveInHistory: true
+        }));
     }
 
     getUserConfigFromHistory(fileName: string): void {
