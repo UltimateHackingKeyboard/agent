@@ -3,6 +3,7 @@ export * from './log';
 export * from './constants';
 export * from './helpers';
 export * from './is-equal-array';
+export * from './user-configuration-history-helpers';
 
 // Source: http://stackoverflow.com/questions/13720256/javascript-regex-camelcase-to-sentence
 export function camelCaseToSentence(camelCasedText: string): string {

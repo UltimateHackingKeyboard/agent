@@ -71,7 +71,7 @@ import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
 import { CancelableDirective, ExternalUrlDirective, TooltipDirective } from './directives';
-import { SafeStylePipe } from './pipes';
+import { SafeStylePipe, UserConfigHistoryDisplayTextPipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
@@ -200,7 +200,8 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
         UdevRulesComponent,
         HighlightArrowComponent,
         OutOfSpaceWarningComponent,
-        UserConfigurationHistoryComponent
+        UserConfigurationHistoryComponent,
+        UserConfigHistoryDisplayTextPipe
     ],
     imports: [
         CommonModule,

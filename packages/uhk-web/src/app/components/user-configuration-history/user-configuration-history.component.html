@@ -23,7 +23,7 @@
                               confirmText="Yes"
                               cancelText="No"
                               (confirm)="getUserConfigFromHistory.emit(file)">
-                            {{ file }}
+                            {{ file | userConfigHistory }}
                             </span>
                     </li>
                 </ul>
