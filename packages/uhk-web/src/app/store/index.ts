@@ -1,7 +1,16 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { ApplicationSettings, HardwareModules, Keymap, UserConfiguration, PlayMacroAction, UhkBuffer } from 'uhk-common';
+import {
+    ApplicationSettings,
+    HardwareModules,
+    Keymap,
+    UserConfiguration,
+    PlayMacroAction,
+    UhkBuffer,
+    createMd5Hash,
+    getMd5HashFromFilename
+} from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
@@ -17,7 +26,13 @@ import { environment } from '../../environments/environment';
 import { RouterStateUrl } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
-import { SideMenuPageState, MacroMenuItem, OutOfSpaceWarningData, UhkProgressBarState } from '../models';
+import {
+    SideMenuPageState,
+    MacroMenuItem,
+    OutOfSpaceWarningData,
+    UhkProgressBarState,
+    UserConfigHistoryComponentState
+} from '../models';
 import { SelectOptionData } from '../models/select-option-data';
 
 // State interface for the application
@@ -121,10 +136,17 @@ export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firm
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
-export const getUserConfigSize = createSelector(getUserConfiguration, userConfig => {
+export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const uhkBuffer = new UhkBuffer();
     userConfig.toBinary(uhkBuffer);
+
+    return uhkBuffer;
+});
+export const getUserConfigSize = createSelector(getUserConfigAsBuffer, uhkBuffer => {
     return uhkBuffer.getBufferContent().length;
+});
+export const getMd5HasOfUserConfig = createSelector(getUserConfigAsBuffer, uhkBuffer => {
+    return createMd5Hash(uhkBuffer.getBufferContent());
 });
 export const getConfigSizesState = createSelector(deviceState, getUserConfigSize, runningInElectron,
     (deviceStateData, userConfigSize, isRunningInElectron) => {
@@ -169,16 +191,16 @@ export const firstAttemptOfSaveToKeyboard = createSelector(
 export const getPrivilegePageState = createSelector(
     appState, getUpdateUdevRules, getUdevFileContent,
     (app, updateUdevRules, udevFileContent): PrivilagePageSate => {
-    const permissionSetupFailed = !!app.permissionError;
+        const permissionSetupFailed = !!app.permissionError;
 
-    return {
-        permissionSetupFailed,
-        updateUdevRules,
-        udevFileContent,
-        showWhatWillThisDo: !app.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
-        showWhatWillThisDoContent: app.privilegeWhatWillThisDoClicked || permissionSetupFailed
-    };
-});
+        return {
+            permissionSetupFailed,
+            updateUdevRules,
+            udevFileContent,
+            showWhatWillThisDo: !app.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
+            showWhatWillThisDoContent: app.privilegeWhatWillThisDoClicked || permissionSetupFailed
+        };
+    });
 
 export const getMacroMenuItems = (userConfiguration: UserConfiguration): MacroMenuItem[] => {
     const macroMap = userConfiguration.macros.reduce((map, macro) => {
@@ -260,3 +282,16 @@ export const getApplicationSettings = createSelector(
     });
 
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;
+export const getUserConfigHistoryComponentState = createSelector(
+    getUserConfigHistoryState,
+    getMd5HasOfUserConfig,
+    (state: fromUserConfigHistory.State,
+     md5Hash: string): UserConfigHistoryComponentState => {
+        return {
+            loading: state.loading,
+            files: state.files.map(x => ({
+                file: x,
+                showRestore: getMd5HashFromFilename(x) !== md5Hash
+            }))
+        };
+    });

@@ -215,7 +215,10 @@ export class UserConfigEffects {
                     }
 
                     if (userConfig.userConfigMajorVersion) {
-                        return new ApplyUserConfigurationFromFileAction(userConfig);
+                        return new ApplyUserConfigurationFromFileAction({
+                            userConfig,
+                            saveInHistory: info.saveInHistory
+                        });
                     }
 
                     return new ShowNotificationAction({

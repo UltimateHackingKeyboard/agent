@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { State } from '../../store/reducers/user-configuration-history.reducer';
+import { HistoryFileInfo, UserConfigHistoryComponentState } from '../../models';
 
 @Component({
     selector: 'user-configuration-history',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: './user-configuration-history.component.html'
+    templateUrl: './user-configuration-history.component.html',
+    styleUrls: ['./user-configuration-history.component.scss']
 })
 export class UserConfigurationHistoryComponent {
-    @Input() state: State;
+    @Input() state: UserConfigHistoryComponentState;
+    @Input() md5HasOfCurrentConfig: string;
+
     @Output() getUserConfigFromHistory = new EventEmitter<string>();
 
-    trackByFn(index: number, key: string): string {
-        return key;
+    trackByFn(index: number, key: HistoryFileInfo): string {
+        return key.file;
     }
 }

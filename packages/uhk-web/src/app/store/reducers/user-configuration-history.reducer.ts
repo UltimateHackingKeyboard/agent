@@ -1,3 +1,5 @@
+import { sortStringDesc } from 'uhk-common';
+
 import { Actions, ActionTypes, LoadUserConfigurationHistorySuccessAction } from '../actions/user-configuration-history.actions';
 
 export interface State {
@@ -17,14 +19,14 @@ export function reducer(state = initialState, action: Actions) {
             return {
                 ...state,
                 loading: true,
-                selectedPage: 1
+                files: []
             };
 
         case ActionTypes.LoadUserConfigurationHistorySuccess:
             return {
                 ...state,
                 loading: false,
-                files: (action as LoadUserConfigurationHistorySuccessAction).payload
+                files: (action as LoadUserConfigurationHistorySuccessAction).payload.sort(sortStringDesc)
             };
 
         default:

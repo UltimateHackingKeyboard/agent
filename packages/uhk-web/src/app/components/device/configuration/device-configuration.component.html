@@ -40,5 +40,11 @@
 
 <div class="separator"></div>
 
-<user-configuration-history [state]="userConfigHistoryState$ | async"
-                            (getUserConfigFromHistory)="getUserConfigFromHistory($event)"></user-configuration-history>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 pl-0">
+            <user-configuration-history [state]="userConfigHistoryState$ | async"
+                                        (getUserConfigFromHistory)="getUserConfigFromHistory($event)"></user-configuration-history>
+        </div>
+    </div>
+</div>

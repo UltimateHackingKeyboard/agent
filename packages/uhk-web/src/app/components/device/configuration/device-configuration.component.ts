@@ -3,19 +3,18 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UploadFileData } from 'uhk-common';
 
-import { AppState, getConfigSizesState, getUserConfigHistoryState } from '../../../store';
+import { AppState, getConfigSizesState, getUserConfigHistoryComponentState } from '../../../store';
 import { ReadConfigSizesAction, ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
     SaveUserConfigInBinaryFileAction,
     SaveUserConfigInJsonFileAction
 } from '../../../store/actions/user-config';
-import { UhkProgressBarState } from '../../../models/uhk-progress-bar-state';
+import { UhkProgressBarState, UserConfigHistoryComponentState } from '../../../models';
 import {
     GetUserConfigurationFromHistoryAction,
     LoadUserConfigurationHistoryAction
 } from '../../../store/actions/user-configuration-history.actions';
-import { State } from '../../../store/reducers/user-configuration-history.reducer';
 
 @Component({
     selector: 'device-settings',
@@ -27,11 +26,11 @@ import { State } from '../../../store/reducers/user-configuration-history.reduce
 })
 export class DeviceConfigurationComponent implements OnInit {
     configSizesState$: Observable<UhkProgressBarState>;
-    userConfigHistoryState$: Observable<State>;
+    userConfigHistoryState$: Observable<UserConfigHistoryComponentState>;
 
     constructor(private store: Store<AppState>) {
         this.configSizesState$ = this.store.select(getConfigSizesState);
-        this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryState);
+        this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryComponentState);
     }
 
     ngOnInit(): void {

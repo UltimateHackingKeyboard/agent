@@ -15,16 +15,30 @@
                 </div>
                 <ul class="list-unstyled"
                     *ngIf="!state.loading">
-                    <li *ngFor="let file of state.files; trackBy:trackByFn">
-                        <span class="btn btn-link"
+                    <li *ngFor="let fileInfo of state.files; trackBy:trackByFn">
+                        <span>
+                            {{ fileInfo.file | userConfigHistory }}
+                        </span>
+
+                        <span>
+                            &mdash;
+                        </span>
+
+                        <span class="btn btn-link btn-padding-0"
+                              *ngIf="fileInfo.showRestore"
                               mwlConfirmationPopover
                               popoverTitle="Are you sure want to load this configuration?"
                               placement="bottom"
                               confirmText="Yes"
                               cancelText="No"
-                              (confirm)="getUserConfigFromHistory.emit(file)">
-                            {{ file | userConfigHistory }}
-                            </span>
+                              (confirm)="getUserConfigFromHistory.emit(fileInfo.file)">
+                            Restore
+                        </span>
+
+                        <span class="current"
+                              *ngIf="!fileInfo.showRestore">
+                            Current
+                        </span>
                     </li>
                 </ul>
             </div>

@@ -36,24 +36,18 @@ export function reducer(
     action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
-        case UserConfig.ActionTypes.ApplyUserConfigurationFromFile:
         case UserConfig.ActionTypes.LoadResetUserConfiguration:
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {
             const userConfig = (action as UserConfig.LoadUserConfigSuccessAction).payload;
 
-            const userConfiguration = Object.assign(new UserConfiguration(), {
-                ...state.userConfiguration,
-                ...userConfig,
-                keymaps: userConfig.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name)),
-                macros: userConfig.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name))
-            });
-
-            return {
-                ...state,
-                userConfiguration
-            };
+            return assignUserConfiguration(state, userConfig);
         }
 
+        case UserConfig.ActionTypes.ApplyUserConfigurationFromFile: {
+            const userConfig = (action as UserConfig.ApplyUserConfigurationFromFileAction).payload.userConfig;
+
+            return assignUserConfiguration(state, userConfig);
+        }
         case DeviceActions.ActionTypes.ResetPcMouseSpeedSettings:
             return {
                 ...state,
@@ -666,4 +660,19 @@ function setKeyActionToLayer(newLayer: Layer, moduleIndex: number, keyIndex: num
 
     newModule.keyActions = newModule.keyActions.slice();
     newModule.keyActions[keyIndex] = newKeyAction;
+}
+
+function assignUserConfiguration(state: State, userConfig: UserConfiguration): State {
+    const userConfiguration = Object.assign(new UserConfiguration(), {
+        ...state.userConfiguration,
+        ...userConfig,
+        keymaps: userConfig.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name)),
+        macros: userConfig.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name))
+    });
+
+    return {
+        ...state,
+        userConfiguration
+    };
+
 }

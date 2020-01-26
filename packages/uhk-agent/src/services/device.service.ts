@@ -332,7 +332,9 @@ export class DeviceService {
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
 
-            await saveUserConfigHistoryAsync(buffer);
+            if (data.saveInHistory) {
+                await saveUserConfigHistoryAsync(buffer);
+            }
 
             response.success = true;
         } catch (error) {
@@ -403,7 +405,8 @@ export class DeviceService {
     private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]): Promise<void> {
         const response: UploadFileData = {
             filename,
-            data: await getUserConfigFromHistoryAsync(filename)
+            data: await getUserConfigFromHistoryAsync(filename),
+            saveInHistory: false
         };
 
         event.sender.send(IpcEvents.device.getUserConfigFromHistoryReply, response);
