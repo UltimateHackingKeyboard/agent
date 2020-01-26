@@ -15,7 +15,8 @@
                 </div>
                 <ul class="list-unstyled"
                     *ngIf="!state.loading">
-                    <li *ngFor="let fileInfo of state.files; trackBy:trackByFn">
+                    <li *ngFor="let fileInfo of state.files; trackBy:trackByFn"
+                        class="history-list-item">
                         <span>
                             {{ fileInfo.file | userConfigHistory }}
                         </span>
