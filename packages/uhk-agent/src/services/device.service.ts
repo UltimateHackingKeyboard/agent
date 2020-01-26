@@ -26,7 +26,9 @@ import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
-    getPackageJsonFromPathAsync, getUserConfigFromHistoryAsync, loadUserConfigHistoryAsync,
+    getPackageJsonFromPathAsync,
+    getUserConfigFromHistoryAsync,
+    loadUserConfigHistoryAsync,
     sanityCheckFirmwareAsync,
     saveTmpFirmware,
     saveUserConfigHistoryAsync
