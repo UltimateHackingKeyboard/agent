@@ -17,7 +17,7 @@
                     *ngIf="!state.loading">
                     <li *ngFor="let fileInfo of state.files; trackBy:trackByFn"
                         class="history-list-item">
-                        <span>
+                        <span class="btn btn-link btn-padding-0 current">
                             {{ fileInfo.file | userConfigHistory }}
                         </span>
 
