@@ -336,6 +336,7 @@ export class DeviceService {
 
             if (data.saveInHistory) {
                 await saveUserConfigHistoryAsync(buffer);
+                await this.loadUserConfigFromHistory(event);
             }
 
             response.success = true;

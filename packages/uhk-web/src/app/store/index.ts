@@ -137,8 +137,10 @@ export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.fir
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
+    const json = userConfig.toJsonObject();
+    const config = new UserConfiguration().fromJsonObject(json);
     const uhkBuffer = new UhkBuffer();
-    userConfig.toBinary(uhkBuffer);
+    config.toBinary(uhkBuffer);
 
     return uhkBuffer;
 });
