@@ -1,45 +1,39 @@
-<div class="panel-group" role="tablist" aria-multiselectable="false">
-    <div class="panel panel-default">
-        <div class="panel-heading" role="tab">
-            <h4 class="panel-title">
-                <a role="button" data-toggle="collapse" href="#userConfigHistory" aria-expanded="true"
-                   aria-controls="userConfigHistory">
-                    User Configuration History
-                </a>
-            </h4>
-        </div>
-        <div id="userConfigHistory" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
-                <div *ngIf="state.loading">
-                    Loading...
-                </div>
-                <ul class="list-unstyled"
-                    *ngIf="!state.loading">
-                    <li *ngFor="let fileInfo of state.files; trackBy:trackByFn"
-                        class="history-list-item">
-                        <span class="btn btn-link btn-padding-0 current">
-                            {{ fileInfo.file | userConfigHistory }}
-                        </span>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            User Configuration History
+        </h4>
+    </div>
 
-                        <span class="btn btn-link btn-padding-0"
-                              *ngIf="fileInfo.showRestore"
-                              mwlConfirmationPopover
-                              popoverTitle="Are you sure want to load this configuration?"
-                              placement="bottom"
-                              confirmText="Yes"
-                              cancelText="No"
-                              (confirm)="getUserConfigFromHistory.emit(fileInfo.file)"
-                              [class.disabled]="state.disabled">
+    <div class="panel-body">
+        <div *ngIf="state.loading">
+            Loading...
+        </div>
+        <ul class="list-unstyled"
+            *ngIf="!state.loading">
+            <li *ngFor="let fileInfo of state.files; trackBy:trackByFn"
+                class="history-list-item">
+                <span class="btn btn-link btn-padding-0 current">
+                    {{ fileInfo.file | userConfigHistory }}
+                </span>
+
+                <span class="btn btn-link btn-padding-0"
+                      *ngIf="fileInfo.showRestore"
+                      mwlConfirmationPopover
+                      popoverTitle="Are you sure want to load this configuration?"
+                      placement="bottom"
+                      confirmText="Yes"
+                      cancelText="No"
+                      (confirm)="getUserConfigFromHistory.emit(fileInfo.file)"
+                      [class.disabled]="state.disabled">
                             Restore
-                        </span>
+                </span>
 
-                        <span class="btn btn-link btn-padding-0 current"
-                              *ngIf="!fileInfo.showRestore">
+                <span class="btn btn-link btn-padding-0 current"
+                      *ngIf="!fileInfo.showRestore">
                             Current
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                </span>
+            </li>
+        </ul>
     </div>
 </div>
