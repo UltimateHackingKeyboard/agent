@@ -8,6 +8,7 @@ const readFileAsync = promisify(readFile);
 
 export async function getUserConfigFromHistoryAsync(filename: string): Promise<Array<number>> {
     const filePath = join(await getUserConfigHistoryDirAsync(), filename);
+    const buffer = await readFileAsync(filePath);
 
-    return [...Buffer.from(await readFileAsync(filePath, { encoding: 'ascii' }), 'ascii')];
+    return [...buffer];
 }
