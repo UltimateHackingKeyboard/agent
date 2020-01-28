@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { UploadFileData } from 'uhk-common';
 
-import { AppState, getConfigSizesState, getUserConfigHistoryComponentState } from '../../../store';
+import { AppState, getConfigSizesState, getUserConfigHistoryComponentState, isUserConfigSaving } from '../../../store';
 import { ReadConfigSizesAction, ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
@@ -24,18 +24,26 @@ import {
         'class': 'container-fluid'
     }
 })
-export class DeviceConfigurationComponent implements OnInit {
+export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     configSizesState$: Observable<UhkProgressBarState>;
     userConfigHistoryState$: Observable<UserConfigHistoryComponentState>;
+    savingUserConfig: boolean;
+
+    private subscription = new Subscription();
 
     constructor(private store: Store<AppState>) {
         this.configSizesState$ = this.store.select(getConfigSizesState);
         this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryComponentState);
+        this.subscription.add(this.store.select(isUserConfigSaving).subscribe(x => this.savingUserConfig = x));
     }
 
     ngOnInit(): void {
         this.store.dispatch(new ReadConfigSizesAction());
         this.store.dispatch(new LoadUserConfigurationHistoryAction());
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     resetUserConfiguration() {

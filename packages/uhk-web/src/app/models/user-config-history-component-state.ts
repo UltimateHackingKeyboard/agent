@@ -6,4 +6,5 @@ export interface HistoryFileInfo {
 export interface UserConfigHistoryComponentState {
     files: Array<HistoryFileInfo>;
     loading: boolean;
+    disabled: boolean;
 }

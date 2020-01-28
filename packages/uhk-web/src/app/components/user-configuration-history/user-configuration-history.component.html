@@ -28,7 +28,8 @@
                               placement="bottom"
                               confirmText="Yes"
                               cancelText="No"
-                              (confirm)="getUserConfigFromHistory.emit(fileInfo.file)">
+                              (confirm)="getUserConfigFromHistory.emit(fileInfo.file)"
+                              [class.disabled]="state.disabled">
                             Restore
                         </span>
 

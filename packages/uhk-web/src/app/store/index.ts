@@ -136,6 +136,7 @@ export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firm
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
+export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -287,13 +288,16 @@ export const getUserConfigHistoryState = (state: AppState) => state.userConfigur
 export const getUserConfigHistoryComponentState = createSelector(
     getUserConfigHistoryState,
     getMd5HasOfUserConfig,
+    isUserConfigSaving,
     (state: fromUserConfigHistory.State,
-     md5Hash: string): UserConfigHistoryComponentState => {
+     md5Hash: string,
+     saving: boolean): UserConfigHistoryComponentState => {
         return {
             loading: state.loading,
             files: state.files.map(x => ({
                 file: x,
                 showRestore: getMd5HashFromFilename(x) !== md5Hash
-            }))
+            })),
+            disabled: saving
         };
     });
