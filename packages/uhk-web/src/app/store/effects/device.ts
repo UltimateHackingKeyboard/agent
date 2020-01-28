@@ -134,12 +134,13 @@ export class DeviceEffects {
     @Effect({ dispatch: false })
     saveConfiguration$: Observable<Action> = this.actions$
         .pipe(
-            ofType(ActionTypes.SaveConfiguration),
+            ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
             withLatestFrom(this.store),
             tap(([action, state]) => {
                 setTimeout(() => this.sendUserConfigToKeyboard(
                     state.userConfiguration.userConfiguration,
-                    state.app.hardwareConfig),
+                    state.app.hardwareConfig,
+                    action.payload),
                 100);
             }),
             switchMap(() => EMPTY)
@@ -210,15 +211,23 @@ export class DeviceEffects {
 
     @Effect() saveResetUserConfigurationToDevice$ = this.actions$
         .pipe(
-            ofType<ApplyUserConfigurationFromFileAction
-                | LoadResetUserConfigurationAction>(
-                UserConfigActions.LoadResetUserConfiguration,
-                UserConfigActions.ApplyUserConfigurationFromFile),
+            ofType<LoadResetUserConfigurationAction>(UserConfigActions.LoadResetUserConfiguration),
             map(action => action.payload),
             switchMap((config: UserConfiguration) => {
                 this.dataStorageRepository.saveConfig(config);
 
-                return of(new SaveConfigurationAction());
+                return of(new SaveConfigurationAction(true));
+            })
+        );
+
+    @Effect() applyUserConfigurationFromFileAction$ = this.actions$
+        .pipe(
+            ofType<ApplyUserConfigurationFromFileAction>(UserConfigActions.ApplyUserConfigurationFromFile),
+            map(action => action.payload),
+            switchMap(payload => {
+                this.dataStorageRepository.saveConfig(payload.userConfig);
+
+                return of(new SaveConfigurationAction(payload.saveInHistory));
             })
         );
 
@@ -261,7 +270,7 @@ export class DeviceEffects {
     @Effect() restoreUserConfiguration$ = this.actions$
         .pipe(
             ofType<ResetUserConfigurationAction>(ActionTypes.RestoreConfigurationFromBackup),
-            map(() => new SaveConfigurationAction())
+            map(() => new SaveConfigurationAction(true))
         );
 
     @Effect({ dispatch: false }) recoveryDevice$ = this.actions$
@@ -297,8 +306,12 @@ export class DeviceEffects {
                 private defaultUserConfigurationService: DefaultUserConfigurationService) {
     }
 
-    private sendUserConfigToKeyboard(userConfiguration: UserConfiguration, hardwareConfig: HardwareConfiguration): void {
+    private sendUserConfigToKeyboard(
+        userConfiguration: UserConfiguration,
+        hardwareConfig: HardwareConfiguration,
+        saveInHistory: boolean): void {
         this.deviceRendererService.saveUserConfiguration({
+            saveInHistory,
             uniqueId: hardwareConfig && hardwareConfig.uniqueId,
             configuration: userConfiguration.toJsonObject()
         });

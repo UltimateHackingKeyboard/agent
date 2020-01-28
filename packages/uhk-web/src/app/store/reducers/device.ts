@@ -85,7 +85,7 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new Device.SaveConfigurationAction()
+                    action: new Device.SaveConfigurationAction(true)
                 }
             };
         }
@@ -119,7 +119,7 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new Device.SaveConfigurationAction()
+                    action: new Device.SaveConfigurationAction(true)
                 }
             };
         }
@@ -272,3 +272,4 @@ export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFaile
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
 export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
 export const halvesInfo = (state: State) => state.halvesInfo;
+export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;

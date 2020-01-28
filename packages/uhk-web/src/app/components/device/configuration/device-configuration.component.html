@@ -23,6 +23,7 @@
     </li>
     <li>
         <file-upload (fileChanged)="changeFile($event)"
+                     [disabled]="savingUserConfig"
                      label="Import device configuration">
         </file-upload>
     </li>
@@ -33,7 +34,19 @@
                 placement="bottom"
                 confirmText="Yes"
                 cancelText="No"
+                [disabled]="savingUserConfig"
                 (confirm)="resetUserConfiguration()">Reset device configuration
         </button>
     </li>
 </ul>
+
+<div class="separator"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 pl-0">
+            <user-configuration-history [state]="userConfigHistoryState$ | async"
+                                        (getUserConfigFromHistory)="getUserConfigFromHistory($event)"></user-configuration-history>
+        </div>
+    </div>
+</div>

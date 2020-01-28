@@ -71,7 +71,7 @@ import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
 import { CancelableDirective, ExternalUrlDirective, TooltipDirective } from './directives';
-import { SafeStylePipe } from './pipes';
+import { SafeStylePipe, UserConfigHistoryDisplayTextPipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
@@ -116,6 +116,7 @@ import { UdevRulesComponent } from './components/udev-rules/udev-rules.component
 import { HighlightArrowComponent } from './components/highlight-arrow/highlight-arrow.component';
 import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-bar.component';
 import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
+import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 
 @NgModule({
     declarations: [
@@ -198,7 +199,9 @@ import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
         SvgSecondaryRoleComponent,
         UdevRulesComponent,
         HighlightArrowComponent,
-        OutOfSpaceWarningComponent
+        OutOfSpaceWarningComponent,
+        UserConfigurationHistoryComponent,
+        UserConfigHistoryDisplayTextPipe
     ],
     imports: [
         CommonModule,

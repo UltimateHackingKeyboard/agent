@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "buffer": "5.4.3",
+    "md5": "2.2.1",
+    "moment": "2.24.0",
     "tslib": "1.10.0"
   },
   "license": "GPL-3.0",

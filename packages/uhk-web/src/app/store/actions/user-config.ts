@@ -1,6 +1,10 @@
 import { Action } from '@ngrx/store';
 import { UserConfiguration, ConfigurationReply, UploadFileData } from 'uhk-common';
-import { UserConfigurationValue } from '../../models/user-configuration-value';
+
+import {
+    ApplyUserConfigurationFromFilePayload,
+    UserConfigurationValue
+} from '../../models';
 
 export enum ActionTypes {
     LoadUserConfig = '[user-config] Load User Config',
@@ -85,7 +89,7 @@ export class LoadUserConfigurationFromFileAction implements Action {
 export class ApplyUserConfigurationFromFileAction implements Action {
     type = ActionTypes.ApplyUserConfigurationFromFile;
 
-    constructor(public payload: UserConfiguration) {
+    constructor(public payload: ApplyUserConfigurationFromFilePayload) {
     }
 }
 

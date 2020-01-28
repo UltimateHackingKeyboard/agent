@@ -60,7 +60,10 @@ export class ConnectionStateChangedAction implements Action {
 export class SaveConfigurationAction implements Action {
     type = ActionTypes.SaveConfiguration;
 
-    constructor() {
+    /**
+     * @param payload - if true then save user configuration in the history
+     */
+    constructor(public payload: boolean) {
     }
 }
 

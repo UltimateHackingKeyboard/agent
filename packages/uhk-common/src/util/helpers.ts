@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer/';
+
 import { HardwareConfiguration, UhkBuffer, UserConfiguration } from '../config-serializer';
 
 export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfiguration => {

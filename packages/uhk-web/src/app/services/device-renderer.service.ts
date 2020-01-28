@@ -7,7 +7,8 @@ import {
     IpcResponse,
     LogService,
     SaveUserConfigurationData,
-    UpdateFirmwareData
+    UpdateFirmwareData,
+    UploadFileData
 } from 'uhk-common';
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
@@ -18,7 +19,8 @@ import {
     SetPrivilegeOnLinuxReplyAction,
     UpdateFirmwareReplyAction
 } from '../store/actions/device';
-import { LoadConfigFromDeviceReplyAction } from '../store/actions/user-config';
+import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
+import { LoadUserConfigurationHistorySuccessAction } from '../store/actions/user-configuration-history.actions';
 
 @Injectable()
 export class DeviceRendererService {
@@ -62,6 +64,14 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.readConfigSizes);
     }
 
+    loadUserConfigurationHistory(): void {
+        this.ipcRenderer.send(IpcEvents.device.loadUserConfigHistory);
+    }
+
+    getUserConfigurationFromHistory(fileName: string): void {
+        this.ipcRenderer.send(IpcEvents.device.getUserConfigFromHistory, fileName);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
@@ -85,6 +95,14 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.readConfigSizesReply, (event: string, response: string) => {
             this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response)));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.loadUserConfigHistoryReply, (event: string, response: Array<string>) => {
+            this.dispachStoreAction(new LoadUserConfigurationHistorySuccessAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.getUserConfigFromHistoryReply, (event: string, response: UploadFileData) => {
+            this.dispachStoreAction(new LoadUserConfigurationFromFileAction(response));
         });
     }
 

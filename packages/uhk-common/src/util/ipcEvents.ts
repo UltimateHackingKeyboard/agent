@@ -33,6 +33,10 @@ export class Device {
     public static readonly enableUsbStackTest = 'enable-usb-stack-test';
     public static readonly readConfigSizes = 'device-read-config-sizes';
     public static readonly readConfigSizesReply = 'device-read-config-sizes-reply';
+    public static readonly loadUserConfigHistory = 'device-load-user-config-history';
+    public static readonly loadUserConfigHistoryReply = 'device-load-user-config-history-reply';
+    public static readonly getUserConfigFromHistory = 'device-get-user-config-from-history';
+    public static readonly getUserConfigFromHistoryReply = 'device-get-user-config-from-history-reply';
 }
 
 export class IpcEvents {

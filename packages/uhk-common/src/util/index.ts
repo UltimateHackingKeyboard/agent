@@ -1,8 +1,12 @@
 export { IpcEvents } from './ipcEvents';
 export * from './log';
 export * from './constants';
+export * from './create-md5-hash';
+export * from './get-md5-hash-from-file-name';
 export * from './helpers';
 export * from './is-equal-array';
+export * from './sort-string-desc';
+export * from './user-configuration-history-helpers';
 
 // Source: http://stackoverflow.com/questions/13720256/javascript-regex-camelcase-to-sentence
 export function camelCaseToSentence(camelCasedText: string): string {
