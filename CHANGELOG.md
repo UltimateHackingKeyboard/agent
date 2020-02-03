@@ -6,6 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.4.0] - 2019-02-04
+
+Firmware: 8.7.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.**7.0** | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Add configuration history section to the configuration page.
+- Change udev rules for better compatibility with some Linux distributions.
+- Fix sporadic "User configuration size is 0" error which happened upon switching to the configuration page.
+- Make get-device-state.js display toggled layer state. `DEVICEPROTOCOL:MINOR`
+
 ## [1.3.2] - 2019-01-20
 
 Firmware: 8.7.**0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.6.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
