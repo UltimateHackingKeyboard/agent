@@ -286,14 +286,16 @@ export const getApplicationSettings = createSelector(
 
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;
 export const getUserConfigHistoryComponentState = createSelector(
+    runningInElectron,
     getUserConfigHistoryState,
     getMd5HasOfUserConfig,
     isUserConfigSaving,
-    (state: fromUserConfigHistory.State,
+    (inElectron,
+     state: fromUserConfigHistory.State,
      md5Hash: string,
      saving: boolean): UserConfigHistoryComponentState => {
         return {
-            loading: state.loading,
+            loading: inElectron && state.loading,
             files: state.files.map(x => ({
                 file: x,
                 showRestore: getMd5HashFromFilename(x) !== md5Hash
