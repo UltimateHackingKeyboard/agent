@@ -18,6 +18,7 @@ import {
     ConnectionStateChangedAction,
     EnableUsbStackTestAction,
     HideSaveToKeyboardButton,
+    ReadConfigSizesAction,
     RecoveryDeviceAction,
     ResetUserConfigurationAction,
     RestoreUserConfigurationFromBackupSuccessAction,
@@ -93,14 +94,17 @@ export class DeviceEffects {
                     prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable &&
                     prevAction.payload.udevRulesInfo === currAction.payload.udevRulesInfo;
             }),
-            switchMap(([action, route, connected]) => {
+            mergeMap(([action, route, connected]) => {
                 const payload = action.payload;
 
                 if (connected
                     && payload.hasPermission
                     && payload.zeroInterfaceAvailable
                     && payload.udevRulesInfo === UdevRulesInfo.Ok) {
-                    return of(new LoadConfigFromDeviceAction());
+                    return [
+                        new ReadConfigSizesAction(),
+                        new LoadConfigFromDeviceAction()
+                    ];
                 }
 
                 return EMPTY;

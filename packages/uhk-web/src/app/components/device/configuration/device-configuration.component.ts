@@ -38,7 +38,6 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.store.dispatch(new ReadConfigSizesAction());
         this.store.dispatch(new LoadUserConfigurationHistoryAction());
     }
 
