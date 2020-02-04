@@ -14,7 +14,7 @@
     "decompress": "4.2.0",
     "decompress-bzip2": "4.0.0",
     "decompress-targz": "4.1.1",
-    "node-hid": "0.7.9",
+    "node-hid": "1.1.0",
     "sudo-prompt": "7.0.0",
     "tmp": "0.0.33",
     "tslib": "1.10.0",
