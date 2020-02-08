@@ -6,11 +6,11 @@ import * as commandLineUsage from 'command-line-usage';
 import { CommandLineArgs } from 'uhk-common';
 
 const optionDefinitions = [
-    { name: 'addons', type: Boolean },
+    { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
-    { name: 'usbDriver', type: String }
+    { name: 'usb-driver', type: String }
 ];
 
 export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true });
@@ -24,8 +24,8 @@ const sections = [
         header: 'Options',
         optionList: [
             {
-                name: 'addons',
-                description: 'Addons menu visible'
+                name: 'modules',
+                description: 'Modules menu visible'
             },
             {
                 name: 'preserve-udev-rules',
@@ -36,7 +36,7 @@ const sections = [
                 description: 'Simulate privilege escalation error'
             },
             {
-                name: 'usbDriver',
+                name: 'usb-driver',
                 description: 'The driver which is used for firmware upgrade',
                 typeLabel: 'blhost | kboot'
             }

@@ -1,8 +1,8 @@
 export interface CommandLineInputs {
     /**
-     * addons menu visible or not
+     * modules menu visible or not
      */
-    addons?: boolean;
+    modules?: boolean;
     /**
      * simulate privilege escalation error
      */

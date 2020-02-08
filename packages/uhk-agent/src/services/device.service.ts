@@ -354,7 +354,7 @@ export class DeviceService {
     }
 
     private useKboot(): boolean {
-        switch (this.options.usbDriver) {
+        switch (this.options['usb-driver']) {
             case 'blhost':
                 return false;
 

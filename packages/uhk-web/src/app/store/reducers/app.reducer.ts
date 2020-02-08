@@ -190,7 +190,7 @@ export function reducer(
     }
 }
 
-export const showAddonMenu = (state: State) => state.commandLineArgs.addons;
+export const showAddonMenu = (state: State) => state.commandLineArgs.modules;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;

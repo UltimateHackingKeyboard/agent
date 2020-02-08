@@ -102,7 +102,7 @@
             </li>
             <li class="sidebar__level-1--item" *ngIf="state.showAddonMenu">
                 <div class="sidebar__level-1">
-                    <i class="fa fa-puzzle-piece"></i> Add-on modules
+                    <i class="fa fa-puzzle-piece"></i> Modules
                     <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
                 </div>
                 <ul [@toggler]="animation['addon']">
@@ -118,7 +118,7 @@
                                [class.disabled]="state.updatingFirmware">Trackball</a>
                         </div>
                     </li>
-                    <li class="sidebar__level-2--item" data-name="Toucpad" data-abbrev="">
+                    <li class="sidebar__level-2--item" data-name="Touchpad" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'Touchpad']"
                                [class.disabled]="state.updatingFirmware">Touchpad</a>

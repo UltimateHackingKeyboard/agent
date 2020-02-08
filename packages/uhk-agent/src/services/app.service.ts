@@ -29,7 +29,7 @@ export class AppService extends MainServiceBase {
         const response: AppStartInfo = {
             deviceConnectionState,
             commandLineArgs: {
-                addons: this.options.addons || false
+                modules: this.options.modules || false
             },
             platform: process.platform as string,
             osVersion: os.release(),

@@ -1,8 +1,8 @@
 export interface CommandLineArgs {
     /**
-     * addons menu visible or not
+     * modules menu visible or not
      */
-    addons?: boolean;
+    modules?: boolean;
     /**
      * show help.
      */
@@ -18,5 +18,5 @@ export interface CommandLineArgs {
     /**
      * The driver which is used for firmware upgrade
      */
-    usbDriver?: 'blhost' | 'kboot';
+    'usb-driver'?: 'blhost' | 'kboot';
 }
