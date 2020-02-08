@@ -25,11 +25,11 @@ const sections = [
         optionList: [
             {
                 name: 'modules',
-                description: 'Modules menu visible'
+                description: 'Make the modules menu visible'
             },
             {
                 name: 'preserve-udev-rules',
-                description: 'Agent not force the udev rule update'
+                description: 'Don\'t force udev rule update'
             },
             {
                 name: 'spe',
@@ -37,7 +37,7 @@ const sections = [
             },
             {
                 name: 'usb-driver',
-                description: 'The driver which is used for firmware upgrade',
+                description: 'Use the specified driver for firmware upgrade',
                 typeLabel: 'blhost | kboot'
             }
         ]
