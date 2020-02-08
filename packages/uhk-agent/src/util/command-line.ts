@@ -38,7 +38,7 @@ const sections = [
             {
                 name: 'usbDriver',
                 description: 'The driver which is used for firmware upgrade',
-                typeLabel: '{underline blhost | kboot}'
+                typeLabel: 'blhost | kboot'
             }
         ]
     }
