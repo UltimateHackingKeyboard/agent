@@ -1,5 +1,4 @@
 /// <reference path="./custom_types/electron-is-dev.d.ts"/>
-/// <reference path="./custom_types/command-line-args.d.ts"/>
 
 import './polyfills';
 import { app, BrowserWindow } from 'electron';
@@ -7,10 +6,9 @@ import { autoUpdater } from 'electron-updater';
 
 import * as path from 'path';
 import * as url from 'url';
-import * as commandLineArgs from 'command-line-args';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
-import { CommandLineArgs, LogRegExps } from 'uhk-common';
+import { LogRegExps } from 'uhk-common';
 import { UhkBlhost } from 'uhk-usb';
 import { DeviceService } from './services/device.service';
 import { logger } from './services/logger.service';
@@ -20,17 +18,14 @@ import { SudoService } from './services/sudo.service';
 import * as isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
-
-const optionDefinitions = [
-    {name: 'addons', type: Boolean},
-    {name: 'spe', type: Boolean}, // simulate privilege escalation error
-    {name: 'usbDriver', type: String}
-];
-
-const options: CommandLineArgs = commandLineArgs(optionDefinitions);
-
+import { options, cliUsage } from './util';
 // import './dev-extension';
 // require('electron-debug')({ showDevTools: true, enabled: true });
+
+if (options.help) {
+    console.log(cliUsage);
+    process.exit(0);
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

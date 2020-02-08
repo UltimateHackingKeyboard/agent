@@ -326,6 +326,11 @@ export class UhkHidDevice {
             return UdevRulesInfo.Ok;
         }
 
+        if (this.options['preserve-udev-rules']) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
         if (!(await pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
             return UdevRulesInfo.NeedToSetup;
         }
