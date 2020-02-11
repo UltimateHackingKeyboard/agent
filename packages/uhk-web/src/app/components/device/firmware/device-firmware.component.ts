@@ -8,7 +8,7 @@ import {
     firmwareUpgradeAllowed,
     firmwareUpgradeFailed,
     firmwareUpgradeSuccess,
-    flashFirmwareButtonDisbabled,
+    flashFirmwareButtonDisabled,
     getAgentVersionInfo,
     getHardwareModules,
     runningOnNotSupportedWindows,
@@ -27,7 +27,7 @@ import { XtermComponent } from '../../xterm/xterm.component';
     }
 })
 export class DeviceFirmwareComponent implements OnDestroy {
-    flashFirmwareButtonDisbabled$: Observable<boolean>;
+    flashFirmwareButtonDisabled$: Observable<boolean>;
     xtermLog$: Observable<Array<XtermLog>>;
     getAgentVersionInfo$: Observable<VersionInformation>;
     hardwareModules: HardwareModules;
@@ -44,7 +44,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     private subscription = new Subscription();
 
     constructor(private store: Store<AppState>) {
-        this.flashFirmwareButtonDisbabled$ = store.select(flashFirmwareButtonDisbabled);
+        this.flashFirmwareButtonDisabled$ = store.select(flashFirmwareButtonDisabled);
         this.xtermLog$ = store.select(xtermLog);
         this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
         this.subscription.add(store.select(getHardwareModules).subscribe(data => {
