@@ -128,7 +128,27 @@ export const updatingFirmware = createSelector(deviceState, fromDevice.updatingF
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
 // tslint:disable-next-line: max-line-length
 export const flashFirmwareButtonDisabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
-export const getHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
+export const getStateHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
+export const getHardwareModules = createSelector(runningInElectron, getStateHardwareModules, getAgentVersionInfo,
+    (electron, hardwareModules, agentVersionInfo): HardwareModules => {
+    if (electron) {
+        return hardwareModules;
+    }
+
+    return {
+        leftModuleInfo: {
+            firmwareVersion: agentVersionInfo.firmwareVersion,
+            moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+        },
+        rightModuleInfo: {
+            deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
+            hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
+            firmwareVersion: agentVersionInfo.firmwareVersion,
+            moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
+            userConfigVersion: agentVersionInfo.userConfigVersion
+        }
+    };
+});
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
