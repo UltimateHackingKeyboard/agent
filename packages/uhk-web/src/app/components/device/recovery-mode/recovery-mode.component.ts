@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { XtermLog } from '../../../models/xterm-log';
-import { AppState, flashFirmwareButtonDisbabled, updatingFirmware, xtermLog } from '../../../store';
+import { AppState, flashFirmwareButtonDisabled, updatingFirmware, xtermLog } from '../../../store';
 import { RecoveryDeviceAction, StartConnectionPollerAction } from '../../../store/actions/device';
 
 @Component({
@@ -16,7 +16,7 @@ import { RecoveryDeviceAction, StartConnectionPollerAction } from '../../../stor
     }
 })
 export class RecoveryModeComponent implements OnInit {
-    flashFirmwareButtonDisbabled$: Observable<boolean>;
+    flashFirmwareButtonDisabled$: Observable<boolean>;
     updatingFirmware$: Observable<boolean>;
 
     xtermLog$: Observable<Array<XtermLog>>;
@@ -25,7 +25,7 @@ export class RecoveryModeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.flashFirmwareButtonDisbabled$ = this.store.select(flashFirmwareButtonDisbabled);
+        this.flashFirmwareButtonDisabled$ = this.store.select(flashFirmwareButtonDisabled);
         this.updatingFirmware$ = this.store.select(updatingFirmware);
         this.xtermLog$ = this.store.select(xtermLog);
     }

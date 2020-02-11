@@ -127,7 +127,7 @@ export const getMissingDeviceState = createSelector(deviceState, fromDevice.getM
 export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
 export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
 // tslint:disable-next-line: max-line-length
-export const flashFirmwareButtonDisbabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
+export const flashFirmwareButtonDisabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
 export const getHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);
