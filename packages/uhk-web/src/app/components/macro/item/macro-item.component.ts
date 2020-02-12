@@ -144,21 +144,25 @@ export class MacroItemComponent implements OnInit, OnChanges {
             this.title = 'Release key: ';
         }
 
-        if (action.hasScancode()) {
-            const scancode: string = (this.mapper.scanCodeToText(action.scancode, action.type) || ['Unknown']).join(' ');
-            if (scancode) {
-                this.title += scancode;
-            }
-        }
+        const texts = [];
 
         if (action.hasModifiers()) {
             // Tap/press/release modifiers
             for (let i = KeyModifiers.leftCtrl; i <= KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
-                    this.title += ' ' + this.mapper.getOsSpecificModifierTextByValue(i);
+                    texts.push(this.mapper.getOsSpecificText(this.mapper.getOsSpecificModifierTextByValue(i)));
                 }
             }
         }
+
+        if (action.hasScancode()) {
+            const scancode: string = (this.mapper.scanCodeToText(action.scancode, action.type) || ['Unknown']).join(' ');
+            if (scancode) {
+                texts.push(scancode);
+            }
+        }
+
+        this.title += texts.join(' + ');
     }
 
     private setMouseMoveScrollActionContent(action: MacroAction): void {

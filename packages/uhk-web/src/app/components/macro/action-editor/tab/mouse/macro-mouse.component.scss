@@ -36,3 +36,9 @@
         width: 10ch;
     }
 }
+
+.nav {
+    li.active {
+        z-index: 0;
+    }
+}
