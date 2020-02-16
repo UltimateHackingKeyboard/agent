@@ -6,6 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.4.1] - 2019-02-16
+
+Firmware: 8.**8.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Revert to the previous udev rules which contain the uaccess method because it has actually better compatibility.
+- Add the --preserve-udev-rules command line argument which can be used to not force udev rules update on problematic Linux distributions.
+- Add the --help command line option which lists the available options and exits.
+- Display macro shortcuts in LShift + LAlt + Tab format.
+
 ## [1.4.0] - 2019-02-04
 
 Firmware: 8.7.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.**7.0** | User Config: 4.1.1 | Hardware Config: 1.0.0
