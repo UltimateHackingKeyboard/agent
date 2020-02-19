@@ -1,5 +1,5 @@
 <svg-keyboard *ngFor="let layer of layers; let index = index; trackBy: trackKeyboard"
-              [@layerState]="layerAnimationState[index]"
+              [@layerState]="{ value: layerAnimationState[index], params: { animationTime: animationTime } }"
               [moduleConfig]="layer.modules"
               [halvesInfo]="halvesInfo"
               [capturingEnabled]="capturingEnabled"

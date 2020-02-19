@@ -47,29 +47,29 @@ type AnimationKeyboard =
                 left: '101%'
             })),
             transition('initOut => leftIn, leftOut => leftIn, rightOut => leftIn', [
-                animate('400ms ease-out', keyframes([
+                animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateX(0%)', left: '101%', offset: 0}),
                     style({transform: 'translateX(-50%)', left: '50%', offset: 1})
                 ]))
-            ]),
+            ], { params: { animationTime: '400ms' } }),
             transition('init => leftOut, leftIn => leftOut, rightIn => leftOut', [
-                animate('400ms ease-out', keyframes([
+                animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
                     style({transform: 'translateX(-101%)', left: '0%', offset: 1})
                 ]))
-            ]),
+            ], { params: { animationTime: '400ms' } }),
             transition('* => rightIn', [
-                animate('400ms ease-out', keyframes([
+                animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateX(-101%)', left: '0%', offset: 0}),
                     style({transform: 'translateX(-50%)', left: '50%', offset: 1})
                 ]))
-            ]),
+            ], { params: { animationTime: '400ms' } }),
             transition('* => rightOut', [
-                animate('400ms ease-out', keyframes([
+                animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
                     style({transform: 'translateX(0%)', left: '101%', offset: 1})
                 ]))
-            ]),
+            ], { params: { animationTime: '400ms' } }),
             transition(':leave', [
                 animate('2000ms ease-out', keyframes([
                     style({opacity: 1, offset: 0}),
@@ -88,6 +88,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() lastEditedKey: LastEditedKey;
+    @Input() animationEnabled: boolean;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
@@ -124,5 +125,9 @@ export class KeyboardSliderComponent implements OnChanges {
             this.layerAnimationState[oldIndex] = 'rightOut';
             this.layerAnimationState[index] = 'rightIn';
         }
+    }
+
+    get animationTime(): string {
+        return this.animationEnabled ? '400ms' : '0ms';
     }
 }

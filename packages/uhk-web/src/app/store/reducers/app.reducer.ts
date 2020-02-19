@@ -16,6 +16,7 @@ import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
 
 export interface State {
+    animationEnabled: boolean;
     started: boolean;
     commandLineArgs: CommandLineArgs;
     undoableNotification?: Notification;
@@ -35,6 +36,7 @@ export interface State {
 }
 
 export const initialState: State = {
+    animationEnabled: true,
     started: false,
     commandLineArgs: {},
     navigationCountAfterNotification: 0,
@@ -171,11 +173,12 @@ export function reducer(
             };
 
         case App.ActionTypes.LoadApplicationSettingsSuccess: {
-            const { everAttemptedSavingToKeyboard = true } = (action as App.LoadApplicationSettingsSuccessAction).payload;
+            const settings = (action as App.LoadApplicationSettingsSuccessAction).payload;
 
             return {
                 ...state,
-                everAttemptedSavingToKeyboard
+                everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
+                animationEnabled: settings.animationEnabled
             };
         }
 
@@ -183,6 +186,12 @@ export function reducer(
             return {
                 ...state,
                 everAttemptedSavingToKeyboard: true
+            };
+
+        case App.ActionTypes.ToggleAnimationEnabled:
+            return {
+                ...state,
+                animationEnabled: (action as App.ToggleAnimationEnabledAction).payload
             };
 
         default:
@@ -219,3 +228,4 @@ export const runningOnNotSupportedWindows = (state: State): boolean => {
 export const keypressCapturing = (state: State): boolean => state.keypressCapturing;
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
+export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;

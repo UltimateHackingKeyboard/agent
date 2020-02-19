@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { AppState, appUpdateSettingsState } from '../../../store';
+import { AppState, appUpdateSettingsState, getAnimationEnabled } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
+import { ToggleAnimationEnabledAction } from '../../../store/actions/app';
 
 @Component({
     selector: 'settings',
@@ -19,9 +20,11 @@ import {
 })
 export class SettingsComponent {
     updateSettingsState$: Observable<UpdateSettingsState>;
+    animationEnabled$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
+        this.animationEnabled$ = store.select(getAnimationEnabled);
     }
 
     toggleCheckForUpdateOnStartUp(value: boolean) {
@@ -30,5 +33,9 @@ export class SettingsComponent {
 
     checkForUpdate(allowPrerelease: boolean): void {
         this.store.dispatch(new CheckForUpdateNowAction(allowPrerelease));
+    }
+
+    toggleAnimationEnabled(enabled: boolean): void {
+        this.store.dispatch(new ToggleAnimationEnabledAction(enabled));
     }
 }

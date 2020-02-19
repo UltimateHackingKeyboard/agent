@@ -21,6 +21,7 @@ export enum ActionTypes {
     OpenUrlInNewWindow = '[app] Open URL in new Window',
     PrivilegeWhatWillThisDo = '[app] What will this do clicked',
     SetupPermissionError = '[app] Setup permission error',
+    ToggleAnimationEnabled = '[app] Toggle animation enabled',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
     StopKeypressCapturing = '[app] Stop keypress capturing',
@@ -120,6 +121,13 @@ export class SetupPermissionErrorAction implements Action {
     }
 }
 
+export class ToggleAnimationEnabledAction implements Action {
+    type = ActionTypes.ToggleAnimationEnabled;
+
+    constructor(public payload: boolean) {
+    }
+}
+
 export class LoadAppStartInfoAction implements Action {
     type = ActionTypes.LoadAppStartInfo;
 }
@@ -167,6 +175,7 @@ export type Actions
     | OpenUrlInNewWindowAction
     | PrivilegeWhatWillThisDoAction
     | SetupPermissionErrorAction
+    | ToggleAnimationEnabledAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
     | StopKeypressCapturingAction

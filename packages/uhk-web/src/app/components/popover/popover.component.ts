@@ -68,24 +68,25 @@ export interface TabHeader {
                 opacity: 1
             })),
             transition('opened => closed', [
-                animate('200ms ease-out', keyframes([
+                animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0}),
                     style({transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1})
                 ]))
-            ]),
+            ], { params: { animationTime: '200ms' } }),
             transition('closed => opened', [
                 style({
                     visibility: 'visible'
                 }),
-                animate('200ms ease-out', keyframes([
+                animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateY(30px)', opacity: 0, offset: 0}),
                     style({transform: 'translateY(0)', opacity: 1, offset: 1})
                 ]))
-            ])
+            ], { params: { animationTime: '200ms' } })
         ])
     ]
 })
 export class PopoverComponent implements OnChanges {
+    @Input() animationEnabled: boolean;
     @Input() defaultKeyAction: KeyAction;
     @Input() currentKeymap: Keymap;
     @Input() currentLayer: number;
@@ -198,6 +199,10 @@ export class PopoverComponent implements OnChanges {
                 this.animationState = 'closed';
             }
         }
+    }
+
+    get animationTime(): string {
+        return this.animationEnabled ? '200ms' : '0ms';
     }
 
     onCancelClick(): void {

@@ -1,6 +1,6 @@
 <div class="popover"
      #popover
-     [@popover]="animationState"
+     [@popover]="{ value: animationState, params: { animationTime: animationTime } }"
      [ngClass]="{'leftArrow': leftArrow, 'rightArrow': rightArrow}"
      [style.top.px]="topPosition"
      [style.left.px]="leftPosition"

@@ -7,13 +7,14 @@ import {
     HostListener,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     Output,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
@@ -36,7 +37,7 @@ import {
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
-import { AppState, getKeymaps, getMacros } from '../../../store';
+import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
 import { SaveKeyAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
@@ -62,7 +63,7 @@ interface NameValuePair {
     styleUrls: ['./svg-keyboard-wrap.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
+export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
@@ -75,6 +76,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 
+    animationEnabled = true;
     popoverShown: boolean;
     keyEditConfig: { moduleId: number, keyId: number };
     selectedKey: { layerId: number, moduleId: number, keyId: number };
@@ -96,6 +98,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
+    private subscription = new Subscription();
 
     constructor(
         private store: Store<AppState>,
@@ -113,6 +116,12 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             content: of([]),
             show: false
         };
+
+        this.subscription.add(
+            this.store
+                .select(getAnimationEnabled)
+                .subscribe(value => this.animationEnabled = value)
+        );
     }
 
     @HostBinding('class.space') get space() {
@@ -141,6 +150,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges {
             this.popoverShown = false;
             this.layers = this.keymap.layers;
         }
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
