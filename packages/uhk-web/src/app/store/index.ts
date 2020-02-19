@@ -101,6 +101,7 @@ export const contributors = (state: AppState) => state.contributors;
 export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindows, notSupportedOs => !notSupportedOs);
 export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
+export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
@@ -300,7 +301,8 @@ export const getApplicationSettings = createSelector(
     ): ApplicationSettings => {
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
-            everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard
+            everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
+            animationEnabled: app.animationEnabled
         };
     });
 

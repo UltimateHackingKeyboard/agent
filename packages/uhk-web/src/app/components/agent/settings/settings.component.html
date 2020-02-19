@@ -8,3 +8,12 @@
                       (toggleCheckForUpdateOnStartUp)="toggleCheckForUpdateOnStartUp($event)"
                       (checkForUpdate)="checkForUpdate($event)">
 </auto-update-settings>
+
+<div class="checkbox d-inline-block mb-0 mt-0">
+    <label>
+        <input type="checkbox"
+               [checked]="animationEnabled$ | async"
+               (change)="toggleAnimationEnabled($event.target.checked)"
+        > Enable layer switching and key popover animation
+    </label>
+</div>
