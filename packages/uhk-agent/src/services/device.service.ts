@@ -263,12 +263,22 @@ export class DeviceService {
     }
 
     public async enableUsbStackTest(event: Electron.Event) {
-        await this.device.enableUsbStackTest();
+        try {
+            await this.stopPollUhkDevice();
+            await this.device.enableUsbStackTest();
+        } finally {
+            this.startPollUhkDevice();
+        }
     }
 
     public async readConfigSizes(event: Electron.IpcMainEvent): Promise<void> {
-        const configSizes = await this.operations.getConfigSizesFromKeyboard();
-        event.sender.send(IpcEvents.device.readConfigSizesReply, JSON.stringify(configSizes));
+        try {
+            await this.stopPollUhkDevice();
+            const configSizes = await this.operations.getConfigSizesFromKeyboard();
+            event.sender.send(IpcEvents.device.readConfigSizesReply, JSON.stringify(configSizes));
+        } finally {
+            this.startPollUhkDevice();
+        }
     }
 
     public startPollUhkDevice(): void {
