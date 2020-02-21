@@ -326,6 +326,11 @@ export class UhkHidDevice {
             return UdevRulesInfo.Ok;
         }
 
+        if (parseInt(process.env.SUDO_UID, 10)) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
         if (this.options['preserve-udev-rules']) {
             this._udevRulesInfo = UdevRulesInfo.Ok;
             return UdevRulesInfo.Ok;
