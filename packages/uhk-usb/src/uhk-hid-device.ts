@@ -2,6 +2,7 @@ import { Device, devices, HID } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
 import { platform } from 'os';
+import isRoot = require('is-root');
 import { CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
@@ -322,6 +323,11 @@ export class UhkHidDevice {
         }
 
         if (process.platform === 'win32' || process.platform === 'darwin') {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (isRoot()) {
             this._udevRulesInfo = UdevRulesInfo.Ok;
             return UdevRulesInfo.Ok;
         }
