@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.4.2] - 2019-02-23
+
+Firmware: 8.8.**1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Add option to disable animations under the settings menu.
+- Fix false "Your configuration occupies ${configSize} bytes, which is larger than the available 1 bytes ..." warning message.
+- Make Agent properly start up when run by root on Linux.
+
 ## [1.4.1] - 2019-02-16
 
 Firmware: 8.**8.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
