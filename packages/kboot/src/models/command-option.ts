@@ -4,4 +4,5 @@ export interface CommandOption {
     command: Commands;
     hasDataPhase?: boolean;
     params?: number[];
+    timeout?: number;
 }

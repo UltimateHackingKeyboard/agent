@@ -1,5 +1,5 @@
 import { ConfigSizesInfo, LeftModuleInfo, LogService, RightModuleInfo, UhkBuffer } from 'uhk-common';
-import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
+import { DataOption, KBoot, Properties, UsbPeripheral2 } from 'kboot';
 
 import {
     Constants,
@@ -10,7 +10,6 @@ import {
     ModuleSlotToI2cAddress,
     ModuleSlotToId
 } from './constants';
-import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import { UhkBlhost } from './uhk-blhost';
@@ -87,7 +86,7 @@ export class UhkOperations {
         this.logService.info('[UhkOperations] Reenumerate bootloader');
         await this.device.reenumerate(EnumerationModes.Bootloader);
         this.device.close();
-        const kboot = new KBoot(new UsbPeripheral({ productId: Constants.BOOTLOADER_ID, vendorId: Constants.VENDOR_ID }));
+        const kboot = new KBoot(new UsbPeripheral2({ productId: Constants.BOOTLOADER_ID, vendorId: Constants.VENDOR_ID }));
         this.logService.info('[UhkOperations] Waiting for bootloader');
         await waitForDevice(Constants.VENDOR_ID, Constants.BOOTLOADER_ID);
         this.logService.info('[UhkOperations] Flash security disable');
@@ -138,7 +137,7 @@ export class UhkOperations {
         this.logService.info('[UhkOperations] Waiting for buspal');
         await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
         let tryCount = 0;
-        const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+        const usbPeripheral = new UsbPeripheral2({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
