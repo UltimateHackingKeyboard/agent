@@ -15,7 +15,7 @@
     "decompress-tarbz2": "^4.1.1",
     "node-hid": "1.2.0",
     "shelljs": "^0.7.8",
-    "tmp": "0.0.33",
+    "tmp": "0.1.0",
     "uhk-common": "1.0.0",
     "uhk-usb": "1.0.0"
   }
