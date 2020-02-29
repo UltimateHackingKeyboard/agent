@@ -124,7 +124,7 @@ export class UhkHidDevice {
      * @returns {Promise<Buffer>}
      */
     public async write(buffer: Buffer): Promise<Buffer> {
-        return new Promise<Buffer>((resolve, reject) => {
+        return new Promise<Buffer>(async (resolve, reject) => {
             const device = this.getDevice();
 
             if (!device) {
@@ -135,6 +135,7 @@ export class UhkHidDevice {
                 const sendData = getTransferData(buffer);
                 this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
                 device.write(sendData);
+                await snooze(1);
                 const receivedData = device.readTimeout(1000);
                 const logString = bufferToString(receivedData);
                 this.logService.debug('[UhkHidDevice] USB[R]:', logString);

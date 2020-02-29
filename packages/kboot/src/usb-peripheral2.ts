@@ -10,6 +10,7 @@ import {
     deviceFinder,
     encodeCommandOption,
     decodeCommandResponse,
+    snooze,
     validateCommandParams
 } from './util';
 import { Commands, ResponseTags } from './enums';
@@ -110,6 +111,8 @@ export class UsbPeripheral2 implements Peripheral {
 
                     logger('send data %o', convertToHexString(writeData));
                     this._device.write(writeData);
+                    // workaround to prevent main thread blocking
+                    await snooze(1);
                 }
 
                 const receivedData = this._device.readTimeout(option.timeout || 2000);
@@ -166,6 +169,8 @@ export class UsbPeripheral2 implements Peripheral {
                     const receivedData = this._device.readTimeout(2000);
                     logger('received data %o', `<${convertToHexString(receivedData)}>`);
                     memoryData.push(...receivedData);
+                    // workaround to prevent main thread blocking
+                    await snooze(1);
                 }
 
                 const responseData = this._device.readTimeout(2000);
