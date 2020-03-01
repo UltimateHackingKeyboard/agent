@@ -144,7 +144,7 @@ export class KBoot {
         }
     }
 
-    async readMemory(startAddress: number, count: number): Promise<any> {
+    async readMemory(startAddress: number, count: number): Promise<Buffer> {
         logger('Start read memory %o', { startAddress, count });
         return this.peripheral.readMemory(startAddress, count);
     }

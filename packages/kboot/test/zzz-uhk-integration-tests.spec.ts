@@ -57,7 +57,7 @@ xdescribe('UHK Integration tests', () => {
             const dataLength = 128;
             return kboot
                 .readMemory(0xc000, dataLength)
-                .then((data: number[]) => {
+                .then((data: Buffer) => {
                     expect(data).toBeTruthy();
                     expect(data.length).toEqual(dataLength);
                 })
