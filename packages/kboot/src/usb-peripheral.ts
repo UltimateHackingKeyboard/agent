@@ -4,28 +4,28 @@ import { pack } from 'byte-data';
 
 import { Peripheral } from './peripheral';
 import { CommandOption, CommandResponse, DataOption, USB } from './models';
-import { convertLittleEndianNumber, convertToHexString, deviceFinder, encodeCommandOption } from './util';
-import { decodeCommandResponse } from './util/usb/decode-command-response';
-import { validateCommandParams } from './util/usb/encode-command-option';
+import {
+    convertLittleEndianNumber,
+    convertToHexString,
+    deviceFinder,
+    encodeCommandOption,
+    decodeCommandResponse,
+    snooze,
+    validateCommandParams
+} from './util';
 import { Commands, ResponseTags } from './enums';
-import { snooze } from './util/snooze';
 
 const logger = debug('kboot:usb');
 const WRITE_DATA_STREAM_PACKAGE_LENGTH = 32;
 
 export class UsbPeripheral implements Peripheral {
     private _device: HID;
-    private _responseBuffer: Buffer;
-    private _dataBuffer: Buffer;
-    private _hidError: any;
 
     constructor(private options: USB) {
         logger('constructor options: %o', options);
     }
 
     open(): void {
-        this._hidError = undefined;
-
         if (this._device) {
             return;
         }
@@ -44,29 +44,35 @@ export class UsbPeripheral implements Peripheral {
             throw new Error('USB device can not be found');
         }
 
-        this._responseBuffer = Buffer.alloc(0);
-        this._dataBuffer = Buffer.alloc(0);
-
         this._device = new HID(device.path);
-        this._device.on('data', this._usbDataListener.bind(this));
-        this._device.on('error', this._usbErrorListener.bind(this));
     }
 
     close(): void {
         if (this._device) {
             this._device.close();
-            this._device.removeAllListeners('data');
-            this._device.removeAllListeners('error');
             this._device = undefined;
         }
     }
 
     async sendCommand(options: CommandOption): Promise<CommandResponse> {
-        validateCommandParams(options.params);
-        const data = encodeCommandOption(options);
-        this._send(data);
+        return new Promise<CommandResponse>((resolve, reject) => {
+            try {
+                this.open();
+                validateCommandParams(options.params);
+                const data = encodeCommandOption(options);
+                logger('send data %o', `<${convertToHexString(data)}>`);
+                this._device.write(data);
+                const receivedData = this._device.readTimeout(options.timeout || 2000);
+                logger('received data %o', `<${convertToHexString(receivedData)}>`);
+                const commandResponse = decodeCommandResponse(Buffer.from(receivedData));
+                logger('command response: %o', commandResponse);
+                resolve(commandResponse);
+            } catch (err) {
+                logger('USB send command communication error %O', err);
 
-        return this._getNextCommandResponse();
+                return reject(err);
+            }
+        });
     }
 
     writeMemory(option: DataOption): Promise<void> {
@@ -93,12 +99,6 @@ export class UsbPeripheral implements Peripheral {
                 }
 
                 for (let i = 0; i < option.data.length; i = i + WRITE_DATA_STREAM_PACKAGE_LENGTH) {
-                    if (this._hidError) {
-                        logger('Throw USB error %O', this._hidError);
-
-                        return reject(new Error('USB error while write data'));
-                    }
-
                     const slice = option.data.slice(i, i + WRITE_DATA_STREAM_PACKAGE_LENGTH);
 
                     const writeData = [
@@ -111,9 +111,15 @@ export class UsbPeripheral implements Peripheral {
 
                     logger('send data %o', convertToHexString(writeData));
                     this._device.write(writeData);
+                    // workaround to prevent main thread blocking
+                    await snooze(1);
                 }
 
-                const secondCommandResponse = await this._getNextCommandResponse();
+                const receivedData = this._device.readTimeout(option.timeout || 2000);
+                logger('write memory received data %o', `<${convertToHexString(receivedData)}>`);
+                const secondCommandResponse = decodeCommandResponse(Buffer.from(receivedData));
+                logger('write memory response: %o', secondCommandResponse);
+
                 if (secondCommandResponse.tag !== ResponseTags.Generic) {
                     logger('Invalid write memory final response %o', secondCommandResponse);
                     return reject(new Error('Invalid write memory final response!'));
@@ -145,8 +151,6 @@ export class UsbPeripheral implements Peripheral {
                     ]
                 };
 
-                this._resetDataBuffer();
-                this._resetResponseBuffer();
                 const firsCommandResponse = await this.sendCommand(command);
                 if (firsCommandResponse.tag !== ResponseTags.ReadMemory) {
                     logger('Invalid read memory response %o', firsCommandResponse);
@@ -159,10 +163,20 @@ export class UsbPeripheral implements Peripheral {
                 }
 
                 const byte4Number = firsCommandResponse.raw.slice(12, 15);
-                const arrivingData = convertLittleEndianNumber(byte4Number);
-                const memoryDataBuffer = await this._readFromDataStream(arrivingData);
+                const arrivingDataSize = convertLittleEndianNumber(byte4Number);
+                const memoryData: Array<number> = [];
+                while (memoryData.length < arrivingDataSize) {
+                    const receivedData = this._device.readTimeout(2000);
+                    logger('received data %o', `<${convertToHexString(receivedData)}>`);
+                    memoryData.push(...receivedData);
+                    // workaround to prevent main thread blocking
+                    await snooze(1);
+                }
 
-                const secondCommandResponse = await this._getNextCommandResponse();
+                const responseData = this._device.readTimeout(2000);
+                logger('received data %o', `<${convertToHexString(responseData)}>`);
+
+                const secondCommandResponse = decodeCommandResponse(Buffer.from(responseData));
                 if (secondCommandResponse.tag !== ResponseTags.Generic) {
                     logger('Invalid read memory final response %o', secondCommandResponse);
                     return reject(new Error('Invalid read memory final response!'));
@@ -174,106 +188,12 @@ export class UsbPeripheral implements Peripheral {
                     return reject(new Error(msg));
                 }
 
-                resolve(memoryDataBuffer);
+                resolve(Buffer.from(memoryData));
             } catch (error) {
                 logger('Read memory error %O', error);
 
                 reject(error);
             }
         });
-    }
-
-    private _send(data: number[]): void {
-        this.open();
-
-        logger('send data %o', `<${convertToHexString(data)}>`);
-        this._device.write(data);
-    }
-
-    private _usbDataListener(data: Buffer): void {
-        logger('received data %o', `[${convertToHexString(data)}]`);
-
-        const channel = data[0];
-
-        switch (channel) {
-            case 3:
-                this._responseBuffer = Buffer.concat([this._responseBuffer, data]);
-                break;
-
-            case 4:
-                this._dataBuffer = Buffer.concat([this._dataBuffer, data]);
-                break;
-
-            default:
-                logger('Unknown USB channel %o', channel);
-                break;
-        }
-    }
-
-    private _usbErrorListener(error: any): void {
-        logger('USB stream error %O', error);
-        this._hidError = error;
-    }
-
-    private _readFromCommandStream(byte = 36, timeout = 15000): Promise<Buffer> {
-        return this._readFromBuffer('_responseBuffer', byte, timeout);
-    }
-
-    private _readFromDataStream(byte = 36, timeout = 15000): Promise<Buffer> {
-        return this._readFromBuffer('_dataBuffer', byte, timeout);
-    }
-
-    private _readFromBuffer(bufferName: string, byte: number, timeout: number): Promise<Buffer> {
-        logger('start read from buffer %o', { bufferName, byte, timeout });
-        return new Promise<Buffer>(async (resolve, reject) => {
-            const startTime = new Date();
-            while (startTime.getTime() + timeout > new Date().getTime()) {
-
-                if (this._hidError) {
-                    const err = this._hidError;
-
-                    return reject(err);
-                }
-
-                const buffer: Buffer = this[bufferName];
-                if (buffer.length >= byte) {
-                    const data = buffer.slice(0, byte);
-
-                    if (buffer.length === byte) {
-                        this[bufferName] = Buffer.alloc(0);
-                    } else {
-                        const newDataBuffer = Buffer.alloc(buffer.length - byte);
-                        buffer.copy(newDataBuffer, 0, byte);
-                        this[bufferName] = newDataBuffer;
-                    }
-
-                    logger(`read from ${bufferName}: %O`, convertToHexString(data));
-
-                    return resolve(data);
-                }
-
-                await snooze(100);
-            }
-
-            logger('Timeout while try to read from buffer');
-            reject(new Error('Timeout while try to read from buffer'));
-        });
-    }
-
-    private _resetDataBuffer(): void {
-        this._dataBuffer = Buffer.alloc(0);
-    }
-
-    private _resetResponseBuffer(): void {
-        this._responseBuffer = Buffer.alloc(0);
-    }
-
-    private async _getNextCommandResponse(): Promise<CommandResponse> {
-        logger('Start read next command response');
-        const response = await this._readFromCommandStream();
-        const commandResponse = decodeCommandResponse(response);
-        logger('next command response: %o', commandResponse);
-
-        return commandResponse;
     }
 }

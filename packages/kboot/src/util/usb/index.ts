@@ -1,2 +1,3 @@
 export { deviceFinder } from './device-finder';
-export { encodeCommandOption } from './encode-command-option';
+export { decodeCommandResponse } from './decode-command-response';
+export { encodeCommandOption, validateCommandParams } from './encode-command-option';

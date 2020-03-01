@@ -372,7 +372,7 @@ export class DeviceService {
                 return true;
 
             default:
-                return platform() !== 'win32';
+                return true;
         }
     }
 

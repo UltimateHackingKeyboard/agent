@@ -6,6 +6,10 @@ import { Commands, MemoryIds, Properties, ResponseCodes, ResponseTags } from './
 import { BootloaderVersion, CommandOption, CommandResponse, DataOption } from './models';
 
 const logger = debug('kboot');
+const RESET_IGNORED_ERRORS = [
+    'could not read data from device',
+    'could not read from HID device'
+];
 
 export class KBoot {
     constructor(private peripheral: Peripheral) {
@@ -140,7 +144,7 @@ export class KBoot {
         }
     }
 
-    async readMemory(startAddress: number, count: number): Promise<any> {
+    async readMemory(startAddress: number, count: number): Promise<Buffer> {
         logger('Start read memory %o', { startAddress, count });
         return this.peripheral.readMemory(startAddress, count);
     }
@@ -164,7 +168,7 @@ export class KBoot {
         try {
             response = await this.peripheral.sendCommand(command);
         } catch (error) {
-            if (error.message === 'could not read from HID device') {
+            if (RESET_IGNORED_ERRORS.includes(error.message)) {
                 logger('Ignoring missing response from reset command.');
 
                 this.close();

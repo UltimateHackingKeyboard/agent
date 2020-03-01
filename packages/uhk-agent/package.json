@@ -27,8 +27,8 @@
   "scripts": {
     "start": "cross-env DEBUG=kboot* electron ./dist/electron-main.js",
     "electron:spe": "electron ./dist/electron-main.js --spe",
-    "electron:blhost": "electron ./dist/electron-main.js --usbDriver=blhost",
-    "electron:kboot": "cross-env DEBUG=kboot* electron ./dist/electron-main.js --usbDriver=kboot",
+    "electron:blhost": "electron ./dist/electron-main.js --usb-driver=blhost",
+    "electron:kboot": "cross-env DEBUG=kboot* electron ./dist/electron-main.js --usb-driver=kboot",
     "build": "webpack && npm run install:build-deps && npm run build:usb && npm run download-firmware && npm run copy-to-tmp-folder",
     "build:usb": "electron-rebuild -w node-hid -p -m ./dist",
     "lint": "tslint --project tsconfig.json",

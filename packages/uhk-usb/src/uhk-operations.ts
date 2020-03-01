@@ -10,7 +10,6 @@ import {
     ModuleSlotToI2cAddress,
     ModuleSlotToId
 } from './constants';
-import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import { UhkBlhost } from './uhk-blhost';
