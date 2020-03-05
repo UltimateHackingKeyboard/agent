@@ -29,7 +29,7 @@
     "@types/jquery": "3.3.29",
     "@types/jsonfile": "5.0.0",
     "@types/lodash": "4.14.136",
-    "@types/node": "8.0.53",
+    "@types/node": "12.12.27",
     "@types/node-hid": "1.2.0",
     "@types/request": "2.0.8",
     "@types/semver": "6.2.0",
@@ -72,7 +72,7 @@
     "ts-loader": "5.3.3",
     "ts-node": "8.6.2",
     "tslint": "5.18.0",
-    "typescript": "3.5.3",
+    "typescript": "3.8.3",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10"
   },

@@ -1,3 +1,4 @@
+// / need to load the buffer package from dependency instead of use node default buffer
 import { Buffer } from 'buffer/';
 
 import { HardwareConfiguration, UhkBuffer, UserConfiguration } from '../config-serializer';
