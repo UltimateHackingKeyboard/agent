@@ -92,6 +92,8 @@ import { AppRendererService } from './services/app-renderer.service';
 import { AppUpdateRendererService } from './services/app-update-renderer.service';
 import { IpcCommonRenderer } from './services/ipc-common-renderer';
 import { MissingDeviceComponent } from './components/missing-device';
+import { LinuxPrivilegeCheckerComponent } from './components/linux-privilege-checker';
+import { MacPrivilegeCheckerComponent } from './components/mac-privilege-checker';
 import { PrivilegeCheckerComponent } from './components/privilege-checker';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
@@ -182,6 +184,8 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
         UpdateAvailableComponent,
         UhkMessageComponent,
         MissingDeviceComponent,
+        LinuxPrivilegeCheckerComponent,
+        MacPrivilegeCheckerComponent,
         PrivilegeCheckerComponent,
         MainPage,
         ProgressButtonComponent,

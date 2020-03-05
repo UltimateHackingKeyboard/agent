@@ -229,3 +229,4 @@ export const keypressCapturing = (state: State): boolean => state.keypressCaptur
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
+export const getPlatform = (state: State): string => state.platform;

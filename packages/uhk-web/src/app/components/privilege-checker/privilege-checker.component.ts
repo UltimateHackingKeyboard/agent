@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
-import { AppState, getPrivilegePageState } from '../../store';
+import { AppState, getPrivilegePageState, getPlatform } from '../../store';
 import { SetPrivilegeOnLinuxAction } from '../../store/actions/device';
 import { LoadAppStartInfoAction, PrivilegeWhatWillThisDoAction } from '../../store/actions/app';
 import { PrivilagePageSate } from '../../models/privilage-page-sate';
@@ -17,25 +17,34 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
 export class PrivilegeCheckerComponent implements OnInit, OnDestroy {
 
     state: PrivilagePageSate;
+    platform: string;
 
-    private stateSubscription: Subscription;
+    private stateSubscription = new Subscription();
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
-        this.stateSubscription = this.store.select(getPrivilegePageState)
-            .subscribe(state => {
-                this.state = state;
-                this.cdRef.markForCheck();
-            });
+        this.stateSubscription.add(
+            this.store.select(getPrivilegePageState)
+                .subscribe(state => {
+                    this.state = state;
+                    this.cdRef.markForCheck();
+                })
+        );
+
+        this.stateSubscription.add(
+            this.store.select(getPlatform)
+                .subscribe(platform => {
+                    this.platform = platform;
+                    this.cdRef.markForCheck();
+                })
+        );
     }
 
     ngOnDestroy(): void {
-        if (this.stateSubscription) {
-            this.stateSubscription.unsubscribe();
-        }
+        this.stateSubscription.unsubscribe();
     }
 
     setUpPermissions(): void {
