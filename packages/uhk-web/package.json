@@ -41,6 +41,7 @@
     "@ngrx/store": "8.2.0",
     "@ngrx/store-devtools": "8.2.0",
     "@ngrx/store-log-monitor": "3.0.2",
+    "@types/node": "12.12.29",
     "angular-confirmation-popover": "4.2.2",
     "angular-notifier": "6.0.1",
     "bootstrap": "3.4.1",
