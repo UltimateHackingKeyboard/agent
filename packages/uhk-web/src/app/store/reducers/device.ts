@@ -243,7 +243,7 @@ export function reducer(state = initialState, action: Action): State {
 
 export const updatingFirmware = (state: State) => state.updatingFirmware;
 export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
-export const hasDevicePermission = (state: State) => state.udevRuleInfo === UdevRulesInfo.Ok;
+export const hasDevicePermission = (state: State) => state.hasPermission && state.udevRuleInfo === UdevRulesInfo.Ok;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (state.connected && !state.zeroInterfaceAvailable) {
         return {

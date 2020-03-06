@@ -1,0 +1,36 @@
+<uhk-message header="Cannot talk to your UHK"
+             subtitle="Your UHK has been detected, but its permissions are not set up yet, so Agent can't talk to it."></uhk-message>
+
+<div *ngIf="state.updateUdevRules">
+    You seem to have an old udev rule file installed. New Agent versions require and updated udev rule file to find
+    your UHK.
+</div>
+
+<div class="text-center">
+    <button class="btn btn-default btn-lg btn-primary mt-10"
+            (click)="setUpPermissions.emit()">
+        <span *ngIf="!state.updateUdevRules">Set up permissions</span>
+        <span *ngIf="state.updateUdevRules">Update udev rule file</span>
+    </button>
+</div>
+<div class="mt-10">
+    <div class="text-center">
+        <a class="link-inline"
+           *ngIf="state.showWhatWillThisDo"
+           (click)="whatWillThisDo.emit()">What will this do?
+        </a>
+    </div>
+
+    <div>
+        <p class="privilege-error"
+           *ngIf="state.permissionSetupFailed">
+            Agent wasn't able to set up permissions via PolicyKit. This is most likely because the
+            <code>polkit</code> package is not installed on your system.
+        </p>
+
+        <div *ngIf="state.showWhatWillThisDoContent">
+            If you want to set up permissions manually:
+            <udev-rules [udevFileContent]="state.udevFileContent"></udev-rules>
+        </div>
+    </div>
+</div>
