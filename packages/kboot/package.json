@@ -12,7 +12,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "byte-data": "^16.0.3",
-    "tslib": "^1.10.0"
+    "tslib": "^1.11.1"
   },
   "peer-dependencies": {
     "node-hid": ">= 1.2.0"
