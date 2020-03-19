@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DragulaService } from 'ng2-dragula';
 import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 
-import { MapperService } from '../../../services/mapper.service';
 import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
@@ -45,9 +45,15 @@ export class MacroListComponent {
 
     newMacro: Macro = undefined;
     showNew: boolean = false;
+    MACRO_ACTIONS = 'macroActions';
     private activeEdit: number = undefined;
 
-    constructor(private mapper: MapperService) {
+    constructor(private dragulaService: DragulaService) {
+        dragulaService.createGroup(this.MACRO_ACTIONS, {
+            moves: (el, container, handle) => {
+                return handle.classList.contains('action--movable');
+            }
+        });
     }
 
     showNewAction() {
