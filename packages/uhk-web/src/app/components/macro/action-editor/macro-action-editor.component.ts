@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import {
     MacroAction,
@@ -41,6 +41,9 @@ export class MacroActionEditorComponent implements OnInit {
     /* tslint:enable:variable-name */
     isSelectedMacroValid = false;
 
+    constructor(private _cdRef: ChangeDetectorRef) {
+    }
+
     ngOnInit() {
         this.updateEditableMacroAction();
         const tab: TabName = this.getTabName(this.editableMacroAction);
@@ -68,7 +71,16 @@ export class MacroActionEditorComponent implements OnInit {
         }
     }
 
-    onValid = (isMacroValid: boolean) => this.isSelectedMacroValid = isMacroValid;
+    onValid(isMacroValid: boolean) {
+        if (isMacroValid === this.isSelectedMacroValid) {
+            return this.isSelectedMacroValid;
+        }
+
+        this.isSelectedMacroValid = isMacroValid;
+        this._cdRef.detectChanges();
+
+        return this.isSelectedMacroValid;
+    }
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
@@ -77,6 +89,7 @@ export class MacroActionEditorComponent implements OnInit {
         } else {
             this.editableMacroAction = undefined;
             this.isSelectedMacroValid = false;
+            this._cdRef.detectChanges();
         }
     }
 
