@@ -16,7 +16,7 @@
                 and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
 
             <p *ngIf="firmwareUpgradeAllowed$ | async">
-                <button class="btn btn-primary"
+                <button class="btn btn-primary action-button"
                         [disabled]="flashFirmwareButtonDisabled$ | async"
                         (click)="onUpdateFirmware()">
                     Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
