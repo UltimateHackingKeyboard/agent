@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef, OnDestroy } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula';
 import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
@@ -33,7 +33,7 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss']
 })
-export class MacroListComponent {
+export class MacroListComponent implements OnDestroy {
     @Input() macro: Macro;
     @Input() macroPlaybackSupported: boolean;
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
@@ -54,6 +54,10 @@ export class MacroListComponent {
                 return handle.classList.contains('action--movable');
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.dragulaService.destroy(this.MACRO_ACTIONS);
     }
 
     showNewAction() {
