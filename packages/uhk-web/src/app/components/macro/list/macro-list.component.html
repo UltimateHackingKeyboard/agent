@@ -15,7 +15,8 @@
             ></macro-item>
 
             <macro-item *ngIf="showNew"
-                        [@togglerNew]="showNew ? 'active' : 'inactive'"
+                        class="new-macro-item"
+                        [@togglerNew]
                         [macroAction]="newMacro"
                         [editable]="true"
                         [deletable]="false"

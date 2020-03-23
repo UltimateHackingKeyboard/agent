@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef, OnDestroy } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula';
 import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 
@@ -16,17 +16,28 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
             state('active', style({
                 height: '*'
             })),
-            transition('inactive <=> active', animate('500ms ease-out'))
+            transition('inactive => active',
+                animate('500ms ease-out', keyframes([
+                    style({ visibility: 'visible', offset: 1 })
+                ]))
+            ),
+            transition('active => inactive',
+                animate('500ms ease-out', keyframes([
+                    style({ visibility: 'hidden', offset: 0 })
+                ]))
+            )
         ]),
         trigger('togglerNew', [
-            state('void', style({
-                height: '0px'
-            })),
-            state('active', style({
-                height: '*'
-            })),
-            transition(':enter', animate('500ms ease-out')),
-            transition(':leave', animate('500ms ease-out'))
+            transition(':enter', [
+                style({ height: 0 }),
+                animate('500ms ease-out', style({ height: '*' })
+                )
+            ]),
+            transition(':leave', [
+                style({ height: '*' }),
+                animate('500ms ease-out', style({ height: 0 })
+                )
+            ])
         ])
     ],
     selector: 'macro-list',
