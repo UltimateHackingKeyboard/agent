@@ -1,12 +1,12 @@
 export enum SecondaryRoleAction {
-    leftCtrl,
     leftShift,
-    leftAlt,
+    leftCtrl,
     leftSuper,
-    rightCtrl,
+    leftAlt,
     rightShift,
-    rightAlt,
+    rightCtrl,
     rightSuper,
+    rightAlt,
     mod,
     fn,
     mouse

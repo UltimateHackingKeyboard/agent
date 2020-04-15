@@ -8,7 +8,7 @@ import {
     Output,
     SimpleChanges
 } from '@angular/core';
-import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
+import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
@@ -245,22 +245,43 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private fillSecondaryRoles(): void {
-        this.secondaryRoleGroups = SECONDARY_ROLES
-            .map(entry => {
-                if (entry.text === 'Modifier') {
-                    return  {
-                        ...entry,
-                        children: entry.children.map(child => {
-                            return {
-                                ...child,
-                                text: this.mapper.getSecondaryRoleText(Number.parseInt(child.id, 10))
-                            }
-                        })
-                    }
-                }
+        this.secondaryRoleGroups = [
+            {
+                id: '-1',
+                text: 'None'
+            }
+        ]
 
-                return entry;
-            })
-            .filter(secondaryRoleFilter(this.showLayerSwitcherInSecondaryRoles));
+        if (this.showLayerSwitcherInSecondaryRoles) {
+            this.secondaryRoleGroups.push({
+                text: 'Layer switcher',
+                children: [
+                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.mod),
+                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.fn),
+                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.mouse)
+                ]
+            });
+        }
+
+        this.secondaryRoleGroups.push({
+            text: 'Modifier',
+            children: [
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftShift),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftCtrl),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftSuper),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftAlt),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightShift),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightCtrl),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightShift),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightAlt)
+            ]
+        });
+    }
+
+    private getSecondaryRoleDropdownItem(action: SecondaryRoleAction): SelectOptionData {
+        return {
+            id: `${action}`,
+            text: this.mapper.getSecondaryRoleText(action)
+        };
     }
 }
