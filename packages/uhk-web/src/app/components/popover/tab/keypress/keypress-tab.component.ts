@@ -246,6 +246,21 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     private fillSecondaryRoles(): void {
         this.secondaryRoleGroups = SECONDARY_ROLES
+            .map(entry => {
+                if (entry.text === 'Modifier') {
+                    return  {
+                        ...entry,
+                        children: entry.children.map(child => {
+                            return {
+                                ...child,
+                                text: this.mapper.getSecondaryRoleText(Number.parseInt(child.id, 10))
+                            }
+                        })
+                    }
+                }
+
+                return entry;
+            })
             .filter(secondaryRoleFilter(this.showLayerSwitcherInSecondaryRoles));
     }
 }

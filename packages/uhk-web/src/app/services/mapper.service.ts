@@ -194,8 +194,8 @@ export class MapperService {
             this.osSpecificTexts.set('LAlt', 'LOption');
             this.osSpecificTexts.set('RAlt', 'ROption');
         } else if (this.operatingSystem === OperatingSystem.Windows) {
-            this.osSpecificTexts.set('LSuper', 'LWindows');
-            this.osSpecificTexts.set('RSuper', 'RWindows');
+            this.osSpecificTexts.set('LSuper', 'LWin');
+            this.osSpecificTexts.set('RSuper', 'RWin');
         }
     }
 
@@ -402,14 +402,14 @@ export class MapperService {
 
     private initSecondaryRoleTexts(): void {
         this.secondaryRoleTexts = new Map<number, string>();
-        this.secondaryRoleTexts.set(0, 'LCtrl');
-        this.secondaryRoleTexts.set(1, 'LShift');
-        this.secondaryRoleTexts.set(2, 'LAlt');
-        this.secondaryRoleTexts.set(3, 'LSuper');
-        this.secondaryRoleTexts.set(4, 'RCtrl');
-        this.secondaryRoleTexts.set(5, 'RShift');
-        this.secondaryRoleTexts.set(6, 'RAlt');
-        this.secondaryRoleTexts.set(7, 'RSuper');
+        this.secondaryRoleTexts.set(0, this.getOsSpecificText('LCtrl'));
+        this.secondaryRoleTexts.set(1, this.getOsSpecificText('LShift'));
+        this.secondaryRoleTexts.set(2, this.getOsSpecificText('LAlt'));
+        this.secondaryRoleTexts.set(3, this.getOsSpecificText('LSuper'));
+        this.secondaryRoleTexts.set(4, this.getOsSpecificText('RCtrl'));
+        this.secondaryRoleTexts.set(5, this.getOsSpecificText('RShift'));
+        this.secondaryRoleTexts.set(6, this.getOsSpecificText('RAlt'));
+        this.secondaryRoleTexts.set(7, this.getOsSpecificText('RSuper'));
         this.secondaryRoleTexts.set(8, 'Mod');
         this.secondaryRoleTexts.set(9, 'Fn');
         this.secondaryRoleTexts.set(10, 'Mouse');
