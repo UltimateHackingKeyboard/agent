@@ -17,16 +17,6 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
 
-export const secondaryRoleFilter = (showLayerSwitchers: boolean) => {
-    return (data): boolean => {
-        if (showLayerSwitchers) {
-            return data;
-        }
-
-        return data.text !== 'Layer switcher';
-    };
-};
-
 @Component({
     selector: 'keypress-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,3 @@
-// DO NOT CHANGE THE ORDER
-// EXCEPT IF YOU KNOW WHAT DO YOU DO
 export enum SecondaryRoleAction {
     leftCtrl,
     leftShift,
