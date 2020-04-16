@@ -8,7 +8,7 @@ import {
     Output,
     SimpleChanges
 } from '@angular/core';
-import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SECONDARY_ROLES } from 'uhk-common';
+import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
@@ -16,16 +16,6 @@ import { SelectOptionData } from '../../../../models/select-option-data';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
-
-export const secondaryRoleFilter = (showLayerSwitchers: boolean) => {
-    return (data): boolean => {
-        if (showLayerSwitchers) {
-            return data;
-        }
-
-        return data.text !== 'Layer switcher';
-    };
-};
 
 @Component({
     selector: 'keypress-tab',
@@ -113,7 +103,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         // Restore secondaryRoleAction
         if (keystrokeAction.secondaryRoleAction !== undefined) {
-            this.selectedSecondaryRoleIndex = this.mapper.modifierMapper(keystrokeAction.secondaryRoleAction);
+            this.selectedSecondaryRoleIndex = keystrokeAction.secondaryRoleAction;
         } else {
             this.selectedSecondaryRoleIndex = -1;
         }
@@ -134,7 +124,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         keystrokeAction.secondaryRoleAction = this.selectedSecondaryRoleIndex === -1
             ? undefined
-            : this.mapper.modifierMapper(this.selectedSecondaryRoleIndex);
+            : this.selectedSecondaryRoleIndex;
 
         if (this.keyActionValid(keystrokeAction)) {
             return keystrokeAction;
@@ -245,7 +235,43 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     private fillSecondaryRoles(): void {
-        this.secondaryRoleGroups = SECONDARY_ROLES
-            .filter(secondaryRoleFilter(this.showLayerSwitcherInSecondaryRoles));
+        this.secondaryRoleGroups = [
+            {
+                id: '-1',
+                text: 'None'
+            }
+        ];
+
+        if (this.showLayerSwitcherInSecondaryRoles) {
+            this.secondaryRoleGroups.push({
+                text: 'Layer switcher',
+                children: [
+                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.mod),
+                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.fn),
+                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.mouse)
+                ]
+            });
+        }
+
+        this.secondaryRoleGroups.push({
+            text: 'Modifier',
+            children: [
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftShift),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftCtrl),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftSuper),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftAlt),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightShift),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightCtrl),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightSuper),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightAlt)
+            ]
+        });
+    }
+
+    private getSecondaryRoleDropdownItem(action: SecondaryRoleAction): SelectOptionData {
+        return {
+            id: `${action}`,
+            text: this.mapper.getSecondaryRoleText(action)
+        };
     }
 }

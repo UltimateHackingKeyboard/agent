@@ -1,5 +1,5 @@
 export interface SelectOptionData {
-    id: string;
+    id?: string;
     text: string;
     disabled?: boolean;
     children?: Array<SelectOptionData>;
