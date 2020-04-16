@@ -250,7 +250,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
                 id: '-1',
                 text: 'None'
             }
-        ]
+        ];
 
         if (this.showLayerSwitcherInSecondaryRoles) {
             this.secondaryRoleGroups.push({
