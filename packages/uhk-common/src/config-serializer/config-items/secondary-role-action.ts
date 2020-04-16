@@ -1,12 +1,14 @@
+// DO NOT CHANGE THE ORDER
+// EXCEPT IF YOU KNOW WHAT DO YOU DO
 export enum SecondaryRoleAction {
-    leftShift,
     leftCtrl,
-    leftSuper,
+    leftShift,
     leftAlt,
-    rightShift,
+    leftSuper,
     rightCtrl,
-    rightSuper,
+    rightShift,
     rightAlt,
+    rightSuper,
     mod,
     fn,
     mouse

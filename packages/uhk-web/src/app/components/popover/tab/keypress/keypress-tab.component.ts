@@ -113,7 +113,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         // Restore secondaryRoleAction
         if (keystrokeAction.secondaryRoleAction !== undefined) {
-            this.selectedSecondaryRoleIndex = this.mapper.modifierMapper(keystrokeAction.secondaryRoleAction);
+            this.selectedSecondaryRoleIndex = keystrokeAction.secondaryRoleAction;
         } else {
             this.selectedSecondaryRoleIndex = -1;
         }
@@ -134,7 +134,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         keystrokeAction.secondaryRoleAction = this.selectedSecondaryRoleIndex === -1
             ? undefined
-            : this.mapper.modifierMapper(this.selectedSecondaryRoleIndex);
+            : this.selectedSecondaryRoleIndex;
 
         if (this.keyActionValid(keystrokeAction)) {
             return keystrokeAction;
@@ -272,7 +272,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftAlt),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightShift),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightCtrl),
-                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightShift),
+                this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightSuper),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightAlt)
             ]
         });

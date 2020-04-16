@@ -103,14 +103,6 @@ export class MapperService {
         }
     }
 
-    public modifierMapper(x: number) {
-        if (x < 8) {
-            return Math.floor(x / 2) * 4 + 1 - x; // 1, 0, 3, 2, 5, 4, 7, 6
-        } else {
-            return x;
-        }
-    }
-
     public getOperatingSystem(): OperatingSystem {
         return this.operatingSystem;
     }
@@ -402,16 +394,16 @@ export class MapperService {
 
     private initSecondaryRoleTexts(): void {
         this.secondaryRoleTexts = new Map<number, string>();
-        this.secondaryRoleTexts.set(0, this.getOsSpecificText('LCtrl'));
-        this.secondaryRoleTexts.set(1, this.getOsSpecificText('LShift'));
-        this.secondaryRoleTexts.set(2, this.getOsSpecificText('LAlt'));
-        this.secondaryRoleTexts.set(3, this.getOsSpecificText('LSuper'));
-        this.secondaryRoleTexts.set(4, this.getOsSpecificText('RCtrl'));
-        this.secondaryRoleTexts.set(5, this.getOsSpecificText('RShift'));
-        this.secondaryRoleTexts.set(6, this.getOsSpecificText('RAlt'));
-        this.secondaryRoleTexts.set(7, this.getOsSpecificText('RSuper'));
-        this.secondaryRoleTexts.set(8, 'Mod');
-        this.secondaryRoleTexts.set(9, 'Fn');
-        this.secondaryRoleTexts.set(10, 'Mouse');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftCtrl, this.getOsSpecificText('LCtrl'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftShift, this.getOsSpecificText('LShift'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftAlt, this.getOsSpecificText('LAlt'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftSuper, this.getOsSpecificText('LSuper'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightCtrl, this.getOsSpecificText('RCtrl'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightShift, this.getOsSpecificText('RShift'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightAlt, this.getOsSpecificText('RAlt'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightSuper, this.getOsSpecificText('RSuper'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.mod, 'Mod');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.fn, 'Fn');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.mouse, 'Mouse');
     }
 }
