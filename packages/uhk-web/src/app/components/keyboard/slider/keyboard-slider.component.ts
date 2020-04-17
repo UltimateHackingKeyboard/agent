@@ -27,6 +27,24 @@ enum LayerNames {
     B
 }
 
+/**
+ * This component manages the layer switching of the selected keymap.
+ * Uses 2 layers for rendering:
+ *   - aLayer
+ *   - bLayer
+ * One of them contains the current layer and the other is the next layer, as 2 layers are needed for the animation.
+ * When animation enables, 1 of the 2 animations may occur:
+ *   - the current layer moves from the center to left and the next layer moves from right to center
+ *   - the current layer moves from the center to right and the next layer moves from left to center
+ *
+ * The AnimationKeyboard contains these animation statuses.
+ * Angular only triggers the animation when the animation status changes.
+ * If the same animation applied twice i.e. slides from left to right, then
+ * the animation status of the current and the next layer will be the same as it was earlier,
+ * so the animation is not triggered.
+ * To re-trigger the animation, the xxx2 animation status is introduced. E.g. if the rightToCenter animation
+ * happens twice the status will be rightToCenter2 and the animation will be triggered.
+ */
 @Component({
     selector: 'keyboard-slider',
     templateUrl: './keyboard-slider.component.html',
