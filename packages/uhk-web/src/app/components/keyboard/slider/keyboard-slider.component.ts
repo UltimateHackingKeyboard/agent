@@ -11,12 +11,21 @@ import {
 import { LastEditedKey } from '../../../models';
 
 type AnimationKeyboard =
-    'init' |
-    'initOut' |
-    'leftIn' |
-    'leftOut' |
-    'rightIn' |
-    'rightOut';
+    'center' |
+    'centerToLeft' |
+    'centerToLeft2' |
+    'centerToRight' |
+    'centerToRight2' |
+    'leftToCenter' |
+    'leftToCenter2' |
+    'rightToCenter' |
+    'rightToCenter2'
+    ;
+
+enum LayerNames {
+    A,
+    B
+}
 
 @Component({
     selector: 'keyboard-slider',
@@ -26,56 +35,42 @@ type AnimationKeyboard =
     // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
     animations: [
         trigger('layerState', [
-            state('init', style({
+            state('center, leftToCenter, leftToCenter2, rightToCenter, rightToCenter2', style({
                 transform: 'translateX(-50%)',
                 left: '50%'
             })),
-            state('initOut', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
-            state('leftIn, rightIn', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('leftOut', style({
+            state('centerToLeft, centerToLeft2', style({
                 transform: 'translateX(-101%)',
                 left: '0'
             })),
-            state('rightOut', style({
+            state('centerToRight, centerToRight2', style({
                 transform: 'translateX(0)',
                 left: '101%'
             })),
-            transition('initOut => leftIn, leftOut => leftIn, rightOut => leftIn', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(0%)', left: '101%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('init => leftOut, leftIn => leftOut, rightIn => leftOut', [
+            transition('* => centerToLeft, * => centerToLeft2', [
                 animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(-101%)', left: '0%', offset: 1})
+                    style({transform: 'translateX(-101%)', left: '0', offset: 1})
                 ]))
             ], { params: { animationTime: '400ms' } }),
-            transition('* => rightIn', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-101%)', left: '0%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('* => rightOut', [
+            transition('* => centerToRight, * => centerToRight2', [
                 animate('{{animationTime}} ease-out', keyframes([
                     style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
                     style({transform: 'translateX(0%)', left: '101%', offset: 1})
                 ]))
             ], { params: { animationTime: '400ms' } }),
-            transition(':leave', [
-                animate('2000ms ease-out', keyframes([
-                    style({opacity: 1, offset: 0}),
-                    style({opacity: 0, offset: 1})
+            transition('* => leftToCenter, * => leftToCenter2', [
+                animate('{{animationTime}} ease-out', keyframes([
+                    style({transform: 'translateX(-101%)', left: 0, offset: 0}),
+                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
                 ]))
-            ])
+            ], { params: { animationTime: '400ms' } }),
+            transition('* => rightToCenter, * => rightToCenter2', [
+                animate('{{animationTime}} ease-out', keyframes([
+                    style({transform: 'translateX(0)', left: '101%', offset: 0}),
+                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
+                ]))
+            ], { params: { animationTime: '400ms' } }),
         ])
     ]
 })
@@ -94,21 +89,33 @@ export class KeyboardSliderComponent implements OnChanges {
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
 
-    layerAnimationState: AnimationKeyboard[];
+    aLayer: Layer;
+    bLayer: Layer;
+    aLayerAnimationState: AnimationKeyboard = 'center';
+    bLayerAnimationState: AnimationKeyboard = 'centerToRight';
+    visibleLayerName = LayerNames.A;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['layers']) {
-            this.layerAnimationState = this.layers.map<AnimationKeyboard>(() => 'initOut');
-            this.layerAnimationState[this.currentLayer] = 'init';
+            if (this.visibleLayerName === LayerNames.A) {
+                this.aLayer = this.layers[this.currentLayer];
+            } else{
+                this.bLayer = this.layers[this.currentLayer];
+            }
         }
+
         const layerChange = changes['currentLayer'];
         if (layerChange) {
-            // turn off the routing navigation from non keymap route
-            if (changes['layers']) {
-            }
-            else {
-                const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
-                this.onLayerChange(prevValue, layerChange.currentValue);
+            if (layerChange.isFirstChange()) {
+                this.aLayer = this.layers[this.currentLayer];
+            } else if (this.visibleLayerName === LayerNames.A) {
+                this.bLayer = this.layers[this.currentLayer];
+                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
+                this.visibleLayerName = LayerNames.B;
+            } else {
+                this.aLayer = this.layers[this.currentLayer];
+                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
+                this.visibleLayerName = LayerNames.A;
             }
         }
     }
@@ -118,12 +125,12 @@ export class KeyboardSliderComponent implements OnChanges {
     }
 
     onLayerChange(oldIndex: number, index: number): void {
-        if (index > oldIndex) {
-            this.layerAnimationState[oldIndex] = 'leftOut';
-            this.layerAnimationState[index] = 'leftIn';
+        if(oldIndex < index) {
+            this.aLayerAnimationState = this.aLayerAnimationState === 'centerToLeft' ? 'centerToLeft2' : 'centerToLeft';
+            this.bLayerAnimationState = this.bLayerAnimationState === 'rightToCenter' ? 'rightToCenter2' : 'rightToCenter';
         } else {
-            this.layerAnimationState[oldIndex] = 'rightOut';
-            this.layerAnimationState[index] = 'rightIn';
+            this.aLayerAnimationState = this.aLayerAnimationState === 'leftToCenter' ? 'leftToCenter2' : 'leftToCenter';
+            this.bLayerAnimationState = this.bLayerAnimationState === 'centerToRight' ? 'centerToRight2' : 'centerToRight';
         }
     }
 
