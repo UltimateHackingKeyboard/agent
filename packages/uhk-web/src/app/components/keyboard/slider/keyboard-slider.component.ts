@@ -88,7 +88,7 @@ enum LayerNames {
                     style({transform: 'translateX(0)', left: '101%', offset: 0}),
                     style({transform: 'translateX(-50%)', left: '50%', offset: 1})
                 ]))
-            ], { params: { animationTime: '400ms' } }),
+            ], { params: { animationTime: '400ms' } })
         ])
     ]
 })
@@ -117,7 +117,7 @@ export class KeyboardSliderComponent implements OnChanges {
         if (changes['layers']) {
             if (this.visibleLayerName === LayerNames.A) {
                 this.aLayer = this.layers[this.currentLayer];
-            } else{
+            } else {
                 this.bLayer = this.layers[this.currentLayer];
             }
         }
@@ -128,12 +128,12 @@ export class KeyboardSliderComponent implements OnChanges {
                 this.aLayer = this.layers[this.currentLayer];
             } else if (this.visibleLayerName === LayerNames.A) {
                 this.bLayer = this.layers[this.currentLayer];
-                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
                 this.visibleLayerName = LayerNames.B;
+                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
             } else {
                 this.aLayer = this.layers[this.currentLayer];
-                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
                 this.visibleLayerName = LayerNames.A;
+                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
             }
         }
     }
@@ -143,12 +143,22 @@ export class KeyboardSliderComponent implements OnChanges {
     }
 
     onLayerChange(oldIndex: number, index: number): void {
-        if(oldIndex < index) {
-            this.aLayerAnimationState = this.aLayerAnimationState === 'centerToLeft' ? 'centerToLeft2' : 'centerToLeft';
-            this.bLayerAnimationState = this.bLayerAnimationState === 'rightToCenter' ? 'rightToCenter2' : 'rightToCenter';
+        if (this.visibleLayerName === LayerNames.A) {
+            if (oldIndex < index) {
+                this.aLayerAnimationState = this.aLayerAnimationState === 'rightToCenter' ? 'rightToCenter2' : 'rightToCenter';
+                this.bLayerAnimationState = this.bLayerAnimationState === 'centerToLeft' ? 'centerToLeft2' : 'centerToLeft';
+            } else {
+                this.aLayerAnimationState = this.aLayerAnimationState === 'leftToCenter' ? 'leftToCenter2' : 'leftToCenter';
+                this.bLayerAnimationState = this.bLayerAnimationState === 'centerToRight' ? 'centerToRight2' : 'centerToRight';
+            }
         } else {
-            this.aLayerAnimationState = this.aLayerAnimationState === 'leftToCenter' ? 'leftToCenter2' : 'leftToCenter';
-            this.bLayerAnimationState = this.bLayerAnimationState === 'centerToRight' ? 'centerToRight2' : 'centerToRight';
+            if (oldIndex < index) {
+                this.aLayerAnimationState = this.aLayerAnimationState === 'centerToLeft' ? 'centerToLeft2' : 'centerToLeft';
+                this.bLayerAnimationState = this.bLayerAnimationState === 'rightToCenter' ? 'rightToCenter2' : 'rightToCenter';
+            } else {
+                this.aLayerAnimationState = this.aLayerAnimationState === 'centerToRight' ? 'centerToRight2' : 'centerToRight';
+                this.bLayerAnimationState = this.bLayerAnimationState === 'leftToCenter' ? 'leftToCenter2' : 'leftToCenter';
+            }
         }
     }
 
