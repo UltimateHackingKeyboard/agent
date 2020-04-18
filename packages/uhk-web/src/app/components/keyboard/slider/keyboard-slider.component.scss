@@ -1,3 +1,18 @@
+@mixin center-position() {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@mixin left-position() {
+    left: 0;
+    transform: translateX(-101%);
+}
+
+@mixin right-position() {
+    left: 101%;
+    transform: translateX(0);
+}
+
 svg-keyboard {
     width: 99%;
     max-width: 1400px;
@@ -5,4 +20,72 @@ svg-keyboard {
     left: 0;
     transform: translateX(-101%);
     user-select: none;
+
+    &.center {
+        @include center-position();
+    }
+
+    &.leftToCenter,
+    &.leftToCenter2 {
+        @include center-position();
+        animation: animateLeftToCenter 400ms ease-out;
+    }
+
+    &.rightToCenter,
+    &.rightToCenter2 {
+        @include center-position();
+        animation: animateRightToCenter 400ms ease-out;
+    }
+
+    &.centerToLeft,
+    &.centerToLeft2 {
+        @include left-position();
+        animation: animateCenterToLeft 400ms ease-out;
+    }
+
+    &.centerToRight,
+    &.centerToRight2 {
+        @include right-position();
+        animation: animateCenterToRight 400ms ease-out;
+    }
+
+    @keyframes animateCenterToLeft {
+        0% {
+            @include center-position();
+        }
+
+        100% {
+            @include left-position();
+        }
+    }
+
+    @keyframes animateCenterToRight {
+        0% {
+            @include center-position();
+        }
+
+        100% {
+            @include right-position();
+        }
+    }
+
+    @keyframes animateLeftToCenter {
+        0% {
+            @include left-position();
+        }
+
+        100% {
+            @include center-position();
+        }
+    }
+
+    @keyframes animateRightToCenter {
+        0% {
+            @include right-position();
+        }
+
+        100% {
+            @include center-position();
+        }
+    }
 }

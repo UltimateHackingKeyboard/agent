@@ -10,87 +10,28 @@ import {
 } from '../../../models/svg-key-events';
 import { LastEditedKey } from '../../../models';
 
-type AnimationKeyboard =
-    'center' |
-    'centerToLeft' |
-    'centerToLeft2' |
-    'centerToRight' |
-    'centerToRight2' |
-    'leftToCenter' |
-    'leftToCenter2' |
-    'rightToCenter' |
-    'rightToCenter2'
-    ;
+interface LayerAnimationCssClasses {
+    center?: boolean;
+    leftToCenter?: boolean;
+    leftToCenter2?: boolean;
+    rightToCenter?: boolean;
+    rightToCenter2?: boolean;
+    centerToLeft?: boolean;
+    centerToLeft2?: boolean;
+    centerToRight?: boolean;
+    centerToRight2?: boolean;
+}
 
 enum LayerNames {
     A,
     B
 }
 
-/**
- * This component manages the layer switching of the selected keymap.
- * Uses 2 layers for rendering:
- *   - aLayer
- *   - bLayer
- * One of them contains the current layer and the other is the next layer, as 2 layers are needed for the animation.
- * When animation enables, 1 of the 2 animations may occur:
- *   - the current layer moves from the center to left and the next layer moves from right to center
- *   - the current layer moves from the center to right and the next layer moves from left to center
- *
- * The AnimationKeyboard contains these animation statuses.
- * Angular only triggers the animation when the animation status changes.
- * If the same animation applied twice i.e. slides from left to right, then
- * the animation status of the current and the next layer will be the same as it was earlier,
- * so the animation is not triggered.
- * To re-trigger the animation, the xxx2 animation status is introduced. E.g. if the rightToCenter animation
- * happens twice the status will be rightToCenter2 and the animation will be triggered.
- */
 @Component({
     selector: 'keyboard-slider',
     templateUrl: './keyboard-slider.component.html',
     styleUrls: ['./keyboard-slider.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
-    animations: [
-        trigger('layerState', [
-            state('center, leftToCenter, leftToCenter2, rightToCenter, rightToCenter2', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('centerToLeft, centerToLeft2', style({
-                transform: 'translateX(-101%)',
-                left: '0'
-            })),
-            state('centerToRight, centerToRight2', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
-            transition('* => centerToLeft, * => centerToLeft2', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(-101%)', left: '0', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('* => centerToRight, * => centerToRight2', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(0%)', left: '101%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('* => leftToCenter, * => leftToCenter2', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-101%)', left: 0, offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('* => rightToCenter, * => rightToCenter2', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(0)', left: '101%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } })
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeyboardSliderComponent implements OnChanges {
     @Input() layers: Layer[];
@@ -109,8 +50,10 @@ export class KeyboardSliderComponent implements OnChanges {
 
     aLayer: Layer;
     bLayer: Layer;
-    aLayerAnimationState: AnimationKeyboard = 'center';
-    bLayerAnimationState: AnimationKeyboard = 'centerToRight';
+    aLayerCssClasses: LayerAnimationCssClasses = {
+        center: true
+    };
+    bLayerCssClasses: LayerAnimationCssClasses = {};
     visibleLayerName = LayerNames.A;
 
     ngOnChanges(changes: SimpleChanges) {
@@ -145,19 +88,51 @@ export class KeyboardSliderComponent implements OnChanges {
     onLayerChange(oldIndex: number, index: number): void {
         if (this.visibleLayerName === LayerNames.A) {
             if (oldIndex < index) {
-                this.aLayerAnimationState = this.aLayerAnimationState === 'rightToCenter' ? 'rightToCenter2' : 'rightToCenter';
-                this.bLayerAnimationState = this.bLayerAnimationState === 'centerToLeft' ? 'centerToLeft2' : 'centerToLeft';
+                this.aLayerCssClasses = {
+                    // center: true,
+                    rightToCenter: !this.aLayerCssClasses.rightToCenter,
+                    rightToCenter2: this.aLayerCssClasses.rightToCenter
+                };
+
+                this.bLayerCssClasses = {
+                    centerToLeft: !this.bLayerCssClasses.centerToLeft,
+                    centerToLeft2: this.bLayerCssClasses.centerToLeft
+                };
             } else {
-                this.aLayerAnimationState = this.aLayerAnimationState === 'leftToCenter' ? 'leftToCenter2' : 'leftToCenter';
-                this.bLayerAnimationState = this.bLayerAnimationState === 'centerToRight' ? 'centerToRight2' : 'centerToRight';
+                this.aLayerCssClasses = {
+                    // center: true,
+                    leftToCenter: !this.aLayerCssClasses.leftToCenter,
+                    leftToCenter2: this.aLayerCssClasses.leftToCenter
+                };
+
+                this.bLayerCssClasses = {
+                    centerToRight: !this.bLayerCssClasses.centerToRight,
+                    centerToRight2: this.bLayerCssClasses.centerToRight
+                };
             }
         } else {
             if (oldIndex < index) {
-                this.aLayerAnimationState = this.aLayerAnimationState === 'centerToLeft' ? 'centerToLeft2' : 'centerToLeft';
-                this.bLayerAnimationState = this.bLayerAnimationState === 'rightToCenter' ? 'rightToCenter2' : 'rightToCenter';
+                this.aLayerCssClasses = {
+                    centerToLeft: !this.aLayerCssClasses.centerToLeft,
+                    centerToLeft2: this.aLayerCssClasses.centerToLeft
+                };
+
+                this.bLayerCssClasses = {
+                    // center: true,
+                    rightToCenter: !this.bLayerCssClasses.rightToCenter,
+                    rightToCenter2: this.bLayerCssClasses.rightToCenter
+                };
             } else {
-                this.aLayerAnimationState = this.aLayerAnimationState === 'centerToRight' ? 'centerToRight2' : 'centerToRight';
-                this.bLayerAnimationState = this.bLayerAnimationState === 'leftToCenter' ? 'leftToCenter2' : 'leftToCenter';
+                this.aLayerCssClasses = {
+                    centerToRight: !this.aLayerCssClasses.centerToRight,
+                    centerToRight2: this.aLayerCssClasses.centerToRight
+                };
+
+                this.bLayerCssClasses = {
+                    // center: true,
+                    leftToCenter: !this.bLayerCssClasses.leftToCenter,
+                    leftToCenter2: this.bLayerCssClasses.leftToCenter
+                };
             }
         }
     }

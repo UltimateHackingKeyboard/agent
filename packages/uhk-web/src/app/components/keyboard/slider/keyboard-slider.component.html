@@ -1,5 +1,5 @@
-<svg-keyboard [moduleConfig]="aLayer.modules"
-              [@layerState]="{ value: aLayerAnimationState, params: { animationTime: animationTime } }"
+<svg-keyboard [ngClass]="aLayerCssClasses"
+              [moduleConfig]="aLayer.modules"
               [halvesInfo]="halvesInfo"
               [capturingEnabled]="capturingEnabled"
               [selectedKey]="selectedKey"
@@ -17,7 +17,7 @@
 </svg-keyboard>
 
 <svg-keyboard *ngIf="bLayer"
-              [@layerState]="{ value: bLayerAnimationState, params: { animationTime: animationTime } }"
+              [ngClass]="bLayerCssClasses"
               [moduleConfig]="bLayer.modules"
               [halvesInfo]="halvesInfo"
               [capturingEnabled]="capturingEnabled"
