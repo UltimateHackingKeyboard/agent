@@ -10,74 +10,28 @@ import {
 } from '../../../models/svg-key-events';
 import { LastEditedKey } from '../../../models';
 
-type AnimationKeyboard =
-    'init' |
-    'initOut' |
-    'leftIn' |
-    'leftOut' |
-    'rightIn' |
-    'rightOut';
+interface LayerAnimationCssClasses {
+    center?: boolean;
+    leftToCenter?: boolean;
+    leftToCenter2?: boolean;
+    rightToCenter?: boolean;
+    rightToCenter2?: boolean;
+    centerToLeft?: boolean;
+    centerToLeft2?: boolean;
+    centerToRight?: boolean;
+    centerToRight2?: boolean;
+}
+
+enum LayerNames {
+    A,
+    B
+}
 
 @Component({
     selector: 'keyboard-slider',
     templateUrl: './keyboard-slider.component.html',
     styleUrls: ['./keyboard-slider.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    // We use 101%, because there was still a trace of the keyboard in the screen when animation was done
-    animations: [
-        trigger('layerState', [
-            state('init', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('initOut', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
-            state('leftIn, rightIn', style({
-                transform: 'translateX(-50%)',
-                left: '50%'
-            })),
-            state('leftOut', style({
-                transform: 'translateX(-101%)',
-                left: '0'
-            })),
-            state('rightOut', style({
-                transform: 'translateX(0)',
-                left: '101%'
-            })),
-            transition('initOut => leftIn, leftOut => leftIn, rightOut => leftIn', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(0%)', left: '101%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('init => leftOut, leftIn => leftOut, rightIn => leftOut', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(-101%)', left: '0%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('* => rightIn', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-101%)', left: '0%', offset: 0}),
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition('* => rightOut', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateX(-50%)', left: '50%', offset: 0}),
-                    style({transform: 'translateX(0%)', left: '101%', offset: 1})
-                ]))
-            ], { params: { animationTime: '400ms' } }),
-            transition(':leave', [
-                animate('2000ms ease-out', keyframes([
-                    style({opacity: 1, offset: 0}),
-                    style({opacity: 0, offset: 1})
-                ]))
-            ])
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeyboardSliderComponent implements OnChanges {
     @Input() layers: Layer[];
@@ -94,21 +48,35 @@ export class KeyboardSliderComponent implements OnChanges {
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
 
-    layerAnimationState: AnimationKeyboard[];
+    aLayer: Layer;
+    bLayer: Layer;
+    aLayerCssClasses: LayerAnimationCssClasses = {
+        center: true
+    };
+    bLayerCssClasses: LayerAnimationCssClasses = {};
+    visibleLayerName = LayerNames.A;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['layers']) {
-            this.layerAnimationState = this.layers.map<AnimationKeyboard>(() => 'initOut');
-            this.layerAnimationState[this.currentLayer] = 'init';
+            if (!this.animationEnabled || this.visibleLayerName === LayerNames.A) {
+                this.aLayer = this.layers[this.currentLayer];
+            } else {
+                this.bLayer = this.layers[this.currentLayer];
+            }
         }
+
         const layerChange = changes['currentLayer'];
         if (layerChange) {
-            // turn off the routing navigation from non keymap route
-            if (changes['layers']) {
-            }
-            else {
-                const prevValue = layerChange.isFirstChange() ? layerChange.currentValue : layerChange.previousValue;
-                this.onLayerChange(prevValue, layerChange.currentValue);
+            if (!this.animationEnabled || layerChange.isFirstChange()) {
+                this.aLayer = this.layers[this.currentLayer];
+            } else if (this.visibleLayerName === LayerNames.A) {
+                this.bLayer = this.layers[this.currentLayer];
+                this.visibleLayerName = LayerNames.B;
+                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
+            } else {
+                this.aLayer = this.layers[this.currentLayer];
+                this.visibleLayerName = LayerNames.A;
+                this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
             }
         }
     }
@@ -118,16 +86,54 @@ export class KeyboardSliderComponent implements OnChanges {
     }
 
     onLayerChange(oldIndex: number, index: number): void {
-        if (index > oldIndex) {
-            this.layerAnimationState[oldIndex] = 'leftOut';
-            this.layerAnimationState[index] = 'leftIn';
-        } else {
-            this.layerAnimationState[oldIndex] = 'rightOut';
-            this.layerAnimationState[index] = 'rightIn';
-        }
-    }
+        if (this.visibleLayerName === LayerNames.A) {
+            if (oldIndex < index) {
+                this.aLayerCssClasses = {
+                    // center: true,
+                    rightToCenter: !this.aLayerCssClasses.rightToCenter,
+                    rightToCenter2: this.aLayerCssClasses.rightToCenter
+                };
 
-    get animationTime(): string {
-        return this.animationEnabled ? '400ms' : '0ms';
+                this.bLayerCssClasses = {
+                    centerToLeft: !this.bLayerCssClasses.centerToLeft,
+                    centerToLeft2: this.bLayerCssClasses.centerToLeft
+                };
+            } else {
+                this.aLayerCssClasses = {
+                    // center: true,
+                    leftToCenter: !this.aLayerCssClasses.leftToCenter,
+                    leftToCenter2: this.aLayerCssClasses.leftToCenter
+                };
+
+                this.bLayerCssClasses = {
+                    centerToRight: !this.bLayerCssClasses.centerToRight,
+                    centerToRight2: this.bLayerCssClasses.centerToRight
+                };
+            }
+        } else {
+            if (oldIndex < index) {
+                this.aLayerCssClasses = {
+                    centerToLeft: !this.aLayerCssClasses.centerToLeft,
+                    centerToLeft2: this.aLayerCssClasses.centerToLeft
+                };
+
+                this.bLayerCssClasses = {
+                    // center: true,
+                    rightToCenter: !this.bLayerCssClasses.rightToCenter,
+                    rightToCenter2: this.bLayerCssClasses.rightToCenter
+                };
+            } else {
+                this.aLayerCssClasses = {
+                    centerToRight: !this.aLayerCssClasses.centerToRight,
+                    centerToRight2: this.aLayerCssClasses.centerToRight
+                };
+
+                this.bLayerCssClasses = {
+                    // center: true,
+                    leftToCenter: !this.bLayerCssClasses.leftToCenter,
+                    leftToCenter2: this.bLayerCssClasses.leftToCenter
+                };
+            }
+        }
     }
 }
