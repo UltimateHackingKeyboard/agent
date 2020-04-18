@@ -58,7 +58,7 @@ export class KeyboardSliderComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['layers']) {
-            if (this.visibleLayerName === LayerNames.A) {
+            if (!this.animationEnabled || this.visibleLayerName === LayerNames.A) {
                 this.aLayer = this.layers[this.currentLayer];
             } else {
                 this.bLayer = this.layers[this.currentLayer];
@@ -67,7 +67,7 @@ export class KeyboardSliderComponent implements OnChanges {
 
         const layerChange = changes['currentLayer'];
         if (layerChange) {
-            if (layerChange.isFirstChange()) {
+            if (!this.animationEnabled || layerChange.isFirstChange()) {
                 this.aLayer = this.layers[this.currentLayer];
             } else if (this.visibleLayerName === LayerNames.A) {
                 this.bLayer = this.layers[this.currentLayer];
@@ -135,9 +135,5 @@ export class KeyboardSliderComponent implements OnChanges {
                 };
             }
         }
-    }
-
-    get animationTime(): string {
-        return this.animationEnabled ? '400ms' : '0ms';
     }
 }
