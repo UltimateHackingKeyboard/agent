@@ -5,9 +5,10 @@
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2016",
+    "target": "ES2016",
     "importHelpers": true
   }
 }

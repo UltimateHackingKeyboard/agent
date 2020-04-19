@@ -1,17 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { dirSync } from 'tmp';
-import * as decompress from 'decompress';
-import * as decompressTarbz from 'decompress-tarbz2';
-import * as decompressTargz from 'decompress-targz';
-import { extname } from 'path';
+import decompress from 'decompress';
+import decompressTarbz from 'decompress-tarbz2';
+import decompressTargz from 'decompress-targz';
 import { UploadFileData } from 'uhk-common';
 
 import { TmpFirmware } from '../models/tmp-firmware';
 
 export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirmware> {
     const tmpDirectory = dirSync();
-    const extension = extname(fileData.filename);
+    const extension = path.extname(fileData.filename);
     const zipFilePath = path.join(tmpDirectory.name, `firmware${extension}`);
 
     await writeDataToFile(fileData.data, zipFilePath);

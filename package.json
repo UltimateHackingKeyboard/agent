@@ -19,6 +19,8 @@
     "npm": ">=6.12.0 <7.0.0"
   },
   "devDependencies": {
+    "@types/command-line-args": "5.0.0",
+    "@types/command-line-usage": "5.0.1",
     "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
