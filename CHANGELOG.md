@@ -6,6 +6,19 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.4.4] - 2019-04-20
+
+Firmware: 8.**9.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.9.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Display error message on OSX when encountering with problematic USB hubs and docking stations.
+- Make Agent faster by only rendering a single layer at a time instead of all layers per keymap.
+- Use improved Agent icons on the loading screen and in the sidebar.
+- Make reordering macro actions only possible by dragging them by their handle icons.
+- Show OS-specific modifier names in the secondary role select2.
+- Display "Win" instead of the "Windows" modifier everywhere.
+- Center-align the explanation text in the key action popover under Mouse speed.
+- Fix the favicon of the web build.
+
 ## [1.4.3] - 2019-03-01
 
 Firmware: 8.8.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
