@@ -7,6 +7,7 @@ const webpackHelper = require('../../scripts/webpack-helper');
 const rootDir = __dirname;
 
 module.exports = {
+    mode: 'development',
     entry: [path.resolve(rootDir, 'src/electron-main.ts')],
     output: {
         path: rootDir + "/dist",
@@ -19,7 +20,8 @@ module.exports = {
     devtool: 'source-map',
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
-        modules: ["node_modules"]
+        modules: ["node_modules"],
+        mainFields: ["main", "module"]
     },
     module: {
         rules: [

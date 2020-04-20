@@ -10,8 +10,8 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
-    "command-line-args": "4.0.7",
-    "command-line-usage": "4.1.0",
+    "command-line-args": "5.1.1",
+    "command-line-usage": "6.1.0",
     "decompress": "4.2.1",
     "decompress-bzip2": "4.0.0",
     "decompress-targz": "4.1.1",
