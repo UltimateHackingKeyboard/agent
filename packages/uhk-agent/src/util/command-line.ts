@@ -1,11 +1,8 @@
-/// <reference path="../custom_types/command-line-args.d.ts"/>
-/// <reference path="../custom_types/command-line-usage.d.ts"/>
-
-import * as commandLineArgs from 'command-line-args';
-import * as commandLineUsage from 'command-line-usage';
+import commandLineArgs from 'command-line-args';
+import commandLineUsage from 'command-line-usage';
 import { CommandLineArgs } from 'uhk-common';
 
-const optionDefinitions = [
+const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
@@ -13,9 +10,9 @@ const optionDefinitions = [
     { name: 'usb-driver', type: String }
 ];
 
-export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true });
+export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true }) as CommandLineArgs;
 
-const sections = [
+const sections: commandLineUsage.Section[] = [
     {
         header: 'UHK Agent',
         content: 'Ultimate Hacking Keyboard configurator'

@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 
 export const FILENAME_DATE_FORMAT = 'YYYYMMDD-HHmmss';
 export const DISPLAY_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';

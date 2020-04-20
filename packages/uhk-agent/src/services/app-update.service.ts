@@ -1,9 +1,9 @@
 import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
-import * as settings from 'electron-settings';
+import settings from 'electron-settings';
 import * as isDev from 'electron-is-dev';
-import * as storage from 'electron-settings';
+import storage from 'electron-settings';
 
 import { ApplicationSettings, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
