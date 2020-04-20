@@ -1,5 +1,5 @@
 import * as electron from 'electron';
-import * as settings from 'electron-settings';
+import settings from 'electron-settings';
 
 import { logger } from '../services/logger.service';
 import { WindowState } from '../models/window-state';
