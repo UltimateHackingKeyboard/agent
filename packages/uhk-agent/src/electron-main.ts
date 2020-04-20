@@ -15,7 +15,7 @@ import { logger } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
-import * as isDev from 'electron-is-dev';
+import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
 import { options, cliUsage } from './util';

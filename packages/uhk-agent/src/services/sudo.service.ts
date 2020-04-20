@@ -1,4 +1,4 @@
-import { ipcMain, app } from 'electron';
+import { ipcMain } from 'electron';
 import * as path from 'path';
 import * as sudo from 'sudo-prompt';
 import { dirSync } from 'tmp';

@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import * as MemoryMap from 'nrf-intel-hex';
+import MemoryMap from 'nrf-intel-hex';
 
 export enum UhkReenumerationModes {
     Bootloader = 'bootloader',

@@ -4,7 +4,7 @@
  * Install DevTool extensions when Electron is in development mode
  */
 import { app } from 'electron';
-import * as isDev from 'electron-is-dev';
+import isDev from 'electron-is-dev';
 
 if (isDev) {
 

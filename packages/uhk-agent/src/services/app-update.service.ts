@@ -2,7 +2,7 @@ import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
 import settings from 'electron-settings';
-import * as isDev from 'electron-is-dev';
+import isDev from 'electron-is-dev';
 import storage from 'electron-settings';
 
 import { ApplicationSettings, IpcEvents, LogService } from 'uhk-common';
