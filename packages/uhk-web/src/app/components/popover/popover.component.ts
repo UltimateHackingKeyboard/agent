@@ -12,6 +12,8 @@ import {
     ViewChild
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faBan, faClone, faKeyboard, faMousePointer, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -45,7 +47,7 @@ enum TabName {
 
 export interface TabHeader {
     text: string;
-    icon: string;
+    icon: IconDefinition;
     tabName: TabName;
     disabled?: boolean;
 }
@@ -117,32 +119,32 @@ export class PopoverComponent implements OnChanges {
     tabHeaders: TabHeader[] = [
         {
             tabName: TabName.Keypress,
-            icon: 'fa-keyboard-o',
+            icon: faKeyboard,
             text: 'Keypress'
         },
         {
             tabName: TabName.Layer,
-            icon: 'fa-clone',
+            icon: faClone,
             text: 'Layer'
         },
         {
             tabName: TabName.Mouse,
-            icon: 'fa-mouse-pointer',
+            icon: faMousePointer,
             text: 'Mouse'
         },
         {
             tabName: TabName.Macro,
-            icon: 'fa-play',
+            icon: faPlay,
             text: 'Macro'
         },
         {
             tabName: TabName.Keymap,
-            icon: 'fa-keyboard-o',
+            icon: faKeyboard,
             text: 'Keymap'
         },
         {
             tabName: TabName.None,
-            icon: 'fa-ban',
+            icon: faBan,
             text: 'None'
         }
     ];

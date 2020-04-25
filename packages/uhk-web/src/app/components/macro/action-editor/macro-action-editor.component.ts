@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
     MacroAction,
@@ -40,6 +41,10 @@ export class MacroActionEditorComponent implements OnInit {
     TabName = TabName;
     /* tslint:enable:variable-name */
     isSelectedMacroValid = false;
+    faFont = faFont;
+    faKeyboard = faKeyboard;
+    faMousePointer = faMousePointer;
+    faClock = faClock;
 
     constructor(private _cdRef: ChangeDetectorRef) {
     }

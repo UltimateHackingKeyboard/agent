@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { UploadFileData } from 'uhk-common';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
 import { AppState, getConfigSizesState, getUserConfigHistoryComponentState, isUserConfigSaving } from '../../../store';
-import { ReadConfigSizesAction, ResetUserConfigurationAction } from '../../../store/actions/device';
+import { ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
     SaveUserConfigInBinaryFileAction,
@@ -28,6 +29,7 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     configSizesState$: Observable<UhkProgressBarState>;
     userConfigHistoryState$: Observable<UserConfigHistoryComponentState>;
     savingUserConfig: boolean;
+    faSlidersH = faSlidersH;
 
     private subscription = new Subscription();
 

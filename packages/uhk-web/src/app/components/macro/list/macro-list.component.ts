@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef, OnDestroy } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 
 import { MacroItemComponent } from '../item';
@@ -57,12 +59,25 @@ export class MacroListComponent implements OnDestroy {
     newMacro: Macro = undefined;
     showNew: boolean = false;
     MACRO_ACTIONS = 'macroActions';
+    faPlus = faPlus;
     private activeEdit: number = undefined;
 
     constructor(private dragulaService: DragulaService) {
         dragulaService.createGroup(this.MACRO_ACTIONS, {
             moves: (el, container, handle) => {
-                return handle.classList.contains('action--movable');
+                if (!handle) {
+                    return false;
+                }
+
+                let element = handle;
+                while (element) {
+                    if (element.classList.contains('action--movable')) {
+                        return true;
+                    }
+                    element = element.parentElement;
+                }
+
+                return false;
             }
         });
     }

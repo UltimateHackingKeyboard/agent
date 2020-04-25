@@ -4,25 +4,25 @@
             <ul class="nav nav-pills nav-stacked">
                 <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
                     <a>
-                        <i class="fa fa-font"></i>
+                        <fa-icon [icon]="faFont"></fa-icon>
                         <span>Type text</span>
                     </a>
                 </li>
                 <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
                     <a>
-                        <i class="fa fa-keyboard-o"></i>
+                        <fa-icon [icon]="faKeyboard"></fa-icon>
                         <span>Key action</span>
                     </a>
                 </li>
                 <li #macroMouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
                     <a>
-                        <i class="fa fa-mouse-pointer"></i>
+                        <fa-icon [icon]="faMousePointer"></fa-icon>
                         <span>Mouse action</span>
                     </a>
                 </li>
                 <li #macroDelay [class.active]="activeTab === TabName.Delay" (click)="selectTab(TabName.Delay)">
                     <a>
-                        <i class="fa fa-clock-o"></i>
+                        <fa-icon [icon]="faClock"></fa-icon>
                         <span>Delay</span>
                     </a>
                 </li>

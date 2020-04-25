@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'udev-rules',
@@ -9,6 +10,7 @@ export class UdevRulesComponent implements OnChanges {
     @Input() udevFileContent: string;
 
     command = '';
+    faCopy = faCopy;
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.udevFileContent) {

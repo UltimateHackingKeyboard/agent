@@ -11,29 +11,32 @@
             <button type="button" class="btn btn-default btn-lg"
                     [class.btn-primary]="mouseActionParam === MouseActionParam.moveUp"
                     (click)="setMouseActionParam(MouseActionParam.moveUp)">
-                <i class="fa fa-arrow-up"></i>
+                <fa-icon [icon]="faArrowUp"></fa-icon>
             </button>
         </div>
         <div class="row">
             <button type="button" class="btn btn-default btn-lg"
                     [class.btn-primary]="mouseActionParam === MouseActionParam.moveLeft"
                     (click)="setMouseActionParam(MouseActionParam.moveLeft)">
-                <i class="fa fa-arrow-left"></i>
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+
             </button>
             <button type="button" class="btn btn-default btn-lg btn-placeholder">
-                <i class="fa fa-square"></i>
+                <fa-icon [icon]="faSquare"></fa-icon>
             </button>
             <button type="button" class="btn btn-default btn-lg"
                     [class.btn-primary]="mouseActionParam === MouseActionParam.moveRight"
                     (click)="setMouseActionParam(MouseActionParam.moveRight)">
-                <i class="fa fa-arrow-right"></i>
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+
             </button>
         </div>
         <div class="row">
             <button type="button" class="btn btn-default btn-lg"
                     [class.btn-primary]="mouseActionParam === MouseActionParam.moveDown"
                     (click)="setMouseActionParam(MouseActionParam.moveDown)">
-                <i class="fa fa-arrow-down"></i>
+                <fa-icon [icon]="faArrowDown"></fa-icon>
+
             </button>
         </div>
     </div>
@@ -42,29 +45,29 @@
             <button type="button" class="btn btn-default btn-lg"
                     [class.btn-primary]="mouseActionParam === MouseActionParam.scrollUp"
                     (click)="setMouseActionParam(MouseActionParam.scrollUp)">
-                <i class="fa fa-angle-double-up"></i>
+                <fa-icon [icon]="faAngleDoubleUp"></fa-icon>
             </button>
         </div>
         <div class="row">
             <button type="button" class="btn btn-default btn-lg"
                     [class.btn-primary]="mouseActionParam === MouseActionParam.scrollLeft"
                     (click)="setMouseActionParam(MouseActionParam.scrollLeft)">
-                <i class="fa fa-angle-double-left"></i>
+                <fa-icon [icon]="faAngleDoubleLeft"></fa-icon>
             </button>
             <button type="button" class="btn btn-default btn-lg btn-placeholder">
-                <i class="fa fa-square"></i>
+                <fa-icon [icon]="faSquare"></fa-icon>
             </button>
             <button type="button" class="btn btn-default btn-lg"
                 [class.btn-primary]="mouseActionParam === MouseActionParam.scrollRight"
                 (click)="setMouseActionParam(MouseActionParam.scrollRight)">
-                <i class="fa fa-angle-double-right"></i>
+                <fa-icon [icon]="faAngleDoubleRight"></fa-icon>
             </button>
         </div>
         <div class="row">
             <button type="button" class="btn btn-default btn-lg"
                 [class.btn-primary]="mouseActionParam === MouseActionParam.scrollDown"
                 (click)="setMouseActionParam(MouseActionParam.scrollDown)">
-                <i class="fa fa-angle-double-down"></i>
+                <fa-icon [icon]="faAngleDoubleDown"></fa-icon>
             </button>
         </div>
     </div>

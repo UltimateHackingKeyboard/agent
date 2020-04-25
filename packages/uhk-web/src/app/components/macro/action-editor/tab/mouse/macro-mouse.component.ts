@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { faArrowsAlt, faArrowsAltV, faHandPaper, faHandRock, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
     MacroMouseSubAction,
@@ -37,6 +38,11 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
     /* tslint:enable:variable-name */
     activeTab: TabName;
     buttonLabels: string[];
+    faArrowsAlt = faArrowsAlt;
+    faArrowsAltV = faArrowsAltV;
+    faHandPaper = faHandPaper;
+    faHandRock = faHandRock;
+    faMousePointer = faMousePointer;
     private selectedButtons: boolean[];
 
     constructor() {

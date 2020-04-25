@@ -11,8 +11,9 @@
 
         <button class="btn btn-link" (click)="emitCheckForUpdate($event)">
             Check for update
-            <span *ngIf="state.checkingForUpdate"
-                  class="fa fa-spinner fa-spin"></span>
+            <fa-icon *ngIf="state.checkingForUpdate"
+                     [icon]="faSpinner"
+                     spin="true"></fa-icon>
         </button>
     </div>
 </div>

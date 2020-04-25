@@ -18,7 +18,8 @@
 
     &__remove {
         font-size: 0.75em;
-        top: 8px;
+        top: 7px;
+        position: relative;
 
         &:not(.disabled):hover {
             cursor: pointer;

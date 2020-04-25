@@ -4,6 +4,7 @@ import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
 import { SliderPips } from '../../slider-wrapper/slider-wrapper.component';
 import { Observable, Subscription } from 'rxjs';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { UserConfiguration } from 'uhk-common';
 
 @Component({
@@ -24,6 +25,7 @@ export class LEDBrightnessComponent implements OnInit, OnDestroy {
         density: 6,
         stepped: true
     };
+    faSlidersH = faSlidersH;
 
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;

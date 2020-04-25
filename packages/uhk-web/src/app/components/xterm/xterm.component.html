@@ -6,12 +6,13 @@
     </div>
     <div class="copy-container-wrapper">
         <div class="copy-container">
-            <span class="fa  fa-2x fa-copy"
-                  ngxClipboard
-                  [cbContent]="getClipboardContent()"
-                  title="Copy to clipboard"
-                  data-toggle="tooltip"
-                  data-placement="top"></span>
+            <fa-icon [icon]="faCopy"
+                     size="2x"
+                     ngxClipboard
+                     [cbContent]="getClipboardContent()"
+                     title="Copy to clipboard"
+                     data-toggle="tooltip"
+                     data-placement="top"></fa-icon>
         </div>
     </div>
 </div>

@@ -8,6 +8,7 @@ import {
     Output,
     SimpleChanges
 } from '@angular/core';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -41,6 +42,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     selectedScancodeOption: SelectOptionData;
     selectedSecondaryRoleIndex: number;
     warningVisible: boolean;
+    faInfoCircle = faInfoCircle;
 
     constructor(private mapper: MapperService,
                 private cdRef: ChangeDetectorRef) {

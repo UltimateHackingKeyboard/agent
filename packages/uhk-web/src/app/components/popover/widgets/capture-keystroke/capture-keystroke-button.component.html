@@ -4,7 +4,7 @@
     'btn-default': !record && !isLink,
     'btn-info': record && !isLink
 }" (click)="start($event)">
-    <i class="fa fa-circle"></i>
+    <fa-icon [icon]="faCircle"></fa-icon>
 
     <ng-template [ngIf]="!record">
     {{ captureText }}

@@ -13,8 +13,7 @@
                 [class.disabled]="tab.disabled"
                 (click)="selectTab(tab)">
                 <a class="menu-tabs--item">
-                    <i class="fa"
-                       [ngClass]="tab.icon"></i>
+                    <fa-icon [icon]="tab.icon"></fa-icon>
                     <span>{{ tab.text }}</span>
                 </a>
             </li>

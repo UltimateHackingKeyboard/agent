@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { Key } from 'ts-keycode-enum';
 
@@ -21,6 +22,8 @@ export class CaptureKeystrokeButtonComponent {
     @Output() capture = new EventEmitter<KeyCaptureData>();
 
     record: boolean;
+    faCircle = faCircle;
+
     private first: boolean; // enable usage of Enter to start capturing
     private scanCodePressed: boolean;
 

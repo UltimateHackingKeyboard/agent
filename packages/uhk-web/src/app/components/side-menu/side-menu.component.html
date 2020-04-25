@@ -7,15 +7,21 @@
                              [css]="'side-menu-pane-title__name'"
                              [disabled]="state.restoreUserConfiguration || state.updatingFirmware"
                              (ngModelChange)="editDeviceName($event)"></auto-grow-input>
-            <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'device')"></i>
+            <fa-icon [icon]="this.sideMenuState.device.icon"
+                     class="chevron pull-right"
+                     (click)="toggleMenuItem('device')"></fa-icon>
+
         </div>
-        <ul [@toggler]="animation['device']">
+        <ul [@toggler]="this.sideMenuState.device.animation">
             <li class="sidebar__level-1--item">
                 <div class="sidebar__level-1">
-                    <i class="fa fa-sliders"></i> Device
-                    <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'configuration')"></i>
+                    <fa-icon [icon]="faSlidersH"></fa-icon>
+                    Device
+                    <fa-icon [icon]="this.sideMenuState.configuration.icon"
+                             class="chevron pull-right"
+                             (click)="toggleMenuItem('configuration')"></fa-icon>
                 </div>
-                <ul [@toggler]="animation['configuration']">
+                <ul [@toggler]="this.sideMenuState.configuration.animation">
                     <li class="sidebar__level-2--item"
                         *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
@@ -54,23 +60,22 @@
             <li class="sidebar__level-1--item"
                 *ngIf="!state.restoreUserConfiguration">
                 <div class="sidebar__level-1">
-                    <i class="fa fa-keyboard-o"></i> Keymaps
-                    <!--a [routerLink]="['/keymap/add']"
-                       class="btn btn-default pull-right btn-sm"
-                       [class.disabled]="updatingFirmware$ | async">
-                        <i class="fa fa-plus"></i>
-                    </a-->
-                    <i class="fa fa-chevron-up pull-right"
-                       (click)="toggleHide($event, 'keymap')"></i>
+                    <fa-icon [icon]="faKeyboard"></fa-icon> Keymaps
+                    <fa-icon [icon]="this.sideMenuState.keymap.icon"
+                             class="chevron pull-right"
+                             (click)="toggleMenuItem('keymap')"></fa-icon>
                 </div>
-                <ul [@toggler]="animation['keymap']">
+                <ul [@toggler]="this.sideMenuState.keymap.animation">
                     <li *ngFor="let keymap of state.keymaps" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/keymap', keymap.abbreviation]"
                                [class.disabled]="state.updatingFirmware">{{keymap.name}}</a>
-                            <i *ngIf="keymap.isDefault" class="fa fa-star sidebar__fav"
-                               title="This is the default keymap which gets activated when powering the keyboard."
-                               data-toggle="tooltip" data-placement="bottom"></i>
+                            <fa-icon *ngIf="keymap.isDefault"
+                                     [icon]="faStar"
+                                     class="sidebar__fav"
+                                     title="This is the default keymap which gets activated when powering the keyboard."
+                                     data-toggle="tooltip"
+                                     data-placement="bottom"></fa-icon>
                         </div>
                     </li>
                 </ul>
@@ -78,15 +83,18 @@
             <li class="sidebar__level-1--item"
                 *ngIf="!state.restoreUserConfiguration">
                 <div class="sidebar__level-1">
-                    <i class="fa fa-play"></i> Macros
+                    <fa-icon [icon]="faPlay"></fa-icon>
+                    Macros
                     <a (click)="addMacro()"
                        class="btn btn-default pull-right btn-sm"
                        [class.disabled]="state.updatingFirmware">
-                        <i class="fa fa-plus"></i>
+                        <fa-icon [icon]="faPlus"></fa-icon>
                     </a>
-                    <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'macro')"></i>
+                    <fa-icon [icon]="this.sideMenuState.macro.icon"
+                             class="chevron pull-right"
+                             (click)="toggleMenuItem('macro')"></fa-icon>
                 </div>
-                <ul [@toggler]="animation['macro']">
+                <ul [@toggler]="this.sideMenuState.macro.animation">
                     <li *ngFor="let macro of state.macros" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/macro', macro.id]"
@@ -102,10 +110,13 @@
             </li>
             <li class="sidebar__level-1--item" *ngIf="state.showAddonMenu">
                 <div class="sidebar__level-1">
-                    <i class="fa fa-puzzle-piece"></i> Modules
-                    <i class="fa fa-chevron-up pull-right" (click)="toggleHide($event, 'addon')"></i>
+                    <fa-icon [icon]="faPuzzlePiece"></fa-icon>
+                    Modules
+                    <fa-icon [icon]="this.sideMenuState.addon.icon"
+                             class="chevron pull-right"
+                             (click)="toggleMenuItem('addon')"></fa-icon>
                 </div>
-                <ul [@toggler]="animation['addon']">
+                <ul [@toggler]="this.sideMenuState.addon.animation">
                     <li class="sidebar__level-2--item" data-name="Key cluster" data-abbrev="">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/add-on', 'Key cluster']"
@@ -137,10 +148,11 @@
     <li class="sidebar__level-0--item" [routerLinkActive]="['active']">
         <div class="sidebar__level-0">
             <i class="uhk-icon uhk-icon-pure-agent-icon"></i> Agent
-            <i class="fa fa-chevron-up pull-right"
-               (click)="toggleHide($event, 'agent')"></i>
+            <fa-icon [icon]="this.sideMenuState.agent.icon"
+                     class="chevron pull-right"
+                     (click)="toggleMenuItem('agent')"></fa-icon>
         </div>
-        <ul [@toggler]="animation['agent']">
+        <ul [@toggler]="this.sideMenuState.agent.animation">
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/settings']"

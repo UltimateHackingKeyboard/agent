@@ -4,6 +4,7 @@ import {
     Input
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { faCopy, faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Macro } from 'uhk-common';
 
 import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
@@ -19,6 +20,10 @@ import * as util from '../../../util';
 export class MacroHeaderComponent {
     @Input() macro: Macro;
     @Input() isNew: boolean;
+
+    faCopy = faCopy;
+    faPlay = faPlay;
+    faTrash = faTrash;
 
     constructor(private store: Store<AppState>) {
     }

@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-
 import { KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
-import { KeypressTabComponent, Tab } from '../../../../popover/tab';
+import { faHandPaper, faHandPointer, faHandRock } from '@fortawesome/free-solid-svg-icons';
+
+import { KeypressTabComponent } from '../../../../popover/tab';
 import { MacroBaseComponent } from '../macro-base.component';
 
 enum TabName {
@@ -28,6 +29,9 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     /* tslint:enable:variable-name */
     activeTab: TabName;
     defaultKeyAction: KeystrokeAction;
+    faHandPaper = faHandPaper;
+    faHandPointer = faHandPointer;
+    faHandRock = faHandRock;
 
     ngOnInit() {
         if (!this.macroAction) {

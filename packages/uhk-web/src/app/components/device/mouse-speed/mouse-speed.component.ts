@@ -5,6 +5,7 @@ import { SetUserConfigurationValueAction } from '../../../store/actions/user-con
 import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
 import { Observable, Subscription } from 'rxjs';
 import { UserConfiguration } from 'uhk-common';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { ResetPcMouseSpeedSettingsAction, ResetMacMouseSpeedSettingsAction } from '../../../store/actions/device';
 
 const MOUSE_MOVE_VALUE_MULTIPLIER = 25;
@@ -112,6 +113,7 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
         max: 255,
         step: 1
     };
+    faSlidersH = faSlidersH;
 
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;

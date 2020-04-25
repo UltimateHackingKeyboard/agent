@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { faKeyboard, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Keymap } from 'uhk-common';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -20,6 +21,9 @@ import { AddKeymapAction } from '../../../store/actions/keymap';
 export class KeymapAddComponent {
     presets$: Observable<Keymap[]>;
     presetsAll$: Observable<Keymap[]>;
+    faKeyboard = faKeyboard;
+    faSearch = faSearch;
+
     private filterExpression$: BehaviorSubject<string>;
 
     constructor(private store: Store<AppState>) {

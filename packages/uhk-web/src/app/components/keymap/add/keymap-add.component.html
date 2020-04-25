@@ -1,11 +1,11 @@
 <h1>
-    <i class="fa fa-keyboard-o"></i>
+    <fa-icon [icon]="faKeyboard"></fa-icon>
     <span>Add new keymap</span>
 </h1>
 <div class="keymap__search clearfix">
     <div class="input-group">
         <span class="input-group-addon" id="sizing-addon1">
-            <i class="fa fa-search"></i>
+        <fa-icon [icon]="faSearch"></fa-icon>
         </span>
         <input type="text" class="form-control" placeholder="Search ..." (input)="filterKeyboards($event.target.value)">
     </div>
