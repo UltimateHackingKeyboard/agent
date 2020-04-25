@@ -67,7 +67,7 @@
     "nrf-intel-hex": "1.3.0",
     "pre-commit": "1.2.2",
     "request": "2.88.0",
-    "rimraf": "2.6.1",
+    "rimraf": "3.0.2",
     "source-map-support": "0.5.9",
     "stylelint": "11.1.1",
     "svg-sprite": "1.5.0",
