@@ -1,13 +1,19 @@
-.alert {
-    padding: 5px 10px 5px 5px;
+:host {
+    position: fixed;
+    right: 1em;
 
-    margin-bottom: 0.25em;
-    margin-top: -2em;
+    .alert {
+        padding: 5px 10px 5px 5px;
 
-    .close {
-        right: -5px;
-    }
-    .undo-button {
-        cursor: pointer;
+        margin-bottom: 0.25em;
+        margin-top: -2em;
+
+        .close {
+            right: -5px;
+        }
+
+        .undo-button {
+            cursor: pointer;
+        }
     }
 }
