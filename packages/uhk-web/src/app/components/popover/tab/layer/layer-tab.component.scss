@@ -6,17 +6,19 @@
         justify-content: center;
     }
 
-    > span,
-    > select {
+    > span {
         margin: 0 5px;
         display: flex;
         align-items: center;
     }
-}
 
-select {
-    background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    padding: 4px 20px 4px 8px;
+    .select-toggle-container {
+        display: inline-block;
+        width: 7em;
+    }
+
+    .select-layer-container {
+        display: inline-block;
+        width: 6em;
+    }
 }
