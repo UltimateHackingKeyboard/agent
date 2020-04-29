@@ -1,4 +1,5 @@
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
@@ -24,13 +25,16 @@ const noop = (_: any) => {
             useExisting: forwardRef(() => AutoGrowInputComponent),
             multi: true
         }
-    ]
+    ],
+    styleUrls: ['./auto-grow-input.component.scss']
 })
-export class AutoGrowInputComponent implements ControlValueAccessor {
-    @Input() maxParentWidthPercent = 1;
+export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewInit {
+    @Input() maxParentWidthPercent;
+    @Input() maxParentWidthOffset;
     @Input() css: string;
+    @Input() selectAfterInit = false;
 
-    @ViewChild('inputControl', { static: true }) inputControl: ElementRef;
+    @ViewChild('inputControl', { static: true }) inputControl: ElementRef<HTMLInputElement>;
 
     disabled: boolean;
 
@@ -50,9 +54,19 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
     private _originalModel: string;
     private _onChanged = noop;
     private _onTouched = noop;
+    private _inEditMode = false;
 
     constructor(private _cdRef: ChangeDetectorRef,
                 private _renderer: Renderer2) {
+    }
+
+    ngAfterViewInit(): void {
+        if (this.selectAfterInit) {
+            setTimeout(() => {
+                this.inputControl.nativeElement.select();
+                this.selectAfterInit = false;
+            });
+        }
     }
 
     registerOnChange(fn: any): void {
@@ -89,10 +103,19 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
     }
 
     focus(): void {
+        setTimeout(() => {
+            this.inputControl.nativeElement.focus();
+        });
+    }
+
+    inputFocus(): void {
+        this._inEditMode = true;
+        this.calculateTextWidth(this.model);
         this._onTouched(this);
     }
 
     blur(): void {
+        this._inEditMode = false;
         if (!util.isValidName(this._model) || this._model.trim() === this._originalModel) {
             this._model = this._originalModel;
             this.calculateTextWidth(this._model);
@@ -101,6 +124,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
         }
 
         this._originalModel = this._model;
+        this.calculateTextWidth(this._model);
         this._onChanged(this._model);
     }
 
@@ -110,8 +134,20 @@ export class AutoGrowInputComponent implements ControlValueAccessor {
 
     calculateTextWidth(text: string): void {
         const htmlInput = this.inputControl.nativeElement as HTMLInputElement;
-        const maxWidth = htmlInput.parentElement.parentElement.offsetWidth * this.maxParentWidthPercent;
-        const textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
+        let maxWidth = htmlInput.parentElement.parentElement.offsetWidth;
+
+        if (this.maxParentWidthPercent) {
+            maxWidth *= this.maxParentWidthPercent;
+        } else if (this.maxParentWidthOffset) {
+            maxWidth -= this.maxParentWidthOffset;
+        }
+
+        let textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
+
+        if (this._inEditMode) {
+            textWidth += util.getContentWidth(window.getComputedStyle(htmlInput), 'W') * 1.1;
+        }
+
         this._renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
     }
 }

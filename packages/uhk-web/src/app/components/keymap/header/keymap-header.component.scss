@@ -58,26 +58,17 @@
 .pane-title {
     margin-bottom: 1em;
 
-    &__name,
     &__abbrev {
         border: none;
         border-bottom: 2px dotted #999;
         padding: 0;
         margin: 0 0.25rem;
+        width: 90px;
+        text-align: center;
 
         &:focus {
             box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;
             border-color: transparent;
         }
-    }
-
-    &__name {
-        width: 290px;
-        text-overflow: ellipsis;
-    }
-
-    &__abbrev {
-        width: 90px;
-        text-align: center;
     }
 }

@@ -5,6 +5,6 @@
        [disabled]="disabled"
        [(ngModel)]="model"
        (blur)="blur()"
-       (focus)="focus()"
+       (focus)="inputFocus()"
        (keyup.enter)="keyEnter($event)"
        (keyup)="calculateTextWidth($event.target.value)">
