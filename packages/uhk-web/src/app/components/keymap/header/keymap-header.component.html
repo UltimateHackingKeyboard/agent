@@ -2,13 +2,10 @@
     <div class="row">
         <h1 class="col-xs-12 pane-title">
             <i class="fa fa-keyboard-o"></i>
-            <input #name cancelable
-                   class="keymap__name pane-title__name"
-                   type="text"
-                   (change)="editKeymapName($event.target.value)"
-                   (keyup.enter)="name.blur()"
-                   (keyup)="calculateHeaderTextWidth($event.target.value)"
-            /> keymap
+            <auto-grow-input [ngModel]="keymap.name"
+                             maxParentWidthOffset="530"
+                             (ngModelChange)="editKeymapName($event)"></auto-grow-input>
+            keymap
             (<input #abbr cancelable
                     class="keymap__abbrev pane-title__abbrev"
                     type="text"

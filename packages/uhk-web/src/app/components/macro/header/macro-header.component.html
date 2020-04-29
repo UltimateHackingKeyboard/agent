@@ -2,12 +2,10 @@
     <div class="row">
         <h1 class="col-xs-12 pane-title">
             <i class="fa fa-play"></i>
-            <input #macroName cancelable
-                   class="pane-title__name"
-                   type="text"
-                   (change)="editMacroName($event.target.value)"
-                   (keyup.enter)="macroName.blur()"
-                   (keyup)="calculateHeaderTextWidth($event.target.value)">
+            <auto-grow-input [ngModel]="macro.name"
+                             maxParentWidthPercent="0.8"
+                             [selectAfterInit]="isNew"
+                             (ngModelChange)="editMacroName($event)"></auto-grow-input>
             <i class="glyphicon glyphicon-trash macro__remove pull-right" title=""
                data-toggle="tooltip"
                data-placement="bottom"

@@ -3,7 +3,6 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    HostListener,
     Input,
     OnChanges,
     Output,
@@ -39,7 +38,6 @@ export class KeymapHeaderComponent implements OnChanges {
     @Input() deletable: boolean;
     @Output() downloadClick = new EventEmitter<void>();
 
-    @ViewChild('name', { static: true }) keymapName: ElementRef;
     @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef;
 
     starTitle: string;
@@ -50,17 +48,11 @@ export class KeymapHeaderComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap']) {
             this.setKeymapTitle();
-            this.setName();
             this.setAbbreviation();
         }
         if (changes['deletable']) {
             this.setTrashTitle();
         }
-    }
-
-    @HostListener('window:resize')
-    windowResize(): void {
-        this.calculateHeaderTextWidth(this.keymap.name);
     }
 
     setDefault() {
@@ -81,7 +73,6 @@ export class KeymapHeaderComponent implements OnChanges {
 
     editKeymapName(name: string) {
         if (!util.isValidName(name)) {
-            this.setName();
             return;
         }
 
@@ -118,18 +109,6 @@ export class KeymapHeaderComponent implements OnChanges {
 
     onDownloadIconClick(): void {
         this.downloadClick.emit();
-    }
-
-    calculateHeaderTextWidth(text): void {
-        const htmlInput = this.keymapName.nativeElement as HTMLInputElement;
-        const maxWidth = htmlInput.parentElement.offsetWidth - 530;
-        const textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
-        this.renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
-    }
-
-    private setName(): void {
-        this.renderer.setProperty(this.keymapName.nativeElement, 'value', this.keymap.name);
-        this.calculateHeaderTextWidth(this.keymap.name);
     }
 
     private setAbbreviation() {
