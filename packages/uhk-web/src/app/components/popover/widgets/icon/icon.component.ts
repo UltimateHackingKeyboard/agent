@@ -3,7 +3,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import {
     faClock,
     faFont,
-    faGripVertical,
+    faGripLinesVertical,
     faHandPaper,
     faHandPointer,
     faHandRock,
@@ -60,7 +60,7 @@ export class IconComponent implements OnChanges {
                 break;
 
             case 'option-vertical':
-                this.icon = faGripVertical;
+                this.icon = faGripLinesVertical;
                 break;
 
             case 'mouse-pointer':
