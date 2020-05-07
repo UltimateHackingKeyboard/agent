@@ -145,10 +145,13 @@ export class UserConfigEffects {
 
                 } catch (err) {
                     this.logService.error('Eeprom user-config parse error:', err);
-                    const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
-
-                    result.push(new HasBackupUserConfigurationAction(!!data.backupConfiguration));
-                    result.push(new LoadUserConfigSuccessAction(userConfig));
+                    if (data.backupConfiguration) {
+                        const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
+                        result.push(new HasBackupUserConfigurationAction(true));
+                        result.push(new LoadUserConfigSuccessAction(userConfig));
+                    } else {
+                        result.push(new HasBackupUserConfigurationAction(false));
+                    }
 
                     newPageDestination = ['/device/restore-user-configuration'];
                 }
