@@ -6,7 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.4.4] - 2019-04-20
+## [1.4.5] - 2020-05-07
+
+Firmware: 8.9.**3** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.9.3)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Use Font Awesome 5 icons instead of Font Awesome 4.
+- Update Agent icon and favicon.
+- Don't stuck at the loading screen when on-board user configuration is invalid and there is no previous configuration saved by Agent.
+
+## [1.4.4] - 2020-04-20
 
 Firmware: 8.**9.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.9.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -19,13 +27,13 @@ Firmware: 8.**9.0** [[release](https://github.com/UltimateHackingKeyboard/firmwa
 - Center-align the explanation text in the key action popover under Mouse speed.
 - Fix the favicon of the web build.
 
-## [1.4.3] - 2019-03-01
+## [1.4.3] - 2020-03-01
 
 Firmware: 8.8.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Make firmware updates on Linux much more stable.
 
-## [1.4.2] - 2019-02-23
+## [1.4.2] - 2020-02-23
 
 Firmware: 8.8.**1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -33,7 +41,7 @@ Firmware: 8.8.**1** [[release](https://github.com/UltimateHackingKeyboard/firmwa
 - Fix false "Your configuration occupies ${configSize} bytes, which is larger than the available 1 bytes ..." warning message.
 - Make Agent properly start up when run by root on Linux.
 
-## [1.4.1] - 2019-02-16
+## [1.4.1] - 2020-02-16
 
 Firmware: 8.**8.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.8.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -42,7 +50,7 @@ Firmware: 8.**8.0** [[release](https://github.com/UltimateHackingKeyboard/firmwa
 - Add the --help command line option which lists the available options and exits.
 - Display macro shortcuts in LShift + LAlt + Tab format.
 
-## [1.4.0] - 2019-02-04
+## [1.4.0] - 2020-02-04
 
 Firmware: 8.7.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.**7.0** | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -51,7 +59,7 @@ Firmware: 8.7.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 - Fix sporadic "User configuration size is 0" error which happened upon switching to the configuration page.
 - Make get-device-state.js display toggled layer state. `DEVICEPROTOCOL:MINOR`
 
-## [1.3.2] - 2019-01-20
+## [1.3.2] - 2020-01-20
 
 Firmware: 8.7.**0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.7.0)] | Device Protocol: 4.6.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
