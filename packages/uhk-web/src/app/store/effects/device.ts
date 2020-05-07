@@ -182,7 +182,7 @@ export class DeviceEffects {
                     mergeMap(() => {
                         const actions = [new HideSaveToKeyboardButton()];
 
-                        if (state.device.hasBackupUserConfiguration) {
+                        if (state.device.restoreUserConfiguration) {
                             actions.push(new RestoreUserConfigurationFromBackupSuccessAction());
                             this.router.navigate(['/']);
                         }

@@ -25,6 +25,7 @@ export interface State {
     log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
     hasBackupUserConfiguration: boolean;
+    restoreUserConfiguration: boolean;
     halvesInfo: HalvesInfo;
     readingConfigSizes: boolean;
     configSizes: ConfigSizesInfo;
@@ -52,6 +53,7 @@ export const initialState: State = {
     log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
     hasBackupUserConfiguration: false,
+    restoreUserConfiguration: false,
     halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: false },
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 }
@@ -206,12 +208,14 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.HasBackupUserConfiguration:
             return {
                 ...state,
+                restoreUserConfiguration: true,
                 hasBackupUserConfiguration: (action as Device.HasBackupUserConfigurationAction).payload
             };
 
         case Device.ActionTypes.RestoreConfigurationFromBackupSuccess:
             return {
                 ...state,
+                restoreUserConfiguration: false,
                 hasBackupUserConfiguration: false
             };
 
@@ -260,7 +264,7 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const xtermLog = (state: State) => state.log;
 export const getHardwareModules = (state: State) => state.modules;
-export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration;
+export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration || state.restoreUserConfiguration;
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
     return {
         restoringUserConfiguration: state.restoringUserConfiguration,
