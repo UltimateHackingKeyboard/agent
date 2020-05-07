@@ -15,6 +15,7 @@
         />)
             <fa-icon [icon]="starIcon"
                      [title]="starTitle"
+                     [class.keymap__is-default]="!keymap.isDefault"
                      data-toggle="tooltip"
                      data-placement="bottom"
                      (click)="setDefault()"

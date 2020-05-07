@@ -6,13 +6,10 @@
 
 .keymap {
     &__is-default {
+        cursor: pointer;
 
-        &.fa-star-o {
-            cursor: pointer;
-
-            &:hover {
-                color: $icon-hover;
-            }
+        &:hover {
+            color: $icon-hover;
         }
     }
 
