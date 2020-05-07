@@ -35,6 +35,7 @@ import { AppState, extraMouseButtonsSupported, getKeymapOptions, getKeymaps, mac
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 import { SelectOptionData } from '../../models/select-option-data';
+import { faSquareA } from '../../custom-fa-icons';
 
 enum TabName {
     Keypress,
@@ -119,7 +120,7 @@ export class PopoverComponent implements OnChanges {
     tabHeaders: TabHeader[] = [
         {
             tabName: TabName.Keypress,
-            icon: faKeyboard,
+            icon: faSquareA,
             text: 'Keypress'
         },
         {
