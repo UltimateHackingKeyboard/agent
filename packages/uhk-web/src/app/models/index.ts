@@ -7,3 +7,4 @@ export * from './side-menu-page-state';
 export * from './uhk-progress-bar-state';
 export * from './user-config-history-component-state';
 export * from './user-configuration-value';
+export * from './save-configuration-payload';
