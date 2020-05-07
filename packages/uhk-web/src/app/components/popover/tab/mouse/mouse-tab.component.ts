@@ -1,4 +1,15 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
+import {
+    faAngleDoubleDown,
+    faAngleDoubleLeft,
+    faAngleDoubleRight,
+    faAngleDoubleUp,
+    faArrowDown,
+    faArrowLeft,
+    faArrowRight,
+    faArrowUp,
+    faSquare
+} from '@fortawesome/free-solid-svg-icons';
 import { KeyAction, MouseAction, MouseActionParam } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -19,6 +30,15 @@ export class MouseTabComponent extends Tab implements OnChanges {
     mouseActionParam: MouseActionParam;
     selectedPageIndex: number;
     pages: string[];
+    faAngleDoubleDown = faAngleDoubleDown;
+    faAngleDoubleLeft = faAngleDoubleLeft;
+    faAngleDoubleRight = faAngleDoubleRight;
+    faAngleDoubleUp = faAngleDoubleUp;
+    faArrowDown = faArrowDown;
+    faArrowLeft = faArrowLeft;
+    faArrowUp = faArrowUp;
+    faArrowRight = faArrowRight;
+    faSquare = faSquare;
 
     constructor() {
         super();

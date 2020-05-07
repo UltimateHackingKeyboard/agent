@@ -1,6 +1,7 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { Constants, HardwareModules, UploadFileData, VersionInformation } from 'uhk-common';
 
 import {
@@ -40,6 +41,8 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     @ViewChild(XtermComponent, { static: false })
     xtermRef: XtermComponent;
+
+    faSlidersH = faSlidersH;
 
     private subscription = new Subscription();
 

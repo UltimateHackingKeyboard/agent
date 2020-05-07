@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
 import {
     DelayMacroAction,
     KeyMacroAction,
@@ -47,6 +48,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     editing: boolean;
     newItem: boolean = false;
     overflow = 'hidden';
+    faGripLinesVertical = faGripLinesVertical;
 
     constructor(private mapper: MapperService) { }
 

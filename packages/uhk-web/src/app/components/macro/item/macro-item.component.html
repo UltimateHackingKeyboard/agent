@@ -1,5 +1,8 @@
 <div class="list-group-item action--item" [class.is-editing]="editing">
-    <span *ngIf="movable" class="glyphicon glyphicon-option-vertical action--movable" aria-hidden="true"></span>
+    <fa-icon *ngIf="movable"
+             [icon]="faGripLinesVertical"
+             class="action--movable"
+             aria-hidden="true"></fa-icon>
     <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
         <icon [name]="iconName"></icon>
         <div class="action--title">{{ title }}</div>

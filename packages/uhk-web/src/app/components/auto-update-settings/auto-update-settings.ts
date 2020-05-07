@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { State } from '../../store/reducers/auto-update-settings';
 
@@ -13,6 +14,8 @@ export class AutoUpdateSettings {
 
     @Output() toggleCheckForUpdateOnStartUp = new EventEmitter<boolean>();
     @Output() checkForUpdate = new EventEmitter<boolean>();
+
+    faSpinner = faSpinner;
 
     constructor() {
     }

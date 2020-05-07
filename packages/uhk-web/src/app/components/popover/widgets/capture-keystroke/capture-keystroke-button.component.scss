@@ -1,4 +1,5 @@
 @import '../../../../../styles/common';
+@import '../../../../../styles/variables';
 
 .btn--capture-keystroke {
     display: inline-block;
@@ -9,6 +10,6 @@
     @extend %btn-link;
 }
 
-.fa-circle {
-    color: #c00;
+.record-circle {
+    color: $icon-hover-delete;
 }

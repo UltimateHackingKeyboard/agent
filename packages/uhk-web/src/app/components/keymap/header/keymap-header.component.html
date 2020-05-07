@@ -1,7 +1,7 @@
 <uhk-header>
     <div class="row">
         <h1 class="col-xs-12 pane-title">
-            <i class="fa fa-keyboard-o"></i>
+            <fa-icon [icon]="faKeyboard"></fa-icon>
             <auto-grow-input [ngModel]="keymap.name"
                              maxParentWidthOffset="530"
                              (ngModelChange)="editKeymapName($event)"></auto-grow-input>
@@ -13,33 +13,28 @@
                     (keyup.enter)="abbr.blur()"
                     [attr.maxLength]="3"
         />)
-            <i class="fa keymap__is-default"
-               [ngClass]="{'fa-star-o': !keymap.isDefault, 'fa-star': keymap.isDefault}"
-               data-toggle="tooltip"
-               data-placement="bottom"
-               [title]="starTitle"
-               (click)="setDefault()"
-            ></i>
-            <i class="glyphicon glyphicon-trash keymap__remove pull-right"
-               [title]="trashTitle"
-               [class.disabled]="!deletable"
-               data-toggle="tooltip"
-               data-placement="bottom"
-               html="true"
-               (click)="removeKeymap()"
-            ></i>
-            <i class="fa fa-files-o keymap__duplicate pull-right"
-               title="Duplicate keymap"
-               data-toggle="tooltip"
-               data-placement="bottom"
-               (click)="duplicateKeymap()"
-            ></i>
-            <!--i class="fa fa-download keymap__download pull-right"
-               title="Download keymap"
-               [html]="true"
-               data-toggle="tooltip"
-               data-placement="bottom"
-               (click)="onDownloadIconClick()"></i-->
+            <fa-icon [icon]="starIcon"
+                     [title]="starTitle"
+                     [class.keymap__is-default]="!keymap.isDefault"
+                     data-toggle="tooltip"
+                     data-placement="bottom"
+                     (click)="setDefault()"
+            ></fa-icon>
+            <fa-icon [icon]="faTrash"
+                     [title]="trashTitle"
+                     class="keymap__remove pull-right"
+                     data-toggle="tooltip"
+                     data-placement="bottom"
+                     html="true"
+                     (click)="removeKeymap()"
+            ></fa-icon>
+            <fa-icon [icon]="faCopy"
+                     class="keymap__duplicate pull-right"
+                     title="Duplicate keymap"
+                     data-toggle="tooltip"
+                     data-placement="bottom"
+                     (click)="duplicateKeymap()"
+            ></fa-icon>
         </h1>
     </div>
 </uhk-header>

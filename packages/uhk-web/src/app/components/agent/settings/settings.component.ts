@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import { AppState, appUpdateSettingsState, getAnimationEnabled } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
@@ -21,6 +22,7 @@ import { ToggleAnimationEnabledAction } from '../../../store/actions/app';
 export class SettingsComponent {
     updateSettingsState$: Observable<UpdateSettingsState>;
     animationEnabled$: Observable<boolean>;
+    faCog = faCog;
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);

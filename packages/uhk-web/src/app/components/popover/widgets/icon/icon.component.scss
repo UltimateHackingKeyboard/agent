@@ -16,7 +16,7 @@
 
     &--trash {
         &:hover {
-            color: #d9534f;
+            color: $icon-hover-delete;
             cursor: pointer;
         }
     }

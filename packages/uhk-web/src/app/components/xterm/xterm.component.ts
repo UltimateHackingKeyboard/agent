@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
+
 import { XtermLog } from '../../models/xterm-log';
 
 @Component({
@@ -11,6 +13,8 @@ export class XtermComponent implements OnChanges {
     @Input() logs: Array<XtermLog> = [];
 
     @ViewChild('scrollMe', { static: false }) divElement: ElementRef;
+
+    faCopy = faCopy;
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.logs) {

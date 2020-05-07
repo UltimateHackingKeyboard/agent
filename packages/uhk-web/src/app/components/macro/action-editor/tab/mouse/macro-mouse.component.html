@@ -3,31 +3,31 @@
         <ul class="nav nav-pills nav-stacked">
             <li #mouseMove [class.active]="activeTab === TabName.Move" (click)="selectTab(TabName.Move)">
                 <a>
-                    <i class="fa fa-arrows"></i>
+                    <fa-icon [icon]="faArrowsAlt" [fixedWidth]="true"></fa-icon>
                     <span>Move pointer</span>
                 </a>
             </li>
             <li #mouseScroll [class.active]="activeTab === TabName.Scroll" (click)="selectTab(TabName.Scroll)">
                 <a>
-                    <i class="fa fa-arrows-v"></i>
+                    <fa-icon [icon]="faArrowsAltV" [fixedWidth]="true"></fa-icon>
                     <span>Scroll</span>
                 </a>
             </li>
             <li #mouseClick [class.active]="activeTab === TabName.Click" (click)="selectTab(TabName.Click)">
                 <a>
-                    <i class="fa fa-mouse-pointer"></i>
+                    <fa-icon [icon]="faMousePointer" [fixedWidth]="true"></fa-icon>
                     <span>Click button</span>
                 </a>
             </li>
             <li #mouseHold [class.active]="activeTab === TabName.Hold" (click)="selectTab(TabName.Hold)">
                 <a>
-                    <i class="fa fa-hand-rock-o"></i>
+                    <fa-icon [icon]="faHandRock" [fixedWidth]="true"></fa-icon>
                     <span>Hold button</span>
                 </a>
             </li>
             <li #mouseRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
                 <a>
-                    <i class="fa fa-hand-paper-o"></i>
+                    <fa-icon [icon]="faHandPaper" [fixedWidth]="true"></fa-icon>
                     <span>Release button</span>
                 </a>
             </li>

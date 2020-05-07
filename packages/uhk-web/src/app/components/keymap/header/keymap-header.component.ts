@@ -13,6 +13,9 @@ import {
 import { Keymap } from 'uhk-common';
 
 import { Store } from '@ngrx/store';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faCopy, faKeyboard, faStar as faSolidStar, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faStar as faRegularStar } from '@fortawesome/free-regular-svg-icons';
 
 import { AppState } from '../../../store';
 import {
@@ -41,7 +44,11 @@ export class KeymapHeaderComponent implements OnChanges {
     @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef;
 
     starTitle: string;
+    starIcon: IconDefinition;
     trashTitle: string = DEFAULT_TRASH_TITLE;
+    faKeyboard = faKeyboard;
+    faCopy = faCopy;
+    faTrash = faTrash;
 
     constructor(private store: Store<AppState>, private renderer: Renderer2) { }
 
@@ -96,19 +103,19 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     setKeymapTitle(): void {
-        this.starTitle = this.keymap.isDefault
-            ? 'This is the default keymap which gets activated when powering the keyboard.'
-            : 'Makes this keymap the default keymap which gets activated when powering the keyboard.';
+        if (this.keymap.isDefault) {
+            this.starTitle = 'This is the default keymap which gets activated when powering the keyboard.';
+            this.starIcon = faSolidStar;
+        } else {
+            this.starTitle = 'Makes this keymap the default keymap which gets activated when powering the keyboard.';
+            this.starIcon = faRegularStar;
+        }
     }
 
     setTrashTitle(): void {
         this.trashTitle = this.deletable
             ? DEFAULT_TRASH_TITLE
             : '<span class="text-nowrap">The last keymap cannot be deleted.</span>';
-    }
-
-    onDownloadIconClick(): void {
-        this.downloadClick.emit();
     }
 
     private setAbbreviation() {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { faWrench } from '@fortawesome/free-solid-svg-icons';
 
 import { XtermLog } from '../../../models/xterm-log';
 import { AppState, flashFirmwareButtonDisabled, updatingFirmware, xtermLog } from '../../../store';
@@ -20,6 +21,7 @@ export class RecoveryModeComponent implements OnInit {
     updatingFirmware$: Observable<boolean>;
 
     xtermLog$: Observable<Array<XtermLog>>;
+    faWrench = faWrench;
 
     constructor(private store: Store<AppState>) {
     }

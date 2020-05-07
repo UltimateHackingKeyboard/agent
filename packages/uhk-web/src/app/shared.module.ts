@@ -10,6 +10,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
@@ -210,6 +211,7 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
     imports: [
         CommonModule,
         BrowserAnimationsModule,
+        FontAwesomeModule,
         FormsModule,
         DragulaModule.forRoot(),
         routing,

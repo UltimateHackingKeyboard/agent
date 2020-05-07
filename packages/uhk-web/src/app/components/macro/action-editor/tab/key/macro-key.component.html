@@ -3,19 +3,19 @@
         <ul class="nav nav-pills nav-stacked">
             <li #keyMove [class.active]="activeTab === TabName.Tap" (click)="selectTab(TabName.Tap)">
                 <a>
-                    <i class="fa fa-hand-pointer-o"></i>
+                    <fa-icon [icon]="faHandPointer"></fa-icon>
                     <span>Tap key</span>
                 </a>
             </li>
             <li #keyHold [class.active]="activeTab === TabName.Press" (click)="selectTab(TabName.Press)">
                 <a>
-                    <i class="fa fa-hand-rock-o"></i>
+                    <fa-icon [icon]="faHandRock"></fa-icon>
                     <span>Press key</span>
                 </a>
             </li>
             <li #keyRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
                 <a>
-                    <i class="fa fa-hand-paper-o"></i>
+                    <fa-icon [icon]="faHandPaper"></fa-icon>
                     <span>Release key</span>
                 </a>
             </li>

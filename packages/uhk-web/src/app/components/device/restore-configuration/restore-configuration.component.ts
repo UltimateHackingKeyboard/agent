@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { AppState, getBackupUserConfigurationState } from '../../../store';
 import { ResetUserConfigurationAction, RestoreUserConfigurationFromBackupAction } from '../../../store/actions/device';
@@ -16,6 +17,7 @@ import { RestoreConfigurationState } from '../../../models/restore-configuration
 })
 export class RestoreConfigurationComponent implements OnInit, OnDestroy {
     state: RestoreConfigurationState;
+    faExclamationCircle = faExclamationCircle;
 
     private stateSubscription: Subscription;
 

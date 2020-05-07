@@ -5,11 +5,12 @@
 </ol>
 
 <div class="copy-container">
-                    <span class="fa  fa-2x fa-copy"
-                          ngxClipboard
-                          [cbContent]="command"
-                          title="Copy to clipboard"
-                          data-toggle="tooltip"
-                          data-placement="top"></span>
+    <fa-icon [icon]="faCopy"
+             size="2x"
+             ngxClipboard
+             [cbContent]="command"
+             title="Copy to clipboard"
+             data-toggle="tooltip"
+             data-placement="top"></fa-icon>
     <pre><code>{{ command }}</code></pre>
 </div>

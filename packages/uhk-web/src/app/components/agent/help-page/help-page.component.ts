@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'help-page',
@@ -10,4 +11,5 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     }
 })
 export class HelpPageComponent {
+    faQuestionCircle = faQuestionCircle;
 }
