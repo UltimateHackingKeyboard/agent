@@ -8,7 +8,6 @@ import {
     UploadFileData
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
-import { SaveConfigurationPayload } from '../../models';
 
 export enum ActionTypes {
     SetPrivilegeOnLinux = '[device] set privilege on linux',
@@ -61,7 +60,10 @@ export class ConnectionStateChangedAction implements Action {
 export class SaveConfigurationAction implements Action {
     type = ActionTypes.SaveConfiguration;
 
-    constructor(public payload: SaveConfigurationPayload) {
+    /**
+     * @param payload - if true then save user configuration in the history
+     */
+    constructor(public payload: boolean) {
     }
 }
 

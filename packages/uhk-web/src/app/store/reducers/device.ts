@@ -87,7 +87,7 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new Device.SaveConfigurationAction({ saveInHistory: true })
+                    action: new Device.SaveConfigurationAction(true)
                 }
             };
         }
@@ -121,7 +121,7 @@ export function reducer(state = initialState, action: Action): State {
                 saveToKeyboard: {
                     showButton: true,
                     text: 'Save to keyboard',
-                    action: new Device.SaveConfigurationAction({ saveInHistory: true })
+                    action: new Device.SaveConfigurationAction(true)
                 }
             };
         }
