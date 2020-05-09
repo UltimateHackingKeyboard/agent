@@ -1,6 +1,7 @@
 :host {
     position: fixed;
     right: 1em;
+    z-index: 100;
 
     .alert {
         padding: 5px 10px 5px 5px;
