@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
-  "license": "GPL-3.0",
+  "license": "See in LICENSE",
   "engines": {
     "node": ">=12.13.0 <13.0.0",
     "npm": ">=6.12.0 <7.0.0"

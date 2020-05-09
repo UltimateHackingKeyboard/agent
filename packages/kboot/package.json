@@ -1,6 +1,7 @@
 {
   "name": "kboot",
   "main": "dist/index.js",
+  "private": true,
   "version": "0.0.0",
   "description": "Javascript implementation of the Kinetis Bootloader protocol",
   "author": "Ultimate Gadget Laboratories",
@@ -8,7 +9,7 @@
     "type": "git",
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
-  "license": "GPL-3.0",
+  "license": "See in LICENSE",
   "dependencies": {
     "debug": "^4.1.1",
     "byte-data": "^16.0.3",

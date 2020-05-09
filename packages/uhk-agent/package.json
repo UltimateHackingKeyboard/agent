@@ -2,13 +2,14 @@
   "name": "uhk-agent",
   "main": "electron-main.js",
   "version": "0.0.0",
+  "private": true,
   "description": "Agent is the configuration application of the Ultimate Hacking Keyboard.",
   "author": "Ultimate Gadget Laboratories",
   "repository": {
     "type": "git",
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
-  "license": "GPL-3.0",
+  "license": "See in LICENSE",
   "dependencies": {
     "command-line-args": "5.1.1",
     "command-line-usage": "6.1.0",

@@ -1,7 +1,6 @@
 {
   "name": "uhk-web",
   "version": "1.0.0",
-  "license": "GPL-3.0",
   "scripts": {
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "ng": "ng",
@@ -19,6 +18,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
+  "license": "See in LICENSE",
   "devDependencies": {
     "@angular/animations": "9.1.1",
     "@angular-builders/custom-webpack": "9.1.0",

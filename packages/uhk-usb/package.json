@@ -1,9 +1,10 @@
 {
   "name": "uhk-usb",
   "version": "1.0.0",
+  "private": true,
   "description": "Agent preliminary USB code",
   "main": "dist/index.js",
-  "license": "GPL-3.0",
+  "license": "See in LICENSE",
   "scripts": {
     "build": "tsc",
     "lint": "tslint --project tsconfig.json"

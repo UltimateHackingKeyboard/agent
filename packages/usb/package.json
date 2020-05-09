@@ -1,9 +1,10 @@
 {
   "name": "agent-usb",
   "version": "1.0.0",
+  "private": true,
   "description": "Agent USB scripts",
   "main": "uhk.js",
-  "license": "GPL-3.0",
+  "license": "See in LICENSE",
   "devDependencies": {
     "shx": "0.2.2",
     "typescript": "2.6.2"
