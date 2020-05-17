@@ -58,3 +58,4 @@ jobs:
           CERT_IV: ${{ secrets.CERT_IV }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
