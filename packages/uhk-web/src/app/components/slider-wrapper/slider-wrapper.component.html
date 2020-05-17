@@ -1,7 +1,10 @@
 <label *ngIf="label">
     <span [innerHtml]="label"></span>
+    <ng-template #htmlTooltipTemplate>
+        <div [innerHTML]="htmlTooltip()"></div>
+    </ng-template>
     <icon name="question-circle"
-            [ngbTooltip]="tooltip"
+            [ngbTooltip]="htmlTooltipTemplate"
             placement="bottom"
             *ngIf="tooltip"></icon>
 </label>
