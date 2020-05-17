@@ -18,6 +18,8 @@ let branchName = '';
 let pullRequestNr = '';
 let gitTag = '';
 let repoName = '';
+let githubRef = '';
+let githubEventName = '';
 
 if (process.env.TRAVIS) {
     branchName = process.env.TRAVIS_BRANCH;
@@ -29,13 +31,17 @@ if (process.env.TRAVIS) {
     pullRequestNr = process.env.APPVEYOR_PULL_REQUEST_NUMBER;
     gitTag = process.env.APPVEYOR_REPO_TAG_NAME;
     repoName = process.env.APPVEYOR_REPO_NAME;
+} else if (process.env.GITHUB_ACTIONS) {
+    githubRef = process.env.GITHUB_REF;
+    githubEventName = process.env.GITHUB_EVENT_NAME;
+    repoName = process.env.GITHUB_REPOSITORY;
 }
 
-console.log({ branchName, pullRequestNr, gitTag, repoName });
+console.log({ branchName, pullRequestNr, gitTag, repoName, githubRef, githubEventName });
 
 const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
-if (!isReleaseCommit) {
+if (!isReleaseCommit && !process.env.GITHUB_ACTIONS) {
     console.log('It is not a release task. Skipping publish.');
     process.exit(0)
 }
@@ -47,13 +53,6 @@ const { notarize } = require('electron-notarize');
 
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
-
-let sha = '';
-if (process.env.TRAVIS) {
-    sha = process.env.TRAVIS_COMMIT;
-} else if (process.env.APPVEYOR) {
-    sha = process.env.APPVEYOR_REPO_COMMIT;
-}
 
 let target = '';
 let artifactName = 'UHK.Agent-${version}-${os}';

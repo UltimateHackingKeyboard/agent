@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - master
+  release:
+    types:
+      - created
 
 jobs:
   test:
@@ -18,25 +21,34 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: github.event
+        run: echo "::warning::${{github.event}}"
 
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-
-      - name: Use Node.js (.nvmrc)
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ steps.nvm.outputs.NVMRC }}
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run linters
-        run: npm run lint
-
-      - name: Run Build
-        run: npm run build
-
-      - name: Run test
-        run: npm test
+      - name: github.event_path
+        run: echo "::warning::${{github.event_path}}"
+#      - uses: actions/checkout@v2
+#
+#      - name: Read .nvmrc
+#        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+#        id: nvm
+#
+#      - name: Use Node.js (.nvmrc)
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{ steps.nvm.outputs.NVMRC }}
+#
+#      - name: Install dependencies
+#        run: npm install
+#
+#      - name: Run linters
+#        run: npm run lint
+#
+#      - name: Run Build
+#        run: npm run build
+#
+#      - name: Run test
+#        run: npm test
+#
+#      - name: Release
+#        run: node ./scripts/release.js
+#        if: on.release.created
