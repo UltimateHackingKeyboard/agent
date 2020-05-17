@@ -5,12 +5,37 @@ $dark-grey: #ccc;
 
 $icon-hover: #337ab7;
 $icon-hover-delete: #900;
+$white: #fff;
+$black: #000;
+$border-radius: 0.25rem;
 
-$tooltip-border-width: 1px;
-$tooltip-arrow-width: 5px;
-$tooltip-border-color: $dark-grey;
-$tooltip-background-color: #fff;
-$tooltip-inner-color: #000;
+$spacer: 1rem;
+$spacers: (
+    0: 0,
+    1: $spacer / 4,
+    2: $spacer / 2,
+    3: $spacer,
+    4: $spacer * 1.5,
+    5: $spacer * 3,
+);
+
+$zindex-tooltip: 50001;
+
+$tooltip-font-size:                 12px;
+$tooltip-max-width:                 200px;
+$tooltip-color:                     $black;
+$tooltip-bg:                        $white;
+$tooltip-border-radius:             $border-radius;
+$tooltip-border-width:              1px;
+$tooltip-border-color:              $dark-grey;
+$tooltip-opacity:                   1;
+$tooltip-padding-y:                 $spacer / 4;
+$tooltip-padding-x:                 $spacer / 2;
+$tooltip-margin:                    0;
+
+$tooltip-arrow-width:               12px;
+$tooltip-arrow-height:              6px;
+$tooltip-arrow-color:               $dark-grey;
 $tooltip-arrow-border-width: $tooltip-arrow-width + $tooltip-border-width;
 
 $update-notification-height: 35px;

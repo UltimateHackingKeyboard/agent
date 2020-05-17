@@ -1,10 +1,8 @@
 <label *ngIf="label">
     <span [innerHtml]="label"></span>
     <icon name="question-circle"
-            data-toggle="tooltip"
-            [title]="tooltip"
-            html="true"
-            data-placement="bottom"
+            [ngbTooltip]="tooltip"
+            placement="bottom"
             *ngIf="tooltip"></icon>
 </label>
 <div class="slider-wrapper">

@@ -237,3 +237,28 @@ kbd {
     line-height: 1.4;
     white-space: nowrap;
 }
+
+.tooltip-nowrap .tooltip-inner {
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.tooltip-scancode .tooltip-inner {
+    width: 330px;
+    max-width: 330px;
+}
+
+.tooltip-modifier .tooltip-inner {
+    width: 370px;
+    max-width: 370px;
+}
+
+.tooltip-secondary-role .tooltip-inner {
+    width: 620px;
+    max-width: 620px;
+}
+
+.tooltip-macro-text .tooltip-inner {
+    width: 350px;
+    max-width: 350px;
+}

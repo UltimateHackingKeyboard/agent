@@ -73,9 +73,9 @@
                             <fa-icon *ngIf="keymap.isDefault"
                                      [icon]="faStar"
                                      class="sidebar__fav"
-                                     title="This is the default keymap which gets activated when powering the keyboard."
-                                     data-toggle="tooltip"
-                                     data-placement="bottom"></fa-icon>
+                                     ngbTooltip="This is the default keymap which gets activated when powering the keyboard."
+                                     container="body"
+                                     placement="bottom"></fa-icon>
                         </div>
                     </li>
                 </ul>
@@ -100,10 +100,9 @@
                             <a [routerLink]="['/macro', macro.id]"
                                [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
                                <span class="sidebar__macro_count badge"
-                                     title="This is the number of times the macro is used across all keymaps."
-                                     data-toggle="tooltip"
-                                     data-placement="bottom"
-                                     data-container="body">{{ macro.usageCount }}</span>
+                                     ngbTooltip="This is the number of times the macro is used across all keymaps."
+                                     placement="bottom"
+                                     container="body">{{ macro.usageCount }}</span>
                         </div>
                     </li>
                 </ul>

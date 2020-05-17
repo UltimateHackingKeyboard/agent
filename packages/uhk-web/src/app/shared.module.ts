@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
@@ -71,7 +72,7 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
-import { CancelableDirective, ExternalUrlDirective, TooltipDirective } from './directives';
+import { CancelableDirective, ExternalUrlDirective } from './directives';
 import { SafeStylePipe, UserConfigHistoryDisplayTextPipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
@@ -176,7 +177,6 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
         SettingsComponent,
         KeyboardSliderComponent,
         CancelableDirective,
-        TooltipDirective,
         SafeStylePipe,
         AutoUpdateSettings,
         UndoableNotifierComponent,
@@ -226,7 +226,8 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
             confirmButtonType: 'danger' // set defaults here
         }),
         ClipboardModule,
-        HttpClientModule
+        HttpClientModule,
+        NgbTooltipModule
     ],
     providers: [
         SvgModuleProviderService,

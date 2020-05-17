@@ -22,17 +22,18 @@
 
         </ngx-select>
     </div>
+    <ng-template #scanCodeTooltip>
+        <p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the label if your computer uses layout different from en-US. In such case, you need to pick the character of the desired key according to the en-US layout.</p>
+        <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the semicolon key, so choose semicolon in this dropdown.</p>
+        <p>Click to learn more about mappings and scancodes.</p>
+    </ng-template>
     <a class="btn btn-black-link btn-padding-0"
        href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
        externalUrl>
         <icon name="question-circle"
-              data-toggle="tooltip"
-              html="true"
-              maxWidth="330"
-              title="<p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the label if your computer uses layout different from en-US. In such case, you need to pick the character of the desired key according to the en-US layout.</p>
-                     <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the semicolon key, so choose semicolon in this dropdown.</p>
-                     <p>Click to learn more about mappings and scancodes.</p>"
-              data-placement="bottom"></icon>
+              [ngbTooltip]="scanCodeTooltip"
+              tooltipClass="tooltip-scancode"
+              placement="bottom"></icon>
     </a>
     <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0"></capture-keystroke-button>
 </div>
@@ -60,11 +61,9 @@
     </div>
     <b class="d-inline-block">
         <icon name="question-circle"
-              data-toggle="tooltip"
-              html="false"
-              maxWidth="370"
-              title="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
-              data-placement="bottom"></icon>
+              ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
+              tooltipClass="tooltip-modifier"
+              placement="bottom"></icon>
     </b>
 </div>
 <div class="long-press-container" *ngIf="secondaryRoleEnabled">
@@ -91,18 +90,19 @@
 
         </ngx-select>
     </div>
+    <ng-template #secondaryRoleTooltip>
+        <p class='text-left'>The secondary role activates when another key gets pressed while holding this key.</p>
+        <p class='text-left'>Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
+        <ul class='text-left'>
+            <li>Tap this key to trigger Escape. <i>(Primary role)</i></li>
+            <li>Hold this key and press another key to activate the relevant key of the Mouse layer. <i>(Secondary role)</i></li>
+        </ul>
+        <p class='text-left'>The secondary role can be any layer or modifier.</p>
+    </ng-template>
     <icon name="question-circle"
-          data-toggle="tooltip"
-          html="true"
-          maxWidth="620"
-          title="<p class='text-left'>The secondary role activates when another key gets pressed while holding this key.</p>
-                 <p class='text-left'>Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
-                 <ul class='text-left'>
-                     <li>Tap this key to trigger Escape. <i>(Primary role)</i></li>
-                     <li>Hold this key and press another key to activate the relevant key of the Mouse layer. <i>(Secondary role)</i></li>
-                 </ul>
-                 <p class='text-left'>The secondary role can be any layer or modifier.</p>"
-          data-placement="bottom"></icon>
+          [ngbTooltip]="secondaryRoleTooltip"
+          tooltipClass="tooltip-secondary-role"
+          placement="bottom"></icon>
 </div>
 
 <div *ngIf="warningVisible" class="alert alert-warning remap-warning" role="alert">

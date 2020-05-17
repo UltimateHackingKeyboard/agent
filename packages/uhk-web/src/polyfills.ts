@@ -57,9 +57,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-// This is hack of jQuery module loading logic
-// When loading in electron jQuery detect it is a node app and not load themself into window
-window['$'] = window['jQuery'] = require('../node_modules/jquery/dist/jquery.js');
+import '@angular/localize/init';
 
 // Other hack to survive
 // https://github.com/valor-software/ng2-dragula/issues/849#issuecomment-385518621

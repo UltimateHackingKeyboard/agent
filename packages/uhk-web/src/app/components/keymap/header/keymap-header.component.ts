@@ -27,7 +27,7 @@ import {
 } from '../../../store/actions/keymap';
 import * as util from '../../../util';
 
-const DEFAULT_TRASH_TITLE = '<span class="text-nowrap">Delete keymap</span>';
+const DEFAULT_TRASH_TITLE = 'Delete keymap';
 
 @Component({
     selector: 'keymap-header',
@@ -115,7 +115,7 @@ export class KeymapHeaderComponent implements OnChanges {
     setTrashTitle(): void {
         this.trashTitle = this.deletable
             ? DEFAULT_TRASH_TITLE
-            : '<span class="text-nowrap">The last keymap cannot be deleted.</span>';
+            : 'The last keymap cannot be deleted.';
     }
 
     private setAbbreviation() {

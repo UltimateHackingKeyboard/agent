@@ -14,25 +14,22 @@
                     [attr.maxLength]="3"
         />)
             <fa-icon [icon]="starIcon"
-                     [title]="starTitle"
+                     [ngbTooltip]="starTitle"
                      [class.keymap__is-default]="!keymap.isDefault"
-                     data-toggle="tooltip"
-                     data-placement="bottom"
+                     placement="bottom"
                      (click)="setDefault()"
             ></fa-icon>
             <fa-icon [icon]="faTrash"
-                     [title]="trashTitle"
+                     [ngbTooltip]="trashTitle"
+                     tooltipClass="tooltip-nowrap"
                      class="keymap__remove pull-right"
-                     data-toggle="tooltip"
-                     data-placement="bottom"
-                     html="true"
+                     placement="bottom-right"
                      (click)="removeKeymap()"
             ></fa-icon>
             <fa-icon [icon]="faCopy"
                      class="keymap__duplicate pull-right"
-                     title="Duplicate keymap"
-                     data-toggle="tooltip"
-                     data-placement="bottom"
+                     ngbTooltip="Duplicate keymap"
+                     placement="bottom"
                      (click)="duplicateKeymap()"
             ></fa-icon>
         </h1>
