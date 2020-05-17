@@ -21,11 +21,9 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - name: github.event
-        run: echo "::warning::${{github.event}}"
+      - name: github context
+        run: echo "::warning::${{toJSON(github)}}"
 
-      - name: github.event_path
-        run: echo "::warning::${{github.event_path}}"
 #      - uses: actions/checkout@v2
 #
 #      - name: Read .nvmrc
