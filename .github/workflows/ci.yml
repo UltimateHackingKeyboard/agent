@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - master
@@ -50,5 +52,9 @@ jobs:
         run: npm test
 
       - name: Release
-        if: ${{ github.event == 'release' }}
         run: npm run release
+        env:
+          - CERT_KEY: ${{ secrets.CERT_KEY }}
+          - CERT_IV: ${{ secrets.CERT_IV }}
+          - APPLE_ID: ${{ secrets.APPLE_ID }}
+          - APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}

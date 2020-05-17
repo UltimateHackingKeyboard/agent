@@ -39,14 +39,7 @@ if (process.env.TRAVIS) {
 
 console.log({ branchName, pullRequestNr, gitTag, repoName, githubRef, githubEventName });
 
-const isReleaseCommit = TEST_BUILD
-    || process.env.GITHUB_ACTIONS
-    || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
-
-if (process.env.GITHUB_ACTIONS && githubEventName !== 'release') {
-    console.log(`"${githubEventName}" if not release GitHub Event. Skipping publish.`);
-    process.exit(0)
-}
+const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
 if (!isReleaseCommit) {
     console.log('It is not a release task. Skipping publish.');
