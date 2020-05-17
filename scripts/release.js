@@ -40,7 +40,7 @@ if (process.env.TRAVIS) {
 
 console.log({ branchName, pullRequestNr, gitTag, repoName, githubRef, githubEventName });
 
-const isReleaseCommit = TEST_BUILD || branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
+const isReleaseCommit = TEST_BUILD || gitTag && branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
 if (!isReleaseCommit) {
     console.log('It is not a release task. Skipping publish.');
@@ -189,5 +189,5 @@ function getGithubTag() {
     const regExp = new RegExp('^refs\\/tags\\/(v\\d\\.\\d\\.\\d)$');
     const result = regExp.exec(process.env.GITHUB_REF);
 
-    return result[1];
+    return result && result[1];
 }
