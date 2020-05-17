@@ -33,7 +33,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.js",
               "node_modules/nouislider/distribute/nouislider.js"
             ]
           },
@@ -95,7 +94,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.js",
               "node_modules/nouislider/distribute/nouislider.js"
             ],
             "assets": [
@@ -154,7 +152,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.js",
               "node_modules/nouislider/distribute/nouislider.js"
             ]
           },

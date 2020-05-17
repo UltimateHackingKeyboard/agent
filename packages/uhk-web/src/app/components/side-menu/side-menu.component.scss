@@ -147,6 +147,7 @@ ul {
     &__fav {
         position: absolute;
         right: 19px;
+        z-index: 50;
     }
 
     &__macro_count {

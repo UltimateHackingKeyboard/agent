@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, forwardRef, Input, Output, OnDestroy, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NouisliderComponent } from 'ng2-nouislider';
 import { Observable, Observer } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -41,6 +42,9 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
     public value: number;
     private changeObserver$: Observer<number>;
     private changeDebounceTime: number = 300;
+
+    constructor(private sanitizer: DomSanitizer) {
+    }
 
     ngAfterViewInit(): void {
         if (this.pips) {
@@ -86,6 +90,10 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
             return; // No change event on first change as the value is just being set
         }
         this.changeObserver$.next(value);
+    }
+
+    htmlTooltip(): SafeHtml {
+        return this.sanitizer.bypassSecurityTrustHtml(this.tooltip);
     }
 
     private propagateChange: any = () => {};

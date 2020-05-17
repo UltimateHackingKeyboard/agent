@@ -8,18 +8,15 @@
                              (ngModelChange)="editMacroName($event)"></auto-grow-input>
             <fa-icon [icon]="faTrash"
                      class="macro__remove pull-right"
-                     title=""
-                     data-toggle="tooltip"
-                     data-placement="bottom"
-                     html="true"
-                     data-original-title="<span class='text-nowrap'>Delete macro</span>"
+                     ngbTooltip="Delete macro"
+                     tooltipClass="tooltip-nowrap"
+                     placement="bottom-right"
                      (click)="removeMacro()"></fa-icon>
             <fa-icon [icon]="faCopy"
                      class="macro__duplicate pull-right"
-                     title=""
-                     data-toggle="tooltip"
-                     data-placement="bottom"
-                     data-original-title="Duplicate macro"
+                     ngbTooltip="Duplicate macro"
+                     tooltipClass="tooltip-nowrap"
+                     placement="bottom"
                      (click)="duplicateMacro()"></fa-icon>
         </h1>
     </div>
