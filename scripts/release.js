@@ -33,6 +33,7 @@ if (process.env.TRAVIS) {
     repoName = process.env.APPVEYOR_REPO_NAME;
 } else if (process.env.GITHUB_ACTIONS) {
     githubRef = process.env.GITHUB_REF;
+    branchName = gitTag = getGithubTag();
     githubEventName = process.env.GITHUB_EVENT_NAME;
     repoName = process.env.GITHUB_REPOSITORY;
 }
@@ -182,4 +183,11 @@ async function afterSign(context) {
         appleId: process.env.APPLE_ID,
         appleIdPassword: process.env.APPLE_ID_PASS,
     });
+}
+
+function getGithubTag() {
+    const regExp = new RegExp('^refs\\/tags\\/(v\\d\\.\\d\\.\\d)$');
+    const result = regExp.exec(process.env.GITHUB_REF);
+
+    return result[1];
 }
