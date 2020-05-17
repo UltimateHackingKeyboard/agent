@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - master
+  release:
+    types:
+      - created
 
 jobs:
   test:
@@ -18,6 +21,11 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - uses: actions/checkout@v2
 
       - name: Read .nvmrc
@@ -40,3 +48,7 @@ jobs:
 
       - name: Run test
         run: npm test
+
+      - name: Release
+        if: ${{ github.event == 'release' }}
+        run: npm run release
