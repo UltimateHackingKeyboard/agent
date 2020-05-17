@@ -54,7 +54,7 @@ jobs:
       - name: Release
         run: npm run release
         env:
-          - CERT_KEY: ${{ secrets.CERT_KEY }}
-          - CERT_IV: ${{ secrets.CERT_IV }}
-          - APPLE_ID: ${{ secrets.APPLE_ID }}
-          - APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          CERT_KEY: ${{ secrets.CERT_KEY }}
+          CERT_IV: ${{ secrets.CERT_IV }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
