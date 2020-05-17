@@ -43,7 +43,6 @@ before_script:
 script:
   - set -e
   - npm run test
-  - npm run release
 
 cache:
   directories:
