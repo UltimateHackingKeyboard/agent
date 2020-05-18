@@ -1,8 +1,5 @@
 ![Agent logo & text](https://raw.githubusercontent.com/UltimateHackingKeyboard/agent/master/packages/uhk-web/src/assets/images/agent-logo-with-text.png)
 
-[![Build Status](https://travis-ci.org/UltimateHackingKeyboard/agent.svg?branch=master)](https://travis-ci.org/UltimateHackingKeyboard/agent)
-[![Build status](https://ci.appveyor.com/api/projects/status/4flvi969t4lgwwk6?svg=true)](https://ci.appveyor.com/project/mondalaci/agent)
-
 Agent is the configuration application of the [Ultimate Hacking Keyboard](https://ultimatehackingkeyboard.com/).
 
 Please do not build Agent from source unless you want to develop it. Using an existing release is far easier for everyone involved:
