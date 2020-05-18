@@ -14,33 +14,14 @@ if (!process.env.CI && !TEST_BUILD) {
     process.exit(1);
 }
 
-let branchName = '';
-let pullRequestNr = '';
-let gitTag = '';
-let repoName = '';
-let githubRef = '';
-let githubEventName = '';
+const githubRef = process.env.GITHUB_REF;
+const gitTag = getGithubTag();
+const githubEventName = process.env.GITHUB_EVENT_NAME;
+const repoName = process.env.GITHUB_REPOSITORY;
 
-if (process.env.TRAVIS) {
-    branchName = process.env.TRAVIS_BRANCH;
-    pullRequestNr = process.env.TRAVIS_PULL_REQUEST;
-    gitTag = process.env.TRAVIS_TAG;
-    repoName = process.env.TRAVIS_REPO_SLUG;
-} else if (process.env.APPVEYOR) {
-    branchName = process.env.APPVEYOR_REPO_BRANCH;
-    pullRequestNr = process.env.APPVEYOR_PULL_REQUEST_NUMBER;
-    gitTag = process.env.APPVEYOR_REPO_TAG_NAME;
-    repoName = process.env.APPVEYOR_REPO_NAME;
-} else if (process.env.GITHUB_ACTIONS) {
-    githubRef = process.env.GITHUB_REF;
-    branchName = gitTag = getGithubTag();
-    githubEventName = process.env.GITHUB_EVENT_NAME;
-    repoName = process.env.GITHUB_REPOSITORY;
-}
+console.log({ gitTag, repoName, githubRef, githubEventName });
 
-console.log({ branchName, pullRequestNr, gitTag, repoName, githubRef, githubEventName });
-
-const isReleaseCommit = TEST_BUILD || gitTag && branchName === gitTag && repoName === 'UltimateHackingKeyboard/agent';
+const isReleaseCommit = TEST_BUILD || gitTag && repoName === 'UltimateHackingKeyboard/agent';
 
 if (!isReleaseCommit) {
     console.log('It is not a release task. Skipping publish.');
