@@ -5,6 +5,7 @@ import { defer, Observable, of } from 'rxjs';
 import { map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
+import { Buffer } from 'buffer/';
 
 import {
     getHardwareConfigFromDeviceResponse,
