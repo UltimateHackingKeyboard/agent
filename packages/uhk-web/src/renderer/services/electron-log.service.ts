@@ -1,7 +1,13 @@
+import * as path from 'path';
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 import * as util from 'util';
 import { LogRegExps, LogService } from 'uhk-common';
+
+log.transports.file.level = 'debug';
+log.transports.file.resolvePath = variables => {
+    return path.join(variables.libraryDefaultDir, 'uhk-agent.log');
+};
 
 // https://github.com/megahertz/electron-log/issues/44
 // console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
@@ -25,9 +31,9 @@ if (console.debug) {
  * This service use the electron-log package to write log in file.
  * The logger usable in main and renderer process.
  * The location of the log files:
- * - on Linux: ~/.config/<app name>/log.log
- * - on OS X: ~/Library/Logs/<app name>/log.log
- * - on Windows: %USERPROFILE%\AppData\Roaming\<app name>\log.log
+ * - on Linux: ~/.config/<app name>/uhk-agent.log
+ * - on OS X: ~/Library/Logs/<app name>/uhk-agent.log
+ * - on Windows: %USERPROFILE%\AppData\Roaming\<app name>\uhk-agent.log
  * The app name: UHK Agent. The up to date value in the scripts/release.js file.
  */
 @Injectable()
