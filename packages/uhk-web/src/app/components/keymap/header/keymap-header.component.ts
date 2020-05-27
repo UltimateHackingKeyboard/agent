@@ -5,19 +5,21 @@ import {
     EventEmitter,
     Input,
     OnChanges,
+    OnDestroy,
     Output,
     Renderer2,
     SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { Keymap } from 'uhk-common';
+import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faCopy, faKeyboard, faStar as faSolidStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faRegularStar } from '@fortawesome/free-regular-svg-icons';
 
-import { AppState } from '../../../store';
+import { AppState, extraLEDCharactersSupported } from '../../../store';
 import {
     DuplicateKeymapAction,
     EditKeymapAbbreviationAction,
@@ -35,7 +37,7 @@ const DEFAULT_TRASH_TITLE = 'Delete keymap';
     styleUrls: ['./keymap-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KeymapHeaderComponent implements OnChanges {
+export class KeymapHeaderComponent implements OnChanges, OnDestroy {
 
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
@@ -50,7 +52,16 @@ export class KeymapHeaderComponent implements OnChanges {
     faCopy = faCopy;
     faTrash = faTrash;
 
-    constructor(private store: Store<AppState>, private renderer: Renderer2) { }
+    private subscriptions = new Subscription();
+    private extraLEDCharactersSupported = false;
+
+    constructor(private store: Store<AppState>, private renderer: Renderer2) {
+        this.subscriptions.add(
+            this.store
+                .select(extraLEDCharactersSupported)
+                .subscribe(value => this.extraLEDCharactersSupported = value)
+        );
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keymap']) {
@@ -60,6 +71,10 @@ export class KeymapHeaderComponent implements OnChanges {
         if (changes['deletable']) {
             this.setTrashTitle();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     setDefault() {
@@ -87,7 +102,9 @@ export class KeymapHeaderComponent implements OnChanges {
     }
 
     editKeymapAbbr(newAbbr: string) {
-        const regexp = new RegExp(/^[a-zA-Z\d$+\-*/|\\<>?_'",`@={} ]{1,3}$/g);
+        const regexp = this.extraLEDCharactersSupported
+            ? new RegExp(/^[a-zA-Z\d$+\-*/|\\<>?_'",`@={} ]{1,3}$/g)
+            : new RegExp(/^[a-zA-Z\d]{1,3}$/g);
 
         if (newAbbr.trim().length === 0 || !regexp.test(newAbbr)) {
             this.setAbbreviation();
