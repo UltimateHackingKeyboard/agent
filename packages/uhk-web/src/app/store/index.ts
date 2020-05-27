@@ -294,6 +294,10 @@ export const extraMouseButtonsSupported = createSelector(getHardwareModules, (ha
     return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.1.1');
 });
 
+export const extraLEDCharactersSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
+    return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.2.0');
+});
+
 export const getApplicationSettings = createSelector(
     appUpdateSettingsState,
     appState,
