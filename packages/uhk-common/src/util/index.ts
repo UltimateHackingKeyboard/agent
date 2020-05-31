@@ -6,6 +6,7 @@ export * from './get-log-options';
 export * from './get-md5-hash-from-file-name';
 export * from './helpers';
 export * from './is-equal-array';
+export * from './log-user-config-helper';
 export * from './sort-string-desc';
 export * from './user-configuration-history-helpers';
 

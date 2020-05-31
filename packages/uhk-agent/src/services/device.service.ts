@@ -340,6 +340,7 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             await backupUserConfiguration(data);
 
+            this.logService.config('[DeviceService] User configuration will be saved', data.configuration);
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
 

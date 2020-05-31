@@ -2,17 +2,16 @@ import { ipcMain, shell } from 'electron';
 import { UhkHidDevice } from 'uhk-usb';
 import * as os from 'os';
 
-import { AppStartInfo, IpcEvents, LogService } from 'uhk-common';
+import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
-import { CommandLineInputs } from '../models/command-line-inputs';
 import { getUdevFileContentAsync } from '../util';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
                 protected win: Electron.BrowserWindow,
                 private deviceService: DeviceService,
-                private options: CommandLineInputs,
+                private options: CommandLineArgs,
                 private uhkHidDeviceService: UhkHidDevice,
                 private rootDir: string) {
         super(logService, win);
@@ -29,7 +28,8 @@ export class AppService extends MainServiceBase {
         const response: AppStartInfo = {
             deviceConnectionState,
             commandLineArgs: {
-                modules: this.options.modules || false
+                modules: this.options.modules || false,
+                log: this.options.log
             },
             platform: process.platform as string,
             osVersion: os.release(),

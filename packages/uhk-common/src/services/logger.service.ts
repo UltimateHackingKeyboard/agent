@@ -1,4 +1,6 @@
 import { LogOptions } from '../models';
+import { UserConfiguration } from '../config-serializer/config-items';
+import { logUserConfigHelper } from '../util';
 
 export const DEFAULT_LOG_OPTIONS: LogOptions = {
     misc: true
@@ -12,12 +14,12 @@ export class LogService {
         this._options = options;
     }
 
-    config(...args: any[]): void {
+    config(message: string, config: UserConfiguration | string): void {
         if (!this._options.config) {
             return;
         }
 
-        this.log(...args);
+        logUserConfigHelper(this.log, message, config);
     }
 
     error(...args: any[]): void {

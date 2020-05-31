@@ -138,6 +138,7 @@ export class UserConfigEffects {
 
                 try {
                     const userConfig = getUserConfigFromDeviceResponse(data.userConfiguration);
+                    this.logService.config('[UserConfigEffect] Loaded user configuration', userConfig);
                     result.push(new LoadUserConfigSuccessAction(userConfig));
 
                     if (route.state && !route.state.url.startsWith('/device/firmware')) {

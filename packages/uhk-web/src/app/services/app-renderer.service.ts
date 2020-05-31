@@ -40,7 +40,9 @@ export class AppRendererService {
             const message = [];
 
             if (data.length > 0
+                && data[data.length - 1].substr
                 && data[data.length - 1].substr(0, 6) === 'color:'
+                && data[0].substr
                 && data[0].substr(0, 2) === '%c'
             ) {
                 data = [

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
-import { LogService } from 'uhk-common';
+import { LogService, logUserConfigHelper, UserConfiguration } from 'uhk-common';
 
 log.transports.file.level = 'debug';
 log.transports.file.resolvePath = variables => {
@@ -20,16 +20,12 @@ log.transports.file.resolvePath = variables => {
 @Injectable()
 export class ElectronLogService extends LogService {
 
-    constructor() {
-        super();
-    }
-
-    config(...args: any[]): void {
+    config(message: string, config: UserConfiguration | string): void {
         if (!this._options.config) {
             return;
         }
 
-        this.log(...args);
+        logUserConfigHelper(this.log, message, config);
     }
 
     error(...args: any[]): void {
