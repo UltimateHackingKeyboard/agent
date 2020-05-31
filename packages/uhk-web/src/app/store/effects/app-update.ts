@@ -28,7 +28,7 @@ export class AppUpdateEffect {
             ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow),
             map(action => action.payload),
             tap((allowPrerelease: boolean) => {
-                this.logService.debug('[AppUpdateEffect] call checkForUpdate');
+                this.logService.misc('[AppUpdateEffect] call checkForUpdate');
                 this.appUpdateRendererService.checkForUpdate(allowPrerelease);
             })
         );

@@ -2,16 +2,16 @@
 
 import './polyfills';
 import { app, BrowserWindow } from 'electron';
-import { autoUpdater } from 'electron-updater';
+// import { autoUpdater } from 'electron-updater';
 
 import * as path from 'path';
 import * as url from 'url';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
-import { LogRegExps } from 'uhk-common';
+import { getLogOptions } from 'uhk-common';
 import { UhkBlhost } from 'uhk-usb';
 import { DeviceService } from './services/device.service';
-import { logger } from './services/logger.service';
+import { ElectronLogService } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
@@ -27,10 +27,13 @@ if (options.help) {
     process.exit(0);
 }
 
+const logger = new ElectronLogService();
+logger.setLogOptions(getLogOptions(options));
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: Electron.BrowserWindow;
-autoUpdater.logger = logger;
+// TODO: Should we log the auto updater logs?
+// autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
 let uhkBlhost: UhkBlhost;
@@ -40,24 +43,6 @@ let appUpdateService: AppUpdateService;
 let appService: AppService;
 let sudoService: SudoService;
 
-// https://github.com/megahertz/electron-log/issues/44
-// console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
-if (console.debug) {
-    console.debug = (...args: any[]): void => {
-        if (LogRegExps.writeRegExp.test(args[0])) {
-            console.log(args[0]);
-        } else if (LogRegExps.readRegExp.test(args[0])) {
-            console.log(args[0]);
-        } else if (LogRegExps.errorRegExp.test(args[0])) {
-            console.log(args[0]);
-        } else if (LogRegExps.transferRegExp.test(args[0])) {
-            console.log(args[0]);
-        } else {
-            console.log(...args);
-        }
-    };
-}
-
 const isSecondInstance = !app.requestSingleInstanceLock();
 
 function createWindow() {
@@ -65,7 +50,7 @@ function createWindow() {
         return;
     }
 
-    logger.info('[Electron Main] Create new window.');
+    logger.misc('[Electron Main] Create new window.');
     let packagesDir;
     if (isDev) {
         packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../tmp');
@@ -73,9 +58,9 @@ function createWindow() {
         packagesDir = path.dirname(app.getAppPath());
     }
 
-    logger.info(`[Electron Main] packagesDir: ${packagesDir}`);
+    logger.misc(`[Electron Main] packagesDir: ${packagesDir}`);
 
-    const loadedWindowState = loadWindowState();
+    const loadedWindowState = loadWindowState(logger);
 
     // Create the browser window.
     win = new BrowserWindow({
@@ -121,7 +106,7 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        logger.info('[Electron Main] win closed');
+        logger.misc('[Electron Main] win closed');
         win = null;
         await deviceService.close();
         deviceService = null;
@@ -139,9 +124,9 @@ function createWindow() {
         logger.error(event);
     });
 
-    win.on('close', () => saveWindowState(win));
-    win.on('resize', () => saveWindowState(win));
-    win.on('move', () => saveWindowState(win));
+    win.on('close', () => saveWindowState(win, logger));
+    win.on('resize', () => saveWindowState(win, logger));
+    win.on('move', () => saveWindowState(win, logger));
 }
 
 if (isSecondInstance) {

@@ -57,7 +57,7 @@ export class UhkHidDevice {
                 return true;
             }
 
-            this.logService.debug('[UhkHidDevice] Devices before checking permission:');
+            this.logService.misc('[UhkHidDevice] Devices before checking permission:');
             const devs = devices();
             this.logDevices(devs);
 
@@ -133,12 +133,12 @@ export class UhkHidDevice {
 
             try {
                 const sendData = getTransferData(buffer);
-                this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
+                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
                 device.write(sendData);
                 await snooze(1);
                 const receivedData = device.readTimeout(1000);
                 const logString = bufferToString(receivedData);
-                this.logService.debug('[UhkHidDevice] USB[R]:', logString);
+                this.logService.usb('[UhkHidDevice] USB[R]:', logString);
 
                 if (receivedData[0] !== 0) {
                     return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
@@ -168,13 +168,13 @@ export class UhkHidDevice {
      * Close the communication chanel with UHK Device
      */
     public close(): void {
-        this.logService.debug('[UhkHidDevice] Device communication closing.');
+        this.logService.misc('[UhkHidDevice] Device communication closing.');
         if (!this._device) {
             return;
         }
         this._device.close();
         this._device = null;
-        this.logService.debug('[UhkHidDevice] Device communication closed.');
+        this.logService.misc('[UhkHidDevice] Device communication closed.');
     }
 
     public async waitUntilKeyboardBusy(): Promise<void> {
@@ -183,7 +183,7 @@ export class UhkHidDevice {
             if (buffer[1] === 0) {
                 break;
             }
-            this.logService.debug('Keyboard is busy, wait...');
+            this.logService.misc('Keyboard is busy, wait...');
             await snooze(200);
         }
     }
@@ -194,7 +194,7 @@ export class UhkHidDevice {
 
     async reenumerate(enumerationMode: EnumerationModes): Promise<void> {
         const reenumMode = EnumerationModes[enumerationMode].toString();
-        this.logService.debug(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}`);
+        this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}`);
 
         const message = Buffer.from([
             UsbCommand.Reenumerate,
@@ -217,7 +217,7 @@ export class UhkHidDevice {
                 x.productId === enumeratedProductId);
 
             if (inBootloaderMode) {
-                this.logService.debug(`[UhkHidDevice] Reenumerating devices`);
+                this.logService.misc(`[UhkHidDevice] Reenumerating devices`);
                 return;
             }
 
@@ -227,17 +227,17 @@ export class UhkHidDevice {
                 const device = this.getDevice({ errorLogLevel: 'debug'});
                 if (device) {
                     const data = getTransferData(message);
-                    this.logService.debug(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
-                    this.logService.debug('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
+                    this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
+                    this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     device.write(data);
                     device.close();
                     jumped = true;
                 } else {
-                    this.logService.debug('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
+                    this.logService.usb('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
                 }
             }
             else {
-                this.logService.debug(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
+                this.logService.misc(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
                 this.listAvailableDevices(devs);
             }
         }
@@ -250,7 +250,7 @@ export class UhkHidDevice {
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
         const moduleName = kbootCommandName(module);
-        this.logService.debug(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
+        this.logService.usb(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
@@ -260,7 +260,7 @@ export class UhkHidDevice {
     }
 
     async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
-        this.logService.debug(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
+        this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
         await this.write(transfer);
     }
@@ -299,11 +299,11 @@ export class UhkHidDevice {
             const dev = devs.find(isUhkZeroInterface);
 
             if (!dev) {
-                this.logService.debug('[UhkHidDevice] UHK Device not found:');
+                this.logService.misc('[UhkHidDevice] UHK Device not found:');
                 return null;
             }
             const device = new HID(dev.path);
-            this.logService.debug('[UhkHidDevice] Used device:', JSON.stringify(dev));
+            this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(dev));
             return device;
         } catch (err) {
             this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
@@ -314,7 +314,7 @@ export class UhkHidDevice {
 
     private logDevices(devs: Array<Device>): void {
         for (const logDevice of devs) {
-            this.logService.debug(JSON.stringify(logDevice));
+            this.logService.misc(JSON.stringify(logDevice));
         }
     }
 
@@ -365,11 +365,11 @@ export class UhkHidDevice {
         }
 
         if (!isEqualArray(this._prevDevices, compareDevices)) {
-            this.logService.debug('[UhkHidDevice] Available devices:');
+            this.logService.misc('[UhkHidDevice] Available devices:');
             this.logDevices(devs);
             this._prevDevices = compareDevices;
         } else {
-            this.logService.debug('[UhkHidDevice] Available devices unchanged');
+            this.logService.misc('[UhkHidDevice] Available devices unchanged');
         }
     }
 

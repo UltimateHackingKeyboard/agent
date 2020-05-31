@@ -14,30 +14,30 @@ export class UhkBlhost {
         const self = this;
         return new Promise<void>((resolve, reject) => {
             const blhostPath = this.getBlhostPath();
-            self.logService.debug(`[blhost] RUN: ${blhostPath} ${params.join(' ')}`);
+            self.logService.misc(`[blhost] RUN: ${blhostPath} ${params.join(' ')}`);
             const childProcess = spawn(`"${blhostPath}"`, params, {shell: true});
             let finished = false;
 
             childProcess.stdout.on('data', data => {
-                self.logService.debug(`[blhost] STDOUT: ${data}`);
+                self.logService.misc(`[blhost] STDOUT: ${data}`);
             });
 
             childProcess.stderr.on('data', data => {
-                self.logService.error(`[blhost] STDERR: ${data}`);
+                self.logService.misc(`[blhost] STDERR: ${data}`);
             });
 
             childProcess.on('close', code => {
-                self.logService.debug(`[blhost] CLOSE_CODE: ${code}`);
+                self.logService.misc(`[blhost] CLOSE_CODE: ${code}`);
                 finish(code);
             });
 
             childProcess.on('exit', code => {
-                self.logService.debug(`[blhost] EXIT_CODE: ${code}`);
+                self.logService.misc(`[blhost] EXIT_CODE: ${code}`);
                 finish(code);
             });
 
             childProcess.on('error', err => {
-                self.logService.debug(`[blhost] ERROR: ${err}`);
+                self.logService.misc(`[blhost] ERROR: ${err}`);
             });
 
             function finish(code) {
@@ -47,7 +47,7 @@ export class UhkBlhost {
 
                 finished = true;
 
-                self.logService.debug(`[blhost] FINISHED: ${code}`);
+                self.logService.misc(`[blhost] FINISHED: ${code}`);
 
                 if (code !== 0) {
                     return reject(new Error(`blhost error code:${code}`));

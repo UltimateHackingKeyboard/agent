@@ -18,7 +18,7 @@ export class AppUpdateService extends MainServiceBase {
         super(logService, win);
 
         this.initListeners();
-        logService.info('[AppUpdateService] init success');
+        logService.misc('[AppUpdateService] init success');
     }
 
     saveFirtsRun() {
@@ -27,19 +27,19 @@ export class AppUpdateService extends MainServiceBase {
 
     private initListeners() {
         autoUpdater.on('checking-for-update', () => {
-            this.logService.debug('[AppUpdateService] checking for update');
+            this.logService.misc('[AppUpdateService] checking for update');
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkingForUpdate);
         });
 
         autoUpdater.on('update-available', async (ev: any, info: UpdateInfo) => {
-            this.logService.debug('[AppUpdateService] update available. Downloading started');
+            this.logService.misc('[AppUpdateService] update available. Downloading started');
             await autoUpdater.downloadUpdate();
             this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
         });
 
         autoUpdater.on('update-not-available', (ev: any, info: UpdateInfo) => {
             if (this.sendAutoUpdateNotification) {
-                this.logService.debug('[AppUpdateService] update not available');
+                this.logService.misc('[AppUpdateService] update not available');
                 this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
             }
         });
@@ -59,19 +59,19 @@ export class AppUpdateService extends MainServiceBase {
         });
 
         autoUpdater.on('update-downloaded', (ev: any, info: UpdateInfo) => {
-            this.logService.debug('[AppUpdateService] update downloaded');
+            this.logService.misc('[AppUpdateService] update downloaded');
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloaded, info);
         });
 
         ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => {
-            this.logService.debug('[AppUpdateService] update and restart from renderer process');
+            this.logService.misc('[AppUpdateService] update and restart from renderer process');
             return autoUpdater.quitAndInstall(true);
         });
 
         ipcMain.on(IpcEvents.app.appStarted, () => {
             if (this.checkForUpdateAtStartup()) {
                 this.sendAutoUpdateNotification = false;
-                this.logService.debug('[AppUpdateService] app started. Automatically check for update.');
+                this.logService.misc('[AppUpdateService] app started. Automatically check for update.');
                 this.checkForUpdate();
             }
         });
@@ -80,7 +80,7 @@ export class AppUpdateService extends MainServiceBase {
             const allowPrerelease: boolean = args[0];
             // tslint:disable-next-line:max-line-length
             const logMsg = `[AppUpdateService] checkForUpdate request from renderer process. Allow prerelease: ${allowPrerelease}`;
-            this.logService.debug(logMsg);
+            this.logService.misc(logMsg);
             this.sendAutoUpdateNotification = true;
             this.checkForUpdate(allowPrerelease);
         });
@@ -89,7 +89,7 @@ export class AppUpdateService extends MainServiceBase {
     private checkForUpdate(allowPrerelease = false): void {
         if (isDev) {
             const msg = '[AppUpdateService] Application update is not working in dev mode.';
-            this.logService.info(msg);
+            this.logService.misc(msg);
 
             if (this.sendAutoUpdateNotification) {
                 this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
@@ -100,7 +100,7 @@ export class AppUpdateService extends MainServiceBase {
 
         if (this.isFirstRun()) {
             const msg = '[AppUpdateService] Application update is skipping at first run.';
-            this.logService.info(msg);
+            this.logService.misc(msg);
 
             if (this.sendAutoUpdateNotification) {
                 this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
@@ -112,7 +112,7 @@ export class AppUpdateService extends MainServiceBase {
         autoUpdater.allowPrerelease = allowPrerelease;
         autoUpdater.checkForUpdates()
             .then(() => {
-                this.logService.debug('[AppUpdateService] checkForUpdate success');
+                this.logService.misc('[AppUpdateService] checkForUpdate success');
             })
             .catch(error => {
                 this.logService.error('[AppUpdateService] checkForUpdate error:', error);
@@ -124,8 +124,8 @@ export class AppUpdateService extends MainServiceBase {
             return true;
         }
         const firstRunVersion = settings.get('firstRunVersion');
-        this.logService.info(`firstRunVersion: ${firstRunVersion}`);
-        this.logService.info(`package.version: ${this.app.getVersion()}`);
+        this.logService.misc(`firstRunVersion: ${firstRunVersion}`);
+        this.logService.misc(`package.version: ${this.app.getVersion()}`);
 
         return firstRunVersion !== this.app.getVersion();
     }
@@ -133,7 +133,7 @@ export class AppUpdateService extends MainServiceBase {
     private checkForUpdateAtStartup() {
         const { checkForUpdateOnStartUp = true } = this.getApplicationSettings();
 
-        this.logService.debug('[AppUpdateService] check for update at startup:', { checkForUpdateOnStartUp });
+        this.logService.misc('[AppUpdateService] check for update at startup:', { checkForUpdateOnStartUp });
 
         return checkForUpdateOnStartUp;
     }

@@ -93,7 +93,7 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
                 throw err;
             } else {
                 if (logService) {
-                    logService.info(`[retry] failed, but try run FUNCTION:\n ${command}, \n retry: ${retryCount}`);
+                    logService.misc(`[retry] failed, but try run FUNCTION:\n ${command}, \n retry: ${retryCount}`);
                 }
                 await snooze(100);
             }

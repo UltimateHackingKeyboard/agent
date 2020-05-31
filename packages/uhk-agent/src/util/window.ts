@@ -1,7 +1,7 @@
 import * as electron from 'electron';
 import settings from 'electron-settings';
+import { LogService } from 'uhk-common';
 
-import { logger } from '../services/logger.service';
 import { WindowState } from '../models/window-state';
 
 const WINDOWS_SETTINGS_KEY = 'windowSettings';
@@ -25,14 +25,14 @@ export const getDefaultWindowState = () => ({
     isMaximized: true
 });
 
-export const loadWindowState = (): Partial<WindowState> => {
-    logger.log('[WindowState] load settings');
+export const loadWindowState = (logger: LogService): Partial<WindowState> => {
+    logger.misc('[WindowState] load settings');
     try {
         const loadedState = settings.get(WINDOWS_SETTINGS_KEY) as any;
-        logger.log('[WindowState] loaded settings', loadedState);
+        logger.misc('[WindowState] loaded settings', loadedState);
 
         if (!loadedState) {
-            logger.log('[WindowState]save state not exists, use default');
+            logger.misc('[WindowState]save state not exists, use default');
 
             return getDefaultWindowState();
         }
@@ -41,24 +41,24 @@ export const loadWindowState = (): Partial<WindowState> => {
         loadedState.height = loadedState.height < 768 ? 768 : loadedState.height;
 
         const visible = windowVisibleOnScreen(loadedState);
-        logger.log('[WindowState] loaded settings is visible', visible);
+        logger.misc('[WindowState] loaded settings is visible', visible);
 
         if (visible) {
-            logger.log('[WindowState] return with loaded settings');
+            logger.misc('[WindowState] return with loaded settings');
             return loadedState;
         }
     } catch (err) {
         logger.error('[WindowState] error when parsing loaded settings', err);
     }
 
-    logger.log('[WindowState] return with default settings');
+    logger.misc('[WindowState] return with default settings');
 
     return getDefaultWindowState();
 };
 
-export const saveWindowState = (win: electron.BrowserWindow) => {
+export const saveWindowState = (win: electron.BrowserWindow, logger: LogService) => {
     const winBounds = win.isMaximized() || win.isFullScreen()
-        ? loadWindowState() as any
+        ? loadWindowState(logger) as any
         : win.getBounds();
 
     const state: WindowState = {
@@ -67,7 +67,7 @@ export const saveWindowState = (win: electron.BrowserWindow) => {
         isFullScreen: win.isFullScreen()
     };
 
-    logger.log('[WindowState] save settings:', state);
+    logger.misc('[WindowState] save settings:', state);
     settings.set(WINDOWS_SETTINGS_KEY, state as any);
-    logger.log('[WindowState] save settings success');
+    logger.misc('[WindowState] save settings success');
 };

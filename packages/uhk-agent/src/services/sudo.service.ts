@@ -13,7 +13,7 @@ export class SudoService {
                 private options: CommandLineArgs,
                 private deviceService: DeviceService,
                 private rootDir: string) {
-        this.logService.info('[SudoService] App root dir: ', this.rootDir);
+        this.logService.misc('[SudoService] App root dir: ', this.rootDir);
         ipcMain.on(IpcEvents.device.setPrivilegeOnLinux, this.setPrivilege.bind(this));
     }
 
@@ -50,7 +50,7 @@ export class SudoService {
         await this.deviceService.stopPollUhkDevice();
         const tmpDirectory = dirSync();
         const rulesDir = path.join(this.rootDir, 'rules');
-        this.logService.debug('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
+        this.logService.misc('[SudoService] Copy rules dir', {src: rulesDir, dst: tmpDirectory.name});
         await copy(rulesDir, tmpDirectory.name);
 
         const scriptPath = path.join(tmpDirectory.name, 'setup-rules.sh');
@@ -59,7 +59,7 @@ export class SudoService {
             name: 'Setting UHK access rules'
         };
         const command = `sh ${scriptPath}`;
-        this.logService.debug('[SudoService] Set privilege command: ', command);
+        this.logService.misc('[SudoService] Set privilege command: ', command);
         sudo.exec(command, options, async (error: any) => {
             const response = new IpcResponse();
 

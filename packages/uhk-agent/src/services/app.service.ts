@@ -20,11 +20,11 @@ export class AppService extends MainServiceBase {
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
         ipcMain.on(IpcEvents.app.exit, this.exit.bind(this));
         ipcMain.on(IpcEvents.app.openUrl, this.openUrl.bind(this));
-        logService.info('[AppService] init success');
+        logService.misc('[AppService] init success');
     }
 
     private async handleAppStartInfo(event: Electron.IpcMainEvent) {
-        this.logService.info('[AppService] getAppStartInfo');
+        this.logService.misc('[AppService] getAppStartInfo');
         const deviceConnectionState = await this.uhkHidDeviceService.getDeviceConnectionStateAsync();
         const response: AppStartInfo = {
             deviceConnectionState,
@@ -35,12 +35,12 @@ export class AppService extends MainServiceBase {
             osVersion: os.release(),
             udevFileContent: await getUdevFileContentAsync(this.rootDir)
         };
-        this.logService.info('[AppService] getAppStartInfo response:', response);
+        this.logService.misc('[AppService] getAppStartInfo response:', response);
         return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);
     }
 
     private exit() {
-        this.logService.info('[AppService] exit');
+        this.logService.misc('[AppService] exit');
         this.win.close();
     }
 

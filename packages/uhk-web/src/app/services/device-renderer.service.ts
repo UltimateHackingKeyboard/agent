@@ -29,7 +29,7 @@ export class DeviceRendererService {
                 private ipcRenderer: IpcCommonRenderer,
                 private logService: LogService) {
         this.registerEvents();
-        this.logService.info('[DeviceRendererService] init success ');
+        this.logService.misc('[DeviceRendererService] init success ');
     }
 
     setPrivilegeOnLinux(): void {
@@ -107,7 +107,7 @@ export class DeviceRendererService {
     }
 
     private dispachStoreAction(action: Action): void {
-        this.logService.info('[DeviceRendererService] dispatch action', JSON.stringify(action));
+        this.logService.misc(`[DeviceRendererService] dispatch action ${action.type}`);
         this.zone.run(() => this.store.dispatch(action));
     }
 }
