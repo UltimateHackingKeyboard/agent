@@ -1,31 +1,12 @@
 import * as path from 'path';
 import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
-import * as util from 'util';
-import { LogRegExps, LogService } from 'uhk-common';
+import { LogService, logUserConfigHelper, UserConfiguration } from 'uhk-common';
 
 log.transports.file.level = 'debug';
 log.transports.file.resolvePath = variables => {
     return path.join(variables.libraryDefaultDir, 'uhk-agent.log');
 };
-
-// https://github.com/megahertz/electron-log/issues/44
-// console.debug starting with Chromium 58 this method is a no-op on Chromium browsers.
-if (console.debug) {
-    console.debug = (...args: any[]): void => {
-        if (LogRegExps.writeRegExp.test(args[0])) {
-            console.log('%c' + args[0], 'color:blue');
-        } else if (LogRegExps.readRegExp.test(args[0])) {
-            console.log('%c' + args[0], 'color:green');
-        } else if (LogRegExps.errorRegExp.test(args[0])) {
-            console.log('%c' + args[0], 'color:red');
-        } else if (LogRegExps.transferRegExp.test(args[0])) {
-            console.log('%c' + args[0], 'color:orange');
-        } else {
-            console.log(...args);
-        }
-    };
-}
 
 /**
  * This service use the electron-log package to write log in file.
@@ -37,24 +18,37 @@ if (console.debug) {
  * The app name: UHK Agent. The up to date value in the scripts/release.js file.
  */
 @Injectable()
-export class ElectronLogService implements LogService {
-    public static getErrorText(args: any) {
-        return util.inspect(args);
+export class ElectronLogService extends LogService {
+
+    config(message: string, config: UserConfiguration | string): void {
+        if (!this._options.config) {
+            return;
+        }
+
+        logUserConfigHelper(this.log, message, config);
     }
 
     error(...args: any[]): void {
-        log.error(ElectronLogService.getErrorText(args));
+        log.error(...args);
     }
 
-    debug(...args: any[]): void {
-        log.debug(ElectronLogService.getErrorText(args));
+    misc(...args: any[]): void {
+        if (!this._options.misc) {
+            return;
+        }
+
+        this.log(...args);
     }
 
-    silly(...args: any[]): void {
-        log.silly(ElectronLogService.getErrorText(args));
+    usb(...args: any[]): void {
+        if (!this._options.usb) {
+            return;
+        }
+
+        this.log(...args);
     }
 
-    info(...args: any[]): void {
-        log.info(ElectronLogService.getErrorText(args));
+    protected log(...args: any[]): void {
+        log.log(...args);
     }
 }

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 
-import { ApplicationSettings, AppStartInfo, LogService, Notification, NotificationType } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, getLogOptions, LogService, Notification, NotificationType } from 'uhk-common';
 import {
     ActionTypes,
     ApplyAppStartInfoAction,
@@ -36,10 +36,10 @@ export class ApplicationEffects {
             ofType(ActionTypes.AppBootstrapped),
             startWith(new AppStartedAction()),
             tap(() => {
-                this.logService.info('Renderer appStart effect start');
+                this.logService.misc('Renderer appStart effect start');
                 this.appUpdateRendererService.sendAppStarted();
                 this.appRendererService.getAppStartInfo();
-                this.logService.info('Renderer appStart effect end');
+                this.logService.misc('Renderer appStart effect end');
             }),
             map(() => {
                 const settings: ApplicationSettings = {
@@ -81,7 +81,8 @@ export class ApplicationEffects {
             ofType<ProcessAppStartInfoAction>(ActionTypes.AppProcessStartInfo),
             map(action => action.payload),
             mergeMap((appInfo: AppStartInfo) => {
-                this.logService.debug('[AppEffect][processStartInfo] payload:', appInfo);
+                this.logService.setLogOptions(getLogOptions(appInfo.commandLineArgs));
+                this.logService.misc('[AppEffect][processStartInfo] payload:', appInfo);
                 return [
                     new ApplyAppStartInfoAction(appInfo),
                     new ConnectionStateChangedAction(appInfo.deviceConnectionState)
@@ -133,7 +134,7 @@ export class ApplicationEffects {
             map(action => action.payload),
             tap(payload => {
                 setTimeout(() => {
-                    this.logService.info('[AppEffects] navigate to', payload);
+                    this.logService.misc('[AppEffects] navigate to', payload);
                     this.router.navigate(payload.commands, payload.extras);
                 }, 10);
             })

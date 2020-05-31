@@ -19,7 +19,6 @@ import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
 import * as fs from 'fs';
-import { platform } from 'os';
 
 import { TmpFirmware } from '../models/tmp-firmware';
 import { QueueManager } from './queue-manager';
@@ -116,7 +115,7 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.getUserConfigFromHistory, this.getUserConfigFromHistory.bind(this));
         ipcMain.on(IpcEvents.device.loadUserConfigHistory, this.loadUserConfigFromHistory.bind(this));
 
-        logService.debug('[DeviceService] init success');
+        logService.misc('[DeviceService] init success');
     }
 
     /**
@@ -179,7 +178,7 @@ export class DeviceService {
 
     public async close(): Promise<void> {
         await this.stopPollUhkDevice();
-        this.logService.info('[DeviceService] Device connection checker stopped.');
+        this.logService.misc('[DeviceService] Device connection checker stopped.');
     }
 
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
@@ -194,16 +193,16 @@ export class DeviceService {
                 : this.getDefaultFirmwarePathData();
 
             await sanityCheckFirmwareAsync(firmwarePathData);
-            this.logService.debug('Agent version:', data.versionInformation.version);
+            this.logService.misc('Agent version:', data.versionInformation.version);
             const hardwareModules = await this.getHardwareModules(false);
-            this.logService.debug('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
-            this.logService.debug('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
+            this.logService.misc('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
+            this.logService.misc('Device left firmware version:', hardwareModules.leftModuleInfo.firmwareVersion);
 
             await this.stopPollUhkDevice();
             this.device.resetDeviceCache();
 
             const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
-            this.logService.debug('New firmware version:', packageJson.firmwareVersion);
+            this.logService.misc('New firmware version:', packageJson.firmwareVersion);
 
             if (this.useKboot()) {
                 await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
@@ -282,18 +281,18 @@ export class DeviceService {
     }
 
     public startPollUhkDevice(): void {
-        this.logService.info('[DeviceService] start poll UHK Device');
+        this.logService.misc('[DeviceService] start poll UHK Device');
         this._pollerAllowed = true;
     }
 
     public async stopPollUhkDevice(): Promise<void> {
-        this.logService.info('[DeviceService] stop poll UHK Device');
+        this.logService.misc('[DeviceService] stop poll UHK Device');
         return new Promise<void>(async resolve => {
             this._pollerAllowed = false;
 
             while (true) {
                 if (!this._uhkDevicePolling) {
-                    this.logService.info('[DeviceService] stopped poll UHK Device');
+                    this.logService.misc('[DeviceService] stopped poll UHK Device');
                     return resolve();
                 }
 
@@ -321,7 +320,7 @@ export class DeviceService {
                     if (!isEqual(state, savedState)) {
                         savedState = state;
                         this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
-                        this.logService.info('[DeviceService] Device connection state changed to:', state);
+                        this.logService.misc('[DeviceService] Device connection state changed to:', state);
                     }
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
@@ -341,6 +340,7 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             await backupUserConfiguration(data);
 
+            this.logService.config('[DeviceService] User configuration will be saved', data.configuration);
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
 

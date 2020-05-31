@@ -13,31 +13,43 @@ export class AppRendererService {
                 private ipcRenderer: IpcCommonRenderer,
                 private logService: LogService) {
         this.registerEvents();
-        this.logService.info('[AppRendererService] init success ');
+        this.logService.misc('[AppRendererService] init success ');
     }
 
     getAppStartInfo() {
-        this.logService.info('[AppRendererService] getAppStartInfo');
+        this.logService.misc('[AppRendererService] getAppStartInfo');
         this.ipcRenderer.send(IpcEvents.app.getAppStartInfo);
     }
 
     exit() {
-        this.logService.info('[AppRendererService] exit');
+        this.logService.misc('[AppRendererService] exit');
         this.ipcRenderer.send(IpcEvents.app.exit);
     }
 
     openUrl(url: string): void {
-        this.logService.info(`[AppRendererService] open url: ${url}`);
+        this.logService.misc(`[AppRendererService] open url: ${url}`);
         this.ipcRenderer.send(IpcEvents.app.openUrl, url);
     }
 
     private registerEvents() {
         this.ipcRenderer.on(IpcEvents.app.getAppStartInfoReply, (event: string, arg: AppStartInfo) => {
-            this.dispachStoreAction(new ProcessAppStartInfoAction(arg));
+            this.dispatchStoreAction(new ProcessAppStartInfoAction(arg));
         });
 
-        this.ipcRenderer.on('__ELECTRON_LOG_RENDERER_CONSOLE__', (event: string, { level, data }) => {
+        this.ipcRenderer.on('__ELECTRON_LOG_IPC_default__', (event: string, { level, data }) => {
             const message = [];
+
+            if (data.length > 0
+                && data[data.length - 1].substr
+                && data[data.length - 1].substr(0, 6) === 'color:'
+                && data[0].substr
+                && data[0].substr(0, 2) === '%c'
+            ) {
+                data = [
+                    data[0].substr(2),
+                    ...data.slice(1, data.length - 2)
+                ];
+            }
 
             for (const item of data) {
                 message.push( typeof item === 'string' ? item : JSON.stringify(item));
@@ -47,8 +59,8 @@ export class AppRendererService {
         });
     }
 
-    private dispachStoreAction(action: Action) {
-        this.logService.info('[AppRendererService] dispatch action', action);
+    private dispatchStoreAction(action: Action) {
+        this.logService.misc(`[AppRendererService] dispatch action: ${action.type}`);
         this.zone.run(() => this.store.dispatch(action));
     }
 }

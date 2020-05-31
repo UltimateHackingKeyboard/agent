@@ -3,6 +3,7 @@ import commandLineUsage from 'command-line-usage';
 import { CommandLineArgs } from 'uhk-common';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
+    { name: 'log', type: String },
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
@@ -20,6 +21,11 @@ const sections: commandLineUsage.Section[] = [
     {
         header: 'Options',
         optionList: [
+            {
+                name: 'log',
+                description: 'Set logging categories. --log=misc,usb. Default is "misc"',
+                typeLabel: 'config | misc | usb | all'
+            },
             {
                 name: 'modules',
                 description: 'Make the modules menu visible'

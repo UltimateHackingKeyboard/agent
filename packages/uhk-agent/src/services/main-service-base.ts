@@ -5,7 +5,7 @@ export class MainServiceBase {
                 protected win: Electron.BrowserWindow) {}
 
     protected sendIpcToWindow(message: string, arg?: any) {
-        this.logService.info('sendIpcToWindow:', message, arg);
+        this.logService.misc('sendIpcToWindow:', message, arg);
         if (!this.win || this.win.isDestroyed()) {
             return;
         }

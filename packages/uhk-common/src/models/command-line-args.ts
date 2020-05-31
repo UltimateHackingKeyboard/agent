@@ -1,5 +1,9 @@
 export interface CommandLineArgs {
     /**
+     * logging categories
+     */
+    log?: string;
+    /**
      * modules menu visible or not
      */
     modules?: boolean;
