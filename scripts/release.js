@@ -42,7 +42,7 @@ let extraResources = [];
 
 if (process.platform === 'darwin') {
     target = Platform.MAC.createTarget();
-    artifactName += '.${version}.${ext}';
+    artifactName += '.${ext}';
 } else if (process.platform === 'win32') {
     target = Platform.WINDOWS.createTarget('nsis', builder.Arch.ia32, builder.Arch.x64);
     artifactName += '-${arch}.${ext}';
