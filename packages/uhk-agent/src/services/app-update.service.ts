@@ -9,6 +9,8 @@ import { ApplicationSettings, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
 import { getUpdaterLoggerService } from '../util';
 
+autoUpdater.autoDownload = false;
+
 export class AppUpdateService extends MainServiceBase {
 
     private sendAutoUpdateNotification = false;
