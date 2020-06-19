@@ -2,7 +2,6 @@
 
 import './polyfills';
 import { app, BrowserWindow } from 'electron';
-// import { autoUpdater } from 'electron-updater';
 
 import * as path from 'path';
 import * as url from 'url';
@@ -32,8 +31,6 @@ logger.setLogOptions(getLogOptions(options));
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: Electron.BrowserWindow;
-// TODO: Should we log the auto updater logs?
-// autoUpdater.logger = logger;
 
 let deviceService: DeviceService;
 let uhkBlhost: UhkBlhost;

@@ -7,6 +7,7 @@ import storage from 'electron-settings';
 
 import { ApplicationSettings, IpcEvents, LogService } from 'uhk-common';
 import { MainServiceBase } from './main-service-base';
+import { getUpdaterLoggerService } from '../util';
 
 export class AppUpdateService extends MainServiceBase {
 
@@ -16,6 +17,8 @@ export class AppUpdateService extends MainServiceBase {
                 protected win: Electron.BrowserWindow,
                 private app: Electron.App) {
         super(logService, win);
+
+        autoUpdater.logger = getUpdaterLoggerService(logService);
 
         this.initListeners();
         logService.misc('[AppUpdateService] init success');
