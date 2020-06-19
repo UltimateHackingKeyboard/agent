@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.0] - 2020-06-20
+
+Firmware: 8.**10.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Fix auto updater.
+- Allow $+-*/|\\<>?_'",\`@={} keymap abbreviation characters appearing on the LED display. Depends on firmware 8.10.0 `USERCONFIG:MINOR`
+- Fix side menu star icon vertical alignment.
+- Make the undo notification not covered by other elements.
+- Add command line logging categories.
+- Remove double version number from the Mac release filename.
+
 ## [1.4.5] - 2020-05-07
 
 Firmware: 8.9.**3** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.9.3)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
