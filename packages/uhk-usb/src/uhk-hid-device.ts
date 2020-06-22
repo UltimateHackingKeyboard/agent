@@ -224,7 +224,7 @@ export class UhkHidDevice {
             await snooze(100);
 
             if (!jumped) {
-                const device = this.getDevice({ errorLogLevel: 'debug'});
+                const device = this.getDevice({ errorLogLevel: 'misc'});
                 if (device) {
                     const data = getTransferData(message);
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);

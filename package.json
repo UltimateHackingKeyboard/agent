@@ -47,7 +47,7 @@
     "electron-builder": "22.5.1",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
-    "electron-log": "4.2.0",
+    "electron-log": "4.2.2",
     "electron-notarize": "0.3.0",
     "electron-rebuild": "1.10.0",
     "electron-settings": "3.1.4",
