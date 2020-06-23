@@ -8,7 +8,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 ## [1.5.0] - 2020-06-23
 
-Firmware: 8.**10.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.0)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+Firmware: 8.**10.1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Fix auto updater.
 - Allow $+-*/|\\<>?_'",\`@={} keymap abbreviation characters appearing on the LED display. Depends on firmware 8.10.0 `USERCONFIG:MINOR`
