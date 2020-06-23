@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import * as log from 'electron-log';
 import { LogService, logUserConfigHelper, UserConfiguration } from 'uhk-common';
 
-log.transports.file.level = 'debug';
 log.transports.file.resolvePath = variables => {
     return path.join(variables.libraryDefaultDir, 'uhk-agent.log');
 };
+log.transports.file.level = 'silly';
+log.transports.ipc.level = 'silly';
 
 /**
  * This service use the electron-log package to write log in file.

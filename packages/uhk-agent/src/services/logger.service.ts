@@ -2,8 +2,9 @@ import * as path from 'path';
 import * as log from 'electron-log';
 import { logUserConfigHelper, LogService, LogRegExps, UserConfiguration } from 'uhk-common';
 
-log.transports.console.level = 'debug';
-log.transports.file.level = 'debug';
+log.transports.console.level = 'silly';
+log.transports.file.level = 'silly';
+log.transports.ipc.level = 'silly';
 log.transports.file.resolvePath = variables => {
     return path.join(variables.libraryDefaultDir, 'uhk-agent.log');
 };
