@@ -6,3 +6,4 @@ dist
 *.sublime-project
 *.sublime-workspace
 tmp/
+.env
