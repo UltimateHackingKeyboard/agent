@@ -1,4 +1,4 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { IconDefinition, IconName } from '@fortawesome/fontawesome-common-types';
 
 const prefix = 'fas';
 const iconName = 'faSquareA';
@@ -11,7 +11,7 @@ const svgPathData = 'M 48 32 C 21.5 32 0 53.5 0 80 L 0 432 C 0 458.5 21.5 480 48
 
 export const faSquareA: IconDefinition = {
     prefix: prefix,
-    iconName: iconName,
+    iconName: iconName as IconName,
     icon: [
         width,
         height,
@@ -19,4 +19,4 @@ export const faSquareA: IconDefinition = {
         unicode,
         svgPathData
         ]
-} as any;
+};

@@ -1,9 +1,12 @@
-import { Output, EventEmitter } from '@angular/core';
+import { Output, EventEmitter, Component } from '@angular/core';
 
 export interface MacroValidator {
     isMacroValid: () => boolean;
 }
 
+@Component({
+    template: ''
+})
 export abstract class MacroBaseComponent implements MacroValidator {
 
     @Output() valid = new EventEmitter<boolean>();
