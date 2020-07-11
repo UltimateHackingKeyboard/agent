@@ -139,7 +139,7 @@ export class MacroListComponent implements OnDestroy {
     }
 
     onKeysCapture(event: KeyCaptureData) {
-        const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event));
+        const keyMacroAction = Object.assign(new KeyMacroAction(), this.toKeyAction(event)) as KeyMacroAction;
         keyMacroAction.action = MacroKeySubAction.tap;
 
         this.add.emit({
