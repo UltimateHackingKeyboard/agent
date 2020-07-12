@@ -67,6 +67,7 @@ export class UserConfigEffects {
             ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {
+                config = Object.assign(new UserConfiguration(), config);
                 config.recalculateConfigurationLength();
                 this.dataStorageRepository.saveConfig(config);
 

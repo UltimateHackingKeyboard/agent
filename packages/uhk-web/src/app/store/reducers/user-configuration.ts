@@ -226,6 +226,7 @@ export function reducer(
                 }
 
                 if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
+                    keymap = Object.assign(new Keymap, keymap);
                     keymap.layers = keymap.layers.map((layer, index) => {
                         if (keyActionRemap.remapOnAllLayer || index === layerIndex || isSwitchLayerAction) {
                             const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
@@ -234,18 +235,18 @@ export function reducer(
                             // on the target layer and remove SwitchLayerAction from other layers
                             if (isSwitchLayerAction) {
                                 if (index === 0 || index - 1 === (newKeyAction as SwitchLayerAction).layer) {
-                                    setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                                    return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                                 } else {
                                     const actionOnLayer = layer.modules[moduleIndex].keyActions[keyIndex];
                                     if (actionOnLayer && actionOnLayer instanceof SwitchLayerAction) {
-                                        setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
+                                        return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                                     }
                                 }
                             } else {
-                                setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                                return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                             }
                         } else if (oldKeyIsSwitchLayerAction && index - 1 === (oldKeyAction as SwitchLayerAction).layer) {
-                            setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
+                            return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                         }
 
                         return layer;
@@ -653,21 +654,24 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
     return newLayers;
 }
 
-function setKeyActionToLayer(newLayer: Layer, moduleIndex: number, keyIndex: number, newKeyAction: KeyAction): void {
+function setKeyActionToLayer(layer: Layer, moduleIndex: number, keyIndex: number, newKeyAction: KeyAction): Layer {
+    const newLayer: Layer = Object.assign(new Layer, layer);
     const newModule: Module = Object.assign(new Module(), newLayer.modules[moduleIndex]);
     newLayer.modules = newLayer.modules.slice();
     newLayer.modules[moduleIndex] = newModule;
 
     newModule.keyActions = newModule.keyActions.slice();
     newModule.keyActions[keyIndex] = newKeyAction;
+
+    return newLayer;
 }
 
 function assignUserConfiguration(state: State, userConfig: UserConfiguration): State {
     const userConfiguration = Object.assign(new UserConfiguration(), {
         ...state.userConfiguration,
         ...userConfig,
-        keymaps: userConfig.keymaps.sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name)),
-        macros: userConfig.macros.sort((first: Macro, second: Macro) => first.name.localeCompare(second.name))
+        keymaps: [...userConfig.keymaps].sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name)),
+        macros: [...userConfig.macros].sort((first: Macro, second: Macro) => first.name.localeCompare(second.name))
     });
 
     return {
