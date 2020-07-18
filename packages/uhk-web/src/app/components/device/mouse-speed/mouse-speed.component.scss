@@ -30,4 +30,14 @@
         height: 3rem;
     }
 
+    // TODO: Bootstrap upgrade with SCSS support so a mixin could be used here
+    @media (min-width: 992px) {
+        .mouse-speed-container {
+            &:nth-child(even) {
+                border-left: 1px solid #ccc;
+            }
+        }
+    }
+    
+
 }
