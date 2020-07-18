@@ -8,6 +8,16 @@
     p {
         margin: 1.5rem 0;
     }
+
+    // TODO: Bootstrap upgrade with SCSS support so a mixin could be used here
+    @media (min-width: 992px) {
+        .device-config-actions {
+            li {
+                display: inline-block;
+                margin-right: 1rem;
+            }
+        }
+    }
 }
 
 .separator {
