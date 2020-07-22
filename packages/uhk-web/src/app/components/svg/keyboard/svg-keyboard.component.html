@@ -5,6 +5,7 @@
      width="100%">
     <svg:g svg-module
            *ngFor="let module of modules; let i = index"
+           [attr.moduleId]="i"
            [coverages]="module.coverages"
            [keyboardKeys]="module.keyboardKeys"
            [capturingEnabled]="capturingEnabled"

@@ -121,6 +121,7 @@ import { HighlightArrowComponent } from './components/highlight-arrow/highlight-
 import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-bar.component';
 import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
+import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 
 @NgModule({
     declarations: [
@@ -231,6 +232,7 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
     ],
     providers: [
         SvgModuleProviderService,
+        KeyActionDragAndDropService,
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,

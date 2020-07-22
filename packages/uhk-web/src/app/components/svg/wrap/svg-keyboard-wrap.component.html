@@ -1,6 +1,7 @@
 <ng-template [ngIf]="layers">
     <layers [class.disabled]="popoverShown" (select)="selectLayer($event.index)" [current]="currentLayer"></layers>
-    <keyboard-slider [animationEnabled]="animationEnabled"
+    <keyboard-slider id="keyboard-slider"
+                     [animationEnabled]="animationEnabled"
                      [layers]="layers"
                      [currentLayer]="currentLayer"
                      [capturingEnabled]="popoverEnabled"

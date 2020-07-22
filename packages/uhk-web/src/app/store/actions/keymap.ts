@@ -4,12 +4,14 @@ import { Keymap } from 'uhk-common';
 import { ChangeKeymapDescription } from '../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
+import { ExchangeKeysActionModel } from '../../models';
 
 export enum ActionTypes {
     Add = '[Keymap] Add keymap',
     Duplicate = '[Keymap] Duplicate keymap',
     EditAbbr = '[Keymap] Edit keymap abbreviation',
     EditName = '[Keymap] Edit keymap title',
+    ExchangeKeys = '[Keymap] Exchange keys action',
     SaveKey = '[Keymap] Save key action',
     SetDefault = '[Keymap] Set default option',
     Remove = '[Keymap] Remove keymap',
@@ -66,6 +68,13 @@ export class SaveKeyAction implements Action {
         key: number;
         keyAction: KeyActionRemap;
     }) {
+    }
+}
+
+export class ExchangeKeysAction implements Action {
+    type = ActionTypes.ExchangeKeys;
+
+    constructor(public payload: ExchangeKeysActionModel) {
     }
 }
 
@@ -127,6 +136,7 @@ export type Actions
     | DuplicateKeymapAction
     | EditKeymapAbbreviationAction
     | EditKeymapNameAction
+    | ExchangeKeysAction
     | SaveKeyAction
     | SetDefaultKeymapAction
     | RemoveKeymapAction
