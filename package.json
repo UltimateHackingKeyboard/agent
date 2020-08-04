@@ -60,7 +60,7 @@
     "jasmine-ts": "0.3.0",
     "jsonfile": "5.0.0",
     "lerna": "3.22.1",
-    "lodash": "4.17.17",
+    "lodash": "4.17.19",
     "node-hid": "1.2.0",
     "npm-run-all": "4.1.5",
     "nrf-intel-hex": "1.3.0",
