@@ -140,9 +140,9 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.svgWrapper.style.cursor = 'grabbing';
         this.svgWrapper.style.left = '0';
         this.svgWrapper.style.top = '0';
-        this.svgWrapper.style.width = '100px';
-        this.svgWrapper.style.height = '100px';
-        this.svgWrapper.setAttribute('viewBox', '0 0 100 100');
+        this.svgWrapper.style.width = '150px';
+        this.svgWrapper.style.height = '150px';
+        this.svgWrapper.setAttribute('viewBox', '0 0 150 150');
         let svgRect: SVGElement = null;
         this.lefButtonDownOptions.element.childNodes.forEach((e: SVGElement): void => {
             const clonedElement = e.cloneNode(true) as SVGElement;
