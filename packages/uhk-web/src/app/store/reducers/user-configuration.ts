@@ -209,7 +209,7 @@ export function reducer(
         case KeymapActions.ActionTypes.ExchangeKeys: {
             const payload = (action as KeymapActions.ExchangeKeysAction).payload;
             const keymap = state.userConfiguration.getKeymap(payload.aKey.keymapAbbr);
-            const aKeyAction = Object.assign( getKeyActionByExchangeKey(state.userConfiguration, payload.aKey));
+            const aKeyAction = getKeyActionByExchangeKey(state.userConfiguration, payload.aKey);
             const bKeyAction = getKeyActionByExchangeKey(state.userConfiguration, payload.bKey);
             const aSaveKeyAction = new SaveKeyAction({
                 keymap,
