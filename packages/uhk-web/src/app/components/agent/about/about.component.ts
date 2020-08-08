@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { Constants } from 'uhk-common';
 
@@ -23,6 +24,7 @@ export class AboutComponent implements OnInit {
     agentGithubUrl: string = Constants.AGENT_GITHUB_URL;
     agentContributorsUrl: string = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
     state$: Observable<State>;
+    faSpinner = faSpinner;
 
     constructor(private store: Store<AppState>) {
     }
