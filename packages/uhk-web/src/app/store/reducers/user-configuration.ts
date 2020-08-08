@@ -2,6 +2,7 @@ import {
     KeyAction,
     KeyActionHelper,
     Keymap,
+    KeystrokeAction,
     Layer,
     Macro,
     Module,
@@ -211,26 +212,40 @@ export function reducer(
             const keymap = state.userConfiguration.getKeymap(payload.aKey.keymapAbbr);
             const aKeyAction = getKeyActionByExchangeKey(state.userConfiguration, payload.aKey);
             const bKeyAction = getKeyActionByExchangeKey(state.userConfiguration, payload.bKey);
+            let remapOnAllLayer = false;
+
+            if (aKeyAction instanceof KeystrokeAction && bKeyAction instanceof KeystrokeAction) {
+                remapOnAllLayer =
+                    aKeyAction.hasActiveModifier() &&
+                    aKeyAction.hasOnlyOneActiveModifier() &&
+                    !aKeyAction.hasSecondaryRoleAction() &&
+                    bKeyAction.hasActiveModifier() &&
+                    bKeyAction.hasOnlyOneActiveModifier() &&
+                    !bKeyAction.hasSecondaryRoleAction();
+            }
+
             const aSaveKeyAction = new SaveKeyAction({
                 keymap,
                 key: payload.bKey.keyId,
                 keyAction: {
-                    ...payload.remapInfo,
+                    remapOnAllKeymap: payload.remapInfo.remapOnAllKeymap,
+                    remapOnAllLayer: payload.remapInfo.remapOnAllLayer || remapOnAllLayer,
                     action: aKeyAction
                 },
                 layer: payload.bKey.layerId,
                 module: payload.bKey.moduleId
-            }) ;
+            });
             const bSaveKeyAction = new SaveKeyAction({
                 keymap,
                 key: payload.aKey.keyId,
                 keyAction: {
-                    ...payload.remapInfo,
+                    remapOnAllKeymap: payload.remapInfo.remapOnAllKeymap,
+                    remapOnAllLayer: payload.remapInfo.remapOnAllLayer || remapOnAllLayer,
                     action: bKeyAction
                 },
                 layer: payload.aKey.layerId,
                 module: payload.aKey.moduleId
-            }) ;
+            });
             let userConfig = saveKeyAction(state.userConfiguration, aSaveKeyAction);
             userConfig = saveKeyAction(userConfig, bSaveKeyAction);
 

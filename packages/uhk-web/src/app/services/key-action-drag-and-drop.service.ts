@@ -25,6 +25,11 @@ enum DragRotation {
     Right
 }
 
+/**
+ * Minimum mouse move in pixel before start the dragging;
+ */
+const MIN_MOVE_TO_START_DRAG = 2;
+
 @Injectable()
 export class KeyActionDragAndDropService implements OnDestroy {
 
@@ -85,6 +90,10 @@ export class KeyActionDragAndDropService implements OnDestroy {
 
     mouseMove(event: MouseEvent): void {
         if (!this.isLeftButtonDown) {
+            return;
+        }
+
+        if (!this.dragging && !this.isMovedMinimum(event)) {
             return;
         }
 
@@ -252,6 +261,11 @@ export class KeyActionDragAndDropService implements OnDestroy {
             this.svgWrapper.style.transform = `translate(5%,0) rotate(10.8deg) scale(${size}, ${size})`;
             this.dragRotation = DragRotation.Left;
         }
+    }
+
+    private isMovedMinimum(event: MouseEvent): boolean {
+        return Math.abs(this.lefButtonDownOptions.event.clientX - event.clientX) > MIN_MOVE_TO_START_DRAG
+        || Math.abs(this.lefButtonDownOptions.event.clientY - event.clientY) > MIN_MOVE_TO_START_DRAG;
     }
 }
 
