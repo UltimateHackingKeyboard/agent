@@ -220,7 +220,7 @@ export function reducer(
                     aKeyAction.hasActiveModifier() &&
                     aKeyAction.hasOnlyOneActiveModifier() &&
                     !aKeyAction.hasSecondaryRoleAction() &&
-                    bKeyAction.hasScancode() &&
+                    !bKeyAction.hasScancode() &&
                     bKeyAction.hasActiveModifier() &&
                     bKeyAction.hasOnlyOneActiveModifier() &&
                     !bKeyAction.hasSecondaryRoleAction();
