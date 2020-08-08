@@ -33,17 +33,23 @@ export class SvgTextIconKeyComponent implements OnChanges {
 
     calculatePositions(): void {
         let textYModifier = 0;
+        let useYModifier = 0;
         let secondaryYModifier = 0;
 
-        if (this.secondaryText && isRectangleAsSecondaryRoleKey(this.width, this.height)) {
-            textYModifier =  this.height / 5;
-            secondaryYModifier = 5;
+        if (this.secondaryText) {
+            if (isRectangleAsSecondaryRoleKey(this.width, this.height)) {
+                textYModifier = this.height / 5;
+                secondaryYModifier = 5;
+            } else {
+                textYModifier = this.height / 5 - 5;
+                useYModifier = textYModifier;
+            }
         }
 
         this.useWidth = this.width / 3;
         this.useHeight = this.height / 3;
         this.useX = (this.width > 2 * this.height) ? this.width * 0.6 : this.width / 3;
-        this.useY = (this.width > 2 * this.height) ? this.height / 3 : this.height / 2;
+        this.useY = (this.width > 2 * this.height) ? this.height / 3 : this.height / 2 - useYModifier;
         this.textY = ((this.width > 2 * this.height) ? this.height / 2 : this.height / 3) - textYModifier;
         this.textAnchor = (this.width > 2 * this.height) ? 'end' : 'middle';
         this.textX = (this.width > 2 * this.height) ? 0.6 * this.width : this.width / 2;
