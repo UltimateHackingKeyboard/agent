@@ -143,11 +143,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
         }
 
         let textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
-
-        if (this._inEditMode) {
-            textWidth += 3;
-        }
-
+        textWidth += 3;
         this._renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
     }
 }
