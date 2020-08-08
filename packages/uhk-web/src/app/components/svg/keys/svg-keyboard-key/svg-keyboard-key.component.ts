@@ -256,6 +256,12 @@ export class SvgKeyboardKeyComponent implements OnChanges {
                     if (newLabelSource.length === 1) {
                         this.labelSource = newLabelSource[0];
                         this.labelType = LabelTypes.OneLineText;
+                    } else if (newLabelSource[1].startsWith('icon')) {
+                        this.labelSource = {
+                            text: newLabelSource[0],
+                            icon: this.mapper.getIcon(newLabelSource[1])
+                        };
+                        this.labelType = LabelTypes.TextIcon;
                     } else {
                         this.labelSource = newLabelSource;
                         this.labelType = LabelTypes.TwoLineText;
