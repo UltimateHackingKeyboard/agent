@@ -132,7 +132,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         if (this.dragging) {
             return;
         }
-        this.scale = this._document.getElementById('svg-keyboard-a').offsetWidth / 1150;
+        this.scale = this._document.getElementById('svg-keyboard-a').offsetWidth / 1100;
         this.lefButtonDownOptions.element.style.visibility = 'hidden';
         this.svgWrapper = this._document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement;
         this.svgWrapper.style.position = 'fixed';
