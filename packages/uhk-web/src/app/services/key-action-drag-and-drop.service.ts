@@ -34,6 +34,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
     private moduleId: number;
     private halvesInfo: HalvesInfo;
     private dragRotation = DragRotation.None;
+    private scale = 1;
     private offset = {
         x: 0,
         y: 0
@@ -131,7 +132,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         if (this.dragging) {
             return;
         }
-
+        this.scale = this._document.getElementById('svg-keyboard-a').offsetWidth / 1150;
         this.lefButtonDownOptions.element.style.visibility = 'hidden';
         this.svgWrapper = this._document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement;
         this.svgWrapper.style.position = 'fixed';
@@ -140,9 +141,9 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.svgWrapper.style.cursor = 'grabbing';
         this.svgWrapper.style.left = '0';
         this.svgWrapper.style.top = '0';
-        this.svgWrapper.style.width = '150px';
-        this.svgWrapper.style.height = '150px';
-        this.svgWrapper.setAttribute('viewBox', '0 0 150 150');
+        this.svgWrapper.style.width = '200px';
+        this.svgWrapper.style.height = '200px';
+        this.svgWrapper.setAttribute('viewBox', '0 0 200 200');
         let svgRect: SVGElement = null;
         this.lefButtonDownOptions.element.childNodes.forEach((e: SVGElement): void => {
             const clonedElement = e.cloneNode(true) as SVGElement;
@@ -231,18 +232,16 @@ export class KeyActionDragAndDropService implements OnDestroy {
             return;
         }
 
-        const scale = this._document.getElementById('keyboard-slider').offsetWidth / 1100;
-
         this.moduleId = moduleId;
         if (this.halvesInfo.areHalvesMerged) {
-            this.svgWrapper.style.transform = `scale(${scale}, ${scale})`;
+            this.svgWrapper.style.transform = `scale(${this.scale}, ${this.scale})`;
             this.dragRotation = DragRotation.None;
         } else if (moduleId === 0) {
-            const size = 0.80 * scale;
+            const size = 0.80 * this.scale;
             this.svgWrapper.style.transform = `rotate(-10deg) scale(${size}, ${size})`;
             this.dragRotation = DragRotation.Right;
         } else if (moduleId === 1) {
-            const size = 0.80 * scale;
+            const size = 0.80 * this.scale;
             this.svgWrapper.style.transform = `rotate(10.8deg) scale(${size}, ${size})`;
             this.dragRotation = DragRotation.Left;
         }

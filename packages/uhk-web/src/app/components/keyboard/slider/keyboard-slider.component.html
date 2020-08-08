@@ -1,4 +1,5 @@
 <svg-keyboard [ngClass]="aLayerCssClasses"
+              id="svg-keyboard-a"
               [attr.layerId]="currentLayer"
               [moduleConfig]="aLayer.modules"
               [halvesInfo]="halvesInfo"
@@ -18,6 +19,7 @@
 </svg-keyboard>
 
 <svg-keyboard *ngIf="bLayer"
+              id="svg-keyboard-b"
               [attr.layerId]="currentLayer"
               [ngClass]="bLayerCssClasses"
               [moduleConfig]="bLayer.modules"
