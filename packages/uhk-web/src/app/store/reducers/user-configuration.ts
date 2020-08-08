@@ -216,9 +216,11 @@ export function reducer(
 
             if (aKeyAction instanceof KeystrokeAction && bKeyAction instanceof KeystrokeAction) {
                 remapOnAllLayer =
+                    !aKeyAction.hasScancode() &&
                     aKeyAction.hasActiveModifier() &&
                     aKeyAction.hasOnlyOneActiveModifier() &&
                     !aKeyAction.hasSecondaryRoleAction() &&
+                    bKeyAction.hasScancode() &&
                     bKeyAction.hasActiveModifier() &&
                     bKeyAction.hasOnlyOneActiveModifier() &&
                     !bKeyAction.hasSecondaryRoleAction();
