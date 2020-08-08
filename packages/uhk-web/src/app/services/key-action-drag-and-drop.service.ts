@@ -141,6 +141,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.svgWrapper.style.position = 'fixed';
         this.svgWrapper.style.transformOrigin = `0 0`;
         this.svgWrapper.style.fill = 'rgb(51, 51, 51)';
+        this.svgWrapper.style.opacity = '0.65';
         this.svgWrapper.style.cursor = 'grabbing';
         this.svgWrapper.style.left = '0';
         this.svgWrapper.style.top = '0';
