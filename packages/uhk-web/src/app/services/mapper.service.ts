@@ -274,11 +274,11 @@ export class MapperService {
         this.basicScanCodeTextMap.set(81, ['Down Arrow']);
         this.basicScanCodeTextMap.set(82, ['Up Arrow']);
         this.basicScanCodeTextMap.set(83, ['NumLk']);
-        this.basicScanCodeTextMap.set(84, ['/']);
-        this.basicScanCodeTextMap.set(85, ['*']);
-        this.basicScanCodeTextMap.set(86, ['-']);
-        this.basicScanCodeTextMap.set(87, ['+']);
-        this.basicScanCodeTextMap.set(88, [this.getOsSpecificText('Enter')]);
+        this.basicScanCodeTextMap.set(84, ['Np /']);
+        this.basicScanCodeTextMap.set(85, ['Np *']);
+        this.basicScanCodeTextMap.set(86, ['Np -']);
+        this.basicScanCodeTextMap.set(87, ['Np +']);
+        this.basicScanCodeTextMap.set(88, [`Np ${this.getOsSpecificText('Enter')}`]);
         this.basicScanCodeTextMap.set(89, ['end', '1']);
         this.basicScanCodeTextMap.set(90, ['2', 'icon-kbd__mod--arrow-down']);
         this.basicScanCodeTextMap.set(91, ['pgdn', '3']);
