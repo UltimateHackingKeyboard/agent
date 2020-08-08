@@ -8,6 +8,11 @@ import { AppState, getHalvesInfo, getSelectedKeymap } from '../store';
 import { ExchangeKeysActionModel } from '../models';
 import { ExchangeKeysAction } from '../store/actions/keymap';
 
+interface Point {
+    x: number;
+    y: number;
+}
+
 export interface LeftButtonDownOptions {
     keyId: string;
     event: MouseEvent;
@@ -35,7 +40,8 @@ export class KeyActionDragAndDropService implements OnDestroy {
     private halvesInfo: HalvesInfo;
     private dragRotation = DragRotation.None;
     private scale = 1;
-    private offset = {
+    private rect: DOMRect;
+    private offset: Point = {
         x: 0,
         y: 0
     };
@@ -59,11 +65,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
     leftButtonDown(options: LeftButtonDownOptions): void {
         this.lefButtonDownOptions = options;
         this.isLeftButtonDown = true;
-        const rec = this.lefButtonDownOptions.element.getBoundingClientRect();
-        this.offset = {
-            x: rec.x - this.lefButtonDownOptions.event.clientX,
-            y: rec.y - this.lefButtonDownOptions.event.clientY
-        };
+        this.rect = this.lefButtonDownOptions.element.getBoundingClientRect();
     }
 
     leftButtonUp(event: MouseEvent): void {
@@ -132,6 +134,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         if (this.dragging) {
             return;
         }
+        const translateBlackRectangle = 2;
         this.scale = this._document.getElementById('svg-keyboard-a').offsetWidth / 1100;
         this.lefButtonDownOptions.element.style.visibility = 'hidden';
         this.svgWrapper = this._document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement;
@@ -154,17 +157,17 @@ export class KeyActionDragAndDropService implements OnDestroy {
             }
 
             if (clonedElement.getAttribute) {
-                clonedElement.setAttribute('x', (+clonedElement.getAttribute('x') + 2).toString());
-                clonedElement.setAttribute('y', (+clonedElement.getAttribute('y') + 2).toString());
+                clonedElement.setAttribute('x', (+clonedElement.getAttribute('x') + translateBlackRectangle).toString());
+                clonedElement.setAttribute('y', (+clonedElement.getAttribute('y') + translateBlackRectangle).toString());
             }
 
             this.svgWrapper.appendChild(clonedElement);
         });
 
-        const svgRectWhite = this._document.createElementNS('http://www.w3.org/2000/svg', 'rect') as SVGRectElement;
         const width = +svgRect.getAttribute('width');
         const height = +svgRect.getAttribute('height');
-        svgRectWhite.setAttribute('width', (width + 4).toString());
+        const svgRectWhite = this._document.createElementNS('http://www.w3.org/2000/svg', 'rect') as SVGRectElement;
+        svgRectWhite.setAttribute('width', (width + translateBlackRectangle * 2).toString());
         svgRectWhite.setAttribute('height', (height + 20).toString());
         svgRectWhite.setAttribute('fill', 'white');
         svgRectWhite.setAttribute('rx', '4');
@@ -173,7 +176,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.svgWrapper.insertBefore(svgRectWhite, svgRect);
 
         const svgTextExchange = this._document.createElementNS('http://www.w3.org/2000/svg', 'text') as SVGTextElement;
-        svgTextExchange.setAttribute('x', ((width + 4) / 2).toString());
+        svgTextExchange.setAttribute('x', ((width + translateBlackRectangle * 2) / 2).toString());
         svgTextExchange.setAttribute('y', (height + 12).toString());
         svgTextExchange.setAttribute('fill', 'black');
         svgTextExchange.setAttribute('font-size', '14');
@@ -184,7 +187,10 @@ export class KeyActionDragAndDropService implements OnDestroy {
 
         this.setSvgWrapperTransformation(this.lefButtonDownOptions.element);
         this._document.body.appendChild(this.svgWrapper);
-
+        this.offset = {
+            x: this.rect.x - this.lefButtonDownOptions.event.clientX - translateBlackRectangle,
+            y: this.rect.y - this.lefButtonDownOptions.event.clientY - translateBlackRectangle
+        };
         this.dragging = true;
     }
 
@@ -238,11 +244,11 @@ export class KeyActionDragAndDropService implements OnDestroy {
             this.dragRotation = DragRotation.None;
         } else if (moduleId === 0) {
             const size = 0.80 * this.scale;
-            this.svgWrapper.style.transform = `rotate(-10deg) scale(${size}, ${size})`;
+            this.svgWrapper.style.transform = `translate(0,5%) rotate(-10deg) scale(${size}, ${size})`;
             this.dragRotation = DragRotation.Right;
         } else if (moduleId === 1) {
             const size = 0.80 * this.scale;
-            this.svgWrapper.style.transform = `rotate(10.8deg) scale(${size}, ${size})`;
+            this.svgWrapper.style.transform = `translate(5%,0) rotate(10.8deg) scale(${size}, ${size})`;
             this.dragRotation = DragRotation.Left;
         }
     }
