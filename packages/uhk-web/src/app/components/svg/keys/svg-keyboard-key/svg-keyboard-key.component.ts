@@ -1,10 +1,12 @@
 import {
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
     HostListener,
     Input,
     OnChanges,
+    OnDestroy,
     Output,
     ChangeDetectionStrategy,
     SimpleChanges,
@@ -13,6 +15,7 @@ import {
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Store } from '@ngrx/store';
 import { Key } from 'ts-keycode-enum';
+import { Subscription } from 'rxjs';
 
 import {
     KeyAction,
@@ -35,6 +38,7 @@ import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
+import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -64,7 +68,7 @@ enum LabelTypes {
     styleUrls: ['./svg-keyboard-key.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgKeyboardKeyComponent implements OnChanges {
+export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() id: string;
     @Input() rx: string;
     @Input() ry: string;
@@ -94,12 +98,15 @@ export class SvgKeyboardKeyComponent implements OnChanges {
     private pressedAltLocation = -1;
     private altPressed = false;
     private shiftPressed = false;
+    private subscriptions = new Subscription();
 
     constructor(
         private mapper: MapperService,
         private store: Store<AppState>,
         private element: ElementRef,
-        private captureService: CaptureService
+        private cdRef: ChangeDetectorRef,
+        private captureService: CaptureService,
+        private dragAndDropService: KeyActionDragAndDropService
     ) {
     }
 
@@ -117,7 +124,14 @@ export class SvgKeyboardKeyComponent implements OnChanges {
 
     @HostListener('mousedown', ['$event'])
     onMouseDown(e: MouseEvent) {
-        if ((e.which === 2 || e.button === 2) && this.capturingEnabled) {
+
+        if ((e.which === 0 || e.button === 0)) {
+            this.dragAndDropService.leftButtonDown({
+                keyId: this.id,
+                element: this.element.nativeElement,
+                event: e
+            });
+        } else if ((e.which === 2 || e.button === 2) && this.capturingEnabled) {
             e.preventDefault();
             this.element.nativeElement.focus();
 
@@ -197,6 +211,10 @@ export class SvgKeyboardKeyComponent implements OnChanges {
         if (changes['blink'] && changes['blink'].currentValue) {
             this.blinkSvgRec();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     onRecordingAnimationDone() {

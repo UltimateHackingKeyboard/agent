@@ -2,6 +2,7 @@ import {
     KeyAction,
     KeyActionHelper,
     Keymap,
+    KeystrokeAction,
     Layer,
     Macro,
     Module,
@@ -16,8 +17,9 @@ import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
 import * as DeviceActions from '../actions/device';
 import { isValidName } from '../../util';
-import { defaultLastEditKey, LastEditedKey } from '../../models';
+import { defaultLastEditKey, ExchangeKey, LastEditedKey } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
+import { SaveKeyAction } from '../actions/keymap';
 
 export interface State {
     userConfiguration: UserConfiguration;
@@ -205,60 +207,64 @@ export function reducer(
             };
         }
 
-        case KeymapActions.ActionTypes.SaveKey: {
-            const payload = (action as KeymapActions.SaveKeyAction).payload;
-            const keyIndex: number = payload.key;
-            const layerIndex: number = payload.layer;
-            const moduleIndex: number = payload.module;
-            const keyActionRemap = payload.keyAction;
-            const newKeyAction = keyActionRemap.action;
-            const newKeymap: Keymap = payload.keymap;
-            const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
-            const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
-            const oldKeyAction = newKeymap.layers[layerIndex].modules[moduleIndex].keyActions[keyIndex];
-            const oldKeyIsSwitchLayerAction = oldKeyAction instanceof SwitchLayerAction;
+        case KeymapActions.ActionTypes.ExchangeKeys: {
+            const payload = (action as KeymapActions.ExchangeKeysAction).payload;
+            const keymap = state.userConfiguration.getKeymap(payload.aKey.keymapAbbr);
+            const aKeyAction = getKeyActionByExchangeKey(state.userConfiguration, payload.aKey);
+            const bKeyAction = getKeyActionByExchangeKey(state.userConfiguration, payload.bKey);
+            let remapOnAllLayer = false;
 
-            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
-                // SwitchKeymapAction not allow to refer to itself
-                if (isSwitchKeymapAction && keymap.abbreviation === (newKeyAction as any).keymapAbbreviation) {
-                    return keymap;
-                }
+            if (aKeyAction instanceof KeystrokeAction && bKeyAction instanceof KeystrokeAction) {
+                remapOnAllLayer =
+                    !aKeyAction.hasScancode() &&
+                    aKeyAction.hasActiveModifier() &&
+                    aKeyAction.hasOnlyOneActiveModifier() &&
+                    !aKeyAction.hasSecondaryRoleAction() &&
+                    !bKeyAction.hasScancode() &&
+                    bKeyAction.hasActiveModifier() &&
+                    bKeyAction.hasOnlyOneActiveModifier() &&
+                    !bKeyAction.hasSecondaryRoleAction();
+            }
 
-                if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
-                    keymap = Object.assign(new Keymap, keymap);
-                    keymap.layers = keymap.layers.map((layer, index) => {
-                        if (keyActionRemap.remapOnAllLayer || index === layerIndex || isSwitchLayerAction) {
-                            const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
-
-                            // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
-                            // on the target layer and remove SwitchLayerAction from other layers
-                            if (isSwitchLayerAction) {
-                                if (index === 0 || index - 1 === (newKeyAction as SwitchLayerAction).layer) {
-                                    return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
-                                } else {
-                                    const actionOnLayer = layer.modules[moduleIndex].keyActions[keyIndex];
-                                    if (actionOnLayer && actionOnLayer instanceof SwitchLayerAction) {
-                                        return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
-                                    }
-                                }
-                            } else {
-                                return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
-                            }
-                        } else if (oldKeyIsSwitchLayerAction && index - 1 === (oldKeyAction as SwitchLayerAction).layer) {
-                            return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
-                        }
-
-                        return layer;
-                    });
-                }
-
-                return keymap;
+            const aSaveKeyAction = new SaveKeyAction({
+                keymap,
+                key: payload.bKey.keyId,
+                keyAction: {
+                    remapOnAllKeymap: payload.remapInfo.remapOnAllKeymap,
+                    remapOnAllLayer: payload.remapInfo.remapOnAllLayer || remapOnAllLayer,
+                    action: aKeyAction
+                },
+                layer: payload.bKey.layerId,
+                module: payload.bKey.moduleId
             });
+            const bSaveKeyAction = new SaveKeyAction({
+                keymap,
+                key: payload.aKey.keyId,
+                keyAction: {
+                    remapOnAllKeymap: payload.remapInfo.remapOnAllKeymap,
+                    remapOnAllLayer: payload.remapInfo.remapOnAllLayer || remapOnAllLayer,
+                    action: bKeyAction
+                },
+                layer: payload.aKey.layerId,
+                module: payload.aKey.moduleId
+            });
+            let userConfig = saveKeyAction(state.userConfiguration, aSaveKeyAction);
+            userConfig = saveKeyAction(userConfig, bSaveKeyAction);
 
             return {
                 ...state,
-                userConfiguration,
+                userConfiguration: userConfig
+            };
+        }
+
+        case KeymapActions.ActionTypes.SaveKey: {
+            const payload = (action as KeymapActions.SaveKeyAction).payload;
+            const keyIndex: number = payload.key;
+            const moduleIndex: number = payload.module;
+
+            return {
+                ...state,
+                userConfiguration: saveKeyAction(state.userConfiguration, action as KeymapActions.SaveKeyAction),
                 lastEditedKey: {
                     key: 'key-' + (keyIndex + 1),
                     moduleId: moduleIndex
@@ -679,4 +685,65 @@ function assignUserConfiguration(state: State, userConfig: UserConfiguration): S
         userConfiguration
     };
 
+}
+
+function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.SaveKeyAction): UserConfiguration {
+    const payload = action.payload;
+    const keyIndex: number = payload.key;
+    const layerIndex: number = payload.layer;
+    const moduleIndex: number = payload.module;
+    const keyActionRemap = payload.keyAction;
+    const newKeyAction = keyActionRemap.action;
+    const newKeymap: Keymap = payload.keymap;
+    const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
+    const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
+    const oldKeyAction = newKeymap.layers[layerIndex].modules[moduleIndex].keyActions[keyIndex];
+    const oldKeyIsSwitchLayerAction = oldKeyAction instanceof SwitchLayerAction;
+
+    const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), userConfig);
+    userConfiguration.keymaps = userConfig.keymaps.map(keymap => {
+        // SwitchKeymapAction not allow to refer to itself
+        if (isSwitchKeymapAction && keymap.abbreviation === (newKeyAction as any).keymapAbbreviation) {
+            return keymap;
+        }
+
+        if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
+            keymap = Object.assign(new Keymap, keymap);
+            keymap.layers = keymap.layers.map((layer, index) => {
+                if (keyActionRemap.remapOnAllLayer || index === layerIndex || isSwitchLayerAction) {
+                    const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
+                    // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
+                    // on the target layer and remove SwitchLayerAction from other layers
+                    if (isSwitchLayerAction) {
+                        if (index === 0 || index - 1 === (newKeyAction as SwitchLayerAction).layer) {
+                            return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                        } else {
+                            const actionOnLayer = layer.modules[moduleIndex].keyActions[keyIndex];
+                            if (actionOnLayer && actionOnLayer instanceof SwitchLayerAction) {
+                                return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
+                            }
+                        }
+                    } else {
+                        return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
+                    }
+                } else if (oldKeyIsSwitchLayerAction && index - 1 === (oldKeyAction as SwitchLayerAction).layer) {
+                    return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
+                }
+
+                return layer;
+            });
+        }
+
+        return keymap;
+    });
+
+    return userConfiguration;
+}
+
+function getKeyActionByExchangeKey(userConfig: UserConfiguration, exchangeKey: ExchangeKey): KeyAction {
+    return userConfig
+        .getKeymap(exchangeKey.keymapAbbr)
+        .layers[exchangeKey.layerId]
+        .modules[exchangeKey.moduleId]
+        .keyActions[exchangeKey.keyId];
 }
