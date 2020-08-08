@@ -55,7 +55,6 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
     private _onChanged = noop;
     private _onTouched = noop;
     private _inEditMode = false;
-    private _animationAdded = false;
 
     constructor(private _cdRef: ChangeDetectorRef,
                 private _renderer: Renderer2) {
@@ -147,18 +146,8 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
 
         if (this._inEditMode) {
             textWidth += 3;
-            this.addAnimation();
         }
 
         this._renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
-    }
-
-    private addAnimation(): void {
-        if (this._animationAdded) {
-            return;
-        }
-
-        const htmlInput = this.inputControl.nativeElement as HTMLInputElement;
-        this._renderer.setStyle(htmlInput, 'transition', '0.5s');
     }
 }
