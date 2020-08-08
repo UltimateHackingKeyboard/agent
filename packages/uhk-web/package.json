@@ -5,7 +5,7 @@
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "ng": "ng",
     "start": "ng serve",
-    "build": "run-s -sn build:*",
+    "build": "run-s -sn build:renderer",
     "build:web": "ng build --prod --aot",
     "build:renderer": "ng build --prod --aot --project=uhk-renderer",
     "server:renderer": "ng build --project=uhk-renderer --watch --source-map",

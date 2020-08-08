@@ -88,6 +88,7 @@
     "e2e": "lerna run e2e --scope uhk-web",
     "prebuild": "check-node-version --package",
     "build": "lerna run build",
+    "build:web": "lerna run build:web --scope=uhk-web",
     "server:web": "lerna exec --scope uhk-web npm start",
     "server:electron": "lerna exec --scope uhk-web npm run server:renderer",
     "electron": "lerna exec --scope uhk-agent npm start",
@@ -98,7 +99,7 @@
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",
     "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist ./tmp",
-    "predeploy-gh-pages": "lerna run build:web --scope=uhk-web",
+    "predeploy-gh-pages": "npm run build:web",
     "deploy-gh-pages": "gh-pages -d packages/uhk-web/dist",
     "convert-user-config-to-bin": "node -r ts-node/register ./packages/usb/user-config-json-to-bin.ts"
   }
