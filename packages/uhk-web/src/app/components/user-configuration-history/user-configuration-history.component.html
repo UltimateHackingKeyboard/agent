@@ -24,12 +24,7 @@
 
                 <span class="btn btn-link btn-padding-0"
                       *ngIf="fileInfo.showRestore"
-                      mwlConfirmationPopover
-                      popoverTitle="Are you sure want to load this configuration?"
-                      placement="bottom"
-                      confirmText="Yes"
-                      cancelText="No"
-                      (confirm)="getUserConfigFromHistory.emit(fileInfo.file)"
+                      (click)="getUserConfigFromHistory.emit(fileInfo.file)"
                       [class.disabled]="state.disabled">
                             Restore
                 </span>
