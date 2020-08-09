@@ -1,9 +1,10 @@
 import { Action } from '@ngrx/store';
-import { UserConfiguration, ConfigurationReply, UploadFileData } from 'uhk-common';
+import { UserConfiguration, ConfigurationReply } from 'uhk-common';
 
 import {
     ApplyUserConfigurationFromFilePayload,
-    UserConfigurationValue
+    UserConfigurationValue,
+    LoadUserConfigurationFromFilePayload
 } from '../../models';
 
 export enum ActionTypes {
@@ -18,7 +19,8 @@ export enum ActionTypes {
     RenameUserConfiguration = '[user-config] Rename user configuration',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
     LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
-    ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file'
+    ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file',
+    PreviewUserConfiguration = '[user-config] Preview user configuration'
 }
 
 export class LoadUserConfigAction implements Action {
@@ -38,6 +40,13 @@ export class LoadConfigFromDeviceReplyAction implements Action {
 
 export class LoadUserConfigSuccessAction implements Action {
     type = ActionTypes.LoadUserConfigSuccess;
+
+    constructor(public payload: UserConfiguration) {
+    }
+}
+
+export class PreviewUserConfigurationAction implements Action {
+    type = ActionTypes.PreviewUserConfiguration;
 
     constructor(public payload: UserConfiguration) {
     }
@@ -82,7 +91,7 @@ export class SetUserConfigurationValueAction implements Action {
 export class LoadUserConfigurationFromFileAction implements Action {
     type = ActionTypes.LoadUserConfigurationFromFile;
 
-    constructor(public payload: UploadFileData) {
+    constructor(public payload: LoadUserConfigurationFromFilePayload) {
     }
 }
 
@@ -102,6 +111,7 @@ export type Actions
     | SaveUserConfigInJsonFileAction
     | SaveUserConfigInBinaryFileAction
     | LoadResetUserConfigurationAction
+    | PreviewUserConfigurationAction
     | RenameUserConfigurationAction
     | SetUserConfigurationValueAction
     | LoadUserConfigurationFromFileAction

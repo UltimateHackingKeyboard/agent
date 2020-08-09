@@ -38,6 +38,8 @@ export function reducer(
     action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
+
+        case UserConfig.ActionTypes.PreviewUserConfiguration:
         case UserConfig.ActionTypes.LoadResetUserConfiguration:
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {
             const userConfig = (action as UserConfig.LoadUserConfigSuccessAction).payload;

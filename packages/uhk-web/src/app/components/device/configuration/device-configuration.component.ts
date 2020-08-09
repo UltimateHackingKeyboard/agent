@@ -69,8 +69,11 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
 
     changeFile(data: UploadFileData): void {
         this.store.dispatch(new LoadUserConfigurationFromFileAction({
-            ...data,
-            saveInHistory: true
+            uploadFileData: {
+                ...data,
+                saveInHistory: true
+            },
+            autoSave: false
         }));
     }
 

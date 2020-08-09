@@ -26,7 +26,7 @@ export function reducer(state = initialState, action: Actions) {
             return {
                 ...state,
                 loading: false,
-                files: (action as LoadUserConfigurationHistorySuccessAction).payload.sort(sortStringDesc)
+                files: [...(action as LoadUserConfigurationHistorySuccessAction).payload].sort(sortStringDesc)
             };
 
         default:

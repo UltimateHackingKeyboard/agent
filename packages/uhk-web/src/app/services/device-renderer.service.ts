@@ -102,7 +102,10 @@ export class DeviceRendererService {
         });
 
         this.ipcRenderer.on(IpcEvents.device.getUserConfigFromHistoryReply, (event: string, response: UploadFileData) => {
-            this.dispachStoreAction(new LoadUserConfigurationFromFileAction(response));
+            this.dispachStoreAction(new LoadUserConfigurationFromFileAction({
+                uploadFileData: response,
+                autoSave: false
+            }));
         });
     }
 

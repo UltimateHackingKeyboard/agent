@@ -23,7 +23,7 @@ import {
     ApplyUserConfigurationFromFileAction,
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
-    LoadUserConfigurationFromFileAction,
+    LoadUserConfigurationFromFileAction, PreviewUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 
@@ -46,6 +46,7 @@ import {
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
+import { LoadUserConfigurationFromFilePayload } from '../../models';
 
 @Injectable()
 export class UserConfigEffects {
@@ -208,23 +209,27 @@ export class UserConfigEffects {
         .pipe(
             ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
             map(action => action.payload),
-            map((info: UploadFileData) => {
+            map((payload: LoadUserConfigurationFromFilePayload) => {
                 try {
                     const userConfig = new UserConfiguration();
 
-                    if (info.filename.endsWith('.bin')) {
-                        userConfig.fromBinary(UhkBuffer.fromArray(info.data));
+                    if (payload.uploadFileData.filename.endsWith('.bin')) {
+                        userConfig.fromBinary(UhkBuffer.fromArray(payload.uploadFileData.data));
                     } else {
-                        const buffer = Buffer.from(info.data);
+                        const buffer = Buffer.from(payload.uploadFileData.data);
                         const json = buffer.toString();
                         userConfig.fromJsonObject(JSON.parse(json));
                     }
 
                     if (userConfig.userConfigMajorVersion) {
-                        return new ApplyUserConfigurationFromFileAction({
-                            userConfig,
-                            saveInHistory: info.saveInHistory
-                        });
+                        if (payload.autoSave) {
+                            return new ApplyUserConfigurationFromFileAction({
+                                userConfig,
+                                saveInHistory: payload.uploadFileData.saveInHistory
+                            });
+                        } else {
+                            return new PreviewUserConfigurationAction(userConfig);
+                        }
                     }
 
                     return new ShowNotificationAction({
@@ -238,6 +243,12 @@ export class UserConfigEffects {
                     });
                 }
             })
+        );
+
+    @Effect() previewUserConfiguration$ = this.actions$
+        .pipe(
+            ofType<PreviewUserConfigurationAction>(ActionTypes.PreviewUserConfiguration),
+            map(() => new ShowSaveToKeyboardButtonAction())
         );
 
     constructor(private actions$: Actions,
