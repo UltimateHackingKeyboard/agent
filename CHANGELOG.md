@@ -6,6 +6,18 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.1] - 2020-08-10
+
+Firmware: 8.10.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Allow key swapping by drag and dropping the keys to be swapped.
+- Display numpad keys explicitly by prefixing them with "Np ", and add relevant icons where applicable.
+- Upon importing a configuration, don't save it automatically but merely load it into Agent. The save to keyboard button saves the imported configuration.
+- Upon restoring a configuration from the configuration history, don't save it automatically but merely load it into Agent. The save to keyboard button saves the restored configuration.
+- Lay out mouse pointer speed and mouse scroll speed sections in two columns.
+- Lay out the buttons horizontally on the device configuration page.
+- Slightly improve the about page loading state by using a spinner and improving phrasing.
+
 ## [1.5.0] - 2020-06-23
 
 Firmware: 8.**10.1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
