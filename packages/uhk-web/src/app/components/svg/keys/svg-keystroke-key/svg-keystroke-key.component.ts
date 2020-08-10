@@ -42,7 +42,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     command: SvgAttributes;
 
     labelSource: any;
-    labelType: 'empty' | 'one-line' | 'two-line' | 'icon' | 'text-icon';
+    labelType: 'empty' | 'one-line' | 'two-line' | 'icon' | 'icon-text' | 'text-icon';
 
     modifierIconNames: {
         shift?: string,
@@ -101,7 +101,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
                                 text: newLabelSource[0],
                                 icon: this.mapper.getIcon(newLabelSource[1])
                             };
-                            this.labelType = 'text-icon';
+                            this.labelType = 'icon-text';
                             this.subComponentSecondaryRoleText = this.secondaryText;
                             this.thisSecondaryRoleText = null;
                         } else {
@@ -119,7 +119,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
                                 text: newLabelSource[0],
                                 icon: this.mapper.getIcon(newLabelSource[1])
                             };
-                            this.labelType = 'text-icon';
+                            this.labelType = 'icon-text';
                             this.subComponentSecondaryRoleText = this.secondaryText;
                             this.thisSecondaryRoleText = null;
                         } else {
