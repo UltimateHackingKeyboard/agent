@@ -279,7 +279,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                             text: newLabelSource[0],
                             icon: this.mapper.getIcon(newLabelSource[1])
                         };
-                        this.labelType = LabelTypes.TextIcon;
+                        this.labelType = LabelTypes.IconText;
                     } else {
                         this.labelSource = newLabelSource;
                         this.labelType = LabelTypes.TwoLineText;

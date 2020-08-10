@@ -92,10 +92,18 @@ export class SvgIconTextKeyComponent implements OnChanges {
 
         if (isRectangle) {
             const textboxHeight = this.height - this.secondaryHeight;
-            this.textY = textboxHeight / 2 - 0.5 * lines * lineHeight;
+            if (lines === 1) {
+                this.textY = textboxHeight / 2 - 0.5 * lineHeight;
+            } else {
+                this.textY = textboxHeight * 0.6;
+            }
         } else {
             const textboxHeight = this.height - this.secondaryHeight + this.useHeight;
-            this.textY = textboxHeight / 2 - 0.5 * lines * lineHeight;
+            if (lines === 1) {
+                this.textY = textboxHeight / 2 - 0.5 * lineHeight;
+            } else {
+                this.textY = textboxHeight * 0.625;
+            }
         }
         this.text1Y = 0;
         this.text2Y = this.text1Y + 1.2 * lines * lineHeight;
@@ -108,6 +116,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
 
         let result = '';
         let lastSpacePosition = 0;
+        let textWider = false;
 
         for (let i = startPosition; i < this.text.length; i++) {
             const char = this.text[i];
@@ -125,13 +134,14 @@ export class SvgIconTextKeyComponent implements OnChanges {
             }
 
             if (textWidth > this.textWidth) {
+                textWider = true;
                 break;
             }
 
             result = newText;
         }
 
-        if (lastSpacePosition > 0 && lastSpacePosition < result.length) {
+        if (textWider && lastSpacePosition > 0 && lastSpacePosition < result.length) {
             result = result.substr(0, lastSpacePosition);
         } else if (this.fontSize === 11) {
             const cleanResult = result.replace(/ /g, '');

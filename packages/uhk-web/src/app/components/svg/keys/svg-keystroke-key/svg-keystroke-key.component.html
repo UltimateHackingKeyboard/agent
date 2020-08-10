@@ -24,6 +24,14 @@
            [secondaryText]="subComponentSecondaryRoleText"
            >
     </svg:g>
+    <svg:g svg-icon-text-key *ngSwitchCase="'icon-text'"
+           [height]="height"
+           [width]="width"
+           [text]="labelSource.text"
+           [icon]="labelSource.icon"
+           [secondaryText]="subComponentSecondaryRoleText"
+    >
+    </svg:g>
 </svg>
 <svg [attr.viewBox]="viewBox" [attr.width]="modifierContainer.width" [attr.height]="modifierContainer.height" [attr.x]="modifierContainer.x"
     [attr.y]="modifierContainer.y" preserveAspectRatio="none">
