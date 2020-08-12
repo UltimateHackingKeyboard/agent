@@ -7,7 +7,8 @@
                 *ngFor="let text of texts; let index = index"
                 [attr.x]="spanX"
                 [attr.y]="spanYs[index]"
-                >{{ text }}</tspan>
+                [attr.font-size]="fontSizes[index]"
+         >{{ text }}</tspan>
  </svg:text>
 <svg:g svg-secondary-role
        *ngIf="secondaryText"

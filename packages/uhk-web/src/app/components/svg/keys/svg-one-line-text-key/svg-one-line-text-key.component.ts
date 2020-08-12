@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
 
-import { isRectangleAsSecondaryRoleKey } from '../util';
+import { calculateFitFontSize, isRectangleAsSecondaryRoleKey, START_FONT_SIZE } from '../util';
 import { SECONDARY_ROLE_BOTTOM_MARGIN } from '../../constants';
 
 @Component({
@@ -14,6 +14,7 @@ export class SvgOneLineTextKeyComponent implements OnChanges {
     @Input() text: string;
     @Input() secondaryText: string;
 
+    fontSize = START_FONT_SIZE;
     textX: number;
     textY: number;
     secondaryTextY: number;
@@ -23,6 +24,7 @@ export class SvgOneLineTextKeyComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         this.calculatePositions();
+        this.fontSize = calculateFitFontSize(this.text, this.width);
     }
 
     calculatePositions() {
