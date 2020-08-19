@@ -81,13 +81,13 @@ export const ENUMERATION_INFOS: Record<EnumerationModes, EnumerationInfo> = {
     [EnumerationModes.NormalKeyboard]: {
         mode: EnumerationModes.NormalKeyboard,
         productId: 0x6122,
-        timeout: 1000,
+        timeout: 5000,
         waitTimeout: 20000
     },
     [EnumerationModes.CompatibleKeyboard]: {
         mode: EnumerationModes.CompatibleKeyboard,
         productId: 0x6123,
-        timeout: 1000,
+        timeout: 5000,
         waitTimeout: 20000
     }
 };
