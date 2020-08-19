@@ -3,8 +3,8 @@ import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
     Constants,
+    ENUMERATION_INFOS,
     EnumerationModes,
-    EnumerationNameToProductId,
     KbootCommands,
     ModulePropertyId,
     ModuleSlotToI2cAddress,
@@ -27,7 +27,7 @@ export class UhkOperations {
     public async updateRightFirmwareWithBlhost(firmwarePath: string): Promise<void> {
         this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.misc('[UhkOperations] Start flashing right firmware');
-        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
+        const prefix = [`--usb 0x1d50,0x${ENUMERATION_INFOS[EnumerationModes.Bootloader].productId.toString(16)}`];
 
         await this.device.reenumerate(EnumerationModes.Bootloader);
         this.device.close();
@@ -41,7 +41,7 @@ export class UhkOperations {
     public async updateLeftModuleWithBlhost(firmwarePath: string): Promise<void> {
         this.logService.misc('[UhkOperations] Start flashing left module firmware');
 
-        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.buspal.toString(16)}`];
+        const prefix = [`--usb 0x1d50,0x${ENUMERATION_INFOS[EnumerationModes.Buspal].productId.toString(16)}`];
         const buspalPrefix = [...prefix, `--buspal i2c,${ModuleSlotToI2cAddress.leftHalf}`];
 
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
@@ -135,9 +135,12 @@ export class UhkOperations {
         await this.device.reenumerate(EnumerationModes.Buspal);
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for buspal');
-        await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
+        await waitForDevice(Constants.VENDOR_ID, ENUMERATION_INFOS[EnumerationModes.Buspal].productId);
         let tryCount = 0;
-        const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+        const usbPeripheral = new UsbPeripheral({
+            productId: ENUMERATION_INFOS[EnumerationModes.Buspal].productId,
+            vendorId: Constants.VENDOR_ID
+        });
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
@@ -179,7 +182,7 @@ export class UhkOperations {
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
-        await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.normalKeyboard);
+        await waitForDevice(Constants.VENDOR_ID, ENUMERATION_INFOS[EnumerationModes.NormalKeyboard].productId);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset, 100);
         this.device.close();
         await snooze(1000);

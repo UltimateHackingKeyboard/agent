@@ -56,19 +56,41 @@ export enum EnumerationModes {
     CompatibleKeyboard = 3
 }
 
-export const enumerationModeIdToProductId = {
-    '0': 0x6120,
-    '1': 0x6121,
-    '2': 0x6122,
-    '3': 0x6123
-};
-
-export enum EnumerationNameToProductId {
-    bootloader = 0x6120,
-    buspal = 0x6121,
-    normalKeyboard = 0x6122,
-    compatibleKeyboard = 0x6123
+export interface EnumerationInfo {
+    mode: EnumerationModes;
+    productId: number;
+    // Bootloader timeout in ms
+    timeout: number;
+    // Agent wait timeout for the device in ms
+    waitTimeout: number;
 }
+
+export const ENUMERATION_INFOS: Record<EnumerationModes, EnumerationInfo> = {
+    [EnumerationModes.Bootloader]: {
+        mode: EnumerationModes.Bootloader,
+        productId: 0x6120,
+        timeout: 60000,
+        waitTimeout: 80000
+    },
+    [EnumerationModes.Buspal]: {
+        mode: EnumerationModes.Buspal,
+        productId: 0x6121,
+        timeout: 60000,
+        waitTimeout: 80000
+    },
+    [EnumerationModes.NormalKeyboard]: {
+        mode: EnumerationModes.NormalKeyboard,
+        productId: 0x6122,
+        timeout: 1000,
+        waitTimeout: 20000
+    },
+    [EnumerationModes.CompatibleKeyboard]: {
+        mode: EnumerationModes.CompatibleKeyboard,
+        productId: 0x6123,
+        timeout: 1000,
+        waitTimeout: 20000
+    }
+};
 
 export enum ModuleSlotToI2cAddress {
     leftHalf = '0x10',
