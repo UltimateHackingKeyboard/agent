@@ -20,7 +20,7 @@ import {
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
 import { GetDeviceOptions } from './models';
 
-export const BOOTLOADER_TIMEOUT_MS = 5000;
+export const BOOTLOADER_TIMEOUT_MS = 60000;
 
 /**
  * HID API wrapper to support unified logging and async write
@@ -209,7 +209,8 @@ export class UhkHidDevice {
         const startTime = new Date();
         let jumped = false;
 
-        while (new Date().getTime() - startTime.getTime() < 20000) {
+        const waitTimeout = BOOTLOADER_TIMEOUT_MS + 5000;
+        while (new Date().getTime() - startTime.getTime() < waitTimeout) {
             const devs = devices();
 
             const inBootloaderMode = devs.some((x: Device) =>
