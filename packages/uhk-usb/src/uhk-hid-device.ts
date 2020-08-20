@@ -9,6 +9,7 @@ import {
     ConfigBufferId,
     Constants,
     EepromOperation,
+    enumerationModeIdToProductId,
     ENUMERATION_INFOS,
     EnumerationModes,
     KbootCommands,
@@ -19,6 +20,8 @@ import {
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
 import { GetDeviceOptions } from './models';
+
+export const BOOTLOADER_TIMEOUT_MS = 5000;
 
 /**
  * HID API wrapper to support unified logging and async write
@@ -198,21 +201,22 @@ export class UhkHidDevice {
         const message = Buffer.from([
             UsbCommand.Reenumerate,
             enumerationMode,
-            enumerationInfo.timeout & 0xff,
-            (enumerationInfo.timeout & 0xff << 8) >> 8,
-            (enumerationInfo.timeout & 0xff << 16) >> 16,
-            (enumerationInfo.timeout & 0xff << 24) >> 24
+            BOOTLOADER_TIMEOUT_MS & 0xff,
+            (BOOTLOADER_TIMEOUT_MS & 0xff << 8) >> 8,
+            (BOOTLOADER_TIMEOUT_MS & 0xff << 16) >> 16,
+            (BOOTLOADER_TIMEOUT_MS & 0xff << 24) >> 24
         ]);
 
+        const enumeratedProductId = enumerationModeIdToProductId[enumerationMode.toString()];
         const startTime = new Date();
         let jumped = false;
 
-        while (new Date().getTime() - startTime.getTime() < enumerationInfo.waitTimeout) {
+        while (new Date().getTime() - startTime.getTime() < 20000) {
             const devs = devices();
 
             const inBootloaderMode = devs.some((x: Device) =>
                 x.vendorId === Constants.VENDOR_ID &&
-                x.productId === enumerationInfo.productId);
+                x.productId === enumeratedProductId);
 
             if (inBootloaderMode) {
                 this.logService.misc(`[UhkHidDevice] Reenumerating devices`);

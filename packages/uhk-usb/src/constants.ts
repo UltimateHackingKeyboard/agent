@@ -56,6 +56,20 @@ export enum EnumerationModes {
     CompatibleKeyboard = 3
 }
 
+export const enumerationModeIdToProductId = {
+    '0': 0x6120,
+    '1': 0x6121,
+    '2': 0x6122,
+    '3': 0x6123
+};
+
+export enum EnumerationNameToProductId {
+    bootloader = 0x6120,
+    buspal = 0x6121,
+    normalKeyboard = 0x6122,
+    compatibleKeyboard = 0x6123
+}
+
 export interface EnumerationInfo {
     mode: EnumerationModes;
     productId: number;
