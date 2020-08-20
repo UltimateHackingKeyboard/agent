@@ -170,7 +170,7 @@ export class UsbPeripheral implements Peripheral {
                     logger('received data %o', `<${convertToHexString(receivedData)}>`);
                     memoryData.push(...receivedData);
                     // workaround to prevent main thread blocking
-                    await snooze(1);
+                    await snooze(5);
                 }
 
                 const responseData = this._device.readTimeout(2000);
