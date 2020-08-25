@@ -70,7 +70,7 @@ export class AppUpdateService extends MainServiceBase {
 
         ipcMain.on(IpcEvents.autoUpdater.updateAndRestart, () => {
             this.logService.misc('[AppUpdateService] update and restart from renderer process');
-            return autoUpdater.quitAndInstall(true);
+            return autoUpdater.quitAndInstall(true, true);
         });
 
         ipcMain.on(IpcEvents.app.appStarted, () => {
