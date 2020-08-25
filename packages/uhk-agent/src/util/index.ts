@@ -6,6 +6,7 @@ export * from './get-updater-logger';
 export * from './get-user-config-from-history-async';
 export * from './get-user-config-history-dir-async';
 export * from './load-user-config-history-async';
+export * from './reenumerate-and-exit';
 export * from './sanity-check-firmware';
 export * from './save-extract-firmware';
 export * from './save-user-config-history-async';

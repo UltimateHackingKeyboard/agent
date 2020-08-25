@@ -17,7 +17,7 @@ import { SudoService } from './services/sudo.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
-import { options, cliUsage } from './util';
+import { options, cliUsage, reenumerateAndExit } from './util';
 // import './dev-extension';
 // require('electron-debug')({ showDevTools: true, enabled: true });
 
@@ -39,6 +39,27 @@ let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
 let appService: AppService;
 let sudoService: SudoService;
+let packagesDir: string;
+
+let areServicesInited = false;
+
+if (!areServicesInited) {
+    logger.misc('[Electron Main] init services.');
+
+    if (isDev) {
+        packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../tmp');
+    } else {
+        packagesDir = path.dirname(app.getAppPath());
+    }
+
+    logger.misc(`[Electron Main] packagesDir: ${packagesDir}`);
+
+    uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
+    uhkBlhost = new UhkBlhost(logger, packagesDir);
+    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService);
+
+    areServicesInited = true;
+}
 
 const isSecondInstance = !app.requestSingleInstanceLock();
 
@@ -48,14 +69,6 @@ function createWindow() {
     }
 
     logger.misc('[Electron Main] Create new window.');
-    let packagesDir;
-    if (isDev) {
-        packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../tmp');
-    } else {
-        packagesDir = path.dirname(app.getAppPath());
-    }
-
-    logger.misc(`[Electron Main] packagesDir: ${packagesDir}`);
 
     const loadedWindowState = loadWindowState(logger);
 
@@ -79,14 +92,11 @@ function createWindow() {
     }
 
     setMenu(win);
-    uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
-    uhkBlhost = new UhkBlhost(logger, packagesDir);
-    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir, options);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService, packagesDir);
     sudoService = new SudoService(logger, options, deviceService, packagesDir);
-    // and load the index.html of the app.
+// and load the index.html of the app.
 
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'renderer/index.html'),
@@ -128,6 +138,22 @@ function createWindow() {
 
 if (isSecondInstance) {
     app.quit();
+} else if (options['reenumerate-and-exit']) {
+    const reenumerateOptions = {
+        logger,
+        commandLineArgs: options,
+        uhkHidDevice: uhkHidDeviceService
+    };
+    reenumerateAndExit(reenumerateOptions)
+        .then(() => {
+            logger.misc('Reenumeration process finished. Please unplug and plug your UHK.');
+            process.exit(0);
+        })
+        .catch(error => {
+            logger.error(error.message);
+            logger.misc('Reenumeration process finished with error. Please unplug and plug your UHK.');
+            process.exit(-1);
+        });
 } else {
 
 // This method will be called when Electron has finished

@@ -16,6 +16,11 @@ export interface CommandLineArgs {
      */
     'preserve-udev-rules'?: boolean;
     /**
+     * Reenumerate as the bootloader or BusPal, wait for the specified seconds and exit.
+     * May make Windows install the relevant USB drivers.
+     */
+    'reenumerate-and-exit'?: string;
+    /**
      * simulate privilege escalation error
      */
     spe?: boolean;
