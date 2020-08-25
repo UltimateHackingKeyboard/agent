@@ -192,24 +192,25 @@ export class UhkHidDevice {
         this._prevDevices = [];
     }
 
-    async reenumerate(enumerationMode: EnumerationModes): Promise<void> {
+    async reenumerate(enumerationMode: EnumerationModes, timeout = BOOTLOADER_TIMEOUT_MS): Promise<void> {
         const reenumMode = EnumerationModes[enumerationMode].toString();
-        this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}`);
+        this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
 
         const message = Buffer.from([
             UsbCommand.Reenumerate,
             enumerationMode,
-            BOOTLOADER_TIMEOUT_MS & 0xff,
-            (BOOTLOADER_TIMEOUT_MS & 0xff << 8) >> 8,
-            (BOOTLOADER_TIMEOUT_MS & 0xff << 16) >> 16,
-            (BOOTLOADER_TIMEOUT_MS & 0xff << 24) >> 24
+            timeout & 0xff,
+            (timeout & 0xff << 8) >> 8,
+            (timeout & 0xff << 16) >> 16,
+            (timeout & 0xff << 24) >> 24
         ]);
 
         const enumeratedProductId = enumerationModeIdToProductId[enumerationMode.toString()];
         const startTime = new Date();
+        const waitTimeout = timeout + 20000;
         let jumped = false;
 
-        while (new Date().getTime() - startTime.getTime() < 20000) {
+        while (new Date().getTime() - startTime.getTime() < waitTimeout) {
             const devs = devices();
 
             const inBootloaderMode = devs.some((x: Device) =>
@@ -272,6 +273,26 @@ export class UhkHidDevice {
             areHalvesMerged: buffer[2] !== 0,
             isLeftHalfConnected: buffer[3] !== 0
         };
+    }
+
+    public listAvailableDevices(devs: Device[]): void {
+        let compareDevices = devs as any;
+
+        if (platform() === 'linux') {
+            compareDevices = devs.map(x => ({
+                productId: x.productId,
+                vendorId: x.vendorId,
+                interface: x.interface
+            }));
+        }
+
+        if (!isEqualArray(this._prevDevices, compareDevices)) {
+            this.logService.misc('[UhkHidDevice] Available devices:');
+            this.logDevices(devs);
+            this._prevDevices = compareDevices;
+        } else {
+            this.logService.misc('[UhkHidDevice] Available devices unchanged');
+        }
     }
 
     /**
@@ -352,27 +373,6 @@ export class UhkHidDevice {
 
         return UdevRulesInfo.Different;
     }
-
-    private listAvailableDevices(devs: Device[]): void {
-        let compareDevices = devs as any;
-
-        if (platform() === 'linux') {
-            compareDevices = devs.map(x => ({
-                productId: x.productId,
-                vendorId: x.vendorId,
-                interface: x.interface
-            }));
-        }
-
-        if (!isEqualArray(this._prevDevices, compareDevices)) {
-            this.logService.misc('[UhkHidDevice] Available devices:');
-            this.logDevices(devs);
-            this._prevDevices = compareDevices;
-        } else {
-            this.logService.misc('[UhkHidDevice] Available devices unchanged');
-        }
-    }
-
 }
 
 function kbootCommandName(module: ModuleSlotToI2cAddress): string {

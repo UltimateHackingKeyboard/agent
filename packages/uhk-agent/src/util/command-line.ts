@@ -7,6 +7,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
+    { name: 'reenumerate-and-exit', type: String },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
     { name: 'usb-driver', type: String }
 ];
@@ -33,6 +34,13 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'preserve-udev-rules',
                 description: 'Don\'t force udev rule update'
+            },
+            {
+                name: 'reenumerate-and-exit',
+                description: 'Reenumerate as the bootloader or BusPal, wait for the specified seconds and exit. ' +
+                    'May make Windows install the relevant USB drivers.' +
+                    'Please provide timeout in millisecond.',
+                typeLabel: '(bootloader|buspal),timeout'
             },
             {
                 name: 'spe',
