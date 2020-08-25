@@ -37,9 +37,9 @@ const sections: commandLineUsage.Section[] = [
             },
             {
                 name: 'reenumerate-and-exit',
-                description: 'Reenumerate as the bootloader or BusPal, wait for the specified seconds and exit. ' +
-                    'May make Windows install the relevant USB drivers.' +
-                    'Please provide timeout in millisecond.',
+                description: 'Reenumerate as the bootloader or BusPal, wait for the specified timeout and exit. ' +
+                    'This may make Windows install the USB drivers needed for firmware update. ' +
+                    'Please provide the timeout in milliseconds.',
                 typeLabel: '(bootloader|buspal),timeout'
             },
             {

@@ -16,8 +16,8 @@ export interface CommandLineArgs {
      */
     'preserve-udev-rules'?: boolean;
     /**
-     * Reenumerate as the bootloader or BusPal, wait for the specified seconds and exit.
-     * May make Windows install the relevant USB drivers.
+     * Reenumerate as the bootloader or BusPal, wait for the specified timeout and exit.
+     * This may make Windows install the USB drivers needed for firmware update.
      */
     'reenumerate-and-exit'?: string;
     /**
