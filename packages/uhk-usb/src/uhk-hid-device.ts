@@ -218,7 +218,7 @@ export class UhkHidDevice {
                 x.productId === enumeratedProductId);
 
             if (inBootloaderMode) {
-                this.logService.misc(`[UhkHidDevice] Reenumerating devices`);
+                this.logService.misc('[UhkHidDevice] Reenumerating devices');
                 return;
             }
 
@@ -230,8 +230,12 @@ export class UhkHidDevice {
                     const data = getTransferData(message);
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
-                    device.write(data);
-                    device.close();
+                    try {
+                        device.write(data);
+                        device.close();
+                    } catch (error) {
+                        this.logService.misc('[UhkHidDevice] Reenumeration error. We hope it would not break the process', error);
+                    }
                     jumped = true;
                 } else {
                     this.logService.usb('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
