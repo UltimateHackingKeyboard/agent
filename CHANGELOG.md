@@ -6,6 +6,18 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.4] - 2020-08-29
+
+Firmware: 8.10.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Fix the error message of the --reenumerate-and-exit command.
+
+## [1.5.3] - 2020-08-28
+
+Firmware: 8.10.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Make the --reenumerate-and-exit command more resilient.
+
 ## [1.5.2] - 2020-08-25
 
 Firmware: 8.10.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.1)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
