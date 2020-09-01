@@ -1,3 +1,5 @@
+$side-value-width: 100px;
+
 :host {
     label {
         display: block;
@@ -15,15 +17,16 @@
     }
 
     .slider-container {
-        width: 80%;
+        width: calc(100% - #{$side-value-width});
     }
 
     .slider-value {
-        width: 20%;
+        width: $side-value-width;
     }
 
     .value-indicator {
-        margin: 1rem 1rem 1rem 3rem;
+        padding: 1rem 1rem 1rem 3rem;
         vertical-align: middle;
+        white-space: nowrap;
     }
 }
