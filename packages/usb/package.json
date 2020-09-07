@@ -7,7 +7,7 @@
   "license": "See in LICENSE",
   "devDependencies": {
     "shx": "0.2.2",
-    "typescript": "2.6.2"
+    "typescript": "3.9.7"
   },
   "dependencies": {
     "chalk": "2.1.0",
