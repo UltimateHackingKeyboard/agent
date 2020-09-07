@@ -7,15 +7,8 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2016",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2015.iterable",
-      "es2016",
-      "dom",
-      "dom.iterable"
-    ]
+    "esModuleInterop": true,
+    "target": "es2018",
+    "importHelpers": true
   }
 }

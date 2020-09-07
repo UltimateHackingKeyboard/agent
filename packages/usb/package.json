@@ -6,8 +6,7 @@
   "main": "uhk.js",
   "license": "See in LICENSE",
   "devDependencies": {
-    "shx": "0.2.2",
-    "typescript": "3.9.7"
+    "shx": "0.2.2"
   },
   "dependencies": {
     "chalk": "2.1.0",
