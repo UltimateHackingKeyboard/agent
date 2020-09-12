@@ -10,5 +10,8 @@
     "esModuleInterop": true,
     "target": "es2018",
     "importHelpers": true
+  },
+  "ts-node": {
+    "transpileOnly": true
   }
 }
