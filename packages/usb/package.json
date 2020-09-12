@@ -5,9 +5,6 @@
   "description": "Agent USB scripts",
   "main": "uhk.js",
   "license": "See in LICENSE",
-  "scripts": {
-    "build:skip": "../../node_modules/.bin/tsc --project ./tsconfig.json"
-  },
   "devDependencies": {
     "shx": "0.2.2"
   },
