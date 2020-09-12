@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node -r ts-node/register/transpile-only
 
 import Uhk, { errorHandler, CliOption } from './src';
 
