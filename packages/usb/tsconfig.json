@@ -9,7 +9,8 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "target": "es2018",
-    "importHelpers": true
+    "importHelpers": true,
+    "outDir": "./dist"
   },
   "ts-node": {
     "transpileOnly": true
