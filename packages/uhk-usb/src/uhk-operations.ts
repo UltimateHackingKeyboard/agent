@@ -361,6 +361,13 @@ export class UhkOperations {
         };
     }
 
+    public async setLedPwmBrightness(percent: number): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set LED PWM Brightness');
+
+        const command = Buffer.from([UsbCommand.SetLedPwmBrightness, percent]);
+        await this.device.write(command);
+    }
+
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
