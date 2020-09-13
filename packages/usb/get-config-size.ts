@@ -1,14 +1,14 @@
 #!/usr/bin/env ts-node-script
 
-import Uhk, { errorHandler, CliOption } from './src';
+import Uhk, { errorHandler, yargs } from './src';
 
 (async () => {
     try {
-        const cliOption: CliOption = {
-            description: 'Query the maximum size of the user and hardware configuration'
-        };
+        const argv = yargs
+            .usage('Query the maximum size of the user and hardware configuration')
+            .argv;
 
-        const { operations } = Uhk(cliOption);
+        const { operations } = Uhk(argv);
         const configs = await operations.getConfigSizesFromKeyboard();
 
         console.log(`hardwareConfigMaxSize: ${configs.hardwareConfig}`);

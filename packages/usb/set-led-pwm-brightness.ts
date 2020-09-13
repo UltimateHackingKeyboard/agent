@@ -1,30 +1,19 @@
 #!/usr/bin/env ts-node-script
 
-import Uhk, { errorHandler, CliOption } from './src';
+import Uhk, { errorHandler, yargs } from './src';
 
 (async () => {
     try {
-        const cliOption: CliOption = {
-            description: 'Set the LED brightness.',
-            args: [
-                {
-                    name: 'percent',
-                    alias: 'p',
-                    type: Number,
-                    defaultOption: true,
-                    description: 'Percent of the brightness'
-                }
-            ]
-        };
+        const argv = yargs
+            .scriptName('./set-led-pwm-brightness.ts')
+            .usage('Usage: $0 <percent>')
+            .demandCommand(1, 'Percent is required')
+            .argv as any;
 
-        const { operations, parsedArgs, usage } = Uhk(cliOption);
+        console.log(argv);
+        const { operations } = Uhk(argv);
 
-        if (!parsedArgs.percent) {
-            console.log(usage);
-            process.exit(-1);
-        }
-
-        await operations.setLedPwmBrightness(parsedArgs.percent);
+        await operations.setLedPwmBrightness(argv._[0]);
 
     } catch (error) {
         errorHandler(error);
