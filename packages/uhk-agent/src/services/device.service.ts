@@ -128,7 +128,7 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            await this.device.waitUntilKeyboardBusy();
+            await this.operations.waitUntilKeyboardBusy();
             const result = await this.operations.loadConfigurations();
             const modules: HardwareModules = await this.getHardwareModules(false);
 
@@ -156,7 +156,7 @@ export class DeviceService {
 
     public async getHardwareModules(catchError: boolean): Promise<HardwareModules> {
         try {
-            await this.device.waitUntilKeyboardBusy();
+            await this.operations.waitUntilKeyboardBusy();
 
             return {
                 leftModuleInfo: await this.operations.getLeftModuleVersionInfo(),
@@ -264,7 +264,7 @@ export class DeviceService {
     public async enableUsbStackTest(event: Electron.Event) {
         try {
             await this.stopPollUhkDevice();
-            await this.device.enableUsbStackTest();
+            await this.operations.enableUsbStackTest();
         } finally {
             this.startPollUhkDevice();
         }
