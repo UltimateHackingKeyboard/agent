@@ -61,7 +61,7 @@ export function getTransferData(buffer: Buffer): number[] {
  * @private
  * @static
  */
-export function bufferToString(buffer: Array<number>): string {
+export function bufferToString(buffer: Array<number> | Buffer): string {
     let str = '';
     for (let i = 0; i < buffer.length; i++) {
         let hex = buffer[i].toString(16) + ' ';

@@ -465,6 +465,13 @@ export class UhkOperations {
         await this.device.write(buffer);
     }
 
+    public async getAdcValue(): Promise<Buffer> {
+        this.logService.usb('[DeviceOperation] USB[T]: get ADC Value');
+        const buffer = Buffer.from([UsbCommand.GetAdcValue]);
+
+        return this.device.write(buffer);
+    }
+
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
