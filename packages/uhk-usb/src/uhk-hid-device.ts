@@ -6,16 +6,13 @@ import isRoot = require('is-root');
 import { Buffer, CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
-    ConfigBufferId,
     Constants,
-    EepromOperation,
     enumerationModeIdToProductId,
     EnumerationModes,
     KbootCommands,
     ModuleSlotToI2cAddress,
     ModuleSlotToId,
-    UsbCommand,
-    UsbVariables
+    UsbCommand
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
 import { GetDeviceOptions } from './models';
@@ -154,16 +151,6 @@ export class UhkHidDevice {
         });
     }
 
-    public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
-        await this.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
-        await this.waitUntilKeyboardBusy();
-    }
-
-    public async enableUsbStackTest(): Promise<void> {
-        await this.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
-        await this.waitUntilKeyboardBusy();
-    }
-
     /**
      * Close the communication chanel with UHK Device
      */
@@ -175,17 +162,6 @@ export class UhkHidDevice {
         this._device.close();
         this._device = null;
         this.logService.misc('[UhkHidDevice] Device communication closed.');
-    }
-
-    public async waitUntilKeyboardBusy(): Promise<void> {
-        while (true) {
-            const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
-            if (buffer[1] === 0) {
-                break;
-            }
-            this.logService.misc('Keyboard is busy, wait...');
-            await snooze(200);
-        }
     }
 
     public resetDeviceCache(): void {

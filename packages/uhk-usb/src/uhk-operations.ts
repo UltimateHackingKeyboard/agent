@@ -1,21 +1,32 @@
-import { Buffer, ConfigSizesInfo, LeftModuleInfo, LogService, RightModuleInfo, UhkBuffer } from 'uhk-common';
+import {
+    Buffer,
+    ConfigSizesInfo,
+    HardwareConfiguration,
+    LeftModuleInfo,
+    LogService,
+    RightModuleInfo,
+    UhkBuffer
+} from 'uhk-common';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
+    ConfigBufferId,
     Constants,
+    EepromOperation,
     EnumerationModes,
     EnumerationNameToProductId,
     KbootCommands,
     ModulePropertyId,
     ModuleSlotToI2cAddress,
-    ModuleSlotToId
+    ModuleSlotToId,
+    UsbVariables
 } from './constants';
 import * as fs from 'fs';
 import * as os from 'os';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
-import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
+import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
 import { LoadConfigurationsResult } from './models';
 
 export class UhkOperations {
@@ -196,7 +207,7 @@ export class UhkOperations {
      */
     public async loadConfigurations(): Promise<LoadConfigurationsResult> {
         try {
-            await this.device.waitUntilKeyboardBusy();
+            await this.waitUntilKeyboardBusy();
             const userConfiguration = await this.loadConfiguration(ConfigBufferId.validatedUserConfig);
             const hardwareConfiguration = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
 
@@ -276,21 +287,66 @@ export class UhkOperations {
 
         return {
             hardwareConfig: buffer[1] + (buffer[2] << 8),
-            userConfig:  buffer[3] + (buffer[4] << 8)
+            userConfig: buffer[3] + (buffer[4] << 8)
         };
     }
 
     public async saveUserConfiguration(buffer: Buffer): Promise<void> {
         try {
             this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to keyboard');
-            await this.sendUserConfigToKeyboard(buffer);
+            await this.sendConfigToKeyboard(buffer, true);
+            await this.applyConfiguration();
             this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
-            await this.device.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
+            await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
         } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
         } finally {
             this.device.close();
+        }
+    }
+
+    public async saveHardwareConfiguration(isIso: boolean): Promise<void> {
+        const hardwareConfig = new HardwareConfiguration();
+
+        hardwareConfig.signature = 'UHK';
+        hardwareConfig.majorVersion = 1;
+        hardwareConfig.minorVersion = 0;
+        hardwareConfig.patchVersion = 0;
+        hardwareConfig.brandId = 0;
+        hardwareConfig.deviceId = 1;
+        hardwareConfig.uniqueId = Math.floor(2 ** 32 * Math.random());
+        hardwareConfig.isVendorModeOn = false;
+        hardwareConfig.isIso = isIso;
+
+        const hardwareBuffer = new UhkBuffer();
+        hardwareConfig.toBinary(hardwareBuffer);
+        const buffer = hardwareBuffer.getBufferContent();
+
+        await this.sendConfigToKeyboard(buffer, false);
+        await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+    }
+
+    public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Write Config to Eeprom');
+        await this.device.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
+        await this.waitUntilKeyboardBusy();
+    }
+
+    public async enableUsbStackTest(): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Enable USB Stack test');
+        await this.device.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
+        await this.waitUntilKeyboardBusy();
+    }
+
+    public async waitUntilKeyboardBusy(): Promise<void> {
+        while (true) {
+            const buffer = await this.device.write(Buffer.from([UsbCommand.GetDeviceState]));
+            if (buffer[1] === 0) {
+                break;
+            }
+            this.logService.misc('Keyboard is busy, wait...');
+            await snooze(200);
         }
     }
 
@@ -368,19 +424,62 @@ export class UhkOperations {
         await this.device.write(command);
     }
 
-    /**
-     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
-     * @param {Buffer} buffer - UserConfiguration buffer
-     * @returns {Promise<void>}
-     * @private
-     */
-    private async sendUserConfigToKeyboard(buffer: Buffer): Promise<void> {
-        const fragments = getTransferBuffers(UsbCommand.WriteStagingUserConfig, buffer);
-        for (const fragment of fragments) {
-            await this.device.write(fragment);
-        }
+    public async applyConfiguration(): Promise<void> {
         this.logService.usb('[DeviceOperation] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = Buffer.from([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
+    }
+
+    public async setTestLedsState(on: boolean): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set test LEDs state');
+        const buffer = Buffer.from([UsbCommand.SetTestLed, on ? 1 : 0]);
+        await this.device.write(buffer);
+    }
+
+    public async launchEepromTransfer(operation: EepromOperation, bufferId: ConfigBufferId): Promise<Buffer> {
+        this.logService.usb('[DeviceOperation] USB[T]: Launch EEPORM transfer');
+        const buffer = Buffer.from([UsbCommand.LaunchEepromTransfer, operation, bufferId]);
+
+        return this.device.write(buffer);
+    }
+
+    public async eraseHardwareConfig(): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Erase hardware configuration');
+        const buffer = Buffer.from(Array(64).fill(0xff));
+        await this.sendConfigToKeyboard(buffer, false);
+        await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+    }
+
+    public async eraseUserConfig(): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Erase user configuration');
+        const buffer = Buffer.from(Array(2 ** 15 - 64).fill(0xff));
+        await this.sendConfigToKeyboard(buffer, false);
+        await this.writeConfigToEeprom(ConfigBufferId.stagingUserConfig);
+    }
+
+    public async switchKeymap(keymapAbbreviation: string): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Switch keymap');
+        const keymapAbbreviationAscii = keymapAbbreviation.split('').map(char => char.charCodeAt(0));
+        const buffer = Buffer.from([UsbCommand.SwitchKeymap, keymapAbbreviationAscii.length, keymapAbbreviationAscii]);
+
+        await this.device.write(buffer);
+    }
+
+    /**
+     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
+     * @param {Buffer} buffer - UserConfiguration buffer
+     * @param {Boolean} isUserConfiguration - User or Hardware configuration
+     * @returns {Promise<void>}
+     * @private
+     */
+    private async sendConfigToKeyboard(buffer: Buffer, isUserConfiguration): Promise<void> {
+        const command = isUserConfiguration
+            ? UsbCommand.WriteStagingUserConfig
+            : UsbCommand.WriteHardwareConfig;
+
+        const fragments = getTransferBuffers(command, buffer);
+        for (const fragment of fragments) {
+            await this.device.write(fragment);
+        }
     }
 }
