@@ -10,12 +10,14 @@ import {
     enumerationModeIdToProductId,
     EnumerationModes,
     KbootCommands,
+    LAYER_NUMBER_TO_STRING,
+    MODULE_ID_TO_STRING,
     ModuleSlotToI2cAddress,
     ModuleSlotToId,
     UsbCommand
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
-import { GetDeviceOptions } from './models';
+import { DeviceState, GetDeviceOptions } from './models';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -247,14 +249,30 @@ export class UhkHidDevice {
     }
 
     async getHalvesStates(): Promise<HalvesInfo> {
-        const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
+        const deviceState = await this.getDeviceState();
 
         return {
-            areHalvesMerged: buffer[2] !== 0,
-            isLeftHalfConnected: buffer[3] !== 0
+            areHalvesMerged: deviceState.areHalvesMerged,
+            isLeftHalfConnected: deviceState.isLeftHalfConnected
         };
     }
 
+    async getDeviceState(): Promise<DeviceState> {
+        const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
+        const activeLayerNumber = buffer[6] & 0x7f;
+
+        return {
+            isEepromBusy: buffer[1] !== 0,
+            areHalvesMerged: buffer[2] !== 0,
+            isLeftHalfConnected: buffer[3] !== 0,
+            activeLayerNumber,
+            activeLayerName: LAYER_NUMBER_TO_STRING[activeLayerNumber],
+            activeLayerToggled: (buffer[6] & 0x80) === 1,
+            leftKeyboardHalfSlot: MODULE_ID_TO_STRING[buffer[3]],
+            leftModuleSlot: MODULE_ID_TO_STRING[buffer[4]],
+            rightModuleSlot: MODULE_ID_TO_STRING[buffer[5]]
+        };
+    }
     public listAvailableDevices(devs: Device[]): void {
         let compareDevices = devs as any;
 

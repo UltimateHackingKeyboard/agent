@@ -98,3 +98,19 @@ export enum UsbVariables {
     debounceTimePress = 2,
     debounceTimeRelease = 3
 }
+
+export const LAYER_NUMBER_TO_STRING = [
+    'base',
+    'mod',
+    'fn',
+    'mouse'
+];
+
+export const MODULE_ID_TO_STRING = [
+    'NoModule',
+    'LeftKeyboardHalf',
+    'KeyClusterLeft',
+    'TrackballRight',
+    'TrackpointRight',
+    'TouchpadRight'
+];

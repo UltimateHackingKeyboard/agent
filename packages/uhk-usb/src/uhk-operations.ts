@@ -341,8 +341,8 @@ export class UhkOperations {
 
     public async waitUntilKeyboardBusy(): Promise<void> {
         while (true) {
-            const buffer = await this.device.write(Buffer.from([UsbCommand.GetDeviceState]));
-            if (buffer[1] === 0) {
+            const deviceState = await this.device.getDeviceState();
+            if (!deviceState.isEepromBusy) {
                 break;
             }
             this.logService.misc('Keyboard is busy, wait...');
