@@ -27,7 +27,7 @@ import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
-import { LoadConfigurationsResult } from './models';
+import { LoadConfigurationsResult, DebugInfo } from './models';
 
 export class UhkOperations {
     constructor(private logService: LogService,
@@ -472,6 +472,27 @@ export class UhkOperations {
         return this.device.write(buffer);
     }
 
+    public async getDebugInfo(): Promise<DebugInfo> {
+        this.logService.usb('[DeviceOperation] USB[T]: get Debug info');
+        const buffer = Buffer.from([UsbCommand.GetDebugBuffer]);
+
+        const responseBuffer = await this.device.write(buffer);
+
+        return {
+            i2cWatchdog: responseBuffer.readUInt32LE(1),
+            i2cSlaveSchedulerCounter: responseBuffer.readUInt32LE(5),
+            i2cWatchdogWatchCounter: responseBuffer.readUInt32LE(9),
+            i2cWatchdogRecoveryCounter: responseBuffer.readUInt32LE(13),
+            keyScannerCounter: responseBuffer.readUInt32LE(17),
+            usbReportUpdateCounter: responseBuffer.readUInt32LE(21),
+            currentTime: responseBuffer.readUInt32LE(25),
+            usbGenericHidActionCounter: responseBuffer.readUInt32LE(29),
+            usbBasicKeyboardActionCounter: responseBuffer.readUInt32LE(33),
+            usbMediaKeyboardActionCounter: responseBuffer.readUInt32LE(37),
+            usbSystemKeyboardActionCounter: responseBuffer.readUInt32LE(41),
+            usbMouseActionCounter: responseBuffer.readUInt32LE(45)
+        };
+    }
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
