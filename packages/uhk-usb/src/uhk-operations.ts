@@ -27,7 +27,7 @@ import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
-import { LoadConfigurationsResult, DebugInfo } from './models';
+import { LoadConfigurationsResult, DebugInfo, I2cBaudRate } from './models';
 
 export class UhkOperations {
     constructor(private logService: LogService,
@@ -491,6 +491,19 @@ export class UhkOperations {
             usbMediaKeyboardActionCounter: responseBuffer.readUInt32LE(37),
             usbSystemKeyboardActionCounter: responseBuffer.readUInt32LE(41),
             usbMouseActionCounter: responseBuffer.readUInt32LE(45)
+        };
+    }
+
+    public async getI2CBaudRate(): Promise<I2cBaudRate> {
+        this.logService.usb('[DeviceOperation] USB[T]: get I2C Baud rate');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.I2cBaudRate]);
+
+        const responseBuffer = await this.device.write(buffer);
+
+        return {
+            requestedBaudRate: responseBuffer.readUInt32LE(2),
+            actualBaudRate: responseBuffer.readUInt32LE(6),
+            i2c0F: responseBuffer[1].toString(2).padStart(8, '0')
         };
     }
     /**
