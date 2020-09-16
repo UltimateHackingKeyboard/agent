@@ -1,7 +1,7 @@
-import { LeftModuleInfo } from './left-module-info';
+import { ModuleVersionInfo } from './module-version-info';
 import { RightModuleInfo } from './right-module-info';
 
 export interface HardwareModules {
-    leftModuleInfo?: LeftModuleInfo;
+    leftModuleInfo?: ModuleVersionInfo;
     rightModuleInfo?: RightModuleInfo;
 }

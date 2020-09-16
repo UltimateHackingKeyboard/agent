@@ -2,8 +2,8 @@ import {
     Buffer,
     ConfigSizesInfo,
     HardwareConfiguration,
-    LeftModuleInfo,
     LogService,
+    ModuleVersionInfo,
     RightModuleInfo,
     UhkBuffer
 } from 'uhk-common';
@@ -371,25 +371,30 @@ export class UhkOperations {
         return false;
     }
 
-    public async getLeftModuleVersionInfo(): Promise<LeftModuleInfo> {
+    public async getModuleVersionInfo(module: ModuleSlotToId): Promise<ModuleVersionInfo> {
+        this.logService.misc(`[DeviceOperation] Read ${module} version information`);
+        this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
+
+        const command = Buffer.from([
+            UsbCommand.GetModuleProperty,
+            module,
+            ModulePropertyId.protocolVersions
+        ]);
+
+        const buffer = await this.device.write(command);
+        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+        // skip the first 2 byte
+        uhkBuffer.readUInt16();
+
+        return {
+            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+        };
+    }
+
+    public async getLeftModuleVersionInfo(): Promise<ModuleVersionInfo> {
         try {
-            this.logService.usb('[DeviceOperation] USB[T]: Read left module version information');
-
-            const command = Buffer.from([
-                UsbCommand.GetModuleProperty,
-                ModuleSlotToId.leftHalf,
-                ModulePropertyId.protocolVersions
-            ]);
-
-            const buffer = await this.device.write(command);
-            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
-            // skip the first 2 byte
-            uhkBuffer.readUInt16();
-
-            return {
-                moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
-            };
+            return await this.getModuleVersionInfo(ModuleSlotToId.leftHalf);
         } catch (error) {
             this.logService.error('[DeviceOperation] Could not read left module version information', error);
         }

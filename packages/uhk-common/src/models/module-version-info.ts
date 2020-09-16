@@ -1,4 +1,4 @@
-export interface LeftModuleInfo {
+export interface ModuleVersionInfo {
     firmwareVersion?: string;
     moduleProtocolVersion?: string;
 }
