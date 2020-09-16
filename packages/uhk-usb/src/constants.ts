@@ -98,7 +98,8 @@ export enum UsbVariables {
     testSwitches = 0,
     testUsbStack = 1,
     debounceTimePress = 2,
-    debounceTimeRelease = 3
+    debounceTimeRelease = 3,
+    usbReportSemaphore= 4
 }
 
 export const LAYER_NUMBER_TO_STRING = [

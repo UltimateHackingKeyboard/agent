@@ -529,6 +529,13 @@ export class UhkOperations {
         return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
     }
 
+    public async getVariable(variableId: UsbVariables): Promise<number> {
+        this.logService.usb('[DeviceOperation] USB[T]: get variable');
+        const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
+        const responseBuffer = await this.device.write(buffer);
+
+        return responseBuffer[1];
+    }
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
