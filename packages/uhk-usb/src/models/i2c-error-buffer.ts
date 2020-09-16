@@ -10,6 +10,7 @@ export interface I2cErrorStatus {
 }
 
 export interface I2cErrorBuffer {
+    isExists: boolean;
     slave: Slave;
     statuses: Array<I2cErrorStatus>;
 }

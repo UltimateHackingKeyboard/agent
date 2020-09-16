@@ -40,6 +40,7 @@ export function convertSlaveI2cErrorBuffer(buffer: Buffer, slaveId: number): I2c
     }
 
     return {
+        isExists: !buffer[0],
         slave,
         statuses
     };
