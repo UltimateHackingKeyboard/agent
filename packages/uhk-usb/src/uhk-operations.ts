@@ -27,7 +27,8 @@ import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
-import { LoadConfigurationsResult, DebugInfo, I2cBaudRate } from './models';
+import { LoadConfigurationsResult, DebugInfo, I2cBaudRate, Duration, I2cErrorBuffer } from './models';
+import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils';
 
 export class UhkOperations {
     constructor(private logService: LogService,
@@ -506,6 +507,23 @@ export class UhkOperations {
             i2c0F: responseBuffer[1].toString(2).padStart(8, '0')
         };
     }
+
+    public async getUptime(): Promise<Duration> {
+        this.logService.usb('[DeviceOperation] USB[T]: get uptime');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.Uptime]);
+        const responseBuffer = await this.device.write(buffer);
+
+        return convertMsToDuration(responseBuffer.readUInt32LE(1));
+    }
+
+    public async getI2cSlaveErrors(slaveId: number): Promise<I2cErrorBuffer> {
+        this.logService.usb('[DeviceOperation] USB[T]: get I2C Slave errors');
+        const buffer = Buffer.from([UsbCommand.GetSlaveI2cErrors, slaveId]);
+        const responseBuffer = await this.device.write(buffer);
+
+        return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
+    }
+
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
