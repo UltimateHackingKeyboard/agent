@@ -2,8 +2,8 @@
 
 import * as fs from 'fs';
 import { Buffer } from 'uhk-common';
-import Uhk, { errorHandler, yargs } from './src';
 import { ConfigBufferId, bufferToString } from 'uhk-usb';
+import Uhk, { errorHandler, yargs } from './src';
 
 (async function () {
     try {

@@ -17,7 +17,7 @@ import { ModuleSlotToId } from 'uhk-usb';
             const keys = Object.keys(ModuleSlotToId)
                 .filter((key: any) => isNaN(key))
                 .join(', ');
-            console.error(`The specified variable does not exist. Specify one of ${keys}`);
+            console.error(`The specified module does not exist. Specify one of ${keys}`);
             process.exit(1);
         }
 
