@@ -1,20 +1,20 @@
 #!/usr/bin/env ts-node-script
 
 import Uhk, { errorHandler, yargs } from './src';
-import { UsbVariables } from 'uhk-usb';
+import { ModuleSlotToId } from 'uhk-usb';
 
 (async function () {
     try {
         const argv = yargs
-            .scriptName('./get-variable.ts')
-            .usage('Usage: $0 <variable>')
-            .demandCommand(1, 'Variable required')
+            .scriptName('./jump-to-module-bootloader.ts')
+            .usage('Usage: $0 <module>')
+            .demandCommand(1, 'Module required')
             .argv;
 
-        const variable = argv._[0];
+        const module = argv._[0];
 
-        if (!Object.values(UsbVariables).includes(variable)) {
-            const keys = Object.keys(UsbVariables)
+        if (!Object.values(ModuleSlotToId).includes(module)) {
+            const keys = Object.keys(ModuleSlotToId)
                 .filter((key: any) => isNaN(key))
                 .join(', ');
             console.error(`The specified variable does not exist. Specify one of ${keys}`);
@@ -22,9 +22,7 @@ import { UsbVariables } from 'uhk-usb';
         }
 
         const { operations } = Uhk(argv);
-        const value = await operations.getVariable(UsbVariables[variable]);
-
-        console.log(value);
+        await operations.jumpToBootloaderModule(ModuleSlotToId[module]);
     } catch (error) {
         errorHandler(error);
     }

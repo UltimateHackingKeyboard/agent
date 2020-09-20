@@ -13,7 +13,6 @@ import {
     LAYER_NUMBER_TO_STRING,
     MODULE_ID_TO_STRING,
     ModuleSlotToI2cAddress,
-    ModuleSlotToId,
     UsbCommand
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
@@ -240,12 +239,6 @@ export class UhkHidDevice {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, Number.parseInt(module, 16)]);
         }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
-    }
-
-    async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
-        this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
-        const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
-        await this.write(transfer);
     }
 
     async getHalvesStates(): Promise<HalvesInfo> {

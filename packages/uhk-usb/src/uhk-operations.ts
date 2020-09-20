@@ -36,6 +36,12 @@ export class UhkOperations {
                 private device: UhkHidDevice) {
     }
 
+    public async jumpToBootloaderModule(module: ModuleSlotToId): Promise<void> {
+        this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
+        const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
+        await this.device.write(transfer);
+    }
+
     public async updateRightFirmwareWithBlhost(firmwarePath: string): Promise<void> {
         this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.misc('[UhkOperations] Start flashing right firmware');
@@ -61,7 +67,7 @@ export class UhkOperations {
         await snooze(1000);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
         await snooze(1000);
-        await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
+        await this.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
         this.device.close();
 
         const leftModuleBricked = await this.waitForKbootIdle();
@@ -134,7 +140,7 @@ export class UhkOperations {
         await snooze(1000);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
         await snooze(1000);
-        await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
+        await this.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
         this.device.close();
 
         const leftModuleBricked = await this.waitForKbootIdle();
