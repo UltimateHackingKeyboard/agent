@@ -219,8 +219,8 @@ export class UhkOperations {
             const hardwareConfiguration = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
 
             return {
-                userConfiguration,
-                hardwareConfiguration
+                userConfiguration: JSON.stringify(convertBufferToIntArray(userConfiguration)),
+                hardwareConfiguration: JSON.stringify(convertBufferToIntArray(hardwareConfiguration))
             };
         } finally {
             this.device.close();
@@ -231,7 +231,7 @@ export class UhkOperations {
      * Return with the actual user / hardware fonfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<string> {
+    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<Buffer> {
         const configBufferIdToName = ['HardwareConfig', 'StagingUserConfig', 'ValidatedUserConfig'];
         const configName = configBufferIdToName[configBufferId];
 
@@ -265,9 +265,8 @@ export class UhkOperations {
                     }
                 }
             }
-            const response = convertBufferToIntArray(configBuffer);
 
-            return Promise.resolve(JSON.stringify(response));
+            return configBuffer;
         } catch (error) {
             const errMsg = `[DeviceOperation] ${configName} from eeprom error`;
             this.logService.error(errMsg, error);
