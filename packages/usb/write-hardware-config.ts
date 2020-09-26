@@ -5,7 +5,7 @@ import Uhk, { errorHandler, yargs } from './src';
 (async () => {
     try {
         const argv = yargs
-            .scriptName('./switch-keymap.ts')
+            .scriptName('./write-hardware-config.ts')
             .usage('Usage: $0 {iso|ansi}')
             .demandCommand(1, 'Layout is required.')
             .argv;
