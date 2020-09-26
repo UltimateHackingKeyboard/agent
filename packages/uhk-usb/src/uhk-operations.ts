@@ -16,6 +16,7 @@ import {
     EnumerationModes,
     EnumerationNameToProductId,
     KbootCommands,
+    MODULE_ID_TO_STRING,
     ModulePropertyId,
     ModuleSlotToI2cAddress,
     ModuleSlotToId,
@@ -132,20 +133,28 @@ export class UhkOperations {
     }
 
     public async updateLeftModuleWithKboot(firmwarePath: string): Promise<void> {
-        this.logService.misc('[UhkOperations] Start flashing left module firmware');
+        return this.updateModuleWithKboot(firmwarePath, ModuleSlotToI2cAddress.leftHalf, ModuleSlotToId.leftHalf);
+    }
 
-        const i2cAddressOfLeftModule = Number.parseInt(ModuleSlotToI2cAddress.leftHalf, 16);
+    public async updateModuleWithKboot(
+        firmwarePath: string,
+        i2CAddress: ModuleSlotToI2cAddress,
+        slotId: ModuleSlotToId
+    ): Promise<void> {
+        this.logService.misc('[UhkOperations] Start flashing left module firmware');
+        const moduleName = MODULE_ID_TO_STRING[slotId];
+        const i2cAddressOfModule = Number.parseInt(i2CAddress, 16);
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
         await snooze(1000);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
+        await this.device.sendKbootCommandToModule(i2CAddress, KbootCommands.ping, 100);
         await snooze(1000);
-        await this.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
+        await this.jumpToBootloaderModule(slotId);
         this.device.close();
 
-        const leftModuleBricked = await this.waitForKbootIdle();
-        if (!leftModuleBricked) {
-            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
+        const moduleBricked = await this.waitForKbootIdle();
+        if (!moduleBricked) {
+            const msg = `[UhkOperations] Couldn't connect to the ${moduleName}.`;
             this.logService.error(msg);
             throw new Error(msg);
         }
@@ -159,13 +168,13 @@ export class UhkOperations {
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
-                this.logService.misc('[UhkOperations] Try to connect to the LEFT keyboard');
-                await kboot.configureI2c(i2cAddressOfLeftModule);
+                this.logService.misc(`[UhkOperations] Try to connect to the ${moduleName}`);
+                await kboot.configureI2c(i2cAddressOfModule);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 break;
             } catch {
                 if (tryCount > 100) {
-                    throw new Error('Can not connect to the LEFT keyboard');
+                    throw new Error(`Can not connect to the ${moduleName}`);
                 }
                 await snooze(2000);
             }
@@ -176,18 +185,18 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
         await snooze(1000);
 
-        this.logService.misc('[UhkOperations] Flash erase all on LEFT keyboard');
-        await kboot.configureI2c(i2cAddressOfLeftModule);
+        this.logService.misc(`[UhkOperations] Flash erase all on ${moduleName} keyboard`);
+        await kboot.configureI2c(i2cAddressOfModule);
         await kboot.flashEraseAllUnsecure();
 
-        this.logService.misc('[UhkOperations] Read LEFT firmware from file');
+        this.logService.misc(`[UhkOperations] Read ${moduleName} firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
 
         this.logService.misc('[UhkOperations] Write memory');
-        await kboot.configureI2c(i2cAddressOfLeftModule);
+        await kboot.configureI2c(i2cAddressOfModule);
         await kboot.writeMemory({ startAddress: 0, data: configData });
 
-        this.logService.misc('[UhkOperations] Reset LEFT keyboard');
+        this.logService.misc(`[UhkOperations] Reset ${moduleName} keyboard`);
         await kboot.reset();
 
         this.logService.misc('[UhkOperations] Close communication channels');
@@ -204,8 +213,7 @@ export class UhkOperations {
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
         this.device.close();
 
-        this.logService.misc('[UhkOperations] Left firmware successfully flashed');
-        this.logService.misc('[UhkOperations] Both left and right firmwares successfully flashed');
+        this.logService.misc(`[UhkOperations] ${moduleName} firmware successfully flashed`);
     }
 
     /**
