@@ -542,6 +542,12 @@ export class UhkOperations {
         return responseBuffer[1];
     }
 
+    public async setVariable(variable: UsbVariables, value: number): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set Variable');
+        await this.device.write(Buffer.from([UsbCommand.SetVariable, variable, value]));
+        await this.waitUntilKeyboardBusy();
+    }
+
     public async setI2CBaudRate(rate: number): Promise<void> {
         this.logService.usb('[DeviceOperation] USB[T]: Set I2C Baud Rate');
         const buffer = Buffer.from([UsbCommand.SetI2cBaudRate, rate]);
