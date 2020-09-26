@@ -21,7 +21,7 @@ import Uhk, { errorHandler, yargs } from './src';
             process.exit(1);
         }
 
-        const leftFirmwarePath = path.join(firmwarePath, '/devices/modules/uhk60-left.bin');
+        const leftFirmwarePath = path.join(firmwarePath, '/modules/uhk60-left.bin');
         if (!fs.existsSync(leftFirmwarePath)) {
             console.error('Left firmware path not found!');
             process.exit(1);
