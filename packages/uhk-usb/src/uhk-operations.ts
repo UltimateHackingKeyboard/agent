@@ -471,7 +471,7 @@ export class UhkOperations {
     public async switchKeymap(keymapAbbreviation: string): Promise<void> {
         this.logService.usb('[DeviceOperation] USB[T]: Switch keymap');
         const keymapAbbreviationAscii = keymapAbbreviation.split('').map(char => char.charCodeAt(0));
-        const buffer = Buffer.from([UsbCommand.SwitchKeymap, keymapAbbreviationAscii.length, keymapAbbreviationAscii]);
+        const buffer = Buffer.from([UsbCommand.SwitchKeymap, keymapAbbreviationAscii.length, ...keymapAbbreviationAscii]);
 
         await this.device.write(buffer);
     }
