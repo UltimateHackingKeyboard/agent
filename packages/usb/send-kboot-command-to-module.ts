@@ -6,7 +6,7 @@ import { KbootCommands, ModuleSlotToId } from 'uhk-usb';
 (async function () {
     try {
         const argv = yargs
-            .scriptName('./send-kboot-command-to-module')
+            .scriptName('./send-kboot-command-to-module.ts')
             .usage('Usage: $0 <command> <moduleSlot> \n moduleSlot is always required, except for the idle command.')
             .demandCommand(1, 'Command required')
             .argv;

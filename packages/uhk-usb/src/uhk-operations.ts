@@ -541,6 +541,12 @@ export class UhkOperations {
 
         return responseBuffer[1];
     }
+
+    public async setI2CBaudRate(rate: number): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set I2C Baud Rate');
+        const buffer = Buffer.from([UsbCommand.SetI2cBaudRate, rate]);
+        await this.device.write(buffer);
+    }
     /**
      * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
      * @param {Buffer} buffer - UserConfiguration buffer
