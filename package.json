@@ -24,7 +24,7 @@
     "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
-    "@types/file-saver": "0.0.1",
+    "@types/file-saver": "2.0.1",
     "@types/fs-extra": "9.0.1",
     "@types/jasmine": "3.5.0",
     "@types/jasminewd2": "2.0.8",
