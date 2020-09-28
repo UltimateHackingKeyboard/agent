@@ -4,9 +4,7 @@ import { Store } from '@ngrx/store';
 import { HalvesInfo, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
-import { combineLatest, first, map, pluck, switchMap } from 'rxjs/operators';
-
-import { saveAs } from 'file-saver';
+import { first, map, pluck } from 'rxjs/operators';
 
 import {
     getUserConfiguration,
@@ -73,26 +71,6 @@ export class KeymapEditComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.routeSubscription.unsubscribe();
         this.keymapSubscription.unsubscribe();
-    }
-
-    downloadKeymap() {
-        const exportableJSON$: Observable<string> = this.keymap$
-            .pipe(
-                switchMap(keymap => this.toExportableJSON(keymap)),
-                map(exportableJSON => JSON.stringify(exportableJSON))
-            );
-
-        this.keymap$
-            .pipe(
-                combineLatest(exportableJSON$),
-                first()
-            )
-            .subscribe(latest => {
-                const keymap = latest[0];
-                const exportableJSON = latest[1];
-                const fileName = keymap.name + '_keymap.json';
-                saveAs(new Blob([exportableJSON], { type: 'application/json' }), fileName);
-            });
     }
 
     descriptionChanged(event: ChangeKeymapDescription): void {
