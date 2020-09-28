@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import { ModuleSlotToId } from 'uhk-usb';
 
