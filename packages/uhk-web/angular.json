@@ -36,6 +36,7 @@
               "node_modules/nouislider/distribute/nouislider.js"
             ],
             "allowedCommonJsDependencies": [
+              "buffer",
               "file-saver"
             ]
           },
@@ -158,6 +159,7 @@
               "node_modules/nouislider/distribute/nouislider.js"
             ],
             "allowedCommonJsDependencies": [
+              "buffer",
               "file-saver"
             ]
           },
