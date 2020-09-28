@@ -2,11 +2,9 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
-    EventEmitter,
     Input,
     OnChanges,
     OnDestroy,
-    Output,
     Renderer2,
     SimpleChanges,
     ViewChild
@@ -41,7 +39,6 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
 
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
-    @Output() downloadClick = new EventEmitter<void>();
 
     @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef;
 
