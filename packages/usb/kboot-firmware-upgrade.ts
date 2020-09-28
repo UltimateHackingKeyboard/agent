@@ -1,26 +1,21 @@
+#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+
 import * as path from 'path';
-import { LogService } from 'uhk-common';
-import { UhkHidDevice, UhkOperations } from 'uhk-usb';
+import Uhk, { errorHandler, yargs } from './src';
 
-const logService = new LogService();
-const rootDir = path.join(__dirname, '../../tmp');
-const uhkHidDevice = new UhkHidDevice(logService, {}, rootDir);
-const uhkOperations = new UhkOperations(logService, uhkHidDevice, rootDir);
+(async function () {
+    try {
+        const argv = yargs
+            .usage('Upgrade firmwares')
+            .argv;
 
-process.on('uncaughtException', error => {
-    console.error('uncaughtException',  error);
-    process.exit(1);
-});
-
-process.on('unhandledRejection', (reason: any, promise: Promise<any>): void => {
-    console.error('unhandledRejection', { reason, promise });
-});
-
-uhkOperations
-    .updateRightFirmwareWithKboot()
-    .then(() => uhkOperations.updateLeftModuleWithKboot())
-    .then(() => console.log('Firmware upgrade finished'))
-    .catch(error => {
-        console.error(error);
-        process.exit(-1);
-    });
+        const { operations } = Uhk(argv);
+        const firmwareDir = path.join('../../tmp/packages/firmware');
+        const rightFirmwarePath = path.join(firmwareDir, 'devices/uhk60-right/firmware.hex');
+        await operations.updateRightFirmwareWithKboot(rightFirmwarePath);
+        const leftFirmwarePath = path.join(firmwareDir, 'modules/uhk60-left.bin');
+        await operations.updateLeftModuleWithKboot(leftFirmwarePath);
+    } catch (error) {
+        errorHandler(error);
+    }
+})();

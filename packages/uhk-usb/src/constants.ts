@@ -46,7 +46,9 @@ export enum DevicePropertyIds {
     DeviceProtocolVersion = 0,
     ProtocolVersions = 1,
     ConfigSizes = 2,
-    CurrentKbootCommand = 3
+    CurrentKbootCommand = 3,
+    I2cBaudRate= 4,
+    Uptime = 5
 }
 
 export enum EnumerationModes {
@@ -96,5 +98,22 @@ export enum UsbVariables {
     testSwitches = 0,
     testUsbStack = 1,
     debounceTimePress = 2,
-    debounceTimeRelease = 3
+    debounceTimeRelease = 3,
+    usbReportSemaphore= 4
 }
+
+export const LAYER_NUMBER_TO_STRING = [
+    'base',
+    'mod',
+    'fn',
+    'mouse'
+];
+
+export const MODULE_ID_TO_STRING = [
+    'NoModule',
+    'LeftKeyboardHalf',
+    'KeyClusterLeft',
+    'TrackballRight',
+    'TrackpointRight',
+    'TouchpadRight'
+];

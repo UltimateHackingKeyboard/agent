@@ -12,7 +12,7 @@ export enum UhkReenumerationModes {
 
 const USB_SCRIPTS_DIR = join(__dirname, '../../../usb');
 export const reenumerate = (mode: UhkReenumerationModes): void => {
-    const reenumerateScriptFile = join(USB_SCRIPTS_DIR, 'reenumerate.js');
+    const reenumerateScriptFile = join(USB_SCRIPTS_DIR, 'reenumerate.ts');
     const command = [reenumerateScriptFile, mode.toString()].join(' ');
 
     execSync(

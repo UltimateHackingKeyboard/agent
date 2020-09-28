@@ -1,27 +1,46 @@
-import { Buffer, ConfigSizesInfo, LeftModuleInfo, LogService, RightModuleInfo, UhkBuffer } from 'uhk-common';
+import {
+    Buffer,
+    ConfigSizesInfo,
+    HardwareConfiguration,
+    LogService,
+    ModuleVersionInfo,
+    RightModuleInfo,
+    UhkBuffer
+} from 'uhk-common';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
+    ConfigBufferId,
     Constants,
+    EepromOperation,
     EnumerationModes,
     EnumerationNameToProductId,
     KbootCommands,
+    MODULE_ID_TO_STRING,
     ModulePropertyId,
     ModuleSlotToI2cAddress,
-    ModuleSlotToId
+    ModuleSlotToId,
+    UsbVariables
 } from './constants';
 import * as fs from 'fs';
 import * as os from 'os';
 import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
-import { ConfigBufferId, convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
-import { LoadConfigurationsResult } from './models';
+import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
+import { LoadConfigurationsResult, DebugInfo, I2cBaudRate, Duration, I2cErrorBuffer } from './models';
+import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils';
 
 export class UhkOperations {
     constructor(private logService: LogService,
                 private blhost: UhkBlhost,
                 private device: UhkHidDevice) {
+    }
+
+    public async jumpToBootloaderModule(module: ModuleSlotToId): Promise<void> {
+        this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
+        const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
+        await this.device.write(transfer);
     }
 
     public async updateRightFirmwareWithBlhost(firmwarePath: string): Promise<void> {
@@ -49,7 +68,7 @@ export class UhkOperations {
         await snooze(1000);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
         await snooze(1000);
-        await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
+        await this.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
         this.device.close();
 
         const leftModuleBricked = await this.waitForKbootIdle();
@@ -114,20 +133,28 @@ export class UhkOperations {
     }
 
     public async updateLeftModuleWithKboot(firmwarePath: string): Promise<void> {
-        this.logService.misc('[UhkOperations] Start flashing left module firmware');
+        return this.updateModuleWithKboot(firmwarePath, ModuleSlotToI2cAddress.leftHalf, ModuleSlotToId.leftHalf);
+    }
 
-        const i2cAddressOfLeftModule = Number.parseInt(ModuleSlotToI2cAddress.leftHalf, 16);
+    public async updateModuleWithKboot(
+        firmwarePath: string,
+        i2CAddress: ModuleSlotToI2cAddress,
+        slotId: ModuleSlotToId
+    ): Promise<void> {
+        this.logService.misc('[UhkOperations] Start flashing left module firmware');
+        const moduleName = MODULE_ID_TO_STRING[slotId];
+        const i2cAddressOfModule = Number.parseInt(i2CAddress, 16);
         await this.device.reenumerate(EnumerationModes.NormalKeyboard);
         this.device.close();
         await snooze(1000);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
+        await this.device.sendKbootCommandToModule(i2CAddress, KbootCommands.ping, 100);
         await snooze(1000);
-        await this.device.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
+        await this.jumpToBootloaderModule(slotId);
         this.device.close();
 
-        const leftModuleBricked = await this.waitForKbootIdle();
-        if (!leftModuleBricked) {
-            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
+        const moduleBricked = await this.waitForKbootIdle();
+        if (!moduleBricked) {
+            const msg = `[UhkOperations] Couldn't connect to the ${moduleName}.`;
             this.logService.error(msg);
             throw new Error(msg);
         }
@@ -141,13 +168,13 @@ export class UhkOperations {
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
-                this.logService.misc('[UhkOperations] Try to connect to the LEFT keyboard');
-                await kboot.configureI2c(i2cAddressOfLeftModule);
+                this.logService.misc(`[UhkOperations] Try to connect to the ${moduleName}`);
+                await kboot.configureI2c(i2cAddressOfModule);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 break;
             } catch {
                 if (tryCount > 100) {
-                    throw new Error('Can not connect to the LEFT keyboard');
+                    throw new Error(`Can not connect to the ${moduleName}`);
                 }
                 await snooze(2000);
             }
@@ -158,18 +185,18 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
         await snooze(1000);
 
-        this.logService.misc('[UhkOperations] Flash erase all on LEFT keyboard');
-        await kboot.configureI2c(i2cAddressOfLeftModule);
+        this.logService.misc(`[UhkOperations] Flash erase all on ${moduleName} keyboard`);
+        await kboot.configureI2c(i2cAddressOfModule);
         await kboot.flashEraseAllUnsecure();
 
-        this.logService.misc('[UhkOperations] Read LEFT firmware from file');
+        this.logService.misc(`[UhkOperations] Read ${moduleName} firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
 
         this.logService.misc('[UhkOperations] Write memory');
-        await kboot.configureI2c(i2cAddressOfLeftModule);
+        await kboot.configureI2c(i2cAddressOfModule);
         await kboot.writeMemory({ startAddress: 0, data: configData });
 
-        this.logService.misc('[UhkOperations] Reset LEFT keyboard');
+        this.logService.misc(`[UhkOperations] Reset ${moduleName} keyboard`);
         await kboot.reset();
 
         this.logService.misc('[UhkOperations] Close communication channels');
@@ -186,8 +213,7 @@ export class UhkOperations {
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
         this.device.close();
 
-        this.logService.misc('[UhkOperations] Left firmware successfully flashed');
-        this.logService.misc('[UhkOperations] Both left and right firmwares successfully flashed');
+        this.logService.misc(`[UhkOperations] ${moduleName} firmware successfully flashed`);
     }
 
     /**
@@ -196,13 +222,13 @@ export class UhkOperations {
      */
     public async loadConfigurations(): Promise<LoadConfigurationsResult> {
         try {
-            await this.device.waitUntilKeyboardBusy();
+            await this.waitUntilKeyboardBusy();
             const userConfiguration = await this.loadConfiguration(ConfigBufferId.validatedUserConfig);
             const hardwareConfiguration = await this.loadConfiguration(ConfigBufferId.hardwareConfig);
 
             return {
-                userConfiguration,
-                hardwareConfiguration
+                userConfiguration: JSON.stringify(convertBufferToIntArray(userConfiguration)),
+                hardwareConfiguration: JSON.stringify(convertBufferToIntArray(hardwareConfiguration))
             };
         } finally {
             this.device.close();
@@ -213,7 +239,7 @@ export class UhkOperations {
      * Return with the actual user / hardware fonfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<string> {
+    public async loadConfiguration(configBufferId: ConfigBufferId): Promise<Buffer> {
         const configBufferIdToName = ['HardwareConfig', 'StagingUserConfig', 'ValidatedUserConfig'];
         const configName = configBufferIdToName[configBufferId];
 
@@ -247,9 +273,8 @@ export class UhkOperations {
                     }
                 }
             }
-            const response = convertBufferToIntArray(configBuffer);
 
-            return Promise.resolve(JSON.stringify(response));
+            return configBuffer;
         } catch (error) {
             const errMsg = `[DeviceOperation] ${configName} from eeprom error`;
             this.logService.error(errMsg, error);
@@ -276,21 +301,66 @@ export class UhkOperations {
 
         return {
             hardwareConfig: buffer[1] + (buffer[2] << 8),
-            userConfig:  buffer[3] + (buffer[4] << 8)
+            userConfig: buffer[3] + (buffer[4] << 8)
         };
     }
 
     public async saveUserConfiguration(buffer: Buffer): Promise<void> {
         try {
             this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to keyboard');
-            await this.sendUserConfigToKeyboard(buffer);
+            await this.sendConfigToKeyboard(buffer, true);
+            await this.applyConfiguration();
             this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
-            await this.device.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
+            await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
         } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
         } finally {
             this.device.close();
+        }
+    }
+
+    public async saveHardwareConfiguration(isIso: boolean): Promise<void> {
+        const hardwareConfig = new HardwareConfiguration();
+
+        hardwareConfig.signature = 'UHK';
+        hardwareConfig.majorVersion = 1;
+        hardwareConfig.minorVersion = 0;
+        hardwareConfig.patchVersion = 0;
+        hardwareConfig.brandId = 0;
+        hardwareConfig.deviceId = 1;
+        hardwareConfig.uniqueId = Math.floor(2 ** 32 * Math.random());
+        hardwareConfig.isVendorModeOn = false;
+        hardwareConfig.isIso = isIso;
+
+        const hardwareBuffer = new UhkBuffer();
+        hardwareConfig.toBinary(hardwareBuffer);
+        const buffer = hardwareBuffer.getBufferContent();
+
+        await this.sendConfigToKeyboard(buffer, false);
+        await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+    }
+
+    public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Write Config to Eeprom');
+        await this.device.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
+        await this.waitUntilKeyboardBusy();
+    }
+
+    public async enableUsbStackTest(): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Enable USB Stack test');
+        await this.device.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
+        await this.waitUntilKeyboardBusy();
+    }
+
+    public async waitUntilKeyboardBusy(): Promise<void> {
+        while (true) {
+            const deviceState = await this.device.getDeviceState();
+            if (!deviceState.isEepromBusy) {
+                break;
+            }
+            this.logService.misc('Keyboard is busy, wait...');
+            await snooze(200);
         }
     }
 
@@ -314,25 +384,30 @@ export class UhkOperations {
         return false;
     }
 
-    public async getLeftModuleVersionInfo(): Promise<LeftModuleInfo> {
+    public async getModuleVersionInfo(module: ModuleSlotToId): Promise<ModuleVersionInfo> {
+        this.logService.misc(`[DeviceOperation] Read ${module} version information`);
+        this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
+
+        const command = Buffer.from([
+            UsbCommand.GetModuleProperty,
+            module,
+            ModulePropertyId.protocolVersions
+        ]);
+
+        const buffer = await this.device.write(command);
+        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+        // skip the first 2 byte
+        uhkBuffer.readUInt16();
+
+        return {
+            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+        };
+    }
+
+    public async getLeftModuleVersionInfo(): Promise<ModuleVersionInfo> {
         try {
-            this.logService.usb('[DeviceOperation] USB[T]: Read left module version information');
-
-            const command = Buffer.from([
-                UsbCommand.GetModuleProperty,
-                ModuleSlotToId.leftHalf,
-                ModulePropertyId.protocolVersions
-            ]);
-
-            const buffer = await this.device.write(command);
-            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
-            // skip the first 2 byte
-            uhkBuffer.readUInt16();
-
-            return {
-                moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
-            };
+            return await this.getModuleVersionInfo(ModuleSlotToId.leftHalf);
         } catch (error) {
             this.logService.error('[DeviceOperation] Could not read left module version information', error);
         }
@@ -361,19 +436,146 @@ export class UhkOperations {
         };
     }
 
-    /**
-     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
-     * @param {Buffer} buffer - UserConfiguration buffer
-     * @returns {Promise<void>}
-     * @private
-     */
-    private async sendUserConfigToKeyboard(buffer: Buffer): Promise<void> {
-        const fragments = getTransferBuffers(UsbCommand.WriteStagingUserConfig, buffer);
-        for (const fragment of fragments) {
-            await this.device.write(fragment);
-        }
+    public async setLedPwmBrightness(percent: number): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set LED PWM Brightness');
+
+        const command = Buffer.from([UsbCommand.SetLedPwmBrightness, percent]);
+        await this.device.write(command);
+    }
+
+    public async applyConfiguration(): Promise<void> {
         this.logService.usb('[DeviceOperation] USB[T]: Apply user configuration to keyboard');
         const applyBuffer = Buffer.from([UsbCommand.ApplyConfig]);
         await this.device.write(applyBuffer);
+    }
+
+    public async setTestLedsState(on: boolean): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set test LEDs state');
+        const buffer = Buffer.from([UsbCommand.SetTestLed, on ? 1 : 0]);
+        await this.device.write(buffer);
+    }
+
+    public async launchEepromTransfer(operation: EepromOperation, bufferId: ConfigBufferId): Promise<Buffer> {
+        this.logService.usb('[DeviceOperation] USB[T]: Launch EEPORM transfer');
+        const buffer = Buffer.from([UsbCommand.LaunchEepromTransfer, operation, bufferId]);
+
+        return this.device.write(buffer);
+    }
+
+    public async eraseHardwareConfig(): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Erase hardware configuration');
+        const buffer = Buffer.from(Array(64).fill(0xff));
+        await this.sendConfigToKeyboard(buffer, false);
+        await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+    }
+
+    public async eraseUserConfig(): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Erase user configuration');
+        const buffer = Buffer.from(Array(2 ** 15 - 64).fill(0xff));
+        await this.sendConfigToKeyboard(buffer, false);
+        await this.writeConfigToEeprom(ConfigBufferId.stagingUserConfig);
+    }
+
+    public async switchKeymap(keymapAbbreviation: string): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Switch keymap');
+        const keymapAbbreviationAscii = keymapAbbreviation.split('').map(char => char.charCodeAt(0));
+        const buffer = Buffer.from([UsbCommand.SwitchKeymap, keymapAbbreviationAscii.length, ...keymapAbbreviationAscii]);
+
+        await this.device.write(buffer);
+    }
+
+    public async getAdcValue(): Promise<Buffer> {
+        this.logService.usb('[DeviceOperation] USB[T]: get ADC Value');
+        const buffer = Buffer.from([UsbCommand.GetAdcValue]);
+
+        return this.device.write(buffer);
+    }
+
+    public async getDebugInfo(): Promise<DebugInfo> {
+        this.logService.usb('[DeviceOperation] USB[T]: get Debug info');
+        const buffer = Buffer.from([UsbCommand.GetDebugBuffer]);
+
+        const responseBuffer = await this.device.write(buffer);
+
+        return {
+            i2cWatchdog: responseBuffer.readUInt32LE(1),
+            i2cSlaveSchedulerCounter: responseBuffer.readUInt32LE(5),
+            i2cWatchdogWatchCounter: responseBuffer.readUInt32LE(9),
+            i2cWatchdogRecoveryCounter: responseBuffer.readUInt32LE(13),
+            keyScannerCounter: responseBuffer.readUInt32LE(17),
+            usbReportUpdateCounter: responseBuffer.readUInt32LE(21),
+            currentTime: responseBuffer.readUInt32LE(25),
+            usbGenericHidActionCounter: responseBuffer.readUInt32LE(29),
+            usbBasicKeyboardActionCounter: responseBuffer.readUInt32LE(33),
+            usbMediaKeyboardActionCounter: responseBuffer.readUInt32LE(37),
+            usbSystemKeyboardActionCounter: responseBuffer.readUInt32LE(41),
+            usbMouseActionCounter: responseBuffer.readUInt32LE(45)
+        };
+    }
+
+    public async getI2CBaudRate(): Promise<I2cBaudRate> {
+        this.logService.usb('[DeviceOperation] USB[T]: get I2C Baud rate');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.I2cBaudRate]);
+
+        const responseBuffer = await this.device.write(buffer);
+
+        return {
+            requestedBaudRate: responseBuffer.readUInt32LE(2),
+            actualBaudRate: responseBuffer.readUInt32LE(6),
+            i2c0F: responseBuffer[1].toString(2).padStart(8, '0')
+        };
+    }
+
+    public async getUptime(): Promise<Duration> {
+        this.logService.usb('[DeviceOperation] USB[T]: get uptime');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.Uptime]);
+        const responseBuffer = await this.device.write(buffer);
+
+        return convertMsToDuration(responseBuffer.readUInt32LE(1));
+    }
+
+    public async getI2cSlaveErrors(slaveId: number): Promise<I2cErrorBuffer> {
+        this.logService.usb('[DeviceOperation] USB[T]: get I2C Slave errors');
+        const buffer = Buffer.from([UsbCommand.GetSlaveI2cErrors, slaveId]);
+        const responseBuffer = await this.device.write(buffer);
+
+        return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
+    }
+
+    public async getVariable(variableId: UsbVariables): Promise<number> {
+        this.logService.usb('[DeviceOperation] USB[T]: get variable');
+        const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
+        const responseBuffer = await this.device.write(buffer);
+
+        return responseBuffer[1];
+    }
+
+    public async setVariable(variable: UsbVariables, value: number): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set Variable');
+        await this.device.write(Buffer.from([UsbCommand.SetVariable, variable, value]));
+        await this.waitUntilKeyboardBusy();
+    }
+
+    public async setI2CBaudRate(rate: number): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Set I2C Baud Rate');
+        const buffer = Buffer.from([UsbCommand.SetI2cBaudRate, rate]);
+        await this.device.write(buffer);
+    }
+    /**
+     * IpcMain handler. Send the UserConfiguration to the UHK Device and send a response with the result.
+     * @param {Buffer} buffer - UserConfiguration buffer
+     * @param {Boolean} isUserConfiguration - User or Hardware configuration
+     * @returns {Promise<void>}
+     * @private
+     */
+    private async sendConfigToKeyboard(buffer: Buffer, isUserConfiguration): Promise<void> {
+        const command = isUserConfiguration
+            ? UsbCommand.WriteStagingUserConfig
+            : UsbCommand.WriteHardwareConfig;
+
+        const fragments = getTransferBuffers(command, buffer);
+        for (const fragment of fragments) {
+            await this.device.write(fragment);
+        }
     }
 }

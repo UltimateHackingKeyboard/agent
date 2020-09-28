@@ -6,19 +6,17 @@ import isRoot = require('is-root');
 import { Buffer, CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
 
 import {
-    ConfigBufferId,
     Constants,
-    EepromOperation,
     enumerationModeIdToProductId,
     EnumerationModes,
     KbootCommands,
+    LAYER_NUMBER_TO_STRING,
+    MODULE_ID_TO_STRING,
     ModuleSlotToI2cAddress,
-    ModuleSlotToId,
-    UsbCommand,
-    UsbVariables
+    UsbCommand
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
-import { GetDeviceOptions } from './models';
+import { DeviceState, GetDeviceOptions } from './models';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -154,16 +152,6 @@ export class UhkHidDevice {
         });
     }
 
-    public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
-        await this.write(Buffer.from([UsbCommand.LaunchEepromTransfer, EepromOperation.write, configBufferId]));
-        await this.waitUntilKeyboardBusy();
-    }
-
-    public async enableUsbStackTest(): Promise<void> {
-        await this.write(Buffer.from([UsbCommand.SetVariable, UsbVariables.testUsbStack, 1]));
-        await this.waitUntilKeyboardBusy();
-    }
-
     /**
      * Close the communication chanel with UHK Device
      */
@@ -175,17 +163,6 @@ export class UhkHidDevice {
         this._device.close();
         this._device = null;
         this.logService.misc('[UhkHidDevice] Device communication closed.');
-    }
-
-    public async waitUntilKeyboardBusy(): Promise<void> {
-        while (true) {
-            const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
-            if (buffer[1] === 0) {
-                break;
-            }
-            this.logService.misc('Keyboard is busy, wait...');
-            await snooze(200);
-        }
     }
 
     public resetDeviceCache(): void {
@@ -264,21 +241,31 @@ export class UhkHidDevice {
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }
 
-    async jumpToBootloaderModule(module: ModuleSlotToId): Promise<any> {
-        this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
-        const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
-        await this.write(transfer);
-    }
-
     async getHalvesStates(): Promise<HalvesInfo> {
-        const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
+        const deviceState = await this.getDeviceState();
 
         return {
-            areHalvesMerged: buffer[2] !== 0,
-            isLeftHalfConnected: buffer[3] !== 0
+            areHalvesMerged: deviceState.areHalvesMerged,
+            isLeftHalfConnected: deviceState.isLeftHalfConnected
         };
     }
 
+    async getDeviceState(): Promise<DeviceState> {
+        const buffer = await this.write(Buffer.from([UsbCommand.GetDeviceState]));
+        const activeLayerNumber = buffer[6] & 0x7f;
+
+        return {
+            isEepromBusy: buffer[1] !== 0,
+            areHalvesMerged: buffer[2] !== 0,
+            isLeftHalfConnected: buffer[3] !== 0,
+            activeLayerNumber,
+            activeLayerName: LAYER_NUMBER_TO_STRING[activeLayerNumber],
+            activeLayerToggled: (buffer[6] & 0x80) === 1,
+            leftKeyboardHalfSlot: MODULE_ID_TO_STRING[buffer[3]],
+            leftModuleSlot: MODULE_ID_TO_STRING[buffer[4]],
+            rightModuleSlot: MODULE_ID_TO_STRING[buffer[5]]
+        };
+    }
     public listAvailableDevices(devs: Device[]): void {
         let compareDevices = devs as any;
 

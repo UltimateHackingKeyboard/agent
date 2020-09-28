@@ -7,7 +7,7 @@ export * from './app-start-info';
 export * from './configuration-reply';
 export * from './version-information';
 export * from './device-connection-state';
-export * from './left-module-info';
+export * from './module-version-info';
 export * from './log-options';
 export * from './hardware-modules';
 export * from './right-module-info';
