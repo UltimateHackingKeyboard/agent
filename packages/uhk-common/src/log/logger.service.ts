@@ -1,10 +1,7 @@
 import { LogOptions } from '../models';
 import { UserConfiguration } from '../config-serializer/config-items';
-import { logUserConfigHelper } from '../util';
-
-export const DEFAULT_LOG_OPTIONS: LogOptions = {
-    misc: true
-};
+import { logUserConfigHelper } from './log-user-config-helper';
+import { DEFAULT_LOG_OPTIONS } from './default-log-options';
 
 export class LogService {
 

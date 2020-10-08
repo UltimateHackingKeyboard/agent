@@ -1,5 +1,5 @@
 import { CommandLineArgs, LogOptions } from '../models';
-import { DEFAULT_LOG_OPTIONS } from '../services';
+import { DEFAULT_LOG_OPTIONS } from './default-log-options';
 
 export function getLogOptions(options: CommandLineArgs): LogOptions {
     if (!options.log) {
