@@ -37,8 +37,10 @@
             ],
             "allowedCommonJsDependencies": [
               "buffer",
-              "file-saver"
-            ]
+              "file-saver",
+              "uhk-common"
+            ],
+            "showCircularDependencies": false
           },
           "configurations": {
             "production": {
@@ -160,8 +162,10 @@
             ],
             "allowedCommonJsDependencies": [
               "buffer",
-              "file-saver"
-            ]
+              "file-saver",
+              "uhk-common"
+            ],
+            "showCircularDependencies": false
           },
           "configurations": {
             "production": {
