@@ -12,7 +12,13 @@
     "@angular/*": ["../node_modules/@angular/*"],
     "rxjs/*": ["../node_modules/rxjs/*"]
   },
+  "files": [
+    "main-web.ts",
+    "polyfills.ts"
+  ],
   "exclude": [
+    "main-renderer.ts",
+    "renderer",
     "test.ts",
     "**/*.spec.ts"
   ]
