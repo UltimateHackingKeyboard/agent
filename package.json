@@ -41,7 +41,7 @@
     "copy-webpack-plugin": "6.2.1",
     "copyfiles": "2.1.1",
     "core-js": "3.6.5",
-    "cross-env": "5.0.5",
+    "cross-env": "7.0.2",
     "decompress": "4.2.1",
     "decompress-targz": "^4.1.1",
     "devtron": "1.4.0",
