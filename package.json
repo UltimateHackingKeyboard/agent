@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/command-line-args": "5.0.0",
     "@types/command-line-usage": "5.0.1",
+    "@types/copy-webpack-plugin": "6.0.0",
     "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
@@ -37,7 +38,7 @@
     "@types/tmp": "0.1.0",
     "@types/yargs": "15.0.5",
     "check-node-version": "4.0.3",
-    "copy-webpack-plugin": "5.1.1",
+    "copy-webpack-plugin": "6.2.1",
     "copyfiles": "2.1.1",
     "core-js": "3.6.5",
     "cross-env": "5.0.5",

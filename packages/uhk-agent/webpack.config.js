@@ -29,8 +29,8 @@ module.exports = {
         ]
     },
     plugins: [
-        new CopyWebpackPlugin(
-            [
+        new CopyWebpackPlugin({
+            patterns: [
                 {
                     from: 'src/manifest.json',
                     to: 'manifest.json'
@@ -40,7 +40,7 @@ module.exports = {
                     to: 'package.json'
                 }
             ]
-        ),
+        }),
         new ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)@angular/,
