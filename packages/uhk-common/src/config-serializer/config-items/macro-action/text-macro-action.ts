@@ -13,15 +13,35 @@ export class TextMacroAction extends MacroAction {
         this.text = other.text;
     }
 
-    fromJsonObject(jsObject: any): TextMacroAction {
-        this.assertMacroActionType(jsObject);
-        this.text = jsObject.text;
+    fromJsonObject(jsonObject: any, version: number): TextMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Text macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): TextMacroAction {
-        this.readAndAssertMacroActionId(buffer);
-        this.text = buffer.readString();
+    fromBinary(buffer: UhkBuffer, version: number): TextMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Text macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -43,5 +63,15 @@ export class TextMacroAction extends MacroAction {
 
     public getName(): string {
         return 'TextMacroAction';
+    }
+
+    private fromJsonObjectV1(jsObject: any): void {
+        this.assertMacroActionType(jsObject);
+        this.text = jsObject.text;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        this.readAndAssertMacroActionId(buffer);
+        this.text = buffer.readString();
     }
 }

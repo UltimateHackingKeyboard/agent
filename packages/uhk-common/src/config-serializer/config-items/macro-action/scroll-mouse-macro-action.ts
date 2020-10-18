@@ -19,17 +19,35 @@ export class ScrollMouseMacroAction extends MacroAction {
         this.y = other.y;
     }
 
-    fromJsonObject(jsObject: any): ScrollMouseMacroAction {
-        this.assertMacroActionType(jsObject);
-        this.x = jsObject.x;
-        this.y = jsObject.y;
+    fromJsonObject(jsonObject: any, version: number): ScrollMouseMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Scroll mouse macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): ScrollMouseMacroAction {
-        this.readAndAssertMacroActionId(buffer);
-        this.x = buffer.readInt16();
-        this.y = buffer.readInt16();
+    fromBinary(buffer: UhkBuffer, version: number): ScrollMouseMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Scroll mouse macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -53,5 +71,17 @@ export class ScrollMouseMacroAction extends MacroAction {
 
     public getName(): string {
         return 'ScrollMouseMacroAction';
+    }
+
+    private fromJsonObjectV1(jsObject: any): void {
+        this.assertMacroActionType(jsObject);
+        this.x = jsObject.x;
+        this.y = jsObject.y;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        this.readAndAssertMacroActionId(buffer);
+        this.x = buffer.readInt16();
+        this.y = buffer.readInt16();
     }
 }

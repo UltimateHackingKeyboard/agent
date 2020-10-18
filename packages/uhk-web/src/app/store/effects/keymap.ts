@@ -21,7 +21,7 @@ export class KeymapEffects {
             switchMap(() => {
                 const presetsRequireContext = (<any>require).context('../../../res/presets', false, /.json$/);
                 const uhkPresets = presetsRequireContext.keys().map(presetsRequireContext) // load the presets into an array
-                    .map((keymap: any) => new Keymap().fromJsonObject(keymap));
+                    .map((keymap: any) => new Keymap().fromJsonObject(keymap, null, 1));
 
                 return of(new Keymaps.LoadKeymapSuccessAction(uhkPresets));
             })

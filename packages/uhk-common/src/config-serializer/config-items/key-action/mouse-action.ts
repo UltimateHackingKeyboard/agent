@@ -36,15 +36,35 @@ export class MouseAction extends KeyAction {
         this.mouseAction = other.mouseAction;
     }
 
-    fromJsonObject(jsObject: any): MouseAction {
-        this.assertKeyActionType(jsObject);
-        this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
+    fromJsonObject(jsonObject: any, version: number): MouseAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Mouse action does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): MouseAction {
-        this.readAndAssertKeyActionId(buffer);
-        this.mouseAction = buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer, version: number): MouseAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Mouse action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -66,5 +86,17 @@ export class MouseAction extends KeyAction {
 
     public getName(): string {
         return 'MouseAction';
+    }
+
+    private fromJsonObjectV1(jsObject: any): MouseAction {
+        this.assertKeyActionType(jsObject);
+        this.mouseAction = MouseActionParam[<string>jsObject.mouseAction];
+        return this;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): MouseAction {
+        this.readAndAssertKeyActionId(buffer);
+        this.mouseAction = buffer.readUInt8();
+        return this;
     }
 }

@@ -81,31 +81,19 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMajorVersion = jsonObject.userConfigMajorVersion;
         this.userConfigMinorVersion = jsonObject.userConfigMinorVersion;
         this.userConfigPatchVersion = jsonObject.userConfigPatchVersion;
-        this.deviceName = jsonObject.deviceName;
-        this.setDefaultDeviceName();
-        this.doubleTapSwitchLayerTimeout = jsonObject.doubleTapSwitchLayerTimeout;
-        this.iconsAndLayerTextsBrightness = jsonObject.iconsAndLayerTextsBrightness;
-        this.alphanumericSegmentsBrightness = jsonObject.alphanumericSegmentsBrightness;
-        this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
-        this.mouseMoveInitialSpeed = jsonObject.mouseMoveInitialSpeed;
-        this.mouseMoveAcceleration = jsonObject.mouseMoveAcceleration;
-        this.mouseMoveDeceleratedSpeed = jsonObject.mouseMoveDeceleratedSpeed;
-        this.mouseMoveBaseSpeed = jsonObject.mouseMoveBaseSpeed;
-        this.mouseMoveAcceleratedSpeed = jsonObject.mouseMoveAcceleratedSpeed;
-        this.mouseScrollInitialSpeed = jsonObject.mouseScrollInitialSpeed;
-        this.mouseScrollAcceleration = jsonObject.mouseScrollAcceleration;
-        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
-        this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
-        this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
-        this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
-            return new ModuleConfiguration().fromJsonObject(moduleConfiguration);
-        });
-        this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
-            const macro = new Macro().fromJsonObject(macroJsonObject);
-            macro.id = index;
-            return macro;
-        });
-        this.keymaps = jsonObject.keymaps.map((keymap: any) => new Keymap().fromJsonObject(keymap, this.macros));
+
+        switch (this.userConfigMajorVersion) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
+        }
+
         this.clean();
         this.recalculateConfigurationLength();
 
@@ -116,33 +104,18 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.userConfigMajorVersion = buffer.readUInt16();
         this.userConfigMinorVersion = buffer.readUInt16();
         this.userConfigPatchVersion = buffer.readUInt16();
-        this.userConfigurationLength = buffer.readUInt16();
-        this.deviceName = buffer.readString();
-        this.setDefaultDeviceName();
-        this.doubleTapSwitchLayerTimeout = buffer.readUInt16();
-        this.iconsAndLayerTextsBrightness = buffer.readUInt8();
-        this.alphanumericSegmentsBrightness = buffer.readUInt8();
-        this.keyBacklightBrightness = buffer.readUInt8();
-        this.mouseMoveInitialSpeed = buffer.readUInt8();
-        this.mouseMoveAcceleration = buffer.readUInt8();
-        this.mouseMoveDeceleratedSpeed = buffer.readUInt8();
-        this.mouseMoveBaseSpeed = buffer.readUInt8();
-        this.mouseMoveAcceleratedSpeed = buffer.readUInt8();
-        this.mouseScrollInitialSpeed = buffer.readUInt8();
-        this.mouseScrollAcceleration = buffer.readUInt8();
-        this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
-        this.mouseScrollBaseSpeed = buffer.readUInt8();
-        this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
-        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
-            return new ModuleConfiguration().fromBinary(uhkBuffer);
-        });
-        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
-            const macro = new Macro().fromBinary(uhkBuffer);
-            macro.id = index;
-            return macro;
-        });
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros));
-        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+        switch (this.userConfigMajorVersion) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
+        }
 
         this.clean();
 
@@ -260,4 +233,66 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             }
         }
     }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        this.userConfigurationLength = buffer.readUInt16();
+        this.deviceName = buffer.readString();
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = buffer.readUInt16();
+        this.iconsAndLayerTextsBrightness = buffer.readUInt8();
+        this.alphanumericSegmentsBrightness = buffer.readUInt8();
+        this.keyBacklightBrightness = buffer.readUInt8();
+        this.mouseMoveInitialSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleration = buffer.readUInt8();
+        this.mouseMoveDeceleratedSpeed = buffer.readUInt8();
+        this.mouseMoveBaseSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollInitialSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleration = buffer.readUInt8();
+        this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollBaseSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
+            return new ModuleConfiguration().fromBinary(uhkBuffer, this.userConfigMajorVersion);
+        });
+        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
+            const macro = new Macro().fromBinary(uhkBuffer, this.userConfigMajorVersion);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, 1));
+        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+    }
+
+    private fromJsonObjectV1(jsonObject: any): void {
+        this.deviceName = jsonObject.deviceName;
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = jsonObject.doubleTapSwitchLayerTimeout;
+        this.iconsAndLayerTextsBrightness = jsonObject.iconsAndLayerTextsBrightness;
+        this.alphanumericSegmentsBrightness = jsonObject.alphanumericSegmentsBrightness;
+        this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
+        this.mouseMoveInitialSpeed = jsonObject.mouseMoveInitialSpeed;
+        this.mouseMoveAcceleration = jsonObject.mouseMoveAcceleration;
+        this.mouseMoveDeceleratedSpeed = jsonObject.mouseMoveDeceleratedSpeed;
+        this.mouseMoveBaseSpeed = jsonObject.mouseMoveBaseSpeed;
+        this.mouseMoveAcceleratedSpeed = jsonObject.mouseMoveAcceleratedSpeed;
+        this.mouseScrollInitialSpeed = jsonObject.mouseScrollInitialSpeed;
+        this.mouseScrollAcceleration = jsonObject.mouseScrollAcceleration;
+        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
+        this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
+        this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+        this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, this.userConfigMajorVersion);
+        });
+        this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
+            const macro = new Macro().fromJsonObject(macroJsonObject, this.userConfigMajorVersion);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = jsonObject.keymaps.map((keymap: any) => {
+            return new Keymap().fromJsonObject(keymap, this.macros, this.userConfigMajorVersion);
+        });
+    }
+
 }
