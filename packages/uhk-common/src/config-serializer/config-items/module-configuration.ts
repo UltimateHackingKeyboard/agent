@@ -34,30 +34,35 @@ export class ModuleConfiguration {
     @assertUInt8
     mouseLayerPointerFunction: number;
 
-    fromJsonObject(jsonObject: any): ModuleConfiguration {
-        this.id = jsonObject.id;
-        this.pointerMode = jsonObject.pointerMode;
-        this.deceleratedPointerSpeedMultiplier = jsonObject.deceleratedPointerSpeedMultiplier;
-        this.basePointerSpeedMultiplier = jsonObject.basePointerSpeedMultiplier;
-        this.acceleratedPointerSpeedMultiplier = jsonObject.acceleratedPointerSpeedMultiplier;
-        this.angularShift = jsonObject.angularShift;
-        this.modLayerPointerFunction = jsonObject.modLayerPointerFunction;
-        this.fnLayerPointerFunction = jsonObject.fnLayerPointerFunction;
-        this.mouseLayerPointerFunction = jsonObject.mouseLayerPointerFunction;
+    fromJsonObject(jsonObject: any, version: number): ModuleConfiguration {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Module configuration does not support version: ${version}`);
+        }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): ModuleConfiguration {
-        this.id = buffer.readUInt8();
-        this.pointerMode = buffer.readInt8();
-        this.deceleratedPointerSpeedMultiplier = buffer.readUInt8();
-        this.basePointerSpeedMultiplier = buffer.readUInt8();
-        this.acceleratedPointerSpeedMultiplier = buffer.readUInt8();
-        this.angularShift = buffer.readUInt16();
-        this.modLayerPointerFunction = buffer.readUInt8();
-        this.fnLayerPointerFunction = buffer.readUInt8();
-        this.mouseLayerPointerFunction = buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer, version: number): ModuleConfiguration {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Module configuration does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -89,5 +94,29 @@ export class ModuleConfiguration {
 
     toString(): string {
         return `<ModuleConfiguration id="${this.id}" >`;
+    }
+
+    private fromJsonObjectV1(jsonObject: any): void {
+        this.id = jsonObject.id;
+        this.pointerMode = jsonObject.pointerMode;
+        this.deceleratedPointerSpeedMultiplier = jsonObject.deceleratedPointerSpeedMultiplier;
+        this.basePointerSpeedMultiplier = jsonObject.basePointerSpeedMultiplier;
+        this.acceleratedPointerSpeedMultiplier = jsonObject.acceleratedPointerSpeedMultiplier;
+        this.angularShift = jsonObject.angularShift;
+        this.modLayerPointerFunction = jsonObject.modLayerPointerFunction;
+        this.fnLayerPointerFunction = jsonObject.fnLayerPointerFunction;
+        this.mouseLayerPointerFunction = jsonObject.mouseLayerPointerFunction;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        this.id = buffer.readUInt8();
+        this.pointerMode = buffer.readInt8();
+        this.deceleratedPointerSpeedMultiplier = buffer.readUInt8();
+        this.basePointerSpeedMultiplier = buffer.readUInt8();
+        this.acceleratedPointerSpeedMultiplier = buffer.readUInt8();
+        this.angularShift = buffer.readUInt16();
+        this.modLayerPointerFunction = buffer.readUInt8();
+        this.fnLayerPointerFunction = buffer.readUInt8();
+        this.mouseLayerPointerFunction = buffer.readUInt8();
     }
 }

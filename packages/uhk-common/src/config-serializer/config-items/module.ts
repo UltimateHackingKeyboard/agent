@@ -16,24 +16,38 @@ export class Module {
             return;
         }
         this.id = other.id;
-        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction));
+        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction, null));
     }
 
-    fromJsonObject(jsonObject: any, macros?: Macro[]): Module {
-        this.id = jsonObject.id;
-        this.keyActions = jsonObject.keyActions.map((keyAction: any) => {
-            return KeyActionHelper.createKeyAction(keyAction, macros);
-        });
+    fromJsonObject(jsonObject: any, macros: Macro[], version: number): Module {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject, macros, version);
+                break;
+
+            default:
+                throw new Error(`Module configuration does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros?: Macro[]): Module {
-        this.id = buffer.readUInt8();
-        const keyActionsLength: number = buffer.readCompactLength();
-        this.keyActions = [];
-        for (let i = 0; i < keyActionsLength; ++i) {
-            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, macros));
+    fromBinary(buffer: UhkBuffer, macros: Macro[], version: number): Module {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer, macros, version);
+                break;
+
+            default:
+                throw new Error(`Module configuration does not support version: ${version}`);
         }
+
         return this;
     }
 
@@ -89,4 +103,19 @@ export class Module {
         return this;
     }
 
+    fromJsonObjectV1(jsonObject: any, macros: Macro[], version: number): void {
+        this.id = jsonObject.id;
+        this.keyActions = jsonObject.keyActions.map((keyAction: any) => {
+            return KeyActionHelper.createKeyAction(keyAction, macros, version);
+        });
+    }
+
+    fromBinaryV1(buffer: UhkBuffer, macros: Macro[], version: number): void {
+        this.id = buffer.readUInt8();
+        const keyActionsLength: number = buffer.readCompactLength();
+        this.keyActions = [];
+        for (let i = 0; i < keyActionsLength; ++i) {
+            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, macros, version));
+        }
+    }
 }

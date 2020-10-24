@@ -27,23 +27,35 @@ export class Macro {
         this.macroActions = other.macroActions.map(macroAction => MacroActionHelper.createMacroAction(macroAction));
     }
 
-    fromJsonObject(jsonObject: any): Macro {
-        this.isLooped = jsonObject.isLooped;
-        this.isPrivate = jsonObject.isPrivate;
-        this.name = jsonObject.name;
-        this.macroActions = jsonObject.macroActions.map((macroAction: any) => MacroActionHelper.createMacroAction(macroAction));
+    fromJsonObject(jsonObject: any, version: number): Macro {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject, version);
+                break;
+
+            default:
+                throw new Error(`Macro configuration does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): Macro {
-        this.isLooped = buffer.readBoolean();
-        this.isPrivate = buffer.readBoolean();
-        this.name = buffer.readString();
-        const macroActionsLength: number = buffer.readCompactLength();
-        this.macroActions = [];
-        for (let i = 0; i < macroActionsLength; ++i) {
-            this.macroActions.push(MacroActionHelper.createMacroAction(buffer));
+    fromBinary(buffer: UhkBuffer, version: number): Macro {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer, version);
+                break;
+
+            default:
+                throw new Error(`Macro configuration does not support version: ${version}`);
         }
+
         return this;
     }
 
@@ -65,5 +77,25 @@ export class Macro {
 
     toString(): string {
         return `<Macro id="${this.id}" name="${this.name}">`;
+    }
+
+    private fromJsonObjectV1(jsonObject: any, version: number): void {
+        this.isLooped = jsonObject.isLooped;
+        this.isPrivate = jsonObject.isPrivate;
+        this.name = jsonObject.name;
+        this.macroActions = jsonObject.macroActions.map((macroAction: any) => {
+            return MacroActionHelper.createMacroAction(macroAction, version);
+        });
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer, version: number): void {
+        this.isLooped = buffer.readBoolean();
+        this.isPrivate = buffer.readBoolean();
+        this.name = buffer.readString();
+        const macroActionsLength: number = buffer.readCompactLength();
+        this.macroActions = [];
+        for (let i = 0; i < macroActionsLength; ++i) {
+            this.macroActions.push(MacroActionHelper.createMacroAction(buffer, version));
+        }
     }
 }

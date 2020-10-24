@@ -713,7 +713,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
             keymap = Object.assign(new Keymap, keymap);
             keymap.layers = keymap.layers.map((layer, index) => {
                 if (keyActionRemap.remapOnAllLayer || index === layerIndex || isSwitchLayerAction) {
-                    const clonedAction = KeyActionHelper.createKeyAction(newKeyAction);
+                    const clonedAction = KeyActionHelper.createKeyAction(newKeyAction, null);
                     // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                     // on the target layer and remove SwitchLayerAction from other layers
                     if (isSwitchLayerAction) {
