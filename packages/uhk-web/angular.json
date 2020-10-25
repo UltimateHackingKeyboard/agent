@@ -28,7 +28,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/nouislider/distribute/nouislider.min.css",
               "src/styles.scss"
             ],
@@ -95,7 +94,6 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/nouislider/distribute/nouislider.min.css",
               "src/styles.scss"
             ],
@@ -153,7 +151,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/nouislider/distribute/nouislider.min.css",
               "src/styles.scss"
             ],
