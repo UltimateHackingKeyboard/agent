@@ -46,13 +46,13 @@
         &:before {
             top: 0;
             border-width: $tooltip-arrow-height ($tooltip-arrow-width / 2) 0;
-            border-top-color: $tooltip-arrow-color;
+            border-top-color: var(--color-tooltip-arrow);
         }
 
         &:after {
             top: -2 * $tooltip-border-width;
             border-width: $tooltip-arrow-height ($tooltip-arrow-width / 2) 0;
-            border-top-color: $tooltip-bg;
+            border-top-color: var(--color-tooltip-bg);
         }
     }
 }
@@ -69,13 +69,13 @@
         &:before {
             right: 0;
             border-width: ($tooltip-arrow-width / 2) $tooltip-arrow-height ($tooltip-arrow-width / 2) 0;
-            border-right-color: $tooltip-arrow-color;
+            border-right-color: var(--color-tooltip-arrow);
         }
 
         &:after {
             right: -2 * $tooltip-border-width;
             border-width: ($tooltip-arrow-width / 2) $tooltip-arrow-height ($tooltip-arrow-width / 2) 0;
-            border-right-color: $tooltip-bg;
+            border-right-color: var(--color-tooltip-bg);
         }
     }
 }
@@ -90,14 +90,14 @@
         &:before {
             bottom: 0;
             border-width: 0 ($tooltip-arrow-width / 2) $tooltip-arrow-height;
-            border-bottom-color: $tooltip-arrow-color;
+            border-bottom-color: var(--color-tooltip-arrow);
         }
 
         &:after {
             top: 2 * $tooltip-border-width;
             bottom: 0;
             border-width: 0 ($tooltip-arrow-width / 2) $tooltip-arrow-height;
-            border-bottom-color: $tooltip-bg;
+            border-bottom-color: var(--color-tooltip-bg);
         }
     }
 }
@@ -114,13 +114,13 @@
         &:before {
             left: 0;
             border-width: ($tooltip-arrow-width / 2) 0 ($tooltip-arrow-width / 2) $tooltip-arrow-height;
-            border-left-color: $tooltip-arrow-color;
+            border-left-color: var(--color-tooltip-arrow);
         }
 
         &:after {
             left: -2 * $tooltip-border-width;
             border-width: ($tooltip-arrow-width / 2) 0 ($tooltip-arrow-width / 2) $tooltip-arrow-height;
-            border-left-color: $tooltip-bg;
+            border-left-color: var(--color-tooltip-bg);
         }
     }
 }
@@ -147,9 +147,9 @@
 .tooltip-inner {
     max-width: $tooltip-max-width;
     padding: $tooltip-padding-y $tooltip-padding-x;
-    color: $tooltip-color;
+    color: var(--color-tooltip-text);
     text-align: center;
-    background-color: $tooltip-bg;
-    border: $tooltip-border-width solid $dark-grey;
+    background-color: var(--color-tooltip-bg);
+    border: $tooltip-border-width solid var(--color-tooltip-border);
     border-radius: $tooltip-border-radius;
 }
