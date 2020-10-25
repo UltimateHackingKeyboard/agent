@@ -5,6 +5,7 @@
     max-width: 590px;
     width: 100%;
     user-select: none;
+    background-color: var(--color-popover-bg);
 
     &.leftArrow {
         .arrowCustom {
@@ -61,7 +62,7 @@
         height: 0;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
-        border-bottom: 16px solid #f7f7f7;
+        border-bottom: 16px solid var(--color-popover-bg);
         display: block;
         position: absolute;
         top: 0;
@@ -72,12 +73,14 @@
     padding: 8px 14px;
     margin: 0;
     font-size: 14px;
-    background-color: #f7f7f7;
-    border-top: 1px solid #ebebeb;
+    background-color: var(--color-popover-bg);
+    border-top: 1px solid var(--color-popover-border);
     border-radius: 0 0 5px 5px;
 }
 
 .popover-title {
+    background-color: var(--color-popover-bg);
+
     &.menu-tabs {
         padding: 0.5rem 0.5rem 0;
         display: block;
@@ -86,6 +89,22 @@
             position: relative;
             top: 1px;
             display: flex;
+            border: 0;
+
+            .nav-item {
+                &:hover {
+                    background-color: var(--color-popover-tab-hover);
+                }
+            
+                &.active {
+                    position: relative;
+                    z-index: 2;
+
+                    a.active {
+                        border-bottom: 1px solid var(--color-popover-border-bg-light);
+                    }
+                }
+            }
 
             .menu-tabs--item {
                 display: flex;
@@ -101,6 +120,8 @@
 
 .popover-content {
     padding: 10px 24px;
+    border-top: 1px solid var(--color-popover-border);
+    background-color: var(--color-popover-bg-light);
 }
 
 .pr-10 {
