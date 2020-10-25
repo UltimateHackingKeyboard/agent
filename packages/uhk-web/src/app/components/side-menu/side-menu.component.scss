@@ -1,8 +1,13 @@
 @import '../../../styles/common';
+@import '../../../styles/variables';
+
+$level-0-item-spacing: 0.5rem 1rem;
+$level-1-item-spacing: 0.5rem 1rem 0.5rem 1.5rem;
+$level-2-item-spacing: 0.25rem 0 0.25rem 2rem;
 
 :host {
-    background-color: #f5f5f5;
-    border-right: 1px solid #ccc;
+    background-color: var(--color-sidemenu-bg);
+    border-right: 1px solid var(--color-sidemenu-border);
     position: fixed;
     overflow-y: auto;
     top: 0;
@@ -13,7 +18,7 @@
 }
 
 a {
-    color: #333;
+    color: var(--color-sidemenu-text);
 
     &.disabled {
         opacity: 0.65;
@@ -27,7 +32,6 @@ ul {
 
     li {
         list-style: none;
-        padding: 0;
     }
 
     ul {
@@ -37,17 +41,16 @@ ul {
 
 .sidebar {
     &__level-0 {
-        padding: 0.5rem 1rem 0;
+        padding: $level-0-item-spacing;
     }
 
     &__level-1 {
-        padding: 0.5rem 1rem 0.5rem 2rem;
+        padding: $level-1-item-spacing;
     }
 
     &__level-0,
     &__level-1 {
-        font-size: 2rem;
-        line-height: 3rem;
+        font-size: $font-size-lg;
         cursor: default;
 
         &:hover {
@@ -65,11 +68,17 @@ ul {
         }
 
         .chevron {
-            margin-right: 1rem;
-            font-size: 1.5rem;
+            line-height: $font-size-lg * 1.75;
+            font-size: $font-size-lg * 0.75;
             position: relative;
             display: none;
             cursor: pointer;
+        }
+
+        
+        .btn + .chevron {
+            // Chevron style when the same row has a button
+            margin-right: 0.75rem;
         }
 
         .uhk-icon-usb-drive {
@@ -78,21 +87,26 @@ ul {
     }
 
     &__level-2 {
+        padding: $level-2-item-spacing;
 
         &--item {
-            padding: 0 20px 0 0;
             position: relative;
 
-            &.active {
-                background-color: #555;
-                color: #fff;
+            &.active,
+            .active {
+                background-color: var(--color-sidemenu-active-bg);
+                color: var(--color-sidemenu-active-text);
+
+                a {
+                    color: var(--color-sidemenu-active-text);
+                }
 
                 .fa-star {
-                    color: #fff;
+                    color: var(--color-sidemenu-active-text);
                 }
 
                 &:hover {
-                    background-color: #555;
+                    background-color: var(--color-sidemenu-active-bg);
                 }
             }
 
@@ -101,19 +115,18 @@ ul {
             }
 
             // General "right side" icon theming.
-            .fa.pull-right {
+            .fa.float-right {
                 position: relative;
                 top: 2px;
             }
 
             .fa-star {
-                color: #666;
+                color: var(--color-sidemenu-star);
             }
 
             a {
                 display: block;
                 width: 100%;
-                padding: 0 15px 0 30px;
 
                 &:hover,
                 &:focus {
@@ -138,23 +151,19 @@ ul {
                 visibility: visible;
             }
         }
-
-        &.active {
-            background-color: rgba(0, 0, 0, 0.18);
-        }
     }
 
     &__fav {
         position: absolute;
         right: 19px;
-        top: 0;
+        top: 3px;
         z-index: 50;
     }
 
     &__macro_count {
         position: absolute;
         right: 11px;
-        top: 1px;
+        top: 6px;
         visibility: hidden;
     }
 }
