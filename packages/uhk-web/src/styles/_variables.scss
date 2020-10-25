@@ -1,13 +1,17 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+// Paths
+
 $fa-font-path : '../node_modules/@fortawesome/fontawesome-free/webfonts';
 $uhk-icon-path: './uhk-css.svg';
 
-$dark-grey: #ccc;
+// Override Bootstrap variables
 
-$icon-hover: #337ab7;
-$icon-hover-delete: #900;
-$white: #fff;
-$black: #000;
+$font-size-base: 0.875rem; // 14 px
 $border-radius: 0.25rem;
+
+$btn-font-size: $font-size-base;
 
 $spacer: 1rem;
 $spacers: (
@@ -21,22 +25,14 @@ $spacers: (
 
 $zindex-tooltip: 50001;
 
-$tooltip-font-size:                 12px;
-$tooltip-max-width:                 200px;
 $tooltip-color:                     $black;
 $tooltip-bg:                        $white;
-$tooltip-border-radius:             $border-radius;
 $tooltip-border-width:              1px;
-$tooltip-border-color:              $dark-grey;
 $tooltip-opacity:                   1;
 $tooltip-padding-y:                 $spacer / 4;
 $tooltip-padding-x:                 $spacer / 2;
-$tooltip-margin:                    0;
 
-$tooltip-arrow-width:               12px;
-$tooltip-arrow-height:              6px;
-$tooltip-arrow-color:               $dark-grey;
-$tooltip-arrow-border-width: $tooltip-arrow-width + $tooltip-border-width;
+// UHK app variables
 
 $update-notification-height: 35px;
 $main-content-top-margin-on-update: 35px + 10px;
