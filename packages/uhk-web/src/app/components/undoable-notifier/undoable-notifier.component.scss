@@ -4,6 +4,9 @@
     z-index: 100;
 
     .alert {
+        background-color: var(--color-undo-alert-bg);
+        color: var(--color-undo-alert-text);
+        border-color: var(--color-undo-alert-border);
         padding: 5px 10px 5px 5px;
 
         margin-bottom: 0.25em;
@@ -15,6 +18,7 @@
 
         .undo-button {
             cursor: pointer;
+            color: var(--color-undo-button);
         }
     }
 }

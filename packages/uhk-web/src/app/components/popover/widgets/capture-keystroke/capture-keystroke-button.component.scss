@@ -1,5 +1,4 @@
 @import '../../../../../styles/common';
-@import '../../../../../styles/variables';
 
 .btn--capture-keystroke {
     display: inline-block;
@@ -11,5 +10,5 @@
 }
 
 .record-circle {
-    color: $icon-hover-delete;
+    color: var(--color-icon-delete);
 }

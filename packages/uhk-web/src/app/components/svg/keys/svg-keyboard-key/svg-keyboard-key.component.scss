@@ -3,7 +3,7 @@
     outline: none;
 
     &:hover {
-        fill: #494949;
+        fill: var(--color-keyboard-key-hover);
     }
 }
 
@@ -12,7 +12,7 @@
     transition: 0.2s;
 
     &.active {
-        fill: #4099e5;
+        fill: var(--color-keyboard-key-active);
         transition-timing-function: ease-in;
         transition: 0s;
     }
