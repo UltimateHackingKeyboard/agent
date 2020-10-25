@@ -1,27 +1,27 @@
-<div class="col-xs-12 macro-key__container">
-    <div class="col-xs-3 macro-key__types">
-        <ul class="nav nav-pills nav-stacked">
+<div class="row macro-key__container">
+    <div class="col-4 col-lg-3 py-3 macro-key__types">
+        <ul class="nav nav-pills flex-column">
             <li #keyMove [class.active]="activeTab === TabName.Tap" (click)="selectTab(TabName.Tap)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Tap">
                     <fa-icon [icon]="faHandPointer"></fa-icon>
                     <span>Tap key</span>
                 </a>
             </li>
             <li #keyHold [class.active]="activeTab === TabName.Press" (click)="selectTab(TabName.Press)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Press">
                     <fa-icon [icon]="faHandRock"></fa-icon>
                     <span>Press key</span>
                 </a>
             </li>
             <li #keyRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Release">
                     <fa-icon [icon]="faHandPaper"></fa-icon>
                     <span>Release key</span>
                 </a>
             </li>
         </ul>
     </div>
-    <div class="col-xs-9 macro-key__action-container">
+    <div class="col-8 col-lg-9 py-3 macro-key__action-container">
         <div class="macro-key__action">
             <h4 *ngIf="activeTab === TabName.Tap">Tap key</h4>
             <h4 *ngIf="activeTab === TabName.Press">Press key</h4>

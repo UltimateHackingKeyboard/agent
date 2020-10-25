@@ -1,7 +1,8 @@
 <button type="button" [ngClass]="{
-    'btn btn-sm btn--capture-keystroke': !isLink,
+    'btn': true,
+    'btn-sm btn--capture-keystroke': !isLink,
     'btn-link link--capture-keystroke': isLink,
-    'btn-default': !record && !isLink,
+    'btn-outline-secondary': !record && !isLink,
     'btn-info': record && !isLink
 }" (click)="start($event)">
     <fa-icon [icon]="faCircle" class="record-circle"></fa-icon>

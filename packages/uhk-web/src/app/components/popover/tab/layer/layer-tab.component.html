@@ -30,11 +30,12 @@
         </span>
         </div>
         <div *ngIf="toggle === 'active' && allowLayerDoubleTap">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           [(ngModel)]="lockLayerWhenDoubleTapping"> Lock layer when double tapping this key.
-                </label>
+            <div class="form-check mt-2">
+                <input type="checkbox"
+                    class="form-check-input"
+                    id="lockLayerDoubleTap"
+                    [(ngModel)]="lockLayerWhenDoubleTapping">
+                <label class="form-check-label" for="lockLayerDoubleTap">Lock layer when double tapping this key.</label>
             </div>
         </div>
     </div>

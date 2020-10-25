@@ -15,7 +15,7 @@
                         [disabled]="flashFirmwareButtonDisabled$ | async"
                         (click)="onRecoveryDevice()">Fix device
                 </button>
-                <button class="btn btn-default"
+                <button class="btn btn-outline-secondary"
                         type="button"
                         [disabled]="updatingFirmware$ | async"
                         (click)="onClose()">Close

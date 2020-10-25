@@ -1,6 +1,6 @@
 <uhk-header>
     <div class="row">
-        <h1 class="col-xs-12 pane-title">
+        <h1 class="col-12 pane-title">
             <fa-icon [icon]="faKeyboard"></fa-icon>
             <auto-grow-input [ngModel]="keymap.name"
                              maxParentWidthOffset="530"
@@ -22,12 +22,12 @@
             <fa-icon [icon]="faTrash"
                      [ngbTooltip]="trashTitle"
                      tooltipClass="tooltip-nowrap"
-                     class="keymap__remove pull-right"
+                     class="keymap__remove float-right"
                      placement="bottom-right"
                      (click)="removeKeymap()"
             ></fa-icon>
             <fa-icon [icon]="faCopy"
-                     class="keymap__duplicate pull-right"
+                     class="keymap__duplicate float-right"
                      ngbTooltip="Duplicate keymap"
                      placement="bottom"
                      (click)="duplicateKeymap()"

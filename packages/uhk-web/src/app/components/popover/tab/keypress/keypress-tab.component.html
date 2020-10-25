@@ -40,18 +40,20 @@
 <div class="modifier-options">
     <b class="setting-label">Modifiers:</b>
     <div class="btn-toolbar modifiers">
-        <div class="btn-group btn-group-sm modifiers__left">
-            <button type="button" class="btn btn-default"
+        <div class="btn-group btn-group-sm mb-3 mr-3 modifiers__left">
+            <button type="button" class="btn"
                     *ngFor="let modifier of leftModifiers; trackBy:modifiersTrackBy"
+                    [class.btn-outline-secondary]="!modifier.checked"
                     [class.btn-primary]="modifier.checked"
                     (click)="toggleModifier(modifier)"
             >
                 {{ modifier.text }}
             </button>
         </div>
-        <div class="btn-group btn-group-sm modifiers__right">
-            <button type="button" class="btn btn-default"
+        <div class="btn-group btn-group-sm mb-3 modifiers__right">
+            <button type="button" class="btn"
                     *ngFor="let modifier of rightModifiers; trackBy:modifiersTrackBy"
+                    [class.btn-outline-secondary]="!modifier.checked"
                     [class.btn-primary]="modifier.checked"
                     (click)="toggleModifier(modifier)"
             >

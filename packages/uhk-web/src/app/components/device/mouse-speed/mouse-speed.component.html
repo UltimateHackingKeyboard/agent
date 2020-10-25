@@ -20,10 +20,10 @@
 </button>
 
 <div class="row">
-    <div class="col-xs-12 col-md-6">
+    <div class="col-12 col-lg-6">
         <h3>Mouse pointer speed</h3>
         <div class="row mouse-speed-setting" *ngFor="let prop of moveProps">
-            <div class="col-xs-12">
+            <div class="col-12">
                 <slider-wrapper
                     [label]="prop.title"
                     [tooltip]="prop.tooltip"
@@ -37,10 +37,10 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-md-6 mouse-speed-container">
+    <div class="col-12 col-lg-6 mouse-speed-container">
         <h3>Mouse scroll speed</h3>
         <div class="row mouse-speed-setting" *ngFor="let prop of scrollProps">
-            <div class="col-xs-12">
+            <div class="col-12">
                 <slider-wrapper
                     [label]="prop.title"
                     [tooltip]="prop.tooltip"

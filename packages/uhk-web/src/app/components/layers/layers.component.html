@@ -1,6 +1,7 @@
 <div class="text-center">
     <span role="group" class="uhk__layer-switcher--wrapper btn-group btn-group-lg" data-title="Layers: ">
-        <button type="button" class="btn btn-default" *ngFor="let button of buttons; let index = index" (click)="selectLayer(index)"
+        <button type="button" class="btn" *ngFor="let button of buttons; let index = index" (click)="selectLayer(index)"
+            [class.btn-outline-secondary]="index !== current"
             [class.btn-primary]="index === current">
             {{ button }}
         </button>

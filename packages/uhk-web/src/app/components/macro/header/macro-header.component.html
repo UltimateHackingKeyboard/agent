@@ -1,19 +1,19 @@
 <uhk-header>
     <div class="row">
-        <h1 class="col-xs-12 pane-title">
+        <h1 class="col-12 pane-title">
             <fa-icon [icon]="faPlay"></fa-icon>
             <auto-grow-input [ngModel]="macro.name"
                              maxParentWidthPercent="0.8"
                              [selectAfterInit]="isNew"
                              (ngModelChange)="editMacroName($event)"></auto-grow-input>
             <fa-icon [icon]="faTrash"
-                     class="macro__remove pull-right"
+                     class="macro__remove float-right"
                      ngbTooltip="Delete macro"
                      tooltipClass="tooltip-nowrap"
                      placement="bottom-right"
                      (click)="removeMacro()"></fa-icon>
             <fa-icon [icon]="faCopy"
-                     class="macro__duplicate pull-right"
+                     class="macro__duplicate float-right"
                      ngbTooltip="Duplicate macro"
                      tooltipClass="tooltip-nowrap"
                      placement="bottom"

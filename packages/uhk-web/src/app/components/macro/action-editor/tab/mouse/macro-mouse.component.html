@@ -1,39 +1,39 @@
-<div class="col-xs-12 macro-mouse__container">
-    <div class="col-xs-3 macro-mouse__types">
-        <ul class="nav nav-pills nav-stacked">
+<div class="row macro-mouse__container">
+    <div class="col-4 col-lg-3 py-3 macro-mouse__types">
+        <ul class="nav nav-pills flex-column">
             <li #mouseMove [class.active]="activeTab === TabName.Move" (click)="selectTab(TabName.Move)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Move">
                     <fa-icon [icon]="faArrowsAlt" [fixedWidth]="true"></fa-icon>
                     <span>Move pointer</span>
                 </a>
             </li>
             <li #mouseScroll [class.active]="activeTab === TabName.Scroll" (click)="selectTab(TabName.Scroll)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Scroll">
                     <fa-icon [icon]="faArrowsAltV" [fixedWidth]="true"></fa-icon>
                     <span>Scroll</span>
                 </a>
             </li>
             <li #mouseClick [class.active]="activeTab === TabName.Click" (click)="selectTab(TabName.Click)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Click">
                     <fa-icon [icon]="faMousePointer" [fixedWidth]="true"></fa-icon>
                     <span>Click button</span>
                 </a>
             </li>
             <li #mouseHold [class.active]="activeTab === TabName.Hold" (click)="selectTab(TabName.Hold)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Hold">
                     <fa-icon [icon]="faHandRock" [fixedWidth]="true"></fa-icon>
                     <span>Hold button</span>
                 </a>
             </li>
             <li #mouseRelease [class.active]="activeTab === TabName.Release" (click)="selectTab(TabName.Release)">
-                <a>
+                <a class="nav-link" [class.active]="activeTab === TabName.Release">
                     <fa-icon [icon]="faHandPaper" [fixedWidth]="true"></fa-icon>
                     <span>Release button</span>
                 </a>
             </li>
         </ul>
     </div>
-    <div class="col-xs-9 macro-mouse__actions" [ngSwitch]="activeTab">
+    <div class="col-8 col-lg-9 ml-n3 py-3 pl-5 macro-mouse__actions" [ngSwitch]="activeTab">
         <div #tab *ngSwitchCase="TabName.Move">
             <h4>Move mouse pointer</h4>
             <div class="form-horizontal">
@@ -93,15 +93,18 @@
             <h4 *ngIf="activeTab === TabName.Hold">Hold mouse button</h4>
             <h4 *ngIf="activeTab === TabName.Release">Release mouse button</h4>
             <div class="btn-group">
-                <button class="btn btn-default"
+                <button type="button" class="btn"
+                        [class.btn-outline-secondary]="!hasButton(MouseButtons.Left)"
                         [class.btn-primary]="hasButton(MouseButtons.Left)"
                         (click)="setMouseClick(MouseButtons.Left)">Left
                 </button>
-                <button class="btn btn-default"
+                <button type="button" class="btn"
+                        [class.btn-outline-secondary]="!hasButton(MouseButtons.Middle)"
                         [class.btn-primary]="hasButton(MouseButtons.Middle)"
                         (click)="setMouseClick(MouseButtons.Middle)">Middle
                 </button>
-                <button class="btn btn-default"
+                <button type="button" class="btn"
+                        [class.btn-outline-secondary]="!hasButton(MouseButtons.Right)"
                         [class.btn-primary]="hasButton(MouseButtons.Right)"
                         (click)="setMouseClick(MouseButtons.Right)">Right
                 </button>
