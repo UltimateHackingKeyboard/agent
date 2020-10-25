@@ -1,19 +1,6 @@
 .macro-mouse {
-    &__container {
-        padding: 0;
-    }
-
-    &__types {
-        border-right: 1px solid #ddd;
-        border-left: 0;
-        margin-top: -1rem;
-        margin-left: 0;
-        padding: 1rem 0;
-    }
-
     &__actions {
-        padding-left: 3rem;
-        padding-bottom: 1rem;
+        border-left: 1px solid var(--color-macro-border);
     }
 }
 
@@ -35,6 +22,6 @@
 
 .nav {
     li.active {
-        z-index: 0;
+        z-index: 2;
     }
 }
