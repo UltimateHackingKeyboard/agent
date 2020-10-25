@@ -13,15 +13,17 @@ $side-value-width: 100px;
     .slider-wrapper {
         display: flex;
         flex-direction: row;
+        flex-wrap: nowrap;
         padding-left: 1.6rem;
     }
 
     .slider-container {
-        width: calc(100% - #{$side-value-width});
+        flex-grow: 1;
+        min-width: 100px;
     }
 
     .slider-value {
-        width: $side-value-width;
+        min-width: $side-value-width;
     }
 
     .value-indicator {
