@@ -156,7 +156,6 @@ export const getRestoreUserConfiguration = createSelector(deviceState, fromDevic
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
 export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firmwareUpgradeFailed);
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
-export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
@@ -214,13 +213,12 @@ export const firstAttemptOfSaveToKeyboard = createSelector(
         return electron ? !everAttemptedSavingToKeyboard && saveToKeyboard.showButton : false;
     });
 export const getPrivilegePageState = createSelector(
-    appState, getUpdateUdevRules, getUdevFileContent,
-    (app, updateUdevRules, udevFileContent): PrivilagePageSate => {
+    appState, getUdevFileContent,
+    (app, udevFileContent): PrivilagePageSate => {
         const permissionSetupFailed = !!app.permissionError;
 
         return {
             permissionSetupFailed,
-            updateUdevRules,
             udevFileContent,
             showWhatWillThisDo: !app.privilegeWhatWillThisDoClicked && !permissionSetupFailed,
             showWhatWillThisDoContent: app.privilegeWhatWillThisDoClicked || permissionSetupFailed
