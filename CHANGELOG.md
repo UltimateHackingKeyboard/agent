@@ -10,7 +10,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 Firmware: 8.10.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.2)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
-- Don't force udev rule updates when not necessary. This change makes Agent not hang in sandboxed process environments like NixOS.
+- Don't force udev rule updates when not necessary. This change makes Agent not hang upon startup in sandboxed process environments like NixOS.
 
 ## [1.5.4] - 2020-08-29
 
