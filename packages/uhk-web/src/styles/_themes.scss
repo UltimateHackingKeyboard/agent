@@ -116,8 +116,8 @@ $dark-theme: false !default;
         --color-keyboard-bg:#{$color-bg-light};
         --color-keyboard-text: #333;
         --color-keyboard-key-bg: #{$color-bg-light};
-        --color-keyboard-key-hover: #494949;
-        --color-keyboard-key-active: #4099e5;
+        --color-keyboard-key-hover: #{theme-color("secondary")};
+        --color-keyboard-key-active: #{theme-color("primary")};
 
         --color-tooltip-bg: #{$tooltip-bg};
         --color-tooltip-text: #{$tooltip-color};
