@@ -39,6 +39,9 @@ $dark-theme: false !default;
     $nav-tabs-link-active-bg: $color-popover-bg-light;
     $nav-tabs-link-active-color: $color-text;
     $nav-tabs-link-active-border-color: $color-popover-border;
+    $alert-bg-level: 9;
+    $alert-border-level: 4;
+    $alert-color-level: 1;
 
     :root,
     .theme-dark {
@@ -72,8 +75,12 @@ $dark-theme: false !default;
         --color-popover-bg: #{$color-bg-light};
         --color-popover-bg-light: #{$color-popover-bg-light};
         --color-popover-border: #{$color-popover-border};
-        --color-popover-tab-hover: #{$color-popover-bg-light};
-
+        --color-popover-tab-hover: #{darken($color-popover-bg-light, 8%)};
+        
+        --color-progress-bar-bg: #{darken(theme-color("primary"), 40%)};
+        --color-progress-bar-progress: #{darken(theme-color("primary"), 20%)};
+        --color-progress-bar-text: #{$color-text};
+        
         --color-macro-bg: #{$color-bg-light};
         --color-macro-border: #ebebeb;
     }
@@ -127,6 +134,11 @@ $dark-theme: false !default;
         --color-popover-bg: #{$color-bg-light};
         --color-popover-bg-light: #{color("white")};
         --color-popover-border: #ebebeb;
+        --color-popover-tab-hover: #{darken($color-bg-light, 5%)};
+
+        --color-progress-bar-bg: #{#d3e4f2};
+        --color-progress-bar-progress: #{lighten(theme-color("primary"), 20%)};
+        --color-progress-bar-text: #{$color-text};
 
         --color-macro-bg: #{$color-bg-light};
         --color-macro-border: #ebebeb;
