@@ -6,10 +6,13 @@ $dark-theme: false !default;
 @if $dark-theme {
     // Dark theme
 
-    $theme-colors: (
-        "primary": #d33,
-        "secondary": #999,
-        "danger": #900,
+    $theme-colors: map-merge(
+        $theme-colors, 
+        (
+            "primary": #3ec9e8,
+            "secondary": #999,
+            "danger": #900,
+        )
     );
 
     $color-bg: #111;
@@ -63,11 +66,6 @@ $dark-theme: false !default;
         --color-icon-hover: #{theme-color("primary")};
         --color-icon-hover-delete: #{$icon-hover-delete};
 
-        --color-undo-alert-bg: #{$color-bg-light};
-        --color-undo-alert-text: #{$color-text};
-        --color-undo-alert-border: #333;
-        --color-undo-button: #{theme-color("primary")};
-
         --color-slider-base-bg: #555;
         --color-slider-handle-bg: #888;
 
@@ -82,10 +80,11 @@ $dark-theme: false !default;
 } @else {
     // Light aka default theme
 
-    $theme-colors: (
-        "primary": #d33,
-        "secondary": #666,
-        "danger": #900,
+    $theme-colors: map-merge(
+        $theme-colors, 
+        (
+            "danger": #900
+        )
     );
 
     $color-bg: color("white");
