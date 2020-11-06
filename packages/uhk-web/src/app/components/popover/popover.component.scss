@@ -86,8 +86,6 @@
         display: block;
 
         .nav-tabs {
-            position: relative;
-            top: 1px;
             display: flex;
             border: 0;
 
@@ -101,7 +99,7 @@
                     z-index: 2;
 
                     a.active {
-                        border-bottom: 1px solid var(--color-popover-border-bg-light);
+                        border-bottom: 1px solid var(--color-popover-bg-light);
                     }
                 }
             }
