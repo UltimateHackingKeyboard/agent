@@ -6,6 +6,11 @@ html, body {
     height: 100%;
 }
 
+textarea {
+    background-color: var(--color-input-bg);
+    color: var(--color-input-text);
+}
+
 
 .uhk-icon-pure-agent-icon {
     background: url('../assets/images/agent-icon.svg') no-repeat;
@@ -139,10 +144,6 @@ a.disabled {
             cursor: inherit;
             display: block;
         }
-    }
-
-    &-black-link {
-        color: #000;
     }
 
     &-padding-0 {

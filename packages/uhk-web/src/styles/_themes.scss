@@ -35,7 +35,7 @@ $dark-theme: false !default;
     $list-group-border-color: #666;
     $input-bg: #222;
     $input-color: $color-text;
-    $input-focus-bg: #222;
+    $input-focus-bg: #111;
     $input-btn-focus-color: rgba(theme-color("primary"), .25);
     $nav-tabs-link-hover-border-color: $color-popover-border;
     $nav-tabs-link-active-bg: $color-popover-bg-light;
@@ -45,9 +45,9 @@ $dark-theme: false !default;
     $alert-border-level: 4;
     $alert-color-level: 1;
     $dropdown-color: $color-text;
-    $dropdown-bg: $color-bg;
+    $dropdown-bg: $input-bg;
     $dropdown-link-color: $color-text;
-    $dropdown-link-hover-color: #222;
+    $dropdown-link-hover-color: #333;
     $dropdown-link-hover-bg: #{theme-color("primary")};
 
     :root,
