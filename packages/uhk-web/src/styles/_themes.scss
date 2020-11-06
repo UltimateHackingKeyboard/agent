@@ -11,7 +11,6 @@ $dark-theme: false !default;
         (
             "primary": #3ec9e8,
             "secondary": #999,
-            "danger": #900,
         )
     );
 
@@ -65,6 +64,7 @@ $dark-theme: false !default;
 
         --color-icon-hover: #{theme-color("primary")};
         --color-icon-hover-delete: #{$icon-hover-delete};
+        --color-icon-capture-keystroke: #{theme-color("danger")};
 
         --color-slider-base-bg: #555;
         --color-slider-handle-bg: #888;
@@ -79,13 +79,7 @@ $dark-theme: false !default;
     }
 } @else {
     // Light aka default theme
-
-    $theme-colors: map-merge(
-        $theme-colors, 
-        (
-            "danger": #900
-        )
-    );
+    // Use default theme controls
 
     $color-bg: color("white");
     $color-bg-light: #f7f7f7;
@@ -125,6 +119,7 @@ $dark-theme: false !default;
 
         --color-icon-hover: #{$icon-hover};
         --color-icon-hover-delete: #{$icon-hover-delete};
+        --color-icon-capture-keystroke: #{theme-color("danger")};
 
         --color-slider-base-bg: #{color("white")};
         --color-slider-handle-bg: #{color("white")};
