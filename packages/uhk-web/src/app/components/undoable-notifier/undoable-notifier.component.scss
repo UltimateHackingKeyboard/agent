@@ -4,21 +4,22 @@
     z-index: 100;
 
     .alert {
-        background-color: var(--color-undo-alert-bg);
-        color: var(--color-undo-alert-text);
-        border-color: var(--color-undo-alert-border);
-        padding: 5px 10px 5px 5px;
-
         margin-bottom: 0.25em;
-        margin-top: -2em;
+        padding-right: 2rem;
 
         .close {
+            top: -2px;
             right: -5px;
+
+            > span {
+                position: relative;
+                top: -2px;
+            }
         }
 
         .undo-button {
             cursor: pointer;
-            color: var(--color-undo-button);
+            padding: 0 1rem;
         }
     }
 }
