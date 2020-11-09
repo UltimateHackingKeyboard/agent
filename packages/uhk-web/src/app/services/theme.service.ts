@@ -34,7 +34,9 @@ export class ThemeService {
         const newStylesheetEl = this.createStylesheetElement(theme);
         if (currentStylesheetEl) {
             // Don't try to change already set theme
-            if (currentStylesheetEl.getAttribute('data-theme') === theme) return;
+            if (currentStylesheetEl.getAttribute('data-theme') === theme) {
+                return;
+            }
 
             // Set new theme
             this.document.head.replaceChild(newStylesheetEl, currentStylesheetEl);
