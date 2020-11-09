@@ -1,5 +1,6 @@
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
+    AppTheme,
     CommandLineArgs,
     HardwareConfiguration,
     Notification,
@@ -16,6 +17,7 @@ import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
 
 export interface State {
+    appTheme: AppTheme,
     animationEnabled: boolean;
     started: boolean;
     commandLineArgs: CommandLineArgs;
@@ -36,6 +38,7 @@ export interface State {
 }
 
 export const initialState: State = {
+    appTheme: AppTheme.Auto,
     animationEnabled: true,
     started: false,
     commandLineArgs: {},
@@ -178,7 +181,8 @@ export function reducer(
             return {
                 ...state,
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
-                animationEnabled: settings.animationEnabled
+                animationEnabled: settings.animationEnabled,
+                appTheme: settings.appTheme
             };
         }
 
@@ -192,6 +196,12 @@ export function reducer(
             return {
                 ...state,
                 animationEnabled: (action as App.ToggleAnimationEnabledAction).payload
+            };
+
+        case App.ActionTypes.SetAppTheme:
+            return {
+                ...state,
+                appTheme: (action as App.SetAppThemeAction).payload
             };
 
         default:
@@ -229,4 +239,5 @@ export const keypressCapturing = (state: State): boolean => state.keypressCaptur
 export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state.everAttemptedSavingToKeyboard;
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
+export const getAppTheme = (state: State): AppTheme => state.appTheme;
 export const getPlatform = (state: State): string => state.platform;

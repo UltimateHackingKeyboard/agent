@@ -1,40 +1,51 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { LogService } from 'uhk-common';
-
-enum CSSTheme {
-    Light = 'light',
-    Dark = 'dark'
-}
+import { Store } from '@ngrx/store';
+import { fromEvent, Observable } from 'rxjs';
+import { skipWhile, withLatestFrom} from 'rxjs/operators';
+import { LogService, AppTheme } from 'uhk-common';
+import { AppState, getAppTheme } from '../store';
 
 const THEME_FILES = {
-    [CSSTheme.Light]: 'stylesLight.css',
-    [CSSTheme.Dark]: 'stylesDark.css'
+    DEFAULT: 'stylesLight.css',
+    [AppTheme.Light]: 'stylesLight.css',
+    [AppTheme.Dark]: 'stylesDark.css'
 };
 
 const UHK_THEME_ID = 'uhk-theme';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-    private darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    appTheme$: Observable<AppTheme>;
+    darkModeListener$: Observable<MediaQueryListEvent>;
+    darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    constructor(@Inject(DOCUMENT) private document: Document, private logService: LogService) {
+    constructor(
+        @Inject(DOCUMENT) private document: Document,
+        private store: Store<AppState>,
+        private logService: LogService
+    ) {
+        this.appTheme$ = this.store.select(getAppTheme);
+        this.appTheme$.subscribe(value => this.setTheme(value));
         this.attachListener();
-        this.setTheme(this.isDarkMode() ? CSSTheme.Dark : CSSTheme.Light);
 
         this.logService.misc('[ThemeService] init success');
     }
 
-    isDarkMode(): boolean {
+    prefersDarkMode(): boolean {
         return this.darkModeMediaQuery.matches;
     }
 
-    setTheme(theme: CSSTheme): void {
+    setTheme(theme: AppTheme): void {
+        let newTheme = theme;
+        if (theme === AppTheme.Auto) {
+            newTheme = this.prefersDarkMode() ? AppTheme.Dark : AppTheme.Light;
+        }
         const currentStylesheetEl = this.getCurrentStylesheetElement();
-        const newStylesheetEl = this.createStylesheetElement(theme);
+        const newStylesheetEl = this.createStylesheetElement(newTheme);
         if (currentStylesheetEl) {
             // Don't try to change already set theme
-            if (currentStylesheetEl.getAttribute('data-theme') === theme) {
+            if (currentStylesheetEl.getAttribute('data-theme') === newTheme) {
                 return;
             }
 
@@ -47,8 +58,12 @@ export class ThemeService {
     }
 
     private attachListener(): void {
-        this.darkModeMediaQuery.addEventListener('change', (event: MediaQueryListEvent) => {
-            this.setTheme(event.matches ? CSSTheme.Dark : CSSTheme.Light);
+        this.darkModeListener$ = fromEvent(this.darkModeMediaQuery, 'change') as Observable<MediaQueryListEvent>;
+        this.darkModeListener$.pipe(
+            withLatestFrom(this.appTheme$),
+            skipWhile(([_, theme]) => theme !== AppTheme.Auto)
+        ).subscribe(([event]) => {
+            this.setTheme(event.matches ? AppTheme.Dark : AppTheme.Light);
         });
     }
 
@@ -56,8 +71,8 @@ export class ThemeService {
         return this.document.head.querySelector(`link[id="${UHK_THEME_ID}"]`);
     }
 
-    private createStylesheetElement(theme: CSSTheme): HTMLLinkElement {
-        const file = THEME_FILES[theme] || THEME_FILES[CSSTheme.Light];
+    private createStylesheetElement(theme: AppTheme): HTMLLinkElement {
+        const file = THEME_FILES[theme] || THEME_FILES.DEFAULT;
         const el = this.document.createElement('link');
         el.setAttribute('id', UHK_THEME_ID);
         el.setAttribute('data-theme', theme);

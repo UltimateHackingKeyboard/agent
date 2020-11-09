@@ -1,19 +1,39 @@
 <div class="row">
-    <h1 class="col-12 pane-title">
-        <fa-icon [icon]="faCog"></fa-icon>
-        <span class="macro__name pane-title__name">Settings</span>
-    </h1>
+    <div class="col-12">
+        <h1 class="pane-title">
+            <fa-icon [icon]="faCog"></fa-icon>
+            <span class="macro__name pane-title__name">Settings</span>
+        </h1>
+    </div>
 </div>
-<auto-update-settings [state]="updateSettingsState$ | async"
-                      (toggleCheckForUpdateOnStartUp)="toggleCheckForUpdateOnStartUp($event)"
-                      (checkForUpdate)="checkForUpdate($event)">
-</auto-update-settings>
+<div class="col-12">
+    <auto-update-settings [state]="updateSettingsState$ | async"
+        (toggleCheckForUpdateOnStartUp)="toggleCheckForUpdateOnStartUp($event)"
+        (checkForUpdate)="checkForUpdate($event)">
+    </auto-update-settings>
+</div>
 
-<div class="checkbox d-inline-block mb-0 mt-0">
-    <label>
-        <input type="checkbox"
-               [checked]="animationEnabled$ | async"
-               (change)="toggleAnimationEnabled($event.target.checked)"
-        > Enable layer switching and key popover animation
-    </label>
+
+<div class="col-12">
+    <div class="checkbox d-inline-block mb-0 mt-0">
+        <label>
+            <input type="checkbox"
+                   [checked]="animationEnabled$ | async"
+                   (change)="toggleAnimationEnabled($event.target.checked)"
+            > Enable layer switching and key popover animation
+        </label>
+    </div>
+</div>
+
+
+<div class="col-12 col-md-4 mb-0 mt-0">
+    <label for="select-theme">Theme</label>
+    <select id="select-theme"
+        class="form-control"
+        (change)="selectTheme($event.target.value)"
+        *ngIf="(appTheme$ | async) as selectedTheme">
+        <option [selected]="selectedTheme === 'auto'" value="auto">System default</option>
+        <option [selected]="selectedTheme === 'light'" value="light">Light</option>
+        <option [selected]="selectedTheme === 'dark'" value="dark">Dark</option>
+    </select>
 </div>

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { ApplicationSettings, AppStartInfo, HardwareConfiguration, Notification } from 'uhk-common';
+import { ApplicationSettings, AppStartInfo, AppTheme, HardwareConfiguration, Notification } from 'uhk-common';
 import { ElectronLogEntry } from '../../models/xterm-log';
 import { NavigationPayload } from '../../models';
 
@@ -22,6 +22,7 @@ export enum ActionTypes {
     PrivilegeWhatWillThisDo = '[app] What will this do clicked',
     SetupPermissionError = '[app] Setup permission error',
     ToggleAnimationEnabled = '[app] Toggle animation enabled',
+    SetAppTheme = '[app] Set application theme',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
     StopKeypressCapturing = '[app] Stop keypress capturing',
@@ -128,6 +129,13 @@ export class ToggleAnimationEnabledAction implements Action {
     }
 }
 
+export class SetAppThemeAction implements Action {
+    type = ActionTypes.SetAppTheme;
+
+    constructor(public payload: AppTheme) {
+    }
+}
+
 export class LoadAppStartInfoAction implements Action {
     type = ActionTypes.LoadAppStartInfo;
 }
@@ -176,6 +184,7 @@ export type Actions
     | PrivilegeWhatWillThisDoAction
     | SetupPermissionErrorAction
     | ToggleAnimationEnabledAction
+    | SetAppThemeAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction
     | StopKeypressCapturingAction
