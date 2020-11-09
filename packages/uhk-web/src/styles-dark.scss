@@ -1,0 +1,14 @@
+$dark-theme: true;
+
+@import './styles/variables';
+@import './styles/themes';
+@import './styles/common';
+@import '~angular-notifier/styles';
+@import './styles/tooltip';
+@import './styles/uhk-icons/uhk-icon';
+@import './styles/side-menu';
+@import './styles/ngx-select-ex';
+
+@import "~bootstrap/scss/bootstrap";
+
+@import './styles/global';
