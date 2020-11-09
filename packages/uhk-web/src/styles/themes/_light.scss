@@ -1,0 +1,60 @@
+// Light aka default theme
+// Uses default theme colors
+
+$color-bg: color('white');
+$color-bg-light: #f7f7f7;
+$color-text: color('black');
+$color-text-highlight: #333;
+
+$icon-hover: theme-color('primary');
+$icon-hover-delete: theme-color('danger');
+$tooltip-arrow-color: #ccc;
+$tooltip-border-color: #ccc;
+
+// Bootstrap variables
+$body-bg: $color-bg;
+$body-color: $color-text;
+$link-color: theme-color('primary');
+$link-hover-color: darken($link-color, 15%);
+$tooltip-color: color('black');
+$tooltip-bg: color('white');
+
+:root,
+.theme-light {
+    --color-sidemenu-bg: #f5f5f5;
+    --color-sidemenu-border: #ccc;
+    --color-sidemenu-text: #333;
+    --color-sidemenu-active-bg: rgba(0, 0, 0, 0.18);
+    --color-sidemenu-active-text: #{$color-text-highlight};
+    --color-sidemenu-star: #666;
+
+    --color-keyboard-bg: #{$color-bg-light};
+    --color-keyboard-text: #333;
+    --color-keyboard-key-bg: #{$color-bg-light};
+    --color-keyboard-key-hover: #{theme-color('secondary')};
+    --color-keyboard-key-active: #{theme-color('primary')};
+
+    --color-tooltip-bg: #{$tooltip-bg};
+    --color-tooltip-text: #{$tooltip-color};
+    --color-tooltip-border: #ccc;
+    --color-tooltip-arrow: #{$tooltip-arrow-color};
+
+    --color-icon-hover: #{$icon-hover};
+    --color-icon-hover-delete: #{$icon-hover-delete};
+    --color-icon-capture-keystroke: #{theme-color('danger')};
+
+    --color-slider-base-bg: #{color('white')};
+    --color-slider-handle-bg: #{color('white')};
+
+    --color-popover-bg: #{$color-bg-light};
+    --color-popover-bg-light: #{color('white')};
+    --color-popover-border: #ebebeb;
+    --color-popover-tab-hover: #{darken($color-bg-light, 5%)};
+
+    --color-progress-bar-bg: #{#d3e4f2};
+    --color-progress-bar-progress: #{lighten(theme-color('primary'), 20%)};
+    --color-progress-bar-text: #{$color-text};
+
+    --color-macro-bg: #{$color-bg-light};
+    --color-macro-border: #ebebeb;
+}
