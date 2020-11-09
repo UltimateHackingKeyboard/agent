@@ -88,8 +88,8 @@ $dark-theme: false !default;
         --color-progress-bar-progress: #{darken(theme-color("primary"), 20%)};
         --color-progress-bar-text: #{$color-text};
         
-        --color-macro-bg: #{$color-bg-light};
-        --color-macro-border: #ebebeb;
+        --color-macro-bg: #333;
+        --color-macro-border: #444;
 
         --color-select-active-bg: #{darken(theme-color('primary'), 40%)};
         --color-select-active-text: #{$white};
