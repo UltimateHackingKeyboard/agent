@@ -32,7 +32,7 @@
 
             a {
                 position: relative;
-                
+
                 &.active {
                     background-color: var(--color-icon-hover);
                 }
@@ -70,8 +70,6 @@
 
         @include media-breakpoint-up(lg) {
             .nav li {
-                
-
                 &.active {
                     a.active {
                         border-top-right-radius: 0;
@@ -81,14 +79,13 @@
                             display: block;
                         }
                     }
-                    
                 }
             }
         }
     }
 
     &__tabs {
-        
+
         margin-left: -1rem;
         padding-left: 2rem;
 
