@@ -80,7 +80,8 @@ function createWindow() {
         width: loadedWindowState.width,
         height: loadedWindowState.height,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            spellcheck: false
         },
         icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
     });
