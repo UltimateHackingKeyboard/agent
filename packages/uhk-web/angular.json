@@ -29,7 +29,8 @@
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
-              "src/styles.scss"
+              { "input": "src/styles.scss", "bundleName": "stylesLight", "inject": false },
+              { "input": "src/styles-dark.scss", "bundleName": "stylesDark", "inject": false }
             ],
             "scripts": [
               "node_modules/nouislider/distribute/nouislider.js"
@@ -39,7 +40,8 @@
               "file-saver",
               "uhk-common"
             ],
-            "showCircularDependencies": false
+            "showCircularDependencies": false,
+            "extractCss": true
           },
           "configurations": {
             "production": {
@@ -152,7 +154,8 @@
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
-              "src/styles.scss"
+              { "input": "src/styles.scss", "bundleName": "stylesLight", "inject": false },
+              { "input": "src/styles-dark.scss", "bundleName": "stylesDark", "inject": false }
             ],
             "scripts": [
               "node_modules/nouislider/distribute/nouislider.js"
