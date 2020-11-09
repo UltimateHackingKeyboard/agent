@@ -78,6 +78,7 @@ import { SafeStylePipe, UserConfigHistoryDisplayTextPipe } from './pipes';
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
 import { SvgModuleProviderService } from './services/svg-module-provider.service';
+import { ThemeService } from './services/theme.service';
 
 import { KeymapEditGuard } from './components/keymap/edit';
 import { MacroNotFoundGuard } from './components/macro/not-found';
@@ -251,7 +252,8 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
         UhkDeviceLoadedGuard,
-        UhkDeviceBootloaderNotActiveGuard
+        UhkDeviceBootloaderNotActiveGuard,
+        ThemeService
     ],
     exports: [
         UhkMessageComponent,
