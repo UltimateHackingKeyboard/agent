@@ -1,9 +1,9 @@
 @import '../../../styles/common';
 @import '../../../styles/variables';
 
-$level-0-item-spacing: 0.5rem 1rem;
-$level-1-item-spacing: 0.5rem 1rem 0.5rem 1.5rem;
-$level-2-item-spacing: 0.25rem 0 0.25rem 2rem;
+$level-0-item-spacing: 0.5rem 0.5rem;
+$level-1-item-spacing: 0.25rem 1rem 0.25rem 1.5rem;
+$level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
 
 :host {
     background-color: var(--color-sidemenu-bg);
