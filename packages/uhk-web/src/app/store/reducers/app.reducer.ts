@@ -17,7 +17,7 @@ import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
 
 export interface State {
-    appTheme: AppTheme,
+    appTheme: AppTheme;
     animationEnabled: boolean;
     started: boolean;
     commandLineArgs: CommandLineArgs;

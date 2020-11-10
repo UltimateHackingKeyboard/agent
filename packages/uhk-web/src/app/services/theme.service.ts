@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { fromEvent, Observable } from 'rxjs';
-import { skipWhile, withLatestFrom} from 'rxjs/operators';
+import { skipWhile, withLatestFrom } from 'rxjs/operators';
 import { LogService, AppTheme } from 'uhk-common';
 import { AppState, getAppTheme } from '../store';
 

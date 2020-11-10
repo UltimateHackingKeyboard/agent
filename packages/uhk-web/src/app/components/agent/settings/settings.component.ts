@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import {AppTheme} from 'uhk-common';
+import { AppTheme } from 'uhk-common';
 import { AppState, appUpdateSettingsState, getAnimationEnabled, getAppTheme } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
