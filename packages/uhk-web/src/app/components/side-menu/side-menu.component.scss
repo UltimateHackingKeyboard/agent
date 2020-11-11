@@ -33,10 +33,6 @@ ul {
     li {
         list-style: none;
     }
-
-    ul {
-        overflow: hidden;
-    }
 }
 
 .sidebar {
@@ -77,7 +73,7 @@ ul {
 
         .btn + .chevron {
             // Chevron style when the same row has a button
-            margin-right: 0.75rem;
+            right: 0.75rem;
         }
 
         .uhk-icon-usb-drive {
