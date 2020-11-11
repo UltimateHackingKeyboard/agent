@@ -22,3 +22,9 @@
         margin-top: $main-content-top-margin-on-update;
     }
 }
+
+@mixin invertInDarkTheme($percentage) {
+    @if ($dark-theme) {
+        filter: invert($percentage);
+    }
+}

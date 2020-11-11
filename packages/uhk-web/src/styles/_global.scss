@@ -11,26 +11,6 @@ textarea {
     color: var(--color-input-text);
 }
 
-.uhk-icon-pure-agent-icon {
-    background: url('../assets/images/agent-icon.svg') no-repeat;
-}
-
-.uhk-icon-full-agent-icon {
-    background: url('../assets/images/agent-logo-with-text.svg') no-repeat;
-}
-
-.uhk-icon {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    background-size: auto 100%;
-    vertical-align: text-bottom;
-
-    &.wide {
-        width: 4.15em;
-    }
-}
-
 .rotate-right {
     -ms-transform: rotate(90deg); /* IE 9 */
     -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
