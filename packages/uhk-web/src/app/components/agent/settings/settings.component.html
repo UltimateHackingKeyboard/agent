@@ -27,12 +27,14 @@
 
 
 <div class="col-12 col-md-4 mb-0 mt-0">
-    <label for="select-theme">Theme</label>
-    <select id="select-theme"
-        class="form-control"
-        (change)="selectTheme($event.target.value)">
-        <option [selected]="(appTheme$ | async) === 'auto'" value="auto">System default</option>
-        <option [selected]="(appTheme$ | async) === 'light'" value="light">Light</option>
-        <option [selected]="(appTheme$ | async) === 'dark'" value="dark">Dark</option>
-    </select>
+    <div class="d-flex align-items-center mt-2">
+        <label for="select-theme" class="mb-0 mr-2">Theme</label>
+        <select id="select-theme"
+            class="form-control theme-selector"
+            (change)="selectTheme($event.target.value)">
+            <option [selected]="(appTheme$ | async) === 'auto'" value="auto">System default</option>
+            <option [selected]="(appTheme$ | async) === 'light'" value="light">Light</option>
+            <option [selected]="(appTheme$ | async) === 'dark'" value="dark">Dark</option>
+        </select>
+    </div>
 </div>
