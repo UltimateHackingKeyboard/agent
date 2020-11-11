@@ -1,5 +1,15 @@
 // Light aka default theme
-// Uses default theme colors
+
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        'primary': #337ab7,
+        'success': #5cb85c,
+        'info': #5bc0de,
+        'warning': #f0ad4e,
+        'danger': #900
+    )
+);
 
 $color-bg: color('white');
 $color-bg-light: #f7f7f7;
