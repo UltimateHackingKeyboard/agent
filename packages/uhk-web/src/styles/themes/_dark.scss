@@ -1,11 +1,13 @@
 // Dark theme
 $dark-theme: true;
 
+$light: #444;
 $theme-colors: map-merge(
     $theme-colors,
     (
         'primary': #3ec9e8,
         'secondary': #999,
+        'light': $light
     )
 );
 
