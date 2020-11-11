@@ -13,6 +13,7 @@ const THEME_FILES = {
 };
 
 const UHK_THEME_ID = 'uhk-theme';
+const THEME_SWAP_DELAY = 300; // Theme swap delay in ms, prevents flash of unstyled content
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
@@ -50,10 +51,13 @@ export class ThemeService {
             }
 
             // Set new theme
-            this.document.head.replaceChild(newStylesheetEl, currentStylesheetEl);
+            currentStylesheetEl.after(newStylesheetEl);
+            setTimeout(() => {
+                this.document.head.removeChild(currentStylesheetEl);
+            }, THEME_SWAP_DELAY);
         } else {
             // Fallback, insert new theme to end of HEAD element
-            this.document.head.append(newStylesheetEl);
+            this.document.head.appendChild(newStylesheetEl);
         }
     }
 
