@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 .popover {
     display: flex;
     flex-direction: column;
@@ -82,6 +84,7 @@
 
     &.menu-tabs {
         padding: 0.5rem 0.5rem 0;
+        border-radius: $border-radius $border-radius 0 0;
         display: block;
 
         .nav-tabs {
