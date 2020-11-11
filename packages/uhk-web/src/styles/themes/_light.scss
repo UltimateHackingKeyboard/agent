@@ -14,7 +14,7 @@ $theme-colors: map-merge(
 
 $color-bg: color('white');
 $color-bg-light: #f7f7f7;
-$color-text: color('black');
+$color-text: #111;
 $color-text-highlight: #333;
 
 $icon-hover: theme-color('primary');
@@ -27,7 +27,7 @@ $body-bg: $color-bg;
 $body-color: $color-text;
 $link-color: theme-color('primary');
 $link-hover-color: darken($link-color, 15%);
-$tooltip-color: color('black');
+$tooltip-color: #111;
 $tooltip-bg: color('white');
 
 :root,
