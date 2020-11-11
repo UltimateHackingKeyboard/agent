@@ -90,6 +90,7 @@ a.disabled {
 .noUi {
     &-base {
         background-color: var(--color-slider-base-bg);
+        border-radius: 4px;
     }
 
     &-handle {
