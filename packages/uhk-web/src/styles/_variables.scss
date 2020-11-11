@@ -9,8 +9,6 @@ $uhk-icon-path: './uhk-css.svg';
 $font-size-base: 0.875rem; // 14 px
 $border-radius: 0.25rem;
 
-$btn-font-size: $font-size-base;
-
 $spacer: 1rem;
 $spacers: (
     0: 0,
@@ -27,6 +25,8 @@ $tooltip-border-width:              1px;
 $tooltip-opacity:                   1;
 $tooltip-padding-y:                 $spacer / 4;
 $tooltip-padding-x:                 $spacer / 2;
+
+$popover-font-size: $font-size-base;
 
 // UHK app variables
 
