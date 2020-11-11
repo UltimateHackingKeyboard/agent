@@ -103,6 +103,10 @@ a.disabled {
 }
 
 .btn {
+    &-outline-secondary {
+        border-color: var(--color-btn-secondary-border);
+    }
+
     &-file {
         position: relative;
         overflow: hidden;

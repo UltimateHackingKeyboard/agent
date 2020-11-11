@@ -65,6 +65,9 @@ $tooltip-bg: $color-bg;
 
     --color-input-bg: #{$input-bg};
     --color-input-text: #{$input-color};
+    --color-input-border: #{theme-color('secondary')};
+
+    --color-btn-secondary-border: #{theme-color('secondary')};
 
     --color-tooltip-bg: #{$color-bg-light};
     --color-tooltip-text: #{$color-text};

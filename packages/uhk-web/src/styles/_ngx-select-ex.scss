@@ -3,6 +3,7 @@ ngx-select,
     .ngx-select__toggle {
         background-color: var(--color-input-bg) !important; /* stylelint-disable-line declaration-no-important */
         color: var(--color-input-text) !important; /* stylelint-disable-line declaration-no-important */
+        border-color: var(--color-input-border) !important; /* stylelint-disable-line declaration-no-important */
         font-size: 14px;
     }
 

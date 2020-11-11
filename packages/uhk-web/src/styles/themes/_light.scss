@@ -50,6 +50,9 @@ $tooltip-bg: color('white');
     --color-tooltip-border: #ccc;
     --color-tooltip-arrow: #{$tooltip-arrow-color};
 
+    --color-input-border: #ccc;
+    --color-btn-secondary-border: #ccc;
+
     --color-icon-hover: #{$icon-hover};
     --color-icon-hover-delete: #{$icon-hover-delete};
     --color-icon-capture-keystroke: #{theme-color('danger')};
