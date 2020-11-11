@@ -25,6 +25,11 @@ export class SettingsComponent {
     animationEnabled$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
     faCog = faCog;
+    themes = [
+        { id: AppTheme.Auto, text: 'System default' },
+        { id: AppTheme.Light, text: 'Light' },
+        { id: AppTheme.Dark, text: 'Dark' }
+    ];
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
