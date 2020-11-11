@@ -13,7 +13,6 @@ const THEME_FILES = {
 };
 
 const UHK_THEME_ID = 'uhk-theme';
-const THEME_SWAP_DELAY = 300; // Theme swap delay in ms, prevents flash of unstyled content
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
@@ -43,7 +42,8 @@ export class ThemeService {
             newTheme = this.prefersDarkMode() ? AppTheme.Dark : AppTheme.Light;
         }
         const currentStylesheetEl = this.getCurrentStylesheetElement();
-        const newStylesheetEl = this.createStylesheetElement(newTheme);
+        const newStylesheetEl = this.createStylesheetElement(newTheme, currentStylesheetEl);
+
         if (currentStylesheetEl) {
             // Don't try to change already set theme
             if (currentStylesheetEl.getAttribute('data-theme') === newTheme) {
@@ -52,9 +52,6 @@ export class ThemeService {
 
             // Set new theme
             currentStylesheetEl.after(newStylesheetEl);
-            setTimeout(() => {
-                this.document.head.removeChild(currentStylesheetEl);
-            }, THEME_SWAP_DELAY);
         } else {
             // Fallback, insert new theme to end of HEAD element
             this.document.head.appendChild(newStylesheetEl);
@@ -75,7 +72,7 @@ export class ThemeService {
         return this.document.head.querySelector(`link[id="${UHK_THEME_ID}"]`);
     }
 
-    private createStylesheetElement(theme: AppTheme): HTMLLinkElement {
+    private createStylesheetElement(theme: AppTheme, currentThemeEl: HTMLLinkElement): HTMLLinkElement {
         const file = THEME_FILES[theme] || THEME_FILES.DEFAULT;
         const el = this.document.createElement('link');
         el.setAttribute('id', UHK_THEME_ID);
@@ -83,6 +80,19 @@ export class ThemeService {
         el.setAttribute('rel', 'stylesheet');
         el.setAttribute('type', 'text/css');
         el.setAttribute('href', `${file}`);
+
+        if (currentThemeEl) {
+            el.onload = () => {
+                // Remove current theme stylesheet element after new one has loaded
+                // This prevents flash of unstyled content
+                this.document.head.removeChild(currentThemeEl);
+            };
+        }
+
+        el.onerror = () => {
+            // Remove new theme stylesheet element if it fails to load for some reason
+            this.document.head.removeChild(el);
+        };
         return el;
     }
 }
