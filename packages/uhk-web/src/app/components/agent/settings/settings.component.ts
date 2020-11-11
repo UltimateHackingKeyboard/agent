@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import { AppTheme } from 'uhk-common';
-import { AppState, appUpdateSettingsState, getAnimationEnabled, getAppTheme } from '../../../store';
+import { AppState, appUpdateSettingsState, getAnimationEnabled, getAppTheme, getOperatingSystem } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
 import { SetAppThemeAction, ToggleAnimationEnabledAction } from '../../../store/actions/app';
+import { OperatingSystem } from '../../../models/operating-system';
+import { compileNgModule } from '@angular/compiler';
 
 @Component({
     selector: 'settings',
@@ -24,6 +27,7 @@ export class SettingsComponent {
     updateSettingsState$: Observable<UpdateSettingsState>;
     animationEnabled$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
+    operatingSystem$: Observable<OperatingSystem>;
     faCog = faCog;
     themes = [
         { id: AppTheme.Auto, text: 'System default' },
@@ -35,6 +39,11 @@ export class SettingsComponent {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
         this.animationEnabled$ = store.select(getAnimationEnabled);
         this.appTheme$ = store.select(getAppTheme);
+
+        this.operatingSystem$ = store.select(getOperatingSystem);
+        this.operatingSystem$.pipe(filter(os => os === OperatingSystem.Linux)).subscribe(() => {
+            this.themes.shift(); // Remove auto option on Linux because it's not supported
+        });
     }
 
     toggleCheckForUpdateOnStartUp(value: boolean) {
