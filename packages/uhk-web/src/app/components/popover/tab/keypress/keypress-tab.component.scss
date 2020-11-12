@@ -31,14 +31,18 @@
     }
 
     .modifier-options {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
         > b {
-            position: relative;
-            top: -9px;
             margin-right: 4px;
+            margin-bottom: 0.5rem;
         }
 
         icon {
             margin-left: 0.3em;
+            margin-bottom: 0.5rem;
         };
 
         .btn-toolbar {
