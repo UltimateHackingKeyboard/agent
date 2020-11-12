@@ -14,15 +14,35 @@ export class Layer {
         this.modules = layers.modules.map(module => new Module(module));
     }
 
-    fromJsonObject(jsonObject: any, macros?: Macro[]): Layer {
-        this.modules = jsonObject.modules.map((module: any) => new Module().fromJsonObject(module, macros));
+    fromJsonObject(jsonObject: any, macros: Macro[], version: number): Layer {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject, macros, version);
+                break;
+
+            default:
+                throw new Error(`Layer configuration does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros?: Macro[]): Layer {
-        this.modules = buffer.readArray<Module>(uhkBuffer => {
-            return new Module().fromBinary(uhkBuffer, macros);
-        });
+    fromBinary(buffer: UhkBuffer, macros: Macro[], version: number): Layer {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer, macros, version);
+                break;
+
+            default:
+                throw new Error(`Layer configuration does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -63,4 +83,15 @@ export class Layer {
         return this;
     }
 
+    fromJsonObjectV1(jsonObject: any, macros: Macro[], version: number): void {
+        this.modules = jsonObject.modules.map((module: any) => {
+            return new Module().fromJsonObject(module, macros, version);
+        });
+    }
+
+    fromBinaryV1(buffer: UhkBuffer, macros: Macro[], version: number): void {
+        this.modules = buffer.readArray<Module>(uhkBuffer => {
+            return new Module().fromBinary(uhkBuffer, macros, version);
+        });
+    }
 }

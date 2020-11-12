@@ -49,32 +49,35 @@ export class KeyMacroAction extends MacroAction {
         this.modifierMask = other.modifierMask;
     }
 
-    fromJsonObject(jsObject: JsObjectKeyMacroAction): KeyMacroAction {
-        this.assertMacroActionType(jsObject);
-        this.action = MacroKeySubAction[jsObject.action];
-        if (jsObject.type === 'media') {
-            this.type = jsObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
-        } else {
-            this.type = KeystrokeType[jsObject.type];
+    fromJsonObject(jsonObject: JsObjectKeyMacroAction, version: number): KeyMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Key macro action does not support version: ${version}`);
         }
-        this._scancode = jsObject.scancode;
-        this.modifierMask = jsObject.modifierMask;
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): KeyMacroAction {
-        const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
-        let keyMacroType: number = macroActionId - MacroActionId.KeyMacroAction;
-        this.action = keyMacroType & 0b11;
-        keyMacroType >>= 2;
-        this.type = keyMacroType & 0b11;
-        keyMacroType >>= 2;
-        if (keyMacroType & 0b10) {
-            this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer, version: number): KeyMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Key macro action does not support version: ${version}`);
         }
-        if (keyMacroType & 0b01) {
-            this.modifierMask = buffer.readUInt8();
-        }
+
         return this;
     }
 
@@ -151,5 +154,32 @@ export class KeyMacroAction extends MacroAction {
 
     public getName(): string {
         return 'KeyMacroAction';
+    }
+
+    private fromJsonObjectV1(jsObject: JsObjectKeyMacroAction): void {
+        this.assertMacroActionType(jsObject);
+        this.action = MacroKeySubAction[jsObject.action];
+        if (jsObject.type === 'media') {
+            this.type = jsObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+        } else {
+            this.type = KeystrokeType[jsObject.type];
+        }
+        this._scancode = jsObject.scancode;
+        this.modifierMask = jsObject.modifierMask;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
+        let keyMacroType: number = macroActionId - MacroActionId.KeyMacroAction;
+        this.action = keyMacroType & 0b11;
+        keyMacroType >>= 2;
+        this.type = keyMacroType & 0b11;
+        keyMacroType >>= 2;
+        if (keyMacroType & 0b10) {
+            this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
+        }
+        if (keyMacroType & 0b01) {
+            this.modifierMask = buffer.readUInt8();
+        }
     }
 }

@@ -63,25 +63,35 @@ export class SwitchLayerAction extends KeyAction {
         this.layer = other.layer;
     }
 
-    fromJsonObject(jsonObject: any): SwitchLayerAction {
-        this.assertKeyActionType(jsonObject);
-        this.layer = LayerName[<string>jsonObject.layer];
+    fromJsonObject(jsonObject: any, version: number): SwitchLayerAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
 
-        // Backward compatibility when "switchLayerMode" was a boolean type as "toggle"
-        if (typeof jsonObject.toggle === 'boolean') {
-            this.switchLayerMode = jsonObject.toggle ? SwitchLayerMode.toggle : SwitchLayerMode.holdAndDoubleTapToggle;
-        }
-        else {
-            this.switchLayerMode = jsonObject.switchLayerMode;
+            default:
+                throw new Error(`Layer switch action does not support version: ${version}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): SwitchLayerAction {
-        this.readAndAssertKeyActionId(buffer);
-        this.layer = buffer.readUInt8();
-        this.switchLayerMode = mapNumberToSwitchLayerMode(buffer.readUInt8());
+    fromBinary(buffer: UhkBuffer, version: number): SwitchLayerAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Layer switch action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -105,5 +115,24 @@ export class SwitchLayerAction extends KeyAction {
 
     public getName(): string {
         return 'SwitchLayerAction';
+    }
+
+    private fromJsonObjectV1(jsonObject: any): void {
+        this.assertKeyActionType(jsonObject);
+        this.layer = LayerName[<string>jsonObject.layer];
+
+        // Backward compatibility when "switchLayerMode" was a boolean type as "toggle"
+        if (typeof jsonObject.toggle === 'boolean') {
+            this.switchLayerMode = jsonObject.toggle ? SwitchLayerMode.toggle : SwitchLayerMode.holdAndDoubleTapToggle;
+        }
+        else {
+            this.switchLayerMode = jsonObject.switchLayerMode;
+        }
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        this.readAndAssertKeyActionId(buffer);
+        this.layer = buffer.readUInt8();
+        this.switchLayerMode = mapNumberToSwitchLayerMode(buffer.readUInt8());
     }
 }

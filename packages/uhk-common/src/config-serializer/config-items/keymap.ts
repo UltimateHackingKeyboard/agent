@@ -28,25 +28,39 @@ export class Keymap {
         this.layers = keymap.layers.map(layer => new Layer(layer));
     }
 
-    fromJsonObject(jsonObject: any, macros?: Macro[]): Keymap {
-        this.isDefault = jsonObject.isDefault;
-        this.abbreviation = jsonObject.abbreviation;
-        this.name = jsonObject.name;
-        this.description = jsonObject.description;
-        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer, macros));
-        this.normalize();
+    fromJsonObject(jsonObject: any, macros: Macro[], version: number): Keymap {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject, macros, version);
+                break;
+
+            default:
+                throw new Error(`Keymap configuration does not support version: ${version}`);
+        }
+
+        this.normalize(version);
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros?: Macro[]): Keymap {
-        this.abbreviation = buffer.readString();
-        this.isDefault = buffer.readBoolean();
-        this.name = buffer.readString();
-        this.description = buffer.readString();
-        this.layers = buffer.readArray<Layer>(uhkBuffer => {
-            return new Layer().fromBinary(uhkBuffer, macros);
-        });
-        this.normalize();
+    fromBinary(buffer: UhkBuffer, macros: Macro[], version: number): Keymap {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer, macros, version);
+                break;
+
+            default:
+                throw new Error(`Keymap configuration does not support version: ${version}`);
+        }
+
+        this.normalize(version);
+
         return this;
     }
 
@@ -95,7 +109,7 @@ export class Keymap {
         return this;
     }
 
-    private normalize() {
+    private normalize(version: number) {
         if (this.layers.length < 1) {
             return;
         }
@@ -140,7 +154,7 @@ export class Keymap {
                                     ` is not switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
                                 console.warn(error);
                             }
-                            currentModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction);
+                            currentModule.keyActions[keyActionId] = KeyActionHelper.createKeyAction(baseKeyAction, null, version);
                         }
                     }
                     else {
@@ -155,5 +169,23 @@ export class Keymap {
                 }
             }
         }
+    }
+
+    private fromJsonObjectV1(jsonObject: any, macros: Macro[], version: number): void {
+        this.isDefault = jsonObject.isDefault;
+        this.abbreviation = jsonObject.abbreviation;
+        this.name = jsonObject.name;
+        this.description = jsonObject.description;
+        this.layers = jsonObject.layers.map((layer: any) => new Layer().fromJsonObject(layer, macros, version));
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer, macros: Macro[], version: number): void {
+        this.abbreviation = buffer.readString();
+        this.isDefault = buffer.readBoolean();
+        this.name = buffer.readString();
+        this.description = buffer.readString();
+        this.layers = buffer.readArray<Layer>(uhkBuffer => {
+            return new Layer().fromBinary(uhkBuffer,  macros, version);
+        });
     }
 }

@@ -75,7 +75,7 @@ describe('user-configuration', () => {
 
     it('Should set the device name to "My UHK" if not exists in the config', () => {
         const original = {
-            userConfigVersion: 1,
+            userConfigMajorVersion: 1,
             moduleConfigurations: [],
             macros: [],
             keymaps: []

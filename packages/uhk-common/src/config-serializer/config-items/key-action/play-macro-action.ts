@@ -21,16 +21,35 @@ export class PlayMacroAction extends KeyAction {
         }
     }
 
-    fromJsonObject(jsonObject: any, macros: Macro[]): PlayMacroAction {
-        this.assertKeyActionType(jsonObject);
-        this.macroId = macros[jsonObject.macroIndex].id;
+    fromJsonObject(jsonObject: any, macros: Macro[], version: number): PlayMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject, macros);
+                break;
+
+            default:
+                throw new Error(`Play macro does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros: Macro[]): PlayMacroAction {
-        this.readAndAssertKeyActionId(buffer);
-        const macroIndex = buffer.readUInt8();
-        this.macroId = macros[macroIndex].id;
+    fromBinary(buffer: UhkBuffer, macros: Macro[], version: number): PlayMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer, macros);
+                break;
+
+            default:
+                throw new Error(`Play macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -52,5 +71,18 @@ export class PlayMacroAction extends KeyAction {
 
     public getName(): string {
         return 'PlayMacroAction';
+    }
+
+    private fromJsonObjectV1(jsonObject: any, macros: Macro[]): PlayMacroAction {
+        this.assertKeyActionType(jsonObject);
+        this.macroId = macros[jsonObject.macroIndex].id;
+        return this;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer, macros: Macro[]): PlayMacroAction {
+        this.readAndAssertKeyActionId(buffer);
+        const macroIndex = buffer.readUInt8();
+        this.macroId = macros[macroIndex].id;
+        return this;
     }
 }

@@ -30,17 +30,35 @@ export class MouseButtonMacroAction extends MacroAction {
         this.mouseButtonsMask = other.mouseButtonsMask;
     }
 
-    fromJsonObject(jsObject: JsObjectMouseButtonMacroAction): MouseButtonMacroAction {
-        this.assertMacroActionType(jsObject);
-        this.action = MacroMouseSubAction[jsObject.action];
-        this.mouseButtonsMask = jsObject.mouseButtonsMask;
+    fromJsonObject(jsonObject: JsObjectMouseButtonMacroAction, version: number): MouseButtonMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Mouse button macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): MouseButtonMacroAction {
-        const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
-        this.action = macroActionId - MacroActionId.MouseButtonMacroAction;
-        this.mouseButtonsMask = buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer, version: number): MouseButtonMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Mouse button macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -96,4 +114,17 @@ export class MouseButtonMacroAction extends MacroAction {
     public getName(): string {
         return 'MouseButtonMacroAction';
     }
+
+    private fromJsonObjectV1(jsObject: JsObjectMouseButtonMacroAction): void {
+        this.assertMacroActionType(jsObject);
+        this.action = MacroMouseSubAction[jsObject.action];
+        this.mouseButtonsMask = jsObject.mouseButtonsMask;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        const macroActionId: MacroActionId = this.readAndAssertMacroActionId(buffer);
+        this.action = macroActionId - MacroActionId.MouseButtonMacroAction;
+        this.mouseButtonsMask = buffer.readUInt8();
+    }
+
 }

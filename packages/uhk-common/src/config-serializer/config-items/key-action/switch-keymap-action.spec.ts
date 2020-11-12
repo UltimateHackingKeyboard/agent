@@ -32,7 +32,7 @@ describe('switch-keymap-action', () => {
     describe('full serialization', () => {
         it('should json match', () => {
             const action = new SwitchKeymapAction('AB1');
-            jsonDefaultHelper(action, null, userConfiguration);
+            jsonDefaultHelper(action);
         });
 
         xit('should binary match', () => {

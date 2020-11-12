@@ -70,33 +70,35 @@ export class KeystrokeAction extends KeyAction {
         this.secondaryRoleAction = other.secondaryRoleAction;
     }
 
-    fromJsonObject(jsonObject: JsonObjectKeystrokeAction): KeystrokeAction {
-        this.assertKeyActionType(jsonObject);
-        if (jsonObject.type === 'media') {
-            this.type = jsonObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
-        } else {
-            this.type = KeystrokeType[jsonObject.type];
+    fromJsonObject(jsonObject: JsonObjectKeystrokeAction, version: number): KeystrokeAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Keystroke action does not support version: ${version}`);
         }
 
-        this._scancode = jsonObject.scancode;
-        this.modifierMask = jsonObject.modifierMask;
-        this.secondaryRoleAction = SecondaryRoleAction[jsonObject.secondaryRoleAction];
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): KeystrokeAction {
-        const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
-        const flags: number = keyActionId - KeyActionId.NoneAction; // NoneAction is the same as an empty KeystrokeAction.
-        this.type = (flags >> 3) & 0b11;
-        if (flags & KeystrokeActionFlag.scancode) {
-            this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer, version: number): KeystrokeAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Keystroke action does not support version: ${version}`);
         }
-        if (flags & KeystrokeActionFlag.modifierMask) {
-            this.modifierMask = buffer.readUInt8();
-        }
-        if (flags & KeystrokeActionFlag.secondaryRoleAction) {
-            this.secondaryRoleAction = buffer.readUInt8();
-        }
+
         return this;
     }
 
@@ -212,5 +214,33 @@ export class KeystrokeAction extends KeyAction {
 
     public getName(): string {
         return 'KeystrokeAction';
+    }
+
+    private fromJsonObjectV1(jsonObject: JsonObjectKeystrokeAction): void {
+        this.assertKeyActionType(jsonObject);
+        if (jsonObject.type === 'media') {
+            this.type = jsonObject.scancode < 256 ? KeystrokeType.shortMedia : KeystrokeType.longMedia;
+        } else {
+            this.type = KeystrokeType[jsonObject.type];
+        }
+
+        this._scancode = jsonObject.scancode;
+        this.modifierMask = jsonObject.modifierMask;
+        this.secondaryRoleAction = SecondaryRoleAction[jsonObject.secondaryRoleAction];
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
+        const flags: number = keyActionId - KeyActionId.NoneAction; // NoneAction is the same as an empty KeystrokeAction.
+        this.type = (flags >> 3) & 0b11;
+        if (flags & KeystrokeActionFlag.scancode) {
+            this._scancode = this.type === KeystrokeType.longMedia ? buffer.readUInt16() : buffer.readUInt8();
+        }
+        if (flags & KeystrokeActionFlag.modifierMask) {
+            this.modifierMask = buffer.readUInt8();
+        }
+        if (flags & KeystrokeActionFlag.secondaryRoleAction) {
+            this.secondaryRoleAction = buffer.readUInt8();
+        }
     }
 }

@@ -89,7 +89,6 @@ export class UhkHidDevice {
             connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
-            udevRulesInfo: await this.getUdevInfoAsync(),
             halvesInfo: { areHalvesMerged: true, isLeftHalfConnected: true }
         };
 
@@ -286,6 +285,45 @@ export class UhkHidDevice {
         }
     }
 
+    public async getUdevInfoAsync(): Promise<UdevRulesInfo> {
+        if (this._udevRulesInfo === UdevRulesInfo.Ok) {
+            return UdevRulesInfo.Ok;
+        }
+
+        if (process.platform === 'win32' || process.platform === 'darwin') {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (isRoot()) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (this.options['preserve-udev-rules']) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        if (!(await pathExists('/etc/udev'))) {
+            return UdevRulesInfo.UdevDirNotExists;
+        }
+
+        if (!(await pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
+            return UdevRulesInfo.NeedToSetup;
+        }
+
+        const expectedUdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60.rules'));
+        const currentUdevSettings = await getFileContentAsync('/etc/udev/rules.d/50-uhk60.rules');
+
+        if (isEqualArray(expectedUdevSettings, currentUdevSettings)) {
+            this._udevRulesInfo = UdevRulesInfo.Ok;
+            return UdevRulesInfo.Ok;
+        }
+
+        return UdevRulesInfo.Different;
+    }
+
     /**
      * Return the stored version of HID device. If not exist try to initialize.
      * @returns {HID}
@@ -328,41 +366,6 @@ export class UhkHidDevice {
         for (const logDevice of devs) {
             this.logService.misc(JSON.stringify(logDevice));
         }
-    }
-
-    private async getUdevInfoAsync(): Promise<UdevRulesInfo> {
-        if (this._udevRulesInfo === UdevRulesInfo.Ok) {
-            return UdevRulesInfo.Ok;
-        }
-
-        if (process.platform === 'win32' || process.platform === 'darwin') {
-            this._udevRulesInfo = UdevRulesInfo.Ok;
-            return UdevRulesInfo.Ok;
-        }
-
-        if (isRoot()) {
-            this._udevRulesInfo = UdevRulesInfo.Ok;
-            return UdevRulesInfo.Ok;
-        }
-
-        if (this.options['preserve-udev-rules']) {
-            this._udevRulesInfo = UdevRulesInfo.Ok;
-            return UdevRulesInfo.Ok;
-        }
-
-        if (!(await pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
-            return UdevRulesInfo.NeedToSetup;
-        }
-
-        const expectedUdevSettings = await getFileContentAsync(path.join(this.rootDir, 'rules/50-uhk60.rules'));
-        const currentUdevSettings = await getFileContentAsync('/etc/udev/rules.d/50-uhk60.rules');
-
-        if (isEqualArray(expectedUdevSettings, currentUdevSettings)) {
-            this._udevRulesInfo = UdevRulesInfo.Ok;
-            return UdevRulesInfo.Ok;
-        }
-
-        return UdevRulesInfo.Different;
     }
 }
 

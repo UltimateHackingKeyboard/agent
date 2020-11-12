@@ -22,9 +22,19 @@ export class SwitchKeymapAction extends KeyAction {
         }
     }
 
-    fromJsonObject(jsonObject: any): SwitchKeymapAction {
-        this.assertKeyActionType(jsonObject);
-        this.keymapAbbreviation = jsonObject.keymapAbbreviation;
+    fromJsonObject(jsonObject: any, version: number): SwitchKeymapAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Switch keymap action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -55,6 +65,11 @@ export class SwitchKeymapAction extends KeyAction {
     public getName(): string {
         return 'SwitchKeymapAction';
     }
+
+    private fromJsonObjectV1(jsonObject: any): void {
+        this.assertKeyActionType(jsonObject);
+        this.keymapAbbreviation = jsonObject.keymapAbbreviation;
+    }
 }
 
 export class UnresolvedSwitchKeymapAction extends KeyAction {
@@ -67,9 +82,19 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
         this.keymapIndex = keymapIndex;
     }
 
-    fromBinary(buffer: UhkBuffer): UnresolvedSwitchKeymapAction {
-        buffer.readUInt8(); // Skip key action id
-        this.keymapIndex = buffer.readUInt8();
+    fromBinary(buffer: UhkBuffer, version: number): UnresolvedSwitchKeymapAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Unresolved switch keymap action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -88,5 +113,10 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
 
     public getName(): string {
         return 'UnresolvedSwitchKeymapAction';
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        buffer.readUInt8(); // Skip key action id
+        this.keymapIndex = buffer.readUInt8();
     }
 }

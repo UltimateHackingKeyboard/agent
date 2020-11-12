@@ -185,7 +185,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject);
+            action.fromJsonObject(jsObject, 1);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.basic;
@@ -205,7 +205,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject);
+            action.fromJsonObject(jsObject, 1);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.system;
@@ -225,7 +225,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject);
+            action.fromJsonObject(jsObject, 1);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.shortMedia;
@@ -245,7 +245,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject);
+            action.fromJsonObject(jsObject, 1);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.longMedia;

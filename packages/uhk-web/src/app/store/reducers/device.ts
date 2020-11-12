@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules, UdevRulesInfo, HalvesInfo, ConfigSizesInfo } from 'uhk-common';
+import { HardwareModules, HalvesInfo, ConfigSizesInfo } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import * as App from '../actions/app';
@@ -14,7 +14,6 @@ export interface State {
     hasPermission: boolean;
     bootloaderActive: boolean;
     zeroInterfaceAvailable: boolean;
-    udevRuleInfo: UdevRulesInfo;
     saveToKeyboard: ProgressButtonState;
     savingToKeyboard: boolean;
     updatingFirmware: boolean;
@@ -36,7 +35,6 @@ export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
     zeroInterfaceAvailable: true,
-    udevRuleInfo: UdevRulesInfo.Unknown,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
     updatingFirmware: false,
@@ -69,7 +67,6 @@ export function reducer(state = initialState, action: Action): State {
                 hasPermission: data.hasPermission,
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
-                udevRuleInfo: data.udevRulesInfo,
                 halvesInfo: data.halvesInfo
             };
         }
@@ -247,7 +244,7 @@ export function reducer(state = initialState, action: Action): State {
 
 export const updatingFirmware = (state: State) => state.updatingFirmware;
 export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
-export const hasDevicePermission = (state: State) => state.hasPermission && state.udevRuleInfo === UdevRulesInfo.Ok;
+export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (state.connected && !state.zeroInterfaceAvailable) {
         return {
@@ -274,6 +271,5 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
 export const bootloaderActive = (state: State) => state.bootloaderActive;
 export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
-export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
 export const halvesInfo = (state: State) => state.halvesInfo;
 export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;

@@ -56,6 +56,14 @@ export class DeviceService {
                 this.logService.error('[DeviceService] UHK Device poller error', error);
             });
 
+        this.device.getUdevInfoAsync()
+            .then(info => {
+                this.logService.misc('[DeviceService] Udev info:', info);
+            })
+            .catch(error => {
+                this.logService.misc('[DeviceService] Cannot query udev info:', error);
+            });
+
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
             this.queueManager.add({
                 method: this.saveUserConfiguration,

@@ -1,3 +1,3 @@
 export function errorHandler(error) {
-    console.error(error.message);
+    console.error(error);
 }

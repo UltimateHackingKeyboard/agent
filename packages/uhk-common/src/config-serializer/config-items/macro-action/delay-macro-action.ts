@@ -15,15 +15,35 @@ export class DelayMacroAction extends MacroAction {
         this.delay = other.delay;
     }
 
-    fromJsonObject(jsObject: any): DelayMacroAction {
-        this.assertMacroActionType(jsObject);
-        this.delay = jsObject.delay;
+    fromJsonObject(jsonObject: any, version: number): DelayMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromJsonObjectV1(jsonObject);
+                break;
+
+            default:
+                throw new Error(`Delay macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): DelayMacroAction {
-        this.readAndAssertMacroActionId(buffer);
-        this.delay = buffer.readUInt16();
+    fromBinary(buffer: UhkBuffer, version: number): DelayMacroAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.fromBinaryV1(buffer);
+                break;
+
+            default:
+                throw new Error(`Delay macro action does not support version: ${version}`);
+        }
+
         return this;
     }
 
@@ -45,5 +65,15 @@ export class DelayMacroAction extends MacroAction {
 
     public getName(): string {
         return 'DelayMacroAction';
+    }
+
+    private fromJsonObjectV1(jsObject: any): void {
+        this.assertMacroActionType(jsObject);
+        this.delay = jsObject.delay;
+    }
+
+    private fromBinaryV1(buffer: UhkBuffer): void {
+        this.readAndAssertMacroActionId(buffer);
+        this.delay = buffer.readUInt16();
     }
 }

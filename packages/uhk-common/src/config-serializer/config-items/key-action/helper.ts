@@ -12,22 +12,35 @@ import { isScancodeExists } from '../scancode-checker';
 
 export class Helper {
 
-    static createKeyAction(source: KeyAction | UhkBuffer | any, macros?: Macro[]): KeyAction {
+    static createKeyAction(source: KeyAction | UhkBuffer | any, macros: Macro[], version: number = 4): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {
-            return Helper.fromUhkBuffer(source, macros);
+            return Helper.fromUhkBuffer(source, macros, version);
         } else {
-            return Helper.fromJSONObject(source, macros);
+            return Helper.fromJSONObject(source, macros, version);
         }
     }
 
-    private static fromUhkBuffer(buffer: UhkBuffer, macros: Macro[]): KeyAction {
+    private static fromUhkBuffer(buffer: UhkBuffer, macros: Macro[], version: number): KeyAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return this.fromUhkBufferV1(buffer, macros, version);
+
+            default:
+                throw new Error(`KeyAction configuration does not support version: ${version}`);
+        }
+    }
+
+    private static fromUhkBufferV1(buffer: UhkBuffer, macros: Macro[], version: number): KeyAction {
         const keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
         if (keyActionFirstByte >= KeyActionId.KeystrokeAction && keyActionFirstByte < KeyActionId.LastKeystrokeAction) {
-            const keystrokeAction = new KeystrokeAction().fromBinary(buffer);
+            const keystrokeAction = new KeystrokeAction().fromBinary(buffer, version);
             if (isValidKeystrokeAction(keystrokeAction)) {
                 return keystrokeAction;
             }
@@ -40,13 +53,13 @@ export class Helper {
                 buffer.readUInt8(); // Read type just to skip it
                 return undefined;
             case KeyActionId.SwitchLayerAction:
-                return new SwitchLayerAction().fromBinary(buffer);
+                return new SwitchLayerAction().fromBinary(buffer, version);
             case KeyActionId.SwitchKeymapAction:
-                return new UnresolvedSwitchKeymapAction().fromBinary(buffer);
+                return new UnresolvedSwitchKeymapAction().fromBinary(buffer, version);
             case KeyActionId.MouseAction:
-                return new MouseAction().fromBinary(buffer);
+                return new MouseAction().fromBinary(buffer, version);
             case KeyActionId.PlayMacroAction:
-                return new PlayMacroAction().fromBinary(buffer, macros);
+                return new PlayMacroAction().fromBinary(buffer, macros, version);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }
@@ -68,14 +81,27 @@ export class Helper {
         return newKeyAction;
     }
 
-    private static fromJSONObject(keyAction: any, macros: Macro[]): KeyAction {
+    private static fromJSONObject(keyAction: any, macros: Macro[], version: number): KeyAction {
+        switch (version) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return this.fromJSONObjectV1(keyAction, macros, version);
+
+            default:
+                throw new Error(`KeyAction configuration does not support version: ${version}`);
+        }
+    }
+
+    private static fromJSONObjectV1(keyAction: any, macros: Macro[], version: number): KeyAction {
         if (!keyAction) {
             return null;
         }
 
         switch (keyAction.keyActionType) {
             case keyActionType.KeystrokeAction: {
-                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction);
+                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, version);
                 if (isValidKeystrokeAction(keystrokeAction)) {
                     return keystrokeAction;
                 }
@@ -83,13 +109,13 @@ export class Helper {
                 return new NoneAction();
             }
             case keyActionType.SwitchLayerAction:
-                return new SwitchLayerAction().fromJsonObject(keyAction);
+                return new SwitchLayerAction().fromJsonObject(keyAction, version);
             case keyActionType.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromJsonObject(keyAction);
+                return new SwitchKeymapAction().fromJsonObject(keyAction, version);
             case keyActionType.MouseAction:
-                return new MouseAction().fromJsonObject(keyAction);
+                return new MouseAction().fromJsonObject(keyAction, version);
             case keyActionType.PlayMacroAction:
-                return new PlayMacroAction().fromJsonObject(keyAction, macros);
+                return new PlayMacroAction().fromJsonObject(keyAction, macros, version);
             case keyActionType.NoneAction:
                 return new NoneAction();
             default:

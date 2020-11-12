@@ -12,5 +12,9 @@ export enum UdevRulesInfo {
     /**
      * Udev rules exist but different than expected on Linux
      */
-    Different = 'Different'
+    Different = 'Different',
+    /**
+     * On NixOS the udev directory is hidden from the Agent
+     */
+    UdevDirNotExists = 'UdevDirNotExists'
 }
