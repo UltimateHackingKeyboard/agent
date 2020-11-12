@@ -1,5 +1,5 @@
-<div class="row macro-key__container">
-    <div class="col-4 col-lg-3 py-3 macro-key__types">
+<div class="macro-key__container d-flex">
+    <div class="py-3 macro-key__types">
         <ul class="nav nav-pills flex-column">
             <li #keyMove [class.active]="activeTab === TabName.Tap" (click)="selectTab(TabName.Tap)">
                 <a class="nav-link" [class.active]="activeTab === TabName.Tap">
@@ -21,7 +21,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-8 col-lg-9 py-3 macro-key__action-container">
+    <div class="py-3 macro-key__action-container">
         <div class="macro-key__action">
             <h4 *ngIf="activeTab === TabName.Tap">Tap key</h4>
             <h4 *ngIf="activeTab === TabName.Press">Press key</h4>
