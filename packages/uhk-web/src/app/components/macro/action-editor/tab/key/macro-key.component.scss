@@ -1,3 +1,8 @@
+:host {
+    display: flex;
+    height: 100%;
+}
+
 .macro-key {
     &__action {
         &-container {
