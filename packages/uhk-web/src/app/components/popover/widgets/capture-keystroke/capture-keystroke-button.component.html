@@ -2,7 +2,7 @@
     'btn': true,
     'btn-sm btn--capture-keystroke': !isLink,
     'btn-link link--capture-keystroke': isLink,
-    'btn-outline-secondary': !record && !isLink,
+    'btn-default': !record && !isLink,
     'btn-info': record && !isLink
 }" (click)="start($event)">
     <fa-icon [icon]="faCircle" class="record-circle"></fa-icon>

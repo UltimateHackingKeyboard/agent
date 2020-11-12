@@ -94,17 +94,17 @@
             <h4 *ngIf="activeTab === TabName.Release">Release mouse button</h4>
             <div class="btn-group">
                 <button type="button" class="btn"
-                        [class.btn-outline-secondary]="!hasButton(MouseButtons.Left)"
+                        [class.btn-default]="!hasButton(MouseButtons.Left)"
                         [class.btn-primary]="hasButton(MouseButtons.Left)"
                         (click)="setMouseClick(MouseButtons.Left)">Left
                 </button>
                 <button type="button" class="btn"
-                        [class.btn-outline-secondary]="!hasButton(MouseButtons.Middle)"
+                        [class.btn-default]="!hasButton(MouseButtons.Middle)"
                         [class.btn-primary]="hasButton(MouseButtons.Middle)"
                         (click)="setMouseClick(MouseButtons.Middle)">Middle
                 </button>
                 <button type="button" class="btn"
-                        [class.btn-outline-secondary]="!hasButton(MouseButtons.Right)"
+                        [class.btn-default]="!hasButton(MouseButtons.Right)"
                         [class.btn-primary]="hasButton(MouseButtons.Right)"
                         (click)="setMouseClick(MouseButtons.Right)">Right
                 </button>

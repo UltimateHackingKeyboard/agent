@@ -5,7 +5,7 @@ $theme-colors: map-merge(
     $theme-colors,
     (
         'primary': #337ab7,
-        'secondary': #878787,
+        'secondary': #6d6d6d,
         'success': #5cb85c,
         'info': #5bc0de,
         'warning': #f0ad4e,
@@ -18,6 +18,9 @@ $color-bg: color('white');
 $color-bg-light: #f7f7f7;
 $color-text: #111;
 $color-text-highlight: #333;
+
+$btn-default-bg: color('white');
+$btn-default-border: #ccc;
 
 $icon-hover: theme-color('primary');
 $icon-hover-delete: theme-color('danger');

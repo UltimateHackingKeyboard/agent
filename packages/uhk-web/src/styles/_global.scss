@@ -107,6 +107,10 @@ a.disabled {
         border-color: var(--color-btn-secondary-border);
     }
 
+    &-default {
+        @include button-variant($btn-default-bg, $btn-default-border);
+    }
+
     &-file {
         position: relative;
         overflow: hidden;
