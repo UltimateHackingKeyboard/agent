@@ -48,6 +48,8 @@ $dropdown-link-hover-color: #333;
 $dropdown-link-hover-bg: #{theme-color('primary')};
 $tooltip-color: $color-text;
 $tooltip-bg: $color-bg;
+$tooltip-arrow-color: $color-bg;
+$tooltip-border-color: #444;
 
 :root,
 .theme-dark {
@@ -68,11 +70,6 @@ $tooltip-bg: $color-bg;
     --color-input-border: #{theme-color('secondary')};
 
     --color-btn-secondary-border: #{theme-color('secondary')};
-
-    --color-tooltip-bg: #{$color-bg-light};
-    --color-tooltip-text: #{$color-text};
-    --color-tooltip-border: #333;
-    --color-tooltip-arrow: #333;
 
     --color-icon-hover: #{theme-color('primary')};
     --color-icon-hover-delete: #{$icon-hover-delete};

@@ -20,8 +20,6 @@ $color-text-highlight: #333;
 
 $icon-hover: theme-color('primary');
 $icon-hover-delete: theme-color('danger');
-$tooltip-arrow-color: #ccc;
-$tooltip-border-color: #ccc;
 
 // Bootstrap variables
 $body-bg: $color-bg;
@@ -30,6 +28,8 @@ $link-color: theme-color('primary');
 $link-hover-color: darken($link-color, 15%);
 $tooltip-color: #111;
 $tooltip-bg: color('white');
+$tooltip-arrow-color: color('white');
+$tooltip-border-color: #ccc;
 
 :root,
 .theme-light {
@@ -45,11 +45,6 @@ $tooltip-bg: color('white');
     --color-keyboard-key-bg: #{$color-bg-light};
     --color-keyboard-key-hover: #{theme-color('secondary')};
     --color-keyboard-key-active: #{theme-color('primary')};
-
-    --color-tooltip-bg: #{$tooltip-bg};
-    --color-tooltip-text: #{$tooltip-color};
-    --color-tooltip-border: #ccc;
-    --color-tooltip-arrow: #{$tooltip-arrow-color};
 
     --color-input-border: #ccc;
     --color-btn-secondary-border: #ccc;

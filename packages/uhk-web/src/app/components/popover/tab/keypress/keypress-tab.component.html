@@ -33,6 +33,7 @@
         <icon name="question-circle"
               [ngbTooltip]="scanCodeTooltip"
               tooltipClass="tooltip-scancode"
+              container="body"
               placement="bottom"></icon>
     </a>
     <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0"></capture-keystroke-button>
@@ -65,7 +66,8 @@
         <icon name="question-circle"
               ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
               tooltipClass="tooltip-modifier"
-              placement="bottom"></icon>
+              container="body"
+              placement="left"></icon>
     </b>
 </div>
 <div class="long-press-container" *ngIf="secondaryRoleEnabled">
@@ -104,6 +106,7 @@
     <icon name="question-circle"
           [ngbTooltip]="secondaryRoleTooltip"
           tooltipClass="tooltip-secondary-role"
+          container="body"
           placement="bottom"></icon>
 </div>
 
