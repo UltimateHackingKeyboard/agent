@@ -60,7 +60,11 @@ $tooltip-border-color: #444;
     --color-sidemenu-active-text: #{$color-text-highlight};
 
     --color-keyboard-bg: #555;
-    --color-keyboard-text: #999;
+    --color-keyboard-text: #bbb;
+    --color-keyboard-text-shadow: #444;
+    --color-keyboard-shadow: rgba(0, 0, 0, 0.8);
+    --color-keyboard-shadow2: #444;
+    --color-keyboard-border: #888;
     --color-keyboard-key-bg: #f7f7f7;
     --color-keyboard-key-hover: #494949;
     --color-keyboard-key-active: #{theme-color('primary')};

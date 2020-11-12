@@ -5,10 +5,11 @@ $theme-colors: map-merge(
     $theme-colors,
     (
         'primary': #337ab7,
+        'secondary': #878787,
         'success': #5cb85c,
         'info': #5bc0de,
         'warning': #f0ad4e,
-        'danger': #900,
+        'danger': #d9534f,
         'light': #fff
     )
 );
@@ -42,6 +43,10 @@ $tooltip-border-color: #ccc;
 
     --color-keyboard-bg: #{$color-bg-light};
     --color-keyboard-text: #333;
+    --color-keyboard-text-shadow: #fff;
+    --color-keyboard-shadow: rgba(0, 0, 0, 0.2);
+    --color-keyboard-shadow2: #{color('white')};
+    --color-keyboard-border: #ccc;
     --color-keyboard-key-bg: #{$color-bg-light};
     --color-keyboard-key-hover: #{theme-color('secondary')};
     --color-keyboard-key-active: #{theme-color('primary')};
