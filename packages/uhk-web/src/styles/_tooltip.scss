@@ -3,7 +3,7 @@
     .tooltip-inner {
         border: $tooltip-border-width solid $tooltip-border-color;
     }
- 
+
     .arrow {
         &:after {
             content: '';
@@ -95,4 +95,3 @@
         @extend .bs-tooltip-left;
     }
 }
-
