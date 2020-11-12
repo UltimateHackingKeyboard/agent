@@ -65,6 +65,7 @@ $tooltip-border-color: #ccc;
     --color-popover-bg-light: #{color('white')};
     --color-popover-border: #ebebeb;
     --color-popover-tab-hover: #{darken($color-bg-light, 5%)};
+    --color-keymap-tab-background: #{color('white')};
 
     --color-progress-bar-bg: #{#d3e4f2};
     --color-progress-bar-progress: #{lighten(theme-color('primary'), 20%)};
