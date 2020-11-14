@@ -153,7 +153,7 @@
 
         &.disabled {
             cursor: not-allowed;
-            color: #959595;
+            color: var(--color-popover-label-disabled);
         }
     }
 }

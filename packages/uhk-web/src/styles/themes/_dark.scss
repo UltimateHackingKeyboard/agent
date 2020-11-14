@@ -90,6 +90,7 @@ $tooltip-border-color: #444;
     --color-popover-bg-light: #{$color-popover-bg-light};
     --color-popover-border: #{$color-popover-border};
     --color-popover-tab-hover: #{darken($color-popover-bg-light, 8%)};
+    --color-popover-label-disabled: #959595;
     --color-keymap-tab-background: #{$color-bg};
 
     --color-progress-bar-bg: #{darken(theme-color('primary'), 40%)};
