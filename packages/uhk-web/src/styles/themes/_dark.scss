@@ -92,6 +92,8 @@ $tooltip-border-color: #444;
     --color-popover-tab-hover: #{darken($color-popover-bg-light, 8%)};
     --color-popover-label-disabled: #959595;
     --color-keymap-tab-background: #{$color-bg};
+    --color-keypress-tab-setting-label-disabled: #999;
+    --color-keypress-tab-disabled-info-text: #{theme-color('primary')};
 
     --color-progress-bar-bg: #{darken(theme-color('primary'), 40%)};
     --color-progress-bar-progress: #{darken(theme-color('primary'), 20%)};
