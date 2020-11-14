@@ -119,4 +119,7 @@ $tooltip-border-color: #444;
 
     --color-layers-button-disabled: #{darken(theme-color('secondary'), 40)};
     --color-layers-button-active-disabled: #7c7c7c;
+
+    --color-out-of-space-warning-bg: #{theme-color('warning')};
+    --color-out-of-space-warning-text: #000;
 }
