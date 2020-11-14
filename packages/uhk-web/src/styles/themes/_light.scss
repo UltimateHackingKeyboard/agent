@@ -80,10 +80,13 @@ $tooltip-border-color: #ccc;
 
     --color-configuration-history-text: #{$color-text};
 
-    --color-code-text: #6a737d;
     --color-code-bg: #f6f8fa;
+    --color-code-text: #6a737d;
     --color-xterm-bg: #000;
     --color-xterm-border: #444;
     --color-xterm-text: #{color('white')};
     --color-xterm-text-error: red;
+
+    --color-update-available-bg: #428bca;
+    --color-update-available-text: #{color('white')};
 }

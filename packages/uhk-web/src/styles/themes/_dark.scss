@@ -104,10 +104,13 @@ $tooltip-border-color: #444;
 
     --color-configuration-history-text: #{$color-text};
 
-    --color-code-text: #{color-text};
     --color-code-bg: #{color-bg};
+    --color-code-text: #{color-text};
     --color-xterm-bg: #000;
     --color-xterm-border: #666;
     --color-xterm-text: #{color('white')};
     --color-xterm-text-error: red;
+
+    --color-update-available-bg: #{theme-color('info')};
+    --color-update-available-text: #{$color-text-highlight};
 }

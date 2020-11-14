@@ -3,14 +3,14 @@
     padding-top: 5px;
     padding-bottom: 5px;
 
-    background-color: #428bca;
-    color: white;
+    background-color: var(--color-update-available-bg);
+    color: var(--color-update-available-text);
     text-align: center;
     border-radius: 0;
     border-width: 0;
 
     .btn-link {
-        color: white;
+        color: var(--color-update-available-text);
 
         &.underline {
             text-decoration: underline;
