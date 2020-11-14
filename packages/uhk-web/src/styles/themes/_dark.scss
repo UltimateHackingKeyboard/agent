@@ -100,4 +100,6 @@ $tooltip-border-color: #444;
 
     --color-select-active-bg: #{darken(theme-color('primary'), 40%)};
     --color-select-active-text: #{$white};
+
+    --color-configuration-history-text: #{$color-text};
 }
