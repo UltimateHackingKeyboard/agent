@@ -15,6 +15,7 @@ $color-bg: #111;
 $color-bg-light: #222;
 $color-text: #bbb;
 $color-text-highlight: #ddd;
+$color-copy-icon: #6a737d;
 $color-popover-bg-light: lighten($color-bg-light, 5%);
 $color-popover-border: lighten($color-bg-light, 10%);
 
@@ -102,4 +103,7 @@ $tooltip-border-color: #444;
     --color-select-active-text: #{$white};
 
     --color-configuration-history-text: #{$color-text};
+
+    --color-code-text: #{color-text};
+    --color-code-bg: #{color-bg};
 }

@@ -28,3 +28,9 @@
         filter: invert($percentage);
     }
 }
+
+@mixin code-style() {
+    color: var(--color-code-text);
+    background-color: var(--color-code-bg);
+    text-align: left;
+}

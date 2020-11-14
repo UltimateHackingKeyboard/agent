@@ -142,12 +142,6 @@ a.link-inline {
     cursor: pointer;
 }
 
-@mixin code-style() {
-    color: #6a737d;
-    background-color: #f6f8fa;
-    text-align: left;
-}
-
 code {
     @include code-style();
 }
@@ -163,13 +157,13 @@ pre {
 
     .fa-copy {
         cursor: pointer;
-        color: #6a737d;
+        color: $color-copy-icon;
         position: absolute;
         right: 4px;
         top: 4px;
 
         &:hover {
-            color: darken(#6a737d, 15);
+            color: darken($color-copy-icon, 15);
         }
     }
 }
