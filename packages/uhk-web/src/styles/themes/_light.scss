@@ -90,4 +90,9 @@ $tooltip-border-color: #ccc;
 
     --color-update-available-bg: #428bca;
     --color-update-available-text: #{color('white')};
+
+    --color-highlight-arrow: #{theme-color('primary')};
+
+    --color-layers-button-disabled: rgba(#ccc, 0.43);
+    --color-layers-button-active-disabled: #7c7c7c;
 }

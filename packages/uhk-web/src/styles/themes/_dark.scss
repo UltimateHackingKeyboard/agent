@@ -114,4 +114,9 @@ $tooltip-border-color: #444;
 
     --color-update-available-bg: #{theme-color('info')};
     --color-update-available-text: #{$color-text-highlight};
+
+    --color-highlight-arrow: #{theme-color('primary')};
+
+    --color-layers-button-disabled: #{darken(theme-color('secondary'), 40)};
+    --color-layers-button-active-disabled: #7c7c7c;
 }

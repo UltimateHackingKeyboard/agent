@@ -4,12 +4,12 @@
     &.disabled {
         button {
             cursor: no-drop;
-            background: rgba(#ccc, 0.43);
+            background: var(--color-layers-button-disabled);
             pointer-events: none;
 
             &.btn-primary {
-                background: #7c7c7c;
-                border-color: #7c7c7c;
+                background: var(--color-layers-button-active-disabled);
+                border-color: var(--color-layers-button-active-disabled);
             }
         }
     }
