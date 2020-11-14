@@ -54,6 +54,12 @@ $tooltip-color: $color-text;
 $tooltip-bg: $color-bg;
 $tooltip-arrow-color: $color-bg;
 $tooltip-border-color: #444;
+$popover-bg: $color-bg-light;
+$popover-header-bg: $color-bg-light;
+$popover-arrow-color: $color-bg-light;
+$popover-arrow-outer-color: $color-popover-border;
+$popover-body-color: $color-popover-bg-light;
+$popover-border-color: $color-popover-border;
 
 :root,
 .theme-dark {
