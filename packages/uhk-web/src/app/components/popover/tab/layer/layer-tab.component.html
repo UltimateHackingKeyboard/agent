@@ -1,6 +1,6 @@
 <ng-template [ngIf]="!isNotBase">
     <div>
-        <div>
+        <div class="d-flex align-items-center mb-3">
             <div class="select-toggle-container">
                 <ngx-select [items]="toggleData"
                             [ngModel]="toggle"
@@ -12,7 +12,7 @@
                 </ngx-select>
             </div>
 
-            <span>the</span>
+            <span class="mx-1">the</span>
 
             <div class="select-layer-container">
                 <ngx-select [items]="layerData"
@@ -24,13 +24,13 @@
                             (select)="layerChanged($event)">
                 </ngx-select>
             </div>
-            <span [ngSwitch]="toggle">
-            <ng-template [ngSwitchCase]="'toggle'">layer by tapping this key.</ng-template>
-            <ng-template ngSwitchDefault>layer by holding this key.</ng-template>
-        </span>
+            <span [ngSwitch]="toggle" class="mx-1">
+                <ng-template [ngSwitchCase]="'toggle'">layer by tapping this key.</ng-template>
+                <ng-template ngSwitchDefault>layer by holding this key.</ng-template>
+            </span>
         </div>
         <div *ngIf="toggle === 'active' && allowLayerDoubleTap">
-            <div class="form-check mt-2">
+            <div class="form-check my-2">
                 <input type="checkbox"
                     class="form-check-input"
                     id="lockLayerDoubleTap"
@@ -41,5 +41,5 @@
     </div>
 </ng-template>
 <ng-template [ngIf]="isNotBase">
-    <span> Layer switching is only possible from the base layer. </span>
+    <span class="my-3"> Layer switching is only possible from the base layer. </span>
 </ng-template>
