@@ -82,4 +82,8 @@ $tooltip-border-color: #ccc;
 
     --color-code-text: #6a737d;
     --color-code-bg: #f6f8fa;
+    --color-xterm-bg: #000;
+    --color-xterm-border: #444;
+    --color-xterm-text: #{color('white')};
+    --color-xterm-text-error: red;
 }
