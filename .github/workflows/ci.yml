@@ -35,9 +35,9 @@ jobs:
         id: nvm
 
       - name: Use Node.js (.nvmrc)
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ steps.nvm.outputs.NVMRC }}
+          node-version: 12.14.1
 
       - name: Install dependencies
         run: npm install
