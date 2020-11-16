@@ -7,7 +7,7 @@ export enum AppTheme {
 export type AppThemeSelect = {
     id: AppTheme;
     text: string;
-}
+};
 
 export interface ApplicationSettings {
     checkForUpdateOnStartUp: boolean;
