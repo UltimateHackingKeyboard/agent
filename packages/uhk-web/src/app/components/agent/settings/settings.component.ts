@@ -1,19 +1,16 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import { AppTheme } from 'uhk-common';
-import { AppState, appUpdateSettingsState, getAnimationEnabled, getAppTheme, getOperatingSystem } from '../../../store';
+import { AppTheme, AppThemeSelect } from 'uhk-common';
+import { AppState, appUpdateSettingsState, getAnimationEnabled, getAppTheme, getSupportedThemes } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
 import { SetAppThemeAction, ToggleAnimationEnabledAction } from '../../../store/actions/app';
-import { OperatingSystem } from '../../../models/operating-system';
-import { compileNgModule } from '@angular/compiler';
 
 @Component({
     selector: 'settings',
@@ -27,23 +24,14 @@ export class SettingsComponent {
     updateSettingsState$: Observable<UpdateSettingsState>;
     animationEnabled$: Observable<boolean>;
     appTheme$: Observable<AppTheme>;
-    operatingSystem$: Observable<OperatingSystem>;
+    themes$: Observable<AppThemeSelect[]>;
     faCog = faCog;
-    themes = [
-        { id: AppTheme.Auto, text: 'System default' },
-        { id: AppTheme.Light, text: 'Light' },
-        { id: AppTheme.Dark, text: 'Dark' }
-    ];
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
         this.animationEnabled$ = store.select(getAnimationEnabled);
         this.appTheme$ = store.select(getAppTheme);
-
-        this.operatingSystem$ = store.select(getOperatingSystem);
-        this.operatingSystem$.pipe(filter(os => os === OperatingSystem.Linux)).subscribe(() => {
-            this.themes.shift(); // Remove auto option on Linux because it's not supported
-        });
+        this.themes$ = store.select(getSupportedThemes);
     }
 
     toggleCheckForUpdateOnStartUp(value: boolean) {

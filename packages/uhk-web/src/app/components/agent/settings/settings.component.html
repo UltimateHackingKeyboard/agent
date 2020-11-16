@@ -29,7 +29,7 @@
 <div class="col-12 col-md-4 mb-0 mt-0">
     <div class="d-flex align-items-center mt-2">
         <label for="select-theme" class="mb-0 mr-2">Theme</label>
-        <ngx-select [items]="themes"
+        <ngx-select [items]="themes$ | async"
                     [defaultValue]="appTheme$ | async"
                     [autoActiveOnMouseEnter]="false"
                     [noAutoComplete]="true"
