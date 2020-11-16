@@ -38,7 +38,7 @@ export interface State {
 }
 
 export const initialState: State = {
-    appTheme: AppTheme.Auto,
+    appTheme: AppTheme.System,
     animationEnabled: true,
     started: false,
     commandLineArgs: {},

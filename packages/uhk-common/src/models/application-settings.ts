@@ -1,7 +1,12 @@
 export enum AppTheme {
-    Auto = 'auto',
+    System = 'system',
     Light = 'light',
     Dark = 'dark'
+}
+
+export type AppThemeSelect = {
+    id: AppTheme;
+    text: string;
 }
 
 export interface ApplicationSettings {

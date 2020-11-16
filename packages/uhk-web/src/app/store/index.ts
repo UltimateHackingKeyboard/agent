@@ -9,7 +9,9 @@ import {
     PlayMacroAction,
     UhkBuffer,
     createMd5Hash,
-    getMd5HashFromFilename
+    getMd5HashFromFilename,
+    AppTheme,
+    AppThemeSelect
 } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
@@ -34,6 +36,7 @@ import {
     UserConfigHistoryComponentState
 } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
+import { OperatingSystem } from '../models/operating-system';
 
 // State interface for the application
 export interface AppState {
@@ -330,3 +333,17 @@ export const getUserConfigHistoryComponentState = createSelector(
             disabled: saving
         };
     });
+
+export const getSupportedThemes = createSelector(getOperatingSystem, (os): AppThemeSelect[] => {
+    const themes = [
+        { id: AppTheme.System, text: 'System default' },
+        { id: AppTheme.Light, text: 'Light' },
+        { id: AppTheme.Dark, text: 'Dark' }
+    ];
+
+    if (os === OperatingSystem.Linux) {
+        return themes.slice(1); // Remove System default option as it is not supported on Linux
+    }
+
+    return themes;
+});
