@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { skipWhile, withLatestFrom } from 'rxjs/operators';
 import { LogService, AppTheme } from 'uhk-common';
 import { AppState, getAppTheme } from '../store';
@@ -15,10 +15,12 @@ const THEME_FILES = {
 const UHK_THEME_ID = 'uhk-theme';
 
 @Injectable({ providedIn: 'root' })
-export class ThemeService {
+export class ThemeService implements OnDestroy {
     appTheme$: Observable<AppTheme>;
     darkModeListener$: Observable<MediaQueryListEvent>;
     darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    private appThemeSubscription: Subscription;
+    private darkModeListenerSubscription: Subscription;
 
     constructor(
         @Inject(DOCUMENT) private document: Document,
@@ -26,10 +28,15 @@ export class ThemeService {
         private logService: LogService
     ) {
         this.appTheme$ = this.store.select(getAppTheme);
-        this.appTheme$.subscribe(value => this.setTheme(value));
+        this.appThemeSubscription = this.appTheme$.subscribe(value => this.setTheme(value));
         this.attachListener();
 
         this.logService.misc('[ThemeService] init success');
+    }
+
+    ngOnDestroy() {
+        this.appThemeSubscription.unsubscribe();
+        this.darkModeListenerSubscription.unsubscribe();
     }
 
     prefersDarkMode(): boolean {
@@ -38,7 +45,7 @@ export class ThemeService {
 
     setTheme(theme: AppTheme): void {
         let newTheme = theme;
-        if (theme === AppTheme.Auto) {
+        if (theme === AppTheme.System) {
             newTheme = this.prefersDarkMode() ? AppTheme.Dark : AppTheme.Light;
         }
         const currentStylesheetEl = this.getCurrentStylesheetElement();
@@ -60,9 +67,9 @@ export class ThemeService {
 
     private attachListener(): void {
         this.darkModeListener$ = fromEvent(this.darkModeMediaQuery, 'change') as Observable<MediaQueryListEvent>;
-        this.darkModeListener$.pipe(
+        this.darkModeListenerSubscription = this.darkModeListener$.pipe(
             withLatestFrom(this.appTheme$),
-            skipWhile(([_, theme]) => theme !== AppTheme.Auto)
+            skipWhile(([_, theme]) => theme !== AppTheme.System)
         ).subscribe(([event]) => {
             this.setTheme(event.matches ? AppTheme.Dark : AppTheme.Light);
         });
