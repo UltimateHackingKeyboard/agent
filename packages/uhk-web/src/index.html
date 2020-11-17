@@ -38,7 +38,9 @@
             }
 
             if (!currentTheme) {
-                document.body.style.background = newTheme === 'dark' ? '#111' : 'white'
+                document.body.style.backgroundColor = newTheme === 'dark' ? '#111' : 'white'
+            } else {
+                document.body.style.backgroundColor = '';
             }
 
             if (currentTheme === newTheme) {
