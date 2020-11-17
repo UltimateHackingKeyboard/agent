@@ -9,7 +9,9 @@ import {
     PlayMacroAction,
     UhkBuffer,
     createMd5Hash,
-    getMd5HashFromFilename
+    getMd5HashFromFilename,
+    AppTheme,
+    AppThemeSelect
 } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
@@ -34,6 +36,7 @@ import {
     UserConfigHistoryComponentState
 } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
+import { OperatingSystem } from '../models/operating-system';
 
 // State interface for the application
 export interface AppState {
@@ -102,6 +105,7 @@ export const firmwareUpgradeAllowed = createSelector(runningOnNotSupportedWindow
 export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp.getEverAttemptedSavingToKeyboard);
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
+export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
 export const getPlatform = createSelector(appState, fromApp.getPlatform);
 
 export const appUpdateState = (state: AppState) => state.appUpdate;
@@ -305,7 +309,8 @@ export const getApplicationSettings = createSelector(
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
             everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
-            animationEnabled: app.animationEnabled
+            animationEnabled: app.animationEnabled,
+            appTheme: app.appTheme
         };
     });
 
@@ -328,3 +333,11 @@ export const getUserConfigHistoryComponentState = createSelector(
             disabled: saving
         };
     });
+
+export const getSupportedThemes = (): AppThemeSelect[] => {
+    return [
+        { id: AppTheme.System, text: 'Follow operating system theme' },
+        { id: AppTheme.Light, text: 'Light' },
+        { id: AppTheme.Dark, text: 'Dark' }
+    ];
+};

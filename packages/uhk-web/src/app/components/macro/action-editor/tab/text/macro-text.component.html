@@ -1,23 +1,25 @@
-<div>
-    <h4>
-        Type text
-        <a class="btn btn-black-link btn-padding-0"
-           href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
-           externalUrl>
-            <icon name="question-circle"
-                  ngbTooltip="The text below is translated to scancodes via en-US mapping.
-                  Output will differ correspondingly if your computer's keymap differs from en-US mapping.
-                  Click to learn more."
-                  tooltipClass="tooltip-macro-text"
-                  placement="bottom">
-            </icon>
-        </a>
-    </h4>
-    <textarea #macroTextInput
-              name="macro-text"
-              (keydown)="onKeydown($event)"
-              (input)="onTextChange()"
-              (keyup)="validate()"
-              (paste)="onPaste($event)"
-              class="macro__text-input">{{ macroAction?.text }}</textarea>
+<div class="row py-3 macro-text">
+    <div class="col-12">
+        <h4>
+            Type text
+            <a class="btn btn-padding-0"
+            href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
+            externalUrl>
+                <icon name="question-circle"
+                    ngbTooltip="The text below is translated to scancodes via en-US mapping.
+                    Output will differ correspondingly if your computer's keymap differs from en-US mapping.
+                    Click to learn more."
+                    tooltipClass="tooltip-macro-text"
+                    placement="bottom">
+                </icon>
+            </a>
+        </h4>
+        <textarea #macroTextInput
+                name="macro-text"
+                (keydown)="onKeydown($event)"
+                (input)="onTextChange()"
+                (keyup)="validate()"
+                (paste)="onPaste($event)"
+                class="macro__text-input">{{ macroAction?.text }}</textarea>
+    </div>
 </div>

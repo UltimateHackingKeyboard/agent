@@ -1,5 +1,5 @@
-<button type="button" [ngClass]="{
-    'btn btn-sm btn--capture-keystroke': !isLink,
+<button type="button" class="btn" [ngClass]="{
+    'btn-sm btn--capture-keystroke': !isLink,
     'btn-link link--capture-keystroke': isLink,
     'btn-default': !record && !isLink,
     'btn-info': record && !isLink

@@ -22,3 +22,15 @@
         margin-top: $main-content-top-margin-on-update;
     }
 }
+
+@mixin invertInDarkTheme($percentage) {
+    @if ($dark-theme) {
+        filter: invert($percentage);
+    }
+}
+
+@mixin code-style() {
+    color: var(--color-code-text);
+    background-color: var(--color-code-bg);
+    text-align: left;
+}

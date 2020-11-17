@@ -1,19 +1,50 @@
 <div class="row">
-    <h1 class="col-xs-12 pane-title">
-        <fa-icon [icon]="faCog"></fa-icon>
-        <span class="macro__name pane-title__name">Settings</span>
-    </h1>
+    <div class="col-12">
+        <h1 class="pane-title">
+            <fa-icon [icon]="faCog"></fa-icon>
+            <span class="macro__name pane-title__name">Settings</span>
+        </h1>
+    </div>
 </div>
-<auto-update-settings [state]="updateSettingsState$ | async"
-                      (toggleCheckForUpdateOnStartUp)="toggleCheckForUpdateOnStartUp($event)"
-                      (checkForUpdate)="checkForUpdate($event)">
-</auto-update-settings>
+<div class="col-12">
+    <auto-update-settings [state]="updateSettingsState$ | async"
+        (toggleCheckForUpdateOnStartUp)="toggleCheckForUpdateOnStartUp($event)"
+        (checkForUpdate)="checkForUpdate($event)">
+    </auto-update-settings>
+</div>
 
-<div class="checkbox d-inline-block mb-0 mt-0">
-    <label>
-        <input type="checkbox"
-               [checked]="animationEnabled$ | async"
-               (change)="toggleAnimationEnabled($event.target.checked)"
-        > Enable layer switching and key popover animation
-    </label>
+
+<div class="col-12">
+    <div class="checkbox d-inline-block mb-0 mt-0">
+        <label>
+            <input type="checkbox"
+                   [checked]="animationEnabled$ | async"
+                   (change)="toggleAnimationEnabled($event.target.checked)"
+            > Enable layer switching and key popover animation
+        </label>
+    </div>
 </div>
+
+
+<div class="col-12 col-md-6 mb-0 mt-0">
+    <div class="d-flex align-items-center mt-2">
+        <label for="select-theme" class="mb-0 mr-2">Theme</label>
+        <ngx-select [items]="themes$ | async"
+                    [defaultValue]="appTheme$ | async"
+                    [autoActiveOnMouseEnter]="false"
+                    [noAutoComplete]="true"
+                    size="small"
+                    class="theme-selector"
+                    (select)="selectTheme($event)"></ngx-select>
+        <icon *ngIf="isLinux$ | async"
+              name="question-circle"
+              class="ml-2"
+              [ngbTooltip]="systemThemeTooltip"
+              tooltipClass="tooltip-system-theme"
+              placement="bottom"></icon>
+    </div>
+</div>
+
+<ng-template #systemThemeTooltip>
+    <p class="text-left mb-0"><strong>Follow operating system theme</strong> may not be supported on all Linux distributions.</p>
+</ng-template>

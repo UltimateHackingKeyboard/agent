@@ -9,10 +9,13 @@
     <div class="popover-title menu-tabs">
         <ul class="nav nav-tabs popover-menu">
             <li *ngFor="let tab of tabHeaders; trackBy:trackTabHeader"
+                class="nav-item"
                 [class.active]="activeTab === tab.tabName"
                 [class.disabled]="tab.disabled"
                 (click)="selectTab(tab)">
-                <a class="menu-tabs--item">
+                <a class="nav-link menu-tabs--item" 
+                    [class.active]="activeTab === tab.tabName"
+                    [class.disabled]="tab.disabled">
                     <fa-icon [icon]="tab.icon"></fa-icon>
                     <span>{{ tab.text }}</span>
                 </a>
@@ -55,42 +58,47 @@
                   (validAction)="setKeyActionValidState($event)"
         ></none-tab>
     </div>
-    <div class="popover-action">
-        <form class="form-inline d-inline-block popover-action-form">
-            <div class="checkbox">
-                <label>
+    <div class="row popover-action">
+        <div class="col-8 pl-2">
+            <form class="form-inline popover-action-form">
+                <div class="form-check mr-2">
+                    <input type="checkbox" class="form-check-input"
+                        id="remapOnAllKeymap"
+                        name="remapOnAllKeymap" 
+                        [(ngModel)]="remapInfo.remapOnAllKeymap">
+                    <label class="form-check-label" for="remapOnAllKeymap">Remap on all keymaps</label>
+                </div>
+                <div class="form-check">
                     <input type="checkbox"
-                           name="remapOnAllKeymap"
-                           [(ngModel)]="remapInfo.remapOnAllKeymap"> Remap on all keymaps
-                </label>
-            </div>
-            <div class="checkbox">
-                <label [ngClass]="{ disabled: disableRemapOnAllLayer }">
-                    <input type="checkbox"
-                           name="remapOnAllLayer"
-                           [(ngModel)]="remapInfo.remapOnAllLayer"
-                           [disabled]="disableRemapOnAllLayer"
-                           (ngModelChange)="remapInfoChange()"> Remap on all layers
-                </label>
-            </div>
-            <ng-template #remapTooltip>
-                <ul class="no-indent text-left">
-                    <li><strong>Default behavior</strong>: Remap the key on the the current layer of the current keymap.</li>
-                    <li><strong>Remap on all keymaps</strong>: Remap key on the current layer of all keymaps.</li>
-                    <li><strong>Remap on all layers</strong>: Remap key on all layers of the current keymap.</li>
-                    <li><strong>Remap on all keymaps + Remap on all layers</strong>: Remap key on all layers of all keymaps.</li>
-                </ul>
-            </ng-template>
-            <div class="d-inline-block">
-                <icon name="question-circle"
-                      [ngbTooltip]="remapTooltip"
-                      tooltipClass="tooltip-nowrap"
-                      placement="bottom"></icon>
-            </div>
-        </form>
+                        class="form-check-input"
+                        id="remapOnAllLayer"
+                        name="remapOnAllLayer"
+                        [(ngModel)]="remapInfo.remapOnAllLayer"
+                        [disabled]="disableRemapOnAllLayer"
+                        (ngModelChange)="remapInfoChange()">
+                    <label class="form-check-label"
+                        for="remapOnAllLayer"
+                        [ngClass]="{ disabled: disableRemapOnAllLayer }">Remap on all layers</label>
+                </div>
+                <ng-template #remapTooltip>
+                    <ul class="no-indent text-left">
+                        <li><strong>Default behavior</strong>: Remap the key on the the current layer of the current keymap.</li>
+                        <li><strong>Remap on all keymaps</strong>: Remap key on the current layer of all keymaps.</li>
+                        <li><strong>Remap on all layers</strong>: Remap key on all layers of the current keymap.</li>
+                        <li><strong>Remap on all keymaps + Remap on all layers</strong>: Remap key on all layers of all keymaps.</li>
+                    </ul>
+                </ng-template>
+                <div class="d-inline-block">
+                    <icon name="question-circle"
+                        [ngbTooltip]="remapTooltip"
+                        tooltipClass="tooltip-nowrap"
+                        placement="bottom"></icon>
+                </div>
+            </form>
+        </div>
 
-        <div class="d-inline-block pull-right">
-            <button class="btn btn-sm btn-default" type="button" (click)="onCancelClick()"> Cancel</button>
+        <div class="col-4 d-flex p-0 justify-content-end">
+            <button class="btn btn-sm btn-default mr-2" type="button" (click)="onCancelClick()"> Cancel</button>
             <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button"
                     (click)="onRemapKey()"> Remap key
             </button>

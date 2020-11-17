@@ -1,0 +1,103 @@
+// Light aka default theme
+$dark-theme: false;
+
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        'primary': #337ab7,
+        'secondary': #6d6d6d,
+        'success': #5cb85c,
+        'info': #5bc0de,
+        'warning': #f0ad4e,
+        'danger': #d9534f,
+        'light': #fff
+    )
+);
+
+$color-bg: color('white');
+$color-bg-light: #f7f7f7;
+$color-text: #111;
+$color-text-highlight: #333;
+$color-copy-icon: #6a737d;
+
+$btn-default-bg: color('white');
+$btn-default-border: #ccc;
+
+$icon-hover: theme-color('primary');
+$icon-hover-delete: theme-color('danger');
+
+// Bootstrap variables
+$body-bg: $color-bg;
+$body-color: $color-text;
+$link-color: theme-color('primary');
+$link-hover-color: darken($link-color, 15%);
+$tooltip-color: #111;
+$tooltip-bg: color('white');
+$tooltip-arrow-color: color('white');
+$tooltip-border-color: #ccc;
+
+:root,
+.theme-light {
+    --color-sidemenu-bg: #f5f5f5;
+    --color-sidemenu-border: #ccc;
+    --color-sidemenu-text: #333;
+    --color-sidemenu-active-bg: rgba(0, 0, 0, 0.18);
+    --color-sidemenu-active-text: #{$color-text-highlight};
+    --color-sidemenu-star: #666;
+
+    --color-keyboard-bg: #{$color-bg-light};
+    --color-keyboard-text: #333;
+    --color-keyboard-text-shadow: #fff;
+    --color-keyboard-shadow: rgba(0, 0, 0, 0.2);
+    --color-keyboard-shadow2: #{color('white')};
+    --color-keyboard-border: #ccc;
+    --color-keyboard-key-bg: #{$color-bg-light};
+    --color-keyboard-key-hover: #{theme-color('secondary')};
+    --color-keyboard-key-active: #{theme-color('primary')};
+
+    --color-input-border: #ccc;
+    --color-btn-secondary-border: #ccc;
+
+    --color-icon-hover: #{$icon-hover};
+    --color-icon-hover-delete: #{$icon-hover-delete};
+    --color-icon-capture-keystroke: #{theme-color('danger')};
+
+    --color-slider-base-bg: #{color('white')};
+    --color-slider-handle-bg: #{color('white')};
+
+    --color-popover-bg: #{$color-bg-light};
+    --color-popover-bg-light: #{color('white')};
+    --color-popover-border: #ebebeb;
+    --color-popover-tab-hover: #{darken($color-bg-light, 5%)};
+    --color-popover-label-disabled: #959595;
+    --color-keymap-tab-background: #{color('white')};
+    --color-keypress-tab-setting-label-disabled: #999;
+    --color-keypress-tab-disabled-info-text: #31708f;
+
+    --color-progress-bar-bg: #{#d3e4f2};
+    --color-progress-bar-progress: #{lighten(theme-color('primary'), 20%)};
+    --color-progress-bar-text: #{$color-text};
+
+    --color-macro-bg: #{$color-bg-light};
+    --color-macro-border: #ebebeb;
+
+    --color-configuration-history-text: #{$color-text};
+
+    --color-code-bg: #f6f8fa;
+    --color-code-text: #6a737d;
+    --color-xterm-bg: #000;
+    --color-xterm-border: #444;
+    --color-xterm-text: #{color('white')};
+    --color-xterm-text-error: red;
+
+    --color-update-available-bg: #428bca;
+    --color-update-available-text: #{color('white')};
+
+    --color-highlight-arrow: #{theme-color('primary')};
+
+    --color-layers-button-disabled: rgba(#ccc, 0.43);
+    --color-layers-button-active-disabled: #7c7c7c;
+
+    --color-out-of-space-warning-bg: #ffc107;
+    --color-out-of-space-warning-text: #000;
+}

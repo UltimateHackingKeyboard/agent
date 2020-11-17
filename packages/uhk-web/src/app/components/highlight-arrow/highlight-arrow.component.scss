@@ -1,7 +1,7 @@
 .highlight-arrow {
     position: fixed;
     font-size: 5rem;
-    color: #337ab7;
+    color: var(--color-highlight-arrow);
     bottom: 34px;
     right: calc((125px + 5rem) / 3);
     opacity: 1;

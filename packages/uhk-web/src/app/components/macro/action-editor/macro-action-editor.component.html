@@ -1,34 +1,34 @@
-<div class="action--editor">
-    <div class="row">
-        <div class="col-lg-3 editor__tab-links">
-            <ul class="nav nav-pills nav-stacked">
+<div class="mx-n1 action--editor">
+    <div class="row mx-1">
+        <div class="col-12 col-lg-3 pt-3 py-lg-3 editor__tab-links">
+            <ul class="nav nav-pills flex-row flex-lg-column">
                 <li #macroText [class.active]="activeTab === TabName.Text" (click)="selectTab(TabName.Text)">
-                    <a>
+                    <a class="nav-link" [class.active]="activeTab === TabName.Text">
                         <fa-icon [icon]="faFont" [fixedWidth]="true"></fa-icon>
                         <span>Type text</span>
                     </a>
                 </li>
                 <li #macroKeypress [class.active]="activeTab === TabName.Keypress" (click)="selectTab(TabName.Keypress)">
-                    <a>
+                    <a class="nav-link" [class.active]="activeTab === TabName.Keypress">
                         <fa-icon [icon]="faKeyboard" [fixedWidth]="true"></fa-icon>
                         <span>Key action</span>
                     </a>
                 </li>
                 <li #macroMouse [class.active]="activeTab === TabName.Mouse" (click)="selectTab(TabName.Mouse)">
-                    <a>
+                    <a class="nav-link" [class.active]="activeTab === TabName.Mouse">
                         <fa-icon [icon]="faMousePointer" [fixedWidth]="true"></fa-icon>
                         <span>Mouse action</span>
                     </a>
                 </li>
                 <li #macroDelay [class.active]="activeTab === TabName.Delay" (click)="selectTab(TabName.Delay)">
-                    <a>
+                    <a class="nav-link" [class.active]="activeTab === TabName.Delay">
                         <fa-icon [icon]="faClock" [fixedWidth]="true"></fa-icon>
                         <span>Delay</span>
                     </a>
                 </li>
             </ul>
         </div>
-        <div class="col-xs-12 col-lg-9 editor__tabs" [ngSwitch]="activeTab">
+        <div class="col-12 col-lg-9 editor__tabs" [ngSwitch]="activeTab">
             <macro-text-tab #tab *ngSwitchCase="TabName.Text" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-text-tab>
             <macro-key-tab #tab *ngSwitchCase="TabName.Keypress" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-key-tab>
             <macro-mouse-tab #tab *ngSwitchCase="TabName.Mouse" [macroAction]="editableMacroAction" (valid)="onValid($event)"></macro-mouse-tab>
@@ -36,10 +36,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 flex-button-wrapper editor__actions-container">
-            <div class="editor__actions">
-                <button class="btn btn-sm btn-default flex-button" type="button" (click)="onCancelClick()"> Cancel </button>
-                <button class="btn btn-sm btn-primary flex-button" type="button" (click)="onSaveClick()" [disabled]="!isSelectedMacroValid"> Save </button>
+        <div class="col-12 editor__actions-container">
+            <div class="d-flex justify-content-end editor__actions">
+                <button class="btn btn-sm btn-default mr-2" type="button" (click)="onCancelClick()"> Cancel </button>
+                <button class="btn btn-sm btn-primary" type="button" (click)="onSaveClick()" [disabled]="!isSelectedMacroValid"> Save </button>
             </div>
         </div>
     </div>

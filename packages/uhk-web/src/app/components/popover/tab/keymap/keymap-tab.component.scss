@@ -31,6 +31,11 @@
     }
 }
 
+.keymap-container {
+    padding: 1rem;
+    background-color: var(--color-keymap-tab-background);
+}
+
 .empty {
     display: flex;
 

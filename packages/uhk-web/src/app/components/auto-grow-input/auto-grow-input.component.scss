@@ -4,6 +4,7 @@ input {
     padding: 0;
     margin: 0;
     text-overflow: ellipsis;
+    background-color: transparent;
 
     &:focus {
         box-shadow: 0 0 0 1px #ccc, 0 0 5px 0 #ccc;

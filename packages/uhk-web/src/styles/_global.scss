@@ -1,0 +1,236 @@
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+textarea {
+    background-color: var(--color-input-bg);
+    color: var(--color-input-text);
+}
+
+.rotate-right {
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg); // svg not aligned properly
+}
+
+.main-content {
+    height: 100%;
+    top: 0;
+
+    @include updatePanelVisible();
+}
+
+.main-page-content {
+    margin-left: 250px;
+    overflow-x: hidden;
+    min-height: 100%;
+}
+
+app-update-available {
+    position: fixed;
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 200;
+}
+
+out-of-space-warning {
+    position: fixed;
+    display: block;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 200;
+}
+
+.nav-pills > li > a {
+    cursor: pointer;
+}
+
+ul.btn-list {
+    & li {
+        margin-top: 0.5em;
+    }
+}
+
+ul.no-indent {
+    padding-left: 1em;
+    margin-bottom: 0;
+}
+
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 10px;
+}
+
+input {
+    background-color: var(--color-input-bg);
+    color: var(--color-input-text);
+
+    &[type=file] {
+        display: inline-block;
+    }
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+.full-height {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+}
+
+.noUi {
+    &-base {
+        background-color: var(--color-slider-base-bg);
+        border-radius: 4px;
+    }
+
+    &-handle {
+        background-color: var(--color-slider-handle-bg);
+    }
+
+    &-value {
+        top: 2rem;
+    }
+}
+
+.btn {
+    &-outline-secondary {
+        border-color: var(--color-btn-secondary-border);
+    }
+
+    &-default {
+        @include button-variant($btn-default-bg, $btn-default-border);
+    }
+
+    &-file {
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 0;
+
+        input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+    }
+
+    &-padding-0 {
+        padding: 0;
+    }
+}
+
+a.link-inline {
+    cursor: pointer;
+}
+
+code {
+    @include code-style();
+}
+
+pre {
+    code {
+        @include code-style();
+    }
+}
+
+.copy-container {
+    position: relative;
+
+    .fa-copy {
+        cursor: pointer;
+        color: $color-copy-icon;
+        position: absolute;
+        right: 4px;
+        top: 4px;
+
+        &:hover {
+            color: darken($color-copy-icon, 15);
+        }
+    }
+}
+
+.flex-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-grow {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+}
+
+.flex-footer {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.ok-button {
+    min-width: 100px;
+}
+
+kbd {
+    padding: 0.1em 0.6em;
+    border: 1px solid var(--color-keyboard-border);
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--color-keyboard-bg);
+    color: var(--color-keyboard-text);
+    -moz-box-shadow: 0 1px 0 var(--color-keyboard-shadow), 0 0 0 2px var(--color-keyboard-shadow2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px var(--color-keyboard-shadow2) inset;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 0 2px var(--color-keyboard-shadow2) inset;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0 0.1em;
+    text-shadow: 0 1px 0 var(--color-keyboard-text-shadow);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.tooltip-nowrap .tooltip-inner {
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.tooltip-scancode .tooltip-inner {
+    width: 330px;
+    max-width: 330px;
+}
+
+.tooltip-modifier .tooltip-inner {
+    width: 370px;
+    max-width: 370px;
+}
+
+.tooltip-secondary-role .tooltip-inner {
+    width: 620px;
+    max-width: 620px;
+}
+
+.tooltip-macro-text .tooltip-inner {
+    width: 350px;
+    max-width: 350px;
+}

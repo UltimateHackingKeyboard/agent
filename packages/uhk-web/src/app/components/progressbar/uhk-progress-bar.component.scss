@@ -1,8 +1,13 @@
 .progress-bar-container {
     position: relative;
 
+    .progress {
+        background-color: var(--color-progress-bar-bg);
+        min-height: 1.4rem;
+    }
+
     .progress-bar {
-        background-color: #d3e4f2;
+        background-color: var(--color-progress-bar-progress);
     }
 
     .progress-text {
@@ -13,6 +18,7 @@
         right: 0;
         bottom: 0;
 
+        color: var(--color-progress-bar-text);
         text-align: center;
         background-color: transparent;
     }

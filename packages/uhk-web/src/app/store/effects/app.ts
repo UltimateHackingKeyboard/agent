@@ -115,6 +115,7 @@ export class ApplicationEffects {
     @Effect() saveApplicationSettings$ = this.actions$
         .pipe(
             ofType(
+                ActionTypes.SetAppTheme,
                 ActionTypes.ToggleAnimationEnabled,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration

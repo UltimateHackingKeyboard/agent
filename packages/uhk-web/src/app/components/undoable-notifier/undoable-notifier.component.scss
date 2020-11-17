@@ -1,20 +1,26 @@
 :host {
     position: fixed;
+    top: 3.5rem;
     right: 1em;
     z-index: 100;
 
     .alert {
-        padding: 5px 10px 5px 5px;
-
         margin-bottom: 0.25em;
-        margin-top: -2em;
+        padding-right: 2rem;
 
         .close {
+            top: -2px;
             right: -5px;
+
+            > span {
+                position: relative;
+                top: -2px;
+            }
         }
 
         .undo-button {
             cursor: pointer;
+            padding: 0 1rem;
         }
     }
 }

@@ -1,6 +1,9 @@
 ngx-select,
 .ngx-select {
     .ngx-select__toggle {
+        background-color: var(--color-input-bg) !important; /* stylelint-disable-line declaration-no-important */
+        color: var(--color-input-text) !important; /* stylelint-disable-line declaration-no-important */
+        border-color: var(--color-input-border) !important; /* stylelint-disable-line declaration-no-important */
         font-size: 14px;
     }
 
@@ -11,7 +14,7 @@ ngx-select,
     .dropdown-header {
         font-weight: bold;
         font-size: 1em;
-        color: black;
+        color: var(--color-input-text);
         padding-left: 6px;
     }
 
@@ -25,9 +28,10 @@ ngx-select,
             padding-left: 6px;
         }
 
+        &:active,
         &.ngx-select__item_active {
-            background-color: #dddddd;
-            color: black;
+            background-color: var(--color-select-active-bg);
+            color: var(--color-select-active-text);
         }
     }
 
@@ -38,7 +42,7 @@ ngx-select,
 
         .scancode--searchterm {
             text-align: right;
-            color: #b7b7b7;
+            color: var(--color-input-text);
         }
     }
 

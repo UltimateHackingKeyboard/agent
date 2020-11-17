@@ -1,4 +1,4 @@
-$side-value-width: 100px;
+$side-value-width: 80px;
 
 :host {
     label {
@@ -13,20 +13,24 @@ $side-value-width: 100px;
     .slider-wrapper {
         display: flex;
         flex-direction: row;
+        flex-wrap: nowrap;
         padding-left: 1.6rem;
     }
 
     .slider-container {
-        width: calc(100% - #{$side-value-width});
+        flex-grow: 1;
+        min-width: 100px;
     }
 
     .slider-value {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
         width: $side-value-width;
+        margin-left: 1rem;
     }
 
     .value-indicator {
-        padding: 1rem 1rem 1rem 3rem;
-        vertical-align: middle;
         white-space: nowrap;
     }
 }

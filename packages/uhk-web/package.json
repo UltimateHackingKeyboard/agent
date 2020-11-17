@@ -45,7 +45,7 @@
     "@types/node": "12.12.29",
     "angular-confirmation-popover": "6.0.0",
     "angular-notifier": "6.0.1",
-    "bootstrap": "3.4.1",
+    "bootstrap": "4.5.3",
     "codelyzer": "6.0.0",
     "dragula": "3.7.2",
     "@fortawesome/angular-fontawesome": "0.7.0",

@@ -6,11 +6,13 @@
     .scancode-options {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
 
         margin-bottom: 10px;
         margin-top: 2px;
+
         > b {
-            top: 2px;
+            display: inline-block;
             margin-right: 0.6em;
         }
 
@@ -19,12 +21,18 @@
             margin-left: 0.6em;
             margin-right: 0.6em;
         };
+
+        capture-keystroke-button {
+            display: inline-block;
+        }
     }
 
     .modifier-options {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
         > b {
-            position: relative;
-            top: -9px;
             margin-right: 4px;
         }
 
@@ -58,7 +66,7 @@
 
     .setting-label {
         &.disabled {
-            color: #999;
+            color: var(--color-keypress-tab-setting-label-disabled);
         }
     }
 
@@ -67,13 +75,13 @@
         position: absolute;
         top: 50%;
         margin-top: -4rem;
-        color: #31708f;
+        color: var(--color-keypress-tab-disabled-info-text);
         padding-right: 40px;
 
-        .fas {
+        fa-icon {
             font-size: 2.6rem;
             float: left;
-            padding: 1rem 1.5rem 2rem;
+            padding-right: 1.5rem;
         }
     }
 
@@ -92,6 +100,8 @@
     .scancode-container {
         display: inline-block;
         width: 200px;
+        min-width: 154px;
+        margin-bottom: 0.5rem;
     }
 
     .secondary-role-groups-container {

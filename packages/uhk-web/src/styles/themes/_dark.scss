@@ -1,0 +1,133 @@
+// Dark theme
+$dark-theme: true;
+
+$light: #444;
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        'primary': #3ec9e8,
+        'secondary': #999,
+        'light': $light
+    )
+);
+
+$color-bg: #111;
+$color-bg-light: #222;
+$color-text: #bbb;
+$color-text-highlight: #ddd;
+$color-copy-icon: #6a737d;
+$color-popover-bg-light: lighten($color-bg-light, 5%);
+$color-popover-border: lighten($color-bg-light, 10%);
+
+$btn-default-bg: #444;
+$btn-default-border: #666;
+
+$icon-hover: theme-color('primary');
+$icon-hover-delete: theme-color('danger');
+$tooltip-arrow-color: #ccc;
+$tooltip-border-color: #ccc;
+
+// Bootstrap variables
+$body-bg: $color-bg;
+$body-color: $color-text;
+$link-color: theme-color('primary');
+$link-hover-color: darken($link-color, 15%);
+$list-group-bg: $color-bg-light;
+$list-group-border-color: #666;
+$input-bg: #222;
+$input-color: $color-text;
+$input-focus-bg: #111;
+$input-btn-focus-color: rgba(theme-color('primary'), 0.25);
+$nav-tabs-link-hover-border-color: $color-popover-border;
+$nav-tabs-link-active-bg: $color-popover-bg-light;
+$nav-tabs-link-active-color: $color-text;
+$nav-tabs-link-active-border-color: $color-popover-border;
+$alert-bg-level: 9;
+$alert-border-level: 4;
+$alert-color-level: 1;
+$dropdown-color: $color-text;
+$dropdown-bg: $input-bg;
+$dropdown-link-color: $color-text;
+$dropdown-link-hover-color: #333;
+$dropdown-link-hover-bg: #{theme-color('primary')};
+$tooltip-color: $color-text;
+$tooltip-bg: $color-bg;
+$tooltip-arrow-color: $color-bg;
+$tooltip-border-color: #444;
+$popover-bg: $color-bg-light;
+$popover-header-bg: $color-bg-light;
+$popover-arrow-color: $color-bg-light;
+$popover-arrow-outer-color: $color-popover-border;
+$popover-body-color: $color-popover-bg-light;
+$popover-border-color: $color-popover-border;
+
+:root,
+.theme-dark {
+    --color-sidemenu-bg: #{$color-bg-light};
+    --color-sidemenu-border: #333;
+    --color-sidemenu-text: #{$color-text};
+    --color-sidemenu-active-bg: #444;
+    --color-sidemenu-active-text: #{$color-text-highlight};
+
+    --color-keyboard-bg: #555;
+    --color-keyboard-text: #bbb;
+    --color-keyboard-text-shadow: #444;
+    --color-keyboard-shadow: rgba(0, 0, 0, 0.8);
+    --color-keyboard-shadow2: #444;
+    --color-keyboard-border: #888;
+    --color-keyboard-key-bg: #f7f7f7;
+    --color-keyboard-key-hover: #494949;
+    --color-keyboard-key-active: #{theme-color('primary')};
+
+    --color-input-bg: #{$input-bg};
+    --color-input-text: #{$input-color};
+    --color-input-border: #{theme-color('secondary')};
+
+    --color-btn-secondary-border: #{theme-color('secondary')};
+
+    --color-icon-hover: #{theme-color('primary')};
+    --color-icon-hover-delete: #{$icon-hover-delete};
+    --color-icon-capture-keystroke: #{theme-color('danger')};
+
+    --color-slider-base-bg: #555;
+    --color-slider-handle-bg: #888;
+
+    --color-popover-bg: #{$color-bg-light};
+    --color-popover-bg-light: #{$color-popover-bg-light};
+    --color-popover-border: #{$color-popover-border};
+    --color-popover-tab-hover: #{darken($color-popover-bg-light, 8%)};
+    --color-popover-label-disabled: #959595;
+    --color-keymap-tab-background: #{$color-bg};
+    --color-keypress-tab-setting-label-disabled: #999;
+    --color-keypress-tab-disabled-info-text: #{theme-color('primary')};
+
+    --color-progress-bar-bg: #{darken(theme-color('primary'), 40%)};
+    --color-progress-bar-progress: #{darken(theme-color('primary'), 20%)};
+    --color-progress-bar-text: #{$color-text};
+
+    --color-macro-bg: #333;
+    --color-macro-border: #444;
+
+    --color-select-active-bg: #{darken(theme-color('primary'), 40%)};
+    --color-select-active-text: #{$white};
+
+    --color-configuration-history-text: #{$color-text};
+
+    --color-code-bg: #{color-bg};
+    --color-code-text: #{color-text};
+    --color-xterm-bg: #000;
+    --color-xterm-border: #666;
+    --color-xterm-text: #{color('white')};
+    --color-xterm-text-error: red;
+
+    --color-update-available-bg: #{theme-color('info')};
+    --color-update-available-text: #{$color-text-highlight};
+
+    --color-highlight-arrow: #{theme-color('primary')};
+
+    --color-layers-button-disabled: #{darken(theme-color('secondary'), 40)};
+    --color-layers-button-active-disabled: #7c7c7c;
+
+    --color-out-of-space-warning-bg: #{theme-color('warning')};
+    --color-out-of-space-warning-text: #000;
+}

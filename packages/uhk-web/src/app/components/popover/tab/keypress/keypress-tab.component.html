@@ -1,5 +1,5 @@
 <div class="scancode-options">
-    <b class="setting-label">Scancode:</b>
+    <b class="setting-label mb-2">Scancode:</b>
     <div class="scancode-container">
         <ngx-select [items]="scanCodeGroups"
                     [ngModel]="selectedScancodeOption?.id"
@@ -25,33 +25,36 @@
     <ng-template #scanCodeTooltip>
         <p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the label if your computer uses layout different from en-US. In such case, you need to pick the character of the desired key according to the en-US layout.</p>
         <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the semicolon key, so choose semicolon in this dropdown.</p>
-        <p>Click to learn more about mappings and scancodes.</p>
+        <p class="mb-1">Click to learn more about mappings and scancodes.</p>
     </ng-template>
-    <a class="btn btn-black-link btn-padding-0"
+    <a class="btn btn-padding-0 mb-2"
        href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
        externalUrl>
         <icon name="question-circle"
               [ngbTooltip]="scanCodeTooltip"
               tooltipClass="tooltip-scancode"
+              container="body"
               placement="bottom"></icon>
     </a>
-    <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0"></capture-keystroke-button>
+    <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0" class="mb-2"></capture-keystroke-button>
 </div>
 <div class="modifier-options">
-    <b class="setting-label">Modifiers:</b>
+    <b class="setting-label mr-2 mb-2">Modifiers:</b>
     <div class="btn-toolbar modifiers">
-        <div class="btn-group btn-group-sm modifiers__left">
-            <button type="button" class="btn btn-default"
+        <div class="btn-group btn-group-sm mb-2 mr-3 modifiers__left">
+            <button type="button" class="btn"
                     *ngFor="let modifier of leftModifiers; trackBy:modifiersTrackBy"
+                    [class.btn-default]="!modifier.checked"
                     [class.btn-primary]="modifier.checked"
                     (click)="toggleModifier(modifier)"
             >
                 {{ modifier.text }}
             </button>
         </div>
-        <div class="btn-group btn-group-sm modifiers__right">
-            <button type="button" class="btn btn-default"
+        <div class="btn-group btn-group-sm mb-2 modifiers__right">
+            <button type="button" class="btn"
                     *ngFor="let modifier of rightModifiers; trackBy:modifiersTrackBy"
+                    [class.btn-default]="!modifier.checked"
                     [class.btn-primary]="modifier.checked"
                     (click)="toggleModifier(modifier)"
             >
@@ -59,10 +62,11 @@
             </button>
         </div>
     </div>
-    <b class="d-inline-block">
+    <b class="d-inline-block mb-2">
         <icon name="question-circle"
               ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
               tooltipClass="tooltip-modifier"
+              container="body"
               placement="bottom"></icon>
     </b>
 </div>
@@ -91,17 +95,18 @@
         </ngx-select>
     </div>
     <ng-template #secondaryRoleTooltip>
-        <p class='text-left'>The secondary role activates when another key gets pressed while holding this key.</p>
-        <p class='text-left'>Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
-        <ul class='text-left'>
+        <p class="text-left">The secondary role activates when another key gets pressed while holding this key.</p>
+        <p class="text-left">Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
+        <ul class="text-left">
             <li>Tap this key to trigger Escape. <i>(Primary role)</i></li>
             <li>Hold this key and press another key to activate the relevant key of the Mouse layer. <i>(Secondary role)</i></li>
         </ul>
-        <p class='text-left'>The secondary role can be any layer or modifier.</p>
+        <p class="text-left mb-1">The secondary role can be any layer or modifier.</p>
     </ng-template>
     <icon name="question-circle"
           [ngbTooltip]="secondaryRoleTooltip"
           tooltipClass="tooltip-secondary-role"
+          container="body"
           placement="bottom"></icon>
 </div>
 
@@ -112,6 +117,8 @@
 
 <div class="disabled-state--text">
     <fa-icon [icon]="faInfoCircle"></fa-icon>
-    When a key is configured as layer switcher key, you can't assign other functions to it.
-    To assign a scancode to the key, set the <em>Layer action</em> to <em>None</em>.
+    <div>
+        When a key is configured as layer switcher key, you can't assign other functions to it.
+        To assign a scancode to the key, set the <em>Layer action</em> to <em>None</em>.
+    </div>
 </div>

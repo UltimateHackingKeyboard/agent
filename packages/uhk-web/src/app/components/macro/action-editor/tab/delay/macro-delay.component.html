@@ -1,11 +1,11 @@
-<div class="macro-delay">
+<div class="py-3 macro-delay">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             <h4>Delay</h4>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             <div class="form-group">
                 <input #macroDelayInput
                        type="number"
@@ -20,11 +20,14 @@
             </div>
         </div>
     </div>
-    <div class="row macro-delay__presets">
-        <div class="col-xs-12">
+    <div class="row mt-3 macro-delay__presets">
+        <div class="col-12">
             <h6>Choose a preset</h6>
-            <button *ngFor="let delay of presets" class="btn btn-sm btn-default" (click)="setDelay(delay)">{{delay}}s
-            </button>
+            <div>
+                <button *ngFor="let delay of presets" type="button" class="btn btn-default mr-2" 
+                    (click)="setDelay(delay)">{{delay}}s
+                </button>
+            </div>
         </div>
     </div>
 </div>

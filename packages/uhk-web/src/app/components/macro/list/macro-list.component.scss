@@ -1,5 +1,4 @@
-@import '../../../../styles/variables';
-@import '../../../../styles/common';
+@import '../../../../styles/mixins';
 
 :host {
     display: flex;
@@ -22,12 +21,12 @@ h1 {
 
 .action {
     &--edit__form {
-        background-color: #fff;
+        background-color: var(--color-macro-bg);
         margin-left: -0.5rem;
         margin-right: -15px;
         margin-top: 15px;
         padding-top: 15px;
-        border-top: 1px solid #ddd;
+        border-top: 1px solid var(--color-macro-border);
     }
 
     &--item {
@@ -35,10 +34,10 @@ h1 {
 
         &.active,
         &.active:hover {
-            background-color: white;
+            background-color: var(--color-macro-bg);
             font-weight: bold;
             color: black;
-            border-color: black;
+            border-color: var(--color-macro-border);
             z-index: 10;
         }
     }
@@ -55,8 +54,7 @@ h1 {
 }
 
 .macro-settings {
-    border: 1px solid black;
-    border-top-color: #999;
+    border: 1px solid var(--color-macro-border);
     z-index: 100;
 
     .helper {
@@ -77,8 +75,8 @@ h1 {
 
 .macro-actions-container {
     margin-bottom: 0;
-    border-radius: 4px;
-    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid var(--color-macro-border);
     border-bottom: 0;
 }
 
@@ -98,12 +96,13 @@ h1 {
 .add-new__action-container {
     overflow: hidden;
     flex-shrink: 0;
-    border-top: 1px solid #ddd;
+    border: 1px solid var(--color-macro-border);
+    border-radius: 0 0 $border-radius $border-radius;
 }
 
 .add-new__action-item {
-    border-radius: 0 0 4px 4px;
-    border-top: 0;
+    border-radius: 0;
+    border: 0;
     padding: 0;
 
     &:hover {
@@ -114,15 +113,14 @@ h1 {
         width: 50%;
         float: left;
         text-align: center;
-        color: $icon-hover;
+        color: var(--color-icon-hover);
 
         &:first-of-type {
-            border-right: 1px solid #ddd;
+            border-right: 1px solid var(--color-macro-border);
         }
 
         &:hover {
             text-decoration: none;
-            background: #e6e6e6;
         }
 
         button.btn-link {

@@ -31,6 +31,7 @@ const noop = (_: any) => {
 export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewInit {
     @Input() maxParentWidthPercent;
     @Input() maxParentWidthOffset;
+    @Input() minWidth: number = 100;
     @Input() css: string;
     @Input() selectAfterInit = false;
 
@@ -141,6 +142,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
         } else if (this.maxParentWidthOffset) {
             maxWidth -= this.maxParentWidthOffset;
         }
+        maxWidth = Math.max(this.minWidth, maxWidth); // Clamp to ensure usable width
 
         let textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
 
