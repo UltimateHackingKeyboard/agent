@@ -334,16 +334,10 @@ export const getUserConfigHistoryComponentState = createSelector(
         };
     });
 
-export const getSupportedThemes = createSelector(getOperatingSystem, (os): AppThemeSelect[] => {
-    const themes = [
-        { id: AppTheme.System, text: 'System default' },
+export const getSupportedThemes = (): AppThemeSelect[] => {
+    return [
+        { id: AppTheme.System, text: 'Follow operating system theme' },
         { id: AppTheme.Light, text: 'Light' },
         { id: AppTheme.Dark, text: 'Dark' }
     ];
-
-    if (os === OperatingSystem.Linux) {
-        return themes.slice(1); // Remove System default option as it is not supported on Linux
-    }
-
-    return themes;
-});
+};

@@ -26,7 +26,7 @@
 </div>
 
 
-<div class="col-12 col-md-4 mb-0 mt-0">
+<div class="col-12 col-md-6 mb-0 mt-0">
     <div class="d-flex align-items-center mt-2">
         <label for="select-theme" class="mb-0 mr-2">Theme</label>
         <ngx-select [items]="themes$ | async"
@@ -36,5 +36,15 @@
                     size="small"
                     class="theme-selector"
                     (select)="selectTheme($event)"></ngx-select>
+        <icon *ngIf="isLinux$ | async"
+              name="question-circle"
+              class="ml-2"
+              [ngbTooltip]="systemThemeTooltip"
+              tooltipClass="tooltip-system-theme"
+              placement="bottom"></icon>
     </div>
 </div>
+
+<ng-template #systemThemeTooltip>
+    <p class="text-left mb-0"><strong>Follow operating system theme</strong> may not be supported on all Linux distributions.</p>
+</ng-template>
