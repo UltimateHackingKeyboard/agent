@@ -20,7 +20,6 @@ import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
 import { KeyUpAction, KeyDownAction } from './store/actions/app';
 import { OutOfSpaceWarningData } from './models';
-import { ThemeService } from './services/theme.service';
 
 @Component({
     selector: 'main-app',
@@ -81,7 +80,7 @@ export class MainAppComponent implements OnDestroy {
     private showUpdateAvailableSubscription: Subscription;
     private outOfSpaceWarningSubscription: Subscription;
 
-    constructor(private store: Store<AppState>, private themeService: ThemeService) {
+    constructor(private store: Store<AppState>) {
         this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
             .subscribe(data => this.showUpdateAvailable = data);
         this.updateInfo$ = store.select(getUpdateInfo);

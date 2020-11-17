@@ -38,6 +38,10 @@ module.exports = {
                 {
                     from: 'src/package.json',
                     to: 'package.json'
+                },
+                {
+                    from: 'src/preload.js',
+                    to: 'preload.js'
                 }
             ]
         }),

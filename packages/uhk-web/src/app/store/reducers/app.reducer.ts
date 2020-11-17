@@ -182,7 +182,7 @@ export function reducer(
                 ...state,
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
-                appTheme: settings.appTheme
+                appTheme: settings.appTheme || AppTheme.System
             };
         }
 
