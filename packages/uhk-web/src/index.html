@@ -37,6 +37,10 @@
                     : 'light';
             }
 
+            if (!currentTheme) {
+                document.body.style.background = newTheme === 'dark' ? '#111' : 'white'
+            }
+
             if (currentTheme === newTheme) {
                 return;
             }
