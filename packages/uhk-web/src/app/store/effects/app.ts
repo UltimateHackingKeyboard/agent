@@ -17,6 +17,7 @@ import {
     OpenUrlInNewWindowAction,
     ProcessAppStartInfoAction,
     SaveApplicationSettingsSuccessAction,
+    SetAppThemeAction,
     ShowNotificationAction,
     UndoLastAction
 } from '../actions/app';
@@ -126,6 +127,17 @@ export class ApplicationEffects {
                 this.dataStorageRepository.saveApplicationSettings(config);
 
                 return new SaveApplicationSettingsSuccessAction();
+            })
+        );
+
+    @Effect({ dispatch: false }) setAppTheme$ = this.actions$
+        .pipe(
+            ofType<SetAppThemeAction>(ActionTypes.SetAppTheme),
+            map(action => action.payload),
+            tap(theme => {
+                if ((window as any).setUhkTheme) {
+                    (window as any).setUhkTheme(theme);
+                }
             })
         );
 

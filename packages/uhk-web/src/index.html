@@ -8,7 +8,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    <link rel="stylesheet" type="text/css" id="uhk-theme" data-theme="light" href="stylesLight.css">
+    <script type="module">
+        const THEME_ID = 'uhk-theme';
+        const THEME_FILES = {
+            light: 'stylesLight.css',
+            dark: 'stylesDark.css'
+        };
+
+        let currentTheme = undefined;
+        let styleElement = undefined;
+
+        function getDefaultTheme() {
+            if (window.UHK_THEME) {
+                return window.UHK_THEME;
+            }
+
+            const { appTheme = 'system' } = JSON.parse(localStorage.getItem('application-settings')) || {};
+
+            console.log('appTheme', appTheme)
+            return appTheme;
+        }
+
+        function setUhkTheme (theme) {
+            let newTheme = theme;
+            if (theme === 'system') {
+                newTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? 'dark'
+                    : 'light';
+            }
+
+            if (!currentTheme) {
+                document.body.style.backgroundColor = newTheme === 'dark' ? '#111' : 'white'
+            } else {
+                document.body.style.backgroundColor = '';
+            }
+
+            if (currentTheme === newTheme) {
+                return;
+            }
+
+            if (!styleElement) {
+                styleElement = document.createElement('link');
+                styleElement.setAttribute('id', THEME_ID);
+                styleElement.setAttribute('rel', 'stylesheet');
+                styleElement.setAttribute('type', 'text/css');
+                document.head.appendChild(styleElement);
+            }
+
+            styleElement.setAttribute('data-theme', newTheme);
+            styleElement.setAttribute('href', `${THEME_FILES[newTheme]}`);
+
+            currentTheme = newTheme;
+        }
+
+        window.setUhkTheme = setUhkTheme;
+        window.setUhkTheme(getDefaultTheme())
+    </script>
 </head>
 <body>
     <main-app></main-app>

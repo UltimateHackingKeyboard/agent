@@ -81,7 +81,8 @@ function createWindow() {
         height: loadedWindowState.height,
         webPreferences: {
             nodeIntegration: true,
-            spellcheck: false
+            spellcheck: false,
+            preload: path.join(__dirname, 'preload.js')
         },
         icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
     });
