@@ -1,5 +1,5 @@
 import {
-    ChangeDetectionStrategy,
+    ChangeDetectionStrategy, ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -51,6 +51,7 @@ import {
 import { RemapInfo } from '../../../models/remap-info';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { LastEditedKey } from '../../../models';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 interface NameValuePair {
     name: string;
@@ -61,7 +62,36 @@ interface NameValuePair {
     selector: 'svg-keyboard-wrap',
     templateUrl: './svg-keyboard-wrap.component.html',
     styleUrls: ['./svg-keyboard-wrap.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('popover', [
+            state('closed', style({
+                transform: 'translateY(30px)',
+                visibility: 'hidden',
+                opacity: 0
+            })),
+            state('opened', style({
+                transform: 'translateY(0)',
+                visibility: 'visible',
+                opacity: 1
+            })),
+            transition('opened => closed', [
+                animate('{{animationTime}} ease-out', keyframes([
+                    style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
+                    style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1 })
+                ]))
+            ], { params: { animationTime: '200ms' } }),
+            transition('closed => opened', [
+                style({
+                    visibility: 'visible'
+                }),
+                animate('{{animationTime}} ease-out', keyframes([
+                    style({ transform: 'translateY(30px)', opacity: 0, offset: 0 }),
+                    style({ transform: 'translateY(0)', opacity: 1, offset: 1 })
+                ]))
+            ], { params: { animationTime: '200ms' } })
+        ])
+    ]
 })
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() keymap: Keymap;
@@ -77,7 +107,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 
     animationEnabled = true;
-    popoverShown: boolean;
+    animationState: 'opened' | 'closed';
     keyEditConfig: { moduleId: number, keyId: number };
     selectedKey: { layerId: number, moduleId: number, keyId: number };
     popoverInitKeyAction: KeyAction;
@@ -95,6 +125,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         remapOnAllKeymap: false,
         remapOnAllLayer: false
     };
+    leftArrow: boolean = false;
+    rightArrow: boolean = false;
+    topPosition: number = 0;
+    leftPosition: number = 0;
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
@@ -103,8 +137,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private mapper: MapperService,
-        private element: ElementRef
+        private element: ElementRef,
+        private cdRef: ChangeDetectorRef
     ) {
+        this.animationState = 'closed';
         this.keyEditConfig = {
             moduleId: undefined,
             keyId: undefined
@@ -137,6 +173,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         if (this.keyElement) {
             this.keyPosition = this.keyElement.getBoundingClientRect();
         }
+        if (this.animationState === 'opened') {
+            this.calculatePosition();
+            this.cdRef.markForCheck();
+        }
     }
 
     ngOnInit() {
@@ -147,7 +187,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         const keymapChanges = changes['keymap'];
         if (keymapChanges) {
-            this.popoverShown = false;
+            this.animationState = 'closed';
             this.layers = this.keymap.layers;
         }
     }
@@ -156,13 +196,17 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         this.subscription.unsubscribe();
     }
 
+    get animationTime(): string {
+        return this.animationEnabled ? '200ms' : '0ms';
+    }
+
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
-        if (!this.popoverShown && this.popoverEnabled) {
+        if (this.animationState === 'closed' && this.popoverEnabled) {
             this.keyEditConfig = {
                 moduleId: event.moduleId,
                 keyId: event.keyId
             };
-            this.selectedKey = {layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId};
+            this.selectedKey = { layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId };
             const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
             this.keyElement = event.keyTarget;
             this.remapInfo = {
@@ -221,9 +265,13 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
 
     showPopover(keyAction: KeyAction): void {
         this.keyPosition = this.keyElement.getBoundingClientRect();
+        this.calculatePosition();
         this.popoverInitKeyAction = keyAction;
-        this.popoverShown = true;
-        this.popover.nativeElement.focus();
+        this.animationState = 'opened';
+        this.cdRef.markForCheck();
+        setTimeout(() => {
+            this.popover.nativeElement.focus();
+        }, 10);
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
@@ -254,7 +302,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     hidePopover(): void {
-        this.popoverShown = false;
+        this.animationState = 'closed';
         this.selectedKey = undefined;
         this.popoverInitKeyAction = null;
     }
@@ -387,5 +435,28 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         return of([]);
+    }
+
+    private calculatePosition() {
+        const offsetLeft: number = this.wrapPosition.left + 249; // 265 is a width of the side menu with a margin
+        const popover: HTMLElement = this.popover.nativeElement;
+        let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
+
+        this.leftArrow = newLeft < offsetLeft;
+        this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
+
+        const splitOffset = this.halvesInfo.areHalvesMerged ? 0 : 17;
+
+        if (this.leftArrow) {
+            newLeft = this.keyPosition.left - splitOffset;
+        } else if (this.rightArrow) {
+            newLeft = this.keyPosition.left - popover.offsetWidth + this.keyPosition.width + splitOffset * 1.5;
+        } else {
+            newLeft -= popover.offsetWidth / 2;
+        }
+
+        // 7 is a space between a bottom key position and a popover
+        this.topPosition = this.keyPosition.top + this.keyPosition.height + 7 + window.scrollY;
+        this.leftPosition = newLeft;
     }
 }

@@ -2,7 +2,6 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    ElementRef,
     EventEmitter,
     HostListener,
     Input,
@@ -11,7 +10,6 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faBan, faClone, faKeyboard, faMousePointer, faPlay } from '@fortawesome/free-solid-svg-icons';
 
@@ -57,64 +55,28 @@ export interface TabHeader {
     selector: 'popover',
     templateUrl: './popover.component.html',
     styleUrls: ['./popover.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('popover', [
-            state('closed', style({
-                transform: 'translateY(30px)',
-                visibility: 'hidden',
-                opacity: 0
-            })),
-            state('opened', style({
-                transform: 'translateY(0)',
-                visibility: 'visible',
-                opacity: 1
-            })),
-            transition('opened => closed', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0}),
-                    style({transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1})
-                ]))
-            ], { params: { animationTime: '200ms' } }),
-            transition('closed => opened', [
-                style({
-                    visibility: 'visible'
-                }),
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({transform: 'translateY(30px)', opacity: 0, offset: 0}),
-                    style({transform: 'translateY(0)', opacity: 1, offset: 1})
-                ]))
-            ], { params: { animationTime: '200ms' } })
-        ])
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PopoverComponent implements OnChanges {
-    @Input() animationEnabled: boolean;
     @Input() defaultKeyAction: KeyAction;
     @Input() currentKeymap: Keymap;
     @Input() currentLayer: number;
-    @Input() keyPosition: any;
-    @Input() wrapPosition: any;
     @Input() visible: boolean;
     @Input() allowLayerDoubleTap: boolean;
     @Input() remapInfo: RemapInfo;
+    @Input() leftArrow: boolean = false;
+    @Input() rightArrow: boolean = false;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyActionRemap>();
 
     @ViewChild('tab', { static: false }) selectedTab: Tab;
-    @ViewChild('popover', { static: false }) popoverHost: ElementRef;
 
     tabName = TabName;
     keyActionValid: boolean;
     activeTab: TabName;
     keymaps$: Observable<Keymap[]>;
     keymapOptions$: Observable<SelectOptionData[]>;
-    leftArrow: boolean = false;
-    rightArrow: boolean = false;
-    topPosition: number = 0;
-    leftPosition: number = 0;
-    animationState: string;
     shadowKeyAction: KeyAction;
     disableRemapOnAllLayer = false;
     tabHeaders: TabHeader[] = [
@@ -154,7 +116,6 @@ export class PopoverComponent implements OnChanges {
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
-        this.animationState = 'closed';
         this.keymaps$ = store.select(getKeymaps);
         this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
@@ -163,10 +124,6 @@ export class PopoverComponent implements OnChanges {
 
     ngOnChanges(change: SimpleChanges) {
         let tab: TabHeader = this.tabHeaders[5];
-
-        if (this.keyPosition && this.wrapPosition && (change['keyPosition'] || change['wrapPosition'])) {
-            this.calculatePosition();
-        }
 
         if (change['defaultKeyAction']) {
             this.disableRemapOnAllLayer = false;
@@ -195,17 +152,9 @@ export class PopoverComponent implements OnChanges {
 
         if (change['visible']) {
             if (change['visible'].currentValue) {
-                this.animationState = 'opened';
-
                 this.selectTab(tab);
-            } else {
-                this.animationState = 'closed';
             }
         }
-    }
-
-    get animationTime(): string {
-        return this.animationEnabled ? '200ms' : '0ms';
     }
 
     onCancelClick(): void {
@@ -251,10 +200,6 @@ export class PopoverComponent implements OnChanges {
         }
     }
 
-    onOverlay() {
-        this.cancel.emit(undefined);
-    }
-
     remapInfoChange(): void {
         this.selectedTab.remapInfoChanged(this.remapInfo);
     }
@@ -286,26 +231,5 @@ export class PopoverComponent implements OnChanges {
 
     trackTabHeader(index: number, tabItem: TabHeader): string {
         return tabItem.tabName.toString();
-    }
-
-    private calculatePosition() {
-        const offsetLeft: number = this.wrapPosition.left + 265; // 265 is a width of the side menu with a margin
-        const popover: HTMLElement = this.popoverHost.nativeElement;
-        let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
-
-        this.leftArrow = newLeft < offsetLeft;
-        this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
-
-        if (this.leftArrow) {
-            newLeft = this.keyPosition.left;
-        } else if (this.rightArrow) {
-            newLeft = this.keyPosition.left - popover.offsetWidth + this.keyPosition.width;
-        } else {
-            newLeft -= popover.offsetWidth / 2;
-        }
-
-        // 7 is a space between a bottom key position and a popover
-        this.topPosition = this.keyPosition.top + this.keyPosition.height + 7 + window.scrollY;
-        this.leftPosition = newLeft;
     }
 }

@@ -1,5 +1,5 @@
 <ng-template [ngIf]="layers">
-    <layers [class.disabled]="popoverShown" (select)="selectLayer($event.index)" [current]="currentLayer"></layers>
+    <layers [class.disabled]="animationState === 'opened'" (select)="selectLayer($event.index)" [current]="currentLayer"></layers>
     <keyboard-slider id="keyboard-slider"
                      [animationEnabled]="animationEnabled"
                      [layers]="layers"
@@ -17,10 +17,12 @@
     ></keyboard-slider>
 
     <popover tabindex="0"
-             [animationEnabled]="animationEnabled"
-             [visible]="popoverShown"
-             [keyPosition]="keyPosition"
-             [wrapPosition]="wrapPosition"
+             [@popover]="{ value: animationState, params: { animationTime: animationTime } }"
+             [visible]="animationState === 'opened'"
+             [style.top.px]="topPosition"
+             [style.left.px]="leftPosition"
+             [leftArrow]="leftArrow"
+             [rightArrow]="rightArrow"
              [defaultKeyAction]="popoverInitKeyAction"
              [currentKeymap]="keymap"
              [currentLayer]="currentLayer"
@@ -41,4 +43,5 @@
             </p>
         </div>
     </div>
+    <div class="popover-overlay" [class.display]="animationState === 'opened'" (click)="hidePopover()"></div>
 </ng-template>

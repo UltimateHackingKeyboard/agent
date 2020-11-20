@@ -1,9 +1,5 @@
 <div class="popover"
-     #popover
-     [@popover]="{ value: animationState, params: { animationTime: animationTime } }"
      [ngClass]="{'leftArrow': leftArrow, 'rightArrow': rightArrow}"
-     [style.top.px]="topPosition"
-     [style.left.px]="leftPosition"
 >
     <div class="arrowCustom"></div>
     <div class="popover-title menu-tabs">
@@ -13,7 +9,7 @@
                 [class.active]="activeTab === tab.tabName"
                 [class.disabled]="tab.disabled"
                 (click)="selectTab(tab)">
-                <a class="nav-link menu-tabs--item" 
+                <a class="nav-link menu-tabs--item"
                     [class.active]="activeTab === tab.tabName"
                     [class.disabled]="tab.disabled">
                     <fa-icon [icon]="tab.icon"></fa-icon>
@@ -64,7 +60,7 @@
                 <div class="form-check mr-2">
                     <input type="checkbox" class="form-check-input"
                         id="remapOnAllKeymap"
-                        name="remapOnAllKeymap" 
+                        name="remapOnAllKeymap"
                         [(ngModel)]="remapInfo.remapOnAllKeymap">
                     <label class="form-check-label" for="remapOnAllKeymap">Remap on all keymaps</label>
                 </div>
@@ -105,4 +101,3 @@
         </div>
     </div>
 </div>
-<div class="popover-overlay" [class.display]="visible" (click)="onOverlay()"></div>
