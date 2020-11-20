@@ -445,7 +445,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         this.leftArrow = newLeft < offsetLeft;
         this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
 
-        const splitOffset = this.halvesInfo.areHalvesMerged ? 0 : 20;
+        const splitOffset = this.halvesInfo.areHalvesMerged ? 0 : 17;
 
         if (this.leftArrow) {
             newLeft = this.keyPosition.left - splitOffset;
