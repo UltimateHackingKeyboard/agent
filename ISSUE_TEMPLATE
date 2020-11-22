@@ -1,10 +1,9 @@
 Before submitting a new issue, make sure to do the following:
 
-1. If you're using Karabiner Elements on your Mac, close it!
-2. Install the latest Agent:
+1. Install the latest Agent:
    https://github.com/UltimateHackingKeyboard/agent/releases/latest
-3. Use Agent to update to the latest firmware:
+2. Use Agent to update to the latest firmware:
    https://github.com/UltimateHackingKeyboard/firmware/releases/latest
-4. Try to reproduce the issue, and only report it if it still persists.
+3. Our contact form will suggest you solutions, so copy-paste your message at https://ultimatehackingkeyboard.com/contact-us - Please don't post customer support issues here.
 
 `npm audit` related issues will be closed due to https://github.com/UltimateHackingKeyboard/agent/blob/master/NPM_UPDATES.md
