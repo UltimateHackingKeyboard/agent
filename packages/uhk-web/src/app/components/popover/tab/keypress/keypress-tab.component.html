@@ -51,6 +51,7 @@
                 {{ modifier.text }}
             </button>
         </div>
+
         <div class="btn-group btn-group-sm mb-2 modifiers__right">
             <button type="button" class="btn"
                     *ngFor="let modifier of rightModifiers; trackBy:modifiersTrackBy"
@@ -61,14 +62,15 @@
                 {{ modifier.text }}
             </button>
         </div>
-    </div>
-    <b class="d-inline-block mb-2">
+
         <icon name="question-circle"
+              class="d-inline mt-1"
               ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
               tooltipClass="tooltip-modifier"
               container="body"
               placement="bottom"></icon>
-    </b>
+    </div>
+
 </div>
 <div class="long-press-container" *ngIf="secondaryRoleEnabled">
     <b class="setting-label">Secondary role:</b>
