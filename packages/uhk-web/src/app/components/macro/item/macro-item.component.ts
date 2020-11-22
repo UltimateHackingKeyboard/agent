@@ -19,10 +19,12 @@ import { MapperService } from '../../../services/mapper.service';
     animations: [
         trigger('toggler', [
             state('inactive', style({
-                height: '0px'
+                height: '0px',
+                visibility: 'hidden'
             })),
             state('active', style({
-                height: '*'
+                height: '*',
+                visibility: 'visible'
             })),
             transition('inactive <=> active', animate('500ms ease-out'))
         ])

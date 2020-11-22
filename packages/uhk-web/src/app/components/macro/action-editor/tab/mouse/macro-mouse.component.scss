@@ -1,4 +1,8 @@
 .macro-mouse {
+    &__types {
+        max-width: var(--macro-sub-item-max-width);
+    }
+
     &__actions {
         border-left: 1px solid var(--color-macro-border);
         padding-left: 2rem;

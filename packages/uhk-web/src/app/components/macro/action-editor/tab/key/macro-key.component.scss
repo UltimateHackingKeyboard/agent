@@ -4,6 +4,10 @@
 }
 
 .macro-key {
+    &__types {
+        max-width: var(--macro-sub-item-max-width);
+    }
+
     &__action {
         &-container {
             border-left: 1px solid var(--color-macro-border);
