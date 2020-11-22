@@ -235,3 +235,10 @@ kbd {
     width: 350px;
     max-width: 350px;
 }
+
+mwl-confirmation-popover-window {
+    .popover-header {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+}
