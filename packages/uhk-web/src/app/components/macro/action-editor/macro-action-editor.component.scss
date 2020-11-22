@@ -17,6 +17,9 @@
     padding-bottom: 1rem;
 
     li {
+        white-space: nowrap;
+        width: 100%;
+
         a {
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
@@ -29,6 +32,8 @@
 
         &.active {
             z-index: 2;
+            white-space: nowrap;
+            width: 100%;
 
             a {
                 position: relative;

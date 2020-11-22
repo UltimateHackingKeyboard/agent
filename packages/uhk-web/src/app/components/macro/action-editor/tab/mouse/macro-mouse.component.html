@@ -1,6 +1,6 @@
-<div class="row macro-mouse__container">
-    <div class="col-4 col-lg-3 py-3 macro-mouse__types">
-        <ul class="nav nav-pills flex-column">
+<div class="macro-mouse__container d-flex">
+    <div class="py-3 macro-mouse__types">
+        <ul class="nav nav-pills">
             <li #mouseMove [class.active]="activeTab === TabName.Move" (click)="selectTab(TabName.Move)">
                 <a class="nav-link" [class.active]="activeTab === TabName.Move">
                     <fa-icon [icon]="faArrowsAlt" [fixedWidth]="true"></fa-icon>
@@ -33,7 +33,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-8 col-lg-9 ml-n3 py-3 pl-5 macro-mouse__actions" [ngSwitch]="activeTab">
+    <div class="macro-mouse__actions" [ngSwitch]="activeTab">
         <div #tab *ngSwitchCase="TabName.Move">
             <h4>Move mouse pointer</h4>
             <div class="form-horizontal">

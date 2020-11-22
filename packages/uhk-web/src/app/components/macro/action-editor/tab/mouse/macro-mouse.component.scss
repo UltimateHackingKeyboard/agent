@@ -1,6 +1,8 @@
 .macro-mouse {
     &__actions {
         border-left: 1px solid var(--color-macro-border);
+        padding-left: 2rem;
+        width: 100%;
     }
 }
 
