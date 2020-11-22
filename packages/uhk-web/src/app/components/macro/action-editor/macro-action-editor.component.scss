@@ -31,7 +31,6 @@
         }
 
         &.active {
-            z-index: 2;
             white-space: nowrap;
             width: 100%;
 
@@ -63,40 +62,22 @@
     &__tabs,
     &__tab-links {
         padding-left: 0;
+        padding-right: 0;
+    }
 
-        .nav li.active a.active {
-            border-top-right-radius: $border-radius;
-            border-bottom-right-radius: $border-radius;
+    &__tab-links {
+        border-right: 1px solid var(--color-macro-border);
+        max-width: 175px;
 
-            &:after {
-                display: none;
-            }
-        }
-
-        @include media-breakpoint-up(lg) {
-            .nav li {
-                &.active {
-                    a.active {
-                        border-top-right-radius: 0;
-                        border-bottom-right-radius: 0;
-
-                        &:after {
-                            display: block;
-                        }
-                    }
-                }
-            }
+        @include media-breakpoint-down(md) {
+            border-right: 0;
+            max-width: none;
         }
     }
 
     &__tabs {
-
-        margin-left: -1rem;
-        padding-left: 2rem;
-
-        @include media-breakpoint-up(lg) {
-            border-left: 1px solid var(--color-macro-border);
-        }
+        padding-right: 0;
+        padding-left: 1rem;
     }
 
     &__actions {

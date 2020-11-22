@@ -5,12 +5,13 @@
 
 .macro-key {
     &__types {
+        padding-left: 5px;
         max-width: var(--macro-sub-item-max-width);
+        border-right: 1px solid var(--color-macro-border);
     }
 
     &__action {
         &-container {
-            border-left: 1px solid var(--color-macro-border);
             padding-left: 2rem;
             width: 100%;
         }
