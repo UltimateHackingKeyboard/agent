@@ -78,6 +78,10 @@
     &__tabs {
         padding-right: 0;
         padding-left: 1rem;
+
+        @include media-breakpoint-down(md) {
+            padding-left: 0;
+        }
     }
 
     &__actions {

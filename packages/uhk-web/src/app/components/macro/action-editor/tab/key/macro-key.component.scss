@@ -1,3 +1,6 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '../../../../../../styles/variables';
+
 :host {
     display: flex;
     height: 100%;
@@ -12,8 +15,12 @@
 
     &__action {
         &-container {
-            padding-left: 2rem;
-            width: 100%;
+            padding-left: 1.5rem;
+            margin-right: -3rem;
+
+            @include media-breakpoint-down(md) {
+                margin-right: 0;
+            }
         }
     }
 }
