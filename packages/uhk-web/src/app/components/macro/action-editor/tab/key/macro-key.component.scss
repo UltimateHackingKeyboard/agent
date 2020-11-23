@@ -16,9 +16,9 @@
     &__action {
         &-container {
             padding-left: 1.5rem;
-            margin-right: -3rem;
+            margin-right: -2.5rem;
 
-            @include media-breakpoint-down(md) {
+            @include media-breakpoint-down(lg) {
                 margin-right: 0;
             }
         }
