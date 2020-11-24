@@ -5,6 +5,7 @@
             <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index"
                         [macroAction]="macroAction"
                         [editable]="true"
+                        [editing]="macroActionIndex === activeEdit"
                         [deletable]="true"
                         [movable]="true"
                         (save)="saveAction($event, macroActionIndex)"

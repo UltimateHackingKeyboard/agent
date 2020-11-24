@@ -1,4 +1,15 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChildren, forwardRef, OnDestroy } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+    QueryList,
+    ViewChildren,
+    forwardRef,
+    OnDestroy,
+    OnChanges,
+    SimpleChanges
+} from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -46,7 +57,7 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss']
 })
-export class MacroListComponent implements OnDestroy {
+export class MacroListComponent implements OnChanges, OnDestroy {
     @Input() macro: Macro;
     @Input() macroPlaybackSupported: boolean;
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
@@ -60,7 +71,7 @@ export class MacroListComponent implements OnDestroy {
     showNew: boolean = false;
     MACRO_ACTIONS = 'macroActions';
     faPlus = faPlus;
-    private activeEdit: number = undefined;
+    activeEdit: number = undefined;
 
     constructor(private dragulaService: DragulaService) {
         dragulaService.createGroup(this.MACRO_ACTIONS, {
@@ -80,6 +91,12 @@ export class MacroListComponent implements OnDestroy {
                 return false;
             }
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['macro']) {
+            this.hideActiveEditor();
+        }
     }
 
     ngOnDestroy(): void {
@@ -167,6 +184,7 @@ export class MacroListComponent implements OnDestroy {
     private hideActiveEditor() {
         if (this.activeEdit !== undefined) {
             this.macroItems.toArray()[this.activeEdit].cancelEdit();
+            this.activeEdit = undefined;
         }
     }
 }

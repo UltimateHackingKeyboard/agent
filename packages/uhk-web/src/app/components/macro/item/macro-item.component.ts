@@ -37,6 +37,7 @@ import { MapperService } from '../../../services/mapper.service';
 export class MacroItemComponent implements OnInit, OnChanges {
     @Input() macroAction: MacroAction;
     @Input() editable: boolean;
+    @Input() editing: boolean;
     @Input() deletable: boolean;
     @Input() movable: boolean;
 
@@ -47,7 +48,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     title: string;
     iconName: string;
-    editing: boolean;
     newItem: boolean = false;
     overflow = 'hidden';
     faGripLinesVertical = faGripLinesVertical;
@@ -57,7 +57,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.updateView();
         if (!this.macroAction) {
-            this.editing = true;
             this.newItem = true;
             this.overflow = 'visible';
         }
@@ -71,7 +70,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     saveEditedAction(editedAction: MacroAction): void {
         this.macroAction = editedAction;
-        this.editing = false;
         this.overflow = 'hidden';
         this.updateView();
         this.save.emit(editedAction);
@@ -83,13 +81,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
             return;
         }
 
-        this.editing = true;
         this.edit.emit();
         this.setOverflow('visible');
     }
 
     cancelEdit(): void {
-        this.editing = false;
         this.overflow = 'hidden';
         this.cancel.emit();
     }
