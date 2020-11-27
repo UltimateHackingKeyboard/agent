@@ -10,7 +10,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 Firmware: 8.10.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.2)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
-- Fix occasional macro editor bugs and improve its responsive layout.
+- Fix occasional macro editor bugs and improve macro editor responsive layout.
 
 ## [1.5.6] - 2020-11-20
 
