@@ -19,7 +19,10 @@ import { existsSync } from 'fs';
         }
 
         const { operations } = Uhk(argv);
+        console.log(`Updating right firmware from ${firmwarePath} ...`);
         await operations.updateRightFirmwareWithKboot(firmwarePath);
+        console.log('Firmware updated.');
+        console.log('Reenumerating device...');
 
     } catch (error) {
         errorHandler(error);

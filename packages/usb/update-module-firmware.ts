@@ -29,11 +29,13 @@ import Uhk, { errorHandler, yargs } from './src';
         }
 
         const { operations } = Uhk(argv);
+        console.log(`Updating ${module} module from ${firmwarePath} ...`);
         await operations.updateModuleWithKboot(
             firmwarePath,
             ModuleSlotToI2cAddress[module],
             ModuleSlotToId[module] as any
         );
+        console.log('Firmware updated.');
 
     } catch (error) {
         errorHandler(error);
