@@ -1,5 +1,4 @@
 'use strict';
-const jsonfile = require('jsonfile');
 const exec = require('child_process').execSync;
 
 const TEST_BUILD = process.env.TEST_BUILD; // set true if you would like to test on your local machine
@@ -127,7 +126,7 @@ function update2ndPackageJson(rootJson) {
     const json = require(jsonPath);
 
     json.version = rootJson.version;
-    jsonfile.writeFileSync(jsonPath, json, { spaces: 2 })
+    fs.writeJsonSync(jsonPath, json, { spaces: 2 })
 }
 
 async function afterPack(context) {
