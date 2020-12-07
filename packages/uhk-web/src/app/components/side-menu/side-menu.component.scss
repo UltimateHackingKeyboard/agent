@@ -30,6 +30,7 @@ ul {
     padding: 0;
     margin: 0;
     overflow: hidden;
+    width: 100%;
 
     li {
         list-style: none;
@@ -65,9 +66,8 @@ ul {
         }
 
         .chevron {
-            line-height: $font-size-lg * 1.75;
+            line-height: $font-size-lg * 1.7;
             font-size: $font-size-lg * 0.75;
-            position: relative;
             display: none;
             cursor: pointer;
         }
