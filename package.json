@@ -15,10 +15,11 @@
   },
   "license": "See in LICENSE",
   "engines": {
-    "node": ">=12.14.1 <13.0.0",
-    "npm": ">=6.12.0 <7.0.0"
+    "node": ">=12.18.3 <13.0.0",
+    "npm": ">=v6.14.6 <7.0.0"
   },
   "devDependencies": {
+    "@ert78gb/jasmine-ts": "0.3.1",
     "@types/command-line-args": "5.0.0",
     "@types/command-line-usage": "5.0.1",
     "@types/copy-webpack-plugin": "6.0.0",
@@ -45,7 +46,7 @@
     "decompress": "4.2.1",
     "decompress-targz": "^4.1.1",
     "devtron": "1.4.0",
-    "electron": "9.3.3",
+    "electron": "11.0.3",
     "electron-builder": "22.9.1",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
@@ -58,7 +59,6 @@
     "jasmine": "3.5.0",
     "jasmine-core": "3.5.0",
     "jasmine-node": "3.0.0",
-    "jasmine-ts": "0.3.0",
     "lerna": "3.22.1",
     "lodash": "4.17.19",
     "node-hid": "2.0.0-0",
