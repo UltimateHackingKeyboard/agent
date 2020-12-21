@@ -1,7 +1,6 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import {
     ApplicationSettings,
     HardwareModules,
@@ -270,9 +269,8 @@ export const calculateExtraMenu = createSelector(
 
         if (!deviceConfigLoaded) {
             return {
-                faIcon: faSpinner,
                 link: '/loading',
-                title: 'Loading'
+                title: 'My UHK'
             };
         }
     }

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { HardwareModules, HalvesInfo, ConfigSizesInfo } from 'uhk-common';
 
 import * as Device from '../actions/device';
@@ -294,9 +294,9 @@ export const deviceExtraSideMenu = (state: State): SideMenu | undefined => {
 
     if (!state.connected) {
         return {
-            faIcon: faExclamationTriangle,
+            faIcon: faInfoCircle,
             link: '/detection',
-            title: 'Detect device'
+            title: 'No device detected'
         };
     }
 };

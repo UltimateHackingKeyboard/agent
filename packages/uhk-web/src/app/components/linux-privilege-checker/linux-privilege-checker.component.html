@@ -2,12 +2,12 @@
              subtitle="Your UHK has been detected, but its permissions are not set up yet, so Agent can't talk to it."></uhk-message>
 
 <div class="text-center">
-    <button class="btn btn-default btn-lg btn-primary mt-10"
+    <button class="btn btn-default btn-lg btn-primary mt-4"
             (click)="setUpPermissions.emit()">
         Set up permissions
     </button>
 </div>
-<div class="mt-10">
+<div class="mt-2">
     <div class="text-center">
         <a class="link-inline"
            *ngIf="state.showWhatWillThisDo"
