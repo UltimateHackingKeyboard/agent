@@ -13,6 +13,8 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import {
     faChevronDown,
     faChevronUp,
+    faExclamationTriangle,
+    faInfoCircle,
     faKeyboard,
     faPlay,
     faPlus,
@@ -93,6 +95,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             animation: 'active'
         }
     };
+    faExclamationTriangle = faExclamationTriangle;
+    faInfoCircle = faInfoCircle;
     faKeyboard = faKeyboard;
     faPlus = faPlus;
     faPlay = faPlay;

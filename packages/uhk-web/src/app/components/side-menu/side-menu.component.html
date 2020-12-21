@@ -1,11 +1,36 @@
 <ul class="menu--top">
-    <li class="sidebar__level-0--item" *ngIf="state.extraMenu">
-        <div class="sidebar__level-0">
-            <a [routerLink]="state.extraMenu.link"
+    <li class="sidebar__level-0--item extra-menu-container" *ngIf="state.deviceUiState">
+        <div class="sidebar__level-0 pb-0" [ngSwitch]="state.deviceUiState">
+            <a *ngSwitchCase="'NotFound'"
+               routerLink="/detection"
                [routerLinkActive]="['active']"
-                class="d-block text-decoration-none">
-                <fa-icon *ngIf="state.extraMenu.faIcon" [icon]="state.extraMenu.faIcon"></fa-icon>
-                {{ state.extraMenu.title }}
+                class="d-block text-decoration-none mb-0">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+                No device detected
+            </a>
+
+            <a *ngSwitchCase="'Loading'"
+               routerLink="/loading"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none">
+                <i class="uhk-icon uhk-icon-usb-drive"></i>
+                UHK 60 v1<span class="loading-config"></span>
+            </a>
+
+            <a *ngSwitchCase="'PermissionRequired'"
+               routerLink="/privilege"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                UHK 60 v1
+            </a>
+
+            <a *ngSwitchCase="'Recovery'"
+               routerLink="/recovery-device"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                UHK 60 v1
             </a>
         </div>
     </li>

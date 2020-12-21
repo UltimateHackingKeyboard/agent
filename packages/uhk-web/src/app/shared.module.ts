@@ -98,6 +98,7 @@ import { LinuxPrivilegeCheckerComponent } from './components/linux-privilege-che
 import { MacPrivilegeCheckerComponent } from './components/mac-privilege-checker';
 import { PrivilegeCheckerComponent } from './components/privilege-checker';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
+import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { MainPage } from './pages/main-page/main.page';
 import { DeviceRendererService } from './services/device-renderer.service';
@@ -105,6 +106,7 @@ import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.gua
 import { ProgressButtonComponent } from './components/progress-button/progress-button.component';
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
+import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
@@ -243,8 +245,10 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
         IpcCommonRenderer,
         DeviceRendererService,
         UhkDeviceConnectedGuard,
+        UhkDeviceDisconnectedGuard,
         UhkDeviceInitializedGuard,
         UhkDeviceUninitializedGuard,
+        UhkDeviceLoadingGuard,
         UhkDeviceBootloaderNotActiveGuard
     ],
     exports: [

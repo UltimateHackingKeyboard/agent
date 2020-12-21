@@ -1,13 +1,7 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { Keymap } from 'uhk-common';
 
 import { MacroMenuItem } from './macro-menu-item';
-
-export interface SideMenu {
-    title: string;
-    link: string;
-    faIcon?: IconDefinition;
-}
+import { DeviceUiStates } from './device-ui-states';
 
 export interface SideMenuPageState {
     showAddonMenu: boolean;
@@ -17,5 +11,5 @@ export interface SideMenuPageState {
     keymaps: Keymap[];
     macros: MacroMenuItem[];
     restoreUserConfiguration: boolean;
-    extraMenu?: SideMenu;
+    deviceUiState?: DeviceUiStates;
 }
