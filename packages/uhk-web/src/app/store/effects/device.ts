@@ -98,6 +98,9 @@ export class DeviceEffects {
                 if (connected
                     && payload.hasPermission
                     && payload.zeroInterfaceAvailable) {
+
+                    this.router.navigate(['/loading']);
+
                     return [
                         new ReadConfigSizesAction(),
                         new LoadConfigFromDeviceAction()

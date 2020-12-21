@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    Input,
     OnDestroy,
     OnInit,
     Renderer2
@@ -63,6 +64,8 @@ interface SideMenuState {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideMenuComponent implements OnInit, OnDestroy {
+    @Input() deviceConfigurationLoaded: boolean;
+
     state: SideMenuPageState;
     sideMenuState: SideMenuState = {
         configuration: {

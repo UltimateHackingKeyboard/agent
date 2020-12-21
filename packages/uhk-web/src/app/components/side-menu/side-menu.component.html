@@ -1,5 +1,15 @@
 <ul class="menu--top">
-    <li class="sidebar__level-0--item">
+    <li class="sidebar__level-0--item" *ngIf="state.extraMenu">
+        <div class="sidebar__level-0">
+            <a [routerLink]="state.extraMenu.link"
+               [routerLinkActive]="['active']"
+                class="d-block text-decoration-none">
+                <fa-icon *ngIf="state.extraMenu.faIcon" [icon]="state.extraMenu.faIcon"></fa-icon>
+                {{ state.extraMenu.title }}
+            </a>
+        </div>
+    </li>
+    <li class="sidebar__level-0--item" *ngIf="deviceConfigurationLoaded">
         <div class="sidebar__level-0">
             <i class="uhk-icon uhk-icon-usb-drive"></i>
             <auto-grow-input [ngModel]="state.deviceName"

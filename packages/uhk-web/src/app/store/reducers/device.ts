@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { HardwareModules, HalvesInfo, ConfigSizesInfo } from 'uhk-common';
 
 import * as Device from '../actions/device';
@@ -8,6 +9,7 @@ import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { ReadConfigSizesReplyAction } from '../actions/device';
+import { SideMenu } from '../../models';
 
 export interface State {
     connected: boolean;
@@ -273,3 +275,28 @@ export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFaile
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
 export const halvesInfo = (state: State) => state.halvesInfo;
 export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;
+export const deviceExtraSideMenu = (state: State): SideMenu | undefined => {
+    if (!state.hasPermission) {
+        return {
+            faIcon: faExclamationTriangle,
+            link: '/privilege',
+            title: 'Set permission'
+        };
+    }
+
+    if (state.bootloaderActive) {
+        return {
+            faIcon: faExclamationTriangle,
+            link: '/recovery-device',
+            title: 'Recovery device'
+        };
+    }
+
+    if (!state.connected) {
+        return {
+            faIcon: faExclamationTriangle,
+            link: '/detection',
+            title: 'Detect device'
+        };
+    }
+};

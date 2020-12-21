@@ -14,7 +14,6 @@ import {
     LogService,
     NotificationType,
     UhkBuffer,
-    UploadFileData,
     UserConfiguration
 } from 'uhk-common';
 
@@ -23,7 +22,8 @@ import {
     ApplyUserConfigurationFromFileAction,
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
-    LoadUserConfigurationFromFileAction, PreviewUserConfigurationAction,
+    LoadUserConfigurationFromFileAction,
+    PreviewUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
 

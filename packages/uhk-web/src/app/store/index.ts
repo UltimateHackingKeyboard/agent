@@ -1,6 +1,7 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import {
     ApplicationSettings,
     HardwareModules,
@@ -33,10 +34,10 @@ import {
     MacroMenuItem,
     OutOfSpaceWarningData,
     UhkProgressBarState,
-    UserConfigHistoryComponentState
+    UserConfigHistoryComponentState,
+    SideMenu
 } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
-import { OperatingSystem } from '../models/operating-system';
 
 // State interface for the application
 export interface AppState {
@@ -162,6 +163,7 @@ export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firm
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
+export const deviceExtraSideMenu = createSelector(deviceState, fromDevice.deviceExtraSideMenu);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -258,17 +260,37 @@ export const getMacroMenuItems = (userConfiguration: UserConfiguration): MacroMe
         .sort((first: MacroMenuItem, second: MacroMenuItem) => first.name.localeCompare(second.name));
 };
 
+export const calculateExtraMenu = createSelector(
+    deviceExtraSideMenu,
+    deviceConfigurationLoaded,
+    (devicesMenu, deviceConfigLoaded): SideMenu | undefined => {
+        if (devicesMenu) {
+            return devicesMenu;
+        }
+
+        if (!deviceConfigLoaded) {
+            return {
+                faIcon: faSpinner,
+                link: '/loading',
+                title: 'Loading'
+            };
+        }
+    }
+);
+
 export const getSideMenuPageState = createSelector(
     showAddonMenu,
     runningInElectron,
     updatingFirmware,
     getUserConfiguration,
     getRestoreUserConfiguration,
+    calculateExtraMenu,
     (showAddonMenuValue: boolean,
      runningInElectronValue: boolean,
      updatingFirmwareValue: boolean,
      userConfiguration: UserConfiguration,
-     restoreUserConfiguration: boolean): SideMenuPageState => {
+     restoreUserConfiguration: boolean,
+     extraMenu): SideMenuPageState => {
         return {
             showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
@@ -276,7 +298,8 @@ export const getSideMenuPageState = createSelector(
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
             macros: getMacroMenuItems(userConfiguration),
-            restoreUserConfiguration
+            restoreUserConfiguration,
+            extraMenu
         };
     }
 );

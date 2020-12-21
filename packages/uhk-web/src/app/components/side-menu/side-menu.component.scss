@@ -11,7 +11,7 @@ $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
     position: fixed;
     overflow-y: auto;
     top: 0;
-    width: 250px;
+    width: $side-menu-width;
     height: 100%;
 
     @include updatePanelVisible();
