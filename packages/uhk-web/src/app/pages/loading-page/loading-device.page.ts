@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
     template: `
         <uhk-message header="Loading keyboard configuration..."
                      subtitle="Hang tight!"
+                     [showLogo]="true"
                      [rotateLogo]="true"></uhk-message>
     `
 })
