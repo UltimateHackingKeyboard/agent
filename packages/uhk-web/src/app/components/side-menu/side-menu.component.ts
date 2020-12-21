@@ -3,9 +3,11 @@ import {
     ChangeDetectorRef,
     Component,
     Input,
+    OnChanges,
     OnDestroy,
     OnInit,
-    Renderer2
+    Renderer2,
+    SimpleChanges
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -65,7 +67,7 @@ interface SideMenuState {
     styleUrls: ['./side-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideMenuComponent implements OnInit, OnDestroy {
+export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     @Input() deviceConfigurationLoaded: boolean;
 
     state: SideMenuPageState;
@@ -116,6 +118,14 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             this.state = data;
             this.cdRef.markForCheck();
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.deviceConfigurationLoaded) {
+            this.sideMenuState.device.animation = changes.deviceConfigurationLoaded.currentValue
+                ? 'active'
+                : 'inactive';
+        }
     }
 
     ngOnDestroy(): void {
