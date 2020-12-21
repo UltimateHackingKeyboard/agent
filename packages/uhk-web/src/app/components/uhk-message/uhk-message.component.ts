@@ -11,4 +11,5 @@ export class UhkMessageComponent {
     @Input() subtitle: string;
     @Input() rotateLogo = false;
     @Input() showLogo = false;
+    @Input() smallText = false;
 }

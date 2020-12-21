@@ -2,9 +2,11 @@
     <img *ngIf="showLogo"
          class="agent-logo spin-logo"
          [ngClass]="{'spin-logo': rotateLogo}"
-         src="assets/images/agent-icon.svg"/>
+         src="assets/images/agent-icon.svg"
+         alt="UHK Agent icon"/>
     <div class="messages">
         <h1> {{ header }} </h1>
-        <div> {{ subtitle }} </div>
+        <h2 *ngIf="!smallText"> {{ subtitle }} </h2>
+        <div *ngIf="smallText"> {{ subtitle }} </div>
     </div>
 </div>
