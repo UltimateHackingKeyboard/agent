@@ -169,6 +169,7 @@ export class KBoot {
         try {
             response = await this.peripheral.sendCommand(command);
         } catch (error) {
+            logger(`Reset command error message type: "${typeof error.message}"`);
             logger(`Reset command error message: "${error.message}"`);
 
             if (RESET_IGNORED_ERRORS.includes(error.message)) {
