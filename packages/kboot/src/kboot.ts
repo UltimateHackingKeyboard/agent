@@ -9,7 +9,8 @@ const logger = debug('kboot');
 const RESET_IGNORED_ERRORS = [
     'could not read data from device',
     'could not read from HID device',
-    'Cannot write to HID device'
+    'Cannot write to HID device',
+    'Cannot write to hid device'
 ];
 
 export class KBoot {
