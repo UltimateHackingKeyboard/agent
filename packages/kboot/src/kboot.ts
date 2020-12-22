@@ -4,6 +4,7 @@ import { pack } from 'byte-data';
 import { Peripheral } from './peripheral';
 import { Commands, MemoryIds, Properties, ResponseCodes, ResponseTags } from './enums';
 import { BootloaderVersion, CommandOption, CommandResponse, DataOption } from './models';
+import { convertToHexString } from './util';
 
 const logger = debug('kboot');
 const RESET_IGNORED_ERRORS = [
@@ -169,8 +170,11 @@ export class KBoot {
         try {
             response = await this.peripheral.sendCommand(command);
         } catch (error) {
-            logger(`Reset command error message type: "${typeof error.message}"`);
             logger(`Reset command error message: "${error.message}"`);
+
+            for (const c of error.message) {
+            logger(`char: "${c}" hex: "${convertToHexString(c)}"`);
+            }
 
             if (RESET_IGNORED_ERRORS.includes(error.message)) {
                 logger('Ignoring missing response from reset command.');
