@@ -107,7 +107,6 @@ import { ProgressButtonComponent } from './components/progress-button/progress-b
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
-import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
@@ -250,7 +249,6 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
         UhkDeviceInitializedGuard,
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
-        UhkDeviceLoadedGuard,
         UhkDeviceBootloaderNotActiveGuard
     ],
     exports: [

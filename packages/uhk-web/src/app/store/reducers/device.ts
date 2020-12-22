@@ -1,13 +1,14 @@
 import { Action } from '@ngrx/store';
-import { HardwareModules, HalvesInfo, ConfigSizesInfo } from 'uhk-common';
+import { ConfigSizesInfo, HalvesInfo, HardwareModules } from 'uhk-common';
 
 import * as Device from '../actions/device';
+import { ReadConfigSizesReplyAction } from '../actions/device';
 import * as App from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
-import { ReadConfigSizesReplyAction } from '../actions/device';
+import { DeviceUiStates } from '../../models';
 
 export interface State {
     connected: boolean;
@@ -273,3 +274,16 @@ export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFaile
 export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
 export const halvesInfo = (state: State) => state.halvesInfo;
 export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;
+export const deviceUiState = (state: State): DeviceUiStates | undefined => {
+    if (!state.hasPermission) {
+        return DeviceUiStates.PermissionRequired;
+    }
+
+    if (state.bootloaderActive) {
+        return DeviceUiStates.Recovery;
+    }
+
+    if (!state.connected) {
+        return DeviceUiStates.NotFound;
+    }
+};

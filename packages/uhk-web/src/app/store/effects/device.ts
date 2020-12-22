@@ -98,6 +98,7 @@ export class DeviceEffects {
                 if (connected
                     && payload.hasPermission
                     && payload.zeroInterfaceAvailable) {
+
                     return [
                         new ReadConfigSizesAction(),
                         new LoadConfigFromDeviceAction()

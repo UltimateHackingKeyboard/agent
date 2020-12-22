@@ -5,10 +5,10 @@
                       (doNotUpdateApp)="doNotUpdateApp()">
 </app-update-available>
 
-<side-menu *ngIf="deviceConfigurationLoaded$ | async"
+<side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
            [class.update-panel-visible]="showUpdateAvailable"></side-menu>
 <div id="main-content"
-     class="main-content"
+     class="main-content inner-content"
      [class.update-panel-visible]="showUpdateAvailable">
     <router-outlet></router-outlet>
 </div>

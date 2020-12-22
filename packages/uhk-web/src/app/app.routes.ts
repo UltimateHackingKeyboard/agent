@@ -15,7 +15,6 @@ import { MainPage } from './pages/main-page/main.page';
 import { agentRoutes } from './components/agent';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
-import { UhkDeviceLoadedGuard } from './services/uhk-device-loaded.guard';
 import { RecoveryModeComponent } from './components/device';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 
@@ -32,8 +31,7 @@ const appRoutes: Routes = [
     },
     {
         path: 'loading',
-        component: LoadingDevicePageComponent,
-        canActivate: [UhkDeviceLoadedGuard]
+        component: LoadingDevicePageComponent
     },
     {
         path: 'recovery-device',
@@ -48,7 +46,13 @@ const appRoutes: Routes = [
             ...deviceRoutes,
             ...keymapRoutes,
             ...macroRoutes,
-            ...addOnRoutes,
+            ...addOnRoutes
+        ]
+    },
+    {
+        path: '',
+        component: MainPage,
+        children: [
             ...agentRoutes
         ]
     }

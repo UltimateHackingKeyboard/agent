@@ -1,16 +1,51 @@
 <ul class="menu--top">
     <li class="sidebar__level-0--item">
-        <div class="sidebar__level-0">
-            <i class="uhk-icon uhk-icon-usb-drive"></i>
-            <auto-grow-input [ngModel]="state.deviceName"
-                             [maxParentWidthPercent]="0.65"
-                             [css]="'side-menu-pane-title__name'"
-                             [disabled]="state.restoreUserConfiguration || state.updatingFirmware"
-                             (ngModelChange)="editDeviceName($event)"></auto-grow-input>
-            <fa-icon [icon]="this.sideMenuState.device.icon"
-                     class="chevron float-right"
-                     (click)="toggleMenuItem('device')"></fa-icon>
+        <div class="sidebar__level-0"
+             [ngSwitch]="state.deviceUiState"
+             [class.pb-0]="!deviceConfigurationLoaded">
+            <ng-container *ngSwitchDefault>
+                <i class="uhk-icon uhk-icon-usb-drive"></i>
+                <auto-grow-input [ngModel]="state.deviceName"
+                                 [maxParentWidthPercent]="0.65"
+                                 [css]="'side-menu-pane-title__name'"
+                                 [disabled]="state.restoreUserConfiguration || state.updatingFirmware"
+                                 (ngModelChange)="editDeviceName($event)"></auto-grow-input>
+                <fa-icon [icon]="this.sideMenuState.device.icon"
+                         class="chevron float-right"
+                         (click)="toggleMenuItem('device')"></fa-icon>
+            </ng-container>
 
+            <a *ngSwitchCase="'NotFound'"
+               routerLink="/detection"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none mb-0">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+                No device detected
+            </a>
+
+            <a *ngSwitchCase="'Loading'"
+               routerLink="/loading"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none">
+                <i class="uhk-icon uhk-icon-usb-drive"></i>
+                UHK 60 v1<span class="loading-config"></span>
+            </a>
+
+            <a *ngSwitchCase="'PermissionRequired'"
+               routerLink="/privilege"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                UHK 60 v1
+            </a>
+
+            <a *ngSwitchCase="'Recovery'"
+               routerLink="/recovery-device"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                UHK 60 v1
+            </a>
         </div>
         <ul [@toggler]="this.sideMenuState.device.animation">
             <li class="sidebar__level-1--item">
@@ -60,7 +95,8 @@
             <li class="sidebar__level-1--item"
                 *ngIf="!state.restoreUserConfiguration">
                 <div class="sidebar__level-1">
-                    <fa-icon [icon]="faKeyboard"></fa-icon> Keymaps
+                    <fa-icon [icon]="faKeyboard"></fa-icon>
+                    Keymaps
                     <fa-icon [icon]="this.sideMenuState.keymap.icon"
                              class="chevron float-right"
                              (click)="toggleMenuItem('keymap')"></fa-icon>
@@ -86,8 +122,8 @@
                     <fa-icon [icon]="faPlay"></fa-icon>
                     Macros
                     <button (click)="addMacro()"
-                       class="btn btn-sm btn-secondary float-right"
-                       [class.disabled]="state.updatingFirmware">
+                            class="btn btn-sm btn-secondary float-right"
+                            [class.disabled]="state.updatingFirmware">
                         <fa-icon [icon]="faPlus"></fa-icon>
                     </button>
                     <fa-icon [icon]="this.sideMenuState.macro.icon"
@@ -99,10 +135,10 @@
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/macro', macro.id]"
                                [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
-                               <span class="sidebar__macro_count badge badge-pill badge-secondary"
-                                     ngbTooltip="This is the number of times the macro is used across all keymaps."
-                                     placement="bottom"
-                                     container="body">{{ macro.usageCount }}</span>
+                            <span class="sidebar__macro_count badge badge-pill badge-secondary"
+                                  ngbTooltip="This is the number of times the macro is used across all keymaps."
+                                  placement="bottom"
+                                  container="body">{{ macro.usageCount }}</span>
                         </div>
                     </li>
                 </ul>

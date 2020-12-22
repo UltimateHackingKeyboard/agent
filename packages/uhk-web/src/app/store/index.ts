@@ -3,15 +3,15 @@ import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import {
     ApplicationSettings,
-    HardwareModules,
-    Keymap,
-    UserConfiguration,
-    PlayMacroAction,
-    UhkBuffer,
+    AppTheme,
+    AppThemeSelect,
     createMd5Hash,
     getMd5HashFromFilename,
-    AppTheme,
-    AppThemeSelect
+    HardwareModules,
+    Keymap,
+    PlayMacroAction,
+    UhkBuffer,
+    UserConfiguration
 } from 'uhk-common';
 
 import * as fromUserConfig from './reducers/user-configuration';
@@ -29,14 +29,14 @@ import { RouterStateUrl } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
 import {
-    SideMenuPageState,
+    DeviceUiStates,
     MacroMenuItem,
     OutOfSpaceWarningData,
+    SideMenuPageState,
     UhkProgressBarState,
     UserConfigHistoryComponentState
 } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
-import { OperatingSystem } from '../models/operating-system';
 
 // State interface for the application
 export interface AppState {
@@ -162,6 +162,7 @@ export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firm
 export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
+export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -258,17 +259,33 @@ export const getMacroMenuItems = (userConfiguration: UserConfiguration): MacroMe
         .sort((first: MacroMenuItem, second: MacroMenuItem) => first.name.localeCompare(second.name));
 };
 
+export const calculateDeviceUiState = createSelector(
+    deviceUiState,
+    deviceConfigurationLoaded,
+    (uiState, deviceConfigLoaded): DeviceUiStates | undefined => {
+        if (uiState) {
+            return uiState;
+        }
+
+        if (!deviceConfigLoaded) {
+            return DeviceUiStates.Loading;
+        }
+    }
+);
+
 export const getSideMenuPageState = createSelector(
     showAddonMenu,
     runningInElectron,
     updatingFirmware,
     getUserConfiguration,
     getRestoreUserConfiguration,
+    calculateDeviceUiState,
     (showAddonMenuValue: boolean,
      runningInElectronValue: boolean,
      updatingFirmwareValue: boolean,
      userConfiguration: UserConfiguration,
-     restoreUserConfiguration: boolean): SideMenuPageState => {
+     restoreUserConfiguration: boolean,
+     uiState): SideMenuPageState => {
         return {
             showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
@@ -276,7 +293,8 @@ export const getSideMenuPageState = createSelector(
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
             macros: getMacroMenuItems(userConfiguration),
-            restoreUserConfiguration
+            restoreUserConfiguration,
+            deviceUiState: uiState
         };
     }
 );

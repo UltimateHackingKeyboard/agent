@@ -1,5 +1,7 @@
 import { Keymap } from 'uhk-common';
+
 import { MacroMenuItem } from './macro-menu-item';
+import { DeviceUiStates } from './device-ui-states';
 
 export interface SideMenuPageState {
     showAddonMenu: boolean;
@@ -9,4 +11,5 @@ export interface SideMenuPageState {
     keymaps: Keymap[];
     macros: MacroMenuItem[];
     restoreUserConfiguration: boolean;
+    deviceUiState?: DeviceUiStates;
 }

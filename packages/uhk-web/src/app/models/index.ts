@@ -1,4 +1,5 @@
 export * from './apply-user-configuration-from-file-payload';
+export * from './device-ui-states';
 export * from './exchange-keys-action.model';
 export * from './last-edited-key';
 export * from './load-user-configuration-from-file-payload';

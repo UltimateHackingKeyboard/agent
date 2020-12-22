@@ -2,9 +2,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    Input,
+    OnChanges,
     OnDestroy,
     OnInit,
-    Renderer2
+    Renderer2,
+    SimpleChanges
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
@@ -12,6 +15,8 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import {
     faChevronDown,
     faChevronUp,
+    faExclamationTriangle,
+    faInfoCircle,
     faKeyboard,
     faPlay,
     faPlus,
@@ -62,7 +67,9 @@ interface SideMenuState {
     styleUrls: ['./side-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideMenuComponent implements OnInit, OnDestroy {
+export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
+    @Input() deviceConfigurationLoaded: boolean;
+
     state: SideMenuPageState;
     sideMenuState: SideMenuState = {
         configuration: {
@@ -90,6 +97,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             animation: 'active'
         }
     };
+    faExclamationTriangle = faExclamationTriangle;
+    faInfoCircle = faInfoCircle;
     faKeyboard = faKeyboard;
     faPlus = faPlus;
     faPlay = faPlay;
@@ -109,6 +118,14 @@ export class SideMenuComponent implements OnInit, OnDestroy {
             this.state = data;
             this.cdRef.markForCheck();
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.deviceConfigurationLoaded) {
+            this.sideMenuState.device.animation = changes.deviceConfigurationLoaded.currentValue
+                ? 'active'
+                : 'inactive';
+        }
     }
 
     ngOnDestroy(): void {
