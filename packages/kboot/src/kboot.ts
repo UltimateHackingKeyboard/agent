@@ -9,7 +9,8 @@ const logger = debug('kboot');
 const RESET_IGNORED_ERRORS = [
     'could not read data from device',
     'could not read from HID device',
-    'Cannot write to HID device'
+    'Cannot write to HID device',
+    'Cannot write to hid device'
 ];
 
 export class KBoot {
@@ -169,6 +170,8 @@ export class KBoot {
         try {
             response = await this.peripheral.sendCommand(command);
         } catch (error) {
+            logger(`Reset command error message: "${error.message}"`);
+
             if (RESET_IGNORED_ERRORS.includes(error.message)) {
                 logger('Ignoring missing response from reset command.');
 
