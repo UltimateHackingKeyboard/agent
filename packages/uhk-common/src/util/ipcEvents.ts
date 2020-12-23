@@ -30,6 +30,7 @@ export class Device {
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
     public static readonly recoveryDevice = 'device-recovery';
+    public static readonly recoveryDeviceReply = 'device-recovery-reply';
     public static readonly enableUsbStackTest = 'enable-usb-stack-test';
     public static readonly readConfigSizes = 'device-read-config-sizes';
     public static readonly readConfigSizesReply = 'device-read-config-sizes-reply';

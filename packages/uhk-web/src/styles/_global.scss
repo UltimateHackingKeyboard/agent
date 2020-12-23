@@ -155,7 +155,7 @@ pre {
 .copy-container {
     position: relative;
 
-    .fa-copy {
+    fa-icon {
         cursor: pointer;
         color: $color-copy-icon;
         position: absolute;
@@ -235,9 +235,21 @@ kbd {
     max-width: 350px;
 }
 
+.tooltip-system-theme .tooltip-inner {
+    width: 300px;
+    max-width: 300px;
+}
+
 mwl-confirmation-popover-window {
     .popover-header {
-        padding-top: 0.25rem;
+        padding-top: 0.5rem;
         padding-bottom: 0.25rem;
+        margin-top: 0;
+    }
+
+    .popover-body {
+        p {
+            margin-bottom: 8px;
+        }
     }
 }

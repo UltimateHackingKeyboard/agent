@@ -19,6 +19,7 @@ import {
     HideSaveToKeyboardButton,
     ReadConfigSizesAction,
     RecoveryDeviceAction,
+    RecoveryDeviceReplyAction,
     ResetUserConfigurationAction,
     RestoreUserConfigurationFromBackupSuccessAction,
     SaveConfigurationAction,
@@ -26,6 +27,7 @@ import {
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed,
     SetPrivilegeOnLinuxReplyAction,
+    StartConnectionPollerAction,
     UpdateFirmwareAction,
     UpdateFirmwareFailedAction,
     UpdateFirmwareReplyAction,
@@ -279,6 +281,28 @@ export class DeviceEffects {
         .pipe(
             ofType<RecoveryDeviceAction>(ActionTypes.RecoveryDevice),
             tap(() => this.deviceRendererService.recoveryDevice())
+        );
+
+    @Effect() recoveryDeviceReply$ = this.actions$
+        .pipe(
+            ofType<RecoveryDeviceReplyAction>(ActionTypes.RecoveryDeviceReply),
+            map(action => action.payload),
+            mergeMap((response: FirmwareUpgradeIpcResponse) => {
+
+                if (response.success) {
+                    return [
+                        new UpdateFirmwareSuccessAction(response.modules),
+                        new StartConnectionPollerAction()
+                    ];
+                }
+
+                return [
+                    new UpdateFirmwareFailedAction({
+                        error: response.error,
+                        modules: response.modules
+                    })
+                ];
+            })
         );
 
     @Effect({ dispatch: false }) enableUsbStackTest$ = this.actions$

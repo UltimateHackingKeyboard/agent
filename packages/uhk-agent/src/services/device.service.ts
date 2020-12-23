@@ -266,7 +266,7 @@ export class DeviceService {
         }
 
         await snooze(500);
-        event.sender.send(IpcEvents.device.updateFirmwareReply, response);
+        event.sender.send(IpcEvents.device.recoveryDeviceReply, response);
     }
 
     public async enableUsbStackTest(event: Electron.Event) {

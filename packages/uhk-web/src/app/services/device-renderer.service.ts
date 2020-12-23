@@ -15,6 +15,7 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ConnectionStateChangedAction,
     ReadConfigSizesReplyAction,
+    RecoveryDeviceReplyAction,
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction,
     UpdateFirmwareReplyAction
@@ -75,6 +76,10 @@ export class DeviceRendererService {
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.recoveryDeviceReply, (event: string, response: IpcResponse) => {
+            this.dispachStoreAction(new RecoveryDeviceReplyAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.setPrivilegeOnLinuxReply, (event: string, response: IpcResponse) => {
