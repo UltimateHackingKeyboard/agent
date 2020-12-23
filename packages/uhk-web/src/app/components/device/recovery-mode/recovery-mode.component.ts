@@ -5,7 +5,7 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons';
 
 import { XtermLog } from '../../../models/xterm-log';
 import { AppState, flashFirmwareButtonDisabled, updatingFirmware, xtermLog } from '../../../store';
-import { RecoveryDeviceAction, StartConnectionPollerAction } from '../../../store/actions/device';
+import { RecoveryDeviceAction } from '../../../store/actions/device';
 
 @Component({
     selector: 'device-recovery-mode',
@@ -34,9 +34,5 @@ export class RecoveryModeComponent implements OnInit {
 
     onRecoveryDevice(): void {
         this.store.dispatch(new RecoveryDeviceAction());
-    }
-
-    onClose(): void {
-        this.store.dispatch(new StartConnectionPollerAction());
     }
 }
