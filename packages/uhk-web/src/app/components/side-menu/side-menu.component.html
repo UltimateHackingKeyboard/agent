@@ -18,7 +18,7 @@
             <a *ngSwitchCase="'NotFound'"
                routerLink="/detection"
                [routerLinkActive]="['active']"
-               class="d-block text-decoration-none mb-0">
+               class="d-block text-decoration-none mb-0 navigation">
                 <fa-icon [icon]="faInfoCircle"></fa-icon>
                 No device detected
             </a>
@@ -26,7 +26,7 @@
             <a *ngSwitchCase="'Loading'"
                routerLink="/loading"
                [routerLinkActive]="['active']"
-               class="d-block text-decoration-none">
+               class="d-block text-decoration-none navigation">
                 <i class="uhk-icon uhk-icon-usb-drive"></i>
                 UHK 60 v1<span class="loading-config"></span>
             </a>
@@ -34,7 +34,7 @@
             <a *ngSwitchCase="'PermissionRequired'"
                routerLink="/privilege"
                [routerLinkActive]="['active']"
-               class="d-block text-decoration-none">
+               class="d-block text-decoration-none navigation">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                 UHK 60 v1
             </a>
@@ -42,7 +42,7 @@
             <a *ngSwitchCase="'Recovery'"
                routerLink="/recovery-device"
                [routerLinkActive]="['active']"
-               class="d-block text-decoration-none">
+               class="d-block text-decoration-none navigation">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                 UHK 60 v1
             </a>
