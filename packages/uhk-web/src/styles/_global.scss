@@ -235,6 +235,11 @@ kbd {
     max-width: 350px;
 }
 
+.tooltip-system-theme .tooltip-inner {
+    width: 300px;
+    max-width: 300px;
+}
+
 mwl-confirmation-popover-window {
     .popover-header {
         padding-top: 0.25rem;
