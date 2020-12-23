@@ -40,6 +40,15 @@ ul {
 .sidebar {
     &__level-0 {
         padding: $level-0-item-spacing;
+
+        a.navigation.active {
+            background-color: var(--color-sidemenu-active-bg);
+            color: var(--color-sidemenu-active-text);
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
     }
 
     &__level-1 {
