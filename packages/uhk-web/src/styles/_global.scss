@@ -242,7 +242,14 @@ kbd {
 
 mwl-confirmation-popover-window {
     .popover-header {
-        padding-top: 0.25rem;
+        padding-top: 0.5rem;
         padding-bottom: 0.25rem;
+        margin-top: 0;
+    }
+
+    .popover-body {
+        p {
+            margin-bottom: 8px;
+        }
     }
 }

@@ -35,6 +35,8 @@ $tooltip-color: #111;
 $tooltip-bg: color('white');
 $tooltip-arrow-color: color('white');
 $tooltip-border-color: #ccc;
+$popover-header-bg: $color-bg-light;
+$popover-arrow-color: $color-bg-light;
 
 :root,
 .theme-light {
