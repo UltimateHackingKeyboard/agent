@@ -39,7 +39,7 @@
     "@types/yargs": "15.0.5",
     "check-node-version": "4.0.3",
     "copy-webpack-plugin": "7.0.0",
-    "copyfiles": "2.1.1",
+    "copyfiles": "2.4.1",
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
     "decompress": "4.2.1",
