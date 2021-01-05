@@ -166,9 +166,6 @@ if (isSecondInstance) {
 
 // Quit when all windows are closed.
     app.on('window-all-closed', () => {
-        if (appUpdateService) {
-            appUpdateService.saveFirtsRun();
-        }
         app.exit();
     });
 
