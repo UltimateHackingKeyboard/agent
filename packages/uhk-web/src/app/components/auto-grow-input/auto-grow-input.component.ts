@@ -144,7 +144,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
         }
         maxWidth = Math.max(this.minWidth, maxWidth); // Clamp to ensure usable width
 
-        let textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text);
+        let textWidth = util.getContentWidth(window.getComputedStyle(htmlInput), text) + 1;
 
         if (this._inEditMode) {
             textWidth += util.getContentWidth(window.getComputedStyle(htmlInput), 'W') * 1.1;
