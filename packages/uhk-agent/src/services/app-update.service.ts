@@ -1,7 +1,6 @@
 import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { UpdateInfo, ProgressInfo } from 'builder-util-runtime';
-import settings from 'electron-settings';
 import isDev from 'electron-is-dev';
 import storage from 'electron-settings';
 
@@ -24,10 +23,6 @@ export class AppUpdateService extends MainServiceBase {
 
         this.initListeners();
         logService.misc('[AppUpdateService] init success');
-    }
-
-    saveFirtsRun() {
-        settings.set('firstRunVersion', this.app.getVersion());
     }
 
     private initListeners() {
@@ -103,17 +98,6 @@ export class AppUpdateService extends MainServiceBase {
             return;
         }
 
-        if (this.isFirstRun()) {
-            const msg = '[AppUpdateService] Application update is skipping at first run.';
-            this.logService.misc(msg);
-
-            if (this.sendAutoUpdateNotification) {
-                this.sendIpcToWindow(IpcEvents.autoUpdater.checkForUpdateNotAvailable, msg);
-            }
-
-            return;
-        }
-
         autoUpdater.allowPrerelease = allowPrerelease;
         autoUpdater.checkForUpdates()
             .then(() => {
@@ -122,17 +106,6 @@ export class AppUpdateService extends MainServiceBase {
             .catch(error => {
                 this.logService.error('[AppUpdateService] checkForUpdate error:', error);
             });
-    }
-
-    private isFirstRun() {
-        if (!settings.has('firstRunVersion')) {
-            return true;
-        }
-        const firstRunVersion = settings.get('firstRunVersion');
-        this.logService.misc(`firstRunVersion: ${firstRunVersion}`);
-        this.logService.misc(`package.version: ${this.app.getVersion()}`);
-
-        return firstRunVersion !== this.app.getVersion();
     }
 
     private checkForUpdateAtStartup() {
