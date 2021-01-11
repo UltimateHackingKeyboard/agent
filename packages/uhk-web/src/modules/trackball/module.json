@@ -1,7 +1,5 @@
 {
     "moduleId": 3,
-    "name": "trackball-staggered-right",
-    "description": "Right trackball",
     "slot": "right-module",
     "keyCount": 2,
     "pointerCount": 1

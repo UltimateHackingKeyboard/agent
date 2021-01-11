@@ -1,7 +1,5 @@
 {
     "moduleId": 1,
-    "name": "uhk60-left",
-    "description": "Left UHK60 keyboard half",
     "slot": "left-half",
     "keyCount": 35,
     "pointerCount": 0
