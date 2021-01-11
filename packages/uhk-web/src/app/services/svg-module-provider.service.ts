@@ -18,7 +18,7 @@ export class SvgModuleProviderService {
 
     getSvgSeparator(): SvgSeparator {
         if (!this.separator) {
-            this.separator = convertXmlToSvgSeparator(require('xml-loader!../../devices/uhk60-right/separator.xml').svg);
+            this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk60-right/separator.svg').svg);
         }
 
         return this.separator;
@@ -27,12 +27,12 @@ export class SvgModuleProviderService {
     private getLeftModule(layout = KeyboardLayout.ANSI): SvgModule {
         if (layout === KeyboardLayout.ISO) {
             if (!this.isoLeft) {
-                this.isoLeft = new SvgModule(require('xml-loader!../../modules/uhk60-left/layout-iso.xml').svg);
+                this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-iso.svg').svg);
             }
             return this.isoLeft;
         }
         if (!this.ansiLeft) {
-            this.ansiLeft = new SvgModule(require('xml-loader!../../modules/uhk60-left/layout-ansi.xml').svg);
+            this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-ansi.svg').svg);
         }
         return this.ansiLeft;
     }
@@ -40,7 +40,7 @@ export class SvgModuleProviderService {
     private getRightModule(): SvgModule {
 
         if (!this.right) {
-            this.right = new SvgModule(require('xml-loader!../../devices/uhk60-right/layout.xml').svg);
+            this.right = new SvgModule(require('!xml-loader!../../devices/uhk60-right/layout.svg').svg);
         }
         return this.right;
     }
