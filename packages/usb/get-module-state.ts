@@ -11,7 +11,8 @@ import Uhk, { errorHandler, yargs } from './src';
             .argv;
 
         const { operations } = Uhk(argv);
-        await operations.getModuleVersionInfo(ModuleSlotToId.leftHalf);
+        const info = await operations.getModuleVersionInfo(ModuleSlotToId.leftHalf);
+        console.log(info);
     } catch (error) {
         errorHandler(error);
     }
