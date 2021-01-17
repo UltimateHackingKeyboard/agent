@@ -21,7 +21,8 @@
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
            (capture)="onCapture(i, $event)" />
 
-    <svg:path [@fadeSeparator]="separatorAnimation"
+    <svg:path [@fadeSeparator]
+              *ngIf="halvesInfo.areHalvesMerged"
               [attr.d]="separator.d"
               [attr.style]="separatorStyle" />
 </svg>

@@ -7,4 +7,5 @@ export interface SvgKeyboardKey {
     height: number;
     width: number;
     fill: string;
+    transform?: string;
 }

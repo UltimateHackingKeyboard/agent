@@ -5,7 +5,7 @@
             [id]="key.id"
             [rx]="key.rx" [ry]="key.ry"
             [width]="key.width" [height]="key.height"
-            [attr.transform]="'translate(' + key.x + ' ' + key.y + ')'"
+            [attr.transform]="calcTransform(key)"
             [attr.fill]="key.fill"
             tabindex="-1"
             [keyAction]="keyActions[i]"

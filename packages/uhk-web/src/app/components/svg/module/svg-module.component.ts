@@ -76,4 +76,14 @@ export class SvgModuleComponent implements OnDestroy {
     keyboardKeysTrackBy(index: number, key: SvgKeyboardKey): string {
         return `${index}`;
     }
+
+    calcTransform(key: SvgKeyboardKey): string {
+        let transform = `translate(${key.x} ${key.y})`;
+
+        if (key.transform) {
+            transform += ` ${key.transform}`;
+        }
+
+        return transform;
+    }
 }

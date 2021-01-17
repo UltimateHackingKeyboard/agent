@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ConfigSizesInfo, HalvesInfo, HardwareModules } from 'uhk-common';
+import { ConfigSizesInfo, HalvesInfo, HardwareModules, LeftSlotModules, RightSlotModules } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
@@ -53,7 +53,12 @@ export const initialState: State = {
     restoringUserConfiguration: false,
     hasBackupUserConfiguration: false,
     restoreUserConfiguration: false,
-    halvesInfo: { isLeftHalfConnected: true, areHalvesMerged: false },
+    halvesInfo: {
+        isLeftHalfConnected: true,
+        leftModuleSlot: LeftSlotModules.KeyClusterLeft,
+        areHalvesMerged: false,
+        rightModuleSlot: RightSlotModules.TrackballRight
+    },
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 }
 };

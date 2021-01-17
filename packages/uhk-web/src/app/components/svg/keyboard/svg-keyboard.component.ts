@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { HalvesInfo, Module } from 'uhk-common';
+import { HalvesInfo, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
@@ -48,8 +48,14 @@ import { LastEditedKey } from '../../../models';
             state('invisible', style({
                 opacity: 0
             })),
-            transition('visible => invisible', animate('200ms')),
-            transition('invisible => visible', animate('200ms 500ms'))
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('200ms 500ms', style({ opacity: 1 }))
+            ]),
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('200ms', style({ opacity: 0 }))
+            ])
         ]),
         trigger('moveDescription', [
             state('down', style({
@@ -101,6 +107,7 @@ export class SvgKeyboardComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.halvesInfo) {
+            this.setModules();
             this.updateModuleAnimationStates();
         }
 
@@ -139,6 +146,14 @@ export class SvgKeyboardComponent {
             this.descriptionAnimation = 'down';
         } else {
             this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
+            if (this.halvesInfo.leftModuleSlot) {
+                this.moduleAnimationStates.push('rotateLeft');
+            }
+
+            if (this.halvesInfo.rightModuleSlot) {
+                this.moduleAnimationStates.push('rotateRight');
+            }
+
             this.separatorAnimation = 'invisible';
             this.descriptionAnimation = 'up';
         }
@@ -147,12 +162,19 @@ export class SvgKeyboardComponent {
             this.moduleVisibilityAnimationStates = ['visible', 'visible'];
         } else {
             this.moduleVisibilityAnimationStates = ['visible', 'invisible'];
+        }
 
+        if (this.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
+            this.moduleVisibilityAnimationStates.push('visible');
+        }
+
+        if (this.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
+            this.moduleVisibilityAnimationStates.push('visible');
         }
     }
 
     private setModules() {
-        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout);
+        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout, this.halvesInfo);
         this.separator = this.svgModuleProvider.getSvgSeparator();
         this.separatorStyle = this.sanitizer.bypassSecurityTrustStyle(this.separator.style);
     }
