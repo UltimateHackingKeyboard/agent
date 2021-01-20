@@ -1,4 +1,5 @@
 <svg:rect #svgRec
+          *ngIf="type === 'rec'"
           class="svg-rec"
           [class.active]="active"
           [id]="id"
@@ -17,7 +18,7 @@
         [attr.fill]="'#c00'"
     ></svg:circle>
 </ng-template>
-<ng-template [ngIf]="!recording">
+<ng-template [ngIf]="!recording && type === 'rec'">
     <svg:g [ngSwitch]="labelType"
            [attr.font-size]="19"
            [attr.font-family]="'Helvetica'"
@@ -72,3 +73,14 @@
         </svg>
     </svg:g>
 </ng-template>
+
+<svg:circle *ngIf="type === 'circle'"
+            [attr.cx]="cx"
+            [attr.cy]="cy"
+            [attr.r]="r"
+            [attr.fill]="fill" />
+
+<svg:path *ngIf="type === 'path'"
+          [attr.d]="d"
+          [attr.style]="style | safeStyle" />
+

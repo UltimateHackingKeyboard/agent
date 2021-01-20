@@ -1,18 +1,31 @@
-<svg:path *ngFor="let path of coverages" [attr.d]="path.$.d" [attr.style]="path.$.style | safeStyle" />
+<svg:path *ngFor="let path of coverages"
+          [attr.d]="path.d"
+          [attr.style]="path.style | safeStyle" />
+<svg:circle *ngFor="let circle of circles"
+            [attr.cx]="circle.cx"
+            [attr.cy]="circle.cy"
+            [attr.r]="circle.r"
+            [attr.style]="circle.style | safeStyle" />
+
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">
     <svg:g svg-keyboard-key
             *ngIf="key"
             [id]="key.id"
+            [type]="key.type"
             [rx]="key.rx" [ry]="key.ry"
             [width]="key.width" [height]="key.height"
             [attr.transform]="calcTransform(key)"
             [attr.fill]="key.fill"
             tabindex="-1"
-            [keyAction]="keyActions[i]"
+            [keyAction]="keyActions && keyActions[i]"
             [active]="selected && i == selectedKey.keyId"
             [capturingEnabled]="capturingEnabled"
             [macroMap]="macroMap"
             [blink]="lastEdited && lastEditedKeyId === key.id"
+            [d]="key.d"
+            [cx]="key.cx"
+            [cy]="key.cy"
+            [r]="key.r"
             (keyClick)="onKeyClick(i, $event)"
             (capture)="onCapture(i, $event)"
             (mouseenter)="onKeyHover(i, $event, true)"

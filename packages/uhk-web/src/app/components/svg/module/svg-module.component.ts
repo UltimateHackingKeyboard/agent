@@ -27,6 +27,7 @@ import { AppState, getMacroMap } from '../../../store';
 })
 export class SvgModuleComponent implements OnDestroy {
     @Input() coverages: any[];
+    @Input() circles: any[];
     @Input() keyboardKeys: SvgKeyboardKey[];
     @Input() keyActions: KeyAction[];
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
@@ -78,7 +79,11 @@ export class SvgModuleComponent implements OnDestroy {
     }
 
     calcTransform(key: SvgKeyboardKey): string {
-        let transform = `translate(${key.x} ${key.y})`;
+        let transform;
+
+        if (key.x && key.y) {
+            transform = `translate(${key.x} ${key.y})`;
+        }
 
         if (key.transform) {
             transform = `${key.transform} ${transform}`;

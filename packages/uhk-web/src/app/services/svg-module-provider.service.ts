@@ -28,19 +28,19 @@ export class SvgModuleProviderService {
         }
 
         // tslint:disable-next-line:switch-default
-        // switch (halvesInfo.rightModuleSlot) {
-        //     case RightSlotModules.TouchpadRight:
-        //         modules.push(this.getTouchPadRight());
-        //         break;
-        //
-        //     case RightSlotModules.TrackballRight:
-        //         modules.push(this.getTrackBallRight());
-        //         break;
-        //
-        //     case RightSlotModules.TrackpointRight:
-        //         modules.push(this.getTrackPointRight());
-        //         break;
-        // }
+        switch (halvesInfo.rightModuleSlot) {
+            case RightSlotModules.TouchpadRight:
+                modules.push(this.getTouchPadRight());
+                break;
+
+            case RightSlotModules.TrackballRight:
+                modules.push(this.getTrackBallRight());
+                break;
+
+            case RightSlotModules.TrackpointRight:
+                modules.push(this.getTrackPointRight());
+                break;
+        }
 
         return modules;
     }
