@@ -1,6 +1,6 @@
 export enum RightSlotModules {
-    NoModule= 'NoModule',
-    TrackballRight = 'TrackballRight',
-    TrackpointRight = 'TrackpointRight',
-    TouchpadRight = 'TouchpadRight'
+    NoModule= 0,
+    TrackballRight = 3,
+    TrackpointRight = 4,
+    TouchpadRight = 5
 }

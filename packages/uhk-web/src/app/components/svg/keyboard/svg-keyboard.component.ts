@@ -42,12 +42,6 @@ import { LastEditedKey } from '../../../models';
             transition('invisible => visible', animate(500))
         ]),
         trigger('fadeSeparator', [
-            state('visible', style({
-                opacity: 1
-            })),
-            state('invisible', style({
-                opacity: 0
-            })),
             transition(':enter', [
                 style({ opacity: 0 }),
                 animate('200ms 500ms', style({ opacity: 1 }))
@@ -64,8 +58,15 @@ import { LastEditedKey } from '../../../models';
             state('up', style({
                 'margin-top': '-6.5%'
             })),
+            state('up2', style({
+                'margin-top': '-2.5%'
+            })),
             transition('down => up', animate(500)),
-            transition('up => down', animate(500))
+            transition('down => up2', animate(500)),
+            transition('up => down', animate(500)),
+            transition('up => up2', animate(500)),
+            transition('up2 => down', animate(500)),
+            transition('up2 => up', animate(500))
         ])
     ]
 })
@@ -86,19 +87,19 @@ export class SvgKeyboardComponent {
 
     modules: SvgModule[];
     viewBox: string;
-    moduleAnimationStates: string[];
-    moduleVisibilityAnimationStates: string[];
+    modulesState: Record<number, {
+        visibility: 'visible' | 'invisible';
+        animation: 'merged' | 'rotateLeft' | 'rotateRight'
+    }>;
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
-    separatorAnimation = 'visible';
     descriptionAnimation = 'down';
 
     constructor(private svgModuleProvider: SvgModuleProviderService,
                 private sanitizer: DomSanitizer) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
-        this.moduleAnimationStates = [];
-        this.moduleVisibilityAnimationStates = [];
+        this.modulesState = {};
     }
 
     ngOnInit() {
@@ -141,35 +142,45 @@ export class SvgKeyboardComponent {
 
     private updateModuleAnimationStates() {
         if (this.halvesInfo.areHalvesMerged) {
-            this.moduleAnimationStates = ['merged', 'merged'];
-            this.separatorAnimation = 'visible';
+            this.modulesState = {
+                0: {
+                    animation: 'merged',
+                    visibility: 'visible'
+                },
+                1: {
+                    animation: 'merged',
+                    visibility: this.halvesInfo.isLeftHalfConnected ? 'visible' : 'invisible'
+                }
+            };
             this.descriptionAnimation = 'down';
         } else {
-            this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
-            if (this.halvesInfo.leftModuleSlot) {
-                this.moduleAnimationStates.push('rotateLeft');
-            }
-
-            if (this.halvesInfo.rightModuleSlot) {
-                this.moduleAnimationStates.push('rotateRight');
-            }
-
-            this.separatorAnimation = 'invisible';
+            this.modulesState = {
+                0: {
+                    animation: 'rotateRight',
+                    visibility: 'visible'
+                },
+                1: {
+                    animation: 'rotateLeft',
+                    visibility: this.halvesInfo.isLeftHalfConnected ? 'visible' : 'invisible'
+                }
+            };
             this.descriptionAnimation = 'up';
-        }
 
-        if (this.halvesInfo.isLeftHalfConnected) {
-            this.moduleVisibilityAnimationStates = ['visible', 'visible'];
-        } else {
-            this.moduleVisibilityAnimationStates = ['visible', 'invisible'];
-        }
+            if (this.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
+                this.modulesState[this.halvesInfo.rightModuleSlot] = {
+                    animation: 'rotateRight',
+                    visibility: 'visible'
+                };
+                this.descriptionAnimation = 'up2';
+            }
 
-        if (this.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
-            this.moduleVisibilityAnimationStates.push('visible');
-        }
-
-        if (this.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
-            this.moduleVisibilityAnimationStates.push('visible');
+            if (this.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
+                this.modulesState[this.halvesInfo.leftModuleSlot] = {
+                    animation: 'rotateLeft',
+                    visibility: 'visible'
+                };
+                this.descriptionAnimation = 'up2';
+            }
         }
     }
 

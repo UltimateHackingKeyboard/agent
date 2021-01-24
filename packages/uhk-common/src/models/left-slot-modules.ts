@@ -1,4 +1,4 @@
 export enum LeftSlotModules {
-    KeyClusterLeft = 'KeyClusterLeft',
-    NoModule = 'NoModule'
+    NoModule = 0,
+    KeyClusterLeft = 2
 }

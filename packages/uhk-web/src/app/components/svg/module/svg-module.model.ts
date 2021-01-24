@@ -6,6 +6,7 @@ export class SvgModule {
     coverages: any[] = [];
     keyboardKeys: SvgKeyboardKey[];
     attributes: any;
+    id: number;
 
     constructor(obj: { rect: any[], path: any[], $: Object, circle: any[] }) {
         this.keyboardKeys = [];
@@ -80,6 +81,7 @@ export class SvgModule {
         }
 
         this.attributes = obj.$;
+        this.id = parseInt(obj.$['data-module-id'], 10);
     }
 }
 
