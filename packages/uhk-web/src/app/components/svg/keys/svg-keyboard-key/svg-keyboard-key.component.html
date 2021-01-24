@@ -84,3 +84,29 @@
           [attr.d]="d"
           [attr.style]="style | safeStyle" />
 
+<svg:g *ngIf="type === 'g'">
+    <svg:path *ngFor="let path of elements.paths"
+              [attr.d]="path.d"
+              [attr.fill]="path.fill" />
+
+    <svg:rect *ngFor="let rect of elements.rects"
+              [attr.height]="rect.height"
+              [attr.width]="rect.width"
+              [attr.transform]="rect.transform"
+              [attr.style]="rect.style | safeStyle" />
+
+    <svg:g [ngSwitch]="labelType"
+           [attr.font-size]="19"
+           [attr.font-family]="'Helvetica'"
+           [attr.fill]="'white'">
+
+        <svg:g svg-one-line-text-key
+               [height]="elements.rects[0].height"
+               [width]="elements.rects[0].width"
+               [attr.transform]="elements.rects[0].transform"
+               [text]="'G'"
+               [secondaryText]="secondaryText">
+        </svg:g>
+
+    </svg:g>
+</svg:g>

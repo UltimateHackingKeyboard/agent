@@ -8,7 +8,7 @@ export class SvgModule {
     attributes: any;
     id: number;
 
-    constructor(obj: { rect: any[], path: any[], $: Object, circle: any[] }) {
+    constructor(obj: { rect: any[], path: any[], $: Object, circle?: any[], g?: any[] }) {
         this.keyboardKeys = [];
         if (obj.rect) {
             const keys = obj.rect.map(rect => rect.$);
@@ -24,7 +24,6 @@ export class SvgModule {
                     keys[i].fill = style.fill;
                     this.keyboardKeys[index] = keys[i];
                 }
-                // TODO: idSplit.length === 3
             }
         }
 
@@ -64,6 +63,7 @@ export class SvgModule {
                         const style = parseStyle(path.style);
 
                         this.keyboardKeys[index] = {
+                            ...this.keyboardKeys[index],
                             type: 'path',
                             id: path.id,
                             d: path.d,
@@ -78,6 +78,33 @@ export class SvgModule {
 
                 this.coverages.push(path);
             }
+        }
+
+        if (obj.g) {
+            obj.g.forEach(g => {
+                if (g.$.id) {
+                    const idSplit = g.$.id.split('-');
+                    const index = idSplit[1] - 1;
+                    this.keyboardKeys[index] = {
+                        type: 'g',
+                        id: g.$.id,
+                        transform: g.$.transform,
+                        elements: {
+                            paths: g.path.map(path => {
+                                path = path.$;
+                                const style = parseStyle(path.style);
+
+                                return {
+                                    id: path.id,
+                                    d: path.d,
+                                    fill: style.fill
+                                };
+                            }),
+                            rects: g.rect.map(r => r.$)
+                        }
+                    };
+                }
+            });
         }
 
         this.attributes = obj.$;

@@ -12,5 +12,6 @@ export interface SvgKeyboardKey {
     cx?: number;
     cy?: number;
     transform?: string;
-    type: 'circle' | 'path' | 'rec';
+    type: 'circle' | 'path' | 'rec' | 'g';
+    elements?: { paths?: Array<any>; rects?: Array<any> };
 }

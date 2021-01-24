@@ -7,6 +7,10 @@
     }
 }
 
+path:hover {
+    fill: var(--color-keyboard-key-hover);
+}
+
 .svg-rec {
     transition-timing-function: ease-out;
     transition: 0.2s;

@@ -79,12 +79,13 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() active: boolean;
     @Input() macroMap = new Map<number, Macro>();
     @Input() blink: boolean;
-    @Input() type: 'rec' | 'circle' | 'path';
+    @Input() type: 'rec' | 'circle' | 'path' | 'g';
     @Input() d: string;
     @Input() style: string;
     @Input() r: number;
     @Input() cx: number;
     @Input() cy: number;
+    @Input() elements: any;
 
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();

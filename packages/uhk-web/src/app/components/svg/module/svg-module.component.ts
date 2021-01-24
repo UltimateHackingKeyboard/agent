@@ -86,7 +86,11 @@ export class SvgModuleComponent implements OnDestroy {
         }
 
         if (key.transform) {
-            transform = `${key.transform} ${transform}`;
+            if (transform) {
+                transform = `${key.transform} ${transform}`;
+            } else {
+                transform = `${key.transform}`;
+            }
         }
 
         return transform;
