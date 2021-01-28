@@ -1,0 +1,38 @@
+name: Deploy GH Pages
+
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  deploy:
+    name: Deploy GitHup Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+            persist-credentials: false
+
+      - name: Use Node.js (.nvmrc)
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.18.3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Run Build Web
+        run: npm run build:web
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: packages/uhk-web/dist
+          CLEAN: true
