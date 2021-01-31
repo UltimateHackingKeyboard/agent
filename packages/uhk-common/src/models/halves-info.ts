@@ -7,3 +7,12 @@ export interface HalvesInfo {
     isLeftHalfConnected: boolean;
     rightModuleSlot: RightSlotModules;
 }
+
+export function getDefaultHalvesInfo(): HalvesInfo {
+    return {
+        isLeftHalfConnected: true,
+        leftModuleSlot: LeftSlotModules.KeyClusterLeft,
+        areHalvesMerged: false,
+        rightModuleSlot: RightSlotModules.TrackballRight
+    };
+}

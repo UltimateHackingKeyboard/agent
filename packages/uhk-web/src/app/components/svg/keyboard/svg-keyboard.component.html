@@ -11,7 +11,7 @@
            [keyboardKeys]="module.keyboardKeys"
            [capturingEnabled]="capturingEnabled"
            [attr.transform]="module.attributes.transform"
-           [keyActions]="moduleConfig[module.id]?.keyActions"
+           [keyActions]="getKeyActions(module.id)"
            [selectedKey]="selectedKey"
            [@split]="modulesState[module.id]?.animation"
            [@fadeKeyboard]="modulesState[module.id]?.visibility"

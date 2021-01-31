@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { HalvesInfo, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
+import { HalvesInfo, KeyAction, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
@@ -14,6 +14,7 @@ import {
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
 import { LastEditedKey } from '../../../models';
+import { findModuleById } from '../../../util';
 
 @Component({
     selector: 'svg-keyboard',
@@ -138,6 +139,20 @@ export class SvgKeyboardComponent {
             over,
             keyId
         });
+    }
+
+    getKeyActions(id: number): KeyAction[] {
+        if (!this.moduleConfig) {
+            return [];
+        }
+
+        const moduleConf = this.moduleConfig.find(findModuleById(id));
+
+        if (moduleConf) {
+            return  moduleConf.keyActions;
+        }
+
+        return [];
     }
 
     private updateModuleAnimationStates() {

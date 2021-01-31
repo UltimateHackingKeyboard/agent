@@ -1,13 +1,18 @@
 import {
+    getDefaultHalvesInfo,
+    HalvesInfo,
     KeyAction,
     KeyActionHelper,
     Keymap,
     KeystrokeAction,
     Layer,
+    LeftSlotModules,
     Macro,
     Module,
+    MODULES_DEFAULT_CONFIGS,
     NoneAction,
     PlayMacroAction,
+    RightSlotModules,
     SwitchKeymapAction,
     SwitchLayerAction,
     UserConfiguration
@@ -16,21 +21,24 @@ import * as KeymapActions from '../actions/keymap';
 import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
 import * as DeviceActions from '../actions/device';
-import { isValidName } from '../../util';
+import { findModuleById, isValidName } from '../../util';
 import { defaultLastEditKey, ExchangeKey, LastEditedKey } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 import { SaveKeyAction } from '../actions/keymap';
+import * as Device from '../actions/device';
 
 export interface State {
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
     lastEditedKey: LastEditedKey;
+    halvesInfo: HalvesInfo;
 }
 
 export const initialState: State = {
     userConfiguration: new UserConfiguration(),
-    lastEditedKey: defaultLastEditKey()
+    lastEditedKey: defaultLastEditKey(),
+    halvesInfo: getDefaultHalvesInfo()
 };
 
 export function reducer(
@@ -52,6 +60,16 @@ export function reducer(
 
             return assignUserConfiguration(state, userConfig);
         }
+
+        case Device.ActionTypes.ConnectionStateChanged: {
+            const newState: State = {
+                ...state,
+                halvesInfo: (action as DeviceActions.ConnectionStateChangedAction).payload.halvesInfo
+            };
+
+            return assignUserConfiguration(state, state.userConfiguration);
+        }
+
         case DeviceActions.ActionTypes.ResetPcMouseSpeedSettings:
             return {
                 ...state,
@@ -664,9 +682,10 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
 
 function setKeyActionToLayer(layer: Layer, moduleIndex: number, keyIndex: number, newKeyAction: KeyAction): Layer {
     const newLayer: Layer = Object.assign(new Layer, layer);
-    const newModule: Module = Object.assign(new Module(), newLayer.modules[moduleIndex]);
+    const newModule: Module = Object.assign(new Module(), newLayer.modules.find(findModuleById(moduleIndex)));
     newLayer.modules = newLayer.modules.slice();
-    newLayer.modules[moduleIndex] = newModule;
+    const moduleIndexInArray = newLayer.modules.findIndex(findModuleById(moduleIndex));
+    newLayer.modules[moduleIndexInArray] = newModule;
 
     newModule.keyActions = newModule.keyActions.slice();
     newModule.keyActions[keyIndex] = newKeyAction;
@@ -675,12 +694,20 @@ function setKeyActionToLayer(layer: Layer, moduleIndex: number, keyIndex: number
 }
 
 function assignUserConfiguration(state: State, userConfig: UserConfiguration): State {
-    const userConfiguration = Object.assign(new UserConfiguration(), {
+    let userConfiguration = Object.assign(new UserConfiguration(), {
         ...state.userConfiguration,
         ...userConfig,
         keymaps: [...userConfig.keymaps].sort((first: Keymap, second: Keymap) => first.name.localeCompare(second.name)),
         macros: [...userConfig.macros].sort((first: Macro, second: Macro) => first.name.localeCompare(second.name))
     });
+
+    if (state.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
+        userConfiguration = addMissingModuleConfigs(userConfiguration, state.halvesInfo.leftModuleSlot);
+    }
+
+    if (state.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
+        userConfiguration = addMissingModuleConfigs(userConfiguration, state.halvesInfo.rightModuleSlot);
+    }
 
     return {
         ...state,
@@ -699,7 +726,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
     const newKeymap: Keymap = payload.keymap;
     const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
     const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
-    const oldKeyAction = newKeymap.layers[layerIndex].modules[moduleIndex].keyActions[keyIndex];
+    const oldKeyAction = newKeymap.layers[layerIndex].modules.find(findModuleById(moduleIndex)).keyActions[keyIndex];
     const oldKeyIsSwitchLayerAction = oldKeyAction instanceof SwitchLayerAction;
 
     const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), userConfig);
@@ -720,7 +747,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
                         if (index === 0 || index - 1 === (newKeyAction as SwitchLayerAction).layer) {
                             return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                         } else {
-                            const actionOnLayer = layer.modules[moduleIndex].keyActions[keyIndex];
+                            const actionOnLayer = layer.modules.find(findModuleById(moduleIndex)).keyActions[keyIndex];
                             if (actionOnLayer && actionOnLayer instanceof SwitchLayerAction) {
                                 return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                             }
@@ -746,6 +773,37 @@ function getKeyActionByExchangeKey(userConfig: UserConfiguration, exchangeKey: E
     return userConfig
         .getKeymap(exchangeKey.keymapAbbr)
         .layers[exchangeKey.layerId]
-        .modules[exchangeKey.moduleId]
+        .modules.find(findModuleById(exchangeKey.moduleId))
         .keyActions[exchangeKey.keyId];
+}
+
+function addMissingModuleConfigs(
+    userConfig: UserConfiguration,
+    moduleSlot: LeftSlotModules | RightSlotModules
+): UserConfiguration {
+    const newConfig = Object.assign(new UserConfiguration(), userConfig);
+
+    newConfig.keymaps = newConfig.keymaps.map(keymap => {
+        keymap = new Keymap(keymap);
+        keymap.layers = keymap.layers.map(layer => {
+            const moduleIndex = layer.modules.findIndex(findModuleById(moduleSlot));
+
+            if (moduleIndex === -1) {
+                layer = new Layer(layer);
+
+                layer.modules.push(new Module(MODULES_DEFAULT_CONFIGS[moduleSlot]));
+            } else if (!layer.modules[moduleIndex].keyActions || layer.modules[moduleIndex].keyActions.length === 0) {
+
+                layer = new Layer(layer);
+
+                layer.modules[moduleIndex] = new Module(MODULES_DEFAULT_CONFIGS[moduleSlot]);
+            }
+
+            return layer;
+        });
+
+        return keymap;
+    });
+
+    return newConfig;
 }
