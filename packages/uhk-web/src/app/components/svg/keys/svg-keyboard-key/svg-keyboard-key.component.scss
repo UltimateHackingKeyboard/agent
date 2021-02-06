@@ -4,11 +4,12 @@
 
     &:hover {
         fill: var(--color-keyboard-key-hover);
-    }
-}
 
-path:hover {
-    fill: var(--color-keyboard-key-hover);
+        circle,
+        path {
+            fill: var(--color-keyboard-key-hover);
+        }
+    }
 }
 
 .svg-rec {

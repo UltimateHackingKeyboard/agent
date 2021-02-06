@@ -3,11 +3,14 @@
 <rect id="key-1" x="34.921" y="877.929" ry="3.511" width="63.015" height="63.015" style="fill:#333"/>
 <rect id="key-2" x="1.189" y="944.447" ry="3.511" width="63.015" height="63.015" style="fill:#333"/>
 <rect id="key-3" transform="rotate(30)" height="63.015" width="63.015" ry="3.511" y="776.364" x="566.368" style="fill:#333"/>
-<g id="key-4" transform="matrix(1, 0, 0, 1, 1, 1011)">
+<g id="key-4" transform="translate(1, 1011)">
     <path id="key-4-path" d="M 76.792 11.204 C 77.776 9.501 77.193 7.324 75.489 6.34 L 65.023 0.298 C 64.482 -0.014 63.868 -0.179 63.243 -0.179 L 3.276 -0.179 C 1.31 -0.179 -0.284 1.415 -0.284 3.381 L -0.284 38.539 C -0.283 40.106 0.742 41.488 2.24 41.944 L 47.852 55.82 C 49.437 56.303 51.145 55.629 51.972 54.194 L 58.262 43.299 C 50.134 37.032 51.839 24.316 61.331 20.411 C 64.581 19.074 68.227 19.074 71.476 20.41 Z" style="fill:#333"></path>
     <rect id="key-4-print" ry="0" height="42.254" width="53.355" style="fill:none;stroke:none"></rect>
 </g>
-<circle id="key-5" r="9.333" cy="1044.107" cx="67.121" style="fill:#333"/>
+<g id="key-5" transform="translate(57.794, 1034.774)">
+    <circle id="key-5-circle" r="9.333" cy="9.333" cx="9.333" style="fill:#333"/>
+    <rect id="key-5-print" ry="0" height="18.666" width="18.66" style="fill:none;stroke:none"></rect>
+</g>
 <g id="key-6" transform="translate(89, 1027)">
     <path id="key-6-path" d="M 33.878 56.609 L 49.096 30.562 C 50.092 28.858 49.511 26.669 47.802 25.683 L -4.281 -4.387 C -5.984 -5.37 -8.161 -4.787 -9.144 -3.084 L -14.459 6.123 C -6.329 12.387 -8.028 25.104 -17.519 29.013 C -20.771 30.352 -24.421 30.352 -27.674 29.013 L -32.725 37.761 C -33.871 39.745 -32.87 42.28 -30.678 42.947 L 25.3 59.975 C 26.068 60.208 26.892 60.175 27.638 59.882 L 32.106 58.126 C 32.85 57.833 33.475 57.299 33.878 56.609 Z" style="fill:#333"></path>
     <rect id="key-6-print" height="40.621" width="55.718" style="fill:none;stroke:none" transform="rotate(30)"></rect>

@@ -26,7 +26,10 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 keyActionType: 'mouse',
                 mouseAction: 'leftClick'
             }, // Left micro button
-            null, // Ball
+            {
+                keyActionType: 'mouse',
+                mouseAction: 'middleClick'
+            }, // Ball
             {
                 keyActionType: 'mouse',
                 mouseAction: 'rightClick'
@@ -43,8 +46,7 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
             {
                 keyActionType: 'mouse',
                 mouseAction: 'rightClick'
-            }, // Right micro button
-            null // Ball
+            } // Right micro button
         ]
     }, [], 4),
     [RightSlotModules.TrackpointRight]: new Module().fromJsonObject({
@@ -57,8 +59,12 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
             {
                 keyActionType: 'mouse',
                 mouseAction: 'rightClick'
-            }, // Right micro button
-            null // Ball
+            } // Right micro button
+        ]
+    }, [], 4),
+    [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
+        id: RightSlotModules.TouchpadRight,
+        keyActions: [
         ]
     }, [], 4)
 };

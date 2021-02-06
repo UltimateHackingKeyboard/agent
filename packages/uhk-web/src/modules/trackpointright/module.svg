@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1052.362" width="744.094" data-module-id="4">
-<path id="key-1" d="M-117.006 1043.423v-32.413h55.863v41.082h-47.194a3.552 3.552 0 01-2.512-1.04l-5.117-5.117a3.552 3.552 0 01-1.04-2.512z" style="fill:#333"/>
-<path id="key-2" d="M-57.604 1052.092v-41.082h55.863v37.53a3.552 3.552 0 01-3.552 3.552z" style="fill:#333"/>
-<circle id="key-3" class="pointer" r="14.353" cx="-59.374" cy="977.357" style="fill:#333"/>
+<g id="key-1" transform="translate(-116, 1011)">
+    <path id="key-1-path" d="M -0.863 32.413 L -0.863 0 L 55 0 L 55 41.082 L 7.806 41.082 C 6.864 41.083 5.96 40.708 5.294 40.042 L 0.177 34.925 C -0.489 34.259 -0.863 33.356 -0.863 32.413 Z" style="fill:#333"></path>
+    <rect id="key-1-print" height="40" width="55" style="fill:none;stroke:none"></rect>
+</g>
+<g id="key-2" transform="translate(-56, 1011)">
+    <path id="key-2-path" d="M -0.863 41.082 L -0.863 0 L 55 0 L 55 37.53 C 55 39.492 53.41 41.082 51.448 41.082 Z" style="fill:#333"></path>
+    <rect id="key-2-print" height="40" width="55" style="fill:none;stroke:none"></rect>
+</g>
+<circle class="pointer" r="14.353" cx="-59.374" cy="977.357" style="fill:#333"/>
 <path class="module-case" d="M-67.324 858.35c-.943 0-1.848.374-2.514 1.04l-46.129 46.128a3.551 3.551 0 00-1.039 2.511v99.428H-1.74v-62.96a3.55 3.55 0 013.55-3.554h26.338a3.55 3.55 0 003.551-3.55v-55.91a3.55 3.55 0 00-3.55-3.553h-26a3.552 3.552 0 01-3.553-3.551v-12.477a3.552 3.552 0 00-3.553-3.552h-62.367zm7.951 101.09a17.918 17.918 0 0117.918 17.917 17.918 17.918 0 01-17.918 17.918 17.918 17.918 0 01-17.918-17.918 17.918 17.918 0 0117.918-17.918z" style="fill:#333"/>
 </svg>

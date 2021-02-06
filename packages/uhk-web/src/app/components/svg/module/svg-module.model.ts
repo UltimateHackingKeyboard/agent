@@ -28,27 +28,7 @@ export class SvgModule {
         }
 
         if (obj.circle) {
-            const keys = obj.circle.map(circle => circle.$);
-            for (let i = 0; i < keys.length; ++i) {
-                const circle = keys[i];
-                if (circle.id) {
-                    const index = keys[i].id.slice(4) - 1; // remove 'key-' then switch to index from 0
-                    const style = parseStyle(keys[i].style);
-                    keys[i].fill = style.fill;
-                    this.keyboardKeys[index] = {
-                        type: 'circle',
-                        id: circle.id,
-                        r: +circle.r,
-                        cx: +circle.cx,
-                        cy: +circle.cy,
-                        fill: style.fill
-                    };
-
-                    continue;
-                }
-
-                this.circles.push(circle);
-            }
+            this.circles = obj.circle.map(circle => circle.$);
         }
 
         if (obj.path) {
@@ -85,24 +65,54 @@ export class SvgModule {
                 if (g.$.id) {
                     const idSplit = g.$.id.split('-');
                     const index = idSplit[1] - 1;
-                    this.keyboardKeys[index] = {
+
+                    const key: SvgKeyboardKey = {
                         type: 'g',
                         id: g.$.id,
                         transform: g.$.transform,
                         elements: {
-                            paths: g.path.map(path => {
-                                path = path.$;
-                                const style = parseStyle(path.style);
-
-                                return {
-                                    id: path.id,
-                                    d: path.d,
-                                    fill: style.fill
-                                };
-                            }),
-                            rects: g.rect.map(r => r.$)
+                            paths: [],
+                            circles: []
                         }
                     };
+
+                    if (g.path) {
+                        key.elements.paths = g.path.map(path => {
+                            path = path.$;
+                            const style = parseStyle(path.style);
+
+                            return {
+                                id: path.id,
+                                d: path.d,
+                                fill: style.fill
+                            };
+                        });
+                    }
+
+                    if (g.circle) {
+                        key.elements.circles = g.circle.map(circle => {
+                            circle = circle.$;
+                            const style = parseStyle(circle.style);
+
+                            return {
+                                id: circle.id,
+                                r: +circle.r,
+                                cx: +circle.cx,
+                                cy: +circle.cy,
+                                fill: style.fill
+                            };
+                        });
+                    }
+
+                    if (g.rect) {
+                        const rect = g.rect.find(r => r.$.id.endsWith('print'));
+                        if (rect) {
+                            key.height = +rect.$.height;
+                            key.width = +rect.$.width;
+                            key.textTransform = rect.$.transform;
+                        }
+                    }
+                    this.keyboardKeys[index] = key;
                 }
             });
         }

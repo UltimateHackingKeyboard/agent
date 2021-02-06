@@ -67,7 +67,7 @@ export function reducer(
                 halvesInfo: (action as DeviceActions.ConnectionStateChangedAction).payload.halvesInfo
             };
 
-            return assignUserConfiguration(state, state.userConfiguration);
+            return assignUserConfiguration(newState, state.userConfiguration);
         }
 
         case DeviceActions.ActionTypes.ResetPcMouseSpeedSettings:

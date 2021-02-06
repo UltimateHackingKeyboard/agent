@@ -1,8 +1,8 @@
 export interface SvgKeyboardKey {
     d?: string;
     id: string;
-    x?: string;
-    y?: string;
+    x?: string | number;
+    y?: string | number;
     rx?: string;
     ry?: string;
     height?: number;
@@ -13,5 +13,6 @@ export interface SvgKeyboardKey {
     cy?: number;
     transform?: string;
     type: 'circle' | 'path' | 'rec' | 'g';
-    elements?: { paths?: Array<any>; rects?: Array<any> };
+    textTransform?: string;
+    elements?: { paths?: Array<any>, circles?: Array<any> };
 }

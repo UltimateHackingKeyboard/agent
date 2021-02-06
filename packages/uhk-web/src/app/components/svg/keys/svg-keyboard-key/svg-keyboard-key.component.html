@@ -8,6 +8,30 @@
           [attr.height]="svgKey.height"
           [attr.width]="svgKey.width"
 />
+
+<svg:circle *ngIf="svgKey.type === 'circle'"
+            [attr.cx]="svgKey.cx"
+            [attr.cy]="svgKey.cy"
+            [attr.r]="svgKey.r"
+            [attr.fill]="svgKey.fill" />
+
+<svg:path *ngIf="svgKey.type === 'path'"
+          [attr.d]="svgKey.d"
+          [attr.style]="svgKey.style | safeStyle" />
+
+<svg:g *ngIf="svgKey.type === 'g'">
+    <svg:path *ngFor="let path of svgKey.elements.paths"
+              [attr.d]="path.d"
+              [attr.fill]="path.fill" />
+
+    <svg:circle *ngFor="let circle of svgKey.elements.circles"
+                [attr.cx]="circle.cx"
+                [attr.cy]="circle.cy"
+                [attr.r]="circle.r"
+                [attr.fill]="circle.fill" />
+
+</svg:g>
+
 <ng-template [ngIf]="recording">
     <svg:circle
         [@recording]="recordAnimation"
@@ -18,11 +42,13 @@
         [attr.fill]="'#c00'"
     ></svg:circle>
 </ng-template>
-<ng-template [ngIf]="!recording && svgKey.type === 'rec'">
+<ng-template [ngIf]="!recording && svgKey.width">
     <svg:g [ngSwitch]="labelType"
            [attr.font-size]="19"
            [attr.font-family]="'Helvetica'"
-           [attr.fill]="'white'">
+           [attr.fill]="'white'"
+           [attr.transform]="svgKey.textTransform"
+    >
         <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
                [height]="svgKey.height"
                [width]="svgKey.width"
@@ -73,40 +99,3 @@
         </svg>
     </svg:g>
 </ng-template>
-
-<svg:circle *ngIf="svgKey.type === 'circle'"
-            [attr.cx]="svgKey.cx"
-            [attr.cy]="svgKey.cy"
-            [attr.r]="svgKey.r"
-            [attr.fill]="svgKey.fill" />
-
-<svg:path *ngIf="svgKey.type === 'path'"
-          [attr.d]="svgKey.d"
-          [attr.style]="svgKey.style | safeStyle" />
-
-<svg:g *ngIf="svgKey.type === 'g'">
-    <svg:path *ngFor="let path of svgKey.elements.paths"
-              [attr.d]="path.d"
-              [attr.fill]="path.fill" />
-
-    <svg:rect *ngFor="let rect of svgKey.elements.rects"
-              [attr.height]="rect.height"
-              [attr.width]="rect.width"
-              [attr.transform]="rect.transform"
-              [attr.style]="rect.style | safeStyle" />
-
-    <svg:g [ngSwitch]="labelType"
-           [attr.font-size]="19"
-           [attr.font-family]="'Helvetica'"
-           [attr.fill]="'white'">
-
-        <svg:g svg-one-line-text-key
-               [height]="svgKey.elements.rects[0].height"
-               [width]="svgKey.elements.rects[0].width"
-               [attr.transform]="svgKey.elements.rects[0].transform"
-               [text]="'G'"
-               [secondaryText]="secondaryText">
-        </svg:g>
-
-    </svg:g>
-</svg:g>
