@@ -1,95 +1,95 @@
 <svg:rect #svgRec
-          *ngIf="type === 'rec'"
+          *ngIf="svgKey.type === 'rec'"
           class="svg-rec"
           [class.active]="active"
-          [id]="id"
-          [attr.rx]="rx"
-          [attr.ry]="ry"
-          [attr.height]="height"
-          [attr.width]="width"
+          [id]="svgKey.id"
+          [attr.rx]="svgKey.rx"
+          [attr.ry]="svgKey.ry"
+          [attr.height]="svgKey.height"
+          [attr.width]="svgKey.width"
 />
 <ng-template [ngIf]="recording">
     <svg:circle
         [@recording]="recordAnimation"
         (@recording.done)="onRecordingAnimationDone()"
-        [attr.cx]="(width / 2)"
-        [attr.cy]="(height / 2)"
+        [attr.cx]="(svgKey.width / 2)"
+        [attr.cy]="(svgKey.height / 2)"
         [attr.r]="10"
         [attr.fill]="'#c00'"
     ></svg:circle>
 </ng-template>
-<ng-template [ngIf]="!recording && type === 'rec'">
+<ng-template [ngIf]="!recording && svgKey.type === 'rec'">
     <svg:g [ngSwitch]="labelType"
            [attr.font-size]="19"
            [attr.font-family]="'Helvetica'"
            [attr.fill]="'white'">
         <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [keystrokeAction]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [text]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [texts]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-text-icon-key *ngSwitchCase="enumLabelTypes.TextIcon"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [text]="labelSource.text"
                [icon]="labelSource.icon"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-icon-text-key *ngSwitchCase="enumLabelTypes.IconText"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [icon]="labelSource.icon"
                [text]="labelSource.text"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-single-icon-key *ngSwitchCase="enumLabelTypes.SingleIcon"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [icon]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-switch-keymap-key *ngSwitchCase="enumLabelTypes.SwitchKeymap"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [abbreviation]="labelSource">
         </svg:g>
         <svg *ngSwitchCase="enumLabelTypes.MouseKey" [attr.viewBox]="'0 0 100 100'"
-             [attr.width]="width"
-             [attr.height]="height">
+             [attr.width]="svgKey.width"
+             [attr.height]="svgKey.height">
             <svg:g svg-mouse-key [mouseAction]="labelSource"></svg:g>
         </svg>
     </svg:g>
 </ng-template>
 
-<svg:circle *ngIf="type === 'circle'"
-            [attr.cx]="cx"
-            [attr.cy]="cy"
-            [attr.r]="r"
-            [attr.fill]="fill" />
+<svg:circle *ngIf="svgKey.type === 'circle'"
+            [attr.cx]="svgKey.cx"
+            [attr.cy]="svgKey.cy"
+            [attr.r]="svgKey.r"
+            [attr.fill]="svgKey.fill" />
 
-<svg:path *ngIf="type === 'path'"
-          [attr.d]="d"
-          [attr.style]="style | safeStyle" />
+<svg:path *ngIf="svgKey.type === 'path'"
+          [attr.d]="svgKey.d"
+          [attr.style]="svgKey.style | safeStyle" />
 
-<svg:g *ngIf="type === 'g'">
-    <svg:path *ngFor="let path of elements.paths"
+<svg:g *ngIf="svgKey.type === 'g'">
+    <svg:path *ngFor="let path of svgKey.elements.paths"
               [attr.d]="path.d"
               [attr.fill]="path.fill" />
 
-    <svg:rect *ngFor="let rect of elements.rects"
+    <svg:rect *ngFor="let rect of svgKey.elements.rects"
               [attr.height]="rect.height"
               [attr.width]="rect.width"
               [attr.transform]="rect.transform"
@@ -101,9 +101,9 @@
            [attr.fill]="'white'">
 
         <svg:g svg-one-line-text-key
-               [height]="elements.rects[0].height"
-               [width]="elements.rects[0].width"
-               [attr.transform]="elements.rects[0].transform"
+               [height]="svgKey.elements.rects[0].height"
+               [width]="svgKey.elements.rects[0].width"
+               [attr.transform]="svgKey.elements.rects[0].transform"
                [text]="'G'"
                [secondaryText]="secondaryText">
         </svg:g>

@@ -10,10 +10,7 @@
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">
     <svg:g svg-keyboard-key
             *ngIf="key"
-            [id]="key.id"
-            [type]="key.type"
-            [rx]="key.rx" [ry]="key.ry"
-            [width]="key.width" [height]="key.height"
+            [svgKey]="key"
             [attr.transform]="calcTransform(key)"
             [attr.fill]="key.fill"
             tabindex="-1"
@@ -22,11 +19,6 @@
             [capturingEnabled]="capturingEnabled"
             [macroMap]="macroMap"
             [blink]="lastEdited && lastEditedKeyId === key.id"
-            [d]="key.d"
-            [cx]="key.cx"
-            [cy]="key.cy"
-            [r]="key.r"
-            [elements]="key.elements"
             (keyClick)="onKeyClick(i, $event)"
             (capture)="onCapture(i, $event)"
             (mouseenter)="onKeyHover(i, $event, true)"

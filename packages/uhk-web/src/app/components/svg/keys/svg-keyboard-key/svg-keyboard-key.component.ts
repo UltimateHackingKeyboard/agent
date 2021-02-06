@@ -39,6 +39,7 @@ import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
+import { SvgKeyboardKey } from './svg-keyboard-key.model';
 
 enum LabelTypes {
     KeystrokeKey,
@@ -69,23 +70,12 @@ enum LabelTypes {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
-    @Input() id: string;
-    @Input() rx: string;
-    @Input() ry: string;
-    @Input() height: number;
-    @Input() width: number;
     @Input() keyAction: KeyAction;
+    @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
     @Input() active: boolean;
     @Input() macroMap = new Map<number, Macro>();
     @Input() blink: boolean;
-    @Input() type: 'rec' | 'circle' | 'path' | 'g';
-    @Input() d: string;
-    @Input() style: string;
-    @Input() r: number;
-    @Input() cx: number;
-    @Input() cy: number;
-    @Input() elements: any;
 
     @Output() keyClick = new EventEmitter<SvgKeyClickEvent>();
     @Output() capture = new EventEmitter<SvgKeyCaptureEvent>();
@@ -134,7 +124,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
         if ((e.which === 0 || e.button === 0)) {
             this.dragAndDropService.leftButtonDown({
-                keyId: this.id,
+                keyId: this.svgKey.id,
                 element: this.element.nativeElement,
                 event: e
             });
