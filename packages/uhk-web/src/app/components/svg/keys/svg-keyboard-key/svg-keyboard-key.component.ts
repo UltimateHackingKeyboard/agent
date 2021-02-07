@@ -256,7 +256,23 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             return;
         }
 
-        if (this.keyAction instanceof KeystrokeAction) {
+        if (this.svgKey.width < 20) {
+            if (this.keyAction instanceof KeystrokeAction) {
+               if (!this.keyAction.hasActiveModifier()
+                   && !this.keyAction.hasSecondaryRoleAction()
+                   && this.keyAction.hasScancode()) {
+                   const text = this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type);
+                   if (text.length === 1) {
+                       this.labelSource = text;
+                   }
+               }
+            }
+
+            if (this.labelSource === undefined) {
+                this.labelSource = '...';
+            }
+        }
+        else if (this.keyAction instanceof KeystrokeAction) {
             const keyAction: KeystrokeAction = this.keyAction as KeystrokeAction;
             let newLabelSource: string[];
             this.secondaryText = this.mapper.getSecondaryRoleText(keyAction.secondaryRoleAction);

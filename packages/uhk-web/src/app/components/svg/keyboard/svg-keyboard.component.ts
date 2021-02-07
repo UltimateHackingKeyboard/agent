@@ -229,8 +229,8 @@ export class SvgKeyboardComponent implements AfterViewInit {
                     animationTime: this.fadeAnimationTime(),
                     cssClasses: {
                         'module-merged': false,
-                        'module-rotate-left': false,
-                        'module-rotate-right': true
+                        'module-rotate-left': true,
+                        'module-rotate-right': false
                     }
                 };
                 this.descriptionAnimation = 'up2';
