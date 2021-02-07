@@ -5,6 +5,7 @@
      width="100%">
     <svg:g svg-module
            *ngFor="let module of modules; trackBy:trackByModuleFn"
+           [class]="modulesState[module.id]?.cssClasses"
            [attr.moduleId]="module.id"
            [coverages]="module.coverages"
            [circles]="module.circles"
@@ -13,8 +14,7 @@
            [attr.transform]="module.attributes.transform"
            [keyActions]="getKeyActions(module.id)"
            [selectedKey]="selectedKey"
-           [@split]="modulesState[module.id]?.animation"
-           [@fadeKeyboard]="modulesState[module.id]?.visibility"
+           [@fadeKeyboard]="{value:'', params: { animationTime: modulesState[module.id].animationTime } }"
            [selected]="selectedKey?.moduleId === module.id"
            [lastEdited]="lastEditedKey?.moduleId === module.id"
            [lastEditedKeyId]="lastEditedKey?.key"

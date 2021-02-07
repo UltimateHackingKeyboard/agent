@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+    SimpleChanges,
+    ChangeDetectionStrategy,
+    AfterViewInit,
+    ChangeDetectorRef
+} from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HalvesInfo, KeyAction, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
@@ -22,25 +31,15 @@ import { findModuleById } from '../../../util';
     styleUrls: ['./svg-keyboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
-        trigger('split', [
-            state('rotateLeft', style({
-                transform: 'translate(2%, 30%) rotate(10.8deg) scale(0.80, 0.80)'
-            })),
-            state('rotateRight', style({
-                transform: 'translate(-2%, 30.7%) rotate(-10deg) scale(0.80, 0.80)'
-            })),
-            transition('merged <=> rotateLeft', animate(500)),
-            transition('merged <=> rotateRight', animate(500))
-        ]),
         trigger('fadeKeyboard', [
-            state('visible', style({
-                opacity: 1
-            })),
-            state('invisible', style({
-                opacity: 0
-            })),
-            transition('visible => invisible', animate(500)),
-            transition('invisible => visible', animate(500))
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('{{animationTime}}', style({ opacity: 1 }))
+            ], { params: { animationTime: '0ms' } }),
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('500ms', style({ opacity: 0 }))
+            ])
         ]),
         trigger('fadeSeparator', [
             transition(':enter', [
@@ -71,7 +70,7 @@ import { findModuleById } from '../../../util';
         ])
     ]
 })
-export class SvgKeyboardComponent {
+export class SvgKeyboardComponent implements AfterViewInit {
     @Input() moduleConfig: Module[];
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
@@ -89,15 +88,22 @@ export class SvgKeyboardComponent {
     modules: SvgModule[];
     viewBox: string;
     modulesState: Record<number, {
-        visibility: 'visible' | 'invisible';
-        animation: 'merged' | 'rotateLeft' | 'rotateRight'
+        animationTime: string;
+        cssClasses: {
+            'module-merged': boolean,
+            'module-rotate-left': boolean;
+            'module-rotate-right': boolean;
+        }
     }>;
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
     descriptionAnimation = 'down';
 
+    private isAfterViewInit = false;
+
     constructor(private svgModuleProvider: SvgModuleProviderService,
-                private sanitizer: DomSanitizer) {
+                private sanitizer: DomSanitizer,
+                private cdRef: ChangeDetectorRef) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
         this.modulesState = {};
@@ -116,6 +122,11 @@ export class SvgKeyboardComponent {
         if (changes['keyboardLayout']) {
             this.setModules();
         }
+    }
+
+    ngAfterViewInit() {
+        this.isAfterViewInit = true;
+        this.cdRef.markForCheck();
     }
 
     onKeyClick(moduleId: number, event: SvgModuleKeyClickEvent): void {
@@ -163,44 +174,72 @@ export class SvgKeyboardComponent {
         if (this.halvesInfo.areHalvesMerged) {
             this.modulesState = {
                 0: {
-                    animation: 'merged',
-                    visibility: 'visible'
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': true,
+                        'module-rotate-left': false,
+                        'module-rotate-right': false
+                    }
                 },
                 1: {
-                    animation: 'merged',
-                    visibility: this.halvesInfo.isLeftHalfConnected ? 'visible' : 'invisible'
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': true,
+                        'module-rotate-left': false,
+                        'module-rotate-right': false
+                    }
                 }
             };
             this.descriptionAnimation = 'down';
         } else {
             this.modulesState = {
                 0: {
-                    animation: 'rotateRight',
-                    visibility: 'visible'
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': false,
+                        'module-rotate-right': true
+                    }
                 },
                 1: {
-                    animation: 'rotateLeft',
-                    visibility: this.halvesInfo.isLeftHalfConnected ? 'visible' : 'invisible'
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': true,
+                        'module-rotate-right': false
+                    }
                 }
             };
             this.descriptionAnimation = 'up';
 
             if (this.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
                 this.modulesState[this.halvesInfo.rightModuleSlot] = {
-                    animation: 'rotateRight',
-                    visibility: 'visible'
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': false,
+                        'module-rotate-right': true
+                    }
                 };
                 this.descriptionAnimation = 'up2';
             }
 
             if (this.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
                 this.modulesState[this.halvesInfo.leftModuleSlot] = {
-                    animation: 'rotateLeft',
-                    visibility: 'visible'
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': false,
+                        'module-rotate-right': true
+                    }
                 };
                 this.descriptionAnimation = 'up2';
             }
         }
+    }
+
+    private fadeAnimationTime(): string {
+        return this.isAfterViewInit ? '500ms' : '0ms';
     }
 
     private setModules() {

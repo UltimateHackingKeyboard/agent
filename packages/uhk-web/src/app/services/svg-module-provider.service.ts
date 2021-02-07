@@ -18,7 +18,11 @@ export class SvgModuleProviderService {
     private trackPointRight: SvgModule;
 
     getSvgModules(layout = KeyboardLayout.ANSI, halvesInfo: HalvesInfo): SvgModule[] {
-        const modules = [this.getRightModule(), this.getLeftModule(layout)];
+        const modules = [this.getRightModule()];
+
+        if (halvesInfo.isLeftHalfConnected) {
+            modules.push(this.getLeftModule(layout));
+        }
 
         // tslint:disable-next-line:switch-default
         switch (halvesInfo.leftModuleSlot) {
