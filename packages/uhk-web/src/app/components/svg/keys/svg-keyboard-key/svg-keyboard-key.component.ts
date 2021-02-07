@@ -269,7 +269,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             }
 
             if (this.labelSource === undefined) {
-                this.labelSource = '...';
+                this.labelSource = '•••';
             }
         }
         else if (this.keyAction instanceof KeystrokeAction) {
