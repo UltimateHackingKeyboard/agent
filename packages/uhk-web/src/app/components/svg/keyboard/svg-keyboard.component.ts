@@ -58,15 +58,24 @@ import { findModuleById } from '../../../util';
             state('up', style({
                 'margin-top': '-6.5%'
             })),
-            state('up2', style({
+            state('upLeftKeyCluster', style({
                 'margin-top': '-2.5%'
             })),
+            state('upRightModule', style({
+                'margin-top': '-4%'
+            })),
             transition('down => up', animate(500)),
-            transition('down => up2', animate(500)),
+            transition('down => upLeftKeyCluster', animate(500)),
+            transition('down => upRightModule', animate(500)),
             transition('up => down', animate(500)),
-            transition('up => up2', animate(500)),
-            transition('up2 => down', animate(500)),
-            transition('up2 => up', animate(500))
+            transition('up => upLeftKeyCluster', animate(500)),
+            transition('up => upRightModule', animate(500)),
+            transition('upLeftKeyCluster => down', animate(500)),
+            transition('upLeftKeyCluster => up', animate(500)),
+            transition('upLeftKeyCluster => upRightModule', animate(500)),
+            transition('upRightModule => down', animate(500)),
+            transition('upRightModule => up', animate(500)),
+            transition('upRightModule => upLeftKeyCluster', animate(500))
         ])
     ]
 })
@@ -221,7 +230,7 @@ export class SvgKeyboardComponent implements AfterViewInit {
                         'module-rotate-right': true
                     }
                 };
-                this.descriptionAnimation = 'up2';
+                this.descriptionAnimation = 'upRightModule';
             }
 
             if (this.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
@@ -233,7 +242,7 @@ export class SvgKeyboardComponent implements AfterViewInit {
                         'module-rotate-right': false
                     }
                 };
-                this.descriptionAnimation = 'up2';
+                this.descriptionAnimation = 'upLeftKeyCluster';
             }
         }
     }
