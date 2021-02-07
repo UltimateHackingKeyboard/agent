@@ -1,73 +1,100 @@
 <svg:rect #svgRec
+          *ngIf="svgKey.type === 'rec'"
           class="svg-rec"
           [class.active]="active"
-          [id]="id"
-          [attr.rx]="rx"
-          [attr.ry]="ry"
-          [attr.height]="height"
-          [attr.width]="width"
+          [id]="svgKey.id"
+          [attr.rx]="svgKey.rx"
+          [attr.ry]="svgKey.ry"
+          [attr.height]="svgKey.height"
+          [attr.width]="svgKey.width"
 />
+
+<svg:circle *ngIf="svgKey.type === 'circle'"
+            [attr.cx]="svgKey.cx"
+            [attr.cy]="svgKey.cy"
+            [attr.r]="svgKey.r"
+            [attr.fill]="svgKey.fill" />
+
+<svg:path *ngIf="svgKey.type === 'path'"
+          [attr.d]="svgKey.d"
+          [attr.style]="svgKey.style | safeStyle" />
+
+<svg:g *ngIf="svgKey.type === 'g'">
+    <svg:path *ngFor="let path of svgKey.elements.paths"
+              [attr.d]="path.d"
+              [attr.fill]="path.fill" />
+
+    <svg:circle *ngFor="let circle of svgKey.elements.circles"
+                [attr.cx]="circle.cx"
+                [attr.cy]="circle.cy"
+                [attr.r]="circle.r"
+                [attr.fill]="circle.fill" />
+
+</svg:g>
+
 <ng-template [ngIf]="recording">
     <svg:circle
         [@recording]="recordAnimation"
         (@recording.done)="onRecordingAnimationDone()"
-        [attr.cx]="(width / 2)"
-        [attr.cy]="(height / 2)"
+        [attr.cx]="(svgKey.width / 2)"
+        [attr.cy]="(svgKey.height / 2)"
         [attr.r]="10"
         [attr.fill]="'#c00'"
     ></svg:circle>
 </ng-template>
-<ng-template [ngIf]="!recording">
+<ng-template [ngIf]="!recording && svgKey.width">
     <svg:g [ngSwitch]="labelType"
            [attr.font-size]="19"
            [attr.font-family]="'Helvetica'"
-           [attr.fill]="'white'">
+           [attr.fill]="'white'"
+           [attr.transform]="svgKey.textTransform"
+    >
         <svg:g svg-keystroke-key *ngSwitchCase="enumLabelTypes.KeystrokeKey"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [keystrokeAction]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [text]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [texts]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-text-icon-key *ngSwitchCase="enumLabelTypes.TextIcon"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [text]="labelSource.text"
                [icon]="labelSource.icon"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-icon-text-key *ngSwitchCase="enumLabelTypes.IconText"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [icon]="labelSource.icon"
                [text]="labelSource.text"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-single-icon-key *ngSwitchCase="enumLabelTypes.SingleIcon"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [icon]="labelSource"
                [secondaryText]="secondaryText">
         </svg:g>
         <svg:g svg-switch-keymap-key *ngSwitchCase="enumLabelTypes.SwitchKeymap"
-               [height]="height"
-               [width]="width"
+               [height]="svgKey.height"
+               [width]="svgKey.width"
                [abbreviation]="labelSource">
         </svg:g>
         <svg *ngSwitchCase="enumLabelTypes.MouseKey" [attr.viewBox]="'0 0 100 100'"
-             [attr.width]="width"
-             [attr.height]="height">
+             [attr.width]="svgKey.width"
+             [attr.height]="svgKey.height">
             <svg:g svg-mouse-key [mouseAction]="labelSource"></svg:g>
         </svg>
     </svg:g>

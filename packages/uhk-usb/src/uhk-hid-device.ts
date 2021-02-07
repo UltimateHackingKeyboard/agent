@@ -3,7 +3,9 @@ import { pathExists } from 'fs-extra';
 import * as path from 'path';
 import { platform } from 'os';
 import isRoot = require('is-root');
-import { Buffer, CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LogService, UdevRulesInfo } from 'uhk-common';
+import { Buffer, CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LeftSlotModules, LogService,
+    RightSlotModules,
+    UdevRulesInfo } from 'uhk-common';
 
 import {
     Constants,
@@ -89,7 +91,12 @@ export class UhkHidDevice {
             connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
-            halvesInfo: { areHalvesMerged: true, isLeftHalfConnected: true }
+            halvesInfo: {
+                areHalvesMerged: true,
+                leftModuleSlot: LeftSlotModules.NoModule,
+                isLeftHalfConnected: true,
+                rightModuleSlot: RightSlotModules.NoModule
+            }
         };
 
         for (const dev of devs) {
@@ -245,7 +252,9 @@ export class UhkHidDevice {
 
         return {
             areHalvesMerged: deviceState.areHalvesMerged,
-            isLeftHalfConnected: deviceState.isLeftHalfConnected
+            isLeftHalfConnected: deviceState.isLeftHalfConnected,
+            leftModuleSlot: LeftSlotModules[deviceState.leftModuleSlot],
+            rightModuleSlot: RightSlotModules[deviceState.rightModuleSlot]
         };
     }
 

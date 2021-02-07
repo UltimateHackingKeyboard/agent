@@ -1,7 +1,16 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+    SimpleChanges,
+    ChangeDetectionStrategy,
+    AfterViewInit,
+    ChangeDetectorRef
+} from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { HalvesInfo, Module } from 'uhk-common';
+import { HalvesInfo, KeyAction, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
@@ -14,6 +23,7 @@ import {
     SvgModuleKeyClickEvent
 } from '../../../models/svg-key-events';
 import { LastEditedKey } from '../../../models';
+import { findModuleById } from '../../../util';
 
 @Component({
     selector: 'svg-keyboard',
@@ -21,35 +31,25 @@ import { LastEditedKey } from '../../../models';
     styleUrls: ['./svg-keyboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
-        trigger('split', [
-            state('rotateLeft', style({
-                transform: 'translate(2%, 30%) rotate(10.8deg) scale(0.80, 0.80)'
-            })),
-            state('rotateRight', style({
-                transform: 'translate(-2%, 30.7%) rotate(-10deg) scale(0.80, 0.80)'
-            })),
-            transition('merged <=> rotateLeft', animate(500)),
-            transition('merged <=> rotateRight', animate(500))
-        ]),
         trigger('fadeKeyboard', [
-            state('visible', style({
-                opacity: 1
-            })),
-            state('invisible', style({
-                opacity: 0
-            })),
-            transition('visible => invisible', animate(500)),
-            transition('invisible => visible', animate(500))
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('{{animationTime}}', style({ opacity: 1 }))
+            ], { params: { animationTime: '0ms' } }),
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('500ms', style({ opacity: 0 }))
+            ])
         ]),
         trigger('fadeSeparator', [
-            state('visible', style({
-                opacity: 1
-            })),
-            state('invisible', style({
-                opacity: 0
-            })),
-            transition('visible => invisible', animate('200ms')),
-            transition('invisible => visible', animate('200ms 500ms'))
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('200ms 500ms', style({ opacity: 1 }))
+            ]),
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('200ms', style({ opacity: 0 }))
+            ])
         ]),
         trigger('moveDescription', [
             state('down', style({
@@ -58,12 +58,28 @@ import { LastEditedKey } from '../../../models';
             state('up', style({
                 'margin-top': '-6.5%'
             })),
+            state('upLeftKeyCluster', style({
+                'margin-top': '-2.5%'
+            })),
+            state('upRightModule', style({
+                'margin-top': '-4%'
+            })),
             transition('down => up', animate(500)),
-            transition('up => down', animate(500))
+            transition('down => upLeftKeyCluster', animate(500)),
+            transition('down => upRightModule', animate(500)),
+            transition('up => down', animate(500)),
+            transition('up => upLeftKeyCluster', animate(500)),
+            transition('up => upRightModule', animate(500)),
+            transition('upLeftKeyCluster => down', animate(500)),
+            transition('upLeftKeyCluster => up', animate(500)),
+            transition('upLeftKeyCluster => upRightModule', animate(500)),
+            transition('upRightModule => down', animate(500)),
+            transition('upRightModule => up', animate(500)),
+            transition('upRightModule => upLeftKeyCluster', animate(500))
         ])
     ]
 })
-export class SvgKeyboardComponent {
+export class SvgKeyboardComponent implements AfterViewInit {
     @Input() moduleConfig: Module[];
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
@@ -80,19 +96,26 @@ export class SvgKeyboardComponent {
 
     modules: SvgModule[];
     viewBox: string;
-    moduleAnimationStates: string[];
-    moduleVisibilityAnimationStates: string[];
+    modulesState: Record<number, {
+        animationTime: string;
+        cssClasses: {
+            'module-merged': boolean,
+            'module-rotate-left': boolean;
+            'module-rotate-right': boolean;
+        }
+    }>;
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
-    separatorAnimation = 'visible';
     descriptionAnimation = 'down';
 
+    private isAfterViewInit = false;
+
     constructor(private svgModuleProvider: SvgModuleProviderService,
-                private sanitizer: DomSanitizer) {
+                private sanitizer: DomSanitizer,
+                private cdRef: ChangeDetectorRef) {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
-        this.moduleAnimationStates = [];
-        this.moduleVisibilityAnimationStates = [];
+        this.modulesState = {};
     }
 
     ngOnInit() {
@@ -101,12 +124,18 @@ export class SvgKeyboardComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.halvesInfo) {
+            this.setModules();
             this.updateModuleAnimationStates();
         }
 
         if (changes['keyboardLayout']) {
             this.setModules();
         }
+    }
+
+    ngAfterViewInit() {
+        this.isAfterViewInit = true;
+        this.cdRef.markForCheck();
     }
 
     onKeyClick(moduleId: number, event: SvgModuleKeyClickEvent): void {
@@ -132,27 +161,98 @@ export class SvgKeyboardComponent {
         });
     }
 
-    private updateModuleAnimationStates() {
-        if (this.halvesInfo.areHalvesMerged) {
-            this.moduleAnimationStates = ['merged', 'merged'];
-            this.separatorAnimation = 'visible';
-            this.descriptionAnimation = 'down';
-        } else {
-            this.moduleAnimationStates = ['rotateRight', 'rotateLeft'];
-            this.separatorAnimation = 'invisible';
-            this.descriptionAnimation = 'up';
+    getKeyActions(id: number): KeyAction[] {
+        if (!this.moduleConfig) {
+            return [];
         }
 
-        if (this.halvesInfo.isLeftHalfConnected) {
-            this.moduleVisibilityAnimationStates = ['visible', 'visible'];
-        } else {
-            this.moduleVisibilityAnimationStates = ['visible', 'invisible'];
+        const moduleConf = this.moduleConfig.find(findModuleById(id));
 
+        if (moduleConf) {
+            return  moduleConf.keyActions;
+        }
+
+        return [];
+    }
+
+    trackByModuleFn(index: number, module: Module): string {
+        return module.id.toString();
+    }
+
+    private updateModuleAnimationStates() {
+        if (this.halvesInfo.areHalvesMerged) {
+            this.modulesState = {
+                0: {
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': true,
+                        'module-rotate-left': false,
+                        'module-rotate-right': false
+                    }
+                },
+                1: {
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': true,
+                        'module-rotate-left': false,
+                        'module-rotate-right': false
+                    }
+                }
+            };
+            this.descriptionAnimation = 'down';
+        } else {
+            this.modulesState = {
+                0: {
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': false,
+                        'module-rotate-right': true
+                    }
+                },
+                1: {
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': true,
+                        'module-rotate-right': false
+                    }
+                }
+            };
+            this.descriptionAnimation = 'up';
+
+            if (this.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
+                this.modulesState[this.halvesInfo.rightModuleSlot] = {
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': false,
+                        'module-rotate-right': true
+                    }
+                };
+                this.descriptionAnimation = 'upRightModule';
+            }
+
+            if (this.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
+                this.modulesState[this.halvesInfo.leftModuleSlot] = {
+                    animationTime: this.fadeAnimationTime(),
+                    cssClasses: {
+                        'module-merged': false,
+                        'module-rotate-left': true,
+                        'module-rotate-right': false
+                    }
+                };
+                this.descriptionAnimation = 'upLeftKeyCluster';
+            }
         }
     }
 
+    private fadeAnimationTime(): string {
+        return this.isAfterViewInit ? '500ms' : '0ms';
+    }
+
     private setModules() {
-        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout);
+        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout, this.halvesInfo);
         this.separator = this.svgModuleProvider.getSvgSeparator();
         this.separatorStyle = this.sanitizer.bypassSecurityTrustStyle(this.separator.style);
     }

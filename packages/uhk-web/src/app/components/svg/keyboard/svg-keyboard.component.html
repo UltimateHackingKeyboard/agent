@@ -4,24 +4,26 @@
      height="100%"
      width="100%">
     <svg:g svg-module
-           *ngFor="let module of modules; let i = index"
-           [attr.moduleId]="i"
+           *ngFor="let module of modules; trackBy:trackByModuleFn"
+           [class]="modulesState[module.id]?.cssClasses"
+           [attr.moduleId]="module.id"
            [coverages]="module.coverages"
+           [circles]="module.circles"
            [keyboardKeys]="module.keyboardKeys"
            [capturingEnabled]="capturingEnabled"
            [attr.transform]="module.attributes.transform"
-           [keyActions]="moduleConfig[i].keyActions"
+           [keyActions]="getKeyActions(module.id)"
            [selectedKey]="selectedKey"
-           [@split]="moduleAnimationStates[i]"
-           [@fadeKeyboard]="moduleVisibilityAnimationStates[i]"
-           [selected]="selectedKey?.moduleId === i"
-           [lastEdited]="lastEditedKey?.moduleId === i"
+           [@fadeKeyboard]="{value:'', params: { animationTime: modulesState[module.id].animationTime } }"
+           [selected]="selectedKey?.moduleId === module.id"
+           [lastEdited]="lastEditedKey?.moduleId === module.id"
            [lastEditedKeyId]="lastEditedKey?.key"
-           (keyClick)="onKeyClick(i, $event)"
-           (keyHover)="onKeyHover($event.index, $event.event, $event.over, i)"
-           (capture)="onCapture(i, $event)" />
+           (keyClick)="onKeyClick(module.id, $event)"
+           (keyHover)="onKeyHover($event.index, $event.event, $event.over, module.id)"
+           (capture)="onCapture(module.id, $event)" />
 
-    <svg:path [@fadeSeparator]="separatorAnimation"
+    <svg:path [@fadeSeparator]
+              *ngIf="halvesInfo.areHalvesMerged"
               [attr.d]="separator.d"
               [attr.style]="separatorStyle" />
 </svg>

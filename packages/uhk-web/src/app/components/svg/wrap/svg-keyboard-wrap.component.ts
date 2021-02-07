@@ -49,7 +49,7 @@ import {
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
-import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
+import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { LastEditedKey } from '../../../models';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
@@ -207,7 +207,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
                 keyId: event.keyId
             };
             this.selectedKey = { layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId };
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer]
+                .modules
+                .find(findModuleById(event.moduleId))
+                .keyActions[event.keyId];
             this.keyElement = event.keyTarget;
             this.remapInfo = {
                 remapOnAllKeymap: event.shiftPressed,
@@ -219,7 +222,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
 
     onKeyHover(event: SvgKeyHoverEvent): void {
         if (this.tooltipEnabled) {
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer].modules[event.moduleId].keyActions[event.keyId];
+            const keyActionToEdit: KeyAction = this.layers[this.currentLayer]
+                .modules
+                .find(findModuleById(event.moduleId))
+                .keyActions[event.keyId];
 
             if (event.over) {
                 this.showTooltip(keyActionToEdit, event.event);

@@ -4,6 +4,11 @@
 
     &:hover {
         fill: var(--color-keyboard-key-hover);
+
+        circle,
+        path {
+            fill: var(--color-keyboard-key-hover);
+        }
     }
 }
 

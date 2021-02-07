@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { HalvesInfo, Layer } from 'uhk-common';
 
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
