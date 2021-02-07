@@ -9,7 +9,7 @@
 </g>
 <g id="key-5" transform="translate(57.794, 1034.774)">
     <circle id="key-5-circle" r="9.333" cy="9.333" cx="9.333" style="fill:#333"/>
-    <rect id="key-5-print" height="18.666" width="18.66" style="fill:none;stroke:none" transform="rotate(30) translate(4, -5)"></rect>
+    <rect id="key-5-print" height="18.666" width="18.66" style="fill:none;stroke:none" transform="rotate(30) translate(3.5, -5)"></rect>
 </g>
 <g id="key-6" transform="translate(89, 1027)">
     <path id="key-6-path" d="M 33.878 56.609 L 49.096 30.562 C 50.092 28.858 49.511 26.669 47.802 25.683 L -4.281 -4.387 C -5.984 -5.37 -8.161 -4.787 -9.144 -3.084 L -14.459 6.123 C -6.329 12.387 -8.028 25.104 -17.519 29.013 C -20.771 30.352 -24.421 30.352 -27.674 29.013 L -32.725 37.761 C -33.871 39.745 -32.87 42.28 -30.678 42.947 L 25.3 59.975 C 26.068 60.208 26.892 60.175 27.638 59.882 L 32.106 58.126 C 32.85 57.833 33.475 57.299 33.878 56.609 Z" style="fill:#333"></path>
