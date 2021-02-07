@@ -22,11 +22,11 @@ editable-text {
 }
 
 .module-rotate-right {
-    transform: translate(-2%, 30.7%) rotate(-10deg) scale(0.8, 0.8);
+    transform: translate(0%, 30.7%) rotate(-10deg) scale(0.78, 0.78);
     transition: transform 500ms;
 }
 
 .module-rotate-left {
-    transform: translate(2%, 30%) rotate(10.8deg) scale(0.8, 0.8);
+    transform: translate(0%, 30%) rotate(10.8deg) scale(0.78, 0.78);
     transition: transform 500ms;
 }
