@@ -4,7 +4,7 @@
      height="100%"
      width="100%">
     <svg:g svg-module
-           *ngFor="let module of modules;"
+           *ngFor="let module of modules; trackBy:trackByModuleFn"
            [attr.moduleId]="module.id"
            [coverages]="module.coverages"
            [circles]="module.circles"

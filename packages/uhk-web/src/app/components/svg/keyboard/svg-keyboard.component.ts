@@ -155,6 +155,10 @@ export class SvgKeyboardComponent {
         return [];
     }
 
+    trackByModuleFn(index: number, module: Module): string {
+        return module.id.toString();
+    }
+
     private updateModuleAnimationStates() {
         if (this.halvesInfo.areHalvesMerged) {
             this.modulesState = {
