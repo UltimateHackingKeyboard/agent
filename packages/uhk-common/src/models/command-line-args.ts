@@ -24,8 +24,4 @@ export interface CommandLineArgs {
      * simulate privilege escalation error
      */
     spe?: boolean;
-    /**
-     * The driver which is used for firmware upgrade
-     */
-    'usb-driver'?: 'blhost' | 'kboot';
 }
