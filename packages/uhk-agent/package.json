@@ -28,8 +28,6 @@
   "scripts": {
     "start": "cross-env DEBUG=kboot* electron ./dist/electron-main.js",
     "electron:spe": "electron ./dist/electron-main.js --spe",
-    "electron:blhost": "electron ./dist/electron-main.js --usb-driver=blhost",
-    "electron:kboot": "cross-env DEBUG=kboot* electron ./dist/electron-main.js --usb-driver=kboot",
     "build": "webpack && npm run install:build-deps && npm run download-firmware && npm run copy-to-tmp-folder",
     "lint": "tslint --project tsconfig.json",
     "install:build-deps": "cd ./dist && npm i",

@@ -8,7 +8,6 @@ import * as url from 'url';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 // import { ElectronDataStorageRepositoryService } from './services/electron-datastorage-repository.service';
 import { getLogOptions } from 'uhk-common';
-import { UhkBlhost } from 'uhk-usb';
 import { DeviceService } from './services/device.service';
 import { ElectronLogService } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
@@ -33,7 +32,6 @@ logger.setLogOptions(getLogOptions(options));
 let win: Electron.BrowserWindow;
 
 let deviceService: DeviceService;
-let uhkBlhost: UhkBlhost;
 let uhkHidDeviceService: UhkHidDevice;
 let uhkOperations: UhkOperations;
 let appUpdateService: AppUpdateService;
@@ -55,8 +53,7 @@ if (!areServicesInited) {
     logger.misc(`[Electron Main] packagesDir: ${packagesDir}`);
 
     uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
-    uhkBlhost = new UhkBlhost(logger, packagesDir);
-    uhkOperations = new UhkOperations(logger, uhkBlhost, uhkHidDeviceService);
+    uhkOperations = new UhkOperations(logger, uhkHidDeviceService);
 
     areServicesInited = true;
 }

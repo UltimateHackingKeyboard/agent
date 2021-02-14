@@ -45,11 +45,6 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'spe',
                 description: 'Simulate privilege escalation error'
-            },
-            {
-                name: 'usb-driver',
-                description: 'Use the specified driver for firmware upgrade',
-                typeLabel: 'blhost | kboot'
             }
         ]
     }

@@ -212,13 +212,8 @@ export class DeviceService {
             const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
             this.logService.misc('New firmware version:', packageJson.firmwareVersion);
 
-            if (this.useKboot()) {
-                await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
-                await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
-            } else {
-                await this.operations.updateRightFirmwareWithBlhost(firmwarePathData.rightFirmwarePath);
-                await this.operations.updateLeftModuleWithBlhost(firmwarePathData.leftFirmwarePath);
-            }
+            await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
+            await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
 
             response.success = true;
             response.modules = await this.getHardwareModules(false);
@@ -249,11 +244,7 @@ export class DeviceService {
             await sanityCheckFirmwareAsync(firmwarePathData);
             await this.stopPollUhkDevice();
 
-            if (this.useKboot()) {
-                await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
-            } else {
-                await this.operations.updateRightFirmwareWithBlhost(firmwarePathData.rightFirmwarePath);
-            }
+            await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;
@@ -369,19 +360,6 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
 
         return Promise.resolve();
-    }
-
-    private useKboot(): boolean {
-        switch (this.options['usb-driver']) {
-            case 'blhost':
-                return false;
-
-            case 'kboot':
-                return true;
-
-            default:
-                return true;
-        }
     }
 
     private getDefaultFirmwarePathData(): TmpFirmware {

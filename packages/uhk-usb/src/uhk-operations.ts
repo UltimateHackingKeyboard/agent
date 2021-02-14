@@ -24,7 +24,6 @@ import {
 } from './constants';
 import * as fs from 'fs';
 import * as os from 'os';
-import { UhkBlhost } from './uhk-blhost';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
@@ -33,7 +32,6 @@ import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils';
 
 export class UhkOperations {
     constructor(private logService: LogService,
-                private blhost: UhkBlhost,
                 private device: UhkHidDevice) {
     }
 
@@ -41,61 +39,6 @@ export class UhkOperations {
         this.logService.usb(`[UhkHidDevice] USB[T]: Jump to bootloader. Module: ${ModuleSlotToId[module].toString()}`);
         const transfer = Buffer.from([UsbCommand.JumpToModuleBootloader, module]);
         await this.device.write(transfer);
-    }
-
-    public async updateRightFirmwareWithBlhost(firmwarePath: string): Promise<void> {
-        this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
-        this.logService.misc('[UhkOperations] Start flashing right firmware');
-        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.bootloader.toString(16)}`];
-
-        await this.device.reenumerate(EnumerationModes.Bootloader);
-        this.device.close();
-        await this.blhost.runBlhostCommand([...prefix, 'flash-security-disable', '0403020108070605']);
-        await this.blhost.runBlhostCommand([...prefix, 'flash-erase-region', '0xc000', '475136']);
-        await this.blhost.runBlhostCommand([...prefix, 'flash-image', `"${firmwarePath}"`]);
-        await this.blhost.runBlhostCommand([...prefix, 'reset']);
-        this.logService.misc('[UhkOperations] Right firmware successfully flashed');
-    }
-
-    public async updateLeftModuleWithBlhost(firmwarePath: string): Promise<void> {
-        this.logService.misc('[UhkOperations] Start flashing left module firmware');
-
-        const prefix = [`--usb 0x1d50,0x${EnumerationNameToProductId.buspal.toString(16)}`];
-        const buspalPrefix = [...prefix, `--buspal i2c,${ModuleSlotToI2cAddress.leftHalf}`];
-
-        await this.device.reenumerate(EnumerationModes.NormalKeyboard);
-        this.device.close();
-        await snooze(1000);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.ping, 100);
-        await snooze(1000);
-        await this.jumpToBootloaderModule(ModuleSlotToId.leftHalf);
-        this.device.close();
-
-        const leftModuleBricked = await this.waitForKbootIdle();
-        if (!leftModuleBricked) {
-            const msg = '[UhkOperations] Couldn\'t connect to the left keyboard half.';
-            this.logService.error(msg);
-            throw new Error(msg);
-        }
-
-        await this.device.reenumerate(EnumerationModes.Buspal);
-        this.device.close();
-        await this.blhost.runBlhostCommandRetry([...buspalPrefix, 'get-property', '1']);
-        await this.blhost.runBlhostCommand([...buspalPrefix, 'flash-erase-all-unsecure']);
-        await this.blhost.runBlhostCommand([...buspalPrefix, 'write-memory', '0x0', `"${firmwarePath}"`]);
-        await this.blhost.runBlhostCommand([...prefix, 'reset']);
-        await snooze(1000);
-        await this.device.reenumerate(EnumerationModes.NormalKeyboard);
-        this.device.close();
-        await snooze(1000);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset, 100);
-        this.device.close();
-        await snooze(1000);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
-        this.device.close();
-
-        this.logService.misc('[UhkOperations] Left firmware successfully flashed');
-        this.logService.misc('[UhkOperations] Both left and right firmwares successfully flashed');
     }
 
     public async updateRightFirmwareWithKboot(firmwarePath: string): Promise<void> {
