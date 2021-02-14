@@ -15,20 +15,25 @@ import {
     UpdateFirmwareData,
     UploadFileData
 } from 'uhk-common';
-import { snooze, UhkHidDevice, UhkOperations } from 'uhk-usb';
+import {
+    getCurrentUhkDeviceProduct,
+    getDeviceFirmwarePath,
+    getFirmwarePackageJson,
+    snooze,
+    UhkHidDevice,
+    UhkOperations,
+    TmpFirmware
+} from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { TmpFirmware } from '../models/tmp-firmware';
 import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
-    getPackageJsonFromPathAsync,
     getUserConfigFromHistoryAsync,
     loadUserConfigHistoryAsync,
-    sanityCheckFirmwareAsync,
     saveTmpFirmware,
     saveUserConfigHistoryAsync
 } from '../util';
@@ -200,7 +205,9 @@ export class DeviceService {
                 ? await saveTmpFirmware(data.uploadFile)
                 : this.getDefaultFirmwarePathData();
 
-            await sanityCheckFirmwareAsync(firmwarePathData);
+            const packageJson = await getFirmwarePackageJson(firmwarePathData);
+            this.logService.misc('New firmware version:', packageJson.firmwareVersion);
+
             this.logService.misc('Agent version:', data.versionInformation.version);
             const hardwareModules = await this.getHardwareModules(false);
             this.logService.misc('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
@@ -209,11 +216,11 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             this.device.resetDeviceCache();
 
-            const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
-            this.logService.misc('New firmware version:', packageJson.firmwareVersion);
-
-            await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
-            await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath);
+            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            this.logService.misc('UHK Device firmware upgrade starts:', JSON.stringify(uhkDeviceProduct));
+            const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+            await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+            await this.operations.updateLeftModuleWithKboot(firmwarePathData.leftFirmwarePath, uhkDeviceProduct);
 
             response.success = true;
             response.modules = await this.getHardwareModules(false);
@@ -241,10 +248,14 @@ export class DeviceService {
 
         try {
             const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
-            await sanityCheckFirmwareAsync(firmwarePathData);
+            const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
-            await this.operations.updateRightFirmwareWithKboot(firmwarePathData.rightFirmwarePath);
+            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            this.logService.misc('UHK Device recovery starts:', JSON.stringify(uhkDeviceProduct));
+            const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+
+            await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;
@@ -365,20 +376,9 @@ export class DeviceService {
     private getDefaultFirmwarePathData(): TmpFirmware {
         return {
             leftFirmwarePath: this.getLeftModuleFirmwarePath(),
-            rightFirmwarePath: this.getFirmwarePath(),
             packageJsonPath: this.getPackageJsonFirmwarePath(),
             tmpDirectory: path.join(this.rootDir, 'packages/firmware')
         };
-    }
-
-    private getFirmwarePath(): string {
-        const firmware = path.join(this.rootDir, 'packages/firmware/devices/uhk60-right/firmware.hex');
-
-        if (fs.existsSync(firmware)) {
-            return firmware;
-        }
-
-        throw new Error(`Could not found firmware ${firmware}`);
     }
 
     private getLeftModuleFirmwarePath(): string {

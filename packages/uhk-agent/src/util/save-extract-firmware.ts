@@ -5,8 +5,7 @@ import decompress from 'decompress';
 import decompressTarbz from 'decompress-tarbz2';
 import decompressTargz from 'decompress-targz';
 import { UploadFileData } from 'uhk-common';
-
-import { TmpFirmware } from '../models/tmp-firmware';
+import { TmpFirmware } from 'uhk-usb';
 
 export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirmware> {
     const tmpDirectory = dirSync();
@@ -33,7 +32,6 @@ export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirm
 
     return {
         tmpDirectory: tmpDirectory.name,
-        rightFirmwarePath: path.join(tmpDirectory.name, 'devices/uhk60-right/firmware.hex'),
         leftFirmwarePath: path.join(tmpDirectory.name, 'modules/uhk60-left.bin'),
         packageJsonPath: path.join(tmpDirectory.name, 'package.json')
     };

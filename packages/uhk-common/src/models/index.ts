@@ -1,6 +1,7 @@
 export * from './application-settings';
 export * from './command-line-args';
 export * from './config-sizes-info';
+export * from './firmware-json';
 export * from './notification';
 export * from './ipc-response';
 export * from './left-slot-modules';
@@ -15,6 +16,7 @@ export * from './right-module-info';
 export * from './right-slot-modules';
 export * from './save-user-configuration-data';
 export * from './udev-rules-info';
+export * from './uhk-products';
 export * from './update-firmware-data';
 export * from './upload-file-data';
 export * from './halves-info';

@@ -16,7 +16,6 @@ import {
 } from 'uhk-common';
 
 import {
-    Constants,
     EnumerationModes,
     KbootCommands,
     LAYER_NUMBER_TO_STRING,
@@ -24,7 +23,7 @@ import {
     ModuleSlotToI2cAddress,
     UsbCommand
 } from './constants';
-import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
+import { bufferToString, getFileContentAsync, getTransferData, isBootloader, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
 import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
@@ -68,7 +67,7 @@ export class UhkHidDevice {
             const devs = devices();
             this.logDevices(devs);
 
-            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || x.productId === Constants.BOOTLOADER_ID);
+            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
 
             if (!dev) {
                 return true;
@@ -113,8 +112,7 @@ export class UhkHidDevice {
 
             if (isUhkZeroInterface(dev)) {
                 result.zeroInterfaceAvailable = true;
-            } else if (dev.vendorId === Constants.VENDOR_ID &&
-                dev.productId === Constants.BOOTLOADER_ID) {
+            } else if (isBootloader(dev)) {
                 result.bootloaderActive = true;
             }
         }

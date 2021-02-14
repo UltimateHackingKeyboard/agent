@@ -1,7 +1,11 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import Uhk, { errorHandler, yargs } from './src';
-import { Constants, enumerationModeIdToProductId, EnumerationModes } from 'uhk-usb';
+import {
+    EnumerationModes,
+    getCurrentUhkDeviceProduct,
+    getDeviceEnumerateProductId
+} from 'uhk-usb';
 
 (async function () {
     try {
@@ -26,12 +30,15 @@ import { Constants, enumerationModeIdToProductId, EnumerationModes } from 'uhk-u
             console.error(`The specified enumeration mode does not exist. Specify one of ${keys}`);
             process.exit(1);
         }
+        const enumerationMode = EnumerationModes[mode];
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+        const enumerationProductId = getDeviceEnumerateProductId(uhkDeviceProduct, enumerationMode);
 
         const { device } = Uhk(argv);
         await device.reenumerate({
-            enumerationMode: EnumerationModes[mode],
-            vid: Constants.VENDOR_ID,
-            pid: enumerationModeIdToProductId[EnumerationModes[mode]],
+            enumerationMode,
+            vid: uhkDeviceProduct.vid,
+            pid: enumerationProductId,
             timeout: argv.timeout});
     } catch (error) {
         errorHandler(error);

@@ -1,6 +1,8 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import * as path from 'path';
+import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
+
 import Uhk, { errorHandler, yargs } from './src';
 
 (async function () {
@@ -9,12 +11,21 @@ import Uhk, { errorHandler, yargs } from './src';
             .usage('Upgrade firmwares')
             .argv;
 
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+
         const { operations } = Uhk(argv);
         const firmwareDir = path.join('../../tmp/packages/firmware');
-        const rightFirmwarePath = path.join(firmwareDir, 'devices/uhk60-right/firmware.hex');
-        await operations.updateRightFirmwareWithKboot(rightFirmwarePath);
+        const packageJsonPath = path.join('../../tmp/packages/firmware/package.json');
+        const packageJson = await getFirmwarePackageJson({
+            packageJsonPath,
+            leftFirmwarePath: path.join(firmwareDir, 'modules/uhk60-left.bin'),
+            tmpDirectory: firmwareDir
+        });
+        const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+
+        await operations.updateRightFirmwareWithKboot(rightFirmwarePath, uhkDeviceProduct);
         const leftFirmwarePath = path.join(firmwareDir, 'modules/uhk60-left.bin');
-        await operations.updateLeftModuleWithKboot(leftFirmwarePath);
+        await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
     } catch (error) {
         errorHandler(error);
     }

@@ -2,7 +2,7 @@ import { Device, devices } from 'node-hid';
 import { readFile } from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
-import { Buffer, LogService } from 'uhk-common';
+import { Buffer, LogService, UHK_DEVICES } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants';
 
@@ -102,14 +102,20 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
 }
 
 export const isUhkZeroInterface = (dev: Device): boolean => {
-    return dev.vendorId === Constants.VENDOR_ID &&
-    dev.productId === Constants.PRODUCT_ID &&
-    dev.interface === 0;
+    return UHK_DEVICES.some(device => dev.vendorId === device.vid &&
+        dev.productId === device.pid &&
+        dev.interface === 0
+    );
 };
 
 export const isUhkDevice = (dev: Device): boolean => {
-    return dev.vendorId === Constants.VENDOR_ID &&
-        (dev.productId === Constants.PRODUCT_ID || dev.productId === Constants.BOOTLOADER_ID);
+    return UHK_DEVICES.some(device => dev.vendorId === device.vid &&
+        (dev.productId === device.pid || dev.productId === device.bootloaderId)
+    );
+};
+
+export const isBootloader = (dev: Device): boolean => {
+    return UHK_DEVICES.some(device => dev.vendorId === device.vid && dev.productId === device.bootloaderId);
 };
 
 export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {
