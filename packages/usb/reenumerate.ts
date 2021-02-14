@@ -1,7 +1,7 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import Uhk, { errorHandler, yargs } from './src';
-import { EnumerationModes } from 'uhk-usb';
+import { Constants, enumerationModeIdToProductId, EnumerationModes } from 'uhk-usb';
 
 (async function () {
     try {
@@ -28,7 +28,11 @@ import { EnumerationModes } from 'uhk-usb';
         }
 
         const { device } = Uhk(argv);
-        await device.reenumerate(EnumerationModes[mode], argv.timeout);
+        await device.reenumerate({
+            enumerationMode: EnumerationModes[mode],
+            vid: Constants.VENDOR_ID,
+            pid: enumerationModeIdToProductId[EnumerationModes[mode]],
+            timeout: argv.timeout});
     } catch (error) {
         errorHandler(error);
     }
