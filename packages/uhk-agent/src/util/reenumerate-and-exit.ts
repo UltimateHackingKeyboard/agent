@@ -1,4 +1,4 @@
-import { UhkHidDevice, EnumerationModes } from 'uhk-usb';
+import { UhkHidDevice, EnumerationModes, Constants, enumerationModeIdToProductId } from 'uhk-usb';
 import { CommandLineArgs } from 'uhk-common';
 
 import { ElectronLogService } from '../services/logger.service';
@@ -20,7 +20,12 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const startTime = new Date();
     const reenumerationOption = parseReenumerateAndExitArg(arg);
 
-    await options.uhkHidDevice.reenumerate(reenumerationOption.mode, reenumerationOption.timeout);
+    await options.uhkHidDevice.reenumerate({
+        enumerationMode: reenumerationOption.mode,
+        vid: Constants.VENDOR_ID,
+        pid: enumerationModeIdToProductId[reenumerationOption.mode],
+        timeout: reenumerationOption.timeout
+    });
 
     options.logger.misc('[reenumerateAndExit] Reenumeration success');
     options.logger.misc('[reenumerateAndExit] Monitoring device list changes');

@@ -3,13 +3,20 @@ import { pathExists } from 'fs-extra';
 import * as path from 'path';
 import { platform } from 'os';
 import isRoot = require('is-root');
-import { Buffer, CommandLineArgs, DeviceConnectionState, HalvesInfo, isEqualArray, LeftSlotModules, LogService,
+import {
+    Buffer,
+    CommandLineArgs,
+    DeviceConnectionState,
+    HalvesInfo,
+    isEqualArray,
+    LeftSlotModules,
+    LogService,
     RightSlotModules,
-    UdevRulesInfo } from 'uhk-common';
+    UdevRulesInfo
+} from 'uhk-common';
 
 import {
     Constants,
-    enumerationModeIdToProductId,
     EnumerationModes,
     KbootCommands,
     LAYER_NUMBER_TO_STRING,
@@ -18,7 +25,7 @@ import {
     UsbCommand
 } from './constants';
 import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
-import { DeviceState, GetDeviceOptions } from './models';
+import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -175,7 +182,7 @@ export class UhkHidDevice {
         this._prevDevices = [];
     }
 
-    async reenumerate(enumerationMode: EnumerationModes, timeout = BOOTLOADER_TIMEOUT_MS): Promise<void> {
+    async reenumerate({ enumerationMode, pid, vid, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption): Promise<void> {
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
 
@@ -188,7 +195,6 @@ export class UhkHidDevice {
             (timeout & 0xff << 24) >> 24
         ]);
 
-        const enumeratedProductId = enumerationModeIdToProductId[enumerationMode.toString()];
         const startTime = new Date();
         const waitTimeout = timeout + 20000;
         let jumped = false;
@@ -197,8 +203,8 @@ export class UhkHidDevice {
             const devs = devices();
 
             const inBootloaderMode = devs.some((x: Device) =>
-                x.vendorId === Constants.VENDOR_ID &&
-                x.productId === enumeratedProductId);
+                x.vendorId === vid &&
+                x.productId === pid);
 
             if (inBootloaderMode) {
                 this.logService.misc('[UhkHidDevice] Reenumerating devices');
@@ -208,7 +214,7 @@ export class UhkHidDevice {
             await snooze(100);
 
             if (!jumped) {
-                const device = this.getDevice({ errorLogLevel: 'misc'});
+                const device = this.getDevice({ errorLogLevel: 'misc' });
                 if (device) {
                     const data = getTransferData(message);
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
@@ -274,6 +280,7 @@ export class UhkHidDevice {
             rightModuleSlot: MODULE_ID_TO_STRING[buffer[5]]
         };
     }
+
     public listAvailableDevices(devs: Device[]): void {
         let compareDevices = devs as any;
 
