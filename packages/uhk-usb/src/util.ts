@@ -104,10 +104,7 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
 export const isUhkZeroInterface = (dev: Device): boolean => {
     return dev.vendorId === Constants.VENDOR_ID &&
     dev.productId === Constants.PRODUCT_ID &&
-    // hidapi can not read the interface number on Mac, so check the usage page and usage
-    ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
-        (dev.usagePage === (0xFF00 | 0x00) && dev.usage === 0x01) || // New firmware
-        dev.interface === 0);
+    dev.interface === 0;
 };
 
 export const isUhkDevice = (dev: Device): boolean => {
