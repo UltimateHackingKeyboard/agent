@@ -1,3 +1,4 @@
+export * from './check-firmware-and-device-compatibility';
 export * from './convert-ms-to-duration';
 export * from './convert-slave-i2c-error-buffer';
 export * from './get-current-uhk-device-product';

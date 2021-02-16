@@ -16,6 +16,7 @@ import {
     UploadFileData
 } from 'uhk-common';
 import {
+    checkFirmwareAndDeviceCompatibility,
     getCurrentUhkDeviceProduct,
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
@@ -207,6 +208,8 @@ export class DeviceService {
 
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             this.logService.misc('New firmware version:', packageJson.firmwareVersion);
+            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc('Agent version:', data.versionInformation.version);
             const hardwareModules = await this.getHardwareModules(false);
@@ -216,7 +219,6 @@ export class DeviceService {
             await this.stopPollUhkDevice();
             this.device.resetDeviceCache();
 
-            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
             this.logService.misc('UHK Device firmware upgrade starts:', JSON.stringify(uhkDeviceProduct));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
             await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
@@ -252,6 +254,8 @@ export class DeviceService {
             await this.stopPollUhkDevice();
 
             const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
+
             this.logService.misc('UHK Device recovery starts:', JSON.stringify(uhkDeviceProduct));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
