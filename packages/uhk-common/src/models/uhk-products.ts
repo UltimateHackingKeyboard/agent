@@ -25,7 +25,7 @@ export interface UhkDeviceProduct extends UhkProduct {
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     type: UhkProductTypes.Device,
     id: 1,
-    name: 'uhk60-right',
+    name: 'UHK 60 v1',
     vid: 0x1D50,
     pid: 0x6122,
     bootloaderId: 0x6120,
@@ -36,7 +36,7 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     type: UhkProductTypes.Device,
     id: 2,
-    name: 'uhk60-v2-right',
+    name: 'UHK 60 v2',
     vid: 0x1D50,
     pid: 0x6124,
     bootloaderId: 0x6123,

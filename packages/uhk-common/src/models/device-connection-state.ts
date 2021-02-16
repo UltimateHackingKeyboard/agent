@@ -1,7 +1,8 @@
 import { HalvesInfo } from './halves-info';
+import { UhkDeviceProduct } from './uhk-products';
 
 export interface DeviceConnectionState {
-    connected: boolean;
+    connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
     zeroInterfaceAvailable: boolean;

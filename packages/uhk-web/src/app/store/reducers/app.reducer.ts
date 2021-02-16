@@ -135,7 +135,7 @@ export function reducer(
         case DeviceActionTypes.ConnectionStateChanged: {
             const connectionState = (action as ConnectionStateChangedAction).payload;
 
-            if (connectionState && connectionState.connected === true) {
+            if (connectionState && connectionState.connectedDevice) {
                 return state;
             }
 

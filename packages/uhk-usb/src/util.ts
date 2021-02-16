@@ -2,7 +2,7 @@ import { Device, devices } from 'node-hid';
 import { readFile } from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
-import { Buffer, LogService, UHK_DEVICES } from 'uhk-common';
+import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants';
 
@@ -108,8 +108,8 @@ export const isUhkZeroInterface = (dev: Device): boolean => {
     );
 };
 
-export const isUhkDevice = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vid &&
+export const getUhkDevice = (dev: Device): UhkDeviceProduct => {
+    return UHK_DEVICES.find(device => dev.vendorId === device.vid &&
         (dev.productId === device.pid || dev.productId === device.bootloaderId)
     );
 };
