@@ -114,7 +114,7 @@ export function reducer(
             const payload = (action as KeymapActions.EditKeymapNameAction).payload;
 
             if (!isValidName(payload.name)) {
-                break;
+                return reassignUserConfig(state);
             }
 
             const name: string = payload.name.trim();
@@ -129,7 +129,7 @@ export function reducer(
             });
 
             if (duplicate) {
-                break;
+                return reassignUserConfig(state);
             }
 
             const newKeymap = Object.assign(new Keymap(), keymapToRename, { name });
@@ -343,7 +343,7 @@ export function reducer(
         case MacroActions.ActionTypes.EditName: {
             const payload = (action as MacroActions.EditMacroNameAction).payload;
             if (!isValidName(payload.name)) {
-                break;
+                return reassignUserConfig(state);
             }
 
             const name: string = payload.name.trim();
@@ -358,7 +358,7 @@ export function reducer(
             });
 
             if (duplicate) {
-                break;
+                return reassignUserConfig(state);
             }
 
             const newMacro = Object.assign(new Macro(), macroToRename, { name });
@@ -806,4 +806,15 @@ function addMissingModuleConfigs(
     });
 
     return newConfig;
+}
+
+function reassignUserConfig(state: State): State {
+    const userConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+    userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => new Keymap(keymap));
+    userConfiguration.macros = userConfiguration.macros.map(macro => new Macro(macro));
+
+    return {
+        ...state,
+        userConfiguration
+    };
 }

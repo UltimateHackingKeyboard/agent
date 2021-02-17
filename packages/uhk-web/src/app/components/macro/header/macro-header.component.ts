@@ -1,7 +1,10 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    Input
+    Input,
+    OnChanges,
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faCopy, faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +13,7 @@ import { Macro } from 'uhk-common';
 import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
 import { AppState } from '../../../store';
 import * as util from '../../../util';
+import { AutoGrowInputComponent } from '../../auto-grow-input';
 
 @Component({
     selector: 'macro-header',
@@ -17,15 +21,23 @@ import * as util from '../../../util';
     styleUrls: ['./macro-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MacroHeaderComponent {
+export class MacroHeaderComponent implements OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
+
+    @ViewChild(AutoGrowInputComponent, { static: true }) macroName: AutoGrowInputComponent;
 
     faCopy = faCopy;
     faPlay = faPlay;
     faTrash = faTrash;
 
     constructor(private store: Store<AppState>) {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.macro) {
+            this.macroName.writeValue(changes.macro.currentValue.name);
+        }
     }
 
     removeMacro() {

@@ -26,6 +26,7 @@ import {
     SetDefaultKeymapAction
 } from '../../../store/actions/keymap';
 import * as util from '../../../util';
+import { AutoGrowInputComponent } from '../../auto-grow-input';
 
 const DEFAULT_TRASH_TITLE = 'Delete keymap';
 
@@ -40,7 +41,8 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
     @Input() keymap: Keymap;
     @Input() deletable: boolean;
 
-    @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef;
+    @ViewChild('abbr', { static: true }) keymapAbbr: ElementRef<HTMLInputElement>;
+    @ViewChild(AutoGrowInputComponent, { static: true }) keymapName: AutoGrowInputComponent;
 
     starTitle: string;
     starIcon: IconDefinition;
@@ -64,6 +66,7 @@ export class KeymapHeaderComponent implements OnChanges, OnDestroy {
         if (changes['keymap']) {
             this.setKeymapTitle();
             this.setAbbreviation();
+            this.keymapName.writeValue(changes.keymap.currentValue.name);
         }
         if (changes['deletable']) {
             this.setTrashTitle();
