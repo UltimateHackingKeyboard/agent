@@ -1,7 +1,7 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import Uhk, { errorHandler, yargs } from './src';
-import { Constants, EnumerationModes } from 'uhk-usb';
+import { Constants, EnumerationModes, waitForDevice } from 'uhk-usb';
 import { KBoot, UsbPeripheral } from '../kboot';
 
 (async function () {
@@ -10,7 +10,7 @@ import { KBoot, UsbPeripheral } from '../kboot';
             .usage('Test 2 bootloader timeout after KBoot reset command')
             .argv;
 
-        const { device } = Uhk(argv);
+        const { device, operations } = Uhk(argv);
         console.info('Start Bootloader re-enumeration with 60 sec');
 
         await device.reenumerate({
@@ -24,14 +24,9 @@ import { KBoot, UsbPeripheral } from '../kboot';
         const kboot = new KBoot(new UsbPeripheral({ vendorId: Constants.VENDOR_ID, productId: Constants.BOOTLOADER_ID }));
         await kboot.reset();
 
-        console.info('Start Normal Keayboard re-enumeration with 5 sec');
+        console.info('Wait for Keyboard');
 
-        await device.reenumerate({
-            enumerationMode: EnumerationModes.NormalKeyboard,
-            timeout: 5000,
-            vid: Constants.VENDOR_ID,
-            pid: Constants.PRODUCT_ID
-        });
+        await waitForDevice(Constants.VENDOR_ID, Constants.PRODUCT_ID);
 
     } catch (error) {
         errorHandler(error);
