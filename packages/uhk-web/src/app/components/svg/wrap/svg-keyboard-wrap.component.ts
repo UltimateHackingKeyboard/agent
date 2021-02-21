@@ -51,7 +51,7 @@ import {
 import { RemapInfo } from '../../../models/remap-info';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { LastEditedKey } from '../../../models';
-import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 interface NameValuePair {
     name: string;
@@ -65,31 +65,30 @@ interface NameValuePair {
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('popover', [
-            state('closed', style({
-                transform: 'translateY(30px)',
-                visibility: 'hidden',
-                opacity: 0
-            })),
-            state('opened', style({
-                transform: 'translateY(0)',
-                visibility: 'visible',
-                opacity: 1
-            })),
-            transition('opened => closed', [
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({ transform: 'translateY(0)', visibility: 'visible', opacity: 1, offset: 0 }),
-                    style({ transform: 'translateY(30px)', visibility: 'hidden', opacity: 0, offset: 1 })
-                ]))
-            ], { params: { animationTime: '200ms' } }),
-            transition('closed => opened', [
+            transition(':leave', [
                 style({
-                    visibility: 'visible'
+                    transform: 'translateY(0)',
+                    visibility: 'visible',
+                    opacity: 1
                 }),
-                animate('{{animationTime}} ease-out', keyframes([
-                    style({ transform: 'translateY(30px)', opacity: 0, offset: 0 }),
-                    style({ transform: 'translateY(0)', opacity: 1, offset: 1 })
-                ]))
-            ], { params: { animationTime: '200ms' } })
+                animate('{{animationTime}} ease-out', style({
+                    transform: 'translateY(30px)',
+                    visibility: 'hidden',
+                    opacity: 0
+                }))
+            ]),
+            transition(':enter', [
+                style({
+                    transform: 'translateY(30px)',
+                    visibility: 'hidden',
+                    opacity: 0
+                }),
+                animate('{{animationTime}} ease-out', style({
+                    transform: 'translateY(0)',
+                    visibility: 'visible',
+                    opacity: 1
+                }))
+            ])
         ])
     ]
 })
@@ -444,21 +443,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private calculatePosition() {
+        const popoverWidth = 600;
         const offsetLeft: number = this.wrapPosition.left + 249; // 265 is a width of the side menu with a margin
-        const popover: HTMLElement = this.popover.nativeElement;
         let newLeft: number = this.keyPosition.left + (this.keyPosition.width / 2);
 
         this.leftArrow = newLeft < offsetLeft;
-        this.rightArrow = (newLeft + popover.offsetWidth) > offsetLeft + this.wrapPosition.width;
+        this.rightArrow = (newLeft + popoverWidth) > offsetLeft + this.wrapPosition.width;
 
         const splitOffset = this.halvesInfo.areHalvesMerged ? 0 : 17;
 
         if (this.leftArrow) {
             newLeft = this.keyPosition.left - splitOffset;
         } else if (this.rightArrow) {
-            newLeft = this.keyPosition.left - popover.offsetWidth + this.keyPosition.width + splitOffset * 1.5;
+            newLeft = this.keyPosition.left - popoverWidth + this.keyPosition.width + splitOffset * 1.5;
         } else {
-            newLeft -= popover.offsetWidth / 2;
+            newLeft -= popoverWidth / 2;
         }
 
         // 7 is a space between a bottom key position and a popover
