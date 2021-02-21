@@ -17,8 +17,9 @@
     ></keyboard-slider>
 
     <popover tabindex="0"
-             [@popover]="{ value: animationState, params: { animationTime: animationTime } }"
-             [visible]="animationState === 'opened'"
+             [@popover]="{ value:'', params: { animationTime: animationTime } }"
+             *ngIf="animationState === 'opened'"
+             [visible]="true"
              [style.top.px]="topPosition"
              [style.left.px]="leftPosition"
              [leftArrow]="leftArrow"
