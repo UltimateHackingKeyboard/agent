@@ -16,7 +16,6 @@ import {
 } from 'uhk-common';
 
 import {
-    Constants,
     EnumerationModes,
     KbootCommands,
     LAYER_NUMBER_TO_STRING,
@@ -24,7 +23,16 @@ import {
     ModuleSlotToI2cAddress,
     UsbCommand
 } from './constants';
-import { bufferToString, getFileContentAsync, getTransferData, isUhkDevice, isUhkZeroInterface, retry, snooze } from './util';
+import {
+    bufferToString,
+    getFileContentAsync,
+    getTransferData,
+    isBootloader,
+    getUhkDevice,
+    isUhkZeroInterface,
+    retry,
+    snooze
+} from './util';
 import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
@@ -68,7 +76,7 @@ export class UhkHidDevice {
             const devs = devices();
             this.logDevices(devs);
 
-            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || x.productId === Constants.BOOTLOADER_ID);
+            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
 
             if (!dev) {
                 return true;
@@ -95,7 +103,6 @@ export class UhkHidDevice {
         const devs = devices();
         const result: DeviceConnectionState = {
             bootloaderActive: false,
-            connected: false,
             zeroInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
             halvesInfo: {
@@ -107,21 +114,20 @@ export class UhkHidDevice {
         };
 
         for (const dev of devs) {
-            if (isUhkDevice(dev)) {
-                result.connected = true;
+            if (!result.connectedDevice) {
+                result.connectedDevice = getUhkDevice(dev);
             }
 
             if (isUhkZeroInterface(dev)) {
                 result.zeroInterfaceAvailable = true;
-            } else if (dev.vendorId === Constants.VENDOR_ID &&
-                dev.productId === Constants.BOOTLOADER_ID) {
+            } else if (isBootloader(dev)) {
                 result.bootloaderActive = true;
             }
         }
 
-        if (result.connected && result.hasPermission && result.zeroInterfaceAvailable) {
+        if (result.connectedDevice && result.hasPermission && result.zeroInterfaceAvailable) {
             result.halvesInfo = await this.getHalvesStates();
-        } else if (!result.connected) {
+        } else if (!result.connectedDevice) {
             this._device = undefined;
         }
 

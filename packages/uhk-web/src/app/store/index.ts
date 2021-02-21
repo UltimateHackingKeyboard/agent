@@ -10,6 +10,7 @@ import {
     HardwareModules,
     Keymap,
     PlayMacroAction,
+    UHK_60_DEVICE,
     UhkBuffer,
     UserConfiguration
 } from 'uhk-common';
@@ -123,10 +124,10 @@ export const deviceConnected = createSelector(
         }
 
         if (app.platform === 'linux') {
-            return device.connected && (device.zeroInterfaceAvailable || device.updatingFirmware);
+            return device.connectedDevice && (device.zeroInterfaceAvailable || device.updatingFirmware);
         }
 
-        return device.connected;
+        return !!device.connectedDevice;
     });
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
@@ -163,6 +164,7 @@ export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.fir
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
+export const getConnectedDevice = createSelector(deviceState, fromDevice.getConnectedDevice);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -280,13 +282,16 @@ export const getSideMenuPageState = createSelector(
     getUserConfiguration,
     getRestoreUserConfiguration,
     calculateDeviceUiState,
+    getConnectedDevice,
     (showAddonMenuValue: boolean,
      runningInElectronValue: boolean,
      updatingFirmwareValue: boolean,
      userConfiguration: UserConfiguration,
      restoreUserConfiguration: boolean,
-     uiState): SideMenuPageState => {
+     uiState,
+     connectedDevice): SideMenuPageState => {
         return {
+            connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
             updatingFirmware: updatingFirmwareValue,

@@ -1,8 +1,10 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
-import Uhk, { errorHandler, yargs } from './src';
 import * as path from 'path';
 import * as fs from 'fs';
+import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
+
+import Uhk, { errorHandler, yargs } from './src';
 
 (async () => {
     try {
@@ -20,7 +22,15 @@ import * as fs from 'fs';
             process.exit(1);
         }
 
-        const rightFirmwarePath = path.join(firmwarePath, '/devices/uhk60-right/firmware.hex');
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+
+        const packageJsonPath = path.join(firmwarePath, 'package.json');
+        const packageJson = await getFirmwarePackageJson({
+            packageJsonPath,
+            leftFirmwarePath: path.join(firmwarePath, 'modules/uhk60-left.bin'),
+            tmpDirectory: firmwarePath
+        });
+        const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
         if (!fs.existsSync(rightFirmwarePath)) {
             console.error('Right firmware path not found!');
             process.exit(1);
@@ -44,8 +54,8 @@ import * as fs from 'fs';
         }
 
         const { operations } = Uhk(argv);
-        await operations.updateRightFirmwareWithKboot(rightFirmwarePath);
-        await operations.updateLeftModuleWithKboot(leftFirmwarePath);
+        await operations.updateRightFirmwareWithKboot(rightFirmwarePath, uhkDeviceProduct);
+        await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);
         await operations.saveHardwareConfiguration(layout === 'iso');

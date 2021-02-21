@@ -70,7 +70,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (state.connected && state.zeroInterfaceAvailable) {
+                if (state.connectedDevice && state.zeroInterfaceAvailable) {
                     const allowDefaultNavigation = [
                         '/detection',
                         '/privilege',

@@ -28,7 +28,7 @@
                [routerLinkActive]="['active']"
                class="d-block text-decoration-none navigation">
                 <i class="uhk-icon uhk-icon-usb-drive"></i>
-                UHK 60 v1<span class="loading-config"></span>
+                {{ state?.connectedDevice?.name }}<span class="loading-config"></span>
             </a>
 
             <a *ngSwitchCase="'PermissionRequired'"
@@ -36,7 +36,7 @@
                [routerLinkActive]="['active']"
                class="d-block text-decoration-none navigation">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                UHK 60 v1
+                {{ state?.connectedDevice?.name }}
             </a>
 
             <a *ngSwitchCase="'Recovery'"
@@ -44,7 +44,7 @@
                [routerLinkActive]="['active']"
                class="d-block text-decoration-none navigation">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                UHK 60 v1
+                {{ state?.connectedDevice?.name }}
             </a>
         </div>
         <ul [@toggler]="this.sideMenuState.device.animation">

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { getDefaultHalvesInfo, ConfigSizesInfo, HalvesInfo, HardwareModules } from 'uhk-common';
+import { getDefaultHalvesInfo, ConfigSizesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
@@ -11,7 +11,7 @@ import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
 
 export interface State {
-    connected: boolean;
+    connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
     zeroInterfaceAvailable: boolean;
@@ -32,7 +32,6 @@ export interface State {
 }
 
 export const initialState: State = {
-    connected: true,
     hasPermission: true,
     bootloaderActive: false,
     zeroInterfaceAvailable: true,
@@ -64,7 +63,7 @@ export function reducer(state = initialState, action: Action): State {
             const data = (<Device.ConnectionStateChangedAction>action).payload;
             return {
                 ...state,
-                connected: data.connected,
+                connectedDevice: data.connectedDevice,
                 hasPermission: data.hasPermission,
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
@@ -244,10 +243,10 @@ export function reducer(state = initialState, action: Action): State {
 }
 
 export const updatingFirmware = (state: State) => state.updatingFirmware;
-export const isDeviceConnected = (state: State) => state.connected || state.updatingFirmware;
+export const isDeviceConnected = (state: State) => state.connectedDevice || state.updatingFirmware;
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
-    if (state.connected && !state.zeroInterfaceAvailable) {
+    if (state.connectedDevice && !state.zeroInterfaceAvailable) {
         return {
             header: 'Cannot find your UHK',
             subtitle: 'Please reconnect it!'
@@ -283,7 +282,9 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
         return DeviceUiStates.Recovery;
     }
 
-    if (!state.connected) {
+    if (!state.connectedDevice) {
         return DeviceUiStates.NotFound;
     }
 };
+
+export const getConnectedDevice = (state: State) => state.connectedDevice;

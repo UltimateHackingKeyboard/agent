@@ -1,4 +1,4 @@
-import { Keymap } from 'uhk-common';
+import { Keymap, UhkDeviceProduct } from 'uhk-common';
 
 import { MacroMenuItem } from './macro-menu-item';
 import { DeviceUiStates } from './device-ui-states';
@@ -12,4 +12,5 @@ export interface SideMenuPageState {
     macros: MacroMenuItem[];
     restoreUserConfiguration: boolean;
     deviceUiState?: DeviceUiStates;
+    connectedDevice?: UhkDeviceProduct;
 }

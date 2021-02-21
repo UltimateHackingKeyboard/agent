@@ -5,17 +5,15 @@ import {
     LogService,
     ModuleVersionInfo,
     RightModuleInfo,
-    UhkBuffer
+    UhkBuffer,
+    UhkDeviceProduct
 } from 'uhk-common';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
     ConfigBufferId,
-    Constants,
     EepromOperation,
-    enumerationModeIdToProductId,
     EnumerationModes,
-    EnumerationNameToProductId,
     KbootCommands,
     MODULE_ID_TO_STRING,
     ModulePropertyId,
@@ -25,11 +23,14 @@ import {
 } from './constants';
 import * as fs from 'fs';
 import * as os from 'os';
+import { promisify } from 'util';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
 import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
 import { LoadConfigurationsResult, DebugInfo, I2cBaudRate, Duration, I2cErrorBuffer } from './models';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils';
+
+const existsAsync = promisify(fs.exists);
 
 export class UhkOperations {
     constructor(private logService: LogService,
@@ -42,20 +43,24 @@ export class UhkOperations {
         await this.device.write(transfer);
     }
 
-    public async updateRightFirmwareWithKboot(firmwarePath: string): Promise<void> {
+    public async updateRightFirmwareWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+        if (!(await existsAsync(firmwarePath))) {
+            throw new Error(`Firmware path not found: ${firmwarePath}`);
+        }
+
         this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.misc('[UhkOperations] Start flashing right firmware');
 
         this.logService.misc('[UhkOperations] Reenumerate bootloader');
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.Bootloader,
-            vid: Constants.VENDOR_ID,
-            pid: enumerationModeIdToProductId[EnumerationModes.Bootloader]
+            vid: device.vid,
+            pid: device.bootloaderId
         });
         this.device.close();
-        const kboot = new KBoot(new UsbPeripheral({ productId: Constants.BOOTLOADER_ID, vendorId: Constants.VENDOR_ID }));
+        const kboot = new KBoot(new UsbPeripheral({ productId: device.bootloaderId, vendorId: device.vid }));
         this.logService.misc('[UhkOperations] Waiting for bootloader');
-        await waitForDevice(Constants.VENDOR_ID, Constants.BOOTLOADER_ID);
+        await waitForDevice(device.vid, device.bootloaderId);
         this.logService.misc('[UhkOperations] Flash security disable');
         await kboot.flashSecurityDisable([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
         this.logService.misc('[UhkOperations] Flash erase region');
@@ -80,22 +85,23 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
-    public async updateLeftModuleWithKboot(firmwarePath: string): Promise<void> {
-        return this.updateModuleWithKboot(firmwarePath, ModuleSlotToI2cAddress.leftHalf, ModuleSlotToId.leftHalf);
+    public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
+        return this.updateModuleWithKboot(firmwarePath, ModuleSlotToI2cAddress.leftHalf, ModuleSlotToId.leftHalf, device);
     }
 
     public async updateModuleWithKboot(
         firmwarePath: string,
         i2CAddress: ModuleSlotToI2cAddress,
-        slotId: ModuleSlotToId
+        slotId: ModuleSlotToId,
+        device: UhkDeviceProduct
     ): Promise<void> {
         this.logService.misc('[UhkOperations] Start flashing left module firmware');
         const moduleName = MODULE_ID_TO_STRING[slotId];
         const i2cAddressOfModule = Number.parseInt(i2CAddress, 16);
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vid: Constants.VENDOR_ID,
-            pid: enumerationModeIdToProductId[EnumerationModes.NormalKeyboard]
+            vid: device.vid,
+            pid: device.normalKeyboard
         });
         this.device.close();
         await snooze(1000);
@@ -113,14 +119,14 @@ export class UhkOperations {
 
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.Buspal,
-            vid: Constants.VENDOR_ID,
-            pid: enumerationModeIdToProductId[EnumerationModes.Buspal]
+            vid: device.vid,
+            pid: device.buspal
         });
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for buspal');
-        await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.buspal);
+        await waitForDevice(device.vid, device.buspal);
         let tryCount = 0;
-        const usbPeripheral = new UsbPeripheral({ productId: EnumerationNameToProductId.buspal, vendorId: Constants.VENDOR_ID });
+        const usbPeripheral = new UsbPeripheral({ productId: device.buspal, vendorId: device.vid });
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
@@ -161,12 +167,12 @@ export class UhkOperations {
         await snooze(1000);
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vid: Constants.VENDOR_ID,
-            pid: enumerationModeIdToProductId[EnumerationModes.NormalKeyboard]
+            vid: device.vid,
+            pid: device.normalKeyboard
         });
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
-        await waitForDevice(Constants.VENDOR_ID, EnumerationNameToProductId.normalKeyboard);
+        await waitForDevice(device.vid, device.normalKeyboard);
         await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset, 100);
         this.device.close();
         await snooze(1000);

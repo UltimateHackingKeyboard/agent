@@ -1,7 +1,4 @@
 export namespace Constants {
-    export const VENDOR_ID = 0x1D50;
-    export const PRODUCT_ID = 0x6122;
-    export const BOOTLOADER_ID = 0x6120;
     export const MAX_PAYLOAD_SIZE = 64;
 }
 
@@ -56,20 +53,6 @@ export enum EnumerationModes {
     Buspal = 1,
     NormalKeyboard = 2,
     CompatibleKeyboard = 3
-}
-
-export const enumerationModeIdToProductId = {
-    '0': 0x6120,
-    '1': 0x6121,
-    '2': 0x6122,
-    '3': 0x6123
-};
-
-export enum EnumerationNameToProductId {
-    bootloader = 0x6120,
-    buspal = 0x6121,
-    normalKeyboard = 0x6122,
-    compatibleKeyboard = 0x6123
 }
 
 export enum ModuleSlotToI2cAddress {
