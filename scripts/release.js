@@ -103,6 +103,7 @@ if (TEST_BUILD || gitTag) {
             },
             publish: 'github',
             artifactName,
+            npmRebuild: false,
             files: [
                 '**/*'
             ]
@@ -112,7 +113,7 @@ if (TEST_BUILD || gitTag) {
             console.log('Packing success.');
         })
         .catch((error) => {
-            console.error(`${error}`);
+            console.error(error);
             process.exit(1);
         })
 } else {
