@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.9] - 2020-02-22
+
+Firmware: 8.10.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.5)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Support the UHK 60 v2.
+- Show connected modules.
+- Make the side menu always visible.
+- Fix keyboard description edit bug.
+- Fix duplicate keymap / macro name bug.
+- Make auto-upgrade work even on the first start of Agent.
+
 ## [1.5.8] - 2020-12-01
 
 Firmware: 8.10.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.2)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
