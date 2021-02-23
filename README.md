@@ -5,7 +5,7 @@ Agent is the configuration application of the [Ultimate Hacking Keyboard](https:
 Please do not build Agent from source unless you want to develop it. Using an existing release is far easier for everyone involved:
 
 * If you already own a UHK then [download the latest desktop build of Agent](https://github.com/UltimateHackingKeyboard/agent/releases/latest) from the releases page. On Linux, download the AppImage, make it executable, and run it. If you don't own a UHK then you won't get past the opening screen!
-* If you don't own a UHK yet then [try out the web build of Agent](http://ultimatehackingkeyboard.github.io/agent/) in your browser. This is meant to be used for demonstration purposes.
+* If you don't own a UHK yet then [try out the web build of Agent](https://ultimatehackingkeyboard.github.io/agent/) in your browser. This is meant to be used for demonstration purposes.
 
 ## Building the electron application
 
