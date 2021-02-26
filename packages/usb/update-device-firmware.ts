@@ -2,6 +2,7 @@
 
 import Uhk, { errorHandler, yargs } from './src';
 import { existsSync } from 'fs';
+import { getCurrentUhkDeviceProduct } from 'uhk-usb';
 
 (async () => {
     try {
@@ -19,8 +20,9 @@ import { existsSync } from 'fs';
         }
 
         const { operations } = Uhk(argv);
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
         console.log(`Updating right firmware from ${firmwarePath} ...`);
-        await operations.updateRightFirmwareWithKboot(firmwarePath);
+        await operations.updateRightFirmwareWithKboot(firmwarePath, uhkDeviceProduct);
         console.log('Firmware updated.');
         console.log('Reenumerating device...');
 
