@@ -1,8 +1,9 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import Uhk, { errorHandler, yargs } from './src';
-import { Constants, EnumerationModes, waitForDevice } from 'uhk-usb';
+import { EnumerationModes, waitForDevice } from 'uhk-usb';
 import { KBoot, UsbPeripheral } from '../kboot';
+import { UHK_60_DEVICE } from 'uhk-common';
 
 (async function () {
     try {
@@ -10,23 +11,23 @@ import { KBoot, UsbPeripheral } from '../kboot';
             .usage('Test 2 bootloader timeout after KBoot reset command')
             .argv;
 
-        const { device, operations } = Uhk(argv);
+        const { device } = Uhk(argv);
         console.info('Start Bootloader re-enumeration with 60 sec');
 
         await device.reenumerate({
             enumerationMode: EnumerationModes.Bootloader,
             timeout: 60000,
-            vid: Constants.VENDOR_ID,
-            pid: Constants.BOOTLOADER_ID
+            vid: UHK_60_DEVICE.vid,
+            pid: UHK_60_DEVICE.bootloaderId
         });
 
         console.info('Kboot reset');
-        const kboot = new KBoot(new UsbPeripheral({ vendorId: Constants.VENDOR_ID, productId: Constants.BOOTLOADER_ID }));
+        const kboot = new KBoot(new UsbPeripheral({ vendorId: UHK_60_DEVICE.vid, productId: UHK_60_DEVICE.bootloaderId }));
         await kboot.reset();
 
         console.info('Wait for Keyboard');
 
-        await waitForDevice(Constants.VENDOR_ID, Constants.PRODUCT_ID);
+        await waitForDevice(UHK_60_DEVICE.vid, UHK_60_DEVICE.pid);
 
     } catch (error) {
         errorHandler(error);
