@@ -44,7 +44,7 @@ import { findModuleById } from '../../../util';
         trigger('fadeSeparator', [
             transition(':enter', [
                 style({ opacity: 0 }),
-                animate('200ms 500ms', style({ opacity: 1 }))
+                animate('{{animationTime}}', style({ opacity: 1 }))
             ]),
             transition(':leave', [
                 style({ opacity: 1 }),
@@ -89,6 +89,7 @@ export class SvgKeyboardComponent implements AfterViewInit {
     @Input() description: string;
     @Input() showDescription = false;
     @Input() lastEditedKey: LastEditedKey;
+    @Input() embedded = false;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
@@ -107,6 +108,7 @@ export class SvgKeyboardComponent implements AfterViewInit {
     separator: SvgSeparator;
     separatorStyle: SafeStyle;
     descriptionAnimation = 'down';
+    fadeSeparatorAnimationTime = '200ms 500ms';
 
     private isAfterViewInit = false;
 
@@ -116,6 +118,14 @@ export class SvgKeyboardComponent implements AfterViewInit {
         this.modules = [];
         this.viewBox = '-520 582 1100 470';
         this.modulesState = {};
+        this.halvesInfo = {
+            areHalvesMerged: true,
+            isLeftHalfConnected: true,
+            leftModuleSlot: LeftSlotModules.NoModule,
+            rightModuleSlot: RightSlotModules.NoModule
+        };
+        this.setModules();
+        this.updateModuleAnimationStates();
     }
 
     ngOnInit() {
@@ -130,6 +140,10 @@ export class SvgKeyboardComponent implements AfterViewInit {
 
         if (changes['keyboardLayout']) {
             this.setModules();
+        }
+
+        if (changes.embedded) {
+            this.fadeSeparatorAnimationTime = this.embedded ? '0ms' : '200ms 500ms';
         }
     }
 
@@ -248,6 +262,10 @@ export class SvgKeyboardComponent implements AfterViewInit {
     }
 
     private fadeAnimationTime(): string {
+        if (this.embedded) {
+            return '0ms';
+        }
+
         return this.isAfterViewInit ? '500ms' : '0ms';
     }
 
