@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1052.362" width="744.094" data-module-id="3">
 <g id="key-1" transform="translate(-116, 1011)">
     <path id="key-1-path" d="M -0.863 32.413 L -0.863 14.181 L -0.863 0 L 55 0 L 55 41.082 L 7.806 41.082 C 6.863 41.083 5.96 40.708 5.294 40.042 L 0.177 34.925 C -0.489 34.259 -0.864 33.356 -0.863 32.413 Z" style="fill:#333"></path>
-    <rect id="key1-print" height="40" width="55" style="fill:none;stroke:none"></rect>
+    <rect id="key-1-print" height="40" width="55" style="fill:none;stroke:none"></rect>
 </g>
 <g id="key-2" transform="translate(-56, 1011)">
     <path id="key-2-path" d="M -0.863 41.082 L -0.863 0 L 55 0 L 55 37.53 C 55 39.492 53.41 41.082 51.448 41.082 Z" style="fill:#333"></path>
