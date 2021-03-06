@@ -62,6 +62,10 @@ export class DeviceEffects {
                     return;
                 }
 
+                if (state.multiDevice) {
+                    return this.router.navigate(['/multi-device']);
+                }
+
                 if (!state.hasPermission) {
                     return this.router.navigate(['/privilege']);
                 }

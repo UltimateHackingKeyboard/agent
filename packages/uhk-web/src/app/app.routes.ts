@@ -11,9 +11,11 @@ import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.g
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
+import { UhkMultiDeviceGuard } from './services/uhk-multi-device.guard';
 import { MainPage } from './pages/main-page/main.page';
 import { agentRoutes } from './components/agent';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
+import { MultiDevicePageComponent } from './pages/multi-device.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { RecoveryModeComponent } from './components/device';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
@@ -34,14 +36,18 @@ const appRoutes: Routes = [
         component: LoadingDevicePageComponent
     },
     {
+        path: 'multi-device',
+        component: MultiDevicePageComponent
+    },
+    {
         path: 'recovery-device',
         component: RecoveryModeComponent,
-        canActivate: [UhkDeviceBootloaderNotActiveGuard]
+        canActivate: [UhkDeviceBootloaderNotActiveGuard, UhkMultiDeviceGuard]
     },
     {
         path: '',
         component: MainPage,
-        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard],
+        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard],
         children: [
             ...deviceRoutes,
             ...keymapRoutes,
