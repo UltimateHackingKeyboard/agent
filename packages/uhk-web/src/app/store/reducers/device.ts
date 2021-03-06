@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { getDefaultHalvesInfo, ConfigSizesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
+import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
@@ -14,6 +14,7 @@ export interface State {
     connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
+    multiDevice: boolean;
     zeroInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
     savingToKeyboard: boolean;
@@ -34,6 +35,7 @@ export interface State {
 export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
+    multiDevice: false,
     zeroInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
@@ -67,7 +69,8 @@ export function reducer(state = initialState, action: Action): State {
                 hasPermission: data.hasPermission,
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
-                halvesInfo: data.halvesInfo
+                halvesInfo: data.halvesInfo,
+                multiDevice: data.multiDevice
             };
         }
 
@@ -274,6 +277,10 @@ export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSucc
 export const halvesInfo = (state: State) => state.halvesInfo;
 export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;
 export const deviceUiState = (state: State): DeviceUiStates | undefined => {
+    if (state.multiDevice) {
+        return DeviceUiStates.MultiDevice;
+    }
+
     if (!state.hasPermission) {
         return DeviceUiStates.PermissionRequired;
     }

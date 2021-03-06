@@ -15,6 +15,14 @@
                          (click)="toggleMenuItem('device')"></fa-icon>
             </ng-container>
 
+            <a *ngSwitchCase="'MultiDevice'"
+               routerLink="/multi-device"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none mb-0 navigation">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+                Multiple device detected
+            </a>
+
             <a *ngSwitchCase="'NotFound'"
                routerLink="/detection"
                [routerLinkActive]="['active']"
