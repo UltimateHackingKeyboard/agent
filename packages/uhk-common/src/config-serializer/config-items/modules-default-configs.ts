@@ -65,6 +65,10 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
     [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
         id: RightSlotModules.TouchpadRight,
         keyActions: [
+            {
+                keyActionType: 'mouse',
+                mouseAction: 'leftClick'
+            }
         ]
     }, [], 4)
 };

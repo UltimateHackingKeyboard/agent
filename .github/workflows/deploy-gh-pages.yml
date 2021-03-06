@@ -4,6 +4,7 @@ on:
   release:
     types:
       - released
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -30,9 +31,9 @@ jobs:
         run: npm run build:web
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3
+        uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: packages/uhk-web/dist
-          CLEAN: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: packages/uhk-web/dist
+          clean: true

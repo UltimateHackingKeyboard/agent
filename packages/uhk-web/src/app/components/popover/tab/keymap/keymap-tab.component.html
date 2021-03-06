@@ -32,7 +32,9 @@
             <img src="assets/images/base-layer--blank.svg">
         </div>
         <svg-keyboard *ngIf="selectedKeymap?.abbreviation"
-                    [moduleConfig]="selectedKeymap.layers[0].modules">
+                      [moduleConfig]="selectedKeymap.layers[0].modules"
+                      [embedded]="true"
+        >
         </svg-keyboard>
     </div>
 </ng-template>
