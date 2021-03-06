@@ -100,12 +100,14 @@ import { PrivilegeCheckerComponent } from './components/privilege-checker';
 import { UhkDeviceConnectedGuard } from './services/uhk-device-connected.guard';
 import { UhkDeviceDisconnectedGuard } from './services/uhk-device-disconnected.guard';
 import { UhkDeviceUninitializedGuard } from './services/uhk-device-uninitialized.guard';
+import { UhkMultiDeviceGuard } from './services/uhk-multi-device.guard';
 import { MainPage } from './pages/main-page/main.page';
 import { DeviceRendererService } from './services/device-renderer.service';
 import { UhkDeviceInitializedGuard } from './services/uhk-device-initialized.guard';
 import { ProgressButtonComponent } from './components/progress-button/progress-button.component';
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
+import { MultiDevicePageComponent } from './pages/multi-device.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
@@ -191,6 +193,7 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
         MainPage,
         ProgressButtonComponent,
         LoadingDevicePageComponent,
+        MultiDevicePageComponent,
         XtermComponent,
         SliderWrapperComponent,
         EditableTextComponent,
@@ -249,7 +252,8 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
         UhkDeviceInitializedGuard,
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
-        UhkDeviceBootloaderNotActiveGuard
+        UhkDeviceBootloaderNotActiveGuard,
+        UhkMultiDeviceGuard
     ],
     exports: [
         UhkMessageComponent,

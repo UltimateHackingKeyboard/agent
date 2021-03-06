@@ -34,6 +34,7 @@ import {
     snooze
 } from './util';
 import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
+import { getNumberOfConnectedDevices } from './utils';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -110,8 +111,13 @@ export class UhkHidDevice {
                 leftModuleSlot: LeftSlotModules.NoModule,
                 isLeftHalfConnected: true,
                 rightModuleSlot: RightSlotModules.NoModule
-            }
+            },
+            multiDevice: getNumberOfConnectedDevices() > 1
         };
+
+        if (result.multiDevice) {
+            return result;
+        }
 
         for (const dev of devs) {
             if (!result.connectedDevice) {

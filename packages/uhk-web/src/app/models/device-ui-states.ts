@@ -3,5 +3,6 @@ export enum DeviceUiStates {
     NotFound = 'NotFound',
     PermissionRequired = 'PermissionRequired',
     Recovery = 'Recovery',
-    UserConfigLoaded = 'UserConfigLoaded'
+    UserConfigLoaded = 'UserConfigLoaded',
+    MultiDevice = 'MultiDevice'
 }
