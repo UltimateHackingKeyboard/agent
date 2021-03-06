@@ -7,3 +7,4 @@ export * from './get-device-firmware-path';
 export * from './get-firmware-package-json';
 export * from './get-number-of-connected-devices';
 export * from './get-package-json-from-path-async';
+export * from './validate-connected-devices';
