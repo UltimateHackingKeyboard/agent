@@ -1,7 +1,7 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import * as fs from 'fs';
-import { ModuleSlotToI2cAddress, ModuleSlotToId } from 'uhk-usb';
+import { getCurrentUhkDeviceProduct, ModuleSlotToI2cAddress, ModuleSlotToId } from 'uhk-usb';
 import Uhk, { errorHandler, yargs } from './src';
 
 (async () => {
@@ -28,12 +28,15 @@ import Uhk, { errorHandler, yargs } from './src';
             process.exit(1);
         }
 
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+
         const { operations } = Uhk(argv);
         console.log(`Updating ${module} module from ${firmwarePath} ...`);
         await operations.updateModuleWithKboot(
             firmwarePath,
             ModuleSlotToI2cAddress[module],
-            ModuleSlotToId[module] as any
+            ModuleSlotToId[module] as any,
+            uhkDeviceProduct
         );
         console.log('Firmware updated.');
 
