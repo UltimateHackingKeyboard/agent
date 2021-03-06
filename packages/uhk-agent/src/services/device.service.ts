@@ -18,6 +18,7 @@ import {
 import {
     checkFirmwareAndDeviceCompatibility,
     getCurrentUhkDeviceProduct,
+    getCurrentUhkDeviceProductByBootloaderId,
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
     snooze,
@@ -253,7 +254,7 @@ export class DeviceService {
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
-            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            const uhkDeviceProduct = getCurrentUhkDeviceProductByBootloaderId();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc('UHK Device recovery starts:', JSON.stringify(uhkDeviceProduct));
