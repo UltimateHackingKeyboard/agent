@@ -28,7 +28,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const enumerationProduct = getDeviceEnumerateProductId(uhkDeviceProduct, reenumerationOption.mode);
     await options.uhkHidDevice.reenumerate({
         enumerationMode: reenumerationOption.mode,
-        vid: uhkDeviceProduct.vid,
+        vid: uhkDeviceProduct.vendorId,
         pid: enumerationProduct,
         timeout: reenumerationOption.timeout
     });
