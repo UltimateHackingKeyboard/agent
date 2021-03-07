@@ -102,20 +102,20 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
 }
 
 export const isUhkZeroInterface = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vid &&
-        dev.productId === device.pid &&
+    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId &&
+        dev.productId === device.keyboardPid &&
         dev.interface === 0
     );
 };
 
 export const getUhkDevice = (dev: Device): UhkDeviceProduct => {
-    return UHK_DEVICES.find(device => dev.vendorId === device.vid &&
-        (dev.productId === device.pid || dev.productId === device.bootloaderId)
+    return UHK_DEVICES.find(device => dev.vendorId === device.vendorId &&
+        (dev.productId === device.keyboardPid || dev.productId === device.bootloaderPid)
     );
 };
 
 export const isBootloader = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vid && dev.productId === device.bootloaderId);
+    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId && dev.productId === device.bootloaderPid);
 };
 
 export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {

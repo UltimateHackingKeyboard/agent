@@ -10,8 +10,8 @@ export function getCurrentUhkDeviceProduct(): UhkDeviceProduct | undefined {
 
     for (const hidDevice of hidDevices) {
         for (const uhkDevice of UHK_DEVICES) {
-            if (hidDevice.vendorId === uhkDevice.vid
-                && (hidDevice.productId === uhkDevice.pid || hidDevice.productId === uhkDevice.bootloaderId)) {
+            if (hidDevice.vendorId === uhkDevice.vendorId
+                && (hidDevice.productId === uhkDevice.keyboardPid || hidDevice.productId === uhkDevice.bootloaderPid)) {
                 return uhkDevice;
             }
         }
