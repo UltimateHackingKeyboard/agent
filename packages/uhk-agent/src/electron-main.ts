@@ -45,7 +45,7 @@ if (!areServicesInited) {
     logger.misc('[Electron Main] init services.');
 
     if (isDev) {
-        packagesDir = path.join(path.join(process.cwd(), process.argv[1]), '../../../../tmp');
+        packagesDir = path.join(process.cwd(), '../../tmp');
     } else {
         packagesDir = path.dirname(app.getAppPath());
     }

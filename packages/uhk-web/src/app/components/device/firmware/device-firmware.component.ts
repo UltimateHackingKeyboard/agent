@@ -2,7 +2,7 @@ import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { Constants, HardwareModules, UploadFileData, VersionInformation } from 'uhk-common';
+import { Constants, HardwareModules, ModuleInfo, UploadFileData, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
@@ -76,6 +76,10 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     changeFile(data: UploadFileData): void {
         this.store.dispatch(new UpdateFirmwareWithAction(data));
+    }
+
+    moduleInfoTrackByFn(index: number, moduleInfo: ModuleInfo): string {
+        return moduleInfo.module.slotId.toString();
     }
 
     private scrollToTheEndOfTheLogs(): void {

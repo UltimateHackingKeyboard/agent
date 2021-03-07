@@ -1,4 +1,5 @@
 import { HalvesInfo } from './halves-info';
+import { HardwareModules } from './hardware-modules';
 import { UhkDeviceProduct } from './uhk-products';
 
 export interface DeviceConnectionState {
@@ -11,4 +12,5 @@ export interface DeviceConnectionState {
     multiDevice: boolean;
     zeroInterfaceAvailable: boolean;
     halvesInfo: HalvesInfo;
+    hardwareModules?: HardwareModules;
 }

@@ -32,7 +32,6 @@ export async function saveTmpFirmware(fileData: UploadFileData): Promise<TmpFirm
 
     return {
         tmpDirectory: tmpDirectory.name,
-        leftFirmwarePath: path.join(tmpDirectory.name, 'modules/uhk60-left.bin'),
         packageJsonPath: path.join(tmpDirectory.name, 'package.json')
     };
 }

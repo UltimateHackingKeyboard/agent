@@ -9,6 +9,8 @@ export * from './app-start-info';
 export * from './configuration-reply';
 export * from './version-information';
 export * from './device-connection-state';
+export * from './module-slot-to-i2c-adress';
+export * from './module-slot-id';
 export * from './module-version-info';
 export * from './log-options';
 export * from './hardware-modules';

@@ -1,5 +1,7 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
+import { ModuleSlotToId } from 'uhk-usb';
+
 import Uhk, { errorHandler, yargs } from './src';
 
 (async function () {
@@ -9,7 +11,7 @@ import Uhk, { errorHandler, yargs } from './src';
             .argv;
 
         const { operations } = Uhk(argv);
-        const version = await operations.getLeftModuleVersionInfo();
+        const version = await operations.getModuleVersionInfo(ModuleSlotToId.leftHalf);
 
         console.log(`moduleProtocolVersion: ${version.moduleProtocolVersion}`);
         console.log(`firmwareVersion: ${version.firmwareVersion}`);
