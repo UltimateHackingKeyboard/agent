@@ -28,8 +28,8 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const enumerationProduct = getDeviceEnumerateProductId(uhkDeviceProduct, reenumerationOption.mode);
     await options.uhkHidDevice.reenumerate({
         enumerationMode: reenumerationOption.mode,
-        vid: uhkDeviceProduct.vendorId,
-        pid: enumerationProduct,
+        vendorId: uhkDeviceProduct.vendorId,
+        productId: enumerationProduct,
         timeout: reenumerationOption.timeout
     });
 

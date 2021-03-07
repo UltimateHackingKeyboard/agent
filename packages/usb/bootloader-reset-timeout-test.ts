@@ -17,17 +17,17 @@ import { UHK_60_DEVICE } from 'uhk-common';
         await device.reenumerate({
             enumerationMode: EnumerationModes.Bootloader,
             timeout: 60000,
-            vid: UHK_60_DEVICE.vid,
-            pid: UHK_60_DEVICE.bootloaderId
+            vendorId: UHK_60_DEVICE.vendorId,
+            productId: UHK_60_DEVICE.bootloaderPid
         });
 
         console.info('Kboot reset');
-        const kboot = new KBoot(new UsbPeripheral({ vendorId: UHK_60_DEVICE.vid, productId: UHK_60_DEVICE.bootloaderId }));
+        const kboot = new KBoot(new UsbPeripheral({ vendorId: UHK_60_DEVICE.vendorId, productId: UHK_60_DEVICE.bootloaderPid }));
         await kboot.reset();
 
         console.info('Wait for Keyboard');
 
-        await waitForDevice(UHK_60_DEVICE.vid, UHK_60_DEVICE.pid);
+        await waitForDevice(UHK_60_DEVICE.vendorId, UHK_60_DEVICE.keyboardPid);
 
     } catch (error) {
         errorHandler(error);

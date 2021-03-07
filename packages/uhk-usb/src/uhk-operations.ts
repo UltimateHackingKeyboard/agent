@@ -54,8 +54,8 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Reenumerate bootloader');
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.Bootloader,
-            vid: device.vendorId,
-            pid: device.bootloaderPid
+            vendorId: device.vendorId,
+            productId: device.bootloaderPid
         });
         this.device.close();
         const kboot = new KBoot(new UsbPeripheral({ productId: device.bootloaderPid, vendorId: device.vendorId }));
@@ -100,8 +100,8 @@ export class UhkOperations {
         const i2cAddressOfModule = Number.parseInt(i2CAddress, 16);
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vid: device.vendorId,
-            pid: device.keyboardPid
+            vendorId: device.vendorId,
+            productId: device.keyboardPid
         });
         this.device.close();
         await snooze(1000);
@@ -119,8 +119,8 @@ export class UhkOperations {
 
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.Buspal,
-            vid: device.vendorId,
-            pid: device.buspalPid
+            vendorId: device.vendorId,
+            productId: device.buspalPid
         });
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for buspal');
@@ -167,8 +167,8 @@ export class UhkOperations {
         await snooze(1000);
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vid: device.vendorId,
-            pid: device.keyboardPid
+            vendorId: device.vendorId,
+            productId: device.keyboardPid
         });
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
