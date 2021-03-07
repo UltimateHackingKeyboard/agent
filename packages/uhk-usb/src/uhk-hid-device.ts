@@ -194,7 +194,9 @@ export class UhkHidDevice {
         this._prevDevices = [];
     }
 
-    async reenumerate({ enumerationMode, pid, vid, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption): Promise<void> {
+    async reenumerate(
+        { enumerationMode, productId, vendorId, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
+    ): Promise<void> {
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
 
@@ -215,8 +217,8 @@ export class UhkHidDevice {
             const devs = devices();
 
             const inBootloaderMode = devs.some((x: Device) =>
-                x.vendorId === vid &&
-                x.productId === pid);
+                x.vendorId === vendorId &&
+                x.productId === productId);
 
             if (inBootloaderMode) {
                 this.logService.misc('[UhkHidDevice] Reenumerating devices');

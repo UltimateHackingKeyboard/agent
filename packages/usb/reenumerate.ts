@@ -37,8 +37,8 @@ import {
         const { device } = Uhk(argv);
         await device.reenumerate({
             enumerationMode,
-            vid: uhkDeviceProduct.vid,
-            pid: enumerationProductId,
+            vendorId: uhkDeviceProduct.vendorId,
+            productId: enumerationProductId,
             timeout: argv.timeout});
     } catch (error) {
         errorHandler(error);
