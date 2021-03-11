@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.10] - 2020-03-11
+
+Firmware: 8.10.**7** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.7)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Fix the keymap action section of the key action popover.
+- Make touchpad action customizable.
+- Disallow the use of multiple UHKs with Agent by showing a dedicated screen.
+
 ## [1.5.9] - 2020-02-22
 
 Firmware: 8.10.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.5)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
