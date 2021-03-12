@@ -167,8 +167,7 @@ async function afterSign(context) {
 }
 
 function getGithubTag() {
-    const regExp = new RegExp('^refs\\/tags\\/(v\\d\\.\\d\\.\\d)$');
-    const result = regExp.exec(process.env.GITHUB_REF);
+    const result = /^refs\/tags\/(v\d+\.\d+\.\d+)$/.exec(process.env.GITHUB_REF);
 
     return result && result[1];
 }
