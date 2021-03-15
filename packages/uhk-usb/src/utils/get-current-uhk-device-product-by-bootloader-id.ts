@@ -6,6 +6,7 @@ import { validateConnectedDevices } from './validate-connected-devices';
 export function getCurrentUhkDeviceProductByBootloaderId(): UhkDeviceProduct | undefined {
     validateConnectedDevices();
 
+    // TODO: pass vendor id ????
     const hidDevices = devices();
 
     for (const hidDevice of hidDevices) {

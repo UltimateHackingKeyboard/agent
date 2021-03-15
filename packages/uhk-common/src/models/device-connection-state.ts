@@ -10,7 +10,7 @@ export interface DeviceConnectionState {
      * True if more then 1 UHK device connected.
      */
     multiDevice: boolean;
-    zeroInterfaceAvailable: boolean;
+    mgmtInterfaceAvailable: boolean;
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
 }

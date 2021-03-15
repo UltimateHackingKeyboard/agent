@@ -30,7 +30,7 @@ import {
     getTransferData,
     isBootloader,
     getUhkDevice,
-    isUhkZeroInterface,
+    isUhkMgmtInterface,
     retry,
     snooze
 } from './util';
@@ -75,10 +75,11 @@ export class UhkHidDevice {
             }
 
             this.logService.misc('[UhkHidDevice] Devices before checking permission:');
+            // TODO: pass vendor ID ???
             const devs = devices();
             this.logDevices(devs);
 
-            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
+            const dev = devs.find((x: Device) => isUhkMgmtInterface(x) || isBootloader(x));
 
             if (!dev) {
                 return true;
@@ -102,10 +103,11 @@ export class UhkHidDevice {
      * @returns {DeviceConnectionState}
      */
     public async getDeviceConnectionStateAsync(): Promise<DeviceConnectionState> {
+        // TODO: Pass vendorid ???
         const devs = devices();
         const result: DeviceConnectionState = {
             bootloaderActive: false,
-            zeroInterfaceAvailable: false,
+            mgmtInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
             halvesInfo: {
                 areHalvesMerged: true,
@@ -126,14 +128,14 @@ export class UhkHidDevice {
                 result.connectedDevice = getUhkDevice(dev);
             }
 
-            if (isUhkZeroInterface(dev)) {
-                result.zeroInterfaceAvailable = true;
+            if (isUhkMgmtInterface(dev)) {
+                result.mgmtInterfaceAvailable = true;
             } else if (isBootloader(dev)) {
                 result.bootloaderActive = true;
             }
         }
 
-        if (result.connectedDevice && result.hasPermission && result.zeroInterfaceAvailable) {
+        if (result.connectedDevice && result.hasPermission && result.mgmtInterfaceAvailable) {
             result.halvesInfo = await this.getHalvesStates();
         } else if (!result.connectedDevice) {
             this._device = undefined;
@@ -216,6 +218,7 @@ export class UhkHidDevice {
         let jumped = false;
 
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
+            // TODO: pass vendor id ????
             const devs = devices();
 
             const inBootloaderMode = devs.some((x: Device) =>
@@ -374,10 +377,11 @@ export class UhkHidDevice {
      */
     private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): HID {
         try {
+            // TODO: pass vendorid ???
             const devs = devices();
             this.listAvailableDevices(devs);
 
-            const dev = devs.find(isUhkZeroInterface);
+            const dev = devs.find(isUhkMgmtInterface);
 
             if (!dev) {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');

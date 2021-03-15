@@ -15,7 +15,7 @@ export interface State {
     hasPermission: boolean;
     bootloaderActive: boolean;
     multiDevice: boolean;
-    zeroInterfaceAvailable: boolean;
+    mgmtInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
     savingToKeyboard: boolean;
     updatingFirmware: boolean;
@@ -36,7 +36,7 @@ export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
     multiDevice: false,
-    zeroInterfaceAvailable: true,
+    mgmtInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
     updatingFirmware: false,
@@ -64,7 +64,7 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 connectedDevice: data.connectedDevice,
                 hasPermission: data.hasPermission,
-                zeroInterfaceAvailable: data.zeroInterfaceAvailable,
+                mgmtInterfaceAvailable: data.mgmtInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
                 halvesInfo: data.halvesInfo,
                 modules: data.hardwareModules,
@@ -247,7 +247,7 @@ export const updatingFirmware = (state: State) => state.updatingFirmware;
 export const isDeviceConnected = (state: State) => state.connectedDevice || state.updatingFirmware;
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
-    if (state.connectedDevice && !state.zeroInterfaceAvailable) {
+    if (state.connectedDevice && !state.mgmtInterfaceAvailable) {
         return {
             header: 'Cannot find your UHK',
             subtitle: 'Please reconnect it!'

@@ -12,6 +12,10 @@ export interface UhkDeviceProduct {
     // USB bootloader product ID
     bootloaderPid: number;
     buspalPid: number;
+    // Management interface HID Usage Page
+    usagePage: number;
+    // Management interface HID Usage
+    usage: number;
 }
 
 export const UHK_60_DEVICE: UhkDeviceProduct = {
@@ -20,7 +24,9 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
     vendorId: 0x1D50,
     keyboardPid: 0x6122,
     bootloaderPid: 0x6120,
-    buspalPid: 0x6121
+    buspalPid: 0x6121,
+    usagePage: 0xFF00,
+    usage: 0x01
 };
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
@@ -29,7 +35,9 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     vendorId: 0x1D50,
     keyboardPid: 0x6124,
     bootloaderPid: 0x6123,
-    buspalPid: 0x6121
+    buspalPid: 0x6121,
+    usagePage: 0xFF00,
+    usage: 0x01
 };
 
 export const UHK_DEVICES: Array<UhkDeviceProduct> = [

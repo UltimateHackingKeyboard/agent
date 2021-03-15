@@ -1,10 +1,10 @@
-import { Device, devices } from 'node-hid';
+import { Device, devices, HID } from 'node-hid';
 import { readFile } from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
 import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
-import { Constants, UsbCommand } from './constants';
+import { Constants, DevicePropertyIds, UsbCommand } from './constants';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -101,11 +101,39 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
     }
 }
 
-export const isUhkZeroInterface = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId &&
-        dev.productId === device.keyboardPid &&
-        dev.interface === 0
-    );
+export const isUhkMgmtInterface = (dev: Device): boolean => {
+    return UHK_DEVICES.some( device => {
+        if (dev.vendorId === device.vendorId
+                && dev.productId === device.keyboardPid
+                && dev.usagePage === device.usagePage
+                && dev.usage === device.usage) {
+            return true;
+        }
+        if (dev.vendorId === device.vendorId
+            && dev.productId === device.keyboardPid
+            && dev.usagePage === 0
+            && dev.usage === 0
+            && (
+                dev.interface !== 1
+                && dev.interface !== 2
+                && dev.interface !== 3
+            )) {
+            // Linux can sometimes return 0 for usage_page and usage.
+            // This tests the interface to see if it is a valid mgmt interface
+            let hid: HID;
+            try {
+                hid = new HID(dev.path);
+                hid.write(getTransferData(Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.DeviceProtocolVersion])));
+                const data = hid.readTimeout(500);
+                return true;
+            } catch (err) {
+                return false;
+            } finally {
+                hid.close();
+            }
+        }
+        return false;
+    });
 };
 
 export const getUhkDevice = (dev: Device): UhkDeviceProduct => {
@@ -139,7 +167,7 @@ export const waitForDevice = async (vendorId: number, productId: number): Promis
     const startTime = new Date().getTime() + 15000;
 
     while (startTime > new Date().getTime()) {
-
+        // TODO: pass vendor id ????
         const isAvailable = devices()
             .some(dev => dev.vendorId === vendorId && dev.productId === productId);
 

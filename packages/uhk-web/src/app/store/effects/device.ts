@@ -74,7 +74,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (state.connectedDevice && state.zeroInterfaceAvailable) {
+                if (state.connectedDevice && state.mgmtInterfaceAvailable) {
                     const allowDefaultNavigation = [
                         '/detection',
                         '/privilege',
@@ -96,14 +96,14 @@ export class DeviceEffects {
 
                 return prevConnected === currConnected &&
                     prevAction.payload.hasPermission === currAction.payload.hasPermission &&
-                    prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable;
+                    prevAction.payload.mgmtInterfaceAvailable === currAction.payload.mgmtInterfaceAvailable;
             }),
             mergeMap(([action, route, connected]) => {
                 const payload = action.payload;
 
                 if (connected
                     && payload.hasPermission
-                    && payload.zeroInterfaceAvailable) {
+                    && payload.mgmtInterfaceAvailable) {
 
                     return [
                         new ReadConfigSizesAction(),

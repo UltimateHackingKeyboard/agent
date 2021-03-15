@@ -20,6 +20,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     options.logger.misc(`[reenumerateAndExit] Command line argument: ${arg}`);
 
     options.logger.misc('[reenumerateAndExit] list available devices');
+    // TODO: pass vendor id ????
     options.uhkHidDevice.listAvailableDevices(devices());
 
     const startTime = new Date();
@@ -39,6 +40,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const waitTime = reenumerationOption.timeout + 10000;
 
     while (new Date().getTime() - startTime.getTime() < waitTime) {
+        // TODO: pass vendor id ????
         options.uhkHidDevice.listAvailableDevices(devices());
     }
 }
