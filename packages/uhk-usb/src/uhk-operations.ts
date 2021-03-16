@@ -32,8 +32,6 @@ import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils';
 
 const existsAsync = promisify(fs.exists);
 
-const DEFAULT_PING_BOOTLOADER_MSG = 'Cannot ping the bootloader. Please remove the bridge cable, and keep reconnecting the left keyboard half until you see this message.';
-
 export class UhkOperations {
     constructor(private logService: LogService,
                 private device: UhkHidDevice) {
@@ -109,7 +107,7 @@ export class UhkOperations {
         await this.jumpToBootloaderModule(module.slotId);
         this.device.close();
 
-        const moduleBricked = await this.waitForKbootIdle(module.bootloaderPingReconnectMsg);
+        const moduleBricked = await this.waitForKbootIdle(module.name);
         if (!moduleBricked) {
             const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
@@ -329,7 +327,7 @@ export class UhkOperations {
         }
     }
 
-    public async waitForKbootIdle(message = DEFAULT_PING_BOOTLOADER_MSG): Promise<boolean> {
+    public async waitForKbootIdle(moduleName: string): Promise<boolean> {
         const timeoutTime = new Date(new Date().getTime() + 30000);
 
         while (new Date() < timeoutTime) {
@@ -341,7 +339,7 @@ export class UhkOperations {
             }
 
             // tslint:disable-next-line: max-line-length
-            this.logService.misc(`[DeviceOperation] ${message}`);
+            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you see this message.`);
 
             await snooze(1000);
         }

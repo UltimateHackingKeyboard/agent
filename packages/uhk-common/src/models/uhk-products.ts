@@ -43,7 +43,6 @@ export interface UhkModule {
     slotId: ModuleSlotToId;
     i2cAddress: ModuleSlotToI2cAddress;
     firmwareUpgradeSupported: boolean;
-    bootloaderPingReconnectMsg: string;
 }
 
 export const LEFT_HALF_MODULE: UhkModule = {
@@ -51,8 +50,7 @@ export const LEFT_HALF_MODULE: UhkModule = {
     name: 'Left keyboard half',
     slotId: ModuleSlotToId.leftHalf,
     i2cAddress: ModuleSlotToI2cAddress.leftHalf,
-    firmwareUpgradeSupported: true,
-    bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the bridge cable, and keep reconnecting the left keyboard half until you see this message.'
+    firmwareUpgradeSupported: true
 };
 
 export const LEFT_KEY_CLUSTER_MODULE: UhkModule = {
@@ -60,8 +58,7 @@ export const LEFT_KEY_CLUSTER_MODULE: UhkModule = {
     name: 'Key cluster',
     slotId: ModuleSlotToId.leftModule,
     i2cAddress: ModuleSlotToI2cAddress.leftModule,
-    firmwareUpgradeSupported: true,
-    bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the "Key cluster" module, and keep reconnecting it until you see this message.'
+    firmwareUpgradeSupported: true
 };
 
 export const RIGHT_TRACKBALL_MODULE: UhkModule = {
@@ -69,8 +66,7 @@ export const RIGHT_TRACKBALL_MODULE: UhkModule = {
     name: 'Trackball',
     slotId: ModuleSlotToId.rightModule,
     i2cAddress: ModuleSlotToI2cAddress.rightModule,
-    firmwareUpgradeSupported: true,
-    bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the "Trackball" module, and keep reconnecting it until you see this message.'
+    firmwareUpgradeSupported: true
 };
 
 export const RIGHT_TRACKPOINT_MODULE: UhkModule = {
@@ -78,8 +74,7 @@ export const RIGHT_TRACKPOINT_MODULE: UhkModule = {
     name: 'Trackpoint',
     slotId: ModuleSlotToId.rightModule,
     i2cAddress: ModuleSlotToI2cAddress.rightModule,
-    firmwareUpgradeSupported: true,
-    bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the "Trackpoint" module, and keep reconnecting it until you see this message.'
+    firmwareUpgradeSupported: true
 };
 
 export const RIGHT_TOUCHPAD_MODULE: UhkModule = {
@@ -87,8 +82,7 @@ export const RIGHT_TOUCHPAD_MODULE: UhkModule = {
     name: 'Touchpad',
     slotId: ModuleSlotToId.rightModule,
     i2cAddress: ModuleSlotToI2cAddress.rightTouchpad,
-    firmwareUpgradeSupported: false,
-    bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the "Touchpad" module, and keep reconnecting it until you see this message.'
+    firmwareUpgradeSupported: false
 };
 
 export const UHK_MODULES = [
