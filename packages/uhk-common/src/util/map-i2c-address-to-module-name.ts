@@ -5,13 +5,13 @@ export function mapI2cAddressToModuleName(address: ModuleSlotToI2cAddress): stri
         case ModuleSlotToI2cAddress.leftHalf:
             return 'leftHalf';
 
-        case ModuleSlotToI2cAddress.leftIqs5xx:
+        case ModuleSlotToI2cAddress.leftTouchpad:
             return 'leftTouchpad';
 
         case ModuleSlotToI2cAddress.leftModule:
             return 'leftModule';
 
-        case ModuleSlotToI2cAddress.rightIqs5xx:
+        case ModuleSlotToI2cAddress.rightTouchpad:
             return 'rightTouchpad';
 
         case ModuleSlotToI2cAddress.rightModule:

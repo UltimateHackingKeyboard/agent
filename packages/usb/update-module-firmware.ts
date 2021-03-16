@@ -6,8 +6,7 @@ import {
     mapI2cAddressToSlotId,
     ModuleSlotToI2cAddress,
     toHexString,
-    UhkModule,
-    UhkProductTypes
+    UhkModule
 } from 'uhk-common';
 import { getCurrentUhkDeviceProduct } from 'uhk-usb';
 import Uhk, { errorHandler, yargs } from './src';
@@ -39,11 +38,9 @@ import Uhk, { errorHandler, yargs } from './src';
 
         const uhkModule: UhkModule = {
             i2cAddress,
-            type: UhkProductTypes.Module,
             id: -1,
             slotId: mapI2cAddressToSlotId(i2cAddress),
             name: mapI2cAddressToModuleName(i2cAddress),
-            slotName: mapI2cAddressToModuleName(i2cAddress),
             firmwareUpgradeSupported: true,
             bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the bridge cable/module, and keep reconnecting until you see this message.'
         };

@@ -6,13 +6,13 @@ export function mapI2cAddressToSlotId(address: ModuleSlotToI2cAddress): ModuleSl
         case ModuleSlotToI2cAddress.leftHalf:
             return ModuleSlotToId.leftHalf;
 
-        case ModuleSlotToI2cAddress.leftIqs5xx:
+        case ModuleSlotToI2cAddress.leftTouchpad:
             return ModuleSlotToId.leftModule;
 
         case ModuleSlotToI2cAddress.leftModule:
             return ModuleSlotToId.leftModule;
 
-        case ModuleSlotToI2cAddress.rightIqs5xx:
+        case ModuleSlotToI2cAddress.rightTouchpad:
             return ModuleSlotToId.rightModule;
 
         case ModuleSlotToI2cAddress.rightModule:

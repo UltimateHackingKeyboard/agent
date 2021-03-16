@@ -18,7 +18,6 @@ import {
     EepromOperation,
     EnumerationModes,
     KbootCommands,
-    MODULE_ID_TO_STRING,
     ModulePropertyId,
     UsbVariables
 } from './constants';
@@ -97,8 +96,7 @@ export class UhkOperations {
         device: UhkDeviceProduct,
         module: UhkModule
     ): Promise<void> {
-        this.logService.misc('[UhkOperations] Start flashing left module firmware');
-        const moduleName = MODULE_ID_TO_STRING[module.slotId];
+        this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
             vendorId: device.vendorId,
@@ -113,7 +111,7 @@ export class UhkOperations {
 
         const moduleBricked = await this.waitForKbootIdle(module.bootloaderPingReconnectMsg);
         if (!moduleBricked) {
-            const msg = `[UhkOperations] Couldn't connect to the ${moduleName}.`;
+            const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
             throw new Error(msg);
         }
@@ -131,13 +129,13 @@ export class UhkOperations {
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
-                this.logService.misc(`[UhkOperations] Try to connect to the ${moduleName}`);
+                this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
                 await kboot.configureI2c(module.i2cAddress);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 break;
             } catch {
                 if (tryCount > 100) {
-                    throw new Error(`Can not connect to the ${moduleName}`);
+                    throw new Error(`Can not connect to the "${module.name}"`);
                 }
                 await snooze(2000);
             }
@@ -148,18 +146,18 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
         await snooze(1000);
 
-        this.logService.misc(`[UhkOperations] Flash erase all on ${moduleName} keyboard`);
+        this.logService.misc(`[UhkOperations] Flash erase all on "${module.name}" keyboard`);
         await kboot.configureI2c(module.i2cAddress);
         await kboot.flashEraseAllUnsecure();
 
-        this.logService.misc(`[UhkOperations] Read ${moduleName} firmware from file`);
+        this.logService.misc(`[UhkOperations] Read "${module.name}" firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
 
         this.logService.misc('[UhkOperations] Write memory');
         await kboot.configureI2c(module.i2cAddress);
         await kboot.writeMemory({ startAddress: 0, data: configData });
 
-        this.logService.misc(`[UhkOperations] Reset ${moduleName} keyboard`);
+        this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
         await kboot.reset();
 
         this.logService.misc('[UhkOperations] Close communication channels');
@@ -180,7 +178,7 @@ export class UhkOperations {
         await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
         this.device.close();
 
-        this.logService.misc(`[UhkOperations] ${moduleName} firmware successfully flashed`);
+        this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
     }
 
     /**

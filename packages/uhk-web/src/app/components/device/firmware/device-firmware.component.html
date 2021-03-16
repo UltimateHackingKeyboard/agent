@@ -8,12 +8,12 @@
             </h1>
 
             <p>
+                Right keyboard half firmware: {{ hardwareModules.rightModuleInfo.firmwareVersion }}.
                 <ng-container *ngFor="let moduleInfo of hardwareModules.moduleInfos; trackBy:moduleInfoTrackByFn">
-                    Firmware {{ moduleInfo.info.firmwareVersion }} is running on the "{{ moduleInfo.module.name }}".
-                    <span *ngIf="!moduleInfo.module.firmwareUpgradeSupported"> Firmware is not updatable yet.</span>
                     <br>
+                    {{ moduleInfo.module.name }} firmware: {{ moduleInfo.info.firmwareVersion }}.
+                    <span *ngIf="!moduleInfo.module.firmwareUpgradeSupported"> Firmware is not updatable yet.</span>
                 </ng-container>
-                Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the "Right Keyboard Half".
             </p>
 
             <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,

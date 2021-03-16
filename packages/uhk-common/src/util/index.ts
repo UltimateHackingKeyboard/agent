@@ -2,7 +2,6 @@ export { IpcEvents } from './ipcEvents';
 export * from './constants';
 export * from './create-md5-hash';
 export * from './find-uhk-module-by-id';
-export * from './find-uhk-module-by-slot-name';
 export * from './get-md5-hash-from-file-name';
 export * from './helpers';
 export * from './is-equal-array';
