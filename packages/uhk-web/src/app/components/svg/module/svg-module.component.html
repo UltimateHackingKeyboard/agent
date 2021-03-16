@@ -10,12 +10,13 @@
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">
     <svg:g svg-keyboard-key
             *ngIf="key"
+            [id]="key.id"
             [svgKey]="key"
             [attr.transform]="calcTransform(key)"
             [attr.fill]="key.fill"
+            [class.active]="selected && i == selectedKey.keyId"
             tabindex="-1"
             [keyAction]="keyActions && keyActions[i]"
-            [active]="selected && i == selectedKey.keyId"
             [capturingEnabled]="capturingEnabled"
             [macroMap]="macroMap"
             [blink]="lastEdited && lastEditedKeyId === key.id"
