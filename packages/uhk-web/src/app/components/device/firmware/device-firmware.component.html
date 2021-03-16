@@ -8,11 +8,11 @@
             </h1>
 
             <p>
-                Right keyboard half firmware: {{ hardwareModules.rightModuleInfo.firmwareVersion }}.
+                Right keyboard half firmware: {{ hardwareModules.rightModuleInfo.firmwareVersion }}
                 <ng-container *ngFor="let moduleInfo of hardwareModules.moduleInfos; trackBy:moduleInfoTrackByFn">
                     <br>
-                    {{ moduleInfo.module.name }} firmware: {{ moduleInfo.info.firmwareVersion }}
-                    <span *ngIf="!moduleInfo.module.firmwareUpgradeSupported"> and it's not updatable yet.</span>
+                    <span *ngIf="moduleInfo.module.firmwareUpgradeSupported">{{ moduleInfo.module.name }} firmware: {{ moduleInfo.info.firmwareVersion }}</span>
+                    <span *ngIf="!moduleInfo.module.firmwareUpgradeSupported"> {{ moduleInfo.module.name }} firmware version is unknown and it's not updatable yet.</span>
                 </ng-container>
             </p>
 
