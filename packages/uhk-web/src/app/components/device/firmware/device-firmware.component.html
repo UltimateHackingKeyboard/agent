@@ -8,8 +8,12 @@
             </h1>
 
             <p>
-                Firmware {{ hardwareModules.leftModuleInfo.firmwareVersion }} is running on the left keyboard half.<br>
-                Firmware {{ hardwareModules.rightModuleInfo.firmwareVersion }} is running on the right keyboard half.
+                Right keyboard half firmware: {{ hardwareModules.rightModuleInfo.firmwareVersion }}
+                <ng-container *ngFor="let moduleInfo of hardwareModules.moduleInfos; trackBy:moduleInfoTrackByFn">
+                    <br>
+                    <span *ngIf="moduleInfo.module.firmwareUpgradeSupported">{{ moduleInfo.module.name }} firmware: {{ moduleInfo.info.firmwareVersion }}</span>
+                    <span *ngIf="!moduleInfo.module.firmwareUpgradeSupported"> {{ moduleInfo.module.name }} firmware version is unknown and it's not updatable yet.</span>
+                </ng-container>
             </p>
 
             <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,

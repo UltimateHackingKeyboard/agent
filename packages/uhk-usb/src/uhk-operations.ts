@@ -2,11 +2,14 @@ import {
     Buffer,
     ConfigSizesInfo,
     HardwareConfiguration,
+    LEFT_HALF_MODULE,
     LogService,
+    ModuleSlotToId,
     ModuleVersionInfo,
     RightModuleInfo,
     UhkBuffer,
-    UhkDeviceProduct
+    UhkDeviceProduct,
+    UhkModule
 } from 'uhk-common';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
@@ -15,10 +18,7 @@ import {
     EepromOperation,
     EnumerationModes,
     KbootCommands,
-    MODULE_ID_TO_STRING,
     ModulePropertyId,
-    ModuleSlotToI2cAddress,
-    ModuleSlotToId,
     UsbVariables
 } from './constants';
 import * as fs from 'fs';
@@ -86,18 +86,15 @@ export class UhkOperations {
     }
 
     public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
-        return this.updateModuleWithKboot(firmwarePath, ModuleSlotToI2cAddress.leftHalf, ModuleSlotToId.leftHalf, device);
+        return this.updateModuleWithKboot(firmwarePath, device, LEFT_HALF_MODULE);
     }
 
     public async updateModuleWithKboot(
         firmwarePath: string,
-        i2CAddress: ModuleSlotToI2cAddress,
-        slotId: ModuleSlotToId,
-        device: UhkDeviceProduct
+        device: UhkDeviceProduct,
+        module: UhkModule
     ): Promise<void> {
-        this.logService.misc('[UhkOperations] Start flashing left module firmware');
-        const moduleName = MODULE_ID_TO_STRING[slotId];
-        const i2cAddressOfModule = Number.parseInt(i2CAddress, 16);
+        this.logService.misc(`[UhkOperations] Start flashing "${module.name}" module firmware`);
         await this.device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
             vendorId: device.vendorId,
@@ -105,14 +102,14 @@ export class UhkOperations {
         });
         this.device.close();
         await snooze(1000);
-        await this.device.sendKbootCommandToModule(i2CAddress, KbootCommands.ping, 100);
+        await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.ping, 100);
         await snooze(1000);
-        await this.jumpToBootloaderModule(slotId);
+        await this.jumpToBootloaderModule(module.slotId);
         this.device.close();
 
-        const moduleBricked = await this.waitForKbootIdle();
+        const moduleBricked = await this.waitForKbootIdle(module.name);
         if (!moduleBricked) {
-            const msg = `[UhkOperations] Couldn't connect to the ${moduleName}.`;
+            const msg = `[UhkOperations] Couldn't connect to the "${module.name}".`;
             this.logService.error(msg);
             throw new Error(msg);
         }
@@ -130,13 +127,13 @@ export class UhkOperations {
         const kboot = new KBoot(usbPeripheral);
         while (true) {
             try {
-                this.logService.misc(`[UhkOperations] Try to connect to the ${moduleName}`);
-                await kboot.configureI2c(i2cAddressOfModule);
+                this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
+                await kboot.configureI2c(module.i2cAddress);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 break;
             } catch {
                 if (tryCount > 100) {
-                    throw new Error(`Can not connect to the ${moduleName}`);
+                    throw new Error(`Can not connect to the "${module.name}"`);
                 }
                 await snooze(2000);
             }
@@ -147,18 +144,18 @@ export class UhkOperations {
         this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
         await snooze(1000);
 
-        this.logService.misc(`[UhkOperations] Flash erase all on ${moduleName} keyboard`);
-        await kboot.configureI2c(i2cAddressOfModule);
+        this.logService.misc(`[UhkOperations] Flash erase all on "${module.name}" keyboard`);
+        await kboot.configureI2c(module.i2cAddress);
         await kboot.flashEraseAllUnsecure();
 
-        this.logService.misc(`[UhkOperations] Read ${moduleName} firmware from file`);
+        this.logService.misc(`[UhkOperations] Read "${module.name}" firmware from file`);
         const configData = fs.readFileSync(firmwarePath);
 
         this.logService.misc('[UhkOperations] Write memory');
-        await kboot.configureI2c(i2cAddressOfModule);
+        await kboot.configureI2c(module.i2cAddress);
         await kboot.writeMemory({ startAddress: 0, data: configData });
 
-        this.logService.misc(`[UhkOperations] Reset ${moduleName} keyboard`);
+        this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
         await kboot.reset();
 
         this.logService.misc('[UhkOperations] Close communication channels');
@@ -173,13 +170,13 @@ export class UhkOperations {
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
         await waitForDevice(device.vendorId, device.keyboardPid);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.reset, 100);
+        await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
         this.device.close();
         await snooze(1000);
-        await this.device.sendKbootCommandToModule(ModuleSlotToI2cAddress.leftHalf, KbootCommands.idle);
+        await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
         this.device.close();
 
-        this.logService.misc(`[UhkOperations] ${moduleName} firmware successfully flashed`);
+        this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
     }
 
     /**
@@ -330,7 +327,7 @@ export class UhkOperations {
         }
     }
 
-    public async waitForKbootIdle(): Promise<boolean> {
+    public async waitForKbootIdle(moduleName: string): Promise<boolean> {
         const timeoutTime = new Date(new Date().getTime() + 30000);
 
         while (new Date() < timeoutTime) {
@@ -342,7 +339,7 @@ export class UhkOperations {
             }
 
             // tslint:disable-next-line: max-line-length
-            this.logService.misc('[DeviceOperation] Cannot ping the bootloader. Please remove the bridge cable, and keep reconnecting the left keyboard half until you see this message.');
+            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you see this message.`);
 
             await snooze(1000);
         }
@@ -351,31 +348,28 @@ export class UhkOperations {
     }
 
     public async getModuleVersionInfo(module: ModuleSlotToId): Promise<ModuleVersionInfo> {
-        this.logService.misc(`[DeviceOperation] Read ${module} version information`);
-        this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
-
-        const command = Buffer.from([
-            UsbCommand.GetModuleProperty,
-            module,
-            ModulePropertyId.protocolVersions
-        ]);
-
-        const buffer = await this.device.write(command);
-        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
-        // skip the first 2 byte
-        uhkBuffer.readUInt16();
-
-        return {
-            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
-        };
-    }
-
-    public async getLeftModuleVersionInfo(): Promise<ModuleVersionInfo> {
         try {
-            return await this.getModuleVersionInfo(ModuleSlotToId.leftHalf);
+
+            this.logService.misc(`[DeviceOperation] Read "${module}" version information`);
+            this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
+
+            const command = Buffer.from([
+                UsbCommand.GetModuleProperty,
+                module,
+                ModulePropertyId.protocolVersions
+            ]);
+
+            const buffer = await this.device.write(command);
+            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+            // skip the first 2 byte
+            uhkBuffer.readUInt16();
+
+            return {
+                moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+            };
         } catch (error) {
-            this.logService.error('[DeviceOperation] Could not read left module version information', error);
+            this.logService.error(`[DeviceOperation] Could not read "${module}" version information`, error);
         }
 
         return {

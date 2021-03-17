@@ -42,10 +42,7 @@ export const initialState: State = {
     updatingFirmware: false,
     firmwareUpdateFinished: false,
     modules: {
-        leftModuleInfo: {
-            firmwareVersion: '',
-            moduleProtocolVersion: ''
-        },
+        moduleInfos: [],
         rightModuleInfo: {
             firmwareVersion: ''
         }
@@ -70,6 +67,7 @@ export function reducer(state = initialState, action: Action): State {
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
                 halvesInfo: data.halvesInfo,
+                modules: data.hardwareModules,
                 multiDevice: data.multiDevice
             };
         }

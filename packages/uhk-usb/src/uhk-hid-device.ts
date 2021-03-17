@@ -11,6 +11,8 @@ import {
     isEqualArray,
     LeftSlotModules,
     LogService,
+    mapI2cAddressToModuleName,
+    ModuleSlotToI2cAddress,
     RightSlotModules,
     UdevRulesInfo
 } from 'uhk-common';
@@ -20,7 +22,6 @@ import {
     KbootCommands,
     LAYER_NUMBER_TO_STRING,
     MODULE_ID_TO_STRING,
-    ModuleSlotToI2cAddress,
     UsbCommand
 } from './constants';
 import {
@@ -112,6 +113,7 @@ export class UhkHidDevice {
                 isLeftHalfConnected: true,
                 rightModuleSlot: RightSlotModules.NoModule
             },
+            hardwareModules: {},
             multiDevice: getNumberOfConnectedDevices() > 1
         };
 
@@ -257,12 +259,11 @@ export class UhkHidDevice {
 
     async sendKbootCommandToModule(module: ModuleSlotToI2cAddress, command: KbootCommands, maxTry = 1): Promise<any> {
         let transfer;
-        const moduleName = kbootCommandName(module);
-        this.logService.usb(`[UhkHidDevice] USB[T]: Send KbootCommand ${moduleName} ${KbootCommands[command].toString()}`);
+        this.logService.usb(`[UhkHidDevice] USB[T]: Send KbootCommand ${mapI2cAddressToModuleName(module)} ${KbootCommands[command].toString()}`);
         if (command === KbootCommands.idle) {
             transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command]);
         } else {
-            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, Number.parseInt(module, 16)]);
+            transfer = Buffer.from([UsbCommand.SendKbootCommandToModule, command, module]);
         }
         await retry(async () => await this.write(transfer), maxTry, this.logService);
     }
@@ -396,21 +397,5 @@ export class UhkHidDevice {
         for (const logDevice of devs) {
             this.logService.misc(JSON.stringify(logDevice));
         }
-    }
-}
-
-function kbootCommandName(module: ModuleSlotToI2cAddress): string {
-    switch (module) {
-        case ModuleSlotToI2cAddress.leftHalf:
-            return 'leftHalf';
-
-        case ModuleSlotToI2cAddress.leftModule:
-            return 'leftModule';
-
-        case ModuleSlotToI2cAddress.rightModule:
-            return 'rightModule';
-
-        default:
-            return 'Unknown';
     }
 }

@@ -9,6 +9,7 @@ import {
     getMd5HashFromFilename,
     HardwareModules,
     Keymap,
+    LEFT_HALF_MODULE,
     PlayMacroAction,
     UHK_60_DEVICE,
     UhkBuffer,
@@ -143,10 +144,15 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
     }
 
     return {
-        leftModuleInfo: {
-            firmwareVersion: agentVersionInfo.firmwareVersion,
-            moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
-        },
+        moduleInfos: [
+            {
+                module: LEFT_HALF_MODULE,
+                info: {
+                    firmwareVersion: agentVersionInfo.firmwareVersion,
+                    moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                }
+            }
+        ],
         rightModuleInfo: {
             deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
             hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
