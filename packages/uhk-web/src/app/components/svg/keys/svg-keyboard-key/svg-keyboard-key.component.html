@@ -1,7 +1,6 @@
 <svg:rect #svgRec
           *ngIf="svgKey.type === 'rec'"
           class="svg-rec"
-          [class.active]="active"
           [id]="svgKey.id"
           [attr.rx]="svgKey.rx"
           [attr.ry]="svgKey.ry"
@@ -21,10 +20,14 @@
 
 <svg:g *ngIf="svgKey.type === 'g'">
     <svg:path *ngFor="let path of svgKey.elements.paths"
+              class="svg-path"
+              [id]="svgKey.id"
               [attr.d]="path.d"
               [attr.fill]="path.fill" />
 
     <svg:circle *ngFor="let circle of svgKey.elements.circles"
+                class="svg-circle"
+                [id]="svgKey.id"
                 [attr.cx]="circle.cx"
                 [attr.cy]="circle.cy"
                 [attr.r]="circle.r"

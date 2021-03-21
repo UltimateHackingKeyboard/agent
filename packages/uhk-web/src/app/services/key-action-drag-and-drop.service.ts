@@ -19,16 +19,12 @@ export interface LeftButtonDownOptions {
     element: SVGGElement;
 }
 
-enum DragRotation {
-    None,
-    Left,
-    Right
-}
-
 /**
  * Minimum mouse move in pixel before start the dragging;
  */
 const MIN_MOVE_TO_START_DRAG = 2;
+const SVG_CLONED_ELEMENT_ID = 'svg-cloned-element';
+const SVG_DISPLAY_ELEMENT_CLASSES = ['svg-circle', 'svg-path', 'svg-rec'];
 
 @Injectable()
 export class KeyActionDragAndDropService implements OnDestroy {
@@ -43,7 +39,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
     private subscriptions = new Subscription();
     private moduleId: number;
     private halvesInfo: HalvesInfo;
-    private dragRotation = DragRotation.None;
     private scale = 1;
     private rect: DOMRect;
     private offset: Point = {
@@ -85,7 +80,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.leftButtonUpEvent = undefined;
         this.dragging = false;
         this.moduleId = undefined;
-        this.dragRotation = DragRotation.None;
     }
 
     mouseMove(event: MouseEvent): void {
@@ -109,13 +103,25 @@ export class KeyActionDragAndDropService implements OnDestroy {
         const elements = this._document.elementsFromPoint(event.clientX, event.clientY);
 
         let foundElement: Element;
+        let svgClonedSkipped = false;
         for (const element of elements) {
-            if (element.tagName === 'rect' &&
-                !element.hasAttribute('data-cloned-rect') &&
-                element.id !== 'tmp-white-rectangle'
+            if (!svgClonedSkipped && element.id === SVG_CLONED_ELEMENT_ID) {
+                svgClonedSkipped = true;
+            } else if (isDropElement(element) &&
+                svgClonedSkipped
             ) {
-                foundElement = element;
-                break;
+                let parent = element.parentElement;
+
+                while (parent) {
+                    if (parent !== this.lefButtonDownOptions.element as any &&
+                        parent.hasAttribute('svg-keyboard-key')
+                    ) {
+                        foundElement = parent;
+                        break;
+                    }
+
+                    parent = parent.parentElement;
+                }
             }
         }
 
@@ -143,10 +149,25 @@ export class KeyActionDragAndDropService implements OnDestroy {
         if (this.dragging) {
             return;
         }
-        const translateBlackRectangle = 2;
+        const translateKey = 2;
         this.scale = this._document.getElementById('svg-keyboard-a').offsetWidth / 1100;
+        const box = this.lefButtonDownOptions.element.getBBox();
+        const width = box.width < 63 ? 63 : box.width;
+        const height = box.height;
+
+        const clonedElement = this.lefButtonDownOptions.element.cloneNode(true) as SVGElement;
+        clonedElement.classList.remove('active');
+        clonedElement.setAttribute('dragging', 'true');
+        if (box.width < 63) {
+            const translateX = translateKey + Math.abs(box.x) + 31.5 - box.width / 2;
+            clonedElement.setAttribute('transform', `translate(${translateX},${translateKey + Math.abs(box.y)})`);
+        } else {
+            clonedElement.setAttribute('transform', `translate(${translateKey + Math.abs(box.x)},${translateKey + Math.abs(box.y)})`);
+        }
+
         this.lefButtonDownOptions.element.style.visibility = 'hidden';
         this.svgWrapper = this._document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement;
+        this.svgWrapper.id = SVG_CLONED_ELEMENT_ID;
         this.svgWrapper.style.position = 'fixed';
         this.svgWrapper.style.transformOrigin = `0 0`;
         this.svgWrapper.style.fill = 'rgb(51, 51, 51)';
@@ -157,36 +178,20 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.svgWrapper.style.width = '200px';
         this.svgWrapper.style.height = '200px';
         this.svgWrapper.setAttribute('viewBox', '0 0 200 200');
-        let svgRect: SVGElement = null;
-        this.lefButtonDownOptions.element.childNodes.forEach((e: SVGElement): void => {
-            const clonedElement = e.cloneNode(true) as SVGElement;
-            if (clonedElement.tagName === 'rect') {
-                clonedElement.setAttribute('data-cloned-rect', 'true');
-                clonedElement.classList.remove('active');
-                svgRect = clonedElement;
-            }
 
-            if (clonedElement.getAttribute) {
-                clonedElement.setAttribute('x', (+clonedElement.getAttribute('x') + translateBlackRectangle).toString());
-                clonedElement.setAttribute('y', (+clonedElement.getAttribute('y') + translateBlackRectangle).toString());
-            }
+        this.svgWrapper.appendChild(clonedElement);
 
-            this.svgWrapper.appendChild(clonedElement);
-        });
-
-        const width = +svgRect.getAttribute('width');
-        const height = +svgRect.getAttribute('height');
         const svgRectWhite = this._document.createElementNS('http://www.w3.org/2000/svg', 'rect') as SVGRectElement;
-        svgRectWhite.setAttribute('width', (width + translateBlackRectangle * 2).toString());
+        svgRectWhite.setAttribute('width', (width + translateKey * 2).toString());
         svgRectWhite.setAttribute('height', (height + 20).toString());
         svgRectWhite.setAttribute('fill', 'white');
         svgRectWhite.setAttribute('rx', '4');
         svgRectWhite.setAttribute('ry', '4');
         svgRectWhite.id = 'tmp-white-rectangle';
-        this.svgWrapper.insertBefore(svgRectWhite, svgRect);
+        this.svgWrapper.insertBefore(svgRectWhite, clonedElement);
 
         const svgTextExchange = this._document.createElementNS('http://www.w3.org/2000/svg', 'text') as SVGTextElement;
-        svgTextExchange.setAttribute('x', ((width + translateBlackRectangle * 2) / 2).toString());
+        svgTextExchange.setAttribute('x', ((width + translateKey * 2) / 2).toString());
         svgTextExchange.setAttribute('y', (height + 12).toString());
         svgTextExchange.setAttribute('fill', 'black');
         svgTextExchange.setAttribute('font-size', '14');
@@ -198,8 +203,8 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.setSvgWrapperTransformation(this.lefButtonDownOptions.element);
         this._document.body.appendChild(this.svgWrapper);
         this.offset = {
-            x: this.rect.x - this.lefButtonDownOptions.event.clientX - translateBlackRectangle,
-            y: this.rect.y - this.lefButtonDownOptions.event.clientY - translateBlackRectangle
+            x: this.rect.x - this.lefButtonDownOptions.event.clientX - translateKey,
+            y: this.rect.y - this.lefButtonDownOptions.event.clientY - translateKey
         };
         this.dragging = true;
     }
@@ -251,15 +256,12 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.moduleId = moduleId;
         if (this.halvesInfo.areHalvesMerged) {
             this.svgWrapper.style.transform = `scale(${this.scale}, ${this.scale})`;
-            this.dragRotation = DragRotation.None;
-        } else if (moduleId === 0) {
+        } else if (moduleId === 0 || moduleId === 3 || moduleId === 4 || moduleId === 5) {
             const size = 0.80 * this.scale;
             this.svgWrapper.style.transform = `translate(0,5%) rotate(-10deg) scale(${size}, ${size})`;
-            this.dragRotation = DragRotation.Right;
-        } else if (moduleId === 1) {
+        } else if (moduleId === 1 || moduleId === 2) {
             const size = 0.80 * this.scale;
             this.svgWrapper.style.transform = `translate(5%,0) rotate(10.8deg) scale(${size}, ${size})`;
-            this.dragRotation = DragRotation.Left;
         }
     }
 
@@ -303,4 +305,12 @@ function getLayerId(element: Element): number | undefined {
 
 function convertKeyIdToNumber(keyId: string): number {
     return parseInt(keyId.split('-').pop()) - 1;
+}
+
+function isDropElement(element: Element): boolean {
+    if (!element.classList) {
+        return false;
+    }
+
+    return SVG_DISPLAY_ELEMENT_CLASSES.some(elClass => element.classList.contains(elClass));
 }
