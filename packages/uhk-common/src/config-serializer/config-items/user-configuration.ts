@@ -77,6 +77,14 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.setDefaultDeviceName();
     }
 
+    clone(): UserConfiguration {
+       const userConfig = Object.assign(new UserConfiguration(), this);
+       userConfig.keymaps = userConfig.keymaps.map(keymap => new Keymap(keymap));
+       userConfig.macros = userConfig.macros.map(macro => new Macro(macro));
+
+       return userConfig;
+    }
+
     fromJsonObject(jsonObject: any): UserConfiguration {
         this.userConfigMajorVersion = jsonObject.userConfigMajorVersion;
         this.userConfigMinorVersion = jsonObject.userConfigMinorVersion;

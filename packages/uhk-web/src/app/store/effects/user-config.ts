@@ -77,7 +77,7 @@ export class UserConfigEffects {
                     const pathPrefix = action.type === Keymaps.ActionTypes.Remove ? 'keymap' : 'macro';
                     const payload: UndoUserConfigData = {
                         path: `/${pathPrefix}/${(action as Keymaps.RemoveKeymapAction | Macros.RemoveMacroAction).payload}`,
-                        config: prevUserConfiguration.toJsonObject()
+                        config: prevUserConfiguration.clone()
                     };
 
                     return [
@@ -107,11 +107,10 @@ export class UserConfigEffects {
             ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction),
             map(action => action.payload),
             mergeMap((payload: UndoUserConfigData) => {
-                const config = new UserConfiguration().fromJsonObject(payload.config);
-                this.dataStorageRepository.saveConfig(config);
+                this.dataStorageRepository.saveConfig(payload.config);
                 this.router.navigate([payload.path]);
 
-                return [new LoadUserConfigSuccessAction(config)];
+                return [new LoadUserConfigSuccessAction(payload.config)];
             })
         );
 
