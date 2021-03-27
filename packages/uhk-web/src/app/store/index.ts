@@ -81,6 +81,7 @@ export const isKeymapDeletable = createSelector(userConfigState, fromUserConfig.
 export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro);
 export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMacroMap);
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
+export const getSelectedMacroIdAfterRemove = createSelector(userConfigState, fromUserConfig.getSelectedMacroIdAfterRemove);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
     return keymaps.map(keymap => {
         return {

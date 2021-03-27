@@ -8,7 +8,7 @@ import { map, pairwise, tap, withLatestFrom } from 'rxjs/operators';
 import { Macro } from 'uhk-common';
 import * as Keymaps from '../actions/keymap';
 import * as Macros from '../actions/macro';
-import { AppState, getMacros } from '..';
+import { AppState, getSelectedMacroIdAfterRemove, getMacros } from '..';
 import { findNewItem } from '../../util';
 
 @Injectable()
@@ -18,14 +18,14 @@ export class MacroEffects {
         .pipe(
             ofType<Macros.RemoveMacroAction>(Macros.ActionTypes.Remove),
             tap(action => this.store.dispatch(new Keymaps.CheckMacroAction(action.payload))),
-            withLatestFrom(this.store.select(getMacros)),
-            map(([action, macros]) => macros),
-            tap(macros => {
-                    if (macros.length === 0) {
-                        return this.router.navigate(['/macro']);
+            withLatestFrom(this.store.select(getSelectedMacroIdAfterRemove)),
+            map(([, newMacroId]) => newMacroId),
+            tap(newMacroId => {
+                    if (newMacroId) {
+                        return this.router.navigate(['/macro', newMacroId]);
                     }
 
-                    return this.router.navigate(['/macro', macros[0].id]);
+                    return this.router.navigate(['/macro']);
                 }
             )
         );

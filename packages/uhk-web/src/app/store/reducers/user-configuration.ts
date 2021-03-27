@@ -33,6 +33,7 @@ export interface State {
     selectedMacroId?: number;
     lastEditedKey: LastEditedKey;
     halvesInfo: HalvesInfo;
+    selectedMacroIdAfterRemove?: number;
 }
 
 export const initialState: State = {
@@ -375,36 +376,44 @@ export function reducer(
         }
 
         case MacroActions.ActionTypes.Remove: {
-            const macroId = (action as MacroActions.RemoveMacroAction).payload;
-            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration.macros = state.userConfiguration.macros.filter((macro: Macro) => macro.id !== macroId);
-
-            for (let k = 0; k < userConfiguration.keymaps.length; k++) {
-                const keymap = userConfiguration.keymaps[k];
-                let hasChanges = false;
-
-                for (const layer of keymap.layers) {
-                    for (const module of layer.modules) {
-                        for (let ka = 0; ka < module.keyActions.length; ka++) {
-                            const keyAction = module.keyActions[ka];
-
-                            if (keyAction instanceof PlayMacroAction && keyAction.macroId === macroId) {
-                                hasChanges = true;
-                                module.keyActions[ka] = new NoneAction();
-                            }
-                        }
-                    }
-                }
-
-                if (hasChanges) {
-                    userConfiguration.keymaps[k] = new Keymap(keymap);
-                }
-            }
-
-            return {
+            const newState = {
                 ...state,
-                userConfiguration
+                selectedMacroIdAfterRemove: undefined
             };
+            const macroId = (action as MacroActions.RemoveMacroAction).payload;
+            const userConfiguration = state.userConfiguration.clone();
+            newState.userConfiguration = userConfiguration;
+            userConfiguration.macros = [];
+            const lastMacroIdx = state.userConfiguration.macros.length - 1;
+            state.userConfiguration.macros.forEach((macro, idx) => {
+                if (macroId === macro.id) {
+                    if (idx === lastMacroIdx) {
+                        if (state.userConfiguration.macros.length > 1) {
+                            newState.selectedMacroIdAfterRemove = state.userConfiguration.macros[idx - 1].id;
+                        }
+                    } else {
+                        newState.selectedMacroIdAfterRemove = state.userConfiguration.macros[idx + 1].id;
+                    }
+                } else {
+                    userConfiguration.macros.push(macro);
+                }
+            });
+
+            userConfiguration.keymaps.forEach(keymap => {
+                keymap.layers.forEach(layer => {
+                    layer.modules.forEach(module => {
+                        module.keyActions.forEach(keyAction => {
+                            if (keyAction instanceof PlayMacroAction && keyAction.macroId === macroId) {
+                                return  new NoneAction();
+                            }
+
+                            return keyAction;
+                        });
+                    });
+                });
+            });
+
+            return newState;
         }
 
         case MacroActions.ActionTypes.AddAction: {
@@ -567,6 +576,7 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
     return state.userConfiguration.macros.reduce(reduceMacroToMap, new Map());
 };
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
+export const getSelectedMacroIdAfterRemove = (state: State): number | undefined => state.selectedMacroIdAfterRemove;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
