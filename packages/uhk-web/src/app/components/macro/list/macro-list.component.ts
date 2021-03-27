@@ -172,6 +172,10 @@ export class MacroListComponent implements OnChanges, OnDestroy {
         });
     }
 
+    macroActionTrackByFn(index: number): string {
+        return index.toString();
+    }
+
     private toKeyAction(event: KeyCaptureData): KeystrokeAction {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
         keystrokeAction.scancode = event.code;
