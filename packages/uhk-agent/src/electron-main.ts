@@ -77,6 +77,7 @@ function createWindow() {
         width: loadedWindowState.width,
         height: loadedWindowState.height,
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true,
             enableRemoteModule: true,
             spellcheck: false,
