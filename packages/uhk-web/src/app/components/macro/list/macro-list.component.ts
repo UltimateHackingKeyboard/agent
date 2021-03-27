@@ -1,4 +1,5 @@
 import {
+    AfterViewChecked,
     Component,
     EventEmitter,
     Input,
@@ -57,7 +58,7 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss']
 })
-export class MacroListComponent implements OnChanges, OnDestroy {
+export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestroy {
     @Input() macro: Macro;
     @Input() macroPlaybackSupported: boolean;
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
@@ -72,6 +73,7 @@ export class MacroListComponent implements OnChanges, OnDestroy {
     MACRO_ACTIONS = 'macroActions';
     faPlus = faPlus;
     activeEdit: number = undefined;
+    scrollTopPosition: number;
 
     constructor(private dragulaService: DragulaService) {
         dragulaService.createGroup(this.MACRO_ACTIONS, {
@@ -91,6 +93,13 @@ export class MacroListComponent implements OnChanges, OnDestroy {
                 return false;
             }
         });
+    }
+
+    ngAfterViewChecked(): void {
+        if (this.scrollTopPosition) {
+            window.scrollTo(window.scrollX, this.scrollTopPosition);
+            this.scrollTopPosition = undefined;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -166,14 +175,15 @@ export class MacroListComponent implements OnChanges, OnDestroy {
     }
 
     macroActionReordered(macroActions: MacroAction[]): void {
+        this.scrollTopPosition = window.scrollY;
         this.reorder.emit({
             macroId: this.macro.id,
             macroActions
         });
     }
 
-    macroActionTrackByFn(index: number): string {
-        return index.toString();
+    macroActionTrackByFn(index: number, macroAction: MacroAction): string {
+        return index.toString() + macroAction.toString();
     }
 
     private toKeyAction(event: KeyCaptureData): KeystrokeAction {
