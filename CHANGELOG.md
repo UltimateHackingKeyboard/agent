@@ -6,6 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.11] - 2020-03-31
+
+Firmware: 8.10.**8** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.8)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Make the firmware updater update connected modules.
+- Make key swapping work via drag-and-drop for non-rectangular keys.
+- Update the default user configuration and factory configuration so that "double tap to lock" is only enabled for the Mouse key.
+- When a macro is deleted, don't jump to the first macro, but to the next one.
+- When a macro items is edited, don't jump to the end of the macro.
+
 ## [1.5.10] - 2020-03-11
 
 Firmware: 8.10.**7** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.7)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
@@ -22,7 +32,7 @@ Firmware: 8.10.**5** [[release](https://github.com/UltimateHackingKeyboard/firmw
 - Show connected modules.
 - Make the side menu always visible.
 - Fix keyboard description edit bug.
-- Fix duplicate keymap / macro name bug.
+- Fix duplicate keymap and duplicate macro name bug.
 - Make auto-upgrade work even on the first start of Agent.
 
 ## [1.5.8] - 2020-12-01
