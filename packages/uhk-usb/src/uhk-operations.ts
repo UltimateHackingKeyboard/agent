@@ -518,7 +518,10 @@ export class UhkOperations {
 
     public async setI2CBaudRate(rate: number): Promise<void> {
         this.logService.usb('[DeviceOperation] USB[T]: Set I2C Baud Rate');
-        const buffer = Buffer.from([UsbCommand.SetI2cBaudRate, rate]);
+        const buffer = Buffer.alloc(5);
+        buffer.writeUInt8(UsbCommand.SetI2cBaudRate, 0);
+        buffer.writeUInt32LE(rate, 1);
+
         await this.device.write(buffer);
     }
     /**
