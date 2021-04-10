@@ -218,7 +218,7 @@ export class DeviceService {
             return hardwareModules;
         } catch (err) {
             if (!catchError) {
-                return err;
+                throw err;
             }
 
             this.logService.error('[DeviceService] Read hardware modules information failed', err);
@@ -402,8 +402,13 @@ export class DeviceService {
                             ...state
                         };
 
-                        if (state.hasPermission) {
+                        if (state.hasPermission && state.connectedDevice) {
                             state.hardwareModules = await this.getHardwareModules(false);
+                        } else {
+                            state.hardwareModules = {
+                                moduleInfos: [],
+                                rightModuleInfo: {}
+                            };
                         }
                         this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
                         this.logService.misc('[DeviceService] Device connection state changed to:', state);
