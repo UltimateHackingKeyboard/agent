@@ -36,7 +36,7 @@
     "@types/request": "2.0.8",
     "@types/semver": "7.3.4",
     "@types/tmp": "0.2.0",
-    "@types/yargs": "15.0.5",
+    "@types/yargs": "16.0.1",
     "check-node-version": "4.0.3",
     "copy-webpack-plugin": "7.0.0",
     "copyfiles": "2.4.1",
