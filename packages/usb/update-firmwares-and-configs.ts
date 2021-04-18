@@ -4,18 +4,19 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src';
 
 (async () => {
     try {
         const argv = yargs
             .scriptName('./update-firmwares-and-configs.ts')
-            .usage('Usage: $0 <firmware directory> {iso|ansi}')
+            .usage('Usage: $0 <firmware directory> {uhk60v1|uhk60v2} {iso|ansi}')
             .demandCommand(2, 'Both firmwarePath and layout must be specified.')
             .argv as any;
 
         const firmwarePath = argv._[0];
-        const layout = argv._[1];
+        const deviceId = getDeviceIdFromArg(argv._[1] as string);
+        const layout = argv._[2];
 
         if (!fs.existsSync(firmwarePath)) {
             console.log('Firmware directory does not exists.');
@@ -27,7 +28,6 @@ import Uhk, { errorHandler, yargs } from './src';
         const packageJsonPath = path.join(firmwarePath, 'package.json');
         const packageJson = await getFirmwarePackageJson({
             packageJsonPath,
-            leftFirmwarePath: path.join(firmwarePath, 'modules/uhk60-left.bin'),
             tmpDirectory: firmwarePath
         });
         const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
@@ -58,7 +58,7 @@ import Uhk, { errorHandler, yargs } from './src';
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);
-        await operations.saveHardwareConfiguration(layout === 'iso');
+        await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
 
     } catch (error) {
         errorHandler(error);
