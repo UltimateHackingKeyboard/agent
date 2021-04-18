@@ -283,7 +283,7 @@ export class UhkOperations {
         }
     }
 
-    public async saveHardwareConfiguration(isIso: boolean): Promise<void> {
+    public async saveHardwareConfiguration(isIso: boolean, deviceId: number): Promise<void> {
         const hardwareConfig = new HardwareConfiguration();
 
         hardwareConfig.signature = 'UHK';
@@ -291,7 +291,7 @@ export class UhkOperations {
         hardwareConfig.minorVersion = 0;
         hardwareConfig.patchVersion = 0;
         hardwareConfig.brandId = 0;
-        hardwareConfig.deviceId = 1;
+        hardwareConfig.deviceId = deviceId;
         hardwareConfig.uniqueId = Math.floor(2 ** 32 * Math.random());
         hardwareConfig.isVendorModeOn = false;
         hardwareConfig.isIso = isIso;

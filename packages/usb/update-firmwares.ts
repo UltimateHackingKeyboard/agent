@@ -32,7 +32,6 @@ import Uhk, { errorHandler, yargs } from './src';
         const packageJsonPath = path.join(firmwarePath, 'package.json');
         const packageJson = await getFirmwarePackageJson({
             packageJsonPath,
-            leftFirmwarePath: path.join(firmwarePath, 'modules/uhk60-left.bin'),
             tmpDirectory: firmwarePath
         });
         const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);

@@ -4,25 +4,25 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src';
 
 (async function () {
     try {
         const argv = yargs
             .scriptName('./factory-update.ts')
-            .usage('Usage: $0 <firmwarePath> <ansi | iso>')
-            .demandCommand(2)
+            .usage('Usage: $0 <firmwarePath> {uhk60v1|uhk60v2} {iso|ansi}')
+            .demandCommand(3)
             .argv;
 
-        const firmwarePath = argv._[0];
-        const layout = argv._[1];
+        const firmwarePath = argv._[0] as string;
+        const deviceId = getDeviceIdFromArg(argv._[1] as string);
+        const layout = argv._[2] as string;
 
         const uhkDeviceProduct = getCurrentUhkDeviceProduct();
 
         const packageJsonPath = path.join(firmwarePath, 'package.json');
         const packageJson = await getFirmwarePackageJson({
             packageJsonPath,
-            leftFirmwarePath: path.join(firmwarePath, 'modules/uhk60-left.bin'),
             tmpDirectory: firmwarePath
         });
         const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
@@ -54,7 +54,7 @@ import Uhk, { errorHandler, yargs } from './src';
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);
-        await operations.saveHardwareConfiguration(layout === 'iso');
+        await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
         await operations.switchKeymap('TES');
         console.log('All done!');
     } catch (error) {

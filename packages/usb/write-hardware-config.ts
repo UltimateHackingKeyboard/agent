@@ -1,23 +1,25 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src';
 
 (async () => {
     try {
         const argv = yargs
             .scriptName('./write-hardware-config.ts')
-            .usage('Usage: $0 {iso|ansi}')
-            .demandCommand(1, 'Layout is required.')
+            .usage('Usage: $0 {uhk60v1|uhk60v2} {iso|ansi}')
+            .demandCommand(2, 'DeviceId and layout is required.')
             .argv;
 
-        const layout = argv._[0];
+        const deviceId = getDeviceIdFromArg(argv._[0] as string);
+        const layout = argv._[1] as string;
 
         if (!['ansi', 'iso'].includes(layout)) {
             console.log('Invalid layout. Layout should be either iso or ansi');
             process.exit(1);
         }
+
         const { operations } = Uhk(argv);
-        await operations.saveHardwareConfiguration(layout === 'iso');
+        await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
 
     } catch (error) {
         errorHandler(error);
