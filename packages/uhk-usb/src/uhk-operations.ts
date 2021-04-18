@@ -124,14 +124,18 @@ export class UhkOperations {
         await waitForDevice(device.vendorId, device.buspalPid);
         let tryCount = 0;
         const usbPeripheral = new UsbPeripheral({ productId: device.buspalPid, vendorId: device.vendorId });
-        const kboot = new KBoot(usbPeripheral);
+        let kboot: KBoot;
         while (true) {
             try {
                 this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
+                kboot = new KBoot(usbPeripheral);
                 await kboot.configureI2c(module.i2cAddress);
                 await kboot.getProperty(Properties.BootloaderVersion);
                 break;
             } catch {
+                if (kboot) {
+                    kboot.close();
+                }
                 if (tryCount > 100) {
                     throw new Error(`Can not connect to the "${module.name}"`);
                 }
