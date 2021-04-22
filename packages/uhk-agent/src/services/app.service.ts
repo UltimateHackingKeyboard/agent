@@ -25,6 +25,15 @@ export class AppService extends MainServiceBase {
     private async handleAppStartInfo(event: Electron.IpcMainEvent) {
         this.logService.misc('[AppService] getAppStartInfo');
         const deviceConnectionState = await this.uhkHidDeviceService.getDeviceConnectionStateAsync();
+        if (deviceConnectionState.hasPermission && deviceConnectionState.connectedDevice) {
+            deviceConnectionState.hardwareModules = await this.deviceService.getHardwareModules(false);
+        } else {
+            deviceConnectionState.hardwareModules = {
+                moduleInfos: [],
+                rightModuleInfo: {}
+            };
+        }
+
         const response: AppStartInfo = {
             deviceConnectionState,
             commandLineArgs: {

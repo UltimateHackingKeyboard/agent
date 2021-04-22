@@ -1,8 +1,8 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { Constants, HardwareModules, ModuleInfo, UploadFileData, VersionInformation } from 'uhk-common';
+import { faSlidersH, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Constants, UploadFileData, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
@@ -11,13 +11,14 @@ import {
     firmwareUpgradeSuccess,
     flashFirmwareButtonDisabled,
     getAgentVersionInfo,
-    getHardwareModules,
+    getFirmwareUpgradeState,
     runningOnNotSupportedWindows,
     xtermLog
 } from '../../../store';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
+import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
 
 @Component({
     selector: 'device-firmware',
@@ -31,7 +32,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     flashFirmwareButtonDisabled$: Observable<boolean>;
     xtermLog$: Observable<Array<XtermLog>>;
     getAgentVersionInfo$: Observable<VersionInformation>;
-    hardwareModules: HardwareModules;
+    firmwareUpgradeStates: FirmwareUpgradeState;
     runningOnNotSupportedWindows$: Observable<boolean>;
     firmwareUpgradeAllowed$: Observable<boolean>;
 
@@ -43,15 +44,18 @@ export class DeviceFirmwareComponent implements OnDestroy {
     xtermRef: XtermComponent;
 
     faSlidersH = faSlidersH;
+    faSpinner = faSpinner;
 
     private subscription = new Subscription();
 
-    constructor(private store: Store<AppState>) {
+    constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef) {
         this.flashFirmwareButtonDisabled$ = store.select(flashFirmwareButtonDisabled);
         this.xtermLog$ = store.select(xtermLog);
         this.getAgentVersionInfo$ = store.select(getAgentVersionInfo);
-        this.subscription.add(store.select(getHardwareModules).subscribe(data => {
-            this.hardwareModules = data;
+        this.subscription.add(store.select(getFirmwareUpgradeState).subscribe(data => {
+            this.firmwareUpgradeStates = data;
+            this.cdRef.markForCheck();
         }));
         this.runningOnNotSupportedWindows$ = store.select(runningOnNotSupportedWindows);
         this.firmwareUpgradeAllowed$ = store.select(firmwareUpgradeAllowed);
@@ -71,15 +75,23 @@ export class DeviceFirmwareComponent implements OnDestroy {
     }
 
     onUpdateFirmware(): void {
-        this.store.dispatch(new UpdateFirmwareAction());
+        if (this.firmwareUpgradeStates?.showForceFirmwareUpgrade) {
+            return;
+        }
+
+        this.store.dispatch(new UpdateFirmwareAction(false));
     }
 
-    changeFile(data: UploadFileData): void {
+    onForceUpgradeFirmware(): void {
+        this.store.dispatch(new UpdateFirmwareAction(true));
+    }
+
+    changeFile(data: UpdateFirmwareWithPayload): void {
         this.store.dispatch(new UpdateFirmwareWithAction(data));
     }
 
-    moduleInfoTrackByFn(index: number, moduleInfo: ModuleInfo): string {
-        return moduleInfo.module.slotId.toString();
+    firmwareUpgradeStateTrackByFn(index: number, module: ModuleFirmwareUpgradeState): string {
+        return module.moduleName;
     }
 
     private scrollToTheEndOfTheLogs(): void {

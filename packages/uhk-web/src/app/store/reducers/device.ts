@@ -3,9 +3,7 @@ import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, Uhk
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
-import * as App from '../actions/app';
 import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
-import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
@@ -18,12 +16,7 @@ export interface State {
     zeroInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
     savingToKeyboard: boolean;
-    updatingFirmware: boolean;
-    firmwareUpdateFinished: boolean;
-    firmwareUpdateFailed?: boolean;
-    firmwareUpdateSuccess?: boolean;
     modules: HardwareModules;
-    log: Array<XtermLog>;
     restoringUserConfiguration: boolean;
     hasBackupUserConfiguration: boolean;
     restoreUserConfiguration: boolean;
@@ -39,15 +32,12 @@ export const initialState: State = {
     zeroInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
     savingToKeyboard: false,
-    updatingFirmware: false,
-    firmwareUpdateFinished: false,
     modules: {
         moduleInfos: [],
         rightModuleInfo: {
             firmwareVersion: ''
         }
     },
-    log: [{ message: '', cssClass: XtermCssClass.standard }],
     restoringUserConfiguration: false,
     hasBackupUserConfiguration: false,
     restoreUserConfiguration: false,
@@ -131,64 +121,17 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case Device.ActionTypes.UpdateFirmwareWith:
-        case Device.ActionTypes.UpdateFirmware:
-            return {
-                ...state,
-                updatingFirmware: true,
-                firmwareUpdateFinished: false,
-                firmwareUpdateFailed: false,
-                firmwareUpdateSuccess: false,
-                log: [{ message: 'Start flashing firmware', cssClass: XtermCssClass.standard }]
-            };
-
         case Device.ActionTypes.UpdateFirmwareSuccess:
             return {
                 ...state,
-                updatingFirmware: false,
-                firmwareUpdateFinished: true,
-                firmwareUpdateSuccess: true,
                 modules: (action as Device.UpdateFirmwareSuccessAction).payload
             };
 
-        case Device.ActionTypes.UpdateFirmwareFailed: {
-            const data = (action as Device.UpdateFirmwareFailedAction).payload;
-            const logEntry = {
-                message: data.error.message,
-                cssClass: XtermCssClass.error
-            };
-
+        case Device.ActionTypes.UpdateFirmwareFailed:
             return {
                 ...state,
-                updatingFirmware: false,
-                firmwareUpdateFinished: true,
-                firmwareUpdateFailed: true,
-                modules: data.modules,
-                log: [...state.log, logEntry]
+                modules: (action as Device.UpdateFirmwareFailedAction).payload.modules
             };
-        }
-
-        case App.ActionTypes.ElectronMainLogReceived: {
-            if (!state.updatingFirmware) {
-                return state;
-            }
-
-            const payload = (action as App.ElectronMainLogReceivedAction).payload;
-
-            if (payload.message.indexOf('UHK Device not found:') > -1) {
-                return state;
-            }
-
-            const logEntry = {
-                message: payload.message,
-                cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard
-            };
-
-            return {
-                ...state,
-                log: [...state.log, logEntry]
-            };
-        }
 
         case Device.ActionTypes.ModulesInfoLoaded:
             return {
@@ -217,14 +160,6 @@ export function reducer(state = initialState, action: Action): State {
                 hasBackupUserConfiguration: false
             };
 
-        case Device.ActionTypes.RecoveryDevice: {
-            return {
-                ...state,
-                updatingFirmware: true,
-                log: [{ message: '', cssClass: XtermCssClass.standard }]
-            };
-        }
-
         case Device.ActionTypes.ReadConfigSizes:
             return {
                 ...state,
@@ -243,8 +178,6 @@ export function reducer(state = initialState, action: Action): State {
     }
 }
 
-export const updatingFirmware = (state: State) => state.updatingFirmware;
-export const isDeviceConnected = (state: State) => state.connectedDevice || state.updatingFirmware;
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (state.connectedDevice && !state.zeroInterfaceAvailable) {
@@ -260,7 +193,6 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
     };
 };
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
-export const xtermLog = (state: State) => state.log;
 export const getHardwareModules = (state: State) => state.modules;
 export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration || state.restoreUserConfiguration;
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
@@ -270,8 +202,6 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
     };
 };
 export const bootloaderActive = (state: State) => state.bootloaderActive;
-export const firmwareUpgradeFailed = (state: State) => state.firmwareUpdateFailed;
-export const firmwareUpgradeSuccess = (state: State) => state.firmwareUpdateSuccess;
 export const halvesInfo = (state: State) => state.halvesInfo;
 export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;
 export const deviceUiState = (state: State): DeviceUiStates | undefined => {

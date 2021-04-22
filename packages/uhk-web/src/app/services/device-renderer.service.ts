@@ -3,6 +3,7 @@ import { Action, Store } from '@ngrx/store';
 
 import {
     DeviceConnectionState,
+    FirmwareJson, FirmwareUpgradeIpcResponse,
     IpcEvents,
     IpcResponse,
     LogService,
@@ -14,10 +15,12 @@ import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ConnectionStateChangedAction,
+    CurrentlyUpdatingModuleAction,
     ReadConfigSizesReplyAction,
     RecoveryDeviceReplyAction,
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction,
+    UpdateFirmwareJsonAction,
     UpdateFirmwareReplyAction
 } from '../store/actions/device';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
@@ -78,7 +81,7 @@ export class DeviceRendererService {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.recoveryDeviceReply, (event: string, response: IpcResponse) => {
+        this.ipcRenderer.on(IpcEvents.device.recoveryDeviceReply, (event: string, response: FirmwareUpgradeIpcResponse) => {
             this.dispachStoreAction(new RecoveryDeviceReplyAction(response));
         });
 
@@ -94,7 +97,15 @@ export class DeviceRendererService {
             this.dispachStoreAction(new LoadConfigFromDeviceReplyAction(JSON.parse(response)));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.updateFirmwareReply, (event: string, response: IpcResponse) => {
+        this.ipcRenderer.on(IpcEvents.device.updateFirmwareJson, (event: string, data: FirmwareJson) => {
+            this.dispachStoreAction(new UpdateFirmwareJsonAction(data));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgrading, (event: string, response: string) => {
+            this.dispachStoreAction(new CurrentlyUpdatingModuleAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.updateFirmwareReply, (event: string, response: FirmwareUpgradeIpcResponse) => {
             this.dispachStoreAction(new UpdateFirmwareReplyAction(response));
         });
 

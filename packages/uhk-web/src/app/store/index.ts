@@ -23,6 +23,7 @@ import * as fromContributors from './reducers/contributors.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromApp from './reducers/app.reducer';
 import * as fromDevice from './reducers/device';
+import * as fromFirmware from './reducers/firmware-upgrade.reducer';
 import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
 import * as fromSelectors from './reducers/selectors';
 import { initProgressButtonState } from './reducers/progress-button-state';
@@ -32,6 +33,7 @@ import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
 import {
     DeviceUiStates,
+    FirmwareUpgradeState,
     MacroMenuItem,
     OutOfSpaceWarningData,
     SideMenuPageState,
@@ -50,6 +52,7 @@ export interface AppState {
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
     contributors: fromContributors.State;
+    firmware: fromFirmware.State;
     userConfigurationHistory: fromUserConfigHistory.State;
 }
 
@@ -62,6 +65,7 @@ export const reducers: ActionReducerMap<AppState> = {
     appUpdate: fromAppUpdate.reducer,
     device: fromDevice.reducer,
     contributors: fromContributors.reducer,
+    firmware: fromFirmware.reducer,
     userConfigurationHistory: fromUserConfigHistory.reducer
 };
 
@@ -118,25 +122,26 @@ export const getUpdateInfo = createSelector(appUpdateState, fromAppUpdate.getUpd
 export const appUpdateSettingsState = (state: AppState) => state.autoUpdateSettings;
 
 export const deviceState = (state: AppState) => state.device;
+export const firmwareState = (state: AppState) => state.firmware;
+export const updatingFirmware = createSelector(firmwareState, fromFirmware.updatingFirmware);
 export const deviceConnected = createSelector(
-    runningInElectron, deviceState, appState,
-    (electron, device, app) => {
+    runningInElectron, deviceState, appState, updatingFirmware,
+    (electron, device, app, upgradingFirmware) => {
         if (!electron) {
             return true;
         }
 
         if (app.platform === 'linux') {
-            return device.connectedDevice && (device.zeroInterfaceAvailable || device.updatingFirmware);
+            return device.connectedDevice && (device.zeroInterfaceAvailable || upgradingFirmware);
         }
 
         return !!device.connectedDevice;
     });
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
-export const updatingFirmware = createSelector(deviceState, fromDevice.updatingFirmware);
-export const xtermLog = createSelector(deviceState, fromDevice.xtermLog);
+export const xtermLog = createSelector(firmwareState, fromFirmware.xtermLog);
 // tslint:disable-next-line: max-line-length
-export const flashFirmwareButtonDisabled = createSelector(runningInElectron, deviceState, (electron, state: fromDevice.State) => !electron || state.updatingFirmware);
+export const flashFirmwareButtonDisabled = createSelector(runningInElectron, updatingFirmware, (electron, upgradingFirmware) => !electron || upgradingFirmware);
 export const getStateHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
 export const getHardwareModules = createSelector(runningInElectron, getStateHardwareModules, getAgentVersionInfo,
     (electron, hardwareModules, agentVersionInfo): HardwareModules => {
@@ -166,8 +171,8 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
-export const firmwareUpgradeFailed = createSelector(deviceState, fromDevice.firmwareUpgradeFailed);
-export const firmwareUpgradeSuccess = createSelector(deviceState, fromDevice.firmwareUpgradeSuccess);
+export const firmwareUpgradeFailed = createSelector(firmwareState, fromFirmware.firmwareUpgradeFailed);
+export const firmwareUpgradeSuccess = createSelector(firmwareState, fromFirmware.firmwareUpgradeSuccess);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
@@ -371,3 +376,32 @@ export const getSupportedThemes = (): AppThemeSelect[] => {
         { id: AppTheme.Dark, text: 'Dark' }
     ];
 };
+
+export const getStateFirmwareUpgradeState = createSelector(firmwareState, fromFirmware.firmwareUpgradeState);
+export const getFirmwareUpgradeState = createSelector(runningInElectron, getStateFirmwareUpgradeState, getAgentVersionInfo,
+    (electron, firmwareUpgrade, agentVersionInfo): FirmwareUpgradeState => {
+        if (electron) {
+            return firmwareUpgrade;
+        }
+
+        return {
+            showForceFirmwareUpgrade: false,
+            showForceFirmwareUpgradeWith: false,
+            modules: [
+                {
+                    moduleName: 'Right keyboard half',
+                    firmwareUpgradeSupported: true,
+                    currentFirmwareVersion: agentVersionInfo.firmwareVersion,
+                    newFirmwareVersion: undefined,
+                    upgrading: false
+                },
+                {
+                    moduleName: 'Left keyboard half',
+                    firmwareUpgradeSupported: true,
+                    currentFirmwareVersion: agentVersionInfo.firmwareVersion,
+                    newFirmwareVersion: undefined,
+                    upgrading: false
+                }
+            ]
+        };
+    });

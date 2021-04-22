@@ -1,0 +1,23 @@
+<button
+    class="btn btn-primary btn-file"
+    (click)="onClick()"
+    [class.disabled]="disabled"
+    mwlConfirmationPopover
+    popoverTitle="This firmware version is already running on your UHK. Do you want to force update anyway?"
+    placement="bottom"
+    confirmText="Yes"
+    cancelText="No"
+    [isDisabled]="!showPopover"
+    [isOpen]="showPopover"
+    (cancel)="onCancel()"
+    (confirm)="onForceClick()"
+    (isOpenChange)="onOpenChange($event)"
+>
+    Choose firmware file and flash it
+</button>
+<input #inputControl
+       class="d-none"
+       type="file"
+       accept=".bz2,.gz"
+       [disabled]="disabled"
+       (change)="changeFile($event)">

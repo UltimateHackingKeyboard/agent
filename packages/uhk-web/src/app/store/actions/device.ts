@@ -2,12 +2,13 @@ import { Action } from '@ngrx/store';
 import {
     ConfigSizesInfo,
     DeviceConnectionState,
+    FirmwareJson,
     FirmwareUpgradeIpcResponse,
     HardwareModules,
-    IpcResponse,
-    UploadFileData
+    IpcResponse
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
+import { UpdateFirmwareWithPayload } from '../../models';
 
 export enum ActionTypes {
     SetPrivilegeOnLinux = '[device] set privilege on linux',
@@ -23,7 +24,9 @@ export enum ActionTypes {
     ResetUserConfiguration = '[device] reset user configuration',
     ResetPcMouseSpeedSettings = '[device] reset PC mouse speed settings',
     ResetMacMouseSpeedSettings = '[device] reset Mac mouse speed settings',
+    CurrentlyUpdatingModule = '[device] currently updating module',
     UpdateFirmware = '[device] update firmware',
+    UpdateFirmwareJson = '[device] update firmware JSON',
     UpdateFirmwareWith = '[device] update firmware with',
     UpdateFirmwareReply = '[device] update firmware reply',
     UpdateFirmwareSuccess = '[device] update firmware success',
@@ -95,14 +98,31 @@ export class ResetUserConfigurationAction implements Action {
     type = ActionTypes.ResetUserConfiguration;
 }
 
+export class CurrentlyUpdatingModuleAction implements Action {
+    type = ActionTypes.CurrentlyUpdatingModule;
+
+    constructor(public payload: string) {
+    }
+}
+
 export class UpdateFirmwareAction implements Action {
     type = ActionTypes.UpdateFirmware;
+
+    constructor(public payload: boolean) {
+    }
+}
+
+export class UpdateFirmwareJsonAction implements Action {
+    type = ActionTypes.UpdateFirmwareJson;
+
+    constructor(public payload: FirmwareJson) {
+    }
 }
 
 export class UpdateFirmwareWithAction implements Action {
     type = ActionTypes.UpdateFirmwareWith;
 
-    constructor(public payload: UploadFileData) {
+    constructor(public payload: UpdateFirmwareWithPayload) {
     }
 }
 
@@ -200,7 +220,9 @@ export type Actions
     | ResetPcMouseSpeedSettingsAction
     | ResetMacMouseSpeedSettingsAction
     | ResetUserConfigurationAction
+    | CurrentlyUpdatingModuleAction
     | UpdateFirmwareAction
+    | UpdateFirmwareJsonAction
     | UpdateFirmwareWithAction
     | UpdateFirmwareReplyAction
     | UpdateFirmwareSuccessAction
