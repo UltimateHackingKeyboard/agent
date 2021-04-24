@@ -294,7 +294,7 @@ export class DeviceService {
                 else if (moduleInfo.module.firmwareUpgradeSupported) {
                     this.logService.misc(`"${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
                     if (data.forceUpgrade ||  moduleInfo.info.firmwareVersion !== packageJson.firmwareVersion) {
-                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(
                                 getModuleFirmwarePath(moduleInfo.module, packageJson),
