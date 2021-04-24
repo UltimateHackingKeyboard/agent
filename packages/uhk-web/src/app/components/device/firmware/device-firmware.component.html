@@ -14,7 +14,7 @@
                     </span>
                     {{ state.moduleName }}
                     <span *ngIf="state.firmwareUpgradeSupported">firmware: {{ state.currentFirmwareVersion }}
-                        <span *ngIf="state.newFirmwareVersion"> → {{ state.newFirmwareVersion }}</span>
+                        <span *ngIf="state.newFirmwareVersion"> <fa-icon [icon]="faArrowRight"></fa-icon> {{ state.newFirmwareVersion }}</span>
                     </span>
                     <span *ngIf="!state.firmwareUpgradeSupported"> firmware version is unknown and it's not updatable yet.</span>
                 </li>
