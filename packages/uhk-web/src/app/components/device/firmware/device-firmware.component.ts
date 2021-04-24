@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { faSlidersH, faSpinner, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { Constants, UploadFileData, VersionInformation } from 'uhk-common';
+import { faCheck, faSlidersH, faSpinner, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { Constants, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
@@ -46,6 +46,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     faArrowRight = faArrowRight;
     faSlidersH = faSlidersH;
     faSpinner = faSpinner;
+    faCheck = faCheck;
 
     private subscription = new Subscription();
 

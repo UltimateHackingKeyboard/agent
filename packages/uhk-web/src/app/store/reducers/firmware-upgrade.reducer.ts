@@ -57,14 +57,10 @@ export function reducer(state = initialState, action: Action): State {
             };
 
             newState.modules = newState.modules.map(module => {
-                if (module.currentFirmwareVersion !== firmwareJson?.firmwareVersion) {
-                    return {
-                        ...module,
-                        newFirmwareVersion: firmwareJson?.firmwareVersion
-                    };
-                }
-
-                return module;
+                return {
+                    ...module,
+                    newFirmwareVersion: firmwareJson?.firmwareVersion
+                };
             });
 
             return newState;
@@ -80,9 +76,7 @@ export function reducer(state = initialState, action: Action): State {
                         firmwareUpgradeSupported: true,
                         currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
                         // tslint:disable-next-line:max-line-length
-                        newFirmwareVersion: state.firmwareJson?.firmwareVersion !== hardwareModules.rightModuleInfo?.firmwareVersion
-                            ? state.firmwareJson?.firmwareVersion
-                            : undefined,
+                        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                         upgrading: false
                     }
                 ]
@@ -94,9 +88,7 @@ export function reducer(state = initialState, action: Action): State {
                         moduleName: moduleInfo.module.name,
                         firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
                         currentFirmwareVersion: moduleInfo.info.firmwareVersion,
-                        newFirmwareVersion: state.firmwareJson?.firmwareVersion !== moduleInfo.info.firmwareVersion
-                            ? state.firmwareJson?.firmwareVersion
-                            : undefined,
+                        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                         upgrading: false
                     });
                 }
@@ -120,7 +112,7 @@ export function reducer(state = initialState, action: Action): State {
                         return {
                             ...module,
                             upgrading: false,
-                            newFirmwareVersion: undefined,
+                            newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                             currentFirmwareVersion: state.firmwareJson?.firmwareVersion
                         };
                     }
@@ -158,6 +150,7 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.UpdateFirmwareSuccess:
             return {
                 ...state,
+                firmwareJson: undefined,
                 upgradeState: state.upgradedModule
                     ? FirmwareUpgradeStates.Success
                     : FirmwareUpgradeStates.ModulesNotUpdated,
@@ -172,7 +165,7 @@ export function reducer(state = initialState, action: Action): State {
                         return {
                             ...module,
                             upgrading: false,
-                            newFirmwareVersion: undefined,
+                            newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                             currentFirmwareVersion: state.firmwareJson?.firmwareVersion
                         };
                     }
