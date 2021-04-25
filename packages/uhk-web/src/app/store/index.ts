@@ -34,7 +34,7 @@ import { isVersionGte } from '../util';
 import {
     DeviceUiStates,
     FirmwareUpgradeState,
-    MacroMenuItem,
+    MacroMenuItem, ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
     SideMenuPageState,
     UhkProgressBarState,
@@ -393,14 +393,14 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                     firmwareUpgradeSupported: true,
                     currentFirmwareVersion: agentVersionInfo.firmwareVersion,
                     newFirmwareVersion: undefined,
-                    upgrading: false
+                    state: ModuleFirmwareUpgradeStates.Idle
                 },
                 {
                     moduleName: 'Left keyboard half',
                     firmwareUpgradeSupported: true,
                     currentFirmwareVersion: agentVersionInfo.firmwareVersion,
                     newFirmwareVersion: undefined,
-                    upgrading: false
+                    state: ModuleFirmwareUpgradeStates.Idle
                 }
             ]
         };

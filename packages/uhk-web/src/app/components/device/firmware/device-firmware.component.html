@@ -10,8 +10,9 @@
             <ul class="list-unstyled">
                 <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;">
                     <span class="upgrading">
-                        <fa-icon *ngIf="state.upgrading" [icon]="faSpinner" [spin]="true"></fa-icon>
-                        <fa-icon *ngIf="!state.upgrading && state.newFirmwareVersion && state.currentFirmwareVersion === state.newFirmwareVersion" [icon]="faCheck"></fa-icon>
+                        <fa-icon *ngIf="state.state === 'Upgrading'" [icon]="faSpinner" [spin]="true"></fa-icon>
+                        <fa-icon *ngIf="state.state === 'Failed'" [icon]="faExclamation"></fa-icon>
+                        <fa-icon *ngIf="state.state !== 'Upgrading' && state.newFirmwareVersion && state.currentFirmwareVersion === state.newFirmwareVersion" [icon]="faCheck"></fa-icon>
                     </span>
                     {{ state.moduleName }}
                     <span *ngIf="state.firmwareUpgradeSupported">firmware: {{ state.currentFirmwareVersion }}

@@ -2,10 +2,10 @@ import { Action } from '@ngrx/store';
 import { FirmwareJson, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME } from 'uhk-common';
 
 import * as Device from '../actions/device';
-import * as App from '../actions/app';
-import { FirmwareUpgradeState, ModuleFirmwareUpgradeState } from '../../models';
-import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../actions/device';
+import * as App from '../actions/app';
+import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates } from '../../models';
+import { XtermCssClass, XtermLog } from '../../models/xterm-log';
 
 export enum FirmwareUpgradeStates {
     Idle = 'Idle',
@@ -77,7 +77,7 @@ export function reducer(state = initialState, action: Action): State {
                         currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
                         // tslint:disable-next-line:max-line-length
                         newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                        upgrading: false
+                        state: ModuleFirmwareUpgradeStates.Idle
                     }
                 ]
             };
@@ -89,7 +89,7 @@ export function reducer(state = initialState, action: Action): State {
                         firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
                         currentFirmwareVersion: moduleInfo.info.firmwareVersion,
                         newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                        upgrading: false
+                        state: ModuleFirmwareUpgradeStates.Idle
                     });
                 }
             }
@@ -106,12 +106,12 @@ export function reducer(state = initialState, action: Action): State {
                     if (module.moduleName === currentlyUpdatingModule) {
                         return {
                             ...module,
-                            upgrading: true
+                            state: ModuleFirmwareUpgradeStates.Upgrading
                         };
-                    } else if (module.upgrading) {
+                    } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
                         return {
                             ...module,
-                            upgrading: false,
+                            state: ModuleFirmwareUpgradeStates.Success,
                             newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                             currentFirmwareVersion: state.firmwareJson?.firmwareVersion
                         };
@@ -161,10 +161,10 @@ export function reducer(state = initialState, action: Action): State {
                     ? false
                     : state.upgradeState === FirmwareUpgradeStates.StartedWith,
                 modules: state.modules.map(module => {
-                    if (module.upgrading) {
+                    if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
                         return {
                             ...module,
-                            upgrading: false,
+                            state: ModuleFirmwareUpgradeStates.Success,
                             newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                             currentFirmwareVersion: state.firmwareJson?.firmwareVersion
                         };
@@ -184,7 +184,19 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 log: [...state.log, logEntry],
-                upgradeState: FirmwareUpgradeStates.Failed
+                upgradeState: FirmwareUpgradeStates.Failed,
+                modules: state.modules.map(module => {
+                    if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+                        return {
+                            ...module,
+                            state: ModuleFirmwareUpgradeStates.Failed,
+                            newFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                            currentFirmwareVersion: state.firmwareJson?.firmwareVersion
+                        };
+                    }
+
+                    return module;
+                })
             };
         }
 
