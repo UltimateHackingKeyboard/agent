@@ -27,7 +27,9 @@ export class Device {
     public static readonly loadConfigurations = 'device-load-configuration';
     public static readonly loadConfigurationReply = 'device-load-configuration-reply';
     public static readonly updateFirmware = 'device-update-firmware';
+    public static readonly updateFirmwareJson = 'device-update-firmware-json';
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
+    public static readonly moduleFirmwareUpgrading = 'device-module-firmware-upgrading';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
     public static readonly recoveryDevice = 'device-recovery';
     public static readonly recoveryDeviceReply = 'device-recovery-reply';

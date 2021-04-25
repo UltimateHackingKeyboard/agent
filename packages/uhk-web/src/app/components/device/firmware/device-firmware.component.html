@@ -7,14 +7,20 @@
                 <span>Firmware</span>
             </h1>
 
-            <p>
-                Right keyboard half firmware: {{ hardwareModules.rightModuleInfo.firmwareVersion }}
-                <ng-container *ngFor="let moduleInfo of hardwareModules.moduleInfos; trackBy:moduleInfoTrackByFn">
-                    <br>
-                    <span *ngIf="moduleInfo.module.firmwareUpgradeSupported">{{ moduleInfo.module.name }} firmware: {{ moduleInfo.info.firmwareVersion }}</span>
-                    <span *ngIf="!moduleInfo.module.firmwareUpgradeSupported"> {{ moduleInfo.module.name }} firmware version is unknown and it's not updatable yet.</span>
-                </ng-container>
-            </p>
+            <ul class="list-unstyled">
+                <li *ngFor="let state of firmwareUpgradeStates.modules; trackBy:firmwareUpgradeStateTrackByFn;">
+                    <span class="upgrading">
+                        <fa-icon *ngIf="state.state === 'Upgrading'" [icon]="faSpinner" [spin]="true" [fixedWidth]="true"></fa-icon>
+                        <fa-icon *ngIf="state.state === 'Failed'" [icon]="faExclamation" class="text-danger" [fixedWidth]="true"></fa-icon>
+                        <fa-icon *ngIf="state.state !== 'Upgrading' && state.newFirmwareVersion && state.currentFirmwareVersion === state.newFirmwareVersion" [icon]="faCheck" [fixedWidth]="true"></fa-icon>
+                    </span>
+                    {{ state.moduleName }}
+                    <span *ngIf="state.firmwareUpgradeSupported">firmware: {{ state.currentFirmwareVersion }}
+                        <span *ngIf="state.newFirmwareVersion && state.currentFirmwareVersion !== state.newFirmwareVersion"> <fa-icon [icon]="faLongArrowAltRight"></fa-icon> {{ state.newFirmwareVersion }}</span>
+                    </span>
+                    <span *ngIf="!state.firmwareUpgradeSupported"> firmware version is unknown and it's not updatable yet.</span>
+                </li>
+            </ul>
 
             <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,
                 and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
@@ -22,13 +28,23 @@
             <p *ngIf="firmwareUpgradeAllowed$ | async">
                 <button class="btn btn-primary action-button"
                         [disabled]="flashFirmwareButtonDisabled$ | async"
-                        (click)="onUpdateFirmware()">
+                        (click)="onUpdateFirmware()"
+                        mwlConfirmationPopover
+                        popoverTitle="This firmware version is already running on your UHK. Do you want to force update anyway?"
+                        placement="bottom"
+                        confirmText="Yes"
+                        cancelText="No"
+                        [isDisabled]="!firmwareUpgradeStates.showForceFirmwareUpgrade"
+                        [isOpen]="firmwareUpgradeStates.showForceFirmwareUpgrade"
+                        (confirm)="onForceUpgradeFirmware()"
+                >
                     Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 </button>
-                <file-upload [disabled]="flashFirmwareButtonDisabled$ | async"
+                <firmware-file-upload [disabled]="flashFirmwareButtonDisabled$ | async"
                              (fileChanged)="changeFile($event)"
-                             accept=".bz2,.gz"
-                             label="Choose firmware file and flash it"></file-upload>
+                             [showPopover]="firmwareUpgradeStates.showForceFirmwareUpgradeWith"
+                >
+                ></firmware-file-upload>
             </p>
 
             <div *ngIf="firmwareUpgradeFailed" class="alert alert-danger" role="alert">

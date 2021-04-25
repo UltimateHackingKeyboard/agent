@@ -34,6 +34,7 @@ import Uhk, { errorHandler, yargs } from './src';
             packageJsonPath,
             tmpDirectory: firmwarePath
         });
+
         const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
         if (!fs.existsSync(rightFirmwarePath)) {

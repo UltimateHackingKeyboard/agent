@@ -242,7 +242,9 @@ export class DeviceEffects {
     @Effect({ dispatch: false }) updateFirmware$ = this.actions$
         .pipe(
             ofType<UpdateFirmwareAction>(ActionTypes.UpdateFirmware),
-            tap(() => this.deviceRendererService.updateFirmware({
+            map(action => action.payload),
+            tap(payload => this.deviceRendererService.updateFirmware({
+                forceUpgrade: payload,
                 versionInformation: getVersions()
             }))
         );
@@ -251,9 +253,10 @@ export class DeviceEffects {
         .pipe(
             ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith),
             map(action => action.payload),
-            tap(uploadFile => this.deviceRendererService.updateFirmware({
+            tap(payload => this.deviceRendererService.updateFirmware({
+                forceUpgrade: payload.forceUpgrade,
                 versionInformation: getVersions(),
-                uploadFile
+                uploadFile: payload.uploadFileData
             }))
         );
 

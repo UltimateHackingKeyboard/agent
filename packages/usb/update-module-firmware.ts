@@ -41,8 +41,7 @@ import Uhk, { errorHandler, yargs } from './src';
             id: -1,
             slotId: mapI2cAddressToSlotId(i2cAddress),
             name: mapI2cAddressToModuleName(i2cAddress),
-            firmwareUpgradeSupported: true,
-            bootloaderPingReconnectMsg: 'Cannot ping the bootloader. Please remove the bridge cable/module, and keep reconnecting until you see this message.'
+            firmwareUpgradeSupported: true
         };
         const uhkDeviceProduct = getCurrentUhkDeviceProduct();
         const { operations } = Uhk(argv);

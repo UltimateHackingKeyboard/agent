@@ -123,12 +123,14 @@ import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-b
 import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
+import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 
 @NgModule({
     declarations: [
         MainAppComponent,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
+        FirmwareFileUploadComponent,
         MouseSpeedComponent,
         LEDBrightnessComponent,
         KeymapEditComponent,
