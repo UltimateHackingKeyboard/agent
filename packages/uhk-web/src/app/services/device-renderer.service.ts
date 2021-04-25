@@ -3,7 +3,8 @@ import { Action, Store } from '@ngrx/store';
 
 import {
     DeviceConnectionState,
-    FirmwareJson, FirmwareUpgradeIpcResponse,
+    FirmwareJson,
+    FirmwareUpgradeIpcResponse,
     IpcEvents,
     IpcResponse,
     LogService,
