@@ -6,6 +6,12 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.12] - 2020-04-26
+
+Firmware: 8.10.**9** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Make the firmware update process only update the needed keyboard halves and modules and show the current update step.
+
 ## [1.5.11] - 2020-03-31
 
 Firmware: 8.10.**8** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.8)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
