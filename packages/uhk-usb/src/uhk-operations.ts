@@ -122,28 +122,30 @@ export class UhkOperations {
         this.device.close();
         this.logService.misc('[UhkOperations] Waiting for buspal');
         await waitForDevice(device.vendorId, device.buspalPid);
-        let tryCount = 0;
         const usbPeripheral = new UsbPeripheral({ productId: device.buspalPid, vendorId: device.vendorId });
         let kboot: KBoot;
-        while (true) {
+
+        const startTime = new Date();
+        let connected = false;
+        while (new Date().getTime() - startTime.getTime() < 30000) {
             try {
                 this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
                 kboot = new KBoot(usbPeripheral);
                 await kboot.configureI2c(module.i2cAddress);
                 await kboot.getProperty(Properties.BootloaderVersion);
+                connected = true;
                 break;
             } catch {
                 if (kboot) {
                     kboot.close();
                 }
-                if (tryCount > 100) {
-                    throw new Error(`Can not connect to the "${module.name}"`);
-                }
                 await snooze(2000);
             }
-            tryCount++;
         }
 
+        if (!connected) {
+            throw new Error(`Can not connect to the "${module.name}"`);
+        }
         // https://github.com/node-hid/node-hid/issues/230
         this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
         await snooze(1000);
