@@ -63,12 +63,13 @@
             </button>
         </div>
 
-        <icon name="question-circle"
-              class="d-inline mt-1"
-              ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
-              tooltipClass="tooltip-modifier"
-              container="body"
-              placement="bottom"></icon>
+        <span class="mt-1">
+            <icon name="question-circle"
+                  ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
+                  tooltipClass="tooltip-modifier"
+                  container="body"
+                  placement="bottom"></icon>
+        </span>
     </div>
 
 </div>
@@ -105,11 +106,13 @@
         </ul>
         <p class="text-left mb-1">The secondary role can be any layer or modifier.</p>
     </ng-template>
-    <icon name="question-circle"
-          [ngbTooltip]="secondaryRoleTooltip"
-          tooltipClass="tooltip-secondary-role"
-          container="body"
-          placement="bottom"></icon>
+    <span class="mt-1">
+        <icon name="question-circle"
+              [ngbTooltip]="secondaryRoleTooltip"
+              tooltipClass="tooltip-secondary-role"
+              container="body"
+              placement="bottom"></icon>
+    </span>
 </div>
 
 <div *ngIf="warningVisible" class="alert alert-warning remap-warning" role="alert">
