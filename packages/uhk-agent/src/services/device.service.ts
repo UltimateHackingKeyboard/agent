@@ -1,7 +1,6 @@
 import { ipcMain } from 'electron';
 import { isEqual } from 'lodash';
 import {
-    CommandLineArgs,
     ConfigurationReply,
     DeviceConnectionState,
     findUhkModuleById,
@@ -63,9 +62,8 @@ export class DeviceService {
                 private win: Electron.BrowserWindow,
                 private device: UhkHidDevice,
                 private operations: UhkOperations,
-                private rootDir: string,
-                private options: CommandLineArgs) {
-        this.startPollUhkDevice();
+                private rootDir: string
+    ) {
         this.uhkDevicePoller()
             .catch(error => {
                 this.logService.error('[DeviceService] UHK Device poller error', error);
