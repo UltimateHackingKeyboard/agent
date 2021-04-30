@@ -211,15 +211,24 @@ export function reducer(state = initialState, action: Action): State {
                 return state;
             }
 
-            const logEntry = {
-                message: payload.message,
-                cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard
-            };
-
-            return {
+            const newState = {
                 ...state,
-                log: [...state.log, logEntry]
+                log: [...state.log]
             };
+            const lastLogEntry = state.log[state.log.length - 1];
+            if (lastLogEntry.message.startsWith(payload.message)) {
+                newState.log[newState.log.length - 1] = {
+                    ...lastLogEntry,
+                    message: lastLogEntry.message + '.'
+                };
+            } else {
+                newState.log.push({
+                    message: payload.message,
+                    cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard
+                });
+            }
+
+            return newState;
         }
 
         case Device.ActionTypes.RecoveryDevice: {
