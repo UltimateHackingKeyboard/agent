@@ -33,7 +33,8 @@ const appRoutes: Routes = [
     },
     {
         path: 'loading',
-        component: LoadingDevicePageComponent
+        component: LoadingDevicePageComponent,
+        canActivate: [UhkDeviceDisconnectedGuard]
     },
     {
         path: 'multi-device',

@@ -93,9 +93,9 @@ function createWindow() {
     }
 
     setMenu(win);
-    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir, options);
+    deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);
     appUpdateService = new AppUpdateService(logger, win, app);
-    appService = new AppService(logger, win, deviceService, options, uhkHidDeviceService, packagesDir);
+    appService = new AppService(logger, win, deviceService, options, packagesDir);
     sudoService = new SudoService(logger, options, deviceService, packagesDir);
 // and load the index.html of the app.
 

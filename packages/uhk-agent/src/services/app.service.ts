@@ -1,5 +1,4 @@
 import { ipcMain, shell } from 'electron';
-import { UhkHidDevice } from 'uhk-usb';
 import * as os from 'os';
 
 import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
@@ -12,7 +11,6 @@ export class AppService extends MainServiceBase {
                 protected win: Electron.BrowserWindow,
                 private deviceService: DeviceService,
                 private options: CommandLineArgs,
-                private uhkHidDeviceService: UhkHidDevice,
                 private rootDir: string) {
         super(logService, win);
 
@@ -23,29 +21,23 @@ export class AppService extends MainServiceBase {
     }
 
     private async handleAppStartInfo(event: Electron.IpcMainEvent) {
-        this.logService.misc('[AppService] getAppStartInfo');
-        const deviceConnectionState = await this.uhkHidDeviceService.getDeviceConnectionStateAsync();
-        if (deviceConnectionState.hasPermission && deviceConnectionState.connectedDevice) {
-            deviceConnectionState.hardwareModules = await this.deviceService.getHardwareModules(false);
-        } else {
-            deviceConnectionState.hardwareModules = {
-                moduleInfos: [],
-                rightModuleInfo: {}
-            };
-        }
+        try {
+            this.logService.misc('[AppService] getAppStartInfo');
 
-        const response: AppStartInfo = {
-            deviceConnectionState,
-            commandLineArgs: {
-                modules: this.options.modules || false,
-                log: this.options.log
-            },
-            platform: process.platform as string,
-            osVersion: os.release(),
-            udevFileContent: await getUdevFileContentAsync(this.rootDir)
-        };
-        this.logService.misc('[AppService] getAppStartInfo response:', response);
-        return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);
+            const response: AppStartInfo = {
+                commandLineArgs: {
+                    modules: this.options.modules || false,
+                    log: this.options.log
+                },
+                platform: process.platform as string,
+                osVersion: os.release(),
+                udevFileContent: await getUdevFileContentAsync(this.rootDir)
+            };
+            this.logService.misc('[AppService] getAppStartInfo response:', response);
+            return event.sender.send(IpcEvents.app.getAppStartInfoReply, response);
+        } catch (error) {
+            this.logService.misc('[AppService] getAppStartInfo failed:', error);
+        }
     }
 
     private exit() {

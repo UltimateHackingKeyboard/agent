@@ -24,7 +24,7 @@ import {
 import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-settings';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
-import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
+import { ActionTypes as DeviceActionTypes, StartConnectionPollerAction } from '../actions/device';
 import { AppState, getApplicationSettings, runningInElectron } from '../index';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 
@@ -86,7 +86,7 @@ export class ApplicationEffects {
                 this.logService.misc('[AppEffect][processStartInfo] payload:', appInfo);
                 return [
                     new ApplyAppStartInfoAction(appInfo),
-                    new ConnectionStateChangedAction(appInfo.deviceConnectionState)
+                    new StartConnectionPollerAction()
                 ];
             })
         );
