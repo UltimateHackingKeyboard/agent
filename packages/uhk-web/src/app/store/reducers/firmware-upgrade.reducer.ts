@@ -27,6 +27,11 @@ const FIRMWARE_UPGRADING_STATES = [
     FirmwareUpgradeStates.Recovering
 ];
 
+const FIRMWARE_NOT_FORCE_UPGRADING = [
+    FirmwareUpgradeStates.Started,
+    FirmwareUpgradeStates.StartedWith
+];
+
 export interface State {
     firmwareJson?: FirmwareJson;
     log: Array<XtermLog>;
@@ -59,7 +64,11 @@ export function reducer(state = initialState, action: Action): State {
             newState.modules = newState.modules.map(module => {
                 return {
                     ...module,
-                    newFirmwareVersion: firmwareJson?.firmwareVersion
+                    newFirmwareVersion: firmwareJson?.firmwareVersion,
+                    state: firmwareJson?.firmwareVersion === module.currentFirmwareVersion
+                            && FIRMWARE_NOT_FORCE_UPGRADING.includes(state.upgradeState)
+                        ? ModuleFirmwareUpgradeStates.Success
+                        : ModuleFirmwareUpgradeStates.Idle
                 };
             });
 
@@ -75,7 +84,6 @@ export function reducer(state = initialState, action: Action): State {
                         moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
                         firmwareUpgradeSupported: true,
                         currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
-                        // tslint:disable-next-line:max-line-length
                         newFirmwareVersion: state.firmwareJson?.firmwareVersion,
                         state: ModuleFirmwareUpgradeStates.Idle
                     }
@@ -162,6 +170,13 @@ export function reducer(state = initialState, action: Action): State {
                     : state.upgradeState === FirmwareUpgradeStates.StartedWith,
                 modules: state.modules.map(module => {
                     if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+                        return {
+                            ...module,
+                            state: ModuleFirmwareUpgradeStates.Success,
+                            newFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                            currentFirmwareVersion: state.firmwareJson?.firmwareVersion
+                        };
+                    } else if (!state.upgradedModule && module.state === ModuleFirmwareUpgradeStates.Idle) {
                         return {
                             ...module,
                             state: ModuleFirmwareUpgradeStates.Success,

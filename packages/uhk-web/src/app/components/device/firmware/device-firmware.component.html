@@ -12,7 +12,7 @@
                     <span class="upgrading">
                         <fa-icon *ngIf="state.state === 'Upgrading'" [icon]="faSpinner" [spin]="true" [fixedWidth]="true"></fa-icon>
                         <fa-icon *ngIf="state.state === 'Failed'" [icon]="faExclamation" class="text-danger" [fixedWidth]="true"></fa-icon>
-                        <fa-icon *ngIf="state.state !== 'Upgrading' && state.newFirmwareVersion && state.currentFirmwareVersion === state.newFirmwareVersion" [icon]="faCheck" [fixedWidth]="true"></fa-icon>
+                        <fa-icon *ngIf="state.state === 'Success'" [icon]="faCheck" [fixedWidth]="true"></fa-icon>
                     </span>
                     {{ state.moduleName }}
                     <span *ngIf="state.firmwareUpgradeSupported">firmware: {{ state.currentFirmwareVersion }}
