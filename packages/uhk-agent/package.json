@@ -19,7 +19,7 @@
     "node-hid": "2.1.1",
     "sudo-prompt": "9.2.1",
     "tmp": "0.2.1",
-    "tslib": "2.0.3",
+    "tslib": "2.2.0",
     "uhk-common": "^1.0.0",
     "uhk-usb": "^1.0.0"
   },
