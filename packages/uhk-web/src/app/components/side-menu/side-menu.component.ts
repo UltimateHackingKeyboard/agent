@@ -32,7 +32,7 @@ import { Subscription } from 'rxjs';
 import { AppState, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
 import { RenameUserConfigurationAction } from '../../store/actions/user-config';
-import { SideMenuPageState } from '../../models';
+import { DeviceUiStates, SideMenuPageState } from '../../models';
 
 interface SideMenuItemState {
     icon: IconDefinition;
@@ -116,15 +116,14 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     ngOnInit(): void {
         this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
             this.state = data;
+            this.calculateDeviceAnimationState();
             this.cdRef.markForCheck();
         });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.deviceConfigurationLoaded) {
-            this.sideMenuState.device.animation = changes.deviceConfigurationLoaded.currentValue
-                ? 'active'
-                : 'inactive';
+            this.calculateDeviceAnimationState();
         }
     }
 
@@ -158,5 +157,12 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
 
     editDeviceName(name: string): void {
         this.store.dispatch(new RenameUserConfigurationAction(name));
+    }
+
+    private calculateDeviceAnimationState(): void {
+        this.sideMenuState.device.animation = this.deviceConfigurationLoaded
+                && this.state?.deviceUiState !== DeviceUiStates.Recovery
+            ? 'active'
+            : 'inactive';
     }
 }

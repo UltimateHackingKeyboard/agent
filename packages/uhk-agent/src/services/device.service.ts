@@ -31,7 +31,8 @@ import {
     snooze,
     TmpFirmware,
     UhkHidDevice,
-    UhkOperations
+    UhkOperations,
+    waitForDevice
 } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
@@ -340,10 +341,13 @@ export class DeviceService {
             const uhkDeviceProduct = getCurrentUhkDeviceProductByBootloaderId();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
-            this.logService.misc('UHK Device recovery starts:', JSON.stringify(uhkDeviceProduct));
+            this.logService.misc('[DeviceService] UHK Device recovery starts:', JSON.stringify(uhkDeviceProduct));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
             await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+
+            this.logService.misc('[DeviceService] Waiting for keyboard');
+            await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;
@@ -351,10 +355,14 @@ export class DeviceService {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
-            response.modules = await this.getHardwareModules(true);
+            response.modules = {
+                moduleInfos: [],
+                rightModuleInfo: {}
+            };
             response.error = err;
         }
 
+        this.startPollUhkDevice();
         await snooze(500);
         event.sender.send(IpcEvents.device.recoveryDeviceReply, response);
     }
@@ -416,11 +424,7 @@ export class DeviceService {
 
                     const state = await this.device.getDeviceConnectionStateAsync();
                     if (!isEqual(state, savedState)) {
-                        savedState = {
-                            ...state
-                        };
-
-                        if (state.hasPermission && state.connectedDevice) {
+                        if (state.hasPermission && state.zeroInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
                         } else {
                             state.hardwareModules = {
@@ -429,6 +433,11 @@ export class DeviceService {
                             };
                         }
                         this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
+
+                        savedState = {
+                            ...state
+                        };
+
                         this.logService.misc('[DeviceService] Device connection state changed to:', state);
                     }
                 } catch (err) {
