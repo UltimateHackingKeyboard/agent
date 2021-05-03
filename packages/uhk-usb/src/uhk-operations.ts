@@ -83,13 +83,17 @@ export class UhkOperations {
             }
         } finally {
             if (inBootloaderMode && kboot) {
-                this.logService.misc('[UhkOperations] Close bootloader connection');
-                kboot.close();
-                this.logService.misc('[UhkOperations] Reset bootloader');
-                await kboot.reset();
-                this.logService.misc('[UhkOperations] Close communication channels');
-                kboot.close();
-                this.logService.misc('[UhkOperations] Right firmware successfully flashed');
+                try {
+                    this.logService.misc('[UhkOperations] Close bootloader connection');
+                    kboot.close();
+                    this.logService.misc('[UhkOperations] Reset bootloader');
+                    await kboot.reset();
+                    this.logService.misc('[UhkOperations] Close communication channels');
+                    kboot.close();
+                    this.logService.misc('[UhkOperations] Right firmware successfully flashed');
+                } catch (error) {
+                    this.logService.error('[UhkOperations] Restore to normal keyboard error', error);
+                }
             }
         }
     }
@@ -174,29 +178,35 @@ export class UhkOperations {
             await kboot.writeMemory({ startAddress: 0, data: configData });
 
         } finally {
-            if (inBuspalMode && kboot) {
-                this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
-                await kboot.reset();
+            if (inBuspalMode) {
+                try {
+                    if (kboot) {
+                        this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
+                        await kboot.reset();
 
-                this.logService.misc('[UhkOperations] Close communication channels');
-                kboot.close();
+                        this.logService.misc('[UhkOperations] Close communication channels');
+                        kboot.close();
+                    }
+                    await snooze(1000);
+                    await this.device.reenumerate({
+                        enumerationMode: EnumerationModes.NormalKeyboard,
+                        vendorId: device.vendorId,
+                        productId: device.keyboardPid
+                    });
+                    this.device.close();
+                    this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
+                    await waitForDevice(device.vendorId, device.keyboardPid);
+                    await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
+                    this.device.close();
+                    await snooze(1000);
+                    await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
+                    this.device.close();
+
+                    this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
+                } catch (error) {
+                    this.logService.error(`[UhkOperations] "${module.name}" firmware restore error`, error);
+                }
             }
-            await snooze(1000);
-            await this.device.reenumerate({
-                enumerationMode: EnumerationModes.NormalKeyboard,
-                vendorId: device.vendorId,
-                productId: device.keyboardPid
-            });
-            this.device.close();
-            this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
-            await waitForDevice(device.vendorId, device.keyboardPid);
-            await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
-            this.device.close();
-            await snooze(1000);
-            await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
-            this.device.close();
-
-            this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
         }
     }
 
