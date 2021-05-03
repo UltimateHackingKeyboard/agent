@@ -48,41 +48,50 @@ export class UhkOperations {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
 
-        this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
-        this.logService.misc('[UhkOperations] Start flashing right firmware');
+        let kboot: KBoot;
+        let inBootloaderMode = false;
+        try {
+            this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
+            this.logService.misc('[UhkOperations] Start flashing right firmware');
 
-        this.logService.misc('[UhkOperations] Reenumerate bootloader');
-        await this.device.reenumerate({
-            enumerationMode: EnumerationModes.Bootloader,
-            vendorId: device.vendorId,
-            productId: device.bootloaderPid
-        });
-        this.device.close();
-        const kboot = new KBoot(new UsbPeripheral({ productId: device.bootloaderPid, vendorId: device.vendorId }));
-        this.logService.misc('[UhkOperations] Waiting for bootloader');
-        await waitForDevice(device.vendorId, device.bootloaderPid);
-        this.logService.misc('[UhkOperations] Flash security disable');
-        await kboot.flashSecurityDisable([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
-        this.logService.misc('[UhkOperations] Flash erase region');
-        await kboot.flashEraseRegion(0xc000, 475136);
+            this.logService.misc('[UhkOperations] Reenumerate bootloader');
+            await this.device.reenumerate({
+                enumerationMode: EnumerationModes.Bootloader,
+                vendorId: device.vendorId,
+                productId: device.bootloaderPid
+            });
+            inBootloaderMode = true;
+            this.device.close();
+            kboot = new KBoot(new UsbPeripheral({ productId: device.bootloaderPid, vendorId: device.vendorId }));
+            this.logService.misc('[UhkOperations] Waiting for bootloader');
+            await waitForDevice(device.vendorId, device.bootloaderPid);
+            this.logService.misc('[UhkOperations] Flash security disable');
+            await kboot.flashSecurityDisable([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
+            this.logService.misc('[UhkOperations] Flash erase region');
+            await kboot.flashEraseRegion(0xc000, 475136);
 
-        this.logService.misc('[UhkOperations] Read RIGHT firmware from file');
-        const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
-        this.logService.misc('[UhkOperations] Write memory');
-        for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
-            const dataOption: DataOption = {
-                startAddress,
-                data
-            };
+            this.logService.misc('[UhkOperations] Read RIGHT firmware from file');
+            const bootloaderMemoryMap = await readBootloaderFirmwareFromHexFileAsync(firmwarePath);
+            this.logService.misc('[UhkOperations] Write memory');
+            for (const [startAddress, data] of bootloaderMemoryMap.entries()) {
+                const dataOption: DataOption = {
+                    startAddress,
+                    data
+                };
 
-            await kboot.writeMemory(dataOption);
+                await kboot.writeMemory(dataOption);
+            }
+        } finally {
+            if (inBootloaderMode && kboot) {
+                this.logService.misc('[UhkOperations] Close bootloader connection');
+                kboot.close();
+                this.logService.misc('[UhkOperations] Reset bootloader');
+                await kboot.reset();
+                this.logService.misc('[UhkOperations] Close communication channels');
+                kboot.close();
+                this.logService.misc('[UhkOperations] Right firmware successfully flashed');
+            }
         }
-
-        this.logService.misc('[UhkOperations] Reset bootloader');
-        await kboot.reset();
-        this.logService.misc('[UhkOperations] Close communication channels');
-        kboot.close();
-        this.logService.misc('[UhkOperations] Right firmware successfully flashed');
     }
 
     public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
@@ -114,75 +123,81 @@ export class UhkOperations {
             throw new Error(msg);
         }
 
-        await this.device.reenumerate({
-            enumerationMode: EnumerationModes.Buspal,
-            vendorId: device.vendorId,
-            productId: device.buspalPid
-        });
-        this.device.close();
-        this.logService.misc('[UhkOperations] Waiting for buspal');
-        await waitForDevice(device.vendorId, device.buspalPid);
-        const usbPeripheral = new UsbPeripheral({ productId: device.buspalPid, vendorId: device.vendorId });
+        let inBuspalMode = false;
         let kboot: KBoot;
+        try {
+            await this.device.reenumerate({
+                enumerationMode: EnumerationModes.Buspal,
+                vendorId: device.vendorId,
+                productId: device.buspalPid
+            });
+            this.device.close();
+            this.logService.misc('[UhkOperations] Waiting for buspal');
+            await waitForDevice(device.vendorId, device.buspalPid);
+            inBuspalMode = true;
+            const usbPeripheral = new UsbPeripheral({ productId: device.buspalPid, vendorId: device.vendorId });
 
-        const startTime = new Date();
-        let connected = false;
-        while (new Date().getTime() - startTime.getTime() < 30000) {
-            try {
-                this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
-                kboot = new KBoot(usbPeripheral);
-                await kboot.configureI2c(module.i2cAddress);
-                await kboot.getProperty(Properties.BootloaderVersion);
-                connected = true;
-                break;
-            } catch {
-                if (kboot) {
-                    kboot.close();
+            const startTime = new Date();
+            let connected = false;
+            while (new Date().getTime() - startTime.getTime() < 30000) {
+                try {
+                    this.logService.misc(`[UhkOperations] Try to connect to the "${module.name}"`);
+                    kboot = new KBoot(usbPeripheral);
+                    await kboot.configureI2c(module.i2cAddress);
+                    await kboot.getProperty(Properties.BootloaderVersion);
+                    connected = true;
+                    break;
+                } catch {
+                    if (kboot) {
+                        kboot.close();
+                    }
+                    await snooze(2000);
                 }
-                await snooze(2000);
             }
+
+            if (!connected) {
+                throw new Error(`Can not connect to the "${module.name}"`);
+            }
+            // https://github.com/node-hid/node-hid/issues/230
+            this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
+            await snooze(1000);
+
+            this.logService.misc(`[UhkOperations] Flash erase all on "${module.name}" keyboard`);
+            await kboot.configureI2c(module.i2cAddress);
+            await kboot.flashEraseAllUnsecure();
+
+            this.logService.misc(`[UhkOperations] Read "${module.name}" firmware from file`);
+            const configData = fs.readFileSync(firmwarePath);
+
+            this.logService.misc('[UhkOperations] Write memory');
+            await kboot.configureI2c(module.i2cAddress);
+            await kboot.writeMemory({ startAddress: 0, data: configData });
+
+        } finally {
+            if (inBuspalMode && kboot) {
+                this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
+                await kboot.reset();
+
+                this.logService.misc('[UhkOperations] Close communication channels');
+                kboot.close();
+            }
+            await snooze(1000);
+            await this.device.reenumerate({
+                enumerationMode: EnumerationModes.NormalKeyboard,
+                vendorId: device.vendorId,
+                productId: device.keyboardPid
+            });
+            this.device.close();
+            this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
+            await waitForDevice(device.vendorId, device.keyboardPid);
+            await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
+            this.device.close();
+            await snooze(1000);
+            await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
+            this.device.close();
+
+            this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
         }
-
-        if (!connected) {
-            throw new Error(`Can not connect to the "${module.name}"`);
-        }
-        // https://github.com/node-hid/node-hid/issues/230
-        this.logService.misc('[UhkOperations] Waiting 1s to prevent node-hid race condition');
-        await snooze(1000);
-
-        this.logService.misc(`[UhkOperations] Flash erase all on "${module.name}" keyboard`);
-        await kboot.configureI2c(module.i2cAddress);
-        await kboot.flashEraseAllUnsecure();
-
-        this.logService.misc(`[UhkOperations] Read "${module.name}" firmware from file`);
-        const configData = fs.readFileSync(firmwarePath);
-
-        this.logService.misc('[UhkOperations] Write memory');
-        await kboot.configureI2c(module.i2cAddress);
-        await kboot.writeMemory({ startAddress: 0, data: configData });
-
-        this.logService.misc(`[UhkOperations] Reset "${module.name}" keyboard`);
-        await kboot.reset();
-
-        this.logService.misc('[UhkOperations] Close communication channels');
-        kboot.close();
-
-        await snooze(1000);
-        await this.device.reenumerate({
-            enumerationMode: EnumerationModes.NormalKeyboard,
-            vendorId: device.vendorId,
-            productId: device.keyboardPid
-        });
-        this.device.close();
-        this.logService.misc('[UhkOperations] Waiting for normalKeyboard');
-        await waitForDevice(device.vendorId, device.keyboardPid);
-        await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.reset, 100);
-        this.device.close();
-        await snooze(1000);
-        await this.device.sendKbootCommandToModule(module.i2cAddress, KbootCommands.idle);
-        this.device.close();
-
-        this.logService.misc(`[UhkOperations] "${module.name}" firmware successfully flashed`);
     }
 
     /**
