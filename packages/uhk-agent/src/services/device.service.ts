@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { isEqual } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 import {
     ConfigurationReply,
     DeviceConnectionState,
@@ -424,6 +424,8 @@ export class DeviceService {
 
                     const state = await this.device.getDeviceConnectionStateAsync();
                     if (!isEqual(state, savedState)) {
+                        const newState = cloneDeep(state);
+
                         if (state.hasPermission && state.zeroInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
                         } else {
@@ -434,9 +436,7 @@ export class DeviceService {
                         }
                         this.win.webContents.send(IpcEvents.device.deviceConnectionStateChanged, state);
 
-                        savedState = {
-                            ...state
-                        };
+                        savedState = newState;
 
                         this.logService.misc('[DeviceService] Device connection state changed to:', state);
                     }
