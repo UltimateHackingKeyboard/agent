@@ -6,6 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.13] - 2020-05-03
+
+Firmware: 8.10.9 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Fix firmware recovery mode.
+- Fix bug that made Agent sometimes not detect the UHK upon startup.
+- Error out during firmware update if connecting to a module takes longer than 30 seconds.
+- Fix check marks next to the modules when force-updating the same firmware version.
+
 ## [1.5.12] - 2020-04-26
 
 Firmware: 8.10.**9** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
