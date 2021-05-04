@@ -81,6 +81,10 @@ export class UhkOperations {
 
                 await kboot.writeMemory(dataOption);
             }
+        } catch (error) {
+            this.logService.misc('[UhkOperations] Upgrade right half error:', error.message);
+
+            throw error;
         } finally {
             if (inBootloaderMode && kboot) {
                 try {
@@ -177,6 +181,10 @@ export class UhkOperations {
             await kboot.configureI2c(module.i2cAddress);
             await kboot.writeMemory({ startAddress: 0, data: configData });
 
+        } catch (error) {
+            this.logService.misc('[UhkOperations] Upgrade module error:', error.message);
+
+            throw error;
         } finally {
             if (inBuspalMode) {
                 try {
