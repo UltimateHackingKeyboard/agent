@@ -48,11 +48,13 @@
             </p>
 
             <div *ngIf="firmwareUpgradeFailed" class="alert alert-danger" role="alert">
-                 <p>
-                    Firmware update failed. If your UHK is connected via a USB hub, docking station, or KVM switch, connect it
-                    directly to your computer and retry. It might also help to join the keyboard halves during the update.
+                <p>
+                    Firmware update failed. Reconnect your UHK over USB and retry.
                 </p>
 
+                <p>
+                    If your UHK is connected via a USB hub, docking station, or KVM switch, connect it
+                    directly to your computer. It might also help to join the keyboard halves during the update.</p>
                 <p>
                     If you've tried the above and the update still keeps failing, please
                     <a class="link-github" [href]="firmwareGithubIssueUrl" externalUrl>create a GitHub issue</a>,
