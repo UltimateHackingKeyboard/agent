@@ -1,14 +1,10 @@
-import { ModuleSlotToI2cAddress, toHexString } from 'uhk-common';
+import { ModuleSlotToI2cAddress } from 'uhk-common';
 
 import { InvalidArgumentError } from '../invalid-argument-error';
 
-function getKeys(): string {
+export function getI2cAddressArgs(): string {
     return Object.keys(ModuleSlotToI2cAddress)
-        .map(key => {
-            const nun = parseInt(key);
-
-            return isNaN(nun) ? key : toHexString(nun);
-        })
+        .filter(key => isNaN(parseInt(key)))
         .join(', ');
 }
 
@@ -19,5 +15,5 @@ export function getI2cAddressFromArg(arg: string): ModuleSlotToI2cAddress {
         return i2cAddress;
     }
 
-    throw new InvalidArgumentError(`Invalid deviceId. DeviceId should be either {${getKeys()}}`);
+    throw new InvalidArgumentError(`Invalid deviceId. DeviceId should be either {${getI2cAddressArgs()}}`);
 }

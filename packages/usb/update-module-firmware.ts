@@ -7,14 +7,14 @@ import {
     UhkModule
 } from 'uhk-common';
 import { getCurrentUhkDeviceProduct } from 'uhk-usb';
-import Uhk, { getI2cAddressFromArg, errorHandler, yargs } from './src';
+import Uhk, { getI2cAddressArgs, getI2cAddressFromArg, errorHandler, yargs } from './src';
 
 (async () => {
     try {
         const argv = yargs
             .scriptName('./update-module-firmware.ts')
-            .usage('Usage: $0 <i2cAddress> <firmwarePath>')
-            .demandCommand(2, 'moduleSlot and firmwarePath are required')
+            .usage(`Usage: $0 {${getI2cAddressArgs()}} <firmwarePath>`)
+            .demandCommand(2, 'i2cAddress and firmwarePath are required')
             .argv as any;
 
         const i2cAddress = getI2cAddressFromArg(argv._[0]);
