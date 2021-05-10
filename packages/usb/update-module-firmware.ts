@@ -4,35 +4,24 @@ import * as fs from 'fs';
 import {
     mapI2cAddressToModuleName,
     mapI2cAddressToSlotId,
-    ModuleSlotToI2cAddress,
-    toHexString,
     UhkModule
 } from 'uhk-common';
 import { getCurrentUhkDeviceProduct } from 'uhk-usb';
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { getI2cAddressArgs, getI2cAddressFromArg, errorHandler, yargs } from './src';
 
 (async () => {
     try {
         const argv = yargs
             .scriptName('./update-module-firmware.ts')
-            .usage('Usage: $0 <i2cAddress> <firmwarePath>')
-            .demandCommand(2, 'moduleSlot and firmwarePath are required')
+            .usage(`Usage: $0 {${getI2cAddressArgs()}} <firmwarePath>`)
+            .demandCommand(2, 'i2cAddress and firmwarePath are required')
             .argv as any;
 
-        const i2cAddress = argv._[0];
+        const i2cAddress = getI2cAddressFromArg(argv._[0]);
         const firmwarePath = argv._[1];
 
         if (!fs.existsSync(firmwarePath)) {
             console.error('Firmware path not found');
-            process.exit(1);
-        }
-
-        if (!Object.values(ModuleSlotToI2cAddress).includes(i2cAddress)) {
-            const keys = Object.keys(ModuleSlotToI2cAddress)
-                .filter((key: any) => !isNaN(key))
-                .map(key => toHexString(key as any))
-                .join(', ');
-            console.error(`The specified I2C address does not exist. Specify one of ${keys}`);
             process.exit(1);
         }
 
