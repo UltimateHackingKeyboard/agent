@@ -2,12 +2,12 @@ import {
     UhkHidDevice,
     EnumerationModes,
     getDeviceEnumerateProductId,
-    getCurrentUhkDeviceProduct
+    getCurrentUhkDeviceProduct,
+    getUhkDevices
 } from 'uhk-usb';
 import { CommandLineArgs } from 'uhk-common';
 
 import { ElectronLogService } from '../services/logger.service';
-import { devices } from 'node-hid';
 
 export interface ReenumerateAndExitOptions {
     logger: ElectronLogService;
@@ -20,7 +20,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     options.logger.misc(`[reenumerateAndExit] Command line argument: ${arg}`);
 
     options.logger.misc('[reenumerateAndExit] list available devices');
-    options.uhkHidDevice.listAvailableDevices(devices());
+    options.uhkHidDevice.listAvailableDevices(getUhkDevices());
 
     const startTime = new Date();
     const reenumerationOption = parseReenumerateAndExitArg(arg);
@@ -39,7 +39,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const waitTime = reenumerationOption.timeout + 10000;
 
     while (new Date().getTime() - startTime.getTime() < waitTime) {
-        options.uhkHidDevice.listAvailableDevices(devices());
+        options.uhkHidDevice.listAvailableDevices(getUhkDevices());
     }
 }
 

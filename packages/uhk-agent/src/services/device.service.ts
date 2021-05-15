@@ -32,6 +32,7 @@ import {
     TmpFirmware,
     UhkHidDevice,
     UhkOperations,
+    usbDeviceJsonFormatter,
     waitForDevice
 } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
@@ -258,9 +259,8 @@ export class DeviceService {
             const hardwareModules = await this.getHardwareModules(false);
 
             await this.stopPollUhkDevice();
-            this.device.resetDeviceCache();
 
-            this.logService.misc('UHK Device firmware upgrade starts:', JSON.stringify(uhkDeviceProduct));
+            this.logService.misc('UHK Device firmware upgrade starts:', JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
             this.logService.misc('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
@@ -341,7 +341,9 @@ export class DeviceService {
             const uhkDeviceProduct = getCurrentUhkDeviceProductByBootloaderId();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
-            this.logService.misc('[DeviceService] UHK Device recovery starts:', JSON.stringify(uhkDeviceProduct));
+            this.logService.misc(
+                '[DeviceService] UHK Device recovery starts:',
+                JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
             await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
