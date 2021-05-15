@@ -12,6 +12,7 @@ export interface State {
     connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
+    deviceConnectionStateLoaded: boolean;
     multiDevice: boolean;
     zeroInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
@@ -28,6 +29,7 @@ export interface State {
 export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
+    deviceConnectionStateLoaded: false,
     multiDevice: false,
     zeroInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
@@ -53,6 +55,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 connectedDevice: data.connectedDevice,
+                deviceConnectionStateLoaded: true,
                 hasPermission: data.hasPermission,
                 zeroInterfaceAvailable: data.zeroInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
@@ -180,6 +183,13 @@ export function reducer(state = initialState, action: Action): State {
 
 export const hasDevicePermission = (state: State) => state.hasPermission;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
+    if (!state.deviceConnectionStateLoaded) {
+        return {
+            header: 'Searching for your UHK',
+            subtitle: 'Hang tight!'
+        };
+    }
+
     if (state.connectedDevice && !state.zeroInterfaceAvailable) {
         return {
             header: 'Cannot find your UHK',
