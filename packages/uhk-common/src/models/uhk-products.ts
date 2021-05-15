@@ -1,6 +1,8 @@
 import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress';
 import { ModuleSlotToId } from './module-slot-id';
 
+export const UHK_VENDOR_ID = 0x1D50;
+
 export interface UhkDeviceProduct {
     id: number;
     // TODO: Maybe it is not necessary
@@ -17,7 +19,7 @@ export interface UhkDeviceProduct {
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: 1,
     name: 'UHK 60 v1',
-    vendorId: 0x1D50,
+    vendorId: UHK_VENDOR_ID,
     keyboardPid: 0x6122,
     bootloaderPid: 0x6120,
     buspalPid: 0x6121
@@ -26,7 +28,7 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: 2,
     name: 'UHK 60 v2',
-    vendorId: 0x1D50,
+    vendorId: UHK_VENDOR_ID,
     keyboardPid: 0x6124,
     bootloaderPid: 0x6123,
     buspalPid: 0x6121

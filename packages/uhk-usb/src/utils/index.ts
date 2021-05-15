@@ -9,4 +9,6 @@ export * from './get-firmware-package-json';
 export * from './get-module-firmware-path';
 export * from './get-number-of-connected-devices';
 export * from './get-package-json-from-path-async';
+export * from './get-uhk-devices';
 export * from './validate-connected-devices';
+export * from './usb-device-json-formatter';

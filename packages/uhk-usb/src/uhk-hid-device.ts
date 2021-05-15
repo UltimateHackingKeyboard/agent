@@ -1,7 +1,6 @@
-import { Device, devices, HID } from 'node-hid';
+import { Device, HID } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
-import { platform } from 'os';
 import isRoot = require('is-root');
 import {
     Buffer,
@@ -35,9 +34,22 @@ import {
     snooze
 } from './util';
 import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
-import { getNumberOfConnectedDevices } from './utils';
+import { getNumberOfConnectedDevices, getUhkDevices, usbDeviceJsonFormatter } from './utils';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
+
+enum UsbDeviceConnectionStates {
+    Unknown,
+    Added,
+    Removed,
+    AlreadyExisted
+}
+
+interface UsvDeviceConnectionState {
+    id: string;
+    device: Device;
+    state: UsbDeviceConnectionStates;
+}
 
 /**
  * HID API wrapper to support unified logging and async write
@@ -47,7 +59,7 @@ export class UhkHidDevice {
      * Internal variable that represent the USB UHK device
      * @private
      */
-    private _prevDevices = [];
+    private _prevDevices = new Map<string, UsvDeviceConnectionState>();
     private _device: HID;
     private _hasPermission = false;
     private _udevRulesInfo = UdevRulesInfo.Unknown;
@@ -75,8 +87,8 @@ export class UhkHidDevice {
             }
 
             this.logService.misc('[UhkHidDevice] Devices before checking permission:');
-            const devs = devices();
-            this.logDevices(devs);
+            const devs = getUhkDevices();
+            this.listAvailableDevices(devs);
 
             const dev = devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
 
@@ -102,7 +114,7 @@ export class UhkHidDevice {
      * @returns {DeviceConnectionState}
      */
     public async getDeviceConnectionStateAsync(): Promise<DeviceConnectionState> {
-        const devs = devices();
+        const devs = getUhkDevices();
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             zeroInterfaceAvailable: false,
@@ -192,10 +204,6 @@ export class UhkHidDevice {
         this.logService.misc('[UhkHidDevice] Device communication closed.');
     }
 
-    public resetDeviceCache(): void {
-        this._prevDevices = [];
-    }
-
     async reenumerate(
         { enumerationMode, productId, vendorId, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
     ): Promise<void> {
@@ -216,7 +224,7 @@ export class UhkHidDevice {
         let jumped = false;
 
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
-            const devs = devices();
+            const devs = getUhkDevices();
 
             const inBootloaderMode = devs.some((x: Device) =>
                 x.vendorId === vendorId &&
@@ -248,7 +256,7 @@ export class UhkHidDevice {
             }
             else {
                 this.logService.misc(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
-                this.listAvailableDevices(devs);
+                this.listAvailableDevices(devs, false);
             }
         }
 
@@ -296,22 +304,50 @@ export class UhkHidDevice {
         };
     }
 
-    public listAvailableDevices(devs: Device[]): void {
-        let compareDevices = devs as any;
+    public listAvailableDevices(devs: Device[], showUnchangedMsg = true): void {
+        let hasDeviceChanges = false;
+        const compareDevices = devs.map(x => ({
+            id: `${x.vendorId}-${x.productId}-${x.interface}`,
+            device: x
+        }));
 
-        if (platform() === 'linux') {
-            compareDevices = devs.map(x => ({
-                productId: x.productId,
-                vendorId: x.vendorId,
-                interface: x.interface
-            }));
+        for (const prevDevice of this._prevDevices.values()) {
+            prevDevice.state = UsbDeviceConnectionStates.Unknown;
         }
 
-        if (!isEqualArray(this._prevDevices, compareDevices)) {
-            this.logService.misc('[UhkHidDevice] Available devices:');
-            this.logDevices(devs);
-            this._prevDevices = compareDevices;
-        } else {
+        for (const compareDevice of compareDevices) {
+            const existingPrevDevice = this._prevDevices.get(compareDevice.id);
+
+            if (existingPrevDevice) {
+                existingPrevDevice.state = UsbDeviceConnectionStates.AlreadyExisted;
+            } else {
+                this._prevDevices.set(compareDevice.id, {
+                    id: compareDevice.id,
+                    device: compareDevice.device,
+                    state: UsbDeviceConnectionStates.Added
+                });
+                hasDeviceChanges = true;
+            }
+        }
+
+        for (const prevDevice of this._prevDevices.values()) {
+            if (prevDevice.state === UsbDeviceConnectionStates.Unknown) {
+                prevDevice.state = UsbDeviceConnectionStates.Removed;
+                hasDeviceChanges = true;
+            }
+        }
+
+        if (hasDeviceChanges) {
+            this.logService.misc('[UhkHidDevice] Available devices changed.');
+            for (const prevDevice of Array.from(this._prevDevices.values())) {
+                if (prevDevice.state === UsbDeviceConnectionStates.Added) {
+                    this.logService.misc(`[UhkHidDevice] Added: ${JSON.stringify(prevDevice.device, usbDeviceJsonFormatter)}`);
+                } else if (prevDevice.state === UsbDeviceConnectionStates.Removed) {
+                    this.logService.misc(`[UhkHidDevice] Removed: ${JSON.stringify(prevDevice.device, usbDeviceJsonFormatter)}`);
+                    this._prevDevices.delete(prevDevice.id);
+                }
+            }
+        } else if (showUnchangedMsg) {
             this.logService.misc('[UhkHidDevice] Available devices unchanged');
         }
     }
@@ -374,7 +410,7 @@ export class UhkHidDevice {
      */
     private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): HID {
         try {
-            const devs = devices();
+            const devs = getUhkDevices();
             this.listAvailableDevices(devs);
 
             const dev = devs.find(isUhkZeroInterface);
@@ -384,18 +420,12 @@ export class UhkHidDevice {
                 return null;
             }
             const device = new HID(dev.path);
-            this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(dev));
+            this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(dev, usbDeviceJsonFormatter));
             return device;
         } catch (err) {
             this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
         }
 
         return null;
-    }
-
-    private logDevices(devs: Array<Device>): void {
-        for (const logDevice of devs) {
-            this.logService.misc(JSON.stringify(logDevice));
-        }
     }
 }
