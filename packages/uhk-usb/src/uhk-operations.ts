@@ -1,6 +1,7 @@
 import {
     Buffer,
     ConfigSizesInfo,
+    getSlotIdName,
     HardwareConfiguration,
     LEFT_HALF_MODULE,
     LogService,
@@ -22,7 +23,6 @@ import {
     UsbVariables
 } from './constants';
 import * as fs from 'fs';
-import * as os from 'os';
 import { promisify } from 'util';
 import { UhkHidDevice } from './uhk-hid-device';
 import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
@@ -48,7 +48,6 @@ export class UhkOperations {
             throw new Error(`Firmware path not found: ${firmwarePath}`);
         }
 
-        this.logService.misc(`[UhkOperations] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
         this.logService.misc('[UhkOperations] Start flashing right firmware');
 
         this.logService.misc('[UhkOperations] Reenumerate bootloader');
@@ -354,9 +353,9 @@ export class UhkOperations {
     }
 
     public async getModuleVersionInfo(module: ModuleSlotToId): Promise<ModuleVersionInfo> {
+        const moduleSlotName = getSlotIdName(module);
         try {
-
-            this.logService.misc(`[DeviceOperation] Read "${module}" version information`);
+            this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" version information`);
             this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
 
             const command = Buffer.from([
@@ -375,7 +374,7 @@ export class UhkOperations {
                 firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
             };
         } catch (error) {
-            this.logService.error(`[DeviceOperation] Could not read "${module}" version information`, error);
+            this.logService.error(`[DeviceOperation] Could not read "${moduleSlotName}" version information`, error);
         }
 
         return {
