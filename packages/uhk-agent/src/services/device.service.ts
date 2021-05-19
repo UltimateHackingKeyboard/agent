@@ -256,9 +256,9 @@ export class DeviceService {
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc('Agent version:', data.versionInformation.version);
-            const hardwareModules = await this.getHardwareModules(false);
-
             await this.stopPollUhkDevice();
+
+            const hardwareModules = await this.getHardwareModules(false);
 
             this.logService.misc('UHK Device firmware upgrade starts:', JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
