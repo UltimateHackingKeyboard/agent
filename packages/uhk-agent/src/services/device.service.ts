@@ -38,6 +38,7 @@ import {
 import { emptyDir } from 'fs-extra';
 import * as path from 'path';
 import * as fs from 'fs';
+import os from 'os';
 
 import { QueueManager } from './queue-manager';
 import {
@@ -248,22 +249,25 @@ export class DeviceService {
                 : this.getDefaultFirmwarePathData();
 
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
-            this.logService.misc('New firmware version:', packageJson.firmwareVersion);
+            this.logService.misc(`[DeviceService] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
+            this.logService.misc('[DeviceService] Agent version:', data.versionInformation.version);
+            this.logService.misc('[DeviceService] New firmware version:', packageJson.firmwareVersion);
 
             event.sender.send(IpcEvents.device.updateFirmwareJson, packageJson);
 
             const uhkDeviceProduct = getCurrentUhkDeviceProduct();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
-            this.logService.misc('Agent version:', data.versionInformation.version);
             await this.stopPollUhkDevice();
 
             const hardwareModules = await this.getHardwareModules(false);
 
-            this.logService.misc('UHK Device firmware upgrade starts:', JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
+            this.logService.misc('[DeviceService] UHK Device firmware upgrade starts:',
+                JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
             const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            this.logService.misc('Device right firmware version:', hardwareModules.rightModuleInfo.firmwareVersion);
+            this.logService.misc('[DeviceService] Device right firmware version:',
+                hardwareModules.rightModuleInfo.firmwareVersion);
             if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
@@ -273,7 +277,7 @@ export class DeviceService {
 
             const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
                 .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
-            this.logService.misc('Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
+            this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
             if (data.forceUpgrade || leftModuleInfo.info.firmwareVersion !== packageJson.firmwareVersion) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
@@ -283,7 +287,7 @@ export class DeviceService {
                         leftModuleInfo.module
                     );
             } else {
-                this.logService.misc('Skip left firmware upgrade.');
+                this.logService.misc('[DeviceService] Skip left firmware upgrade.');
             }
 
             for (const moduleInfo of hardwareModules.moduleInfos) {
@@ -291,7 +295,8 @@ export class DeviceService {
                     // Left half upgrade mandatory, it is running before the other modules upgrade.
                 }
                 else if (moduleInfo.module.firmwareUpgradeSupported) {
-                    this.logService.misc(`"${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
+                    // tslint:disable-next-line:max-line-length
+                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
                     if (data.forceUpgrade ||  moduleInfo.info.firmwareVersion !== packageJson.firmwareVersion) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
@@ -300,12 +305,12 @@ export class DeviceService {
                                 uhkDeviceProduct,
                                 moduleInfo.module
                             );
-                        this.logService.misc(`"${moduleInfo.module.name}" firmware update done.`);
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
                     } else {
-                        this.logService.misc(`Skip "${moduleInfo.module.name}" firmware upgrade.`);
+                        this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade.`);
                     }
                 } else {
-                    this.logService.misc(`Skip "${moduleInfo.module.name}" firmware upgrade. Currently not supported`);
+                    this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade. Currently not supported`);
                 }
             }
 

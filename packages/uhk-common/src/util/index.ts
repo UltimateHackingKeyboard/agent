@@ -3,6 +3,7 @@ export * from './constants';
 export * from './create-md5-hash';
 export * from './find-uhk-module-by-id';
 export * from './get-md5-hash-from-file-name';
+export * from './get-slot-id-name';
 export * from './helpers';
 export * from './is-equal-array';
 export * from './map-i2c-address-to-module-name';
