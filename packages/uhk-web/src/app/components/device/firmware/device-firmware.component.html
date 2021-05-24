@@ -25,7 +25,8 @@
             <p *ngIf="runningOnNotSupportedWindows$ | async">Firmware update doesn't work on Windows 7, Windows Vista,
                 and Windows XP. Use Windows 10, Windows 8, Linux, or OSX instead.</p>
 
-            <p *ngIf="firmwareUpgradeAllowed$ | async">
+            <div *ngIf="firmwareUpgradeAllowed$ | async"
+                 class="mb-2">
                 <button class="btn btn-primary action-button"
                         [disabled]="flashFirmwareButtonDisabled$ | async"
                         (click)="onUpdateFirmware()"
@@ -41,10 +42,25 @@
                     Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 </button>
                 <firmware-file-upload [disabled]="flashFirmwareButtonDisabled$ | async"
-                             (fileChanged)="changeFile($event)"
-                             [showPopover]="firmwareUpgradeStates.showForceFirmwareUpgradeWith"
+                                      class="action-button"
+                                      (fileChanged)="changeFile($event)"
+                                      [showPopover]="firmwareUpgradeStates.showForceFirmwareUpgradeWith"
                 ></firmware-file-upload>
-            </p>
+
+                <div ngbDropdown class="d-inline-block">
+                    <button ngbDropdownToggle
+                            [disabled]="flashFirmwareButtonDisabled$ | async"
+                            class="btn btn-danger"
+                            id="recoverModuleDropdown"
+                    >Recover bricked module</button>
+
+                    <div ngbDropdownMenu aria-labelledby="recoverModuleDropdown">
+                        <button ngbDropdownItem (click)="recoveryModule(2)">Recover Key Cluster module</button>
+                        <button ngbDropdownItem (click)="recoveryModule(3)">Recover Trackball module</button>
+                        <button ngbDropdownItem (click)="recoveryModule(4)">Recover Trackpoint module</button>
+                    </div>
+                </div>
+            </div>
 
             <div *ngIf="firmwareUpgradeFailed" class="alert alert-danger" role="alert">
                 <p>

@@ -20,6 +20,7 @@ import {
     ReadConfigSizesAction,
     RecoveryDeviceAction,
     RecoveryDeviceReplyAction,
+    RecoveryModuleAction,
     ResetUserConfigurationAction,
     RestoreUserConfigurationFromBackupSuccessAction,
     SaveConfigurationAction,
@@ -310,6 +311,13 @@ export class DeviceEffects {
                     })
                 ];
             })
+        );
+
+    @Effect({ dispatch: false }) recoveryModule$ = this.actions$
+        .pipe(
+            ofType<RecoveryModuleAction>(ActionTypes.RecoveryModule),
+            map(action => action.payload),
+            tap(moduleId => this.deviceRendererService.recoveryModule(moduleId))
         );
 
     @Effect({ dispatch: false }) enableUsbStackTest$ = this.actions$

@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
-import { FirmwareJson, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME } from 'uhk-common';
+import { FirmwareJson, HardwareModules, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME } from 'uhk-common';
 
 import * as Device from '../actions/device';
-import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../actions/device';
+import { RecoveryDeviceReplyAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../actions/device';
 import * as App from '../actions/app';
 import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates } from '../../models';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
@@ -77,32 +77,11 @@ export function reducer(state = initialState, action: Action): State {
 
         case Device.ActionTypes.ConnectionStateChanged: {
             const hardwareModules = (action as Device.ConnectionStateChangedAction).payload.hardwareModules;
-            const newState = {
+
+            return {
                 ...state,
-                modules: [
-                    {
-                        moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
-                        firmwareUpgradeSupported: true,
-                        currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
-                        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                        state: ModuleFirmwareUpgradeStates.Idle
-                    }
-                ]
+                modules: mapModules(state.firmwareJson, hardwareModules)
             };
-
-            if (hardwareModules.moduleInfos) {
-                for (const moduleInfo of hardwareModules.moduleInfos) {
-                    newState.modules.push({
-                        moduleName: moduleInfo.module.name,
-                        firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
-                        currentFirmwareVersion: moduleInfo.info.firmwareVersion,
-                        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                        state: ModuleFirmwareUpgradeStates.Idle
-                    });
-                }
-            }
-
-            return newState;
         }
 
         case Device.ActionTypes.CurrentlyUpdatingModule: {
@@ -246,11 +225,22 @@ export function reducer(state = initialState, action: Action): State {
             return newState;
         }
 
+        case Device.ActionTypes.RecoveryModule:
         case Device.ActionTypes.RecoveryDevice: {
             return {
                 ...state,
                 upgradeState: FirmwareUpgradeStates.Recovering,
                 log: [{ message: '', cssClass: XtermCssClass.standard }]
+            };
+        }
+
+        case Device.ActionTypes.RecoveryModuleReply: {
+            const response = (action as RecoveryDeviceReplyAction).payload;
+
+            return {
+                ...state,
+                upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
+                modules: mapModules(state.firmwareJson, response.modules)
             };
         }
 
@@ -268,3 +258,29 @@ export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
     showForceFirmwareUpgradeWith: state.showForceFirmwareUpgradeWith,
     modules: state.modules
 });
+
+function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules): Array<ModuleFirmwareUpgradeState> {
+    const modules = [
+        {
+            moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+            firmwareUpgradeSupported: true,
+            currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
+            newFirmwareVersion: firmwareJson?.firmwareVersion,
+            state: ModuleFirmwareUpgradeStates.Idle
+        }
+    ];
+
+    if (hardwareModules.moduleInfos) {
+        for (const moduleInfo of hardwareModules.moduleInfos) {
+            modules.push({
+                moduleName: moduleInfo.module.name,
+                firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+                currentFirmwareVersion: moduleInfo.info.firmwareVersion,
+                newFirmwareVersion: firmwareJson?.firmwareVersion,
+                state: ModuleFirmwareUpgradeStates.Idle
+            });
+        }
+    }
+
+    return modules;
+}

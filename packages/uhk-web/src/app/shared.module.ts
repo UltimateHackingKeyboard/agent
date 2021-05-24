@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
@@ -232,7 +232,8 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         }),
         ClipboardModule,
         HttpClientModule,
-        NgbTooltipModule
+        NgbTooltipModule,
+        NgbDropdownModule
     ],
     providers: [
         SvgModuleProviderService,

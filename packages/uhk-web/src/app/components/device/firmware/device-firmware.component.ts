@@ -15,7 +15,7 @@ import {
     runningOnNotSupportedWindows,
     xtermLog
 } from '../../../store';
-import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
+import { RecoveryModuleAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
 import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
@@ -95,6 +95,10 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     firmwareUpgradeStateTrackByFn(index: number, module: ModuleFirmwareUpgradeState): string {
         return module.moduleName;
+    }
+
+    recoveryModule(moduleId: number): void {
+        this.store.dispatch(new RecoveryModuleAction(moduleId));
     }
 
     private scrollToTheEndOfTheLogs(): void {

@@ -19,6 +19,7 @@ import {
     CurrentlyUpdatingModuleAction,
     ReadConfigSizesReplyAction,
     RecoveryDeviceReplyAction,
+    RecoveryModuleReplyAction,
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction,
     UpdateFirmwareJsonAction,
@@ -61,6 +62,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.recoveryDevice);
     }
 
+    recoveryModule(moduleId: number): void {
+        this.ipcRenderer.send(IpcEvents.device.recoveryModule, moduleId);
+    }
+
     enableUsbStackTest(): void {
         this.ipcRenderer.send(IpcEvents.device.enableUsbStackTest);
     }
@@ -84,6 +89,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.recoveryDeviceReply, (event: string, response: FirmwareUpgradeIpcResponse) => {
             this.dispachStoreAction(new RecoveryDeviceReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.recoveryModuleReply, (event: string, response: FirmwareUpgradeIpcResponse) => {
+            this.dispachStoreAction(new RecoveryModuleReplyAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.setPrivilegeOnLinuxReply, (event: string, response: IpcResponse) => {
