@@ -64,7 +64,7 @@
 
             <div *ngIf="firmwareUpgradeFailed" class="alert alert-danger" role="alert">
                 <p>
-                    Firmware update failed. Reconnect your UHK over USB and retry.
+                    {{ upgradeType }} update failed. Reconnect your UHK over USB and retry.
                 </p>
 
                 <p>
@@ -80,7 +80,7 @@
             <div *ngIf="firmwareUpgradeSuccess"
                  class="alert alert-success"
                  role="alert">
-                Firmware update succeeded.
+                {{ upgradeType }} update succeeded.
             </div>
         </div>
 

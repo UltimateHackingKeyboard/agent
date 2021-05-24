@@ -39,6 +39,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareGithubIssueUrl: string;
     firmwareUpgradeFailed: boolean;
     firmwareUpgradeSuccess: boolean;
+    upgradeType: string;
 
     @ViewChild(XtermComponent, { static: false })
     xtermRef: XtermComponent;
@@ -82,14 +83,17 @@ export class DeviceFirmwareComponent implements OnDestroy {
             return;
         }
 
+        this.upgradeType = 'Firmware';
         this.store.dispatch(new UpdateFirmwareAction(false));
     }
 
     onForceUpgradeFirmware(): void {
+        this.upgradeType = 'Firmware';
         this.store.dispatch(new UpdateFirmwareAction(true));
     }
 
     changeFile(data: UpdateFirmwareWithPayload): void {
+        this.upgradeType = 'Firmware';
         this.store.dispatch(new UpdateFirmwareWithAction(data));
     }
 
@@ -98,6 +102,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     }
 
     recoveryModule(moduleId: number): void {
+        this.upgradeType = 'Module';
         this.store.dispatch(new RecoveryModuleAction(moduleId));
     }
 

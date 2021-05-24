@@ -411,10 +411,7 @@ export class DeviceService {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] Module recovery error', err);
 
-            response.modules = {
-                moduleInfos: [],
-                rightModuleInfo: {}
-            };
+            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
