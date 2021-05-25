@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { faCheck, faExclamation, faLongArrowAltRight, faSlidersH, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { Constants, VersionInformation } from 'uhk-common';
+import { Constants, UhkModule, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
@@ -18,7 +18,7 @@ import {
 import { RecoveryModuleAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../../../store/actions/device';
 import { XtermLog } from '../../../models/xterm-log';
 import { XtermComponent } from '../../xterm/xterm.component';
-import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
+import { FirmwareUpgradeState, HistoryFileInfo, ModuleFirmwareUpgradeState, UpdateFirmwareWithPayload } from '../../../models';
 
 @Component({
     selector: 'device-firmware',
@@ -104,6 +104,10 @@ export class DeviceFirmwareComponent implements OnDestroy {
     recoveryModule(moduleId: number): void {
         this.upgradeType = 'Module';
         this.store.dispatch(new RecoveryModuleAction(moduleId));
+    }
+
+    trackByRecoveryModuleFn(index: number, key: UhkModule): string {
+        return key.id.toString();
     }
 
     private scrollToTheEndOfTheLogs(): void {

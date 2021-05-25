@@ -402,6 +402,7 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
                 }
-            ]
+            ],
+            recoveryModules: []
         };
     });

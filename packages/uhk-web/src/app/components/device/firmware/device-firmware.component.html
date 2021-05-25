@@ -47,7 +47,7 @@
                                       [showPopover]="firmwareUpgradeStates.showForceFirmwareUpgradeWith"
                 ></firmware-file-upload>
 
-                <div ngbDropdown class="d-inline-block">
+                <div *ngIf="firmwareUpgradeStates.recoveryModules.length > 0" ngbDropdown class="d-inline-block">
                     <button ngbDropdownToggle
                             [disabled]="flashFirmwareButtonDisabled$ | async"
                             class="btn btn-danger"
@@ -55,9 +55,10 @@
                     >Recover bricked module</button>
 
                     <div ngbDropdownMenu aria-labelledby="recoverModuleDropdown">
-                        <button ngbDropdownItem (click)="recoveryModule(2)">Recover Key Cluster module</button>
-                        <button ngbDropdownItem (click)="recoveryModule(3)">Recover Trackball module</button>
-                        <button ngbDropdownItem (click)="recoveryModule(4)">Recover Trackpoint module</button>
+                        <button *ngFor="let module of firmwareUpgradeStates.recoveryModules; trackBy:trackByRecoveryModuleFn"
+                                ngbDropdownItem
+                                (click)="recoveryModule(module.id)"
+                        >Recover {{ module.name }} module</button>
                     </div>
                 </div>
             </div>
