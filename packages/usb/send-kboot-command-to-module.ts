@@ -1,7 +1,9 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
-import Uhk, { errorHandler, yargs } from './src';
-import { KbootCommands, ModuleSlotToId } from 'uhk-usb';
+import { ModuleSlotToId } from 'uhk-common';
+import { KbootCommands } from 'uhk-usb';
+
+import Uhk, { errorHandler, getI2cAddressFromArg, yargs } from './src';
 
 (async function () {
     try {
@@ -22,7 +24,7 @@ import { KbootCommands, ModuleSlotToId } from 'uhk-usb';
         }
 
         const { device } = Uhk(argv);
-        const module = argv._[1];
+        const i2cAddress = getI2cAddressFromArg(argv._[1] as string);
 
         if (KbootCommands[command] !== KbootCommands.idle) {
             if (!command) {
@@ -33,15 +35,7 @@ import { KbootCommands, ModuleSlotToId } from 'uhk-usb';
                 process.exit(1);
             }
 
-            if (!Object.values(ModuleSlotToId).includes(module)) {
-                const keys = Object.keys(ModuleSlotToId)
-                    .filter((key: any) => isNaN(key))
-                    .join(', ');
-                console.error(`The specified module does not exist. Specify one of ${keys}`);
-                process.exit(1);
-            }
-
-            await device.sendKbootCommandToModule(ModuleSlotToId[module], KbootCommands[command]);
+            await device.sendKbootCommandToModule(i2cAddress, KbootCommands[command]);
 
         } else {
             await device.sendKbootCommandToModule(undefined, KbootCommands.idle);

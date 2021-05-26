@@ -1,7 +1,7 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-script
 
 import Uhk, { errorHandler, yargs } from './src';
-import { ModuleSlotToId } from 'uhk-usb';
+import { ModuleSlotToId } from 'uhk-common';
 
 (async function () {
     try {
