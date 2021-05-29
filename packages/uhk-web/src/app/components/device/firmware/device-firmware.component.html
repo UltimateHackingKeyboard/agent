@@ -29,6 +29,7 @@
                  class="mb-2">
                 <button class="btn btn-primary action-button"
                         [disabled]="flashFirmwareButtonDisabled$ | async"
+                        [contextMenu]="recoveryContextMenu"
                         (click)="onUpdateFirmware()"
                         mwlConfirmationPopover
                         popoverTitle="This firmware version is already running on your UHK. Do you want to force update anyway?"
@@ -41,26 +42,18 @@
                 >
                     Flash firmware {{ (getAgentVersionInfo$ | async).firmwareVersion }} (bundled with Agent)
                 </button>
+                <context-menu #recoveryContextMenu [disabled]="firmwareUpgradeStates.recoveryModules.length === 0">
+                    <ng-template *ngFor="let module of firmwareUpgradeStates.recoveryModules; trackBy:trackByRecoveryModuleFn"
+                                 contextMenuItem
+                                 (execute)="recoveryModule(module.id)">
+                        Recover {{ module.name }} module
+                    </ng-template>
+                </context-menu>
                 <firmware-file-upload [disabled]="flashFirmwareButtonDisabled$ | async"
                                       class="action-button"
                                       (fileChanged)="changeFile($event)"
                                       [showPopover]="firmwareUpgradeStates.showForceFirmwareUpgradeWith"
                 ></firmware-file-upload>
-
-                <div *ngIf="firmwareUpgradeStates.recoveryModules.length > 0" ngbDropdown class="d-inline-block">
-                    <button ngbDropdownToggle
-                            [disabled]="flashFirmwareButtonDisabled$ | async"
-                            class="btn btn-danger"
-                            id="recoverModuleDropdown"
-                    >Recover bricked module</button>
-
-                    <div ngbDropdownMenu aria-labelledby="recoverModuleDropdown">
-                        <button *ngFor="let module of firmwareUpgradeStates.recoveryModules; trackBy:trackByRecoveryModuleFn"
-                                ngbDropdownItem
-                                (click)="recoveryModule(module.id)"
-                        >Recover {{ module.name }} module</button>
-                    </div>
-                </div>
             </div>
 
             <div *ngIf="firmwareUpgradeFailed" class="alert alert-danger" role="alert">

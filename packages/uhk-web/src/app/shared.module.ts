@@ -11,6 +11,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ContextMenuModule } from 'ngx-contextmenu';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AddOnComponent } from './components/add-on';
@@ -231,6 +232,9 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
             confirmButtonType: 'danger' // set defaults here
         }),
         ClipboardModule,
+        ContextMenuModule.forRoot({
+            useBootstrap4: true
+        }),
         HttpClientModule,
         NgbTooltipModule,
         NgbDropdownModule
