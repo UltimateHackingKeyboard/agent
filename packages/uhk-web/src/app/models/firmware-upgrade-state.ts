@@ -1,3 +1,5 @@
+import { UhkModule } from 'uhk-common';
+
 export enum ModuleFirmwareUpgradeStates {
     Idle = 'Idle',
     Upgrading = 'Upgrading',
@@ -15,6 +17,7 @@ export interface ModuleFirmwareUpgradeState {
 
 export interface FirmwareUpgradeState {
     modules: Array<ModuleFirmwareUpgradeState>;
+    recoveryModules: Array<UhkModule>;
     showForceFirmwareUpgrade: boolean;
     showForceFirmwareUpgradeWith: boolean;
 }

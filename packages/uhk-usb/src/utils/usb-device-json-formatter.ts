@@ -7,6 +7,7 @@ export function usbDeviceJsonFormatter(key: any, value: any): any {
         case 'keyboardPid':
         case 'bootloaderPid':
         case 'buspalPid':
+        case 'i2cAddress':
             return toHexString(value);
 
         default:

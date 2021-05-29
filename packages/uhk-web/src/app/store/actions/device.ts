@@ -37,6 +37,8 @@ export enum ActionTypes {
     RestoreConfigurationFromBackupSuccess = '[device] Restore configuration from backup success',
     RecoveryDevice = '[device] Recovery device',
     RecoveryDeviceReply = '[device] Recovery device reply',
+    RecoveryModule = '[device] Recovery module',
+    RecoveryModuleReply = '[device] Recovery module reply',
     EnableUsbStackTest = '[device] USB stack test',
     StartConnectionPoller = '[device] Start connection poller',
     ReadConfigSizes = '[device] Read config sizes',
@@ -188,6 +190,23 @@ export class RecoveryDeviceReplyAction implements Action {
     }
 }
 
+export class RecoveryModuleAction implements Action {
+    type = ActionTypes.RecoveryModule;
+
+    /**
+     * @param payload - moduleId
+     */
+    constructor(public payload: number) {
+    }
+}
+
+export class RecoveryModuleReplyAction implements Action {
+    type = ActionTypes.RecoveryModuleReply;
+
+    constructor(public payload: FirmwareUpgradeIpcResponse) {
+    }
+}
+
 export class EnableUsbStackTestAction implements Action {
     type = ActionTypes.EnableUsbStackTest;
 }
@@ -233,6 +252,7 @@ export type Actions
     | RestoreUserConfigurationFromBackupSuccessAction
     | RecoveryDeviceAction
     | RecoveryDeviceReplyAction
+    | RecoveryModuleAction
     | EnableUsbStackTestAction
     | StartConnectionPollerAction
     | ReadConfigSizesAction

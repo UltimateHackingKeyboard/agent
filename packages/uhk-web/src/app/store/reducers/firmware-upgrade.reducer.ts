@@ -1,8 +1,16 @@
 import { Action } from '@ngrx/store';
-import { FirmwareJson, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME } from 'uhk-common';
+import {
+    FirmwareJson,
+    HardwareModules,
+    ModuleInfo,
+    ModuleSlotToId,
+    RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+    UHK_MODULES,
+    UhkModule
+} from 'uhk-common';
 
 import * as Device from '../actions/device';
-import { UpdateFirmwareAction, UpdateFirmwareWithAction } from '../actions/device';
+import { RecoveryDeviceReplyAction, UpdateFirmwareAction, UpdateFirmwareWithAction } from '../actions/device';
 import * as App from '../actions/app';
 import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates } from '../../models';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
@@ -36,6 +44,7 @@ export interface State {
     firmwareJson?: FirmwareJson;
     log: Array<XtermLog>;
     modules: Array<ModuleFirmwareUpgradeState>;
+    recoveryModules: Array<UhkModule>;
     showForceFirmwareUpgrade: boolean;
     showForceFirmwareUpgradeWith: boolean;
     upgradeState: FirmwareUpgradeStates;
@@ -44,6 +53,7 @@ export interface State {
 
 export const initialState: State = {
     modules: [],
+    recoveryModules: [],
     log: [{ message: '', cssClass: XtermCssClass.standard }],
     showForceFirmwareUpgrade: false,
     showForceFirmwareUpgradeWith: false,
@@ -66,7 +76,7 @@ export function reducer(state = initialState, action: Action): State {
                     ...module,
                     newFirmwareVersion: firmwareJson?.firmwareVersion,
                     state: firmwareJson?.firmwareVersion === module.currentFirmwareVersion
-                            && FIRMWARE_NOT_FORCE_UPGRADING.includes(state.upgradeState)
+                    && FIRMWARE_NOT_FORCE_UPGRADING.includes(state.upgradeState)
                         ? ModuleFirmwareUpgradeStates.Success
                         : ModuleFirmwareUpgradeStates.Idle
                 };
@@ -77,32 +87,12 @@ export function reducer(state = initialState, action: Action): State {
 
         case Device.ActionTypes.ConnectionStateChanged: {
             const hardwareModules = (action as Device.ConnectionStateChangedAction).payload.hardwareModules;
-            const newState = {
+
+            return {
                 ...state,
-                modules: [
-                    {
-                        moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
-                        firmwareUpgradeSupported: true,
-                        currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
-                        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                        state: ModuleFirmwareUpgradeStates.Idle
-                    }
-                ]
+                modules: mapModules(state.firmwareJson, hardwareModules),
+                recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos)
             };
-
-            if (hardwareModules.moduleInfos) {
-                for (const moduleInfo of hardwareModules.moduleInfos) {
-                    newState.modules.push({
-                        moduleName: moduleInfo.module.name,
-                        firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
-                        currentFirmwareVersion: moduleInfo.info.firmwareVersion,
-                        newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                        state: ModuleFirmwareUpgradeStates.Idle
-                    });
-                }
-            }
-
-            return newState;
         }
 
         case Device.ActionTypes.CurrentlyUpdatingModule: {
@@ -246,11 +236,23 @@ export function reducer(state = initialState, action: Action): State {
             return newState;
         }
 
+        case Device.ActionTypes.RecoveryModule:
         case Device.ActionTypes.RecoveryDevice: {
             return {
                 ...state,
                 upgradeState: FirmwareUpgradeStates.Recovering,
                 log: [{ message: '', cssClass: XtermCssClass.standard }]
+            };
+        }
+
+        case Device.ActionTypes.RecoveryModuleReply: {
+            const response = (action as RecoveryDeviceReplyAction).payload;
+
+            return {
+                ...state,
+                upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
+                modules: mapModules(state.firmwareJson, response.modules),
+                recoveryModules: calculateRecoveryModules(response.modules.moduleInfos)
             };
         }
 
@@ -266,5 +268,64 @@ export const firmwareUpgradeSuccess = (state: State) => state.upgradeState === F
 export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
     showForceFirmwareUpgrade: state.showForceFirmwareUpgrade,
     showForceFirmwareUpgradeWith: state.showForceFirmwareUpgradeWith,
-    modules: state.modules
+    modules: state.modules,
+    recoveryModules: state.recoveryModules
 });
+
+function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules): Array<ModuleFirmwareUpgradeState> {
+    const modules = [
+        {
+            moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+            firmwareUpgradeSupported: true,
+            currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
+            newFirmwareVersion: firmwareJson?.firmwareVersion,
+            state: ModuleFirmwareUpgradeStates.Idle
+        }
+    ];
+
+    if (hardwareModules.moduleInfos) {
+        for (const moduleInfo of hardwareModules.moduleInfos) {
+            modules.push({
+                moduleName: moduleInfo.module.name,
+                firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+                currentFirmwareVersion: moduleInfo.info.firmwareVersion,
+                newFirmwareVersion: firmwareJson?.firmwareVersion,
+                state: ModuleFirmwareUpgradeStates.Idle
+            });
+        }
+    }
+
+    return modules;
+}
+
+function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModule> {
+    let hasLeftSlotModule = false;
+    let hasRightSlotModule = false;
+
+    moduleInfos.forEach(moduleInfo => {
+        switch (moduleInfo.module.slotId) {
+            case ModuleSlotToId.leftModule:
+                hasLeftSlotModule = true;
+                break;
+
+            case ModuleSlotToId.rightModule:
+                hasRightSlotModule = true;
+                break;
+
+            default:
+                break;
+        }
+    });
+
+    return UHK_MODULES.reduce((result: Array<UhkModule>, module) => {
+        if (module.firmwareUpgradeSupported ) {
+            if (!hasLeftSlotModule && module.slotId === ModuleSlotToId.leftModule) {
+                result.push(module);
+            } else if (!hasRightSlotModule && module.slotId === ModuleSlotToId.rightModule) {
+                result.push(module);
+            }
+        }
+
+        return result;
+    }, []);
+}

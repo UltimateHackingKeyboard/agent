@@ -18,6 +18,7 @@ import {
     SaveUserConfigurationData,
     UpdateFirmwareData,
     UploadFileData,
+    UHK_MODULES,
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME
 } from 'uhk-common';
@@ -112,6 +113,15 @@ export class DeviceService {
         ipcMain.on(IpcEvents.device.recoveryDevice, (...args: any[]) => {
             this.queueManager.add({
                 method: this.recoveryDevice,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
+        ipcMain.on(IpcEvents.device.recoveryModule, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.recoveryModule,
                 bind: this,
                 params: args,
                 asynchronous: true
@@ -372,6 +382,47 @@ export class DeviceService {
         this.startPollUhkDevice();
         await snooze(500);
         event.sender.send(IpcEvents.device.recoveryDeviceReply, response);
+    }
+
+    public async recoveryModule(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        const response = new FirmwareUpgradeIpcResponse();
+        const moduleId: number = args[0];
+
+        try {
+            const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
+            const packageJson = await getFirmwarePackageJson(firmwarePathData);
+            await this.stopPollUhkDevice();
+
+            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
+
+            this.logService.misc(
+                '[DeviceService] UHK Module recovery starts:',
+                JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
+
+            const uhkModule = UHK_MODULES.find(module => module.id === moduleId);
+            this.logService.misc('[DeviceService] UHK Module: ', JSON.stringify(uhkModule));
+
+            await this.operations
+                .updateModuleWithKboot(
+                    getModuleFirmwarePath(uhkModule, packageJson),
+                    uhkDeviceProduct,
+                    uhkModule
+                );
+
+            response.modules = await this.getHardwareModules(false);
+            response.success = true;
+        } catch (error) {
+            const err = { message: error.message, stack: error.stack };
+            this.logService.error('[DeviceService] Module recovery error', err);
+
+            response.modules = await this.getHardwareModules(true);
+            response.error = err;
+        }
+
+        this.startPollUhkDevice();
+        await snooze(500);
+        event.sender.send(IpcEvents.device.recoveryModuleReply, response);
     }
 
     public async enableUsbStackTest(event: Electron.Event) {
