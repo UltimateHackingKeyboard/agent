@@ -92,7 +92,7 @@ function createWindow() {
         win.maximize();
     }
 
-    setMenu(win);
+    setMenu(win, options.devtools);
     deviceService = new DeviceService(logger, win, uhkHidDeviceService, uhkOperations, packagesDir);
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, packagesDir);
