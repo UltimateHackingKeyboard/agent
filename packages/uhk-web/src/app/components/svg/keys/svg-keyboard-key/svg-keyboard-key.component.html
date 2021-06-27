@@ -43,6 +43,7 @@
         [attr.cy]="(svgKey.height / 2)"
         [attr.r]="10"
         [attr.fill]="'#c00'"
+        [attr.transform]="svgKey.textTransform"
     ></svg:circle>
 </ng-template>
 <ng-template [ngIf]="!recording && svgKey.width">
