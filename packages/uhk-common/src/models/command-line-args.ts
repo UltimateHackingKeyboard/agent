@@ -1,5 +1,9 @@
 export interface CommandLineArgs {
     /**
+     * Allow Developer Tools menu
+     */
+    devtools?: boolean;
+    /**
      * logging categories
      */
     log?: string;

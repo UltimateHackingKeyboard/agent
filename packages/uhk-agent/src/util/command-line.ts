@@ -3,6 +3,7 @@ import commandLineUsage from 'command-line-usage';
 import { CommandLineArgs } from 'uhk-common';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
+    { name: 'devtools', type: Boolean },
     { name: 'log', type: String },
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
@@ -22,6 +23,10 @@ const sections: commandLineUsage.Section[] = [
     {
         header: 'Options',
         optionList: [
+            {
+                name: 'devtools',
+                description: 'Allow the Developer Tools menu.'
+            },
             {
                 name: 'log',
                 description: 'Set logging categories. --log=misc,usb. Default is "misc"',
