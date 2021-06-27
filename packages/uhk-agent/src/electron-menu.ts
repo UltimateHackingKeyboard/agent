@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron';
-import isDev from 'electron-is-dev';
 
 export const setMenu = (win: BrowserWindow, allowDevTools): void => {
     if (!allowDevTools && process.platform !== 'darwin') {
