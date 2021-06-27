@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChange
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
 import {
+    CommandMacroAction,
     DelayMacroAction,
     KeyMacroAction,
     KeyModifiers,
@@ -97,6 +98,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
     private updateView(): void {
         if (!this.macroAction) {
             this.title = 'New macro action';
+        } else if (this.macroAction instanceof CommandMacroAction) {
+            this.iconName = 'code';
+            this.title = 'Command';
         } else if (this.macroAction instanceof DelayMacroAction) {
             // Delay
             this.iconName = 'clock';

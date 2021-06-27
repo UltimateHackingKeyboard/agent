@@ -28,6 +28,7 @@ import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from '
 import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
+    MacroCommandComponent,
     MacroDelayTabComponent,
     MacroEditComponent,
     MacroHeaderComponent,
@@ -171,6 +172,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         MacroHeaderComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
+        MacroCommandComponent,
         MacroDelayTabComponent,
         MacroKeyTabComponent,
         MacroMouseTabComponent,
