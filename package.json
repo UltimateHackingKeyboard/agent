@@ -19,7 +19,7 @@
     "npm": ">=v6.14.11 <7.0.0"
   },
   "devDependencies": {
-    "@ert78gb/jasmine-ts": "0.3.2",
+    "jasmine-ts": "0.4.0",
     "@types/command-line-args": "5.0.0",
     "@types/command-line-usage": "5.0.1",
     "@types/copy-webpack-plugin": "8.0.0",
