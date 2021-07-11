@@ -10,8 +10,8 @@ export function initLayerOptions(): Map<number, LayerOption> {
     const layerOptions: Map<number, LayerOption> = new Map<number, LayerOption>();
     layerOptions.set(LayerName.base, getBaseLayerOption());
     layerOptions.set(LayerName.mod, { id: LayerName.mod, name: 'Mod', selected: false, order: 1, allowed: true });
-    layerOptions.set(LayerName.fn, { id: LayerName.fn, name: 'Fn', selected: false, order: 2, allowed: true });
-    layerOptions.set(LayerName.mouse, { id: LayerName.mouse, name: 'Mouse', selected: false, order: 3, allowed: true });
+    layerOptions.set(LayerName.fn, { id: LayerName.fn, name: 'Fn', selected: false, order: 3, allowed: true });
+    layerOptions.set(LayerName.mouse, { id: LayerName.mouse, name: 'Mouse', selected: false, order: 2, allowed: true });
     layerOptions.set(LayerName.fn2, { id: LayerName.fn2, name: 'Fn2', selected: false, order: 4, allowed: true });
     layerOptions.set(LayerName.fn3, { id: LayerName.fn3, name: 'Fn3', selected: false, order: 5, allowed: true });
     layerOptions.set(LayerName.fn4, { id: LayerName.fn4, name: 'Fn4', selected: false, order: 6, allowed: true });

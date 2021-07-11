@@ -693,7 +693,9 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
 };
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
 export const getSelectedMacroIdAfterRemove = (state: State): number | undefined => state.selectedMacroIdAfterRemove;
-export const getLayerOptions = (state: State): LayerOption[] => Array.from(state.layerOptions.values());
+export const getLayerOptions = (state: State): LayerOption[] => Array
+    .from(state.layerOptions.values())
+    .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
