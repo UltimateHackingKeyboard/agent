@@ -25,7 +25,7 @@ import {
     RecoveryModeComponent
 } from './components/device';
 import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
-import { LayersComponent } from './components/layers';
+import { LayerOptionComponent, LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
     MacroDelayTabComponent,
@@ -154,6 +154,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         SvgKeyboardWrapComponent,
         SvgKeyboardComponent,
         SvgModuleComponent,
+        LayerOptionComponent,
         LayersComponent,
         PopoverComponent,
         KeymapAddComponent,

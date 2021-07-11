@@ -6,10 +6,12 @@ import {
     Keymap,
     KeystrokeAction,
     Layer,
+    LayerName,
     LeftSlotModules,
     Macro,
     Module,
     MODULES_DEFAULT_CONFIGS,
+    MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
     RightSlotModules,
@@ -22,24 +24,29 @@ import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
 import * as DeviceActions from '../actions/device';
 import { findModuleById, isValidName } from '../../util';
-import { defaultLastEditKey, ExchangeKey, LastEditedKey } from '../../models';
+import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 import { SaveKeyAction } from '../actions/keymap';
 import * as Device from '../actions/device';
+import { getBaseLayerOption, initLayerOptions } from './layer-options';
 
 export interface State {
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
     lastEditedKey: LastEditedKey;
+    layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
+    selectedLayerOption: LayerOption;
     selectedMacroIdAfterRemove?: number;
 }
 
 export const initialState: State = {
     userConfiguration: new UserConfiguration(),
     lastEditedKey: defaultLastEditKey(),
-    halvesInfo: getDefaultHalvesInfo()
+    layerOptions: initLayerOptions(),
+    halvesInfo: getDefaultHalvesInfo(),
+    selectedLayerOption: getBaseLayerOption()
 };
 
 export function reducer(
@@ -52,8 +59,10 @@ export function reducer(
         case UserConfig.ActionTypes.LoadResetUserConfiguration:
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {
             const userConfig = (action as UserConfig.LoadUserConfigSuccessAction).payload;
+            const newState = assignUserConfiguration(state, userConfig);
+            newState.layerOptions = calculateLayerOptions(newState);
 
-            return assignUserConfiguration(state, userConfig);
+            return newState;
         }
 
         case UserConfig.ActionTypes.ApplyUserConfigurationFromFile: {
@@ -109,6 +118,49 @@ export function reducer(
                 ...state,
                 userConfiguration
             };
+        }
+
+        case KeymapActions.ActionTypes.AddLayer: {
+            const newLayerId = (action as KeymapActions.AddLayerAction).payload;
+            const newLayer = new Layer();
+            newLayer.id = newLayerId;
+            const leftModule = new Module();
+            leftModule.id = 1;
+            leftModule.keyActions = [];
+            const rightModule = new Module();
+            rightModule.id = 0;
+            rightModule.keyActions = [];
+            newLayer.modules = [
+                rightModule,
+                leftModule
+            ];
+
+            if (state.halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
+                newLayer.modules.push(new Module(MODULES_NONE_CONFIGS[state.halvesInfo.leftModuleSlot]));
+            }
+
+            if (state.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
+                newLayer.modules.push(new Module(MODULES_NONE_CONFIGS[state.halvesInfo.rightModuleSlot]));
+            }
+
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+
+            userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
+                if (keymap.abbreviation === state.selectedKeymapAbbr) {
+                    keymap = new Keymap(keymap);
+                    keymap.layers.push(newLayer);
+                }
+
+                return keymap;
+            });
+
+            const newState = {
+                ...state,
+                userConfiguration
+            };
+            newState.layerOptions = calculateLayerOptions(newState);
+
+            return newState;
         }
 
         case KeymapActions.ActionTypes.EditName: {
@@ -226,6 +278,55 @@ export function reducer(
                 ...state,
                 userConfiguration
             };
+        }
+
+        case KeymapActions.ActionTypes.RemoveLayer: {
+            const deleteLayerId = (action as KeymapActions.AddLayerAction).payload;
+
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+
+            userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
+                if (keymap.abbreviation === state.selectedKeymapAbbr) {
+                    keymap = new Keymap(keymap);
+                    keymap.layers = keymap.layers
+                        .filter(layer => layer.id !== deleteLayerId)
+                        .map(layer => {
+                            layer.modules.forEach(module => {
+                                module.keyActions = module.keyActions.map(keyAction => {
+                                    if (keyAction instanceof SwitchLayerAction && keyAction.layer === deleteLayerId) {
+                                        return new NoneAction();
+                                    }
+
+                                    return keyAction;
+                                });
+                            });
+
+                            return layer;
+                        });
+                }
+
+                return keymap;
+            });
+
+            const newState: State = {
+                ...state,
+                userConfiguration
+            };
+            newState.layerOptions = calculateLayerOptions(newState);
+
+            if (state.selectedLayerOption.id === deleteLayerId) {
+                for (const layerOption of newState.layerOptions.values()) {
+                    if (layerOption.selected) {
+                        if (layerOption.order < state.selectedLayerOption.order) {
+                            newState.selectedLayerOption = {...layerOption};
+                        } else {
+                          break;
+                        }
+                    }
+                }
+            }
+
+            return newState;
         }
 
         case KeymapActions.ActionTypes.ExchangeKeys: {
@@ -533,11 +634,26 @@ export function reducer(
             };
         }
 
-        case KeymapActions.ActionTypes.Select:
-            return {
+        case KeymapActions.ActionTypes.Select: {
+            const newState = {
                 ...state,
                 selectedKeymapAbbr: (action as KeymapActions.SelectKeymapAction).payload,
                 lastEditedKey: defaultLastEditKey()
+            };
+            newState.layerOptions = calculateLayerOptions(newState);
+            const currentLayerOption = newState.layerOptions.get(newState.selectedLayerOption.id);
+
+            if (!currentLayerOption.selected) {
+                newState.selectedLayerOption = getBaseLayerOption();
+            }
+
+            return newState;
+        }
+
+        case KeymapActions.ActionTypes.SelectLayer:
+            return {
+                ...state,
+                selectedLayerOption: (action as KeymapActions.SelectLayerAction).payload
             };
 
         case MacroActions.ActionTypes.Select:
@@ -577,6 +693,8 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
 };
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
 export const getSelectedMacroIdAfterRemove = (state: State): number | undefined => state.selectedMacroIdAfterRemove;
+export const getLayerOptions = (state: State): LayerOption[] => Array.from(state.layerOptions.values());
+export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -736,7 +854,9 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
     const newKeymap: Keymap = payload.keymap;
     const isSwitchLayerAction = newKeyAction instanceof SwitchLayerAction;
     const isSwitchKeymapAction = newKeyAction instanceof SwitchKeymapAction;
-    const oldKeyAction = newKeymap.layers[layerIndex].modules.find(findModuleById(moduleIndex)).keyActions[keyIndex];
+    const oldKeyAction = newKeymap
+        .layers.find(layer => layer.id === layerIndex)
+        .modules.find(findModuleById(moduleIndex)).keyActions[keyIndex];
     const oldKeyIsSwitchLayerAction = oldKeyAction instanceof SwitchLayerAction;
 
     const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), userConfig);
@@ -748,13 +868,13 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
 
         if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
             keymap = Object.assign(new Keymap, keymap);
-            keymap.layers = keymap.layers.map((layer, index) => {
-                if (keyActionRemap.remapOnAllLayer || index === layerIndex || isSwitchLayerAction) {
+            keymap.layers = keymap.layers.map(layer => {
+                if (keyActionRemap.remapOnAllLayer || layer.id === layerIndex || isSwitchLayerAction) {
                     const clonedAction = KeyActionHelper.createKeyAction(newKeyAction, null);
                     // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                     // on the target layer and remove SwitchLayerAction from other layers
                     if (isSwitchLayerAction) {
-                        if (index === 0 || index - 1 === (newKeyAction as SwitchLayerAction).layer) {
+                        if (layer.id === LayerName.base || layer.id === (newKeyAction as SwitchLayerAction).layer) {
                             return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                         } else {
                             const actionOnLayer = layer.modules.find(findModuleById(moduleIndex)).keyActions[keyIndex];
@@ -765,7 +885,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
                     } else {
                         return setKeyActionToLayer(layer, moduleIndex, keyIndex, clonedAction);
                     }
-                } else if (oldKeyIsSwitchLayerAction && index - 1 === (oldKeyAction as SwitchLayerAction).layer) {
+                } else if (oldKeyIsSwitchLayerAction && layer.id === (oldKeyAction as SwitchLayerAction).layer) {
                     return setKeyActionToLayer(layer, moduleIndex, keyIndex, null);
                 }
 
@@ -782,7 +902,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
 function getKeyActionByExchangeKey(userConfig: UserConfiguration, exchangeKey: ExchangeKey): KeyAction {
     return userConfig
         .getKeymap(exchangeKey.keymapAbbr)
-        .layers[exchangeKey.layerId]
+        .layers.find(layer => layer.id === exchangeKey.layerId)
         .modules.find(findModuleById(exchangeKey.moduleId))
         .keyActions[exchangeKey.keyId];
 }
@@ -827,4 +947,15 @@ function reassignUserConfig(state: State): State {
         ...state,
         userConfiguration
     };
+}
+
+function calculateLayerOptions(state: State): Map<number, LayerOption> {
+    const selectedKeymap = getSelectedKeymap(state);
+    const layerOptions = initLayerOptions();
+
+    for (const layer of selectedKeymap.layers) {
+        layerOptions.get(layer.id).selected = true;
+    }
+
+    return layerOptions;
 }

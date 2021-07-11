@@ -33,6 +33,7 @@ export class Macro {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromJsonObjectV1(jsonObject, version);
                 break;
 
@@ -49,6 +50,7 @@ export class Macro {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromBinaryV1(buffer, version);
                 break;
 

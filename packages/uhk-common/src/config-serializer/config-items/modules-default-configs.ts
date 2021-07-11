@@ -72,3 +72,37 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
         ]
     }, [], 4)
 };
+
+export const MODULES_NONE_CONFIGS: ModulesDefaultConfigs = {
+    [LeftSlotModules.KeyClusterLeft]: new Module().fromJsonObject({
+        id: LeftSlotModules.KeyClusterLeft,
+        keyActions: [
+            null, // Top button
+            null, // Left button
+            null, // Right button
+            null, // Left micro button
+            null, // Ball
+            null // Right micro button
+        ]
+    }, [], 4),
+    [RightSlotModules.TrackballRight]: new Module().fromJsonObject({
+        id: RightSlotModules.TrackballRight,
+        keyActions: [
+            null, // Left micro button
+            null // Right micro button
+        ]
+    }, [], 4),
+    [RightSlotModules.TrackpointRight]: new Module().fromJsonObject({
+        id: RightSlotModules.TrackpointRight,
+        keyActions: [
+            null, // Left micro button
+            null // Right micro button
+        ]
+    }, [], 4),
+    [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
+        id: RightSlotModules.TouchpadRight,
+        keyActions: [
+            null
+        ]
+    }, [], 4)
+};

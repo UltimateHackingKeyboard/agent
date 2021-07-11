@@ -8,6 +8,7 @@ import { KeystrokeAction, NoneAction } from './key-action';
 import { SecondaryRoleAction } from './secondary-role-action';
 import { isScancodeExists } from './scancode-checker';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration';
+import { LayerName } from './layer-name';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
 
@@ -95,6 +96,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
@@ -103,6 +105,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         this.clean();
+        this.migrateToV5();
         this.recalculateConfigurationLength();
 
         return this;
@@ -118,6 +121,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromBinaryV1(buffer);
                 break;
 
@@ -126,6 +130,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         this.clean();
+        if (this.migrateToV5()) {
+            this.userConfigurationLength = 0;
+        }
 
         if (this.userConfigurationLength === 0) {
             this.recalculateConfigurationLength();
@@ -303,4 +310,18 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         });
     }
 
+    private migrateToV5(): boolean {
+        if (this.userConfigMajorVersion > 4) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 5;
+        for (const keymap of this.keymaps) {
+            for (let i = 0; i < keymap.layers.length; i++ ) {
+                keymap.layers[i].id = i === 0 ? LayerName.base : i - 1;
+            }
+        }
+
+        return true;
+    }
 }

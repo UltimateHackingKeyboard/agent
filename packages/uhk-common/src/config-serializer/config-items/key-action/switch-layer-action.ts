@@ -1,12 +1,7 @@
 import { assertEnum } from '../../assert';
 import { UhkBuffer } from '../../uhk-buffer';
 import { KeyAction, KeyActionId, keyActionType } from './key-action';
-
-export enum LayerName {
-    mod,
-    fn,
-    mouse
-}
+import { LayerName } from '../layer-name';
 
 export enum SwitchLayerMode {
     holdAndDoubleTapToggle = 'holdAndDoubleTapToggle',
@@ -69,6 +64,7 @@ export class SwitchLayerAction extends KeyAction {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
@@ -85,6 +81,7 @@ export class SwitchLayerAction extends KeyAction {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromBinaryV1(buffer);
                 break;
 

@@ -1,9 +1,28 @@
 <div class="text-center">
-    <span role="group" class="uhk__layer-switcher--wrapper btn-group btn-group-lg" data-title="Layers: ">
-        <button type="button" class="btn" *ngFor="let button of buttons; let index = index" (click)="selectLayer(index)"
-            [class.btn-default]="index !== current"
-            [class.btn-primary]="index === current">
-            {{ button }}
+    <div role="group" class="uhk__layer-switcher--wrapper btn-group btn-group-lg" data-title="Layers: ">
+        <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
+        <button *ngIf="layerOption.selected"
+                type="button"
+                class="btn"
+                (click)="selectLayer(layerOption)"
+                [class.btn-default]="layerOption.id !== current.id"
+                [class.btn-primary]="layerOption.id === current.id">
+            {{ layerOption.name }}
         </button>
-    </span>
+        </ng-container>
+
+        <div class="btn-group" ngbDropdown role="group" autoClose="outside">
+            <button class="btn btn-default" ngbDropdownToggle></button>
+            <div class="dropdown-menu"ngbDropdownMenu>
+                <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
+                    <layer-option *ngIf="layerOption.id !== 255"
+                                  [layerOption]="layerOption"
+                                  (remove)="onRemoveLayer($event)"
+                                  (select)="onSelectLayer($event)"
+                    >
+                    </layer-option>
+                </ng-container>
+            </div>
+        </div>
+    </div>
 </div>

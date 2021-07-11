@@ -27,6 +27,7 @@ export class PlayMacroAction extends KeyAction {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromJsonObjectV1(jsonObject, macros);
                 break;
 
@@ -43,6 +44,7 @@ export class PlayMacroAction extends KeyAction {
             case 2:
             case 3:
             case 4:
+            case 5:
                 this.fromBinaryV1(buffer, macros);
                 break;
 

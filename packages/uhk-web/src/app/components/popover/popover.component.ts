@@ -20,6 +20,7 @@ import {
     KeyAction,
     Keymap,
     KeystrokeAction,
+    LayerName,
     MouseAction,
     PlayMacroAction,
     SecondaryRoleAction,
@@ -29,11 +30,19 @@ import {
 
 import { Tab } from './tab';
 
-import { AppState, extraMouseButtonsSupported, getKeymapOptions, getKeymaps, macroPlaybackSupported } from '../../store';
+import {
+    AppState,
+    extraMouseButtonsSupported,
+    getKeymapOptions,
+    getKeymaps,
+    getLayerOptions,
+    macroPlaybackSupported
+} from '../../store';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { RemapInfo } from '../../models/remap-info';
 import { SelectOptionData } from '../../models/select-option-data';
 import { faSquareA } from '../../custom-fa-icons';
+import { LayerOption } from '../../models';
 
 enum TabName {
     Keypress,
@@ -60,7 +69,7 @@ export interface TabHeader {
 export class PopoverComponent implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
     @Input() currentKeymap: Keymap;
-    @Input() currentLayer: number;
+    @Input() currentLayer: LayerOption;
     @Input() visible: boolean;
     @Input() allowLayerDoubleTap: boolean;
     @Input() remapInfo: RemapInfo;
@@ -113,6 +122,7 @@ export class PopoverComponent implements OnChanges {
     ];
     macroPlaybackSupported$: Observable<boolean>;
     extraMouseButtonsSupported$: Observable<boolean>;
+    layerOptions$: Observable<LayerOption[]>;
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
@@ -120,6 +130,7 @@ export class PopoverComponent implements OnChanges {
         this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
         this.extraMouseButtonsSupported$ = store.select(extraMouseButtonsSupported);
+        this.layerOptions$ = store.select(getLayerOptions);
     }
 
     ngOnChanges(change: SimpleChanges) {
@@ -144,7 +155,7 @@ export class PopoverComponent implements OnChanges {
             }
 
             for (const tabHeader of this.tabHeaders) {
-                const allowOnlyLayerTab = tab.tabName === TabName.Layer && this.currentLayer !== 0;
+                const allowOnlyLayerTab = tab.tabName === TabName.Layer && this.currentLayer?.id !== LayerName.base;
 
                 tabHeader.disabled = allowOnlyLayerTab && tabHeader.tabName !== TabName.Layer;
             }
@@ -208,7 +219,7 @@ export class PopoverComponent implements OnChanges {
         this.shadowKeyAction = keystrokeAction;
         const disableRemapOnAllLayer =
             keystrokeAction &&
-            this.currentLayer === 0 &&
+            this.currentLayer?.id === LayerName.base &&
             (keystrokeAction.secondaryRoleAction === SecondaryRoleAction.fn ||
                 keystrokeAction.secondaryRoleAction === SecondaryRoleAction.mod ||
                 keystrokeAction.secondaryRoleAction === SecondaryRoleAction.mouse);
