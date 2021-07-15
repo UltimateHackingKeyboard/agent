@@ -4,6 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import * as semver from 'semver/preload';
 
 import {
     FirmwareUpgradeIpcResponse,
@@ -73,6 +74,10 @@ export class DeviceEffects {
 
                 if (state.bootloaderActive) {
                     return this.router.navigate(['/recovery-device']);
+                }
+
+                if (semver.gt(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+                    return this.router.navigate(['/update-agent']);
                 }
 
                 if (state.connectedDevice && state.zeroInterfaceAvailable) {

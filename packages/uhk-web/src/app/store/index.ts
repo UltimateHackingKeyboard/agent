@@ -120,6 +120,7 @@ export const getPlatform = createSelector(appState, fromApp.getPlatform);
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
 export const getUpdateInfo = createSelector(appUpdateState, fromAppUpdate.getUpdateInfo);
+export const isForceUpdate = createSelector(appUpdateState, fromAppUpdate.isForceUpdate);
 
 export const appUpdateSettingsState = (state: AppState) => state.autoUpdateSettings;
 

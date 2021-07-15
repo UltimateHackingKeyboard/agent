@@ -109,6 +109,7 @@ import { ProgressButtonComponent } from './components/progress-button/progress-b
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { MultiDevicePageComponent } from './pages/multi-device.page';
+import { UpdateAgentPageComponent } from './pages/update-agent.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
@@ -125,6 +126,7 @@ import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
+import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 
 @NgModule({
     declarations: [
@@ -198,6 +200,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         ProgressButtonComponent,
         LoadingDevicePageComponent,
         MultiDevicePageComponent,
+        UpdateAgentPageComponent,
         XtermComponent,
         SliderWrapperComponent,
         EditableTextComponent,
@@ -261,7 +264,8 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
         UhkDeviceBootloaderNotActiveGuard,
-        UhkMultiDeviceGuard
+        UhkMultiDeviceGuard,
+        AgentUpdateNeededGuard
     ],
     exports: [
         UhkMessageComponent,

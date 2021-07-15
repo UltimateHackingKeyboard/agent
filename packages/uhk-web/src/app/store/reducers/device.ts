@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import * as semver from 'semver/preload';
 import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
 
 import * as Device from '../actions/device';
@@ -7,6 +8,7 @@ import { initProgressButtonState, ProgressButtonState } from './progress-button-
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
+import { getVersions } from '../../util';
 
 export interface State {
     connectedDevice?: UhkDeviceProduct;
@@ -229,6 +231,10 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 
     if (!state.connectedDevice) {
         return DeviceUiStates.NotFound;
+    }
+
+    if (semver.gt(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+        return DeviceUiStates.UpdateNeeded;
     }
 };
 

@@ -3,6 +3,7 @@ import { UpdateInfo } from '../../models/update-info';
 import { UpdateDownloadedAction } from '../actions/app-update.action';
 
 export interface State {
+    forceUpdate: boolean;
     updateAvailable: boolean;
     updateDownloaded: boolean;
     doNotUpdateApp: boolean;
@@ -10,6 +11,7 @@ export interface State {
 }
 
 export const initialState: State = {
+    forceUpdate: false,
     updateAvailable: false,
     updateDownloaded: false,
     doNotUpdateApp: false,
@@ -21,6 +23,13 @@ export const initialState: State = {
 
 export function reducer(state = initialState, action: AppUpdate.Actions) {
     switch (action.type) {
+
+        case AppUpdate.ActionTypes.ForceUpdate:
+            return {
+                ...state,
+                forceUpdate: true
+            };
+
         case AppUpdate.ActionTypes.UpdateAvailable:
             return {
                 ...state,
@@ -48,5 +57,6 @@ export function reducer(state = initialState, action: AppUpdate.Actions) {
     }
 }
 
-export const getShowAppUpdateAvailable = (state: State) => state.updateDownloaded && !state.doNotUpdateApp;
+export const getShowAppUpdateAvailable = (state: State) => state.updateDownloaded && !state.doNotUpdateApp && !state.forceUpdate;
 export const getUpdateInfo = (state: State) => state.updateInfo;
+export const isForceUpdate = (state: State) => state.forceUpdate;

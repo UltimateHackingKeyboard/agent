@@ -162,6 +162,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     private calculateDeviceAnimationState(): void {
         this.sideMenuState.device.animation = this.deviceConfigurationLoaded
                 && this.state?.deviceUiState !== DeviceUiStates.Recovery
+                && this.state?.deviceUiState !== DeviceUiStates.UpdateNeeded
             ? 'active'
             : 'inactive';
     }

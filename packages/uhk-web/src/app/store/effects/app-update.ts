@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable } from 'rxjs';
-import { first, map, tap } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { first, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { LogService, NotificationType } from 'uhk-common';
 
-import { ActionTypes, UpdateErrorAction } from '../actions/app-update.action';
+import {
+    ActionTypes,
+    ForceUpdateAction,
+    UpdateAppAction,
+    UpdateAvailableAction,
+    UpdateErrorAction
+} from '../actions/app-update.action';
 import { ActionTypes as AutoUpdateActionTypes, CheckForUpdateNowAction } from '../actions/auto-update-settings';
 import { ShowNotificationAction } from '../actions/app';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
+import { AppState, isForceUpdate } from '../index';
 
 @Injectable()
 export class AppUpdateEffect {
@@ -33,6 +40,28 @@ export class AppUpdateEffect {
             })
         );
 
+    @Effect({ dispatch: false }) forceUpdate$ = this.actions$
+        .pipe(
+            ofType<ForceUpdateAction>(ActionTypes.ForceUpdate),
+            tap(() => {
+                this.logService.misc('[AppUpdateEffect] force update agent');
+                this.appUpdateRendererService.checkForUpdate(false);
+            })
+        );
+
+    @Effect() updateAvailable$ = this.actions$
+        .pipe(
+            ofType<UpdateAvailableAction>(ActionTypes.UpdateAvailable),
+            withLatestFrom(this.store.select(isForceUpdate)),
+            map(([, forceUpdate]) => {
+                if (forceUpdate) {
+                    return new UpdateAppAction();
+                }
+
+                return EMPTY;
+            })
+        );
+
     @Effect() handleError$: Observable<Action> = this.actions$
         .pipe(
             ofType<UpdateErrorAction>(ActionTypes.UpdateError),
@@ -47,7 +76,8 @@ export class AppUpdateEffect {
 
     constructor(private actions$: Actions,
                 private appUpdateRendererService: AppUpdateRendererService,
-                private logService: LogService) {
+                private logService: LogService,
+                private store: Store<AppState>) {
     }
 
 }

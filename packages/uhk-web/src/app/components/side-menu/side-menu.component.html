@@ -54,6 +54,14 @@
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                 {{ state?.connectedDevice?.name }}
             </a>
+
+            <a *ngSwitchCase="'UpdateNeeded'"
+               routerLink="/update-agent"
+               [routerLinkActive]="['active']"
+               class="d-block text-decoration-none navigation">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                {{ state?.connectedDevice?.name }}
+            </a>
         </div>
         <ul [@toggler]="this.sideMenuState.device.animation">
             <li class="sidebar__level-1--item">
