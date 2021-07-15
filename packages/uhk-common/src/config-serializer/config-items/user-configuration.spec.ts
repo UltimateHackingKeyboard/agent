@@ -8,7 +8,7 @@ describe('user-configuration', () => {
 
     it('should transform an empty config', () => {
         jsonTester({
-            userConfigMajorVersion: 3,
+            userConfigMajorVersion: 5,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
@@ -34,7 +34,7 @@ describe('user-configuration', () => {
 
     it('should transform a null keyActionType ', () => {
         jsonTester({
-            userConfigMajorVersion: 3,
+            userConfigMajorVersion: 5,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
@@ -61,6 +61,7 @@ describe('user-configuration', () => {
                     name: 'QWERTY',
                     description: '',
                     layers: [{
+                        id: 'base',
                         modules: [{
                             id: 0,
                             keyActions: [
