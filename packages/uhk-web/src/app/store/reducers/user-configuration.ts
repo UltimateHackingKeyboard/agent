@@ -402,9 +402,9 @@ export function reducer(
             userConfiguration.keymaps.forEach(keymap => {
                 keymap.layers.forEach(layer => {
                     layer.modules.forEach(module => {
-                        module.keyActions.forEach(keyAction => {
+                        module.keyActions = module.keyActions.map(keyAction => {
                             if (keyAction instanceof PlayMacroAction && keyAction.macroId === macroId) {
-                                return  new NoneAction();
+                                return new NoneAction();
                             }
 
                             return keyAction;
