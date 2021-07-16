@@ -275,7 +275,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             macro.id = index;
             return macro;
         });
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, 1));
+        // tslint:disable-next-line: max-line-length
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, this.userConfigMajorVersion));
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
 
     }
