@@ -6,6 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.15] - 2020-07-17
+
+Firmware: 8.10.10 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.10)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Make the configuration saveable after deleting a macro which is referenced by a play macro action.
+- Allow module recovery.
+- Fix the position of the recording dot on the right button of the key cluster module.
+- Add --devtools command line argument for debugging purposes.
+
 ## [1.5.14] - 2020-05-20
 
 Firmware: 8.10.9 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
