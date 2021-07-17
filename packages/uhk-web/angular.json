@@ -24,6 +24,8 @@
             "main": "src/main-web.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "sourceMap": true,
+            "optimization": false,
             "assets": [
               "src/assets"
             ],
@@ -39,9 +41,7 @@
               "buffer",
               "file-saver",
               "uhk-common"
-            ],
-            "showCircularDependencies": false,
-            "extractCss": true
+            ]
           },
           "configurations": {
             "production": {
@@ -54,7 +54,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -144,6 +143,8 @@
               }
             },
             "baseHref": "",
+            "optimization": false,
+            "sourceMap": true,
             "outputPath": "../uhk-agent/dist/renderer",
             "index": "src/index.html",
             "main": "src/main-renderer.ts",
@@ -164,8 +165,7 @@
               "buffer",
               "file-saver",
               "uhk-common"
-            ],
-            "showCircularDependencies": false
+            ]
           },
           "configurations": {
             "production": {
@@ -178,7 +178,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

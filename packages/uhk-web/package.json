@@ -8,7 +8,7 @@
     "build": "run-s -sn build:renderer",
     "build:web": "ng build --prod --aot",
     "build:renderer": "ng build --prod --aot --project=uhk-renderer",
-    "server:renderer": "ng build --project=uhk-renderer --watch --source-map --extract-css",
+    "server:renderer": "ng build --project=uhk-renderer --watch",
     "test-skip": "ng test --watch false",
     "lint": "run-p -snc lint:*",
     "lint:ng": "ng lint",
