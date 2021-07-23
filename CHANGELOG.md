@@ -10,7 +10,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 Firmware: 8.10.10 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.10)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
-- Make the configuration saveable after deleting a macro which is referenced by a play macro action.
+- Make the configuration saveable after deleting a macro that is referenced by a play macro action.
 - Allow module recovery.
 - Fix the position of the recording dot on the right button of the key cluster module.
 - Add --devtools command line argument for debugging purposes.
