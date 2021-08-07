@@ -97,7 +97,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesInfo: HalvesInfo;
-    @Input() keyboardLayout: KeyboardLayout.ANSI;
+    @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
 
