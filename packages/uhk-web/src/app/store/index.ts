@@ -16,6 +16,7 @@ import {
     UserConfiguration
 } from 'uhk-common';
 
+import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromPreset from './reducers/preset';
 import * as fromAppUpdate from './reducers/app-update.reducer';
@@ -28,7 +29,7 @@ import * as fromUserConfigHistory from './reducers/user-configuration-history.re
 import * as fromSelectors from './reducers/selectors';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
-import { RouterStateUrl } from './router-util';
+import { RouterState } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { isVersionGte } from '../util';
 import {
@@ -44,11 +45,12 @@ import { SelectOptionData } from '../models/select-option-data';
 
 // State interface for the application
 export interface AppState {
+    defaultUserConfiguration: fromDefaultUserConfig.State;
     userConfiguration: fromUserConfig.State;
     presetKeymaps: Keymap[];
     autoUpdateSettings: autoUpdateSettings.State;
     app: fromApp.State;
-    router: RouterReducerState<RouterStateUrl>;
+    router: RouterReducerState<RouterState>;
     appUpdate: fromAppUpdate.State;
     device: fromDevice.State;
     contributors: fromContributors.State;
@@ -57,6 +59,7 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
+    defaultUserConfiguration: fromDefaultUserConfig.reducer,
     userConfiguration: fromUserConfig.reducer,
     presetKeymaps: fromPreset.reducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
@@ -406,3 +409,9 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
             recoveryModules: []
         };
     });
+
+export const defaultUserConfigState = (state: AppState) => state.defaultUserConfiguration;
+export const getDefaultUserConfigurationKeymaps = createSelector(
+    defaultUserConfigState, fromDefaultUserConfig.getDefaultUserConfigurationKeymaps);
+export const getSelectedAddKeymap = createSelector(
+    defaultUserConfigState, fromDefaultUserConfig.getSelectedKeymap);

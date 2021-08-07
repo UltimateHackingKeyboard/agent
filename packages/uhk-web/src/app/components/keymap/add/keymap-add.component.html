@@ -21,6 +21,8 @@
         </p>
         <svg-keyboard-wrap
                 [keymap]="keymap"
+                [halvesInfo]="halvesInfo$ | async"
+                [keyboardLayout]="keyboardLayout$ | async"
                 [popoverEnabled]="false"
                 [tooltipEnabled]="true"
         >

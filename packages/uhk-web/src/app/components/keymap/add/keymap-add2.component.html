@@ -1,0 +1,14 @@
+<h1 class="mb-4">
+    <fa-icon [icon]="faKeyboard"></fa-icon>
+    {{ keymap.name }} keymap (<span class="pr-2 pl-2">{{ keymap.abbreviation }}</span>)
+    <button class="btn btn-default">Add keymap</button>
+</h1>
+
+<svg-keyboard-wrap
+    [keymap]="keymap"
+    [halvesInfo]="halvesInfo$ | async"
+    [keyboardLayout]="keyboardLayout$ | async"
+    [popoverEnabled]="false"
+    [tooltipEnabled]="true"
+>
+</svg-keyboard-wrap>

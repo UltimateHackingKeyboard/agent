@@ -7,9 +7,16 @@
 
 <side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
            [class.update-panel-visible]="showUpdateAvailable"></side-menu>
+
+<second-side-menu-container
+    [class.visible]="secondSideMenuVisible"
+    [class.update-panel-visible]="showUpdateAvailable">
+</second-side-menu-container>
+
 <div id="main-content"
-     class="main-content inner-content"
-     [class.update-panel-visible]="showUpdateAvailable">
+     class="main-content inner-content "
+     [class.update-panel-visible]="showUpdateAvailable"
+     [class.second-menu-visible]="secondSideMenuVisible">
     <router-outlet></router-outlet>
 </div>
 <notifier-container></notifier-container>

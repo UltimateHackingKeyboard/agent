@@ -1,0 +1,12 @@
+<header>
+    <fa-icon [icon]="faKeyboard"></fa-icon>
+    Available keymaps
+</header>
+<ul>
+    <li *ngFor="let keymap of (keymaps$ | async)"
+        [routerLinkActive]="['active']">
+        <a [routerLink]="['/add-keymap', keymap.abbreviation]">
+            {{ keymap.name }}
+        </a>
+    </li>
+</ul>

@@ -18,7 +18,9 @@ $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
 }
 
 a {
-    color: var(--color-sidemenu-text);
+    &:not(.btn) {
+        color: var(--color-sidemenu-text);
+    }
 
     &.disabled {
         opacity: 0.65;

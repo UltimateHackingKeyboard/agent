@@ -1,0 +1,39 @@
+@import '../../../../styles/mixins';
+@import '../../../../styles/variables';
+
+:host {
+    display: block;
+
+    header {
+        font-size: $font-size-lg;
+        padding-left: 0.5rem;
+    }
+
+    ul {
+        padding: 4px 0 0;
+        margin: 0;
+        overflow: hidden;
+
+        li {
+            list-style: none;
+            padding-top: 2px;
+            padding-bottom: 2px;
+
+            &.active {
+                background-color: var(--color-sidemenu-active-bg);
+                color: var(--color-sidemenu-active-text);
+            }
+
+            &:hover {
+                background-color: var(--color-hover-link-color);
+            }
+
+            a {
+                color: var(--color-sidemenu-text);
+                display: block;
+                text-decoration: none;
+                padding-left: 1rem;
+            }
+        }
+    }
+}

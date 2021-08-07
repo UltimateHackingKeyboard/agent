@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faKeyboard, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Keymap } from 'uhk-common';
+import { HalvesInfo, Keymap } from 'uhk-common';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, publishReplay, refCount } from 'rxjs/operators';
 
-import { AppState } from '../../../store';
+import { AppState, getHalvesInfo, getKeyboardLayout } from '../../../store';
 import { AddKeymapAction } from '../../../store/actions/keymap';
+import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 
 @Component({
     selector: 'keymap-add',
@@ -21,12 +22,16 @@ import { AddKeymapAction } from '../../../store/actions/keymap';
 export class KeymapAddComponent {
     presets$: Observable<Keymap[]>;
     presetsAll$: Observable<Keymap[]>;
+    keyboardLayout$: Observable<KeyboardLayout>;
+    halvesInfo$: Observable<HalvesInfo>;
     faKeyboard = faKeyboard;
     faSearch = faSearch;
 
     private filterExpression$: BehaviorSubject<string>;
 
     constructor(private store: Store<AppState>) {
+        this.keyboardLayout$ = store.select(getKeyboardLayout);
+        this.halvesInfo$ = store.select(getHalvesInfo);
         this.presetsAll$ = store.select((appState: AppState) => appState.presetKeymaps);
         this.filterExpression$ = new BehaviorSubject('');
 
