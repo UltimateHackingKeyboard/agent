@@ -1,3 +1,4 @@
+@use 'sass:math';
 // Paths
 
 $fa-font-path : '../node_modules/@fortawesome/fontawesome-free/webfonts';
@@ -12,8 +13,8 @@ $border-radius: 0.25rem;
 $spacer: 1rem;
 $spacers: (
     0: 0,
-    1: $spacer / 4,
-    2: $spacer / 2,
+    1: math.div($spacer, 4),
+    2: math.div($spacer, 2),
     3: $spacer,
     4: $spacer * 1.5,
     5: $spacer * 3,
@@ -24,8 +25,8 @@ $zindex-tooltip: 50001;
 $tooltip-arrow-offset:              2;
 $tooltip-border-width:              1px;
 $tooltip-opacity:                   1;
-$tooltip-padding-y:                 $spacer / 4;
-$tooltip-padding-x:                 $spacer / 2;
+$tooltip-padding-y:                 math.div($spacer, 4);
+$tooltip-padding-x:                 math.div($spacer, 2);
 
 $popover-font-size: $font-size-base;
 
