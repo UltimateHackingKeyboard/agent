@@ -104,12 +104,13 @@ I have read this Agreement, and fully agree to it by signing it with my GitHub u
 - @eltang
 - @ert78gb
 - @fjozsef
+- @kareltucek
+- @Lauszus
 - @laxu
 - @mondalaci
 - @NejcZdovc
 - @spuder
 - @srang
-- @wormuth
-- @Lauszus
 - @steamraven
-- @kareltucek
+- @wormuth
+
