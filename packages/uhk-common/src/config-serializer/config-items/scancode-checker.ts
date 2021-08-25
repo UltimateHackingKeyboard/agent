@@ -1,4 +1,4 @@
-import { SCANCODES } from './';
+import { KeystrokeAction, KeystrokeType, SCANCODES } from './';
 
 let scancodeMap: Map<number, any>;
 
@@ -8,6 +8,25 @@ export function isScancodeExists(scancode: number): boolean {
     }
 
     return scancodeMap.has(scancode);
+}
+
+export function isAllowedScancode(keyAction: KeystrokeAction): boolean {
+    if (isScancodeExists(keyAction.scancode)) {
+        return true;
+    }
+
+    switch (keyAction.type) {
+        case KeystrokeType.system:
+        case KeystrokeType.basic:
+            return keyAction.scancode > 0 && keyAction.scancode < 256;
+
+        case KeystrokeType.longMedia:
+        case KeystrokeType.shortMedia:
+            return keyAction.scancode > 0 && keyAction.scancode < 65566;
+
+        default:
+            return false;
+    }
 }
 
 function fillScancodeMap(): void {

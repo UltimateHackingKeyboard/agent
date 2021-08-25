@@ -39,19 +39,25 @@ export class MapperService {
 
     public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
         let map: Map<number, string[]>;
+        let prefix: string;
+
         switch (type) {
             case KeystrokeType.shortMedia:
             case KeystrokeType.longMedia:
                 map = this.mediaScanCodeTextMap;
+                prefix = 'M';
                 break;
             case KeystrokeType.system:
                 map = this.systemScanCodeTextMap;
+                prefix = 'S';
                 break;
             default:
                 map = this.basicScanCodeTextMap;
+                prefix = 'B';
                 break;
         }
-        return map.get(scanCode);
+
+        return map.get(scanCode) || [`${prefix}${scanCode}`];
     }
 
     public hasScancodeIcon(scancode: number, type = KeystrokeType.basic): boolean {

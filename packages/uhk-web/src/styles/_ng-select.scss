@@ -1,0 +1,50 @@
+$ng-select-height: 1.75rem;
+$ng-select-primary-text: $input-color;
+$ng-select-value-font-size: 14px;
+$ng-select-bg: $input-bg;
+$ng-select-border-radius: 0.2rem;
+$ng-select-dropdown-optgroup-text: $input-color;
+$ng-select-dropdown-option-text: $input-color;
+$ng-select-selected: $color-select-active-bg;
+$ng-select-selected-text: $color-select-active-text;
+$ng-select-marked: $color-select-hover-bg;
+$ng-select-marked-text: $color-select-hover-text;
+@import '~@ng-select/ng-select/scss/default.theme';
+
+.ng-select {
+    &.ng-select-opened {
+        .ng-value {
+            display: none;
+        }
+
+        .ng-arrow-wrapper {
+            .ng-arrow {
+                border-width: 0 4px 4px;
+            }
+        }
+    }
+
+    &.ng-select-single {
+        .ng-select-container {
+            .ng-value-container {
+                .ng-input {
+                    top: 2px;
+                }
+            }
+        }
+    }
+
+    .ng-arrow-wrapper {
+        .ng-arrow {
+            border-width: 4px 4px 2.5px;
+        }
+    }
+
+    .ng-dropdown-panel {
+        .ng-dropdown-panel-items {
+            .ng-optgroup {
+                font-weight: 700;
+            }
+        }
+    }
+}

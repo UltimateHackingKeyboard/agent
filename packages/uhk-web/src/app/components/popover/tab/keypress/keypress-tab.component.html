@@ -1,30 +1,37 @@
 <div class="scancode-options">
     <b class="setting-label mb-2">Scancode:</b>
     <div class="scancode-container">
-        <ngx-select [items]="scanCodeGroups"
-                    [ngModel]="selectedScancodeOption?.id"
-                    [autoActiveOnMouseEnter]="false"
-                    size="small"
-                    optionValueField="id"
-                    optionTextField="text"
-                    optGroupLabelField="text"
-                    optGroupOptionsField="children"
-                    (select)="onScancodeChange($event)">
-
-            <ng-template ngx-select-option let-option>
-                <span [ngClass]="{'indent-dropdown-item':option.data.id !== '0'}">
-                    <span>{{ option.text }}</span>
-                    <span class="scancode--searchterm">
-                        {{ option.data.additional?.explanation}}
-                    </span>
+        <ng-select [addTag]="addTagFn.bind(this)"
+                   [clearable]="false"
+                   [editableSearchTerm]="true"
+                   [items]="scanCodeGroups"
+                   [ngModel]="selectedScancodeOption?.id"
+                   [searchFn]="searchFn"
+                   bindLabel="text"
+                   bindValue="id"
+                   groupBy="group"
+                   (ngModelChange)="onScancodeChange($event)"
+        >
+            <ng-template ng-option-tmp let-item="item">
+                <span>
+                  <span>{{ item.text }}</span>
+                <span class="float-right">
+                      {{ item.additional?.explanation}}
+                  </span>
                 </span>
             </ng-template>
 
-        </ngx-select>
+            <ng-template ng-tag-tmp let-search="searchTerm">
+                {{ addTagText(search) }}
+            </ng-template>
+        </ng-select>
     </div>
     <ng-template #scanCodeTooltip>
-        <p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the label if your computer uses layout different from en-US. In such case, you need to pick the character of the desired key according to the en-US layout.</p>
-        <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the semicolon key, so choose semicolon in this dropdown.</p>
+        <p>Labels are shown according to en-US character-to-scancode mapping. This means that output may differ from the
+            label if your computer uses layout different from en-US. In such case, you need to pick the character of the
+            desired key according to the en-US layout.</p>
+        <p>Let's say you're a German user and want to map the Ö character. You can see that on US keyboards this is the
+            semicolon key, so choose semicolon in this dropdown.</p>
         <p class="mb-1">Click to learn more about mappings and scancodes.</p>
     </ng-template>
     <a class="btn btn-padding-0 mb-2"
@@ -102,7 +109,8 @@
         <p class="text-left">Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
         <ul class="text-left">
             <li>Tap this key to trigger Escape. <i>(Primary role)</i></li>
-            <li>Hold this key and press another key to activate the relevant key of the Mouse layer. <i>(Secondary role)</i></li>
+            <li>Hold this key and press another key to activate the relevant key of the Mouse layer. <i>(Secondary
+                role)</i></li>
         </ul>
         <p class="text-left mb-1">The secondary role can be any layer or modifier.</p>
     </ng-template>
