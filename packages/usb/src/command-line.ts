@@ -11,6 +11,12 @@ export const yargs = Yargs
         default: 'none',
         choices: ['all', 'config', 'misc', 'none', 'usb']
     })
+    .option('usb-driver', {
+        description: 'Set USB HID driver. It has affect only on Linux OS',
+        type: 'string',
+        default: 'hidraw',
+        choices: ['hidraw', 'libusb']
+    })
     .help('help')
     .version(false)
 ;

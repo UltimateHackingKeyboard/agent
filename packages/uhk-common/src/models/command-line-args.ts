@@ -28,4 +28,8 @@ export interface CommandLineArgs {
      * simulate privilege escalation error
      */
     spe?: boolean;
+    /**
+     * USB HID Driver option. It has affect only on Linux OS {hidraw|libusb}
+     */
+    'usb-driver'?: 'hidraw' | 'libusb';
 }

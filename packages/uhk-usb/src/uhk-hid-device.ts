@@ -1,4 +1,4 @@
-import { Device, HID } from 'node-hid';
+import { Device, HID, setDriverType } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
 import isRoot = require('is-root');
@@ -67,6 +67,9 @@ export class UhkHidDevice {
     constructor(private logService: LogService,
                 private options: CommandLineArgs,
                 private rootDir: string) {
+        if (options['usb-driver'] === 'libusb') {
+            setDriverType('libusb');
+        }
     }
 
     /**
