@@ -456,6 +456,7 @@ export class UhkHidDevice {
             try {
                 const sendData = getTransferData(buffer);
                 this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
+                device.setNonBlocking(true);
                 device.on('data', receivedData => {
                     const logString = bufferToString(receivedData);
                     this.logService.usb('[UhkHidDevice] USB[R]:', logString);
