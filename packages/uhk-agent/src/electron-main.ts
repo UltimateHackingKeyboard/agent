@@ -16,7 +16,7 @@ import { SudoService } from './services/sudo.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
-import { options, cliUsage, reenumerateAndExit } from './util';
+import { getWindowBackgroundColor, options, cliUsage, reenumerateAndExit } from './util';
 // import './dev-extension';
 // require('electron-debug')({ showDevTools: true, enabled: true });
 
@@ -83,7 +83,9 @@ function createWindow() {
             spellcheck: false,
             preload: path.join(__dirname, 'preload.js')
         },
-        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
+        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
+        backgroundColor: getWindowBackgroundColor(),
+        show: false
     });
 
     if (loadedWindowState.isFullScreen) {
@@ -123,6 +125,10 @@ function createWindow() {
         uhkHidDeviceService.close();
         uhkHidDeviceService = null;
         sudoService = null;
+    });
+
+    win.once('ready-to-show', () => {
+        win.show();
     });
 
     win.webContents.on('did-finish-load', () => {
