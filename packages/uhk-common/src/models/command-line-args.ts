@@ -32,4 +32,9 @@ export interface CommandLineArgs {
      * USB HID Driver option. It has affect only on Linux OS {hidraw|libusb}
      */
     'usb-driver'?: 'hidraw' | 'libusb';
+
+    /**
+     * How to wait for the USB response
+     */
+    'usb-read-mode'?: 'readTimeout' | 'onData';
 }

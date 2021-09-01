@@ -10,7 +10,8 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'preserve-udev-rules', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
-    { name: 'usb-driver', type: String }
+    { name: 'usb-driver', type: String },
+    { name: 'usb-read-mode', type: String }
 ];
 
 export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true }) as CommandLineArgs;
@@ -55,6 +56,11 @@ const sections: commandLineUsage.Section[] = [
                 name: 'usb-driver',
                 description: 'Set USB HID driver. It has affect only on Linux OS --usb-driver=hidraw. Default is "hidraw"',
                 typeLabel: 'hidraw | libusb'
+            },
+            {
+                name: 'usb-read-mode',
+                description: 'How to wait for the USB response. --usb-read-mode=readTimeout. Default is "readTimeout"',
+                typeLabel: 'readTimeout | onData'
             }
         ]
     }

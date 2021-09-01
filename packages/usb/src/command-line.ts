@@ -17,6 +17,12 @@ export const yargs = Yargs
         default: 'hidraw',
         choices: ['hidraw', 'libusb']
     })
+    .option('usb-read-mode', {
+        description: 'How to wait for the USB response',
+        type: 'string',
+        default: 'readTimeout',
+        choices: ['readTimeout', 'onData']
+    })
     .help('help')
     .version(false)
 ;

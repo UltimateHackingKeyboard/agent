@@ -163,35 +163,13 @@ export class UhkHidDevice {
      * @param {Buffer} buffer
      * @returns {Promise<Buffer>}
      */
-    public async write(buffer: Buffer): Promise<Buffer> {
-        return new Promise<Buffer>(async (resolve, reject) => {
-            const device = this.getDevice();
+    public write(buffer: Buffer): Promise<Buffer> {
+        this.logService.misc('[UhkHidDevice] options', this.options);
+        if (this.options['usb-read-mode'] === 'onData') {
+            return this.writeOnData(buffer);
+        }
 
-            if (!device) {
-                return reject(new Error('[UhkHidDevice] Device is not connected'));
-            }
-
-            try {
-                const sendData = getTransferData(buffer);
-                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
-                device.write(sendData);
-                await snooze(1);
-                const receivedData = device.readTimeout(1000);
-                const logString = bufferToString(receivedData);
-                this.logService.usb('[UhkHidDevice] USB[R]:', logString);
-
-                if (receivedData[0] !== 0) {
-                    return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
-                }
-
-                return resolve(Buffer.from(receivedData));
-            } catch (err) {
-                this.logService.error('[UhkHidDevice] Transfer error: ', err);
-                this.close();
-                return reject(err);
-            }
-
-        });
+        return this.writeReadTimeout(buffer);
     }
 
     /**
@@ -256,8 +234,7 @@ export class UhkHidDevice {
                 } else {
                     this.logService.usb('[UhkHidDevice] USB[T]: Enumerated device is not ready yet');
                 }
-            }
-            else {
+            } else {
                 this.logService.misc(`[UhkHidDevice] Could not find reenumerated device: ${reenumMode}. Waiting...`);
                 this.listAvailableDevices(devs, false);
             }
@@ -431,4 +408,82 @@ export class UhkHidDevice {
 
         return null;
     }
+
+    private writeReadTimeout(buffer: Buffer): Promise<Buffer> {
+        this.logService.misc('[UhkHidDevice] Use writeReadTimeout');
+
+        return new Promise<Buffer>(async (resolve, reject) => {
+            const device = this.getDevice();
+
+            if (!device) {
+                return reject(new Error('[UhkHidDevice] Device is not connected'));
+            }
+
+            try {
+                const sendData = getTransferData(buffer);
+                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
+                device.write(sendData);
+                await snooze(1);
+                const receivedData = device.readTimeout(1000);
+                const logString = bufferToString(receivedData);
+                this.logService.usb('[UhkHidDevice] USB[R]:', logString);
+
+                if (receivedData[0] !== 0) {
+                    return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
+                }
+
+                return resolve(Buffer.from(receivedData));
+            } catch (err) {
+                this.logService.error('[UhkHidDevice] Transfer error: ', err);
+                this.close();
+                return reject(err);
+            }
+
+        });
+    }
+
+    private writeOnData(buffer: Buffer): Promise<Buffer> {
+        this.logService.misc('[UhkHidDevice] Use writeOnData');
+
+        return new Promise<Buffer>((resolve, reject) => {
+            this.close();
+            const device = this.getDevice();
+
+            if (!device) {
+                return reject(new Error('[UhkHidDevice] Device is not connected'));
+            }
+
+            try {
+                const sendData = getTransferData(buffer);
+                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
+                device.on('data', receivedData => {
+                    const logString = bufferToString(receivedData);
+                    this.logService.usb('[UhkHidDevice] USB[R]:', logString);
+
+                    if (receivedData[0] !== 0) {
+                        return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
+                    }
+
+                    return resolve(Buffer.from(receivedData));
+                });
+                device.on('error', err => {
+                    this.logService.error('[UhkHidDevice] Transfer error: ', err);
+                    return reject(err);
+                });
+                device.write(sendData);
+            } catch (err) {
+                this.logService.error('[UhkHidDevice] Transfer error: ', err);
+                return reject(err);
+            }
+        })
+            .then(resultBuffer => {
+                this.close();
+                return resultBuffer;
+            })
+            .catch(error => {
+                this.close();
+                throw error;
+            });
+    }
+
 }
