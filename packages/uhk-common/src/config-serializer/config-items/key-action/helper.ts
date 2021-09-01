@@ -8,7 +8,7 @@ import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keyma
 import { MouseAction } from './mouse-action';
 import { PlayMacroAction } from './play-macro-action';
 import { NoneAction } from './none-action';
-import { isScancodeExists } from '../scancode-checker';
+import { isAllowedScancode } from '../scancode-checker';
 
 export class Helper {
 
@@ -127,5 +127,5 @@ export class Helper {
 function isValidKeystrokeAction(keystrokeAction: KeystrokeAction): boolean {
     return keystrokeAction.hasSecondaryRoleAction() ||
         keystrokeAction.hasActiveModifier() ||
-        keystrokeAction.hasScancode() && isScancodeExists(keystrokeAction.scancode);
+        keystrokeAction.hasScancode() && isAllowedScancode(keystrokeAction);
 }

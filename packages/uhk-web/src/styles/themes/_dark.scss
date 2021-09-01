@@ -38,6 +38,11 @@ $input-bg: #222;
 $input-color: $color-text;
 $input-focus-bg: #111;
 $input-btn-focus-color: rgba(theme-color('primary'), 0.25);
+$color-select-active-bg: darken(theme-color('primary'), 40%);
+$color-select-active-text: $white;
+$color-select-hover-bg: #3ec9e8;
+$color-select-hover-text: #333;
+
 $nav-tabs-link-hover-border-color: $color-popover-border;
 $nav-tabs-link-active-bg: $color-popover-bg-light;
 $nav-tabs-link-active-color: $color-text;
@@ -108,8 +113,8 @@ $popover-border-color: $color-popover-border;
     --color-macro-bg: #333;
     --color-macro-border: #444;
 
-    --color-select-active-bg: #{darken(theme-color('primary'), 40%)};
-    --color-select-active-text: #{$white};
+    --color-select-active-bg: #{$color-select-active-bg};
+    --color-select-active-text: #{$color-select-active-text};
 
     --color-configuration-history-text: #{$color-text};
 
