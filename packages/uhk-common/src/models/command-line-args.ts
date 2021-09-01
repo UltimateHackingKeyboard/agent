@@ -36,5 +36,5 @@ export interface CommandLineArgs {
     /**
      * How to wait for the USB response
      */
-    'usb-read-mode'?: 'readTimeout' | 'onData';
+    'usb-read-mode'?: 'readTimeout' | 'onData' | 'readSync';
 }

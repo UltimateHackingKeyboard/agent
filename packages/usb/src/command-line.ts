@@ -21,7 +21,7 @@ export const yargs = Yargs
         description: 'How to wait for the USB response',
         type: 'string',
         default: 'readTimeout',
-        choices: ['readTimeout', 'onData']
+        choices: ['readTimeout', 'onData', 'readSync']
     })
     .help('help')
     .version(false)

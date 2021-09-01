@@ -169,6 +169,10 @@ export class UhkHidDevice {
             return this.writeOnData(buffer);
         }
 
+        if (this.options['usb-read-mode'] === 'readSync') {
+            return this.writeReadSync(buffer);
+        }
+
         return this.writeReadTimeout(buffer);
     }
 
@@ -456,7 +460,6 @@ export class UhkHidDevice {
             try {
                 const sendData = getTransferData(buffer);
                 this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
-                device.setNonBlocking(true);
                 device.on('data', receivedData => {
                     const logString = bufferToString(receivedData);
                     this.logService.usb('[UhkHidDevice] USB[R]:', logString);
@@ -485,6 +488,39 @@ export class UhkHidDevice {
                 this.close();
                 throw error;
             });
+    }
+
+    private writeReadSync(buffer: Buffer): Promise<Buffer> {
+        this.logService.misc('[UhkHidDevice] Use writeReadSync');
+
+        return new Promise<Buffer>(async (resolve, reject) => {
+            const device = this.getDevice();
+
+            if (!device) {
+                return reject(new Error('[UhkHidDevice] Device is not connected'));
+            }
+
+            try {
+                const sendData = getTransferData(buffer);
+                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
+                device.write(sendData);
+
+                const receivedData = device.readSync();
+                const logString = bufferToString(receivedData);
+                this.logService.usb('[UhkHidDevice] USB[R]:', logString);
+
+                if (receivedData[0] !== 0) {
+                    return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
+                }
+
+                return resolve(Buffer.from(receivedData));
+            } catch (err) {
+                this.logService.error('[UhkHidDevice] Transfer error: ', err);
+                this.close();
+                return reject(err);
+            }
+
+        });
     }
 
 }

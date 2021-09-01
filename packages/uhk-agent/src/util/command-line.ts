@@ -60,7 +60,7 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'usb-read-mode',
                 description: 'How to wait for the USB response. --usb-read-mode=readTimeout. Default is "readTimeout"',
-                typeLabel: 'readTimeout | onData'
+                typeLabel: 'readTimeout | onData | readSync'
             }
         ]
     }
