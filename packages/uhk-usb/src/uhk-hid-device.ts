@@ -404,6 +404,7 @@ export class UhkHidDevice {
                 return null;
             }
             const device = new HID(dev.path);
+            device.setNonBlocking(1 as any);
             this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(dev, usbDeviceJsonFormatter));
             return device;
         } catch (err) {
