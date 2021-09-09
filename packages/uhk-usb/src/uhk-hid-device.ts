@@ -179,14 +179,14 @@ export class UhkHidDevice {
 
                 if (receivedData[0] !== 0) {
                     return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
-        }
+                }
 
                 return resolve(Buffer.from(receivedData));
             } catch (err) {
                 this.logService.error('[UhkHidDevice] Transfer error: ', err);
                 this.close();
                 return reject(err);
-        }
+            }
 
         });
     }
