@@ -11,17 +11,10 @@ export const yargs = Yargs
         default: 'none',
         choices: ['all', 'config', 'misc', 'none', 'usb']
     })
-    .option('usb-driver', {
-        description: 'Set USB HID driver. It has affect only on Linux OS',
-        type: 'string',
-        default: 'hidraw',
-        choices: ['hidraw', 'libusb']
-    })
-    .option('usb-read-mode', {
-        description: 'How to wait for the USB response',
-        type: 'string',
-        default: 'readTimeout',
-        choices: ['readTimeout', 'onData', 'readSync']
+    .option('usb-non-blocking', {
+        description: 'Use USB non blocking communication',
+        type: 'boolean',
+        default: false
     })
     .help('help')
     .version(false)

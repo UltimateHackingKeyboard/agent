@@ -29,12 +29,7 @@ export interface CommandLineArgs {
      */
     spe?: boolean;
     /**
-     * USB HID Driver option. It has affect only on Linux OS {hidraw|libusb}
+     * Use USB non-blocking communication
      */
-    'usb-driver'?: 'hidraw' | 'libusb';
-
-    /**
-     * How to wait for the USB response
-     */
-    'usb-read-mode'?: 'readTimeout' | 'onData' | 'readSync';
+    'usb-non-blocking'?: boolean;
 }
