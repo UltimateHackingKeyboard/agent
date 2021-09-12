@@ -11,6 +11,11 @@ export const yargs = Yargs
         default: 'none',
         choices: ['all', 'config', 'misc', 'none', 'usb']
     })
+    .option('usb-non-blocking', {
+        description: 'Use USB non blocking communication',
+        type: 'boolean',
+        default: false
+    })
     .help('help')
     .version(false)
 ;

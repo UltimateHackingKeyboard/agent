@@ -10,7 +10,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'preserve-udev-rules', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
-    { name: 'usb-driver', type: String }
+    { name: 'usb-non-blocking', type: Boolean }
 ];
 
 export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true }) as CommandLineArgs;
@@ -50,6 +50,10 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'spe',
                 description: 'Simulate privilege escalation error'
+            },
+            {
+                name: 'usb-non-blocking',
+                description: 'Use USB non-blocking communication'
             }
         ]
     }

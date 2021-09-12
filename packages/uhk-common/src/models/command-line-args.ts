@@ -28,4 +28,8 @@ export interface CommandLineArgs {
      * simulate privilege escalation error
      */
     spe?: boolean;
+    /**
+     * Use USB non-blocking communication
+     */
+    'usb-non-blocking'?: boolean;
 }
