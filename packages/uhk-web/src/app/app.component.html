@@ -8,10 +8,12 @@
 <side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
            [class.update-panel-visible]="showUpdateAvailable"></side-menu>
 
-<second-side-menu-container
-    [class.visible]="secondSideMenuVisible"
-    [class.update-panel-visible]="showUpdateAvailable">
-</second-side-menu-container>
+<div class="secondary-menu-wrapper"
+     [class.visible]="secondSideMenuVisible"
+     [class.update-panel-visible]="showUpdateAvailable">
+    <second-side-menu-container>
+    </second-side-menu-container>
+</div>
 
 <div id="main-content"
      class="main-content inner-content "

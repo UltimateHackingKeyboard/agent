@@ -8,7 +8,6 @@ import {
     createMd5Hash,
     getMd5HashFromFilename,
     HardwareModules,
-    Keymap,
     LEFT_HALF_MODULE,
     PlayMacroAction,
     UHK_60_DEVICE,
@@ -18,7 +17,6 @@ import {
 
 import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
 import * as fromUserConfig from './reducers/user-configuration';
-import * as fromPreset from './reducers/preset';
 import * as fromAppUpdate from './reducers/app-update.reducer';
 import * as fromContributors from './reducers/contributors.reducer';
 import * as autoUpdateSettings from './reducers/auto-update-settings';
@@ -47,7 +45,6 @@ import { SelectOptionData } from '../models/select-option-data';
 export interface AppState {
     defaultUserConfiguration: fromDefaultUserConfig.State;
     userConfiguration: fromUserConfig.State;
-    presetKeymaps: Keymap[];
     autoUpdateSettings: autoUpdateSettings.State;
     app: fromApp.State;
     router: RouterReducerState<RouterState>;
@@ -61,7 +58,6 @@ export interface AppState {
 export const reducers: ActionReducerMap<AppState> = {
     defaultUserConfiguration: fromDefaultUserConfig.reducer,
     userConfiguration: fromUserConfig.reducer,
-    presetKeymaps: fromPreset.reducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
     app: fromApp.reducer,
     router: routerReducer,

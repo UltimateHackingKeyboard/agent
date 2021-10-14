@@ -24,9 +24,8 @@ main-app {
     }
 }
 
-second-side-menu-container {
+.secondary-menu-wrapper {
     background-color: var(--color-secondary-sidemenu-bg);
-    border-right: 1px solid var(--color-sidemenu-border);
     bottom: 0;
     left: $side-menu-width;
     width: 0;
@@ -39,5 +38,11 @@ second-side-menu-container {
 
     &.visible {
         width: $second-side-menu-width;
+        border-right: 1px solid var(--color-sidemenu-border);
+    }
+
+    second-side-menu-container {
+        width: $second-side-menu-width;
+        display: block;
     }
 }

@@ -27,7 +27,6 @@ import {
 } from './components/device';
 import {
     KeymapAddComponent,
-    KeymapAdd2Component,
     KeymapAddEmptyComponent,
     KeymapEditComponent,
     KeymapHeaderComponent,
@@ -165,7 +164,6 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         LayersComponent,
         PopoverComponent,
         KeymapAddComponent,
-        KeymapAdd2Component,
         KeymapAddEmptyComponent,
         KeymapAddSecondaryMenuComponent,
         SideMenuComponent,

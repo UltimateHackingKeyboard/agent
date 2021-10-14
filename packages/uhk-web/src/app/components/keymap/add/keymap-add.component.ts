@@ -1,55 +1,49 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { faKeyboard, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
+import { Observable, Subscription } from 'rxjs';
 import { HalvesInfo, Keymap } from 'uhk-common';
 
-import { BehaviorSubject, Observable } from 'rxjs';
-import { combineLatest, publishReplay, refCount } from 'rxjs/operators';
-
-import { AppState, getHalvesInfo, getKeyboardLayout } from '../../../store';
-import { AddKeymapAction } from '../../../store/actions/keymap';
+import { AppState, getHalvesInfo, getKeyboardLayout, getSelectedAddKeymap } from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
+import { AddKeymapAction } from '../../../store/actions/keymap';
 
 @Component({
     selector: 'keymap-add',
-    templateUrl: './keymap-add.component.html',
-    styleUrls: ['./keymap-add.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './keymap-add.component.html',
+    styleUrls: ['keymap-add.component.scss'],
     host: {
         'class': 'container-fluid'
     }
 })
-export class KeymapAddComponent {
-    presets$: Observable<Keymap[]>;
-    presetsAll$: Observable<Keymap[]>;
-    keyboardLayout$: Observable<KeyboardLayout>;
-    halvesInfo$: Observable<HalvesInfo>;
+export class KeymapAddComponent implements OnDestroy, OnInit {
     faKeyboard = faKeyboard;
-    faSearch = faSearch;
+    halvesInfo$: Observable<HalvesInfo>;
+    keyboardLayout$: Observable<KeyboardLayout>;
+    keymap: Keymap;
 
-    private filterExpression$: BehaviorSubject<string>;
+    private subscription = new Subscription();
 
-    constructor(private store: Store<AppState>) {
-        this.keyboardLayout$ = store.select(getKeyboardLayout);
-        this.halvesInfo$ = store.select(getHalvesInfo);
-        this.presetsAll$ = store.select((appState: AppState) => appState.presetKeymaps);
-        this.filterExpression$ = new BehaviorSubject('');
-
-        this.presets$ = this.presetsAll$
-            .pipe(
-                combineLatest(this.filterExpression$, (keymaps: Keymap[], filterExpression: string) => {
-                    return keymaps.filter((keymap: Keymap) => keymap.name.toLocaleLowerCase().includes(filterExpression));
-                }),
-                publishReplay(1),
-                refCount()
-            );
+    constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef) {
     }
 
-    filterKeyboards(filterExpression: string) {
-        this.filterExpression$.next(filterExpression);
+    ngOnInit(): void {
+        this.halvesInfo$ = this.store.select(getHalvesInfo);
+        this.keyboardLayout$ = this.store.select(getKeyboardLayout);
+        this.subscription.add(
+            this.store.select(getSelectedAddKeymap).subscribe(keymap => {
+                this.keymap = keymap;
+                this.cdRef.detectChanges();
+            }));
     }
 
-    addKeymap(keymap: Keymap) {
-        this.store.dispatch(new AddKeymapAction(keymap));
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
+
+    addKeymap(): void {
+        this.store.dispatch(new AddKeymapAction(this.keymap));
     }
 }
