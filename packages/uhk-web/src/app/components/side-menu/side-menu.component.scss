@@ -152,7 +152,7 @@ ul {
     &__level-1,
     &__level-2 {
         &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: var(--color-hover-link-color);
 
             .sidebar__macro_count {
                 visibility: visible;
