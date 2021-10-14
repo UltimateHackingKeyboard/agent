@@ -75,8 +75,8 @@ $popover-border-color: $color-popover-border;
     --color-sidemenu-active-text: #{$color-text-highlight};
 
     --color-secondary-sidemenu-bg: #050505;
-    --color-secondary-sidemenu-hover-link-color: #595959;
-    --color-hover-link-color: #595959;
+    --color-secondary-sidemenu-hover-link-color: black;
+    --color-hover-link-color: rgba(0, 0, 0, 0.05);
 
     --color-keyboard-bg: #555;
     --color-keyboard-text: #bbb;
