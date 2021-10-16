@@ -1,4 +1,5 @@
 @import '../styles/variables';
+@import '../styles/mixins';
 
 main-app {
     min-height: 100%;
@@ -16,4 +17,32 @@ main-app {
 
 .inner-content {
     margin-left: $side-menu-width;
+
+    &.second-menu-visible {
+        margin-left: $side-menu-width + $second-side-menu-width;
+
+    }
+}
+
+.secondary-menu-wrapper {
+    background-color: var(--color-secondary-sidemenu-bg);
+    bottom: 0;
+    left: $side-menu-width;
+    width: 0;
+    position: fixed;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: 0;
+
+    @include updatePanelVisible();
+
+    &.visible {
+        width: $second-side-menu-width;
+        border-right: 1px solid var(--color-sidemenu-border);
+    }
+
+    second-side-menu-container {
+        width: $second-side-menu-width;
+        display: block;
+    }
 }

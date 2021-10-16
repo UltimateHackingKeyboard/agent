@@ -25,7 +25,13 @@ import {
     RestoreConfigurationComponent,
     RecoveryModeComponent
 } from './components/device';
-import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
+import {
+    KeymapAddComponent,
+    KeymapAddEmptyComponent,
+    KeymapEditComponent,
+    KeymapHeaderComponent,
+    KeymapAddSecondaryMenuComponent
+} from './components/keymap';
 import { LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
@@ -52,7 +58,7 @@ import {
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
 import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
-import { SideMenuComponent } from './components/side-menu';
+import { SecondSideMenuContainerComponent, SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
     SvgIconTextKeyComponent,
@@ -158,6 +164,8 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         LayersComponent,
         PopoverComponent,
         KeymapAddComponent,
+        KeymapAddEmptyComponent,
+        KeymapAddSecondaryMenuComponent,
         SideMenuComponent,
         KeypressTabComponent,
         KeymapTabComponent,
@@ -208,6 +216,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         AutoGrowInputComponent,
         HelpPageComponent,
         ExternalUrlDirective,
+        SecondSideMenuContainerComponent,
         SvgSecondaryRoleComponent,
         UdevRulesComponent,
         HighlightArrowComponent,

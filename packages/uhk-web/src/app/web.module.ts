@@ -9,13 +9,16 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { effects } from './store/effects';
+import { CustomRouterStateSerializer } from './store/router-util';
 
 @NgModule({
     imports: [
         BrowserModule,
         SharedModule,
         StoreModule.forRoot(reducers),
-        StoreRouterConnectingModule.forRoot(),
+        StoreRouterConnectingModule.forRoot({
+            serializer: CustomRouterStateSerializer
+        }),
         StoreDevtoolsModule.instrument({
             maxAge: 10
         }),
