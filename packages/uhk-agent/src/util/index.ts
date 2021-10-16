@@ -4,6 +4,7 @@ export * from './get-udev-file-content-async';
 export * from './get-updater-logger';
 export * from './get-user-config-from-history-async';
 export * from './get-user-config-history-dir-async';
+export * from './get-window-background-color';
 export * from './load-user-config-history-async';
 export * from './reenumerate-and-exit';
 export * from './save-extract-firmware';

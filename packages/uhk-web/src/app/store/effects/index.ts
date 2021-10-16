@@ -1,3 +1,4 @@
+import { DefaultUserConfigurationEffect } from './default-user-configuration.effect';
 import { DeviceEffects } from './device';
 import { AutoUpdateSettingsEffects } from './auto-update-settings';
 import { MacroEffects } from './macro';
@@ -17,6 +18,7 @@ export * from './app';
 export const effects = [
     ApplicationEffects,
     AppUpdateEffect,
+    DefaultUserConfigurationEffect,
     UserConfigEffects,
     KeymapEffects,
     MacroEffects,

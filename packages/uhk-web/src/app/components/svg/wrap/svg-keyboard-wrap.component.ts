@@ -25,6 +25,7 @@ import {
     KeyAction,
     Keymap,
     KeystrokeAction,
+    KeystrokeType,
     Layer,
     LayerName,
     MouseAction,
@@ -238,6 +239,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
 
         keystrokeAction.scancode = event.captured.code;
+        keystrokeAction.type = KeystrokeType.basic;
         keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.captured.left, event.captured.right);
 
         this.store.dispatch(

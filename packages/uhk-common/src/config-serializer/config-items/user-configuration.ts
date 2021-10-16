@@ -6,7 +6,7 @@ import { ModuleConfiguration } from './module-configuration';
 import { ConfigSerializer } from '../config-serializer';
 import { KeystrokeAction, NoneAction } from './key-action';
 import { SecondaryRoleAction } from './secondary-role-action';
-import { isScancodeExists } from './scancode-checker';
+import { isAllowedScancode } from './scancode-checker';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
@@ -233,7 +233,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                             (keyAction as any)._secondaryRoleAction = undefined;
                         }
 
-                        if (keyAction.hasScancode() && !isScancodeExists(keyAction.scancode)) {
+                        if (keyAction.hasScancode() && !isAllowedScancode(keyAction)) {
                             module.keyActions[keyActionId] = new NoneAction();
                         }
                     }
