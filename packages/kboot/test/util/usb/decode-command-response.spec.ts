@@ -2,8 +2,7 @@ import { decodeCommandResponse } from '../../../src/util/usb/decode-command-resp
 
 describe('decodeCommandResponse', () => {
     it('should parse the command', () => {
-        const arr = '03 00 0c 00 a0 00 00 02 00 00 00 00 c1 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
-            .split(' ');
+        const arr = '03 00 0c 00 a0 00 00 02 00 00 00 00 c1 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00';
         const buffer = Buffer.from(arr);
         const response = decodeCommandResponse(buffer);
 
