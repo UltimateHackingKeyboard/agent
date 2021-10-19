@@ -66,7 +66,7 @@
     "rimraf": "3.0.2",
     "source-map-support": "0.5.9",
     "stylelint": "13.13.1",
-    "svg-sprite": "1.5.2",
+    "svg-sprite": "1.5.3",
     "ts-loader": "9.2.6",
     "ts-node": "10.3.0",
     "tslint": "6.1.3",
