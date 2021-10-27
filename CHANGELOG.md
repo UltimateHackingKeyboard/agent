@@ -6,6 +6,13 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.16] - 2020-10-27
+
+Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Allow arbitrary scancodes.
+- Make the preloaded keymaps available for addition.
+
 ## [1.5.15] - 2020-07-17
 
 Firmware: 8.10.10 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.10)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
