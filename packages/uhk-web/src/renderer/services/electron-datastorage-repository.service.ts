@@ -2,6 +2,7 @@ import * as storage from 'electron-settings';
 
 import { ApplicationSettings, UserConfiguration } from 'uhk-common';
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
+import { Observable, of } from 'rxjs';
 
 export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
     static getValue(key: string): any {
@@ -20,22 +21,24 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
     // TODO: Throw error when read user config from electron datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    getConfig(): UserConfiguration {
-        return null;
+    getConfig(): Observable<UserConfiguration> {
+        return of(null);
     }
 
     // TODO: Throw error when save user config from electron-datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    saveConfig(config: UserConfiguration): void {
-
+    saveConfig(config: UserConfiguration): Observable<null> {
+        return of(null);
     }
 
-    getApplicationSettings(): ApplicationSettings {
-        return ElectronDataStorageRepositoryService.getValue('application-settings');
+    getApplicationSettings(): Observable<ApplicationSettings> {
+        return of(ElectronDataStorageRepositoryService.getValue('application-settings'));
     }
 
-    saveApplicationSettings(settings: ApplicationSettings): void {
+    saveApplicationSettings(settings: ApplicationSettings): Observable<null> {
         ElectronDataStorageRepositoryService.saveValue('application-settings', settings);
+
+        return of(null);
     }
 }
