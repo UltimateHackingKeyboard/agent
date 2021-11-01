@@ -222,22 +222,22 @@ export class DeviceEffects {
         .pipe(
             ofType<LoadResetUserConfigurationAction>(UserConfigActions.LoadResetUserConfiguration),
             map(action => action.payload),
-            switchMap((config: UserConfiguration) => {
-                this.dataStorageRepository.saveConfig(config);
-
-                return of(new SaveConfigurationAction(true));
-            })
+            switchMap((config: UserConfiguration) => this.dataStorageRepository.saveConfig(config)
+                .pipe(
+                    map(() => new SaveConfigurationAction(true))
+                )
+            )
         );
 
     @Effect() applyUserConfigurationFromFileAction$ = this.actions$
         .pipe(
             ofType<ApplyUserConfigurationFromFileAction>(UserConfigActions.ApplyUserConfigurationFromFile),
             map(action => action.payload),
-            switchMap(payload => {
-                this.dataStorageRepository.saveConfig(payload.userConfig);
-
-                return of(new SaveConfigurationAction(payload.saveInHistory));
-            })
+            switchMap(payload => this.dataStorageRepository.saveConfig(payload.userConfig)
+                .pipe(
+                    map(() => new SaveConfigurationAction(payload.saveInHistory))
+                )
+            )
         );
 
     @Effect({ dispatch: false }) updateFirmware$ = this.actions$
