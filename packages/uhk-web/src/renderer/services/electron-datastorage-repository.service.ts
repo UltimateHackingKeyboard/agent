@@ -1,12 +1,13 @@
-import * as storage from 'electron-settings';
+import { ipcRenderer } from 'electron';
 
-import { ApplicationSettings, UserConfiguration } from 'uhk-common';
+import { ApplicationSettings, IpcEvents, UserConfiguration } from 'uhk-common';
+import { Observable, from, of } from 'rxjs';
+
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
-import { Observable, of } from 'rxjs';
 
 export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
-    static getValue(key: string): any {
-        const value = storage.get(key);
+    static async getValue(key: string): Promise<any> {
+        const value = await ipcRenderer.invoke(IpcEvents.app.getConfig, key);
         if (!value) {
             return null;
         }
@@ -14,8 +15,10 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
         return JSON.parse(<string>value);
     }
 
-    static saveValue(key: string, value: any) {
-        storage.set(key, JSON.stringify(value));
+    static async saveValue(key: string, value: any): Promise<null> {
+        await ipcRenderer.invoke(IpcEvents.app.setConfig, key, JSON.stringify(value));
+
+        return null;
     }
 
     // TODO: Throw error when read user config from electron datastore
@@ -33,12 +36,10 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
     }
 
     getApplicationSettings(): Observable<ApplicationSettings> {
-        return of(ElectronDataStorageRepositoryService.getValue('application-settings'));
+        return from(ElectronDataStorageRepositoryService.getValue('application-settings'));
     }
 
     saveApplicationSettings(settings: ApplicationSettings): Observable<null> {
-        ElectronDataStorageRepositoryService.saveValue('application-settings', settings);
-
-        return of(null);
+        return from(ElectronDataStorageRepositoryService.saveValue('application-settings', settings));
     }
 }

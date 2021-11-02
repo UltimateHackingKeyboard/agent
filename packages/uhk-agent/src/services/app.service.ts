@@ -1,4 +1,5 @@
 import { ipcMain, shell } from 'electron';
+import settings from 'electron-settings';
 import * as os from 'os';
 
 import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
@@ -17,6 +18,12 @@ export class AppService extends MainServiceBase {
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
         ipcMain.on(IpcEvents.app.exit, this.exit.bind(this));
         ipcMain.on(IpcEvents.app.openUrl, this.openUrl.bind(this));
+        ipcMain.handle(IpcEvents.app.getConfig, (event, key) => {
+            return settings.get(key);
+        });
+        ipcMain.handle(IpcEvents.app.setConfig, (event, key, value) => {
+            settings.set(key, value);
+        });
         logService.misc('[AppService] init success');
     }
 
