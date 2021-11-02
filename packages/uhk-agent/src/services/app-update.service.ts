@@ -68,8 +68,8 @@ export class AppUpdateService extends MainServiceBase {
             return autoUpdater.quitAndInstall(true, true);
         });
 
-        ipcMain.on(IpcEvents.app.appStarted, () => {
-            if (this.checkForUpdateAtStartup()) {
+        ipcMain.on(IpcEvents.app.appStarted, async () => {
+            if (await this.checkForUpdateAtStartup()) {
                 this.sendAutoUpdateNotification = false;
                 this.logService.misc('[AppUpdateService] app started. Automatically check for update.');
                 this.checkForUpdate();
@@ -108,16 +108,16 @@ export class AppUpdateService extends MainServiceBase {
             });
     }
 
-    private checkForUpdateAtStartup() {
-        const { checkForUpdateOnStartUp = true } = this.getApplicationSettings();
+    private async checkForUpdateAtStartup() {
+        const { checkForUpdateOnStartUp = true } = await this.getApplicationSettings();
 
         this.logService.misc('[AppUpdateService] check for update at startup:', { checkForUpdateOnStartUp });
 
         return checkForUpdateOnStartUp;
     }
 
-    private getApplicationSettings(): ApplicationSettings {
-        const value = storage.get('application-settings');
+    private async getApplicationSettings(): Promise<ApplicationSettings> {
+        const value = await storage.get('application-settings');
         if (!value) {
             return {
                 checkForUpdateOnStartUp: true,
