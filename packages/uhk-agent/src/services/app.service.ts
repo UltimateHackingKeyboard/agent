@@ -18,11 +18,17 @@ export class AppService extends MainServiceBase {
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
         ipcMain.on(IpcEvents.app.exit, this.exit.bind(this));
         ipcMain.on(IpcEvents.app.openUrl, this.openUrl.bind(this));
-        ipcMain.handle(IpcEvents.app.getConfig, (event, key) => {
-            return settings.get(key);
+        ipcMain.handle(IpcEvents.app.getConfig, async (event, key) => {
+            logService.misc(`[AppService] get-config: ${key}`);
+
+            const config = await settings.get(key);
+            logService.misc(`[AppService] get-config of "${key}": ${config}`);
+
+            return config;
         });
-        ipcMain.handle(IpcEvents.app.setConfig, (event, key, value) => {
-            settings.set(key, value);
+        ipcMain.handle(IpcEvents.app.setConfig, async (event, key, value) => {
+            logService.misc(`[AppService] set-config of "${key}": ${value}`);
+            await settings.set(key, value);
         });
         logService.misc('[AppService] init success');
     }
