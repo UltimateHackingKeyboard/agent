@@ -81,7 +81,6 @@ async function createWindow() {
         webPreferences: {
             contextIsolation: false,
             nodeIntegration: true,
-            enableRemoteModule: true,
             spellcheck: false,
             preload: path.join(__dirname, 'preload.js')
         },
