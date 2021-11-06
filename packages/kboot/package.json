@@ -11,7 +11,7 @@
   },
   "license": "See in LICENSE",
   "dependencies": {
-    "debug": "^4.2.0",
+    "debug": "^4.3.2",
     "byte-data": "^19.0.1",
     "tslib": "^2.2.0"
   },
