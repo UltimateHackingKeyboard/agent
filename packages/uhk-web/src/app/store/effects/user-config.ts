@@ -5,7 +5,7 @@ import { defer, Observable } from 'rxjs';
 import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { Buffer } from 'buffer/';
+import { Buffer } from 'uhk-common';
 
 import {
     getHardwareConfigFromDeviceResponse,
