@@ -603,15 +603,23 @@ function generateAbbr(keymaps: Keymap[], abbr: string): string {
 }
 
 function generateName(items: { name: string }[], name: string) {
-    let suffix = 1;
-    const regexp = / \(\d+\)$/g;
+    const regexp = / \((\d+)\)$/;
+    const regexpResult = regexp.exec(name);
+    let suffix = regexpResult
+        ? parseInt(regexpResult[1]) + 1
+        : 2;
     const matchName = name.replace(regexp, '');
-    items.forEach(item => {
-        if (item.name.replace(regexp, '') === matchName) {
+    const nameSet = new Set<string>();
+    items.forEach(item => nameSet.add(item.name));
+
+    while (true) {
+        const newName = `${matchName} (${suffix})`;
+        if (nameSet.has(newName)) {
             suffix++;
+        } else {
+            return newName;
         }
-    });
-    return `${matchName} (${suffix})`;
+    }
 }
 
 function generateMacroId(macros: Macro[]) {
