@@ -11,10 +11,10 @@ $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
     position: fixed;
     overflow-y: auto;
     top: 0;
+    bottom: 0;
     width: $side-menu-width;
-    height: 100%;
-
-    @include updatePanelVisible();
+    transition-timing-function: ease-out;
+    transition: 0.5s;
 }
 
 a {

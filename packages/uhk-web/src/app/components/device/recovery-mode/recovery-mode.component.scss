@@ -1,8 +1,13 @@
+@import '../../../../styles/variables';
+
 :host {
-    overflow-y: auto;
-    display: block;
-    height: 100%;
-    width: 100%;
+    .flex-container {
+        height: 100vh;
+    }
+
+    .update-panel-visible .flex-container {
+        height: calc(100vh - #{$main-content-top-margin-on-update});
+    }
 
     p {
         margin: 1.5rem 0;

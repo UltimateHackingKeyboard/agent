@@ -7,7 +7,10 @@ import { MissingDeviceState } from '../../models/missing-device-state';
 
 @Component({
     selector: 'missing-device',
-    templateUrl: './missing-device.component.html'
+    templateUrl: './missing-device.component.html',
+    host: {
+        'class': 'container-fluid vertical-center-component'
+    }
 })
 export class MissingDeviceComponent implements OnDestroy {
 

@@ -11,18 +11,6 @@
     }
 }
 
-@mixin updatePanelVisible() {
-    transition-timing-function: ease-out;
-    transition: 0.5s;
-    margin-top: 0;
-
-    &.update-panel-visible {
-        transition-timing-function: ease-in;
-        transition: 0.5s;
-        margin-top: $main-content-top-margin-on-update;
-    }
-}
-
 @mixin invertInDarkTheme($percentage) {
     @if ($dark-theme) {
         filter: invert($percentage);

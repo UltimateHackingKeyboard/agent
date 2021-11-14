@@ -35,7 +35,7 @@ $btn-focus-width: 0;
 // UHK app variables
 
 $update-notification-height: 35px;
-$main-content-top-margin-on-update: 35px + 10px;
+$main-content-top-margin-on-update: $update-notification-height + 10px;
 $icon-dark-theme-inversion: 70%;
 $side-menu-width: 250px;
 $second-side-menu-width: 250px;
