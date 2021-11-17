@@ -25,7 +25,7 @@ import { FirmwareUpgradeState, HistoryFileInfo, ModuleFirmwareUpgradeState, Upda
     templateUrl: './device-firmware.component.html',
     styleUrls: ['./device-firmware.component.scss'],
     host: {
-        'class': 'container-fluid'
+        'class': 'container-fluid full-screen-component'
     }
 })
 export class DeviceFirmwareComponent implements OnDestroy {

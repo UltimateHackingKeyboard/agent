@@ -13,7 +13,7 @@ import { RecoveryDeviceAction } from '../../../store/actions/device';
     templateUrl: './recovery-mode.component.html',
     styleUrls: ['./recovery-mode.component.scss'],
     host: {
-        'class': 'container-fluid'
+        'class': 'container-fluid full-screen-component'
     }
 })
 export class RecoveryModeComponent implements OnInit {

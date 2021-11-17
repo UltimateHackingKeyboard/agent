@@ -8,6 +8,9 @@ import { Component } from '@angular/core';
                      [showLogo]="true"
                      [smallText]="true"
         ></uhk-message>
-    `
+    `,
+    host: {
+        'class': 'container-fluid vertical-center-component'
+    }
 })
 export class MultiDevicePageComponent {}
