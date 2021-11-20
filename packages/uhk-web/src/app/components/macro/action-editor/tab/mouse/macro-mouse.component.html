@@ -43,7 +43,7 @@
                            type="number"
                            class="form-control"
                            [(ngModel)]="macroAction['x']"
-                           (keyup)="validate()"
+                           (ngModelChange)="validate()"
                            min="-9999"
                            max="9999"
                            maxlength="4"> pixels
@@ -54,7 +54,7 @@
                            type="number"
                            class="form-control"
                            [(ngModel)]="macroAction['y']"
-                           (keyup)="validate()"
+                           (ngModelChange)="validate()"
                            min="-9999"
                            max="9999"
                            maxlength="4"> pixels
