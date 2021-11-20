@@ -8,7 +8,7 @@
   "license": "See in LICENSE",
   "scripts": {
     "build": "tsc",
-    "lint": "tslint --project tsconfig.json"
+    "lint": "eslint --ext .ts ."
   },
   "devDependencies": {
   },
