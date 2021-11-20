@@ -15,8 +15,8 @@
   },
   "license": "See in LICENSE",
   "engines": {
-    "node": ">=16.5.0 <17.0.0",
-    "npm": ">=7.19.1 <8.0.0"
+    "node": ">=16.9.1 <17.0.0",
+    "npm": ">=7.21.1 <8.0.0"
   },
   "devDependencies": {
     "jasmine-ts": "0.4.0",
@@ -44,7 +44,7 @@
     "decompress": "4.2.1",
     "decompress-targz": "^4.1.1",
     "devtron": "1.4.0",
-    "electron": "15.3.0",
+    "electron": "16.0.1",
     "electron-builder": "22.9.1",
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
