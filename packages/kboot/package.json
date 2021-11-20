@@ -20,6 +20,6 @@
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
-    "lint": "tslint --project  tsconfig.json"
+    "lint": "eslint --ext .ts ."
   }
 }

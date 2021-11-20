@@ -7,7 +7,7 @@ import { MapperService } from '../../../../services/mapper.service';
     templateUrl: './svg-mouse-click-key.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgMouseClickKeyComponent implements OnInit {
+export class SvgMouseClickKeyComponent {
     @Input() button: string;
 
     icon: string;
@@ -15,6 +15,4 @@ export class SvgMouseClickKeyComponent implements OnInit {
     constructor(private mapper: MapperService) {
         this.icon = this.mapper.getIcon('mouse');
     }
-
-    ngOnInit() { }
 }

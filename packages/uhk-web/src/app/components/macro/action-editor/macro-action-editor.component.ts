@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -26,7 +26,7 @@ enum TabName {
     styleUrls: ['./macro-action-editor.component.scss'],
     host: { 'class': 'macro-action-editor' }
 })
-export class MacroActionEditorComponent implements OnInit {
+export class MacroActionEditorComponent implements OnInit, OnChanges {
     @Input() macroAction: MacroAction;
 
     @Output() save = new EventEmitter<MacroAction>();
