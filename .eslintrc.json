@@ -36,6 +36,10 @@
     "no-async-promise-executor": "off",
     "no-constant-condition": "off",
     "no-case-declarations": "off",
-    "prefer-const": "off"
+    "prefer-const": "off",
+    "no-control-regex": "off",
+    "no-irregular-whitespace": "off",
+    "no-prototype-builtins": "off",
+    "no-var": "off"
   }
 }
