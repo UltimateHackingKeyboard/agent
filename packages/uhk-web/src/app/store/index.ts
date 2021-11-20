@@ -358,12 +358,29 @@ export const getUserConfigHistoryComponentState = createSelector(
      state: fromUserConfigHistory.State,
      md5Hash: string,
      saving: boolean): UserConfigHistoryComponentState => {
+        let foundFirstCurrent = false;
+
         return {
             loading: inElectron && state.loading,
-            files: state.files.map(x => ({
-                file: x,
-                showRestore: getMd5HashFromFilename(x) !== md5Hash
-            })),
+            files: state.files.map(x => {
+                const showRestore = getMd5HashFromFilename(x) !== md5Hash;
+                let displayText: string;
+
+                if (showRestore) {
+                    displayText = 'Restore';
+                } else if (foundFirstCurrent) {
+                    displayText = 'Same as current';
+                } else {
+                    displayText = 'Current';
+                    foundFirstCurrent = true;
+                }
+
+                return {
+                    displayText,
+                    showRestore,
+                    file: x
+                };
+            }),
             disabled: saving
         };
     });

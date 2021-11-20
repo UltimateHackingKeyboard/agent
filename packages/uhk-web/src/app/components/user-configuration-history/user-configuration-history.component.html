@@ -26,12 +26,12 @@
                       *ngIf="fileInfo.showRestore"
                       (click)="getUserConfigFromHistory.emit(fileInfo.file)"
                       [class.disabled]="state.disabled">
-                            Restore
+                            {{ fileInfo.displayText }}
                 </span>
 
                 <span class="btn btn-link btn-padding-0 current"
                       *ngIf="!fileInfo.showRestore">
-                            Current
+                            {{ fileInfo.displayText }}
                 </span>
             </li>
         </ul>
