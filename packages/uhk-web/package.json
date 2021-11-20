@@ -52,8 +52,6 @@
     "@ngrx/store": "10.0.0",
     "@ngrx/store-devtools": "10.0.0",
     "@ngtools/webpack": "13.0.3",
-    "@typescript-eslint/eslint-plugin": "5.3.0",
-    "@typescript-eslint/parser": "5.3.0",
     "angular-confirmation-popover": "6.0.0",
     "angular-notifier": "9.1.0",
     "bootstrap": "4.6.0",
