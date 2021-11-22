@@ -6,6 +6,16 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [1.5.17] - 2021-11-22
+
+Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- When adding a preset keymap, change the keymap switch actions that reference non-existing keymaps to none actions.
+- Fix duplicate macro/keymap name generation when cloning macros/keymaps.
+- Make the extra scrollbar not show when the new release notification appears.
+- Fix the input field validation of mouse move and scroll actions when using arrows to set coordinate values.
+- In the configuration history, show "Same as current" for current entries after the first "Current" entry.
+
 ## [1.5.16] - 2021-10-27
 
 Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0

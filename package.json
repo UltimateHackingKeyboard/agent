@@ -3,7 +3,7 @@
   "private": true,
   "author": "Ultimate Gadget Laboratories",
   "main": "electron/dist/electron-main.js",
-  "version": "1.5.16",
+  "version": "1.5.17",
   "firmwareVersion": "8.10.12",
   "deviceProtocolVersion": "4.7.0",
   "userConfigVersion": "4.1.1",
