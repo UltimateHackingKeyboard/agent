@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { defer, Observable, of } from 'rxjs';
-import { map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
+import { defer, Observable } from 'rxjs';
+import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { Buffer } from 'buffer/';
+import { Buffer } from 'uhk-common';
 
 import {
     getHardwareConfigFromDeviceResponse,
@@ -52,7 +52,10 @@ import { LoadUserConfigurationFromFilePayload } from '../../models';
 export class UserConfigEffects {
 
     @Effect() loadUserConfig$: Observable<Action> = defer(() => {
-        return of(new LoadUserConfigSuccessAction(this.getUserConfiguration()));
+        return this.getUserConfiguration()
+            .pipe(
+                map(userConfig => new LoadUserConfigSuccessAction(userConfig))
+            );
     });
 
     @Effect() saveUserConfig$: Observable<Action> = this.actions$
@@ -70,35 +73,39 @@ export class UserConfigEffects {
             mergeMap(([action, config, prevUserConfiguration]) => {
                 config = Object.assign(new UserConfiguration(), config);
                 config.recalculateConfigurationLength();
-                this.dataStorageRepository.saveConfig(config);
 
-                if (action.type === Keymaps.ActionTypes.Remove || action.type === Macros.ActionTypes.Remove) {
-                    const text = action.type === Keymaps.ActionTypes.Remove ? 'Keymap' : 'Macro';
-                    const pathPrefix = action.type === Keymaps.ActionTypes.Remove ? 'keymap' : 'macro';
-                    const payload: UndoUserConfigData = {
-                        path: `/${pathPrefix}/${(action as Keymaps.RemoveKeymapAction | Macros.RemoveMacroAction).payload}`,
-                        config: prevUserConfiguration.clone()
-                    };
+                return this.dataStorageRepository.saveConfig(config)
+                    .pipe(
+                        mergeMap(() => {
+                            if (action.type === Keymaps.ActionTypes.Remove || action.type === Macros.ActionTypes.Remove) {
+                                const text = action.type === Keymaps.ActionTypes.Remove ? 'Keymap' : 'Macro';
+                                const pathPrefix = action.type === Keymaps.ActionTypes.Remove ? 'keymap' : 'macro';
+                                const payload: UndoUserConfigData = {
+                                    path: `/${pathPrefix}/${(action as Keymaps.RemoveKeymapAction | Macros.RemoveMacroAction).payload}`,
+                                    config: prevUserConfiguration.clone()
+                                };
 
-                    return [
-                        new SaveUserConfigSuccessAction(config),
-                        new ShowNotificationAction({
-                            type: NotificationType.Undoable,
-                            message: `${text} has been deleted`,
-                            extra: {
-                                payload,
-                                type: Keymaps.ActionTypes.UndoLastAction
+                                return [
+                                    new SaveUserConfigSuccessAction(config),
+                                    new ShowNotificationAction({
+                                        type: NotificationType.Undoable,
+                                        message: `${text} has been deleted`,
+                                        extra: {
+                                            payload,
+                                            type: Keymaps.ActionTypes.UndoLastAction
+                                        }
+                                    }),
+                                    new ShowSaveToKeyboardButtonAction()
+                                ];
                             }
-                        }),
-                        new ShowSaveToKeyboardButtonAction()
-                    ];
-                }
 
-                return [
-                    new SaveUserConfigSuccessAction(config),
-                    new DismissUndoNotificationAction(),
-                    new ShowSaveToKeyboardButtonAction()
-                ];
+                            return [
+                                new SaveUserConfigSuccessAction(config),
+                                new DismissUndoNotificationAction(),
+                                new ShowSaveToKeyboardButtonAction()
+                            ];
+                        })
+                    );
             })
         );
 
@@ -106,12 +113,12 @@ export class UserConfigEffects {
         .pipe(
             ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction),
             map(action => action.payload),
-            mergeMap((payload: UndoUserConfigData) => {
-                this.dataStorageRepository.saveConfig(payload.config);
-                this.router.navigate([payload.path]);
-
-                return [new LoadUserConfigSuccessAction(payload.config)];
-            })
+            switchMap((payload: UndoUserConfigData) => this.dataStorageRepository.saveConfig(payload.config)
+                .pipe(
+                    tap(() => this.router.navigate([payload.path])),
+                    map(() => new LoadUserConfigSuccessAction(payload.config))
+                )
+            )
         );
 
     @Effect({ dispatch: false }) loadConfigFromDevice$ = this.actions$
@@ -259,22 +266,25 @@ export class UserConfigEffects {
                 private router: Router) {
     }
 
-    private getUserConfiguration() {
-        const configJsonObject = this.dataStorageRepository.getConfig();
-        let config: UserConfiguration;
+    private getUserConfiguration(): Observable<UserConfiguration> {
+        return this.dataStorageRepository.getConfig()
+            .pipe(
+                map(configJsonObject => {
+                    let config: UserConfiguration;
 
-        if (configJsonObject) {
-            if (configJsonObject.userConfigMajorVersion ===
-                this.defaultUserConfigurationService.getDefault().userConfigMajorVersion) {
-                config = new UserConfiguration().fromJsonObject(configJsonObject);
-            }
-        }
+                    if (configJsonObject) {
+                        if (configJsonObject.userConfigMajorVersion ===
+                            this.defaultUserConfigurationService.getDefault().userConfigMajorVersion) {
+                            config = new UserConfiguration().fromJsonObject(configJsonObject);
+                        }
+                    }
 
-        if (!config) {
-            config = this.defaultUserConfigurationService.getDefault();
-        }
+                    if (!config) {
+                        config = this.defaultUserConfigurationService.getDefault();
+                    }
 
-        return config;
-
+                    return config;
+                })
+            );
     }
 }

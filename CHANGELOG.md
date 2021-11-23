@@ -6,7 +6,24 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [1.5.15] - 2020-07-17
+## [1.5.17] - 2021-11-22
+
+Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- When adding a preset keymap, change the keymap switch actions that reference non-existing keymaps to none actions.
+- Fix duplicate macro/keymap name generation when cloning macros/keymaps.
+- Make the extra scrollbar not show when the new release notification appears.
+- Fix the input field validation of mouse move and scroll actions when using arrows to set coordinate values.
+- In the configuration history, show "Same as current" for current entries after the first "Current" entry.
+
+## [1.5.16] - 2021-10-27
+
+Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+
+- Allow arbitrary scancodes.
+- Make the preloaded keymaps available for addition.
+
+## [1.5.15] - 2021-07-17
 
 Firmware: 8.10.10 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.10)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -15,14 +32,14 @@ Firmware: 8.10.10 [[release](https://github.com/UltimateHackingKeyboard/firmware
 - Fix the position of the recording dot on the right button of the key cluster module.
 - Add --devtools command line argument for debugging purposes.
 
-## [1.5.14] - 2020-05-20
+## [1.5.14] - 2021-05-20
 
 Firmware: 8.10.9 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Fix firmware update issue that made the update start with an error and fail on some Windows installations.
 - Make the firmware update log easier to read.
 
-## [1.5.13] - 2020-05-04
+## [1.5.13] - 2021-05-04
 
 Firmware: 8.10.9 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -31,13 +48,13 @@ Firmware: 8.10.9 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 - Error out during firmware update if connecting to a module takes longer than 30 seconds.
 - Fix check marks next to the modules when force-updating the same firmware version.
 
-## [1.5.12] - 2020-04-26
+## [1.5.12] - 2021-04-26
 
 Firmware: 8.10.**9** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.9)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Make the firmware update process only update the needed keyboard halves and modules and show the current update step.
 
-## [1.5.11] - 2020-03-31
+## [1.5.11] - 2021-03-31
 
 Firmware: 8.10.**8** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.8)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -47,7 +64,7 @@ Firmware: 8.10.**8** [[release](https://github.com/UltimateHackingKeyboard/firmw
 - When a macro is deleted, don't jump to the first macro, but to the next one.
 - When a macro items is edited, don't jump to the end of the macro.
 
-## [1.5.10] - 2020-03-11
+## [1.5.10] - 2021-03-11
 
 Firmware: 8.10.**7** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.7)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
@@ -55,7 +72,7 @@ Firmware: 8.10.**7** [[release](https://github.com/UltimateHackingKeyboard/firmw
 - Make touchpad action customizable.
 - Disallow the use of multiple UHKs with Agent by showing a dedicated screen.
 
-## [1.5.9] - 2020-02-22
+## [1.5.9] - 2021-02-22
 
 Firmware: 8.10.**5** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.5)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 

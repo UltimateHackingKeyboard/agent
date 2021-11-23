@@ -1,8 +1,8 @@
 import { nativeTheme } from 'electron';
 import settings from 'electron-settings';
 
-export function getWindowBackgroundColor(): string {
-    const { appTheme = 'system' } = JSON.parse(settings.get('application-settings') as string || '{}');
+export async function getWindowBackgroundColor(): Promise<string> {
+    const { appTheme = 'system' } = JSON.parse(await settings.get('application-settings') as string || '{}');
 
     switch (appTheme) {
         case 'dark':

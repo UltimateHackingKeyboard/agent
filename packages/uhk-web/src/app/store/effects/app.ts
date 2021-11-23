@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
-import { map, mergeMap, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 
 import { ApplicationSettings, AppStartInfo, getLogOptions, LogService, Notification, NotificationType } from 'uhk-common';
@@ -42,16 +42,20 @@ export class ApplicationEffects {
                 this.appRendererService.getAppStartInfo();
                 this.logService.misc('Renderer appStart effect end');
             }),
-            map(() => {
-                const settings: ApplicationSettings = {
-                    checkForUpdateOnStartUp: true,
-                    everAttemptedSavingToKeyboard: false,
-                    animationEnabled: true,
-                    ...this.dataStorageRepository.getApplicationSettings()
-                };
+            switchMap(() => this.dataStorageRepository.getApplicationSettings()
+                .pipe(
+                    map(appSettings => {
+                        const settings: ApplicationSettings = {
+                            checkForUpdateOnStartUp: true,
+                            everAttemptedSavingToKeyboard: false,
+                            animationEnabled: true,
+                            ...appSettings
+                        };
 
-                return new LoadApplicationSettingsSuccessAction(settings);
-            })
+                        return new LoadApplicationSettingsSuccessAction(settings);
+                    })
+                )
+            )
         );
 
     @Effect({ dispatch: false })
@@ -123,11 +127,8 @@ export class ApplicationEffects {
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),
-            map((config: ApplicationSettings) => {
-                this.dataStorageRepository.saveApplicationSettings(config);
-
-                return new SaveApplicationSettingsSuccessAction();
-            })
+            switchMap((config: ApplicationSettings) => this.dataStorageRepository.saveApplicationSettings(config)),
+            map(() => new SaveApplicationSettingsSuccessAction())
         );
 
     @Effect({ dispatch: false }) setAppTheme$ = this.actions$

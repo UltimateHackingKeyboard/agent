@@ -28,7 +28,7 @@ export const getDefaultWindowState = () => ({
 export const loadWindowState = (logger: LogService): Partial<WindowState> => {
     logger.misc('[WindowState] load settings');
     try {
-        const loadedState = settings.get(WINDOWS_SETTINGS_KEY) as any;
+        const loadedState = settings.getSync(WINDOWS_SETTINGS_KEY) as any;
         logger.misc('[WindowState] loaded settings', loadedState);
 
         if (!loadedState) {
@@ -68,6 +68,6 @@ export const saveWindowState = (win: electron.BrowserWindow, logger: LogService)
     };
 
     logger.misc('[WindowState] save settings:', state);
-    settings.set(WINDOWS_SETTINGS_KEY, state as any);
+    settings.setSync(WINDOWS_SETTINGS_KEY, state as any);
     logger.misc('[WindowState] save settings success');
 };

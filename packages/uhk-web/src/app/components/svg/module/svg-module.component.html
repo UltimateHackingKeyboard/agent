@@ -14,7 +14,7 @@
             [svgKey]="key"
             [attr.transform]="calcTransform(key)"
             [attr.fill]="key.fill"
-            [class.active]="selected && i == selectedKey.keyId"
+            [class.active]="selected && i === selectedKey.keyId"
             tabindex="-1"
             [keyAction]="keyActions && keyActions[i]"
             [capturingEnabled]="capturingEnabled"

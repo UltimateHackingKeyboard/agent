@@ -22,7 +22,7 @@ import {
     templateUrl: './device-configuration.component.html',
     styleUrls: ['./device-configuration.component.scss'],
     host: {
-        'class': 'container-fluid'
+        'class': 'container-fluid full-screen-component'
     }
 })
 export class DeviceConfigurationComponent implements OnInit, OnDestroy {

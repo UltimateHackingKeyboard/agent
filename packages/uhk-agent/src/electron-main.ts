@@ -2,6 +2,8 @@
 
 import './polyfills';
 import { app, BrowserWindow } from 'electron';
+import setElectronSettingsConfig from './set-electron-settings-config';
+setElectronSettingsConfig();
 
 import * as path from 'path';
 import * as url from 'url';
@@ -60,7 +62,7 @@ if (!areServicesInited) {
 
 const isSecondInstance = !app.requestSingleInstanceLock();
 
-function createWindow() {
+async function createWindow() {
     if (isSecondInstance) {
         return;
     }
@@ -79,12 +81,11 @@ function createWindow() {
         webPreferences: {
             contextIsolation: false,
             nodeIntegration: true,
-            enableRemoteModule: true,
             spellcheck: false,
             preload: path.join(__dirname, 'preload.js')
         },
         icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
-        backgroundColor: getWindowBackgroundColor(),
+        backgroundColor: await getWindowBackgroundColor(),
         show: false
     });
 
@@ -176,11 +177,11 @@ if (isSecondInstance) {
     app.on('will-quit', () => {
     });
 
-    app.on('activate', () => {
+    app.on('activate', async () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (win === null) {
-            createWindow();
+            await createWindow();
         }
     });
 

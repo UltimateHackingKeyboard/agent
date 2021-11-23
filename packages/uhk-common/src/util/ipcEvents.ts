@@ -4,6 +4,8 @@ export class App {
     public static readonly getAppStartInfoReply = 'app-get-start-info-reply';
     public static readonly exit = 'app-exit';
     public static readonly openUrl = 'open-url';
+    public static readonly getConfig = 'app-get-config';
+    public static readonly setConfig = 'app-set-config';
 }
 
 export class AutoUpdate {

@@ -1,11 +1,13 @@
-import * as storage from 'electron-settings';
+import { ipcRenderer } from 'electron';
 
-import { ApplicationSettings, UserConfiguration } from 'uhk-common';
+import { ApplicationSettings, IpcEvents, UserConfiguration } from 'uhk-common';
+import { Observable, from, of } from 'rxjs';
+
 import { DataStorageRepositoryService } from '../../app/services/datastorage-repository.service';
 
 export class ElectronDataStorageRepositoryService implements DataStorageRepositoryService {
-    static getValue(key: string): any {
-        const value = storage.get(key);
+    static async getValue(key: string): Promise<any> {
+        const value = await ipcRenderer.invoke(IpcEvents.app.getConfig, key);
         if (!value) {
             return null;
         }
@@ -13,29 +15,31 @@ export class ElectronDataStorageRepositoryService implements DataStorageReposito
         return JSON.parse(<string>value);
     }
 
-    static saveValue(key: string, value: any) {
-        storage.set(key, JSON.stringify(value));
+    static async saveValue(key: string, value: any): Promise<null> {
+        await ipcRenderer.invoke(IpcEvents.app.setConfig, key, JSON.stringify(value));
+
+        return null;
     }
 
     // TODO: Throw error when read user config from electron datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    getConfig(): UserConfiguration {
-        return null;
+    getConfig(): Observable<UserConfiguration> {
+        return of(null);
     }
 
     // TODO: Throw error when save user config from electron-datastore
     // Agent-electron should always read the configuration from the UHK over USB which will be implemented later.
     // If implemented the feature should have to throw an error to prevent unwanted side effects.
-    saveConfig(config: UserConfiguration): void {
-
+    saveConfig(config: UserConfiguration): Observable<null> {
+        return of(null);
     }
 
-    getApplicationSettings(): ApplicationSettings {
-        return ElectronDataStorageRepositoryService.getValue('application-settings');
+    getApplicationSettings(): Observable<ApplicationSettings> {
+        return from(ElectronDataStorageRepositoryService.getValue('application-settings'));
     }
 
-    saveApplicationSettings(settings: ApplicationSettings): void {
-        ElectronDataStorageRepositoryService.saveValue('application-settings', settings);
+    saveApplicationSettings(settings: ApplicationSettings): Observable<null> {
+        return from(ElectronDataStorageRepositoryService.saveValue('application-settings', settings));
     }
 }

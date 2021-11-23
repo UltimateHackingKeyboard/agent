@@ -98,8 +98,29 @@ export function reducer(
         case KeymapActions.ActionTypes.Add:
         case KeymapActions.ActionTypes.Duplicate: {
             const newKeymap: Keymap = new Keymap((action as KeymapActions.AddKeymapAction).payload);
-            newKeymap.abbreviation = generateAbbr(state.userConfiguration.keymaps, newKeymap.abbreviation);
-            newKeymap.name = generateName(state.userConfiguration.keymaps, newKeymap.name);
+            let duplicateKeymap = false;
+
+            if (action.type === KeymapActions.ActionTypes.Add) {
+                const keymapSet = new Set<string>(state.userConfiguration.keymaps.map(x => x.abbreviation));
+                duplicateKeymap = keymapSet.has(newKeymap.abbreviation);
+
+                for (const layer of newKeymap.layers) {
+                    for (const module of layer.modules) {
+                        module.keyActions = module.keyActions.map(keyAction => {
+                            if (keyAction instanceof SwitchKeymapAction && !keymapSet.has(keyAction.keymapAbbreviation)) {
+                                return new NoneAction();
+                            }
+
+                            return keyAction;
+                        });
+                    }
+                }
+            }
+
+            if (duplicateKeymap || action.type === KeymapActions.ActionTypes.Duplicate) {
+                newKeymap.abbreviation = generateAbbr(state.userConfiguration.keymaps, newKeymap.abbreviation);
+                newKeymap.name = generateName(state.userConfiguration.keymaps, newKeymap.name);
+            }
             newKeymap.isDefault = (state.userConfiguration.keymaps.length === 0);
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
@@ -603,15 +624,23 @@ function generateAbbr(keymaps: Keymap[], abbr: string): string {
 }
 
 function generateName(items: { name: string }[], name: string) {
-    let suffix = 1;
-    const regexp = / \(\d+\)$/g;
+    const regexp = / \((\d+)\)$/;
+    const regexpResult = regexp.exec(name);
+    let suffix = regexpResult
+        ? parseInt(regexpResult[1]) + 1
+        : 2;
     const matchName = name.replace(regexp, '');
-    items.forEach(item => {
-        if (item.name.replace(regexp, '') === matchName) {
+    const nameSet = new Set<string>();
+    items.forEach(item => nameSet.add(item.name));
+
+    while (true) {
+        const newName = `${matchName} (${suffix})`;
+        if (nameSet.has(newName)) {
             suffix++;
+        } else {
+            return newName;
         }
-    });
-    return `${matchName} (${suffix})`;
+    }
 }
 
 function generateMacroId(macros: Macro[]) {
