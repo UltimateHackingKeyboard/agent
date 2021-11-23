@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import {
+    faCode,
     faClock,
     faFont,
     faGripLinesVertical,
@@ -39,6 +40,10 @@ export class IconComponent implements OnChanges {
         this.css = undefined;
 
         switch (this.name) {
+            case 'code':
+                this.icon = faCode;
+                break;
+
             case 'clock':
                 this.icon = faClock;
                 break;

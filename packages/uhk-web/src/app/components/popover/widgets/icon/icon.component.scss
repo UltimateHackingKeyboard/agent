@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+:host(.align-items-top) {
+    align-items: flex-start;
+}
+
 .action {
 
     &--edit {

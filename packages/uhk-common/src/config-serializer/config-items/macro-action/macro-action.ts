@@ -20,7 +20,8 @@ export enum MacroActionId {
     MoveMouseMacroAction            = 67,
     ScrollMouseMacroAction          = 68,
     DelayMacroAction                = 69,
-    TextMacroAction                 = 70
+    TextMacroAction                 = 70,
+    CommandMacroAction              = 71
 }
 
 export enum MacroKeySubAction {
@@ -41,7 +42,8 @@ export let macroActionType = {
     MoveMouseMacroAction            : 'moveMouse',
     ScrollMouseMacroAction          : 'scrollMouse',
     DelayMacroAction                : 'delay',
-    TextMacroAction                 : 'text'
+    TextMacroAction                 : 'text',
+    CommandMacroAction              : 'command'
 };
 
 export abstract class MacroAction {

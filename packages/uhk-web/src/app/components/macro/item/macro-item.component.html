@@ -4,11 +4,15 @@
              class="action--movable"
              aria-hidden="true"></fa-icon>
     <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
-        <icon [name]="iconName"></icon>
-        <div class="action--title">{{ title }}</div>
-        <icon *ngIf="editable && macroAction && !editing" name="pencil"></icon>
+        <icon [name]="iconName" class="align-items-top"></icon>
+        <div *ngIf="!multiline" class="action--title">{{ title }}</div>
+        <div *ngIf="multiline" class="action--title">
+            <span class="pr-1">Command:</span>
+            <span [innerHTML]="multilineText"></span>
+        </div>
+        <icon *ngIf="editable && macroAction && !editing" name="pencil" class="align-items-top"></icon>
     </div>
-    <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
+    <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>
 </div>
 <div class="list-group-item macro-action-editor__container"
      [@toggler]="((editable && editing) || newItem) ? 'active' : 'inactive'"

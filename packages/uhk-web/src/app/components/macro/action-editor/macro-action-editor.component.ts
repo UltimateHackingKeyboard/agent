@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
+    CommandMacroAction,
     MacroAction,
     DelayMacroAction,
     KeyMacroAction,
@@ -17,7 +18,8 @@ enum TabName {
     Keypress,
     Text,
     Mouse,
-    Delay
+    Delay,
+    Command
 }
 
 @Component({
@@ -45,6 +47,7 @@ export class MacroActionEditorComponent implements OnInit, OnChanges {
     faKeyboard = faKeyboard;
     faMousePointer = faMousePointer;
     faClock = faClock;
+    faCode = faCode;
 
     constructor(private _cdRef: ChangeDetectorRef) {
     }
@@ -109,6 +112,8 @@ export class MacroActionEditorComponent implements OnInit, OnChanges {
             action instanceof MoveMouseMacroAction ||
             action instanceof ScrollMouseMacroAction) {
             return TabName.Mouse;
+        } else if (action instanceof CommandMacroAction) {
+            return TabName.Command;
         }
         return undefined;
     }

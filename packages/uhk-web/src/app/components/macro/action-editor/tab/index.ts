@@ -1,3 +1,4 @@
+export { MacroCommandComponent } from './command';
 export { MacroDelayTabComponent } from './delay';
 export { MacroKeyTabComponent } from './key';
 export { MacroMouseTabComponent } from './mouse';
