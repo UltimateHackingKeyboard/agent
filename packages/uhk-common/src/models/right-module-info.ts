@@ -4,4 +4,5 @@ export interface RightModuleInfo {
     firmwareVersion?: string;
     moduleProtocolVersion?: string;
     userConfigVersion?: string;
+    smartMacrosVersion?: string; 
 }

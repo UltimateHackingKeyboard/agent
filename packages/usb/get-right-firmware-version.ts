@@ -16,6 +16,7 @@ import Uhk, { errorHandler, yargs } from './src';
         console.log(`moduleProtocolVersion: ${version.moduleProtocolVersion}`);
         console.log(`userConfigVersion: ${version.userConfigVersion}`);
         console.log(`hardwareConfigVersion: ${version.hardwareConfigVersion}`);
+        console.log(`smartMacrosVersion: ${version.smartMacrosVersion}`);
     } catch (error) {
         errorHandler(error);
     }
