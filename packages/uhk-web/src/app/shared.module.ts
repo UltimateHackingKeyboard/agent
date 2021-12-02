@@ -14,6 +14,7 @@ import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
@@ -133,6 +134,7 @@ import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
+import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
 
 @NgModule({
     declarations: [
@@ -182,6 +184,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         MacroItemComponent,
         MacroActionEditorComponent,
         MacroCommandComponent,
+        MacroCommandEditorComponent,
         MacroDelayTabComponent,
         MacroKeyTabComponent,
         MacroMouseTabComponent,
@@ -233,6 +236,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
         FormsModule,
         DragulaModule.forRoot(),
         routing,
+        MonacoEditorModule,
         NgxSelectModule.forRoot({
             keepSelectedItems: true,
             optionValueField: 'id',

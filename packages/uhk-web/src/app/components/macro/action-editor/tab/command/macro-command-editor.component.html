@@ -1,0 +1,8 @@
+<div class="me-container">
+    <ngx-monaco-editor [options]="editorOptions"
+                       [disabled]="disabled"
+                       [ngModel]="value"
+                       (ngModelChange)="onValueChanged($event)"
+                       (init)="onEditorInit($event)"
+    ></ngx-monaco-editor>
+</div>

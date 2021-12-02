@@ -27,7 +27,8 @@
             "sourceMap": true,
             "optimization": false,
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "assets/monaco-editor" }
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
@@ -110,7 +111,8 @@
               "node_modules/nouislider/distribute/nouislider.js"
             ],
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "assets/monaco-editor" }
             ]
           }
         },
@@ -155,7 +157,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.renderer.json",
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "assets/monaco-editor" }
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",

@@ -1,4 +1,3 @@
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
@@ -53,11 +52,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
     newItem: boolean = false;
     overflow = 'hidden';
     faGripLinesVertical = faGripLinesVertical;
-    multiline = false;
-    multilineText: SafeHtml;
+    isCommand = false;
 
-    constructor(private mapper: MapperService,
-                private sanitizer: DomSanitizer) { }
+    constructor(private mapper: MapperService) { }
 
     ngOnInit() {
         this.updateView();
@@ -81,6 +78,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     editAction(): void {
+        if (this.isCommand) {
+            return;
+        }
         if (!this.editable || this.editing) {
             this.cancelEdit();
             return;
@@ -99,13 +99,18 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.delete.emit();
     }
 
+    saveMacroCommand(command: string): void {
+        const macroAction = new CommandMacroAction();
+        macroAction.command = command;
+        this.save.emit(macroAction);
+    }
+
     private updateView(): void {
-        this.multiline = false;
+        this.isCommand = false;
         if (!this.macroAction) {
             this.title = 'New macro action';
         } else if (this.macroAction instanceof CommandMacroAction) {
-            this.multiline = true;
-            this.multilineText = this.sanitizer.bypassSecurityTrustHtml(this.macroAction.command.replace(/\n/g, '<br/>'));
+            this.isCommand = true;
             this.iconName = 'code';
         } else if (this.macroAction instanceof DelayMacroAction) {
             // Delay

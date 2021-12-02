@@ -5,12 +5,17 @@
              aria-hidden="true"></fa-icon>
     <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
         <icon [name]="iconName" class="align-items-top"></icon>
-        <div *ngIf="!multiline" class="action--title">{{ title }}</div>
-        <div *ngIf="multiline" class="action--title">
+        <div *ngIf="!isCommand" class="action--title">{{ title }}</div>
+        <div *ngIf="isCommand" class="action--title">
             <span class="pr-1">Command:</span>
-            <span [innerHTML]="multilineText"></span>
+            <div style="height: 100%; width: 100%">
+            <macro-command-editor [ngModel]="macroAction.command"
+                                  [ngModelOptions]="{updateOn: 'blur'}"
+                                  (ngModelChange)="saveMacroCommand($event)"
+            ></macro-command-editor>
+            </div>
         </div>
-        <icon *ngIf="editable && macroAction && !editing" name="pencil" class="align-items-top"></icon>
+        <icon *ngIf="!isCommand && editable && macroAction && !editing" name="pencil" class="align-items-top"></icon>
     </div>
     <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>
 </div>

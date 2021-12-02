@@ -14,12 +14,9 @@
                 </icon>
             </a>
         </h4>
-        <textarea #macroTextInput
-                name="macro-text"
-                (keydown)="onKeydown($event)"
-                (input)="onTextChange()"
-                (keyup)="validate()"
-                (paste)="onPaste($event)"
-                class="macro__text-input">{{ macroAction?.command }}</textarea>
+            <macro-command-editor
+                                  [ngModel]="macroAction?.command"
+                                  (ngModelChange)="onCommandChanged($event)"
+            ></macro-command-editor>
     </div>
 </div>

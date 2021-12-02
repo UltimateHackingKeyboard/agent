@@ -12,8 +12,8 @@
     "createDefaultProgram": true
   },
   "ignorePatterns": [
-    "dist/**/*",
-    "build/**/*"
+    "dist/**",
+    "build/**"
   ],
   "overrides": [
     {
