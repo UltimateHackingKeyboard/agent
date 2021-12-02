@@ -27,7 +27,15 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     editorOptions = {
         theme: 'vs-dark',
-        scrollBeyondLastLine: false
+        scrollBeyondLastLine: false,
+        minimap: {
+            enabled: false
+        },
+        folding: 0,
+        glyphMargin: false,
+        lineNumbers: false,
+        lineDecorationsWidth: 0,
+        lineNumbersMinChars: 0
     }
 
     editor: any
