@@ -1,4 +1,6 @@
-<div class="me-container">
+<div class="me-container"
+     [style.height]="containerHeight"
+>
     <ngx-monaco-editor [options]="editorOptions"
                        [disabled]="disabled"
                        [ngModel]="value"

@@ -5,10 +5,16 @@ import {
     Component,
     forwardRef,
     HostListener,
+    Input,
+    OnChanges,
+    SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
+// 1.3 ratio is the different between the 2 agent and monaco-editor font size
+const FONT_SIZE_RATIO = 1.3;
 
 @Component({
     selector: 'macro-command-editor',
@@ -21,32 +27,45 @@ const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
     }],
     styleUrls: ['./macro-command-editor.component.scss']
 })
-export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor {
+export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges {
+    /**
+     * Show the macro edit as high as possible
+     */
+    @Input() fullHeight = false;
+
     value: string;
     disabled: boolean;
 
-    editorOptions = {
+    editorOptions: MonacoEditorConstructionOptions = {
         theme: 'vs-dark',
         scrollBeyondLastLine: false,
         minimap: {
             enabled: false
         },
-        folding: 0,
+        folding: false,
         glyphMargin: false,
-        lineNumbers: false,
+        lineNumbers: 'off',
         lineDecorationsWidth: 0,
         lineNumbersMinChars: 0
-    }
+    };
 
-    editor: any
+    editor: any;
+    containerHeight = '3em';
 
     constructor(private cdRef: ChangeDetectorRef) {
     }
 
-    ngAfterViewInit(): void {
-        if(this.editor) {
-            this.editor.focus()
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.fullHeight) {
+            this.calculateHeight();
         }
+    }
+
+    ngAfterViewInit(): void {
+        if (this.editor) {
+            this.editor.focus();
+        }
+        this.calculateHeight();
     }
 
     private onChanged = (_: any) => {};
@@ -71,13 +90,14 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                 event.preventDefault();
                 event.stopPropagation();
             }
-        })
+        });
 
-        editor.onDidBlurEditorText(() => this.onTouched())
+        editor.onDidBlurEditorText(() => this.onTouched());
     }
 
     onValueChanged(value: string): void {
         this.value = value;
+        this.calculateHeight();
         this.onChanged(this.value);
     }
 
@@ -100,6 +120,29 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         }
 
         this.value = obj;
+        this.calculateHeight();
+        this.cdRef.detectChanges();
+    }
+
+    private calculateHeight() {
+        if (!this.fullHeight) {
+            return;
+        }
+
+        const value = this.value || '';
+        let lines = value.split('\n').length;
+
+        if (lines < 1) {
+           lines = 1;
+        }
+
+        lines = lines * FONT_SIZE_RATIO;
+        const newHeight = `${lines}em`;
+        if (this.containerHeight === newHeight) {
+            return;
+        }
+
+        this.containerHeight = newHeight;
         this.cdRef.detectChanges();
     }
 }

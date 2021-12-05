@@ -11,6 +11,7 @@
             <div style="height: 100%; width: 100%">
             <macro-command-editor [ngModel]="macroAction.command"
                                   [ngModelOptions]="{updateOn: 'blur'}"
+                                  [fullHeight]="true"
                                   (ngModelChange)="saveMacroCommand($event)"
             ></macro-command-editor>
             </div>

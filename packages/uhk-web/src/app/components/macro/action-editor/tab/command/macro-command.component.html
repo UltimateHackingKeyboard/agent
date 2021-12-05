@@ -16,6 +16,7 @@
         </h4>
             <macro-command-editor
                                   [ngModel]="macroAction?.command"
+                                  [fullHeight]="true"
                                   (ngModelChange)="onCommandChanged($event)"
             ></macro-command-editor>
     </div>
