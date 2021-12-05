@@ -16,6 +16,10 @@ const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 // 1.3 ratio is the different between the 2 agent and monaco-editor font size
 const FONT_SIZE_RATIO = 1.3;
 
+function getVsCodeTheme(): string {
+    return (window as any).getUhkTheme() === 'dark' ? 'vs-dark' : 'vs';
+}
+
 @Component({
     selector: 'macro-command-editor',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +41,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     disabled: boolean;
 
     editorOptions: MonacoEditorConstructionOptions = {
-        theme: 'vs-dark',
+        theme: getVsCodeTheme(),
         scrollBeyondLastLine: false,
         minimap: {
             enabled: false
