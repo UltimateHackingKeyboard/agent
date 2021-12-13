@@ -14,7 +14,7 @@ import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 // 1.3 ratio is the different between the agent and monaco-editor font size
-const FONT_SIZE_RATIO = 1.3;
+const MONACO_LINE_HEIGHT = 18;
 
 function getVsCodeTheme(): string {
     return (window as any).getUhkTheme() === 'dark' ? 'vs-dark' : 'vs';
@@ -146,8 +146,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
            lines = 3;
         }
 
-        lines = lines * FONT_SIZE_RATIO;
-        const newHeight = `${lines}em`;
+        lines = lines * MONACO_LINE_HEIGHT;
+        const newHeight = `${lines}px`;
         if (this.containerHeight === newHeight) {
             return;
         }
