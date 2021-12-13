@@ -10,11 +10,10 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
+import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
-// 1.3 ratio is the different between the agent and monaco-editor font size
-const MONACO_LINE_HEIGHT = 18;
+const MONACO_EDITOR_LINE_HEIGHT_OPTION = 58;
 
 function getVsCodeTheme(): string {
     return (window as any).getUhkTheme() === 'dark' ? 'vs-dark' : 'vs';
@@ -53,8 +52,10 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         lineNumbersMinChars: 0
     };
 
-    editor: any;
+    editor: MonacoStandaloneCodeEditor;
     containerHeight = '3em';
+
+    private lineHeight = 18;
 
     constructor(private cdRef: ChangeDetectorRef) {
     }
@@ -87,10 +88,10 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.editor.setPosition(cursorPosition);
     }
 
-    onEditorInit(editor: any) {
+    onEditorInit(editor: MonacoStandaloneCodeEditor) {
         this.editor = editor;
-        editor.onKeyDown((event: KeyboardEvent) => {
-            if (new RegExp(NON_ASCII_REGEXP).test(event.key)) {
+        editor.onKeyDown((event) => {
+            if (new RegExp(NON_ASCII_REGEXP).test(event.code)) {
                 event.preventDefault();
                 event.stopPropagation();
             }
@@ -103,6 +104,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
             this.onTouched();
         });
+
+        this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION)
     }
 
     onValueChanged(value: string): void {
@@ -134,7 +137,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.cdRef.detectChanges();
     }
 
-    private calculateHeight() {
+    private calculateHeight(): void {
         if (!this.fullHeight) {
             return;
         }
@@ -146,8 +149,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
            lines = 3;
         }
 
-        lines = lines * MONACO_LINE_HEIGHT;
-        const newHeight = `${lines}px`;
+        const newHeight = `${(lines * this.lineHeight) + 3}px`;
         if (this.containerHeight === newHeight) {
             return;
         }
