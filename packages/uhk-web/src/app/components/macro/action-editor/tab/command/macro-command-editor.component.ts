@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
-// 1.3 ratio is the different between the 2 agent and monaco-editor font size
+// 1.3 ratio is the different between the agent and monaco-editor font size
 const FONT_SIZE_RATIO = 1.3;
 
 function getVsCodeTheme(): string {
@@ -36,9 +36,9 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
      * Show the macro edit as high as possible
      */
     @Input() fullHeight = false;
+    @Input() autoFocus = false;
 
     value: string;
-    disabled: boolean;
 
     editorOptions: MonacoEditorConstructionOptions = {
         theme: getVsCodeTheme(),
@@ -66,7 +66,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     }
 
     ngAfterViewInit(): void {
-        if (this.editor) {
+        if (this.editor && this.autoFocus) {
             this.editor.focus();
         }
         this.calculateHeight();
@@ -96,7 +96,13 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             }
         });
 
-        editor.onDidBlurEditorText(() => this.onTouched());
+        editor.onDidBlurEditorText(() => {
+            if (this.editorOptions.readOnly) {
+                return;
+            }
+
+            this.onTouched();
+        });
     }
 
     onValueChanged(value: string): void {
@@ -114,7 +120,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     }
 
     setDisabledState(isDisabled: boolean) {
-        this.disabled = isDisabled;
+        this.editorOptions.readOnly = isDisabled;
         this.cdRef.detectChanges();
     }
 
@@ -136,8 +142,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         const value = this.value || '';
         let lines = value.split('\n').length;
 
-        if (lines < 1) {
-           lines = 1;
+        if (lines < 3) {
+           lines = 3;
         }
 
         lines = lines * FONT_SIZE_RATIO;

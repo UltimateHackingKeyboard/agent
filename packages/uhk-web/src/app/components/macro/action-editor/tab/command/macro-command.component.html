@@ -17,6 +17,7 @@
             <macro-command-editor
                                   [ngModel]="macroAction?.command"
                                   [fullHeight]="true"
+                                  [autoFocus]="true"
                                   (ngModelChange)="onCommandChanged($event)"
             ></macro-command-editor>
     </div>
