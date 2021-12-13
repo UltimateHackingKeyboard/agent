@@ -124,6 +124,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     setDisabledState(isDisabled: boolean) {
         this.editorOptions.readOnly = isDisabled;
+        this.editor.updateOptions(this.editorOptions);
         this.cdRef.detectChanges();
     }
 
