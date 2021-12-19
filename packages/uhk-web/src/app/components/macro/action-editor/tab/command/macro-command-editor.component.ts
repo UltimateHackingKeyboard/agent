@@ -53,7 +53,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     };
 
     editor: MonacoStandaloneCodeEditor;
-    containerHeight = '3em';
+    containerHeight = '54px';
 
     private lineHeight = 18;
 
@@ -106,6 +106,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         });
 
         this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION)
+        this.calculateHeight();
     }
 
     onValueChanged(value: string): void {
