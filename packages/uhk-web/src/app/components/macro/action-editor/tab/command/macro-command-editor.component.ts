@@ -49,7 +49,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         glyphMargin: false,
         lineNumbers: 'off',
         lineDecorationsWidth: 0,
-        lineNumbersMinChars: 0
+        lineNumbersMinChars: 0,
+        renderLineHighlight: 'none'
     };
 
     editor: MonacoStandaloneCodeEditor;
@@ -156,7 +157,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
            lines = 3;
         }
 
-        const newHeight = `${(lines * this.lineHeight) + 3}px`;
+        const newHeight = `${(lines * this.lineHeight)}px`;
         if (this.containerHeight === newHeight) {
             return;
         }
