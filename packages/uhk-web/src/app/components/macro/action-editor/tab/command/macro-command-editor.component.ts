@@ -50,7 +50,10 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         lineNumbers: 'off',
         lineDecorationsWidth: 0,
         lineNumbersMinChars: 0,
-        renderLineHighlight: 'none'
+        renderLineHighlight: 'none',
+        scrollbar: {
+            alwaysConsumeMouseWheel: false
+        }
     };
 
     editor: MonacoStandaloneCodeEditor;
