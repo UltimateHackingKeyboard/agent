@@ -3,10 +3,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    EventEmitter,
     forwardRef,
     HostListener,
     Input,
     OnChanges,
+    Output,
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -36,6 +38,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
      */
     @Input() fullHeight = false;
     @Input() autoFocus = false;
+
+    @Output() gotFocus = new EventEmitter<void>();
 
     value: string;
 
@@ -107,6 +111,10 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             }
 
             this.onTouched();
+        });
+
+        editor.onDidFocusEditorText(()=> {
+            this.gotFocus.emit();
         });
 
         this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION)

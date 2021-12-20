@@ -33,6 +33,7 @@
                                   [fullHeight]="true"
                                   [disabled]="!editable"
                                   (ngModelChange)="saveMacroCommand($event)"
+                                  (gotFocus)="cancelEdit()"
             ></macro-command-editor>
         </div>
         <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>
