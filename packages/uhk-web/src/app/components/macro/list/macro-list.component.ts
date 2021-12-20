@@ -1,21 +1,22 @@
 import {
     AfterViewChecked,
+    ChangeDetectionStrategy,
     Component,
     EventEmitter,
+    forwardRef,
     Input,
+    OnChanges,
+    OnDestroy,
     Output,
     QueryList,
-    ViewChildren,
-    forwardRef,
-    OnDestroy,
-    OnChanges,
-    SimpleChanges
+    SimpleChanges,
+    ViewChildren
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from 'ng2-dragula';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { Macro, MacroAction, KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
+import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction } from 'uhk-common';
 
 import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
@@ -55,6 +56,7 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
         ])
     ],
     selector: 'macro-list',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss']
 })
@@ -74,6 +76,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     faPlus = faPlus;
     activeEdit: number = undefined;
     scrollTopPosition: number;
+    isMacroReordering = false;
 
     constructor(private dragulaService: DragulaService) {
         dragulaService.createGroup(this.MACRO_ACTIONS, {
@@ -99,6 +102,10 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         if (this.scrollTopPosition) {
             window.scrollTo(window.scrollX, this.scrollTopPosition);
             this.scrollTopPosition = undefined;
+        }
+
+        if (this.isMacroReordering) {
+            this.isMacroReordering = false;
         }
     }
 
@@ -175,6 +182,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     macroActionReordered(macroActions: MacroAction[]): void {
+        this.isMacroReordering = true;
         this.scrollTopPosition = window.scrollY;
         this.reorder.emit({
             macroId: this.macro.id,
@@ -183,7 +191,11 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     macroActionTrackByFn(index: number, macroAction: MacroAction): string {
-        return index.toString() + macroAction.toString();
+        if (this.isMacroReordering) {
+            return index.toString() + macroAction.toString();
+        }
+
+        return index.toString()
     }
 
     private toKeyAction(event: KeyCaptureData): KeystrokeAction {

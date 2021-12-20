@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Macro, MacroAction } from 'uhk-common';
@@ -17,6 +17,7 @@ import { AppState, getSelectedMacro, macroPlaybackSupported } from '../../../sto
 
 @Component({
     selector: 'macro-edit',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-edit.component.html',
     styleUrls: ['./macro-edit.component.scss'],
     host: {
@@ -33,6 +34,7 @@ export class MacroEditComponent implements OnDestroy {
     private routeSubscription: Subscription;
 
     constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef,
                 public route: ActivatedRoute) {
 
         this.routeSubscription = route
@@ -45,6 +47,7 @@ export class MacroEditComponent implements OnDestroy {
         this.selectedMacroSubscription = store.select(getSelectedMacro)
             .subscribe((macro: Macro) => {
                 this.macro = macro;
+                this.cdRef.markForCheck();
             });
 
         this.isNew = this.route.snapshot.params['empty'] === 'new';

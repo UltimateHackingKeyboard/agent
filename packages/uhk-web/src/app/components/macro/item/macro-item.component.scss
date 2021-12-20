@@ -58,6 +58,27 @@
                 }
             }
         }
+
+        .btn-change-macro-action {
+            margin-top: 0.2em;
+            padding: 2px;
+            width: 90px;
+            visibility: hidden;
+        }
+
+        .macro-command-item {
+            &:focus-within {
+                .btn-change-macro-action {
+                    visibility: visible;
+                }
+            }
+        }
+
+        .macro-command-editor-container {
+            height: 100%;
+            width: 100%;
+            padding-left: 0.5em;
+        }
     }
 
     &--title {

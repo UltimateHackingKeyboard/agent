@@ -1,4 +1,9 @@
 {
+  "ignorePatterns": [
+    ".angular/**",
+    "dist/**",
+    "build/**"
+  ],
   "overrides": [
     {
       "files": [

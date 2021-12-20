@@ -561,12 +561,18 @@ export function reducer(
                 lastEditedKey: defaultLastEditKey()
             };
 
-        case MacroActions.ActionTypes.Select:
+        case MacroActions.ActionTypes.Select: {
+            const selectedMacroId = (action as MacroActions.SelectMacroAction).payload;
+
+            if (selectedMacroId === state.selectedMacroId) {
+                return state;
+            }
+
             return {
                 ...state,
-                selectedMacroId: (action as MacroActions.SelectMacroAction).payload
+                selectedMacroId,
             };
-
+        }
         default:
             return state;
     }

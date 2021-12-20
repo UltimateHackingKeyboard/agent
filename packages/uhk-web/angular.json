@@ -27,7 +27,9 @@
             "sourceMap": true,
             "optimization": false,
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" },
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min-maps", "output": "assets/monaco-editor/min-maps" }
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
@@ -110,7 +112,8 @@
               "node_modules/nouislider/distribute/nouislider.js"
             ],
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
             ]
           }
         },
@@ -155,7 +158,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.renderer.json",
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",

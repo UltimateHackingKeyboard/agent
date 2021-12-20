@@ -2,7 +2,7 @@
     <div class="col-10 offset-1 list-group">
     <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can create macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
         <div class="macro-actions-container" [dragula]="MACRO_ACTIONS" [dragulaModel]="macro.macroActions" (dragulaModelChange)="macroActionReordered($event)">
-            <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index; trackBy:macroActionTrackByFn"
+            <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index; trackBy:macroActionTrackByFn.bind(this)"
                         [macroAction]="macroAction"
                         [editable]="true"
                         [editing]="macroActionIndex === activeEdit"
