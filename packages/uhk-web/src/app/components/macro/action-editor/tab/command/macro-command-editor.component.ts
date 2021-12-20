@@ -8,14 +8,18 @@ import {
     HostListener,
     Input,
     OnChanges,
+    OnDestroy,
     Output,
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
+import { Observable, Observer } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 58;
+const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
     return (window as any).getUhkTheme() === 'dark' ? 'vs-dark' : 'vs';
@@ -32,7 +36,7 @@ function getVsCodeTheme(): string {
     }],
     styleUrls: ['./macro-command-editor.component.scss']
 })
-export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges {
+export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy {
     /**
      * Show the macro edit as high as possible
      */
@@ -41,7 +45,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     @Output() gotFocus = new EventEmitter<void>();
 
-    value: string;
+    value: string = null;
 
     editorOptions: MonacoEditorConstructionOptions = {
         theme: getVsCodeTheme(),
@@ -64,6 +68,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     containerHeight = '54px';
 
     private lineHeight = 18;
+    private isFocused = false;
+    private changeObserver$: Observer<string>;
 
     constructor(private cdRef: ChangeDetectorRef) {
     }
@@ -79,6 +85,12 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.editor.focus();
         }
         this.calculateHeight();
+    }
+
+    ngOnDestroy() {
+        if (this.changeObserver$) {
+            this.changeObserver$.complete();
+        }
     }
 
     private onChanged = (_: any) => {};
@@ -106,6 +118,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         });
 
         editor.onDidBlurEditorText(() => {
+            this.isFocused = false;
             if (this.editorOptions.readOnly) {
                 return;
             }
@@ -114,6 +127,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         });
 
         editor.onDidFocusEditorText(()=> {
+            this.isFocused = true;
             this.gotFocus.emit();
         });
 
@@ -122,9 +136,22 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     }
 
     onValueChanged(value: string): void {
+        if (!this.isFocused) {
+            return;
+        }
+
         this.value = value;
         this.calculateHeight();
-        this.onChanged(this.value);
+
+        if (!this.changeObserver$) {
+            Observable.create(observer => {
+                this.changeObserver$ = observer;
+            }).pipe(
+                debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
+                distinctUntilChanged()
+            ).subscribe(this.onChanged);
+        }
+        this.changeObserver$.next(value);
     }
 
     registerOnChange(fn: any): void {
