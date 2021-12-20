@@ -51,7 +51,7 @@ export const initialState: State = {
 };
 
 export function reducer(state = initialState, action: Action): State {
-    console.log('state', {action, state})
+
     switch (action.type) {
         case Device.ActionTypes.ConnectionStateChanged: {
             const data = (<Device.ConnectionStateChangedAction>action).payload;
