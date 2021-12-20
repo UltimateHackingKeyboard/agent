@@ -16,7 +16,7 @@ export enum ActionTypes {
     ConnectionStateChanged = '[device] connection state changed',
     SaveConfiguration = '[device] save configuration',
     SaveConfigurationReply = '[device] save configuration reply',
-    SavingConfiguration = '[device] saving configuration',
+    SavingConfiguration = '[device] saving configuration', // TODO: Delete looks like not used
     ShowSaveToKeyboardButton = '[device] show save to keyboard button',
     SaveToKeyboardSuccess = '[device] save to keyboard success',
     SaveToKeyboardFailed = '[device] save to keyboard failed',
