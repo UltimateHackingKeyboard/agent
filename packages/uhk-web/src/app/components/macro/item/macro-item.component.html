@@ -29,7 +29,6 @@
         </div>
         <div class="macro-command-editor-container">
             <macro-command-editor [ngModel]="macroAction.command"
-                                  [ngModelOptions]="{updateOn: 'blur'}"
                                   [fullHeight]="true"
                                   [disabled]="!editable"
                                   (ngModelChange)="saveMacroCommand($event)"
