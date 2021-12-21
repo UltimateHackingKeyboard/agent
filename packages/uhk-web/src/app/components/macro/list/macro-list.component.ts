@@ -24,7 +24,8 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
 
 const ANIMATION_TIME = 500;
 const ANIMATION_INTERVAL = 5;
-const ANIMATION_TIMEOUT = ANIMATION_TIME + ANIMATION_INTERVAL
+const ANIMATION_TIMEOUT = ANIMATION_TIME + ANIMATION_INTERVAL;
+const CANCEL_ACTION_ANIMATION_TIMEOUT = ANIMATION_TIME + 25;
 
 @Component({
     animations: [
@@ -137,15 +138,12 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
         this.newMacro = undefined;
         this.showNew = true;
-        this.scrollToBottomIntervalTimer = window.setInterval(() => {
-            window.scrollTo(0, document.body.scrollHeight)
-        }, ANIMATION_INTERVAL)
-
-        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), ANIMATION_TIMEOUT)
+        this.scrollToBottom();
     }
 
     hideNewAction() {
         this.showNew = false;
+        window.setTimeout(() => window.scrollTo(document.body.scrollLeft, document.body.scrollHeight), CANCEL_ACTION_ANIMATION_TIMEOUT)
     }
 
     addNewAction(macroAction: MacroAction) {
@@ -232,9 +230,18 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         }
     }
 
+    private scrollToBottom(): void {
+        this.scrollToBottomIntervalTimer = window.setInterval(() => {
+            console.log('scroll', document.body.scrollHeight)
+            window.scrollTo(document.body.scrollLeft, document.body.scrollHeight);
+        }, ANIMATION_INTERVAL);
+
+        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), ANIMATION_TIMEOUT);
+    }
+
     private clearScrollToBottomInterval(): void {
         if (this.scrollToBottomIntervalTimer) {
-            window.clearInterval(this.scrollToBottomIntervalTimer)
+            window.clearInterval(this.scrollToBottomIntervalTimer);
         }
     }
 }
