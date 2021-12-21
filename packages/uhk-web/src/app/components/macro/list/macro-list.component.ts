@@ -22,6 +22,10 @@ import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
 
+const ANIMATION_TIME = 500;
+const ANIMATION_INTERVAL = 5;
+const ANIMATION_TIMEOUT = ANIMATION_TIME + ANIMATION_INTERVAL
+
 @Component({
     animations: [
         trigger('toggler', [
@@ -32,12 +36,12 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
                 height: '*'
             })),
             transition('inactive => active',
-                animate('500ms ease-out', keyframes([
+                animate(`${ANIMATION_TIME}ms ease-out`, keyframes([
                     style({ visibility: 'visible', offset: 1 })
                 ]))
             ),
             transition('active => inactive',
-                animate('500ms ease-out', keyframes([
+                animate(`${ANIMATION_TIME}ms ease-out`, keyframes([
                     style({ visibility: 'hidden', offset: 0 })
                 ]))
             )
@@ -45,12 +49,12 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
         trigger('togglerNew', [
             transition(':enter', [
                 style({ height: 0 }),
-                animate('500ms ease-out', style({ height: '*' })
+                animate(`${ANIMATION_TIME}ms ease-out`, style({ height: '*' })
                 )
             ]),
             transition(':leave', [
                 style({ height: '*' }),
-                animate('500ms ease-out', style({ height: 0 })
+                animate(`${ANIMATION_TIME}ms ease-out`, style({ height: 0 })
                 )
             ])
         ])
@@ -135,9 +139,9 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         this.showNew = true;
         this.scrollToBottomIntervalTimer = window.setInterval(() => {
             window.scrollTo(0, document.body.scrollHeight)
-        }, 5)
+        }, ANIMATION_INTERVAL)
 
-        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), 505)
+        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), ANIMATION_TIMEOUT)
     }
 
     hideNewAction() {
