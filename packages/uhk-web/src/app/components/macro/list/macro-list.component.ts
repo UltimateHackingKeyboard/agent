@@ -22,6 +22,11 @@ import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
 
+const ANIMATION_TIME = 500;
+const ANIMATION_INTERVAL = 5;
+const ANIMATION_TIMEOUT = ANIMATION_TIME + ANIMATION_INTERVAL;
+const CANCEL_ACTION_ANIMATION_TIMEOUT = ANIMATION_TIME + 25;
+
 @Component({
     animations: [
         trigger('toggler', [
@@ -32,12 +37,12 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
                 height: '*'
             })),
             transition('inactive => active',
-                animate('500ms ease-out', keyframes([
+                animate(`${ANIMATION_TIME}ms ease-out`, keyframes([
                     style({ visibility: 'visible', offset: 1 })
                 ]))
             ),
             transition('active => inactive',
-                animate('500ms ease-out', keyframes([
+                animate(`${ANIMATION_TIME}ms ease-out`, keyframes([
                     style({ visibility: 'hidden', offset: 0 })
                 ]))
             )
@@ -45,12 +50,12 @@ import { KeyCaptureData } from '../../../models/svg-key-events';
         trigger('togglerNew', [
             transition(':enter', [
                 style({ height: 0 }),
-                animate('500ms ease-out', style({ height: '*' })
+                animate(`${ANIMATION_TIME}ms ease-out`, style({ height: '*' })
                 )
             ]),
             transition(':leave', [
                 style({ height: '*' }),
-                animate('500ms ease-out', style({ height: 0 })
+                animate(`${ANIMATION_TIME}ms ease-out`, style({ height: 0 })
                 )
             ])
         ])
@@ -77,6 +82,9 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     activeEdit: number = undefined;
     scrollTopPosition: number;
     isMacroReordering = false;
+
+    private scrollToBottomIntervalTimer: number;
+    private scrollToBottomSetTimeoutTimer: number;
 
     constructor(private dragulaService: DragulaService) {
         dragulaService.createGroup(this.MACRO_ACTIONS, {
@@ -117,6 +125,12 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     ngOnDestroy(): void {
         this.dragulaService.destroy(this.MACRO_ACTIONS);
+
+        this.clearScrollToBottomInterval();
+
+        if (this.scrollToBottomSetTimeoutTimer) {
+            window.clearTimeout(this.scrollToBottomSetTimeoutTimer)
+        }
     }
 
     showNewAction() {
@@ -124,10 +138,12 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
         this.newMacro = undefined;
         this.showNew = true;
+        this.scrollToBottom();
     }
 
     hideNewAction() {
         this.showNew = false;
+        window.setTimeout(() => window.scrollTo(document.body.scrollLeft, document.body.scrollHeight), CANCEL_ACTION_ANIMATION_TIMEOUT)
     }
 
     addNewAction(macroAction: MacroAction) {
@@ -211,6 +227,21 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         if (this.activeEdit !== undefined) {
             this.macroItems.toArray()[this.activeEdit].cancelEdit();
             this.activeEdit = undefined;
+        }
+    }
+
+    private scrollToBottom(): void {
+        this.scrollToBottomIntervalTimer = window.setInterval(() => {
+            console.log('scroll', document.body.scrollHeight)
+            window.scrollTo(document.body.scrollLeft, document.body.scrollHeight);
+        }, ANIMATION_INTERVAL);
+
+        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), ANIMATION_TIMEOUT);
+    }
+
+    private clearScrollToBottomInterval(): void {
+        if (this.scrollToBottomIntervalTimer) {
+            window.clearInterval(this.scrollToBottomIntervalTimer);
         }
     }
 }
