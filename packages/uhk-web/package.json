@@ -83,7 +83,6 @@
     "zone.js": "0.11.4"
   },
   "dependencies": {
-    "classlist.js": "1.1.20150312",
     "file-saver": "2.0.2",
     "spacing-bootstrap-3": "^1.0.0"
   }
