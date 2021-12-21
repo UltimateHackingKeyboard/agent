@@ -78,6 +78,9 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     scrollTopPosition: number;
     isMacroReordering = false;
 
+    private scrollToBottomIntervalTimer: number;
+    private scrollToBottomSetTimeoutTimer: number;
+
     constructor(private dragulaService: DragulaService) {
         dragulaService.createGroup(this.MACRO_ACTIONS, {
             moves: (el, container, handle) => {
@@ -117,6 +120,12 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     ngOnDestroy(): void {
         this.dragulaService.destroy(this.MACRO_ACTIONS);
+
+        this.clearScrollToBottomInterval();
+
+        if (this.scrollToBottomSetTimeoutTimer) {
+            window.clearTimeout(this.scrollToBottomSetTimeoutTimer)
+        }
     }
 
     showNewAction() {
@@ -124,6 +133,11 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
         this.newMacro = undefined;
         this.showNew = true;
+        this.scrollToBottomIntervalTimer = window.setInterval(() => {
+            window.scrollTo(0, document.body.scrollHeight)
+        }, 5)
+
+        this.scrollToBottomSetTimeoutTimer = window.setTimeout(this.clearScrollToBottomInterval.bind(this), 505)
     }
 
     hideNewAction() {
@@ -211,6 +225,12 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         if (this.activeEdit !== undefined) {
             this.macroItems.toArray()[this.activeEdit].cancelEdit();
             this.activeEdit = undefined;
+        }
+    }
+
+    private clearScrollToBottomInterval(): void {
+        if (this.scrollToBottomIntervalTimer) {
+            window.clearInterval(this.scrollToBottomIntervalTimer)
         }
     }
 }
