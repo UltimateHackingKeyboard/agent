@@ -58,8 +58,8 @@ export class CaptureKeystrokeButtonComponent {
             this.first = false;
 
             if (this.captureService.hasMap(code)) {
-                this.saveScanCode(this.captureService.getMap(code));
                 this.scanCodePressed = true;
+                this.saveScanCode(this.captureService.getMap(code));
             } else {
                 this.captureService.setModifier((e.location === 1), code);
             }
@@ -83,10 +83,14 @@ export class CaptureKeystrokeButtonComponent {
     }
 
     private saveScanCode(code?: number) {
-        this.record = false;
         const left: KeyModifierModel[] = this.captureService.getModifiers(true);
         const right: KeyModifierModel[] = this.captureService.getModifiers(false);
 
+        if(!this.scanCodePressed && !this.captureService.hasModifiers()) {
+            return;
+        }
+
+        this.record = false;
         this.capture.emit({
             code,
             left,
