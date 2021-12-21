@@ -1,4 +1,15 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
 import { faCode, faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -28,7 +39,7 @@ enum TabName {
     styleUrls: ['./macro-action-editor.component.scss'],
     host: { 'class': 'macro-action-editor' }
 })
-export class MacroActionEditorComponent implements OnInit, OnChanges {
+export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() macroAction: MacroAction;
 
     @Output() save = new EventEmitter<MacroAction>();
@@ -52,6 +63,14 @@ export class MacroActionEditorComponent implements OnInit, OnChanges {
     constructor(private _cdRef: ChangeDetectorRef) {
     }
 
+    ngAfterViewInit(): void {
+        const isValid = this.selectedTab && this.selectedTab.isMacroValid()
+        if (isValid !== this.isSelectedMacroValid) {
+            this.isSelectedMacroValid = isValid;
+            this._cdRef.detectChanges();
+        }
+    }
+
     ngOnInit() {
         this.updateEditableMacroAction();
         const tab: TabName = this.getTabName(this.editableMacroAction);
@@ -64,6 +83,14 @@ export class MacroActionEditorComponent implements OnInit, OnChanges {
 
     onCancelClick(): void {
         this.cancel.emit();
+    }
+
+    @HostListener('document:keydown.control.enter', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (this.isSelectedMacroValid) {
+            this.onSaveClick();
+            event.preventDefault();
+        }
     }
 
     onSaveClick(): void {
