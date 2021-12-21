@@ -38,6 +38,11 @@ export class CaptureService {
         return Array.from(map.values());
     }
 
+    public hasModifiers(): boolean {
+        return this.getModifiers(true).some(x => x.checked)
+            || this.getModifiers(false).some(x => x.checked);
+    }
+
     public initModifiers() {
         this.leftModifiers.set(Key.Shift, {
             text: 'LShift',
