@@ -131,7 +131,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.gotFocus.emit();
         });
 
-        this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION)
+        this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION);
         this.calculateHeight();
     }
 
@@ -192,7 +192,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         let lines = value.split('\n').length;
 
         if (lines < 3) {
-           lines = 3;
+            lines = 3;
         }
 
         const newHeight = `${(lines * this.lineHeight)}px`;

@@ -31,8 +31,7 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 @Injectable()
 export class ApplicationEffects {
 
-    @Effect()
-    appStart$: Observable<Action> = this.actions$
+    @Effect() appStart$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.AppBootstrapped),
             startWith(new AppStartedAction()),
@@ -58,8 +57,7 @@ export class ApplicationEffects {
             )
         );
 
-    @Effect({ dispatch: false })
-    appStartInfo$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) appStartInfo$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.LoadAppStartInfo),
             tap(() => {
@@ -67,8 +65,7 @@ export class ApplicationEffects {
             })
         );
 
-    @Effect({ dispatch: false })
-    showNotification$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) showNotification$: Observable<Action> = this.actions$
         .pipe(
             ofType<ShowNotificationAction>(ActionTypes.AppShowNotification),
             map(action => action.payload),
@@ -80,8 +77,7 @@ export class ApplicationEffects {
             })
         );
 
-    @Effect()
-    processStartInfo$: Observable<Action> = this.actions$
+    @Effect() processStartInfo$: Observable<Action> = this.actions$
         .pipe(
             ofType<ProcessAppStartInfoAction>(ActionTypes.AppProcessStartInfo),
             map(action => action.payload),

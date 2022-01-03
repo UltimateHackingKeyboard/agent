@@ -21,13 +21,12 @@ export class MacroEffects {
             withLatestFrom(this.store.select(getSelectedMacroIdAfterRemove)),
             map(([, newMacroId]) => newMacroId),
             tap(newMacroId => {
-                    if (newMacroId) {
-                        return this.router.navigate(['/macro', newMacroId]);
-                    }
-
-                    return this.router.navigate(['/macro']);
+                if (newMacroId) {
+                    return this.router.navigate(['/macro', newMacroId]);
                 }
-            )
+
+                return this.router.navigate(['/macro']);
+            })
         );
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$

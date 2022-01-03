@@ -234,7 +234,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         const right: KeyModifierModel[] = this.captureService.getModifiers(false);
 
         if (!this.scanCodePressed && !this.captureService.hasModifiers()) {
-           return;
+            return;
         }
 
         this.capture.emit({
@@ -261,14 +261,14 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
         if (this.svgKey.width < 20) {
             if (this.keyAction instanceof KeystrokeAction) {
-               if (!this.keyAction.hasActiveModifier()
+                if (!this.keyAction.hasActiveModifier()
                    && !this.keyAction.hasSecondaryRoleAction()
                    && this.keyAction.hasScancode()) {
-                   const text = this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type);
-                   if (text.length === 1) {
-                       this.labelSource = text;
-                   }
-               }
+                    const text = this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type);
+                    if (text.length === 1) {
+                        this.labelSource = text;
+                    }
+                }
             }
 
             if (this.labelSource === undefined) {

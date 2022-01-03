@@ -51,8 +51,7 @@ import { getVersions } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
-    @Effect()
-    deviceConnectionStateChange$: Observable<Action> = this.actions$
+    @Effect() deviceConnectionStateChange$: Observable<Action> = this.actions$
         .pipe(
             ofType<ConnectionStateChangedAction>(ActionTypes.ConnectionStateChanged),
             withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected)),
@@ -116,8 +115,7 @@ export class DeviceEffects {
             })
         );
 
-    @Effect({ dispatch: false })
-    setPrivilegeOnLinux$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) setPrivilegeOnLinux$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.SetPrivilegeOnLinux),
             tap(() => {
@@ -125,8 +123,7 @@ export class DeviceEffects {
             })
         );
 
-    @Effect()
-    setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
+    @Effect() setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
         .pipe(
             ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SetPrivilegeOnLinuxReply),
             map(action => action.payload),
@@ -140,8 +137,7 @@ export class DeviceEffects {
             })
         );
 
-    @Effect({ dispatch: false })
-    saveConfiguration$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) saveConfiguration$: Observable<Action> = this.actions$
         .pipe(
             ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
             withLatestFrom(this.store),
@@ -155,8 +151,7 @@ export class DeviceEffects {
             switchMap(() => EMPTY)
         );
 
-    @Effect()
-    saveConfigurationReply$: Observable<Action> = this.actions$
+    @Effect() saveConfigurationReply$: Observable<Action> = this.actions$
         .pipe(
             ofType<SaveConfigurationReplyAction>(ActionTypes.SaveConfigurationReply),
             map(action => action.payload),
@@ -177,8 +172,7 @@ export class DeviceEffects {
             })
         );
 
-    @Effect()
-    autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
+    @Effect() autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.SaveToKeyboardSuccess),
             withLatestFrom(this.store),
@@ -198,8 +192,7 @@ export class DeviceEffects {
             )
         );
 
-    @Effect()
-    resetMouseSpeedSettings$: Observable<Action> = this.actions$
+    @Effect() resetMouseSpeedSettings$: Observable<Action> = this.actions$
         .pipe(
             ofType(
                 ActionTypes.ResetPcMouseSpeedSettings,

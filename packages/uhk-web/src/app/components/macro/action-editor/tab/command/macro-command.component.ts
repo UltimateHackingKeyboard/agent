@@ -34,6 +34,6 @@ export class MacroCommandComponent extends MacroBaseComponent implements OnInit 
         if (!this.macroAction) {
             this.macroAction = new CommandMacroAction();
         }
-    }
+    };
 
 }

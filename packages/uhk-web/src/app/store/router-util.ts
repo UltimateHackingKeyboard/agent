@@ -16,8 +16,7 @@ export interface RouterState {
     queryParams: Params;
 }
 
-export class CustomRouterStateSerializer
-    implements RouterStateSerializer<RouterState> {
+export class CustomRouterStateSerializer implements RouterStateSerializer<RouterState> {
     serialize(routerState: RouterStateSnapshot): RouterState {
         let route = routerState.root;
 

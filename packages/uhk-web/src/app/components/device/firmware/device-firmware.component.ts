@@ -41,8 +41,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareUpgradeSuccess: boolean;
     upgradeType: string;
 
-    @ViewChild(XtermComponent, { static: false })
-    xtermRef: XtermComponent;
+    @ViewChild(XtermComponent, { static: false }) xtermRef: XtermComponent;
 
     faLongArrowAltRight = faLongArrowAltRight;
     faSlidersH = faSlidersH;

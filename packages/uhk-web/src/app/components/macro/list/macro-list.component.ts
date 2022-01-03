@@ -129,7 +129,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         this.clearScrollToBottomInterval();
 
         if (this.scrollToBottomSetTimeoutTimer) {
-            window.clearTimeout(this.scrollToBottomSetTimeoutTimer)
+            window.clearTimeout(this.scrollToBottomSetTimeoutTimer);
         }
     }
 
@@ -143,7 +143,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     hideNewAction() {
         this.showNew = false;
-        window.setTimeout(() => window.scrollTo(document.body.scrollLeft, document.body.scrollHeight), CANCEL_ACTION_ANIMATION_TIMEOUT)
+        window.setTimeout(() => window.scrollTo(document.body.scrollLeft, document.body.scrollHeight), CANCEL_ACTION_ANIMATION_TIMEOUT);
     }
 
     addNewAction(macroAction: MacroAction) {
@@ -211,7 +211,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
             return index.toString() + macroAction.toString();
         }
 
-        return index.toString()
+        return index.toString();
     }
 
     private toKeyAction(event: KeyCaptureData): KeystrokeAction {
@@ -232,7 +232,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     private scrollToBottom(): void {
         this.scrollToBottomIntervalTimer = window.setInterval(() => {
-            console.log('scroll', document.body.scrollHeight)
+            console.log('scroll', document.body.scrollHeight);
             window.scrollTo(document.body.scrollLeft, document.body.scrollHeight);
         }, ANIMATION_INTERVAL);
 

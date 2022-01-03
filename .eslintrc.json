@@ -11,9 +11,12 @@
     ],
     "createDefaultProgram": true
   },
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "ignorePatterns": [
-    "dist/**",
-    "build/**"
+    "**/dist/**",
+    "**/build/**"
   ],
   "overrides": [
     {
@@ -21,6 +24,8 @@
         "*.ts"
       ],
       "rules": {
+        "semi": "off",
+        "@typescript-eslint/semi": ["error"],
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/ban-types": "off",
@@ -33,6 +38,14 @@
     }
   ],
   "rules": {
+    "indent": [
+      "error",
+      4,
+      {
+        "FunctionDeclaration": {"parameters": "first"},
+        "SwitchCase": 1
+      }
+    ],
     "no-async-promise-executor": "off",
     "no-constant-condition": "off",
     "no-case-declarations": "off",

@@ -69,7 +69,7 @@ export class Helper {
     }
 
     private static fromJSONObject(macroAction: any, version: number): MacroAction {
-       switch (macroAction.macroActionType) {
+        switch (macroAction.macroActionType) {
             case macroActionType.KeyMacroAction:
                 return new KeyMacroAction().fromJsonObject(macroAction, version);
             case macroActionType.MouseButtonMacroAction:
@@ -82,8 +82,8 @@ export class Helper {
                 return new DelayMacroAction().fromJsonObject(macroAction, version);
             case macroActionType.TextMacroAction:
                 return new TextMacroAction().fromJsonObject(macroAction, version);
-           case macroActionType.CommandMacroAction:
-               return new CommandMacroAction().fromJsonObject(macroAction, version);
+            case macroActionType.CommandMacroAction:
+                return new CommandMacroAction().fromJsonObject(macroAction, version);
             default:
                 throw `Invalid MacroAction.macroActionType: "${macroAction.macroActionType}"`;
         }

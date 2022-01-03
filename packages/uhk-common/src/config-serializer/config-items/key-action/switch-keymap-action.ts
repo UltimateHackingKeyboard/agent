@@ -74,8 +74,7 @@ export class SwitchKeymapAction extends KeyAction {
 
 export class UnresolvedSwitchKeymapAction extends KeyAction {
 
-    @assertUInt8
-    keymapIndex: number;
+    @assertUInt8 keymapIndex: number;
 
     constructor(keymapIndex?: number) {
         super();

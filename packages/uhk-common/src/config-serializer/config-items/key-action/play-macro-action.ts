@@ -6,8 +6,7 @@ import { UserConfiguration } from '../user-configuration';
 
 export class PlayMacroAction extends KeyAction {
 
-    @assertUInt8
-    macroId: number;
+    @assertUInt8 macroId: number;
 
     constructor(parameter?: PlayMacroAction | Macro) {
         super();
