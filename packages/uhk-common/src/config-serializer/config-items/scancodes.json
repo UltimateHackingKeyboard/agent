@@ -509,6 +509,22 @@
                     "type": "media",
                     "scancode": 549
                 }
+            },
+            {
+                "id": "147",
+                "text": "Screen brightness -",
+                "additional": {
+                    "type": "media",
+                    "scancode": 112
+                }
+            },
+            {
+                "id": "148",
+                "text": "Screen brightness +",
+                "additional": {
+                    "type": "media",
+                    "scancode": 111
+                }
             }
         ]
     },

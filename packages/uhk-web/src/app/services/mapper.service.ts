@@ -355,6 +355,8 @@ export class MapperService {
         this.basicScancodeIcons.set(101, 'icon-kbd__mod--menu');
 
         this.mediaScancodeIcons = new Map<number, string>();
+        this.mediaScancodeIcons.set(111, 'icon-kbd__media--sunrise');
+        this.mediaScancodeIcons.set(112, 'icon-kbd__media--sunset');
         this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
         this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
         this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');
