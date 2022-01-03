@@ -19,5 +19,5 @@ export function getSaveToKeyboardButtonState(): ProgressButtonState {
         showButton: true,
         text: 'Save to keyboard',
         action: new Device.SaveConfigurationAction(true)
-    }
+    };
 }

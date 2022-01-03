@@ -64,7 +64,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
     }
 
     ngAfterViewInit(): void {
-        const isValid = this.selectedTab && this.selectedTab.isMacroValid()
+        const isValid = this.selectedTab && this.selectedTab.isMacroValid();
         if (isValid !== this.isSelectedMacroValid) {
             this.isSelectedMacroValid = isValid;
             this._cdRef.detectChanges();

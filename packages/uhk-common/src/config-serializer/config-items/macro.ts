@@ -5,8 +5,7 @@ import { Helper as MacroActionHelper } from './macro-action/helper';
 
 export class Macro {
 
-    @assertUInt8
-    id: number;
+    @assertUInt8 id: number;
 
     isLooped: boolean;
 

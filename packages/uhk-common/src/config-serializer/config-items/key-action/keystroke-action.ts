@@ -37,11 +37,9 @@ export class KeystrokeAction extends KeyAction {
         return this._scancode;
     }
 
-    @assertUInt8
-    modifierMask: number;
+    @assertUInt8 modifierMask: number;
 
-    @assertEnum(SecondaryRoleAction)
-    secondaryRoleAction: SecondaryRoleAction;
+    @assertEnum(SecondaryRoleAction) secondaryRoleAction: SecondaryRoleAction;
 
     set type(type: KeystrokeType) {
         if (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) {

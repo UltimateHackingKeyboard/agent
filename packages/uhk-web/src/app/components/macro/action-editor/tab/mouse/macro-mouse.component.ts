@@ -145,5 +145,5 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
             default:
                 return true;
         }
-    }
+    };
 }

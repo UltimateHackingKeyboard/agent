@@ -44,7 +44,7 @@ export class KeymapEditComponent implements OnDestroy {
     private keymapSubscription: Subscription;
 
     constructor(protected store: Store<AppState>,
-                route: ActivatedRoute,
+                private route: ActivatedRoute,
                 private cdRef: ChangeDetectorRef) {
         this.routeSubscription = route
             .params

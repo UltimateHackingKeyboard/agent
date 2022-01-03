@@ -13,8 +13,7 @@ import { AppUpdateRendererService } from '../../services/app-update-renderer.ser
 
 @Injectable()
 export class AppUpdateEffect {
-    @Effect({ dispatch: false })
-    appStart$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) appStart$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.UpdateApp),
             first(),

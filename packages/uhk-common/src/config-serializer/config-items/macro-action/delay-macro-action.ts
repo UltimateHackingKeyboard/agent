@@ -4,8 +4,7 @@ import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class DelayMacroAction extends MacroAction {
 
-    @assertUInt16
-    delay: number;
+    @assertUInt16 delay: number;
 
     constructor(other?: DelayMacroAction) {
         super();

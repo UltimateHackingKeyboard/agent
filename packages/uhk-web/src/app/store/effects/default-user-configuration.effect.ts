@@ -14,15 +14,13 @@ import { RouterState } from '../router-util';
 
 @Injectable()
 export class DefaultUserConfigurationEffect {
-    @Effect()
-    loadDefaultUserConfiguration$ = this.actions$
+    @Effect() loadDefaultUserConfiguration$ = this.actions$
         .pipe(
             ofType<LoadDefaultUserConfigurationAction>(ActionTypes.LoadDefaultUserConfiguration),
             map(() => new LoadDefaultUserConfigurationSuccessAction(this.defaultUserConfigurationService.getDefault()))
         );
 
-    @Effect()
-    addKeymapNavigated$ = this.actions$
+    @Effect() addKeymapNavigated$ = this.actions$
         .pipe(
             ofType<RouterNavigatedAction>(ROUTER_NAVIGATED),
             map<RouterNavigatedAction, RouterState>(action => action.payload.routerState as any),

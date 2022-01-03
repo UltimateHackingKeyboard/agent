@@ -78,6 +78,6 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
         if (!this.macroAction) {
             this.macroAction = new TextMacroAction();
         }
-    }
+    };
 
 }

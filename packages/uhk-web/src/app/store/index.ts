@@ -144,29 +144,29 @@ export const flashFirmwareButtonDisabled = createSelector(runningInElectron, upd
 export const getStateHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
 export const getHardwareModules = createSelector(runningInElectron, getStateHardwareModules, getAgentVersionInfo,
     (electron, hardwareModules, agentVersionInfo): HardwareModules => {
-    if (electron) {
-        return hardwareModules;
-    }
-
-    return {
-        moduleInfos: [
-            {
-                module: LEFT_HALF_MODULE,
-                info: {
-                    firmwareVersion: agentVersionInfo.firmwareVersion,
-                    moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
-                }
-            }
-        ],
-        rightModuleInfo: {
-            deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
-            hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
-            firmwareVersion: agentVersionInfo.firmwareVersion,
-            moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
-            userConfigVersion: agentVersionInfo.userConfigVersion
+        if (electron) {
+            return hardwareModules;
         }
-    };
-});
+
+        return {
+            moduleInfos: [
+                {
+                    module: LEFT_HALF_MODULE,
+                    info: {
+                        firmwareVersion: agentVersionInfo.firmwareVersion,
+                        moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                    }
+                }
+            ],
+            rightModuleInfo: {
+                deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
+                hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
+                firmwareVersion: agentVersionInfo.firmwareVersion,
+                moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
+                userConfigVersion: agentVersionInfo.userConfigVersion
+            }
+        };
+    });
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);
 export const bootloaderActive = createSelector(deviceState, fromDevice.bootloaderActive);
@@ -295,12 +295,12 @@ export const getSideMenuPageState = createSelector(
     calculateDeviceUiState,
     getConnectedDevice,
     (showAddonMenuValue: boolean,
-     runningInElectronValue: boolean,
-     updatingFirmwareValue: boolean,
-     userConfiguration: UserConfiguration,
-     restoreUserConfiguration: boolean,
-     uiState,
-     connectedDevice): SideMenuPageState => {
+        runningInElectronValue: boolean,
+        updatingFirmwareValue: boolean,
+        userConfiguration: UserConfiguration,
+        restoreUserConfiguration: boolean,
+        uiState,
+        connectedDevice): SideMenuPageState => {
         return {
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             showAddonMenu: showAddonMenuValue,
@@ -338,7 +338,7 @@ export const getApplicationSettings = createSelector(
     appUpdateSettingsState,
     appState,
     (updateSettingsState,
-     app
+        app
     ): ApplicationSettings => {
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
@@ -355,9 +355,9 @@ export const getUserConfigHistoryComponentState = createSelector(
     getMd5HasOfUserConfig,
     isUserConfigSaving,
     (inElectron,
-     state: fromUserConfigHistory.State,
-     md5Hash: string,
-     saving: boolean): UserConfigHistoryComponentState => {
+        state: fromUserConfigHistory.State,
+        md5Hash: string,
+        saving: boolean): UserConfigHistoryComponentState => {
         let foundFirstCurrent = false;
 
         return {

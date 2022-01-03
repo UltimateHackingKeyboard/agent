@@ -31,15 +31,15 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
     encapsulation: ViewEncapsulation.None,
     animations: [
         trigger('showSaveToKeyboardButton', [
-                transition(':enter', [
-                    style({transform: 'translateY(100%)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
-                ]),
-                transition(':leave', [
-                    style({transform: 'translateY(0)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
-                ])
+            transition(':enter', [
+                style({transform: 'translateY(100%)'}),
+                animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
             ]),
+            transition(':leave', [
+                style({transform: 'translateY(0)'}),
+                animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
+            ])
+        ]),
         trigger('showOutOfSpaceWarning', [
             transition(':enter', [
                 style({transform: 'translateY(100%)'}),
@@ -67,15 +67,15 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
             ])
         ]),
         trigger('slideInOut', [
-                transition(':enter', [
-                    style({transform: 'translateX(100%)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateX(0)'}))
-                ]),
-                transition(':leave', [
-                    style({transform: 'translateX(0)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateX(100%)'}))
-                ])
+            transition(':enter', [
+                style({transform: 'translateX(100%)'}),
+                animate('400ms ease-in-out', style({transform: 'translateX(0)'}))
+            ]),
+            transition(':leave', [
+                style({transform: 'translateX(0)'}),
+                animate('400ms ease-in-out', style({transform: 'translateX(100%)'}))
             ])
+        ])
     ]
 })
 export class MainAppComponent implements OnDestroy {
@@ -129,16 +129,16 @@ export class MainAppComponent implements OnDestroy {
             }
 
             if (this.secondSideMenuComponent !== data.secondMenuComponent) {
-               this.secondSideMenuComponent = data.secondMenuComponent;
+                this.secondSideMenuComponent = data.secondMenuComponent;
 
-               if (this.secondSideMenuComponent) {
-                   this.secondSideMenuVisible = true;
-                   this.secondarySideMenuContainer.resolveComponent(this.secondSideMenuComponent);
-               } else {
-                   this.secondSideMenuVisible = false;
-                   this.secondarySideMenuContainer.clear();
-               }
-               this.cdRef.detectChanges();
+                if (this.secondSideMenuComponent) {
+                    this.secondSideMenuVisible = true;
+                    this.secondarySideMenuContainer.resolveComponent(this.secondSideMenuComponent);
+                } else {
+                    this.secondSideMenuVisible = false;
+                    this.secondarySideMenuContainer.clear();
+                }
+                this.cdRef.detectChanges();
             }
         });
     }

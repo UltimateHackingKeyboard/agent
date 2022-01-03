@@ -78,5 +78,5 @@ export class EditableTextComponent implements ControlValueAccessor {
     }
 
     private textChange: any = () => {
-    }
+    };
 }
