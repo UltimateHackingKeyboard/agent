@@ -1,19 +1,15 @@
 {
   "root": true,
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "eslint:recommended"
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": [
-      "tsconfig.json"
-    ],
-    "createDefaultProgram": true
+  "env": {
+    "es6": true,
+    "node": true
   },
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "parserOptions": {
+    "ecmaVersion": 2019
+  },
   "ignorePatterns": [
     "**/dist/**",
     "**/build/**"
@@ -23,8 +19,30 @@
       "files": [
         "*.ts"
       ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "plugins": [
+        "@typescript-eslint"
+      ],
       "rules": {
         "semi": "off",
+        "no-async-promise-executor": "off",
+        "no-case-declarations": "off",
+        "no-constant-condition": "off",
+        "no-control-regex": "off",
+        "no-irregular-whitespace": "off",
+        "no-prototype-builtins": "off",
+        "no-var": "off",
+        "prefer-const": "off",
         "@typescript-eslint/semi": ["error"],
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
@@ -45,14 +63,6 @@
         "FunctionDeclaration": {"parameters": "first"},
         "SwitchCase": 1
       }
-    ],
-    "no-async-promise-executor": "off",
-    "no-constant-condition": "off",
-    "no-case-declarations": "off",
-    "prefer-const": "off",
-    "no-control-regex": "off",
-    "no-irregular-whitespace": "off",
-    "no-prototype-builtins": "off",
-    "no-var": "off"
+    ]
   }
 }
