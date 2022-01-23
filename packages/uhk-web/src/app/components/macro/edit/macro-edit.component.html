@@ -24,7 +24,7 @@
             <div *ngIf="!macro" class="not-found">
                 There is no macro with id {{ macroId }}.
             </div>
-            <div class="smart-macro-doc-label" role="button" (click)="toggleSmartMacroDocPanel()">
+            <div class="smart-macro-doc-label" role="button" (click)="toggleSmartMacroDocPanel()" tabindex="0">
                 Smart macro reference
                 <fa-icon [icon]="faCaretLeft"></fa-icon>
             </div>
