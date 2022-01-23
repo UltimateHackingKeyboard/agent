@@ -15,6 +15,7 @@ import { ElectronLogService } from './services/logger.service';
 import { AppUpdateService } from './services/app-update.service';
 import { AppService } from './services/app.service';
 import { SudoService } from './services/sudo.service';
+import { SmartMacroDocService } from './services/smart-macro-doc.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
@@ -40,6 +41,7 @@ let appUpdateService: AppUpdateService;
 let appService: AppService;
 let sudoService: SudoService;
 let packagesDir: string;
+let smartMacroDocService: SmartMacroDocService;
 
 let areServicesInited = false;
 
@@ -56,6 +58,7 @@ if (!areServicesInited) {
 
     uhkHidDeviceService = new UhkHidDevice(logger, options, packagesDir);
     uhkOperations = new UhkOperations(logger, uhkHidDeviceService);
+    smartMacroDocService = new SmartMacroDocService(logger, packagesDir);
 
     areServicesInited = true;
 }
@@ -70,6 +73,9 @@ async function createWindow() {
     logger.misc('[Electron Main] Create new window.');
 
     const loadedWindowState = loadWindowState(logger);
+    if(!smartMacroDocService.isRunning) {
+        await smartMacroDocService.start();
+    }
 
     // Create the browser window.
     win = new BrowserWindow({
@@ -126,6 +132,8 @@ async function createWindow() {
         uhkHidDeviceService.close();
         uhkHidDeviceService = null;
         sudoService = null;
+        await smartMacroDocService.stop();
+        smartMacroDocService = null;
     });
 
     win.once('ready-to-show', () => {

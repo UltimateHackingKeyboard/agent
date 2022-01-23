@@ -25,6 +25,7 @@ import { ActionTypes as UpdateActionTypes } from '../actions/auto-update-setting
 import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { ActionTypes as DeviceActionTypes, StartConnectionPollerAction } from '../actions/device';
+import { ActionTypes as SmartMacroDocActionTypes } from '../actions/smart-macro-doc.action';
 import { AppState, getApplicationSettings, runningInElectron } from '../index';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 
@@ -119,7 +120,8 @@ export class ApplicationEffects {
                 ActionTypes.SetAppTheme,
                 ActionTypes.ToggleAnimationEnabled,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
-                DeviceActionTypes.SaveConfiguration
+                DeviceActionTypes.SaveConfiguration,
+                SmartMacroDocActionTypes.PanelSizeChanged
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),

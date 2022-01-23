@@ -46,8 +46,15 @@ export class Device {
     public static readonly getUserConfigFromHistoryReply = 'device-get-user-config-from-history-reply';
 }
 
+export class SmartMacroDoc {
+    public static readonly downloadDocumentation = 'smart-macro-doc-service-download-documentation';
+    public static readonly downloadDocumentationReply = 'smart-macro-doc-service-download-documentation-reply';
+    public static readonly serviceListening = 'smart-macro-doc-service-listening';
+}
+
 export class IpcEvents {
     public static readonly app = App;
     public static readonly autoUpdater = AutoUpdate;
     public static readonly device = Device;
+    public static readonly smartMacroDoc = SmartMacroDoc;
 }

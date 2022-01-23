@@ -7,6 +7,7 @@ import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -83,7 +84,7 @@ import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
-import { SafeStylePipe, UserConfigHistoryDisplayTextPipe } from './pipes';
+import { SafeStylePipe, SafeUrlPipe, UserConfigHistoryDisplayTextPipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
@@ -135,6 +136,7 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
+import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
 
 @NgModule({
     declarations: [
@@ -197,6 +199,7 @@ import { MacroCommandEditorComponent } from './components/macro/action-editor/ta
         KeyboardSliderComponent,
         CancelableDirective,
         SafeStylePipe,
+        SafeUrlPipe,
         AutoUpdateSettings,
         UndoableNotifierComponent,
         UhkHeader,
@@ -230,6 +233,7 @@ import { MacroCommandEditorComponent } from './components/macro/action-editor/ta
         UserConfigHistoryDisplayTextPipe
     ],
     imports: [
+        AngularSplitModule,
         CommonModule,
         BrowserAnimationsModule,
         FontAwesomeModule,
@@ -271,6 +275,7 @@ import { MacroCommandEditorComponent } from './components/macro/action-editor/ta
         AppRendererService,
         IpcCommonRenderer,
         DeviceRendererService,
+        SmartMacroDocRendererService,
         UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
         UhkDeviceInitializedGuard,

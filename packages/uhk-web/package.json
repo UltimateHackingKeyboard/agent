@@ -55,6 +55,7 @@
     "@ngtools/webpack": "13.0.3",
     "angular-confirmation-popover": "6.0.0",
     "angular-notifier": "9.1.0",
+    "angular-split": "13.1.0",
     "bootstrap": "4.6.0",
     "codelyzer": "6.0.0",
     "dragula": "3.7.2",

@@ -25,6 +25,7 @@ import * as fromDevice from './reducers/device';
 import * as fromFirmware from './reducers/firmware-upgrade.reducer';
 import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
 import * as fromSelectors from './reducers/selectors';
+import * as fromSmartMacroDoc from './reducers/smart-macro-doc.reducer';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
 import { RouterState } from './router-util';
@@ -52,6 +53,7 @@ export interface AppState {
     device: fromDevice.State;
     contributors: fromContributors.State;
     firmware: fromFirmware.State;
+    smartMacroDoc: fromSmartMacroDoc.State;
     userConfigurationHistory: fromUserConfigHistory.State;
 }
 
@@ -65,6 +67,7 @@ export const reducers: ActionReducerMap<AppState> = {
     device: fromDevice.reducer,
     contributors: fromContributors.reducer,
     firmware: fromFirmware.reducer,
+    smartMacroDoc: fromSmartMacroDoc.reducer,
     userConfigurationHistory: fromUserConfigHistory.reducer
 };
 
@@ -334,20 +337,6 @@ export const extraLEDCharactersSupported = createSelector(getHardwareModules, (h
     return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.2.0');
 });
 
-export const getApplicationSettings = createSelector(
-    appUpdateSettingsState,
-    appState,
-    (updateSettingsState,
-        app
-    ): ApplicationSettings => {
-        return {
-            checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
-            everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
-            animationEnabled: app.animationEnabled,
-            appTheme: app.appTheme
-        };
-    });
-
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;
 export const getUserConfigHistoryComponentState = createSelector(
     runningInElectron,
@@ -428,3 +417,35 @@ export const getDefaultUserConfigurationKeymaps = createSelector(
     defaultUserConfigState, fromDefaultUserConfig.getDefaultUserConfigurationKeymaps);
 export const getSelectedAddKeymap = createSelector(
     defaultUserConfigState, fromDefaultUserConfig.getSelectedKeymap);
+
+export const smartMacroDocState = (state: AppState) => state.smartMacroDoc;
+export const getSmartMacroDocUrl = createSelector(smartMacroDocState, fromSmartMacroDoc.getSmartMacroDocUrl);
+export const selectSmartMacroDocUrl = createSelector(
+    runningInElectron, getSmartMacroDocUrl,
+    (isRunningInElectron, smartMacroDocUrl) => {
+        if (isRunningInElectron) {
+            return smartMacroDocUrl;
+        }
+
+        // Base64 encoded version of the lorem-ipsum.html
+        return 'data:text/html;base64,PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+CiAgICA8bWV0YSBjaGFyc2V0PSJVVEYtOCI+CiAgICA8dGl0bGU+U21hcnQgTWFjcm8gTG9yZW0gSXBzdW08L3RpdGxlPgo8L2hlYWQ+Cjxib2R5Pgo8cD4KICAgIExvcmVtIGlwc3VtIGRvbG9yIHNpdCBhbWV0LCBjb25zZWN0ZXR1ciBhZGlwaXNjaW5nIGVsaXQuIE5hbSBjb25zZWN0ZXR1ciwgYXJjdSBzYWdpdHRpcyBvcm5hcmUgdGVtcHVzLCBmZWxpcyBleAogICAgY29udmFsbGlzIHZlbGl0LCBzY2VsZXJpc3F1ZSB0ZW1wdXMgcXVhbSBkaWFtIGV1IGVsaXQuIFNlZCBwZWxsZW50ZXNxdWUgbmlzaSBpZCBsaWd1bGEgbHVjdHVzIGhlbmRyZXJpdC4gT3JjaSB2YXJpdXMKICAgIG5hdG9xdWUgcGVuYXRpYnVzIGV0IG1hZ25pcyBkaXMgcGFydHVyaWVudCBtb250ZXMsIG5hc2NldHVyIHJpZGljdWx1cyBtdXMuIEV0aWFtIGlkIHZvbHV0cGF0IHR1cnBpcywgYSByaG9uY3VzCiAgICB0ZWxsdXMuIFByYWVzZW50IGxpZ3VsYSBtZXR1cywgcnV0cnVtIGV0IHNlbXBlciBuZWMsIGRpY3R1bSB2ZWwgZXN0LiBDdXJhYml0dXIgc2NlbGVyaXNxdWUgYmxhbmRpdCBsYWNpbmlhLgogICAgQ3VyYWJpdHVyIGdyYXZpZGEgc2FnaXR0aXMgbWFzc2EsIGEgZmVybWVudHVtIHB1cnVzIHVsbGFtY29ycGVyIGF0LiBDdXJhYml0dXIgc2VtcGVyIHZlaGljdWxhIG1hdHRpcy4gQ3VyYWJpdHVyIGF0CiAgICBuZXF1ZSBzaXQgYW1ldCBsZW8gZGlnbmlzc2ltIGNvbnNlY3RldHVyIHNpdCBhbWV0IGV1IHB1cnVzLiBNYWVjZW5hcyBydXRydW0gdHJpc3RpcXVlIHRvcnRvciwgbmVjIGxvYm9ydGlzIGV4Lgo8L3A+CjxwPgogICAgUXVpc3F1ZSBmZXJtZW50dW0gbWFnbmEgdmVsIHVybmEgaWFjdWxpcyBncmF2aWRhLiBFdGlhbSBlbGVpZmVuZCBncmF2aWRhIGxvcmVtLCBzaXQgYW1ldCBhdWN0b3IgbWF1cmlzIGxhY2luaWEKICAgIHZpdGFlLiBEdWlzIGNvbW1vZG8gaW4gcHVydXMgdmVsIGF1Y3Rvci4gQ3JhcyBtb2xsaXMgZGlhbSBhbGlxdWV0IGp1c3RvIGFsaXF1YW0gY3Vyc3VzLiBEb25lYyBwcmV0aXVtIHNjZWxlcmlzcXVlCiAgICBleCwgYXQgcmhvbmN1cyBqdXN0byBjb25ndWUgc2VkLiBDdXJhYml0dXIgaW4gYW50ZSBudW5jLiBOdWxsYSBsYWN1cyBvZGlvLCByaG9uY3VzIHZlbCBwdXJ1cyB2ZWwsIGludGVyZHVtIGxhY2luaWEKICAgIG1hdXJpcy4gU2VkIG5lcXVlIGxlbywgbW9sbGlzIHNlZCBkdWkgYWMsIGNvbmd1ZSBibGFuZGl0IGxhY3VzLiBGdXNjZSBkYXBpYnVzIGF1Z3VlIGxpYmVybywgdml0YWUgaWFjdWxpcyBsb3JlbQogICAgZXVpc21vZCB2aXRhZS4KPC9wPgo8cD4KICAgIFZlc3RpYnVsdW0gZnJpbmdpbGxhIGFjY3Vtc2FuIG5pYmggbmVjIGFsaXF1YW0uIFByb2luIGRpY3R1bSBhY2N1bXNhbiBvcm5hcmUuIE51bmMgY29uc2VjdGV0dXIgYXJjdSByaXN1cywgdml0YWUKICAgIGludGVyZHVtIGVyYXQgZWZmaWNpdHVyIGlkLiBNYWVjZW5hcyBldCBlbGl0IHRvcnRvci4gRHVpcyBlbGVpZmVuZCBzYWdpdHRpcyB0aW5jaWR1bnQuIFN1c3BlbmRpc3NlIGFsaXF1YW0gdWx0cmljaWVzCiAgICBjb21tb2RvLiBWZXN0aWJ1bHVtIGV1IGRpYW0gbmVjIGRpYW0gbG9ib3J0aXMgZWxlaWZlbmQgaW4gdmVsIG51bGxhLiBQcmFlc2VudCBhdCB2aXZlcnJhIGxlY3R1cywgZXUgcGVsbGVudGVzcXVlCiAgICBlcmF0LiBJbnRlZ2VyIGZpbmlidXMgcmhvbmN1cyBvcmNpLCB2aXRhZSBwdWx2aW5hciBuaWJoLiBTZWQgYWNjdW1zYW4gdmVzdGlidWx1bSBwbGFjZXJhdC4gUHJhZXNlbnQgcmhvbmN1cyB0ZWxsdXMKICAgIHF1aXMgbG9yZW0gc2FnaXR0aXMgc2NlbGVyaXNxdWUgc2l0IGFtZXQgaWQgb3JjaS4gTW9yYmkgZ3JhdmlkYSBqdXN0byBzYXBpZW4sIGVnZXQgdmVoaWN1bGEgc2VtIG1hdHRpcyBzZWQuIEludGVnZXIKICAgIGp1c3RvIGRvbG9yLCB1bGxhbWNvcnBlciBldCBqdXN0byBzaXQgYW1ldCwgZWdlc3RhcyBibGFuZGl0IG5lcXVlLiBDdXJhYml0dXIgaW4gdmVuZW5hdGlzIHJpc3VzLCBlZ2V0IGNvbmd1ZSBhcmN1LgogICAgT3JjaSB2YXJpdXMgbmF0b3F1ZSBwZW5hdGlidXMgZXQgbWFnbmlzIGRpcyBwYXJ0dXJpZW50IG1vbnRlcywgbmFzY2V0dXIgcmlkaWN1bHVzIG11cy4gTWFlY2VuYXMgbWF0dGlzIG5pc2wgZmV1Z2lhdAogICAgaWFjdWxpcyB1bHRyaWNlcy4KPC9wPgo8cD4KICAgIE51bmMgcnV0cnVtIGxpYmVybyByaXN1cywgc2VkIGludGVyZHVtIHNhcGllbiBldWlzbW9kIGF0LiBMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LgogICAgUHJvaW4gdmVsIHJpc3VzIG51bGxhLiBEb25lYyB2aXZlcnJhIGVyb3MgdmVsIGV4IGxvYm9ydGlzIGNvbnNlY3RldHVyLiBEb25lYyBub24gbGliZXJvIHNvZGFsZXMsIHRpbmNpZHVudCBsaWd1bGEKICAgIGlkLCBtYWxlc3VhZGEgcHVydXMuIEludGVnZXIgZmF1Y2lidXMgZXggbmVxdWUsIHZpdGFlIGZhdWNpYnVzIG1pIGVnZXN0YXMgbmVjLiBTdXNwZW5kaXNzZSBxdWlzIGZldWdpYXQgbGliZXJvLCB1dAogICAgc29kYWxlcyBlcm9zLiBQcmFlc2VudCBhYyBsYW9yZWV0IGxpZ3VsYS4KPC9wPgo8cD4KICAgIEluIGlhY3VsaXMsIGxlbyBzZWQgYmxhbmRpdCBjb25zZXF1YXQsIG5pYmggbnVsbGEgZ3JhdmlkYSBzZW0sIHZlbCBmZXVnaWF0IGVzdCBtaSB1dCBmZWxpcy4gRXRpYW0gbGFjaW5pYSBzZW0gZXQKICAgIG9kaW8gYmxhbmRpdCBjb25zZXF1YXQuIFBlbGxlbnRlc3F1ZSBtYXVyaXMgbnVuYywgc29kYWxlcyBzaXQgYW1ldCBzZW1wZXIgdWx0cmljaWVzLCBtYXhpbXVzIGVnZXQgbWV0dXMuIFByb2luCiAgICBhY2N1bXNhbiwgbGVjdHVzIGEgdGVtcG9yIGJsYW5kaXQsIG51bGxhIGxlY3R1cyBmYXVjaWJ1cyBuZXF1ZSwgbmVjIGxvYm9ydGlzIGF1Z3VlIGV4IG5vbiBuZXF1ZS4gUHJhZXNlbnQgbHVjdHVzCiAgICBmZXJtZW50dW0gbWFnbmEsIHF1aXMgbGFvcmVldCBudWxsYSBkaWduaXNzaW0gYS4gTnVuYyB2ZWhpY3VsYSBzY2VsZXJpc3F1ZSBqdXN0byBhIGVsZW1lbnR1bS4gU3VzcGVuZGlzc2UgaWQgbWF1cmlzCiAgICBzZWQgbWV0dXMgY29udmFsbGlzIGRhcGlidXMgdmVsIHNpdCBhbWV0IG5pYmguIERvbmVjIHJ1dHJ1bSBpcHN1bSB2ZWwgc29kYWxlcyBncmF2aWRhLiBTdXNwZW5kaXNzZSB2ZWwgZmVsaXMgcHVydXMuCiAgICBEb25lYyB2b2x1dHBhdCB2ZWxpdCBxdWlzIGFyY3UgZWZmaWNpdHVyLCBldCByaG9uY3VzIGxlbyBjb25ndWUuIEFlbmVhbiB2aXRhZSBlZmZpY2l0dXIgc2VtLiBOdW5jIG5vbiBwcmV0aXVtCiAgICB0dXJwaXMsIGF0IHNvZGFsZXMgdG9ydG9yLgo8L3A+CjwvYm9keT4KPC9odG1sPgo=';
+    });
+export const getSmartMacroPanelWidth = createSelector(smartMacroDocState, fromSmartMacroDoc.getSmartMacroPanelWidth);
+export const getSmartMacroPanelVisibility = createSelector(smartMacroDocState, fromSmartMacroDoc.getSmartMacroPanelVisibility);
+
+export const getApplicationSettings = createSelector(
+    appUpdateSettingsState,
+    appState,
+    getSmartMacroPanelWidth,
+    (updateSettingsState,
+        app,
+        smartMacroPanelWidth
+    ): ApplicationSettings => {
+        return {
+            checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
+            everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
+            animationEnabled: app.animationEnabled,
+            appTheme: app.appTheme,
+            smartMacroPanelWidth
+        };
+    });

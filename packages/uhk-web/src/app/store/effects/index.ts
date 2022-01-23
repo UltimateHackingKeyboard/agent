@@ -8,6 +8,7 @@ import { ApplicationEffects } from './app';
 import { AppUpdateEffect } from './app-update';
 import { ContributorsEffect } from './contributors.effect';
 import { UserConfigurationHistoryEffects } from './user-configuration-history.effects';
+import { SmartMacroDocEffect } from './smart-macro-doc.effect';
 
 export * from './keymap';
 export * from './macro';
@@ -25,5 +26,6 @@ export const effects = [
     AutoUpdateSettingsEffects,
     DeviceEffects,
     ContributorsEffect,
-    UserConfigurationHistoryEffects
+    UserConfigurationHistoryEffects,
+    SmartMacroDocEffect
 ];
