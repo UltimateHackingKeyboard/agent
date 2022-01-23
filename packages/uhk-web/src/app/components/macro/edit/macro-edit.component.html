@@ -24,10 +24,10 @@
             <div *ngIf="!macro" class="not-found">
                 There is no macro with id {{ macroId }}.
             </div>
-            <div class="smart-macro-doc-label" role="button" (click)="toggleSmartMacroDocPanel()" tabindex="0">
+            <button class="btn btn-default smart-macro-doc-label" (click)="toggleSmartMacroDocPanel()">
                 Smart macro reference
-                <fa-icon [icon]="faCaretLeft"></fa-icon>
-            </div>
+                <fa-icon [icon]="faCaretDown"></fa-icon>
+            </button>
         </div>
     </as-split-area>
     <as-split-area *ngIf="smartMacroPanelVisibility$ | async"

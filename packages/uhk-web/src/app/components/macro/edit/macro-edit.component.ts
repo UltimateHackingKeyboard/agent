@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { faCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
@@ -35,7 +35,7 @@ import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../st
     }
 })
 export class MacroEditComponent implements OnDestroy {
-    faCaretLeft = faCaretLeft;
+    faCaretDown = faCaretDown;
     macro: Macro;
     isNew: boolean;
     macroId: number;

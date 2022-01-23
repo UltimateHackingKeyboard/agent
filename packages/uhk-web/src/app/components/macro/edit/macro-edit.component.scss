@@ -41,9 +41,9 @@
 }
 
 .smart-macro-doc-label {
-    display: inline-block;
-    writing-mode: tb-rl;
     position: absolute;
     right: 0;
-    top: calc(50% - 88px);
+    top: 50%;
+    transform: rotate(90deg) translateX(50%);
+    transform-origin: 100% 0;
 }
