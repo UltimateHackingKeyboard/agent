@@ -63,7 +63,7 @@
         background-color: transparent;
         top: 0;
         height: $btn-border-radius;
-        width:  $btn-border-radius * 2;
+        width: $btn-border-radius * 2;
         transition: $btn-transition;
     }
 
@@ -110,7 +110,7 @@
 
     fa-icon {
         ::ng-deep svg {
-            transition: .3s;
+            transition: 0.3s;
         }
 
         &.opened {
