@@ -107,4 +107,16 @@
             box-shadow: -$btn-border-radius 0 0 0 var(--color-smart-macro-hover-color);
         }
     }
+
+    fa-icon {
+        ::ng-deep svg {
+            transition: .3s;
+        }
+
+        &.opened {
+            ::ng-deep svg {
+                transform: rotate(-180deg);
+            }
+        }
+    }
 }
