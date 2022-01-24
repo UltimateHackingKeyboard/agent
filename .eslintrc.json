@@ -1,0 +1,68 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended"
+  ],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/build/**"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "rules": {
+        "semi": "off",
+        "no-async-promise-executor": "off",
+        "no-case-declarations": "off",
+        "no-constant-condition": "off",
+        "no-control-regex": "off",
+        "no-irregular-whitespace": "off",
+        "no-prototype-builtins": "off",
+        "no-var": "off",
+        "prefer-const": "off",
+        "@typescript-eslint/semi": ["error"],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/triple-slash-reference": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-inferrable-types": "off"
+      }
+    }
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      4,
+      {
+        "FunctionDeclaration": {"parameters": "first"},
+        "SwitchCase": 1
+      }
+    ]
+  }
+}

@@ -7,32 +7,23 @@ export class ModuleConfiguration {
      * module id enumeration is a separate story
      */
 
-    @assertUInt8
-    id: number;
+    @assertUInt8 id: number;
 
-    @assertUInt8
-    pointerMode: number;
+    @assertUInt8 pointerMode: number;
 
-    @assertUInt8
-    deceleratedPointerSpeedMultiplier: number;
+    @assertUInt8 deceleratedPointerSpeedMultiplier: number;
 
-    @assertUInt8
-    basePointerSpeedMultiplier: number;
+    @assertUInt8 basePointerSpeedMultiplier: number;
 
-    @assertUInt8
-    acceleratedPointerSpeedMultiplier: number;
+    @assertUInt8 acceleratedPointerSpeedMultiplier: number;
 
-    @assertUInt16
-    angularShift: number;
+    @assertUInt16 angularShift: number;
 
-    @assertUInt8
-    modLayerPointerFunction: number;
+    @assertUInt8 modLayerPointerFunction: number;
 
-    @assertUInt8
-    fnLayerPointerFunction: number;
+    @assertUInt8 fnLayerPointerFunction: number;
 
-    @assertUInt8
-    mouseLayerPointerFunction: number;
+    @assertUInt8 mouseLayerPointerFunction: number;
 
     fromJsonObject(jsonObject: any, version: number): ModuleConfiguration {
         switch (version) {

@@ -15,6 +15,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { effects } from '../app/store/effects';
+import { CustomRouterStateSerializer } from '../app/store/router-util';
 
 @NgModule({
     imports: [
@@ -22,7 +23,9 @@ import { effects } from '../app/store/effects';
         SharedModule,
         routing,
         StoreModule.forRoot(reducers),
-        StoreRouterConnectingModule.forRoot(),
+        StoreRouterConnectingModule.forRoot({
+            serializer: CustomRouterStateSerializer
+        }),
         StoreDevtoolsModule.instrument({
             maxAge: 10
         }),

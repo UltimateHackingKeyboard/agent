@@ -18,8 +18,6 @@ export enum ActionTypes {
     Remove = '[Keymap] Remove keymap',
     RemoveLayer = '[Keymap] Remove keymap layer',
     CheckMacro = '[Keymap] Check deleted macro',
-    LoadKeymaps = '[Keymap] Load keymaps',
-    LoadKeymapsSuccess = '[Keymap] Load keymaps success',
     EditDescription = '[Keymap] Edit description',
     UndoLastAction = '[Keymap] Undo last action',
     Select = '[Keymap] Select keymap action',
@@ -116,17 +114,6 @@ export class CheckMacroAction implements Action {
     }
 }
 
-export class LoadKeymapsAction implements Action {
-    type = ActionTypes.LoadKeymaps;
-}
-
-export class LoadKeymapSuccessAction implements Action {
-    type = ActionTypes.LoadKeymapsSuccess;
-
-    constructor(public payload: Keymap[]) {
-    }
-}
-
 export class EditDescriptionAction implements Action {
     type = ActionTypes.EditDescription;
 
@@ -167,8 +154,6 @@ export type Actions
     | RemoveKeymapAction
     | RemoveLayerAction
     | CheckMacroAction
-    | LoadKeymapsAction
-    | LoadKeymapSuccessAction
     | EditDescriptionAction
     | UndoLastAction
     | SelectKeymapAction

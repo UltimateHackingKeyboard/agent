@@ -5,23 +5,17 @@ export class HardwareConfiguration {
 
     signature: string;
 
-    @assertUInt8
-    majorVersion: number;
+    @assertUInt8 majorVersion: number;
 
-    @assertUInt8
-    minorVersion: number;
+    @assertUInt8 minorVersion: number;
 
-    @assertUInt8
-    patchVersion: number;
+    @assertUInt8 patchVersion: number;
 
-    @assertUInt8
-    brandId: number;
+    @assertUInt8 brandId: number;
 
-    @assertUInt8
-    deviceId: number;
+    @assertUInt8 deviceId: number;
 
-    @assertUInt32
-    uniqueId: number;
+    @assertUInt32 uniqueId: number;
 
     isVendorModeOn: boolean;
 

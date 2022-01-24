@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
-import { map, mergeMap, startWith, tap, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 
 import { ApplicationSettings, AppStartInfo, getLogOptions, LogService, Notification, NotificationType } from 'uhk-common';
@@ -31,8 +31,7 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 @Injectable()
 export class ApplicationEffects {
 
-    @Effect()
-    appStart$: Observable<Action> = this.actions$
+    @Effect() appStart$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.AppBootstrapped),
             startWith(new AppStartedAction()),
@@ -42,20 +41,23 @@ export class ApplicationEffects {
                 this.appRendererService.getAppStartInfo();
                 this.logService.misc('Renderer appStart effect end');
             }),
-            map(() => {
-                const settings: ApplicationSettings = {
-                    checkForUpdateOnStartUp: true,
-                    everAttemptedSavingToKeyboard: false,
-                    animationEnabled: true,
-                    ...this.dataStorageRepository.getApplicationSettings()
-                };
+            switchMap(() => this.dataStorageRepository.getApplicationSettings()
+                .pipe(
+                    map(appSettings => {
+                        const settings: ApplicationSettings = {
+                            checkForUpdateOnStartUp: true,
+                            everAttemptedSavingToKeyboard: false,
+                            animationEnabled: true,
+                            ...appSettings
+                        };
 
-                return new LoadApplicationSettingsSuccessAction(settings);
-            })
+                        return new LoadApplicationSettingsSuccessAction(settings);
+                    })
+                )
+            )
         );
 
-    @Effect({ dispatch: false })
-    appStartInfo$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) appStartInfo$: Observable<Action> = this.actions$
         .pipe(
             ofType(ActionTypes.LoadAppStartInfo),
             tap(() => {
@@ -63,8 +65,7 @@ export class ApplicationEffects {
             })
         );
 
-    @Effect({ dispatch: false })
-    showNotification$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) showNotification$: Observable<Action> = this.actions$
         .pipe(
             ofType<ShowNotificationAction>(ActionTypes.AppShowNotification),
             map(action => action.payload),
@@ -76,8 +77,7 @@ export class ApplicationEffects {
             })
         );
 
-    @Effect()
-    processStartInfo$: Observable<Action> = this.actions$
+    @Effect() processStartInfo$: Observable<Action> = this.actions$
         .pipe(
             ofType<ProcessAppStartInfoAction>(ActionTypes.AppProcessStartInfo),
             map(action => action.payload),
@@ -123,11 +123,8 @@ export class ApplicationEffects {
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),
-            map((config: ApplicationSettings) => {
-                this.dataStorageRepository.saveApplicationSettings(config);
-
-                return new SaveApplicationSettingsSuccessAction();
-            })
+            switchMap((config: ApplicationSettings) => this.dataStorageRepository.saveApplicationSettings(config)),
+            map(() => new SaveApplicationSettingsSuccessAction())
         );
 
     @Effect({ dispatch: false }) setAppTheme$ = this.actions$

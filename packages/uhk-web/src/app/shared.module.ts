@@ -9,10 +9,12 @@ import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
@@ -24,10 +26,17 @@ import {
     RestoreConfigurationComponent,
     RecoveryModeComponent
 } from './components/device';
-import { KeymapAddComponent, KeymapEditComponent, KeymapHeaderComponent } from './components/keymap';
+import {
+    KeymapAddComponent,
+    KeymapAddEmptyComponent,
+    KeymapEditComponent,
+    KeymapHeaderComponent,
+    KeymapAddSecondaryMenuComponent
+} from './components/keymap';
 import { LayerOptionComponent, LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
+    MacroCommandComponent,
     MacroDelayTabComponent,
     MacroEditComponent,
     MacroHeaderComponent,
@@ -51,7 +60,7 @@ import {
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
 import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
-import { SideMenuComponent } from './components/side-menu';
+import { SecondSideMenuContainerComponent, SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
     SvgIconTextKeyComponent,
@@ -126,6 +135,7 @@ import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
+import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
 import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 
 @NgModule({
@@ -160,6 +170,8 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         LayersComponent,
         PopoverComponent,
         KeymapAddComponent,
+        KeymapAddEmptyComponent,
+        KeymapAddSecondaryMenuComponent,
         SideMenuComponent,
         KeypressTabComponent,
         KeymapTabComponent,
@@ -174,6 +186,8 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         MacroHeaderComponent,
         MacroItemComponent,
         MacroActionEditorComponent,
+        MacroCommandComponent,
+        MacroCommandEditorComponent,
         MacroDelayTabComponent,
         MacroKeyTabComponent,
         MacroMouseTabComponent,
@@ -211,6 +225,7 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         AutoGrowInputComponent,
         HelpPageComponent,
         ExternalUrlDirective,
+        SecondSideMenuContainerComponent,
         SvgSecondaryRoleComponent,
         UdevRulesComponent,
         HighlightArrowComponent,
@@ -225,11 +240,13 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         FormsModule,
         DragulaModule.forRoot(),
         routing,
+        MonacoEditorModule,
         NgxSelectModule.forRoot({
             keepSelectedItems: true,
             optionValueField: 'id',
             optionTextField: 'text'
         }),
+        NgSelectModule,
         NouisliderModule,
         NotifierModule.withConfig(angularNotifierConfig),
         ConfirmationPopoverModule.forRoot({

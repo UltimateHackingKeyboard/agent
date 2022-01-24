@@ -2,6 +2,8 @@
 
 import './polyfills';
 import { app, BrowserWindow } from 'electron';
+import setElectronSettingsConfig from './set-electron-settings-config';
+setElectronSettingsConfig();
 
 import * as path from 'path';
 import * as url from 'url';
@@ -16,7 +18,7 @@ import { SudoService } from './services/sudo.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
 import { loadWindowState, saveWindowState } from './util/window';
-import { options, cliUsage, reenumerateAndExit } from './util';
+import { getWindowBackgroundColor, options, cliUsage, reenumerateAndExit } from './util';
 // import './dev-extension';
 // require('electron-debug')({ showDevTools: true, enabled: true });
 
@@ -60,7 +62,7 @@ if (!areServicesInited) {
 
 const isSecondInstance = !app.requestSingleInstanceLock();
 
-function createWindow() {
+async function createWindow() {
     if (isSecondInstance) {
         return;
     }
@@ -79,11 +81,12 @@ function createWindow() {
         webPreferences: {
             contextIsolation: false,
             nodeIntegration: true,
-            enableRemoteModule: true,
             spellcheck: false,
             preload: path.join(__dirname, 'preload.js')
         },
-        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png')
+        icon: path.join(__dirname, 'renderer/assets/images/agent-app-icon.png'),
+        backgroundColor: await getWindowBackgroundColor(),
+        show: false
     });
 
     if (loadedWindowState.isFullScreen) {
@@ -97,7 +100,7 @@ function createWindow() {
     appUpdateService = new AppUpdateService(logger, win, app);
     appService = new AppService(logger, win, deviceService, options, packagesDir);
     sudoService = new SudoService(logger, options, deviceService, packagesDir);
-// and load the index.html of the app.
+    // and load the index.html of the app.
 
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'renderer/index.html'),
@@ -123,6 +126,10 @@ function createWindow() {
         uhkHidDeviceService.close();
         uhkHidDeviceService = null;
         sudoService = null;
+    });
+
+    win.once('ready-to-show', () => {
+        win.show();
     });
 
     win.webContents.on('did-finish-load', () => {
@@ -157,12 +164,12 @@ if (isSecondInstance) {
         });
 } else {
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+    // This method will be called when Electron has finished
+    // initialization and is ready to create browser windows.
+    // Some APIs can only be used after this event occurs.
     app.on('ready', createWindow);
 
-// Quit when all windows are closed.
+    // Quit when all windows are closed.
     app.on('window-all-closed', () => {
         app.exit();
     });
@@ -170,11 +177,11 @@ if (isSecondInstance) {
     app.on('will-quit', () => {
     });
 
-    app.on('activate', () => {
+    app.on('activate', async () => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (win === null) {
-            createWindow();
+            await createWindow();
         }
     });
 

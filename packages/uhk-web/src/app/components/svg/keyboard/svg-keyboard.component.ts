@@ -6,7 +6,9 @@ import {
     SimpleChanges,
     ChangeDetectionStrategy,
     AfterViewInit,
-    ChangeDetectorRef
+    ChangeDetectorRef,
+    OnInit,
+    OnChanges
 } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -79,7 +81,7 @@ import { findModuleById } from '../../../util';
         ])
     ]
 })
-export class SvgKeyboardComponent implements AfterViewInit {
+export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() moduleConfig: Module[];
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };

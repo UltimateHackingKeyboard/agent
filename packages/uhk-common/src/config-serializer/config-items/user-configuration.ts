@@ -6,67 +6,49 @@ import { ModuleConfiguration } from './module-configuration';
 import { ConfigSerializer } from '../config-serializer';
 import { KeystrokeAction, NoneAction } from './key-action';
 import { SecondaryRoleAction } from './secondary-role-action';
-import { isScancodeExists } from './scancode-checker';
+import { isAllowedScancode } from './scancode-checker';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration';
 import { LayerName } from './layer-name';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
 
-    @assertUInt16
-    userConfigMajorVersion: number;
+    @assertUInt16 userConfigMajorVersion: number;
 
-    @assertUInt16
-    userConfigMinorVersion: number;
+    @assertUInt16 userConfigMinorVersion: number;
 
-    @assertUInt16
-    userConfigPatchVersion: number;
+    @assertUInt16 userConfigPatchVersion: number;
 
-    @assertUInt16
-    userConfigurationLength: number;
+    @assertUInt16 userConfigurationLength: number;
 
     deviceName: string;
 
-    @assertUInt16
-    doubleTapSwitchLayerTimeout: number;
+    @assertUInt16 doubleTapSwitchLayerTimeout: number;
 
-    @assertUInt8
-    iconsAndLayerTextsBrightness: number;
+    @assertUInt8 iconsAndLayerTextsBrightness: number;
 
-    @assertUInt8
-    alphanumericSegmentsBrightness: number;
+    @assertUInt8 alphanumericSegmentsBrightness: number;
 
-    @assertUInt8
-    keyBacklightBrightness: number;
+    @assertUInt8 keyBacklightBrightness: number;
 
-    @assertUInt8
-    mouseMoveInitialSpeed: number;
+    @assertUInt8 mouseMoveInitialSpeed: number;
 
-    @assertUInt8
-    mouseMoveAcceleration: number;
+    @assertUInt8 mouseMoveAcceleration: number;
 
-    @assertUInt8
-    mouseMoveDeceleratedSpeed: number;
+    @assertUInt8 mouseMoveDeceleratedSpeed: number;
 
-    @assertUInt8
-    mouseMoveBaseSpeed: number;
+    @assertUInt8 mouseMoveBaseSpeed: number;
 
-    @assertUInt8
-    mouseMoveAcceleratedSpeed: number;
+    @assertUInt8 mouseMoveAcceleratedSpeed: number;
 
-    @assertUInt8
-    mouseScrollInitialSpeed: number;
+    @assertUInt8 mouseScrollInitialSpeed: number;
 
-    @assertUInt8
-    mouseScrollAcceleration: number;
+    @assertUInt8 mouseScrollAcceleration: number;
 
-    @assertUInt8
-    mouseScrollDeceleratedSpeed: number;
+    @assertUInt8 mouseScrollDeceleratedSpeed: number;
 
-    @assertUInt8
-    mouseScrollBaseSpeed: number;
+    @assertUInt8 mouseScrollBaseSpeed: number;
 
-    @assertUInt8
-    mouseScrollAcceleratedSpeed: number;
+    @assertUInt8 mouseScrollAcceleratedSpeed: number;
 
     moduleConfigurations: ModuleConfiguration[] = [];
 
@@ -79,11 +61,11 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     }
 
     clone(): UserConfiguration {
-       const userConfig = Object.assign(new UserConfiguration(), this);
-       userConfig.keymaps = userConfig.keymaps.map(keymap => new Keymap(keymap));
-       userConfig.macros = userConfig.macros.map(macro => new Macro(macro));
+        const userConfig = Object.assign(new UserConfiguration(), this);
+        userConfig.keymaps = userConfig.keymaps.map(keymap => new Keymap(keymap));
+        userConfig.macros = userConfig.macros.map(macro => new Macro(macro));
 
-       return userConfig;
+        return userConfig;
     }
 
     fromJsonObject(jsonObject: any): UserConfiguration {
@@ -240,7 +222,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                             (keyAction as any)._secondaryRoleAction = undefined;
                         }
 
-                        if (keyAction.hasScancode() && !isScancodeExists(keyAction.scancode)) {
+                        if (keyAction.hasScancode() && !isAllowedScancode(keyAction)) {
                             module.keyActions[keyActionId] = new NoneAction();
                         }
                     }

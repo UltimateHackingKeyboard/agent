@@ -1,4 +1,5 @@
-import { Component, HostListener, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, HostListener, ViewEncapsulation, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
@@ -20,6 +21,8 @@ import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
 import { KeyUpAction, KeyDownAction } from './store/actions/app';
 import { OutOfSpaceWarningData } from './models';
+import { filter } from 'rxjs/operators';
+import { SecondSideMenuContainerComponent } from './components/side-menu';
 
 @Component({
     selector: 'main-app',
@@ -28,15 +31,15 @@ import { OutOfSpaceWarningData } from './models';
     encapsulation: ViewEncapsulation.None,
     animations: [
         trigger('showSaveToKeyboardButton', [
-                transition(':enter', [
-                    style({transform: 'translateY(100%)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
-                ]),
-                transition(':leave', [
-                    style({transform: 'translateY(0)'}),
-                    animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
-                ])
+            transition(':enter', [
+                style({transform: 'translateY(100%)'}),
+                animate('400ms ease-in-out', style({transform: 'translateY(0)'}))
             ]),
+            transition(':leave', [
+                style({transform: 'translateY(0)'}),
+                animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
+            ])
+        ]),
         trigger('showOutOfSpaceWarning', [
             transition(':enter', [
                 style({transform: 'translateY(100%)'}),
@@ -62,10 +65,22 @@ import { OutOfSpaceWarningData } from './models';
                 style({ opacity: 1 }),
                 animate('500ms ease-out', style({ opacity: 0 }))
             ])
+        ]),
+        trigger('slideInOut', [
+            transition(':enter', [
+                style({transform: 'translateX(100%)'}),
+                animate('400ms ease-in-out', style({transform: 'translateX(0)'}))
+            ]),
+            transition(':leave', [
+                style({transform: 'translateX(0)'}),
+                animate('400ms ease-in-out', style({transform: 'translateX(100%)'}))
+            ])
         ])
     ]
 })
 export class MainAppComponent implements OnDestroy {
+    @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
+
     showUpdateAvailable: boolean;
     updateInfo$: Observable<UpdateInfo>;
     deviceConfigurationLoaded$: Observable<boolean>;
@@ -73,14 +88,20 @@ export class MainAppComponent implements OnDestroy {
     saveToKeyboardState: ProgressButtonState;
     firstAttemptOfSaveToKeyboard$: Observable<boolean>;
     outOfSpaceWarning: OutOfSpaceWarningData;
+    secondSideMenuVisible = false;
 
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
     private showUpdateAvailableSubscription: Subscription;
     private outOfSpaceWarningSubscription: Subscription;
+    private routeDataSubscription: Subscription;
+    private secondSideMenuComponent: any;
 
-    constructor(private store: Store<AppState>) {
+    constructor(private store: Store<AppState>,
+                private route: ActivatedRoute,
+                private router: Router,
+                private cdRef: ChangeDetectorRef) {
         this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
             .subscribe(data => this.showUpdateAvailable = data);
         this.updateInfo$ = store.select(getUpdateInfo);
@@ -93,6 +114,33 @@ export class MainAppComponent implements OnDestroy {
         this.firstAttemptOfSaveToKeyboard$ = store.select(firstAttemptOfSaveToKeyboard);
         this.outOfSpaceWarningSubscription = store.select(getOutOfSpaceWaringData)
             .subscribe(data => this.outOfSpaceWarning = data);
+        this.routeDataSubscription = this.router.events.pipe(
+            filter((event: Event) => event instanceof NavigationEnd)
+        ).subscribe((event: NavigationEnd) => {
+            let tmpRoute = this.route.snapshot.root;
+            let data = { ...tmpRoute.data };
+
+            while (tmpRoute.firstChild) {
+                tmpRoute = tmpRoute.firstChild;
+                data = {
+                    ...data,
+                    ...tmpRoute.data
+                };
+            }
+
+            if (this.secondSideMenuComponent !== data.secondMenuComponent) {
+                this.secondSideMenuComponent = data.secondMenuComponent;
+
+                if (this.secondSideMenuComponent) {
+                    this.secondSideMenuVisible = true;
+                    this.secondarySideMenuContainer.resolveComponent(this.secondSideMenuComponent);
+                } else {
+                    this.secondSideMenuVisible = false;
+                    this.secondarySideMenuContainer.clear();
+                }
+                this.cdRef.detectChanges();
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -100,6 +148,7 @@ export class MainAppComponent implements OnDestroy {
         this.keypressCapturingSubscription.unsubscribe();
         this.showUpdateAvailableSubscription.unsubscribe();
         this.outOfSpaceWarningSubscription.unsubscribe();
+        this.routeDataSubscription.unsubscribe();
     }
 
     @HostListener('document:keydown', ['$event'])

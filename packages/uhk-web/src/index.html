@@ -60,7 +60,10 @@
 
             currentTheme = newTheme;
         }
-
+        function getUhkTheme () {
+            return currentTheme;
+        }
+        window.getUhkTheme = getUhkTheme;
         window.setUhkTheme = setUhkTheme;
         window.setUhkTheme(getDefaultTheme())
     </script>

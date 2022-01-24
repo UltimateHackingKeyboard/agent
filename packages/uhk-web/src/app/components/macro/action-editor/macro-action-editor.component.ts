@@ -1,7 +1,19 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
+import { faCode, faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
+    CommandMacroAction,
     MacroAction,
     DelayMacroAction,
     KeyMacroAction,
@@ -17,7 +29,8 @@ enum TabName {
     Keypress,
     Text,
     Mouse,
-    Delay
+    Delay,
+    Command
 }
 
 @Component({
@@ -26,7 +39,7 @@ enum TabName {
     styleUrls: ['./macro-action-editor.component.scss'],
     host: { 'class': 'macro-action-editor' }
 })
-export class MacroActionEditorComponent implements OnInit {
+export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() macroAction: MacroAction;
 
     @Output() save = new EventEmitter<MacroAction>();
@@ -45,8 +58,17 @@ export class MacroActionEditorComponent implements OnInit {
     faKeyboard = faKeyboard;
     faMousePointer = faMousePointer;
     faClock = faClock;
+    faCode = faCode;
 
     constructor(private _cdRef: ChangeDetectorRef) {
+    }
+
+    ngAfterViewInit(): void {
+        const isValid = this.selectedTab && this.selectedTab.isMacroValid();
+        if (isValid !== this.isSelectedMacroValid) {
+            this.isSelectedMacroValid = isValid;
+            this._cdRef.detectChanges();
+        }
     }
 
     ngOnInit() {
@@ -61,6 +83,14 @@ export class MacroActionEditorComponent implements OnInit {
 
     onCancelClick(): void {
         this.cancel.emit();
+    }
+
+    @HostListener('document:keydown.control.enter', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (this.isSelectedMacroValid) {
+            this.onSaveClick();
+            event.preventDefault();
+        }
     }
 
     onSaveClick(): void {
@@ -109,6 +139,8 @@ export class MacroActionEditorComponent implements OnInit {
             action instanceof MoveMouseMacroAction ||
             action instanceof ScrollMouseMacroAction) {
             return TabName.Mouse;
+        } else if (action instanceof CommandMacroAction) {
+            return TabName.Command;
         }
         return undefined;
     }

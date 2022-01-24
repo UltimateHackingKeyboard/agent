@@ -39,19 +39,25 @@ export class MapperService {
 
     public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
         let map: Map<number, string[]>;
+        let prefix: string;
+
         switch (type) {
             case KeystrokeType.shortMedia:
             case KeystrokeType.longMedia:
                 map = this.mediaScanCodeTextMap;
+                prefix = 'M';
                 break;
             case KeystrokeType.system:
                 map = this.systemScanCodeTextMap;
+                prefix = 'S';
                 break;
             default:
                 map = this.basicScanCodeTextMap;
+                prefix = 'B';
                 break;
         }
-        return map.get(scanCode);
+
+        return map.get(scanCode) || [`${prefix}${scanCode}`];
     }
 
     public hasScancodeIcon(scancode: number, type = KeystrokeType.basic): boolean {
@@ -349,6 +355,8 @@ export class MapperService {
         this.basicScancodeIcons.set(101, 'icon-kbd__mod--menu');
 
         this.mediaScancodeIcons = new Map<number, string>();
+        this.mediaScancodeIcons.set(111, 'icon-kbd__media--sunrise');
+        this.mediaScancodeIcons.set(112, 'icon-kbd__media--sunset');
         this.mediaScancodeIcons.set(176, 'icon-kbd__media--play');
         this.mediaScancodeIcons.set(177, 'icon-kbd__media--pause');
         this.mediaScancodeIcons.set(181, 'icon-kbd__media--next');

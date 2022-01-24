@@ -237,7 +237,7 @@ export class PopoverComponent implements OnChanges {
 
     setKeyActionValidState($event: boolean): void {
         this.keyActionValid = $event;
-        this.cdRef.markForCheck();
+        this.cdRef.detectChanges();
     }
 
     trackTabHeader(index: number, tabItem: TabHeader): string {

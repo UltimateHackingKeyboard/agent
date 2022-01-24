@@ -72,7 +72,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
         this.fontSize = 19;
         this.text1 = '';
         this.text2 = '';
-        while (this.fontSize > 10 && !this.isFullTextVisible()) {
+        while (this.fontSize > 10 && (!this.isFullTextVisible() || this.is2LineTextFontSizeLarge())) {
             this.calculateTexts(isRectangle);
             this.fontSize--;
         }
@@ -146,7 +146,7 @@ export class SvgIconTextKeyComponent implements OnChanges {
         } else if (this.fontSize === 11) {
             const cleanResult = result.replace(/ /g, '');
             const cleanText = this.text.substr(startPosition).replace(/ /g, '');
-            if (cleanResult.length < cleanText.length) {
+            if (cleanResult.length < cleanText.length && startPosition > 0) {
                 result = result.substring(0, result.length - 3) + '...';
             }
         }
@@ -164,5 +164,13 @@ export class SvgIconTextKeyComponent implements OnChanges {
         const textLength = this.text.replace(/ /g, '').length;
 
         return visibleText.length === textLength;
+    }
+
+    private is2LineTextFontSizeLarge(): boolean {
+        if (!this.text2) {
+            return false;
+        }
+
+        return this.fontSize > 12;
     }
 }

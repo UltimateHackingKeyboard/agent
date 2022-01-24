@@ -11,15 +11,15 @@
   },
   "license": "See in LICENSE",
   "dependencies": {
-    "debug": "^4.2.0",
+    "debug": "^4.3.2",
     "byte-data": "^19.0.1",
-    "tslib": "^2.2.0"
+    "tslib": "^2.3.1"
   },
   "peer-dependencies": {
     "node-hid": ">= 1.2.0"
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
-    "lint": "tslint --project  tsconfig.json"
+    "lint": "eslint --ext .ts ."
   }
 }

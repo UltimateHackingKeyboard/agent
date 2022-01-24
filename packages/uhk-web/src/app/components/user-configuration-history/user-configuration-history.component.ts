@@ -10,7 +10,6 @@ import { HistoryFileInfo, UserConfigHistoryComponentState } from '../../models';
 })
 export class UserConfigurationHistoryComponent {
     @Input() state: UserConfigHistoryComponentState;
-    @Input() md5HasOfCurrentConfig: string;
 
     @Output() getUserConfigFromHistory = new EventEmitter<string>();
 

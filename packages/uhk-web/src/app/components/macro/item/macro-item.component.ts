@@ -1,13 +1,23 @@
-import { Component, Input, Output, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges
+} from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
 import {
+    CommandMacroAction,
     DelayMacroAction,
     KeyMacroAction,
     KeyModifiers,
     MacroAction,
-    MouseButtons,
     MouseButtonMacroAction,
+    MouseButtons,
     MoveMouseMacroAction,
     ScrollMouseMacroAction,
     TextMacroAction
@@ -18,18 +28,30 @@ import { MapperService } from '../../../services/mapper.service';
 @Component({
     animations: [
         trigger('toggler', [
-            state('inactive', style({
-                height: '0px',
-                visibility: 'hidden'
-            })),
-            state('active', style({
-                height: '*',
-                visibility: 'visible'
-            })),
-            transition('inactive <=> active', animate('500ms ease-out'))
+            transition(':enter', [
+                style({
+                    height: '0px',
+                    visibility: 'hidden'
+                }),
+                animate('500ms ease-out', style({
+                    height: '*',
+                    visibility: 'visible'
+                }))
+            ]),
+            transition(':leave', [
+                style({
+                    height: '*',
+                    visibility: 'visible'
+                }),
+                animate('500ms ease-out', style({
+                    height: '0px',
+                    visibility: 'hidden'
+                }))
+            ]),
         ])
     ],
     selector: 'macro-item',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './macro-item.component.html',
     styleUrls: ['./macro-item.component.scss'],
     host: { 'class': 'macro-item' }
@@ -49,8 +71,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
     title: string;
     iconName: string;
     newItem: boolean = false;
-    overflow = 'hidden';
     faGripLinesVertical = faGripLinesVertical;
+    isCommand = false;
 
     constructor(private mapper: MapperService) { }
 
@@ -58,7 +80,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.updateView();
         if (!this.macroAction) {
             this.newItem = true;
-            this.overflow = 'visible';
         }
     }
 
@@ -70,7 +91,6 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     saveEditedAction(editedAction: MacroAction): void {
         this.macroAction = editedAction;
-        this.overflow = 'hidden';
         this.updateView();
         this.save.emit(editedAction);
     }
@@ -82,11 +102,9 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         this.edit.emit();
-        this.setOverflow('visible');
     }
 
     cancelEdit(): void {
-        this.overflow = 'hidden';
         this.cancel.emit();
     }
 
@@ -94,9 +112,19 @@ export class MacroItemComponent implements OnInit, OnChanges {
         this.delete.emit();
     }
 
+    saveMacroCommand(command: string): void {
+        const macroAction = new CommandMacroAction();
+        macroAction.command = command;
+        this.save.emit(macroAction);
+    }
+
     private updateView(): void {
+        this.isCommand = false;
         if (!this.macroAction) {
             this.title = 'New macro action';
+        } else if (this.macroAction instanceof CommandMacroAction) {
+            this.isCommand = true;
+            this.iconName = 'code';
         } else if (this.macroAction instanceof DelayMacroAction) {
             // Delay
             this.iconName = 'clock';
@@ -210,13 +238,5 @@ export class MacroItemComponent implements OnInit, OnChanges {
             }
         });
         this.title += selectedButtonLabels.join(', ');
-    }
-
-    private setOverflow(value: string): void {
-        // tslint:disable: align
-        setTimeout(() => {
-            this.overflow = value;
-        }, 600);
-        // tslint:enable: align
     }
 }

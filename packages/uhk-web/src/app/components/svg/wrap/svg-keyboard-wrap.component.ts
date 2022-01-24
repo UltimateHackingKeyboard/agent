@@ -25,6 +25,7 @@ import {
     KeyAction,
     Keymap,
     KeystrokeAction,
+    KeystrokeType,
     Layer,
     LayerName,
     MouseAction,
@@ -97,7 +98,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesInfo: HalvesInfo;
-    @Input() keyboardLayout: KeyboardLayout.ANSI;
+    @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
 
@@ -253,6 +254,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
 
         keystrokeAction.scancode = event.captured.code;
+        keystrokeAction.type = KeystrokeType.basic;
         keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.captured.left, event.captured.right);
 
         this.store.dispatch(

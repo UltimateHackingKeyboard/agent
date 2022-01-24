@@ -43,11 +43,9 @@ export const mapNumberToSwitchLayerMode = (value: number): SwitchLayerMode => {
 
 export class SwitchLayerAction extends KeyAction {
 
-    @assertEnum(SwitchLayerMode)
-    switchLayerMode: SwitchLayerMode;
+    @assertEnum(SwitchLayerMode) switchLayerMode: SwitchLayerMode;
 
-    @assertEnum(LayerName)
-    layer: LayerName;
+    @assertEnum(LayerName) layer: LayerName;
 
     constructor(other?: SwitchLayerAction) {
         super();

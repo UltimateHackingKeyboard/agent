@@ -1,3 +1,4 @@
+export * from './command-macro-action';
 export * from './delay-macro-action';
 export * from './key-macro-action';
 export * from './macro-action';

@@ -180,8 +180,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                     this.captureService.setModifier((this.pressedAltLocation === 1), Key.Alt);
                 }
 
-                this.saveScanCode(this.captureService.getMap(code));
                 this.scanCodePressed = true;
+                this.saveScanCode(this.captureService.getMap(code));
             } else {
                 this.captureService.setModifier((e.location === 1), code);
             }
@@ -235,6 +235,10 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         const left: KeyModifierModel[] = this.captureService.getModifiers(true);
         const right: KeyModifierModel[] = this.captureService.getModifiers(false);
 
+        if (!this.scanCodePressed && !this.captureService.hasModifiers()) {
+            return;
+        }
+
         this.capture.emit({
             captured: {
                 code,
@@ -259,14 +263,14 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
         if (this.svgKey.width < 20) {
             if (this.keyAction instanceof KeystrokeAction) {
-               if (!this.keyAction.hasActiveModifier()
+                if (!this.keyAction.hasActiveModifier()
                    && !this.keyAction.hasSecondaryRoleAction()
                    && this.keyAction.hasScancode()) {
-                   const text = this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type);
-                   if (text.length === 1) {
-                       this.labelSource = text;
-                   }
-               }
+                    const text = this.mapper.scanCodeToText(this.keyAction.scancode, this.keyAction.type);
+                    if (text.length === 1) {
+                        this.labelSource = text;
+                    }
+                }
             }
 
             if (this.labelSource === undefined) {

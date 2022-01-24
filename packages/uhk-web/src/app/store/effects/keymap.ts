@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { map, pairwise, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { map, pairwise, tap, withLatestFrom } from 'rxjs/operators';
 
 import { Keymap } from 'uhk-common';
 import { findNewItem } from '../../util';
@@ -13,19 +12,6 @@ import { AppState, getKeymaps } from '../index';
 
 @Injectable()
 export class KeymapEffects {
-
-    @Effect() loadKeymaps$: Observable<Action> = this.actions$
-        .pipe(
-            ofType(Keymaps.ActionTypes.LoadKeymaps),
-            startWith(new Keymaps.LoadKeymapsAction()),
-            switchMap(() => {
-                const presetsRequireContext = (<any>require).context('../../../res/presets', false, /.json$/);
-                const uhkPresets = presetsRequireContext.keys().map(presetsRequireContext) // load the presets into an array
-                    .map((keymap: any) => new Keymap().fromJsonObject(keymap, null, 1));
-
-                return of(new Keymaps.LoadKeymapSuccessAction(uhkPresets));
-            })
-        );
 
     @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
         .pipe(

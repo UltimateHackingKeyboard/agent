@@ -11,7 +11,7 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
@@ -24,13 +24,25 @@
             "main": "src/main-web.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "sourceMap": true,
+            "optimization": false,
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" },
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min-maps", "output": "assets/monaco-editor/min-maps" }
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
-              { "input": "src/styles.scss", "bundleName": "stylesLight", "inject": false },
-              { "input": "src/styles-dark.scss", "bundleName": "stylesDark", "inject": false }
+              {
+                "input": "src/styles.scss",
+                "bundleName": "stylesLight",
+                "inject": false
+              },
+              {
+                "input": "src/styles-dark.scss",
+                "bundleName": "stylesDark",
+                "inject": false
+              }
             ],
             "scripts": [
               "node_modules/nouislider/distribute/nouislider.js"
@@ -39,9 +51,7 @@
               "buffer",
               "file-saver",
               "uhk-common"
-            ],
-            "showCircularDependencies": false,
-            "extractCss": true
+            ]
           },
           "configurations": {
             "production": {
@@ -54,7 +64,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -94,7 +103,7 @@
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
+            "karmaConfig": "karma.conf.js",
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
               "src/styles.scss"
@@ -103,20 +112,17 @@
               "node_modules/nouislider/distribute/nouislider.js"
             ],
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
             ]
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.renderer.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         }
@@ -129,7 +135,7 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
@@ -144,18 +150,29 @@
               }
             },
             "baseHref": "",
+            "optimization": false,
+            "sourceMap": true,
             "outputPath": "../uhk-agent/dist/renderer",
             "index": "src/index.html",
             "main": "src/main-renderer.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.renderer.json",
             "assets": [
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
             ],
             "styles": [
               "node_modules/nouislider/distribute/nouislider.min.css",
-              { "input": "src/styles.scss", "bundleName": "stylesLight", "inject": false },
-              { "input": "src/styles-dark.scss", "bundleName": "stylesDark", "inject": false }
+              {
+                "input": "src/styles.scss",
+                "bundleName": "stylesLight",
+                "inject": false
+              },
+              {
+                "input": "src/styles-dark.scss",
+                "bundleName": "stylesDark",
+                "inject": false
+              }
             ],
             "scripts": [
               "node_modules/nouislider/distribute/nouislider.js"
@@ -164,8 +181,7 @@
               "buffer",
               "file-saver",
               "uhk-common"
-            ],
-            "showCircularDependencies": false
+            ]
           },
           "configurations": {
             "production": {
@@ -178,7 +194,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

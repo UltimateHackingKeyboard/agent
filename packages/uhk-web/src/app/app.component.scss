@@ -1,11 +1,18 @@
 @import '../styles/variables';
+@import '../styles/mixins';
 
-main-app {
+.main-div {
     min-height: 100%;
     height: 100%;
-    width: 100%;
-    display: block;
-    position: relative;
+}
+
+app-update-available {
+    height: $main-content-top-margin-on-update;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 .save-to-keyboard-button {
@@ -15,5 +22,62 @@ main-app {
 }
 
 .inner-content {
+    overflow-x: hidden;
     margin-left: $side-menu-width;
+    min-height: 100vh;
+    transition-timing-function: ease-out;
+    transition: 0.5s;
+
+    &.second-menu-visible {
+        margin-left: $side-menu-width + $second-side-menu-width;
+    }
+
+    & > :not(router-outlet) {
+        display: block;
+        height: 100%;
+        min-height: 100vh;
+        width: 100%;
+
+        &.vertical-center-component {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+}
+
+.secondary-menu-wrapper {
+    background-color: var(--color-secondary-sidemenu-bg);
+    bottom: 0;
+    left: $side-menu-width;
+    width: 0;
+    position: fixed;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: 0;
+    transition-timing-function: ease-out;
+    transition: 0.5s;
+
+    &.visible {
+        width: $second-side-menu-width;
+        border-right: 1px solid var(--color-sidemenu-border);
+    }
+
+    second-side-menu-container {
+        width: $second-side-menu-width;
+        display: block;
+    }
+}
+
+.update-panel-visible .secondary-menu-wrapper,
+.update-panel-visible side-menu {
+    top: $main-content-top-margin-on-update;
+}
+
+.update-panel-visible .inner-content {
+    padding-top: $main-content-top-margin-on-update;
+
+    & > :not(router-outlet) {
+        min-height: calc(100vh - #{$main-content-top-margin-on-update});
+    }
 }

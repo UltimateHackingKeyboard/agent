@@ -14,14 +14,11 @@ export interface JsObjectKeyMacroAction {
 
 export class KeyMacroAction extends MacroAction {
 
-    @assertEnum(MacroKeySubAction)
-    action: MacroKeySubAction;
+    @assertEnum(MacroKeySubAction) action: MacroKeySubAction;
 
-    @assertEnum(KeystrokeType)
-    type: KeystrokeType;
+    @assertEnum(KeystrokeType) type: KeystrokeType;
 
-    @assertUInt8
-    modifierMask: number;
+    @assertUInt8 public modifierMask: number;
 
     @assertUInt16
     private _scancode: number;

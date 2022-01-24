@@ -6,6 +6,7 @@ import { MoveMouseMacroAction } from './move-mouse-macro-action';
 import { ScrollMouseMacroAction } from './scroll-mouse-macro-action';
 import { DelayMacroAction } from './delay-macro-action';
 import { TextMacroAction } from './text-macro-action';
+import { CommandMacroAction } from './command-macro-action';
 
 export class Helper {
 
@@ -40,6 +41,8 @@ export class Helper {
                 return new DelayMacroAction().fromBinary(buffer, version);
             case MacroActionId.TextMacroAction:
                 return new TextMacroAction().fromBinary(buffer, version);
+            case MacroActionId.CommandMacroAction:
+                return new CommandMacroAction().fromBinary(buffer, version);
             default:
                 throw `Invalid MacroAction first byte: ${macroActionFirstByte}`;
         }
@@ -59,12 +62,14 @@ export class Helper {
             newMacroAction = new DelayMacroAction(macroAction);
         } else if (macroAction instanceof TextMacroAction) {
             newMacroAction = new TextMacroAction(macroAction);
+        } else if (macroAction instanceof CommandMacroAction) {
+            newMacroAction = new CommandMacroAction(macroAction);
         }
         return newMacroAction;
     }
 
     private static fromJSONObject(macroAction: any, version: number): MacroAction {
-       switch (macroAction.macroActionType) {
+        switch (macroAction.macroActionType) {
             case macroActionType.KeyMacroAction:
                 return new KeyMacroAction().fromJsonObject(macroAction, version);
             case macroActionType.MouseButtonMacroAction:
@@ -77,6 +82,8 @@ export class Helper {
                 return new DelayMacroAction().fromJsonObject(macroAction, version);
             case macroActionType.TextMacroAction:
                 return new TextMacroAction().fromJsonObject(macroAction, version);
+            case macroActionType.CommandMacroAction:
+                return new CommandMacroAction().fromJsonObject(macroAction, version);
             default:
                 throw `Invalid MacroAction.macroActionType: "${macroAction.macroActionType}"`;
         }

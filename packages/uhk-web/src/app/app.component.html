@@ -1,16 +1,26 @@
-<app-update-available *ngIf="showUpdateAvailable"
-                      [@updateAvailable]
-                      [updateInfo]="updateInfo$ | async"
-                      (updateApp)="updateApp()"
-                      (doNotUpdateApp)="doNotUpdateApp()">
-</app-update-available>
+<div class="main-div" [class.update-panel-visible]="showUpdateAvailable">
+    <app-update-available *ngIf="showUpdateAvailable"
+                          [@updateAvailable]
+                          [updateInfo]="updateInfo$ | async"
+                          (updateApp)="updateApp()"
+                          (doNotUpdateApp)="doNotUpdateApp()">
+    </app-update-available>
 
-<side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
-           [class.update-panel-visible]="showUpdateAvailable"></side-menu>
-<div id="main-content"
-     class="main-content inner-content"
-     [class.update-panel-visible]="showUpdateAvailable">
-    <router-outlet></router-outlet>
+    <side-menu [deviceConfigurationLoaded] = "deviceConfigurationLoaded$ | async"
+    ></side-menu>
+
+    <div class="secondary-menu-wrapper"
+         [class.visible]="secondSideMenuVisible">
+        <second-side-menu-container>
+        </second-side-menu-container>
+    </div>
+
+    <div class="inner-content"
+         [class.update-panel-visible]="showUpdateAvailable"
+         [class.second-menu-visible]="secondSideMenuVisible">
+        <router-outlet></router-outlet>
+    </div>
+
 </div>
 <notifier-container></notifier-container>
 <highlight-arrow *ngIf="firstAttemptOfSaveToKeyboard$ | async" [@highlightArrow]></highlight-arrow>

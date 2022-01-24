@@ -15,11 +15,9 @@ export interface JsObjectMouseButtonMacroAction {
 }
 
 export class MouseButtonMacroAction extends MacroAction {
-    @assertEnum(MacroMouseSubAction)
-    action: MacroMouseSubAction;
+    @assertEnum(MacroMouseSubAction) action: MacroMouseSubAction;
 
-    @assertUInt8
-    mouseButtonsMask: number;
+    @assertUInt8 mouseButtonsMask: number;
 
     constructor(other?: MouseButtonMacroAction) {
         super();

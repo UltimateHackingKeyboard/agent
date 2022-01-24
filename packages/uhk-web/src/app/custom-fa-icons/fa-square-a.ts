@@ -18,5 +18,5 @@ export const faSquareA: IconDefinition = {
         ligatures,
         unicode,
         svgPathData
-        ]
+    ]
 };

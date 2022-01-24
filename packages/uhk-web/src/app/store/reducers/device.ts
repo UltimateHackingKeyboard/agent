@@ -4,7 +4,7 @@ import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, Uhk
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
-import { initProgressButtonState, ProgressButtonState } from './progress-button-state';
+import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonState } from './progress-button-state';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
@@ -18,6 +18,7 @@ export interface State {
     multiDevice: boolean;
     zeroInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
+    modifiedConfigWhileSaved: boolean;
     savingToKeyboard: boolean;
     modules: HardwareModules;
     restoringUserConfiguration: boolean;
@@ -35,6 +36,7 @@ export const initialState: State = {
     multiDevice: false,
     zeroInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
+    modifiedConfigWhileSaved: false,
     savingToKeyboard: false,
     modules: {
         moduleInfos: [],
@@ -51,6 +53,7 @@ export const initialState: State = {
 };
 
 export function reducer(state = initialState, action: Action): State {
+
     switch (action.type) {
         case Device.ActionTypes.ConnectionStateChanged: {
             const data = (<Device.ConnectionStateChangedAction>action).payload;
@@ -77,11 +80,10 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.ShowSaveToKeyboardButton: {
             return {
                 ...state,
-                saveToKeyboard: {
-                    showButton: true,
-                    text: 'Save to keyboard',
-                    action: new Device.SaveConfigurationAction(true)
-                }
+                modifiedConfigWhileSaved: state.modifiedConfigWhileSaved
+                    || state.saveToKeyboard.showProgress
+                    || (state.saveToKeyboard.showButton && !state.saveToKeyboard.action),
+                saveToKeyboard: getSaveToKeyboardButtonState()
             };
         }
 
@@ -111,18 +113,18 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.SaveToKeyboardFailed: {
             return {
                 ...state,
-                saveToKeyboard: {
-                    showButton: true,
-                    text: 'Save to keyboard',
-                    action: new Device.SaveConfigurationAction(true)
-                }
+                modifiedConfigWhileSaved: false,
+                saveToKeyboard: getSaveToKeyboardButtonState()
             };
         }
 
         case Device.ActionTypes.HideSaveToKeyboardButton: {
             return {
                 ...state,
-                saveToKeyboard: initProgressButtonState
+                modifiedConfigWhileSaved: false,
+                saveToKeyboard: state.modifiedConfigWhileSaved
+                    ? getSaveToKeyboardButtonState()
+                    : initProgressButtonState
             };
         }
 

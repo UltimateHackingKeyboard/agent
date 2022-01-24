@@ -13,5 +13,8 @@ insert_final_newline = true
 [*.json]
 indent_size = 2
 
+[scancodes.json]
+indent_size = 4
+
 [*.yml]
 indent_size = 2

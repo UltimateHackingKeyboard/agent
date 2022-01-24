@@ -18,6 +18,18 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
 
+interface FlatScancode {
+    id: string;
+    text: string;
+    group?: string;
+    additional?: any;
+}
+
+interface SearchResult {
+    isMatch: boolean;
+    scancode?: number;
+}
+
 @Component({
     selector: 'keypress-tab',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,10 +48,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
 
-    scanCodeGroups: Array<SelectOptionData>;
+    scanCodeGroups: Array<FlatScancode>;
     secondaryRoleGroups: Array<SelectOptionData> = [];
 
-    selectedScancodeOption: SelectOptionData;
+    selectedScancodeOption: FlatScancode;
     selectedSecondaryRoleIndex: number;
     warningVisible: boolean;
     faInfoCircle = faInfoCircle;
@@ -52,9 +64,26 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         this.scanCodeGroups = [{
             id: '0',
-            text: 'None'
+            text: 'None',
+            additional: {
+                type: 'basic',
+                scancode: 0
+            }
         }];
-        this.scanCodeGroups = this.scanCodeGroups.concat(SCANCODES);
+        SCANCODES.forEach(group => {
+            group.children.forEach(child => {
+                this.scanCodeGroups.push({
+                    id: child.id,
+                    text: child.text,
+                    group: group.text,
+                    additional: {
+                        type: 'basic',
+                        scancode: Number.parseInt(child.id, 10),
+                        ...child.additional
+                    }
+                });
+            });
+        });
         this.selectedScancodeOption = this.scanCodeGroups[0];
         this.selectedSecondaryRoleIndex = -1;
     }
@@ -149,6 +178,111 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.keyActionChanged();
     }
 
+    addTagFn (name: string): FlatScancode | boolean {
+        const mediaSearchResult = isMediaSearch(name);
+        if (mediaSearchResult.isMatch) {
+            const option = {
+                id: name,
+                text: name,
+                group: 'Media',
+                additional: {
+                    type: 'media',
+                    scancode: mediaSearchResult.scancode
+                }
+            };
+            this.scanCodeGroups = [...this.scanCodeGroups, option];
+
+            return option;
+        }
+
+        const basicSearchResult = isBasicSearch(name);
+        if (basicSearchResult.isMatch) {
+            const option = {
+                id: name,
+                text: name,
+                group: 'Basic',
+                additional: {
+                    type: 'basic',
+                    scancode: basicSearchResult.scancode
+                }
+            };
+            this.scanCodeGroups = [...this.scanCodeGroups, option];
+
+            return option;
+        }
+
+        const systemSearchResult = isSystemSearch(name);
+        if (systemSearchResult.isMatch) {
+            const option = {
+                id: name,
+                text: name,
+                group: 'System',
+                additional: {
+                    type: 'system',
+                    scancode: systemSearchResult.scancode
+                }
+            };
+            this.scanCodeGroups = [...this.scanCodeGroups, option];
+
+            return option;
+        }
+
+        return false;
+    }
+
+    addTagText(term: string): string {
+        const mediaSearchResult = isMediaSearch(term);
+
+        if (mediaSearchResult.isMatch &&
+            !this.scanCodeGroups
+                .some(x => x.additional?.type === 'media' && x.additional?.scancode === mediaSearchResult.scancode)) {
+            return `Media scancode: ${mediaSearchResult.scancode}`;
+        }
+
+        const basicSearchResult = isBasicSearch(term);
+
+        if (basicSearchResult.isMatch &&
+            !this.scanCodeGroups
+                .some(x => x.additional?.type === 'basic' && x.additional?.scancode === basicSearchResult.scancode)) {
+            return `Basic scancode: ${basicSearchResult.scancode}`;
+        }
+
+        const systemSearchResult = isSystemSearch(term);
+        if (systemSearchResult.isMatch &&
+            !this.scanCodeGroups
+                .some(x => x.additional?.type === 'system' && x.additional?.scancode === systemSearchResult.scancode)) {
+            return `System scancode: ${systemSearchResult.scancode}`;
+        }
+
+        return '';
+    }
+
+    searchFn(term: string, item: FlatScancode) {
+        if (new RegExp(term, 'i').test(item.text)) {
+            return true;
+        }
+
+        const mediaSearchResult = isMediaSearch(term);
+        if (mediaSearchResult.isMatch &&
+            item.additional?.type === 'media' && item.additional?.scancode === mediaSearchResult.scancode) {
+            return true;
+        }
+
+        const basicSearchResult = isBasicSearch(term);
+        if (basicSearchResult.isMatch &&
+            item.additional?.type === 'basic' && item.additional?.scancode === basicSearchResult.scancode) {
+            return true;
+        }
+
+        const systemSearchResult = isSystemSearch(term);
+        if (systemSearchResult.isMatch &&
+            item.additional?.type === 'system' && item.additional?.scancode === systemSearchResult.scancode) {
+            return true;
+        }
+
+        return false;
+    }
+
     modifiersTrackBy(index: number, modifier: KeyModifierModel): string {
         return `${modifier.value}${modifier.checked}`;
     }
@@ -160,61 +294,41 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.cdRef.markForCheck();
     }
 
-    private findScancodeOptionBy(predicate: (option: SelectOptionData) => boolean): SelectOptionData {
-        let selectedOption: SelectOptionData;
-
-        const scanCodeGroups: SelectOptionData[] = [...this.scanCodeGroups];
-        while (scanCodeGroups.length > 0) {
-            const scanCodeGroup = scanCodeGroups.shift();
-            if (predicate(scanCodeGroup)) {
-                selectedOption = scanCodeGroup;
-                break;
-            }
-
-            if (scanCodeGroup.children) {
-                scanCodeGroups.push(...scanCodeGroup.children);
-            }
-        }
-        return selectedOption;
+    private findScancodeOptionById(id: string): FlatScancode {
+        return this.scanCodeGroups.find(scancode => scancode.id === id) ||
+            this.addTagFn(id) as FlatScancode;
     }
 
-    private findScancodeOptionById(id: string): SelectOptionData {
-        return this.findScancodeOptionBy(option => option.id === id);
-    }
-
-    private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): SelectOptionData {
+    private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): FlatScancode {
         const typeToFind: string =
             (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) ? 'media' : KeystrokeType[type];
-        return this.findScancodeOptionBy((option: SelectOptionData) => {
-            const additional = option.additional;
-            if (additional && additional.scancode === scancode && additional.type === typeToFind) {
-                return true;
-            } else if ((!additional || additional.scancode === undefined) && +option.id === scancode) {
-                return true;
-            } else {
-                return false;
-            }
-        });
+        const option = this.scanCodeGroups.find(x => x.additional.scancode === scancode && x.additional.type === typeToFind);
+
+        if (option) {
+            return option;
+        }
+
+        switch (typeToFind) {
+            case 'media':
+                return this.addTagFn(`M${scancode}`) as FlatScancode;
+
+            case 'basic':
+                return this.addTagFn(`B${scancode}`) as FlatScancode;
+
+            case 'system':
+                return this.addTagFn(`S${scancode}`) as FlatScancode;
+
+            default:
+                break;
+        }
     }
 
-    private toScancodeTypePair(option: SelectOptionData): [number, string] {
+    private toScancodeTypePair(option: FlatScancode): [number, string] {
         if (!option) {
             return [0, 'basic'];
         }
 
-        let scanCode: number;
-        let type: string;
-        if (option.additional) {
-            scanCode = option.additional.scancode;
-            type = option.additional.type || 'basic';
-        } else {
-            type = 'basic';
-        }
-        if (scanCode === undefined) {
-            scanCode = +option.id;
-        }
-
-        return [scanCode, type];
+        return [option.additional.scancode, option.additional.type || 'basic'];
     }
 
     private keyActionChanged(dispatch = true): void {
@@ -276,4 +390,61 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             text: this.mapper.getSecondaryRoleText(action)
         };
     }
+}
+
+const mediaRegExp = new RegExp('^M([0-9]*)', 'i');
+function isMediaSearch(term: string): SearchResult {
+    const match = mediaRegExp.exec(term);
+    if (match) {
+        const nr = parseInt(match[1], 10);
+
+        if (nr > 0 && nr <= 65535) {
+            return {
+                isMatch: true,
+                scancode: nr
+            };
+        }
+    }
+
+    return {
+        isMatch: false
+    };
+}
+
+const basicRegExp = new RegExp('^B([0-9]*)', 'i');
+function isBasicSearch(term: string): SearchResult {
+    const match = basicRegExp.exec(term);
+    if (match) {
+        const nr = parseInt(match[1], 10);
+
+        if (nr > 0 && nr <= 255) {
+            return {
+                isMatch: true,
+                scancode: nr
+            };
+        }
+    }
+
+    return {
+        isMatch: false
+    };
+}
+
+const systemRegExp = new RegExp('^S([0-9]*)', 'i');
+function isSystemSearch(term: string): SearchResult {
+    const match = systemRegExp.exec(term);
+    if (match) {
+        const nr = parseInt(match[1], 10);
+
+        if (nr > 0 && nr <= 255) {
+            return {
+                isMatch: true,
+                scancode: nr
+            };
+        }
+    }
+
+    return {
+        isMatch: false
+    };
 }

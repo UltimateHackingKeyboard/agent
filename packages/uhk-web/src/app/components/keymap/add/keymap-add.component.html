@@ -1,35 +1,14 @@
-<h1>
+<h1 class="mb-4">
     <fa-icon [icon]="faKeyboard"></fa-icon>
-    <span>Add new keymap</span>
+    {{ keymap.name }} keymap (<span class="pr-2 pl-2">{{ keymap.abbreviation }}</span>)
+    <button class="btn btn-default" (click)="addKeymap()">Add keymap</button>
 </h1>
-<div class="keymap__search clearfix">
-    <div class="input-group">
-        <span class="input-group-addon" id="sizing-addon1">
-        <fa-icon [icon]="faSearch"></fa-icon>
-        </span>
-        <input type="text" class="form-control" placeholder="Search ..." (input)="filterKeyboards($event.target.value)">
-    </div>
-    <div class="keymap__search_amount">
-        {{ (presets$ | async).length }} / {{ (presetsAll$ | async).length }} keymaps shown
-    </div>
-</div>
-<div class="keymap__list">
-    <div #keyboard class="keymap__list_item" *ngFor="let keymap of presets$ | async">
-        <h2>{{ keymap.name }}</h2>
-        <p class="keymap__description">
-            {{ keymap.description }}
-        </p>
-        <svg-keyboard-wrap
-                [keymap]="keymap"
-                [popoverEnabled]="false"
-                [tooltipEnabled]="true"
-        >
-        </svg-keyboard-wrap>
-        <div class="btn-group btn-group-lg">
-            <button class="btn btn-default" (click)="addKeymap(keymap)">Add keymap</button>
-        </div>
-    </div>
-</div>
-<div *ngIf="(presets$ | async).length === 0">
-    Sorry, no keyboard found under this search query.
-</div>
+
+<svg-keyboard-wrap
+    [keymap]="keymap"
+    [halvesInfo]="halvesInfo$ | async"
+    [keyboardLayout]="keyboardLayout$ | async"
+    [popoverEnabled]="false"
+    [tooltipEnabled]="true"
+>
+</svg-keyboard-wrap>

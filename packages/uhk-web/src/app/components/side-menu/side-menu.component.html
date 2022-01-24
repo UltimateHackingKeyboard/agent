@@ -113,8 +113,13 @@
                 <div class="sidebar__level-1">
                     <fa-icon [icon]="faKeyboard"></fa-icon>
                     Keymaps
+                    <a routerLink="/add-keymap"
+                       class="btn btn-sm btn-secondary float-right"
+                       [class.disabled]="state.updatingFirmware">
+                        <fa-icon [icon]="faPlus"></fa-icon>
+                    </a>
                     <fa-icon [icon]="this.sideMenuState.keymap.icon"
-                             class="chevron float-right"
+                             class="chevron float-right mr-1"
                              (click)="toggleMenuItem('keymap')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.keymap.animation">

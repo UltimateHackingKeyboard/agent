@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { faArrowsAlt, faArrowsAltV, faHandPaper, faHandRock, faMousePointer } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -29,7 +29,7 @@ enum TabName {
     ],
     host: {'class': 'macro__mouse'}
 })
-export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit {
+export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit, OnChanges {
     @Input() macroAction: MouseMacroAction;
 
     /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
@@ -145,5 +145,5 @@ export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit
             default:
                 return true;
         }
-    }
+    };
 }

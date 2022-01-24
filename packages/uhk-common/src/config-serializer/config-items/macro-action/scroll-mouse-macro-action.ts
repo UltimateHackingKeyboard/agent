@@ -4,11 +4,9 @@ import { MacroAction, MacroActionId, macroActionType } from './macro-action';
 
 export class ScrollMouseMacroAction extends MacroAction {
 
-    @assertInt16
-    x: number;
+    @assertInt16 x: number;
 
-    @assertInt16
-    y: number;
+    @assertInt16 y: number;
 
     constructor(other?: ScrollMouseMacroAction) {
         super();

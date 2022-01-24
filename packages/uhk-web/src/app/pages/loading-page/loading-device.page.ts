@@ -7,7 +7,10 @@ import { Component } from '@angular/core';
                      subtitle="Hang tight!"
                      [showLogo]="true"
                      [rotateLogo]="true"></uhk-message>
-    `
+    `,
+    host: {
+        'class': 'container-fluid vertical-center-component'
+    }
 })
 export class LoadingDevicePageComponent {
 

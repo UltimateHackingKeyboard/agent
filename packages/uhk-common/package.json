@@ -16,13 +16,13 @@
     "copy:scancodes": "copyfiles ./src/config-serializer/config-items/scancodes.json dist",
     "test": "jasmine-ts --config=jasmine.json",
     "coverage": "nyc jasmine-ts --config=jasmine.json",
-    "lint": "tslint --project tsconfig.json"
+    "lint": "eslint --ext .ts ."
   },
   "dependencies": {
-    "buffer": "5.4.3",
+    "buffer": "6.0.3",
     "md5": "2.2.1",
-    "moment": "2.24.0",
-    "tslib": "2.2.0"
+    "moment": "2.29.1",
+    "tslib": "2.3.1"
   },
   "license": "GPL-3.0",
   "nyc": {

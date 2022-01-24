@@ -6,8 +6,7 @@ import { UserConfiguration } from './user-configuration';
 
 export class Module {
 
-    @assertUInt8
-    id: number;
+    @assertUInt8 id: number;
 
     keyActions: KeyAction[];
 

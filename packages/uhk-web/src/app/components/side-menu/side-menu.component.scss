@@ -11,14 +11,16 @@ $level-2-item-spacing: 0.125rem 0 0.125rem 2rem;
     position: fixed;
     overflow-y: auto;
     top: 0;
+    bottom: 0;
     width: $side-menu-width;
-    height: 100%;
-
-    @include updatePanelVisible();
+    transition-timing-function: ease-out;
+    transition: 0.5s;
 }
 
 a {
-    color: var(--color-sidemenu-text);
+    &:not(.btn) {
+        color: var(--color-sidemenu-text);
+    }
 
     &.disabled {
         opacity: 0.65;
@@ -150,7 +152,7 @@ ul {
     &__level-1,
     &__level-2 {
         &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: var(--color-hover-link-color);
 
             .sidebar__macro_count {
                 visibility: visible;

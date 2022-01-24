@@ -40,7 +40,9 @@ let artifactName = 'UHK.Agent-${version}-${os}';
 let extraResources = [];
 
 if (process.platform === 'darwin') {
-    target = Platform.MAC.createTarget();
+    // https://github.com/lidel/electron-builder/blob/master/docs/configuration/mac.md
+    // Use default target to create dmg and zip artifact. Zip needed to Squirrel.Mac auto update
+    target = Platform.MAC.createTarget('default', builder.Arch.universal);
     artifactName += '.${ext}';
 } else if (process.platform === 'win32') {
     target = Platform.WINDOWS.createTarget('nsis', builder.Arch.ia32, builder.Arch.x64);
