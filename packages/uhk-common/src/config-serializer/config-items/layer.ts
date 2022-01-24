@@ -8,8 +8,7 @@ import { LayerName } from './layer-name';
 
 export class Layer {
 
-    @assertEnum(LayerName)
-    id: LayerName;
+    @assertEnum(LayerName) id: LayerName;
 
     modules: Module[];
 

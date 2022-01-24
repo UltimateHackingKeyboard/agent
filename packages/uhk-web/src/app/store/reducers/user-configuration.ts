@@ -341,7 +341,7 @@ export function reducer(
                         if (layerOption.order < state.selectedLayerOption.order) {
                             newState.selectedLayerOption = {...layerOption};
                         } else {
-                          break;
+                            break;
                         }
                     }
                 }
