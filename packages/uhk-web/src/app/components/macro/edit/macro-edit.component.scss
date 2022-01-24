@@ -23,6 +23,7 @@
 .macro-container {
     position: relative;
     height: 100vh;
+    border-right: solid 1px #ccc;
 }
 
 .smart-macro-doc-container {
@@ -42,8 +43,52 @@
 
 .smart-macro-doc-label {
     position: absolute;
-    right: 0;
+    right: -1px;
     top: 50%;
     transform: rotate(90deg) translateX(50%);
     transform-origin: 100% 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top-width: 0;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        background-color: transparent;
+        top: 0;
+        height: 4px;
+        width: 8px;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    &::before {
+        left: -8px;
+        border-right: solid 1px #ccc;
+        border-top: solid 1px #ccc;
+        border-top-right-radius: 4px;
+        box-shadow: 4px 0 0 0 white;
+    }
+
+    &::after {
+        right: -8px;
+        border-left: solid 1px #ccc;
+        border-top: solid 1px #ccc;
+        border-top-left-radius: 4px;
+        box-shadow: -4px 0 0 0 white;
+    }
+
+    &:focus,
+    &:hover {
+        border-color: #ccc;
+
+        &::before {
+            box-shadow: 4px 0 0 0 #ececec;
+        }
+
+        &::after {
+            box-shadow: -4px 0 0 0 #ececec;
+        }
+    }
+
 }
