@@ -140,5 +140,8 @@ $popover-border-color: $color-popover-border;
     --color-out-of-space-warning-bg: #{theme-color('warning')};
     --color-out-of-space-warning-text: #000;
 
-    --color-split-glutter: #000;
+    --color-smart-macro-split-glutter: #000;
+    --color-smart-macro-border-color: #666;
+    --color-smart-macro-hover-color: #313131;
+    --color-smart-macro-focus-bg-color: #444;
 }
