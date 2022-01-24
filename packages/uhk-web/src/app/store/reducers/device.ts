@@ -235,9 +235,10 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
         return DeviceUiStates.NotFound;
     }
 
-    if (semver.gt(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
-        return DeviceUiStates.UpdateNeeded;
-    }
+    // Temporarily switch off
+    // if (semver.gt(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+    //     return DeviceUiStates.UpdateNeeded;
+    // }
 };
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;

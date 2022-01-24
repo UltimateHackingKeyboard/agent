@@ -54,7 +54,7 @@ const appRoutes: Routes = [
     {
         path: '',
         component: MainPage,
-        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard],
+        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard, AgentUpdateNeededGuard],
         children: [
             ...deviceRoutes,
             ...keymapRoutes,
