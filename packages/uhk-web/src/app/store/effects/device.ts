@@ -4,7 +4,6 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import * as semver from 'semver/preload';
 
 import {
     FirmwareUpgradeIpcResponse,
@@ -48,7 +47,7 @@ import {
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
-import { getVersions } from '../../util';
+import { getVersions, isVersionGtMinor } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
@@ -75,7 +74,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (semver.gt(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+                if (isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
                     return this.router.navigate(['/update-agent']);
                 }
 

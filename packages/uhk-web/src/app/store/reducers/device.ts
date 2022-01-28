@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import * as semver from 'semver/preload';
 import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
 
 import * as Device from '../actions/device';
@@ -8,7 +7,7 @@ import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonSt
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
-import { getVersions } from '../../util';
+import { getVersions, isVersionGtMinor } from '../../util';
 
 export interface State {
     connectedDevice?: UhkDeviceProduct;
@@ -235,10 +234,9 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
         return DeviceUiStates.NotFound;
     }
 
-    // Temporarily switch off
-    // if (semver.gt(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
-    //     return DeviceUiStates.UpdateNeeded;
-    // }
+    if (isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+        return DeviceUiStates.UpdateNeeded;
+    }
 };
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;

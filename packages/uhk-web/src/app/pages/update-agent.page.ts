@@ -15,20 +15,27 @@ import { ForceUpdateAction } from '../store/actions/app-update.action';
                  src="assets/images/agent-icon.svg"
                  alt="UHK Agent icon"/>
             <div>
-                <h1>You must update to the latest Agent version.</h1>
-                <button class="btn btn-primary"
-                        [disabled]="isForceUpdate"
-                        (click)="onUpdate()"
-                >
-                    Update Agent
-                    <fa-icon *ngIf="isForceUpdate"
-                             [icon]="faSpinner"
-                             spin="true"></fa-icon>
-                </button>
+                <h1>Update Agent</h1>
+                <p>Your UHK contains a newer configuration version than this Agent version can handle, so you
+                    must update Agent.</p>
             </div>
         </div>
+        <div style="display: flex; justify-content: center">
+            <button class="btn btn-primary btn-lg"
+                    [disabled]="isForceUpdate"
+                    (click)="onUpdate()"
+            >
+                Update Agent
+                <fa-icon *ngIf="isForceUpdate"
+                         [icon]="faSpinner"
+                         spin="true"></fa-icon>
+            </button>
+        </div>
     `,
-    styleUrls: ['../components/uhk-message/uhk-message.component.scss']
+    styleUrls: ['../components/uhk-message/uhk-message.component.scss'],
+    host: {
+        'class': 'container-fluid vertical-center-component'
+    }
 })
 export class UpdateAgentPageComponent {
 
