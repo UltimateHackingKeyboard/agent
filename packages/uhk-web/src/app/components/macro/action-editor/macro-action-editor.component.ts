@@ -41,6 +41,7 @@ enum TabName {
 })
 export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() macroAction: MacroAction;
+    @Input() isMacroCommandSupported: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();

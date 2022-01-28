@@ -334,6 +334,10 @@ export const extraLEDCharactersSupported = createSelector(getHardwareModules, (h
     return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '4.2.0');
 });
 
+export const isMacroCommandSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
+    return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '5.0.0');
+});
+
 export const getApplicationSettings = createSelector(
     appUpdateSettingsState,
     appState,

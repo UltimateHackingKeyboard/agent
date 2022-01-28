@@ -44,6 +44,7 @@
      >
     <macro-action-editor
         [macroAction]="macroAction"
+        [isMacroCommandSupported]="isMacroCommandSupported"
         (cancel)="cancelEdit()"
         (save)="saveEditedAction($event)">
     </macro-action-editor>
