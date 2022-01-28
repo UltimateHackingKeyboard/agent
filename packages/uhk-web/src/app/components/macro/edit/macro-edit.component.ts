@@ -13,7 +13,7 @@ import {
     SaveMacroActionAction,
     SelectMacroAction
 } from '../../../store/actions/macro';
-import { AppState, getSelectedMacro, macroPlaybackSupported } from '../../../store';
+import { AppState, getSelectedMacro, isMacroCommandSupported, macroPlaybackSupported } from '../../../store';
 
 @Component({
     selector: 'macro-edit',
@@ -29,6 +29,7 @@ export class MacroEditComponent implements OnDestroy {
     isNew: boolean;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
+    isMacroCommandSupported$: Observable<boolean>;
 
     private selectedMacroSubscription: Subscription;
     private routeSubscription: Subscription;
@@ -52,6 +53,7 @@ export class MacroEditComponent implements OnDestroy {
 
         this.isNew = this.route.snapshot.params['empty'] === 'new';
         this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
+        this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);
     }
 
     ngOnDestroy() {

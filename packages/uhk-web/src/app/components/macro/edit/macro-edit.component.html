@@ -6,6 +6,7 @@
     <macro-list
         [macro]="macro"
         [macroPlaybackSupported]="macroPlaybackSupported$ | async"
+        [isMacroCommandSupported]="isMacroCommandSupported$ | async"
         (add)="addAction($event.macroId, $event.action)"
         (edit)="editAction($event.macroId, $event.index, $event.action)"
         (delete)="deleteAction($event.macroId, $event.index, $event.action)"
