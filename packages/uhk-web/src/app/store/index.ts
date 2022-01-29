@@ -99,6 +99,7 @@ export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (k
 });
 export const appState = (state: AppState) => state.app;
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
+export const disableUpdateAgentPage = createSelector(appState, fromApp.disableUpdateAgentPage);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
@@ -278,8 +279,13 @@ export const getMacroMenuItems = (userConfiguration: UserConfiguration): MacroMe
 export const calculateDeviceUiState = createSelector(
     deviceUiState,
     deviceConfigurationLoaded,
-    (uiState, deviceConfigLoaded): DeviceUiStates | undefined => {
+    disableUpdateAgentPage,
+    (uiState, deviceConfigLoaded, isDisableUpdateAgentPage): DeviceUiStates | undefined => {
         if (uiState) {
+
+            if(isDisableUpdateAgentPage && uiState === DeviceUiStates.UpdateNeeded)
+                return;
+
             return uiState;
         }
 

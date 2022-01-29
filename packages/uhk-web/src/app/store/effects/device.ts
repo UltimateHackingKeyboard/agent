@@ -38,7 +38,7 @@ import {
 import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState, deviceConnected, getRouterState, getUserConfiguration } from '../index';
+import { AppState, deviceConnected, disableUpdateAgentPage, getRouterState, getUserConfiguration } from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -54,8 +54,12 @@ export class DeviceEffects {
     @Effect() deviceConnectionStateChange$: Observable<Action> = this.actions$
         .pipe(
             ofType<ConnectionStateChangedAction>(ActionTypes.ConnectionStateChanged),
-            withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected)),
-            tap(([action, route]) => {
+            withLatestFrom(
+                this.store.select(getRouterState),
+                this.store.select(deviceConnected),
+                this.store.select(disableUpdateAgentPage),
+            ),
+            tap(([action, route, connected, isDisableUpdateAgentPage]) => {
                 const state = action.payload;
 
                 if (route.state && route.state.url.startsWith('/device/firmware')) {
@@ -74,7 +78,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+                if (!isDisableUpdateAgentPage && isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
                     return this.router.navigate(['/update-agent']);
                 }
 
