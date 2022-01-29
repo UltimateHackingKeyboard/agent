@@ -3,6 +3,11 @@ export interface CommandLineArgs {
      * Allow Developer Tools menu
      */
     devtools?: boolean;
+
+    /**
+     * Don't show the update agent screen
+     */
+    'disable-agent-update-screen'?: boolean;
     /**
      * logging categories
      */

@@ -1,5 +1,11 @@
 <ng-template [ngIf]="layers">
-    <layers [class.disabled]="animationState === 'opened'" (select)="selectLayer($event.index)" [current]="currentLayer"></layers>
+    <layers [class.disabled]="animationState === 'opened'"
+            [current]="currentLayer"
+            [layerOptions]="layerOptions"
+            (addLayer)="onAddLayer($event)"
+            (removeLayer)="onRemoveLayer($event)"
+            (select)="selectLayer($event)"
+    ></layers>
     <keyboard-slider id="keyboard-slider"
                      [animationEnabled]="animationEnabled"
                      [layers]="layers"

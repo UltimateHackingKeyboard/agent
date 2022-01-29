@@ -33,7 +33,8 @@ import { isVersionGte } from '../util';
 import {
     DeviceUiStates,
     FirmwareUpgradeState,
-    MacroMenuItem, ModuleFirmwareUpgradeStates,
+    MacroMenuItem,
+    ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
     SideMenuPageState,
     UhkProgressBarState,
@@ -85,6 +86,8 @@ export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro)
 export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMacroMap);
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
 export const getSelectedMacroIdAfterRemove = createSelector(userConfigState, fromUserConfig.getSelectedMacroIdAfterRemove);
+export const getSelectedLayerOption = createSelector(userConfigState, fromUserConfig.getSelectedLayerOption);
+export const getLayerOptions = createSelector(userConfigState, fromUserConfig.getLayerOptions);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
     return keymaps.map(keymap => {
         return {
@@ -94,9 +97,9 @@ export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (k
         };
     });
 });
-
 export const appState = (state: AppState) => state.app;
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
+export const disableUpdateAgentPage = createSelector(appState, fromApp.disableUpdateAgentPage);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
@@ -117,6 +120,7 @@ export const getPlatform = createSelector(appState, fromApp.getPlatform);
 export const appUpdateState = (state: AppState) => state.appUpdate;
 export const getShowAppUpdateAvailable = createSelector(appUpdateState, fromAppUpdate.getShowAppUpdateAvailable);
 export const getUpdateInfo = createSelector(appUpdateState, fromAppUpdate.getUpdateInfo);
+export const isForceUpdate = createSelector(appUpdateState, fromAppUpdate.isForceUpdate);
 
 export const appUpdateSettingsState = (state: AppState) => state.autoUpdateSettings;
 
@@ -275,8 +279,13 @@ export const getMacroMenuItems = (userConfiguration: UserConfiguration): MacroMe
 export const calculateDeviceUiState = createSelector(
     deviceUiState,
     deviceConfigurationLoaded,
-    (uiState, deviceConfigLoaded): DeviceUiStates | undefined => {
+    disableUpdateAgentPage,
+    (uiState, deviceConfigLoaded, isDisableUpdateAgentPage): DeviceUiStates | undefined => {
         if (uiState) {
+
+            if(isDisableUpdateAgentPage && uiState === DeviceUiStates.UpdateNeeded)
+                return;
+
             return uiState;
         }
 

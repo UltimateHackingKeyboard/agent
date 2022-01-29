@@ -7,6 +7,7 @@ import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonSt
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
+import { getVersions, isVersionGtMinor } from '../../util';
 
 export interface State {
     connectedDevice?: UhkDeviceProduct;
@@ -231,6 +232,10 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 
     if (!state.connectedDevice) {
         return DeviceUiStates.NotFound;
+    }
+
+    if (isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+        return DeviceUiStates.UpdateNeeded;
     }
 };
 

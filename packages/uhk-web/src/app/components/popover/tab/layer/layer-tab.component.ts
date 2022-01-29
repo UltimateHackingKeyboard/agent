@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, Simp
 import { KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode } from 'uhk-common';
 
 import { Tab } from '../tab';
+import { LayerOption } from '../../../../models';
 
 export type toggleType = 'active' | 'toggle';
 
@@ -13,8 +14,9 @@ export type toggleType = 'active' | 'toggle';
 })
 export class LayerTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
-    @Input() currentLayer: number;
+    @Input() currentLayer: LayerOption;
     @Input() allowLayerDoubleTap: boolean;
+    @Input() layerOptions: LayerOption[];
 
     @HostBinding('class.no-base') isNotBase: boolean;
 
@@ -29,20 +31,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
         }
     ];
 
-    layerData: { id: number, text: string }[] = [
-        {
-            id: 0,
-            text: 'Mod'
-        },
-        {
-            id: 1,
-            text: 'Fn'
-        },
-        {
-            id: 2,
-            text: 'Mouse'
-        }
-    ];
+    layerData: LayerOption[] = [];
 
     toggle: toggleType;
     layer: LayerName;
@@ -60,7 +49,11 @@ export class LayerTabComponent extends Tab implements OnChanges {
         }
 
         if (changes['currentLayer']) {
-            this.isNotBase = this.currentLayer > 0;
+            this.isNotBase = this.currentLayer.id !== LayerName.base;
+        }
+
+        if (changes.layerOptions) {
+            this.layerData = this.layerOptions.filter(layer => layer.selected && layer.allowed);
         }
 
         this.validAction.emit(!this.isNotBase);

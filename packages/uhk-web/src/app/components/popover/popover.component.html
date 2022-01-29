@@ -24,7 +24,7 @@
                       [secondaryRoleEnabled]="true"
                       [allowRemapOnAllKeymapWarning]="true"
                       [remapInfo]="remapInfo"
-                      [showLayerSwitcherInSecondaryRoles]="currentLayer === 0"
+                      [showLayerSwitcherInSecondaryRoles]="currentLayer?.id === 255"
                       (validAction)="setKeyActionValidState($event)"
                       (keyActionChange)="keystrokeActionChange($event)"
         ></keypress-tab>
@@ -32,6 +32,7 @@
                    [defaultKeyAction]="defaultKeyAction"
                    [currentLayer]="currentLayer"
                    [allowLayerDoubleTap]="allowLayerDoubleTap"
+                   [layerOptions]="layerOptions$ | async"
                    (validAction)="setKeyActionValidState($event)"
         ></layer-tab>
         <mouse-tab #tab *ngSwitchCase="tabName.Mouse" class="popover-content"

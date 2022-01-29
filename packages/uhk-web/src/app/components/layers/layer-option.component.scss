@@ -1,0 +1,12 @@
+:host {
+    display: block;
+
+    .form-check {
+        padding: 0.25rem 0.25rem 0.25rem 2rem;
+
+        label {
+            width: 100%;
+            display: inline-block;
+        }
+    }
+}

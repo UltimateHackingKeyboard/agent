@@ -10,7 +10,8 @@ import {
     LogService,
     SaveUserConfigurationData,
     UpdateFirmwareData,
-    UploadFileData
+    UploadFileData,
+    UserConfiguration
 } from 'uhk-common';
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
@@ -58,8 +59,8 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.startConnectionPoller);
     }
 
-    recoveryDevice(): void {
-        this.ipcRenderer.send(IpcEvents.device.recoveryDevice);
+    recoveryDevice(userConfig: UserConfiguration): void {
+        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, JSON.stringify(userConfig));
     }
 
     recoveryModule(moduleId: number): void {

@@ -7,6 +7,7 @@ export * from './hardware-configuration';
 export * from './key-modifiers';
 export * from './keymap';
 export * from './layer';
+export * from './layer-name';
 export * from './secondary-role-action';
 export * from './macro';
 export * from './module';

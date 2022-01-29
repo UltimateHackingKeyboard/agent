@@ -4,6 +4,7 @@ import { CommandLineArgs } from 'uhk-common';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'devtools', type: Boolean },
+    { name: 'disable-agent-update-screen', type: Boolean },
     { name: 'log', type: String },
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
@@ -26,6 +27,11 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'devtools',
                 description: 'Allow the Developer Tools menu.'
+            },
+            {
+                name: 'disable-agent-update-screen',
+                description: "Don't show the Agent update screen",
+                type: Boolean
             },
             {
                 name: 'log',

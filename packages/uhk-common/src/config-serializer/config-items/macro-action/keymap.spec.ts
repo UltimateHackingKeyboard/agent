@@ -75,7 +75,7 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            userConfigMajorVersion: 3,
+            userConfigMajorVersion: 5,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
@@ -103,6 +103,7 @@ describe('keymap', () => {
                     description: '',
                     layers: [
                         {
+                            id: 'base',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -115,6 +116,7 @@ describe('keymap', () => {
                             }]
                         },
                         {
+                            id: 'mod',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -127,6 +129,7 @@ describe('keymap', () => {
                             }]
                         },
                         {
+                            id: 'fn',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -135,6 +138,7 @@ describe('keymap', () => {
                             }]
                         },
                         {
+                            id: 'mouse',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -228,7 +232,7 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            userConfigMajorVersion: 3,
+            userConfigMajorVersion: 5,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
@@ -256,6 +260,7 @@ describe('keymap', () => {
                     description: '',
                     layers: [
                         {
+                            id: 'base',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -268,6 +273,7 @@ describe('keymap', () => {
                             }]
                         },
                         {
+                            id: 'mod',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -280,6 +286,7 @@ describe('keymap', () => {
                             }]
                         },
                         {
+                            id: 'fn',
                             modules: [{
                                 id: 0,
                                 keyActions: [
@@ -288,6 +295,7 @@ describe('keymap', () => {
                             }]
                         },
                         {
+                            id: 'mouse',
                             modules: [{
                                 id: 0,
                                 keyActions: [

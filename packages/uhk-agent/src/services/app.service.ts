@@ -40,6 +40,7 @@ export class AppService extends MainServiceBase {
             const response: AppStartInfo = {
                 commandLineArgs: {
                     modules: this.options.modules || false,
+                    'disable-agent-update-screen': this.options['disable-agent-update-screen'] || false,
                     log: this.options.log
                 },
                 platform: process.platform as string,

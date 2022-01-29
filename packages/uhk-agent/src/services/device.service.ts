@@ -18,6 +18,7 @@ import {
     SaveUserConfigurationData,
     UpdateFirmwareData,
     UploadFileData,
+    UserConfiguration,
     UHK_MODULES,
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME
@@ -281,6 +282,13 @@ export class DeviceService {
             if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+                this.logService.misc('[DeviceService] Waiting for keyboard');
+                await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
+                this.logService.config(
+                    '[DeviceService] User configuration will be saved after right module firmware upgrade',
+                    data.userConfig);
+                const buffer = mapObjectToUserConfigBinaryBuffer(data.userConfig);
+                await this.operations.saveUserConfiguration(buffer);
             } else {
                 this.logService.misc('Skip right firmware upgrade.');
             }
@@ -345,10 +353,11 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
-    public async recoveryDevice(event: Electron.IpcMainEvent): Promise<void> {
+    public async recoveryDevice(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
+            const userConfig: UserConfiguration = JSON.parse(args[0]);
             const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
@@ -365,6 +374,12 @@ export class DeviceService {
 
             this.logService.misc('[DeviceService] Waiting for keyboard');
             await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
+
+            this.logService.config(
+                '[DeviceService] User configuration will be saved after right module recovery',
+                userConfig);
+            const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
+            await this.operations.saveUserConfiguration(buffer);
 
             response.modules = await this.getHardwareModules(false);
             response.success = true;

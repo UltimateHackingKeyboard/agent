@@ -33,7 +33,7 @@ import {
     KeymapHeaderComponent,
     KeymapAddSecondaryMenuComponent
 } from './components/keymap';
-import { LayersComponent } from './components/layers';
+import { LayerOptionComponent, LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
     MacroCommandComponent,
@@ -118,6 +118,7 @@ import { ProgressButtonComponent } from './components/progress-button/progress-b
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { MultiDevicePageComponent } from './pages/multi-device.page';
+import { UpdateAgentPageComponent } from './pages/update-agent.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
@@ -135,6 +136,7 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
+import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 
 @NgModule({
     declarations: [
@@ -164,6 +166,7 @@ import { MacroCommandEditorComponent } from './components/macro/action-editor/ta
         SvgKeyboardWrapComponent,
         SvgKeyboardComponent,
         SvgModuleComponent,
+        LayerOptionComponent,
         LayersComponent,
         PopoverComponent,
         KeymapAddComponent,
@@ -211,6 +214,7 @@ import { MacroCommandEditorComponent } from './components/macro/action-editor/ta
         ProgressButtonComponent,
         LoadingDevicePageComponent,
         MultiDevicePageComponent,
+        UpdateAgentPageComponent,
         XtermComponent,
         SliderWrapperComponent,
         EditableTextComponent,
@@ -277,7 +281,8 @@ import { MacroCommandEditorComponent } from './components/macro/action-editor/ta
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
         UhkDeviceBootloaderNotActiveGuard,
-        UhkMultiDeviceGuard
+        UhkMultiDeviceGuard,
+        AgentUpdateNeededGuard
     ],
     exports: [
         UhkMessageComponent,

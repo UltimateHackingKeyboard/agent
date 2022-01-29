@@ -1,31 +1,38 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { LayerOption } from '../../models';
 
 @Component({
     selector: 'layers',
     templateUrl: './layers.component.html',
-    styleUrls: ['./layers.component.scss']
+    styleUrls: ['./layers.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayersComponent {
-    @Input() current: number;
-    @Output() select = new EventEmitter();
+    @Input() current: LayerOption;
+    @Input() layerOptions: LayerOption[];
 
-    buttons: string[];
+    @Output() select = new EventEmitter<LayerOption>();
+    @Output() addLayer = new EventEmitter<number>();
+    @Output() removeLayer = new EventEmitter<number>();
 
-    constructor() {
-        this.buttons = ['Base', 'Mod', 'Fn', 'Mouse'];
-        this.current = 0;
-    }
-
-    selectLayer(index: number) {
-        if (this.current === index) {
+    selectLayer(option: LayerOption) {
+        if (this.current?.id === option.id) {
             return;
         }
 
-        this.select.emit({
-            oldIndex: this.current,
-            index: index
-        });
+        this.select.emit(option);
+    }
 
-        this.current = index;
+    trackLayer(index: number, layer: LayerOption): string {
+        return layer.id.toString();
+    }
+
+    onRemoveLayer(layerOption: LayerOption): void {
+        this.removeLayer.emit(layerOption.id);
+    }
+
+    onSelectLayer(layerOption: LayerOption): void {
+        this.addLayer.emit(layerOption.id);
     }
 }

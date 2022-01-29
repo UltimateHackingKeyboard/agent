@@ -38,8 +38,8 @@ import {
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
-import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
-import { SaveKeyAction } from '../../../store/actions/keymap';
+import { AppState, getKeymaps, getMacros, getAnimationEnabled, getLayerOptions, getSelectedLayerOption } from '../../../store';
+import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SelectLayerAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
@@ -51,7 +51,7 @@ import {
 } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
-import { LastEditedKey } from '../../../models';
+import { LastEditedKey, LayerOption } from '../../../models';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 interface NameValuePair {
@@ -111,7 +111,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     keyEditConfig: { moduleId: number, keyId: number };
     selectedKey: { layerId: number, moduleId: number, keyId: number };
     popoverInitKeyAction: KeyAction;
-    currentLayer: number = 0;
+    currentLayer: LayerOption;
     tooltipData: {
         posTop: number,
         posLeft: number,
@@ -129,6 +129,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     rightArrow: boolean = false;
     topPosition: number = 0;
     leftPosition: number = 0;
+    layerOptions: LayerOption[];
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
@@ -157,6 +158,18 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
             this.store
                 .select(getAnimationEnabled)
                 .subscribe(value => this.animationEnabled = value)
+        );
+
+        this.subscription.add(
+            this.store
+                .select(getLayerOptions)
+                .subscribe(value => this.layerOptions = value)
+        );
+
+        this.subscription.add(
+            this.store
+                .select(getSelectedLayerOption)
+                .subscribe(value => this.currentLayer = value)
         );
     }
 
@@ -206,8 +219,9 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
                 moduleId: event.moduleId,
                 keyId: event.keyId
             };
-            this.selectedKey = { layerId: this.currentLayer, moduleId: event.moduleId, keyId: event.keyId };
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer]
+            this.selectedKey = { layerId: this.currentLayer.id, moduleId: event.moduleId, keyId: event.keyId };
+            const keyActionToEdit: KeyAction = this.layers
+                .find(layer => layer.id === this.currentLayer.id)
                 .modules
                 .find(findModuleById(event.moduleId))
                 .keyActions[event.keyId];
@@ -222,7 +236,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
 
     onKeyHover(event: SvgKeyHoverEvent): void {
         if (this.tooltipEnabled) {
-            const keyActionToEdit: KeyAction = this.layers[this.currentLayer]
+            const keyActionToEdit: KeyAction = this.layers
+                .find(layer => layer.id === this.currentLayer.id)
                 .modules
                 .find(findModuleById(event.moduleId))
                 .keyActions[event.keyId];
@@ -245,7 +260,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(
             new SaveKeyAction({
                 keymap: this.keymap,
-                layer: this.currentLayer,
+                layer: this.currentLayer.id,
                 module: event.moduleId,
                 key: event.keyId,
                 keyAction: {
@@ -261,13 +276,21 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(
             new SaveKeyAction({
                 keymap: this.keymap,
-                layer: this.currentLayer,
+                layer: this.currentLayer.id,
                 module: this.keyEditConfig.moduleId,
                 key: this.keyEditConfig.keyId,
                 keyAction
             })
         );
         this.hidePopover();
+    }
+
+    onAddLayer(id: number): void {
+        this.store.dispatch(new AddLayerAction(id));
+    }
+
+    onRemoveLayer(id: number): void {
+        this.store.dispatch(new RemoveLayerAction(id));
     }
 
     showPopover(keyAction: KeyAction): void {
@@ -314,12 +337,8 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         this.popoverInitKeyAction = null;
     }
 
-    selectLayer(index: number): void {
-        this.currentLayer = index;
-    }
-
-    getSelectedLayer(): number {
-        return this.currentLayer;
+    selectLayer(option: LayerOption): void {
+        this.store.dispatch(new SelectLayerAction(option));
     }
 
     onDescriptionChanged(description: string): void {
