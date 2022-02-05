@@ -31,6 +31,7 @@ import * as Device from '../actions/device';
 import { getBaseLayerOption, initLayerOptions } from './layer-options';
 
 export interface State {
+    isSelectedMacroNew: boolean;
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
@@ -38,10 +39,10 @@ export interface State {
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
     selectedLayerOption: LayerOption;
-    selectedMacroIdAfterRemove?: number;
 }
 
 export const initialState: State = {
+    isSelectedMacroNew: false,
     userConfiguration: new UserConfiguration(),
     lastEditedKey: defaultLastEditKey(),
     layerOptions: initLayerOptions(),
@@ -444,7 +445,9 @@ export function reducer(
 
             return {
                 ...state,
-                userConfiguration
+                userConfiguration,
+                selectedMacroId: newMacro.id,
+                isSelectedMacroNew: true
             };
         }
 
@@ -459,7 +462,8 @@ export function reducer(
 
             return {
                 ...state,
-                userConfiguration
+                userConfiguration,
+                selectedMacroId: newMacro.id
             };
         }
 
@@ -500,7 +504,7 @@ export function reducer(
         case MacroActions.ActionTypes.Remove: {
             const newState = {
                 ...state,
-                selectedMacroIdAfterRemove: undefined
+                selectedMacroId: undefined
             };
             const macroId = (action as MacroActions.RemoveMacroAction).payload;
             const userConfiguration = state.userConfiguration.clone();
@@ -511,10 +515,10 @@ export function reducer(
                 if (macroId === macro.id) {
                     if (idx === lastMacroIdx) {
                         if (state.userConfiguration.macros.length > 1) {
-                            newState.selectedMacroIdAfterRemove = state.userConfiguration.macros[idx - 1].id;
+                            newState.selectedMacroId = state.userConfiguration.macros[idx - 1].id;
                         }
                     } else {
-                        newState.selectedMacroIdAfterRemove = state.userConfiguration.macros[idx + 1].id;
+                        newState.selectedMacroId = state.userConfiguration.macros[idx + 1].id;
                     }
                 } else {
                     userConfiguration.macros.push(macro);
@@ -687,6 +691,7 @@ export function reducer(
             return {
                 ...state,
                 selectedMacroId,
+                isSelectedMacroNew: false
             };
         }
         default:
@@ -712,6 +717,7 @@ export const getSelectedMacro = (state: State): Macro => {
 
     return state.userConfiguration.macros.find(macro => macro.id === state.selectedMacroId);
 };
+export const isSelectedMacroNew = (state: State): boolean => state.isSelectedMacroNew;
 export const isKeymapDeletable = (state: State): boolean => state.userConfiguration.keymaps.length > 1;
 export const hasMacro = (state: State): boolean => state.userConfiguration.macros.length > 0;
 export const reduceMacroToMap = (map: Map<number, Macro>, macro: Macro) => map.set(macro.id, macro);
@@ -719,7 +725,6 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
     return state.userConfiguration.macros.reduce(reduceMacroToMap, new Map());
 };
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
-export const getSelectedMacroIdAfterRemove = (state: State): number | undefined => state.selectedMacroIdAfterRemove;
 export const getLayerOptions = (state: State): LayerOption[] => Array
     .from(state.layerOptions.values())
     .sort((a, b) => a.order - b.order);

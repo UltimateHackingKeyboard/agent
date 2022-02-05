@@ -1,7 +1,7 @@
 <ng-template [ngIf]="macro">
     <macro-header
             [macro]="macro"
-            [isNew]="isNew"
+            [isNew]="isNew$ | async"
     ></macro-header>
     <macro-list
         [macro]="macro"

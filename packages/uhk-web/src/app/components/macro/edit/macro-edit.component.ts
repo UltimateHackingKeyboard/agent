@@ -4,16 +4,14 @@ import { Store } from '@ngrx/store';
 import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
-import { pluck } from 'rxjs/operators';
 
 import {
     AddMacroActionAction,
     DeleteMacroActionAction,
     ReorderMacroActionAction,
-    SaveMacroActionAction,
-    SelectMacroAction
+    SaveMacroActionAction
 } from '../../../store/actions/macro';
-import { AppState, getSelectedMacro, isMacroCommandSupported, macroPlaybackSupported } from '../../../store';
+import { AppState, getSelectedMacro, isMacroCommandSupported, isSelectedMacroNew, macroPlaybackSupported } from '../../../store';
 
 @Component({
     selector: 'macro-edit',
@@ -26,39 +24,29 @@ import { AppState, getSelectedMacro, isMacroCommandSupported, macroPlaybackSuppo
 })
 export class MacroEditComponent implements OnDestroy {
     macro: Macro;
-    isNew: boolean;
+    isNew$: Observable<boolean>;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
     isMacroCommandSupported$: Observable<boolean>;
 
     private selectedMacroSubscription: Subscription;
-    private routeSubscription: Subscription;
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef,
                 public route: ActivatedRoute) {
-
-        this.routeSubscription = route
-            .params
-            .pipe(
-                pluck<{}, string>('id')
-            )
-            .subscribe(id => store.dispatch(new SelectMacroAction(+id)));
-
         this.selectedMacroSubscription = store.select(getSelectedMacro)
             .subscribe((macro: Macro) => {
                 this.macro = macro;
                 this.cdRef.markForCheck();
             });
 
-        this.isNew = this.route.snapshot.params['empty'] === 'new';
+        this.isNew$ = this.store.select(isSelectedMacroNew);
         this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
         this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);
     }
 
     ngOnDestroy() {
         this.selectedMacroSubscription.unsubscribe();
-        this.routeSubscription.unsubscribe();
     }
 
     addAction(macroId: number, action: MacroAction) {
