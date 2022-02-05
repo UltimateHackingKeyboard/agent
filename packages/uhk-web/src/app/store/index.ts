@@ -81,11 +81,11 @@ export const getDefaultKeymap = createSelector(userConfigState, fromUserConfig.g
 export const getSelectedKeymap = createSelector(userConfigState, fromUserConfig.getSelectedKeymap);
 export const getMacros = createSelector(userConfigState, fromUserConfig.getMacros);
 export const getSelectedMacro = createSelector(userConfigState, fromUserConfig.getSelectedMacro);
+export const isSelectedMacroNew = createSelector(userConfigState, fromUserConfig.isSelectedMacroNew);
 export const isKeymapDeletable = createSelector(userConfigState, fromUserConfig.isKeymapDeletable);
 export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro);
 export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMacroMap);
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
-export const getSelectedMacroIdAfterRemove = createSelector(userConfigState, fromUserConfig.getSelectedMacroIdAfterRemove);
 export const getSelectedLayerOption = createSelector(userConfigState, fromUserConfig.getSelectedLayerOption);
 export const getLayerOptions = createSelector(userConfigState, fromUserConfig.getLayerOptions);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
