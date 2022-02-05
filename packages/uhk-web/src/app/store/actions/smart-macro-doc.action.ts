@@ -6,6 +6,8 @@ export enum ActionTypes {
     DownloadDocumentationFailed = '[smart-macro-doc] download documentation failed',
     PanelSizeChanged = '[smart-macro-doc] panel size changed',
     ServiceListening = '[smart-macro-doc] service listening',
+    SmdAppendMacro = '[smart-macro-doc][smd] append macro',
+    SmdInited = '[smart-macro-doc][smd] inited',
     TogglePanelVisibility = '[smart-macro-doc] toggle panel visibility',
 }
 
@@ -29,6 +31,16 @@ export class ServiceListeningAction implements Action {
     constructor(public payload: number) {}
 }
 
+export class SmdAppendMacroAction implements Action {
+    type = ActionTypes.SmdAppendMacro;
+
+    constructor(public payload: string) {}
+}
+
+export class SmdInitedAction implements Action {
+    type = ActionTypes.SmdInited;
+}
+
 export class TogglePanelVisibilityAction implements Action {
     type = ActionTypes.TogglePanelVisibility;
 }
@@ -38,5 +50,7 @@ export type SmartMacroDocActions
     | DownloadDocumentationSuccessAction
     | PanelSizeChangedAction
     | ServiceListeningAction
+    | SmdAppendMacroAction
+    | SmdInitedAction
     | TogglePanelVisibilityAction
 ;

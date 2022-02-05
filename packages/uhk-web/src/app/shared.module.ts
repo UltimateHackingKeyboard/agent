@@ -137,6 +137,7 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
 import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
+import { SmartMacroDocService } from './services/smart-macro-doc-service';
 
 @NgModule({
     declarations: [
@@ -276,6 +277,7 @@ import { SmartMacroDocRendererService } from './services/smart-macro-doc-rendere
         IpcCommonRenderer,
         DeviceRendererService,
         SmartMacroDocRendererService,
+        SmartMacroDocService,
         UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
         UhkDeviceInitializedGuard,

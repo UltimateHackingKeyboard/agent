@@ -1,7 +1,9 @@
 import { Action } from '@ngrx/store';
 import { Macro, MacroAction as ConfigItemMacroAction } from 'uhk-common';
+import { ActiveMacroCommandEditorChangedPayload } from '../../models';
 
 export enum ActionTypes {
+    ActiveMacroCommandEditorChanged = '[Macro] active macro command editor changed',
     Duplicate = '[Macro] Duplicate macro',
     EditName = '[Macro] Edit macro title',
     Remove = '[Macro] Remove macro',
@@ -36,6 +38,13 @@ export class EditMacroNameAction implements Action {
     type = ActionTypes.EditName;
 
     constructor(public payload: { id: number, name: string }) {
+    }
+}
+
+export class ActiveMacroCommandEditorChangedAction implements Action {
+    type = ActionTypes.ActiveMacroCommandEditorChanged;
+
+    constructor(public payload?: ActiveMacroCommandEditorChangedPayload) {
     }
 }
 
@@ -76,6 +85,7 @@ export class ReorderMacroActionAction implements Action {
 
 export type Actions
     = DuplicateMacroAction
+    | ActiveMacroCommandEditorChangedAction
     | AddMacroAction
     | RemoveMacroAction
     | EditMacroNameAction

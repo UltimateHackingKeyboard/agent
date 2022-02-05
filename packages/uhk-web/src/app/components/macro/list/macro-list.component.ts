@@ -232,7 +232,6 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     private scrollToBottom(): void {
         this.scrollToBottomIntervalTimer = window.setInterval(() => {
-            console.log('scroll', document.body.scrollHeight);
             window.scrollTo(document.body.scrollLeft, document.body.scrollHeight);
         }, ANIMATION_INTERVAL);
 

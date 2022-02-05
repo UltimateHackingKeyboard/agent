@@ -23,7 +23,13 @@ import {
     TextMacroAction,
     MacroActionHelper
 } from 'uhk-common';
-import { MacroDelayTabComponent, MacroMouseTabComponent, MacroKeyTabComponent, MacroTextTabComponent } from './tab';
+import {
+    MacroDelayTabComponent,
+    MacroMouseTabComponent,
+    MacroKeyTabComponent,
+    MacroTextTabComponent,
+    MacroCommandComponent
+} from './tab';
 
 enum TabName {
     Keypress,
@@ -46,7 +52,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
     @Output() cancel = new EventEmitter<void>();
 
     // tslint:disable-next-line:max-line-length
-    @ViewChild('tab', { static: false }) selectedTab: MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
+    @ViewChild('tab', { static: false }) selectedTab: MacroCommandComponent | MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
 
     editableMacroAction: MacroAction;
     activeTab: TabName;

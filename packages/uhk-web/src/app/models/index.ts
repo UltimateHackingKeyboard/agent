@@ -1,3 +1,4 @@
+export * from './active-macro-command-editor-changed-payload';
 export * from './apply-user-configuration-from-file-payload';
 export * from './device-ui-states';
 export * from './exchange-keys-action.model';
