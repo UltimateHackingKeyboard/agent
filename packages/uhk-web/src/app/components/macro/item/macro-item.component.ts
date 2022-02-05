@@ -62,6 +62,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() editing: boolean;
     @Input() deletable: boolean;
     @Input() movable: boolean;
+    @Input() isMacroCommandSupported: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();

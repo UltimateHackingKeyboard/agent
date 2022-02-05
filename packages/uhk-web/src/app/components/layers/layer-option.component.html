@@ -1,0 +1,22 @@
+<div ngbDropdownItem
+     class="form-check"
+     mwlConfirmationPopover
+     popoverTitle="Do you really want to delete this layer?"
+     placement="bottom"
+     confirmText="Yes"
+     cancelText="No"
+     [isDisabled]="!layerOption.selected"
+     (confirm)="onRemoveLayer($event)"
+>
+    <input class="form-check-input"
+           type="checkbox"
+           [ngModel]="layerOption.selected"
+           (ngModelChange)="onCheckboxChange($event)"
+           id="layer_checkbox_{{layerOption.id}}"
+    >
+    <label class="form-check-label"
+           for="layer_checkbox_{{layerOption.id}}"
+    >
+        {{ layerOption.name }}
+    </label>
+</div>

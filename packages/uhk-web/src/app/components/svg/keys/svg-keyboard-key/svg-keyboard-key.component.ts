@@ -34,6 +34,7 @@ import { CaptureService } from '../../../../services/capture.service';
 import { MapperService } from '../../../../services/mapper.service';
 
 import { AppState } from '../../../../store';
+import { initLayerOptions } from '../../../../store/reducers/layer-options';
 import { SvgKeyCaptureEvent, SvgKeyClickEvent } from '../../../../models/svg-key-events';
 import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
@@ -95,6 +96,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private altPressed = false;
     private shiftPressed = false;
     private subscriptions = new Subscription();
+    private layerOptionMap = initLayerOptions();
 
     constructor(
         private mapper: MapperService,
@@ -334,20 +336,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             }
         } else if (this.keyAction instanceof SwitchLayerAction) {
             const keyAction: SwitchLayerAction = this.keyAction as SwitchLayerAction;
-            let newLabelSource: string;
-            switch (keyAction.layer) {
-                case LayerName.mod:
-                    newLabelSource = 'Mod';
-                    break;
-                case LayerName.fn:
-                    newLabelSource = 'Fn';
-                    break;
-                case LayerName.mouse:
-                    newLabelSource = 'Mouse';
-                    break;
-                default:
-                    break;
-            }
+            const layerOption = this.layerOptionMap.get(keyAction.layer);
+            const newLabelSource = layerOption?.name;
 
             if (keyAction.switchLayerMode === SwitchLayerMode.toggle) {
                 this.labelType = LabelTypes.TextIcon;

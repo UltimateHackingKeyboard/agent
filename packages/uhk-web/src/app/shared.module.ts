@@ -34,7 +34,7 @@ import {
     KeymapHeaderComponent,
     KeymapAddSecondaryMenuComponent
 } from './components/keymap';
-import { LayersComponent } from './components/layers';
+import { LayerOptionComponent, LayersComponent } from './components/layers';
 import {
     MacroActionEditorComponent,
     MacroCommandComponent,
@@ -119,6 +119,7 @@ import { ProgressButtonComponent } from './components/progress-button/progress-b
 import { MainAppComponent } from './app.component';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { MultiDevicePageComponent } from './pages/multi-device.page';
+import { UpdateAgentPageComponent } from './pages/update-agent.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
@@ -136,6 +137,7 @@ import { UserConfigurationHistoryComponent } from './components/user-configurati
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
+import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
 import { SmartMacroDocService } from './services/smart-macro-doc-service';
 
@@ -167,6 +169,7 @@ import { SmartMacroDocService } from './services/smart-macro-doc-service';
         SvgKeyboardWrapComponent,
         SvgKeyboardComponent,
         SvgModuleComponent,
+        LayerOptionComponent,
         LayersComponent,
         PopoverComponent,
         KeymapAddComponent,
@@ -215,6 +218,7 @@ import { SmartMacroDocService } from './services/smart-macro-doc-service';
         ProgressButtonComponent,
         LoadingDevicePageComponent,
         MultiDevicePageComponent,
+        UpdateAgentPageComponent,
         XtermComponent,
         SliderWrapperComponent,
         EditableTextComponent,
@@ -284,7 +288,8 @@ import { SmartMacroDocService } from './services/smart-macro-doc-service';
         UhkDeviceUninitializedGuard,
         UhkDeviceLoadingGuard,
         UhkDeviceBootloaderNotActiveGuard,
-        UhkMultiDeviceGuard
+        UhkMultiDeviceGuard,
+        AgentUpdateNeededGuard
     ],
     exports: [
         UhkMessageComponent,

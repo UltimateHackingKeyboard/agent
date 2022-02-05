@@ -3,12 +3,17 @@ import { Action } from '@ngrx/store';
 import { UpdateInfo } from '../../models/update-info';
 
 export enum ActionTypes {
+    ForceUpdate = '[app-update] force update',
     UpdateAvailable = '[app-update] update available',
     UpdateApp = '[app-update] update app',
     DoNotUpdateApp = '[app-update] do not update app',
     UpdateDownloaded = '[app-update] update downloaded',
     Updating = '[app-update] updating',
     UpdateError = '[app-update] error'
+}
+
+export class ForceUpdateAction implements Action {
+    type = ActionTypes.ForceUpdate;
 }
 
 export class UpdateAvailableAction implements Action {

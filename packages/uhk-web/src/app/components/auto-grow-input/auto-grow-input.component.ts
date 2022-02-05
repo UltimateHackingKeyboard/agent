@@ -6,7 +6,9 @@ import {
     ElementRef,
     forwardRef, HostListener,
     Input,
+    OnChanges,
     Renderer2,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -28,7 +30,7 @@ const noop = (_: any) => {
     ],
     styleUrls: ['./auto-grow-input.component.scss']
 })
-export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewInit {
+export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewInit, OnChanges {
     @Input() maxParentWidthPercent;
     @Input() maxParentWidthOffset;
     @Input() minWidth: number = 100;
@@ -61,8 +63,18 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
                 private _renderer: Renderer2) {
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.selectAfterInit.currentValue) {
+            this.selectContent();
+        }
+    }
+
     ngAfterViewInit(): void {
-        if (this.selectAfterInit) {
+        this.selectContent();
+    }
+
+    selectContent(): void {
+        if (this.selectAfterInit && this.inputControl) {
             setTimeout(() => {
                 this.inputControl.nativeElement.select();
                 this.selectAfterInit = false;

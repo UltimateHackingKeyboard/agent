@@ -38,7 +38,7 @@ import {
 import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState, deviceConnected, getRouterState, getUserConfiguration } from '../index';
+import { AppState, deviceConnected, disableUpdateAgentPage, getRouterState, getUserConfiguration } from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -47,15 +47,19 @@ import {
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
-import { getVersions } from '../../util';
+import { getVersions, isVersionGtMinor } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
     @Effect() deviceConnectionStateChange$: Observable<Action> = this.actions$
         .pipe(
             ofType<ConnectionStateChangedAction>(ActionTypes.ConnectionStateChanged),
-            withLatestFrom(this.store.select(getRouterState), this.store.select(deviceConnected)),
-            tap(([action, route]) => {
+            withLatestFrom(
+                this.store.select(getRouterState),
+                this.store.select(deviceConnected),
+                this.store.select(disableUpdateAgentPage),
+            ),
+            tap(([action, route, connected, isDisableUpdateAgentPage]) => {
                 const state = action.payload;
 
                 if (route.state && route.state.url.startsWith('/device/firmware')) {
@@ -72,6 +76,10 @@ export class DeviceEffects {
 
                 if (state.bootloaderActive) {
                     return this.router.navigate(['/recovery-device']);
+                }
+
+                if (!isDisableUpdateAgentPage && isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+                    return this.router.navigate(['/update-agent']);
                 }
 
                 if (state.connectedDevice && state.zeroInterfaceAvailable) {
@@ -236,9 +244,10 @@ export class DeviceEffects {
     @Effect({ dispatch: false }) updateFirmware$ = this.actions$
         .pipe(
             ofType<UpdateFirmwareAction>(ActionTypes.UpdateFirmware),
-            map(action => action.payload),
-            tap(payload => this.deviceRendererService.updateFirmware({
-                forceUpgrade: payload,
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            tap(([action, userConfig]) => this.deviceRendererService.updateFirmware({
+                userConfig,
+                forceUpgrade: action.payload,
                 versionInformation: getVersions()
             }))
         );
@@ -246,11 +255,12 @@ export class DeviceEffects {
     @Effect({ dispatch: false }) updateFirmwareWith$ = this.actions$
         .pipe(
             ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith),
-            map(action => action.payload),
-            tap(payload => this.deviceRendererService.updateFirmware({
-                forceUpgrade: payload.forceUpgrade,
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            tap(([action, userConfig]) => this.deviceRendererService.updateFirmware({
+                userConfig,
+                forceUpgrade: action.payload.forceUpgrade,
                 versionInformation: getVersions(),
-                uploadFile: payload.uploadFileData
+                uploadFile: action.payload.uploadFileData
             }))
         );
 
@@ -281,7 +291,8 @@ export class DeviceEffects {
     @Effect({ dispatch: false }) recoveryDevice$ = this.actions$
         .pipe(
             ofType<RecoveryDeviceAction>(ActionTypes.RecoveryDevice),
-            tap(() => this.deviceRendererService.recoveryDevice())
+            withLatestFrom(this.store.select(getUserConfiguration)),
+            tap(([, userConfig]) => this.deviceRendererService.recoveryDevice(userConfig))
         );
 
     @Effect() recoveryDeviceReply$ = this.actions$

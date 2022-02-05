@@ -16,9 +16,11 @@ import { MainPage } from './pages/main-page/main.page';
 import { agentRoutes } from './components/agent';
 import { LoadingDevicePageComponent } from './pages/loading-page/loading-device.page';
 import { MultiDevicePageComponent } from './pages/multi-device.page';
+import { UpdateAgentPageComponent } from './pages/update-agent.page';
 import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { RecoveryModeComponent } from './components/device';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
+import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 
 const appRoutes: Routes = [
     {
@@ -41,6 +43,10 @@ const appRoutes: Routes = [
         component: MultiDevicePageComponent
     },
     {
+        path: 'update-agent',
+        component: UpdateAgentPageComponent
+    },
+    {
         path: 'recovery-device',
         component: RecoveryModeComponent,
         canActivate: [UhkDeviceBootloaderNotActiveGuard, UhkMultiDeviceGuard]
@@ -48,7 +54,7 @@ const appRoutes: Routes = [
     {
         path: '',
         component: MainPage,
-        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard],
+        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard, AgentUpdateNeededGuard],
         children: [
             ...deviceRoutes,
             ...keymapRoutes,

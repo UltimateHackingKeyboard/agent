@@ -68,6 +68,7 @@ const CANCEL_ACTION_ANIMATION_TIMEOUT = ANIMATION_TIME + 25;
 export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestroy {
     @Input() macro: Macro;
     @Input() macroPlaybackSupported: boolean;
+    @Input() isMacroCommandSupported: boolean;
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
     @Output() add = new EventEmitter();

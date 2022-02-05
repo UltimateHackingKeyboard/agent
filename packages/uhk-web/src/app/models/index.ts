@@ -5,6 +5,7 @@ export * from './exchange-keys-action.model';
 export * from './firmware-upgrade-state';
 export * from './firmware-upgrade-steps';
 export * from './last-edited-key';
+export * from './layer-option';
 export * from './load-user-configuration-from-file-payload';
 export * from './macro-menu-item';
 export * from './navigation-payload';

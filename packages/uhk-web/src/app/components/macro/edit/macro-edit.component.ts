@@ -5,20 +5,20 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
-import { pluck } from 'rxjs/operators';
 
 import {
     AddMacroActionAction,
     DeleteMacroActionAction,
     ReorderMacroActionAction,
-    SaveMacroActionAction,
-    SelectMacroAction
+    SaveMacroActionAction
 } from '../../../store/actions/macro';
 import {
     AppState,
     getSelectedMacro,
     getSmartMacroPanelVisibility,
     getSmartMacroPanelWidth,
+    isMacroCommandSupported,
+    isSelectedMacroNew,
     macroPlaybackSupported,
     selectSmartMacroDocUrl
 } from '../../../store';
@@ -37,9 +37,10 @@ import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../st
 export class MacroEditComponent implements OnDestroy {
     faCaretDown = faCaretDown;
     macro: Macro;
-    isNew: boolean;
+    isNew$: Observable<boolean>;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
+    isMacroCommandSupported$: Observable<boolean>;
     smartMacroDocUrl$: Observable<string>;
     smartMacroPanelVisibility$: Observable<boolean>;
     showIframeHider = false;
@@ -50,42 +51,34 @@ export class MacroEditComponent implements OnDestroy {
 
     @ViewChild(SplitComponent) split: SplitComponent;
 
-    private selectedMacroSubscription: Subscription;
-    private routeSubscription: Subscription;
+    private subscriptions = new Subscription();
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef,
                 public route: ActivatedRoute) {
-
-        this.routeSubscription = route
-            .params
-            .pipe(
-                pluck<{}, string>('id')
-            )
-            .subscribe(id => store.dispatch(new SelectMacroAction(+id)));
-
-        this.selectedMacroSubscription = store.select(getSelectedMacro)
+        this.subscriptions.add(store.select(getSelectedMacro)
             .subscribe((macro: Macro) => {
                 this.macro = macro;
                 this.cdRef.markForCheck();
-            });
-        this.selectedMacroSubscription = store.select(getSmartMacroPanelWidth)
+            }));
+
+        this.isNew$ = this.store.select(isSelectedMacroNew);
+        this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);
+        this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
+        this.subscriptions.add(store.select(getSmartMacroPanelWidth)
             .subscribe((width: number) => {
                 this.smartMacroPanelSizes = {
                     left: 100 - width,
                     right: width
                 };
                 this.cdRef.markForCheck();
-            });
+            }));
         this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
         this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
-        this.isNew = this.route.snapshot.params['empty'] === 'new';
-        this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
     }
 
     ngOnDestroy() {
-        this.selectedMacroSubscription.unsubscribe();
-        this.routeSubscription.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
     addAction(macroId: number, action: MacroAction) {

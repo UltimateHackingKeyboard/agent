@@ -7,7 +7,7 @@ import {
     SvgKeyboardKeyClickEvent,
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
-import { LastEditedKey } from '../../../models';
+import { LastEditedKey, LayerOption } from '../../../models';
 
 interface LayerAnimationCssClasses {
     center?: boolean;
@@ -34,7 +34,7 @@ enum LayerNames {
 })
 export class KeyboardSliderComponent implements OnChanges {
     @Input() layers: Layer[];
-    @Input() currentLayer: number;
+    @Input() currentLayer: LayerOption;
     @Input() capturingEnabled: boolean;
     @Input() halvesInfo: HalvesInfo;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
@@ -58,22 +58,22 @@ export class KeyboardSliderComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['layers']) {
             if (!this.animationEnabled || this.visibleLayerName === LayerNames.A) {
-                this.aLayer = this.layers[this.currentLayer];
+                this.aLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
             } else {
-                this.bLayer = this.layers[this.currentLayer];
+                this.bLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
             }
         }
 
         const layerChange = changes['currentLayer'];
         if (layerChange) {
             if (!this.animationEnabled || layerChange.isFirstChange()) {
-                this.aLayer = this.layers[this.currentLayer];
+                this.aLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
             } else if (this.visibleLayerName === LayerNames.A) {
-                this.bLayer = this.layers[this.currentLayer];
+                this.bLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
                 this.visibleLayerName = LayerNames.B;
                 this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
             } else {
-                this.aLayer = this.layers[this.currentLayer];
+                this.aLayer = this.layers.find(layer => layer.id === this.currentLayer.id);
                 this.visibleLayerName = LayerNames.A;
                 this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
             }
@@ -84,9 +84,9 @@ export class KeyboardSliderComponent implements OnChanges {
         return index;
     }
 
-    onLayerChange(oldIndex: number, index: number): void {
+    onLayerChange(oldIndex: LayerOption, index: LayerOption): void {
         if (this.visibleLayerName === LayerNames.A) {
-            if (oldIndex < index) {
+            if (oldIndex.order < index.order) {
                 this.aLayerCssClasses = {
                     // center: true,
                     rightToCenter: !this.aLayerCssClasses.rightToCenter,
@@ -110,7 +110,7 @@ export class KeyboardSliderComponent implements OnChanges {
                 };
             }
         } else {
-            if (oldIndex < index) {
+            if (oldIndex.order < index.order) {
                 this.aLayerCssClasses = {
                     centerToLeft: !this.aLayerCssClasses.centerToLeft,
                     centerToLeft2: this.aLayerCssClasses.centerToLeft

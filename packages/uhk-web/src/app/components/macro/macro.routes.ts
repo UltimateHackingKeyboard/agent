@@ -10,11 +10,7 @@ export const macroRoutes: Routes = [
         canActivate: [MacroNotFoundGuard]
     },
     {
-        path: 'macro/:id',
-        component: MacroEditComponent
-    },
-    {
-        path: 'macro/:id/:empty',
+        path: 'macro/:macroId',
         component: MacroEditComponent
     }
 ];
