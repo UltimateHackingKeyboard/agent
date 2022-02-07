@@ -151,6 +151,10 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
         return undefined;
     }
 
+    onMacroEditorGotFocus(): void {
+        this.tabChanged.emit(this.activeTab);
+    }
+
     private updateEditableMacroAction() {
         const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
         this.editableMacroAction = MacroActionHelper.createMacroAction(macroAction);

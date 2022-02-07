@@ -19,6 +19,7 @@
                                   [fullHeight]="true"
                                   [autoFocus]="true"
                                   [index]="index"
+                                  (gotFocus)="gotFocus.emit()"
                                   (ngModelChange)="onCommandChanged($event)"
             ></macro-command-editor>
     </div>

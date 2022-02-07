@@ -44,6 +44,7 @@
                                [macroAction]="editableMacroAction"
                                [index]="index"
                                (valid)="onValid($event)"
+                               (gotFocus)="onMacroEditorGotFocus()"
             ></macro-command-tab>
         </div>
     </div>

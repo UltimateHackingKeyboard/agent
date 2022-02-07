@@ -64,7 +64,7 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.selectAfterInit.currentValue) {
+        if (changes.selectAfterInit?.currentValue) {
             this.selectContent();
         }
     }

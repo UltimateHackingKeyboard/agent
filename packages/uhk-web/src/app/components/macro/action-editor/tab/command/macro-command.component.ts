@@ -2,6 +2,8 @@ import {
     OnInit,
     Component,
     Input,
+    Output,
+    EventEmitter,
 } from '@angular/core';
 import { CommandMacroAction } from 'uhk-common';
 
@@ -17,6 +19,8 @@ import { MacroBaseComponent } from '../macro-base.component';
 export class MacroCommandComponent extends MacroBaseComponent implements OnInit {
     @Input() index: SelectedMacroActionId;
     @Input() macroAction: CommandMacroAction;
+
+    @Output() gotFocus = new EventEmitter<void>();
 
     constructor() { super(); }
 
