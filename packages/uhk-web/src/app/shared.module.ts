@@ -139,6 +139,7 @@ import { FirmwareFileUploadComponent } from './components/device/firmware-file-u
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
 import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
+import { SmartMacroDocDirective } from './components/macro/directives/smart-macro-doc.directive';
 import { SmartMacroDocService } from './services/smart-macro-doc-service';
 
 @NgModule({
@@ -234,6 +235,7 @@ import { SmartMacroDocService } from './services/smart-macro-doc-service';
         UdevRulesComponent,
         HighlightArrowComponent,
         OutOfSpaceWarningComponent,
+        SmartMacroDocDirective,
         UserConfigurationHistoryComponent,
         UserConfigHistoryDisplayTextPipe
     ],

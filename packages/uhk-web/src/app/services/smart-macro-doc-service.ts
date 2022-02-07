@@ -5,7 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 
 import { AppState, getSelectedMacroAction } from '../store';
 import { SmdInitedAction } from '../store/actions/smart-macro-doc.action';
-import { SelectedMacroAction, SelectedMacroActionId } from '../models';
+import { SelectedMacroAction, SelectedMacroActionId, TabName } from '../models';
 
 export interface InsertMacroCommand {
     data: string;
@@ -18,6 +18,7 @@ export class SmartMacroDocService implements OnDestroy {
     selectedMacroAction: SelectedMacroAction;
 
     private subscriptions = new Subscription();
+    private iframe: HTMLIFrameElement;
 
     constructor(private store: Store<AppState>,
                 private logService: LogService,
@@ -27,7 +28,10 @@ export class SmartMacroDocService implements OnDestroy {
 
         this.subscriptions.add(
             store.select(getSelectedMacroAction)
-                .subscribe(action => this.selectedMacroAction = action)
+                .subscribe(action => {
+                    this.selectedMacroAction = action;
+                    this.toggleMacroEditorInFocus();
+                })
         );
     }
 
@@ -35,6 +39,11 @@ export class SmartMacroDocService implements OnDestroy {
         window.removeEventListener('message', this.onMessage.bind(this));
         window.removeEventListener('messageerror', this.onMessageError.bind(this));
         this.subscriptions.unsubscribe();
+    }
+
+    setIframe(iframe: HTMLIFrameElement): void {
+        this.iframe = iframe;
+        this.toggleMacroEditorInFocus();
     }
 
     private dispatchStoreAction(action: Action) {
@@ -48,10 +57,13 @@ export class SmartMacroDocService implements OnDestroy {
 
     private onMessage(event: MessageEvent): void {
         switch (event.data.action) {
-            case 'smd-inited':
-                return this.dispatchStoreAction(new SmdInitedAction());
+            case 'smd-inited': {
+                this.toggleMacroEditorInFocus();
 
-            case 'smd-append-macro': {
+                return this.dispatchStoreAction(new SmdInitedAction());
+            }
+
+            case 'smd-insert-macro': {
                 if (!this.selectedMacroAction) {
                     return;
                 }
@@ -68,4 +80,15 @@ export class SmartMacroDocService implements OnDestroy {
         }
     }
 
+    private toggleMacroEditorInFocus(): void {
+        if (!this.iframe?.contentWindow) {
+            return;
+        }
+
+        const action = this.selectedMacroAction?.type === TabName.Command
+            ? 'sma-editor-got-focus'
+            : 'sma-editor-lost-focus';
+
+        this.iframe.contentWindow.postMessage({ action }, '*');
+    }
 }

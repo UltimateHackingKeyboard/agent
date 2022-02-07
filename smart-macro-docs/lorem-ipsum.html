@@ -14,7 +14,7 @@
 <code>
     set var 1
 </code>
-<button id="appendMacro">Append Macro</button>
+<button id="appendMacro">Insert Macro</button>
 <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam consectetur, arcu sagittis ornare tempus, felis ex
     convallis velit, scelerisque tempus quam diam eu elit. Sed pellentesque nisi id ligula luctus hendrerit. Orci varius
@@ -60,7 +60,7 @@
     const button = document.getElementById('appendMacro');
     button.addEventListener('click', () => {
         window.parent.postMessage({
-            action: 'smd-append-macro',
+            action: 'smd-insert-macro',
             data: 'set var 1\n'
         }, '*')
     })
@@ -71,12 +71,12 @@
         switch (event.data.action) {
 
             case 'sma-editor-got-focus': {
-                button.setAttribute('disabled', '');
+                button.removeAttribute('disabled');
                 break;
             }
 
             case 'sma-editor-lost-focus': {
-                button.removeAttribute('disabled');
+                button.setAttribute('disabled', '');
                 break;
             }
 

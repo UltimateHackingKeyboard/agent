@@ -37,7 +37,7 @@
     <as-split-area *ngIf="smartMacroPanelVisibility$ | async"
                    [size]="smartMacroPanelSizes.right">
         <div class="smart-macro-doc-container">
-            <iframe [src]="smartMacroDocUrl$ | async | safeUrl"></iframe>
+            <iframe smartMacroIframe [src]="smartMacroDocUrl$ | async | safeUrl"></iframe>
             <div [hidden]="showIframeHider === false" class="hack-iframe-hider"></div>
         </div>
     </as-split-area>
