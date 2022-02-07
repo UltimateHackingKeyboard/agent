@@ -21,6 +21,7 @@ import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction 
 import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
+import { SelectedMacroAction, SelectedMacroActionId, TabName } from '../../../models';
 
 const ANIMATION_TIME = 500;
 const ANIMATION_INTERVAL = 5;
@@ -75,6 +76,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     @Output() edit = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
+    @Output() selectedMacroAction = new EventEmitter<SelectedMacroAction>();
 
     newMacro: Macro = undefined;
     showNew: boolean = false;
@@ -213,6 +215,10 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         }
 
         return index.toString();
+    }
+
+    onSelectedMacroAction(id: SelectedMacroActionId, type: TabName): void {
+        this.selectedMacroAction.emit({ id, type });
     }
 
     private toKeyAction(event: KeyCaptureData): KeystrokeAction {

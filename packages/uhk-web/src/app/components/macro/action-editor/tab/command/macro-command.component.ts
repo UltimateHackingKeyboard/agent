@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { CommandMacroAction } from 'uhk-common';
 
+import { SelectedMacroActionId } from '../../../../../models';
 import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
@@ -14,6 +15,7 @@ import { MacroBaseComponent } from '../macro-base.component';
     host: { 'class': 'macro__text' }
 })
 export class MacroCommandComponent extends MacroBaseComponent implements OnInit {
+    @Input() index: SelectedMacroActionId;
     @Input() macroAction: CommandMacroAction;
 
     constructor() { super(); }

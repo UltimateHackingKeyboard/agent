@@ -19,6 +19,7 @@
                     (edit)="editAction($event.macroId, $event.index, $event.action)"
                     (delete)="deleteAction($event.macroId, $event.index, $event.action)"
                     (reorder)="reorderAction($event.macroId, $event.macroActions)"
+                    (selectedMacroAction)="onSelectedMacroAction($event)"
                 ></macro-list>
             </ng-template>
 

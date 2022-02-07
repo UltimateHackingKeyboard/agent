@@ -23,6 +23,9 @@ import {
     TextMacroAction,
     MacroActionHelper
 } from 'uhk-common';
+
+import { SelectedMacroActionId, TabName } from '../../../models';
+
 import {
     MacroDelayTabComponent,
     MacroMouseTabComponent,
@@ -30,14 +33,6 @@ import {
     MacroTextTabComponent,
     MacroCommandComponent
 } from './tab';
-
-enum TabName {
-    Keypress,
-    Text,
-    Mouse,
-    Delay,
-    Command
-}
 
 @Component({
     selector: 'macro-action-editor',
@@ -47,10 +42,12 @@ enum TabName {
 })
 export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() macroAction: MacroAction;
+    @Input() index: SelectedMacroActionId;
     @Input() isMacroCommandSupported: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
+    @Output() tabChanged = new EventEmitter<TabName>();
 
     // tslint:disable-next-line:max-line-length
     @ViewChild('tab', { static: false }) selectedTab: MacroCommandComponent | MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
@@ -82,6 +79,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
         this.updateEditableMacroAction();
         const tab: TabName = this.getTabName(this.editableMacroAction);
         this.activeTab = tab;
+        this.tabChanged.emit(tab);
     }
 
     ngOnChanges() {
@@ -126,6 +124,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.tabChanged.emit(tab);
         if (tab === this.getTabName(this.macroAction)) {
             this.updateEditableMacroAction();
         } else {

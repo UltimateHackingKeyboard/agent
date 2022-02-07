@@ -8,11 +8,13 @@
                         [editable]="true"
                         [editing]="macroActionIndex === activeEdit"
                         [deletable]="true"
+                        [index]="macroActionIndex"
                         [movable]="true"
                         (save)="saveAction($event, macroActionIndex)"
                         (edit)="editAction(macroActionIndex)"
                         (cancel)="cancelAction()"
                         (delete)="deleteAction(macroAction, macroActionIndex)"
+                        (selected)="onSelectedMacroAction(macroActionIndex, $event)"
                         [attr.data-index]="macroActionIndex"
             ></macro-item>
 
@@ -23,9 +25,11 @@
                         [macroAction]="newMacro"
                         [editable]="true"
                         [deletable]="false"
+                        [index]="'new'"
                         [movable]="false"
                         (save)="addNewAction($event)"
                         (cancel)="hideNewAction()"
+                        (selected)="onSelectedMacroAction('new', $event)"
             ></macro-item>
         </div>
         <div class="list-group add-new__action-container" [@toggler]="(!showNew) ? 'active' : 'inactive'">

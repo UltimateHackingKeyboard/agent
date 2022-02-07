@@ -10,7 +10,8 @@ import {
     AddMacroActionAction,
     DeleteMacroActionAction,
     ReorderMacroActionAction,
-    SaveMacroActionAction
+    SaveMacroActionAction,
+    SelectMacroActionAction
 } from '../../../store/actions/macro';
 import {
     AppState,
@@ -23,6 +24,8 @@ import {
     selectSmartMacroDocUrl
 } from '../../../store';
 import { IOutputData, SplitComponent } from 'angular-split';
+
+import { SelectedMacroAction } from '../../../models';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
 
 @Component({
@@ -95,6 +98,10 @@ export class MacroEditComponent implements OnDestroy {
 
     reorderAction(macroId: number, macroActions: MacroAction[]) {
         this.store.dispatch(new ReorderMacroActionAction({ id: macroId, macroActions }));
+    }
+
+    onSelectedMacroAction(action: SelectedMacroAction): void {
+        this.store.dispatch(new SelectMacroActionAction(action));
     }
 
     dragStartHandler() {

@@ -1,23 +1,40 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { LogService } from 'uhk-common';
+import { Subject, Subscription } from 'rxjs';
 
-import { AppState } from '../store';
-import { SmdAppendMacroAction, SmdInitedAction } from '../store/actions/smart-macro-doc.action';
+import { AppState, getSelectedMacroAction } from '../store';
+import { SmdInitedAction } from '../store/actions/smart-macro-doc.action';
+import { SelectedMacroAction, SelectedMacroActionId } from '../models';
+
+export interface InsertMacroCommand {
+    data: string;
+    macroActionId: SelectedMacroActionId;
+}
 
 @Injectable()
 export class SmartMacroDocService implements OnDestroy {
+    insertMacroCommand = new Subject<InsertMacroCommand>();
+    selectedMacroAction: SelectedMacroAction;
+
+    private subscriptions = new Subscription();
 
     constructor(private store: Store<AppState>,
-        private logService: LogService,
-        private zone: NgZone) {
+                private logService: LogService,
+                private zone: NgZone) {
         window.addEventListener('message', this.onMessage.bind(this));
         window.addEventListener('messageerror', this.onMessageError.bind(this));
+
+        this.subscriptions.add(
+            store.select(getSelectedMacroAction)
+                .subscribe(action => this.selectedMacroAction = action)
+        );
     }
 
     ngOnDestroy(): void {
         window.removeEventListener('message', this.onMessage.bind(this));
         window.removeEventListener('messageerror', this.onMessageError.bind(this));
+        this.subscriptions.unsubscribe();
     }
 
     private dispatchStoreAction(action: Action) {
@@ -35,7 +52,14 @@ export class SmartMacroDocService implements OnDestroy {
                 return this.dispatchStoreAction(new SmdInitedAction());
 
             case 'smd-append-macro': {
-                return this.dispatchStoreAction(new SmdAppendMacroAction(event.data.data));
+                if (!this.selectedMacroAction) {
+                    return;
+                }
+
+                return this.insertMacroCommand.next({
+                    data: event.data.data,
+                    macroActionId: this.selectedMacroAction.id
+                });
             }
 
             default: {

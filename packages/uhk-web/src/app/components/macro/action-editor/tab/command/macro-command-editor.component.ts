@@ -9,13 +9,17 @@ import {
     Input,
     OnChanges,
     OnDestroy,
+    OnInit,
     Output,
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { SelectedMacroActionId } from '../../../../../models';
+import { SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 58;
@@ -36,12 +40,13 @@ function getVsCodeTheme(): string {
     }],
     styleUrls: ['./macro-command-editor.component.scss']
 })
-export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy {
+export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy, OnInit {
     /**
      * Show the macro edit as high as possible
      */
     @Input() fullHeight = false;
     @Input() autoFocus = false;
+    @Input() index: SelectedMacroActionId;
 
     @Output() gotFocus = new EventEmitter<void>();
 
@@ -69,9 +74,37 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     private lineHeight = 18;
     private isFocused = false;
+    private insertingMacro = false;
     private changeObserver$: Observer<string>;
+    private subscriptions = new Subscription();
 
-    constructor(private cdRef: ChangeDetectorRef) {
+    constructor(private cdRef: ChangeDetectorRef,
+                private smartMacroDocService: SmartMacroDocService) {
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.add(
+            this.smartMacroDocService
+                .insertMacroCommand
+                .subscribe(command => {
+                    if(!this.editor) {
+                        return;
+                    }
+
+                    if (command.macroActionId !== this.index) {
+                        return;
+                    }
+
+                    const selection = this.editor.getSelection();
+                    const operation = {
+                        range: selection,
+                        text: command.data,
+                        forceMoveMarkers: true
+                    };
+                    this.insertingMacro = true;
+                    this.editor.executeEdits("my-source", [operation]);
+                })
+        );
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -91,6 +124,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         if (this.changeObserver$) {
             this.changeObserver$.complete();
         }
+        this.subscriptions.unsubscribe();
     }
 
     private onChanged = (_: any) => {};
@@ -136,10 +170,11 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     }
 
     onValueChanged(value: string): void {
-        if (!this.isFocused) {
+        if (!this.isFocused && !this.insertingMacro) {
             return;
         }
 
+        this.insertingMacro = false;
         this.value = value;
         this.calculateHeight();
 

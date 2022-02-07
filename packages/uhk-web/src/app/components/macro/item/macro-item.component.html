@@ -31,8 +31,9 @@
             <macro-command-editor [ngModel]="macroAction.command"
                                   [fullHeight]="true"
                                   [disabled]="!editable"
+                                  [index]="index"
                                   (ngModelChange)="saveMacroCommand($event)"
-                                  (gotFocus)="cancelEdit()"
+                                  (gotFocus)="macroEditorGotFocus()"
             ></macro-command-editor>
         </div>
         <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>
@@ -44,8 +45,11 @@
      >
     <macro-action-editor
         [macroAction]="macroAction"
+        [index]="index"
         [isMacroCommandSupported]="isMacroCommandSupported"
         (cancel)="cancelEdit()"
-        (save)="saveEditedAction($event)">
+        (save)="saveEditedAction($event)"
+        (tabChanged)="selected.emit($event)"
+    >
     </macro-action-editor>
 </div>

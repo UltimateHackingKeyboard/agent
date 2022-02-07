@@ -1,9 +1,9 @@
 import { Action } from '@ngrx/store';
 import { Macro, MacroAction as ConfigItemMacroAction } from 'uhk-common';
-import { ActiveMacroCommandEditorChangedPayload } from '../../models';
+
+import { SelectedMacroAction } from '../../models';
 
 export enum ActionTypes {
-    ActiveMacroCommandEditorChanged = '[Macro] active macro command editor changed',
     Duplicate = '[Macro] Duplicate macro',
     EditName = '[Macro] Edit macro title',
     Remove = '[Macro] Remove macro',
@@ -13,7 +13,8 @@ export enum ActionTypes {
     AddAction = '[Macro] Add macro action',
     SaveAction = '[Macro] Save macro action',
     DeleteAction = '[Macro] Delete macro action',
-    ReorderAction = '[Macro] Reorder macro action'
+    ReorderAction = '[Macro] Reorder macro action',
+    SelectAction = '[Macro] Select macro action'
 }
 
 export class DuplicateMacroAction implements Action {
@@ -38,13 +39,6 @@ export class EditMacroNameAction implements Action {
     type = ActionTypes.EditName;
 
     constructor(public payload: { id: number, name: string }) {
-    }
-}
-
-export class ActiveMacroCommandEditorChangedAction implements Action {
-    type = ActionTypes.ActiveMacroCommandEditorChanged;
-
-    constructor(public payload?: ActiveMacroCommandEditorChangedPayload) {
     }
 }
 
@@ -76,6 +70,13 @@ export class DeleteMacroActionAction implements Action {
     }
 }
 
+export class SelectMacroActionAction implements Action {
+    type = ActionTypes.SelectAction;
+
+    constructor(public payload?: SelectedMacroAction) {
+    }
+}
+
 export class ReorderMacroActionAction implements Action {
     type = ActionTypes.ReorderAction;
 
@@ -85,7 +86,6 @@ export class ReorderMacroActionAction implements Action {
 
 export type Actions
     = DuplicateMacroAction
-    | ActiveMacroCommandEditorChangedAction
     | AddMacroAction
     | RemoveMacroAction
     | EditMacroNameAction
@@ -93,5 +93,6 @@ export type Actions
     | AddMacroActionAction
     | SaveMacroActionAction
     | DeleteMacroActionAction
+    | SelectMacroActionAction
     | ReorderMacroActionAction
     ;

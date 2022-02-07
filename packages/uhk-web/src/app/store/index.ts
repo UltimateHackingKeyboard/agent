@@ -91,6 +91,7 @@ export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMac
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
 export const getSelectedLayerOption = createSelector(userConfigState, fromUserConfig.getSelectedLayerOption);
 export const getLayerOptions = createSelector(userConfigState, fromUserConfig.getLayerOptions);
+export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
     return keymaps.map(keymap => {
         return {
