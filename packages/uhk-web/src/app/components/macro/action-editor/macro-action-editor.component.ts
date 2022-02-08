@@ -8,6 +8,7 @@ import {
     OnChanges,
     OnInit,
     Output,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { faCode, faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
@@ -83,8 +84,10 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
         this.tabChanged.emit(tab);
     }
 
-    ngOnChanges() {
-        this.ngOnInit();
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.macroAction) {
+            this.ngOnInit();
+        }
     }
 
     onCancelClick(): void {
