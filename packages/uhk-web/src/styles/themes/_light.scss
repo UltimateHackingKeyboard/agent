@@ -44,7 +44,7 @@ $color-select-hover-text: #16181b;
 
 $popover-header-bg: $color-bg-light;
 $popover-arrow-color: $color-bg-light;
-$component-active-bg: theme-color("primary") !default;
+$component-active-bg: theme-color('primary') !default;
 $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
 :root,

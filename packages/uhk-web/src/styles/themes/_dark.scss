@@ -65,7 +65,7 @@ $popover-arrow-color: $color-bg-light;
 $popover-arrow-outer-color: $color-popover-border;
 $popover-body-color: $color-popover-bg-light;
 $popover-border-color: $color-popover-border;
-$component-active-bg: theme-color("primary") !default;
+$component-active-bg: theme-color('primary') !default;
 $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
 :root,

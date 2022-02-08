@@ -9,7 +9,7 @@
         border: 1px solid var(--color-active-monaco-editor-border-color);
 
         ::ng-deep .cursor.monaco-mouse-cursor-text {
-            visibility: visible !important;
+            visibility: visible !important; /* stylelint-disable-line declaration-no-important */
             animation: cursor-blink 1.5s steps(2) infinite;
         }
     }
