@@ -18,6 +18,7 @@ import { MacroBaseComponent } from '../macro-base.component';
 })
 export class MacroCommandComponent extends MacroBaseComponent implements OnInit {
     @Input() index: SelectedMacroActionId;
+    @Input() isActive: boolean;
     @Input() macroAction: CommandMacroAction;
 
     @Output() gotFocus = new EventEmitter<void>();

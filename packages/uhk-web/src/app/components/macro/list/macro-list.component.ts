@@ -70,13 +70,14 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     @Input() macro: Macro;
     @Input() macroPlaybackSupported: boolean;
     @Input() isMacroCommandSupported: boolean;
+    @Input() selectedMacroAction: SelectedMacroAction;
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
     @Output() add = new EventEmitter();
     @Output() edit = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
-    @Output() selectedMacroAction = new EventEmitter<SelectedMacroAction>();
+    @Output() selectedMacroActionChanged = new EventEmitter<SelectedMacroAction>();
 
     newMacro: Macro = undefined;
     showNew: boolean = false;
@@ -218,7 +219,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     onSelectedMacroAction(id: SelectedMacroActionId, type: TabName): void {
-        this.selectedMacroAction.emit({ id, type });
+        this.selectedMacroActionChanged.emit({ id, type });
     }
 
     private toKeyAction(event: KeyCaptureData): KeystrokeAction {

@@ -43,6 +43,7 @@ import {
 export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() macroAction: MacroAction;
     @Input() index: SelectedMacroActionId;
+    @Input() isActive: boolean;
     @Input() isMacroCommandSupported: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();

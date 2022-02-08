@@ -8,6 +8,7 @@
                         [editable]="true"
                         [editing]="macroActionIndex === activeEdit"
                         [deletable]="true"
+                        [isActive]="selectedMacroAction?.id === macroActionIndex"
                         [index]="macroActionIndex"
                         [movable]="true"
                         (save)="saveAction($event, macroActionIndex)"
@@ -21,6 +22,7 @@
             <macro-item *ngIf="showNew"
                         class="new-macro-item"
                         [@togglerNew]
+                        [isActive]="selectedMacroAction?.id === 'new'"
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="newMacro"
                         [editable]="true"

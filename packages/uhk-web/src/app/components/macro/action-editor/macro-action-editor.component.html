@@ -43,6 +43,7 @@
                                *ngSwitchCase="TabName.Command"
                                [macroAction]="editableMacroAction"
                                [index]="index"
+                               [isActive]="isActive"
                                (valid)="onValid($event)"
                                (gotFocus)="onMacroEditorGotFocus()"
             ></macro-command-tab>

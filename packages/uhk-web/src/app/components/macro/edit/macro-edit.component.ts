@@ -16,6 +16,7 @@ import {
 import {
     AppState,
     getSelectedMacro,
+    getSelectedMacroAction,
     getSmartMacroPanelVisibility,
     getSmartMacroPanelWidth,
     isMacroCommandSupported,
@@ -44,6 +45,7 @@ export class MacroEditComponent implements OnDestroy {
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
     isMacroCommandSupported$: Observable<boolean>;
+    selectedMacroAction$: Observable<SelectedMacroAction>;
     smartMacroDocUrl$: Observable<string>;
     smartMacroPanelVisibility$: Observable<boolean>;
     showIframeHider = false;
@@ -76,6 +78,7 @@ export class MacroEditComponent implements OnDestroy {
                 };
                 this.cdRef.markForCheck();
             }));
+        this.selectedMacroAction$ = store.select(getSelectedMacroAction);
         this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
         this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
     }
