@@ -148,6 +148,11 @@ h1 {
         user-select: none;
     }
 }
+macro-item {
+    &.active {
+        border: 1px solid var(--color-active-monaco-editor-border-color);
+    }
+}
 
 .new-macro-item {
     overflow: hidden;

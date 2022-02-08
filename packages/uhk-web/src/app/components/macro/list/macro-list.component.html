@@ -3,6 +3,7 @@
     <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can create macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
         <div class="macro-actions-container" [dragula]="MACRO_ACTIONS" [dragulaModel]="macro.macroActions" (dragulaModelChange)="macroActionReordered($event)">
             <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index; trackBy:macroActionTrackByFn.bind(this)"
+                        [class.active]="selectedMacroAction?.id === macroActionIndex"
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="macroAction"
                         [editable]="true"
@@ -22,6 +23,7 @@
             <macro-item *ngIf="showNew"
                         class="new-macro-item"
                         [@togglerNew]
+                        [class.active]="selectedMacroAction?.id === 'new'"
                         [isActive]="selectedMacroAction?.id === 'new'"
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="newMacro"
