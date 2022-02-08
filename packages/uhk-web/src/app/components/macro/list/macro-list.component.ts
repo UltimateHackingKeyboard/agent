@@ -168,6 +168,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     cancelAction() {
+        this.showNew = false;
         this.activeEdit = undefined;
     }
 
