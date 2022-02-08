@@ -230,7 +230,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             lines = 3;
         }
 
-        const newHeight = `${(lines * this.lineHeight)}px`;
+        // 6 is the padding and border width
+        const newHeight = `${(lines * this.lineHeight) + 6}px`;
         if (this.containerHeight === newHeight) {
             return;
         }
