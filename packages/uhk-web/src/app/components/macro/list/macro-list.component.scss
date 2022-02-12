@@ -152,6 +152,11 @@ macro-item {
     border: 1px solid transparent;
     border-bottom-color: var(--color-macro-border);
 
+    &:first-of-type {
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+    }
+
     &:last-of-type {
         border-bottom-color: transparent;
     }
