@@ -149,8 +149,15 @@ h1 {
     }
 }
 macro-item {
+    border: 1px solid transparent;
+    border-bottom-color: var(--color-macro-border);
+
+    &:last-of-type {
+        border-bottom-color: transparent;
+    }
+
     &.active {
-        border: 1px solid var(--color-active-monaco-editor-border-color);
+        border-color: var(--color-active-monaco-editor-border-color);
     }
 }
 

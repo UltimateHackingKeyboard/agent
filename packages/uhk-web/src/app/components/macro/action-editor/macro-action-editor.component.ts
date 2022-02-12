@@ -80,8 +80,10 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
     ngOnInit() {
         this.updateEditableMacroAction();
         const tab: TabName = this.getTabName(this.editableMacroAction);
-        this.activeTab = tab;
-        this.tabChanged.emit(tab);
+        if (this.activeTab !== tab) {
+            this.activeTab = tab;
+            setTimeout(() => this.tabChanged.emit(tab));
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
