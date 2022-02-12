@@ -5,28 +5,31 @@
           (dragEnd)="dragEndHandler($event)"
           (gutterClick)="splitGutterClick($event)">
     <as-split-area [size]="smartMacroPanelSizes.left">
-        <div class="macro-container">
-            <ng-template [ngIf]="macro">
-                <macro-header
+        <div class="macro-container-wrapper">
+            <div class="macro-container">
+                <ng-template [ngIf]="macro">
+                    <macro-header
+                            [macro]="macro"
+                            [isNew]="isNew$ | async"
+                    ></macro-header>
+                    <macro-list
                         [macro]="macro"
-                        [isNew]="isNew$ | async"
-                ></macro-header>
-                <macro-list
-                    [macro]="macro"
-                    [macroPlaybackSupported]="macroPlaybackSupported$ | async"
-                    [isMacroCommandSupported]="isMacroCommandSupported$ | async"
-                    [selectedMacroAction]="selectedMacroAction$ | async"
-                    (add)="addAction($event.macroId, $event.action)"
-                    (edit)="editAction($event.macroId, $event.index, $event.action)"
-                    (delete)="deleteAction($event.macroId, $event.index, $event.action)"
-                    (reorder)="reorderAction($event.macroId, $event.macroActions)"
-                    (selectedMacroActionChanged)="onSelectedMacroAction($event)"
-                ></macro-list>
-            </ng-template>
+                        [macroPlaybackSupported]="macroPlaybackSupported$ | async"
+                        [isMacroCommandSupported]="isMacroCommandSupported$ | async"
+                        [selectedMacroAction]="selectedMacroAction$ | async"
+                        (add)="addAction($event.macroId, $event.action)"
+                        (edit)="editAction($event.macroId, $event.index, $event.action)"
+                        (delete)="deleteAction($event.macroId, $event.index, $event.action)"
+                        (reorder)="reorderAction($event.macroId, $event.macroActions)"
+                        (selectedMacroActionChanged)="onSelectedMacroAction($event)"
+                    ></macro-list>
+                </ng-template>
 
-            <div *ngIf="!macro" class="not-found">
-                There is no macro with id {{ macroId }}.
+                <div *ngIf="!macro" class="not-found">
+                    There is no macro with id {{ macroId }}.
+                </div>
             </div>
+
             <button class="btn btn-default smart-macro-doc-label" (click)="toggleSmartMacroDocPanel()">
                 Smart macro reference
                 <fa-icon [icon]="faCaretDown"

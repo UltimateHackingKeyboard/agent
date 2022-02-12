@@ -26,10 +26,15 @@
     text-align: center;
 }
 
-.macro-container {
+.macro-container-wrapper {
     position: relative;
     height: 100vh;
     border-right: solid 1px var(--color-smart-macro-border-color);
+}
+
+.macro-container {
+    height: 100vh;
+    overflow: scroll;
     padding-right: math.div($grid-gutter-width, 2);
 }
 
