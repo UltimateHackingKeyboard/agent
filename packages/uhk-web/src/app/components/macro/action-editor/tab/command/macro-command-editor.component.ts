@@ -95,14 +95,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                         return;
                     }
 
-                    const selection = this.editor.getSelection();
-                    const operation = {
-                        range: selection,
-                        text: command.data,
-                        forceMoveMarkers: true
-                    };
-                    this.insertingMacro = true;
-                    this.editor.executeEdits("my-source", [operation]);
+                    this.insertMacroCommand(command.data);
                 })
         );
     }
@@ -238,5 +231,53 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
         this.containerHeight = newHeight;
         this.cdRef.detectChanges();
+    }
+
+    /**
+     * Insert macro command to the monaco editor
+     * Logic
+     * - if text selected in the editor then replace the text
+     * - if text not selected in the editor then
+     *   - cursor at the beginning of the line => insert macro and line break. The current line moves to the next line
+     *   - cursor at the end of the line => insert the macro into new line
+     *   - cursor at the middle of the line => insert the macro into new line
+     * @param data
+     * @private
+     */
+    private insertMacroCommand(data: string): void {
+        data = data?.trim();
+
+        let selection = this.editor.getSelection();
+        let cursorPosition;
+        if (selection.isEmpty()) {
+            const macroLines = this.editor.getValue().split(this.editor.getModel().getEOL());
+            const lineNumber = selection.getPosition().lineNumber;
+            const column = selection.getPosition().column;
+            const line = macroLines[lineNumber - 1];
+            if (column === 1) {
+                if (line.length !== 0) {
+                    data += this.editor.getModel().getEOL();
+                }
+            } else if (column === line.length) {
+                data = this.editor.getModel().getEOL() + data;
+            } else {
+                data = this.editor.getModel().getEOL() + data;
+                selection = selection
+                    .setEndPosition(lineNumber, line.length + 1)
+                    .setStartPosition(lineNumber, line.length + 1);
+                cursorPosition = { lineNumber: lineNumber + 1, column: data.length };
+            }
+        }
+        const operation = {
+            range: selection,
+            id: { major: 1, minor: 1 },
+            text: data,
+            forceMoveMarkers: true
+        };
+        this.insertingMacro = true;
+        this.editor.executeEdits("my-source", [operation]);
+        if (cursorPosition) {
+            this.editor.setPosition(cursorPosition);
+        }
     }
 }
