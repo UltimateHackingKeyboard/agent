@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
+    "clean": "rimraf ./node_modules ./dist",
     "lint": "eslint --ext .ts ."
   }
 }

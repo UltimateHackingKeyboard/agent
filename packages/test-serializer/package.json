@@ -17,6 +17,7 @@
   },
   "scripts": {
     "test": "jasmine-ts --config=jasmine.json",
+    "clean": "rimraf ./node_modules",
     "lint": "eslint --ext .ts ."
   }
 }

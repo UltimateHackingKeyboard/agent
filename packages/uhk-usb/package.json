@@ -8,6 +8,7 @@
   "license": "See in LICENSE",
   "scripts": {
     "build": "tsc",
+    "clean": "rimraf ./node_modules ./dist",
     "lint": "eslint --ext .ts ."
   },
   "devDependencies": {
