@@ -7,6 +7,7 @@ import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from 'ng2-dragula';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -83,7 +84,7 @@ import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
-import { SafeStylePipe, UserConfigHistoryDisplayTextPipe } from './pipes';
+import { SafeStylePipe, SafeUrlPipe, UserConfigHistoryDisplayTextPipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
@@ -137,6 +138,9 @@ import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
 import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
+import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
+import { SmartMacroDocDirective } from './components/macro/directives/smart-macro-doc.directive';
+import { SmartMacroDocService } from './services/smart-macro-doc-service';
 
 @NgModule({
     declarations: [
@@ -200,6 +204,7 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         KeyboardSliderComponent,
         CancelableDirective,
         SafeStylePipe,
+        SafeUrlPipe,
         AutoUpdateSettings,
         UndoableNotifierComponent,
         UhkHeader,
@@ -230,10 +235,12 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         UdevRulesComponent,
         HighlightArrowComponent,
         OutOfSpaceWarningComponent,
+        SmartMacroDocDirective,
         UserConfigurationHistoryComponent,
         UserConfigHistoryDisplayTextPipe
     ],
     imports: [
+        AngularSplitModule,
         CommonModule,
         BrowserAnimationsModule,
         FontAwesomeModule,
@@ -275,6 +282,8 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
         AppRendererService,
         IpcCommonRenderer,
         DeviceRendererService,
+        SmartMacroDocRendererService,
+        SmartMacroDocService,
         UhkDeviceConnectedGuard,
         UhkDeviceDisconnectedGuard,
         UhkDeviceInitializedGuard,

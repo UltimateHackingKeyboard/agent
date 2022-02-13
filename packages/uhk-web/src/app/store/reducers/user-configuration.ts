@@ -24,7 +24,7 @@ import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
 import * as DeviceActions from '../actions/device';
 import { findModuleById, isValidName } from '../../util';
-import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption } from '../../models';
+import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption, SelectedMacroAction } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 import { SaveKeyAction } from '../actions/keymap';
 import * as Device from '../actions/device';
@@ -35,6 +35,7 @@ export interface State {
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
+    selectedMacroAction?: SelectedMacroAction;
     lastEditedKey: LastEditedKey;
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
@@ -691,9 +692,18 @@ export function reducer(
             return {
                 ...state,
                 selectedMacroId,
-                isSelectedMacroNew: false
+                isSelectedMacroNew: false,
+                selectedMacroAction: undefined
             };
         }
+
+        case MacroActions.ActionTypes.SelectAction: {
+            return {
+                ...state,
+                selectedMacroAction: (action as MacroActions.SelectMacroActionAction).payload
+            };
+        }
+
         default:
             return state;
     }
@@ -729,6 +739,7 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
     .from(state.layerOptions.values())
     .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
+export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

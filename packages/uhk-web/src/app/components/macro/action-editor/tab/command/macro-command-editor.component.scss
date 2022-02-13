@@ -1,4 +1,24 @@
+
 .me-container {
     display: block;
     max-height: calc(100vh - 100px);
+    padding: 2px;
+    border: 1px solid transparent;
+}
+
+:host(.active) {
+    .me-container {
+        //border-color: var(--color-active-monaco-editor-border-color);
+
+        ::ng-deep .cursor.monaco-mouse-cursor-text {
+            visibility: visible !important; /* stylelint-disable-line declaration-no-important */
+            animation: cursor-blink 1.5s steps(2) infinite;
+        }
+    }
+}
+
+@keyframes cursor-blink {
+    0% {
+        opacity: 0;
+    }
 }

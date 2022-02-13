@@ -73,6 +73,7 @@ if (TEST_BUILD || gitTag) {
     // Add firmware to extra resources
     const extractedFirmwareDir = path.join(__dirname, '../tmp/packages');
     extraResources.push({ from: extractedFirmwareDir, to: 'packages/' });
+    extraResources.push({ from: path.join(__dirname, '../tmp/smart-macro-docs'), to: 'smart-macro-docs/' });
 
     builder.build({
         dir: DIR,

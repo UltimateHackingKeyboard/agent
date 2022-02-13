@@ -9,6 +9,7 @@ export * from './load-user-configuration-from-file-payload';
 export * from './macro-menu-item';
 export * from './navigation-payload';
 export * from './out-of-space-warning-data';
+export * from './selected-macro-action';
 export * from './side-menu-page-state';
 export * from './uhk-progress-bar-state';
 export * from './update-firmware-with-payload';

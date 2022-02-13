@@ -44,6 +44,8 @@ $color-select-hover-text: #16181b;
 
 $popover-header-bg: $color-bg-light;
 $popover-arrow-color: $color-bg-light;
+$component-active-bg: theme-color('primary') !default;
+$input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
 :root,
 .theme-light {
@@ -116,4 +118,11 @@ $popover-arrow-color: $color-bg-light;
 
     --color-out-of-space-warning-bg: #ffc107;
     --color-out-of-space-warning-text: #000;
+
+    --color-smart-macro-split-glutter: #eee;
+    --color-smart-macro-border-color: #ccc;
+    --color-smart-macro-hover-color: #ececec;
+    --color-smart-macro-focus-bg-color: white;
+
+    --color-active-monaco-editor-border-color: #{$input-focus-border-color};
 }

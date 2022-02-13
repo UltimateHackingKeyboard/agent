@@ -9,13 +9,17 @@ import {
     Input,
     OnChanges,
     OnDestroy,
+    OnInit,
     Output,
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { SelectedMacroActionId } from '../../../../../models';
+import { SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 58;
@@ -36,12 +40,13 @@ function getVsCodeTheme(): string {
     }],
     styleUrls: ['./macro-command-editor.component.scss']
 })
-export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy {
+export class MacroCommandEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy, OnInit {
     /**
      * Show the macro edit as high as possible
      */
     @Input() fullHeight = false;
     @Input() autoFocus = false;
+    @Input() index: SelectedMacroActionId;
 
     @Output() gotFocus = new EventEmitter<void>();
 
@@ -69,9 +74,30 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     private lineHeight = 18;
     private isFocused = false;
+    private insertingMacro = false;
     private changeObserver$: Observer<string>;
+    private subscriptions = new Subscription();
 
-    constructor(private cdRef: ChangeDetectorRef) {
+    constructor(private cdRef: ChangeDetectorRef,
+                private smartMacroDocService: SmartMacroDocService) {
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.add(
+            this.smartMacroDocService
+                .insertMacroCommand
+                .subscribe(command => {
+                    if(!this.editor) {
+                        return;
+                    }
+
+                    if (command.macroActionId !== this.index) {
+                        return;
+                    }
+
+                    this.insertMacroCommand(command.data);
+                })
+        );
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -91,6 +117,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         if (this.changeObserver$) {
             this.changeObserver$.complete();
         }
+        this.subscriptions.unsubscribe();
     }
 
     private onChanged = (_: any) => {};
@@ -136,10 +163,11 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     }
 
     onValueChanged(value: string): void {
-        if (!this.isFocused) {
+        if (!this.isFocused && !this.insertingMacro) {
             return;
         }
 
+        this.insertingMacro = false;
         this.value = value;
         this.calculateHeight();
 
@@ -195,12 +223,61 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             lines = 3;
         }
 
-        const newHeight = `${(lines * this.lineHeight)}px`;
+        // 6 is the padding and border width
+        const newHeight = `${(lines * this.lineHeight) + 6}px`;
         if (this.containerHeight === newHeight) {
             return;
         }
 
         this.containerHeight = newHeight;
         this.cdRef.detectChanges();
+    }
+
+    /**
+     * Insert macro command to the monaco editor
+     * Logic
+     * - if text selected in the editor then replace the text
+     * - if text not selected in the editor then
+     *   - cursor at the beginning of the line => insert macro and line break. The current line moves to the next line
+     *   - cursor at the end of the line => insert the macro into new line
+     *   - cursor at the middle of the line => insert the macro into new line
+     * @param data
+     * @private
+     */
+    private insertMacroCommand(data: string): void {
+        data = data?.trim();
+
+        let selection = this.editor.getSelection();
+        let cursorPosition;
+        if (selection.isEmpty()) {
+            const macroLines = this.editor.getValue().split(this.editor.getModel().getEOL());
+            const lineNumber = selection.getPosition().lineNumber;
+            const column = selection.getPosition().column;
+            const line = macroLines[lineNumber - 1];
+            if (column === 1) {
+                if (line.length !== 0) {
+                    data += this.editor.getModel().getEOL();
+                }
+            } else if (column === line.length) {
+                data = this.editor.getModel().getEOL() + data;
+            } else {
+                data = this.editor.getModel().getEOL() + data;
+                selection = selection
+                    .setEndPosition(lineNumber, line.length + 1)
+                    .setStartPosition(lineNumber, line.length + 1);
+                cursorPosition = { lineNumber: lineNumber + 1, column: data.length };
+            }
+        }
+        const operation = {
+            range: selection,
+            id: { major: 1, minor: 1 },
+            text: data,
+            forceMoveMarkers: true
+        };
+        this.insertingMacro = true;
+        this.editor.executeEdits("my-source", [operation]);
+        if (cursorPosition) {
+            this.editor.setPosition(cursorPosition);
+        }
     }
 }

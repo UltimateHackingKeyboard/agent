@@ -8,6 +8,7 @@ import {
     OnChanges,
     OnInit,
     Output,
+    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import { faCode, faClock, faFont, faKeyboard, faMousePointer } from '@fortawesome/free-solid-svg-icons';
@@ -23,15 +24,16 @@ import {
     TextMacroAction,
     MacroActionHelper
 } from 'uhk-common';
-import { MacroDelayTabComponent, MacroMouseTabComponent, MacroKeyTabComponent, MacroTextTabComponent } from './tab';
 
-enum TabName {
-    Keypress,
-    Text,
-    Mouse,
-    Delay,
-    Command
-}
+import { SelectedMacroActionId, TabName } from '../../../models';
+
+import {
+    MacroDelayTabComponent,
+    MacroMouseTabComponent,
+    MacroKeyTabComponent,
+    MacroTextTabComponent,
+    MacroCommandComponent
+} from './tab';
 
 @Component({
     selector: 'macro-action-editor',
@@ -41,13 +43,16 @@ enum TabName {
 })
 export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() macroAction: MacroAction;
+    @Input() index: SelectedMacroActionId;
+    @Input() isActive: boolean;
     @Input() isMacroCommandSupported: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
+    @Output() tabChanged = new EventEmitter<TabName>();
 
     // tslint:disable-next-line:max-line-length
-    @ViewChild('tab', { static: false }) selectedTab: MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
+    @ViewChild('tab', { static: false }) selectedTab: MacroCommandComponent | MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
 
     editableMacroAction: MacroAction;
     activeTab: TabName;
@@ -75,11 +80,16 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
     ngOnInit() {
         this.updateEditableMacroAction();
         const tab: TabName = this.getTabName(this.editableMacroAction);
-        this.activeTab = tab;
+        if (this.activeTab !== tab) {
+            this.activeTab = tab;
+            setTimeout(() => this.tabChanged.emit(tab));
+        }
     }
 
-    ngOnChanges() {
-        this.ngOnInit();
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.macroAction) {
+            this.ngOnInit();
+        }
     }
 
     onCancelClick(): void {
@@ -120,6 +130,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
 
     selectTab(tab: TabName): void {
         this.activeTab = tab;
+        this.tabChanged.emit(tab);
         if (tab === this.getTabName(this.macroAction)) {
             this.updateEditableMacroAction();
         } else {
@@ -144,6 +155,10 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
             return TabName.Command;
         }
         return undefined;
+    }
+
+    onMacroEditorGotFocus(): void {
+        this.tabChanged.emit(this.activeTab);
     }
 
     private updateEditableMacroAction() {

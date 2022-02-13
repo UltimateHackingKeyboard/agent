@@ -1,11 +1,129 @@
+@use 'sass:math';
+@import '../../../../styles/variables';
+
 :host {
     width: 100%;
     height: 100%;
     display: block;
+    padding-right: 0;
+
+    as-split {
+        ::ng-deep .as-split-gutter {
+            background-color: var(--color-smart-macro-split-glutter);
+        }
+    }
+
+    iframe {
+        border: 0;
+        width: 100%;
+        height: 100vh;
+    }
 }
 
 .not-found {
     margin-top: 30px;
     font-size: 16px;
     text-align: center;
+}
+
+.macro-container-wrapper {
+    position: relative;
+    height: 100vh;
+    border-right: solid 1px var(--color-smart-macro-border-color);
+}
+
+.macro-container {
+    height: 100vh;
+    overflow: scroll;
+    padding-right: math.div($grid-gutter-width, 2);
+}
+
+.smart-macro-doc-container {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+
+    .hack-iframe-hider {
+        background: rgba(0, 0, 0, 0.2);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.smart-macro-doc-label {
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: rotate(90deg) translateX(50%);
+    transform-origin: 100% 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top-width: 0;
+
+    &:before,
+    &:after {
+        content: '';
+        position: absolute;
+        background-color: transparent;
+        top: 0;
+        height: $btn-border-radius;
+        width: $btn-border-radius * 2;
+        transition: $btn-transition;
+    }
+
+    &:before {
+        left: -8px;
+        border-right: solid 1px var(--color-smart-macro-border-color);
+        border-top: solid 1px var(--color-smart-macro-border-color);
+        border-top-right-radius: $btn-border-radius;
+        box-shadow: $btn-border-radius 0 0 0 var(--color-smart-macro-focus-bg-color);
+    }
+
+    &:after {
+        right: -8px;
+        border-left: solid 1px var(--color-smart-macro-border-color);
+        border-top: solid 1px var(--color-smart-macro-border-color);
+        border-top-left-radius: $btn-border-radius;
+        box-shadow: -$btn-border-radius 0 0 0 var(--color-smart-macro-focus-bg-color);
+    }
+
+    &:focus {
+        background-color: var(--color-smart-macro-focus-bg-color);
+        border-color: #ccc;
+
+        &:before {
+            box-shadow: $btn-border-radius 0 0 0 var(--color-smart-macro-focus-bg-color);
+        }
+
+        &:after {
+            box-shadow: -$btn-border-radius 0 0 0 var(--color-smart-macro-focus-bg-color);
+        }
+    }
+
+    &:hover {
+        background-color: var(--color-smart-macro-hover-color);
+
+        &:before {
+            box-shadow: $btn-border-radius 0 0 0 var(--color-smart-macro-hover-color);
+        }
+
+        &:after {
+            box-shadow: -$btn-border-radius 0 0 0 var(--color-smart-macro-hover-color);
+        }
+    }
+
+    fa-icon {
+        ::ng-deep svg {
+            transition: 0.3s;
+        }
+
+        &.opened {
+            ::ng-deep svg {
+                transform: rotate(-180deg);
+            }
+        }
+    }
 }

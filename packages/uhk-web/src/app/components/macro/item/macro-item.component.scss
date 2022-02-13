@@ -28,7 +28,6 @@
         display: flex;
         flex-shrink: 0;
         border: 0;
-        border-bottom: 1px solid var(--color-macro-border);
         user-select: none;
 
         icon {
@@ -46,6 +45,7 @@
 
         &.is-editing {
             background: var(--color-macro-bg);
+            border-bottom: 1px solid var(--color-macro-border);
         }
 
         &--wrap {

@@ -1,19 +1,49 @@
-<ng-template [ngIf]="macro">
-    <macro-header
-            [macro]="macro"
-            [isNew]="isNew$ | async"
-    ></macro-header>
-    <macro-list
-        [macro]="macro"
-        [macroPlaybackSupported]="macroPlaybackSupported$ | async"
-        [isMacroCommandSupported]="isMacroCommandSupported$ | async"
-        (add)="addAction($event.macroId, $event.action)"
-        (edit)="editAction($event.macroId, $event.index, $event.action)"
-        (delete)="deleteAction($event.macroId, $event.index, $event.action)"
-        (reorder)="reorderAction($event.macroId, $event.macroActions)"
-    ></macro-list>
-</ng-template>
+<div style="width: 100%; height: 100vh;">
+<as-split direction="horizontal"
+          [useTransition]="true"
+          (dragStart)="dragStartHandler()"
+          (dragEnd)="dragEndHandler($event)"
+          (gutterClick)="splitGutterClick($event)">
+    <as-split-area [size]="smartMacroPanelSizes.left">
+        <div class="macro-container-wrapper">
+            <div class="macro-container">
+                <ng-template [ngIf]="macro">
+                    <macro-header
+                            [macro]="macro"
+                            [isNew]="isNew$ | async"
+                    ></macro-header>
+                    <macro-list
+                        [macro]="macro"
+                        [macroPlaybackSupported]="macroPlaybackSupported$ | async"
+                        [isMacroCommandSupported]="isMacroCommandSupported$ | async"
+                        [selectedMacroAction]="selectedMacroAction$ | async"
+                        (add)="addAction($event.macroId, $event.action)"
+                        (edit)="editAction($event.macroId, $event.index, $event.action)"
+                        (delete)="deleteAction($event.macroId, $event.index, $event.action)"
+                        (reorder)="reorderAction($event.macroId, $event.macroActions)"
+                        (selectedMacroActionChanged)="onSelectedMacroAction($event)"
+                    ></macro-list>
+                </ng-template>
 
-<div *ngIf="!macro" class="not-found">
-    There is no macro with id {{ macroId }}.
+                <div *ngIf="!macro" class="not-found">
+                    There is no macro with id {{ macroId }}.
+                </div>
+            </div>
+
+            <button class="btn btn-default smart-macro-doc-label" (click)="toggleSmartMacroDocPanel()">
+                Smart macro reference
+                <fa-icon [icon]="faCaretDown"
+                         [class.opened]="smartMacroPanelVisibility$ | async"
+                ></fa-icon>
+            </button>
+        </div>
+    </as-split-area>
+    <as-split-area *ngIf="smartMacroPanelVisibility$ | async"
+                   [size]="smartMacroPanelSizes.right">
+        <div class="smart-macro-doc-container">
+            <iframe smartMacroIframe [src]="smartMacroDocUrl$ | async | safeUrl"></iframe>
+            <div [hidden]="showIframeHider === false" class="hack-iframe-hider"></div>
+        </div>
+    </as-split-area>
+</as-split>
 </div>

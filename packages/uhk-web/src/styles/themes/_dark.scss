@@ -65,6 +65,8 @@ $popover-arrow-color: $color-bg-light;
 $popover-arrow-outer-color: $color-popover-border;
 $popover-body-color: $color-popover-bg-light;
 $popover-border-color: $color-popover-border;
+$component-active-bg: theme-color('primary') !default;
+$input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
 :root,
 .theme-dark {
@@ -139,4 +141,11 @@ $popover-border-color: $color-popover-border;
 
     --color-out-of-space-warning-bg: #{theme-color('warning')};
     --color-out-of-space-warning-text: #000;
+
+    --color-smart-macro-split-glutter: #000;
+    --color-smart-macro-border-color: #666;
+    --color-smart-macro-hover-color: #313131;
+    --color-smart-macro-focus-bg-color: #444;
+
+    --color-active-monaco-editor-border-color: #{$input-focus-border-color};
 }

@@ -24,6 +24,7 @@ import {
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
+import { SelectedMacroActionId, TabName } from '../../../models';
 
 @Component({
     animations: [
@@ -61,13 +62,16 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Input() editable: boolean;
     @Input() editing: boolean;
     @Input() deletable: boolean;
+    @Input() index: SelectedMacroActionId;
     @Input() movable: boolean;
     @Input() isMacroCommandSupported: boolean;
+    @Input() isActive: boolean;
 
     @Output() save = new EventEmitter<MacroAction>();
     @Output() cancel = new EventEmitter<void>();
     @Output() edit = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
+    @Output() selected = new EventEmitter<TabName>();
 
     title: string;
     iconName: string;
@@ -111,6 +115,11 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     deleteAction(): void {
         this.delete.emit();
+    }
+
+    macroEditorGotFocus():void {
+        this.cancelEdit();
+        this.selected.emit(TabName.Command);
     }
 
     saveMacroCommand(command: string): void {

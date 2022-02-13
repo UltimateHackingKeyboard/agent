@@ -3,7 +3,6 @@
 :host {
     display: flex;
     flex-direction: column;
-    height: 100%;
 
     .list-container {
         display: flex;
@@ -147,6 +146,23 @@ h1 {
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+    }
+}
+macro-item {
+    border: 1px solid transparent;
+    border-bottom-color: var(--color-macro-border);
+
+    &:first-of-type {
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+    }
+
+    &:last-of-type {
+        border-bottom-color: transparent;
+    }
+
+    &.active {
+        border-color: var(--color-active-monaco-editor-border-color);
     }
 }
 

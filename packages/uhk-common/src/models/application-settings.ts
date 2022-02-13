@@ -14,4 +14,8 @@ export interface ApplicationSettings {
     everAttemptedSavingToKeyboard: boolean;
     animationEnabled?: boolean;
     appTheme?: AppTheme;
+    /**
+     * Smart Macro panel width in percent;
+     */
+    smartMacroPanelWidth?: number;
 }
