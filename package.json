@@ -90,7 +90,7 @@
     "pack": "node ./scripts/release.js",
     "sprites": "node ./scripts/generate-svg-sprites",
     "release": "node ./scripts/release.js",
-    "clean": "lerna exec rimraf ./node_modules ./dist && rimraf ./node_modules ./dist ./tmp",
+    "clean": "lerna run clean && rimraf ./node_modules ./dist ./tmp",
     "convert-user-config-to-bin": "node -r ts-node/register ./packages/usb/user-config-json-to-bin.ts"
   }
 }
