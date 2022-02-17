@@ -19,7 +19,7 @@
     "npm": ">=8.1.0 <9.0.0"
   },
   "devDependencies": {
-    "@types/command-line-args": "5.0.0",
+    "@types/command-line-args": "5.2.0",
     "@types/command-line-usage": "5.0.1",
     "@types/copy-webpack-plugin": "8.0.0",
     "@types/decompress": "4.2.3",
