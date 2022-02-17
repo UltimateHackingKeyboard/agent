@@ -5,7 +5,7 @@
   "description": "Agent USB scripts",
   "license": "See in LICENSE",
   "dependencies": {
-    "yargs": "16.2.0",
+    "yargs": "17.3.1",
     "kboot": "0.0.0",
     "node-hid": "2.1.1",
     "uhk-common": "1.0.0",
