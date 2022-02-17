@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/command-line-args": "5.2.0",
     "@types/command-line-usage": "5.0.2",
-    "@types/copy-webpack-plugin": "8.0.0",
+    "@types/copy-webpack-plugin": "10.1.0",
     "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
@@ -38,7 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "check-node-version": "4.1.0",
-    "copy-webpack-plugin": "8.1.1",
+    "copy-webpack-plugin": "10.2.4",
     "copyfiles": "2.4.1",
     "core-js": "3.15.2",
     "cross-env": "7.0.3",
