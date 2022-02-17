@@ -246,7 +246,7 @@ export class DeviceEffects {
             ofType<UpdateFirmwareAction>(ActionTypes.UpdateFirmware),
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([action, userConfig]) => this.deviceRendererService.updateFirmware({
-                userConfig,
+                userConfig: userConfig.toJsonObject(),
                 forceUpgrade: action.payload,
                 versionInformation: getVersions()
             }))
@@ -257,7 +257,7 @@ export class DeviceEffects {
             ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith),
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([action, userConfig]) => this.deviceRendererService.updateFirmware({
-                userConfig,
+                userConfig: userConfig.toJsonObject(),
                 forceUpgrade: action.payload.forceUpgrade,
                 versionInformation: getVersions(),
                 uploadFile: action.payload.uploadFileData

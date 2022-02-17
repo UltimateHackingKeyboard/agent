@@ -60,7 +60,7 @@ export class DeviceRendererService {
     }
 
     recoveryDevice(userConfig: UserConfiguration): void {
-        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, JSON.stringify(userConfig));
+        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, userConfig.toJsonObject());
     }
 
     recoveryModule(moduleId: number): void {
