@@ -31,6 +31,17 @@ export const getUserConfigFromDeviceResponse = (json: string): UserConfiguration
     throw Error('Invalid user configuration');
 };
 
+export const getUserConfigFromJsonObject = (data: any): UserConfiguration  => {
+    const userConfig = new UserConfiguration();
+    userConfig.fromJsonObject(data);
+
+    if (userConfig.userConfigMajorVersion > 0) {
+        return userConfig;
+    }
+
+    throw Error('JSON string is an invalid user configuration');
+};
+
 export const mapObjectToUserConfigBinaryBuffer = (obj: any): Buffer => {
     const configuration = new UserConfiguration();
     configuration.fromJsonObject(obj);
