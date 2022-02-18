@@ -323,7 +323,7 @@ export const getSideMenuPageState = createSelector(
             keymaps: userConfiguration.keymaps,
             macros: getMacroMenuItems(userConfiguration),
             restoreUserConfiguration,
-            deviceUiState: uiState
+            deviceUiState: runningInElectronValue ? uiState : DeviceUiStates.UserConfigLoaded
         };
     }
 );
