@@ -20,7 +20,7 @@ export const deviceRoutes: Routes = [
                 component: DeviceConfigurationComponent
             },
             {
-                path: 'mouse-speed',
+                path: 'mouse-key-speed',
                 component: MouseSpeedComponent
             },
             {
