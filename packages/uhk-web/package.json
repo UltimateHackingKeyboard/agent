@@ -20,7 +20,7 @@
   "private": true,
   "license": "See in LICENSE",
   "devDependencies": {
-    "@angular-builders/custom-webpack": "13.0.0",
+    "@angular-builders/custom-webpack": "13.1.0",
     "@angular-devkit/build-angular": " 13.1.3",
     "@angular-devkit/build-optimizer": "0.1301.3",
     "@angular-devkit/core": "13.1.3",
