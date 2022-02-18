@@ -17,7 +17,7 @@
     "decompress-bzip2": "4.0.0",
     "decompress-targz": "4.1.1",
     "delay": "5.0.0",
-    "get-port": "6.0.0",
+    "get-port": "6.1.0",
     "node-hid": "2.1.1",
     "static-server": "2.2.1",
     "sudo-prompt": "9.2.1",
