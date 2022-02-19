@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import './variables';
 
 /* You can add global styles to this file, and also import other style files */
@@ -105,8 +106,32 @@ a.disabled {
         border-radius: 4px;
     }
 
-    &-handle {
-        background-color: var(--color-slider-handle-bg);
+    &-connects {
+        border-radius: 3px;
+
+        .noUi-connect {
+            background-color: var(--color-slider-connect-bg);
+        }
+    }
+
+    &-horizontal {
+        height: 10px;
+
+        .noUi-handle {
+            $noUiHandleSize: 18px;
+
+            background-color: var(--color-slider-handle-bg);
+            height: $noUiHandleSize;
+            width: $noUiHandleSize;
+            top: -5px;
+            right: math.div($noUiHandleSize, -2);
+            border-radius: math.div($noUiHandleSize, 2);
+
+            &:after,
+            &:before {
+                display: none;
+            }
+        }
     }
 
     &-value {

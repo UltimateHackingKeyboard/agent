@@ -2,7 +2,7 @@
     <fa-icon [icon]="faSlidersH"></fa-icon>
     <span>LED brightness</span>
 </h1>
-<div class="row led-setting">
+<div class="row">
     <div class="col-12 col-lg-6">
         <slider-wrapper
             label="LED display icon and layer texts brightness"
@@ -14,7 +14,7 @@
             (ngModelChange)="onSetPropertyValue('iconsAndLayerTextsBrightness', $event)"></slider-wrapper>
     </div>
 </div>
-<div class="row led-setting">
+<div class="row">
     <div class="col-12 col-lg-6">
         <slider-wrapper
             label="LED display alphanumeric segments brightness"
@@ -26,7 +26,7 @@
             (ngModelChange)="onSetPropertyValue('alphanumericSegmentsBrightness', $event)"></slider-wrapper>
     </div>
 </div>
-<div class="row led-setting">
+<div class="row">
     <div class="col-12 col-lg-6">
         <slider-wrapper
             label="Key backlight brightness"
