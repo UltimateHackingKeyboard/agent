@@ -8,7 +8,7 @@
      [isDisabled]="!layerOption.selected"
      (confirm)="onRemoveLayer($event)"
 >
-    <input class="form-check-input"
+    <input #checkbox class="form-check-input"
            type="checkbox"
            [ngModel]="layerOption.selected"
            (ngModelChange)="onCheckboxChange($event)"
