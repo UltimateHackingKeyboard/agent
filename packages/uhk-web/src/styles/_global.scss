@@ -124,7 +124,7 @@ a.disabled {
             height: $noUiHandleSize;
             width: $noUiHandleSize;
             top: -5px;
-            right: math.div($noUiHandleSize, -2) ;
+            right: math.div($noUiHandleSize, -2);
             border-radius: math.div($noUiHandleSize, 2);
 
             &:after,
