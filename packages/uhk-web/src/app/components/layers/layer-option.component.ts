@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    Output,
+    ViewChild
+} from '@angular/core';
 
 import { LayerOption } from '../../models';
 import { ConfirmCancelEvent } from 'angular-confirmation-popover/lib/confirmation-popover.directive';
@@ -10,9 +19,11 @@ import { ConfirmCancelEvent } from 'angular-confirmation-popover/lib/confirmatio
     styleUrls: ['./layer-option.component.scss']
 })
 export class LayerOptionComponent {
+
     @Input() layerOption: LayerOption;
     @Output() remove = new EventEmitter<LayerOption>();
     @Output() select = new EventEmitter<LayerOption>();
+    @ViewChild('checkbox') checkbox: ElementRef<HTMLInputElement>;
 
     @HostListener('click', ['$event'])
     onClick(event: Event): void {
@@ -21,6 +32,9 @@ export class LayerOptionComponent {
         if (!this.layerOption.selected) {
             this.select.emit(this.layerOption);
         }
+        setTimeout(() => {
+            this.checkbox.nativeElement.checked = this.layerOption.selected;
+        });
     }
 
     onCheckboxChange(event): void {
