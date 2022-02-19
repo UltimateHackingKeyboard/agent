@@ -5953,8 +5953,8 @@
     {
       "isDefault": true,
       "abbreviation": "EMP",
-      "name": "EMPTY",
-      "description": "Empty keymap",
+      "name": "Empty",
+      "description": "This is an empty keymap. Let's start from scratch!",
       "layers": [
         {
           "id": "base",
