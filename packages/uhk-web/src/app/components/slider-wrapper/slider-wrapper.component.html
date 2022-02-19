@@ -11,11 +11,12 @@
 <div class="slider-wrapper">
     <div class="slider-container">
         <nouislider
+            [connect]="[true, false]"
             [min]="min"
             [max]="max"
             [step]="step"
             [keyboard]="true"
-            [tooltips]="true"
+            [tooltips]="[true]"
             [(ngModel)]="value"
             (ngModelChange)="onSliderChange($event)"></nouislider>
     </div>

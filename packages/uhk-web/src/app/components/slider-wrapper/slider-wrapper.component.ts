@@ -47,9 +47,9 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
     }
 
     ngAfterViewInit(): void {
-        if (this.pips) {
-            this.slider.slider.pips(this.pips);
-        }
+        // if (this.pips) {
+        //     this.slider.slider.pips(this.pips);
+        // }
 
         // Hide tooltips and show them when dragging slider handle
         this.slider.slider.target.querySelector('.noUi-tooltip').style.display = 'none';

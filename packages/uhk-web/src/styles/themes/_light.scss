@@ -79,6 +79,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
     --color-slider-base-bg: #{color('white')};
     --color-slider-handle-bg: #{color('white')};
+    --color-slider-connect-bg: #{theme-color('primary')};
 
     --color-popover-bg: #{$color-bg-light};
     --color-popover-bg-light: #{color('white')};
