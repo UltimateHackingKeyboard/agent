@@ -69,7 +69,7 @@
     "ngrx-store-freeze": "0.2.4",
     "ngx-clipboard": "15.0.1",
     "ngx-contextmenu": "6.0.0",
-    "ngx-select-ex": "6.1.0",
+    "ngx-select-ex": "8.0.1",
     "nouislider": "15.5.1",
     "protractor": "7.0.0",
     "rxjs": "6.6.7",
