@@ -72,7 +72,7 @@
     "ngx-select-ex": "6.1.0",
     "nouislider": "15.5.1",
     "protractor": "7.0.0",
-    "rxjs": "6.6.0",
+    "rxjs": "6.6.7",
     "semver": "7.3.5",
     "ts-keycode-enum": "^1.0.6",
     "uhk-common": "1.0.0",
