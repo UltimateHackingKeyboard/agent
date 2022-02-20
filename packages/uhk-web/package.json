@@ -40,7 +40,7 @@
     "@angular/platform-browser": "13.2.3",
     "@angular/platform-browser-dynamic": "13.2.3",
     "@angular/router": "13.2.3",
-    "@fortawesome/angular-fontawesome": "0.7.0",
+    "@fortawesome/angular-fontawesome": "0.10.1",
     "@fortawesome/fontawesome-svg-core": "1.2.30",
     "@fortawesome/free-regular-svg-icons": "5.14.0",
     "@fortawesome/free-solid-svg-icons": "5.14.0",
