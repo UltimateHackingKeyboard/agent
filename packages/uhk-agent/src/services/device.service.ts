@@ -251,7 +251,6 @@ export class DeviceService {
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
         const response = new FirmwareUpgradeIpcResponse();
         const data: UpdateFirmwareData = JSON.parse(args[0]);
-        const userConfig = getUserConfigFromJsonObject(data.userConfig);
         let firmwarePathData: TmpFirmware;
 
         try {
@@ -287,7 +286,7 @@ export class DeviceService {
                 this.logService.config(
                     '[DeviceService] User configuration will be saved after right module firmware upgrade',
                     data.userConfig);
-                const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
+                const buffer = mapObjectToUserConfigBinaryBuffer(data.userConfig);
                 await this.operations.saveUserConfiguration(buffer);
             } else {
                 this.logService.misc('Skip right firmware upgrade.');
@@ -357,7 +356,7 @@ export class DeviceService {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
-            const userConfig = getUserConfigFromJsonObject(args[0]);
+            const userConfig = JSON.parse(args[0]);
             const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
