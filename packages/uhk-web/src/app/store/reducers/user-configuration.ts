@@ -62,6 +62,7 @@ export function reducer(
         case UserConfig.ActionTypes.LoadUserConfigSuccess: {
             const userConfig = (action as UserConfig.LoadUserConfigSuccessAction).payload;
             const newState = assignUserConfiguration(state, userConfig);
+            newState.selectedKeymapAbbr = undefined;
             newState.layerOptions = calculateLayerOptions(newState);
 
             return newState;
