@@ -214,7 +214,8 @@ export class DeviceEffects {
         .pipe(
             ofType(ActionTypes.ResetUserConfiguration),
             switchMap(() => {
-                const config = this.defaultUserConfigurationService.getDefault();
+                const config = this.defaultUserConfigurationService.getDefault().clone();
+                config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
                 return of(new LoadResetUserConfigurationAction(config));
             })
         );
