@@ -5951,7 +5951,7 @@
       ]
     },
     {
-      "isDefault": true,
+      "isDefault": false,
       "abbreviation": "EMP",
       "name": "Empty",
       "description": "This is an empty keymap. Let's start from scratch!",
