@@ -150,7 +150,9 @@ export class UserConfigEffects {
                     this.logService.config('[UserConfigEffect] Loaded user configuration', userConfig);
                     result.push(new LoadUserConfigSuccessAction(userConfig));
 
-                    if (route.state && !route.state.url.startsWith('/device/firmware')) {
+                    if (route.state
+                        && !route.state.url.startsWith('/device/firmware')
+                        && !route.state.url.startsWith('/update-firmware')) {
                         newPageDestination = ['/'];
                     }
 

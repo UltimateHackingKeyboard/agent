@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 
 import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-update.action';
-import { EnableUsbStackTestAction } from './store/actions/device';
+import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/device';
 import {
     AppState,
     getShowAppUpdateAvailable,
@@ -15,7 +15,8 @@ import {
     keypressCapturing,
     getUpdateInfo,
     firstAttemptOfSaveToKeyboard,
-    getOutOfSpaceWaringData
+    getOutOfSpaceWaringData,
+    getShowFirmwareUpgradePanel
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
@@ -50,7 +51,7 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
                 animate('400ms ease-in-out', style({transform: 'translateY(100%)'}))
             ])
         ]),
-        trigger('updateAvailable', [
+        trigger('topNotificationPanelVisible', [
             transition(':enter', [
                 style({transform: 'translateY(-45px)'}),
                 animate('500ms ease-out', style({transform: 'translateY(0)'}))
@@ -81,6 +82,7 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
 export class MainAppComponent implements OnDestroy {
     @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
 
+    showFirmwareUpgradePanel: boolean;
     showUpdateAvailable: boolean;
     updateInfo$: Observable<UpdateInfo>;
     deviceConfigurationLoaded$: Observable<boolean>;
@@ -93,6 +95,7 @@ export class MainAppComponent implements OnDestroy {
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
+    private showFirmwareUpgradePanelSubscription: Subscription;
     private showUpdateAvailableSubscription: Subscription;
     private outOfSpaceWarningSubscription: Subscription;
     private routeDataSubscription: Subscription;
@@ -102,6 +105,11 @@ export class MainAppComponent implements OnDestroy {
                 private route: ActivatedRoute,
                 private router: Router,
                 private cdRef: ChangeDetectorRef) {
+        this.showFirmwareUpgradePanelSubscription = store.select(getShowFirmwareUpgradePanel)
+            .subscribe(data => {
+                this.showFirmwareUpgradePanel = data;
+                this.cdRef.markForCheck();
+            });
         this.showUpdateAvailableSubscription = store.select(getShowAppUpdateAvailable)
             .subscribe(data => this.showUpdateAvailable = data);
         this.updateInfo$ = store.select(getUpdateInfo);
@@ -146,6 +154,7 @@ export class MainAppComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.saveToKeyboardStateSubscription.unsubscribe();
         this.keypressCapturingSubscription.unsubscribe();
+        this.showFirmwareUpgradePanelSubscription.unsubscribe();
         this.showUpdateAvailableSubscription.unsubscribe();
         this.outOfSpaceWarningSubscription.unsubscribe();
         this.routeDataSubscription.unsubscribe();
@@ -193,5 +202,13 @@ export class MainAppComponent implements OnDestroy {
 
     enableUsbStackTest() {
         this.store.dispatch(new EnableUsbStackTestAction());
+    }
+
+    isTopNotificationPanelVisible(): boolean {
+        return this.showFirmwareUpgradePanel || this.showUpdateAvailable;
+    }
+
+    updateFirmware(): void {
+        this.store.dispatch(new UpdateFirmwareAction(false));
     }
 }

@@ -1,0 +1,21 @@
+@import '../../../../styles/variables';
+
+.firmware-upgrade-panel-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $main-content-top-margin-on-update;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    background-color: var(--color-firmware-upgrade-panel-bg);
+    color: var(--color-firmware-upgrade-panel-text);
+    border-radius: 0;
+    border-width: 0;
+
+    a {
+        color: var(--color-firmware-upgrade-panel-text);
+        text-decoration: underline;
+    }
+}

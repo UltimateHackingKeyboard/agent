@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
 
 import * as Device from '../actions/device';
@@ -8,6 +9,7 @@ import { RestoreConfigurationState } from '../../models/restore-configuration-st
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
 import { getVersions, isVersionGtMinor } from '../../util';
+import { RouterNavigatedAction } from '@ngrx/router-store/src/actions';
 
 export interface State {
     connectedDevice?: UhkDeviceProduct;
@@ -26,6 +28,7 @@ export interface State {
     halvesInfo: HalvesInfo;
     readingConfigSizes: boolean;
     configSizes: ConfigSizesInfo;
+    skipFirmwareUpgrade: boolean;
 }
 
 export const initialState: State = {
@@ -48,7 +51,8 @@ export const initialState: State = {
     restoreUserConfiguration: false,
     halvesInfo: getDefaultHalvesInfo(),
     readingConfigSizes: false,
-    configSizes: { userConfig: 32704, hardwareConfig: 64 }
+    configSizes: { userConfig: 32704, hardwareConfig: 64 },
+    skipFirmwareUpgrade: false
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -87,6 +91,9 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.SaveConfiguration: {
+            if (state.skipFirmwareUpgrade)
+                return state;
+
             return {
                 ...state,
                 saveToKeyboard: {
@@ -130,7 +137,10 @@ export function reducer(state = initialState, action: Action): State {
         case Device.ActionTypes.UpdateFirmwareSuccess:
             return {
                 ...state,
-                modules: (action as Device.UpdateFirmwareSuccessAction).payload
+                modules: (action as Device.UpdateFirmwareSuccessAction).payload,
+                saveToKeyboard: state.modifiedConfigWhileSaved
+                    ? getSaveToKeyboardButtonState()
+                    : initProgressButtonState
             };
 
         case Device.ActionTypes.UpdateFirmwareFailed:
@@ -177,6 +187,18 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 readingConfigSizes: false,
                 configSizes: (action as ReadConfigSizesReplyAction).payload
+            };
+
+        case ROUTER_NAVIGATED:
+            return {
+                ...state,
+                skipFirmwareUpgrade: state.skipFirmwareUpgrade || !(action as RouterNavigatedAction).payload.event.url.startsWith('/update-firmware')
+            };
+
+        case Device.ActionTypes.SkipFirmwareUpgrade:
+            return {
+                ...state,
+                skipFirmwareUpgrade: true
             };
 
         default:
@@ -240,3 +262,4 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 };
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;
+export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;

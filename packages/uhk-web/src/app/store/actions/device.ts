@@ -42,7 +42,8 @@ export enum ActionTypes {
     EnableUsbStackTest = '[device] USB stack test',
     StartConnectionPoller = '[device] Start connection poller',
     ReadConfigSizes = '[device] Read config sizes',
-    ReadConfigSizesReply = '[device] Read config sizes reply'
+    ReadConfigSizesReply = '[device] Read config sizes reply',
+    SkipFirmwareUpgrade = '[device] Skip firmware upgrade'
 }
 
 export class SetPrivilegeOnLinuxAction implements Action {
@@ -226,6 +227,10 @@ export class ReadConfigSizesReplyAction implements Action {
     }
 }
 
+export class SkipFirmwareUpgradeAction implements Action {
+    type = ActionTypes.SkipFirmwareUpgrade;
+}
+
 export type Actions
     = SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
@@ -257,4 +262,5 @@ export type Actions
     | StartConnectionPollerAction
     | ReadConfigSizesAction
     | ReadConfigSizesReplyAction
+    | SkipFirmwareUpgradeAction
     ;

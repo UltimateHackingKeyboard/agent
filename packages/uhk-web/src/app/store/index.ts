@@ -1,6 +1,8 @@
 import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { gt } from 'semver';
+
 import {
     ApplicationSettings,
     AppTheme,
@@ -12,7 +14,8 @@ import {
     PlayMacroAction,
     UHK_60_DEVICE,
     UhkBuffer,
-    UserConfiguration
+    UserConfiguration,
+    VersionInformation
 } from 'uhk-common';
 
 import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
@@ -184,6 +187,7 @@ export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
 export const getConnectedDevice = createSelector(deviceState, fromDevice.getConnectedDevice);
+export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -350,6 +354,15 @@ export const extraLEDCharactersSupported = createSelector(getHardwareModules, (h
 export const isMacroCommandSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
     return isVersionGte(hardwareModules.rightModuleInfo.userConfigVersion, '5.0.0');
 });
+
+export const getShowFirmwareUpgradePanel = createSelector(
+    runningInElectron, getHardwareModules, getAgentVersionInfo, getSkipFirmwareUpgrade,
+    (inElectron: boolean, hardwareModules:HardwareModules, agentVersionInfo: VersionInformation, skipFirmwareUpgrade: boolean): boolean => {
+        return inElectron
+            && skipFirmwareUpgrade
+            && hardwareModules.rightModuleInfo.userConfigVersion
+            && gt(agentVersionInfo.userConfigVersion, hardwareModules.rightModuleInfo.userConfigVersion);
+    });
 
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;
 export const getUserConfigHistoryComponentState = createSelector(

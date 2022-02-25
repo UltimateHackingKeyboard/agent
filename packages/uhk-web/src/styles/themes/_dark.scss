@@ -135,6 +135,9 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-update-available-bg: #{theme-color('info')};
     --color-update-available-text: #{$color-text-highlight};
 
+    --color-firmware-upgrade-panel-bg: #f39c12;
+    --color-firmware-upgrade-panel-text: #fff;
+
     --color-highlight-arrow: #{theme-color('primary')};
 
     --color-layers-button-disabled: #{darken(theme-color('secondary'), 40)};
