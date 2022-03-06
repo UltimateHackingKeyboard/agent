@@ -112,6 +112,9 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-update-available-bg: #428bca;
     --color-update-available-text: #{color('white')};
 
+    --color-firmware-upgrade-panel-bg: #fff3cd;
+    --color-firmware-upgrade-panel-text: #664d03;
+
     --color-highlight-arrow: #{theme-color('primary')};
 
     --color-layers-button-disabled: rgba(#ccc, 0.43);

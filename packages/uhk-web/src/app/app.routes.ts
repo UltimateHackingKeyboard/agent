@@ -21,6 +21,7 @@ import { UhkDeviceLoadingGuard } from './services/uhk-device-loading.guard';
 import { RecoveryModeComponent } from './components/device';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
+import { UpdateFirmwarePageComponent } from './pages/update-firmware.page';
 
 const appRoutes: Routes = [
     {
@@ -45,6 +46,10 @@ const appRoutes: Routes = [
     {
         path: 'update-agent',
         component: UpdateAgentPageComponent
+    },
+    {
+        path: 'update-firmware',
+        component: UpdateFirmwarePageComponent
     },
     {
         path: 'recovery-device',

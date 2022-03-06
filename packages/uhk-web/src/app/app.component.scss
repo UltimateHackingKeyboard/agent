@@ -6,6 +6,7 @@
     height: 100%;
 }
 
+firmware-upgrade-panel,
 app-update-available {
     height: $main-content-top-margin-on-update;
     position: fixed;
@@ -70,12 +71,12 @@ app-update-available {
     }
 }
 
-.update-panel-visible .secondary-menu-wrapper,
-.update-panel-visible side-menu {
+.top-notification-panel-visible .secondary-menu-wrapper,
+.top-notification-panel-visible side-menu {
     top: $main-content-top-margin-on-update;
 }
 
-.update-panel-visible .inner-content {
+.top-notification-panel-visible .inner-content {
     padding-top: $main-content-top-margin-on-update;
 
     & > :not(router-outlet) {

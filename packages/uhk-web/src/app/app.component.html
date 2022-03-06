@@ -1,6 +1,11 @@
-<div class="main-div" [class.update-panel-visible]="showUpdateAvailable">
+<div class="main-div" [class.top-notification-panel-visible]="isTopNotificationPanelVisible()">
+    <firmware-upgrade-panel *ngIf="showFirmwareUpgradePanel"
+                            [@topNotificationPanelVisible]
+                            (updateFirmware)="updateFirmware()"
+    >
+    </firmware-upgrade-panel>
     <app-update-available *ngIf="showUpdateAvailable"
-                          [@updateAvailable]
+                          [@topNotificationPanelVisible]
                           [updateInfo]="updateInfo$ | async"
                           (updateApp)="updateApp()"
                           (doNotUpdateApp)="doNotUpdateApp()">
@@ -16,7 +21,7 @@
     </div>
 
     <div class="inner-content"
-         [class.update-panel-visible]="showUpdateAvailable"
+         [class.top-notification-panel-visible]="isTopNotificationPanelVisible()"
          [class.second-menu-visible]="secondSideMenuVisible">
         <router-outlet></router-outlet>
     </div>

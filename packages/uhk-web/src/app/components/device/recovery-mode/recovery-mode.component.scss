@@ -5,7 +5,7 @@
         height: 100vh;
     }
 
-    .update-panel-visible .flex-container {
+    .top-notification-panel-visible .flex-container {
         height: calc(100vh - #{$main-content-top-margin-on-update});
     }
 

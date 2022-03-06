@@ -24,11 +24,11 @@ main-app {
     height: 100vh;
 }
 
-.update-panel-visible {
+.top-notification-panel-visible {
     transition-timing-function: ease-out;
     transition: 0.5s;
 }
-.update-panel-visible .full-screen-component {
+.top-notification-panel-visible .full-screen-component {
     height: calc(100vh - #{$main-content-top-margin-on-update});
 }
 
@@ -290,4 +290,8 @@ mwl-confirmation-popover-window {
             margin-bottom: 8px;
         }
     }
+}
+
+.text-underline {
+    text-decoration: underline;
 }

@@ -4,6 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { gt } from 'semver';
 
 import {
     FirmwareUpgradeIpcResponse,
@@ -38,7 +39,14 @@ import {
 import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
-import { AppState, deviceConnected, disableUpdateAgentPage, getRouterState, getUserConfiguration } from '../index';
+import {
+    AppState,
+    deviceConnected,
+    disableUpdateAgentPage,
+    getRouterState,
+    getShowFirmwareUpgradePanel,
+    getUserConfiguration
+} from '../index';
 import {
     ActionTypes as UserConfigActions,
     ApplyUserConfigurationFromFileAction,
@@ -78,8 +86,15 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (!isDisableUpdateAgentPage && isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+                if (!isDisableUpdateAgentPage
+                    && state.hardwareModules.rightModuleInfo.userConfigVersion
+                    && isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
                     return this.router.navigate(['/update-agent']);
+                }
+
+                if (state.hardwareModules.rightModuleInfo.userConfigVersion
+                    && gt(getVersions().userConfigVersion, state.hardwareModules.rightModuleInfo.userConfigVersion)) {
+                    return this.router.navigate(['/update-firmware']);
                 }
 
                 if (state.connectedDevice && state.zeroInterfaceAvailable) {
@@ -148,8 +163,11 @@ export class DeviceEffects {
     @Effect({ dispatch: false }) saveConfiguration$: Observable<Action> = this.actions$
         .pipe(
             ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
-            withLatestFrom(this.store),
-            tap(([action, state]) => {
+            withLatestFrom(this.store, this.store.select(getShowFirmwareUpgradePanel)),
+            tap(([action, state, shouldUpgradeFirmware]) => {
+                if (shouldUpgradeFirmware)
+                    return this.router.navigate(['/update-firmware']);
+
                 setTimeout(() => this.sendUserConfigToKeyboard(
                     state.userConfiguration.userConfiguration,
                     state.app.hardwareConfig,
