@@ -8,10 +8,14 @@ import {
     AppTheme,
     AppThemeSelect,
     createMd5Hash,
+    getEmptyKeymap,
     getMd5HashFromFilename,
     HardwareModules,
+    Keymap,
     LEFT_HALF_MODULE,
+    LeftSlotModules,
     PlayMacroAction,
+    RightSlotModules,
     UHK_60_DEVICE,
     UhkBuffer,
     UserConfiguration,
@@ -45,6 +49,7 @@ import {
     UserConfigHistoryComponentState
 } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
+import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
 // State interface for the application
 export interface AppState {
@@ -440,10 +445,32 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
     });
 
 export const defaultUserConfigState = (state: AppState) => state.defaultUserConfiguration;
+export const getDefaultUserConfiguration = createSelector(
+    defaultUserConfigState, fromDefaultUserConfig.getDefaultUserConfiguration);
 export const getDefaultUserConfigurationKeymaps = createSelector(
-    defaultUserConfigState, fromDefaultUserConfig.getDefaultUserConfigurationKeymaps);
+    getDefaultUserConfiguration, getHalvesInfo, (userConfig, halvesInfo) => {
+        let userConfiguration = userConfig;
+
+        if (halvesInfo.leftModuleSlot !== LeftSlotModules.NoModule) {
+            userConfiguration = addMissingModuleConfigs(userConfiguration, halvesInfo.leftModuleSlot, true);
+        }
+        if (halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
+            userConfiguration = addMissingModuleConfigs(userConfiguration, halvesInfo.rightModuleSlot, true);
+        }
+
+        return userConfiguration.keymaps;
+    });
+export const selectedKeymapAbbreviationAddKeymap = createSelector(
+    defaultUserConfigState, fromDefaultUserConfig.selectedKeymapAbbreviation);
 export const getSelectedAddKeymap = createSelector(
-    defaultUserConfigState, fromDefaultUserConfig.getSelectedKeymap);
+    getDefaultUserConfigurationKeymaps, selectedKeymapAbbreviationAddKeymap, (keymaps, abbreviation): Keymap => {
+        return keymaps.find(x => x.abbreviation === abbreviation) || getEmptyKeymap();
+    }
+);
+export const getLayerOptionsAddKeymap = createSelector(
+    defaultUserConfigState, fromDefaultUserConfig.getLayerOptions);
+export const getSelectedLayerOptionAddKeymap = createSelector(
+    defaultUserConfigState, fromDefaultUserConfig.getSelectedLayerOption);
 
 export const smartMacroDocState = (state: AppState) => state.smartMacroDoc;
 export const getSmartMacroDocUrl = createSelector(smartMacroDocState, fromSmartMacroDoc.getSmartMacroDocUrl);

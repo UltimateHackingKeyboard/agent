@@ -4,7 +4,16 @@ import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subscription } from 'rxjs';
 import { HalvesInfo, Keymap } from 'uhk-common';
 
-import { AppState, getHalvesInfo, getKeyboardLayout, getSelectedAddKeymap } from '../../../store';
+import { LayerOption } from '../../../models';
+import {
+    AppState,
+    getHalvesInfo,
+    getKeyboardLayout,
+    getLayerOptionsAddKeymap,
+    getSelectedAddKeymap,
+    getSelectedLayerOptionAddKeymap
+} from '../../../store';
+import { SelectLayerAction } from '../../../store/actions/default-user-configuration.actions';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { AddKeymapAction } from '../../../store/actions/keymap';
 
@@ -18,10 +27,12 @@ import { AddKeymapAction } from '../../../store/actions/keymap';
     }
 })
 export class KeymapAddComponent implements OnDestroy, OnInit {
+    currentLayer$: Observable<LayerOption>;
     faKeyboard = faKeyboard;
     halvesInfo$: Observable<HalvesInfo>;
     keyboardLayout$: Observable<KeyboardLayout>;
     keymap: Keymap;
+    layerOptions$: Observable<LayerOption[]>;
 
     private subscription = new Subscription();
 
@@ -30,8 +41,10 @@ export class KeymapAddComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
+        this.currentLayer$ = this.store.select(getSelectedLayerOptionAddKeymap);
         this.halvesInfo$ = this.store.select(getHalvesInfo);
         this.keyboardLayout$ = this.store.select(getKeyboardLayout);
+        this.layerOptions$ = this.store.select(getLayerOptionsAddKeymap);
         this.subscription.add(
             this.store.select(getSelectedAddKeymap).subscribe(keymap => {
                 this.keymap = keymap;
@@ -45,5 +58,9 @@ export class KeymapAddComponent implements OnDestroy, OnInit {
 
     addKeymap(): void {
         this.store.dispatch(new AddKeymapAction(this.keymap));
+    }
+
+    selectLayer(option: LayerOption): void {
+        this.store.dispatch(new SelectLayerAction(option));
     }
 }

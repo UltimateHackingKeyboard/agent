@@ -94,15 +94,19 @@ interface NameValuePair {
     ]
 })
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
+    @Input() allowNewLayers: boolean;
+    @Input() currentLayer: LayerOption;
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
     @Input() halvesInfo: HalvesInfo;
     @Input() keyboardLayout = KeyboardLayout.ANSI;
+    @Input() layerOptions: LayerOption[];
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
+    @Output() selectedLayerChanged = new EventEmitter<LayerOption>();
 
     @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 
@@ -111,7 +115,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     keyEditConfig: { moduleId: number, keyId: number };
     selectedKey: { layerId: number, moduleId: number, keyId: number };
     popoverInitKeyAction: KeyAction;
-    currentLayer: LayerOption;
     tooltipData: {
         posTop: number,
         posLeft: number,
@@ -129,7 +132,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     rightArrow: boolean = false;
     topPosition: number = 0;
     leftPosition: number = 0;
-    layerOptions: LayerOption[];
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
@@ -158,18 +160,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
             this.store
                 .select(getAnimationEnabled)
                 .subscribe(value => this.animationEnabled = value)
-        );
-
-        this.subscription.add(
-            this.store
-                .select(getLayerOptions)
-                .subscribe(value => this.layerOptions = value)
-        );
-
-        this.subscription.add(
-            this.store
-                .select(getSelectedLayerOption)
-                .subscribe(value => this.currentLayer = value)
         );
     }
 
@@ -335,10 +325,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         this.animationState = 'closed';
         this.selectedKey = undefined;
         this.popoverInitKeyAction = null;
-    }
-
-    selectLayer(option: LayerOption): void {
-        this.store.dispatch(new SelectLayerAction(option));
     }
 
     onDescriptionChanged(description: string): void {

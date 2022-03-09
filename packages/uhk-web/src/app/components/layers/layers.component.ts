@@ -9,6 +9,7 @@ import { LayerOption } from '../../models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LayersComponent {
+    @Input() allowNewLayers: boolean;
     @Input() current: LayerOption;
     @Input() layerOptions: LayerOption[];
 
