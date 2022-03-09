@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { UserConfiguration } from 'uhk-common';
+
 import { LayerOption } from '../../models';
 
 export enum ActionTypes {

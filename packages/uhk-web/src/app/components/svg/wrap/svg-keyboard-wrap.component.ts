@@ -38,8 +38,8 @@ import {
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
-import { AppState, getKeymaps, getMacros, getAnimationEnabled, getLayerOptions, getSelectedLayerOption } from '../../../store';
-import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SelectLayerAction } from '../../../store/actions/keymap';
+import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
+import { AddLayerAction, RemoveLayerAction, SaveKeyAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
@@ -295,7 +295,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
-        if (keyAction === undefined) {
+        if (!keyAction) {
             return;
         }
 
