@@ -14,12 +14,14 @@ import {
     AppState,
     getKeyboardLayout,
     lastEditedKey,
-    getHalvesInfo
+    getHalvesInfo,
+    getLayerOptions,
+    getSelectedLayerOption
 } from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
-import { EditDescriptionAction, SelectKeymapAction } from '../../../store/actions/keymap';
+import { EditDescriptionAction, SelectKeymapAction, SelectLayerAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
-import { LastEditedKey } from '../../../models';
+import { LastEditedKey, LayerOption } from '../../../models';
 
 @Component({
     selector: 'keymap-edit',
@@ -32,6 +34,7 @@ import { LastEditedKey } from '../../../models';
 })
 export class KeymapEditComponent implements OnDestroy {
 
+    currentLayer$: Observable<LayerOption>;
     deletable$: Observable<boolean>;
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
@@ -39,6 +42,7 @@ export class KeymapEditComponent implements OnDestroy {
     lastEditedKey$: Observable<LastEditedKey>;
     halvesInfo$: Observable<HalvesInfo>;
     keymap: Keymap;
+    layerOptions$: Observable<LayerOption[]>;
 
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
@@ -53,6 +57,7 @@ export class KeymapEditComponent implements OnDestroy {
             )
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 
+        this.currentLayer$ = store.select(getSelectedLayerOption);
         this.keymap$ = store.select(getSelectedKeymap);
         this.keymapSubscription = this.keymap$
             .subscribe(keymap => {
@@ -66,6 +71,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
         this.lastEditedKey$ = store.select(lastEditedKey);
         this.halvesInfo$ = store.select(getHalvesInfo);
+        this.layerOptions$ = this.store.select(getLayerOptions);
     }
 
     ngOnDestroy(): void {
@@ -75,6 +81,10 @@ export class KeymapEditComponent implements OnDestroy {
 
     descriptionChanged(event: ChangeKeymapDescription): void {
         this.store.dispatch(new EditDescriptionAction(event));
+    }
+
+    selectLayer(option: LayerOption): void {
+        this.store.dispatch(new SelectLayerAction(option));
     }
 
     private toExportableJSON(keymap: Keymap): Observable<any> {

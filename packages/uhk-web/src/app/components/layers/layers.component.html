@@ -11,7 +11,7 @@
         </button>
         </ng-container>
 
-        <div class="btn-group" ngbDropdown role="group" autoClose="outside">
+        <div *ngIf="allowNewLayers" class="btn-group" ngbDropdown role="group" autoClose="outside">
             <button class="btn btn-default" ngbDropdownToggle></button>
             <div class="dropdown-menu"ngbDropdownMenu>
                 <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">

@@ -10,7 +10,6 @@ import {
     LeftSlotModules,
     Macro,
     Module,
-    MODULES_DEFAULT_CONFIGS,
     MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
@@ -28,7 +27,9 @@ import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption, SelectedMa
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 import { SaveKeyAction } from '../actions/keymap';
 import * as Device from '../actions/device';
+import { addMissingModuleConfigs } from './add-missing-module-configs';
 import { getBaseLayerOption, initLayerOptions } from './layer-options';
+import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
 
 export interface State {
     isSelectedMacroNew: boolean;
@@ -961,37 +962,6 @@ function getKeyActionByExchangeKey(userConfig: UserConfiguration, exchangeKey: E
         .keyActions[exchangeKey.keyId];
 }
 
-function addMissingModuleConfigs(
-    userConfig: UserConfiguration,
-    moduleSlot: LeftSlotModules | RightSlotModules
-): UserConfiguration {
-    const newConfig = Object.assign(new UserConfiguration(), userConfig);
-
-    newConfig.keymaps = newConfig.keymaps.map(keymap => {
-        keymap = new Keymap(keymap);
-        keymap.layers = keymap.layers.map(layer => {
-            const moduleIndex = layer.modules.findIndex(findModuleById(moduleSlot));
-
-            if (moduleIndex === -1) {
-                layer = new Layer(layer);
-
-                layer.modules.push(new Module(MODULES_DEFAULT_CONFIGS[moduleSlot]));
-            } else if (!layer.modules[moduleIndex].keyActions || layer.modules[moduleIndex].keyActions.length === 0) {
-
-                layer = new Layer(layer);
-
-                layer.modules[moduleIndex] = new Module(MODULES_DEFAULT_CONFIGS[moduleSlot]);
-            }
-
-            return layer;
-        });
-
-        return keymap;
-    });
-
-    return newConfig;
-}
-
 function reassignUserConfig(state: State): State {
     const userConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
     userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => new Keymap(keymap));
@@ -1005,11 +975,6 @@ function reassignUserConfig(state: State): State {
 
 function calculateLayerOptions(state: State): Map<number, LayerOption> {
     const selectedKeymap = getSelectedKeymap(state);
-    const layerOptions = initLayerOptions();
 
-    for (const layer of selectedKeymap.layers) {
-        layerOptions.get(layer.id).selected = true;
-    }
-
-    return layerOptions;
+    return calculateLayerOptionsOfKeymap(selectedKeymap);
 }

@@ -191,3 +191,10 @@ export class Keymap {
         });
     }
 }
+
+export function getEmptyKeymap(): Keymap {
+    const keymap = new Keymap();
+    keymap.layers = [];
+
+    return keymap;
+}

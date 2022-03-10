@@ -1,10 +1,13 @@
 import { Action } from '@ngrx/store';
 import { UserConfiguration } from 'uhk-common';
 
+import { LayerOption } from '../../models';
+
 export enum ActionTypes {
     AddKeymapSelected = '[default-user-config] add keymap selected',
     LoadDefaultUserConfiguration = '[default-user-config] load',
-    LoadDefaultUserConfigurationSuccess = '[default-user-config] load success'
+    LoadDefaultUserConfigurationSuccess = '[default-user-config] load success',
+    SelectLayer = '[default-user-config] select layer'
 }
 
 export class AddKeymapSelectedAction implements Action {
@@ -28,8 +31,16 @@ export class LoadDefaultUserConfigurationSuccessAction implements Action {
     }
 }
 
+export class SelectLayerAction implements Action {
+    type = ActionTypes.SelectLayer;
+
+    constructor(public payload: LayerOption) {
+    }
+}
+
 export type Actions =
     AddKeymapSelectedAction
     | LoadDefaultUserConfigurationAction
     | LoadDefaultUserConfigurationSuccessAction
+    | SelectLayerAction
     ;

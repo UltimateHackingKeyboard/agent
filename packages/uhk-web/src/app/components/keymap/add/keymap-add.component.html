@@ -5,10 +5,14 @@
 </h1>
 
 <svg-keyboard-wrap
+    [allowNewLayers]="false"
+    [currentLayer]="currentLayer$ | async"
+    [layerOptions]="layerOptions$ | async"
     [keymap]="keymap"
     [halvesInfo]="halvesInfo$ | async"
     [keyboardLayout]="keyboardLayout$ | async"
     [popoverEnabled]="false"
     [tooltipEnabled]="true"
+    (selectedLayerChanged)="selectLayer($event)"
 >
 </svg-keyboard-wrap>
