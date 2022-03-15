@@ -22,7 +22,7 @@ import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
-const MONACO_EDITOR_LINE_HEIGHT_OPTION = 58;
+const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
@@ -158,7 +158,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.gotFocus.emit();
         });
 
-        this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION);
+        this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION) as any;
         this.calculateHeight();
     }
 
