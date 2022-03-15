@@ -21,7 +21,7 @@ export interface State {
 
 export const initialState: State = {
     firmwareDocState: FirmwareDocState.Unknown,
-    panelSize: 30,
+    panelSize: 41,
     panelVisible: false
 };
 
