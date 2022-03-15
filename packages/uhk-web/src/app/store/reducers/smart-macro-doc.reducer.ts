@@ -5,6 +5,8 @@ import {
     SmartMacroDocActions
 } from '../actions/smart-macro-doc.action';
 
+const DEFAULT_PANEL_SIZE = 41;
+
 export enum FirmwareDocState {
     Error = 'Error',
     Loading = 'Loading',
@@ -21,7 +23,7 @@ export interface State {
 
 export const initialState: State = {
     firmwareDocState: FirmwareDocState.Unknown,
-    panelSize: 30,
+    panelSize: DEFAULT_PANEL_SIZE,
     panelVisible: false
 };
 
@@ -31,7 +33,7 @@ export function reducer(state = initialState, action: SmartMacroDocActions | fro
         case fromApp.ActionTypes.LoadApplicationSettingsSuccess:
             return {
                 ...state,
-                panelSize: (action as fromApp.LoadApplicationSettingsSuccessAction).payload.smartMacroPanelWidth || 30
+                panelSize: (action as fromApp.LoadApplicationSettingsSuccessAction).payload.smartMacroPanelWidth || DEFAULT_PANEL_SIZE
             };
 
         case ActionTypes.DownloadDocumentation:
