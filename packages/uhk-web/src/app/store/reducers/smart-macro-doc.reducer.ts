@@ -71,7 +71,7 @@ export function reducer(state = initialState, action: SmartMacroDocActions | fro
 
 export const getSmartMacroDocUrl = (state: State): string => {
     if (state.firmwareDocState === FirmwareDocState.Loaded)
-        return `http://127.0.0.1:${state.port}/lorem-ipsum.html`;
+        return `http://127.0.0.1:${state.port}/index.html`;
 
     return `http://127.0.0.1:${state.port}/loading.html`;
 };
