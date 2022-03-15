@@ -6,13 +6,13 @@
     border: 1px solid transparent;
 }
 
-:host(.active) {
+:host(.active:not(:focus-within)) {
     .me-container {
         //border-color: var(--color-active-monaco-editor-border-color);
 
         ::ng-deep .cursor.monaco-mouse-cursor-text {
             visibility: visible !important; /* stylelint-disable-line declaration-no-important */
-            animation: cursor-blink 1.5s steps(2) infinite;
+            animation: cursor-blink 1s steps(2) infinite;
         }
     }
 }
