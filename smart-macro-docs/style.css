@@ -1,0 +1,26 @@
+pre {
+    background-color: #eee;
+}
+
+img {
+    width: 100%;
+    max-width: 1024px;
+    padding: 10px 0;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+table.table td {
+    vertical-align: middle;
+}
+
+table.table input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+table.table input[type="range"] {
+    margin-right: 10px;
+}
