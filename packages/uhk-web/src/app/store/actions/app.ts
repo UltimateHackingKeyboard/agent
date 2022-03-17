@@ -18,6 +18,7 @@ export enum ActionTypes {
     LoadApplicationSettingsSuccess = '[app] Load application settings success',
     SaveApplicationSettingsSuccess = '[app] Save application settings success',
     ElectronMainLogReceived = '[app] Electron main log received',
+    Empty = '[app] empty action',
     OpenUrlInNewWindow = '[app] Open URL in new Window',
     PrivilegeWhatWillThisDo = '[app] What will this do clicked',
     SetupPermissionError = '[app] Setup permission error',
@@ -104,6 +105,10 @@ export class ElectronMainLogReceivedAction implements Action {
     }
 }
 
+export class EmptyAction implements Action {
+    type = ActionTypes.Empty;
+}
+
 export class OpenUrlInNewWindowAction implements Action {
     type = ActionTypes.OpenUrlInNewWindow;
 
@@ -180,6 +185,7 @@ export type Actions
     | LoadApplicationSettingsSuccessAction
     | SaveApplicationSettingsSuccessAction
     | ElectronMainLogReceivedAction
+    | EmptyAction
     | OpenUrlInNewWindowAction
     | PrivilegeWhatWillThisDoAction
     | SetupPermissionErrorAction
