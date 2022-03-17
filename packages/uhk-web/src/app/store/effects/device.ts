@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
+import { RouterNavigatedAction, ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
-import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeMap, pairwise, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { gt } from 'semver';
 
 import {
@@ -29,6 +30,7 @@ import {
     SaveToKeyboardSuccessAction,
     SaveToKeyboardSuccessFailed,
     SetPrivilegeOnLinuxReplyAction,
+    SkipFirmwareUpgradeAction,
     StartConnectionPollerAction,
     UpdateFirmwareAction,
     UpdateFirmwareFailedAction,
@@ -38,7 +40,7 @@ import {
 } from '../actions/device';
 import { AppRendererService } from '../../services/app-renderer.service';
 import { DeviceRendererService } from '../../services/device-renderer.service';
-import { SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
+import { EmptyAction, SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
 import {
     AppState,
     deviceConnected,
@@ -359,6 +361,19 @@ export class DeviceEffects {
         .pipe(
             ofType(ActionTypes.ReadConfigSizes),
             tap(() => this.deviceRendererService.readConfigSizes())
+        );
+
+    @Effect() skipFirmwareUpgrade$: Observable<Action> = this.actions$
+        .pipe(
+            ofType<RouterNavigatedAction>(ROUTER_NAVIGATED),
+            map<RouterNavigatedAction, string>(action => action?.payload?.routerState?.url),
+            pairwise(),
+            map(([prevUrl]) => {
+                if (prevUrl?.startsWith('/update-firmware'))
+                    return new SkipFirmwareUpgradeAction();
+
+                return new EmptyAction();
+            })
         );
 
     constructor(private actions$: Actions,

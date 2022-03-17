@@ -189,12 +189,6 @@ export function reducer(state = initialState, action: Action): State {
                 configSizes: (action as ReadConfigSizesReplyAction).payload
             };
 
-        case ROUTER_NAVIGATED:
-            return {
-                ...state,
-                skipFirmwareUpgrade: state.skipFirmwareUpgrade || !(action as RouterNavigatedAction).payload.event.url.startsWith('/update-firmware')
-            };
-
         case Device.ActionTypes.SkipFirmwareUpgrade:
             return {
                 ...state,
