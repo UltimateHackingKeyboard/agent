@@ -23,8 +23,7 @@ setInterval(async function () {
 
         const debugInfo = await operations.getDebugInfo();
         if (i2cRecovery !== debugInfo.i2cWatchdogRecoveryCounter) {
-            const sign = debugInfo.i2cWatchdogRecoveryCounter === 0 ? '' : '+';
-            process.stdout.write(`${getTimestamp()} I2cRecovery: ${sign}${debugInfo.i2cWatchdogRecoveryCounter}${EOL}`);
+            process.stdout.write(`${getTimestamp()} I2cRecovery: ${debugInfo.i2cWatchdogRecoveryCounter}${EOL}`);
             i2cRecovery = debugInfo.i2cWatchdogRecoveryCounter;
         }
     } catch (error) {
