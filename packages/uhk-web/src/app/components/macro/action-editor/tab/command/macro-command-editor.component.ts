@@ -137,6 +137,9 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
         this.editor = editor;
+        if (this.autoFocus) {
+            this.editor.focus();
+        }
         editor.onKeyDown((event) => {
             if (new RegExp(NON_ASCII_REGEXP).test(event.code)) {
                 event.preventDefault();
