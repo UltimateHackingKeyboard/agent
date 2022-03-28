@@ -1,4 +1,4 @@
-<div class="list-group-item action--item" [class.is-editing]="editing">
+<div *ngIf="this.macroAction" class="list-group-item action--item" [class.is-editing]="editing">
     <ng-container *ngIf="!isCommand">
         <fa-icon *ngIf="movable"
                  [icon]="faGripLinesVertical"
