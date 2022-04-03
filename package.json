@@ -21,7 +21,6 @@
   "devDependencies": {
     "@types/command-line-args": "5.2.0",
     "@types/command-line-usage": "5.0.2",
-    "@types/copy-webpack-plugin": "10.1.0",
     "@types/decompress": "4.2.3",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
