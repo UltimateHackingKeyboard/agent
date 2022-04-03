@@ -2,18 +2,14 @@
     <div class="col-12">
         <h4>
             Macro commands
-            <a class="btn btn-padding-0"
-            href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
-            externalUrl>
-                <icon name="question-circle"
-                    [ngbTooltip]="macroContentTooltip"
-                    tooltipClass="tooltip-macro-text"
-                    placement="bottom">
-                </icon>
-                <ng-template #macroContentTooltip>
-                    Open the <strong>Smart macro reference</strong> tab on the right edge to learn more.
-                </ng-template>
-            </a>
+            <icon name="question-circle"
+                [ngbTooltip]="macroContentTooltip"
+                tooltipClass="tooltip-macro-text"
+                placement="bottom">
+            </icon>
+            <ng-template #macroContentTooltip>
+                Open the <strong>Smart macro reference</strong> tab on the right edge to learn more.
+            </ng-template>
         </h4>
             <macro-command-editor
                                   [ngModel]="macroAction?.command"
