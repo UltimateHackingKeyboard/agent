@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/command-line-args": "5.2.0",
     "@types/command-line-usage": "5.0.2",
-    "@types/decompress": "4.2.3",
+    "@types/decompress": "4.2.4",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/electron-settings": "3.0.0",
     "@types/file-saver": "2.0.1",
