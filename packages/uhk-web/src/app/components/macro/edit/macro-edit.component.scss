@@ -34,7 +34,7 @@
 
 .macro-container {
     height: 100vh;
-    overflow: scroll;
+    overflow: auto;
     padding-right: math.div($grid-gutter-width, 2);
 }
 
