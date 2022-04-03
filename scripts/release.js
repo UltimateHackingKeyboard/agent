@@ -79,7 +79,6 @@ if (TEST_BUILD || gitTag) {
         dir: DIR,
         targets: target,
         config: {
-            afterPack,
             afterSign,
             directories: {
                 app: electron_build_folder
@@ -131,26 +130,6 @@ function update2ndPackageJson(rootJson) {
 
     json.version = rootJson.version;
     fs.writeJsonSync(jsonPath, json, { spaces: 2 })
-}
-
-async function afterPack(context) {
-    if (process.platform !== 'linux')
-        return;
-
-    const sourceExecutable = path.join(context.appOutDir, 'uhk-agent');
-    const targetExecutable = path.join(context.appOutDir, 'uhk-agent-ui');
-    const launcherScript = path.join(__dirname, 'launcher-script.sh');
-    const chromeSandbox = path.join(context.appOutDir, 'chrome-sandbox');
-
-    // rename uhk-agent to the-uhk-agent
-    await fs.rename(sourceExecutable, targetExecutable);
-
-    // copy launcher script to uhk-agent
-    await fs.copy(launcherScript, sourceExecutable);
-    await fs.chmod(sourceExecutable, 0o755);
-
-    // remove the chrome-sandbox file since we explicitly disable it
-    await fs.unlink(chromeSandbox);
 }
 
 async function afterSign(context) {
