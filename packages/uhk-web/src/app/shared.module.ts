@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -143,6 +143,8 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
 import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
 import { SmartMacroDocDirective } from './components/macro/directives/smart-macro-doc.directive';
 import { SmartMacroDocService } from './services/smart-macro-doc-service';
+import { MonacoEditorCustomThemeService } from './services/monaco-editor-custom-theme.service';
+import appInitFactory from './services/app-init-factory';
 
 @NgModule({
     declarations: [
@@ -272,6 +274,12 @@ import { SmartMacroDocService } from './services/smart-macro-doc-service';
         NgbDropdownModule
     ],
     providers: [
+        {
+            provide: APP_INITIALIZER,
+            useFactory: appInitFactory,
+            multi: true,
+            deps: [MonacoEditorCustomThemeService]
+        },
         SvgModuleProviderService,
         KeyActionDragAndDropService,
         MapperService,

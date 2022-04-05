@@ -26,7 +26,7 @@ const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
-    return (window as any).getUhkTheme() === 'dark' ? 'vs-dark' : 'vs';
+    return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'vs';
 }
 
 @Component({
