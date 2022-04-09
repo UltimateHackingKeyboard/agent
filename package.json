@@ -23,7 +23,7 @@
     "@types/command-line-usage": "5.0.2",
     "@types/decompress": "4.2.4",
     "@types/electron-devtools-installer": "2.0.2",
-    "@types/electron-settings": "3.0.0",
+    "@types/electron-settings": "4.0.0",
     "@types/file-saver": "2.0.1",
     "@types/fs-extra": "9.0.11",
     "@types/jasmine": "3.10.0",
