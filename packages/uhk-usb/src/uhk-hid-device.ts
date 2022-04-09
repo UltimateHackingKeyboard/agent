@@ -1,7 +1,7 @@
 import { Device, HID } from 'node-hid';
 import { pathExists } from 'fs-extra';
 import * as path from 'path';
-import isRoot = require('is-root');
+import isRoot from 'is-root';
 import {
     Buffer,
     CommandLineArgs,
