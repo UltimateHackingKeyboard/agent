@@ -13,7 +13,8 @@
         "<node_internals>/**"
       ],
       "type": "node",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "runtimeVersion": "16.13.0"
     },
     {
       "name": "Debug Main Process",
@@ -28,7 +29,8 @@
       "env": {
         "DEBUG": "*"
       },
-      "sourceMaps": true
+      "sourceMaps": true,
+      "runtimeVersion": "16.13.0"
     }
   ]
 }
