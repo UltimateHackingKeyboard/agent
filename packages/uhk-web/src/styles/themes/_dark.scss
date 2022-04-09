@@ -128,6 +128,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-code-bg: #{color-bg};
     --color-code-text: #{color-text};
     --color-xterm-bg: #000;
+    // uses as the textarea border color too
     --color-xterm-border: #666;
     --color-xterm-text: #{color('white')};
     --color-xterm-text-error: red;
@@ -150,6 +151,4 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-smart-macro-border-color: #666;
     --color-smart-macro-hover-color: #313131;
     --color-smart-macro-focus-bg-color: #444;
-
-    --color-active-monaco-editor-border-color: #{$input-focus-border-color};
 }

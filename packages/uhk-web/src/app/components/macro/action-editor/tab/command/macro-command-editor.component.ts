@@ -26,7 +26,7 @@ const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
-    return (window as any).getUhkTheme() === 'dark' ? 'vs-dark' : 'vs';
+    return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'vs';
 }
 
 @Component({
@@ -65,7 +65,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         lineNumbersMinChars: 0,
         renderLineHighlight: 'none',
         scrollbar: {
-            alwaysConsumeMouseWheel: false
+            alwaysConsumeMouseWheel: false,
+            useShadows: false
         }
     };
 
