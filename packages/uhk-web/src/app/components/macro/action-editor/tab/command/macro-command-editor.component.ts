@@ -15,11 +15,13 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
+import { Store } from '@ngrx/store';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
+import { AppState, isLinuxOperatingSystem } from '../../../../../store';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
@@ -77,13 +79,21 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private isFocused = false;
     private insertingMacro = false;
     private changeObserver$: Observer<string>;
+    private isLinuxOperationSystem: boolean;
     private subscriptions = new Subscription();
 
     constructor(private cdRef: ChangeDetectorRef,
-                private smartMacroDocService: SmartMacroDocService) {
+                private smartMacroDocService: SmartMacroDocService,
+                private state: Store<AppState>) {
     }
 
     ngOnInit(): void {
+        this.subscriptions.add(
+            this.state.select(isLinuxOperatingSystem)
+                .subscribe(os => {
+                    this.isLinuxOperationSystem = os;
+                }));
+
         this.subscriptions.add(
             this.smartMacroDocService
                 .insertMacroCommand
@@ -228,7 +238,14 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         }
 
         // 6 is the padding and border width
-        const newHeight = `${(lines * this.lineHeight) + 6}px`;
+        let newHeight: number | string = (lines * this.lineHeight) + 6;
+
+        if(this.isLinuxOperationSystem && window.devicePixelRatio > 1) {
+            newHeight += Math.floor(this.lineHeight / 2);
+        }
+
+        newHeight = `${newHeight}px`;
+
         if (this.containerHeight === newHeight) {
             return;
         }

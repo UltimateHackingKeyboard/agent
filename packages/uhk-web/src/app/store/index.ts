@@ -50,6 +50,7 @@ import {
 } from '../models';
 import { SelectOptionData } from '../models/select-option-data';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
+import { OperatingSystem } from '../models/operating-system';
 
 // State interface for the application
 export interface AppState {
@@ -119,6 +120,7 @@ export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLay
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
 export const getOperatingSystem = createSelector(appState, fromSelectors.getOperatingSystem);
+export const isLinuxOperatingSystem = createSelector(getOperatingSystem, os => os === OperatingSystem.Linux);
 export const keypressCapturing = createSelector(appState, fromApp.keypressCapturing);
 export const runningOnNotSupportedWindows = createSelector(appState, fromApp.runningOnNotSupportedWindows);
 export const contributors = (state: AppState) => state.contributors;
