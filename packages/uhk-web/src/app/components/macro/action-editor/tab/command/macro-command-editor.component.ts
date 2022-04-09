@@ -65,7 +65,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         lineNumbersMinChars: 0,
         renderLineHighlight: 'none',
         scrollbar: {
-            alwaysConsumeMouseWheel: false
+            alwaysConsumeMouseWheel: false,
+            useShadows: false
         }
     };
 
