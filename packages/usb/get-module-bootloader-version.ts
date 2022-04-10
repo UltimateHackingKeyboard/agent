@@ -1,4 +1,4 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
 import { BootloaderVersion, KBoot, UsbPeripheral } from 'kboot';
 import { EnumerationModes, getCurrentUhkDeviceProduct, snooze, waitForDevice } from 'uhk-usb';
@@ -8,7 +8,7 @@ import Uhk, {
     getI2cAddressArgs,
     getI2cAddressFromArg,
     yargs
-} from './src';
+} from './src/index.js';
 
 (async () => {
     try {

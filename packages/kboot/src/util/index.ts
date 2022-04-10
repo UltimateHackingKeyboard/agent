@@ -1,7 +1,7 @@
-export * from './encode-string-to-parameters';
-export * from './response-parser';
-export * from './usb';
-export * from './snooze';
+export * from './encode-string-to-parameters.js';
+export * from './response-parser.js';
+export * from './usb/index.js';
+export * from './snooze.js';
 
 export const convertToHexString = (arr: number[] | Buffer): string => {
     let str = '';

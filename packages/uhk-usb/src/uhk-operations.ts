@@ -16,19 +16,21 @@ import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 
 import {
     ConfigBufferId,
+    DevicePropertyIds,
     EepromOperation,
     EnumerationModes,
     KbootCommands,
     ModulePropertyId,
-    UsbVariables
-} from './constants';
+    UsbVariables,
+    UsbCommand
+} from './constants.js';
 import * as fs from 'fs';
 import { promisify } from 'util';
-import { UhkHidDevice } from './uhk-hid-device';
-import { readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util';
-import { convertBufferToIntArray, DevicePropertyIds, getTransferBuffers, UsbCommand } from '../index';
-import { LoadConfigurationsResult, DebugInfo, I2cBaudRate, Duration, I2cErrorBuffer } from './models';
-import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils';
+
+import { UhkHidDevice } from './uhk-hid-device.js';
+import { convertBufferToIntArray, getTransferBuffers, readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util.js';
+import { LoadConfigurationsResult, DebugInfo, I2cBaudRate, Duration, I2cErrorBuffer } from './models/index.js';
+import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
 
 const existsAsync = promisify(fs.exists);
 

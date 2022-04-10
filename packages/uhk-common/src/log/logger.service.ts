@@ -1,7 +1,7 @@
-import { LogOptions } from '../models';
-import { UserConfiguration } from '../config-serializer/config-items';
-import { logUserConfigHelper } from './log-user-config-helper';
-import { DEFAULT_LOG_OPTIONS } from './default-log-options';
+import { LogOptions } from '../models/log-options.js';
+import { UserConfiguration } from '../config-serializer/config-items/user-configuration.js';
+import { logUserConfigHelper } from './log-user-config-helper.js';
+import { DEFAULT_LOG_OPTIONS } from './default-log-options.js';
 
 export class LogService {
 

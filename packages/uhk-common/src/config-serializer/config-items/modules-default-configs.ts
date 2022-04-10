@@ -1,5 +1,5 @@
-import { LeftSlotModules, RightSlotModules } from '../../models';
-import { Module } from './module';
+import { LeftSlotModules, RightSlotModules } from '../../models/index.js';
+import { Module } from './module.js';
 
 export type ModulesDefaultConfigs = { [K in LeftSlotModules | RightSlotModules]?: Module };
 

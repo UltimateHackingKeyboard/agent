@@ -1,4 +1,4 @@
-import { getResponseCode, ResponseCodes } from '../../src';
+import { getResponseCode, ResponseCodes } from '../../src/index.js';
 
 describe('response-parser', () => {
     describe('getResponseCode', () => {

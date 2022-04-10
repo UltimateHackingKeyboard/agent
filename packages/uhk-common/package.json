@@ -1,10 +1,11 @@
 {
   "name": "uhk-common",
   "private": true,
+  "type": "module",
   "version": "1.0.0",
   "description": "Common Library contains the common code for uhk-agent (electron-main) and web (electron-renderer) modules",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Ultimate Gadget Laboratories",
   "repository": {
     "type": "git",
@@ -13,14 +14,15 @@
   "scripts": {
     "build": "run-s tsc copy:*",
     "clean": "rimraf ./node_modules ./dist",
-    "tsc": "tsc",
-    "copy:scancodes": "copyfiles ./src/config-serializer/config-items/scancodes.json dist",
-    "test": "jasmine-ts --config=jasmine.json",
-    "coverage": "nyc jasmine-ts --config=jasmine.json",
+    "tsc": "tsc --project ./src/tsconfig.json",
+    "copy:scancodes": "copyfiles src/config-serializer/config-items/scancodes.ts dist",
+    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "coverage": "nyc npm test",
     "lint": "eslint --ext .ts ."
   },
   "dependencies": {
     "buffer": "6.0.3",
+    "lodash.isequal": "4.5.0",
     "md5": "2.3.0",
     "moment": "2.29.2",
     "tslib": "2.3.1"

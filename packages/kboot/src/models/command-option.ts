@@ -1,4 +1,4 @@
-import { Commands } from '../enums';
+import { Commands } from '../enums/commands.js';
 
 export interface CommandOption {
     command: Commands;

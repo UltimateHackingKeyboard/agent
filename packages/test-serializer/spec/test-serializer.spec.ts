@@ -1,8 +1,8 @@
-import { UhkBuffer, UserConfiguration } from '../../uhk-common/index';
+import { UhkBuffer, UserConfiguration } from '../../uhk-common/src/index.js';
 
-const fs = require('fs');
+import fs from 'fs';
 
-const userConfig = JSON.parse(fs.readFileSync('../uhk-web/src/app/services/user-config.json'));
+const userConfig = JSON.parse(fs.readFileSync('../uhk-web/src/app/services/user-config.json', { encoding: 'utf8' }));
 
 describe('Test Serializer', () => {
     it('full config match', () => {

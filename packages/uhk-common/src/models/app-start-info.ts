@@ -1,4 +1,4 @@
-import { CommandLineArgs } from './command-line-args';
+import { CommandLineArgs } from './command-line-args.js';
 
 export interface AppStartInfo {
     commandLineArgs: CommandLineArgs;

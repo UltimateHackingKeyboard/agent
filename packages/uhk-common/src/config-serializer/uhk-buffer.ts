@@ -1,5 +1,5 @@
 // / need to load the buffer package from dependency instead of use node default buffer
-import { Buffer } from 'buffer/';
+import { Buffer } from '../buffer.js';
 
 export class UhkBuffer {
 

@@ -1,8 +1,8 @@
-import { assertEnum, assertUInt8, assertUInt16 } from '../../assert';
-import { UhkBuffer } from '../../uhk-buffer';
-import { KeyModifiers } from '../key-modifiers';
-import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action';
-import { KeystrokeType } from '../key-action';
+import { assertEnum, assertUInt8, assertUInt16 } from '../../assert.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { KeyModifiers } from '../key-modifiers.js';
+import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action.js';
+import { KeystrokeType } from '../key-action/keystroke-type.js';
 
 export interface JsObjectKeyMacroAction {
     macroActionType: string;

@@ -1,16 +1,16 @@
-export { IpcEvents } from './ipcEvents';
-export * from './constants';
-export * from './create-md5-hash';
-export * from './find-uhk-module-by-id';
-export * from './get-md5-hash-from-file-name';
-export * from './get-slot-id-name';
-export * from './helpers';
-export * from './is-equal-array';
-export * from './map-i2c-address-to-module-name';
-export * from './map-i2c-address-to-slot-id';
-export * from './sort-string-desc';
-export * from './to-hex-string';
-export * from './user-configuration-history-helpers';
+export { IpcEvents } from './ipcEvents.js';
+export * from './constants.js';
+export * from './create-md5-hash.js';
+export * from './find-uhk-module-by-id.js';
+export * from './get-md5-hash-from-file-name.js';
+export * from './get-slot-id-name.js';
+export * from './helpers.js';
+export * from './is-equal-array.js';
+export * from './map-i2c-address-to-module-name.js';
+export * from './map-i2c-address-to-slot-id.js';
+export * from './sort-string-desc.js';
+export * from './to-hex-string.js';
+export * from './user-configuration-history-helpers.js';
 
 // Source: http://stackoverflow.com/questions/13720256/javascript-regex-camelcase-to-sentence
 export function camelCaseToSentence(camelCasedText: string): string {

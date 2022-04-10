@@ -1,5 +1,5 @@
-import { VersionInformation } from './version-information';
-import { UploadFileData } from './upload-file-data';
+import { VersionInformation } from './version-information.js';
+import { UploadFileData } from './upload-file-data.js';
 
 export interface UpdateFirmwareData {
     forceUpgrade: boolean;

@@ -1,5 +1,5 @@
-import { CommandResponse } from '../../models';
-import { getResponseCode, getResponseTag } from '../response-parser';
+import { CommandResponse } from '../../models/command-response.js';
+import { getResponseCode, getResponseTag } from '../response-parser.js';
 
 export const decodeCommandResponse = (response: Buffer): CommandResponse => {
     if (response.length < 8) {

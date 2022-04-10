@@ -1,6 +1,6 @@
-import { assertEnum, assertUInt8 } from '../../assert';
-import { UhkBuffer } from '../../uhk-buffer';
-import { MacroAction, MacroActionId, MacroMouseSubAction, macroActionType } from './macro-action';
+import { assertEnum, assertUInt8 } from '../../assert.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { MacroAction, MacroActionId, MacroMouseSubAction, macroActionType } from './macro-action.js';
 
 export enum MouseButtons {
     Left = 0,

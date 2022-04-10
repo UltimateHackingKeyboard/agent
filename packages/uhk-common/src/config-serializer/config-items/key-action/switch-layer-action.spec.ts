@@ -1,6 +1,6 @@
-import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
-import { SwitchLayerAction, SwitchLayerMode } from './switch-layer-action';
-import { keyActionType } from './key-action';
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { SwitchLayerAction, SwitchLayerMode } from './switch-layer-action.js';
+import { keyActionType } from './key-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('switch-layer-action', () => {

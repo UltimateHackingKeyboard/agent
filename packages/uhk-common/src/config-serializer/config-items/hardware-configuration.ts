@@ -1,5 +1,5 @@
-import { assertUInt8, assertUInt32 } from '../assert';
-import { UhkBuffer } from '../uhk-buffer';
+import { assertUInt8, assertUInt32 } from '../assert.js';
+import { UhkBuffer } from '../uhk-buffer.js';
 
 export class HardwareConfiguration {
 

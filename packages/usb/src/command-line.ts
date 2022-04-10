@@ -1,6 +1,7 @@
 import Yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
-export const yargs = Yargs
+export const yargs = Yargs(hideBin(process.argv))
     .showHelpOnFail(true)
     .option('help', {
         description: 'Display help message'

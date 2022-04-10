@@ -1,9 +1,9 @@
-export * from './key-action';
-export * from './keystroke-action';
-export * from './keystroke-type';
-export * from './mouse-action';
-export * from './none-action';
-export * from './play-macro-action';
-export * from './switch-keymap-action';
-export * from './switch-layer-action';
-export { Helper as KeyActionHelper } from './helper';
+export * from './key-action.js';
+export * from './keystroke-action.js';
+export * from './keystroke-type.js';
+export * from './mouse-action.js';
+export * from './none-action.js';
+export * from './play-macro-action.js';
+export * from './switch-keymap-action.js';
+export * from './switch-layer-action.js';
+export { Helper as KeyActionHelper } from './helper.js';

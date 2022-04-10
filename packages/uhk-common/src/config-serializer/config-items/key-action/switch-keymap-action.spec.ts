@@ -1,5 +1,5 @@
-import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
-import { SwitchKeymapAction } from './switch-keymap-action';
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { SwitchKeymapAction } from './switch-keymap-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('switch-keymap-action', () => {

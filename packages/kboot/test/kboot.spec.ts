@@ -1,5 +1,5 @@
-import { BootloaderVersion, CommandResponse, Commands, KBoot, Peripheral, Properties, ResponseCodes, ResponseTags } from '../src';
-import { TestPeripheral } from './test-peripheral';
+import { BootloaderVersion, CommandResponse, Commands, KBoot, Peripheral, Properties, ResponseCodes, ResponseTags } from '../src/index.js';
+import { TestPeripheral } from './test-peripheral.js';
 
 describe('kboot', () => {
     let kboot: KBoot;

@@ -1,6 +1,6 @@
-import { KeystrokeAction } from './keystroke-action';
-import { KeystrokeType } from './keystroke-type';
-import { SecondaryRoleAction } from '../secondary-role-action';
+import { KeystrokeAction } from './keystroke-action.js';
+import { KeystrokeType } from './keystroke-type.js';
+import { SecondaryRoleAction } from '../secondary-role-action.js';
 
 describe('keystroke-action', () => {
     it('should be instantiate', () => {
@@ -257,47 +257,4 @@ describe('keystroke-action', () => {
         });
     });
 
-    describe('fromBinary', () => {
-
-    });
-
-    describe('toJsonObject', () => {
-
-    });
-
-    describe('toBinary', () => {
-
-    });
-
-    describe('toString', () => {
-
-    });
-
-    describe('isActive', () => {
-
-    });
-
-    describe('hasActiveModifier', () => {
-
-    });
-
-    describe('hasSecondaryRoleAction', () => {
-
-    });
-
-    describe('hasScancode', () => {
-
-    });
-
-    describe('hasOnlyOneActiveModifier', () => {
-
-    });
-
-    describe('getModifierList', () => {
-
-    });
-
-    describe('getName', () => {
-
-    });
 });

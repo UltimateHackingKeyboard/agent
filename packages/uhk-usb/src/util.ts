@@ -1,10 +1,10 @@
 import { Device, devices } from 'node-hid';
-import { readFile } from 'fs-extra';
+import fse from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
 import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
-import { Constants, UsbCommand } from './constants';
+import { Constants, UsbCommand } from './constants.js';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -119,7 +119,7 @@ export const isBootloader = (dev: Device): boolean => {
 };
 
 export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {
-    const fileContent = await readFile(filePath, {encoding: 'utf-8'});
+    const fileContent = await fse.readFile(filePath, {encoding: 'utf-8'});
 
     return fileContent
         .split(EOL)
@@ -128,7 +128,7 @@ export const getFileContentAsync = async (filePath: string): Promise<Array<strin
 };
 
 export const readBootloaderFirmwareFromHexFileAsync = async (hexFilePath: string): Promise<Map<any, any>> => {
-    const fileContent = await readFile(hexFilePath, { encoding: 'utf8' });
+    const fileContent = await fse.readFile(hexFilePath, { encoding: 'utf8' });
 
     const memoryMap = MemoryMap.fromHex(fileContent);
 

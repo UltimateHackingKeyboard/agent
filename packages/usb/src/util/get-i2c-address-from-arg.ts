@@ -1,6 +1,6 @@
 import { ModuleSlotToI2cAddress } from 'uhk-common';
 
-import { InvalidArgumentError } from '../invalid-argument-error';
+import { InvalidArgumentError } from '../invalid-argument-error.js';
 
 export function getI2cAddressArgs(): string {
     return Object.keys(ModuleSlotToI2cAddress)

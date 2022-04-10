@@ -1,8 +1,8 @@
-import { join } from 'path';
+import { join } from 'desm';
 import { LogService } from 'uhk-common';
 import { UhkHidDevice, UhkOperations } from 'uhk-usb';
 
-import { parseLoggingOptions } from './parse-logging-options';
+import { parseLoggingOptions } from './parse-logging-options.js';
 
 export interface Uhk {
     device: UhkHidDevice;
@@ -10,7 +10,7 @@ export interface Uhk {
     operations: UhkOperations;
 }
 
-const tmpDir = join(__dirname, '../../tmp');
+const tmpDir = join(import.meta.url, '../../tmp');
 
 export default function (argv: any): Uhk {
     const logger = new LogService();

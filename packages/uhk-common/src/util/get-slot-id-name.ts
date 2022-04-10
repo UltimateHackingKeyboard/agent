@@ -1,4 +1,4 @@
-import { ModuleSlotToId } from '../models';
+import { ModuleSlotToId } from '../models/module-slot-id.js';
 
 export function getSlotIdName(slotId: ModuleSlotToId): string  {
     switch (slotId) {

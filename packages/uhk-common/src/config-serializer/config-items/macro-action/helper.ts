@@ -1,12 +1,12 @@
-import { UhkBuffer } from '../../uhk-buffer';
-import { MacroAction, MacroActionId, macroActionType } from './macro-action';
-import { KeyMacroAction } from './key-macro-action';
-import { MouseButtonMacroAction } from './mouse-button-macro-action';
-import { MoveMouseMacroAction } from './move-mouse-macro-action';
-import { ScrollMouseMacroAction } from './scroll-mouse-macro-action';
-import { DelayMacroAction } from './delay-macro-action';
-import { TextMacroAction } from './text-macro-action';
-import { CommandMacroAction } from './command-macro-action';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { MacroAction, MacroActionId, macroActionType } from './macro-action.js';
+import { KeyMacroAction } from './key-macro-action.js';
+import { MouseButtonMacroAction } from './mouse-button-macro-action.js';
+import { MoveMouseMacroAction } from './move-mouse-macro-action.js';
+import { ScrollMouseMacroAction } from './scroll-mouse-macro-action.js';
+import { DelayMacroAction } from './delay-macro-action.js';
+import { TextMacroAction } from './text-macro-action.js';
+import { CommandMacroAction } from './command-macro-action.js';
 
 export class Helper {
 

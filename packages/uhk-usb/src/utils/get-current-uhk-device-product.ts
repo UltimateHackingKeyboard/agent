@@ -1,7 +1,7 @@
 import { devices } from 'node-hid';
 import { UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
-import { validateConnectedDevices } from './validate-connected-devices';
+import { validateConnectedDevices } from './validate-connected-devices.js';
 
 export function getCurrentUhkDeviceProduct(): UhkDeviceProduct | undefined {
     validateConnectedDevices();

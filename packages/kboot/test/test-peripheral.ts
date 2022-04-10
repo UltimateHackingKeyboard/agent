@@ -1,4 +1,4 @@
-import { CommandOption, CommandResponse, DataOption, Peripheral, ResponseCodes, ResponseTags } from '../src';
+import { CommandOption, CommandResponse, DataOption, Peripheral, ResponseCodes, ResponseTags } from '../src/index.js';
 
 export class TestPeripheral implements Peripheral {
     close(): void {

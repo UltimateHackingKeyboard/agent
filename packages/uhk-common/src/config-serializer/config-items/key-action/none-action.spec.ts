@@ -1,7 +1,7 @@
-import { NoneAction } from './none-action';
-import { keyActionType } from './key-action';
-import { UhkBuffer } from '../../uhk-buffer';
-import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
+import { NoneAction } from './none-action.js';
+import { keyActionType } from './key-action.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('node-action', () => {

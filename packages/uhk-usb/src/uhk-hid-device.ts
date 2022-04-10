@@ -1,5 +1,5 @@
 import { Device, HID } from 'node-hid';
-import { pathExists } from 'fs-extra';
+import fse from 'fs-extra';
 import * as path from 'path';
 import isRoot from 'is-root';
 import {
@@ -22,7 +22,7 @@ import {
     LAYER_NUMBER_TO_STRING,
     MODULE_ID_TO_STRING,
     UsbCommand
-} from './constants';
+} from './constants.js';
 import {
     bufferToString,
     getFileContentAsync,
@@ -32,9 +32,9 @@ import {
     isUhkZeroInterface,
     retry,
     snooze
-} from './util';
-import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
-import { getNumberOfConnectedDevices, getUhkDevices, usbDeviceJsonFormatter } from './utils';
+} from './util.js';
+import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models/index.js';
+import { getNumberOfConnectedDevices, getUhkDevices, usbDeviceJsonFormatter } from './utils/index.js';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -372,11 +372,11 @@ export class UhkHidDevice {
             return UdevRulesInfo.Ok;
         }
 
-        if (!(await pathExists('/etc/udev'))) {
+        if (!(await fse.pathExists('/etc/udev'))) {
             return UdevRulesInfo.UdevDirNotExists;
         }
 
-        if (!(await pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
+        if (!(await fse.pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
             return UdevRulesInfo.NeedToSetup;
         }
 

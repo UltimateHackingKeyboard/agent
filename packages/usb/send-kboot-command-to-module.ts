@@ -1,9 +1,9 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
 import { ModuleSlotToId } from 'uhk-common';
 import { KbootCommands } from 'uhk-usb';
 
-import Uhk, { errorHandler, getI2cAddressFromArg, yargs } from './src';
+import Uhk, { errorHandler, getI2cAddressFromArg, yargs } from './src/index.js';
 
 (async function () {
     try {

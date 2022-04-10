@@ -1,14 +1,14 @@
-import { UhkBuffer } from '../../uhk-buffer';
+import { UhkBuffer } from '../../uhk-buffer.js';
 
-import { Macro } from '../macro';
-import { KeyAction, KeyActionId, keyActionType } from './key-action';
-import { KeystrokeAction } from './keystroke-action';
-import { SwitchLayerAction } from './switch-layer-action';
-import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action';
-import { MouseAction } from './mouse-action';
-import { PlayMacroAction } from './play-macro-action';
-import { NoneAction } from './none-action';
-import { isAllowedScancode } from '../scancode-checker';
+import { Macro } from '../macro.js';
+import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
+import { KeystrokeAction } from './keystroke-action.js';
+import { SwitchLayerAction } from './switch-layer-action.js';
+import { SwitchKeymapAction, UnresolvedSwitchKeymapAction } from './switch-keymap-action.js';
+import { MouseAction } from './mouse-action.js';
+import { PlayMacroAction } from './play-macro-action.js';
+import { NoneAction } from './none-action.js';
+import { isAllowedScancode } from '../scancode-checker.js';
 
 export class Helper {
 

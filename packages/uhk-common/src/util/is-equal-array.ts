@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 export const isEqualArray = (arr1: Array<any>, arr2: Array<any>): boolean => {
     if (arr1.length !== arr2.length) {

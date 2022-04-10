@@ -1,6 +1,6 @@
-import { Macro } from '../macro';
-import { UhkBuffer } from '../../uhk-buffer';
-import { UserConfiguration } from '../user-configuration';
+import { Macro } from '../macro.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { UserConfiguration } from '../user-configuration.js';
 
 export enum KeyActionId {
     NoneAction                   = 0,

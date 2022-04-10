@@ -1,10 +1,10 @@
-import { UhkBuffer } from '../uhk-buffer';
-import { assertEnum } from '../assert';
+import { UhkBuffer } from '../uhk-buffer.js';
+import { assertEnum } from '../assert.js';
 
-import { Macro } from './macro';
-import { Module } from './module';
-import { UserConfiguration } from './user-configuration';
-import { LayerName } from './layer-name';
+import { Macro } from './macro.js';
+import { Module } from './module.js';
+import { UserConfiguration } from './user-configuration.js';
+import { LayerName } from './layer-name.js';
 
 export class Layer {
 

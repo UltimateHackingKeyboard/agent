@@ -1,4 +1,4 @@
-import { UserConfiguration } from './user-configuration';
+import { UserConfiguration } from './user-configuration.js';
 
 describe('user-configuration', () => {
     it('should be instantiate', () => {

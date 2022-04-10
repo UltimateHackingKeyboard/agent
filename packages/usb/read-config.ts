@@ -1,9 +1,9 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
 import * as fs from 'fs';
 import { Buffer } from 'uhk-common';
 import { ConfigBufferId, bufferToString } from 'uhk-usb';
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, yargs } from './src/index.js';
 
 (async function () {
     try {

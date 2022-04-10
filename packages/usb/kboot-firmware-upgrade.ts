@@ -1,9 +1,9 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
 import * as path from 'path';
 import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, yargs } from './src/index.js';
 
 (async function () {
     try {

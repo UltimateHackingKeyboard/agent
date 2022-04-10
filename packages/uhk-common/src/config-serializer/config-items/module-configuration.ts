@@ -1,5 +1,5 @@
-import { assertUInt8, assertUInt16 } from '../assert';
-import { UhkBuffer } from '../uhk-buffer';
+import { assertUInt8, assertUInt16 } from '../assert.js';
+import { UhkBuffer } from '../uhk-buffer.js';
 
 export class ModuleConfiguration {
 

@@ -1,8 +1,8 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, yargs } from './src/index.js';
 import { EnumerationModes, waitForDevice } from 'uhk-usb';
-import { KBoot, UsbPeripheral } from '../kboot';
+import { KBoot, UsbPeripheral } from '../kboot/src/index.js';
 import { UHK_60_DEVICE } from 'uhk-common';
 
 (async function () {

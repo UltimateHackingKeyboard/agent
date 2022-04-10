@@ -1,4 +1,5 @@
-import { ResponseCodes, ResponseTags } from '../enums';
+import { ResponseCodes } from '../enums/response-codes.js';
+import { ResponseTags } from '../enums/response-tags.js';
 
 export const convertLittleEndianNumber = (data: Buffer): number => {
     let value = 0;

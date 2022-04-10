@@ -1,18 +1,13 @@
 {
+  "extends": "../../tsconfig.json",
   "compileOnSave": false,
   "compilerOptions": {
-    "sourceMap": true,
     "declaration": false,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "esModuleInterop": true,
-    "target": "es2018",
-    "importHelpers": true,
+    "module": "ES2020",
     "outDir": "./dist"
   },
   "ts-node": {
+    "esm": true,
     "transpileOnly": true
   }
 }

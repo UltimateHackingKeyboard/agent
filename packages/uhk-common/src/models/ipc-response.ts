@@ -1,4 +1,4 @@
-import { HardwareModules } from './hardware-modules';
+import { HardwareModules } from './hardware-modules.js';
 
 export class IpcResponse {
     success: boolean;

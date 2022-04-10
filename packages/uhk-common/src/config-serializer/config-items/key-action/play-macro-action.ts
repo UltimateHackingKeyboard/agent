@@ -1,8 +1,8 @@
-import { assertUInt8 } from '../../assert';
-import { UhkBuffer } from '../../uhk-buffer';
-import { Macro } from '../macro';
-import { KeyAction, KeyActionId, keyActionType } from './key-action';
-import { UserConfiguration } from '../user-configuration';
+import { assertUInt8 } from '../../assert.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { Macro } from '../macro.js';
+import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
+import { UserConfiguration } from '../user-configuration.js';
 
 export class PlayMacroAction extends KeyAction {
 

@@ -1,7 +1,7 @@
 import { isNullOrUndefined } from 'util';
 import { Device } from 'node-hid';
 
-import { USB } from '../../models';
+import { USB } from '../../models/usb.js';
 
 export const deviceFinder = (usb: USB) => {
     return (device: Device): boolean => {
