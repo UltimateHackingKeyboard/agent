@@ -1,9 +1,9 @@
-import { assertEnum, assertUInt8 } from '../../assert';
-import { UhkBuffer } from '../../uhk-buffer';
-import { KeyModifiers } from '../key-modifiers';
-import { SecondaryRoleAction } from '../secondary-role-action';
-import { KeyAction, KeyActionId, keyActionType } from './key-action';
-import { KeystrokeType } from './keystroke-type';
+import { assertEnum, assertUInt8 } from '../../assert.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { KeyModifiers } from '../key-modifiers.js';
+import { SecondaryRoleAction } from '../secondary-role-action.js';
+import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
+import { KeystrokeType } from './keystroke-type.js';
 
 export enum KeystrokeActionFlag {
     scancode = 1 << 0,

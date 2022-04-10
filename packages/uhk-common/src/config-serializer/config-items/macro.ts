@@ -1,7 +1,7 @@
-import { assertUInt8 } from '../assert';
-import { UhkBuffer } from '../uhk-buffer';
-import { MacroAction } from './macro-action';
-import { Helper as MacroActionHelper } from './macro-action/helper';
+import { assertUInt8 } from '../assert.js';
+import { UhkBuffer } from '../uhk-buffer.js';
+import { MacroAction } from './macro-action/macro-action.js';
+import { Helper as MacroActionHelper } from './macro-action/helper.js';
 
 export class Macro {
 

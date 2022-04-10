@@ -1,7 +1,7 @@
 // / need to load the buffer package from dependency instead of use node default buffer
 import { Buffer } from 'buffer/';
 
-import { HardwareConfiguration, UhkBuffer, UserConfiguration } from '../config-serializer';
+import { HardwareConfiguration, UhkBuffer, UserConfiguration } from '../config-serializer/index.js';
 
 export const getHardwareConfigFromDeviceResponse = (json: string): HardwareConfiguration => {
     const data = JSON.parse(json);

@@ -1,4 +1,4 @@
-import { ModuleSlotToI2cAddress } from '../models';
+import { ModuleSlotToI2cAddress } from '../models/module-slot-to-i2c-adress.js';
 
 export function mapI2cAddressToModuleName(address: ModuleSlotToI2cAddress): string {
     switch (address) {

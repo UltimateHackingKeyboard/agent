@@ -1,5 +1,5 @@
-import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress';
-import { ModuleSlotToId } from './module-slot-id';
+import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress.js';
+import { ModuleSlotToId } from './module-slot-id.js';
 
 export const UHK_VENDOR_ID = 0x1D50;
 

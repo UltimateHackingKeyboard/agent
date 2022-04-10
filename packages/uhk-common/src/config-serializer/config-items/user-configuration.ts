@@ -1,14 +1,14 @@
-import { assertUInt16, assertUInt8 } from '../assert';
-import { UhkBuffer } from '../uhk-buffer';
-import { Keymap } from './keymap';
-import { Macro } from './macro';
-import { ModuleConfiguration } from './module-configuration';
-import { ConfigSerializer } from '../config-serializer';
-import { KeystrokeAction, NoneAction } from './key-action';
-import { SecondaryRoleAction } from './secondary-role-action';
-import { isAllowedScancode } from './scancode-checker';
-import { MouseSpeedConfiguration } from './mouse-speed-configuration';
-import { LayerName } from './layer-name';
+import { assertUInt16, assertUInt8 } from '../assert.js';
+import { UhkBuffer } from '../uhk-buffer.js';
+import { Keymap } from './keymap.js';
+import { Macro } from './macro.js';
+import { ModuleConfiguration } from './module-configuration.js';
+import { ConfigSerializer } from '../config-serializer.js';
+import { KeystrokeAction, NoneAction } from './key-action/index.js';
+import { SecondaryRoleAction } from './secondary-role-action.js';
+import { isAllowedScancode } from './scancode-checker.js';
+import { MouseSpeedConfiguration } from './mouse-speed-configuration.js';
+import { LayerName } from './layer-name.js';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
 

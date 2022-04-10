@@ -1,6 +1,6 @@
-import { assertEnum } from '../../assert';
-import { UhkBuffer } from '../../uhk-buffer';
-import { KeyAction, KeyActionId, keyActionType } from './key-action';
+import { assertEnum } from '../../assert.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 
 export enum MouseActionParam {
     leftClick,

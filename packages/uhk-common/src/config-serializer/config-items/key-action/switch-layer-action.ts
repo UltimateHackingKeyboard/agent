@@ -1,7 +1,7 @@
-import { assertEnum } from '../../assert';
-import { UhkBuffer } from '../../uhk-buffer';
-import { KeyAction, KeyActionId, keyActionType } from './key-action';
-import { LayerName } from '../layer-name';
+import { assertEnum } from '../../assert.js';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
+import { LayerName } from '../layer-name.js';
 
 export enum SwitchLayerMode {
     holdAndDoubleTapToggle = 'holdAndDoubleTapToggle',

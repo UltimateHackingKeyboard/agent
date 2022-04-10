@@ -9,6 +9,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "ES2020",
-    "importHelpers": true
+    "importHelpers": true,
+    "resolveJsonModule": true
   }
 }

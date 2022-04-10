@@ -1,4 +1,4 @@
-import { UhkBuffer } from '../src/config-serializer';
+import { UhkBuffer } from '../src/config-serializer/uhk-buffer.js';
 
 export function jsonDefaultHelper(baseObject: any, serializationParam?: any, deserializationParam?: any, version = 4): void {
     const json = baseObject.toJsonObject(serializationParam);

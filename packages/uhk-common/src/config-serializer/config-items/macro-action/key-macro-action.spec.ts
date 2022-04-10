@@ -1,7 +1,7 @@
-import { KeyMacroAction } from './key-macro-action';
-import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
-import { MacroKeySubAction } from './macro-action';
-import { KeystrokeType } from '../key-action';
+import { KeyMacroAction } from './key-macro-action.js';
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { MacroKeySubAction } from './macro-action.js';
+import { KeystrokeType } from '../key-action/keystroke-type.js';
 
 describe('key-macro-action', () => {
     it('should be instantiate', () => {

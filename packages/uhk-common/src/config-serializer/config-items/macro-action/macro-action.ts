@@ -1,4 +1,4 @@
-import { UhkBuffer } from '../../uhk-buffer';
+import { UhkBuffer } from '../../uhk-buffer.js';
 
 export enum MacroActionId {
     KeyMacroAction                  =  0,

@@ -1,5 +1,5 @@
-import { HardwareModules } from './hardware-modules';
-import { UserConfiguration } from '../config-serializer/config-items';
+import { HardwareModules } from './hardware-modules.js';
+import { UserConfiguration } from '../config-serializer/config-items/user-configuration.js';
 
 export interface ConfigurationReply {
     success: boolean;

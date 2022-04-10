@@ -1,8 +1,8 @@
-import { assertEnum, assertUInt8 } from '../assert';
-import { UhkBuffer } from '../uhk-buffer';
-import { KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action';
-import { Macro } from './macro';
-import { UserConfiguration } from './user-configuration';
+import { assertUInt8 } from '../assert.js';
+import { UhkBuffer } from '../uhk-buffer.js';
+import { KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action/index.js';
+import { Macro } from './macro.js';
+import { UserConfiguration } from './user-configuration.js';
 
 export class Module {
 

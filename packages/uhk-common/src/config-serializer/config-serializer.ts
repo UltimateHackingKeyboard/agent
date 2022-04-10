@@ -1,5 +1,5 @@
-import { Keymap } from './config-items/keymap';
-import { UnresolvedSwitchKeymapAction } from './config-items/key-action';
+import { Keymap } from './config-items/keymap.js';
+import { UnresolvedSwitchKeymapAction } from './config-items/key-action/switch-keymap-action.js';
 
 export namespace ConfigSerializer {
 

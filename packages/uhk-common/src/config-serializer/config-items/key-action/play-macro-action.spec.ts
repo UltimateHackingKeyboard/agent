@@ -1,5 +1,5 @@
-import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
-import { PlayMacroAction } from './play-macro-action';
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { PlayMacroAction } from './play-macro-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('play-action', () => {

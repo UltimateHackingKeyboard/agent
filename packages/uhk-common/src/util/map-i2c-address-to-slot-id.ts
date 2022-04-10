@@ -1,5 +1,6 @@
-import { ModuleSlotToI2cAddress, ModuleSlotToId } from '../models';
-import { toHexString } from './to-hex-string';
+import { ModuleSlotToI2cAddress } from '../models/module-slot-to-i2c-adress.js';
+import { ModuleSlotToId } from '../models/module-slot-id.js';
+import { toHexString } from './to-hex-string.js';
 
 export function mapI2cAddressToSlotId(address: ModuleSlotToI2cAddress): ModuleSlotToId {
     switch (address) {

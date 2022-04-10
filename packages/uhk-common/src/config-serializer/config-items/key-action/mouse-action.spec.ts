@@ -1,5 +1,5 @@
-import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper';
-import { MouseAction, MouseActionParam } from './mouse-action';
+import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { MouseAction, MouseActionParam } from './mouse-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
 describe('mouse-action', () => {

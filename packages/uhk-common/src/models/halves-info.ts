@@ -1,7 +1,7 @@
-import { runInElectron } from '../util';
+import { runInElectron } from '../util/index.js';
 
-import { LeftSlotModules } from './left-slot-modules';
-import { RightSlotModules } from './right-slot-modules';
+import { LeftSlotModules } from './left-slot-modules.js';
+import { RightSlotModules } from './right-slot-modules.js';
 
 export interface HalvesInfo {
     areHalvesMerged: boolean;

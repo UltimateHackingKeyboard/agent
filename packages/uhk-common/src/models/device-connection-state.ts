@@ -1,6 +1,6 @@
-import { HalvesInfo } from './halves-info';
-import { HardwareModules } from './hardware-modules';
-import { UhkDeviceProduct } from './uhk-products';
+import { HalvesInfo } from './halves-info.js';
+import { HardwareModules } from './hardware-modules.js';
+import { UhkDeviceProduct } from './uhk-products.js';
 
 export interface DeviceConnectionState {
     connectedDevice?: UhkDeviceProduct;

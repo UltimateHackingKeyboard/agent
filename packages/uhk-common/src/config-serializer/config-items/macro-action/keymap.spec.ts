@@ -1,4 +1,4 @@
-import { UserConfiguration } from '../user-configuration';
+import { UserConfiguration } from '../user-configuration.js';
 
 describe('keymap', () => {
     it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', () => {

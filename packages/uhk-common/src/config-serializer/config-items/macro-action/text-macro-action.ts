@@ -1,5 +1,5 @@
-import { UhkBuffer } from '../../uhk-buffer';
-import { MacroAction, MacroActionId, macroActionType } from './macro-action';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { MacroAction, MacroActionId, macroActionType } from './macro-action.js';
 
 export class TextMacroAction extends MacroAction {
 

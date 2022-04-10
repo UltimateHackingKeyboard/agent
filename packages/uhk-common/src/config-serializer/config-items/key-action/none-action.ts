@@ -1,5 +1,5 @@
-import { UhkBuffer } from '../../uhk-buffer';
-import { KeyAction, KeyActionId, keyActionType } from './key-action';
+import { UhkBuffer } from '../../uhk-buffer.js';
+import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 
 /**
  * NoneAction is only intended for binary serialization of undefined key actions

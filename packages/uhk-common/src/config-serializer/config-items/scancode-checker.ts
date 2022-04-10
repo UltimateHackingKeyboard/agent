@@ -1,4 +1,4 @@
-import { KeystrokeAction, KeystrokeType, SCANCODES } from './';
+import { KeystrokeAction, KeystrokeType, SCANCODES } from './index.js';
 
 let scancodeMap: Map<number, any>;
 
@@ -34,8 +34,9 @@ function fillScancodeMap(): void {
 
     for (const scanGroup of SCANCODES) {
         for (const child of scanGroup.children) {
-            if (child.additional && child.additional.scancode) {
-                scancodeMap.set(child.additional.scancode, child);
+            const additional = child.additional as any;
+            if (additional && additional.scancode) {
+                scancodeMap.set(additional.scancode, child);
             }
             else {
                 scancodeMap.set(Number.parseInt(child.id), child);
