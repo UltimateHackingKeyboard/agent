@@ -3,7 +3,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "declaration": true,
-    "module": "commonjs",
+    "module": "ES2015",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,

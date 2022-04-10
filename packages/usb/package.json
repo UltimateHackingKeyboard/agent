@@ -2,6 +2,7 @@
   "name": "agent-usb",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Agent USB scripts",
   "license": "See in LICENSE",
   "dependencies": {
