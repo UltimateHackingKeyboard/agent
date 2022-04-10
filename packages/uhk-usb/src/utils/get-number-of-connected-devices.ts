@@ -1,6 +1,6 @@
 import { devices } from 'node-hid';
 
-import { isBootloader, isUhkZeroInterface } from '../util';
+import { isBootloader, isUhkZeroInterface } from '../util.js';
 
 export function getNumberOfConnectedDevices(): number {
     return devices()

@@ -1,6 +1,6 @@
 import { UhkDeviceProduct } from 'uhk-common';
 
-import { EnumerationModes } from '../constants';
+import { EnumerationModes } from '../constants.js';
 
 export function getDeviceEnumerateProductId(device: UhkDeviceProduct, enumerationMode: EnumerationModes): number {
     switch (enumerationMode) {

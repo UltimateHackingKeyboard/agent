@@ -22,7 +22,7 @@ import {
     LAYER_NUMBER_TO_STRING,
     MODULE_ID_TO_STRING,
     UsbCommand
-} from './constants';
+} from './constants.js';
 import {
     bufferToString,
     getFileContentAsync,
@@ -32,9 +32,9 @@ import {
     isUhkZeroInterface,
     retry,
     snooze
-} from './util';
-import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models';
-import { getNumberOfConnectedDevices, getUhkDevices, usbDeviceJsonFormatter } from './utils';
+} from './util.js';
+import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models/index.js';
+import { getNumberOfConnectedDevices, getUhkDevices, usbDeviceJsonFormatter } from './utils/index.js';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 

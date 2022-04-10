@@ -4,7 +4,7 @@ import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
 import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
-import { Constants, UsbCommand } from './constants';
+import { Constants, UsbCommand } from './constants.js';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 

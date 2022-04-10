@@ -1,4 +1,4 @@
-import { getNumberOfConnectedDevices } from './get-number-of-connected-devices';
+import { getNumberOfConnectedDevices } from './get-number-of-connected-devices.js';
 
 export function validateConnectedDevices(): void {
     switch (getNumberOfConnectedDevices()) {

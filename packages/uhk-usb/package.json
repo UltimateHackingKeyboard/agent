@@ -2,6 +2,7 @@
   "name": "uhk-usb",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Agent preliminary USB code",
   "main": "dist/index.js",
   "types": "dist/index.d.js",

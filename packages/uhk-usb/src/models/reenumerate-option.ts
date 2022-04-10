@@ -1,4 +1,4 @@
-import { EnumerationModes } from '../constants';
+import { EnumerationModes } from '../constants.js';
 
 export interface ReenumerateOption {
     enumerationMode: EnumerationModes;

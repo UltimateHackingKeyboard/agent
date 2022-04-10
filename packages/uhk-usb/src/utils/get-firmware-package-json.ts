@@ -3,8 +3,8 @@ import { join } from 'path';
 import { promisify } from 'util';
 import { FirmwareJson } from 'uhk-common';
 
-import { TmpFirmware } from '../models';
-import { getPackageJsonFromPathAsync } from './get-package-json-from-path-async';
+import { TmpFirmware } from '../models/tmp-firmware.js';
+import { getPackageJsonFromPathAsync } from './get-package-json-from-path-async.js';
 
 const existsAsync = promisify(exists);
 

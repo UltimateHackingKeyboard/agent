@@ -1,6 +1,6 @@
 import { Buffer } from 'uhk-common';
 
-import { I2cErrorBuffer, I2cErrorStatus, Slave } from '../models';
+import { I2cErrorBuffer, I2cErrorStatus, Slave } from '../models/i2c-error-buffer.js';
 
 const SLAVE_ID_TO_NAME = [
     'leftHalf',

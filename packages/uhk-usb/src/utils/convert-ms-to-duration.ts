@@ -1,4 +1,4 @@
-import { Duration } from '../models';
+import { Duration } from '../models/duration.js';
 
 export function convertMsToDuration(milliseconds: number): Duration {
     let days, hours, minutes, seconds;
