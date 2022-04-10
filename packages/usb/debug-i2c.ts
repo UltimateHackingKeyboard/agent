@@ -1,7 +1,7 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 import { EOL } from 'os';
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, yargs } from './src/index.js';
 
 const argv = yargs
     .usage('Every second, check the I2cRecovery value and display its increment if it has been incremented.')

@@ -1,4 +1,4 @@
-import { InvalidArgumentError } from '../invalid-argument-error';
+import { InvalidArgumentError } from '../invalid-argument-error.js';
 
 const DEVICES = new Map<string, number>([
     ['uhk60v1', 1],

@@ -1,6 +1,6 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
-import Uhk, { errorHandler, yargs } from './src';
+import Uhk, { errorHandler, yargs } from './src/index.js';
 import { ModuleSlotToId } from 'uhk-common';
 
 (async function () {

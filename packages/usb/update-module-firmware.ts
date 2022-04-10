@@ -1,4 +1,4 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
 import * as fs from 'fs';
 import {
@@ -7,7 +7,7 @@ import {
     UhkModule
 } from 'uhk-common';
 import { getCurrentUhkDeviceProduct } from 'uhk-usb';
-import Uhk, { getI2cAddressArgs, getI2cAddressFromArg, errorHandler, yargs } from './src';
+import Uhk, { getI2cAddressArgs, getI2cAddressFromArg, errorHandler, yargs } from './src/index.js';
 
 (async () => {
     try {

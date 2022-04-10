@@ -1,6 +1,6 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-script
+#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 
-import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src';
+import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
 
 (async () => {
     try {
