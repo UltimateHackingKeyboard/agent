@@ -16,8 +16,8 @@
     "clean": "rimraf ./node_modules ./dist",
     "tsc": "tsc --project ./src/tsconfig.json",
     "copy:scancodes": "copyfiles src/config-serializer/config-items/scancodes.ts dist",
-    "test": "jasmine-ts --config=jasmine.json",
-    "coverage": "nyc jasmine-ts --config=jasmine.json",
+    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "coverage": "nyc npm test",
     "lint": "eslint --ext .ts ."
   },
   "dependencies": {

@@ -257,47 +257,4 @@ describe('keystroke-action', () => {
         });
     });
 
-    describe('fromBinary', () => {
-
-    });
-
-    describe('toJsonObject', () => {
-
-    });
-
-    describe('toBinary', () => {
-
-    });
-
-    describe('toString', () => {
-
-    });
-
-    describe('isActive', () => {
-
-    });
-
-    describe('hasActiveModifier', () => {
-
-    });
-
-    describe('hasSecondaryRoleAction', () => {
-
-    });
-
-    describe('hasScancode', () => {
-
-    });
-
-    describe('hasOnlyOneActiveModifier', () => {
-
-    });
-
-    describe('getModifierList', () => {
-
-    });
-
-    describe('getName', () => {
-
-    });
 });
