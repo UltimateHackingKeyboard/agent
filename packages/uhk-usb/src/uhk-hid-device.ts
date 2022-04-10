@@ -1,5 +1,5 @@
 import { Device, HID } from 'node-hid';
-import { pathExists } from 'fs-extra';
+import fse from 'fs-extra';
 import * as path from 'path';
 import isRoot from 'is-root';
 import {
@@ -372,11 +372,11 @@ export class UhkHidDevice {
             return UdevRulesInfo.Ok;
         }
 
-        if (!(await pathExists('/etc/udev'))) {
+        if (!(await fse.pathExists('/etc/udev'))) {
             return UdevRulesInfo.UdevDirNotExists;
         }
 
-        if (!(await pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
+        if (!(await fse.pathExists('/etc/udev/rules.d/50-uhk60.rules'))) {
             return UdevRulesInfo.NeedToSetup;
         }
 

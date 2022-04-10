@@ -1,4 +1,4 @@
-export { Buffer } from 'buffer/';
+export { Buffer } from './buffer.js';
 export * from './config-serializer/index.js';
 export * from './log/index.js';
 export * from './models/index.js';

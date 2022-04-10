@@ -1,4 +1,4 @@
-export { default as SCANCODES }  from './scancodes.json';
+export { default as SCANCODES }  from './scancodes.js';
 
 export * from './key-action/index.js';
 export * from './macro-action/index.js';

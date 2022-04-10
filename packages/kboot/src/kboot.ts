@@ -1,4 +1,4 @@
-import { debug } from 'debug';
+import debug from 'debug';
 import { pack } from 'byte-data';
 
 import { Peripheral } from './peripheral.js';

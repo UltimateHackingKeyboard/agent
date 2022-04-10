@@ -1,4 +1,4 @@
-import { debug } from 'debug';
+import debug from 'debug';
 import { devices, HID } from 'node-hid';
 import { pack } from 'byte-data';
 

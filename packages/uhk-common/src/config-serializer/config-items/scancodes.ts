@@ -1,4 +1,4 @@
-[
+const SCANCODES = [
     {
         "text": "Letter",
         "children": [
@@ -107,8 +107,8 @@
                 "text": "Z"
             },
             {
-              "id": "100",
-              "text": "| ISO"
+                "id": "100",
+                "text": "| ISO"
             }
         ]
     },
@@ -757,4 +757,6 @@
             }
         ]
     }
-]
+];
+
+export default SCANCODES;
