@@ -1,9 +1,9 @@
 import { debug } from 'debug';
 import { pack } from 'byte-data';
 
-import { Peripheral } from './peripheral';
-import { Commands, MemoryIds, Properties, ResponseCodes, ResponseTags } from './enums';
-import { BootloaderVersion, CommandOption, CommandResponse, DataOption } from './models';
+import { Peripheral } from './peripheral.js';
+import { Commands, MemoryIds, Properties, ResponseCodes, ResponseTags } from './enums/index.js';
+import { BootloaderVersion, CommandOption, CommandResponse, DataOption } from './models/index.js';
 
 const logger = debug('kboot');
 const RESET_IGNORED_ERRORS = [

@@ -2,8 +2,8 @@ import { debug } from 'debug';
 import { devices, HID } from 'node-hid';
 import { pack } from 'byte-data';
 
-import { Peripheral } from './peripheral';
-import { CommandOption, CommandResponse, DataOption, USB } from './models';
+import { Peripheral } from './peripheral.js';
+import { CommandOption, CommandResponse, DataOption, USB } from './models/index.js';
 import {
     convertLittleEndianNumber,
     convertToHexString,
@@ -12,8 +12,8 @@ import {
     decodeCommandResponse,
     snooze,
     validateCommandParams
-} from './util';
-import { Commands, ResponseTags } from './enums';
+} from './util/index.js';
+import { Commands, ResponseTags } from './enums/index.js';
 
 const logger = debug('kboot:usb');
 const WRITE_DATA_STREAM_PACKAGE_LENGTH = 32;

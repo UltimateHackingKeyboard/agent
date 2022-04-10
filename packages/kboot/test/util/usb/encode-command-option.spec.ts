@@ -1,5 +1,4 @@
-import { CommandOption, Commands } from '../../../src';
-import { encodeCommandOption } from '../../../src/util';
+import { CommandOption, Commands, encodeCommandOption } from '../../../src/index.js';
 
 describe('usb encodeCommandOption', () => {
     it('should convert correctly', () => {

@@ -2,6 +2,7 @@
   "name": "kboot",
   "main": "dist/index.js",
   "private": true,
+  "type": "module",
   "version": "0.0.0",
   "description": "Javascript implementation of the Kinetis Bootloader protocol",
   "author": "Ultimate Gadget Laboratories",

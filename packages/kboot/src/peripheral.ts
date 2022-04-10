@@ -1,4 +1,4 @@
-import { CommandOption, CommandResponse, DataOption } from './models';
+import { CommandOption, CommandResponse, DataOption } from './models/index.js';
 
 export interface Peripheral {
     open(): void;

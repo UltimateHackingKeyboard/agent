@@ -1,7 +1,5 @@
-import { reenumerate, UhkReenumerationModes, readBootloaderFirmwareFromHexFile } from './uhk-helpers';
-import { BootloaderVersion, UsbPeripheral } from '../src';
-import { KBoot } from '../src/kboot';
-import { DataOption } from '../index';
+import { reenumerate, UhkReenumerationModes, readBootloaderFirmwareFromHexFile } from './uhk-helpers/index.js';
+import { BootloaderVersion,  DataOption, KBoot, UsbPeripheral } from '../src/index.js';
 
 xdescribe('UHK Integration tests', () => {
     describe('bootloader', () => {

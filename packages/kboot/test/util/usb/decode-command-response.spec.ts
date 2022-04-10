@@ -1,4 +1,4 @@
-import { decodeCommandResponse } from '../../../src/util/usb/decode-command-response';
+import { decodeCommandResponse } from '../../../src/index.js';
 
 describe('decodeCommandResponse', () => {
     it('should parse the command', () => {

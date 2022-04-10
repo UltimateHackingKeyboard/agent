@@ -1,4 +1,4 @@
-import { encodeStringToParams } from '../../src/util';
+import { encodeStringToParams } from '../../src/util/encode-string-to-parameters.js';
 
 describe('encodeStringToParams', () => {
     xit('should convert 8 character to little endian 4 byte array', () => {
