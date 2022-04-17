@@ -2,6 +2,7 @@ export * from './application-settings.js';
 export * from './command-line-args.js';
 export * from './config-sizes-info.js';
 export * from './firmware-json.js';
+export * from './firmware-repo-info.js';
 export * from './notification.js';
 export * from './ipc-response.js';
 export * from './left-slot-modules.js';
