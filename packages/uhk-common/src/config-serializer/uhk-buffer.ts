@@ -153,6 +153,10 @@ export class UhkBuffer {
         return str;
     }
 
+    read0EndString(): string {
+        return this.buffer.toString(UhkBuffer.stringEncoding, this.offset);
+    }
+
     writeString(str: string): void {
         const stringByteLength = Buffer.byteLength(str, UhkBuffer.stringEncoding);
 

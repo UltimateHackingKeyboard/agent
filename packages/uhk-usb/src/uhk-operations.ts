@@ -38,6 +38,7 @@ import {
     waitForDevice
 } from './util.js';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
+import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
 const existsAsync = promisify(fs.exists);
 
@@ -369,7 +370,7 @@ export class UhkOperations {
     public async getModuleProperty({ module, property } : GetModulePropertyArguments): Promise<UhkBuffer> {
         const moduleSlotName = getSlotIdName(module);
 
-        this.logService.usb(`[DeviceOperation] USB[T]: Read "${moduleSlotName}" module "${property}" property information as string`);
+        this.logService.usb(`[DeviceOperation] USB[T]: Read "${moduleSlotName}" module "${ModulePropertyId[property]}" property information as string`);
 
         const command = Buffer.from([
             UsbCommand.GetModuleProperty,
@@ -383,7 +384,7 @@ export class UhkOperations {
     }
 
     public async getModulePropertyAsString(arg : GetModulePropertyArguments): Promise<string> {
-        return this.getModuleProperty(arg).then(uhkBuffer => uhkBuffer.readString());
+        return this.getModuleProperty(arg).then(readUhkResponseAs0EndString);
     }
 
     public async getModuleFirmwareRepoInfo(module: ModuleSlotToId): Promise<FirmwareRepoInfo> {
@@ -430,7 +431,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleProperty(property: DevicePropertyIds): Promise<UhkBuffer> {
-        this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${property}" property information`);
+        this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${DevicePropertyIds[property]}" property information`);
         const command = Buffer.from([UsbCommand.GetProperty, property]);
         const buffer = await this.device.write(command);
 
@@ -441,8 +442,8 @@ export class UhkOperations {
         this.logService.usb('[DeviceOperation] USB[T]: Read right module firmware repo information');
 
         return {
-            firmwareGitRepo: (await this.getRightModuleProperty(DevicePropertyIds.GitRepo)).readString(),
-            firmwareGitTag: (await this.getRightModuleProperty(DevicePropertyIds.GitTag)).readString()
+            firmwareGitRepo: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitRepo)),
+            firmwareGitTag: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitTag))
         };
     }
 
