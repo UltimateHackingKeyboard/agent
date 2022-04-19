@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
-import { isOfficialUhkFirmware } from 'uhk-common';
 import {
     FirmwareJson,
     HardwareModules,
+    isOfficialUhkFirmware,
     ModuleInfo,
     ModuleSlotToId,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
