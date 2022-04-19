@@ -9,6 +9,7 @@ import {
     HardwareModules,
     IpcEvents,
     IpcResponse,
+    isDeviceProtocolSupportGitInfo,
     LEFT_HALF_MODULE,
     LeftSlotModules,
     LogService,
@@ -21,7 +22,6 @@ import {
     UHK_MODULES,
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
-    getUserConfigFromJsonObject
 } from 'uhk-common';
 import {
     checkFirmwareAndDeviceCompatibility,
@@ -198,6 +198,7 @@ export class DeviceService {
                 rightModuleInfo: await this.operations.getRightModuleVersionInfo()
             };
 
+            const isGitInfoSupported = isDeviceProtocolSupportGitInfo(hardwareModules.rightModuleInfo.deviceProtocolVersion);
             const halvesStates = await this.device.getHalvesStates();
 
             const leftModuleInfo: ModuleInfo = {
@@ -207,7 +208,10 @@ export class DeviceService {
             hardwareModules.moduleInfos.push(leftModuleInfo);
 
             if (halvesStates.isLeftHalfConnected) {
-                leftModuleInfo.info = await this.operations.getModuleVersionInfo(LEFT_HALF_MODULE.slotId);
+                leftModuleInfo.info = await this.operations.getModuleVersionInfo(
+                    LEFT_HALF_MODULE.slotId,
+                    isGitInfoSupported
+                );
             }
 
             if (halvesStates.leftModuleSlot !== LeftSlotModules.NoModule) {
@@ -215,7 +219,7 @@ export class DeviceService {
 
                 hardwareModules.moduleInfos.push({
                     module: module,
-                    info: await this.operations.getModuleVersionInfo(module.slotId)
+                    info: await this.operations.getModuleVersionInfo(module.slotId, isGitInfoSupported)
                 });
             }
 
@@ -224,7 +228,7 @@ export class DeviceService {
 
                 hardwareModules.moduleInfos.push({
                     module: module,
-                    info: await this.operations.getModuleVersionInfo(module.slotId)
+                    info: await this.operations.getModuleVersionInfo(module.slotId, isGitInfoSupported)
                 });
             }
 

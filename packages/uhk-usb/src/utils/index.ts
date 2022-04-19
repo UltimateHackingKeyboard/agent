@@ -11,4 +11,5 @@ export * from './get-number-of-connected-devices.js';
 export * from './get-package-json-from-path-async.js';
 export * from './get-uhk-devices.js';
 export * from './validate-connected-devices.js';
+export * from './read-uhk-response-as-0-end-string.js';
 export * from './usb-device-json-formatter.js';

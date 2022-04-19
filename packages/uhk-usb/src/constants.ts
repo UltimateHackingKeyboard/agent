@@ -45,7 +45,9 @@ export enum DevicePropertyIds {
     ConfigSizes = 2,
     CurrentKbootCommand = 3,
     I2cBaudRate= 4,
-    Uptime = 5
+    Uptime = 5,
+    GitTag = 6,
+    GitRepo = 7
 }
 
 export enum EnumerationModes {
@@ -62,7 +64,9 @@ export enum KbootCommands {
 }
 
 export enum ModulePropertyId {
-    protocolVersions = 0
+    protocolVersions = 0,
+    GitTag = 1,
+    GitRepo = 2
 }
 
 export enum UsbVariables {

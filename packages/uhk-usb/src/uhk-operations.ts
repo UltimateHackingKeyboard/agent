@@ -1,8 +1,12 @@
+import * as fs from 'fs';
+import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 import {
     Buffer,
     ConfigSizesInfo,
+    FirmwareRepoInfo,
     getSlotIdName,
     HardwareConfiguration,
+    isDeviceProtocolSupportGitInfo,
     LEFT_HALF_MODULE,
     LogService,
     ModuleSlotToId,
@@ -12,27 +16,36 @@ import {
     UhkDeviceProduct,
     UhkModule
 } from 'uhk-common';
-import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
-
+import { promisify } from 'util';
+import { DevicePropertyIds } from './constants.js';
 import {
     ConfigBufferId,
-    DevicePropertyIds,
     EepromOperation,
     EnumerationModes,
     KbootCommands,
     ModulePropertyId,
-    UsbVariables,
-    UsbCommand
+    UsbCommand,
+    UsbVariables
 } from './constants.js';
-import * as fs from 'fs';
-import { promisify } from 'util';
+import { DebugInfo, Duration, I2cBaudRate, I2cErrorBuffer, LoadConfigurationsResult } from './models/index.js';
 
 import { UhkHidDevice } from './uhk-hid-device.js';
-import { convertBufferToIntArray, getTransferBuffers, readBootloaderFirmwareFromHexFileAsync, snooze, waitForDevice } from './util.js';
-import { LoadConfigurationsResult, DebugInfo, I2cBaudRate, Duration, I2cErrorBuffer } from './models/index.js';
+import {
+    convertBufferToIntArray,
+    getTransferBuffers,
+    readBootloaderFirmwareFromHexFileAsync,
+    snooze,
+    waitForDevice
+} from './util.js';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
+import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
 const existsAsync = promisify(fs.exists);
+
+interface GetModulePropertyArguments {
+    module: ModuleSlotToId,
+    property: ModulePropertyId
+}
 
 export class UhkOperations {
     constructor(private logService: LogService,
@@ -354,27 +367,59 @@ export class UhkOperations {
         return false;
     }
 
-    public async getModuleVersionInfo(module: ModuleSlotToId): Promise<ModuleVersionInfo> {
+    public async getModuleProperty({ module, property } : GetModulePropertyArguments): Promise<UhkBuffer> {
+        const moduleSlotName = getSlotIdName(module);
+
+        this.logService.usb(`[DeviceOperation] USB[T]: Read "${moduleSlotName}" module "${ModulePropertyId[property]}" property information as string`);
+
+        const command = Buffer.from([
+            UsbCommand.GetModuleProperty,
+            module,
+            property
+        ]);
+
+        const buffer = await this.device.write(command);
+
+        return UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+    }
+
+    public async getModulePropertyAsString(arg : GetModulePropertyArguments): Promise<string> {
+        return this.getModuleProperty(arg).then(readUhkResponseAs0EndString);
+    }
+
+    public async getModuleFirmwareRepoInfo(module: ModuleSlotToId): Promise<FirmwareRepoInfo> {
+        const moduleSlotName = getSlotIdName(module);
+        this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" repo information`);
+
+        return {
+            firmwareGitRepo: await this.getModulePropertyAsString({ module, property: ModulePropertyId.GitRepo }),
+            firmwareGitTag: await this.getModulePropertyAsString({ module, property: ModulePropertyId.GitTag }),
+        };
+    }
+
+    public async getModuleVersionInfo(module: ModuleSlotToId, includeGitInfo: boolean = false): Promise<ModuleVersionInfo> {
         const moduleSlotName = getSlotIdName(module);
         try {
             this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" version information`);
             this.logService.usb('[DeviceOperation] USB[T]: Read module version information');
 
-            const command = Buffer.from([
-                UsbCommand.GetModuleProperty,
-                module,
-                ModulePropertyId.protocolVersions
-            ]);
-
-            const buffer = await this.device.write(command);
-            const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+            const uhkBuffer = await this.getModuleProperty({ module, property: ModulePropertyId.protocolVersions });
             // skip the first 2 byte
             uhkBuffer.readUInt16();
 
-            return {
+            let moduleVersionInfo: ModuleVersionInfo =  {
                 moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+                firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             };
+
+            if (includeGitInfo) {
+                moduleVersionInfo = {
+                    ...moduleVersionInfo,
+                    ...await this.getModuleFirmwareRepoInfo(module)
+                };
+            }
+
+            return moduleVersionInfo;
         } catch (error) {
             this.logService.error(`[DeviceOperation] Could not read "${moduleSlotName}" version information`, error);
         }
@@ -382,6 +427,23 @@ export class UhkOperations {
         return {
             moduleProtocolVersion: '',
             firmwareVersion: ''
+        };
+    }
+
+    public async getRightModuleProperty(property: DevicePropertyIds): Promise<UhkBuffer> {
+        this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${DevicePropertyIds[property]}" property information`);
+        const command = Buffer.from([UsbCommand.GetProperty, property]);
+        const buffer = await this.device.write(command);
+
+        return UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+    }
+
+    public async getRightModuleFirmwareRepoInfo(): Promise<FirmwareRepoInfo> {
+        this.logService.usb('[DeviceOperation] USB[T]: Read right module firmware repo information');
+
+        return {
+            firmwareGitRepo: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitRepo)),
+            firmwareGitTag: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitTag))
         };
     }
 
@@ -394,7 +456,7 @@ export class UhkOperations {
         // skip the first byte
         uhkBuffer.readUInt8();
 
-        return {
+        let rightModuleInfo: RightModuleInfo = {
             firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
@@ -402,6 +464,14 @@ export class UhkOperations {
             hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
         };
+
+        if (isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion))
+            rightModuleInfo = {
+                ...rightModuleInfo,
+                ...await this.getRightModuleFirmwareRepoInfo(),
+            };
+
+        return rightModuleInfo;
     }
 
     public async setLedPwmBrightness(percent: number): Promise<void> {

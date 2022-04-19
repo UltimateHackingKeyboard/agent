@@ -9,6 +9,9 @@ export enum ModuleFirmwareUpgradeStates {
 
 export interface ModuleFirmwareUpgradeState {
     firmwareUpgradeSupported: boolean;
+    isOfficialFirmware?: boolean;
+    gitRepo?: string;
+    gitTag?: string;
     moduleName: string;
     currentFirmwareVersion: string;
     newFirmwareVersion?: string;

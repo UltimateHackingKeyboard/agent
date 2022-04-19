@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import {
     FirmwareJson,
     HardwareModules,
+    isOfficialUhkFirmware,
     ModuleInfo,
     ModuleSlotToId,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
@@ -273,10 +274,13 @@ export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
 });
 
 function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules): Array<ModuleFirmwareUpgradeState> {
-    const modules = [
+    const modules: Array<ModuleFirmwareUpgradeState> = [
         {
             moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
             firmwareUpgradeSupported: true,
+            gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
+            gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
+            isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
             currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
             newFirmwareVersion: firmwareJson?.firmwareVersion,
             state: ModuleFirmwareUpgradeStates.Idle
@@ -288,6 +292,9 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
             modules.push({
                 moduleName: moduleInfo.module.name,
                 firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+                gitRepo: moduleInfo.info.firmwareGitRepo,
+                gitTag: moduleInfo.info.firmwareGitTag,
+                isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
                 currentFirmwareVersion: moduleInfo.info.firmwareVersion,
                 newFirmwareVersion: firmwareJson?.firmwareVersion,
                 state: ModuleFirmwareUpgradeStates.Idle

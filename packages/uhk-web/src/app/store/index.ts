@@ -2,6 +2,7 @@ import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
+import { UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
 
 import {
     ApplicationSettings,
@@ -428,6 +429,8 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                 {
                     moduleName: 'Right keyboard half',
                     firmwareUpgradeSupported: true,
+                    gitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
+                    isOfficialFirmware: true,
                     currentFirmwareVersion: agentVersionInfo.firmwareVersion,
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
@@ -435,6 +438,8 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
                 {
                     moduleName: 'Left keyboard half',
                     firmwareUpgradeSupported: true,
+                    gitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
+                    isOfficialFirmware: true,
                     currentFirmwareVersion: agentVersionInfo.firmwareVersion,
                     newFirmwareVersion: undefined,
                     state: ModuleFirmwareUpgradeStates.Idle
