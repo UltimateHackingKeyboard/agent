@@ -140,6 +140,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.editor = editor;
         if (this.autoFocus) {
             this.editor.focus();
+            this.isFocused = true;
         }
         editor.onKeyDown((event) => {
             if (new RegExp(NON_ASCII_REGEXP).test(event.code)) {
