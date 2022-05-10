@@ -19,6 +19,7 @@ import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { SelectedMacroActionId } from '../../../../../models';
+import { SmartMacroDocCommandAction } from '../../../../../services/smart-macro-doc-service';
 import { SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
@@ -86,7 +87,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     ngOnInit(): void {
         this.subscriptions.add(
             this.smartMacroDocService
-                .insertMacroCommand
+                .smartMacroDocCommand
                 .subscribe(command => {
                     if(!this.editor) {
                         return;
@@ -96,7 +97,14 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                         return;
                     }
 
-                    this.insertMacroCommand(command.data);
+                    switch (command.action) {
+                        case SmartMacroDocCommandAction.insert:
+                            return this.insertMacroCommand(command.data);
+
+                        case SmartMacroDocCommandAction.set:
+                            return this.setMacroCommand(command.data);
+                    }
+
                 })
         );
     }
@@ -284,5 +292,10 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         if (cursorPosition) {
             this.editor.setPosition(cursorPosition);
         }
+    }
+
+    private setMacroCommand(data: string): void {
+        this.insertingMacro = true;
+        this.writeValue(data?.trim());
     }
 }

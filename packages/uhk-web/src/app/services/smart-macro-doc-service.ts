@@ -1,21 +1,28 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { LogService } from 'uhk-common';
+import { CommandMacroAction, LogService } from 'uhk-common';
 import { Subject, Subscription } from 'rxjs';
 
-import { AppState, getSelectedMacroAction } from '../store';
+import { AppState, getSelectedMacroAction, getSmartMacroDocModuleIds } from '../store';
 import { SmdInitedAction } from '../store/actions/smart-macro-doc.action';
 import { SelectedMacroAction, SelectedMacroActionId, TabName } from '../models';
 
-export interface InsertMacroCommand {
+export enum SmartMacroDocCommandAction {
+    insert,
+    set
+}
+
+export interface SmartMacroDocCommand {
+    action: SmartMacroDocCommandAction;
     data: string;
     macroActionId: SelectedMacroActionId;
 }
 
 @Injectable()
 export class SmartMacroDocService implements OnDestroy {
-    insertMacroCommand = new Subject<InsertMacroCommand>();
+    smartMacroDocCommand = new Subject<SmartMacroDocCommand>();
     selectedMacroAction: SelectedMacroAction;
+    smartMacroDocModuleIds: Array<number> = [];
 
     private subscriptions = new Subscription();
     private iframe: HTMLIFrameElement;
@@ -30,7 +37,15 @@ export class SmartMacroDocService implements OnDestroy {
             store.select(getSelectedMacroAction)
                 .subscribe(action => {
                     this.selectedMacroAction = action;
-                    this.toggleMacroEditorInFocus();
+                    this.dispatchMacroEditorFocusEvent();
+                })
+        );
+
+        this.subscriptions.add(
+            store.select(getSmartMacroDocModuleIds)
+                .subscribe(moduleIds => {
+                    this.smartMacroDocModuleIds = moduleIds;
+                    this.dispatchMacroEditorFocusEvent();
                 })
         );
     }
@@ -43,7 +58,7 @@ export class SmartMacroDocService implements OnDestroy {
 
     setIframe(iframe: HTMLIFrameElement): void {
         this.iframe = iframe;
-        this.toggleMacroEditorInFocus();
+        this.dispatchMacroEditorFocusEvent();
     }
 
     private dispatchStoreAction(action: Action) {
@@ -57,22 +72,17 @@ export class SmartMacroDocService implements OnDestroy {
 
     private onMessage(event: MessageEvent): void {
         switch (event.data.action) {
-            case 'smd-inited': {
-                this.toggleMacroEditorInFocus();
+            case 'docMessage-inited': {
+                this.dispatchMacroEditorFocusEvent();
 
                 return this.dispatchStoreAction(new SmdInitedAction());
             }
 
-            case 'smd-insert-macro': {
-                if (!this.selectedMacroAction) {
-                    return;
-                }
+            case 'docMessage-insert-macro':
+                return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.insert, event.data.command);
 
-                return this.insertMacroCommand.next({
-                    data: event.data.data,
-                    macroActionId: this.selectedMacroAction.id
-                });
-            }
+            case 'docMessage-set-macro':
+                return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.set, event.data.command);
 
             default: {
                 break;
@@ -80,15 +90,35 @@ export class SmartMacroDocService implements OnDestroy {
         }
     }
 
-    private toggleMacroEditorInFocus(): void {
+    private dispatchSmartMacroDocCommand(action: SmartMacroDocCommandAction, data: any): void {
+        if (!this.selectedMacroAction) {
+            return;
+        }
+
+        this.smartMacroDocCommand.next({
+            action,
+            data,
+            macroActionId: this.selectedMacroAction.id
+        });
+    }
+
+    private dispatchMacroEditorFocusEvent(): void {
         if (!this.iframe?.contentWindow) {
             return;
         }
 
-        const action = this.selectedMacroAction?.type === TabName.Command
-            ? 'sma-editor-got-focus'
-            : 'sma-editor-lost-focus';
+        const message = {
+            action: 'agentMessage-editor-lost-focus',
+            command: '',
+            modules: this.smartMacroDocModuleIds,
+            version: '1.0.0'
+        };
 
-        this.iframe.contentWindow.postMessage({ action }, '*');
+        if (this.selectedMacroAction?.type === TabName.Command) {
+            message.action = 'agentMessage-editor-got-focus';
+            message.command = (this.selectedMacroAction.macroAction as CommandMacroAction).command;
+        }
+
+        this.iframe.contentWindow.postMessage(message, '*');
     }
 }

@@ -60,8 +60,8 @@
     const button = document.getElementById('appendMacro');
     button.addEventListener('click', () => {
         window.parent.postMessage({
-            action: 'smd-insert-macro',
-            data: 'set var 1'
+            action: 'docMessage-insert-macro',
+            command: 'set var 1'
         }, '*')
     })
 
@@ -70,12 +70,12 @@
 
         switch (event.data.action) {
 
-            case 'sma-editor-got-focus': {
+            case 'agentMessage-editor-got-focus': {
                 button.removeAttribute('disabled');
                 break;
             }
 
-            case 'sma-editor-lost-focus': {
+            case 'agentMessage-editor-lost-focus': {
                 button.setAttribute('disabled', '');
                 break;
             }
@@ -86,7 +86,7 @@
         }
     });
     window.addEventListener('messageerror', console.error)
-    window.parent.postMessage({action: 'smd-inited'}, '*');
+    window.parent.postMessage({action: 'docMessage-inited'}, '*');
 </script>
 </body>
 </html>
