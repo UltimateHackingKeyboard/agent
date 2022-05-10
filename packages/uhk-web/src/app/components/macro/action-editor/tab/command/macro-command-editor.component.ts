@@ -19,8 +19,7 @@ import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { SelectedMacroActionId } from '../../../../../models';
-import { SmartMacroDocCommandAction } from '../../../../../services/smart-macro-doc-service';
-import { SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
+import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 
 const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;

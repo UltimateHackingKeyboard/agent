@@ -72,16 +72,16 @@ export class SmartMacroDocService implements OnDestroy {
 
     private onMessage(event: MessageEvent): void {
         switch (event.data.action) {
-            case 'docMessage-inited': {
+            case 'doc-message-inited': {
                 this.dispatchMacroEditorFocusEvent();
 
                 return this.dispatchStoreAction(new SmdInitedAction());
             }
 
-            case 'docMessage-insert-macro':
+            case 'doc-message-insert-macro':
                 return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.insert, event.data.command);
 
-            case 'docMessage-set-macro':
+            case 'doc-message-set-macro':
                 return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.set, event.data.command);
 
             default: {
@@ -108,14 +108,14 @@ export class SmartMacroDocService implements OnDestroy {
         }
 
         const message = {
-            action: 'agentMessage-editor-lost-focus',
+            action: 'agent-message-editor-lost-focus',
             command: '',
             modules: this.smartMacroDocModuleIds,
             version: '1.0.0'
         };
 
         if (this.selectedMacroAction?.type === TabName.Command) {
-            message.action = 'agentMessage-editor-got-focus';
+            message.action = 'agent-message-editor-got-focus';
             message.command = (this.selectedMacroAction.macroAction as CommandMacroAction).command;
         }
 

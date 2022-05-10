@@ -60,7 +60,7 @@
     const button = document.getElementById('appendMacro');
     button.addEventListener('click', () => {
         window.parent.postMessage({
-            action: 'docMessage-insert-macro',
+            action: 'doc-message-insert-macro',
             command: 'set var 1'
         }, '*')
     })
@@ -70,12 +70,12 @@
 
         switch (event.data.action) {
 
-            case 'agentMessage-editor-got-focus': {
+            case 'agent-message-editor-got-focus': {
                 button.removeAttribute('disabled');
                 break;
             }
 
-            case 'agentMessage-editor-lost-focus': {
+            case 'agent-message-editor-lost-focus': {
                 button.setAttribute('disabled', '');
                 break;
             }
@@ -86,7 +86,7 @@
         }
     });
     window.addEventListener('messageerror', console.error)
-    window.parent.postMessage({action: 'docMessage-inited'}, '*');
+    window.parent.postMessage({action: 'doc-message-inited'}, '*');
 </script>
 </body>
 </html>

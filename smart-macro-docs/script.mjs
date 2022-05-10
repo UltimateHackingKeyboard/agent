@@ -18,7 +18,7 @@ function setVariable(name, value, isInit) {
         currentCommand += (currentCommand.endsWith('\n') ? '' : '\n') + `set ${regexVarName} ${value}\n`;
     }
     const message = {
-        action: 'docMessage-set-macro',
+        action: 'doc-message-set-macro',
         command: currentCommand
     };
 
@@ -181,21 +181,21 @@ const app = createApp({
         const self = this;
         window.addEventListener('message', function(event) {
             switch (event.data.action) {
-                case 'agentMessage-editor-got-focus': {
+                case 'agent-message-editor-got-focus': {
                     const data = event.data;
                     currentCommand = data.command;
                     self.modules = data.modules;
                     break;
                 }
 
-                case 'agentMessage-editor-lost-focus': {
+                case 'agent-message-editor-lost-focus': {
                     const data = event.data;
                     currentCommand = '';
                     self.modules = data.modules
                 }
             }
         });
-        window.parent.postMessage({action: 'docMessage-inited'}, '*');
+        window.parent.postMessage({action: 'doc-message-inited'}, '*');
     },
     computed: {
         rightModules() {
