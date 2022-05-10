@@ -1,4 +1,3 @@
-import delay from 'delay';
 import { ipcMain } from 'electron';
 import getPort from 'get-port';
 import { join } from 'path';
@@ -65,8 +64,7 @@ export class SmartMacroDocService {
     private async handleDownloadDocumentation(event: Electron.IpcMainEvent): Promise<void> {
         this.logService.misc(serviceLogMessage('start download firmware documentation'));
 
-        await delay(2000);
-
+        // TODO: Implement download not bundled doc
         this.logService.misc(serviceLogMessage('firmware documentation downloaded'));
         event.sender.send(IpcEvents.smartMacroDoc.downloadDocumentationReply);
     }

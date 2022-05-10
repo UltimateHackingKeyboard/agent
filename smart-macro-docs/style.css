@@ -12,7 +12,7 @@ img {
     white-space: nowrap;
 }
 
-table.table td {
+table.table td, table.table th {
     vertical-align: middle;
 }
 
