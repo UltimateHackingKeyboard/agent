@@ -346,6 +346,32 @@ Syntax is <code>set stickyModifiers {stickyMode}</code><br>
 
 <p>Syntax is <code>chordingDelay {time in milliseconds, at most 255}</code></p>
 
+<h3>set &raquo; enable/disable LEDs</h3>
+
+<p>Enable/disable all LEDs.</p>
+
+<p>Syntax is <code>set leds.enabled {0|1}</code></p>
+
+<h3>set &raquo; LED brightness</h3>
+
+<p>Set the brightness of all LEDs.</p>
+
+Syntax is <code>set leds.brightness {brightness}</code><br>
+
+<ul>
+    <li><code>{brightness}</code>: 0-1 multiple of default (FLOAT)</li>
+</ul>
+
+<h3>set &raquo; LED fade timeout</h3>
+
+<p>Set timeout after which all LEDs will fade out to save power until the next user interaction.</p>
+
+Syntax is <code>set leds.fadeTimeout {timeout}</code><br>
+
+<ul>
+    <li><code>{timeout}</code>: Zero value means disabled fade timeout. Otherwise, the timeout value specified in minutes.</li>
+</ul>
+
 </div>
 <script type="module" src="script.mjs"></script>
 </body>
