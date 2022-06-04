@@ -78,7 +78,9 @@ Syntax is <code>set module.{module}.{property} {value}</code><br>
     <tbody>
         <tr v-for="speedProp in moduleSpeedProps">
             <td>{{speedProp.desc}}</td>
-            <td v-for="module in rightModules" class="no-wrap"><slider :name="`module.${moduleStrings[module]}.${speedProp.name}`"/></td>
+            <td v-for="module in rightModules" class="no-wrap">
+                <slider :name="`module.${moduleStrings[module]}.${speedProp.name}`" :min="speedProp.min" :default="speedProp.perModuleDefaults[module]" :max="speedProp.max" :step="speedProp.step"/>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -114,25 +116,31 @@ Syntax is <code>set module.{module}.{property} {value}</code><br>
 </li>
 </ul>
 
-<table v-show="rightModules.length" class="table w-auto">
+<table v-show="modules.length" class="table w-auto">
     <thead>
         <tr>
             <th scope="col"></th>
-            <th v-for="module in rightModules" scope="col">{{moduleDescriptions[module]}}</th>
+            <th v-for="module in modules" scope="col">{{moduleDescriptions[module]}}</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>Axis lock skew</td>
-            <td v-for="module in rightModules" class="no-wrap"><slider :name="`module.${moduleStrings[module]}.axisLockSkew`"/></td>
+            <td v-for="module in modules" class="no-wrap">
+                <slider :name="`module.${moduleStrings[module]}.axisLockSkew`" min="0.5" :default="axisLockSkewDefaults[module]" max="2" step="0.1"/>
+            </td>
         </tr>
         <tr>
             <td>Axis lock first tick skew</td>
-            <td v-for="module in rightModules" class="no-wrap"><slider :name="`module.${moduleStrings[module]}.axisLockFirstTickSkew`"/></td>
+            <td v-for="module in modules" class="no-wrap">
+                <slider :name="`module.${moduleStrings[module]}.axisLockFirstTickSkew`" :default="axisLockFirstTickSkewDefaults[module]" min="0.5" max="2" step="0.1"/>
+            </td>
         </tr>
         <tr>
             <td>Scroll axis lock enabled</td>
-            <td v-for="module in rightModules" class="no-wrap"><checkbox :name="`module.${moduleStrings[module]}.scrollAxisLock`"/></td>
+            <td v-for="module in modules" class="no-wrap">
+                <checkbox :name="`module.${moduleStrings[module]}.scrollAxisLock`" default="1"/>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -157,7 +165,7 @@ Syntax is <code>set module.{module}.invertScrollDirection {0|1}</code><br>
     <tbody>
         <tr>
             <td>Invert scroll direction</td>
-            <td v-for="module in rightModules"><checkbox :name="`module.${moduleStrings[module]}.invertScrollDirection`"/></td>
+            <td v-for="module in rightModules"><checkbox :name="`module.${moduleStrings[module]}.invertScrollDirection`" default="0"/></td>
         </tr>
     </tbody>
 </table>
@@ -172,7 +180,7 @@ Syntax is <code>set module.{module}.swapAxes {0|1}</code><br>
 <li><code>{module}</code> is of <code>keycluster</code>, <code>trackball</code>, <code>trackpoint</code>, <code>touchpad</code></li>
 </ul>
 
-<p><checkbox name="module.keycluster.swapAxes"></checkbox> Swap the X and Y axes of key cluster module's mini trackball</p>
+<p><checkbox name="module.keycluster.swapAxes" default="0"></checkbox> Swap the X and Y axes of key cluster module's mini trackball</p>
 
 <h3>set &raquo; touchpad pinch-to-zoom divisor</h3>
 
@@ -180,7 +188,7 @@ Syntax is <code>set module.{module}.swapAxes {0|1}</code><br>
 
 <p>Syntax is <code>set module.touchpad.pinchZoomDivisor {value}</code></p>
 
-<p><slider name="module.touchpad.pinchZoomDivisor"/></p>
+<p><slider name="module.touchpad.pinchZoomDivisor" min="1" default="4" max="10" step="1"/></p>
 
 <h3>set &raquo; module navigation modes</h3>
 
@@ -213,7 +221,9 @@ Syntax is <code>set module.{moduleId}.{layerId} {navigationMode}</code><br>
     <tbody>
         <tr v-for="layer in layers">
             <th scope="row">{{layer}}</th>
-            <td v-for="module in modules"><dropdown :name="`module.${moduleStrings[module]}.${layer.toLowerCase()}`" options="navigationModes"/></td>
+            <td v-for="module in modules">
+                <dropdown :name="`module.${moduleStrings[module]}.${layer.toLowerCase()}`" options="navigationModes" :default="getNavigationMode(module, layer)"/>
+            </td>
         </tr>
     </tbody>
   </table>
@@ -255,7 +265,7 @@ Syntax is <code>set modifierLayerTriggers.{layer} {modifiers}</code><br>
     <tbody>
         <tr v-for="modifier in modifiers">
             <th scope="row">{{modifier}}</th>
-            <td><dropdown :name="`modifierLayerTriggers.${modifier.toLowerCase()}`" options="modifierTriggers"/></td>
+            <td><dropdown :name="`modifierLayerTriggers.${modifier.toLowerCase()}`" options="modifierTriggers" default="both"/></td>
         </tr>
         <tr>
     </tbody>
@@ -292,8 +302,24 @@ Syntax is <code>set mouseKeys.{mode}.{property} {floatValue}</code><br>
     <tbody>
         <tr v-for="prop in keySpeedProps">
             <td>{{prop.desc}}</td>
-            <td class="no-wrap"><slider :name="`module.move.${prop.name}`"/></td>
-            <td class="no-wrap"><slider :name="`module.scroll.${prop.name}`"/></td>
+            <td class="no-wrap">
+                <slider
+                    :name="`module.move.${prop.name}`"
+                    :min="prop.sliderProps.move.min"
+                    :default="prop.sliderProps.move.default"
+                    :max="prop.sliderProps.move.max"
+                    :step="prop.sliderProps.move.step"
+                />
+            </td>
+            <td class="no-wrap">
+                <slider
+                    :name="`module.scroll.${prop.name}`"
+                    :min="prop.sliderProps.scroll.min"
+                    :default="prop.sliderProps.scroll.default"
+                    :max="prop.sliderProps.scroll.max"
+                    :step="prop.sliderProps.scroll.step"
+                />
+            </td>
         </tr>
     </tbody>
 </table>
@@ -304,7 +330,7 @@ Syntax is <code>set mouseKeys.{mode}.{property} {floatValue}</code><br>
 
 <p>Syntax is <code>set diagonalSpeedCompensation {0|1}</code></p>
 
-<p><checkbox name="diagonalSpeedCompensation"></checkbox> Enable diagonal speed compensation</p>
+<p><checkbox name="diagonalSpeedCompensation" default="0"></checkbox> Enable diagonal speed compensation</p>
 
 <h3>set &raquo; sticky modifiers</h3>
 
