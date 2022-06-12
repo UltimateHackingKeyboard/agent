@@ -23,4 +23,7 @@ promises.push(
 
 Promise
     .all(promises)
-    .catch(console.error);
+    .catch(error => {
+        console.error(error);
+        process.exit(1)
+    });
