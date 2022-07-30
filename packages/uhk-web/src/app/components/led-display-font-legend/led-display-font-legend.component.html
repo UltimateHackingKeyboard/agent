@@ -1,0 +1,14 @@
+<div class="row">
+    <h1 class="col-12 pane-title">
+        <span class="macro__name pane-title__name">
+            LED Display Font Legend
+        </span>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-1 legend" *ngFor="let item of pinOuts">
+        <led-display [pinOut]="item.pinOut"></led-display>
+        <span>{{ item.character }}</span>
+    </div>
+</div>

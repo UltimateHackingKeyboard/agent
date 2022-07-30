@@ -144,6 +144,8 @@ import { SmartMacroDocRendererService } from './services/smart-macro-doc-rendere
 import { SmartMacroDocDirective } from './components/macro/directives/smart-macro-doc.directive';
 import { SmartMacroDocService } from './services/smart-macro-doc-service';
 import { MonacoEditorCustomThemeService } from './services/monaco-editor-custom-theme.service';
+import { LedDisplayFontLegendComponent } from './components/led-display-font-legend/led-display-font-legend.component';
+import { LedDisplayComponent } from './components/led-display/led-display.component';
 import appInitFactory from './services/app-init-factory';
 
 @NgModule({
@@ -243,7 +245,9 @@ import appInitFactory from './services/app-init-factory';
         OutOfSpaceWarningComponent,
         SmartMacroDocDirective,
         UserConfigurationHistoryComponent,
-        UserConfigHistoryDisplayTextPipe
+        UserConfigHistoryDisplayTextPipe,
+        LedDisplayFontLegendComponent,
+        LedDisplayComponent,
     ],
     imports: [
         AngularSplitModule,
