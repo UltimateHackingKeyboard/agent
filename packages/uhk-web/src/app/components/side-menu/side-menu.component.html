@@ -227,6 +227,12 @@
                        [class.disabled]="state.updatingFirmware">About</a>
                 </div>
             </li>
+            <li class="sidebar__level-2--item">
+                <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                    <a [routerLink]="['/led-display-legend-demo']"
+                       [class.disabled]="state.updatingFirmware">LED Display Font Legend Demo</a>
+                </div>
+            </li>
         </ul>
     </li>
 </ul>
