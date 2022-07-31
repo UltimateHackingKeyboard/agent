@@ -105,6 +105,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     faPuzzlePiece = faPuzzlePiece;
     faSlidersH = faSlidersH;
     faStar = faStar;
+    maxAllowedMacros = 255;
 
     private stateSubscription: Subscription;
 

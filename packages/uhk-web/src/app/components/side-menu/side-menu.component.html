@@ -144,8 +144,12 @@
                     Macros
                     <button (click)="addMacro()"
                             class="btn btn-sm btn-secondary float-right"
-                            [class.disabled]="state.updatingFirmware">
-                        <fa-icon [icon]="faPlus"></fa-icon>
+                            [disabled]="state.updatingFirmware || state.macros.length > maxAllowedMacros">
+                        <fa-icon [icon]="faPlus"
+                                 [ngbTooltip]="state.macros.length > maxAllowedMacros ? 'No more than 255 macros are supported.' : null"
+                                 placement="bottom"
+                                 container="body"
+                        ></fa-icon>
                     </button>
                     <fa-icon [icon]="this.sideMenuState.macro.icon"
                              class="chevron float-right mr-1"
