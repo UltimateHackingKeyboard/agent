@@ -258,6 +258,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     searchFn(term: string, item: FlatScancode) {
+        term = term.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
         if (new RegExp(term, 'i').test(item.text)) {
             return true;
         }
