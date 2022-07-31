@@ -22,6 +22,7 @@ import {
     isMacroCommandSupported,
     isSelectedMacroNew,
     macroPlaybackSupported,
+    maxMacroCountReached,
     selectSmartMacroDocUrl
 } from '../../../store';
 import { IOutputData, SplitComponent } from 'angular-split';
@@ -44,6 +45,7 @@ export class MacroEditComponent implements OnDestroy {
     isNew$: Observable<boolean>;
     macroId: number;
     macroPlaybackSupported$: Observable<boolean>;
+    maxMacroCountReached$: Observable<boolean>;
     isMacroCommandSupported$: Observable<boolean>;
     selectedMacroAction$: Observable<SelectedMacroAction>;
     smartMacroDocUrl$: Observable<string>;
@@ -70,6 +72,7 @@ export class MacroEditComponent implements OnDestroy {
         this.isNew$ = this.store.select(isSelectedMacroNew);
         this.isMacroCommandSupported$ = this.store.select(isMacroCommandSupported);
         this.macroPlaybackSupported$ = this.store.select(macroPlaybackSupported);
+        this.maxMacroCountReached$ = store.select(maxMacroCountReached);
         this.subscriptions.add(store.select(getSmartMacroPanelWidth)
             .subscribe((width: number) => {
                 this.smartMacroPanelSizes = {
