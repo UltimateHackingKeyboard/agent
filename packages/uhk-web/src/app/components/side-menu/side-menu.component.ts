@@ -105,7 +105,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     faPuzzlePiece = faPuzzlePiece;
     faSlidersH = faSlidersH;
     faStar = faStar;
-    maxAllowedMacros = 254;
+    maxAllowedMacros = 255;
     maxAllowedMacrosTooltip = `No more than ${this.maxAllowedMacros} macros are supported.`;
 
     private stateSubscription: Subscription;
