@@ -11,6 +11,7 @@
                     <macro-header
                             [macro]="macro"
                             [isNew]="isNew$ | async"
+                            [maxMacroCountReached]="maxMacroCountReached$ | async"
                     ></macro-header>
                     <macro-list
                         [macro]="macro"

@@ -17,9 +17,13 @@
         margin-right: 15px;
         position: relative;
 
-        &:hover {
+        &:hover:not(.disabled) {
             cursor: pointer;
             color: var(--color-icon-hover);
+        }
+
+        &.disabled {
+            color: var(--color-layers-button-active-disabled);
         }
     }
 }

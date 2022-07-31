@@ -1,4 +1,5 @@
 import {
+    Constants,
     getDefaultHalvesInfo,
     HalvesInfo,
     KeyAction,
@@ -789,14 +790,26 @@ function generateName(items: { name: string }[], name: string) {
 
 function generateMacroId(macros: Macro[]) {
     let newId = 0;
+    let usedMacroIds = new Set();
 
     macros.forEach((macro: Macro) => {
         if (macro.id > newId) {
             newId = macro.id;
         }
+
+        usedMacroIds.add(macro.id);
     });
 
-    return newId + 1;
+    newId += 1;
+
+    if (newId <= Constants.MAX_ALLOWED_MACROS)
+        return newId;
+
+    for (let i = 0; i <= Constants.MAX_ALLOWED_MACROS; i++) {
+        if (!usedMacroIds.has(i)) {
+            return i;
+        }
+    }
 }
 
 function insertItemInNameOrder<T extends { name: string }>(

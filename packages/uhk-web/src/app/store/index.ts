@@ -2,7 +2,7 @@ import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
-import { UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
+import { Constants, UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
 
 import {
     ApplicationSettings,
@@ -329,6 +329,8 @@ export const getSideMenuPageState = createSelector(
         restoreUserConfiguration: boolean,
         uiState,
         connectedDevice): SideMenuPageState => {
+        const macros = getMacroMenuItems(userConfiguration);
+
         return {
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             showAddonMenu: showAddonMenuValue,
@@ -336,12 +338,15 @@ export const getSideMenuPageState = createSelector(
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
-            macros: getMacroMenuItems(userConfiguration),
+            macros,
+            maxMacroCountReached: macros.length >= Constants.MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
             deviceUiState: runningInElectronValue ? uiState : DeviceUiStates.UserConfigLoaded
         };
     }
 );
+
+export const maxMacroCountReached = createSelector(getSideMenuPageState, sideMenuState => sideMenuState.maxMacroCountReached);
 
 export const getRouterState = (state: AppState) => state.router;
 
