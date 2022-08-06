@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { faCopy, faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Macro } from 'uhk-common';
+import { Constants, Macro } from 'uhk-common';
 
 import { DuplicateMacroAction, EditMacroNameAction, RemoveMacroAction } from '../../../store/actions/macro';
 import { AppState } from '../../../store';
@@ -24,12 +24,14 @@ import { AutoGrowInputComponent } from '../../auto-grow-input';
 export class MacroHeaderComponent implements OnChanges {
     @Input() macro: Macro;
     @Input() isNew: boolean;
+    @Input() maxMacroCountReached: boolean;
 
     @ViewChild(AutoGrowInputComponent, { static: true }) macroName: AutoGrowInputComponent;
 
     faCopy = faCopy;
     faPlay = faPlay;
     faTrash = faTrash;
+    maxAllowedMacrosTooltip = Constants.MAX_ALLOWED_MACROS_TOOLTIP;
 
     constructor(private store: Store<AppState>) {
     }
@@ -45,6 +47,9 @@ export class MacroHeaderComponent implements OnChanges {
     }
 
     duplicateMacro() {
+        if (this.maxMacroCountReached)
+            return;
+
         this.store.dispatch(new DuplicateMacroAction(this.macro));
     }
 

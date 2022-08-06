@@ -14,9 +14,10 @@
                      (click)="removeMacro()"></fa-icon>
             <fa-icon [icon]="faCopy"
                      class="macro__duplicate float-right"
-                     ngbTooltip="Duplicate macro"
+                     [class.disabled]="maxMacroCountReached"
+                     [ngbTooltip]="maxMacroCountReached ? maxAllowedMacrosTooltip : 'Duplicate macro'"
                      tooltipClass="tooltip-nowrap"
-                     placement="bottom"
+                     placement="bottom-right"
                      (click)="duplicateMacro()"></fa-icon>
         </h1>
     </div>

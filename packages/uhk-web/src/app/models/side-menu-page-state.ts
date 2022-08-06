@@ -10,6 +10,7 @@ export interface SideMenuPageState {
     deviceName: string;
     keymaps: Keymap[];
     macros: MacroMenuItem[];
+    maxMacroCountReached: boolean;
     restoreUserConfiguration: boolean;
     deviceUiState?: DeviceUiStates;
     connectedDevice?: UhkDeviceProduct;

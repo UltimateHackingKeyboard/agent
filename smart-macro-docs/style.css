@@ -2,7 +2,7 @@ pre {
     background-color: #eee;
 }
 
-img {
+img, video {
     width: 100%;
     max-width: 1024px;
     padding: 10px 0;
