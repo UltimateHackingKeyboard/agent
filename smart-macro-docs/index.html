@@ -46,6 +46,10 @@
 
 <p>Last but not least, when a command macro action is selected, many interactive widgets, such as sliders, comboboxes, and checkboxes appear in this documentation, some depending on the currently attached modules. By interacting with these widgets, the relevant commands appear in the current command macro action without writing any code:</p>
 
+<video autoplay="autoplay" loop="loop" muted="muted">
+    <source src="agent-macro-variable-slider.mp4" type="video/mp4">
+</video>
+
 <h1>Macro events</h1>
 
 <p>Macro events are specially named macros that are executed on select occasions. When your UHK powers up and when you save its configuration, the relevant macro events are executed in the following order:</p>
@@ -448,16 +452,6 @@ Syntax is <code>set stickyModifiers {stickyMode}</code><br>
 </li>
 </ul>
 
-<h3>set &raquo; switch debounce delay</h3>
-
-<p>Prevents key states from changing for some time after every state change. This setting is needed because contacts of mechanical switches can bounce after contact and change state multiple times in a few milliseconds.</p>
-
-Syntax is <code>set debounceDelay {delay}</code><br>
-
-<ul>
-    <li><code>{delay} integer of 0 to 250, defaults to 50</code>: Delay in milliseconds. The recommended value is <code>10</code> to <code>50</code>.</li>
-</ul>
-
 <h3>set &raquo; double tap timeout</h3>
 
 <p>Controls the double tap timeout for layer locking.</p>
@@ -530,6 +524,20 @@ Syntax is <code>set leds.fadeTimeout {timeout}</code><br>
         </tr>
     </tbody>
 </table>
+
+<h3>set &raquo; enable/disable extended macro commands</h3>
+
+<p>Enable/disable the extended commands of the macro engine.</p>
+
+<p>There are <a href="https://github.com/UltimateHackingKeyboard/firmware/blob/master/doc-dev/user-guide.md" target="_blank">extended macro commands</a> available besides the ones mentioned here, but they're disabled by default because most of them are quite niche. These commands can be explicitly enabled via this variable, after which they can be used just like the commands featured here.</p>
+
+<p>We plan to make most or possibly all of the extended commands directly accessible and include them in this documentation step by step after careful consideration.</p>
+
+Syntax is <code>set macroEngine.extendedCommands {extendedCommandsEnabled}</code><br>
+
+<ul>
+    <li><code>{extendedCommandsEnabled} boolean</code>: <code>0</code> disables extended commands (default), <code>1</code> enables extended commands.</li>
+</ul>
 
 </div>
 <script src="jquery.min.js"></script>
