@@ -1,15 +1,17 @@
+import fastifyStatic from '@fastify/static';
 import delay from 'delay';
 import { ipcMain } from 'electron';
 import getPort from 'get-port';
 import { join } from 'path';
-import StaticServer from 'static-server';
+import fastify, { FastifyInstance } from 'fastify';
 import { IpcEvents, LogService } from 'uhk-common';
 
 const LOG_PREFIX = '[SmartMacroService]';
+
 export class SmartMacroDocService {
     private _isRunning = false;
     private port: number;
-    private staticServer: StaticServer;
+    private staticServer: FastifyInstance;
     private readonly rootPath: string;
 
     constructor(private logService: LogService,
@@ -22,35 +24,34 @@ export class SmartMacroDocService {
     public get isRunning(): boolean {
         return this._isRunning;
     }
+
     async start(): Promise<void> {
-        this.logService.misc(serviceLogMessage('starting...'));
+        try {
+            this.logService.misc(serviceLogMessage('starting...'));
 
-        this.port = await getPort();
-        const staticServerOptions = {
-            port: this.port,
-            rootPath: this.rootPath
-        };
-        this.staticServer = new StaticServer(staticServerOptions);
+            this.port = await getPort();
+            this.staticServer = fastify();
+            this.staticServer.register(fastifyStatic, {
+                root: this.rootPath,
+                prefix: '/'
+            });
+            await this.staticServer.listen({
+                port: this.port
+            });
+            this.logService.misc(serviceLogMessage(`started on ${this.port}.`));
+            this._isRunning = true;
 
-        return new Promise<void>((resolve, reject) => {
-            try {
-                this.staticServer.start(() => {
-                    this.logService.misc(serviceLogMessage(`started on ${this.port}.`));
-                    this._isRunning = true;
-                    resolve();
-                });
-            } catch (err) {
-                this.logService.error(serviceLogMessage(`can't be started on ${this.port}`), err);
+        } catch (err) {
+            this.logService.error(serviceLogMessage(`can't be started on ${this.port}`), err);
 
-                return reject(err);
-            }
-        });
+            throw err;
+        }
     }
 
     async stop(): Promise<void> {
         this.logService.misc(serviceLogMessage('stopping...'));
 
-        this.staticServer.stop();
+        await this.staticServer.close();
         this._isRunning = false;
 
         this.logService.misc(serviceLogMessage('stopped.'));
