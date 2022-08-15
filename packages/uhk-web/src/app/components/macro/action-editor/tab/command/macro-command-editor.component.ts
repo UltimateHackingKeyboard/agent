@@ -168,6 +168,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         editor.onDidFocusEditorText(()=> {
             this.isFocused = true;
             this.gotFocus.emit();
+            // To be sure the macro command doc got the latest edited macro command
+            this.smartMacroDocService.updateCommand(this.value);
         });
 
         this.lineHeight = this.editor.getOption(MONACO_EDITOR_LINE_HEIGHT_OPTION) as any;
@@ -189,7 +191,13 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             }).pipe(
                 debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
                 distinctUntilChanged()
-            ).subscribe(this.onChanged);
+            ).subscribe(data => {
+                // If the user modify the macro without saving then we update the macro text
+                if (this.isFocused) {
+                    this.smartMacroDocService.updateCommand(data);
+                }
+                this.onChanged(data);
+            });
         }
         this.changeObserver$.next(value);
     }
