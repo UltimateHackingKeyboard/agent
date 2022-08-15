@@ -61,6 +61,10 @@ export class SmartMacroDocService implements OnDestroy {
         this.dispatchMacroEditorFocusEvent();
     }
 
+    updateCommand(command: string): void {
+        this.dispatchMacroEditorFocusEvent(command);
+    }
+
     private dispatchStoreAction(action: Action) {
         this.logService.misc(`[SmartMacroDocService] dispatch action: ${action.type}`);
         this.zone.run(() => this.store.dispatch(action));
@@ -102,7 +106,7 @@ export class SmartMacroDocService implements OnDestroy {
         });
     }
 
-    private dispatchMacroEditorFocusEvent(): void {
+    private dispatchMacroEditorFocusEvent(command = ''): void {
         if (!this.iframe?.contentWindow) {
             return;
         }
@@ -114,9 +118,17 @@ export class SmartMacroDocService implements OnDestroy {
             version: '1.0.0'
         };
 
-        if (this.selectedMacroAction?.type === TabName.Command) {
+        if (command) {
+            message.action = 'agent-message-editor-got-focus';
+            message.command = command;
+        }
+        // it should be the 2nd condition otherwise the unchanged command will dispatch
+        else if (this.selectedMacroAction?.type === TabName.Command) {
             message.action = 'agent-message-editor-got-focus';
             message.command = (this.selectedMacroAction.macroAction as CommandMacroAction).command;
+        } else if (this.selectedMacroAction?.id === 'new') {
+            message.action = 'agent-message-editor-got-focus';
+            message.command = '';
         }
 
         this.iframe.contentWindow.postMessage(message, '*');
