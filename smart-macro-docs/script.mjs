@@ -229,6 +229,7 @@ const app = createApp({
     data() {
         return {
             modules: [],
+            isRunningInAgent: false,
             moduleStrings: {
                 2: 'keycluster',
                 3: 'trackball',
@@ -571,10 +572,17 @@ const app = createApp({
         const self = this;
         window.addEventListener('message', function(event) {
             switch (event.data.action) {
+                case 'agent-message-context': {
+                    const data = event.data;
+                    self.modules = data.modules;
+                    self.isRunningInAgent = data.isRunningInAgent;
+                    updateWidgets();
+                    break;
+                }
+
                 case 'agent-message-editor-got-focus': {
                     const data = event.data;
                     currentCommand = data.command;
-                    self.modules = data.modules;
                     updateWidgets();
                     break;
                 }
@@ -582,7 +590,6 @@ const app = createApp({
                 case 'agent-message-editor-lost-focus': {
                     const data = event.data;
                     currentCommand = '';
-                    self.modules = data.modules;
                     updateWidgets();
                     break;
                 }
@@ -620,6 +627,24 @@ const app = createApp({
             const scancode = this.scancode === '(none)' ? '' : this.scancode;
             return `${modifierMask}${separator}${scancode}`;
         }
+    },
+    mounted() {
+        const self = this;
+        function handleAnchorClick(event) {
+            if (self.isRunningInAgent) {
+                event.preventDefault();
+                const message = {
+                    action: 'doc-message-open-link',
+                    url: event.target.href
+                };
+                window.parent.postMessage(message, '*');
+            }
+        }
+        document
+            .querySelectorAll('a[target="_blank"]')
+            .forEach(element => {
+                element.addEventListener('click', handleAnchorClick)
+            })
     },
     computed: {
         rightModules() {
