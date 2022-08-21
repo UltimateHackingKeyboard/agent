@@ -6,9 +6,11 @@ import {
     Input,
     OnChanges,
     Output,
-    SimpleChanges
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -44,6 +46,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() showLayerSwitcherInSecondaryRoles: boolean;
 
     @Output() keyActionChange = new EventEmitter<KeystrokeAction>();
+    @ViewChild('scancodeSelect',  { static: true }) scancodeSelect: NgSelectComponent;
 
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
@@ -286,6 +289,12 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     modifiersTrackBy(index: number, modifier: KeyModifierModel): string {
         return `${modifier.value}${modifier.checked}`;
+    }
+
+    onScancodeOpen(): void {
+        setTimeout(()=> {
+            this.scancodeSelect.element.querySelector('input').select();
+        }, 10);
     }
 
     remapInfoChanged(remapInfo: RemapInfo): void {
