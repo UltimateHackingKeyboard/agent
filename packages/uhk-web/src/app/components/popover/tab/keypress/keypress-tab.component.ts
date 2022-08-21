@@ -294,6 +294,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     onScancodeOpen(): void {
         setTimeout(()=> {
             this.scancodeSelect.element.querySelector('input').select();
+            this.maximiseScancodeDropdownHeight();
         }, 10);
     }
 
@@ -399,6 +400,24 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             id: `${action}`,
             text: this.mapper.getSecondaryRoleText(action)
         };
+    }
+
+    private maximiseScancodeDropdownHeight(): void {
+        const MAX_HEIGHT_OFFSET = 20;
+        const scancodeSelectRec = this.scancodeSelect.element.getBoundingClientRect();
+        const dropdownPanel = this.scancodeSelect.element.querySelector('ng-dropdown-panel');
+        const dropdownPanelRec = dropdownPanel.getBoundingClientRect();
+        const dropdownPanelItems: HTMLDivElement = dropdownPanel.querySelector('.ng-dropdown-panel-items');
+        const placement = scancodeSelectRec.top > dropdownPanelRec.top ? 'top' : 'bottom';
+
+        let newHeight;
+        if (placement === 'top') {
+            newHeight = scancodeSelectRec.top - MAX_HEIGHT_OFFSET;
+        } else {
+            newHeight = window.innerHeight - scancodeSelectRec.bottom - MAX_HEIGHT_OFFSET;
+        }
+
+        dropdownPanelItems.style['max-height'] = `${newHeight}px`;
     }
 }
 
