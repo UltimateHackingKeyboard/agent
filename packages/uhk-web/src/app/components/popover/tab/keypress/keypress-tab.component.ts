@@ -117,6 +117,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.leftModifiers = event.left;
         this.rightModifiers = event.right;
         this.keyActionChanged();
+        this.scancodeSelect.searchTerm = this.selectedScancodeOption.text || '';
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
