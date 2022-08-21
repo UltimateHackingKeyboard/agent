@@ -405,16 +405,20 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     private maximiseScancodeDropdownHeight(): void {
         const MAX_HEIGHT_OFFSET = 20;
         const scancodeSelectRec = this.scancodeSelect.element.getBoundingClientRect();
-        const dropdownPanel = this.scancodeSelect.element.querySelector('ng-dropdown-panel');
-        const dropdownPanelRec = dropdownPanel.getBoundingClientRect();
+        const scancodeMiddle = scancodeSelectRec.top + scancodeSelectRec.height / 2;
+        const dropdownPanel: HTMLDivElement = this.scancodeSelect.element.querySelector('ng-dropdown-panel');
         const dropdownPanelItems: HTMLDivElement = dropdownPanel.querySelector('.ng-dropdown-panel-items');
-        const placement = scancodeSelectRec.top > dropdownPanelRec.top ? 'top' : 'bottom';
+        const placement = window.document.body.clientHeight / 2 < scancodeMiddle ? 'top' : 'bottom';
 
         let newHeight;
         if (placement === 'top') {
             newHeight = scancodeSelectRec.top - MAX_HEIGHT_OFFSET;
+            dropdownPanel.classList.add('ng-select-top');
+            dropdownPanel.classList.remove('ng-select-bottom');
         } else {
-            newHeight = window.innerHeight - scancodeSelectRec.bottom - MAX_HEIGHT_OFFSET;
+            newHeight = window.document.body.clientHeight - scancodeSelectRec.bottom - MAX_HEIGHT_OFFSET;
+            dropdownPanel.classList.remove('ng-select-top');
+            dropdownPanel.classList.add('ng-select-bottom');
         }
 
         dropdownPanelItems.style['max-height'] = `${newHeight}px`;
