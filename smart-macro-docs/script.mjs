@@ -71,7 +71,7 @@ const Checkbox = {
             }
 
             if (isInit !== true && this.name) {
-                setVariable(this.name, this.checked ? '0' : '1', isInit);
+                setVariable(this.name, this.checked ? '1' : '0', isInit);
             }
 
             this.$emit('update:modelValue', this.checked);
@@ -229,6 +229,7 @@ const app = createApp({
     data() {
         return {
             modules: [],
+            isRunningInAgent: false,
             moduleStrings: {
                 2: 'keycluster',
                 3: 'trackball',
@@ -248,14 +249,19 @@ const app = createApp({
                 {name:'speed', desc:'Speed', min:0, max:10, step:0.1,
                     perModuleDefaults: {3:0.5, 4:1.0, 5:0.7},
                 },
-                {name:'xceleration', desc:'Acceleration speed', min:0, max:1, step:0.1,
+                {name:'xceleration', desc:'Xceleration speed', min:0, max:1, step:0.1,
                     perModuleDefaults: {3:1.0, 4:0.0, 5:1.0},
                 },
+            ],
+            moduleDivisorProps: [
                 {name:'caretSpeedDivisor', desc:'Caret speed divisor', min:0, max:100, step:1,
                     perModuleDefaults: {3:16.0, 4:16.0, 5:16.0},
                 },
                 {name:'scrollSpeedDivisor', desc:'Scroll speed divisor', min:0, max:100, step:1,
                     perModuleDefaults: {3:8.0, 4:8.0, 5:8.0},
+                },
+                {name:'pinchZoomDivisor', desc:'Pinch-to-zoom divisor', min:0, max:10, step:1,
+                    perModuleDefaults: {5:4.0},
                 },
             ],
             axisLockSkewDefaults: {2:0.5, 3:0.5, 4:0.5, 5:0.5},
@@ -571,18 +577,23 @@ const app = createApp({
         const self = this;
         window.addEventListener('message', function(event) {
             switch (event.data.action) {
+                case 'agent-message-context': {
+                    const data = event.data;
+                    self.modules = data.modules;
+                    self.isRunningInAgent = data.isRunningInAgent;
+                    updateWidgets();
+                    break;
+                }
+
                 case 'agent-message-editor-got-focus': {
                     const data = event.data;
                     currentCommand = data.command;
-                    self.modules = data.modules;
                     updateWidgets();
                     break;
                 }
 
                 case 'agent-message-editor-lost-focus': {
-                    const data = event.data;
                     currentCommand = '';
-                    self.modules = data.modules;
                     updateWidgets();
                     break;
                 }
@@ -620,6 +631,24 @@ const app = createApp({
             const scancode = this.scancode === '(none)' ? '' : this.scancode;
             return `${modifierMask}${separator}${scancode}`;
         }
+    },
+    mounted() {
+        const self = this;
+        function handleAnchorClick(event) {
+            if (self.isRunningInAgent) {
+                event.preventDefault();
+                const message = {
+                    action: 'doc-message-open-link',
+                    url: event.target.href
+                };
+                window.parent.postMessage(message, '*');
+            }
+        }
+        document
+          .querySelectorAll('a[target="_blank"]')
+          .forEach(element => {
+              element.addEventListener('click', handleAnchorClick)
+          })
     },
     computed: {
         rightModules() {

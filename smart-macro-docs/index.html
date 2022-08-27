@@ -69,6 +69,12 @@
 
 <p>We recommend binding this command to a shortcut, such as <kbd>Fn</kbd> + <kbd>`</kbd>, for easy accessibility and triggering it in a text editor when encountering an error.</p>
 
+<h2>resetTrackpoint</h2>
+
+<p>The trackpoint module sometimes makes the mouse cursor drift. Drifting happens because the auto-calibration mechanism of the trackpoint hardware sometimes kicks in when resting a finger on the trackpoint for several seconds. This issue also affects IBM ThinkPad trackpoints, but given their position, they're not as affected by resting fingers as the UHK trackpoint module.</p>
+
+<p>Avoiding resting fingers on the trackpoint should make this a non-issue. Alternatively, this command resets the trackpoint and recovers it from drift conditions.</p>
+
 <h2>set</h2>
 
 <p>The <code>set</code> command sets variables that affect the behavior of the UHK and its modules. This command has many different parameters, which are explained below.</p>
@@ -86,8 +92,6 @@ Syntax is <code>set module.{module}.{property} {value}</code><br>
         <li><code>baseSpeed</code>: The speed multiplier part that always applies. <code>{value}</code> ranges from <code>0</code> to <code>10.0</code> and defaults to <code>0.5</code> for the trackball and touchpad and <code>0</code> for the touchpad.</li>
         <li><code>speed</code>: The speed multiplier part that is affected by <code>xceleration</code>. <code>{value}</code> ranges from <code>0</code> to <code>10.0</code> and defaults to <code>0.5</code> for the trackball, <code>1.0</code> for the trackpoint, and <code>0.7</code> for the touchpad.</li>
         <li><code>xceleration</code>: The acceleration/deceleration exponent. <code>{value}</code> ranges from <code>0</code> to <code>1.0</code>, defaults to <code>1</code> for the trackball and touchpad, and <code>0</code> for the trackpoint.</li>
-        <li><code>caretSpeedDivisor</code>: Divisor that affects the speed in caret mode. The higher the value, the slower the caret speed. <code>{value}</code> ranges from <code>1</code> to <code>100</code> and defaults to <code>16</code>.</li>
-        <li><code>ScrollSpeedDivisor</code>: Divisor that affects the speed in caret mode. The higher the value, the slower the scroll speed. <code>{value}</code> ranges from <code>1</code> to <code>100</code> and defaults to <code>8</code>.</li>
     </ul>
     <li><code>{value} float</code>: The range is dependent on <code>{property}</code>.</li>
 </li>
@@ -112,6 +116,42 @@ Syntax is <code>set module.{module}.{property} {value}</code><br>
 
 <img src="module-speed-diagram.svg">
 
+<h3>set &raquo; module speed divisors</h3>
+
+<p>Sets module speed divisors. These settings are not useful for the key cluster due to the limited resolution of its mini trackball.</p>
+
+Syntax is <code>set module.{module}.{property} {value}</code><br>
+
+<ul>
+<li><code>{module}</code> is of <code>keycluster</code>, <code>trackball</code>, <code>trackpoint</code>, <code>touchpad</code></li>
+<li><code>{property}</code> is of
+    <ul>
+
+        <li><code>caretSpeedDivisor</code>: Divisor that affects the speed in caret mode. The higher the value, the slower the caret speed. <code>{value}</code> ranges from <code>1</code> to <code>100</code> and defaults to <code>16</code>.</li>
+        <li><code>ScrollSpeedDivisor</code>: Divisor that affects the speed in caret mode. The higher the value, the slower the scroll speed. <code>{value}</code> ranges from <code>1</code> to <code>100</code> and defaults to <code>8</code>.</li>
+        <li><code>pinchZoomDivisor</code>: Touchpad-specific divisor that affects the sensitivity of the touchpad's pinch-to-zoom gesture. The higher the value, the larger gesture is needed for zooming. <code>{value}</code> ranges from <code>1</code> to <code>10</code> and defaults to <code>4</code>.</li>
+    </ul>
+    <li><code>{value} float</code>: The range is dependent on <code>{property}</code>.</li>
+</li>
+</ul>
+
+<table v-show="rightModules.length" class="table w-auto">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th v-for="module in rightModules" scope="col">{{moduleDescriptions[module]}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="speedProp in moduleDivisorProps">
+            <td>{{speedProp.desc}}</td>
+            <td v-for="module in rightModules" class="no-wrap">
+                <slider v-if="module === 5 || speedProp.name !== 'pinchZoomDivisor'" :name="`module.${moduleStrings[module]}.${speedProp.name}`" :min="speedProp.min" :default="speedProp.perModuleDefaults[module]" :max="speedProp.max" :step="speedProp.step"/>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 <h3>set &raquo; module axis locking</h3>
 
 <p>When first moving in a navigation mode with axis locking enabled, the axis is locked to one of the axes. The following variables define axis locking behavior.</p>
@@ -122,7 +162,8 @@ Syntax is <code>set module.{module}.{property} {value}</code><br>
 <li><code>{module}</code> is of <code>keycluster</code>, <code>trackball</code>, <code>trackpoint</code>, <code>touchpad</code></li>
 <li><code>{property}</code> is of
     <ul>
-        <li><code>{scrollAxisLock} boolean</code>: <code>0</code> disables scroll axis locking, <code>1</code> enables scroll axis locking. By default, axis locking is enabled in scroll and discreet modes for right-hand modules and scroll, caret, and media modes for the key cluster.</li>
+        <li><code>{scrollAxisLock} boolean</code>: <code>0</code> disables scroll axis locking, <code>1</code> (default) enables scroll axis locking.</li>
+        <li><code>{caretAxisLock} boolean</code>: <code>0</code> disables caret axis locking, <code>1</code> (default) enables caret axis locking.</li>
         <li><code>{axisLockFirstTickSkew} float of 0.5 to 2.0</code>: The first event produced when the axis is not yet locked can be adjusted as follows.
             <ul>
                 <li>Set <code>{value}</code> to <code>0.5</code> to require a stronger push at the beginning of a movement. Useful for the mini trackball to not produce an unwanted move event when trying just to click it. With this value, it will require two roll events to activate.</li>
@@ -148,6 +189,12 @@ Syntax is <code>set module.{module}.{property} {value}</code><br>
             <td>Scroll axis lock enabled</td>
             <td v-for="module in modules" class="no-wrap">
                 <checkbox :name="`module.${moduleStrings[module]}.scrollAxisLock`" default="1"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Caret axis lock enabled</td>
+            <td v-for="module in modules" class="no-wrap">
+                <checkbox :name="`module.${moduleStrings[module]}.caretAxisLock`" default="1"/>
             </td>
         </tr>
         <tr>
@@ -204,33 +251,13 @@ Syntax is <code>set module.{module}.swapAxes {value}</code><br>
 
 <p><checkbox id="module.keycluster.swapAxes" name="module.keycluster.swapAxes" default="0"></checkbox> <label for="module.keycluster.swapAxes">Swap the X and Y axes of the key cluster module's mini trackball</label></p>
 
-<h3>set &raquo; touchpad pinch-to-zoom divisor</h3>
-
-<p>Controls the sensitivity of the touchpad's pinch-to-zoom gesture.</p>
-
-Syntax is <code>set module.touchpad.pinchZoomDivisor {value}</code><br>
-<ul>
-    <li><code>{value} integer of 0 to 10, defaults to 4</code>: The higher the value, the larger gesture is needed for zooming.</li>
-</ul>
-
-<table v-show="isTouchpadAttached" class="table table-borderless w-auto">
-    <tbody>
-        <tr>
-            <td style="padding-left:0">Touchpad pinch-to-zoom divisor</td>
-            <td class="no-wrap">
-                <slider name="module.touchpad.pinchZoomDivisor" min="1" default="4" max="10" step="1"/>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
 <h3>set &raquo; touchpad pinch-to-zoom mode</h3>
 
 <p>Controls the behavior of the touchpad's pinch-to-zoom gesture.</p>
 
 Syntax is <code>set module.touchpad.pinchZoomMode {navigationMode}</code><br>
 <ul>
-    <li><code>{navigationMode}</code> is of <code>media</code>, <code>zoom</code>, <code>zoomPc</code>, <code>zoomMac</code>, <code>none</code>. The default <code>zoom</code> navigation mode usually works fine, but extra <kbd>+</kbd> and <kbd>-</kbd> characters may be displayed by some applications, in which case the more specific <code>zoomPc</code> or <code>zoomMac</code> mode should be used. The <code>media</code> navigation mode adjusts the volume. See <a href="#set-module-navigation-modes">set &raquo; module navigation modes</a> for more details.</li>
+    <li><code>{navigationMode}</code> is of <code>media</code>, <code>caret</code>, <code>zoom</code>, <code>zoomPc</code>, <code>zoomMac</code>, <code>none</code>. The default <code>zoom</code> navigation mode usually works fine, but extra <kbd>+</kbd> and <kbd>-</kbd> characters may be displayed by some applications, in which case the more specific <code>zoomPc</code> or <code>zoomMac</code> mode should be used. The <code>media</code> navigation mode adjusts the volume. See <a href="#set-module-navigation-modes">set &raquo; module navigation modes</a> for more details.</li>
 </ul>
 
 <table v-show="isTouchpadAttached" class="table table-borderless w-auto">
@@ -404,7 +431,7 @@ Syntax is <code>set mouseKeys.{mode}.{property} {floatValue}</code><br>
             <td>{{prop.desc}}</td>
             <td class="no-wrap">
                 <slider
-                    :name="`module.move.${prop.name}`"
+                    :name="`mouseKeys.move.${prop.name}`"
                     :min="prop.sliderProps.move.min"
                     :default="prop.sliderProps.move.default"
                     :max="prop.sliderProps.move.max"
@@ -413,7 +440,7 @@ Syntax is <code>set mouseKeys.{mode}.{property} {floatValue}</code><br>
             </td>
             <td class="no-wrap">
                 <slider
-                    :name="`module.scroll.${prop.name}`"
+                    :name="`mouseKeys.scroll.${prop.name}`"
                     :min="prop.sliderProps.scroll.min"
                     :default="prop.sliderProps.scroll.default"
                     :max="prop.sliderProps.scroll.max"
