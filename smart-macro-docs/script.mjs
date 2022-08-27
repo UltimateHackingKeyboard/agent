@@ -645,10 +645,10 @@ const app = createApp({
             }
         }
         document
-          .querySelectorAll('a[target="_blank"]')
-          .forEach(element => {
-              element.addEventListener('click', handleAnchorClick)
-          })
+            .querySelectorAll('a[target="_blank"]')
+            .forEach(element => {
+                element.addEventListener('click', handleAnchorClick)
+            })
     },
     computed: {
         rightModules() {

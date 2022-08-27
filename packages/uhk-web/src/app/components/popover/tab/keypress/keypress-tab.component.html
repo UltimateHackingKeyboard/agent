@@ -1,7 +1,8 @@
 <div class="scancode-options">
     <b class="setting-label mb-2">Scancode:</b>
     <div class="scancode-container">
-        <ng-select [addTag]="addTagFn.bind(this)"
+        <ng-select #scancodeSelect
+                   [addTag]="addTagFn.bind(this)"
                    [clearable]="false"
                    [editableSearchTerm]="true"
                    [items]="scanCodeGroups"
@@ -11,6 +12,7 @@
                    bindValue="id"
                    groupBy="group"
                    (ngModelChange)="onScancodeChange($event)"
+                   (open)="onScancodeOpen()"
         >
             <ng-template ng-option-tmp let-item="item">
                 <span>

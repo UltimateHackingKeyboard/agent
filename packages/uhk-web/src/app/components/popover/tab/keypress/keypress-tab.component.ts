@@ -6,9 +6,11 @@ import {
     Input,
     OnChanges,
     Output,
-    SimpleChanges
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
@@ -44,6 +46,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() showLayerSwitcherInSecondaryRoles: boolean;
 
     @Output() keyActionChange = new EventEmitter<KeystrokeAction>();
+    @ViewChild('scancodeSelect',  { static: true }) scancodeSelect: NgSelectComponent;
 
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
@@ -114,6 +117,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.leftModifiers = event.left;
         this.rightModifiers = event.right;
         this.keyActionChanged();
+        this.scancodeSelect.searchTerm = this.selectedScancodeOption.text || '';
     }
 
     fromKeyAction(keyAction: KeyAction): boolean {
@@ -288,6 +292,13 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         return `${modifier.value}${modifier.checked}`;
     }
 
+    onScancodeOpen(): void {
+        setTimeout(()=> {
+            this.scancodeSelect.element.querySelector('input').select();
+            this.maximiseScancodeDropdownHeight();
+        }, 10);
+    }
+
     remapInfoChanged(remapInfo: RemapInfo): void {
         this.remapInfo = remapInfo;
         const keystrokeAction = this.toKeyAction();
@@ -390,6 +401,28 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             id: `${action}`,
             text: this.mapper.getSecondaryRoleText(action)
         };
+    }
+
+    private maximiseScancodeDropdownHeight(): void {
+        const MAX_HEIGHT_OFFSET = 20;
+        const scancodeSelectRec = this.scancodeSelect.element.getBoundingClientRect();
+        const scancodeMiddle = scancodeSelectRec.top + scancodeSelectRec.height / 2;
+        const dropdownPanel: HTMLDivElement = this.scancodeSelect.element.querySelector('ng-dropdown-panel');
+        const dropdownPanelItems: HTMLDivElement = dropdownPanel.querySelector('.ng-dropdown-panel-items');
+        const placement = window.document.body.clientHeight / 2 < scancodeMiddle ? 'top' : 'bottom';
+
+        let newHeight;
+        if (placement === 'top') {
+            newHeight = scancodeSelectRec.top - MAX_HEIGHT_OFFSET;
+            dropdownPanel.classList.add('ng-select-top');
+            dropdownPanel.classList.remove('ng-select-bottom');
+        } else {
+            newHeight = window.document.body.clientHeight - scancodeSelectRec.bottom - MAX_HEIGHT_OFFSET;
+            dropdownPanel.classList.remove('ng-select-top');
+            dropdownPanel.classList.add('ng-select-bottom');
+        }
+
+        dropdownPanelItems.style['max-height'] = `${newHeight}px`;
     }
 }
 

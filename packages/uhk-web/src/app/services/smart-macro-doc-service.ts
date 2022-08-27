@@ -4,6 +4,7 @@ import { CommandMacroAction, LogService } from 'uhk-common';
 import { Subject, Subscription } from 'rxjs';
 
 import { AppState, getSelectedMacroAction, getSmartMacroDocModuleIds } from '../store';
+import { OpenUrlInNewWindowAction } from '../store/actions/app';
 import { SmdInitedAction } from '../store/actions/smart-macro-doc.action';
 import { SelectedMacroAction, SelectedMacroActionId, TabName } from '../models';
 
@@ -65,6 +66,18 @@ export class SmartMacroDocService implements OnDestroy {
         this.dispatchMacroEditorFocusEvent(command);
     }
 
+    /**
+     * Send message to the Smart Macro Doc.
+     * If the smart macro has not been initialised then the message will be dropped
+     */
+    sendMessage(message: any): void {
+        if (!this.iframe?.contentWindow) {
+            return;
+        }
+
+        this.iframe.contentWindow.postMessage(message, '*');
+    }
+
     private dispatchStoreAction(action: Action) {
         this.logService.misc(`[SmartMacroDocService] dispatch action: ${action.type}`);
         this.zone.run(() => this.store.dispatch(action));
@@ -88,6 +101,10 @@ export class SmartMacroDocService implements OnDestroy {
             case 'doc-message-set-macro':
                 return this.dispatchSmartMacroDocCommand(SmartMacroDocCommandAction.set, event.data.command);
 
+            case 'doc-message-open-link': {
+                return this.dispatchStoreAction(new OpenUrlInNewWindowAction(event.data.url));
+            }
+
             default: {
                 break;
             }
@@ -107,15 +124,9 @@ export class SmartMacroDocService implements OnDestroy {
     }
 
     private dispatchMacroEditorFocusEvent(command = ''): void {
-        if (!this.iframe?.contentWindow) {
-            return;
-        }
-
         const message = {
             action: 'agent-message-editor-lost-focus',
-            command: '',
-            modules: this.smartMacroDocModuleIds,
-            version: '1.0.0'
+            command: ''
         };
 
         if (command) {
@@ -131,6 +142,6 @@ export class SmartMacroDocService implements OnDestroy {
             message.command = '';
         }
 
-        this.iframe.contentWindow.postMessage(message, '*');
+        this.sendMessage(message);
     }
 }
