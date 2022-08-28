@@ -20,8 +20,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
+import { NON_ASCII_REGEXP } from '../../../../../util';
 
-const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
@@ -150,7 +150,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.isFocused = true;
         }
         editor.onKeyDown((event) => {
-            if (new RegExp(NON_ASCII_REGEXP).test(event.code)) {
+            if (new RegExp(NON_ASCII_REGEXP).test(event.browserEvent.key)) {
                 event.preventDefault();
                 event.stopPropagation();
             }
