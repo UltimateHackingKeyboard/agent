@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { TextMacroAction } from 'uhk-common';
 
-import { MacroBaseComponent } from '../macro-base.component';
+import { NON_ASCII_REGEXP } from '../../../../../util';
 
-const NON_ASCII_REGEXP = /[^\x00-\x7F]/g;
+import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
     selector: 'macro-text-tab',
