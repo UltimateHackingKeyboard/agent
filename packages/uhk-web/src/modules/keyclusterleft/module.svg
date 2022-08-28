@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1052.362" width="744.094" data-module-id="2">
-<rect id="key-1" x="34.921" y="877.929" ry="3.511" width="63.015" height="63.015" style="fill:#333"/>
-<rect id="key-2" x="1.189" y="944.447" ry="3.511" width="63.015" height="63.015" style="fill:#333"/>
-<rect id="key-3" transform="rotate(30)" height="63.015" width="63.015" ry="3.511" y="776.364" x="566.368" style="fill:#333"/>
+<rect id="key-1" x="34.921" y="877.929" ry="3.5107117" width="63.015" height="63.015" style="fill:#333"/>
+<rect id="key-2" x="1.189" y="944.447" ry="3.5107117" width="63.015" height="63.015" style="fill:#333"/>
+<rect id="key-3" transform="rotate(30)" height="63.015" width="63.015" ry="3.5107117" y="776.364" x="566.368" style="fill:#333"/>
 <g id="key-4" transform="translate(1, 1011)">
     <path id="key-4-path" d="M 76.792 11.204 C 77.776 9.501 77.193 7.324 75.489 6.34 L 65.023 0.298 C 64.482 -0.014 63.868 -0.179 63.243 -0.179 L 3.276 -0.179 C 1.31 -0.179 -0.284 1.415 -0.284 3.381 L -0.284 38.539 C -0.283 40.106 0.742 41.488 2.24 41.944 L 47.852 55.82 C 49.437 56.303 51.145 55.629 51.972 54.194 L 58.262 43.299 C 50.134 37.032 51.839 24.316 61.331 20.411 C 64.581 19.074 68.227 19.074 71.476 20.41 Z" style="fill:#333"></path>
     <rect id="key-4-print" ry="0" height="42.254" width="53.355" style="fill:none;stroke:none"></rect>
