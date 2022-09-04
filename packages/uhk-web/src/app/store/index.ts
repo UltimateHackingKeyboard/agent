@@ -2,7 +2,7 @@ import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
-import { Constants, UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
+import { Constants, FirmwareRepoInfo, UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
 
 import {
     ApplicationSettings,
@@ -179,6 +179,8 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
                 deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
                 hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
                 firmwareVersion: agentVersionInfo.firmwareVersion,
+                firmwareGitRepo: 'UltimateHackingKeyboard/firmware',
+                firmwareGitTag: 'master',
                 moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
                 userConfigVersion: agentVersionInfo.userConfigVersion
             }
@@ -188,6 +190,12 @@ export const getSmartMacroDocModuleIds = createSelector(getHardwareModules, (har
     return hardwareModules.moduleInfos
         .filter(moduleInfo => moduleInfo.module.id > 1)
         .map(moduleInfo => moduleInfo.module.id);
+});
+export const getRightModuleFirmwareRepoInfo = createSelector(getHardwareModules, (hardwareModules): FirmwareRepoInfo => {
+    return {
+        firmwareGitRepo: hardwareModules?.rightModuleInfo?.firmwareGitRepo || '',
+        firmwareGitTag: hardwareModules?.rightModuleInfo?.firmwareGitTag || '',
+    };
 });
 export const getBackupUserConfigurationState = createSelector(deviceState, fromDevice.getBackupUserConfigurationState);
 export const getRestoreUserConfiguration = createSelector(deviceState, fromDevice.getHasBackupUserConfiguration);

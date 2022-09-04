@@ -223,12 +223,17 @@ const Select2 = {
     }
 };
 
+const DEFAULT_FIRMWARE_REPO_INFO = {
+    firmwareGitRepo: 'UltimateHackingKeyboard/firmware',
+    firmwareGitTag: 'master',
+};
 // Init Vue
 
 const app = createApp({
     data() {
         return {
             modules: [],
+            firmwareRepoInfo: DEFAULT_FIRMWARE_REPO_INFO,
             isRunningInAgent: false,
             moduleStrings: {
                 2: 'keycluster',
@@ -580,6 +585,7 @@ const app = createApp({
                 case 'agent-message-context': {
                     const data = event.data;
                     self.modules = data.modules;
+                    self.firmwareRepoInfo = data.firmwareRepoInfo || DEFAULT_FIRMWARE_REPO_INFO;
                     self.isRunningInAgent = data.isRunningInAgent;
                     updateWidgets();
                     break;
