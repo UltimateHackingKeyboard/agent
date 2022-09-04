@@ -179,7 +179,7 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
                 deviceProtocolVersion: agentVersionInfo.deviceProtocolVersion,
                 hardwareConfigVersion: agentVersionInfo.hardwareConfigVersion,
                 firmwareVersion: agentVersionInfo.firmwareVersion,
-                firmwareGitRepo: 'UltimateHackingKeyboard/firmware',
+                firmwareGitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                 firmwareGitTag: 'master',
                 moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
                 userConfigVersion: agentVersionInfo.userConfigVersion
