@@ -360,7 +360,7 @@ export class DeviceService {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
-            const userConfig = JSON.parse(args[0]);
+            const userConfig = args[0];
             const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
