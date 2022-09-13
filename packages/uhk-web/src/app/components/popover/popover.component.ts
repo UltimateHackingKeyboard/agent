@@ -75,6 +75,7 @@ export class PopoverComponent implements OnChanges {
     @Input() remapInfo: RemapInfo;
     @Input() leftArrow: boolean = false;
     @Input() rightArrow: boolean = false;
+    @Input() secondaryRoleOptions: SelectOptionData[];
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyActionRemap>();

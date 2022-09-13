@@ -2,7 +2,7 @@ import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
-import { Constants, FirmwareRepoInfo, UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
+import { Constants, FirmwareRepoInfo, LayerName, UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
 
 import {
     ApplicationSettings,
@@ -100,6 +100,27 @@ export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMac
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
 export const getSelectedLayerOption = createSelector(userConfigState, fromUserConfig.getSelectedLayerOption);
 export const getLayerOptions = createSelector(userConfigState, fromUserConfig.getLayerOptions);
+export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, getLayerOptions,
+    (selectedLayer, layerOptions): SelectOptionData[] => {
+        if (selectedLayer?.id !== LayerName.base) {
+            return [];
+        }
+
+        const result: SelectOptionData[] = [];
+        for(const layerOption of layerOptions) {
+            if (layerOption.secondaryRole === undefined || !layerOption.selected) {
+                continue;
+            }
+
+            result.push({
+                id: `${layerOption.secondaryRole}`,
+                text: layerOption.name,
+            });
+        }
+
+        return result;
+    });
+
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
     return keymaps.map(keymap => {

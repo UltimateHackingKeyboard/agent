@@ -308,6 +308,7 @@ export function reducer(
 
         case KeymapActions.ActionTypes.RemoveLayer: {
             const deleteLayerId = (action as KeymapActions.AddLayerAction).payload;
+            const secondaryRole = state.layerOptions.get(deleteLayerId).secondaryRole;
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
 
@@ -323,6 +324,12 @@ export function reducer(
                                         return new NoneAction();
                                     }
 
+                                    if (keyAction instanceof KeystrokeAction && keyAction.secondaryRoleAction === secondaryRole) {
+                                        const newKeyAction = new KeystrokeAction(keyAction);
+                                        newKeyAction.secondaryRoleAction = undefined;
+
+                                        return newKeyAction;
+                                    }
                                     return keyAction;
                                 });
                             });

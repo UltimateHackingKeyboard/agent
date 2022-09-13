@@ -50,6 +50,7 @@ import {
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
 import { RemapInfo } from '../../../models/remap-info';
+import { SelectOptionData } from '../../../models/select-option-data';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { LastEditedKey, LayerOption } from '../../../models';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -104,6 +105,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() layerOptions: LayerOption[];
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
+    @Input() secondaryRoleOptions: SelectOptionData[];
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
     @Output() selectedLayerChanged = new EventEmitter<LayerOption>();

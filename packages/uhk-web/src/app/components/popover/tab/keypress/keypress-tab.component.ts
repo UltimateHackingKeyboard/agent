@@ -43,7 +43,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     @Input() secondaryRoleEnabled: boolean;
     @Input() allowRemapOnAllKeymapWarning: boolean;
     @Input() remapInfo: RemapInfo;
-    @Input() showLayerSwitcherInSecondaryRoles: boolean;
+    @Input() secondaryRoleOptions: SelectOptionData[];
 
     @Output() keyActionChange = new EventEmitter<KeystrokeAction>();
     @ViewChild('scancodeSelect',  { static: true }) scancodeSelect: NgSelectComponent;
@@ -92,7 +92,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.showLayerSwitcherInSecondaryRoles) {
+        if (changes.secondaryRoleOptions) {
             this.fillSecondaryRoles();
         }
         this.fromKeyAction(this.defaultKeyAction);
@@ -370,13 +370,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
             }
         ];
 
-        if (this.showLayerSwitcherInSecondaryRoles) {
+        if (this.secondaryRoleOptions.length > 0) {
             this.secondaryRoleGroups.push({
                 text: 'Layer switcher',
                 children: [
-                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.mod),
-                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.fn),
-                    this.getSecondaryRoleDropdownItem(SecondaryRoleAction.mouse)
+                    ...this.secondaryRoleOptions
                 ]
             });
         }
