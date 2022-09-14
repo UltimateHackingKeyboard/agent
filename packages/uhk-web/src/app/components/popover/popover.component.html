@@ -24,7 +24,7 @@
                       [secondaryRoleEnabled]="true"
                       [allowRemapOnAllKeymapWarning]="true"
                       [remapInfo]="remapInfo"
-                      [showLayerSwitcherInSecondaryRoles]="currentLayer?.id === 255"
+                      [secondaryRoleOptions]="secondaryRoleOptions"
                       (validAction)="setKeyActionValidState($event)"
                       (keyActionChange)="keystrokeActionChange($event)"
         ></keypress-tab>

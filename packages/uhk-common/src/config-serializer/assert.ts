@@ -60,6 +60,10 @@ export function assertEnum<E>(enumerated: E) {
         }
 
         function setter(newVal: any) {
+            if (newVal === undefined) {
+                this[priv] = newVal;
+            }
+
             if (this[priv] !== newVal) {
                 if (enumerated[newVal] === undefined) {
                     throw `${target.constructor.name}.${key}: ${newVal} is not enum`;

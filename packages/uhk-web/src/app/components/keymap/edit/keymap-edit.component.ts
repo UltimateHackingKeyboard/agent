@@ -16,12 +16,14 @@ import {
     lastEditedKey,
     getHalvesInfo,
     getLayerOptions,
+    getSecondaryRoleOptions,
     getSelectedLayerOption
 } from '../../../store';
 import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { EditDescriptionAction, SelectKeymapAction, SelectLayerAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { LastEditedKey, LayerOption } from '../../../models';
+import { SelectOptionData } from '../../../models/select-option-data';
 
 @Component({
     selector: 'keymap-edit',
@@ -43,6 +45,7 @@ export class KeymapEditComponent implements OnDestroy {
     halvesInfo$: Observable<HalvesInfo>;
     keymap: Keymap;
     layerOptions$: Observable<LayerOption[]>;
+    secondaryRoleOptions$: Observable<SelectOptionData[]>;
 
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
@@ -72,6 +75,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.lastEditedKey$ = store.select(lastEditedKey);
         this.halvesInfo$ = store.select(getHalvesInfo);
         this.layerOptions$ = this.store.select(getLayerOptions);
+        this.secondaryRoleOptions$ = this.store.select(getSecondaryRoleOptions);
     }
 
     ngOnDestroy(): void {

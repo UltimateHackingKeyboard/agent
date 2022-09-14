@@ -417,5 +417,9 @@ export class MapperService {
         this.secondaryRoleTexts.set(SecondaryRoleAction.mod, 'Mod');
         this.secondaryRoleTexts.set(SecondaryRoleAction.fn, 'Fn');
         this.secondaryRoleTexts.set(SecondaryRoleAction.mouse, 'Mouse');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.fn2, 'Fn2');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.fn3, 'Fn3');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.fn4, 'Fn4');
+        this.secondaryRoleTexts.set(SecondaryRoleAction.fn5, 'Fn5');
     }
 }
