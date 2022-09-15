@@ -172,8 +172,11 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     onSecondaryRoleChange(id: string) {
-        this.selectedSecondaryRoleIndex = +id;
-        this.keyActionChanged();
+        // setTimeout is a workaround of the ngx-select does not close the dropdown if you don't move the mouse
+        setTimeout(()=> {
+            this.selectedSecondaryRoleIndex = +id;
+            this.keyActionChanged();
+        },1);
     }
 
     onScancodeChange(id: string) {
