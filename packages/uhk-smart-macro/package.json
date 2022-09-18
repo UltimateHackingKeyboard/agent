@@ -1,0 +1,21 @@
+{
+  "name": "uhk-smart-macro",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Utility library to manage smart macro documentation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Ultimate Gadget Laboratories",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UltimateHackingKeyboard/agent.git"
+  },
+  "scripts": {
+    "build": "tsc --project ./src/tsconfig.json",
+    "lint": "eslint --ext .ts ."
+  },
+  "dependencies": {
+    "got": "12.4.1"
+  }
+}

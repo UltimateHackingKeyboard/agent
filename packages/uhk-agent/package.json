@@ -37,6 +37,7 @@
     "lint": "eslint --ext .ts .",
     "install:build-deps": "cd ./dist && npm i",
     "download-firmware": "node ../../scripts/download-firmware.js",
+    "download-smart-macro-doc": "node ../../scripts/download-smart-macro-doc.mjs",
     "copy-to-tmp-folder": "node ../../scripts/copy-to-tmp-folder.js",
     "webpack": "webpack"
   }
