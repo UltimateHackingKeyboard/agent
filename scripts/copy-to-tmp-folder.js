@@ -14,12 +14,6 @@ promises.push(
         path.join(__dirname, '../tmp/rules'),
         copyOptions)
 );
-promises.push(
-    fse.copy(
-        path.join(__dirname, '../smart-macro-docs'),
-        path.join(__dirname, '../tmp/smart-macro-docs'),
-        copyOptions)
-);
 
 Promise
     .all(promises)

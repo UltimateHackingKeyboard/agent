@@ -1,1 +1,2 @@
-export * from './get-git-tag-info.js';
+export * from './download-smart-macro-doc.js';
+export * from './get-commit-sha-of-git-tag.js';

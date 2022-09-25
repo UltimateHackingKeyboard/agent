@@ -13,9 +13,14 @@
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
+    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "coverage": "nyc npm test",
     "lint": "eslint --ext .ts ."
   },
   "dependencies": {
-    "got": "12.4.1"
+    "@octokit/rest": "19.0.4",
+    "fs-extra": "10.1.0",
+    "got": "12.5.0",
+    "url-join": "5.0.0"
   }
 }
