@@ -519,8 +519,6 @@ export class DeviceService {
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
-            } else {
-                savedState = undefined;
             }
 
             this._uhkDevicePolling = false;
