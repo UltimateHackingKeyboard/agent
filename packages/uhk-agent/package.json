@@ -18,7 +18,7 @@
     "decompress-bzip2": "4.0.0",
     "decompress-targz": "4.1.1",
     "delay": "5.0.0",
-    "fastify": "4.3.0",
+    "fastify": "4.6.0",
     "fs-extra": "10.1.0",
     "get-port": "6.1.2",
     "node-hid": "2.1.1",
@@ -39,7 +39,6 @@
     "lint": "eslint --ext .ts .",
     "install:build-deps": "cd ./dist && npm i",
     "download-firmware": "node ../../scripts/download-firmware.js",
-    "download-smart-macro-doc": "node ../../scripts/download-smart-macro-doc.mjs",
     "copy-to-tmp-folder": "node ../../scripts/copy-to-tmp-folder.js",
     "webpack": "webpack"
   }

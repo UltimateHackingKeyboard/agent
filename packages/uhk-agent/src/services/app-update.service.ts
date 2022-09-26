@@ -31,13 +31,13 @@ export class AppUpdateService extends MainServiceBase {
             this.sendIpcToWindow(IpcEvents.autoUpdater.checkingForUpdate);
         });
 
-        autoUpdater.on('update-available', async (ev: any, info: UpdateInfo) => {
+        autoUpdater.on('update-available', async (info: UpdateInfo) => {
             this.logService.misc('[AppUpdateService] update available. Downloading started');
             await autoUpdater.downloadUpdate();
             this.sendIpcToWindow(IpcEvents.autoUpdater.updateAvailable, info);
         });
 
-        autoUpdater.on('update-not-available', (ev: any, info: UpdateInfo) => {
+        autoUpdater.on('update-not-available', (info: UpdateInfo) => {
             if (this.sendAutoUpdateNotification) {
                 this.logService.misc('[AppUpdateService] update not available');
                 this.sendIpcToWindow(IpcEvents.autoUpdater.updateNotAvailable, info);
@@ -58,7 +58,7 @@ export class AppUpdateService extends MainServiceBase {
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloadProgress, progressObj);
         });
 
-        autoUpdater.on('update-downloaded', (ev: any, info: UpdateInfo) => {
+        autoUpdater.on('update-downloaded', (info: UpdateInfo) => {
             this.logService.misc('[AppUpdateService] update downloaded');
             this.sendIpcToWindow(IpcEvents.autoUpdater.autoUpdateDownloaded, info);
         });
