@@ -1,5 +1,6 @@
 export * from './backup-user-confoguration';
 export * from './command-line';
+export * from './get-smart-macro-doc-root-path';
 export * from './get-udev-file-content-async';
 export * from './get-updater-logger';
 export * from './get-user-config-from-history-async';

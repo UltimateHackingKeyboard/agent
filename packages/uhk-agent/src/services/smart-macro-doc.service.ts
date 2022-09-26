@@ -1,11 +1,13 @@
 import fastifyStatic from '@fastify/static';
-import { app, ipcMain } from 'electron';
+import { ipcMain } from 'electron';
 import fse from 'fs-extra';
 import getPort from 'get-port';
 import { join } from 'path';
 import fastify, { FastifyInstance } from 'fastify';
 import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
 import { downloadSmartMacroDoc } from 'uhk-smart-macro';
+
+import { getSmartMacroDocRootPath } from '../util';
 
 const LOG_PREFIX = '[SmartMacroService]';
 
@@ -17,7 +19,7 @@ export class SmartMacroDocService {
 
     constructor(private logService: LogService,
                 private rootDir: string) {
-        this.rootPath = join(app.getPath('userData'), 'smart-macro-docs');
+        this.rootPath = getSmartMacroDocRootPath();
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
         ipcMain.on(IpcEvents.smartMacroDoc.downloadDocumentation, this.handleDownloadDocumentation.bind(this));
     }

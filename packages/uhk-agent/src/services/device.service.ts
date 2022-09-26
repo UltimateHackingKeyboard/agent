@@ -37,7 +37,7 @@ import {
     usbDeviceJsonFormatter,
     waitForDevice
 } from 'uhk-usb';
-import { emptyDir } from 'fs-extra';
+import { emptyDir, copy } from 'fs-extra';
 import * as path from 'path';
 import * as fs from 'fs';
 import os from 'os';
@@ -46,6 +46,7 @@ import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
     getBackupUserConfigurationContent,
+    getSmartMacroDocRootPath,
     getUserConfigFromHistoryAsync,
     loadUserConfigHistoryAsync,
     saveTmpFirmware,
@@ -335,8 +336,9 @@ export class DeviceService {
                 }
             }
 
-            response.success = true;
             response.modules = await this.getHardwareModules(false);
+            await this.copySmartMacroDocOfUpgradedFirmware(firmwarePathData, response.modules);
+            response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
@@ -385,6 +387,7 @@ export class DeviceService {
             await this.operations.saveUserConfiguration(buffer);
 
             response.modules = await this.getHardwareModules(false);
+            await this.copySmartMacroDocOfUpgradedFirmware(firmwarePathData, response.modules);
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
@@ -481,6 +484,27 @@ export class DeviceService {
                 await snooze(100);
             }
         });
+    }
+
+    private async copySmartMacroDocOfUpgradedFirmware(firmwarePathData: TmpFirmware, hardwareModules: HardwareModules): Promise<void> {
+        this.logService.misc('[DeviceService] start copy firmware smart macro doc');
+
+        const smartMacroDocFirmwarePath = path.join(firmwarePathData.tmpDirectory, 'doc');
+        if(!fs.existsSync(smartMacroDocFirmwarePath)) {
+            this.logService.misc('[DeviceService] firmware does not contains smart macro doc directory');
+            return;
+        }
+
+        if (!hardwareModules.rightModuleInfo?.firmwareGitRepo) {
+            this.logService.misc('[DeviceService] firmware does not contains firmware git repo information');
+            return;
+        }
+
+        const [owner, repo] = hardwareModules.rightModuleInfo.firmwareGitRepo.split('/');
+        const downloadDirectory = path.join(getSmartMacroDocRootPath(), owner, repo, hardwareModules.rightModuleInfo.firmwareGitTag);
+
+        await copy(smartMacroDocFirmwarePath, downloadDirectory);
+        this.logService.misc('[DeviceService] end copy firmware smart macro doc');
     }
 
     /**
