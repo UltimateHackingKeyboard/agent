@@ -6,23 +6,23 @@ import { findDirShaFromTree } from './find-tree-sha-from-tree.js';
 export interface DownloadSmartMacroDocOptions {
     owner: string;
     repo: string;
-    commitSha: string;
+    ref: string;
     directory: string;
 }
 
 export async function downloadSmartMacroDoc(options: DownloadSmartMacroDocOptions): Promise<void> {
     const octokit = new Octokit();
 
-    const commitInfo = await octokit.git.getCommit({
+    const commitInfo = await octokit.repos.getCommit({
         owner: options.owner,
         repo: options.repo,
-        commit_sha: options.commitSha
+        ref: options.ref
     });
 
     const docDirSha = await findDirShaFromTree({
         owner: options.owner,
         repo: options.repo,
-        sha: commitInfo.data.tree.sha,
+        sha: commitInfo.data.commit.tree.sha,
         dir: 'doc'
     });
 
@@ -34,7 +34,7 @@ export async function downloadSmartMacroDoc(options: DownloadSmartMacroDocOption
     });
 
     await downloadTreeToFolder({
-        commitSha: options.commitSha,
+        commitSha: options.ref,
         owner: options.owner,
         repo: options.repo,
         treeSha: docDistDirSha,

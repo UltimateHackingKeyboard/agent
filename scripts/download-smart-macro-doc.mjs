@@ -1,7 +1,7 @@
 import * as desm from 'desm';
 import fse from 'fs-extra';
 
-import {downloadSmartMacroDoc, getCommitShaOfGitTag} from '../packages/uhk-smart-macro/dist/index.js';
+import {downloadSmartMacroDoc, getCommitShortShaOfGitRef} from '../packages/uhk-smart-macro/dist/index.js';
 import {UHK_OFFICIAL_FIRMWARE_REPO} from '../packages/uhk-common/dist/index.js';
 
 async function readPackageInfo() {
@@ -13,10 +13,10 @@ async function readPackageInfo() {
 (async function main() {
     const packageJson = await readPackageInfo();
     const [owner, repo] = UHK_OFFICIAL_FIRMWARE_REPO.split('/')
-    const gitCommitSha = await getCommitShaOfGitTag({
+    const gitCommitSha = await getCommitShortShaOfGitRef({
         owner,
         repo,
-        tag: `v${packageJson.firmwareVersion}`
+        ref: `v${packageJson.firmwareVersion}`
     });
     const smartMacroTmpDir = desm.join(import.meta.url, '..', 'tmp', 'smart-macro-docs', owner, repo, gitCommitSha);
 
@@ -25,7 +25,7 @@ async function readPackageInfo() {
         await downloadSmartMacroDoc({
             owner,
             repo,
-            commitSha: gitCommitSha,
+            ref: gitCommitSha,
             directory: smartMacroTmpDir
         })
     }

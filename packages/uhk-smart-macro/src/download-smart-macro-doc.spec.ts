@@ -13,7 +13,7 @@ describe('downloadSmartMacroDoc', () => {
         await downloadSmartMacroDoc({
             owner: 'UltimateHackingKeyboard',
             repo: 'firmware',
-            commitSha: '885a92a0d6b730fcb74ac7fd7c256d10ab215750',
+            ref: '885a92a',
             directory
         });
 

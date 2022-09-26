@@ -73,7 +73,8 @@ export class SmartMacroDocService {
         event.sender.send(IpcEvents.smartMacroDoc.serviceListening, this.port);
     }
 
-    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, firmwareRepoInfo: FirmwareRepoInfo): Promise<void> {
+    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        const firmwareRepoInfo: FirmwareRepoInfo = args[0];
         this.logService.misc(serviceLogMessage('start download firmware documentation'), firmwareRepoInfo);
         const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
         const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);
@@ -82,7 +83,7 @@ export class SmartMacroDocService {
             await downloadSmartMacroDoc({
                 owner,
                 repo,
-                commitSha: firmwareRepoInfo.firmwareGitTag,
+                ref: firmwareRepoInfo.firmwareGitTag,
                 directory: downloadDirectory
             });
         }
