@@ -37,16 +37,15 @@ import {
     usbDeviceJsonFormatter,
     waitForDevice
 } from 'uhk-usb';
-import { emptyDir, copy } from 'fs-extra';
-import * as path from 'path';
-import * as fs from 'fs';
+import { emptyDir } from 'fs-extra';
 import os from 'os';
 
 import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
+    copySmartMacroDocToWebserver,
     getBackupUserConfigurationContent,
-    getSmartMacroDocRootPath,
+    getDefaultFirmwarePath,
     getUserConfigFromHistoryAsync,
     loadUserConfigHistoryAsync,
     saveTmpFirmware,
@@ -261,7 +260,7 @@ export class DeviceService {
         try {
             firmwarePathData = data.uploadFile
                 ? await saveTmpFirmware(data.uploadFile)
-                : this.getDefaultFirmwarePathData();
+                : getDefaultFirmwarePath(this.rootDir);
 
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             this.logService.misc(`[DeviceService] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
@@ -337,7 +336,7 @@ export class DeviceService {
             }
 
             response.modules = await this.getHardwareModules(false);
-            await this.copySmartMacroDocOfUpgradedFirmware(firmwarePathData, response.modules);
+            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
@@ -363,7 +362,7 @@ export class DeviceService {
 
         try {
             const userConfig = args[0];
-            const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
+            const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
@@ -387,7 +386,7 @@ export class DeviceService {
             await this.operations.saveUserConfiguration(buffer);
 
             response.modules = await this.getHardwareModules(false);
-            await this.copySmartMacroDocOfUpgradedFirmware(firmwarePathData, response.modules);
+            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
@@ -410,7 +409,7 @@ export class DeviceService {
         const moduleId: number = args[0];
 
         try {
-            const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
+            const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
@@ -486,27 +485,6 @@ export class DeviceService {
         });
     }
 
-    private async copySmartMacroDocOfUpgradedFirmware(firmwarePathData: TmpFirmware, hardwareModules: HardwareModules): Promise<void> {
-        this.logService.misc('[DeviceService] start copy firmware smart macro doc');
-
-        const smartMacroDocFirmwarePath = path.join(firmwarePathData.tmpDirectory, 'doc');
-        if(!fs.existsSync(smartMacroDocFirmwarePath)) {
-            this.logService.misc('[DeviceService] firmware does not contains smart macro doc directory');
-            return;
-        }
-
-        if (!hardwareModules.rightModuleInfo?.firmwareGitRepo) {
-            this.logService.misc('[DeviceService] firmware does not contains firmware git repo information');
-            return;
-        }
-
-        const [owner, repo] = hardwareModules.rightModuleInfo.firmwareGitRepo.split('/');
-        const downloadDirectory = path.join(getSmartMacroDocRootPath(), owner, repo, hardwareModules.rightModuleInfo.firmwareGitTag);
-
-        await copy(smartMacroDocFirmwarePath, downloadDirectory);
-        this.logService.misc('[DeviceService] end copy firmware smart macro doc');
-    }
-
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
@@ -579,23 +557,6 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
 
         return Promise.resolve();
-    }
-
-    private getDefaultFirmwarePathData(): TmpFirmware {
-        return {
-            packageJsonPath: this.getPackageJsonFirmwarePath(),
-            tmpDirectory: path.join(this.rootDir, 'packages/firmware')
-        };
-    }
-
-    private getPackageJsonFirmwarePath(): string {
-        const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
-
-        if (fs.existsSync(packageJsonPath)) {
-            return packageJsonPath;
-        }
-
-        throw new Error(`Could not found package.json of firmware ${packageJsonPath}`);
     }
 
     private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]): Promise<void> {

@@ -7,7 +7,12 @@ import fastify, { FastifyInstance } from 'fastify';
 import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
 import { downloadSmartMacroDoc } from 'uhk-smart-macro';
 
-import { getSmartMacroDocRootPath } from '../util';
+import {
+    copySmartMacroDocToWebserver,
+    copySmartMacroLoadingHtml,
+    getDefaultFirmwarePath,
+    getSmartMacroDocRootPath
+} from '../util';
 
 const LOG_PREFIX = '[SmartMacroService]';
 
@@ -31,14 +36,9 @@ export class SmartMacroDocService {
     async start(): Promise<void> {
         try {
             this.logService.misc(serviceLogMessage('starting...'));
-            const bundledSmartMacroDir = join(this.rootDir, 'smart-macro-docs');
-
-            this.logService.misc(serviceLogMessage('copy bundled smart macro documentation'), {
-                bundledSmartMacroDir,
-                rootPath: this.rootPath
-            });
-            await fse.copy(bundledSmartMacroDir, this.rootPath);
-
+            const firmwarePathData = getDefaultFirmwarePath(this.rootDir);
+            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+            await copySmartMacroLoadingHtml(this.rootDir, this.logService);
             this.logService.misc(serviceLogMessage('get free TCP port'));
             this.port = await getPort();
             this.logService.misc(serviceLogMessage(`acquired TCP port: ${this.port}`));

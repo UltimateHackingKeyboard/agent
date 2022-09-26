@@ -19,4 +19,8 @@ export interface FirmwareJson {
     hardwareConfigVersion: string;
     devices: Array<FirmwareJsonDevice>;
     modules: Array<FirmwareJsonModule>;
+    gitInfo?: {
+        repo: string;
+        tag: string;
+    }
 }

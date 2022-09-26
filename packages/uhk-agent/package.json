@@ -34,7 +34,7 @@
   "scripts": {
     "start": "cross-env DEBUG=kboot* electron ./dist/electron-main.js",
     "electron:spe": "electron ./dist/electron-main.js --spe",
-    "build": "webpack && npm run install:build-deps && npm run download-firmware && npm run download-smart-macro-doc && npm run copy-to-tmp-folder",
+    "build": "webpack && npm run install:build-deps && npm run download-firmware && npm run copy-to-tmp-folder",
     "clean": "rimraf ./node_modules ./dist",
     "lint": "eslint --ext .ts .",
     "install:build-deps": "cd ./dist && npm i",
