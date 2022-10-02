@@ -53,7 +53,7 @@
     "@ngrx/store-devtools": "13.1.0",
     "@perfectmemory/ngx-contextmenu": "7.0.1",
     "angular-confirmation-popover": "6.0.0",
-    "angular-notifier": "9.1.0",
+    "angular-notifier": "11.0.0",
     "angular-split": "13.1.0",
     "bootstrap": "4.6.0",
     "dragula": "3.7.3",
