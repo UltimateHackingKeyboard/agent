@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable } from 'rxjs';
 import { tap, withLatestFrom } from 'rxjs/operators';
 import { FirmwareRepoInfo } from 'uhk-common';
 
@@ -14,10 +13,11 @@ import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds } f
 @Injectable()
 export class SmartMacroDocEffect {
 
-    @Effect({ dispatch: false }) appStart$: Observable<Action> = this.actions$
+    @Effect({ dispatch: false }) smartMacroTogglePanelVisibility$ = this.actions$
         .pipe(
             ofType(ActionTypes.TogglePanelVisibility),
-            tap(() => this.smartMacroDocRendererService.downloadDocumentation())
+            withLatestFrom(this.store.select(getRightModuleFirmwareRepoInfo)),
+            tap(([, firmwareRepoInfo]) => this.smartMacroDocRendererService.downloadDocumentation(firmwareRepoInfo))
         );
 
     @Effect({ dispatch: false }) smartMacroDocInited$ = this.actions$

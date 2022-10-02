@@ -1,10 +1,18 @@
 import fastifyStatic from '@fastify/static';
-import delay from 'delay';
 import { ipcMain } from 'electron';
+import fse from 'fs-extra';
 import getPort from 'get-port';
 import { join } from 'path';
 import fastify, { FastifyInstance } from 'fastify';
-import { IpcEvents, LogService } from 'uhk-common';
+import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
+import { downloadSmartMacroDoc } from 'uhk-smart-macro';
+
+import {
+    copySmartMacroDocToWebserver,
+    copySmartMacroLoadingHtml,
+    getDefaultFirmwarePath,
+    getSmartMacroDocRootPath
+} from '../util';
 
 const LOG_PREFIX = '[SmartMacroService]';
 
@@ -16,7 +24,7 @@ export class SmartMacroDocService {
 
     constructor(private logService: LogService,
                 private rootDir: string) {
-        this.rootPath = join(this.rootDir, 'smart-macro-docs');
+        this.rootPath = getSmartMacroDocRootPath();
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
         ipcMain.on(IpcEvents.smartMacroDoc.downloadDocumentation, this.handleDownloadDocumentation.bind(this));
     }
@@ -28,8 +36,12 @@ export class SmartMacroDocService {
     async start(): Promise<void> {
         try {
             this.logService.misc(serviceLogMessage('starting...'));
-
+            const firmwarePathData = getDefaultFirmwarePath(this.rootDir);
+            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+            await copySmartMacroLoadingHtml(this.rootDir, this.logService);
+            this.logService.misc(serviceLogMessage('get free TCP port'));
             this.port = await getPort();
+            this.logService.misc(serviceLogMessage(`acquired TCP port: ${this.port}`));
             this.staticServer = fastify();
             this.staticServer.register(fastifyStatic, {
                 root: this.rootPath,
@@ -63,11 +75,21 @@ export class SmartMacroDocService {
         event.sender.send(IpcEvents.smartMacroDoc.serviceListening, this.port);
     }
 
-    private async handleDownloadDocumentation(event: Electron.IpcMainEvent): Promise<void> {
-        this.logService.misc(serviceLogMessage('start download firmware documentation'));
+    private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        const firmwareRepoInfo: FirmwareRepoInfo = args[0];
+        this.logService.misc(serviceLogMessage('start download firmware documentation'), firmwareRepoInfo);
+        const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
+        const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);
 
-        await delay(250);
-        // TODO: Implement download not bundled doc
+        if (!await fse.pathExists(downloadDirectory)) {
+            await downloadSmartMacroDoc({
+                owner,
+                repo,
+                ref: firmwareRepoInfo.firmwareGitTag,
+                directory: downloadDirectory
+            });
+        }
+
         this.logService.misc(serviceLogMessage('firmware documentation downloaded'));
         event.sender.send(IpcEvents.smartMacroDoc.downloadDocumentationReply);
     }
