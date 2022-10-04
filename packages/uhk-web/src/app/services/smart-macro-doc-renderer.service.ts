@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { IpcEvents, LogService } from 'uhk-common';
+import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
 
 import { AppState } from '../store';
 import { DownloadDocumentationSuccessAction, ServiceListeningAction } from '../store/actions/smart-macro-doc.action';
@@ -16,9 +16,9 @@ export class SmartMacroDocRendererService {
         this.logService.misc('[SmartMacroDocRendererService] init success');
     }
 
-    public downloadDocumentation(): void {
+    public downloadDocumentation(firmwareRepoInfo: FirmwareRepoInfo): void {
         this.logService.misc('[SmartMacroDocRendererService] downloadDocumentation');
-        this.ipcRenderer.send(IpcEvents.smartMacroDoc.downloadDocumentation);
+        this.ipcRenderer.send(IpcEvents.smartMacroDoc.downloadDocumentation, firmwareRepoInfo);
     }
 
     private registerEvents(): void {

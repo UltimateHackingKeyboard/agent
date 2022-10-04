@@ -517,12 +517,14 @@ export const getSelectedLayerOptionAddKeymap = createSelector(
     defaultUserConfigState, fromDefaultUserConfig.getSelectedLayerOption);
 
 export const smartMacroDocState = (state: AppState) => state.smartMacroDoc;
-export const getSmartMacroDocUrl = createSelector(smartMacroDocState, fromSmartMacroDoc.getSmartMacroDocUrl);
 export const selectSmartMacroDocUrl = createSelector(
-    runningInElectron, getSmartMacroDocUrl,
-    (isRunningInElectron, smartMacroDocUrl) => {
+    runningInElectron, smartMacroDocState, getRightModuleFirmwareRepoInfo,
+    (isRunningInElectron, smartMacroState, firmwareRepoInfo) => {
         if (isRunningInElectron) {
-            return smartMacroDocUrl;
+            if (smartMacroState.firmwareDocState === fromSmartMacroDoc.FirmwareDocState.Loaded)
+                return `http://127.0.0.1:${smartMacroState.port}/${firmwareRepoInfo.firmwareGitRepo}/${firmwareRepoInfo.firmwareGitTag}/index.html`;
+
+            return `http://127.0.0.1:${smartMacroState.port}/loading.html`;
         }
 
         // Base64 encoded version of the lorem-ipsum.html

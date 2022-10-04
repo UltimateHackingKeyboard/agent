@@ -38,14 +38,14 @@ import {
     waitForDevice
 } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
-import * as path from 'path';
-import * as fs from 'fs';
 import os from 'os';
 
 import { QueueManager } from './queue-manager';
 import {
     backupUserConfiguration,
+    copySmartMacroDocToWebserver,
     getBackupUserConfigurationContent,
+    getDefaultFirmwarePath,
     getUserConfigFromHistoryAsync,
     loadUserConfigHistoryAsync,
     saveTmpFirmware,
@@ -260,7 +260,7 @@ export class DeviceService {
         try {
             firmwarePathData = data.uploadFile
                 ? await saveTmpFirmware(data.uploadFile)
-                : this.getDefaultFirmwarePathData();
+                : getDefaultFirmwarePath(this.rootDir);
 
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             this.logService.misc(`[DeviceService] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
@@ -335,8 +335,9 @@ export class DeviceService {
                 }
             }
 
-            response.success = true;
             response.modules = await this.getHardwareModules(false);
+            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+            response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
@@ -361,7 +362,7 @@ export class DeviceService {
 
         try {
             const userConfig = args[0];
-            const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
+            const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
@@ -385,6 +386,7 @@ export class DeviceService {
             await this.operations.saveUserConfiguration(buffer);
 
             response.modules = await this.getHardwareModules(false);
+            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
@@ -407,7 +409,7 @@ export class DeviceService {
         const moduleId: number = args[0];
 
         try {
-            const firmwarePathData: TmpFirmware = this.getDefaultFirmwarePathData();
+            const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
@@ -555,23 +557,6 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.saveUserConfigurationReply, response);
 
         return Promise.resolve();
-    }
-
-    private getDefaultFirmwarePathData(): TmpFirmware {
-        return {
-            packageJsonPath: this.getPackageJsonFirmwarePath(),
-            tmpDirectory: path.join(this.rootDir, 'packages/firmware')
-        };
-    }
-
-    private getPackageJsonFirmwarePath(): string {
-        const packageJsonPath = path.join(this.rootDir, 'packages/firmware/package.json');
-
-        if (fs.existsSync(packageJsonPath)) {
-            return packageJsonPath;
-        }
-
-        throw new Error(`Could not found package.json of firmware ${packageJsonPath}`);
     }
 
     private async getUserConfigFromHistory(event: Electron.IpcMainEvent, [filename]): Promise<void> {
