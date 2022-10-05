@@ -3,6 +3,6 @@
         [disabled]="state.showProgress">
     <fa-icon *ngIf="state.showProgress"
              [icon]="faSpinner"
-             spin="true"></fa-icon>
+             [spin]="true"></fa-icon>
     {{state.text}}
 </button>
