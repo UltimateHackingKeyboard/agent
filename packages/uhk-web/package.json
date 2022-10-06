@@ -74,13 +74,13 @@
     "protractor": "7.0.0",
     "rxjs": "6.6.7",
     "semver": "7.3.6",
-    "ts-keycode-enum": "^1.0.6",
+    "ts-keycode-enum": "1.0.6",
     "uhk-common": "1.0.0",
     "xml-loader": "1.2.1",
     "zone.js": "0.11.5"
   },
   "dependencies": {
     "file-saver": "2.0.2",
-    "spacing-bootstrap-3": "^1.0.0"
+    "spacing-bootstrap-3": "1.0.2"
   }
 }
