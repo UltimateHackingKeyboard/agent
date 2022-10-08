@@ -112,7 +112,9 @@ export function reducer(state = initialState, action: Action): State {
                             ...module,
                             state: ModuleFirmwareUpgradeStates.Success,
                             newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                            currentFirmwareVersion: state.firmwareJson?.firmwareVersion
+                            currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                            gitRepo: state.firmwareJson?.gitInfo?.repo,
+                            gitTag: state.firmwareJson?.gitInfo?.tag,
                         };
                     }
 
