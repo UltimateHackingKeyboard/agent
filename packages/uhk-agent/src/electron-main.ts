@@ -5,6 +5,11 @@ import { app, BrowserWindow, systemPreferences } from 'electron';
 import setElectronSettingsConfig from './set-electron-settings-config';
 setElectronSettingsConfig();
 
+// If the preferred reduced motion is ON then the font awesome icons don't spin.
+// For some reason the reduced motion accessibility feature is on Laci's machine
+// we could not switch off because we don't find the setting in the config files
+// We switch off this feature in Agent. If someone complain about it then
+// we will implement a more sophisticated solution.
 systemPreferences.getAnimationSettings().prefersReducedMotion = false;
 
 import * as path from 'path';

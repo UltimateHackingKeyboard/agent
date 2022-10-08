@@ -28,7 +28,7 @@ import { ForceUpdateAction } from '../store/actions/app-update.action';
                 Update Agent
                 <fa-icon *ngIf="isForceUpdate"
                          [icon]="faSpinner"
-                         [spin]="true"></fa-icon>
+                         spin="true"></fa-icon>
             </button>
         </div>
     `,
