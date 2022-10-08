@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { faCheck, faExclamation, faLongArrowAltRight, faSlidersH, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { Constants, UhkModule, VersionInformation } from 'uhk-common';
+import { Constants, FirmwareUpgradeFailReason, UhkModule, VersionInformation } from 'uhk-common';
 
 import {
     AppState,
@@ -38,6 +38,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
 
     firmwareGithubIssueUrl: string;
     firmwareUpgradeFailed: boolean;
+    firmwareUpgradeFailReasons = FirmwareUpgradeFailReason;
     firmwareUpgradeSuccess: boolean;
     upgradeType: string;
 

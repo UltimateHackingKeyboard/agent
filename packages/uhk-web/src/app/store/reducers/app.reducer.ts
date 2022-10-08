@@ -2,6 +2,7 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
     AppTheme,
     CommandLineArgs,
+    disableAgentUpgradeProtection,
     HardwareConfiguration,
     Notification,
     NotificationType,
@@ -210,7 +211,7 @@ export function reducer(
 }
 
 export const showAddonMenu = (state: State) => state.commandLineArgs.modules;
-export const disableUpdateAgentPage = (state: State) => !!state.commandLineArgs['disable-agent-update-screen'];
+export const disableUpdateAgentProtection = (state: State) => disableAgentUpgradeProtection(state.commandLineArgs);
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;

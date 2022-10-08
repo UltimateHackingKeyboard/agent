@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import {
     FirmwareJson,
+    FirmwareUpgradeFailReason,
     HardwareModules,
     isOfficialUhkFirmware,
     ModuleInfo,
@@ -50,6 +51,7 @@ export interface State {
     showForceFirmwareUpgradeWith: boolean;
     upgradeState: FirmwareUpgradeStates;
     upgradedModule: boolean;
+    failReason?: FirmwareUpgradeFailReason
 }
 
 export const initialState: State = {
@@ -131,7 +133,8 @@ export function reducer(state = initialState, action: Action): State {
                     : FirmwareUpgradeStates.Started,
                 upgradedModule: false,
                 showForceFirmwareUpgrade: false,
-                showForceFirmwareUpgradeWith: false
+                showForceFirmwareUpgradeWith: false,
+                failReason: undefined
             };
 
         case Device.ActionTypes.UpdateFirmwareWith:
@@ -143,7 +146,8 @@ export function reducer(state = initialState, action: Action): State {
                     : FirmwareUpgradeStates.StartedWith,
                 upgradedModule: false,
                 showForceFirmwareUpgrade: false,
-                showForceFirmwareUpgradeWith: false
+                showForceFirmwareUpgradeWith: false,
+                failReason: undefined
             };
 
         case Device.ActionTypes.UpdateFirmwareSuccess:
@@ -203,6 +207,14 @@ export function reducer(state = initialState, action: Action): State {
 
                     return module;
                 })
+            };
+        }
+
+        case Device.ActionTypes.UpdateFirmwareNotSupported: {
+            return {
+                ...state,
+                failReason: (action as Device.UpdateFirmwareNotSupportedAction).payload,
+                upgradeState: FirmwareUpgradeStates.Idle
             };
         }
 
@@ -267,6 +279,7 @@ export const updatingFirmware = (state: State) => FIRMWARE_UPGRADING_STATES.incl
 export const firmwareUpgradeFailed = (state: State) => state.upgradeState === FirmwareUpgradeStates.Failed;
 export const firmwareUpgradeSuccess = (state: State) => state.upgradeState === FirmwareUpgradeStates.Success;
 export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
+    failReason: state.failReason,
     showForceFirmwareUpgrade: state.showForceFirmwareUpgrade,
     showForceFirmwareUpgradeWith: state.showForceFirmwareUpgradeWith,
     modules: state.modules,

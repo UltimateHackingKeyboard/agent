@@ -3,6 +3,7 @@ import {
     ConfigSizesInfo,
     DeviceConnectionState,
     FirmwareJson,
+    FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     HardwareModules,
     IpcResponse
@@ -31,6 +32,7 @@ export enum ActionTypes {
     UpdateFirmwareReply = '[device] update firmware reply',
     UpdateFirmwareSuccess = '[device] update firmware success',
     UpdateFirmwareFailed = '[device] update firmware failed',
+    UpdateFirmwareNotSupported= '[device] update firmware not supported',
     ModulesInfoLoaded = '[device] module info loaded',
     HasBackupUserConfiguration = '[device] Store backup user configuration',
     RestoreConfigurationFromBackup = '[device] Restore configuration from backup',
@@ -150,6 +152,13 @@ export class UpdateFirmwareFailedAction implements Action {
     }
 }
 
+export class UpdateFirmwareNotSupportedAction implements Action {
+    type = ActionTypes.UpdateFirmwareNotSupported;
+
+    constructor(public payload: FirmwareUpgradeFailReason) {
+    }
+}
+
 export class ResetPcMouseSpeedSettingsAction implements Action {
     type = ActionTypes.ResetPcMouseSpeedSettings;
 }
@@ -251,6 +260,7 @@ export type Actions
     | UpdateFirmwareReplyAction
     | UpdateFirmwareSuccessAction
     | UpdateFirmwareFailedAction
+    | UpdateFirmwareNotSupportedAction
     | HardwareModulesLoadedAction
     | RestoreUserConfigurationFromBackupAction
     | HasBackupUserConfigurationAction
