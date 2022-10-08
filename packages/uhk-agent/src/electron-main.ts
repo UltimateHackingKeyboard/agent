@@ -1,9 +1,11 @@
 /// <reference path="./custom_types/electron-is-dev.d.ts"/>
 
 import './polyfills';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, systemPreferences } from 'electron';
 import setElectronSettingsConfig from './set-electron-settings-config';
 setElectronSettingsConfig();
+
+systemPreferences.getAnimationSettings().prefersReducedMotion = false;
 
 import * as path from 'path';
 import * as url from 'url';
