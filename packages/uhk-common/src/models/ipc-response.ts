@@ -5,6 +5,11 @@ export class IpcResponse {
     error?: { message: string };
 }
 
+export enum FirmwareUpgradeFailReason {
+    UserConfigVersionNotSupported = 'UserConfigVersionNotSupported'
+}
+
 export class FirmwareUpgradeIpcResponse extends IpcResponse {
     modules?: HardwareModules;
+    failReason?: FirmwareUpgradeFailReason;
 }
