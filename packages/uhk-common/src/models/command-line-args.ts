@@ -6,8 +6,9 @@ export interface CommandLineArgs {
 
     /**
      * Don't show the update agent screen
+     * and allow to upgrade firmware that uses newer user config version that Agent support
      */
-    'disable-agent-update-screen'?: boolean;
+    'disable-agent-update-protection'?: boolean;
     /**
      * logging categories
      */

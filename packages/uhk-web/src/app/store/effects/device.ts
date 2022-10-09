@@ -5,15 +5,17 @@ import { RouterNavigatedAction, ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, pairwise, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { gt } from 'semver';
 
 import {
     FirmwareUpgradeIpcResponse,
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
+    shouldUpgradeAgent,
+    shouldUpgradeFirmware,
     UserConfiguration
 } from 'uhk-common';
+
 import {
     ActionTypes,
     ConnectionStateChangedAction,
@@ -34,6 +36,7 @@ import {
     StartConnectionPollerAction,
     UpdateFirmwareAction,
     UpdateFirmwareFailedAction,
+    UpdateFirmwareNotSupportedAction,
     UpdateFirmwareReplyAction,
     UpdateFirmwareSuccessAction,
     UpdateFirmwareWithAction
@@ -44,7 +47,7 @@ import { EmptyAction, SetupPermissionErrorAction, ShowNotificationAction } from 
 import {
     AppState,
     deviceConnected,
-    disableUpdateAgentPage,
+    disableUpdateAgentProtection,
     getRouterState,
     getShowFirmwareUpgradePanel,
     getUserConfiguration
@@ -57,19 +60,21 @@ import {
 } from '../actions/user-config';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
-import { getVersions, isVersionGtMinor } from '../../util';
+import { getVersions } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
+    private shouldUpgradeAgent = false;
+
     @Effect() deviceConnectionStateChange$: Observable<Action> = this.actions$
         .pipe(
             ofType<ConnectionStateChangedAction>(ActionTypes.ConnectionStateChanged),
             withLatestFrom(
                 this.store.select(getRouterState),
                 this.store.select(deviceConnected),
-                this.store.select(disableUpdateAgentPage),
+                this.store.select(disableUpdateAgentProtection),
             ),
-            tap(([action, route, connected, isDisableUpdateAgentPage]) => {
+            tap(([action, route, connected, disableUpdateAgentProtection]) => {
                 const state = action.payload;
 
                 if (route.state && route.state.url.startsWith('/device/firmware')) {
@@ -88,14 +93,13 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (!isDisableUpdateAgentPage
-                    && state.hardwareModules.rightModuleInfo.userConfigVersion
-                    && isVersionGtMinor(state.hardwareModules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+                if (shouldUpgradeAgent(state.hardwareModules?.rightModuleInfo?.userConfigVersion, disableUpdateAgentProtection, getVersions())) {
+                    this.shouldUpgradeAgent = true;
+
                     return this.router.navigate(['/update-agent']);
                 }
 
-                if (state.hardwareModules.rightModuleInfo.userConfigVersion
-                    && gt(getVersions().userConfigVersion, state.hardwareModules.rightModuleInfo.userConfigVersion)) {
+                if (shouldUpgradeFirmware(state.hardwareModules?.rightModuleInfo?.userConfigVersion, getVersions())) {
                     return this.router.navigate(['/update-firmware']);
                 }
 
@@ -130,10 +134,15 @@ export class DeviceEffects {
                     && payload.hasPermission
                     && payload.zeroInterfaceAvailable) {
 
-                    return [
+                    const result: Array<Action> = [
                         new ReadConfigSizesAction(),
-                        new LoadConfigFromDeviceAction()
                     ];
+
+                    if(!this.shouldUpgradeAgent) {
+                        result.push(new LoadConfigFromDeviceAction());
+                    }
+
+                    return result;
                 }
 
                 return EMPTY;
@@ -290,10 +299,14 @@ export class DeviceEffects {
             ofType<UpdateFirmwareReplyAction>(ActionTypes.UpdateFirmwareReply),
             map(action => action.payload),
             switchMap((response: FirmwareUpgradeIpcResponse)
-                : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction> => {
+                : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction | UpdateFirmwareNotSupportedAction> => {
 
                 if (response.success) {
                     return of(new UpdateFirmwareSuccessAction(response.modules));
+                }
+
+                if (response.failReason) {
+                    return of(new UpdateFirmwareNotSupportedAction(response.failReason));
                 }
 
                 return of(new UpdateFirmwareFailedAction({

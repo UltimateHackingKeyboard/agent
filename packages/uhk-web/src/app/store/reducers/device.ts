@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { ROUTER_NAVIGATED } from '@ngrx/router-store';
-import { ConfigSizesInfo, getDefaultHalvesInfo, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
+import { ConfigSizesInfo, getDefaultHalvesInfo, isVersionGtMinor, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
@@ -8,7 +8,7 @@ import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonSt
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { DeviceUiStates } from '../../models';
-import { getVersions, isVersionGtMinor } from '../../util';
+import { getVersions } from '../../util';
 import { RouterNavigatedAction } from '@ngrx/router-store/src/actions';
 
 export interface State {

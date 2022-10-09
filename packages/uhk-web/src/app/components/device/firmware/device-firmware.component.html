@@ -71,6 +71,13 @@
                 </p>
             </div>
 
+            <div *ngIf="firmwareUpgradeStates.failReason"
+                 class="alert alert-danger"
+                 role="alert">
+                <ng-container [ngSwitch]="firmwareUpgradeFailReasons.UserConfigVersionNotSupported">
+                    The provided firmware version is not supported by this Agent version. We recommend using the latest Agent with its bundled firmware version.
+                </ng-container>
+            </div>
             <div *ngIf="firmwareUpgradeSuccess"
                  class="alert alert-success"
                  role="alert">

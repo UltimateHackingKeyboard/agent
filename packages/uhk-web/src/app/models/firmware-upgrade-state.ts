@@ -1,4 +1,4 @@
-import { UhkModule } from 'uhk-common';
+import { FirmwareUpgradeFailReason, UhkModule } from 'uhk-common';
 
 export enum ModuleFirmwareUpgradeStates {
     Idle = 'Idle',
@@ -19,6 +19,7 @@ export interface ModuleFirmwareUpgradeState {
 }
 
 export interface FirmwareUpgradeState {
+    failReason?: FirmwareUpgradeFailReason;
     modules: Array<ModuleFirmwareUpgradeState>;
     recoveryModules: Array<UhkModule>;
     showForceFirmwareUpgrade: boolean;

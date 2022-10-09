@@ -1,9 +1,12 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
 import {
+    CommandLineArgs,
     ConfigurationReply,
     DeviceConnectionState,
+    disableAgentUpgradeProtection,
     findUhkModuleById,
+    FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
     HardwareModules,
@@ -22,6 +25,7 @@ import {
     UHK_MODULES,
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+    shouldUpgradeAgent
 } from 'uhk-common';
 import {
     checkFirmwareAndDeviceCompatibility,
@@ -67,6 +71,7 @@ export class DeviceService {
                 private win: Electron.BrowserWindow,
                 private device: UhkHidDevice,
                 private operations: UhkOperations,
+                private options: CommandLineArgs,
                 private rootDir: string
     ) {
         this.uhkDevicePoller()
@@ -266,12 +271,19 @@ export class DeviceService {
             this.logService.misc(`[DeviceService] Operating system: ${os.type()} ${os.release()} ${os.arch()}`);
             this.logService.misc('[DeviceService] Agent version:', data.versionInformation.version);
             this.logService.misc('[DeviceService] New firmware version:', packageJson.firmwareVersion);
+            this.logService.misc('[DeviceService] New firmware user config version:', packageJson.userConfigVersion);
 
             event.sender.send(IpcEvents.device.updateFirmwareJson, packageJson);
 
             const uhkDeviceProduct = getCurrentUhkDeviceProduct();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
+            const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
+            if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation)) {
+                response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
+                this.logService.error('[DeviceService] Firmware contains newer user config version that Agent supports', packageJson.userConfigVersion);
 
+                return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
+            }
             await this.stopPollUhkDevice();
 
             const hardwareModules = await this.getHardwareModules(false);
