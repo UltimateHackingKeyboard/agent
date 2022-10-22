@@ -25,7 +25,8 @@ import {
     UHK_MODULES,
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
-    shouldUpgradeAgent
+    shouldUpgradeAgent,
+    VersionInformation
 } from 'uhk-common';
 import {
     checkFirmwareAndDeviceCompatibility,
@@ -162,7 +163,9 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(event: Electron.IpcMainEvent): Promise<void> {
+    public async loadConfigurations(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        const versionInformation: VersionInformation = args[0];
+
         let response: ConfigurationReply;
 
         try {
@@ -179,7 +182,7 @@ export class DeviceService {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId)
+                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
             };
         } catch (error) {
             response = {

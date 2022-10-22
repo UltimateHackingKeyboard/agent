@@ -1,5 +1,5 @@
+import { BackupUserConfiguration } from './backup-user-configuration.js';
 import { HardwareModules } from './hardware-modules.js';
-import { UserConfiguration } from '../config-serializer/config-items/user-configuration.js';
 
 export interface ConfigurationReply {
     success: boolean;
@@ -7,5 +7,5 @@ export interface ConfigurationReply {
     hardwareConfiguration?: string;
     modules?: HardwareModules;
     error?: string;
-    backupConfiguration?: UserConfiguration;
+    backupConfiguration?: BackupUserConfiguration;
 }
