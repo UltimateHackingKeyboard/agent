@@ -3,7 +3,7 @@
     <span>Fix configuration</span>
 </h1>
 
-<ng-container [ngSwitch]="state.backupUserConfiguration">
+<ng-container [ngSwitch]="state.backupUserConfiguration.info">
     <ng-container *ngSwitchCase="backupUserConfigurationInfo.LastCompatible">
         <p>
             Your on-board device configuration is invalid, but your last saved configuration is valid.
