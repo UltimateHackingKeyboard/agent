@@ -6,7 +6,7 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
-## [2.0.0] - 2022-10-xx
+## [2.0.0] - 2022-10-23
 
 Firmware: 9.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.1)] | Device Protocol: 4.**8.0** | User Config: **5.1.0** | Hardware Config: 1.0.0
 
