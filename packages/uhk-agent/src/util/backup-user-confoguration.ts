@@ -32,16 +32,20 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
         const backupFilePath = getBackupUserConfigurationPath(uniqueId);
 
         if (await fs.pathExists(backupFilePath)) {
-            const json = await fs.readJSON(backupFilePath);
-            const config = new UserConfiguration().fromJsonObject(json);
+            try {
+                const json = await fs.readJSON(backupFilePath);
+                const config = new UserConfiguration().fromJsonObject(json);
 
-            if (!shouldUpgradeAgent(config.getSemanticVersion(), false, versionInformation)) {
-                logService.config('Backup user configuration', config);
+                if (!shouldUpgradeAgent(config.getSemanticVersion(), false, versionInformation)) {
+                    logService.config('Backup user configuration', config);
 
-                return {
-                    info: BackupUserConfigurationInfo.LastCompatible,
-                    userConfiguration: json
-                };
+                    return {
+                        info: BackupUserConfigurationInfo.LastCompatible,
+                        userConfiguration: json
+                    };
+                }
+            } catch (error) {
+                logService.error('Cannot parse backup user config', error);
             }
         }
 
