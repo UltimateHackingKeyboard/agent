@@ -35,11 +35,13 @@ const { notarize } = require('electron-notarize');
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
 
+let buildDependenciesFromSource = false;
 let target = '';
 let artifactName = 'UHK.Agent-${version}-${os}';
 let extraResources = [];
 
 if (process.platform === 'darwin') {
+    buildDependenciesFromSource = true;
     // https://github.com/lidel/electron-builder/blob/master/docs/configuration/mac.md
     // Use default target to create dmg and zip artifact. Zip needed to Squirrel.Mac auto update
     target = Platform.MAC.createTarget('default', builder.Arch.universal);
@@ -80,6 +82,7 @@ if (TEST_BUILD || gitTag) {
         targets: target,
         config: {
             afterSign,
+            buildDependenciesFromSource,
             directories: {
                 app: electron_build_folder
             },
