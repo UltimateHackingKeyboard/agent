@@ -37,7 +37,7 @@
     "check-node-version": "4.2.1",
     "copy-webpack-plugin": "10.2.4",
     "copyfiles": "2.4.1",
-    "core-js": "3.15.2",
+    "core-js": "3.26.0",
     "cross-env": "7.0.3",
     "decompress": "4.2.1",
     "decompress-targz": "^4.1.1",
