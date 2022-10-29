@@ -76,7 +76,7 @@
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "1.0.0",
     "xml-loader": "1.2.1",
-    "zone.js": "0.11.5"
+    "zone.js": "0.11.8"
   },
   "dependencies": {
     "file-saver": "2.0.5",
