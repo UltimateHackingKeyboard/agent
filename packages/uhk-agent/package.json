@@ -21,7 +21,7 @@
     "fastify": "4.6.0",
     "fs-extra": "10.1.0",
     "get-port": "6.1.2",
-    "node-hid": "2.1.1",
+    "node-hid": "2.1.2",
     "sudo-prompt": "9.2.1",
     "tmp": "0.2.1",
     "tslib": "2.3.1",
