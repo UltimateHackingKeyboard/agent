@@ -24,7 +24,7 @@
     "buffer": "6.0.3",
     "lodash.isequal": "4.5.0",
     "md5": "2.3.0",
-    "moment": "2.29.2",
+    "moment": "2.29.4",
     "semver": "7.3.7",
     "tslib": "2.3.1"
   },
