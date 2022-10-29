@@ -14,12 +14,12 @@
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
     "clean": "rimraf ./node_modules ./dist",
-    "test:skio": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "test:skip": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "coverage": "nyc npm test",
     "lint": "eslint --ext .ts ."
   },
   "dependencies": {
-    "@octokit/rest": "19.0.4",
+    "@octokit/rest": "19.0.5",
     "fs-extra": "10.1.0",
     "got": "12.5.0",
     "url-join": "5.0.0"
