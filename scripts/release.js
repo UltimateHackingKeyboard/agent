@@ -105,7 +105,6 @@ if (TEST_BUILD || gitTag) {
             },
             publish: 'github',
             artifactName,
-            npmRebuild: false,
             files: [
                 '**/*'
             ]
