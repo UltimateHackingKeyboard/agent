@@ -10,7 +10,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 
 Firmware: 9.1.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.2)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
 
-- Make Agent able to detect the UHK on M1 MacBook and various Windows installations.
+- Make Agent able to detect the UHK on M1 MacBooks and all Windows installations.
 
 ## [2.0.0] - 2022-10-23
 
