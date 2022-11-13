@@ -21,6 +21,7 @@ export class MacroCommandComponent extends MacroBaseComponent implements OnInit 
     @Input() isActive: boolean;
     @Input() macroAction: CommandMacroAction;
 
+    @Output() ctrlEnterKeyDown = new EventEmitter<void>();
     @Output() gotFocus = new EventEmitter<void>();
 
     constructor() { super(); }
