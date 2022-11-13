@@ -43,7 +43,7 @@ export class MacroDelayTabComponent extends MacroBaseComponent implements OnInit
     }
 
     setDelay(value: number): void {
-        this._delay = value;
+        this._delay = Math.min(value, 65);
         this.macroAction.delay = this._delay * 1000;
         this.validate();
     }
