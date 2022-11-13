@@ -161,6 +161,12 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
         this.tabChanged.emit(this.activeTab);
     }
 
+    onMacroEditorCtrlEnterKeydown(): void {
+        if (this.isSelectedMacroValid) {
+            this.onSaveClick();
+        }
+    }
+
     private updateEditableMacroAction() {
         const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
         this.editableMacroAction = MacroActionHelper.createMacroAction(macroAction);
