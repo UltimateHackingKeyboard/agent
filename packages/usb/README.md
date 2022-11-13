@@ -1,18 +1,12 @@
 ## Usage
 
 1. Install node.js and npm
-2. Run `npm install` in this directory
-3. Run script eg. `node blink-test-led.js`
+2. Run `npm ci` in the root directory of the git repository
+3. Run `npm build`
+4. Switch to usb directory `cd packages/usb`
+4. Run script eg. `./blink-led-pwm-brightness.ts`
 
 ## Driver requirements
 
 ### Linux
 Default driver.
-
-### Windows
-Inorder to make the usb lib work, the WinUsb driver should be installed (only) for interface 0, the rest should be the default HidUsb. 
-
-1. Download [zadig](http://zadig.akeo.ie/)
-2. Install WinUsb for Ultimate Hacking Keyboard (Interface 0)
-
-For more information click [here](https://www.npmjs.com/package/usb).
