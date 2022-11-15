@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [2.0.2] - 2022-11-15
+
+Firmware: 9.1.4 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.4)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+
+- After firmware updates, refresh the new firmware version number of the last updated module.
+- Save macro command upon pressing Ctrl + Enter.
+- Maximize macro delay action to 65 seconds.
+
 ## [2.0.1] - 2022-10-30
 
 Firmware: 9.1.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.2)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
