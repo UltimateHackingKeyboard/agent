@@ -40,7 +40,7 @@ Firmware: 9.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 - Don't allow to create more than 255 macros according to firmware limits.
 - Handle the \ character properly in the scancode field.
 - Select the text content of the scancode dropdown when it gets opened.
-- Make the capture keystroke button work even if the scnacode dropdown is opened.
+- Make the capture keystroke button work even if the scancode dropdown is opened.
 - Maximize scancode selector height.
 - Fix device recovery mode.
 - Fix the validation of the key action popover fields.
