@@ -1,3 +1,4 @@
 user-config.bin
 user-config-serialized.json
 user-config-serialized.bin
+tmp/
