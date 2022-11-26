@@ -17,9 +17,10 @@ jobs:
             persist-credentials: false
 
       - name: Use Node.js (.nvmrc)
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.16.0
+          node-version-file: .nvmrc
+          cache: npm
 
       - name: Install dependencies
         run: npm install
