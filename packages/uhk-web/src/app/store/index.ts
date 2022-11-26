@@ -2,7 +2,14 @@ import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
-import { Constants, FirmwareRepoInfo, LayerName, UHK_OFFICIAL_FIRMWARE_REPO } from 'uhk-common';
+import {
+    Constants,
+    FirmwareRepoInfo,
+    LayerName,
+    LEFT_KEY_CLUSTER_MODULE,
+    RIGHT_TRACKPOINT_MODULE,
+    UHK_OFFICIAL_FIRMWARE_REPO
+} from 'uhk-common';
 
 import {
     ApplicationSettings,
@@ -190,6 +197,20 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
             moduleInfos: [
                 {
                     module: LEFT_HALF_MODULE,
+                    info: {
+                        firmwareVersion: agentVersionInfo.firmwareVersion,
+                        moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                    }
+                },
+                {
+                    module: LEFT_KEY_CLUSTER_MODULE,
+                    info: {
+                        firmwareVersion: agentVersionInfo.firmwareVersion,
+                        moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
+                    }
+                },
+                {
+                    module: RIGHT_TRACKPOINT_MODULE,
                     info: {
                         firmwareVersion: agentVersionInfo.firmwareVersion,
                         moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion
