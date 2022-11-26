@@ -136,10 +136,7 @@ export class SmartMacroDocService implements OnDestroy {
         // it should be the 2nd condition otherwise the unchanged command will dispatch
         else if (this.selectedMacroAction?.type === TabName.Command) {
             message.action = 'agent-message-editor-got-focus';
-            message.command = (this.selectedMacroAction.macroAction as CommandMacroAction).command;
-        } else if (this.selectedMacroAction?.id === 'new') {
-            message.action = 'agent-message-editor-got-focus';
-            message.command = '';
+            message.command = (this.selectedMacroAction?.macroAction as CommandMacroAction)?.command || '';
         }
 
         this.sendMessage(message);

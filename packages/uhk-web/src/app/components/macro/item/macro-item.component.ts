@@ -125,6 +125,13 @@ export class MacroItemComponent implements OnInit, OnChanges {
         });
     }
 
+    onTabChanged(type: TabName) {
+        this.selected.emit({
+            type,
+            macroAction: this.macroAction
+        });
+    }
+
     saveMacroCommand(command: string): void {
         const macroAction = new CommandMacroAction();
         macroAction.command = command;
