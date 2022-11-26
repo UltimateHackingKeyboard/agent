@@ -30,7 +30,7 @@ if (!isReleaseCommit) {
 const path = require('path');
 const builder = require("electron-builder");
 const fs = require('fs-extra');
-const { notarize } = require('electron-notarize');
+const { notarize } = require('@electron/notarize');
 
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
