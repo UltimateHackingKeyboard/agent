@@ -79,6 +79,7 @@ if (TEST_BUILD || gitTag) {
         dir: DIR,
         targets: target,
         config: {
+            afterPack,
             afterSign,
             directories: {
                 app: electron_build_folder
@@ -129,6 +130,15 @@ function update2ndPackageJson(rootJson) {
 
     json.version = rootJson.version;
     fs.writeJsonSync(jsonPath, json, { spaces: 2 })
+}
+
+async function afterPack(context) {
+    if (process.platform !== 'linux')
+        return;
+
+    const chromeSandbox = path.join(context.appOutDir, 'chrome-sandbox');
+
+    fs.chmodSync(chromeSandbox, '4755')
 }
 
 async function afterSign(context) {
