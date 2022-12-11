@@ -37,6 +37,7 @@ if (options.help) {
 
 const logger = new ElectronLogService();
 logger.setLogOptions(getLogOptions(options));
+logger.misc('[Electron Main] command line arguments', options);
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: Electron.BrowserWindow;

@@ -232,9 +232,10 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const getHardwareModules = (state: State) => state.modules;
 export const getHasBackupUserConfiguration = (state: State) => {
-    return state.backupUserConfiguration?.info === BackupUserConfigurationInfo.LastCompatible
+    return (state.backupUserConfiguration?.info === BackupUserConfigurationInfo.LastCompatible
         || state.backupUserConfiguration?.info === BackupUserConfigurationInfo.EarlierCompatible
-        || state.restoreUserConfiguration;
+        || state.backupUserConfiguration?.info === BackupUserConfigurationInfo.NotExists)
+        && state.restoreUserConfiguration;
 };
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
     return {

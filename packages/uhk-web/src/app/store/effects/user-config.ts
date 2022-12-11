@@ -8,6 +8,7 @@ import { saveAs } from 'file-saver';
 import { Buffer } from 'uhk-common';
 
 import {
+    BackupUserConfigurationInfo,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
@@ -159,8 +160,9 @@ export class UserConfigEffects {
 
                 } catch (err) {
                     this.logService.error('Eeprom user-config parse error:', err);
-                    if (data.backupConfiguration) {
-                        result.push(new BackupUserConfigurationAction(data.backupConfiguration));
+                    result.push(new BackupUserConfigurationAction(data.backupConfiguration));
+                    if (data.backupConfiguration.info === BackupUserConfigurationInfo.LastCompatible
+                        || data.backupConfiguration.info === BackupUserConfigurationInfo.EarlierCompatible) {
                         const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration.userConfiguration);
                         result.push(new LoadUserConfigSuccessAction(userConfig));
                     }

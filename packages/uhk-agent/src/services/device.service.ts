@@ -26,6 +26,7 @@ import {
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
     shouldUpgradeAgent,
+    simulateInvalidUserConfigError,
     VersionInformation
 } from 'uhk-common';
 import {
@@ -67,6 +68,7 @@ export class DeviceService {
     private _pollerAllowed: boolean;
     private _uhkDevicePolling: boolean;
     private queueManager = new QueueManager();
+    private wasCalledSaveUserConfiguration = false;
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
@@ -177,6 +179,10 @@ export class DeviceService {
 
             const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
             const uniqueId = hardwareConfig.uniqueId;
+
+            if (simulateInvalidUserConfigError(this.options) && !this.wasCalledSaveUserConfiguration) {
+                result.userConfiguration = 'invalid user config';
+            }
 
             response = {
                 success: true,
@@ -565,6 +571,7 @@ export class DeviceService {
             this.logService.error('[DeviceService] Transferring error', error);
             response.error = { message: error.message };
         } finally {
+            this.wasCalledSaveUserConfiguration = true;
             this.device.close();
             this.startPollUhkDevice();
         }

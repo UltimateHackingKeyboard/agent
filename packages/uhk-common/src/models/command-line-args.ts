@@ -10,6 +10,11 @@ export interface CommandLineArgs {
      */
     'disable-agent-update-protection'?: boolean;
     /**
+     * Agent simulate the error that named in the argument
+     */
+    'error-simulation'?: string;
+
+    /**
      * logging categories
      */
     log?: string;
