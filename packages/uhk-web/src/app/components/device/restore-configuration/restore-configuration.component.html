@@ -15,7 +15,7 @@
         </button>
     </ng-container>
 
-    <ng-container *ngSwitchCase="backupUserConfigurationInfo.LastNotCompatible">
+    <ng-container *ngSwitchCase="backupUserConfigurationInfo.EarlierCompatible">
         <p>
             Your on-board device configuration is invalid, but your earlier configuration that was saved at {{state.backupUserConfiguration?.date}} is the latest that's valid.
         </p>

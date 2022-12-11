@@ -82,7 +82,7 @@ export async function getCompatibleUserConfigFromHistory(logService: LogService,
             }
 
             return {
-                info: BackupUserConfigurationInfo.LastNotCompatible,
+                info: BackupUserConfigurationInfo.EarlierCompatible,
                 userConfiguration: userConfig.toJsonObject(),
                 date: convertHistoryFilenameToDisplayText(file)
             };

@@ -233,7 +233,7 @@ export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const getHardwareModules = (state: State) => state.modules;
 export const getHasBackupUserConfiguration = (state: State) => {
     return state.backupUserConfiguration?.info === BackupUserConfigurationInfo.LastCompatible
-        || state.backupUserConfiguration?.info === BackupUserConfigurationInfo.LastNotCompatible
+        || state.backupUserConfiguration?.info === BackupUserConfigurationInfo.EarlierCompatible
         || state.restoreUserConfiguration;
 };
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {

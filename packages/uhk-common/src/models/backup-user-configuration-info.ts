@@ -4,9 +4,10 @@ export enum BackupUserConfigurationInfo {
      */
     LastCompatible = 'LatestCompatible',
     /**
-     * The last saved backup user configuration is not compatible with the current firmware version of the UHK
+     * The last saved backup user configuration is not compatible with the current firmware version of the UHK,
+     * but we found earlier version that compatible
      */
-    LastNotCompatible = 'LatestNotCompatible',
+    EarlierCompatible = 'EarlierCompatible',
     /**
      * There is no saved user configuration on this computer
      */
