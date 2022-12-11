@@ -51,7 +51,7 @@
         [isMacroCommandSupported]="isMacroCommandSupported"
         (cancel)="cancelEdit()"
         (save)="saveEditedAction($event)"
-        (tabChanged)="selected.emit($event)"
+        (tabChanged)="onTabChanged($event)"
     >
     </macro-action-editor>
 </div>

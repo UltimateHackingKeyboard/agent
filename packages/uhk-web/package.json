@@ -41,16 +41,16 @@
     "@angular/platform-browser-dynamic": "13.3.11",
     "@angular/router": "13.3.11",
     "@fortawesome/angular-fontawesome": "0.10.2",
-    "@fortawesome/fontawesome-svg-core": "6.1.1",
-    "@fortawesome/free-regular-svg-icons": "6.1.1",
-    "@fortawesome/free-solid-svg-icons": "6.1.1",
+    "@fortawesome/fontawesome-svg-core": "6.2.0",
+    "@fortawesome/free-regular-svg-icons": "6.2.0",
+    "@fortawesome/free-solid-svg-icons": "6.2.0",
     "@materia-ui/ngx-monaco-editor": "6.0.0",
-    "@ng-bootstrap/ng-bootstrap": "11.0.0",
+    "@ng-bootstrap/ng-bootstrap": "11.0.1",
     "@ng-select/ng-select": "8.3.0",
-    "@ngrx/effects": "13.1.0",
-    "@ngrx/router-store": "13.1.0",
-    "@ngrx/store": "13.1.0",
-    "@ngrx/store-devtools": "13.1.0",
+    "@ngrx/effects": "13.2.0",
+    "@ngrx/router-store": "13.2.0",
+    "@ngrx/store": "13.2.0",
+    "@ngrx/store-devtools": "13.2.0",
     "@perfectmemory/ngx-contextmenu": "7.0.1",
     "angular-confirmation-popover": "6.0.0",
     "angular-notifier": "11.0.0",
@@ -76,10 +76,10 @@
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "1.0.0",
     "xml-loader": "1.2.1",
-    "zone.js": "0.11.5"
+    "zone.js": "0.11.8"
   },
   "dependencies": {
-    "file-saver": "2.0.2",
+    "file-saver": "2.0.5",
     "spacing-bootstrap-3": "1.0.2"
   }
 }

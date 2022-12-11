@@ -2,6 +2,42 @@ const SVGSpriter = require('svg-sprite');
 const path = require('path');
 const fs = require('fs-extra');
 
+const transform = [
+    {
+        svgo: {
+            plugins: [
+                {
+                    name: 'preset-default',
+                    params: {
+                        overrides: {
+                            inlineStyles: {
+                                onlyMatchedOnce: false
+                            }
+                        }
+                    }
+                },
+                {
+                    name: 'convertStyleToAttrs'
+                },
+                {
+                    name: 'removeAttributesBySelector',
+                    params: {
+                        selector: '[fill="#000"]',
+                        attributes: 'fill'
+                    },
+                },
+                {
+                    name: 'removeAttributesBySelector',
+                    params: {
+                        selector: '[stop-opacity="1"]',
+                        attributes: 'stop-opacity'
+                    },
+                },
+            ]
+        }
+    }
+]
+
 let config = {
     'dest': 'packages/uhk-web/src/assets/',
     log: 'verbose',
@@ -10,7 +46,8 @@ let config = {
             'generator': function (name) {
                 return 'icon-' + path.basename(name).slice(0, -4);
             }
-        }
+        },
+        transform
     },
     'mode': {
         'defs': {
@@ -44,7 +81,8 @@ config = {
             'generator': function (name) {
                 return 'icon-' + path.basename(name).slice(0, -4);
             }
-        }
+        },
+        transform
     },
     'mode': {
         'css': {

@@ -6,6 +6,45 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [2.0.2] - 2022-11-15
+
+Firmware: 9.1.4 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.4)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+
+- After firmware updates, refresh the new firmware version number of the last updated module.
+- Save macro command upon pressing Ctrl + Enter.
+- Maximize macro delay action to 65 seconds.
+
+## [2.0.1] - 2022-10-30
+
+Firmware: 9.1.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.2)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+
+- Make Agent able to detect the UHK on M1 MacBooks and all Windows installations.
+
+## [2.0.0] - 2022-10-23
+
+Firmware: 9.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.1)] | Device Protocol: 4.**8.0** | User Config: **5.1.0** | Hardware Config: 1.0.0
+
+- Support smart macros. `USERCONFIG:MINOR`
+- Support 12 layers. `USERCONFIG:MAJOR`
+- Expose device and module git and version properties. `DEVICEPROTOCOL:MINOR`
+- Add firmware update notification bar and screen.
+- Save macro on Ctrl+Enter.
+- Fix keypress capture which sometimes captured invalid keypresses.
+- Scroll to bottom when a new macro item added.
+- Improve key content rendering when there are two lines.
+- Add screen brightness increase and decrease scancodes.
+- Make sliders rounded.
+- Add an empty keymap to the list of available keymaps.
+- Only show the non-empty layers of available keymaps.
+- Fix the exchanged Mod and Fn layers of the QWERTY for PC available keymap.
+- Don't allow to create more than 255 macros according to firmware limits.
+- Handle the \ character properly in the scancode field.
+- Select the text content of the scancode dropdown when it gets opened.
+- Make the capture keystroke button work even if the scancode dropdown is opened.
+- Maximize scancode selector height.
+- Fix device recovery mode.
+- Fix the validation of the key action popover fields.
+
 ## [1.5.17] - 2021-11-22
 
 Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0

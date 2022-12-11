@@ -30,7 +30,7 @@ if (!isReleaseCommit) {
 const path = require('path');
 const builder = require("electron-builder");
 const fs = require('fs-extra');
-const { notarize } = require('electron-notarize');
+const { notarize } = require('@electron/notarize');
 
 const Platform = builder.Platform;
 const electron_build_folder = path.join(__dirname, '../packages/uhk-agent/dist');
@@ -79,6 +79,7 @@ if (TEST_BUILD || gitTag) {
         dir: DIR,
         targets: target,
         config: {
+            afterPack,
             afterSign,
             directories: {
                 app: electron_build_folder
@@ -105,7 +106,6 @@ if (TEST_BUILD || gitTag) {
             },
             publish: 'github',
             artifactName,
-            npmRebuild: false,
             files: [
                 '**/*'
             ]
@@ -130,6 +130,15 @@ function update2ndPackageJson(rootJson) {
 
     json.version = rootJson.version;
     fs.writeJsonSync(jsonPath, json, { spaces: 2 })
+}
+
+async function afterPack(context) {
+    if (process.platform !== 'linux')
+        return;
+
+    const chromeSandbox = path.join(context.appOutDir, 'chrome-sandbox');
+
+    fs.chmodSync(chromeSandbox, '4755')
 }
 
 async function afterSign(context) {

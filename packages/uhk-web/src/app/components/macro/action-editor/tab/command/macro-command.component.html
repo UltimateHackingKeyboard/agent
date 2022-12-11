@@ -18,6 +18,7 @@
                                   [index]="index"
                                   [class.active]="isActive"
                                   (gotFocus)="gotFocus.emit()"
+                                  (ctrlEnterKeyDown)="ctrlEnterKeyDown.emit()"
                                   (ngModelChange)="onCommandChanged($event)"
             ></macro-command-editor>
     </div>

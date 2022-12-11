@@ -10,7 +10,7 @@
                 <input #macroDelayInput
                        type="number"
                        min="0"
-                       max="1000"
+                       max="65"
                        step="0.1"
                        placeholder="Delay amount"
                        class="form-control"
@@ -24,7 +24,7 @@
         <div class="col-12">
             <h6>Choose a preset</h6>
             <div>
-                <button *ngFor="let delay of presets" type="button" class="btn btn-default mr-2" 
+                <button *ngFor="let delay of presets" type="button" class="btn btn-default mr-2"
                     (click)="setDelay(delay)">{{delay}}s
                 </button>
             </div>

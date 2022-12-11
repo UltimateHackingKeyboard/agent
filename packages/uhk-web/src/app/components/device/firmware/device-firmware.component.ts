@@ -110,6 +110,15 @@ export class DeviceFirmwareComponent implements OnDestroy {
         return key.id.toString();
     }
 
+    gitTagText(currentFirmwareVersion: string, gitTag: string): string {
+        const tag = gitTag?.startsWith('v') ? gitTag.substring(1) : gitTag;
+
+        if (tag === currentFirmwareVersion)
+            return '';
+
+        return '#' + gitTag;
+    }
+
     private scrollToTheEndOfTheLogs(): void {
         if (this.xtermRef) {
             this.xtermRef.scrollToTheEnd();

@@ -17,6 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Key } from 'ts-keycode-enum';
 
 import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
@@ -48,6 +49,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     @Input() autoFocus = false;
     @Input() index: SelectedMacroActionId;
 
+    @Output() ctrlEnterKeyDown = new EventEmitter<void>();
     @Output() gotFocus = new EventEmitter<void>();
 
     value: string = null;
@@ -150,6 +152,14 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.isFocused = true;
         }
         editor.onKeyDown((event) => {
+            if(event.browserEvent.ctrlKey && event.browserEvent.keyCode === Key.Enter) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.ctrlEnterKeyDown.emit();
+                
+                return;
+            }
+
             if (new RegExp(NON_ASCII_REGEXP).test(event.browserEvent.key)) {
                 event.preventDefault();
                 event.stopPropagation();

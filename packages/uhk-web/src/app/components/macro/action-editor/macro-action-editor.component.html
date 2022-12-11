@@ -45,6 +45,7 @@
                                [index]="index"
                                [isActive]="isActive"
                                (valid)="onValid($event)"
+                               (ctrlEnterKeyDown)="onMacroEditorCtrlEnterKeydown()"
                                (gotFocus)="onMacroEditorGotFocus()"
             ></macro-command-tab>
         </div>
