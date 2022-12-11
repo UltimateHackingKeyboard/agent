@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
+    BackupUserConfiguration,
     ConfigSizesInfo,
     DeviceConnectionState,
     FirmwareJson,
@@ -34,7 +35,7 @@ export enum ActionTypes {
     UpdateFirmwareFailed = '[device] update firmware failed',
     UpdateFirmwareNotSupported= '[device] update firmware not supported',
     ModulesInfoLoaded = '[device] module info loaded',
-    HasBackupUserConfiguration = '[device] Store backup user configuration',
+    BackupUserConfiguration = '[device] Stored backup user configuration',
     RestoreConfigurationFromBackup = '[device] Restore configuration from backup',
     RestoreConfigurationFromBackupSuccess = '[device] Restore configuration from backup success',
     RecoveryDevice = '[device] Recovery device',
@@ -178,10 +179,10 @@ export class RestoreUserConfigurationFromBackupAction implements Action {
     type = ActionTypes.RestoreConfigurationFromBackup;
 }
 
-export class HasBackupUserConfigurationAction implements Action {
-    type = ActionTypes.HasBackupUserConfiguration;
+export class BackupUserConfigurationAction implements Action {
+    type = ActionTypes.BackupUserConfiguration;
 
-    constructor(public payload: boolean) {
+    constructor(public payload: BackupUserConfiguration) {
     }
 }
 
@@ -263,7 +264,7 @@ export type Actions
     | UpdateFirmwareNotSupportedAction
     | HardwareModulesLoadedAction
     | RestoreUserConfigurationFromBackupAction
-    | HasBackupUserConfigurationAction
+    | BackupUserConfigurationAction
     | RestoreUserConfigurationFromBackupSuccessAction
     | RecoveryDeviceAction
     | RecoveryDeviceReplyAction

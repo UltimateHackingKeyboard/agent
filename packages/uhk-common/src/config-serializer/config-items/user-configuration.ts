@@ -185,6 +185,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         return this.keymaps.find(keymap => keymapAbbreviation === keymap.abbreviation);
     }
 
+    getSemanticVersion(): string {
+        return `${this.userConfigMajorVersion}.${this.userConfigMinorVersion}.${this.userConfigPatchVersion}`;
+    }
+
     getMacro(macroId: number): Macro {
         return this.macros.find(macro => macroId === macro.id);
     }

@@ -3,17 +3,37 @@
     <span>Fix configuration</span>
 </h1>
 
-<p>
-    Your on-board device configuration is invalid.
-</p>
-<button class="btn btn-primary"
-        *ngIf="state.hasBackupUserConfiguration"
-        [disabled]="state.restoringUserConfiguration"
-        (click)="restoreUserConfiguration()"> Restore the last valid device configuration
-</button>
+<ng-container [ngSwitch]="state.backupUserConfiguration.info">
+    <ng-container *ngSwitchCase="backupUserConfigurationInfo.LastCompatible">
+        <p>
+            Your on-board device configuration is invalid, but your last saved configuration is valid.
+        </p>
+        <button class="btn btn-primary"
+                [disabled]="state.restoringUserConfiguration"
+                (click)="restoreUserConfiguration()">
+            Restore last configuration
+        </button>
+    </ng-container>
 
-<button class="btn btn-danger"
-        *ngIf="!state.hasBackupUserConfiguration"
-        [disabled]="state.restoringUserConfiguration"
-        (click)="resetUserConfiguration()">Reset device configuration
-</button>
+    <ng-container *ngSwitchCase="backupUserConfigurationInfo.EarlierCompatible">
+        <p>
+            Your on-board device configuration is invalid, but your earlier configuration that was saved at {{state.backupUserConfiguration?.date}} is the latest that's valid.
+        </p>
+        <button class="btn btn-primary"
+                [disabled]="state.restoringUserConfiguration"
+                (click)="restoreUserConfiguration()">
+            Restore earlier configuration
+        </button>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+        <p>
+            Your on-board device configuration is invalid, and none of the saved configurations are valid.
+        </p>
+        <button class="btn btn-danger"
+                [disabled]="state.restoringUserConfiguration"
+                (click)="resetUserConfiguration()">
+            Reset configuration
+        </button>
+    </ng-container>
+</ng-container>

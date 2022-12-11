@@ -11,7 +11,8 @@ import {
     SaveUserConfigurationData,
     UpdateFirmwareData,
     UploadFileData,
-    UserConfiguration
+    UserConfiguration,
+    VersionInformation
 } from 'uhk-common';
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
@@ -47,8 +48,8 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.saveUserConfiguration, JSON.stringify(data));
     }
 
-    loadConfigurationFromKeyboard(): void {
-        this.ipcRenderer.send(IpcEvents.device.loadConfigurations);
+    loadConfigurationFromKeyboard(versionInformation: VersionInformation): void {
+        this.ipcRenderer.send(IpcEvents.device.loadConfigurations, versionInformation);
     }
 
     updateFirmware(data: UpdateFirmwareData): void {

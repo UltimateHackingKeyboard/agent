@@ -5,6 +5,7 @@ import { CommandLineArgs } from 'uhk-common';
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'devtools', type: Boolean },
     { name: 'disable-agent-update-protection', type: Boolean },
+    { name: 'error-simulation', type: String },
     { name: 'log', type: String },
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
@@ -32,6 +33,11 @@ const sections: commandLineUsage.Section[] = [
                 name: 'disable-agent-update-protection',
                 description: "Don't show the Agent update screen",
                 type: Boolean
+            },
+            {
+                name: 'error-simulation',
+                description: 'Simulate an error',
+                typeLabel: 'invalid-user-config'
             },
             {
                 name: 'log',

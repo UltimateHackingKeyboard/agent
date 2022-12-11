@@ -25,7 +25,9 @@ import {
     UHK_MODULES,
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
-    shouldUpgradeAgent
+    shouldUpgradeAgent,
+    simulateInvalidUserConfigError,
+    VersionInformation
 } from 'uhk-common';
 import {
     checkFirmwareAndDeviceCompatibility,
@@ -66,6 +68,7 @@ export class DeviceService {
     private _pollerAllowed: boolean;
     private _uhkDevicePolling: boolean;
     private queueManager = new QueueManager();
+    private wasCalledSaveUserConfiguration = false;
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
@@ -162,7 +165,9 @@ export class DeviceService {
      * Return with the actual UserConfiguration from UHK Device
      * @returns {Promise<Buffer>}
      */
-    public async loadConfigurations(event: Electron.IpcMainEvent): Promise<void> {
+    public async loadConfigurations(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        const versionInformation: VersionInformation = args[0];
+
         let response: ConfigurationReply;
 
         try {
@@ -175,11 +180,15 @@ export class DeviceService {
             const hardwareConfig = getHardwareConfigFromDeviceResponse(result.hardwareConfiguration);
             const uniqueId = hardwareConfig.uniqueId;
 
+            if (simulateInvalidUserConfigError(this.options) && !this.wasCalledSaveUserConfiguration) {
+                result.userConfiguration = 'invalid user config';
+            }
+
             response = {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId)
+                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
             };
         } catch (error) {
             response = {
@@ -562,6 +571,7 @@ export class DeviceService {
             this.logService.error('[DeviceService] Transferring error', error);
             response.error = { message: error.message };
         } finally {
+            this.wasCalledSaveUserConfiguration = true;
             this.device.close();
             this.startPollUhkDevice();
         }

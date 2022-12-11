@@ -1,4 +1,6 @@
 export * from './application-settings.js';
+export * from './backup-user-configuration.js';
+export * from './backup-user-configuration-info.js';
 export * from './command-line-args.js';
 export * from './config-sizes-info.js';
 export * from './firmware-json.js';

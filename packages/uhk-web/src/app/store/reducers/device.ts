@@ -1,15 +1,22 @@
 import { Action } from '@ngrx/store';
-import { ROUTER_NAVIGATED } from '@ngrx/router-store';
-import { ConfigSizesInfo, getDefaultHalvesInfo, isVersionGtMinor, HalvesInfo, HardwareModules, UhkDeviceProduct } from 'uhk-common';
+import {
+    BackupUserConfiguration,
+    BackupUserConfigurationInfo,
+    ConfigSizesInfo,
+    getDefaultHalvesInfo,
+    HalvesInfo,
+    HardwareModules,
+    isVersionGtMinor,
+    UhkDeviceProduct
+} from 'uhk-common';
+import { DeviceUiStates } from '../../models';
+import { MissingDeviceState } from '../../models/missing-device-state';
+import { RestoreConfigurationState } from '../../models/restore-configuration-state';
+import { getVersions } from '../../util';
 
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
 import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonState } from './progress-button-state';
-import { RestoreConfigurationState } from '../../models/restore-configuration-state';
-import { MissingDeviceState } from '../../models/missing-device-state';
-import { DeviceUiStates } from '../../models';
-import { getVersions } from '../../util';
-import { RouterNavigatedAction } from '@ngrx/router-store/src/actions';
 
 export interface State {
     connectedDevice?: UhkDeviceProduct;
@@ -23,7 +30,7 @@ export interface State {
     savingToKeyboard: boolean;
     modules: HardwareModules;
     restoringUserConfiguration: boolean;
-    hasBackupUserConfiguration: boolean;
+    backupUserConfiguration: BackupUserConfiguration;
     restoreUserConfiguration: boolean;
     halvesInfo: HalvesInfo;
     readingConfigSizes: boolean;
@@ -47,7 +54,9 @@ export const initialState: State = {
         }
     },
     restoringUserConfiguration: false,
-    hasBackupUserConfiguration: false,
+    backupUserConfiguration: {
+        info: BackupUserConfigurationInfo.Unknown
+    },
     restoreUserConfiguration: false,
     halvesInfo: getDefaultHalvesInfo(),
     readingConfigSizes: false,
@@ -162,18 +171,17 @@ export function reducer(state = initialState, action: Action): State {
                 restoringUserConfiguration: true
             };
 
-        case Device.ActionTypes.HasBackupUserConfiguration:
+        case Device.ActionTypes.BackupUserConfiguration:
             return {
                 ...state,
                 restoreUserConfiguration: true,
-                hasBackupUserConfiguration: (action as Device.HasBackupUserConfigurationAction).payload
+                backupUserConfiguration: (action as Device.BackupUserConfigurationAction).payload
             };
 
         case Device.ActionTypes.RestoreConfigurationFromBackupSuccess:
             return {
                 ...state,
                 restoreUserConfiguration: false,
-                hasBackupUserConfiguration: false
             };
 
         case Device.ActionTypes.ReadConfigSizes:
@@ -223,11 +231,16 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
 };
 export const getSaveToKeyboardState = (state: State) => state.saveToKeyboard;
 export const getHardwareModules = (state: State) => state.modules;
-export const getHasBackupUserConfiguration = (state: State) => state.hasBackupUserConfiguration || state.restoreUserConfiguration;
+export const getHasBackupUserConfiguration = (state: State) => {
+    return (state.backupUserConfiguration?.info === BackupUserConfigurationInfo.LastCompatible
+        || state.backupUserConfiguration?.info === BackupUserConfigurationInfo.EarlierCompatible
+        || state.backupUserConfiguration?.info === BackupUserConfigurationInfo.NotExists)
+        && state.restoreUserConfiguration;
+};
 export const getBackupUserConfigurationState = (state: State): RestoreConfigurationState => {
     return {
         restoringUserConfiguration: state.restoringUserConfiguration,
-        hasBackupUserConfiguration: state.hasBackupUserConfiguration
+        backupUserConfiguration: state.backupUserConfiguration
     };
 };
 export const bootloaderActive = (state: State) => state.bootloaderActive;

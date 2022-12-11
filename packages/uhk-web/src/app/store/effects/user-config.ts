@@ -8,6 +8,7 @@ import { saveAs } from 'file-saver';
 import { Buffer } from 'uhk-common';
 
 import {
+    BackupUserConfigurationInfo,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
@@ -29,6 +30,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
+import { getVersions } from '../../util';
 import { AppState, getPrevUserConfiguration, getRouterState, getUserConfiguration } from '../index';
 import * as Keymaps from '../actions/keymap';
 import * as Macros from '../actions/macro';
@@ -42,7 +44,7 @@ import {
 import {
     HardwareModulesLoadedAction,
     ShowSaveToKeyboardButtonAction,
-    HasBackupUserConfigurationAction
+    BackupUserConfigurationAction
 } from '../actions/device';
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
@@ -125,7 +127,7 @@ export class UserConfigEffects {
     @Effect({ dispatch: false }) loadConfigFromDevice$ = this.actions$
         .pipe(
             ofType(ActionTypes.LoadConfigFromDevice),
-            tap(() => this.deviceRendererService.loadConfigurationFromKeyboard())
+            tap(() => this.deviceRendererService.loadConfigurationFromKeyboard(getVersions()))
         );
 
     @Effect() loadConfigFromDeviceReply$ = this.actions$
@@ -158,12 +160,11 @@ export class UserConfigEffects {
 
                 } catch (err) {
                     this.logService.error('Eeprom user-config parse error:', err);
-                    if (data.backupConfiguration) {
-                        const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration);
-                        result.push(new HasBackupUserConfigurationAction(true));
+                    result.push(new BackupUserConfigurationAction(data.backupConfiguration));
+                    if (data.backupConfiguration.info === BackupUserConfigurationInfo.LastCompatible
+                        || data.backupConfiguration.info === BackupUserConfigurationInfo.EarlierCompatible) {
+                        const userConfig = new UserConfiguration().fromJsonObject(data.backupConfiguration.userConfiguration);
                         result.push(new LoadUserConfigSuccessAction(userConfig));
-                    } else {
-                        result.push(new HasBackupUserConfigurationAction(false));
                     }
 
                     newPageDestination = ['/device/restore-user-configuration'];
