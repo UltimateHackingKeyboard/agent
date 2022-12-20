@@ -619,4 +619,14 @@ export class UhkOperations {
             await this.device.write(fragment);
         }
     }
+
+    public async execMacroCommand(cmd: string): Promise<void> {
+        this.logService.usb('[DeviceOperation] USB[T]: Execute Macro Command');
+        if (cmd.length <= 63) {
+            const b1 = Buffer.from([UsbCommand.ExecMacroCommand]);
+            const b2 = Buffer.from(cmd);
+            const buffer = Buffer.concat([b1,b2]);
+            await this.device.write(buffer);
+        }
+    }
 }

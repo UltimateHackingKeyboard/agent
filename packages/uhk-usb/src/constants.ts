@@ -25,7 +25,8 @@ export enum UsbCommand {
     SetI2cBaudRate           = 0x10,
     SwitchKeymap             = 0x11,
     GetVariable              = 0x12,
-    SetVariable              = 0x13
+    SetVariable              = 0x13,
+    ExecMacroCommand         = 0x14
 }
 
 export enum EepromOperation {
