@@ -51,14 +51,11 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
     @Output() cancel = new EventEmitter<void>();
     @Output() tabChanged = new EventEmitter<TabName>();
 
-    // tslint:disable-next-line:max-line-length
     @ViewChild('tab', { static: false }) selectedTab: MacroCommandComponent | MacroTextTabComponent | MacroKeyTabComponent | MacroMouseTabComponent | MacroDelayTabComponent;
 
     editableMacroAction: MacroAction;
     activeTab: TabName;
-    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     TabName = TabName;
-    /* tslint:enable:variable-name */
     isSelectedMacroValid = false;
     faFont = faFont;
     faKeyboard = faKeyboard;

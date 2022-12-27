@@ -78,7 +78,6 @@ export class AppUpdateService extends MainServiceBase {
 
         ipcMain.on(IpcEvents.autoUpdater.checkForUpdate, (event: Electron.Event, args: any[]) => {
             const allowPrerelease: boolean = args[0];
-            // tslint:disable-next-line:max-line-length
             const logMsg = `[AppUpdateService] checkForUpdate request from renderer process. Allow prerelease: ${allowPrerelease}`;
             this.logService.misc(logMsg);
             this.sendAutoUpdateNotification = true;

@@ -24,14 +24,12 @@ export class SvgModuleProviderService {
             modules.push(this.getLeftModule(layout));
         }
 
-        // tslint:disable-next-line:switch-default
         switch (halvesInfo.leftModuleSlot) {
             case LeftSlotModules.KeyClusterLeft:
                 modules.push(this.getKeyClusterLeft());
                 break;
         }
 
-        // tslint:disable-next-line:switch-default
         switch (halvesInfo.rightModuleSlot) {
             case RightSlotModules.TouchpadRight:
                 modules.push(this.getTouchPadRight());

@@ -24,9 +24,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     @Input() macroAction: KeyMacroAction;
     @ViewChild('keypressTab', { static: true }) keypressTab: KeypressTabComponent;
 
-    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     TabName = TabName;
-    /* tslint:enable:variable-name */
     activeTab: TabName;
     defaultKeyAction: KeystrokeAction;
     faHandPaper = faHandPaper;

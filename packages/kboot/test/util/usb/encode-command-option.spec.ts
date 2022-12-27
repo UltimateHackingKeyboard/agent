@@ -8,7 +8,6 @@ describe('usb encodeCommandOption', () => {
         };
 
         const result = encodeCommandOption(option);
-        // tslint:disable-next-line:max-line-length
         const expected = [1, 0, 0x0c, 0, 0x07, 0x00, 0x00, 0x02, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         expect(result).toEqual(expected);
     });
