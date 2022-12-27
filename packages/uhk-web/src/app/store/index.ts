@@ -184,7 +184,6 @@ export const deviceConnected = createSelector(
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
 export const xtermLog = createSelector(firmwareState, fromFirmware.xtermLog);
-// tslint:disable-next-line: max-line-length
 export const flashFirmwareButtonDisabled = createSelector(runningInElectron, updatingFirmware, (electron, upgradingFirmware) => !electron || upgradingFirmware);
 export const getStateHardwareModules = createSelector(deviceState, fromDevice.getHardwareModules);
 export const getHardwareModules = createSelector(runningInElectron, getStateHardwareModules, getAgentVersionInfo,

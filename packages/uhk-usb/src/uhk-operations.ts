@@ -358,7 +358,6 @@ export class UhkOperations {
                 return true;
             }
 
-            // tslint:disable-next-line: max-line-length
             this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you see this message.`);
 
             await snooze(1000);

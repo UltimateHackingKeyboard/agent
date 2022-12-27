@@ -32,10 +32,8 @@ enum TabName {
 export class MacroMouseTabComponent extends MacroBaseComponent implements OnInit, OnChanges {
     @Input() macroAction: MouseMacroAction;
 
-    /* tslint:disable:variable-name: It is an enum type. So it can start with uppercase. */
     MouseButtons = MouseButtons;
     TabName = TabName;
-    /* tslint:enable:variable-name */
     activeTab: TabName;
     buttonLabels: string[];
     faArrowsAlt = faArrowsAlt;

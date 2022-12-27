@@ -146,12 +146,10 @@ export class Keymap {
                                     currentKeyAction.switchLayerMode === baseKeyAction.switchLayerMode) {
                                     continue;
                                 }
-                                // tslint:disable-next-line: max-line-length
                                 const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
                                     ` is different switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
                                 console.warn(error);
                             } else {
-                                // tslint:disable-next-line: max-line-length
                                 const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
                                     ` is not switch layer. ${currentKeyAction} will be override with ${baseKeyAction}`;
                                 console.warn(error);
@@ -161,7 +159,6 @@ export class Keymap {
                     }
                     else {
                         if (currentKeyAction instanceof SwitchLayerAction) {
-                            // tslint:disable-next-line: max-line-length
                             const error = `${this.name}.layers[${currentLayerId}]modules[${moduleId}].keyActions[${keyActionId}]` +
                                 ` is switch layer action, but the base key action is not switch layer action, so will delete`;
                             console.warn(error);

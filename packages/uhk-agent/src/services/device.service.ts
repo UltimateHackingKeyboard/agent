@@ -337,7 +337,6 @@ export class DeviceService {
                     // Left half upgrade mandatory, it is running before the other modules upgrade.
                 }
                 else if (moduleInfo.module.firmwareUpgradeSupported) {
-                    // tslint:disable-next-line:max-line-length
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
                     if (data.forceUpgrade ||  moduleInfo.info.firmwareVersion !== packageJson.firmwareVersion) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);

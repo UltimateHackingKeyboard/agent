@@ -154,7 +154,6 @@ describe('keymap', () => {
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
-        // tslint:disable-next-line: max-line-length
         expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is not switch layer. <KeystrokeAction type="basic" scancode="44"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
     });
 
@@ -311,7 +310,6 @@ describe('keymap', () => {
         const inputUserConfig = new UserConfiguration().fromJsonObject(inputJsonConfig);
 
         expect(inputUserConfig.toJsonObject()).toEqual(expectedJsonConfig);
-        // tslint:disable-next-line: max-line-length
         expect(console.warn).toHaveBeenCalledWith('QWERTY.layers[1]modules[0].keyActions[0] is different switch layer. <SwitchLayerAction layer="1" switchLayerMode="holdAndDoubleTapToggle"> will be override with <SwitchLayerAction layer="0" switchLayerMode="holdAndDoubleTapToggle">');
     });
 });
