@@ -36,7 +36,7 @@ export async function getBackupUserConfigurationContent(logService: LogService, 
                 const json = await fs.readJSON(backupFilePath);
                 const config = new UserConfiguration().fromJsonObject(json);
 
-                if (!shouldUpgradeAgent(config.getSemanticVersion(), false, versionInformation)) {
+                if (!shouldUpgradeAgent(config.getSemanticVersion(), false, versionInformation?.userConfigVersion)) {
                     logService.config('Backup user configuration', config);
 
                     return {
@@ -77,7 +77,7 @@ export async function getCompatibleUserConfigFromHistory(logService: LogService,
             const userConfig = new UserConfiguration();
             userConfig.fromBinary(UhkBuffer.fromArray(content));
 
-            if (shouldUpgradeAgent(userConfig.getSemanticVersion(), false, versionInformation)) {
+            if (shouldUpgradeAgent(userConfig.getSemanticVersion(), false, versionInformation?.userConfigVersion)) {
                 continue;
             }
 

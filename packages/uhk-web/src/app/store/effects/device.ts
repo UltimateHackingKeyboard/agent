@@ -93,7 +93,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/recovery-device']);
                 }
 
-                if (shouldUpgradeAgent(state.hardwareModules?.rightModuleInfo?.userConfigVersion, disableUpdateAgentProtection, getVersions())) {
+                if (shouldUpgradeAgent(state.hardwareModules?.rightModuleInfo?.userConfigVersion, disableUpdateAgentProtection, getVersions()?.userConfigVersion)) {
                     this.shouldUpgradeAgent = true;
 
                     return this.router.navigate(['/update-agent']);

@@ -287,7 +287,7 @@ export class DeviceService {
             const uhkDeviceProduct = getCurrentUhkDeviceProduct();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
             const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
-            if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation)) {
+            if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation?.userConfigVersion)) {
                 response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
                 this.logService.error('[DeviceService] Firmware contains newer user config version that Agent supports', packageJson.userConfigVersion);
 
