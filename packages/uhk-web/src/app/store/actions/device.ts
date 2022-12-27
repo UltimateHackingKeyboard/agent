@@ -11,6 +11,7 @@ import {
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 import { UpdateFirmwareWithPayload } from '../../models';
+import { UpdateFirmwareSuccessPayload } from '../../models/update-firmware-success-payload';
 
 export enum ActionTypes {
     SetPrivilegeOnLinux = '[device] set privilege on linux',
@@ -142,7 +143,7 @@ export class UpdateFirmwareReplyAction implements Action {
 export class UpdateFirmwareSuccessAction implements Action {
     type = ActionTypes.UpdateFirmwareSuccess;
 
-    constructor(public payload: HardwareModules) {
+    constructor(public payload: UpdateFirmwareSuccessPayload) {
     }
 }
 
