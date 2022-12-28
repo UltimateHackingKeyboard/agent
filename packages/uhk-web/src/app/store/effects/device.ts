@@ -302,7 +302,11 @@ export class DeviceEffects {
                 : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction | UpdateFirmwareNotSupportedAction> => {
 
                 if (response.success) {
-                    return of(new UpdateFirmwareSuccessAction(response.modules));
+                    return of(new UpdateFirmwareSuccessAction({
+                        firmwareDowngraded: response.firmwareDowngraded,
+                        hardwareModules: response.modules,
+                        userConfigSaved: response.userConfigSaved
+                    }));
                 }
 
                 if (response.failReason) {
@@ -337,7 +341,11 @@ export class DeviceEffects {
 
                 if (response.success) {
                     return [
-                        new UpdateFirmwareSuccessAction(response.modules),
+                        new UpdateFirmwareSuccessAction({
+                            firmwareDowngraded: response.firmwareDowngraded,
+                            hardwareModules: response.modules,
+                            userConfigSaved: response.userConfigSaved
+                        }),
                         new StartConnectionPollerAction()
                     ];
                 }

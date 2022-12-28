@@ -12,4 +12,6 @@ export enum FirmwareUpgradeFailReason {
 export class FirmwareUpgradeIpcResponse extends IpcResponse {
     modules?: HardwareModules;
     failReason?: FirmwareUpgradeFailReason;
+    userConfigSaved?: boolean;
+    firmwareDowngraded?: boolean;
 }

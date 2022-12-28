@@ -26,6 +26,7 @@ import {
     RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
     shouldUpgradeAgent,
+    shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
     VersionInformation
 } from 'uhk-common';
@@ -268,6 +269,8 @@ export class DeviceService {
 
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
         const response = new FirmwareUpgradeIpcResponse();
+        response.userConfigSaved = false;
+        response.firmwareDowngraded = false;
         const data: UpdateFirmwareData = JSON.parse(args[0]);
         let firmwarePathData: TmpFirmware;
 
@@ -308,11 +311,17 @@ export class DeviceService {
                 await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
-                this.logService.config(
-                    '[DeviceService] User configuration will be saved after right module firmware upgrade',
-                    data.userConfig);
-                const buffer = mapObjectToUserConfigBinaryBuffer(data.userConfig);
-                await this.operations.saveUserConfiguration(buffer);
+
+                if(shouldUpgradeFirmware(packageJson.userConfigVersion, data.versionInformation)) {
+                    this.logService.misc('[DeviceService] Skip user config saving because user config version is newer that firmware supports');
+                    response.firmwareDowngraded = true;
+                } else {
+                    this.logService.misc('[DeviceService] User configuration will be saved after right module firmware upgrade');
+                    this.logService.config('[DeviceService] User configuration', data.userConfig);
+                    const buffer = mapObjectToUserConfigBinaryBuffer(data.userConfig);
+                    await this.operations.saveUserConfiguration(buffer);
+                    response.userConfigSaved = true;
+                }
             } else {
                 this.logService.misc('Skip right firmware upgrade.');
             }
@@ -408,6 +417,8 @@ export class DeviceService {
             response.modules = await this.getHardwareModules(false);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             response.success = true;
+            response.userConfigSaved = true;
+            response.firmwareDowngraded = false;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);

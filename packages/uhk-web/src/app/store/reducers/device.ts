@@ -143,14 +143,24 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case Device.ActionTypes.UpdateFirmwareSuccess:
-            return {
+        case Device.ActionTypes.UpdateFirmwareSuccess: {
+            const payload = (action as Device.UpdateFirmwareSuccessAction).payload;
+
+            const newState = {
                 ...state,
-                modules: (action as Device.UpdateFirmwareSuccessAction).payload,
-                saveToKeyboard: state.modifiedConfigWhileSaved
+                modules: payload.hardwareModules,
+                saveToKeyboard: state.modifiedConfigWhileSaved && !payload.userConfigSaved
                     ? getSaveToKeyboardButtonState()
-                    : initProgressButtonState
+                    : initProgressButtonState,
+                skipFirmwareUpgrade: payload.firmwareDowngraded
             };
+
+            if (state.restoreUserConfiguration && payload.userConfigSaved) {
+                newState.restoreUserConfiguration = false;
+            }
+
+            return newState;
+        }
 
         case Device.ActionTypes.UpdateFirmwareFailed:
             return {
