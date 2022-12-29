@@ -8,6 +8,7 @@ import {
 import { CommandMacroAction } from 'uhk-common';
 
 import { SelectedMacroActionId } from '../../../../../models';
+import { hasNonAsciiCharacters } from '../../../../../util';
 import { MacroBaseComponent } from '../macro-base.component';
 
 @Component({
@@ -36,7 +37,7 @@ export class MacroCommandComponent extends MacroBaseComponent implements OnInit 
         this.validate();
     }
 
-    isMacroValid = () => !!this.macroAction.command;
+    isMacroValid = () => !!this.macroAction.command && !hasNonAsciiCharacters(this.macroAction.command);
 
     private init = () => {
         if (!this.macroAction) {
