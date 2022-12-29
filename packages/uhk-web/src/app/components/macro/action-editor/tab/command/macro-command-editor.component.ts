@@ -21,7 +21,7 @@ import { Key } from 'ts-keycode-enum';
 
 import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
-import { NON_ASCII_REGEXP } from '../../../../../util';
+import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
@@ -139,10 +139,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             return;
         }
 
-        const cursorPosition = this.editor.getPosition();
-        const value = this.editor.getValue().replace(NON_ASCII_REGEXP, '');
-        this.editor.setValue(value);
-        this.editor.setPosition(cursorPosition);
+        this.removeNonAsciiCharachters();
     }
 
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
@@ -156,11 +153,11 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                 event.preventDefault();
                 event.stopPropagation();
                 this.ctrlEnterKeyDown.emit();
-                
+
                 return;
             }
 
-            if (new RegExp(NON_ASCII_REGEXP).test(event.browserEvent.key)) {
+            if (hasNonAsciiCharacters(event.browserEvent.key)) {
                 event.preventDefault();
                 event.stopPropagation();
             }
@@ -188,6 +185,11 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     onValueChanged(value: string): void {
         if (!this.isFocused && !this.insertingMacro) {
+            return;
+        }
+
+        if (hasNonAsciiCharacters(value)) {
+            this.removeNonAsciiCharachters();
             return;
         }
 
@@ -309,6 +311,13 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         if (cursorPosition) {
             this.editor.setPosition(cursorPosition);
         }
+    }
+
+    private removeNonAsciiCharachters() {
+        const cursorPosition = this.editor.getPosition();
+        const value = this.editor.getValue().replace(NON_ASCII_REGEXP, '');
+        this.editor.setValue(value);
+        this.editor.setPosition(cursorPosition);
     }
 
     private setMacroCommand(data: string): void {

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { TextMacroAction } from 'uhk-common';
 
-import { NON_ASCII_REGEXP } from '../../../../../util';
+import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
 import { MacroBaseComponent } from '../macro-base.component';
 
@@ -35,6 +35,7 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
     onTextChange() {
         this.init();
         this.macroAction.text = this.input.nativeElement.value;
+        this.validate();
     }
 
     /**
@@ -42,7 +43,7 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
      * @param $event
      */
     onKeydown($event: KeyboardEvent): void {
-        if (new RegExp(NON_ASCII_REGEXP).test($event.key)) {
+        if (hasNonAsciiCharacters($event.key)) {
             $event.preventDefault();
             $event.stopPropagation();
         }
@@ -72,7 +73,7 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
         this.macroAction.text = textarea.value;
     }
 
-    isMacroValid = () => !!this.input.nativeElement.value;
+    isMacroValid = () => !!this.input.nativeElement.value && !hasNonAsciiCharacters(this.input.nativeElement.value);
 
     private init = () => {
         if (!this.macroAction) {
