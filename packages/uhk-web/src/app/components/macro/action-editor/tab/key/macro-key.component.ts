@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ResizedEvent } from 'angular-resize-event';
 import { KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 import { faHandPaper, faHandPointer, faHandRock } from '@fortawesome/free-solid-svg-icons';
 
@@ -30,6 +31,7 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
     faHandPaper = faHandPaper;
     faHandPointer = faHandPointer;
     faHandRock = faHandRock;
+    width = 0;
 
     ngOnInit() {
         if (!this.macroAction) {
@@ -37,6 +39,10 @@ export class MacroKeyTabComponent extends MacroBaseComponent implements OnInit {
         }
         this.defaultKeyAction = new KeystrokeAction(<any>this.macroAction);
         this.selectTab(this.getTabName(this.macroAction));
+    }
+
+    onResized(event: ResizedEvent) {
+        this.width = event.newRect.width;
     }
 
     selectTab(tab: TabName): void {

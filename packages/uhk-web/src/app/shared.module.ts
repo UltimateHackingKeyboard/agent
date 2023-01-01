@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { AngularResizeEventModule } from 'angular-resize-event';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AngularSplitModule } from 'angular-split';
@@ -246,6 +247,7 @@ import appInitFactory from './services/app-init-factory';
         UserConfigHistoryDisplayTextPipe
     ],
     imports: [
+        AngularResizeEventModule,
         AngularSplitModule,
         CommonModule,
         BrowserAnimationsModule,

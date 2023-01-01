@@ -1,4 +1,7 @@
-<div class="macro-key__container d-flex">
+<div class="macro-key__container"
+     [ngClass]="width < 350 ? 'd-block' : 'd-flex'"
+     (resized)="onResized($event)"
+>
     <div class="py-3 macro-key__types">
         <ul class="nav nav-pills">
             <li #keyMove [class.active]="activeTab === TabName.Tap" (click)="selectTab(TabName.Tap)">
