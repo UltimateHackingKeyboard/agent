@@ -32,20 +32,26 @@ import { SelectedMacroActionId, SelectedMacroItem, TabName } from '../../../mode
             transition(':enter', [
                 style({
                     height: '0px',
+                    offset: 0,
+                    overflow: 'hidden',
                     visibility: 'hidden'
                 }),
                 animate('500ms ease-out', style({
                     height: '*',
+                    overflow: 'unset',
                     visibility: 'visible'
                 }))
             ]),
             transition(':leave', [
                 style({
                     height: '*',
+                    offset: 0,
+                    overflow: 'hidden',
                     visibility: 'visible'
                 }),
                 animate('500ms ease-out', style({
                     height: '0px',
+                    overflow: 'hidden',
                     visibility: 'hidden'
                 }))
             ]),
