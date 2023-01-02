@@ -44,6 +44,8 @@ $ng-select-marked-text: $color-select-hover-text;
         .ng-dropdown-panel-items {
             .ng-optgroup {
                 font-weight: 700;
+                padding-bottom: 4px;
+                padding-top: 4px;
             }
 
             .ng-option {
