@@ -167,6 +167,7 @@ export class DeviceService {
      * @returns {Promise<Buffer>}
      */
     public async loadConfigurations(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
+        this.logService.misc('[DeviceService] load user configuration');
         const versionInformation: VersionInformation = args[0];
 
         let response: ConfigurationReply;
