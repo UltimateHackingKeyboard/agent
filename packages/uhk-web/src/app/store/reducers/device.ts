@@ -273,7 +273,8 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
         return DeviceUiStates.NotFound;
     }
 
-    if (isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
+    if (state.modules.rightModuleInfo.userConfigVersion
+        && isVersionGtMinor(state.modules.rightModuleInfo.userConfigVersion, getVersions().userConfigVersion)) {
         return DeviceUiStates.UpdateNeeded;
     }
 };
