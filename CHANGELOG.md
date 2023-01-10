@@ -6,6 +6,18 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [2.0.3] - 2023-01-10
+
+Firmware: 9.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.0)] | Device Protocol: 4.**9**.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+
+- Fix scancode dropdown visibility in macros.
+- Decrease the padding of select2 items.
+- Make Agent work with hardened Linux kernels.
+- Make smart macro documentation widgets visible only if a macro command is in focus.
+- Don't auto-save user configuration when downgrading the firmware, allowing for firmware downgrades.
+- Fix side menu revalidation after device reconnection.
+- Allow executing smart macro commands with a script via the USB protocol. `DEVICEPROTOCOL:MINOR`
+
 ## [2.0.2] - 2022-11-15
 
 Firmware: 9.1.4 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.4)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
