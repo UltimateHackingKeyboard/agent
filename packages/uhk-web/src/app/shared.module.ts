@@ -61,7 +61,7 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
-import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
+import { AdvanceSettingsPageComponent, AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
 import { SecondSideMenuContainerComponent, SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
@@ -149,6 +149,7 @@ import appInitFactory from './services/app-init-factory';
 
 @NgModule({
     declarations: [
+        AdvanceSettingsPageComponent,
         MainAppComponent,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,

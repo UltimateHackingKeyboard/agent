@@ -4,6 +4,7 @@ import { MacroMenuItem } from './macro-menu-item';
 import { DeviceUiStates } from './device-ui-states';
 
 export interface SideMenuPageState {
+    advancedSettingsMenuVisible: boolean;
     showAddonMenu: boolean;
     runInElectron: boolean;
     updatingFirmware: boolean;

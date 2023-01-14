@@ -1,3 +1,4 @@
+import { AdvancedSettingsEffects } from './advanced-settings.effects';
 import { DefaultUserConfigurationEffect } from './default-user-configuration.effect';
 import { DeviceEffects } from './device';
 import { AutoUpdateSettingsEffects } from './auto-update-settings';
@@ -17,6 +18,7 @@ export * from './auto-update-settings';
 export * from './app';
 
 export const effects = [
+    AdvancedSettingsEffects,
     ApplicationEffects,
     AppUpdateEffect,
     DefaultUserConfigurationEffect,

@@ -1,5 +1,6 @@
 #!/usr/bin/env ../../node_modules/.bin/ts-node-esm
 import { EOL } from 'os';
+import { getFormattedTimestamp } from 'uhk-common';
 
 import Uhk, { errorHandler, yargs } from './src/index.js';
 
@@ -8,14 +9,6 @@ const argv = yargs
     .argv;
 
 const { operations } = Uhk(argv);
-const dateFormat = new Intl.DateTimeFormat('sv-SE',{
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-});
 let i2cRecovery;
 
 setInterval(async function () {
@@ -23,14 +16,10 @@ setInterval(async function () {
 
         const debugInfo = await operations.getDebugInfo();
         if (i2cRecovery !== debugInfo.i2cWatchdogRecoveryCounter) {
-            process.stdout.write(`${getTimestamp()} I2cRecovery: ${debugInfo.i2cWatchdogRecoveryCounter}${EOL}`);
+            process.stdout.write(`${getFormattedTimestamp()} I2cRecovery: ${debugInfo.i2cWatchdogRecoveryCounter}${EOL}`);
             i2cRecovery = debugInfo.i2cWatchdogRecoveryCounter;
         }
     } catch (error) {
         errorHandler(error);
     }
 }, 1000);
-
-function getTimestamp() {
-    return dateFormat.format(new Date());
-}

@@ -9,6 +9,7 @@ import { getVersions } from '../../../util';
 
 import { AppState, contributors } from '../../../store';
 import { State } from '../../../store/reducers/contributors.reducer';
+import { ShowAdvancedSettingsMenuAction } from '../../../store/actions/advance-settings.action';
 import { GetAgentContributorsAction } from '../../../store/actions/contributors.action';
 
 @Component({
@@ -33,5 +34,11 @@ export class AboutComponent implements OnInit {
         this.state$ = this.store.select(contributors);
 
         this.store.dispatch(new GetAgentContributorsAction());
+    }
+
+    onAgentIconClicked(event: MouseEvent): void {
+        if(event.detail === 7) {
+            this.store.dispatch(new ShowAdvancedSettingsMenuAction());
+        }
     }
 }

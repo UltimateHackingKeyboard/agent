@@ -44,6 +44,8 @@ export class Device {
     public static readonly loadUserConfigHistoryReply = 'device-load-user-config-history-reply';
     public static readonly getUserConfigFromHistory = 'device-get-user-config-from-history';
     public static readonly getUserConfigFromHistoryReply = 'device-get-user-config-from-history-reply';
+    public static readonly toggleI2cDebugging = 'device-toggle-i2c-debugging';
+    public static readonly i2cWatchdogCounterChanged = 'device-i2c-watchdog-counter-changed';
 }
 
 export class SmartMacroDoc {
