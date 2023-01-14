@@ -21,7 +21,7 @@ import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
-    AdvanceSettingsPageComponent,
+    AdvancedSettingsPageComponent,
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
     MouseSpeedComponent,
@@ -150,7 +150,7 @@ import appInitFactory from './services/app-init-factory';
 
 @NgModule({
     declarations: [
-        AdvanceSettingsPageComponent,
+        AdvancedSettingsPageComponent,
         MainAppComponent,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,

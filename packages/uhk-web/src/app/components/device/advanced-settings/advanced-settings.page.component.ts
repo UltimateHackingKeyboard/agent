@@ -14,12 +14,12 @@ import { State } from '../../../store/reducers/advanced-settings.reducer';
 @Component({
     selector: 'advanced-settings',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: 'advance-settings.page.component.html',
+    templateUrl: 'advanced-settings.page.component.html',
     host: {
         'class': 'container-fluid full-screen-component'
     }
 })
-export class AdvanceSettingsPageComponent implements OnInit, OnDestroy {
+export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     faCog = faCog;
 
     state: State;

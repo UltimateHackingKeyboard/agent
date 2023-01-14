@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { AdvanceSettingsPageComponent } from './advanced-settings/advance-settings.page.component';
+import { AdvancedSettingsPageComponent } from './advanced-settings/advanced-settings.page.component';
 import { DeviceConfigurationComponent } from './configuration/device-configuration.component';
 import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
 import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
@@ -18,7 +18,7 @@ export const deviceRoutes: Routes = [
             },
             {
                 path: 'advanced-settings',
-                component: AdvanceSettingsPageComponent
+                component: AdvancedSettingsPageComponent
             },
             {
                 path: 'configuration',
