@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { ToggleI2cDebuggingAction } from '../../../store/actions/advance-settings.action';
-import { advanceSettingsState, AppState } from '../../../store/index';
+import { advanceSettingsState, AppState } from '../../../store';
 import { State } from '../../../store/reducers/advanced-settings.reducer';
 
 @Component({

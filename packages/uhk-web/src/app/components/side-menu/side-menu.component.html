@@ -106,6 +106,13 @@
                                [class.disabled]="state.updatingFirmware">Firmware</a>
                         </div>
                     </li>
+                    <li class="sidebar__level-2--item"
+                        *ngIf="state.advancedSettingsMenuVisible">
+                        <div class="sidebar__level-2" [routerLinkActive]="['active']">
+                            <a [routerLink]="['/device/advanced-settings']"
+                               [class.disabled]="state.updatingFirmware">Advanced settings</a>
+                        </div>
+                    </li>
                 </ul>
             </li>
             <li class="sidebar__level-1--item"
@@ -219,14 +226,6 @@
                        [class.disabled]="state.updatingFirmware">Settings</a>
                 </div>
             </li>
-            <li class="sidebar__level-2--item"
-                *ngIf="state.advancedSettingsMenuVisible">
-                <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                    <a [routerLink]="['/advanced-settings']"
-                       [class.disabled]="state.updatingFirmware">Advanced settings</a>
-                </div>
-            </li>
-
             <li class="sidebar__level-2--item">
                 <div class="sidebar__level-2" [routerLinkActive]="['active']">
                     <a [routerLink]="['/help']"

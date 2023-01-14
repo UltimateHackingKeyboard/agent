@@ -21,6 +21,7 @@ import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { AddOnComponent } from './components/add-on';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
+    AdvanceSettingsPageComponent,
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
     MouseSpeedComponent,
@@ -61,7 +62,7 @@ import {
 } from './components/popover/tab';
 import { CaptureKeystrokeButtonComponent } from './components/popover/widgets/capture-keystroke';
 import { IconComponent } from './components/popover/widgets/icon';
-import { AdvanceSettingsPageComponent, AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
+import { AboutComponent, SettingsComponent, ContributorBadgeComponent } from './components/agent';
 import { SecondSideMenuContainerComponent, SideMenuComponent } from './components/side-menu';
 import { SvgKeyboardComponent } from './components/svg/keyboard';
 import {
