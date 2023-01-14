@@ -70,6 +70,8 @@ export class DeviceService {
     private _uhkDevicePolling: boolean;
     private queueManager = new QueueManager();
     private wasCalledSaveUserConfiguration = false;
+    private isI2cDebuggingEnabled = false;
+    private i2cWatchdogRecoveryCounter = -1;
 
     constructor(private logService: LogService,
                 private win: Electron.BrowserWindow,
@@ -90,6 +92,8 @@ export class DeviceService {
             .catch(error => {
                 this.logService.misc('[DeviceService] Cannot query udev info:', error);
             });
+
+        ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
 
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
             this.queueManager.add({
@@ -526,12 +530,14 @@ export class DeviceService {
      */
     private async uhkDevicePoller(): Promise<void> {
         let savedState: DeviceConnectionState;
+        let iterationCount = 0;
 
         while (true) {
             if (this._pollerAllowed) {
                 this._uhkDevicePolling = true;
-                try {
+                iterationCount++;
 
+                try {
                     const state = await this.device.getDeviceConnectionStateAsync();
                     if (!isEqual(state, savedState)) {
                         const newState = cloneDeep(state);
@@ -550,6 +556,8 @@ export class DeviceService {
 
                         this.logService.misc('[DeviceService] Device connection state changed to:', state);
                     }
+
+                    await this.pollDebugInfo(iterationCount);
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
@@ -557,6 +565,26 @@ export class DeviceService {
 
             this._uhkDevicePolling = false;
             await snooze(250);
+        }
+    }
+
+    private async pollDebugInfo(iterationCount: number): Promise<void> {
+        if(!this.isI2cDebuggingEnabled) {
+            return;
+        }
+
+        // the connection state pool runs in every 250ms,
+        // but we query the i2c state in every sec so every 4th iteration
+        if (iterationCount % 4 !== 0) {
+            return;
+        }
+
+        const debugInfo = await this.operations.getDebugInfo();
+
+        if (this.i2cWatchdogRecoveryCounter !== debugInfo.i2cWatchdogRecoveryCounter) {
+            this.logService.misc(`[DeviceService] I2C watchdog counter changed from ${this.i2cWatchdogRecoveryCounter} => ${debugInfo.i2cWatchdogRecoveryCounter}`);
+            this.i2cWatchdogRecoveryCounter = debugInfo.i2cWatchdogRecoveryCounter;
+            this.win.webContents.send(IpcEvents.device.i2cWatchdogCounterChanged, this.i2cWatchdogRecoveryCounter);
         }
     }
 
@@ -600,6 +628,12 @@ export class DeviceService {
         };
 
         event.sender.send(IpcEvents.device.getUserConfigFromHistoryReply, response);
+    }
+
+    private async toggleI2cDebugging(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
+        this.logService.error('[DeviceService] Toggle I2C debugging =>', enabled);
+
+        this.isI2cDebuggingEnabled = enabled;
     }
 
     private async loadUserConfigFromHistory(event: Electron.IpcMainEvent): Promise<void> {

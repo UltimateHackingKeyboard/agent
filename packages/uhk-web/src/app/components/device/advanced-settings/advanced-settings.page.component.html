@@ -1,0 +1,27 @@
+<div class="full-height">
+    <div class="flex-container">
+        <div>
+            <h1 class="pane-title">
+                <fa-icon [icon]="faCog"></fa-icon>
+                <span>Advanced settings</span>
+            </h1>
+
+            <div class="col-12">
+                <div class="checkbox d-inline-block mb-0 mt-0">
+                    <label>
+                        <input type="checkbox"
+                               [checked]="state.i2cDebuggingEnabled"
+                               (click)="onToggleI2cDebug()"
+                        > I2cRecovery debugging
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow">
+            <xterm [logs]="state.i2cLogs"></xterm>
+        </div>
+        <div class="flex-footer">
+        </div>
+    </div>
+</div>

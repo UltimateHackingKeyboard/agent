@@ -27,6 +27,7 @@ import {
     UpdateFirmwareJsonAction,
     UpdateFirmwareReplyAction
 } from '../store/actions/device';
+import { I2cWatchdogCounterChangedAction } from '../store/actions/advance-settings.action';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
 import { LoadUserConfigurationHistorySuccessAction } from '../store/actions/user-configuration-history.actions';
 
@@ -84,9 +85,17 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.getUserConfigFromHistory, fileName);
     }
 
+    toggleI2cDebugging(enabled: boolean): void {
+        this.ipcRenderer.send(IpcEvents.device.toggleI2cDebugging, enabled);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.i2cWatchdogCounterChanged, (event: string, counter) => {
+            this.dispachStoreAction(new I2cWatchdogCounterChangedAction(counter));
         });
 
         this.ipcRenderer.on(IpcEvents.device.recoveryDeviceReply, (event: string, response: FirmwareUpgradeIpcResponse) => {

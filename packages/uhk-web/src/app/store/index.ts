@@ -31,6 +31,7 @@ import {
     VersionInformation
 } from 'uhk-common';
 
+import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
 import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
 import * as fromUserConfig from './reducers/user-configuration';
 import * as fromAppUpdate from './reducers/app-update.reducer';
@@ -61,6 +62,7 @@ import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
 // State interface for the application
 export interface AppState {
+    advanceSettings: fromAdvancedSettings.State;
     defaultUserConfiguration: fromDefaultUserConfig.State;
     userConfiguration: fromUserConfig.State;
     autoUpdateSettings: autoUpdateSettings.State;
@@ -75,6 +77,7 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
+    advanceSettings: fromAdvancedSettings.reducer,
     defaultUserConfiguration: fromDefaultUserConfig.reducer,
     userConfiguration: fromUserConfig.reducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
@@ -91,6 +94,10 @@ export const reducers: ActionReducerMap<AppState> = {
 export const metaReducers: MetaReducer<AppState>[] = environment.production
     ? []
     : [storeFreeze];
+
+export const advanceSettingsState = (state: AppState) => state.advanceSettings;
+export const getIsAdvancedSettingsMenuVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAdvancedSettingsMenuVisible);
+export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingEnabled);
 
 export const userConfigState = (state: AppState) => state.userConfiguration;
 
@@ -371,16 +378,19 @@ export const getSideMenuPageState = createSelector(
     getRestoreUserConfiguration,
     calculateDeviceUiState,
     getConnectedDevice,
+    getIsAdvancedSettingsMenuVisible,
     (showAddonMenuValue: boolean,
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
         userConfiguration: UserConfiguration,
         restoreUserConfiguration: boolean,
         uiState,
-        connectedDevice): SideMenuPageState => {
+        connectedDevice,
+        isAdvancedSettingsMenuVisible): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
 
         return {
+            advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
