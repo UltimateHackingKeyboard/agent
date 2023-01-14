@@ -24,6 +24,7 @@ export class AboutComponent implements OnInit {
     version: string = getVersions().version;
     agentGithubUrl: string = Constants.AGENT_GITHUB_URL;
     agentContributorsUrl: string = Constants.AGENT_CONTRIBUTORS_GITHUB_PAGE_URL;
+    logoClickCounter = 0;
     state$: Observable<State>;
     faSpinner = faSpinner;
 
@@ -37,7 +38,9 @@ export class AboutComponent implements OnInit {
     }
 
     onAgentIconClicked(event: MouseEvent): void {
-        if(event.detail === 7) {
+        this.logoClickCounter++;
+
+        if (this.logoClickCounter === 7) {
             this.store.dispatch(new ShowAdvancedSettingsMenuAction());
         }
     }
