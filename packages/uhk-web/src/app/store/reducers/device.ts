@@ -19,6 +19,7 @@ import { ReadConfigSizesReplyAction } from '../actions/device';
 import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonState } from './progress-button-state';
 
 export interface State {
+    isKeyboardLayoutChanging: boolean;
     connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
@@ -39,6 +40,7 @@ export interface State {
 }
 
 export const initialState: State = {
+    isKeyboardLayoutChanging: false,
     hasPermission: true,
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,
@@ -67,6 +69,21 @@ export const initialState: State = {
 export function reducer(state = initialState, action: Action): State {
 
     switch (action.type) {
+
+        case Device.ActionTypes.ChangeKeyboardLayout: {
+            return {
+                ...state,
+                isKeyboardLayoutChanging: true,
+            };
+        }
+
+        case Device.ActionTypes.ChangeKeyboardLayoutReply: {
+            return {
+                ...state,
+                isKeyboardLayoutChanging: false,
+            };
+        }
+
         case Device.ActionTypes.ConnectionStateChanged: {
             const data = (<Device.ConnectionStateChangedAction>action).payload;
             return {
@@ -281,3 +298,4 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 
 export const getConnectedDevice = (state: State) => state.connectedDevice;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
+export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;

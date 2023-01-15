@@ -10,13 +10,13 @@ export interface State {
     menuVisible: boolean;
 }
 
-export const initialState: State = {
+export const initialState = (): State => ({
     i2cDebuggingEnabled: false,
     i2cLogs: [],
     menuVisible: false,
-};
+});
 
-export function reducer(state = initialState, action: Actions) {
+export function reducer(state = initialState(), action: Actions) {
     switch (action.type) {
 
         case ActionTypes.i2cWatchdogCounterChanged: {

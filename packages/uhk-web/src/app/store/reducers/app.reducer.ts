@@ -215,6 +215,8 @@ export const disableUpdateAgentProtection = (state: State) => disableAgentUpgrad
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;
+export const getDeviceId = (state: State): number => state.hardwareConfig?.deviceId;
+
 export const getKeyboardLayout = (state: State): KeyboardLayout => {
     if (state.hardwareConfig && state.hardwareConfig.isIso) {
         return KeyboardLayout.ISO;

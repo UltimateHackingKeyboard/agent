@@ -5,6 +5,10 @@ export class IpcResponse {
     error?: { message: string };
 }
 
+export class ChangeKeyboardLayoutIpcResponse extends IpcResponse {
+    hardwareConfig: string;
+}
+
 export enum FirmwareUpgradeFailReason {
     UserConfigVersionNotSupported = 'UserConfigVersionNotSupported'
 }
