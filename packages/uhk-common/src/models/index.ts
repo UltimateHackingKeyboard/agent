@@ -7,6 +7,7 @@ export * from './firmware-json.js';
 export * from './firmware-repo-info.js';
 export * from './notification.js';
 export * from './ipc-response.js';
+export * from './keyboard-layout.enum.js';
 export * from './left-slot-modules.js';
 export * from './app-start-info.js';
 export * from './configuration-reply.js';

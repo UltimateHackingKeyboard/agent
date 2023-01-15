@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Store } from '@ngrx/store';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import { Observable, Subscription } from 'rxjs';
-import { HalvesInfo, Keymap } from 'uhk-common';
+import { HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
 
 import { LayerOption } from '../../../models';
 import {
@@ -14,7 +14,6 @@ import {
     getSelectedLayerOptionAddKeymap
 } from '../../../store';
 import { SelectLayerAction } from '../../../store/actions/default-user-configuration.actions';
-import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { AddKeymapAction } from '../../../store/actions/keymap';
 
 @Component({

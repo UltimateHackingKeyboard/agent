@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HalvesInfo, LeftSlotModules, RightSlotModules } from 'uhk-common';
+import { HalvesInfo, KeyboardLayout, LeftSlotModules, RightSlotModules } from 'uhk-common';
 
 import { SvgModule } from '../components/svg/module';
-import { KeyboardLayout } from '../keyboard/keyboard-layout.enum';
 import { convertXmlToSvgSeparator, SvgSeparator } from '../components/svg/separator';
 
 @Injectable()
