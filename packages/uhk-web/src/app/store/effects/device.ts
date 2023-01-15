@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Action, Store } from '@ngrx/store';
-import { RouterNavigatedAction, ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
+import { Action, Store } from '@ngrx/store';
 import { EMPTY, Observable, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, pairwise, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import {
     FirmwareUpgradeIpcResponse,
+    getHardwareConfigFromDeviceResponse,
     HardwareConfiguration,
     IpcResponse,
     NotificationType,
@@ -18,6 +19,8 @@ import {
 
 import {
     ActionTypes,
+    ChangeKeyboardLayoutAction,
+    ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
     EnableUsbStackTestAction,
     HideSaveToKeyboardButton,
@@ -41,13 +44,17 @@ import {
     UpdateFirmwareSuccessAction,
     UpdateFirmwareWithAction
 } from '../actions/device';
-import { AppRendererService } from '../../services/app-renderer.service';
-import { DeviceRendererService } from '../../services/device-renderer.service';
-import { EmptyAction, SetupPermissionErrorAction, ShowNotificationAction } from '../actions/app';
+import {
+    EmptyAction,
+    LoadHardwareConfigurationSuccessAction,
+    SetupPermissionErrorAction,
+    ShowNotificationAction
+} from '../actions/app';
 import {
     AppState,
     deviceConnected,
     disableUpdateAgentProtection,
+    getDeviceId,
     getRouterState,
     getShowFirmwareUpgradePanel,
     getUserConfiguration
@@ -58,13 +65,39 @@ import {
     LoadConfigFromDeviceAction,
     LoadResetUserConfigurationAction
 } from '../actions/user-config';
+import { AppRendererService } from '../../services/app-renderer.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
+import { DeviceRendererService } from '../../services/device-renderer.service';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { getVersions } from '../../util';
 
 @Injectable()
 export class DeviceEffects {
     private shouldUpgradeAgent = false;
+
+    @Effect({dispatch:false}) changeKeyboardLayout$ = this.actions$
+        .pipe(
+            ofType<ChangeKeyboardLayoutAction>(ActionTypes.ChangeKeyboardLayout),
+            withLatestFrom(this.store.select(getDeviceId)),
+            tap(([action, deviceId]) => {
+                this.deviceRendererService.changeKeyboardLayout(action.layout, deviceId);
+            })
+        );
+
+    @Effect() changeKeyboardLayoutFailed$ = this.actions$
+        .pipe(
+            ofType<ChangeKeyboardLayoutReplyAction>(ActionTypes.ChangeKeyboardLayoutReply),
+            map(action => {
+                if (action.payload.success) {
+                    return new LoadHardwareConfigurationSuccessAction(getHardwareConfigFromDeviceResponse(action.payload.hardwareConfig));
+                }
+
+                return new ShowNotificationAction({
+                    message: action.payload.error?.message,
+                    type: NotificationType.Error,
+                });
+            })
+        );
 
     @Effect() deviceConnectionStateChange$: Observable<Action> = this.actions$
         .pipe(

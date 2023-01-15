@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
 import {
+    ChangeKeyboardLayoutIpcResponse,
     CommandLineArgs,
     ConfigurationReply,
     DeviceConnectionState,
@@ -13,25 +14,28 @@ import {
     IpcEvents,
     IpcResponse,
     isDeviceProtocolSupportGitInfo,
+    KeyboardLayout,
     LEFT_HALF_MODULE,
     LeftSlotModules,
     LogService,
     mapObjectToUserConfigBinaryBuffer,
     ModuleInfo,
     ModuleSlotToId,
-    SaveUserConfigurationData,
-    UpdateFirmwareData,
-    UploadFileData,
-    UHK_MODULES,
-    RightSlotModules,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+    RightSlotModules,
+    SaveUserConfigurationData,
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
+    UHK_MODULES,
+    UpdateFirmwareData,
+    UploadFileData,
     VersionInformation
 } from 'uhk-common';
 import {
     checkFirmwareAndDeviceCompatibility,
+    ConfigBufferId,
+    convertBufferToIntArray,
     getCurrentUhkDeviceProduct,
     getCurrentUhkDeviceProductByBootloaderId,
     getDeviceFirmwarePath,
@@ -92,6 +96,15 @@ export class DeviceService {
             .catch(error => {
                 this.logService.misc('[DeviceService] Cannot query udev info:', error);
             });
+
+        ipcMain.on(IpcEvents.device.changeKeyboardLayout, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.changeKeyboardLayout,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
 
         ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
 
@@ -519,6 +532,34 @@ export class DeviceService {
                 await snooze(100);
             }
         });
+    }
+
+    private async changeKeyboardLayout(event: Electron.IpcMainEvent, [layout, deviceId]): Promise<void> {
+        const layoutName = layout === KeyboardLayout.ISO ? 'iso': 'ansi';
+
+        this.logService.misc(`[DeviceService] Change keyboard layout to ${layoutName}`);
+        const response = new ChangeKeyboardLayoutIpcResponse();
+
+        try {
+            await this.stopPollUhkDevice();
+
+            await this.operations.saveHardwareConfiguration(layout === KeyboardLayout.ISO, deviceId);
+
+            const hardwareInfo = await this.operations.loadConfiguration(ConfigBufferId.hardwareConfig);
+            response.hardwareConfig = JSON.stringify(convertBufferToIntArray(hardwareInfo));
+            response.success = true;
+
+            this.logService.misc('[DeviceService] Keyboard layout changed to', layoutName);
+        } catch (error) {
+            this.logService.error('[DeviceService] Change keyboard  layout error', error);
+
+            response.success = false;
+            response.error = { message: error.message };
+        } finally {
+            this.startPollUhkDevice();
+        }
+
+        event.sender.send(IpcEvents.device.changeKeyboardLayoutReply, response);
     }
 
     /**

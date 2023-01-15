@@ -6,14 +6,40 @@
                 <span>Advanced settings</span>
             </h1>
 
-            <div class="col-12">
-                <div class="checkbox d-inline-block mb-0 mt-0">
-                    <label>
-                        <input type="checkbox"
-                               [checked]="state.i2cDebuggingEnabled"
-                               (click)="onToggleI2cDebug()"
-                        > I2cRecovery debugging
-                    </label>
+            <div>
+                <div class="form-check">
+                    Layout:
+                    <div class="form-check d-inline-block">
+                        <input class="form-check-input" type="radio" id="ansiLayout" name="device-layout"
+                               [checked]="keyboardLayout === keyboardLayoutEnum.ANSI"
+                               [disabled]="isKeyboardLayoutChanging$ | async"
+                               (click)="onChangeKeyboardLayout(keyboardLayoutEnum.ANSI)"
+                        >
+                        <label class="form-check-label" for="ansiLayout">
+                            ANSI
+                        </label>
+                    </div>
+                    <div class="form-check d-inline-block">
+                        <input class="form-check-input" type="radio" id="isoLayout" name="device-layout"
+                               [checked]="keyboardLayout === keyboardLayoutEnum.ISO"
+                               [disabled]="isKeyboardLayoutChanging$ | async"
+                               (click)="onChangeKeyboardLayout(keyboardLayoutEnum.ISO)"
+                        >
+                        <label class="form-check-label" for="isoLayout">
+                            ISO
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-check mt-3">
+                    <div class="checkbox d-inline-block mb-0 mt-0">
+                        <label>
+                            <input type="checkbox"
+                                   [checked]="state.i2cDebuggingEnabled"
+                                   (click)="onToggleI2cDebug()"
+                            > I2cRecovery debugging
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>

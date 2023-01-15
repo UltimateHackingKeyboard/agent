@@ -151,6 +151,7 @@ export const disableUpdateAgentProtection = createSelector(appState, fromApp.dis
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
+export const getDeviceId = createSelector(appState, fromApp.getDeviceId);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);
@@ -255,6 +256,7 @@ export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserC
 export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
 export const getConnectedDevice = createSelector(deviceState, fromDevice.getConnectedDevice);
 export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
+export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);

@@ -2,11 +2,13 @@ import { Injectable, NgZone } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 
 import {
+    ChangeKeyboardLayoutIpcResponse,
     DeviceConnectionState,
     FirmwareJson,
     FirmwareUpgradeIpcResponse,
     IpcEvents,
     IpcResponse,
+    KeyboardLayout,
     LogService,
     SaveUserConfigurationData,
     UpdateFirmwareData,
@@ -14,9 +16,11 @@ import {
     UserConfiguration,
     VersionInformation
 } from 'uhk-common';
+
 import { AppState } from '../store';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
+    ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
     CurrentlyUpdatingModuleAction,
     ReadConfigSizesReplyAction,
@@ -39,6 +43,10 @@ export class DeviceRendererService {
                 private logService: LogService) {
         this.registerEvents();
         this.logService.misc('[DeviceRendererService] init success ');
+    }
+
+    changeKeyboardLayout(layout: KeyboardLayout, deviceId: number): void {
+        this.ipcRenderer.send(IpcEvents.device.changeKeyboardLayout, layout, deviceId);
     }
 
     setPrivilegeOnLinux(): void {
@@ -90,6 +98,10 @@ export class DeviceRendererService {
     }
 
     private registerEvents(): void {
+        this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
+            this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });

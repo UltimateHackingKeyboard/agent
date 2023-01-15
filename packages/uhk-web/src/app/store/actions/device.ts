@@ -1,19 +1,23 @@
 import { Action } from '@ngrx/store';
 import {
     BackupUserConfiguration,
+    ChangeKeyboardLayoutIpcResponse,
     ConfigSizesInfo,
     DeviceConnectionState,
     FirmwareJson,
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     HardwareModules,
-    IpcResponse
+    IpcResponse,
+    KeyboardLayout
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 import { UpdateFirmwareWithPayload } from '../../models';
 import { UpdateFirmwareSuccessPayload } from '../../models/update-firmware-success-payload';
 
 export enum ActionTypes {
+    ChangeKeyboardLayout = '[device] change keyboard layout',
+    ChangeKeyboardLayoutReply = '[device] change keyboard layout reply',
     SetPrivilegeOnLinux = '[device] set privilege on linux',
     SetPrivilegeOnLinuxReply = '[device] set privilege on linux reply',
     ConnectionStateChanged = '[device] connection state changed',
@@ -49,6 +53,19 @@ export enum ActionTypes {
     ReadConfigSizesReply = '[device] Read config sizes reply',
     SkipFirmwareUpgrade = '[device] Skip firmware upgrade'
 }
+
+export class ChangeKeyboardLayoutAction implements Action {
+    type = ActionTypes.ChangeKeyboardLayout;
+
+    constructor(public layout: KeyboardLayout) {}
+}
+
+export class ChangeKeyboardLayoutReplyAction implements Action {
+    type = ActionTypes.ChangeKeyboardLayoutReply;
+
+    constructor(public payload: ChangeKeyboardLayoutIpcResponse) {}
+}
+
 
 export class SetPrivilegeOnLinuxAction implements Action {
     type = ActionTypes.SetPrivilegeOnLinux;
@@ -243,7 +260,9 @@ export class SkipFirmwareUpgradeAction implements Action {
 }
 
 export type Actions
-    = SetPrivilegeOnLinuxAction
+    = ChangeKeyboardLayoutAction
+    | ChangeKeyboardLayoutReplyAction
+    | SetPrivilegeOnLinuxAction
     | SetPrivilegeOnLinuxReplyAction
     | ConnectionStateChangedAction
     | ShowSaveToKeyboardButtonAction
