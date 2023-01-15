@@ -12,11 +12,10 @@ import {
 } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { HalvesInfo, KeyAction, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
+import { HalvesInfo, KeyAction, KeyboardLayout, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
-import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { SvgSeparator } from '../separator';
 import {
     SvgKeyHoverEvent,

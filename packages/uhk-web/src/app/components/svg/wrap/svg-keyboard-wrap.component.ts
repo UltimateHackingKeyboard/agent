@@ -23,6 +23,7 @@ import {
     capitalizeFirstLetter,
     HalvesInfo,
     KeyAction,
+    KeyboardLayout,
     Keymap,
     KeystrokeAction,
     KeystrokeType,
@@ -41,7 +42,6 @@ import { MapperService } from '../../../services/mapper.service';
 import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
 import { AddLayerAction, RemoveLayerAction, SaveKeyAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
-import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
 import {

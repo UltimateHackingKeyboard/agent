@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { HalvesInfo, Keymap } from 'uhk-common';
+import { HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
 import { first, map, pluck } from 'rxjs/operators';
@@ -19,7 +19,6 @@ import {
     getSecondaryRoleOptions,
     getSelectedLayerOption
 } from '../../../store';
-import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import { EditDescriptionAction, SelectKeymapAction, SelectLayerAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { LastEditedKey, LayerOption } from '../../../models';

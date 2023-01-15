@@ -4,6 +4,7 @@ import {
     CommandLineArgs,
     disableAgentUpgradeProtection,
     HardwareConfiguration,
+    KeyboardLayout,
     Notification,
     NotificationType,
     runInElectron,
@@ -14,7 +15,6 @@ import {
 import * as App from '../actions/app';
 import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } from '../actions/user-config';
 import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
-import { KeyboardLayout } from '../../keyboard/keyboard-layout.enum';
 import { getVersions } from '../../util';
 
 export interface State {

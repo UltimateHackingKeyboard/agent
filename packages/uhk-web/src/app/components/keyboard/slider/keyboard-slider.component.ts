@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { HalvesInfo, Layer } from 'uhk-common';
+import { HalvesInfo, KeyboardLayout, Layer } from 'uhk-common';
 
-import { KeyboardLayout } from '../../../keyboard/keyboard-layout.enum';
 import {
     SvgKeyboardCaptureEvent,
     SvgKeyboardKeyClickEvent,
