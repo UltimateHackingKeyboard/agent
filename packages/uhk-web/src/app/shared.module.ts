@@ -25,7 +25,7 @@ import {
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
     MouseSpeedComponent,
-    LEDBrightnessComponent,
+    LEDSettingsComponent,
     RestoreConfigurationComponent,
     RecoveryModeComponent
 } from './components/device';
@@ -157,7 +157,7 @@ import appInitFactory from './services/app-init-factory';
         FirmwareFileUploadComponent,
         FirmwareUpgradePanelComponent,
         MouseSpeedComponent,
-        LEDBrightnessComponent,
+        LEDSettingsComponent,
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,
