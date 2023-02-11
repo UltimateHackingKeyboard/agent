@@ -61,14 +61,25 @@
                     {{ upgradeType }} update failed. Reconnect your UHK over USB and retry.
                 </p>
 
-                <p>
-                    If your UHK is connected via a USB hub, docking station, or KVM switch, connect it
-                    directly to your computer. It might also help to join the keyboard halves during the update.</p>
-                <p class="mb-0">
-                    If you've tried the above and the update still keeps failing, please
-                    <a class="link-github" [href]="firmwareGithubIssueUrl" externalUrl>create a GitHub issue</a>,
-                    and attach the update log.
-                </p>
+                <ul>
+                    <li>
+                        Reconnect your UHK over USB and retry.
+                    </li>
+                    <li>
+                        If your UHK is connected via a USB hub, docking station, or KVM switch, connect it directly to your computer.
+                    </li>
+                    <li>
+                        It might help to join the keyboard halves during the update.
+                    </li>
+                    <li>
+                        If you're running any application that might capture USB devices, such as VMware or VirtualBox, please stop them.
+                    </li>
+                    <li>
+                        If you've tried the above and the update still keeps failing, please
+                        <a class="link-github" [href]="firmwareGithubIssueUrl" externalUrl>create a GitHub issue</a>,
+                        and attach the update log.
+                    </li>
+                </ul>
             </div>
 
             <div *ngIf="firmwareUpgradeStates.failReason"
