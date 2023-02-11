@@ -6,6 +6,12 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [2.1.1] - 2023-01-16
+
+Firmware: 9.2.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.1)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+
+- Add hidden advanced settings page, enabling I2C debugging and ANSI-ISO layout switching.
+
 ## [2.1.0] - 2023-01-11
 
 Firmware: 9.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.0)] | Device Protocol: 4.**9**.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
