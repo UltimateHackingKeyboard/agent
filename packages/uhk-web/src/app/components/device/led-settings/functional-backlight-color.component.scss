@@ -1,0 +1,20 @@
+:host {
+    display: inline-block;
+    text-align: center;
+
+    .input-container {
+        display: inline-block;
+        height: 25px;
+        width: 25px;
+        overflow: hidden;
+
+        input[type=color] {
+            cursor: pointer;
+            display: inline-block;
+            height: calc(100% + 12px);
+            padding: 0;
+            margin: -6px;
+            width: calc(100% + 12px);
+        }
+    }
+}
