@@ -38,6 +38,7 @@ import {
     KeymapAddSecondaryMenuComponent
 } from './components/keymap';
 import { LayerOptionComponent, LayersComponent } from './components/layers';
+import { ColoredButtonDirective } from './components/layers/colors/colored-button.directive';
 import {
     MacroActionEditorComponent,
     MacroCommandComponent,
@@ -153,6 +154,7 @@ import appInitFactory from './services/app-init-factory';
     declarations: [
         AdvancedSettingsPageComponent,
         MainAppComponent,
+        ColoredButtonDirective,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
         FirmwareFileUploadComponent,

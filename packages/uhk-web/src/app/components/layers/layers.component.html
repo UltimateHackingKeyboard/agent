@@ -35,40 +35,34 @@
             <button *ngFor="let color of paletteColors; let index = index"
                     type="button"
                     class="btn btn-default"
-                    [style.background-color]="'rgb(' + color.r + ',' + color.g + ',' + color.b + ')'"
+                    coloredButton
+                    ngbTooltip=""
+                    [color]="color"
+                    [selected]="selectedPaletteColorIndex === index"
                     (click)="onColorSelected(index)"
             >
-                <fa-icon [icon]="faCheck" [style.color]="getCheckColor(color, index)"></fa-icon>
+                <fa-icon [icon]="faCheck"></fa-icon>
             </button>
 
-            <button type="button"
+            <button *ngIf="selectedPaletteColorIndex === -1" type="button"
                     class="btn btn-default"
-                    id="addColorToPaletteButton"
-                    #addColorToPaletteTooltip
-                    [autoClose]="false"
-                    [class.active]="isAddColorToPaletteButtonActive"
-                    [ngbTooltip]="tooltipMsg"
-                    triggers="manual"
-                    (click)="onAddColorToPalette($event)"
-                    (mouseenter)="onAddColorButtonMouseEnter()"
-                    (mouseleave)="onAddColorButtonMouseLeave()"
+                    ngbTooltip="Add new color to the palette."
                     >
                 <fa-icon [icon]="faPlus"></fa-icon>
             </button>
             <button *ngIf="selectedPaletteColorIndex > -1"
                     type="button"
                     class="btn btn-default"
-                    style="color: red"
-                    (click)="onDeleteColor()"
+                    ngbTooltip="Delete color from the palette."
+                    container="body"
+                    mwlConfirmationPopover
+                    popoverTitle="Are you sure?"
+                    placement="bottom"
+                    confirmText="Yes"
+                    cancelText="No"
+                    (confirm)="onDeleteColor()"
             >
                 <fa-icon [icon]="faTrash"></fa-icon>
-            </button>
-            <button *ngIf="selectedPaletteColorIndex > -1"
-                    type="button"
-                    class="btn btn-default"
-                    (click)="onFinishColor()"
-            >
-                Finish editing
             </button>
         </div>
     </div>
