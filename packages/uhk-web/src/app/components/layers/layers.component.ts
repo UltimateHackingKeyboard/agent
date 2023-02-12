@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { faCheck, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { colord } from 'colord';
 
 import { LayerOption } from '../../models';
 
@@ -22,14 +23,9 @@ export class LayersComponent {
     faPlus = faPlus;
     faTrash = faTrash;
     paletteColors= [
-        // { r: 0, g: 0, b: 0 },
-        // { r: 255, g: 255, b: 255 },
-        // { r: 0, g: 255, b: 255 },
         { r: 255, g: 0, b: 0 },
         { r: 0, g: 255, b: 0 },
         { r: 0, g: 0, b: 255 },
-        // { r: 255, g: 255, b: 0 },
-        // { r: 255, g: 0, b: 255 },
     ];
 
     selectedPaletteColorIndex = -1;
@@ -63,5 +59,10 @@ export class LayersComponent {
     onDeleteColor(): void {
         this.paletteColors.splice(this.selectedPaletteColorIndex, 1);
         this.selectedPaletteColorIndex = -1;
+    }
+
+    onAddColor(event: Event): void {
+        const target = <HTMLInputElement>event.target;
+        this.paletteColors.push(colord(target.value).toRgb());
     }
 }

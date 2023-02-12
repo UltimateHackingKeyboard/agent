@@ -44,11 +44,13 @@
                 <fa-icon [icon]="faCheck"></fa-icon>
             </button>
 
-            <button *ngIf="selectedPaletteColorIndex === -1" type="button"
-                    class="btn btn-default"
+            <button *ngIf="selectedPaletteColorIndex === -1"
+                    type="button"
+                    class="btn btn-default add-new-color-button"
                     ngbTooltip="Add new color to the palette."
                     >
                 <fa-icon [icon]="faPlus"></fa-icon>
+                <input type="color" (change)="onAddColor($event)">
             </button>
             <button *ngIf="selectedPaletteColorIndex > -1"
                     type="button"
