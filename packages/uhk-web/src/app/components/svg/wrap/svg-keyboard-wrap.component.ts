@@ -13,6 +13,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { RgbColor } from 'colord';
 
 import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -105,11 +106,16 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() layerOptions: LayerOption[];
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
+    @Input() paletteColors: Array<RgbColor> = [];
     @Input() secondaryRoleOptions: SelectOptionData[];
+    @Input() selectedPaletteColorIndex = -1;
     @Input() showPaletteColors = false;
 
+    @Output() addColorToPalette = new EventEmitter<RgbColor>();
+    @Output() deleteColorFromPalette = new EventEmitter();
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
     @Output() selectedLayerChanged = new EventEmitter<LayerOption>();
+    @Output() toggleColorFromPalette = new EventEmitter<number>();
 
     @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 

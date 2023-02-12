@@ -1,3 +1,4 @@
+import { RgbColor } from 'colord';
 import {
     BacklightingMode,
     Constants,
@@ -30,10 +31,13 @@ import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../service
 import { SaveKeyAction } from '../actions/keymap';
 import * as Device from '../actions/device';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
+import { initBacklightingColorPalette } from './backlighting-color-palette';
 import { getBaseLayerOption, initLayerOptions } from './layer-options';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
 
 export interface State {
+    backlightingColorPalette: Array<RgbColor>;
+    selectedBacklightingColorIndex: number;
     isSelectedMacroNew: boolean;
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
@@ -46,6 +50,8 @@ export interface State {
 }
 
 export const initialState: State = {
+    backlightingColorPalette: initBacklightingColorPalette(),
+    selectedBacklightingColorIndex: -1,
     isSelectedMacroNew: false,
     userConfiguration: new UserConfiguration(),
     lastEditedKey: defaultLastEditKey(),
@@ -77,6 +83,37 @@ export function reducer(
             return assignUserConfiguration(state, userConfig);
         }
 
+        case UserConfig.ActionTypes.AddColorToBacklightingColorPalette: {
+            const color = (action as UserConfig.AddColorToBacklightingColorPaletteAction).payload;
+
+            return {
+                ...state,
+                backlightingColorPalette: [...state.backlightingColorPalette, color],
+            };
+        }
+
+        case UserConfig.ActionTypes.DeleteColorFromBacklightingColorPalette: {
+            if (state.selectedBacklightingColorIndex === -1) {
+                return state;
+            }
+            const backlightingColorPalette = [...state.backlightingColorPalette];
+            backlightingColorPalette.splice(state.selectedBacklightingColorIndex, 1);
+
+            return {
+                ...state,
+                backlightingColorPalette,
+                selectedBacklightingColorIndex: -1,
+            };
+        }
+
+        case UserConfig.ActionTypes.ToggleColorFromBacklightingColorPalette: {
+            const index = (action as UserConfig.ToggleColorFromBacklightingColorPaletteAction).payload;
+
+            return {
+                ...state,
+                selectedBacklightingColorIndex: index === state.selectedBacklightingColorIndex ? -1 : index,
+            };
+        }
         case Device.ActionTypes.ConnectionStateChanged: {
             const newState: State = {
                 ...state,
@@ -752,6 +789,8 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
+export const backlightingColorPalette = (state: State): Array<RgbColor> => state.backlightingColorPalette;
+export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

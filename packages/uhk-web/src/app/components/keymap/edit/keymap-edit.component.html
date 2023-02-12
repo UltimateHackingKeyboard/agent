@@ -10,10 +10,15 @@
                        [currentLayer]="currentLayer$ | async"
                        [lastEditedKey]="lastEditedKey$ | async"
                        [layerOptions]="layerOptions$ | async"
+                       [paletteColors]="paletteColors$ | async"
                        [secondaryRoleOptions]="secondaryRoleOptions$ | async"
+                       [selectedPaletteColorIndex]="selectedPaletteColorIndex$ | async"
                        [showPaletteColors]="showColorPalette$ | async"
+                       (addColorToPalette)="addColorToPalette($event)"
+                       (deleteColorFromPalette)="deleteColorFromPalette()"
                        (descriptionChanged)="descriptionChanged($event)"
                        (selectedLayerChanged)="selectLayer($event)"
+                       (toggleColorFromPalette)="toggleColorFromPalette($event)"
     ></svg-keyboard-wrap>
 </ng-template>
 
