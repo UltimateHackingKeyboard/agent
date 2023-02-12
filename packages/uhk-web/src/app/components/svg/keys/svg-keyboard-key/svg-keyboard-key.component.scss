@@ -16,6 +16,13 @@
     }
 }
 
+.svg-circle,
+.svg-path,
+.svg-rec {
+    stroke-width:1;
+    stroke:lightgray;
+}
+
 .svg-rec {
     transition-timing-function: ease-out;
     transition: 0.2s;
