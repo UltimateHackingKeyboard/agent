@@ -1,4 +1,4 @@
-<div>{{label}}</div>
-<div class="input-container">
-    <input type="color" [value]="getHex()" (change)="onColorChanged($event)">
-</div>
+<label>
+    {{label}}
+    <input type="color" [value]="getHex" (change)="onColorChanged($event)">
+</label>

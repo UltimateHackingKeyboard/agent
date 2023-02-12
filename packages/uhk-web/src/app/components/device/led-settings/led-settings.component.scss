@@ -1,17 +1,44 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '../../../../styles/variables';
+
 :host {
     display: block;
     height: 100%;
     width: 100%;
+    --slider-value-width: 35px;
 
     label {
         display: block;
         font-weight: normal;
     }
 
-    .color-preview {
-        border: 1px solid black;
-        display: inline-block;
-        width: 25px;
-        height: 25px;
+    .backlighting-mode-container {
+        margin-left: 1.6rem;
+    }
+
+    .functional-backlight-color-container {
+        margin-left: 1.6rem;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1em;
+
+        @include media-breakpoint-down(lg) {
+            div {
+                width: 20%;
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+            div {
+                width: 45%;
+            }
+        }
+
+        @include media-breakpoint-down(xs) {
+            div {
+                width: 90%;
+            }
+        }
     }
 }
