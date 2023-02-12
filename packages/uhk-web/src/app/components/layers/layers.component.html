@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="group-container">
+    <div *ngIf="showPaletteColors" class="group-container">
         <span class="group-title">Colors: </span>
         <div role="group" class="btn-group btn-group-lg">
             <button *ngFor="let color of paletteColors; let index = index"

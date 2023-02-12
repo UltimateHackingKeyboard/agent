@@ -3,6 +3,7 @@
             [allowNewLayers]="allowNewLayers"
             [current]="currentLayer"
             [layerOptions]="layerOptions"
+            [showPaletteColors]="showPaletteColors"
             (addLayer)="onAddLayer($event)"
             (removeLayer)="onRemoveLayer($event)"
             (select)="selectedLayerChanged.emit($event)"

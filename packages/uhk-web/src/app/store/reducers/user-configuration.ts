@@ -1,4 +1,5 @@
 import {
+    BacklightingMode,
     Constants,
     getDefaultHalvesInfo,
     HalvesInfo,
@@ -750,6 +751,7 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
     .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
+export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

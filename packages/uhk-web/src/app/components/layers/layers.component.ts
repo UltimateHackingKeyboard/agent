@@ -14,6 +14,7 @@ export class LayersComponent {
     @Input() allowNewLayers: boolean;
     @Input() current: LayerOption;
     @Input() layerOptions: LayerOption[];
+    @Input() showPaletteColors = false;
 
     @Output() select = new EventEmitter<LayerOption>();
     @Output() addLayer = new EventEmitter<number>();

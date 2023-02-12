@@ -17,7 +17,8 @@ import {
     getHalvesInfo,
     getLayerOptions,
     getSecondaryRoleOptions,
-    getSelectedLayerOption
+    getSelectedLayerOption,
+    showColorPalette
 } from '../../../store';
 import { EditDescriptionAction, SelectKeymapAction, SelectLayerAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
@@ -45,6 +46,7 @@ export class KeymapEditComponent implements OnDestroy {
     keymap: Keymap;
     layerOptions$: Observable<LayerOption[]>;
     secondaryRoleOptions$: Observable<SelectOptionData[]>;
+    showColorPalette$: Observable<boolean>;
 
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
@@ -75,6 +77,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.halvesInfo$ = store.select(getHalvesInfo);
         this.layerOptions$ = this.store.select(getLayerOptions);
         this.secondaryRoleOptions$ = this.store.select(getSecondaryRoleOptions);
+        this.showColorPalette$ = this.store.select(showColorPalette);
     }
 
     ngOnDestroy(): void {

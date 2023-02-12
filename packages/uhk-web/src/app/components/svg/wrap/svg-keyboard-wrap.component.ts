@@ -106,6 +106,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
     @Input() secondaryRoleOptions: SelectOptionData[];
+    @Input() showPaletteColors = false;
 
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
     @Output() selectedLayerChanged = new EventEmitter<LayerOption>();

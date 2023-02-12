@@ -136,6 +136,7 @@ export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, ge
     });
 
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
+export const showColorPalette = createSelector(userConfigState, fromUserConfig.showColorPalette);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
     return keymaps.map(keymap => {
         return {
