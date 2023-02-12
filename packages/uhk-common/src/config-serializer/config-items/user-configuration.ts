@@ -1,14 +1,16 @@
+import { assertEnum } from '../assert.js';
 import { assertUInt16, assertUInt8 } from '../assert.js';
+import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
+import { BacklightingMode } from './backlighting-mode.js';
+import { KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
+import { LayerName } from './layer-name.js';
 import { Macro } from './macro.js';
 import { ModuleConfiguration } from './module-configuration.js';
-import { ConfigSerializer } from '../config-serializer.js';
-import { KeystrokeAction, NoneAction } from './key-action/index.js';
-import { SecondaryRoleAction } from './secondary-role-action.js';
-import { isAllowedScancode } from './scancode-checker.js';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration.js';
-import { LayerName } from './layer-name.js';
+import { isAllowedScancode } from './scancode-checker.js';
+import { SecondaryRoleAction } from './secondary-role-action.js';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
 
@@ -29,6 +31,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     @assertUInt8 alphanumericSegmentsBrightness: number;
 
     @assertUInt8 keyBacklightBrightness: number;
+
+    @assertEnum(BacklightingMode) backlightingMode: BacklightingMode;
 
     @assertUInt8 mouseMoveInitialSpeed: number;
 
@@ -82,12 +86,17 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
+            case 6:
+                this.fromJsonObjectV6(jsonObject);
+                break;
+
             default:
                 throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
         }
 
         this.clean();
         this.migrateToV5();
+        this.migrateToV6();
         this.recalculateConfigurationLength();
 
         return this;
@@ -107,12 +116,20 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 this.fromBinaryV1(buffer);
                 break;
 
+            case 6:
+                this.fromBinaryV6(buffer);
+                break;
+
             default:
                 throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
         }
 
         this.clean();
         if (this.migrateToV5()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV6()) {
             this.userConfigurationLength = 0;
         }
 
@@ -133,6 +150,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             iconsAndLayerTextsBrightness: this.iconsAndLayerTextsBrightness,
             alphanumericSegmentsBrightness: this.alphanumericSegmentsBrightness,
             keyBacklightBrightness: this.keyBacklightBrightness,
+            backlightingMode: this.backlightingMode,
             mouseMoveInitialSpeed: this.mouseMoveInitialSpeed,
             mouseMoveAcceleration: this.mouseMoveAcceleration,
             mouseMoveDeceleratedSpeed: this.mouseMoveDeceleratedSpeed,
@@ -159,6 +177,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt8(this.iconsAndLayerTextsBrightness);
         buffer.writeUInt8(this.alphanumericSegmentsBrightness);
         buffer.writeUInt8(this.keyBacklightBrightness);
+        buffer.writeUInt8(this.backlightingMode);
         buffer.writeUInt8(this.mouseMoveInitialSpeed);
         buffer.writeUInt8(this.mouseMoveAcceleration);
         buffer.writeUInt8(this.mouseMoveDeceleratedSpeed);
@@ -266,6 +285,38 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     }
 
+    private fromBinaryV6(buffer: UhkBuffer): void {
+        this.userConfigurationLength = buffer.readUInt16();
+        this.deviceName = buffer.readString();
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = buffer.readUInt16();
+        this.iconsAndLayerTextsBrightness = buffer.readUInt8();
+        this.alphanumericSegmentsBrightness = buffer.readUInt8();
+        this.keyBacklightBrightness = buffer.readUInt8();
+        this.backlightingMode = buffer.readUInt8();
+        this.mouseMoveInitialSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleration = buffer.readUInt8();
+        this.mouseMoveDeceleratedSpeed = buffer.readUInt8();
+        this.mouseMoveBaseSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollInitialSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleration = buffer.readUInt8();
+        this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollBaseSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
+            return new ModuleConfiguration().fromBinary(uhkBuffer, this.userConfigMajorVersion);
+        });
+        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
+            const macro = new Macro().fromBinary(uhkBuffer, this.userConfigMajorVersion);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, this.userConfigMajorVersion));
+        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+    }
+
     private fromJsonObjectV1(jsonObject: any): void {
         this.deviceName = jsonObject.deviceName;
         this.setDefaultDeviceName();
@@ -296,6 +347,38 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         });
     }
 
+    private fromJsonObjectV6(jsonObject: any): void {
+        this.deviceName = jsonObject.deviceName;
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = jsonObject.doubleTapSwitchLayerTimeout;
+        this.iconsAndLayerTextsBrightness = jsonObject.iconsAndLayerTextsBrightness;
+        this.alphanumericSegmentsBrightness = jsonObject.alphanumericSegmentsBrightness;
+        this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
+        this.backlightingMode = jsonObject.backlightingMode;
+        this.mouseMoveInitialSpeed = jsonObject.mouseMoveInitialSpeed;
+        this.mouseMoveAcceleration = jsonObject.mouseMoveAcceleration;
+        this.mouseMoveDeceleratedSpeed = jsonObject.mouseMoveDeceleratedSpeed;
+        this.mouseMoveBaseSpeed = jsonObject.mouseMoveBaseSpeed;
+        this.mouseMoveAcceleratedSpeed = jsonObject.mouseMoveAcceleratedSpeed;
+        this.mouseScrollInitialSpeed = jsonObject.mouseScrollInitialSpeed;
+        this.mouseScrollAcceleration = jsonObject.mouseScrollAcceleration;
+        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
+        this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
+        this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+        this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, this.userConfigMajorVersion);
+        });
+        this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
+            const macro = new Macro().fromJsonObject(macroJsonObject, this.userConfigMajorVersion);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = jsonObject.keymaps.map((keymap: any) => {
+            return new Keymap().fromJsonObject(keymap, this.macros, this.userConfigMajorVersion);
+        });
+    }
+
+
     private migrateToV5(): boolean {
         if (this.userConfigMajorVersion > 4) {
             return false;
@@ -307,6 +390,17 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 keymap.layers[i].id = i === 0 ? LayerName.base : i - 1;
             }
         }
+
+        return true;
+    }
+
+    private migrateToV6(): boolean {
+        if (this.userConfigMajorVersion > 5) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 6;
+        this.backlightingMode = BacklightingMode.FunctionalBacklighting;
 
         return true;
     }

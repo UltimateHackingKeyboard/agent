@@ -44,13 +44,19 @@
 
 <div class="backlighting-mode-container">
     <div class="form-check">
-        <input class="form-check-input" type="radio" id="functionalBacklighting" name="backlighting-mode">
+        <input class="form-check-input" type="radio" id="functionalBacklighting" name="backlighting-mode"
+               [checked]="backlightingMode === backlightingModeEnum.FunctionalBacklighting"
+               (change)="onSetPropertyValue('backlightingMode', backlightingModeEnum.FunctionalBacklighting)"
+        >
         <label class="form-check-label" for="functionalBacklighting">
             Functional backlighting
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" id="perKeyBacklighting" name="backlighting-mode">
+        <input class="form-check-input" type="radio" id="perKeyBacklighting" name="backlighting-mode"
+               [checked]="backlightingMode === backlightingModeEnum.PerKeyBacklighting"
+               (change)="onSetPropertyValue('backlightingMode', backlightingModeEnum.PerKeyBacklighting)"
+        >
         <label class="form-check-label" for="perKeyBacklighting">
             Per-key backlighting
         </label>

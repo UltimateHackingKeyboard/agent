@@ -30,6 +30,7 @@ export class Layer {
                 break;
 
             case 5:
+            case 6:
                 this.fromJsonObjectV5(jsonObject, macros, version);
                 break;
 
@@ -50,6 +51,7 @@ export class Layer {
                 break;
 
             case 5:
+            case 6:
                 this.fromBinaryV5(buffer, macros, version);
                 break;
 

@@ -5,7 +5,7 @@ import { SetUserConfigurationValueAction } from '../../../store/actions/user-con
 import { SliderPips } from '../../slider-wrapper/slider-wrapper.component';
 import { Observable, Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { UserConfiguration } from 'uhk-common';
+import { BacklightingMode, UserConfiguration } from 'uhk-common';
 
 @Component({
     selector: 'device-led-settings',
@@ -16,6 +16,9 @@ import { UserConfiguration } from 'uhk-common';
     }
 })
 export class LEDSettingsComponent implements OnInit, OnDestroy {
+    backlightingModeEnum = BacklightingMode;
+    backlightingMode = BacklightingMode.FunctionalBacklighting;
+
     public iconsAndLayerTextsBrightness: number = 0;
     public alphanumericSegmentsBrightness: number = 0;
     public keyBacklightBrightness: number = 0;
@@ -38,6 +41,7 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
             this.iconsAndLayerTextsBrightness = config.iconsAndLayerTextsBrightness;
             this.alphanumericSegmentsBrightness = config.alphanumericSegmentsBrightness;
             this.keyBacklightBrightness = config.keyBacklightBrightness;
+            this.backlightingMode = config.backlightingMode;
         });
     }
 

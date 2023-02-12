@@ -75,6 +75,7 @@ export class KeystrokeAction extends KeyAction {
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
@@ -92,6 +93,7 @@ export class KeystrokeAction extends KeyAction {
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromBinaryV1(buffer);
                 break;
 

@@ -35,6 +35,7 @@ export class Keymap {
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromJsonObjectV1(jsonObject, macros, version);
                 break;
 
@@ -54,6 +55,7 @@ export class Keymap {
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromBinaryV1(buffer, macros, version);
                 break;
 

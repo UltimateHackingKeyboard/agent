@@ -1,5 +1,6 @@
 export { default as SCANCODES }  from './scancodes.js';
 
+export * from './backlighting-mode.js';
 export * from './key-action/index.js';
 export * from './macro-action/index.js';
 export * from './modules-default-configs.js';
