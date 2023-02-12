@@ -1,9 +1,9 @@
 import { HostBinding } from '@angular/core';
 import { ChangeDetectionStrategy, Input } from '@angular/core';
 import { Component } from '@angular/core';
-import { colord, extend, RgbColor } from 'colord';
-import a11yPlugin from "colord/plugins/a11y";
-extend([a11yPlugin]);
+import { colord, RgbColor } from 'colord';
+
+import { blackOrWhiteInverseColor } from '../../../util/black-or-white-inverse-color';
 
 @Component({
     selector: 'functional-backlight-color',
@@ -30,14 +30,6 @@ export class FunctionalBacklightColorComponent {
 
     @HostBinding('style.color')
     get colorHex(): string {
-        if (!this.color) {
-            return '#ffffff';
-        }
-
-        const color = colord(this.color);
-        if (color.isReadable('#ffffff'))
-            return '#ffffff';
-
-        return '#000000';
+        return colord(blackOrWhiteInverseColor(this.color)).toHex();
     }
 }
