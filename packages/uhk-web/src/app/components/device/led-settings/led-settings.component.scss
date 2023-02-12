@@ -19,26 +19,7 @@
     .functional-backlight-color-container {
         margin-left: 1.6rem;
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
-        gap: 1em;
-
-        @include media-breakpoint-down(lg) {
-            div {
-                width: 20%;
-            }
-        }
-
-        @include media-breakpoint-down(sm) {
-            div {
-                width: 45%;
-            }
-        }
-
-        @include media-breakpoint-down(xs) {
-            div {
-                width: 90%;
-            }
-        }
+        gap: 1.5em;
     }
 }
