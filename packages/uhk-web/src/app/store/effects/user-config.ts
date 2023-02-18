@@ -70,7 +70,7 @@ export class UserConfigEffects {
                 Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate, Macros.ActionTypes.EditName, Macros.ActionTypes.Remove,
                 Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
                 Macros.ActionTypes.ReorderAction,
-                ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue
+                ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue, ActionTypes.SetUserConfigurationRgbValue
             ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {

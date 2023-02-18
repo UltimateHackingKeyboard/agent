@@ -4,6 +4,7 @@ import { UserConfiguration, ConfigurationReply } from 'uhk-common';
 
 import {
     ApplyUserConfigurationFromFilePayload,
+    UserConfigurationRgbValue,
     UserConfigurationValue,
     LoadUserConfigurationFromFilePayload
 } from '../../models';
@@ -21,6 +22,7 @@ export enum ActionTypes {
     ToggleColorFromBacklightingColorPalette = '[user-config] toggle color from the backlighting color palette',
     LoadResetUserConfiguration = '[user-config] Load reset user configuration',
     RenameUserConfiguration = '[user-config] Rename user configuration',
+    SetUserConfigurationRgbValue = '[user-config] Set user configuration RGB value',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
     LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
     ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file',
@@ -106,6 +108,13 @@ export class RenameUserConfigurationAction implements Action {
     }
 }
 
+export class SetUserConfigurationRgbValueAction implements Action {
+    type = ActionTypes.SetUserConfigurationRgbValue;
+
+    constructor(public payload: UserConfigurationRgbValue) {
+    }
+}
+
 export class SetUserConfigurationValueAction implements Action {
     type = ActionTypes.SetUserConfigurationValue;
 
@@ -140,6 +149,7 @@ export type Actions
     | LoadResetUserConfigurationAction
     | PreviewUserConfigurationAction
     | RenameUserConfigurationAction
+    | SetUserConfigurationRgbValueAction
     | SetUserConfigurationValueAction
     | ToggleColorFromBacklightingColorPaletteAction
     | LoadUserConfigurationFromFileAction

@@ -17,6 +17,7 @@ import {
     NoneAction,
     PlayMacroAction,
     RgbColor,
+    RgbColorInterface,
     RightSlotModules,
     SwitchKeymapAction,
     SwitchLayerAction,
@@ -38,7 +39,7 @@ import { getBaseLayerOption, initLayerOptions } from './layer-options';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
 
 export interface State {
-    backlightingColorPalette: Array<RgbColor>;
+    backlightingColorPalette: Array<RgbColorInterface>;
     selectedBacklightingColorIndex: number;
     isSelectedMacroNew: boolean;
     userConfiguration: UserConfiguration;
@@ -691,6 +692,17 @@ export function reducer(
             return state;
         }
 
+        case UserConfig.ActionTypes.SetUserConfigurationRgbValue: {
+            const payload = (action as UserConfig.SetUserConfigurationRgbValueAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration[payload.propertyName] = new RgbColor(payload.value);
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
         case UserConfig.ActionTypes.SetUserConfigurationValue: {
             const payload = (action as UserConfig.SetUserConfigurationValueAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
@@ -800,7 +812,7 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
-export const backlightingColorPalette = (state: State): Array<RgbColor> => state.backlightingColorPalette;
+export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
 export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {

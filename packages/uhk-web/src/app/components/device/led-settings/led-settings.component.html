@@ -66,13 +66,21 @@
 <h3 class="mt-4">Functional backlighting colors</h3>
 
 <div class="functional-backlight-color-container">
-    <functional-backlight-color [label]="'None'" [color]="{r:0, g:0, b:0}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Scancode'" [color]="{r:255, g:255, b:255}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Modifier'" [color]="{r:0, g:255, b:255}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Shortcut'" [color]="{r:0, g:0, b:255}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Switch layer'" [color]="{r:255, g:255, b:0}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Switch keymap'" [color]="{r:255, g:0, b:0}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Mouse'" [color]="{r:0, g:255, b:0}"></functional-backlight-color>
-    <functional-backlight-color [label]="'Macro'" [color]="{r:255, g:0, b:255}"></functional-backlight-color>
+    <functional-backlight-color [label]="'None'" [color]="backlightingNoneActionColor"
+                                (colorChanged)="onSetRgbValue('backlightingNoneActionColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Scancode'" [color]="backlightingScancodeColor"
+                                (colorChanged)="onSetRgbValue('backlightingScancodeColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Modifier'" [color]="backlightingModifierColor"
+                                (colorChanged)="onSetRgbValue('backlightingModifierColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Shortcut'" [color]="backlightingShortcutColor"
+                                (colorChanged)="onSetRgbValue('backlightingShortcutColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Switch layer'" [color]="backlightingSwitchLayerColor"
+                                (colorChanged)="onSetRgbValue('backlightingSwitchLayerColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Switch keymap'" [color]="backlightingSwitchKeymapColor"
+                                (colorChanged)="onSetRgbValue('backlightingSwitchKeymapColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Mouse'" [color]="backlightingMouseColor"
+                                (colorChanged)="onSetRgbValue('backlightingMouseColor', $event)"></functional-backlight-color>
+    <functional-backlight-color [label]="'Macro'" [color]="backlightingMacroColor"
+                                (colorChanged)="onSetRgbValue('backlightingMacroColor', $event)"></functional-backlight-color>
 </div>
 

@@ -1,7 +1,6 @@
-import { HostBinding } from '@angular/core';
-import { ChangeDetectionStrategy, Input } from '@angular/core';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { colord, RgbColor } from 'colord';
+import { RgbColorInterface } from 'uhk-common';
 
 import { blackOrWhiteInverseColor } from '../../../util/black-or-white-inverse-color';
 
@@ -15,8 +14,11 @@ export class FunctionalBacklightColorComponent {
     @Input() color: RgbColor;
     @Input() label: string;
 
-    onColorChanged(value) {
-        console.log(value);
+    @Output() colorChanged = new EventEmitter<RgbColorInterface>();
+
+    onColorChanged(event: Event) {
+        const element = <HTMLInputElement>event.target;
+        this.colorChanged.emit(colord(element.value).toRgb());
     }
 
     @HostBinding('style.background-color')

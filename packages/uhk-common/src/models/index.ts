@@ -19,7 +19,7 @@ export * from './module-slot-id.js';
 export * from './module-version-info.js';
 export * from './log-options.js';
 export * from './hardware-modules.js';
-export * from './rgb-color.js';
+export * from './rgb-color-interface.js';
 export * from './right-module-info.js';
 export * from './right-slot-modules.js';
 export * from './save-user-configuration-data.js';

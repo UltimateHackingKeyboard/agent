@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
-import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
+import {
+    SetUserConfigurationRgbValueAction,
+    SetUserConfigurationValueAction
+} from '../../../store/actions/user-config';
 import { SliderPips } from '../../slider-wrapper/slider-wrapper.component';
 import { Observable, Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { BacklightingMode, UserConfiguration } from 'uhk-common';
+import { BacklightingMode, RgbColorInterface, UserConfiguration } from 'uhk-common';
 
 @Component({
     selector: 'device-led-settings',
@@ -18,6 +21,14 @@ import { BacklightingMode, UserConfiguration } from 'uhk-common';
 export class LEDSettingsComponent implements OnInit, OnDestroy {
     backlightingModeEnum = BacklightingMode;
     backlightingMode = BacklightingMode.FunctionalBacklighting;
+    backlightingNoneActionColor: RgbColorInterface;
+    backlightingScancodeColor: RgbColorInterface;
+    backlightingModifierColor: RgbColorInterface;
+    backlightingShortcutColor: RgbColorInterface;
+    backlightingSwitchLayerColor: RgbColorInterface;
+    backlightingSwitchKeymapColor: RgbColorInterface;
+    backlightingMouseColor: RgbColorInterface;
+    backlightingMacroColor: RgbColorInterface;
 
     public iconsAndLayerTextsBrightness: number = 0;
     public alphanumericSegmentsBrightness: number = 0;
@@ -42,6 +53,14 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
             this.alphanumericSegmentsBrightness = config.alphanumericSegmentsBrightness;
             this.keyBacklightBrightness = config.keyBacklightBrightness;
             this.backlightingMode = config.backlightingMode;
+            this.backlightingNoneActionColor = config.backlightingNoneActionColor.toJsonObject();
+            this.backlightingScancodeColor = config.backlightingScancodeColor.toJsonObject();
+            this.backlightingModifierColor = config.backlightingModifierColor.toJsonObject();
+            this.backlightingShortcutColor = config.backlightingShortcutColor.toJsonObject();
+            this.backlightingSwitchLayerColor = config.backlightingSwitchLayerColor.toJsonObject();
+            this.backlightingSwitchKeymapColor = config.backlightingSwitchKeymapColor.toJsonObject();
+            this.backlightingMouseColor = config.backlightingMouseColor.toJsonObject();
+            this.backlightingMacroColor = config.backlightingMacroColor.toJsonObject();
         });
     }
 
@@ -51,6 +70,13 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
 
     onSetPropertyValue(propertyName: string, value: number): void {
         this.store.dispatch(new SetUserConfigurationValueAction({
+            propertyName,
+            value
+        }));
+    }
+
+    onSetRgbValue(propertyName: string, value: RgbColorInterface): void {
+        this.store.dispatch(new SetUserConfigurationRgbValueAction({
             propertyName,
             value
         }));

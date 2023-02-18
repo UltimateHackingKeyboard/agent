@@ -14,4 +14,5 @@ export * from './side-menu-page-state';
 export * from './uhk-progress-bar-state';
 export * from './update-firmware-with-payload';
 export * from './user-config-history-component-state';
+export * from './user-configuration-rgb-value';
 export * from './user-configuration-value';
