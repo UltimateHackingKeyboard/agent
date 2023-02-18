@@ -34,6 +34,7 @@ import {
 } from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
+import { KeyActionMouseMoveService } from '../../../../services/key-action-mouse-move.service';
 import { MapperService } from '../../../../services/mapper.service';
 
 import { AppState } from '../../../../store';
@@ -104,6 +105,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private shiftPressed = false;
     private subscriptions = new Subscription();
     private layerOptionMap = initLayerOptions();
+    private isMouseMoveDispatched = false;
 
     constructor(
         private mapper: MapperService,
@@ -111,7 +113,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         private element: ElementRef,
         private cdRef: ChangeDetectorRef,
         private captureService: CaptureService,
-        private dragAndDropService: KeyActionDragAndDropService
+        private dragAndDropService: KeyActionDragAndDropService,
+        private mouseMoveService: KeyActionMouseMoveService
     ) {
     }
 
@@ -131,6 +134,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     onMouseDown(e: MouseEvent) {
 
         if ((e.which === 0 || e.button === 0)) {
+            this.mouseMoveService.leftButtonDown();
             this.dragAndDropService.leftButtonDown({
                 keyId: this.svgKey.id,
                 element: this.element.nativeElement,
@@ -150,6 +154,21 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 this.store.dispatch(new StartKeypressCapturingAction());
             }
         }
+    }
+
+    @HostListener('mousemove', ['$event'])
+    onMouseMove(e: MouseEvent) {
+        if (!this.isMouseMoveDispatched && this.mouseMoveService.shouldDispatchKeyColoring()) {
+            this.isMouseMoveDispatched = true;
+            this.keyClick.emit({
+                keyTarget: this.element.nativeElement,
+            });
+        }
+    }
+
+    @HostListener('mouseleave', ['$event'])
+    onMouseLeave(e: MouseEvent) {
+        this.isMouseMoveDispatched = false;
     }
 
     @HostListener('document:keyup', ['$event'])

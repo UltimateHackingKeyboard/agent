@@ -140,6 +140,7 @@ import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-b
 import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
+import { KeyActionMouseMoveService } from './services/key-action-mouse-move.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { FirmwareUpgradePanelComponent } from './components/device/firmware-upgrade-panel';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
@@ -290,6 +291,7 @@ import appInitFactory from './services/app-init-factory';
         },
         SvgModuleProviderService,
         KeyActionDragAndDropService,
+        KeyActionMouseMoveService,
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,
