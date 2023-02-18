@@ -1,9 +1,9 @@
-import { RgbColor } from 'colord';
 import {
     BacklightingMode,
     Constants,
     getDefaultHalvesInfo,
     HalvesInfo,
+    initBacklightingColorPalette,
     KeyAction,
     KeyActionHelper,
     Keymap,
@@ -16,11 +16,14 @@ import {
     MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
+    RgbColor,
     RightSlotModules,
     SwitchKeymapAction,
     SwitchLayerAction,
     UserConfiguration
 } from 'uhk-common';
+
+import * as AppActions from '../actions/app';
 import * as KeymapActions from '../actions/keymap';
 import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
@@ -31,7 +34,6 @@ import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../service
 import { SaveKeyAction } from '../actions/keymap';
 import * as Device from '../actions/device';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
-import { initBacklightingColorPalette } from './backlighting-color-palette';
 import { getBaseLayerOption, initLayerOptions } from './layer-options';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
 
@@ -62,9 +64,18 @@ export const initialState: State = {
 
 export function reducer(
     state = initialState,
-    action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
+    action: AppActions.Actions | KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
+
+        case AppActions.ActionTypes.LoadApplicationSettingsSuccess: {
+            const applicationSettings = (action as AppActions.LoadApplicationSettingsSuccessAction).payload;
+
+            return {
+                ...state,
+                backlightingColorPalette: applicationSettings.backlightingColorPalette
+            };
+        }
 
         case UserConfig.ActionTypes.PreviewUserConfiguration:
         case UserConfig.ActionTypes.LoadResetUserConfiguration:

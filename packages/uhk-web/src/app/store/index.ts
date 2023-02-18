@@ -571,15 +571,18 @@ export const getApplicationSettings = createSelector(
     appUpdateSettingsState,
     appState,
     getSmartMacroPanelWidth,
+    backlightingColorPalette,
     (updateSettingsState,
         app,
-        smartMacroPanelWidth
+        smartMacroPanelWidth,
+        backlightingColorPalette
     ): ApplicationSettings => {
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
             everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
             animationEnabled: app.animationEnabled,
             appTheme: app.appTheme,
+            backlightingColorPalette,
             smartMacroPanelWidth
         };
     });

@@ -1,3 +1,5 @@
+import { RgbColor } from './rgb-color.js';
+
 export enum AppTheme {
     System = 'system',
     Light = 'light',
@@ -14,6 +16,7 @@ export interface ApplicationSettings {
     everAttemptedSavingToKeyboard: boolean;
     animationEnabled?: boolean;
     appTheme?: AppTheme;
+    backlightingColorPalette?: Array<RgbColor>
     /**
      * Smart Macro panel width in percent;
      */

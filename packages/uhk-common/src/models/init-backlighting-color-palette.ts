@@ -1,4 +1,4 @@
-import { RgbColor } from 'colord';
+import { RgbColor } from './rgb-color.js';
 
 export function initBacklightingColorPalette(): Array<RgbColor> {
     return [
