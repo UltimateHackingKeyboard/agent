@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { HalvesInfo, Keymap } from 'uhk-common';
+import { selectedBacklightingColorIndex } from '../store';
 
 import { AppState, getHalvesInfo, getSelectedKeymap } from '../store';
 import { ExchangeKeysActionModel } from '../models';
@@ -29,6 +30,7 @@ const SVG_DISPLAY_ELEMENT_CLASSES = ['svg-circle', 'svg-path', 'svg-rec'];
 @Injectable()
 export class KeyActionDragAndDropService implements OnDestroy {
 
+    private coloring = false;
     private isLeftButtonDown = false;
     private dragging = false;
     private lefButtonDownOptions: LeftButtonDownOptions;
@@ -54,6 +56,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this._document.addEventListener('mousemove', this.mouseMove.bind(this));
         this.subscriptions.add(this._store.select(getSelectedKeymap).subscribe(keymap => this.keymap = keymap));
         this.subscriptions.add(this._store.select(getHalvesInfo).subscribe(info => this.halvesInfo = info));
+        this.subscriptions.add(this._store.select(selectedBacklightingColorIndex).subscribe(index => this.coloring = index > -1));
     }
 
     ngOnDestroy(): void {
@@ -84,6 +87,10 @@ export class KeyActionDragAndDropService implements OnDestroy {
 
     mouseMove(event: MouseEvent): void {
         if (!this.isLeftButtonDown) {
+            return;
+        }
+
+        if (this.coloring) {
             return;
         }
 
