@@ -6,7 +6,8 @@
         fill: var(--color-keyboard-key-hover);
 
         circle,
-        path {
+        path,
+        rect {
             fill: var(--color-keyboard-key-hover);
         }
     }

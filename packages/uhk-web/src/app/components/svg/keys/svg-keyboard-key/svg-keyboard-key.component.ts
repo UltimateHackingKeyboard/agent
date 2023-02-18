@@ -14,10 +14,12 @@ import {
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Store } from '@ngrx/store';
+import { colord } from 'colord';
 import { Key } from 'ts-keycode-enum';
 import { Subscription } from 'rxjs';
 
 import {
+    BacklightingMode,
     KeyAction,
     KeyModifiers,
     KeystrokeAction,
@@ -25,6 +27,7 @@ import {
     Macro,
     MouseAction,
     PlayMacroAction,
+    RgbColor,
     SwitchKeymapAction,
     SwitchLayerAction,
     SwitchLayerMode
@@ -40,6 +43,7 @@ import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
+import { blackOrWhiteInverseColor } from '../../../../util/black-or-white-inverse-color';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
 
 enum LabelTypes {
@@ -71,7 +75,9 @@ enum LabelTypes {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
+    @Input() backlightingMode: BacklightingMode;
     @Input() keyAction: KeyAction;
+    @Input() ledColor: RgbColor;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
     @Input() macroMap = new Map<number, Macro>();
@@ -83,13 +89,14 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @ViewChild('svgRec', { static: false }) svgRec: ElementRef<HTMLElement>;
 
     enumLabelTypes = LabelTypes;
-
+    fillColor = '#333';
     recordAnimation: string;
     recording: boolean;
     labelType: LabelTypes;
 
     labelSource: any;
     secondaryText: string;
+    textColor: string;
     private scanCodePressed = false;
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
@@ -204,6 +211,10 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keyAction']) {
             this.setLabels();
+        }
+
+        if (changes['ledColor']) {
+            this.setColors();
         }
 
         if (changes['blink'] && changes['blink'].currentValue) {
@@ -384,5 +395,16 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 }
             }, 10);
         }
+    }
+
+    private setColors(): void {
+        if (this.backlightingMode === BacklightingMode.PerKeyBacklighting) {
+            this.fillColor = colord(this.ledColor).toHex();
+            this.textColor = colord(blackOrWhiteInverseColor(this.ledColor)).toHex();
+        } else {
+            this.fillColor = '#333';
+            this.textColor = colord(blackOrWhiteInverseColor(colord(this.fillColor).toRgb())).toHex();
+        }
+
     }
 }

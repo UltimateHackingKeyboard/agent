@@ -1,6 +1,7 @@
 import {
     BacklightingMode,
     Constants,
+    defaultRgbColor,
     getDefaultHalvesInfo,
     HalvesInfo,
     initBacklightingColorPalette,
@@ -24,19 +25,19 @@ import {
     UserConfiguration
 } from 'uhk-common';
 
-import * as AppActions from '../actions/app';
-import * as KeymapActions from '../actions/keymap';
-import * as MacroActions from '../actions/macro';
-import * as UserConfig from '../actions/user-config';
-import * as DeviceActions from '../actions/device';
-import { findModuleById, isValidName } from '../../util';
 import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption, SelectedMacroAction } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
-import { SaveKeyAction } from '../actions/keymap';
+import { findModuleById, isValidName } from '../../util';
+import * as AppActions from '../actions/app';
+import * as DeviceActions from '../actions/device';
 import * as Device from '../actions/device';
+import * as KeymapActions from '../actions/keymap';
+import { SaveKeyAction } from '../actions/keymap';
+import * as MacroActions from '../actions/macro';
+import * as UserConfig from '../actions/user-config';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
-import { getBaseLayerOption, initLayerOptions } from './layer-options';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
+import { getBaseLayerOption, initLayerOptions } from './layer-options';
 
 export interface State {
     backlightingColorPalette: Array<RgbColorInterface>;
@@ -224,6 +225,15 @@ export function reducer(
             userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === state.selectedKeymapAbbr) {
                     keymap = new Keymap(keymap);
+                    const baseLayer = keymap.layers.find(layer => layer.id === LayerName.base);
+                    const baseLeftModule = baseLayer.modules.find(findModuleById(1));
+                    leftModule.ledColors = new Array(baseLeftModule.keyActions.length);
+                    leftModule.ledColors.fill(defaultRgbColor());
+
+                    const baseRightModule = baseLayer.modules.find(findModuleById(0));
+                    rightModule.ledColors = new Array(baseRightModule.keyActions.length);
+                    rightModule.ledColors.fill(defaultRgbColor());
+
                     keymap.layers.push(newLayer);
                 }
 
@@ -317,6 +327,46 @@ export function reducer(
             return {
                 ...state,
                 userConfiguration
+            };
+        }
+
+        case KeymapActions.ActionTypes.SetKeyColor: {
+            const payload = (action as KeymapActions.SetKeyColorAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
+                if (keymap.abbreviation !== payload.keymap.abbreviation) {
+                    return keymap;
+                }
+
+                keymap = Object.assign(new Keymap(), keymap);
+                keymap.layers = keymap.layers.map(layer => {
+                    if (layer.id !== payload.layer) {
+                        return layer;
+                    }
+
+                    layer = new Layer(layer);
+                    layer.modules = layer.modules.map(module => {
+                        if(module.id !== payload.module) {
+                            return module;
+                        }
+
+                        module = new Module(module);
+                        module.ledColors = [...module.ledColors];
+                        const selectedColor = state.backlightingColorPalette[state.selectedBacklightingColorIndex];
+                        module.ledColors[payload.key] = new RgbColor(selectedColor);
+
+                        return module;
+                    });
+
+                    return layer;
+                });
+
+                return keymap;
+            });
+
+            return {
+                ...state,
+                userConfiguration,
             };
         }
 
@@ -812,7 +862,9 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
+export const backlightingMode = (state: State): BacklightingMode => state.userConfiguration.backlightingMode;
 export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
+export const isBacklightingColoring = (state: State): boolean => state.selectedBacklightingColorIndex > -1;
 export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {

@@ -15,6 +15,7 @@ export enum ActionTypes {
     ExchangeKeys = '[Keymap] Exchange keys action',
     SaveKey = '[Keymap] Save key action',
     SetDefault = '[Keymap] Set default option',
+    SetKeyColor = '[Keymap] Set key color',
     Remove = '[Keymap] Remove keymap',
     RemoveLayer = '[Keymap] Remove keymap layer',
     CheckMacro = '[Keymap] Check deleted macro',
@@ -93,6 +94,17 @@ export class SetDefaultKeymapAction implements Action {
     }
 }
 
+export class SetKeyColorAction implements Action {
+    type = ActionTypes.SetKeyColor;
+
+    constructor(public payload: {
+        keymap: Keymap;
+        layer: number;
+        module: number;
+        key: number;
+    }) {}
+}
+
 export class RemoveKeymapAction implements Action {
     type = ActionTypes.Remove;
 
@@ -151,6 +163,7 @@ export type Actions
     | ExchangeKeysAction
     | SaveKeyAction
     | SetDefaultKeymapAction
+    | SetKeyColorAction
     | RemoveKeymapAction
     | RemoveLayerAction
     | CheckMacroAction

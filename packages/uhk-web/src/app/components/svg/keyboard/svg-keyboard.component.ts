@@ -12,7 +12,16 @@ import {
 } from '@angular/core';
 import { animate, state, trigger, style, transition } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { HalvesInfo, KeyAction, KeyboardLayout, LeftSlotModules, Module, RightSlotModules } from 'uhk-common';
+import {
+    BacklightingMode,
+    HalvesInfo,
+    KeyAction,
+    KeyboardLayout,
+    LeftSlotModules,
+    Module,
+    RgbColor,
+    RightSlotModules
+} from 'uhk-common';
 
 import { SvgModule } from '../module';
 import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
@@ -81,6 +90,7 @@ import { findModuleById } from '../../../util';
     ]
 })
 export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
+    @Input() backlightingMode: BacklightingMode;
     @Input() moduleConfig: Module[];
     @Input() capturingEnabled: boolean;
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
@@ -185,6 +195,20 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
 
         if (moduleConf) {
             return  moduleConf.keyActions;
+        }
+
+        return [];
+    }
+
+    getLedColors(id: number): RgbColor[] {
+        if (!this.moduleConfig) {
+            return [];
+        }
+
+        const moduleConf = this.moduleConfig.find(findModuleById(id));
+
+        if (moduleConf) {
+            return  moduleConf.ledColors;
         }
 
         return [];

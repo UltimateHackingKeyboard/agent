@@ -3,9 +3,8 @@ import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { HalvesInfo, Keymap } from 'uhk-common';
-import { selectedBacklightingColorIndex } from '../store';
 
-import { AppState, getHalvesInfo, getSelectedKeymap } from '../store';
+import { AppState, getHalvesInfo, getSelectedKeymap, isBacklightingColoring } from '../store';
 import { ExchangeKeysActionModel } from '../models';
 import { ExchangeKeysAction } from '../store/actions/keymap';
 
@@ -56,7 +55,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this._document.addEventListener('mousemove', this.mouseMove.bind(this));
         this.subscriptions.add(this._store.select(getSelectedKeymap).subscribe(keymap => this.keymap = keymap));
         this.subscriptions.add(this._store.select(getHalvesInfo).subscribe(info => this.halvesInfo = info));
-        this.subscriptions.add(this._store.select(selectedBacklightingColorIndex).subscribe(index => this.coloring = index > -1));
+        this.subscriptions.add(this._store.select(isBacklightingColoring).subscribe(coloring => this.coloring = coloring));
     }
 
     ngOnDestroy(): void {

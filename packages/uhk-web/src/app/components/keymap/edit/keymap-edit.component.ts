@@ -2,19 +2,21 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RgbColor } from 'colord';
-import { HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
+import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
 import { first, map, pluck } from 'rxjs/operators';
 
 import {
     backlightingColorPalette,
+    backlightingMode,
     getUserConfiguration,
     getSelectedKeymap,
     isKeymapDeletable,
     layerDoubleTapSupported,
     AppState,
     getKeyboardLayout,
+    isBacklightingColoring,
     lastEditedKey,
     getHalvesInfo,
     getLayerOptions,
@@ -44,8 +46,10 @@ import {
 })
 export class KeymapEditComponent implements OnDestroy {
 
+    backlightingMode$: Observable<BacklightingMode>;
     currentLayer$: Observable<LayerOption>;
     deletable$: Observable<boolean>;
+    isBacklightingColoring$: Observable<boolean>;
     keymap$: Observable<Keymap>;
     keyboardLayout$: Observable<KeyboardLayout>;
     allowLayerDoubleTap$: Observable<boolean>;
@@ -71,6 +75,7 @@ export class KeymapEditComponent implements OnDestroy {
             )
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 
+        this.backlightingMode$ = store.select(backlightingMode);
         this.currentLayer$ = store.select(getSelectedLayerOption);
         this.keymap$ = store.select(getSelectedKeymap);
         this.keymapSubscription = this.keymap$
@@ -85,6 +90,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.allowLayerDoubleTap$ = store.select(layerDoubleTapSupported);
         this.lastEditedKey$ = store.select(lastEditedKey);
         this.halvesInfo$ = store.select(getHalvesInfo);
+        this.isBacklightingColoring$ = store.select(isBacklightingColoring);
         this.layerOptions$ = this.store.select(getLayerOptions);
         this.secondaryRoleOptions$ = this.store.select(getSecondaryRoleOptions);
         this.showColorPalette$ = this.store.select(showColorPalette);

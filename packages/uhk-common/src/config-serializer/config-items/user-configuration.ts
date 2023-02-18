@@ -9,6 +9,7 @@ import { LayerName } from './layer-name.js';
 import { Macro } from './macro.js';
 import { ModuleConfiguration } from './module-configuration.js';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration.js';
+import { defaultRgbColor } from './rgb-color.js';
 import { RgbColor } from './rgb-color.js';
 import { isAllowedScancode } from './scancode-checker.js';
 import { SecondaryRoleAction } from './secondary-role-action.js';
@@ -458,6 +459,20 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.backlightingSwitchKeymapColor = new RgbColor({r:255, g:0, b:0});
         this.backlightingMouseColor = new RgbColor({r:0, g:255, b:0});
         this.backlightingMacroColor = new RgbColor({r:255, g:0, b:255});
+
+        for (const keymap of this.keymaps) {
+            for (const layer of keymap.layers) {
+                for (const module of layer.modules) {
+                    if (!module.keyActions) {
+                        continue;
+                    }
+
+                    const ledColors = new Array(module.keyActions.length);
+                    ledColors.fill(defaultRgbColor());
+                    module.ledColors = ledColors;
+                }
+            }
+        }
 
         return true;
     }
