@@ -865,6 +865,7 @@ export const showColorPalette = (state: State): boolean => state.userConfigurati
 export const backlightingMode = (state: State): BacklightingMode => state.userConfiguration.backlightingMode;
 export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
 export const isBacklightingColoring = (state: State): boolean => state.selectedBacklightingColorIndex > -1;
+export const selectedBacklightingColor = (state: State): RgbColorInterface => state.backlightingColorPalette[state.selectedBacklightingColorIndex];
 export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
