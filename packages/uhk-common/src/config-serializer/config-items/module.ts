@@ -65,13 +65,13 @@ export class Module {
     toJsonObject(macros?: Macro[]): any {
         return {
             id: this.id,
-            ledColors: this.ledColors.map(color => color.toJsonObject()),
             keyActions: this.keyActions.map(keyAction => {
                 if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
                     return keyAction.toJsonObject(macros);
                 }
                 return null;
             }),
+            ledColors: this.ledColors.map(color => color.toJsonObject())
         };
     }
 
