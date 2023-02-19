@@ -127,7 +127,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             const color = colord(this.mouseMoveService.selectedBacklightingColor).toHex().replace('#', '%23');
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="24" height="24"><path fill="${color}" d="M339.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L568.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S517.7-4.4 499.1 9.6L262.4 187.2c-24 18-38.2 46.1-38.4 76.1L339.3 367.1zm-19.6 25.4l-116-104.4C143.9 290.3 96 339.6 96 400c0 3.9 .2 7.8 .6 11.6C98.4 429.1 86.4 448 68.8 448H64c-17.7 0-32 14.3-32 32s14.3 32 32 32H208c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg>`;
 
-            return this.sanitizer.bypassSecurityTrustStyle(`cursor: url('data:image/svg+xml;utf8,${svg}') 16 16, pointer;`);
+            return this.sanitizer.bypassSecurityTrustStyle(`cursor: url('data:image/svg+xml;utf8,${svg}') 0 24, pointer;`);
         }
 
         return '';
