@@ -10,6 +10,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
+    { name: 'print-usb-devices', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
     { name: 'usb-non-blocking', type: Boolean }
@@ -51,6 +52,10 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'preserve-udev-rules',
                 description: 'Don\'t force udev rule update'
+            },
+            {
+                name: 'print-usb-devices',
+                description: 'Print usb devices to the standard output and exit.'
             },
             {
                 name: 'reenumerate-and-exit',
