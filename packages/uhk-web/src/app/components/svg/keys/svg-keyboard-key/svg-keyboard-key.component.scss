@@ -3,17 +3,20 @@
     outline: none;
 
     &:hover {
-        fill: var(--color-keyboard-key-hover);
+        //fill: var(--color-keyboard-key-hover);
 
         circle,
         path,
         rect {
-            fill: var(--color-keyboard-key-hover);
+            //fill: var(--color-keyboard-key-hover);
+            //stroke-width: 5;
+        //stroke: var(--color-keyboard-key-hover);
+            //stroke: red;
         }
     }
 
     .svg-rec {
-        transition: 0s;
+        //transition: 0s;
     }
 }
 

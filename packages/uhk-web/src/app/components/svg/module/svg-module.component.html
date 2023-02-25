@@ -1,11 +1,11 @@
 <svg:path *ngFor="let path of coverages"
           [attr.d]="path.d"
-          [attr.style]="path.style | safeStyle" />
+          fill="white" stroke="lightgray" stroke-width="1"/>
 <svg:circle *ngFor="let circle of circles"
             [attr.cx]="circle.cx"
             [attr.cy]="circle.cy"
             [attr.r]="circle.r"
-            [attr.style]="circle.style | safeStyle" />
+            fill="white" stroke="lightgray" stroke-width="1" />
 
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">
     <svg:g svg-keyboard-key

@@ -1,4 +1,5 @@
 export enum BacklightingMode {
     FunctionalBacklighting,
-    PerKeyBacklighting
+    PerKeyBacklighting,
+    FunctionalBacklightingWithPerKeyValues
 }
