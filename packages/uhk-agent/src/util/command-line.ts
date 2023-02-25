@@ -28,7 +28,8 @@ const sections: commandLineUsage.Section[] = [
         optionList: [
             {
                 name: 'devtools',
-                description: 'Allow the Developer Tools menu.'
+                description: 'Allow the Developer Tools menu.',
+                type: Boolean
             },
             {
                 name: 'disable-agent-update-protection',
@@ -47,15 +48,18 @@ const sections: commandLineUsage.Section[] = [
             },
             {
                 name: 'modules',
-                description: 'Make the modules menu visible'
+                description: 'Make the modules menu visible',
+                type: Boolean
             },
             {
                 name: 'preserve-udev-rules',
-                description: 'Don\'t force udev rule update'
+                description: 'Don\'t force udev rule update',
+                type: Boolean
             },
             {
                 name: 'print-usb-devices',
-                description: 'Print usb devices to the standard output and exit.'
+                description: 'Print usb devices to the standard output and exit.',
+                type: Boolean
             },
             {
                 name: 'reenumerate-and-exit',
@@ -66,11 +70,13 @@ const sections: commandLineUsage.Section[] = [
             },
             {
                 name: 'spe',
-                description: 'Simulate privilege escalation error'
+                description: 'Simulate privilege escalation error',
+                type: Boolean
             },
             {
                 name: 'usb-non-blocking',
-                description: 'Use USB non-blocking communication'
+                description: 'Use USB non-blocking communication',
+                type: Boolean
             }
         ]
     }
