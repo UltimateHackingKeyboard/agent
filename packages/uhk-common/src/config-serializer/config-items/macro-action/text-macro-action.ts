@@ -1,4 +1,5 @@
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action.js';
 
 export class TextMacroAction extends MacroAction {
@@ -13,8 +14,8 @@ export class TextMacroAction extends MacroAction {
         this.text = other.text;
     }
 
-    fromJsonObject(jsonObject: any, version: number): TextMacroAction {
-        switch (version) {
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): TextMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -25,14 +26,14 @@ export class TextMacroAction extends MacroAction {
                 break;
 
             default:
-                throw new Error(`Text macro action does not support version: ${version}`);
+                throw new Error(`Text macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): TextMacroAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): TextMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -43,7 +44,7 @@ export class TextMacroAction extends MacroAction {
                 break;
 
             default:
-                throw new Error(`Text macro action does not support version: ${version}`);
+                throw new Error(`Text macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;

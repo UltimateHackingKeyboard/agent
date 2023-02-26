@@ -225,15 +225,6 @@ export function reducer(
             userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === state.selectedKeymapAbbr) {
                     keymap = new Keymap(keymap);
-                    const baseLayer = keymap.layers.find(layer => layer.id === LayerName.base);
-                    const baseLeftModule = baseLayer.modules.find(findModuleById(1));
-                    leftModule.ledColors = new Array(baseLeftModule.keyActions.length);
-                    leftModule.ledColors.fill(defaultRgbColor());
-
-                    const baseRightModule = baseLayer.modules.find(findModuleById(0));
-                    rightModule.ledColors = new Array(baseRightModule.keyActions.length);
-                    rightModule.ledColors.fill(defaultRgbColor());
-
                     keymap.layers.push(newLayer);
                 }
 
@@ -351,9 +342,12 @@ export function reducer(
                         }
 
                         module = new Module(module);
-                        module.ledColors = [...module.ledColors];
                         const selectedColor = state.backlightingColorPalette[state.selectedBacklightingColorIndex];
-                        module.ledColors[payload.key] = new RgbColor(selectedColor);
+                        const keyAction = KeyActionHelper.fromKeyAction(module.keyActions[payload.key]);
+                        keyAction.b = selectedColor.b;
+                        keyAction.g = selectedColor.g;
+                        keyAction.r = selectedColor.r;
+                        module.keyActions[payload.key] = keyAction;
 
                         return module;
                     });
@@ -994,7 +988,7 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
             newModules[path.moduleIdx] = Object.assign(new Module(), newModules[path.moduleIdx]);
             newModules[path.moduleIdx].keyActions = [...newModules[path.moduleIdx].keyActions];
         }
-        newModules[path.moduleIdx].keyActions[path.keyActionIdx] = undefined;
+        newModules[path.moduleIdx].keyActions[path.keyActionIdx] = new NoneAction(newModules[path.moduleIdx].keyActions[path.keyActionIdx]);
     }
 
     return newLayers;
@@ -1008,6 +1002,9 @@ function setKeyActionToLayer(layer: Layer, moduleIndex: number, keyIndex: number
     newLayer.modules[moduleIndexInArray] = newModule;
 
     newModule.keyActions = newModule.keyActions.slice();
+    if (!newKeyAction) {
+        newKeyAction = new NoneAction(newModule.keyActions[keyIndex]);
+    }
     newModule.keyActions[keyIndex] = newKeyAction;
 
     return newLayer;
@@ -1062,7 +1059,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
             keymap = Object.assign(new Keymap, keymap);
             keymap.layers = keymap.layers.map(layer => {
                 if (keyActionRemap.remapOnAllLayer || layer.id === layerIndex || isSwitchLayerAction) {
-                    const clonedAction = KeyActionHelper.createKeyAction(newKeyAction, null);
+                    const clonedAction = KeyActionHelper.fromKeyAction(newKeyAction);
                     // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                     // on the target layer and remove SwitchLayerAction from other layers
                     if (isSwitchLayerAction) {

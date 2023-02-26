@@ -5,12 +5,11 @@ import { RgbColor } from 'colord';
 import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
-import { first, map, pluck } from 'rxjs/operators';
+import { pluck } from 'rxjs/operators';
 
 import {
     backlightingColorPalette,
     backlightingMode,
-    getUserConfiguration,
     getSelectedKeymap,
     isKeymapDeletable,
     layerDoubleTapSupported,
@@ -121,25 +120,5 @@ export class KeymapEditComponent implements OnDestroy {
 
     toggleColorFromPalette(index: number): void {
         this.store.dispatch(new ToggleColorFromBacklightingColorPaletteAction(index));
-    }
-
-    private toExportableJSON(keymap: Keymap): Observable<any> {
-        return this.store
-            .select(getUserConfiguration)
-            .pipe(
-                first(),
-                map(userConfiguration => {
-                    return {
-                        site: 'https://ultimatehackingkeyboard.com',
-                        description: 'Ultimate Hacking Keyboard keymap',
-                        keyboardModel: 'UHK60',
-                        userConfigMajorVersion: userConfiguration.userConfigMajorVersion,
-                        userConfigMinorVersion: userConfiguration.userConfigMinorVersion,
-                        userConfigPatchVersion: userConfiguration.userConfigPatchVersion,
-                        objectType: 'keymap',
-                        objectValue: keymap.toJsonObject()
-                    };
-                })
-            );
     }
 }

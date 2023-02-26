@@ -166,7 +166,7 @@ export class MacroActionEditorComponent implements AfterViewInit, OnInit, OnChan
 
     private updateEditableMacroAction() {
         const macroAction: MacroAction = this.macroAction ? this.macroAction : new TextMacroAction();
-        this.editableMacroAction = MacroActionHelper.createMacroAction(macroAction);
+        this.editableMacroAction = MacroActionHelper.fromMacroAction(macroAction);
     }
 
 }

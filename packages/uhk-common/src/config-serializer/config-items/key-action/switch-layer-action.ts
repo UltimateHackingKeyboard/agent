@@ -1,5 +1,6 @@
 import { assertEnum } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { LayerName } from '../layer-name.js';
 
@@ -48,7 +49,7 @@ export class SwitchLayerAction extends KeyAction {
     @assertEnum(LayerName) layer: LayerName;
 
     constructor(other?: SwitchLayerAction) {
-        super();
+        super(other);
         if (!other) {
             return;
         }
@@ -56,54 +57,62 @@ export class SwitchLayerAction extends KeyAction {
         this.layer = other.layer;
     }
 
-    fromJsonObject(jsonObject: any, version: number): SwitchLayerAction {
-        switch (version) {
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): SwitchLayerAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-            case 6:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
+            case 6:
+                this.fromJsonObjectV6(jsonObject, serialisationInfo);
+                break;
+
             default:
-                throw new Error(`Layer switch action does not support version: ${version}`);
+                throw new Error(`Layer switch action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): SwitchLayerAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): SwitchLayerAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-            case 6:
                 this.fromBinaryV1(buffer);
                 break;
 
+            case 6:
+                this.fromBinaryV6(buffer, serialisationInfo);
+                break;
+
             default:
-                throw new Error(`Layer switch action does not support version: ${version}`);
+                throw new Error(`Layer switch action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    toJsonObject(): any {
+    toJsonObject(serialisationInfo: SerialisationInfo): any {
         return {
             keyActionType: keyActionType.SwitchLayerAction,
             layer: LayerName[this.layer],
-            switchLayerMode: this.switchLayerMode
+            switchLayerMode: this.switchLayerMode,
+            ...this.rgbColorToJson(serialisationInfo)
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
         buffer.writeUInt8(KeyActionId.SwitchLayerAction);
         buffer.writeUInt8(this.layer);
         buffer.writeUInt8(mapSwitchLayerModeToNumber(this.switchLayerMode));
+        this.rgbColorToBinary(buffer, serialisationInfo);
     }
 
     toString(): string {
@@ -127,9 +136,19 @@ export class SwitchLayerAction extends KeyAction {
         }
     }
 
+    private fromJsonObjectV6(jsonObject: any, serialisationInfo: SerialisationInfo): void {
+        this.fromJsonObjectV1(jsonObject);
+        this.rgbColorFromJson(jsonObject, serialisationInfo);
+    }
+
     private fromBinaryV1(buffer: UhkBuffer): void {
         this.readAndAssertKeyActionId(buffer);
         this.layer = buffer.readUInt8();
         this.switchLayerMode = mapNumberToSwitchLayerMode(buffer.readUInt8());
+    }
+
+    private fromBinaryV6(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
+        this.fromBinaryV1(buffer);
+        this.rgbColorFromBinary(buffer, serialisationInfo);
     }
 }

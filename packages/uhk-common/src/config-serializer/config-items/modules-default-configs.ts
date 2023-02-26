@@ -1,20 +1,12 @@
 import { LeftSlotModules, RightSlotModules } from '../../models/index.js';
 import { Module } from './module.js';
-import { defaultRgbColor } from './rgb-color.js';
+import { DEFAULT_SERIALISATION_INFO } from './serialisation-info.js';
 
 export type ModulesDefaultConfigs = { [K in LeftSlotModules | RightSlotModules]?: Module };
 
 export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
     [LeftSlotModules.KeyClusterLeft]: new Module().fromJsonObject({
         id: LeftSlotModules.KeyClusterLeft,
-        ledColors: [
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor()
-        ],
         keyActions: [
             {
                 keyActionType: 'keystroke',
@@ -44,13 +36,9 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'rightClick'
             } // Right micro button
         ]
-    }, [], 6),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackballRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackballRight,
-        ledColors: [
-            defaultRgbColor(),
-            defaultRgbColor()
-        ],
         keyActions: [
             {
                 keyActionType: 'mouse',
@@ -61,13 +49,9 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'rightClick'
             } // Right micro button
         ]
-    }, [], 6),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackpointRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackpointRight,
-        ledColors: [
-            defaultRgbColor(),
-            defaultRgbColor()
-        ],
         keyActions: [
             {
                 keyActionType: 'mouse',
@@ -78,32 +62,21 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'rightClick'
             } // Right micro button
         ]
-    }, [], 6),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
         id: RightSlotModules.TouchpadRight,
-        ledColors: [
-            defaultRgbColor(),
-        ],
         keyActions: [
             {
                 keyActionType: 'mouse',
                 mouseAction: 'leftClick'
             }
         ]
-    }, [], 6)
+    }, [], DEFAULT_SERIALISATION_INFO)
 };
 
 export const MODULES_NONE_CONFIGS: ModulesDefaultConfigs = {
     [LeftSlotModules.KeyClusterLeft]: new Module().fromJsonObject({
         id: LeftSlotModules.KeyClusterLeft,
-        ledColors: [
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor(),
-            defaultRgbColor()
-        ],
         keyActions: [
             null, // Top button
             null, // Left button
@@ -112,36 +85,25 @@ export const MODULES_NONE_CONFIGS: ModulesDefaultConfigs = {
             null, // Ball
             null // Right micro button
         ]
-    }, [], 6),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackballRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackballRight,
-        ledColors: [
-            defaultRgbColor(),
-            defaultRgbColor()
-        ],
         keyActions: [
             null, // Left micro button
             null // Right micro button
         ]
-    }, [], 6),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackpointRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackpointRight,
-        ledColors: [
-            defaultRgbColor(),
-            defaultRgbColor()
-        ],
         keyActions: [
             null, // Left micro button
             null // Right micro button
         ]
-    }, [], 6),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
         id: RightSlotModules.TouchpadRight,
-        ledColors: [
-            defaultRgbColor()
-        ],
         keyActions: [
             null
         ]
-    }, [], 6)
+    }, [], DEFAULT_SERIALISATION_INFO)
 };

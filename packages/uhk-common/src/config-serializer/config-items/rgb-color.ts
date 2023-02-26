@@ -88,7 +88,3 @@ export class RgbColor {
         this.r = jsonObject.r;
     }
 }
-
-export function defaultRgbColor(): RgbColor {
-    return new RgbColor({ b: 255, g: 255, r: 255 });
-}

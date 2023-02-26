@@ -1,4 +1,5 @@
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action.js';
 
 export class CommandMacroAction extends MacroAction {
@@ -13,8 +14,8 @@ export class CommandMacroAction extends MacroAction {
         this.command = other.command;
     }
 
-    fromJsonObject(jsonObject: any, version: number): CommandMacroAction {
-        switch (version) {
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): CommandMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -25,14 +26,14 @@ export class CommandMacroAction extends MacroAction {
                 break;
 
             default:
-                throw new Error(`Command macro action does not support version: ${version}`);
+                throw new Error(`Command macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): CommandMacroAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): CommandMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -43,7 +44,7 @@ export class CommandMacroAction extends MacroAction {
                 break;
 
             default:
-                throw new Error(`Command macro action does not support version: ${version}`);
+                throw new Error(`Command macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;

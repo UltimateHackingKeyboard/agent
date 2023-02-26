@@ -25,11 +25,9 @@ import {
     KeyAction,
     KeyModifiers,
     KeystrokeAction,
-    LayerName,
     Macro,
     MouseAction,
     PlayMacroAction,
-    RgbColor,
     SwitchKeymapAction,
     SwitchLayerAction,
     SwitchLayerMode
@@ -80,7 +78,6 @@ enum LabelTypes {
 export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() backlightingMode: BacklightingMode;
     @Input() keyAction: KeyAction;
-    @Input() ledColor: RgbColor;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
     @Input() macroMap = new Map<number, Macro>();
@@ -247,9 +244,6 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keyAction']) {
             this.setLabels();
-        }
-
-        if (changes['ledColor']) {
             this.setColors();
         }
 
@@ -435,8 +429,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     private setColors(): void {
         if (this.backlightingMode === BacklightingMode.PerKeyBacklighting) {
-            this.fillColor = colord(this.ledColor).toHex();
-            this.textColor = colord(blackOrWhiteInverseColor(this.ledColor)).toHex();
+            this.fillColor = colord(this.keyAction).toHex();
+            this.textColor = colord(blackOrWhiteInverseColor(this.keyAction)).toHex();
         } else {
             this.fillColor = '#333';
             this.textColor = colord(blackOrWhiteInverseColor(colord(this.fillColor).toRgb())).toHex();

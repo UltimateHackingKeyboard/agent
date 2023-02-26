@@ -1,3 +1,4 @@
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { NoneAction } from './none-action.js';
 import { keyActionType } from './key-action.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
@@ -13,14 +14,14 @@ describe('node-action', () => {
     describe('fromJsonObject', () => {
         it('should map null', () => {
             const action = new NoneAction();
-            expect(action.fromJsonObject({keyActionType: keyActionType.NoneAction})).toEqual(new NoneAction());
+            expect(action.fromJsonObject({keyActionType: keyActionType.NoneAction}, DEFAULT_SERIALISATION_INFO)).toEqual(new NoneAction());
         });
     });
 
     describe('toJsonObject', () => {
         it('should work', () => {
             const action = new NoneAction();
-            expect(action.toJsonObject()).toEqual({
+            expect(action.toJsonObject(DEFAULT_SERIALISATION_INFO)).toEqual({
                 keyActionType: keyActionType.NoneAction
             });
         });
@@ -30,7 +31,7 @@ describe('node-action', () => {
         it('should work', () => {
             const buffer = new UhkBuffer();
             const action = new NoneAction();
-            action.toBinary(buffer);
+            action.toBinary(buffer, DEFAULT_SERIALISATION_INFO);
             expect(action).toEqual(new NoneAction());
         });
     });
@@ -39,7 +40,7 @@ describe('node-action', () => {
         it('should work', () => {
             const buffer = new UhkBuffer();
             const action = new NoneAction();
-            action.toBinary(buffer);
+            action.toBinary(buffer, DEFAULT_SERIALISATION_INFO);
 
             const expected = new UhkBuffer();
             expected.offset = 1;
@@ -63,11 +64,11 @@ describe('node-action', () => {
 
     describe('full serialization', () => {
         it('should json match with default constructor', () => {
-            jsonDefaultHelper(new NoneAction());
+            jsonDefaultHelper(new NoneAction(), DEFAULT_SERIALISATION_INFO);
         });
 
         it('should binary match with default constructor', () => {
-            binaryDefaultHelper(new NoneAction());
+            binaryDefaultHelper(new NoneAction(), DEFAULT_SERIALISATION_INFO);
         });
     });
 });

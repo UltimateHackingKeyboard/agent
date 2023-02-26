@@ -59,7 +59,9 @@ describe('keymap', () => {
                             modules: [{
                                 id: 0,
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         },
@@ -67,7 +69,9 @@ describe('keymap', () => {
                             modules: [{
                                 id: 0,
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         }
@@ -116,9 +120,6 @@ describe('keymap', () => {
                             id: 'base',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -132,9 +133,6 @@ describe('keymap', () => {
                             id: 'mod',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -148,11 +146,10 @@ describe('keymap', () => {
                             id: 'fn',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         },
@@ -160,11 +157,10 @@ describe('keymap', () => {
                             id: 'mouse',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         }
@@ -236,7 +232,9 @@ describe('keymap', () => {
                             modules: [{
                                 id: 0,
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         },
@@ -244,7 +242,9 @@ describe('keymap', () => {
                             modules: [{
                                 id: 0,
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         }
@@ -293,9 +293,6 @@ describe('keymap', () => {
                             id: 'base',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -309,9 +306,6 @@ describe('keymap', () => {
                             id: 'mod',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
                                     {
                                         keyActionType: 'switchLayer',
@@ -325,11 +319,10 @@ describe('keymap', () => {
                             id: 'fn',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         },
@@ -337,11 +330,10 @@ describe('keymap', () => {
                             id: 'mouse',
                             modules: [{
                                 id: 0,
-                                ledColors: [
-                                    { b: 255, g: 255, r: 255 }
-                                ],
                                 keyActions: [
-                                    null
+                                    {
+                                        "keyActionType": "none"
+                                    }
                                 ]
                             }]
                         }

@@ -2,14 +2,12 @@ import { assertUInt8 } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { KeyActionHelper, KeyAction, NoneAction, PlayMacroAction, SwitchKeymapAction } from './key-action/index.js';
 import { Macro } from './macro.js';
-import { RgbColor } from './rgb-color.js';
+import { SerialisationInfo } from './serialisation-info.js';
 import { UserConfiguration } from './user-configuration.js';
 
 export class Module {
 
     @assertUInt8 id: number;
-
-    ledColors: RgbColor[];
 
     keyActions: KeyAction[] = [];
 
@@ -18,77 +16,68 @@ export class Module {
             return;
         }
         this.id = other.id;
-        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.createKeyAction(keyAction, null));
-        this.ledColors = other.ledColors.map(color => new RgbColor(color));
+        this.keyActions = other.keyActions.map(keyAction => KeyActionHelper.fromKeyAction(keyAction));
     }
 
-    fromJsonObject(jsonObject: any, macros: Macro[], version: number): Module {
-        switch (version) {
+    fromJsonObject(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): Module {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                this.fromJsonObjectV1(jsonObject, macros, version);
-                break;
             case 6:
-                this.fromJsonObjectV6(jsonObject, macros, version);
+                this.fromJsonObjectV1(jsonObject, macros, serialisationInfo);
                 break;
 
             default:
-                throw new Error(`Module configuration does not support version: ${version}`);
+                throw new Error(`Module configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros: Macro[], version: number): Module {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): Module {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                this.fromBinaryV1(buffer, macros, version);
-                break;
             case 6:
-                this.fromBinaryV6(buffer, macros, version);
+                this.fromBinaryV1(buffer, macros, serialisationInfo);
                 break;
 
             default:
-                throw new Error(`Module configuration does not support version: ${version}`);
+                throw new Error(`Module configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    toJsonObject(macros?: Macro[]): any {
+    toJsonObject(serialisationInfo: SerialisationInfo, macros?: Macro[]): any {
         return {
             id: this.id,
             keyActions: this.keyActions.map(keyAction => {
                 if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
-                    return keyAction.toJsonObject(macros);
+                    return keyAction.toJsonObject(serialisationInfo, macros);
                 }
-                return null;
-            }),
-            ledColors: this.ledColors.map(color => color.toJsonObject())
+                return new NoneAction();
+            })
         };
     }
 
-    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration: UserConfiguration): void {
         buffer.writeUInt8(this.id);
 
         const noneAction = new NoneAction();
 
         buffer.writeArray(this.keyActions, (uhkBuffer: UhkBuffer, keyAction: KeyAction) => {
             if (keyAction) {
-                keyAction.toBinary(uhkBuffer, userConfiguration);
+                keyAction.toBinary(uhkBuffer, serialisationInfo, userConfiguration);
             } else {
-                noneAction.toBinary(uhkBuffer);
+                noneAction.toBinary(uhkBuffer, serialisationInfo);
             }
-        });
-        buffer.writeArray(this.ledColors, (uhkBuffer: UhkBuffer, color: RgbColor) => {
-            color.toBinary(uhkBuffer);
         });
     }
 
@@ -118,38 +107,19 @@ export class Module {
         return this;
     }
 
-    fromJsonObjectV1(jsonObject: any, macros: Macro[], version: number): void {
+    fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = jsonObject.id;
         this.keyActions = jsonObject.keyActions.map((keyAction: any) => {
-            return KeyActionHelper.createKeyAction(keyAction, macros, version);
+            return KeyActionHelper.fromJSONObject(keyAction, macros, serialisationInfo);
         });
     }
 
-    fromJsonObjectV6(jsonObject: any, macros: Macro[], version: number): void {
-        this.fromJsonObjectV1(jsonObject, macros, version);
-        this.ledColors = jsonObject.ledColors.map(color => new RgbColor(color));
-    }
-
-    fromBinaryV1(buffer: UhkBuffer, macros: Macro[], version: number): void {
+    fromBinaryV1(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = buffer.readUInt8();
         const keyActionsLength: number = buffer.readCompactLength();
         this.keyActions = [];
         for (let i = 0; i < keyActionsLength; ++i) {
-            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, macros, version));
+            this.keyActions.push(KeyActionHelper.createKeyAction(buffer, macros, serialisationInfo));
         }
-    }
-
-    fromBinaryV6(buffer: UhkBuffer, macros: Macro[], version: number): void {
-        this.fromBinaryV1(buffer, macros, version);
-        this.ledColors = [];
-        const ledColorsLength: number = buffer.readCompactLength();
-        for (let i = 0; i < ledColorsLength; ++i) {
-            this.ledColors.push(new RgbColor({
-                r: buffer.readUInt8(),
-                g: buffer.readUInt8(),
-                b: buffer.readUInt8()
-            }));
-        }
-
     }
 }

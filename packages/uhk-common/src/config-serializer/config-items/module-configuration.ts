@@ -1,5 +1,6 @@
 import { assertUInt8, assertUInt16 } from '../assert.js';
 import { UhkBuffer } from '../uhk-buffer.js';
+import { SerialisationInfo } from './serialisation-info.js';
 
 export class ModuleConfiguration {
 
@@ -25,8 +26,8 @@ export class ModuleConfiguration {
 
     @assertUInt8 mouseLayerPointerFunction: number;
 
-    fromJsonObject(jsonObject: any, version: number): ModuleConfiguration {
-        switch (version) {
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): ModuleConfiguration {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -37,14 +38,14 @@ export class ModuleConfiguration {
                 break;
 
             default:
-                throw new Error(`Module configuration does not support version: ${version}`);
+                throw new Error(`Module configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): ModuleConfiguration {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): ModuleConfiguration {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -55,7 +56,7 @@ export class ModuleConfiguration {
                 break;
 
             default:
-                throw new Error(`Module configuration does not support version: ${version}`);
+                throw new Error(`Module configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;

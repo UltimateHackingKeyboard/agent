@@ -19,7 +19,6 @@ import {
     KeyboardLayout,
     LeftSlotModules,
     Module,
-    RgbColor,
     RightSlotModules
 } from 'uhk-common';
 
@@ -195,20 +194,6 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
 
         if (moduleConf) {
             return  moduleConf.keyActions;
-        }
-
-        return [];
-    }
-
-    getLedColors(id: number): RgbColor[] {
-        if (!this.moduleConfig) {
-            return [];
-        }
-
-        const moduleConf = this.moduleConfig.find(findModuleById(id));
-
-        if (moduleConf) {
-            return  moduleConf.ledColors;
         }
 
         return [];

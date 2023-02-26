@@ -1,3 +1,4 @@
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { KeystrokeAction } from './keystroke-action.js';
 import { KeystrokeType } from './keystroke-type.js';
 import { SecondaryRoleAction } from '../secondary-role-action.js';
@@ -185,7 +186,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject, 1);
+            action.fromJsonObject(jsObject, DEFAULT_SERIALISATION_INFO);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.basic;
@@ -205,7 +206,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject, 1);
+            action.fromJsonObject(jsObject, DEFAULT_SERIALISATION_INFO);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.system;
@@ -225,7 +226,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject, 1);
+            action.fromJsonObject(jsObject, DEFAULT_SERIALISATION_INFO);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.shortMedia;
@@ -245,7 +246,7 @@ describe('keystroke-action', () => {
                 secondaryRoleAction: 'leftAlt'
             };
             const action = new KeystrokeAction();
-            action.fromJsonObject(jsObject, 1);
+            action.fromJsonObject(jsObject, DEFAULT_SERIALISATION_INFO);
 
             const expected = new KeystrokeAction();
             expected.type = KeystrokeType.longMedia;

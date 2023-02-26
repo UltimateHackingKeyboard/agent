@@ -1,6 +1,7 @@
 import { assertEnum, assertUInt8, assertUInt16 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { KeyModifiers } from '../key-modifiers.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { MacroAction, MacroActionId, MacroKeySubAction, macroActionType } from './macro-action.js';
 import { KeystrokeType } from '../key-action/keystroke-type.js';
 
@@ -46,8 +47,8 @@ export class KeyMacroAction extends MacroAction {
         this.modifierMask = other.modifierMask;
     }
 
-    fromJsonObject(jsonObject: JsObjectKeyMacroAction, version: number): KeyMacroAction {
-        switch (version) {
+    fromJsonObject(jsonObject: JsObjectKeyMacroAction, serialisationInfo: SerialisationInfo): KeyMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -58,14 +59,14 @@ export class KeyMacroAction extends MacroAction {
                 break;
 
             default:
-                throw new Error(`Key macro action does not support version: ${version}`);
+                throw new Error(`Key macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): KeyMacroAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): KeyMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -76,7 +77,7 @@ export class KeyMacroAction extends MacroAction {
                 break;
 
             default:
-                throw new Error(`Key macro action does not support version: ${version}`);
+                throw new Error(`Key macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
