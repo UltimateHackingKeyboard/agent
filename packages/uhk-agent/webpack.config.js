@@ -36,10 +36,6 @@ module.exports = {
                     to: 'manifest.json'
                 },
                 {
-                    from: 'src/package.json',
-                    to: 'package.json'
-                },
-                {
                     from: 'src/preload.js',
                     to: 'preload.js'
                 }
