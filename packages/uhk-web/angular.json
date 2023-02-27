@@ -28,11 +28,11 @@
             "optimization": false,
             "assets": [
               "src/assets",
-              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" },
-              { "glob": "**/*", "input": "node_modules/monaco-editor/min-maps", "output": "assets/monaco-editor/min-maps" }
+              { "glob": "**/*", "input": "monaco-editor/min", "output": "assets/monaco-editor/min" },
+              { "glob": "**/*", "input": "monaco-editor/min-maps", "output": "assets/monaco-editor/min-maps" }
             ],
             "styles": [
-              "node_modules/nouislider/dist/nouislider.min.css",
+              "nouislider/dist/nouislider.min.css",
               {
                 "input": "src/styles.scss",
                 "bundleName": "stylesLight",
@@ -45,7 +45,7 @@
               }
             ],
             "scripts": [
-              "node_modules/nouislider/dist/nouislider.js"
+              "nouislider/dist/nouislider.js"
             ],
             "allowedCommonJsDependencies": [
               "buffer",
@@ -105,15 +105,15 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "styles": [
-              "node_modules/nouislider/dist/nouislider.min.css",
+              "nouislider/dist/nouislider.min.css",
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/nouislider/dist/nouislider.js"
+              "nouislider/dist/nouislider.js"
             ],
             "assets": [
               "src/assets",
-              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
+              { "glob": "**/*", "input": "monaco-editor/min", "output": "assets/monaco-editor/min" }
             ]
           }
         },
@@ -159,10 +159,10 @@
             "tsConfig": "src/tsconfig.renderer.json",
             "assets": [
               "src/assets",
-              { "glob": "**/*", "input": "node_modules/monaco-editor/min", "output": "assets/monaco-editor/min" }
+              { "glob": "**/*", "input": "monaco-editor/min", "output": "assets/monaco-editor/min" }
             ],
             "styles": [
-              "node_modules/nouislider/dist/nouislider.min.css",
+              "nouislider/dist/nouislider.min.css",
               {
                 "input": "src/styles.scss",
                 "bundleName": "stylesLight",
@@ -175,7 +175,7 @@
               }
             ],
             "scripts": [
-              "node_modules/nouislider/dist/nouislider.js"
+              "nouislider/dist/nouislider.js"
             ],
             "allowedCommonJsDependencies": [
               "buffer",
