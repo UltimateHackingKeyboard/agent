@@ -55,6 +55,7 @@ export interface State {
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
     selectedLayerOption: LayerOption;
+    theme: string;
 }
 
 export const initialState: State = {
@@ -65,7 +66,8 @@ export const initialState: State = {
     lastEditedKey: defaultLastEditKey(),
     layerOptions: initLayerOptions(),
     halvesInfo: getDefaultHalvesInfo(),
-    selectedLayerOption: getBaseLayerOption()
+    selectedLayerOption: getBaseLayerOption(),
+    theme: ''
 };
 
 export function reducer(
@@ -73,6 +75,20 @@ export function reducer(
     action: AppActions.Actions | KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
+
+        case AppActions.ActionTypes.SetAppTheme: {
+            const theme = (action as AppActions.SetAppThemeAction).payload;
+            const userConfiguration = state.userConfiguration.clone();
+            setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, theme);
+
+            const newState = {
+                ...state,
+                userConfiguration,
+                theme
+            };
+
+            return newState;
+        }
 
         case AppActions.ActionTypes.LoadApplicationSettingsSuccess: {
             const applicationSettings = (action as AppActions.LoadApplicationSettingsSuccessAction).payload;
@@ -227,7 +243,7 @@ export function reducer(
             }
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, newLayer);
+            setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, newLayer, state.theme);
 
             userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === state.selectedKeymapAbbr) {
@@ -359,7 +375,7 @@ export function reducer(
                         return module;
                     });
 
-                    setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, layer);
+                    setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, layer, state.theme);
 
                     return layer;
                 });
@@ -762,7 +778,7 @@ export function reducer(
             userConfiguration[payload.propertyName] = payload.value;
 
             if (payload.propertyName === 'backlightingMode') {
-                setSvgKeyboardCoverColorsOfAllLayer(userConfiguration);
+                setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, state.theme);
             }
 
             return {
@@ -1023,7 +1039,7 @@ function setKeyActionToLayer(layer: Layer, moduleIndex: number, keyIndex: number
     return newLayer;
 }
 
-function assignUserConfiguration(state: State, userConfig: UserConfiguration): State {
+function assignUserConfiguration(state: State, userConfig: UserConfiguration, theme?: string): State {
     let userConfiguration = Object.assign(new UserConfiguration(), {
         ...state.userConfiguration,
         ...userConfig,
@@ -1039,7 +1055,7 @@ function assignUserConfiguration(state: State, userConfig: UserConfiguration): S
         userConfiguration = addMissingModuleConfigs(userConfiguration, state.halvesInfo.rightModuleSlot);
     }
 
-    setSvgKeyboardCoverColorsOfAllLayer(userConfiguration);
+    setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, theme);
 
     return {
         ...state,
@@ -1128,8 +1144,8 @@ function calculateLayerOptions(state: State): Map<number, LayerOption> {
     return calculateLayerOptionsOfKeymap(selectedKeymap);
 }
 
-function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, layer: Layer): void {
-    const themeColors = uhkThemeColors();
+function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, layer: Layer, theme: string): void {
+    const themeColors = uhkThemeColors(theme);
 
     if (backligtingMode === BacklightingMode.PerKeyBacklighting) {
         let nrOfKeys = 0;
@@ -1170,11 +1186,11 @@ function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, lay
     }
 }
 
-function setSvgKeyboardCoverColorsOfAllLayer(userConfig: UserConfiguration): void {
+function setSvgKeyboardCoverColorsOfAllLayer(userConfig: UserConfiguration, theme: string): void {
     userConfig.keymaps = userConfig.keymaps.map(keymap => {
         keymap = new Keymap(keymap);
         for (const layer of keymap.layers) {
-            setSvgKeyboardCoverColorsOfLayer(userConfig.backlightingMode, layer);
+            setSvgKeyboardCoverColorsOfLayer(userConfig.backlightingMode, layer, theme);
         }
 
         return keymap;

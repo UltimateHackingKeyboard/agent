@@ -4,13 +4,13 @@ export interface UhkThemeColors {
     backgroundColor: string;
     svgKeyboardCoverColors: SvgKeyboardCoverColors;
 }
-export function uhkThemeColors(): UhkThemeColors {
-    if ((window as any).getUhkTheme() === 'dark') {
+export function uhkThemeColors(theme = (window as any).getUhkTheme()): UhkThemeColors {
+    if (theme === 'dark') {
         return {
             backgroundColor: '#000',
             svgKeyboardCoverColors: {
-                fillColor: '#111',
-                strokeColor: 'lightgray'
+                fillColor: '#333',
+                strokeColor: ''
             }
         };
     }
@@ -19,7 +19,7 @@ export function uhkThemeColors(): UhkThemeColors {
         backgroundColor: '#fff',
         svgKeyboardCoverColors: {
             fillColor: '#333',
-            strokeColor: 'lightgray'
+            strokeColor: ''
         }
     };
 }
