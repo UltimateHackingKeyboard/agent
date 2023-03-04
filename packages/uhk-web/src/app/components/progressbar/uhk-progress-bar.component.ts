@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { UhkProgressBarState } from '../../models/uhk-progress-bar-state';
+import { ProgressBar, UhkProgressBarState } from '../../models/uhk-progress-bar-state';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,8 +11,8 @@ import { UhkProgressBarState } from '../../models/uhk-progress-bar-state';
 export class UhkProgressBarComponent {
     @Input() state: UhkProgressBarState;
 
-    getStyleWidth(): string {
-        const percent = this.state.currentValue / (this.state.maxValue - this.state.minValue) * 100;
+    getStyleWidth(progressBar: ProgressBar): string {
+        const percent = progressBar.currentValue / (progressBar.maxValue - progressBar.minValue) * 100;
 
         return `${percent}%`;
     }

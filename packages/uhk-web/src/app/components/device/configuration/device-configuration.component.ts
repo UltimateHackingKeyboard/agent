@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { UploadFileData } from 'uhk-common';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
-import { AppState, getConfigSizesState, getUserConfigHistoryComponentState, isUserConfigSaving } from '../../../store';
+import { AppState, getConfigSizesProgressBarState, getUserConfigHistoryComponentState, isUserConfigSaving } from '../../../store';
 import { ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
@@ -26,7 +26,7 @@ import {
     }
 })
 export class DeviceConfigurationComponent implements OnInit, OnDestroy {
-    configSizesState$: Observable<UhkProgressBarState>;
+    configSizesProgressBarState$: Observable<UhkProgressBarState>;
     userConfigHistoryState$: Observable<UserConfigHistoryComponentState>;
     savingUserConfig: boolean;
     faSlidersH = faSlidersH;
@@ -34,7 +34,7 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     private subscription = new Subscription();
 
     constructor(private store: Store<AppState>) {
-        this.configSizesState$ = this.store.select(getConfigSizesState);
+        this.configSizesProgressBarState$ = this.store.select(getConfigSizesProgressBarState);
         this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryComponentState);
         this.subscription.add(this.store.select(isUserConfigSaving).subscribe(x => this.savingUserConfig = x));
     }

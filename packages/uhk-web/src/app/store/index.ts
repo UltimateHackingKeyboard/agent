@@ -48,11 +48,13 @@ import { environment } from '../../environments/environment';
 import { RouterState } from './router-util';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import {
+    ConfigSizeState,
     DeviceUiStates,
     FirmwareUpgradeState,
     MacroMenuItem,
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
+    ProgressBar,
     SideMenuPageState,
     UhkProgressBarState,
     UserConfigHistoryComponentState
@@ -277,26 +279,39 @@ export const getUserConfigSize = createSelector(getUserConfigAsBuffer, uhkBuffer
 export const getMd5HasOfUserConfig = createSelector(getUserConfigAsBuffer, uhkBuffer => {
     return createMd5Hash(uhkBuffer.getBufferContent());
 });
-export const getConfigSizesState = createSelector(deviceState, getUserConfigSize, runningInElectron,
-    (deviceStateData, userConfigSize, isRunningInElectron) => {
+export const getConfigSizesState = createSelector(deviceState, getUserConfigSize,
+    (deviceStateData, userConfigSize): ConfigSizeState => {
+        return {
+            allUsage: userConfigSize,
+            capacity: deviceStateData.configSizes.userConfig,
+            rgbColorsUsage: 0
+        };
+    });
+export const getConfigSizesProgressBarState = createSelector(getConfigSizesState,
+    (configSizeState: ConfigSizeState): UhkProgressBarState => {
         const formatNumber = new Intl.NumberFormat(undefined, {
             useGrouping: true
         }).format;
-        const maxValue = deviceStateData.configSizes.userConfig;
+
+        const progressBars: Array<ProgressBar> = [
+            {
+                currentValue: configSizeState.allUsage,
+                maxValue: configSizeState.capacity,
+                minValue: 0
+            }
+        ];
 
         return {
-            currentValue: userConfigSize,
-            maxValue,
-            loading: isRunningInElectron && deviceStateData.readingConfigSizes,
-            minValue: 0,
-            text: `${formatNumber(userConfigSize)} of ${formatNumber(maxValue)} bytes on-board storage in used`
+            progressBars,
+            text: `${formatNumber(configSizeState.allUsage)} of ${formatNumber(configSizeState.capacity)} bytes on-board storage in used`
         };
     });
+
 export const getOutOfSpaceWaringData = createSelector(getConfigSizesState,
-    (configSizeState: UhkProgressBarState): OutOfSpaceWarningData => ({
-        currentValue: configSizeState.currentValue,
-        maxValue: configSizeState.maxValue,
-        show: configSizeState.currentValue > configSizeState.maxValue
+    (configSizeState: ConfigSizeState): OutOfSpaceWarningData => ({
+        currentValue: configSizeState.allUsage,
+        maxValue: configSizeState.capacity,
+        show: configSizeState.allUsage > configSizeState.capacity
     }));
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, getOutOfSpaceWaringData,
