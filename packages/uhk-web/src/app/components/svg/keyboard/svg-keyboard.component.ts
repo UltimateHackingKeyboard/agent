@@ -19,7 +19,8 @@ import {
     KeyboardLayout,
     LeftSlotModules,
     Module,
-    RightSlotModules
+    RightSlotModules,
+    SvgKeyboardCoverColors
 } from 'uhk-common';
 
 import { SvgModule } from '../module';
@@ -98,6 +99,7 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() showDescription = false;
+    @Input() svgKeyboardCoverColors: SvgKeyboardCoverColors;
     @Input() lastEditedKey: LastEditedKey;
     @Input() embedded = false;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();

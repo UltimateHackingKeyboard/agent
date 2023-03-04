@@ -15,4 +15,5 @@ export * from './module.js';
 export * from './module-configuration.js';
 export * from './mouse-speed-configuration.js';
 export * from './rgb-color.js';
+export * from './svg-keyboard-cover-colors.js';
 export * from './user-configuration.js';

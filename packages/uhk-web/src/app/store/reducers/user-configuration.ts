@@ -1,7 +1,8 @@
+import { colord, extend } from 'colord';
+import labPlugin from 'colord/plugins/lab';
 import {
     BacklightingMode,
     Constants,
-    defaultRgbColor,
     getDefaultHalvesInfo,
     HalvesInfo,
     initBacklightingColorPalette,
@@ -28,6 +29,7 @@ import {
 import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption, SelectedMacroAction } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 import { findModuleById, isValidName } from '../../util';
+import { uhkThemeColors } from '../../util/uhk-theme-colors';
 import * as AppActions from '../actions/app';
 import * as DeviceActions from '../actions/device';
 import * as Device from '../actions/device';
@@ -38,6 +40,8 @@ import * as UserConfig from '../actions/user-config';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
 import { getBaseLayerOption, initLayerOptions } from './layer-options';
+
+extend([labPlugin]);
 
 export interface State {
     backlightingColorPalette: Array<RgbColorInterface>;
@@ -199,14 +203,16 @@ export function reducer(
 
         case KeymapActions.ActionTypes.AddLayer: {
             const newLayerId = (action as KeymapActions.AddLayerAction).payload;
+            const currentKeymap = state.userConfiguration.keymaps.find(keymap => state.selectedKeymapAbbr);
+            const baseLayer = currentKeymap.layers.find(layer => layer.id === LayerName.base);
             const newLayer = new Layer();
             newLayer.id = newLayerId;
             const leftModule = new Module();
             leftModule.id = 1;
-            leftModule.keyActions = [];
+            leftModule.keyActions = new Array(baseLayer.modules.find(findModuleById(1)).keyActions.length).fill(0).map(x => new NoneAction());
             const rightModule = new Module();
             rightModule.id = 0;
-            rightModule.keyActions = [];
+            rightModule.keyActions = new Array(baseLayer.modules.find(findModuleById(0)).keyActions.length).fill(0).map(x => new NoneAction());
             newLayer.modules = [
                 rightModule,
                 leftModule
@@ -221,6 +227,7 @@ export function reducer(
             }
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, newLayer);
 
             userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === state.selectedKeymapAbbr) {
@@ -351,6 +358,8 @@ export function reducer(
 
                         return module;
                     });
+
+                    setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, layer);
 
                     return layer;
                 });
@@ -752,6 +761,10 @@ export function reducer(
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration[payload.propertyName] = payload.value;
 
+            if (payload.propertyName === 'backlightingMode') {
+                setSvgKeyboardCoverColorsOfAllLayer(userConfiguration);
+            }
+
             return {
                 ...state,
                 userConfiguration
@@ -1026,6 +1039,8 @@ function assignUserConfiguration(state: State, userConfig: UserConfiguration): S
         userConfiguration = addMissingModuleConfigs(userConfiguration, state.halvesInfo.rightModuleSlot);
     }
 
+    setSvgKeyboardCoverColorsOfAllLayer(userConfiguration);
+
     return {
         ...state,
         userConfiguration
@@ -1111,4 +1126,57 @@ function calculateLayerOptions(state: State): Map<number, LayerOption> {
     const selectedKeymap = getSelectedKeymap(state);
 
     return calculateLayerOptionsOfKeymap(selectedKeymap);
+}
+
+function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, layer: Layer): void {
+    const themeColors = uhkThemeColors();
+
+    if (backligtingMode === BacklightingMode.PerKeyBacklighting) {
+        let nrOfKeys = 0;
+        let redSum = 0;
+        let greenSum = 0;
+        let blueSum = 0;
+
+        for (let module of layer.modules) {
+            for(const keyAction of module.keyActions) {
+                nrOfKeys++;
+                redSum += keyAction.r;
+                greenSum += keyAction.g;
+                blueSum += keyAction.b;
+            }
+        }
+
+        if (nrOfKeys === 0) {
+            layer.svgKeyboardCoverColors = themeColors.svgKeyboardCoverColors;
+            return;
+        }
+
+        const color = {
+            r: Math.round(redSum / nrOfKeys),
+            g: Math.round(greenSum / nrOfKeys),
+            b: Math.round(blueSum / nrOfKeys)
+        };
+
+        const fillColord = colord(color);
+
+        layer.svgKeyboardCoverColors = {
+            fillColor: fillColord.toHex(),
+            strokeColor: colord(themeColors.backgroundColor).delta(fillColord) < 0.01
+                ? 'lightgray'
+                : ''
+        };
+    } else {
+        layer.svgKeyboardCoverColors = themeColors.svgKeyboardCoverColors;
+    }
+}
+
+function setSvgKeyboardCoverColorsOfAllLayer(userConfig: UserConfiguration): void {
+    userConfig.keymaps = userConfig.keymaps.map(keymap => {
+        keymap = new Keymap(keymap);
+        for (const layer of keymap.layers) {
+            setSvgKeyboardCoverColorsOfLayer(userConfig.backlightingMode, layer);
+        }
+
+        return keymap;
+    });
 }

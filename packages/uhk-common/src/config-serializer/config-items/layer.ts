@@ -4,6 +4,7 @@ import { assertEnum } from '../assert.js';
 import { Macro } from './macro.js';
 import { Module } from './module.js';
 import { SerialisationInfo } from './serialisation-info.js';
+import { SvgKeyboardCoverColors } from './svg-keyboard-cover-colors.js';
 import { UserConfiguration } from './user-configuration.js';
 import { LayerName } from './layer-name.js';
 
@@ -13,12 +14,15 @@ export class Layer {
 
     modules: Module[];
 
+    svgKeyboardCoverColors: SvgKeyboardCoverColors;
+
     constructor(layers?: Layer) {
         if (!layers) {
             return;
         }
         this.id = layers.id;
         this.modules = layers.modules.map(module => new Module(module));
+        this.svgKeyboardCoverColors = layers.svgKeyboardCoverColors;
     }
 
     fromJsonObject(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): Layer {

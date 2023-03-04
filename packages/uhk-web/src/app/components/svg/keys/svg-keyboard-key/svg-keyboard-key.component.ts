@@ -47,6 +47,7 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
 import { getColorsOf } from '../../../../util/get-colors-of';
+import { uhkThemeColors } from '../../../../util/uhk-theme-colors';
 import { keyboardGreyRgbColor } from '../../../../util/rgb-color-contants';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
 
@@ -452,12 +453,10 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             : colors.backgroundColorAsHex;
         this.textColor = colors.fontColorAsHex;
 
-        this.strokeColor = isPerKeyBacklighting && colord(themeBackgroundColor()).delta(this.keyAction) < 0.01
+        const themeColors = uhkThemeColors();
+
+        this.strokeColor = isPerKeyBacklighting && colord(themeColors.backgroundColor).delta(this.keyAction) < 0.01
             ? 'lightgray'
             : '';
     }
-}
-
-function themeBackgroundColor(): string {
-    return (window as any).getUhkTheme() === 'dark' ? '#111' : '#fff';
 }
