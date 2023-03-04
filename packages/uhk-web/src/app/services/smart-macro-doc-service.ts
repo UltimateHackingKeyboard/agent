@@ -63,7 +63,7 @@ export class SmartMacroDocService implements OnDestroy {
     }
 
     updateCommand(command: string): void {
-        this.dispatchMacroEditorFocusEvent(command);
+        this.dispatchMacroEditorFocusEvent(command, true);
     }
 
     /**
@@ -123,13 +123,13 @@ export class SmartMacroDocService implements OnDestroy {
         });
     }
 
-    private dispatchMacroEditorFocusEvent(command = ''): void {
+    private dispatchMacroEditorFocusEvent(command = '', updateCommand = false): void {
         const message = {
             action: 'agent-message-editor-lost-focus',
             command: ''
         };
 
-        if (command) {
+        if (command || updateCommand) {
             message.action = 'agent-message-editor-got-focus';
             message.command = command;
         }
