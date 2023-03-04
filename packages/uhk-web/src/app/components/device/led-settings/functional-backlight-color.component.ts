@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
-import { colord, RgbColor } from 'colord';
+import { colord, } from 'colord';
 import { RgbColorInterface } from 'uhk-common';
 
-import { blackOrWhiteInverseColor } from '../../../util/black-or-white-inverse-color';
+import { getColorsOf } from '../../../util/get-colors-of';
 
 @Component({
     selector: 'functional-backlight-color',
@@ -11,7 +11,7 @@ import { blackOrWhiteInverseColor } from '../../../util/black-or-white-inverse-c
     styleUrls: ['./functional-backlight-color.component.scss']
 })
 export class FunctionalBacklightColorComponent {
-    @Input() color: RgbColor;
+    @Input() color: RgbColorInterface;
     @Input() label: string;
 
     @Output() colorChanged = new EventEmitter<RgbColorInterface>();
@@ -23,15 +23,11 @@ export class FunctionalBacklightColorComponent {
 
     @HostBinding('style.background-color')
     get getHex(): string {
-        if (!this.color) {
-            return '';
-        }
-
-        return colord(this.color).toHex();
+        return getColorsOf(this.color).backgroundColorAsHex;
     }
 
     @HostBinding('style.color')
     get colorHex(): string {
-        return colord(blackOrWhiteInverseColor(this.color)).toHex();
+        return getColorsOf(this.color).fontColorAsHex;
     }
 }

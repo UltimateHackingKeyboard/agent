@@ -1,14 +1,14 @@
 import { Directive, ElementRef, Input, HostBinding, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { colord, RgbColor } from 'colord';
+import { RgbColorInterface } from 'uhk-common';
 
-import { blackOrWhiteInverseColor } from '../../../util/black-or-white-inverse-color';
+import { getColorsOf } from '../../../util/get-colors-of';
 
 @Directive({
     selector: '[coloredButton]',
 })
 export class ColoredButtonDirective implements OnChanges {
-    @Input() color: RgbColor;
+    @Input() color: RgbColorInterface;
     @Input() selected: boolean;
 
     private mouseIn = false;
@@ -32,7 +32,7 @@ export class ColoredButtonDirective implements OnChanges {
             return 'inherit';
         }
 
-        return colord(this.color).toHex();
+        return getColorsOf(this.color).backgroundColorAsHex;
     }
 
     @HostBinding('style.color')
@@ -42,10 +42,10 @@ export class ColoredButtonDirective implements OnChanges {
         }
 
         if (this.selected) {
-            return colord(blackOrWhiteInverseColor(this.color)).toHex();
+            return getColorsOf(this.color).fontColorAsHex;
         }
 
-        return colord(this.color).toHex();
+        return getColorsOf(this.color).backgroundColorAsHex;
     }
 
     @HostListener('mouseenter')

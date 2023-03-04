@@ -5,6 +5,7 @@
           [attr.fill]="fillColor"
           [attr.rx]="svgKey.rx"
           [attr.ry]="svgKey.ry"
+          [attr.stroke]="strokeColor"
           [attr.height]="svgKey.height"
           [attr.width]="svgKey.width"
 />
@@ -13,18 +14,24 @@
             [attr.cx]="svgKey.cx"
             [attr.cy]="svgKey.cy"
             [attr.r]="svgKey.r"
-            [attr.fill]="fillColor" />
+            [attr.fill]="fillColor"
+            [attr.stroke]="strokeColor"
+/>
 
 <svg:path *ngIf="svgKey.type === 'path'"
           [attr.d]="svgKey.d"
-          [attr.fill]="fillColor" />
+          [attr.fill]="fillColor"
+          [attr.stroke]="strokeColor"
+/>
 
 <svg:g *ngIf="svgKey.type === 'g'">
     <svg:path *ngFor="let path of svgKey.elements.paths"
               class="svg-path"
               [id]="svgKey.id"
               [attr.d]="path.d"
-              [attr.fill]="fillColor" />
+              [attr.fill]="fillColor"
+              [attr.stroke]="strokeColor"
+    />
 
     <svg:circle *ngFor="let circle of svgKey.elements.circles"
                 class="svg-circle"
@@ -32,7 +39,9 @@
                 [attr.cx]="circle.cx"
                 [attr.cy]="circle.cy"
                 [attr.r]="circle.r"
-                [attr.fill]="fillColor" />
+                [attr.fill]="fillColor"
+                [attr.stroke]="strokeColor"
+    />
 
 </svg:g>
 

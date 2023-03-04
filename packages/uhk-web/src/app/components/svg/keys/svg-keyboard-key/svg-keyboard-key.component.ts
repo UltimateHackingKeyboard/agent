@@ -16,9 +16,11 @@ import {
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
-import { colord } from 'colord';
+import { extend } from 'colord';
 import { Key } from 'ts-keycode-enum';
 import { Subscription } from 'rxjs';
+import { colord } from 'colord';
+import labPlugin from 'colord/plugins/lab';
 
 import {
     BacklightingMode,
@@ -44,8 +46,11 @@ import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
-import { blackOrWhiteInverseColor } from '../../../../util/black-or-white-inverse-color';
+import { getColorsOf } from '../../../../util/get-colors-of';
+import { keyboardGreyRgbColor } from '../../../../util/rgb-color-contants';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
+
+extend([labPlugin]);
 
 enum LabelTypes {
     KeystrokeKey,
@@ -90,6 +95,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     enumLabelTypes = LabelTypes;
     fillColor = '#333';
+    strokeColor = '';
     recordAnimation: string;
     recording: boolean;
     labelType: LabelTypes;
@@ -105,6 +111,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private subscriptions = new Subscription();
     private layerOptionMap = initLayerOptions();
     private isMouseMoveDispatched = false;
+    private isMouseHover = false;
 
     constructor(
         private sanitizer: DomSanitizer,
@@ -121,15 +128,13 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @HostBinding('style')
     get cursorStyle(): SafeStyle {
         if (this.mouseMoveService.isColoring) {
-            const color = colord(this.mouseMoveService.selectedBacklightingColor);
-            const fillColor = color.toHex().replace('#', '%23');
-            const strokeColor = colord(blackOrWhiteInverseColor(this.mouseMoveService.selectedBacklightingColor)).toHex().replace('#', '%23');
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="24" height="24"><path fill="${fillColor}" stroke="${strokeColor}" stroke-width="20" d="M339.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L568.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S517.7-4.4 499.1 9.6L262.4 187.2c-24 18-38.2 46.1-38.4 76.1L339.3 367.1zm-19.6 25.4l-116-104.4C143.9 290.3 96 339.6 96 400c0 3.9 .2 7.8 .6 11.6C98.4 429.1 86.4 448 68.8 448H64c-17.7 0-32 14.3-32 32s14.3 32 32 32H208c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg>`;
+            const colors = getColorsOf(this.mouseMoveService.selectedBacklightingColor);
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="24" height="24"><path fill="${colors.svgFillColor}" stroke="${colors.svgStrokeColor}" stroke-width="20" d="M339.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L568.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S517.7-4.4 499.1 9.6L262.4 187.2c-24 18-38.2 46.1-38.4 76.1L339.3 367.1zm-19.6 25.4l-116-104.4C143.9 290.3 96 339.6 96 400c0 3.9 .2 7.8 .6 11.6C98.4 429.1 86.4 448 68.8 448H64c-17.7 0-32 14.3-32 32s14.3 32 32 32H208c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg>`;
 
             return this.sanitizer.bypassSecurityTrustStyle(`cursor: url('data:image/svg+xml;utf8,${svg}') 0 24, pointer;`);
         }
 
-        return '';
+        return this.sanitizer.bypassSecurityTrustStyle('');
     }
 
     @HostListener('click', ['$event'])
@@ -170,6 +175,12 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         }
     }
 
+    @HostListener('mouseenter', ['$event'])
+    onMouseEnter(e: MouseEvent) {
+        this.isMouseHover = true;
+        this.setColors();
+    }
+
     @HostListener('mousemove', ['$event'])
     onMouseMove(e: MouseEvent) {
         if (!this.isMouseMoveDispatched && this.mouseMoveService.shouldDispatchKeyColoring()) {
@@ -183,6 +194,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @HostListener('mouseleave', ['$event'])
     onMouseLeave(e: MouseEvent) {
         this.isMouseMoveDispatched = false;
+        this.isMouseHover = false;
+        this.setColors();
     }
 
     @HostListener('document:keyup', ['$event'])
@@ -428,13 +441,23 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     }
 
     private setColors(): void {
-        if (this.backlightingMode === BacklightingMode.PerKeyBacklighting) {
-            this.fillColor = colord(this.keyAction).toHex();
-            this.textColor = colord(blackOrWhiteInverseColor(this.keyAction)).toHex();
-        } else {
-            this.fillColor = '#333';
-            this.textColor = colord(blackOrWhiteInverseColor(colord(this.fillColor).toRgb())).toHex();
-        }
+        const isPerKeyBacklighting = this.backlightingMode === BacklightingMode.PerKeyBacklighting;
+        const baseRgb = isPerKeyBacklighting
+            ? this.keyAction
+            : keyboardGreyRgbColor();
 
+        const colors = getColorsOf(baseRgb);
+        this.fillColor = this.isMouseHover && !this.mouseMoveService.isColoring
+            ? colors.hoverColorAsHex
+            : colors.backgroundColorAsHex;
+        this.textColor = colors.fontColorAsHex;
+
+        this.strokeColor = isPerKeyBacklighting && colord(themeBackgroundColor()).delta(this.keyAction) < 0.01
+            ? 'lightgray'
+            : '';
     }
+}
+
+function themeBackgroundColor(): string {
+    return (window as any).getUhkTheme() === 'dark' ? '#111' : '#fff';
 }
