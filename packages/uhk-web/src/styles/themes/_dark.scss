@@ -115,6 +115,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
     --color-progress-bar-bg: #{darken(theme-color('primary'), 40%)};
     --color-progress-bar-progress: #{darken(theme-color('primary'), 20%)};
+    --color-progress-bar-progress-rgb-colors: #{darken(theme-color('warning'), 20%)};
     --color-progress-bar-text: #{$color-text};
 
     --color-macro-bg: #333;

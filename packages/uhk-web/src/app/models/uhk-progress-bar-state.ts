@@ -1,4 +1,5 @@
 export interface ProgressBar {
+    color: string;
     minValue: number;
     maxValue: number;
     currentValue: number;

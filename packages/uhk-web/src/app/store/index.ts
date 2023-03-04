@@ -1,8 +1,9 @@
-import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
+import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
 import {
+    BacklightingMode,
     Constants,
     FirmwareRepoInfo,
     LayerName,
@@ -10,7 +11,6 @@ import {
     RIGHT_TRACKPOINT_MODULE,
     UHK_OFFICIAL_FIRMWARE_REPO
 } from 'uhk-common';
-
 import {
     ApplicationSettings,
     AppTheme,
@@ -18,8 +18,8 @@ import {
     createMd5Hash,
     getEmptyKeymap,
     getMd5HashFromFilename,
-    isVersionGte,
     HardwareModules,
+    isVersionGte,
     Keymap,
     LEFT_HALF_MODULE,
     LeftSlotModules,
@@ -30,23 +30,7 @@ import {
     UserConfiguration,
     VersionInformation
 } from 'uhk-common';
-
-import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
-import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
-import * as fromUserConfig from './reducers/user-configuration';
-import * as fromAppUpdate from './reducers/app-update.reducer';
-import * as fromContributors from './reducers/contributors.reducer';
-import * as autoUpdateSettings from './reducers/auto-update-settings';
-import * as fromApp from './reducers/app.reducer';
-import * as fromDevice from './reducers/device';
-import * as fromFirmware from './reducers/firmware-upgrade.reducer';
-import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
-import * as fromSelectors from './reducers/selectors';
-import * as fromSmartMacroDoc from './reducers/smart-macro-doc.reducer';
-import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
-import { RouterState } from './router-util';
-import { PrivilagePageSate } from '../models/privilage-page-sate';
 import {
     ConfigSizeState,
     DeviceUiStates,
@@ -59,8 +43,24 @@ import {
     UhkProgressBarState,
     UserConfigHistoryComponentState
 } from '../models';
+import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
+
+import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
+import * as fromAppUpdate from './reducers/app-update.reducer';
+import * as fromApp from './reducers/app.reducer';
+import * as autoUpdateSettings from './reducers/auto-update-settings';
+import * as fromContributors from './reducers/contributors.reducer';
+import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
+import * as fromDevice from './reducers/device';
+import * as fromFirmware from './reducers/firmware-upgrade.reducer';
+import { initProgressButtonState } from './reducers/progress-button-state';
+import * as fromSelectors from './reducers/selectors';
+import * as fromSmartMacroDoc from './reducers/smart-macro-doc.reducer';
+import * as fromUserConfig from './reducers/user-configuration';
+import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
+import { RouterState } from './router-util';
 
 // State interface for the application
 export interface AppState {
@@ -273,18 +273,35 @@ export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userCo
 
     return uhkBuffer;
 });
+export const getRgbColorSpaceUsage = createSelector(getUserConfiguration, userConfig => {
+    if (userConfig.backlightingMode === BacklightingMode.FunctionalBacklighting) {
+        return 0;
+    }
+
+    let rgbColorSpaceUsage = 0;
+
+    for (const keymap of userConfig.keymaps) {
+        for (const layer of keymap.layers) {
+            for (const module of layer.modules) {
+                rgbColorSpaceUsage += module.keyActions.length;
+            }
+        }
+    }
+
+    return rgbColorSpaceUsage * 3; // 3 is the 3 byte that represent a RGB color
+});
 export const getUserConfigSize = createSelector(getUserConfigAsBuffer, uhkBuffer => {
     return uhkBuffer.getBufferContent().length;
 });
 export const getMd5HasOfUserConfig = createSelector(getUserConfigAsBuffer, uhkBuffer => {
     return createMd5Hash(uhkBuffer.getBufferContent());
 });
-export const getConfigSizesState = createSelector(deviceState, getUserConfigSize,
-    (deviceStateData, userConfigSize): ConfigSizeState => {
+export const getConfigSizesState = createSelector(deviceState, getUserConfigSize, getRgbColorSpaceUsage,
+    (deviceStateData, userConfigSize, rgbColorSpaceUsage): ConfigSizeState => {
         return {
             allUsage: userConfigSize,
             capacity: deviceStateData.configSizes.userConfig,
-            rgbColorsUsage: 0
+            rgbColorsUsage: rgbColorSpaceUsage
         };
     });
 export const getConfigSizesProgressBarState = createSelector(getConfigSizesState,
@@ -295,7 +312,14 @@ export const getConfigSizesProgressBarState = createSelector(getConfigSizesState
 
         const progressBars: Array<ProgressBar> = [
             {
-                currentValue: configSizeState.allUsage,
+                color: 'var(--color-progress-bar-progress-rgb-colors)',
+                currentValue: configSizeState.rgbColorsUsage,
+                maxValue: configSizeState.capacity,
+                minValue: 0
+            },
+            {
+                color: 'var(--color-progress-bar-progress)',
+                currentValue: configSizeState.allUsage - configSizeState.rgbColorsUsage,
                 maxValue: configSizeState.capacity,
                 minValue: 0
             }
