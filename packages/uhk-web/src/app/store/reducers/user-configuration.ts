@@ -382,8 +382,6 @@ export function reducer(
                         return module;
                     });
 
-                    setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, layer, state.theme);
-
                     return layer;
                 });
 
@@ -1170,32 +1168,7 @@ function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, lay
     const themeColors = uhkThemeColors(theme);
 
     if (backligtingMode === BacklightingMode.PerKeyBacklighting) {
-        let nrOfKeys = 0;
-        let redSum = 0;
-        let greenSum = 0;
-        let blueSum = 0;
-
-        for (let module of layer.modules) {
-            for(const keyAction of module.keyActions) {
-                nrOfKeys++;
-                redSum += keyAction.r;
-                greenSum += keyAction.g;
-                blueSum += keyAction.b;
-            }
-        }
-
-        if (nrOfKeys === 0) {
-            layer.svgKeyboardCoverColors = themeColors.svgKeyboardCoverColors;
-            return;
-        }
-
-        const color = {
-            r: Math.round(redSum / nrOfKeys),
-            g: Math.round(greenSum / nrOfKeys),
-            b: Math.round(blueSum / nrOfKeys)
-        };
-
-        const fillColord = colord(color);
+        const fillColord = colord('#ffffff');
 
         layer.svgKeyboardCoverColors = {
             fillColor: fillColord.toHex(),
