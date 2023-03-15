@@ -12,10 +12,8 @@
     "url": "git@github.com:UltimateHackingKeyboard/agent.git"
   },
   "scripts": {
-    "build": "run-s tsc copy:*",
+    "build": "tsc --project ./src/tsconfig.json",
     "clean": "rimraf ./node_modules ./dist",
-    "tsc": "tsc --project ./src/tsconfig.json",
-    "copy:scancodes": "copyfiles src/config-serializer/config-items/scancodes.ts dist",
     "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
     "coverage": "nyc npm test",
     "lint": "eslint --ext .ts ."
