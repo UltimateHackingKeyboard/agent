@@ -10,11 +10,12 @@ import { getColorsOf } from '../../../util/get-colors-of';
 export class ColoredButtonDirective implements OnChanges {
     @Input() color: RgbColorInterface;
     @Input() selected: boolean;
+    @Input() selectedPaletteColorIndex: number;
 
     private mouseIn = false;
 
     constructor(private host: ElementRef,
-        private tooltip: NgbTooltip) {
+                private tooltip: NgbTooltip) {
         this.tooltip.autoClose = false;
         this.tooltip.placement = 'top';
         this.tooltip.triggers = 'manual';
@@ -24,6 +25,16 @@ export class ColoredButtonDirective implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.selected) {
             this.updateTooltipText();
+        }
+
+        if (changes.selectedPaletteColorIndex) {
+            if (this.selected) {
+                this.tooltip.placement = 'top';
+            } else if (this.selectedPaletteColorIndex > -1) {
+                this.tooltip.placement = 'bottom';
+            } else {
+                this.tooltip.placement = 'top';
+            }
         }
     }
     @HostBinding('style.backgroundColor')
@@ -77,7 +88,6 @@ export class ColoredButtonDirective implements OnChanges {
         if (tooltipInnerId) {
             const tooltipInner = document.querySelector(`#${tooltipInnerId} .tooltip-inner`);
             tooltipInner.textContent = this.tooltipText();
-            console.log(tooltipInner.textContent);
         }
 
         if (!this.mouseIn){

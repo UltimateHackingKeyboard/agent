@@ -39,6 +39,7 @@
                     ngbTooltip=""
                     [color]="color"
                     [selected]="selectedPaletteColorIndex === index"
+                    [selectedPaletteColorIndex]="selectedPaletteColorIndex"
                     (click)="onColorSelected(index)"
             >
                 <fa-icon [icon]="faCheck"></fa-icon>
