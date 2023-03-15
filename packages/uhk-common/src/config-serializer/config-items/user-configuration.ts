@@ -2,6 +2,7 @@ import { assertEnum } from '../assert.js';
 import { assertUInt16, assertUInt8 } from '../assert.js';
 import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
+import { isUserConfigContainsRgbColors } from './backlighting-mode.js';
 import { BacklightingMode } from './backlighting-mode.js';
 import { KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
@@ -14,7 +15,7 @@ import { isAllowedScancode } from './scancode-checker.js';
 import { SecondaryRoleAction } from './secondary-role-action.js';
 import { SerialisationInfo } from './serialisation-info.js';
 
-export class UserConfiguration implements MouseSpeedConfiguration, SerialisationInfo {
+export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 userConfigMajorVersion: number;
 
@@ -188,7 +189,7 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
             mouseScrollBaseSpeed: this.mouseScrollBaseSpeed,
             mouseScrollAcceleratedSpeed: this.mouseScrollAcceleratedSpeed,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
-            keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this, this.macros)),
+            keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.getSerialisationInfo(), this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject())
         };
     }
@@ -225,7 +226,7 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
-            keymap.toBinary(uhkBuffer, this, this);
+            keymap.toBinary(uhkBuffer, this.getSerialisationInfo(), this);
         });
     }
 
@@ -306,15 +307,16 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
         this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
         this.mouseScrollBaseSpeed = buffer.readUInt8();
         this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+        const serialisationInfo = this.getSerialisationInfo();
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
-            return new ModuleConfiguration().fromBinary(uhkBuffer, this);
+            return new ModuleConfiguration().fromBinary(uhkBuffer, serialisationInfo);
         });
         this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
-            const macro = new Macro().fromBinary(uhkBuffer, this);
+            const macro = new Macro().fromBinary(uhkBuffer, serialisationInfo);
             macro.id = index;
             return macro;
         });
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, this));
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
 
     }
@@ -346,15 +348,16 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
         this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
         this.mouseScrollBaseSpeed = buffer.readUInt8();
         this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+        const serialisationInfo = this.getSerialisationInfo();
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
-            return new ModuleConfiguration().fromBinary(uhkBuffer, this);
+            return new ModuleConfiguration().fromBinary(uhkBuffer, serialisationInfo);
         });
         this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
-            const macro = new Macro().fromBinary(uhkBuffer, this);
+            const macro = new Macro().fromBinary(uhkBuffer, serialisationInfo);
             macro.id = index;
             return macro;
         });
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, this));
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
 
     }
@@ -376,16 +379,17 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
         this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
         this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
         this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+        const serialisationInfo = this.getSerialisationInfo();
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
-            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, this);
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, serialisationInfo);
         });
         this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
-            const macro = new Macro().fromJsonObject(macroJsonObject, this);
+            const macro = new Macro().fromJsonObject(macroJsonObject, serialisationInfo);
             macro.id = index;
             return macro;
         });
         this.keymaps = jsonObject.keymaps.map((keymap: any) => {
-            return new Keymap().fromJsonObject(keymap, this.macros, this);
+            return new Keymap().fromJsonObject(keymap, this.macros, serialisationInfo);
         });
     }
 
@@ -415,16 +419,17 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
         this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
         this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
         this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+        const serialisationInfo = this.getSerialisationInfo();
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
-            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, this);
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, serialisationInfo);
         });
         this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
-            const macro = new Macro().fromJsonObject(macroJsonObject, this);
+            const macro = new Macro().fromJsonObject(macroJsonObject, serialisationInfo);
             macro.id = index;
             return macro;
         });
         this.keymaps = jsonObject.keymaps.map((keymap: any) => {
-            return new Keymap().fromJsonObject(keymap, this.macros, this);
+            return new Keymap().fromJsonObject(keymap, this.macros, serialisationInfo);
         });
     }
 
@@ -461,5 +466,12 @@ export class UserConfiguration implements MouseSpeedConfiguration, Serialisation
         this.backlightingMacroColor = new RgbColor({r:255, g:0, b:255});
 
         return true;
+    }
+
+    private getSerialisationInfo(): SerialisationInfo {
+        return {
+            isUserConfigContainsRgbColors: isUserConfigContainsRgbColors(this.backlightingMode),
+            userConfigMajorVersion: this.userConfigMajorVersion
+        };
     }
 }

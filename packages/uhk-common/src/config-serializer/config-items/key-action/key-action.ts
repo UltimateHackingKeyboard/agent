@@ -1,6 +1,5 @@
 import { RgbColorInterface } from '../../../models/index.js';
 import { assertUInt8 } from '../../assert.js';
-import { isUserConfigContainsRgbColors } from '../backlighting-mode.js';
 import { Macro } from '../macro.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { SerialisationInfo } from '../serialisation-info.js';
@@ -78,7 +77,7 @@ export abstract class KeyAction implements RgbColorInterface {
     }
 
     rgbColorFromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
-        if (isUserConfigContainsRgbColors(serialisationInfo.backlightingMode)) {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
             this.r = buffer.readUInt8();
             this.g = buffer.readUInt8();
             this.b = buffer.readUInt8();
@@ -86,7 +85,7 @@ export abstract class KeyAction implements RgbColorInterface {
     }
 
     rgbColorFromJson(jsonObject: any, serialisationInfo: SerialisationInfo): void {
-        if (isUserConfigContainsRgbColors(serialisationInfo.backlightingMode)) {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
             this.b = jsonObject.b;
             this.g = jsonObject.g;
             this.r = jsonObject.r;
@@ -94,7 +93,7 @@ export abstract class KeyAction implements RgbColorInterface {
     }
 
     rgbColorToBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
-        if (isUserConfigContainsRgbColors(serialisationInfo.backlightingMode)) {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
             buffer.writeUInt8(this.r);
             buffer.writeUInt8(this.g);
             buffer.writeUInt8(this.b);
@@ -102,7 +101,7 @@ export abstract class KeyAction implements RgbColorInterface {
     }
 
     rgbColorToJson(serialisationInfo: SerialisationInfo): RgbColorInterface {
-        if (isUserConfigContainsRgbColors(serialisationInfo.backlightingMode)) {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
             return {
                 b: this.b,
                 g: this.g,
