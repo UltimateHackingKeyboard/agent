@@ -353,8 +353,9 @@ export const getConfigSizesProgressBarState = createSelector(getConfigSizesState
         };
     });
 
-export const getOutOfSpaceWaringData = createSelector(getConfigSizesState,
-    (configSizeState: ConfigSizeState): OutOfSpaceWarningData => ({
+export const getOutOfSpaceWaringData = createSelector(getConfigSizesState, backlightingMode,
+    (configSizeState: ConfigSizeState, backlightingMode): OutOfSpaceWarningData => ({
+        backlightingMode,
         currentValue: configSizeState.allUsage,
         maxValue: configSizeState.capacity,
         show: configSizeState.allUsage > configSizeState.capacity
