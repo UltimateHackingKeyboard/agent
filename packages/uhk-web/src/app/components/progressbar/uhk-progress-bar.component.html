@@ -12,3 +12,11 @@
     </div>
     <div class="progress-text">{{ state.text }}</div>
 </div>
+
+<div class="progress-bar-legends-container">
+    <ng-container *ngFor="let legend of state.legends">
+        <span class="legend-color"
+        [style.background-color]="legend.color"></span>
+        <span>{{legend.text}}</span>
+    </ng-container>
+</div>

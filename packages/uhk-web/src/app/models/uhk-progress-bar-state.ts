@@ -5,7 +5,13 @@ export interface ProgressBar {
     currentValue: number;
 }
 
+export interface ProgressBarLegend {
+    color: string;
+    text: string;
+}
+
 export interface UhkProgressBarState {
+    legends: Array<ProgressBarLegend>
     progressBars: Array<ProgressBar>;
     text: string;
 }

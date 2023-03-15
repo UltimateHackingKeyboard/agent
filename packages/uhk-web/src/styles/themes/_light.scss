@@ -92,7 +92,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
     --color-progress-bar-bg: #{#d3e4f2};
     --color-progress-bar-progress: #{lighten(theme-color('primary'), 20%)};
-    --color-progress-bar-progress-rgb-colors: #{lighten(theme-color('warning'), 20%)};
+    --color-progress-bar-progress-rgb-colors: #{lighten(theme-color('success'), 20%)};
     --color-progress-bar-text: #{$color-text};
 
     --color-macro-bg: #{$color-bg-light};

@@ -19,3 +19,16 @@
         background-color: transparent;
     }
 }
+
+.progress-bar-legends-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 0.5em;
+
+    .legend-color {
+        display: inline-block;
+        height: 1em;
+        width: 1em;
+    }
+}

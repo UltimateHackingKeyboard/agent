@@ -19,6 +19,7 @@ import {
     getEmptyKeymap,
     getMd5HashFromFilename,
     HardwareModules,
+    isUserConfigContainsRgbColors,
     isVersionGte,
     Keymap,
     LEFT_HALF_MODULE,
@@ -39,6 +40,7 @@ import {
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
     ProgressBar,
+    ProgressBarLegend,
     SideMenuPageState,
     UhkProgressBarState,
     UserConfigHistoryComponentState
@@ -305,19 +307,13 @@ export const getConfigSizesState = createSelector(deviceState, getUserConfigSize
             rgbColorsUsage: rgbColorSpaceUsage
         };
     });
-export const getConfigSizesProgressBarState = createSelector(getConfigSizesState,
-    (configSizeState: ConfigSizeState): UhkProgressBarState => {
+export const getConfigSizesProgressBarState = createSelector(getConfigSizesState, backlightingMode,
+    (configSizeState: ConfigSizeState, backlightingMode: BacklightingMode): UhkProgressBarState => {
         const formatNumber = new Intl.NumberFormat(undefined, {
             useGrouping: true
         }).format;
 
         const progressBars: Array<ProgressBar> = [
-            {
-                color: 'var(--color-progress-bar-progress-rgb-colors)',
-                currentValue: configSizeState.rgbColorsUsage,
-                maxValue: configSizeState.capacity,
-                minValue: 0
-            },
             {
                 color: 'var(--color-progress-bar-progress)',
                 currentValue: configSizeState.allUsage - configSizeState.rgbColorsUsage,
@@ -325,8 +321,33 @@ export const getConfigSizesProgressBarState = createSelector(getConfigSizesState
                 minValue: 0
             }
         ];
+        const legends: Array<ProgressBarLegend> = [
+            {
+                color: 'var(--color-progress-bar-progress)',
+                text: 'keymaps and macros'
+            },
+            {
+                color: 'var(--color-progress-bar-bg)',
+                text: 'free space\n'
+            }
+        ];
+
+        if (isUserConfigContainsRgbColors(backlightingMode)) {
+            progressBars.unshift({
+                color: 'var(--color-progress-bar-progress-rgb-colors)',
+                currentValue: configSizeState.rgbColorsUsage,
+                maxValue: configSizeState.capacity,
+                minValue: 0
+            });
+
+            legends.unshift({
+                color: 'var(--color-progress-bar-progress-rgb-colors)',
+                text: 'per-key colors'
+            });
+        }
 
         return {
+            legends,
             progressBars,
             text: `${formatNumber(configSizeState.allUsage)} of ${formatNumber(configSizeState.capacity)} bytes on-board storage in used`
         };
