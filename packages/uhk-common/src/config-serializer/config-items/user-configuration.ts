@@ -1,5 +1,4 @@
-import { assertEnum } from '../assert.js';
-import { assertUInt16, assertUInt8 } from '../assert.js';
+import { assertUInt16, assertUInt32, assertUInt8, assertEnum } from '../assert.js';
 import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { isUserConfigContainsRgbColors } from './backlighting-mode.js';
@@ -23,7 +22,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 userConfigPatchVersion: number;
 
-    @assertUInt16 userConfigurationLength: number;
+    @assertUInt32 userConfigurationLength: number;
 
     deviceName: string;
 
@@ -198,7 +197,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.userConfigMajorVersion);
         buffer.writeUInt16(this.userConfigMinorVersion);
         buffer.writeUInt16(this.userConfigPatchVersion);
-        buffer.writeUInt16(this.userConfigurationLength);
+        buffer.writeUInt32(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeUInt16(this.doubleTapSwitchLayerTimeout);
         buffer.writeUInt8(this.iconsAndLayerTextsBrightness);
@@ -322,7 +321,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     }
 
     private fromBinaryV6(buffer: UhkBuffer): void {
-        this.userConfigurationLength = buffer.readUInt16();
+        this.userConfigurationLength = buffer.readUInt32();
         this.deviceName = buffer.readString();
         this.setDefaultDeviceName();
         this.doubleTapSwitchLayerTimeout = buffer.readUInt16();
