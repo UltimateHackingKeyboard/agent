@@ -59,6 +59,7 @@ export class ColoredButtonDirective implements OnChanges {
         return getColorsOf(this.color).backgroundColorAsHex;
     }
 
+    @HostListener('focus')
     @HostListener('mouseenter')
     onMouseEnter(): void {
         this.mouseIn = true;
@@ -66,6 +67,7 @@ export class ColoredButtonDirective implements OnChanges {
         this.tooltip.open();
     }
 
+    @HostListener('blur')
     @HostListener('mouseleave')
     onMouseLeave(): void {
         this.mouseIn = false;
