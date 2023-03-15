@@ -26,7 +26,14 @@ import {
     UserConfiguration
 } from 'uhk-common';
 
-import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption, SelectedMacroAction } from '../../models';
+import {
+    BacklightingOption,
+    defaultLastEditKey,
+    ExchangeKey,
+    LastEditedKey,
+    LayerOption,
+    SelectedMacroAction
+} from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
 import { findModuleById, isValidName } from '../../util';
 import { uhkThemeColors } from '../../util/uhk-theme-colors';
@@ -886,6 +893,21 @@ export const getSelectedLayerOption = (state: State): LayerOption => state.selec
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
 export const backlightingMode = (state: State): BacklightingMode => state.userConfiguration.backlightingMode;
+export const backlightingOptions = (state: State): Array<BacklightingOption> => {
+    return [
+        {
+            displayText: 'Functional backlighting',
+            mode: state.userConfiguration.backlightingMode === BacklightingMode.PerKeyBacklighting ||
+                    state.userConfiguration.backlightingMode === BacklightingMode.FunctionalBacklightingWithPerKeyValues
+                ? BacklightingMode.FunctionalBacklightingWithPerKeyValues
+                : BacklightingMode.FunctionalBacklighting
+        },
+        {
+            displayText: 'Per-key backlighting',
+            mode: BacklightingMode.PerKeyBacklighting
+        }
+    ];
+};
 export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
 export const isBacklightingColoring = (state: State): boolean => state.selectedBacklightingColorIndex > -1;
 export const selectedBacklightingColor = (state: State): RgbColorInterface => state.backlightingColorPalette[state.selectedBacklightingColorIndex];

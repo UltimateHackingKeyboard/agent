@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState, getUserConfiguration } from '../../../store';
+import { BacklightingOption } from '../../../models/index';
+import { AppState, getBacklightingOptions, getUserConfiguration } from '../../../store';
 import {
     SetUserConfigurationRgbValueAction,
     SetUserConfigurationValueAction
@@ -19,7 +20,6 @@ import { BacklightingMode, RgbColorInterface, UserConfiguration } from 'uhk-comm
     }
 })
 export class LEDSettingsComponent implements OnInit, OnDestroy {
-    backlightingModeEnum = BacklightingMode;
     backlightingMode = BacklightingMode.FunctionalBacklighting;
     backlightingNoneActionColor: RgbColorInterface;
     backlightingScancodeColor: RgbColorInterface;
@@ -29,6 +29,8 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     backlightingSwitchKeymapColor: RgbColorInterface;
     backlightingMouseColor: RgbColorInterface;
     backlightingMacroColor: RgbColorInterface;
+
+    backlightingOptions: Array<BacklightingOption>;
 
     public iconsAndLayerTextsBrightness: number = 0;
     public alphanumericSegmentsBrightness: number = 0;
@@ -43,8 +45,10 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
 
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;
+    private backlightingOptionsSubscription: Subscription;
 
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>,
+                private cdRef: ChangeDetectorRef) {}
 
     ngOnInit() {
         this.userConfig$ = this.store.select(getUserConfiguration);
@@ -61,11 +65,20 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
             this.backlightingSwitchKeymapColor = config.backlightingSwitchKeymapColor.toJsonObject();
             this.backlightingMouseColor = config.backlightingMouseColor.toJsonObject();
             this.backlightingMacroColor = config.backlightingMacroColor.toJsonObject();
+            this.cdRef.detectChanges();
         });
+        this.backlightingOptionsSubscription = this.store.select(getBacklightingOptions)
+            .subscribe(options => {
+                this.backlightingOptions = options;
+                this.cdRef.detectChanges();
+            });
     }
 
     ngOnDestroy() {
         this.userConfigSubscription.unsubscribe();
+        if (this.backlightingOptionsSubscription) {
+            this.backlightingOptionsSubscription.unsubscribe();
+        }
     }
 
     onSetPropertyValue(propertyName: string, value: number): void {
