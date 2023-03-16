@@ -1,6 +1,5 @@
 /// <reference path="./custom_types/electron-is-dev.d.ts"/>
 
-import './polyfills';
 import { app, BrowserWindow, systemPreferences } from 'electron';
 import * as process from 'process';
 import setElectronSettingsConfig from './set-electron-settings-config';
