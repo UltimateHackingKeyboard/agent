@@ -1,4 +1,4 @@
-#!/usr/bin/env ../../node_modules/.bin/ts-node-esm
+#!/usr/bin/env -S node --loader ts-node/esm --no-warnings=ExperimentalWarning
 
 import { ModuleSlotToId } from 'uhk-common';
 
