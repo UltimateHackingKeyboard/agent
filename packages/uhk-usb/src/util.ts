@@ -5,6 +5,7 @@ import MemoryMap from 'nrf-intel-hex';
 import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
 import { Constants, UsbCommand } from './constants.js';
+import isOsProvideUsbInterface from './utils/is-os-provide-usb-interface.js';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -104,7 +105,10 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
 export const isUhkZeroInterface = (dev: Device): boolean => {
     return UHK_DEVICES.some(device => dev.vendorId === device.vendorId &&
         dev.productId === device.keyboardPid &&
-        dev.interface === 0
+        ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
+            (dev.usagePage === (0xFF00 | 0x00) && dev.usage === 0x01) || // New firmware
+            (dev.interface === 0 && isOsProvideUsbInterface())
+        )
     );
 };
 
