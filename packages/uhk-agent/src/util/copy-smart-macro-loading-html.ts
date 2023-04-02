@@ -1,4 +1,4 @@
-import { copy } from 'fs-extra';
+import { cp } from 'fs/promises';
 import { join } from 'path';
 import { LogService } from 'uhk-common';
 
@@ -8,7 +8,7 @@ export async function copySmartMacroLoadingHtml(rootDir: string, logger: LogServ
     logger.misc('[SmartMacroCopy] start copy loading.html');
     const bundledSmartMacroDir = join(rootDir, 'smart-macro-docs');
 
-    await copy(bundledSmartMacroDir, getSmartMacroDocRootPath());
+    await cp(bundledSmartMacroDir, getSmartMacroDocRootPath(), { recursive: true });
 
     logger.misc('[SmartMacroCopy] end copy loading.html');
 }
