@@ -58,7 +58,9 @@ import {
     getBackupUserConfigurationContent,
     getDefaultFirmwarePath,
     getUserConfigFromHistoryAsync,
+    getSmartMacroDocRootPath,
     loadUserConfigHistoryAsync,
+    makeFolderWriteableToUserOnLinux,
     saveTmpFirmware,
     saveUserConfigHistoryAsync
 } from '../util';
@@ -384,6 +386,7 @@ export class DeviceService {
 
             response.modules = await this.getHardwareModules(false);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+            await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
@@ -434,6 +437,7 @@ export class DeviceService {
 
             response.modules = await this.getHardwareModules(false);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+            await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
             response.success = true;
             response.userConfigSaved = true;
             response.firmwareDowngraded = false;
