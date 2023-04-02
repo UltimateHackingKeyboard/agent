@@ -8,7 +8,7 @@ export async function copySmartMacroLoadingHtml(rootDir: string, logger: LogServ
     logger.misc('[SmartMacroCopy] start copy loading.html');
     const bundledSmartMacroDir = join(rootDir, 'smart-macro-docs');
 
-    await cp(bundledSmartMacroDir, getSmartMacroDocRootPath(), { recursive: true });
+    await cp(bundledSmartMacroDir, getSmartMacroDocRootPath(), { force: true, recursive: true });
 
     logger.misc('[SmartMacroCopy] end copy loading.html');
 }

@@ -22,7 +22,7 @@ export async function copySmartMacroDocToWebserver(firmwarePath: TmpFirmware, lo
         smartMacroDocFirmwarePath
     });
 
-    await cp(smartMacroDocFirmwarePath, destination, { recursive: true });
+    await cp(smartMacroDocFirmwarePath, destination, { force: true, recursive: true });
 
     logger.misc('[SmartMacroCopy] done');
 }
