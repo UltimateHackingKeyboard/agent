@@ -8,7 +8,7 @@ const execAsync = promisify(exec);
 // https://github.com/nodejs/node/issues/23736
 export async function makeFolderWriteableToUserOnLinux(folder: string): Promise<void>{
     if (platform() !== 'win32') {
-        await execAsync(`chmod +w "${folder}"`);
+        await execAsync(`chmod -R +w "${folder}"`);
     }
     // TODO: implement for windows if needed for someone
 }
