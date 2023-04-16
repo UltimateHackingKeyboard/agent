@@ -1,4 +1,5 @@
-const request = require('request');
+const { Readable } = require('stream');
+const { pipeline } = require('stream/promises');
 const decompress = require('decompress');
 const decompressTargz = require('decompress-targz');
 const path = require('path');
@@ -19,19 +20,8 @@ async function downloadFirmware(version) {
 }
 
 async function downloadFile(url, output) {
-    return new Promise((resolve, reject) => {
-        console.log(`Start download ${url}`);
-
-        const r = request(url);
-        r.on('end', () => {
-            resolve(output);
-        });
-        r.on('error', (error) => {
-            reject(error);
-        });
-
-        r.pipe(fs.createWriteStream(output));
-    })
+    const res = await fetch(url);
+    await pipeline(Readable.fromWeb(res.body), fs.createWriteStream(output));
 }
 
 (async function main() {
