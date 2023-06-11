@@ -6,7 +6,10 @@
                  aria-hidden="true"></fa-icon>
         <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
             <icon [name]="iconName" class="align-items-top"></icon>
-            <div class="action--title">{{ title }}</div>
+            <div class="action--title">
+                {{ title }}
+                <svg-sprite-image *ngIf="titleIcon" [icon]="titleIcon"></svg-sprite-image>
+            </div>
             <icon *ngIf="editable && macroAction && !editing" name="pencil" class="align-items-top"></icon>
         </div>
         <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>

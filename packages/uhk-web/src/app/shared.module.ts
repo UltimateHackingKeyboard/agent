@@ -82,6 +82,7 @@ import {
     SvgTwoLineTextKeyComponent
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
+import { SvgSpriteImage } from './components/svg/svg-sprite-image';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
@@ -209,6 +210,7 @@ import appInitFactory from './services/app-init-factory';
         AboutComponent,
         ContributorBadgeComponent,
         SettingsComponent,
+        SvgSpriteImage,
         KeyboardSliderComponent,
         CancelableDirective,
         SafeStylePipe,
