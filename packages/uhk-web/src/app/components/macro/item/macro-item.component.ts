@@ -80,6 +80,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Output() selected = new EventEmitter<SelectedMacroItem>();
 
     title: string;
+    titleIcon: string;
     iconName: string;
     newItem: boolean = false;
     faGripLinesVertical = faGripLinesVertical;
@@ -179,6 +180,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     private setKeyActionContent(action: KeyMacroAction): void {
+        this.titleIcon = undefined;
         if (!action.hasScancode() && !action.hasModifiers()) {
             this.title = 'Invalid keypress';
             return;
@@ -210,9 +212,14 @@ export class MacroItemComponent implements OnInit, OnChanges {
         }
 
         if (action.hasScancode()) {
-            const scancode: string = (this.mapper.scanCodeToText(action.scancode, action.type) || ['Unknown']).join(' ');
+            const scancode = this.mapper.scanCodeToText(action.scancode, action.type) || ['Unknown'];
             if (scancode) {
-                texts.push(scancode);
+                if (scancode.length > 1 && scancode[1].startsWith('icon')) {
+                    texts.push(scancode[0]);
+                    this.titleIcon = this.mapper.getIcon(scancode[1]);
+                } else {
+                    texts.push(scancode.join(' '));
+                }
             }
         }
 
