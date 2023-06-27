@@ -1,7 +1,7 @@
 /// <reference path="./custom_types/electron-is-dev.d.ts"/>
 
-import './polyfills';
 import { app, BrowserWindow, systemPreferences } from 'electron';
+import * as process from 'process';
 import setElectronSettingsConfig from './set-electron-settings-config';
 setElectronSettingsConfig();
 
@@ -25,6 +25,7 @@ import { SudoService } from './services/sudo.service';
 import { SmartMacroDocService } from './services/smart-macro-doc.service';
 import isDev from 'electron-is-dev';
 import { setMenu } from './electron-menu';
+import { printUsbDevices } from './util';
 import { loadWindowState, saveWindowState } from './util/window';
 import { getWindowBackgroundColor, options, cliUsage, reenumerateAndExit } from './util';
 // import './dev-extension';
@@ -162,6 +163,15 @@ async function createWindow() {
 
 if (isSecondInstance) {
     app.quit();
+} else if (options['print-usb-devices']) {
+    printUsbDevices()
+        .then(() => {
+            process.exit(0);
+        })
+        .catch(error => {
+            console.error(error);
+            process.exit(-1);
+        });
 } else if (options['reenumerate-and-exit']) {
     const reenumerateOptions = {
         logger,
