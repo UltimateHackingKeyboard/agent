@@ -1,8 +1,9 @@
-import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
+import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
 import {
+    BacklightingMode,
     Constants,
     FirmwareRepoInfo,
     LayerName,
@@ -10,7 +11,6 @@ import {
     RIGHT_TRACKPOINT_MODULE,
     UHK_OFFICIAL_FIRMWARE_REPO
 } from 'uhk-common';
-
 import {
     ApplicationSettings,
     AppTheme,
@@ -18,8 +18,9 @@ import {
     createMd5Hash,
     getEmptyKeymap,
     getMd5HashFromFilename,
-    isVersionGte,
     HardwareModules,
+    isUserConfigContainsRgbColors,
+    isVersionGte,
     Keymap,
     LEFT_HALF_MODULE,
     LeftSlotModules,
@@ -30,35 +31,38 @@ import {
     UserConfiguration,
     VersionInformation
 } from 'uhk-common';
-
-import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
-import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
-import * as fromUserConfig from './reducers/user-configuration';
-import * as fromAppUpdate from './reducers/app-update.reducer';
-import * as fromContributors from './reducers/contributors.reducer';
-import * as autoUpdateSettings from './reducers/auto-update-settings';
-import * as fromApp from './reducers/app.reducer';
-import * as fromDevice from './reducers/device';
-import * as fromFirmware from './reducers/firmware-upgrade.reducer';
-import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
-import * as fromSelectors from './reducers/selectors';
-import * as fromSmartMacroDoc from './reducers/smart-macro-doc.reducer';
-import { initProgressButtonState } from './reducers/progress-button-state';
 import { environment } from '../../environments/environment';
-import { RouterState } from './router-util';
-import { PrivilagePageSate } from '../models/privilage-page-sate';
 import {
+    ConfigSizeState,
     DeviceUiStates,
     FirmwareUpgradeState,
     MacroMenuItem,
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
+    ProgressBar,
+    ProgressBarLegend,
     SideMenuPageState,
     UhkProgressBarState,
     UserConfigHistoryComponentState
 } from '../models';
+import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
+
+import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
+import * as fromAppUpdate from './reducers/app-update.reducer';
+import * as fromApp from './reducers/app.reducer';
+import * as autoUpdateSettings from './reducers/auto-update-settings';
+import * as fromContributors from './reducers/contributors.reducer';
+import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
+import * as fromDevice from './reducers/device';
+import * as fromFirmware from './reducers/firmware-upgrade.reducer';
+import { initProgressButtonState } from './reducers/progress-button-state';
+import * as fromSelectors from './reducers/selectors';
+import * as fromSmartMacroDoc from './reducers/smart-macro-doc.reducer';
+import * as fromUserConfig from './reducers/user-configuration';
+import * as fromUserConfigHistory from './reducers/user-configuration-history.reducer';
+import { RouterState } from './router-util';
 
 // State interface for the application
 export interface AppState {
@@ -136,6 +140,13 @@ export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, ge
     });
 
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
+export const showColorPalette = createSelector(userConfigState, fromUserConfig.showColorPalette);
+export const backlightingMode = createSelector(userConfigState, fromUserConfig.backlightingMode);
+export const getBacklightingOptions = createSelector(userConfigState, fromUserConfig.backlightingOptions);
+export const backlightingColorPalette = createSelector(userConfigState, fromUserConfig.backlightingColorPalette);
+export const isBacklightingColoring = createSelector(userConfigState, fromUserConfig.isBacklightingColoring);
+export const selectedBacklightingColor = createSelector(userConfigState, fromUserConfig.selectedBacklightingColor);
+export const selectedBacklightingColorIndex = createSelector(userConfigState, fromUserConfig.selectedBacklightingColorIndex);
 export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (keymaps, selectedKeymap): SelectOptionData[] => {
     return keymaps.map(keymap => {
         return {
@@ -265,32 +276,89 @@ export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userCo
 
     return uhkBuffer;
 });
+export const getRgbColorSpaceUsage = createSelector(getUserConfiguration, userConfig => {
+    if (userConfig.backlightingMode === BacklightingMode.FunctionalBacklighting) {
+        return 0;
+    }
+
+    let rgbColorSpaceUsage = 0;
+
+    for (const keymap of userConfig.keymaps) {
+        for (const layer of keymap.layers) {
+            for (const module of layer.modules) {
+                rgbColorSpaceUsage += module.keyActions.length;
+            }
+        }
+    }
+
+    return rgbColorSpaceUsage * 3; // 3 is the 3 byte that represent a RGB color
+});
 export const getUserConfigSize = createSelector(getUserConfigAsBuffer, uhkBuffer => {
     return uhkBuffer.getBufferContent().length;
 });
 export const getMd5HasOfUserConfig = createSelector(getUserConfigAsBuffer, uhkBuffer => {
     return createMd5Hash(uhkBuffer.getBufferContent());
 });
-export const getConfigSizesState = createSelector(deviceState, getUserConfigSize, runningInElectron,
-    (deviceStateData, userConfigSize, isRunningInElectron) => {
+export const getConfigSizesState = createSelector(deviceState, getUserConfigSize, getRgbColorSpaceUsage,
+    (deviceStateData, userConfigSize, rgbColorSpaceUsage): ConfigSizeState => {
+        return {
+            allUsage: userConfigSize,
+            capacity: deviceStateData.configSizes.userConfig,
+            rgbColorsUsage: rgbColorSpaceUsage
+        };
+    });
+export const getConfigSizesProgressBarState = createSelector(getConfigSizesState, backlightingMode,
+    (configSizeState: ConfigSizeState, backlightingMode: BacklightingMode): UhkProgressBarState => {
         const formatNumber = new Intl.NumberFormat(undefined, {
             useGrouping: true
         }).format;
-        const maxValue = deviceStateData.configSizes.userConfig;
+
+        const progressBars: Array<ProgressBar> = [
+            {
+                color: 'var(--color-progress-bar-progress)',
+                currentValue: configSizeState.allUsage - configSizeState.rgbColorsUsage,
+                maxValue: configSizeState.capacity,
+                minValue: 0
+            }
+        ];
+        const legends: Array<ProgressBarLegend> = [
+            {
+                color: 'var(--color-progress-bar-progress)',
+                text: 'keymaps and macros'
+            },
+            {
+                color: 'var(--color-progress-bar-bg)',
+                text: 'free space\n'
+            }
+        ];
+
+        if (isUserConfigContainsRgbColors(backlightingMode)) {
+            progressBars.unshift({
+                color: 'var(--color-progress-bar-progress-rgb-colors)',
+                currentValue: configSizeState.rgbColorsUsage,
+                maxValue: configSizeState.capacity,
+                minValue: 0
+            });
+
+            legends.unshift({
+                color: 'var(--color-progress-bar-progress-rgb-colors)',
+                text: 'per-key colors'
+            });
+        }
 
         return {
-            currentValue: userConfigSize,
-            maxValue,
-            loading: isRunningInElectron && deviceStateData.readingConfigSizes,
-            minValue: 0,
-            text: `${formatNumber(userConfigSize)} of ${formatNumber(maxValue)} bytes on-board storage in used`
+            legends,
+            progressBars,
+            text: `${formatNumber(configSizeState.allUsage)} of ${formatNumber(configSizeState.capacity)} bytes on-board storage in used`
         };
     });
-export const getOutOfSpaceWaringData = createSelector(getConfigSizesState,
-    (configSizeState: UhkProgressBarState): OutOfSpaceWarningData => ({
-        currentValue: configSizeState.currentValue,
-        maxValue: configSizeState.maxValue,
-        show: configSizeState.currentValue > configSizeState.maxValue
+
+export const getOutOfSpaceWaringData = createSelector(getConfigSizesState, backlightingMode,
+    (configSizeState: ConfigSizeState, backlightingMode): OutOfSpaceWarningData => ({
+        backlightingMode,
+        currentValue: configSizeState.allUsage,
+        maxValue: configSizeState.capacity,
+        show: configSizeState.allUsage > configSizeState.capacity
     }));
 export const saveToKeyboardStateSelector = createSelector(deviceState, fromDevice.getSaveToKeyboardState);
 export const saveToKeyboardState = createSelector(runningInElectron, saveToKeyboardStateSelector, getOutOfSpaceWaringData,
@@ -568,15 +636,18 @@ export const getApplicationSettings = createSelector(
     appUpdateSettingsState,
     appState,
     getSmartMacroPanelWidth,
+    backlightingColorPalette,
     (updateSettingsState,
         app,
-        smartMacroPanelWidth
+        smartMacroPanelWidth,
+        backlightingColorPalette
     ): ApplicationSettings => {
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
             everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
             animationEnabled: app.animationEnabled,
             appTheme: app.appTheme,
+            backlightingColorPalette,
             smartMacroPanelWidth
         };
     });

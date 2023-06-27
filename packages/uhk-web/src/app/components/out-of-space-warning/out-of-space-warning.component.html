@@ -1,3 +1,12 @@
-<div class="out-of-space-warning-wrapper" role="alert">
-    Your configuration occupies {{ state.currentValue | number }} bytes, which is larger than the available {{ state.maxValue | number }} bytes on-board storage, so it can't be saved. Delete some keymaps or macros to be able to save your configuration.
+<div class="out-of-space-warning-wrapper" role="alert" [ngSwitch]="state.backlightingMode">
+    Your configuration occupies {{ state.currentValue | number }} bytes, which is larger than the available {{ state.maxValue | number }} bytes on-board storage, so it can't be saved.
+    <ng-container *ngSwitchCase="backlightingModeEnum.PerKeyBacklighting">
+        <a routerLink="/device/led-settings">Switch to functional backlighting</a>, or delete some keymaps or macros to be able to save your configuration.
+    </ng-container>
+    <ng-container *ngSwitchCase="backlightingModeEnum.FunctionalBacklightingWithPerKeyValues">
+        <a routerLink="/device/configuration">Recover per-key backlighting space</a>, or delete some keymaps or macros to be able to save your configuration.
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        Delete some keymaps or macros to be able to save your configuration.
+    </ng-container>
 </div>

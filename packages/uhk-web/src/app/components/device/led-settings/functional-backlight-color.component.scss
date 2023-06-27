@@ -1,0 +1,32 @@
+:host {
+    display: inline-block;
+    width: 90px;
+    min-width: 90px;
+    min-height: 60px;
+    height: 60px;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+
+    label {
+        text-align: center;
+        position: relative;
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+
+        input[type=color] {
+            cursor: pointer;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 50%;
+        }
+    }
+}

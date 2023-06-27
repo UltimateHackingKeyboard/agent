@@ -1,5 +1,6 @@
 import { assertEnum, assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { MacroAction, MacroActionId, MacroMouseSubAction, macroActionType } from './macro-action.js';
 
 export enum MouseButtons {
@@ -28,35 +29,37 @@ export class MouseButtonMacroAction extends MacroAction {
         this.mouseButtonsMask = other.mouseButtonsMask;
     }
 
-    fromJsonObject(jsonObject: JsObjectMouseButtonMacroAction, version: number): MouseButtonMacroAction {
-        switch (version) {
+    fromJsonObject(jsonObject: JsObjectMouseButtonMacroAction, serialisationInfo: SerialisationInfo): MouseButtonMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
             default:
-                throw new Error(`Mouse button macro action does not support version: ${version}`);
+                throw new Error(`Mouse button macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): MouseButtonMacroAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): MouseButtonMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromBinaryV1(buffer);
                 break;
 
             default:
-                throw new Error(`Mouse button macro action does not support version: ${version}`);
+                throw new Error(`Mouse button macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;

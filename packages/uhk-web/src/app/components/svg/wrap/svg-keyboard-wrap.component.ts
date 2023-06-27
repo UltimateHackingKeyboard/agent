@@ -13,12 +13,14 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { RgbColor } from 'colord';
 
 import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import {
+    BacklightingMode,
     camelCaseToSentence,
     capitalizeFirstLetter,
     HalvesInfo,
@@ -40,7 +42,7 @@ import {
 
 import { MapperService } from '../../../services/mapper.service';
 import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
-import { AddLayerAction, RemoveLayerAction, SaveKeyAction } from '../../../store/actions/keymap';
+import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
@@ -96,7 +98,9 @@ interface NameValuePair {
 })
 export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() allowNewLayers: boolean;
+    @Input() backlightingMode: BacklightingMode;
     @Input() currentLayer: LayerOption;
+    @Input() isBacklightingColoring = false;
     @Input() keymap: Keymap;
     @Input() popoverEnabled: boolean = true;
     @Input() tooltipEnabled: boolean = false;
@@ -105,10 +109,16 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Input() layerOptions: LayerOption[];
     @Input() allowLayerDoubleTap: boolean;
     @Input() lastEditedKey: LastEditedKey;
+    @Input() paletteColors: Array<RgbColor> = [];
     @Input() secondaryRoleOptions: SelectOptionData[];
+    @Input() selectedPaletteColorIndex = -1;
+    @Input() showPaletteColors = false;
 
+    @Output() addColorToPalette = new EventEmitter<RgbColor>();
+    @Output() deleteColorFromPalette = new EventEmitter();
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
     @Output() selectedLayerChanged = new EventEmitter<LayerOption>();
+    @Output() toggleColorFromPalette = new EventEmitter<number>();
 
     @ViewChild(PopoverComponent, { read: ElementRef, static: false }) popover: ElementRef;
 
@@ -206,7 +216,14 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     onKeyClick(event: SvgKeyboardKeyClickEvent): void {
-        if (this.animationState === 'closed' && this.popoverEnabled) {
+        if (this.isBacklightingColoring) {
+            this.store.dispatch(new SetKeyColorAction({
+                keymap: this.keymap,
+                layer: this.currentLayer.id,
+                module: event.moduleId,
+                key: event.keyId,
+            }));
+        } else if (this.animationState === 'closed' && this.popoverEnabled) {
             this.keyEditConfig = {
                 moduleId: event.moduleId,
                 keyId: event.keyId

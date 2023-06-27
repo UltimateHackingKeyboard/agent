@@ -1,15 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { UploadFileData } from 'uhk-common';
+import { BacklightingMode, UploadFileData } from 'uhk-common';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
-import { AppState, getConfigSizesState, getUserConfigHistoryComponentState, isUserConfigSaving } from '../../../store';
+import { AppState,
+    backlightingMode,
+    getConfigSizesProgressBarState,
+    getRgbColorSpaceUsage,
+    getUserConfigHistoryComponentState,
+    isUserConfigSaving
+} from '../../../store';
 import { ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
     SaveUserConfigInBinaryFileAction,
-    SaveUserConfigInJsonFileAction
+    SaveUserConfigInJsonFileAction,
+    SetUserConfigurationValueAction
 } from '../../../store/actions/user-config';
 import { UhkProgressBarState, UserConfigHistoryComponentState } from '../../../models';
 import {
@@ -26,16 +33,21 @@ import {
     }
 })
 export class DeviceConfigurationComponent implements OnInit, OnDestroy {
-    configSizesState$: Observable<UhkProgressBarState>;
+    backlightingModeEnum = BacklightingMode;
+    backlightingMode$: Observable<BacklightingMode>;
+    configSizesProgressBarState$: Observable<UhkProgressBarState>;
     userConfigHistoryState$: Observable<UserConfigHistoryComponentState>;
+    rgbColorSpaceUsage$: Observable<number>;
     savingUserConfig: boolean;
     faSlidersH = faSlidersH;
 
     private subscription = new Subscription();
 
     constructor(private store: Store<AppState>) {
-        this.configSizesState$ = this.store.select(getConfigSizesState);
+        this.backlightingMode$ = this.store.select(backlightingMode);
+        this.configSizesProgressBarState$ = this.store.select(getConfigSizesProgressBarState);
         this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryComponentState);
+        this.rgbColorSpaceUsage$ = this.store.select(getRgbColorSpaceUsage);
         this.subscription.add(this.store.select(isUserConfigSaving).subscribe(x => this.savingUserConfig = x));
     }
 
@@ -79,5 +91,12 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
 
     getUserConfigFromHistory(fileName: string): void {
         this.store.dispatch(new GetUserConfigurationFromHistoryAction(fileName));
+    }
+
+    recoverLedSpaces(): void {
+        this.store.dispatch(new SetUserConfigurationValueAction({
+            propertyName: 'backlightingMode',
+            value: BacklightingMode.FunctionalBacklighting
+        }));
     }
 }

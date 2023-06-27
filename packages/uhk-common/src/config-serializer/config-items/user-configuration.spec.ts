@@ -1,3 +1,4 @@
+import { BacklightingMode } from './backlighting-mode.js';
 import { UserConfiguration } from './user-configuration.js';
 
 describe('user-configuration', () => {
@@ -8,7 +9,7 @@ describe('user-configuration', () => {
 
     it('should transform an empty config', () => {
         jsonTester({
-            userConfigMajorVersion: 5,
+            userConfigMajorVersion: 6,
             userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
@@ -16,6 +17,15 @@ describe('user-configuration', () => {
             iconsAndLayerTextsBrightness: 255,
             alphanumericSegmentsBrightness: 255,
             keyBacklightBrightness: 255,
+            backlightingMode: BacklightingMode.FunctionalBacklighting,
+            backlightingNoneActionColor: {r:0, g:0, b:0},
+            backlightingScancodeColor: {r:255, g:255, b:255},
+            backlightingModifierColor: {r:0, g:255, b:255},
+            backlightingShortcutColor: {r:0, g:0, b:255},
+            backlightingSwitchLayerColor: {r:255, g:255, b:0},
+            backlightingSwitchKeymapColor: {r:255, g:0, b:0},
+            backlightingMouseColor: {r:0, g:255, b:0},
+            backlightingMacroColor: {r:255, g:0, b:255},
             mouseMoveInitialSpeed: 5,
             mouseMoveAcceleration: 35,
             mouseMoveDeceleratedSpeed: 10,
@@ -29,48 +39,6 @@ describe('user-configuration', () => {
             moduleConfigurations: [],
             macros: [],
             keymaps: []
-        });
-    });
-
-    it('should transform a null keyActionType ', () => {
-        jsonTester({
-            userConfigMajorVersion: 5,
-            userConfigMinorVersion: 0,
-            userConfigPatchVersion: 0,
-            deviceName: 'My UHK',
-            doubleTapSwitchLayerTimeout: 250,
-            iconsAndLayerTextsBrightness: 255,
-            alphanumericSegmentsBrightness: 255,
-            keyBacklightBrightness: 255,
-            mouseMoveInitialSpeed: 5,
-            mouseMoveAcceleration: 35,
-            mouseMoveDeceleratedSpeed: 10,
-            mouseMoveBaseSpeed: 40,
-            mouseMoveAcceleratedSpeed: 80,
-            mouseScrollInitialSpeed: 20,
-            mouseScrollAcceleration: 20,
-            mouseScrollDeceleratedSpeed: 20,
-            mouseScrollBaseSpeed: 20,
-            mouseScrollAcceleratedSpeed: 50,
-            moduleConfigurations: [],
-            macros: [],
-            keymaps: [
-                {
-                    isDefault: true,
-                    abbreviation: 'QWR',
-                    name: 'QWERTY',
-                    description: '',
-                    layers: [{
-                        id: 'base',
-                        modules: [{
-                            id: 0,
-                            keyActions: [
-                                null
-                            ]
-                        }]
-                    }]
-                }
-            ]
         });
     });
 

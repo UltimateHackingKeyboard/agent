@@ -2,6 +2,7 @@ import { assertEnum, assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { KeyModifiers } from '../key-modifiers.js';
 import { SecondaryRoleAction } from '../secondary-role-action.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeystrokeType } from './keystroke-type.js';
 
@@ -58,7 +59,7 @@ export class KeystrokeAction extends KeyAction {
     private _type: KeystrokeType;
 
     constructor(other?: KeystrokeAction) {
-        super();
+        super(other);
         if (!other) {
             return;
         }
@@ -68,8 +69,8 @@ export class KeystrokeAction extends KeyAction {
         this.secondaryRoleAction = other.secondaryRoleAction;
     }
 
-    fromJsonObject(jsonObject: JsonObjectKeystrokeAction, version: number): KeystrokeAction {
-        switch (version) {
+    fromJsonObject(jsonObject: JsonObjectKeystrokeAction, serialisationInfo: SerialisationInfo): KeystrokeAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -78,15 +79,19 @@ export class KeystrokeAction extends KeyAction {
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
+            case 6:
+                this.fromJsonObjectV6(jsonObject, serialisationInfo);
+                break;
+
             default:
-                throw new Error(`Keystroke action does not support version: ${version}`);
+                throw new Error(`Keystroke action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): KeystrokeAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): KeystrokeAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -95,14 +100,19 @@ export class KeystrokeAction extends KeyAction {
                 this.fromBinaryV1(buffer);
                 break;
 
+            case 6:
+                this.fromBinaryV6(buffer, serialisationInfo);
+                break;
+
+
             default:
-                throw new Error(`Keystroke action does not support version: ${version}`);
+                throw new Error(`Keystroke action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    toJsonObject(): JsonObjectKeystrokeAction {
+    toJsonObject(serialisationInfo: SerialisationInfo): JsonObjectKeystrokeAction {
         const jsonObject: JsonObjectKeystrokeAction = {
             keyActionType: keyActionType.KeystrokeAction
         };
@@ -125,10 +135,13 @@ export class KeystrokeAction extends KeyAction {
             jsonObject.secondaryRoleAction = SecondaryRoleAction[this.secondaryRoleAction];
         }
 
-        return jsonObject;
+        return {
+            ...jsonObject,
+            ...this.rgbColorToJson(serialisationInfo)
+        };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo) {
         let flags = 0;
         const toWrite: {
             data: number,
@@ -162,6 +175,7 @@ export class KeystrokeAction extends KeyAction {
             }
         }
 
+        this.rgbColorToBinary(buffer, serialisationInfo);
     }
 
     toString(): string {
@@ -229,6 +243,11 @@ export class KeystrokeAction extends KeyAction {
         this.secondaryRoleAction = SecondaryRoleAction[jsonObject.secondaryRoleAction];
     }
 
+    private fromJsonObjectV6(jsonObject: JsonObjectKeystrokeAction, serialisationInfo: SerialisationInfo): void {
+        this.fromJsonObjectV1(jsonObject);
+        this.rgbColorFromJson(jsonObject, serialisationInfo);
+    }
+
     private fromBinaryV1(buffer: UhkBuffer): void {
         const keyActionId: KeyActionId = this.readAndAssertKeyActionId(buffer);
         const flags: number = keyActionId - KeyActionId.NoneAction; // NoneAction is the same as an empty KeystrokeAction.
@@ -242,5 +261,10 @@ export class KeystrokeAction extends KeyAction {
         if (flags & KeystrokeActionFlag.secondaryRoleAction) {
             this.secondaryRoleAction = buffer.readUInt8();
         }
+    }
+
+    private fromBinaryV6(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
+        this.fromBinaryV1(buffer);
+        this.rgbColorFromBinary(buffer, serialisationInfo);
     }
 }

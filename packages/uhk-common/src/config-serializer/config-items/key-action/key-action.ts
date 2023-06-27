@@ -1,5 +1,8 @@
+import { RgbColorInterface } from '../../../models/index.js';
+import { assertUInt8 } from '../../assert.js';
 import { Macro } from '../macro.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { UserConfiguration } from '../user-configuration.js';
 
 export enum KeyActionId {
@@ -29,7 +32,17 @@ export let keyActionType = {
     PlayMacroAction              : 'playMacro'
 };
 
-export abstract class KeyAction {
+export abstract class KeyAction implements RgbColorInterface {
+
+    @assertUInt8 b = 255;
+    @assertUInt8 g = 255;
+    @assertUInt8 r = 255;
+
+    protected constructor(keyAction?: RgbColorInterface) {
+        this.b = keyAction?.b ?? 255;
+        this.g = keyAction?.g ?? 255;
+        this.r = keyAction?.r ?? 255;
+    }
 
     assertKeyActionType(jsObject: any): void {
         const keyActionClassname: string = this.getName();
@@ -53,13 +66,47 @@ export abstract class KeyAction {
         return readKeyActionId;
     }
 
-    abstract toJsonObject(macros?: Macro[]): any;
+    abstract toJsonObject(serialisationInfo: SerialisationInfo, macros?: Macro[]): any;
 
-    abstract toBinary(buffer: UhkBuffer, userConfiguration?: UserConfiguration): void;
+    abstract toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration?: UserConfiguration): void;
 
     abstract getName(): string;
 
     renameKeymap(oldAbbr: string, newAbbr: string): KeyAction {
         return this;
+    }
+
+    rgbColorFromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
+            this.r = buffer.readUInt8();
+            this.g = buffer.readUInt8();
+            this.b = buffer.readUInt8();
+        }
+    }
+
+    rgbColorFromJson(jsonObject: any, serialisationInfo: SerialisationInfo): void {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
+            this.b = jsonObject.b;
+            this.g = jsonObject.g;
+            this.r = jsonObject.r;
+        }
+    }
+
+    rgbColorToBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
+            buffer.writeUInt8(this.r);
+            buffer.writeUInt8(this.g);
+            buffer.writeUInt8(this.b);
+        }
+    }
+
+    rgbColorToJson(serialisationInfo: SerialisationInfo): RgbColorInterface {
+        if (serialisationInfo.isUserConfigContainsRgbColors) {
+            return {
+                b: this.b,
+                g: this.g,
+                r: this.r
+            };
+        }
     }
 }

@@ -1,4 +1,6 @@
+import { RgbColorInterface } from '../../../models/index.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 
 /**
@@ -9,24 +11,34 @@ import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 
 export class NoneAction extends KeyAction {
 
-    fromJsonObject(jsonObject: any): NoneAction {
+    constructor(other?: NoneAction | RgbColorInterface) {
+        super(other);
+    }
+
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): NoneAction {
         this.assertKeyActionType(jsonObject);
+        this.rgbColorFromJson(jsonObject, serialisationInfo);
+
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer): NoneAction {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): NoneAction {
         this.readAndAssertKeyActionId(buffer);
+        this.rgbColorFromBinary(buffer, serialisationInfo);
+
         return this;
     }
 
-    toJsonObject(): any {
+    toJsonObject(serialisationInfo: SerialisationInfo): any {
         return {
-            keyActionType: keyActionType.NoneAction
+            keyActionType: keyActionType.NoneAction,
+            ...this.rgbColorToJson(serialisationInfo)
         };
     }
 
-    toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
         buffer.writeUInt8(KeyActionId.NoneAction);
+        this.rgbColorToBinary(buffer, serialisationInfo);
     }
 
     toString(): string {

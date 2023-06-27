@@ -1,28 +1,72 @@
 <div class="text-center">
-    <div role="group" class="uhk__layer-switcher--wrapper btn-group btn-group-lg" data-title="Layers: ">
-        <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
-        <button *ngIf="layerOption.selected"
-                type="button"
-                class="btn"
-                (click)="selectLayer(layerOption)"
-                [class.btn-default]="layerOption.id !== current.id"
-                [class.btn-primary]="layerOption.id === current.id">
-            {{ layerOption.name }}
-        </button>
-        </ng-container>
+    <div class="group-container">
+        <span class="group-title">Layers: </span>
+        <div role="group" class="btn-group btn-group-lg">
+            <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
+                <button *ngIf="layerOption.selected"
+                        type="button"
+                        class="btn"
+                        (click)="selectLayer(layerOption)"
+                        [class.btn-default]="layerOption.id !== current.id"
+                        [class.btn-primary]="layerOption.id === current.id">
+                    {{ layerOption.name }}
+                </button>
+            </ng-container>
 
-        <div *ngIf="allowNewLayers" class="btn-group" ngbDropdown role="group" autoClose="outside">
-            <button class="btn btn-default" ngbDropdownToggle></button>
-            <div class="dropdown-menu"ngbDropdownMenu>
-                <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
-                    <layer-option *ngIf="layerOption.id !== 255"
-                                  [layerOption]="layerOption"
-                                  (remove)="onRemoveLayer($event)"
-                                  (select)="onSelectLayer($event)"
-                    >
-                    </layer-option>
-                </ng-container>
+            <div *ngIf="allowNewLayers" class="btn-group" ngbDropdown role="group" autoClose="outside">
+                <button class="btn btn-default" ngbDropdownToggle></button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
+                        <layer-option *ngIf="layerOption.id !== 255"
+                                      [layerOption]="layerOption"
+                                      (remove)="onRemoveLayer($event)"
+                                      (select)="onSelectLayer($event)"
+                        >
+                        </layer-option>
+                    </ng-container>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div *ngIf="showPaletteColors" class="group-container">
+        <span class="group-title">Colors: </span>
+        <div role="group" class="btn-group btn-group-lg">
+            <button *ngFor="let color of paletteColors; let index = index"
+                    type="button"
+                    class="btn btn-default"
+                    coloredButton
+                    ngbTooltip=""
+                    [color]="color"
+                    [selected]="selectedPaletteColorIndex === index"
+                    [selectedPaletteColorIndex]="selectedPaletteColorIndex"
+                    (click)="onColorSelected(index)"
+            >
+                <fa-icon [icon]="faCheck"></fa-icon>
+            </button>
+
+            <button *ngIf="selectedPaletteColorIndex === -1"
+                    type="button"
+                    class="btn btn-default add-new-color-button"
+                    ngbTooltip="Add new color to the palette."
+                    >
+                <fa-icon [icon]="faPlus"></fa-icon>
+                <input type="color" (change)="onAddColor($event)">
+            </button>
+            <button *ngIf="selectedPaletteColorIndex > -1"
+                    type="button"
+                    class="btn btn-default"
+                    ngbTooltip="Delete the current color from the palette."
+                    container="body"
+                    mwlConfirmationPopover
+                    popoverTitle="Are you sure to delete the current color from the palette?"
+                    placement="bottom"
+                    confirmText="Yes"
+                    cancelText="No"
+                    (confirm)="onDeleteColor()"
+            >
+                <fa-icon [icon]="faTrash"></fa-icon>
+            </button>
         </div>
     </div>
 </div>

@@ -1,7 +1,11 @@
+import { colord, extend } from 'colord';
+import labPlugin from 'colord/plugins/lab';
 import {
+    BacklightingMode,
     Constants,
     getDefaultHalvesInfo,
     HalvesInfo,
+    initBacklightingColorPalette,
     KeyAction,
     KeyActionHelper,
     Keymap,
@@ -14,25 +18,41 @@ import {
     MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
+    RgbColor,
+    RgbColorInterface,
     RightSlotModules,
     SwitchKeymapAction,
     SwitchLayerAction,
     UserConfiguration
 } from 'uhk-common';
+
+import {
+    BacklightingOption,
+    defaultLastEditKey,
+    ExchangeKey,
+    LastEditedKey,
+    LayerOption,
+    SelectedMacroAction
+} from '../../models';
+import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
+import { findModuleById, isValidName } from '../../util';
+import { uhkThemeColors } from '../../util/uhk-theme-colors';
+import * as AppActions from '../actions/app';
+import * as DeviceActions from '../actions/device';
+import * as Device from '../actions/device';
 import * as KeymapActions from '../actions/keymap';
+import { SaveKeyAction } from '../actions/keymap';
 import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
-import * as DeviceActions from '../actions/device';
-import { findModuleById, isValidName } from '../../util';
-import { defaultLastEditKey, ExchangeKey, LastEditedKey, LayerOption, SelectedMacroAction } from '../../models';
-import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
-import { SaveKeyAction } from '../actions/keymap';
-import * as Device from '../actions/device';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
-import { getBaseLayerOption, initLayerOptions } from './layer-options';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
+import { getBaseLayerOption, initLayerOptions } from './layer-options';
+
+extend([labPlugin]);
 
 export interface State {
+    backlightingColorPalette: Array<RgbColorInterface>;
+    selectedBacklightingColorIndex: number;
     isSelectedMacroNew: boolean;
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
@@ -42,22 +62,49 @@ export interface State {
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
     selectedLayerOption: LayerOption;
+    theme: string;
 }
 
 export const initialState: State = {
+    backlightingColorPalette: initBacklightingColorPalette(),
+    selectedBacklightingColorIndex: -1,
     isSelectedMacroNew: false,
     userConfiguration: new UserConfiguration(),
     lastEditedKey: defaultLastEditKey(),
     layerOptions: initLayerOptions(),
     halvesInfo: getDefaultHalvesInfo(),
-    selectedLayerOption: getBaseLayerOption()
+    selectedLayerOption: getBaseLayerOption(),
+    theme: ''
 };
 
 export function reducer(
     state = initialState,
-    action: KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
+    action: AppActions.Actions | KeymapActions.Actions | MacroActions.Actions | UserConfig.Actions | DeviceActions.Actions
 ): State {
     switch (action.type) {
+
+        case AppActions.ActionTypes.SetAppTheme: {
+            const theme = (action as AppActions.SetAppThemeAction).payload;
+            const userConfiguration = state.userConfiguration.clone();
+            setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, theme);
+
+            const newState = {
+                ...state,
+                userConfiguration,
+                theme
+            };
+
+            return newState;
+        }
+
+        case AppActions.ActionTypes.LoadApplicationSettingsSuccess: {
+            const applicationSettings = (action as AppActions.LoadApplicationSettingsSuccessAction).payload;
+
+            return {
+                ...state,
+                backlightingColorPalette: applicationSettings.backlightingColorPalette
+            };
+        }
 
         case UserConfig.ActionTypes.PreviewUserConfiguration:
         case UserConfig.ActionTypes.LoadResetUserConfiguration:
@@ -76,6 +123,37 @@ export function reducer(
             return assignUserConfiguration(state, userConfig);
         }
 
+        case UserConfig.ActionTypes.AddColorToBacklightingColorPalette: {
+            const color = (action as UserConfig.AddColorToBacklightingColorPaletteAction).payload;
+
+            return {
+                ...state,
+                backlightingColorPalette: [...state.backlightingColorPalette, color],
+            };
+        }
+
+        case UserConfig.ActionTypes.DeleteColorFromBacklightingColorPalette: {
+            if (state.selectedBacklightingColorIndex === -1) {
+                return state;
+            }
+            const backlightingColorPalette = [...state.backlightingColorPalette];
+            backlightingColorPalette.splice(state.selectedBacklightingColorIndex, 1);
+
+            return {
+                ...state,
+                backlightingColorPalette,
+                selectedBacklightingColorIndex: -1,
+            };
+        }
+
+        case UserConfig.ActionTypes.ToggleColorFromBacklightingColorPalette: {
+            const index = (action as UserConfig.ToggleColorFromBacklightingColorPaletteAction).payload;
+
+            return {
+                ...state,
+                selectedBacklightingColorIndex: index === state.selectedBacklightingColorIndex ? -1 : index,
+            };
+        }
         case Device.ActionTypes.ConnectionStateChanged: {
             const newState: State = {
                 ...state,
@@ -148,14 +226,16 @@ export function reducer(
 
         case KeymapActions.ActionTypes.AddLayer: {
             const newLayerId = (action as KeymapActions.AddLayerAction).payload;
+            const currentKeymap = state.userConfiguration.keymaps.find(keymap => state.selectedKeymapAbbr);
+            const baseLayer = currentKeymap.layers.find(layer => layer.id === LayerName.base);
             const newLayer = new Layer();
             newLayer.id = newLayerId;
             const leftModule = new Module();
             leftModule.id = 1;
-            leftModule.keyActions = [];
+            leftModule.keyActions = new Array(baseLayer.modules.find(findModuleById(1)).keyActions.length).fill(0).map(x => new NoneAction());
             const rightModule = new Module();
             rightModule.id = 0;
-            rightModule.keyActions = [];
+            rightModule.keyActions = new Array(baseLayer.modules.find(findModuleById(0)).keyActions.length).fill(0).map(x => new NoneAction());
             newLayer.modules = [
                 rightModule,
                 leftModule
@@ -170,6 +250,7 @@ export function reducer(
             }
 
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            setSvgKeyboardCoverColorsOfLayer(userConfiguration.backlightingMode, newLayer, state.theme);
 
             userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === state.selectedKeymapAbbr) {
@@ -267,6 +348,49 @@ export function reducer(
             return {
                 ...state,
                 userConfiguration
+            };
+        }
+
+        case KeymapActions.ActionTypes.SetKeyColor: {
+            const payload = (action as KeymapActions.SetKeyColorAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.keymaps = userConfiguration.keymaps.map(keymap => {
+                if (keymap.abbreviation !== payload.keymap.abbreviation) {
+                    return keymap;
+                }
+
+                keymap = Object.assign(new Keymap(), keymap);
+                keymap.layers = keymap.layers.map(layer => {
+                    if (layer.id !== payload.layer) {
+                        return layer;
+                    }
+
+                    layer = new Layer(layer);
+                    layer.modules = layer.modules.map(module => {
+                        if(module.id !== payload.module) {
+                            return module;
+                        }
+
+                        module = new Module(module);
+                        const selectedColor = state.backlightingColorPalette[state.selectedBacklightingColorIndex];
+                        const keyAction = KeyActionHelper.fromKeyAction(module.keyActions[payload.key]);
+                        keyAction.b = selectedColor.b;
+                        keyAction.g = selectedColor.g;
+                        keyAction.r = selectedColor.r;
+                        module.keyActions[payload.key] = keyAction;
+
+                        return module;
+                    });
+
+                    return layer;
+                });
+
+                return keymap;
+            });
+
+            return {
+                ...state,
+                userConfiguration,
             };
         }
 
@@ -642,10 +766,25 @@ export function reducer(
             return state;
         }
 
+        case UserConfig.ActionTypes.SetUserConfigurationRgbValue: {
+            const payload = (action as UserConfig.SetUserConfigurationRgbValueAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration[payload.propertyName] = new RgbColor(payload.value);
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
         case UserConfig.ActionTypes.SetUserConfigurationValue: {
             const payload = (action as UserConfig.SetUserConfigurationValueAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration[payload.propertyName] = payload.value;
+
+            if (payload.propertyName === 'backlightingMode') {
+                setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, state.theme);
+            }
 
             return {
                 ...state,
@@ -750,6 +889,27 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
     .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
+export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
+export const backlightingMode = (state: State): BacklightingMode => state.userConfiguration.backlightingMode;
+export const backlightingOptions = (state: State): Array<BacklightingOption> => {
+    return [
+        {
+            displayText: 'Functional backlighting',
+            mode: state.userConfiguration.backlightingMode === BacklightingMode.PerKeyBacklighting ||
+                    state.userConfiguration.backlightingMode === BacklightingMode.FunctionalBacklightingWithPerKeyValues
+                ? BacklightingMode.FunctionalBacklightingWithPerKeyValues
+                : BacklightingMode.FunctionalBacklighting
+        },
+        {
+            displayText: 'Per-key backlighting',
+            mode: BacklightingMode.PerKeyBacklighting
+        }
+    ];
+};
+export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
+export const isBacklightingColoring = (state: State): boolean => state.selectedBacklightingColorIndex > -1;
+export const selectedBacklightingColor = (state: State): RgbColorInterface => state.backlightingColorPalette[state.selectedBacklightingColorIndex];
+export const selectedBacklightingColorIndex = (state: State): number => state.selectedBacklightingColorIndex;
 
 function generateAbbr(keymaps: Keymap[], abbr: string): string {
     const chars: string[] = '23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -877,7 +1037,7 @@ function checkExistence(layers: Layer[], property: string, value: any): Layer[] 
             newModules[path.moduleIdx] = Object.assign(new Module(), newModules[path.moduleIdx]);
             newModules[path.moduleIdx].keyActions = [...newModules[path.moduleIdx].keyActions];
         }
-        newModules[path.moduleIdx].keyActions[path.keyActionIdx] = undefined;
+        newModules[path.moduleIdx].keyActions[path.keyActionIdx] = new NoneAction(newModules[path.moduleIdx].keyActions[path.keyActionIdx]);
     }
 
     return newLayers;
@@ -891,12 +1051,15 @@ function setKeyActionToLayer(layer: Layer, moduleIndex: number, keyIndex: number
     newLayer.modules[moduleIndexInArray] = newModule;
 
     newModule.keyActions = newModule.keyActions.slice();
+    if (!newKeyAction) {
+        newKeyAction = new NoneAction(newModule.keyActions[keyIndex]);
+    }
     newModule.keyActions[keyIndex] = newKeyAction;
 
     return newLayer;
 }
 
-function assignUserConfiguration(state: State, userConfig: UserConfiguration): State {
+function assignUserConfiguration(state: State, userConfig: UserConfiguration, theme?: string): State {
     let userConfiguration = Object.assign(new UserConfiguration(), {
         ...state.userConfiguration,
         ...userConfig,
@@ -911,6 +1074,8 @@ function assignUserConfiguration(state: State, userConfig: UserConfiguration): S
     if (state.halvesInfo.rightModuleSlot !== RightSlotModules.NoModule) {
         userConfiguration = addMissingModuleConfigs(userConfiguration, state.halvesInfo.rightModuleSlot);
     }
+
+    setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, theme);
 
     return {
         ...state,
@@ -945,7 +1110,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
             keymap = Object.assign(new Keymap, keymap);
             keymap.layers = keymap.layers.map(layer => {
                 if (keyActionRemap.remapOnAllLayer || layer.id === layerIndex || isSwitchLayerAction) {
-                    const clonedAction = KeyActionHelper.createKeyAction(newKeyAction, null);
+                    const clonedAction = KeyActionHelper.fromKeyAction(newKeyAction);
                     // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                     // on the target layer and remove SwitchLayerAction from other layers
                     if (isSwitchLayerAction) {
@@ -997,4 +1162,32 @@ function calculateLayerOptions(state: State): Map<number, LayerOption> {
     const selectedKeymap = getSelectedKeymap(state);
 
     return calculateLayerOptionsOfKeymap(selectedKeymap);
+}
+
+function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, layer: Layer, theme: string): void {
+    const themeColors = uhkThemeColors(theme);
+
+    if (backligtingMode === BacklightingMode.PerKeyBacklighting) {
+        const fillColord = colord('#ffffff');
+
+        layer.svgKeyboardCoverColors = {
+            fillColor: fillColord.toHex(),
+            strokeColor: colord(themeColors.backgroundColor).delta(fillColord) < 0.01
+                ? 'lightgray'
+                : ''
+        };
+    } else {
+        layer.svgKeyboardCoverColors = themeColors.svgKeyboardCoverColors;
+    }
+}
+
+function setSvgKeyboardCoverColorsOfAllLayer(userConfig: UserConfiguration, theme: string): void {
+    userConfig.keymaps = userConfig.keymaps.map(keymap => {
+        keymap = new Keymap(keymap);
+        for (const layer of keymap.layers) {
+            setSvgKeyboardCoverColorsOfLayer(userConfig.backlightingMode, layer, theme);
+        }
+
+        return keymap;
+    });
 }

@@ -1,5 +1,6 @@
 export { default as SCANCODES }  from './scancodes.js';
 
+export * from './backlighting-mode.js';
 export * from './key-action/index.js';
 export * from './macro-action/index.js';
 export * from './modules-default-configs.js';
@@ -13,4 +14,6 @@ export * from './macro.js';
 export * from './module.js';
 export * from './module-configuration.js';
 export * from './mouse-speed-configuration.js';
+export * from './rgb-color.js';
+export * from './svg-keyboard-cover-colors.js';
 export * from './user-configuration.js';

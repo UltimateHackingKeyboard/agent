@@ -6,10 +6,6 @@
         min-height: 1.4rem;
     }
 
-    .progress-bar {
-        background-color: var(--color-progress-bar-progress);
-    }
-
     .progress-text {
         position: absolute;
 
@@ -21,5 +17,18 @@
         color: var(--color-progress-bar-text);
         text-align: center;
         background-color: transparent;
+    }
+}
+
+.progress-bar-legends-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 0.5em;
+
+    .legend-color {
+        display: inline-block;
+        height: 1em;
+        width: 1em;
     }
 }

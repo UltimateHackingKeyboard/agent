@@ -13,24 +13,32 @@
             }
         }
     }
-}
 
-.uhk {
-    &__layer-switcher {
-        &--wrapper {
-            position: relative;
-            margin-bottom: 2rem;
+    .group-container {
+        display: inline-block;
+        padding-bottom: 0.25em;
+        padding-top: 0.25em;
 
-            &:before {
-                content: attr(data-title);
-                display: inline-block;
-                position: absolute;
-                bottom: 0.55em;
-                right: 100%;
-                font-size: 18px;
-                padding-right: 0.45em;
-                margin: 0;
-            }
+        .group-title {
+            display: inline-block;
+            font-size: 18px;
+            padding-left: 0.45em;
+            padding-right: 0.45em;
+            margin: 0;
+        }
+    }
+
+    .add-new-color-button {
+        position: relative;
+
+        input[type=color] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
     }
 }

@@ -83,8 +83,8 @@
                     <li class="sidebar__level-2--item"
                         *ngIf="!state.restoreUserConfiguration">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                            <a [routerLink]="['/device/led-brightness']"
-                               [class.disabled]="state.updatingFirmware">LED brightness</a>
+                            <a [routerLink]="['/device/led-settings']"
+                               [class.disabled]="state.updatingFirmware">LED settings</a>
                         </div>
                     </li>
                     <li class="sidebar__level-2--item"

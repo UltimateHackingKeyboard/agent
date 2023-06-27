@@ -1,4 +1,5 @@
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { MouseAction, MouseActionParam } from './mouse-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
@@ -27,13 +28,13 @@ describe('mouse-action', () => {
         it('should json match', () => {
             const action = new MouseAction();
             action.mouseAction = MouseActionParam.leftClick;
-            jsonDefaultHelper(action);
+            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
 
         it('should binary match', () => {
             const action = new MouseAction();
             action.mouseAction = MouseActionParam.leftClick;
-            binaryDefaultHelper(action);
+            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
     });
 });

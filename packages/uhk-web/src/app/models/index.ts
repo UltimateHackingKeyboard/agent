@@ -1,4 +1,6 @@
 export * from './apply-user-configuration-from-file-payload';
+export * from './backlighting-option';
+export * from './config-size-state';
 export * from './device-ui-states';
 export * from './exchange-keys-action.model';
 export * from './firmware-upgrade-state';
@@ -14,4 +16,5 @@ export * from './side-menu-page-state';
 export * from './uhk-progress-bar-state';
 export * from './update-firmware-with-payload';
 export * from './user-config-history-component-state';
+export * from './user-configuration-rgb-value';
 export * from './user-configuration-value';

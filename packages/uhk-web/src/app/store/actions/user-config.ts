@@ -1,13 +1,17 @@
 import { Action } from '@ngrx/store';
+import { RgbColor } from 'colord';
 import { UserConfiguration, ConfigurationReply } from 'uhk-common';
 
 import {
     ApplyUserConfigurationFromFilePayload,
+    UserConfigurationRgbValue,
     UserConfigurationValue,
     LoadUserConfigurationFromFilePayload
 } from '../../models';
 
 export enum ActionTypes {
+    AddColorToBacklightingColorPalette = '[user-config] Add color to the backlighting color palette',
+    DeleteColorFromBacklightingColorPalette = '[user-config] delete color from the backlighting color palette',
     LoadUserConfig = '[user-config] Load User Config',
     LoadConfigFromDevice = '[user-config] Load User Config from Device',
     LoadConfigFromDeviceReply = '[user-config] Load User Config from Device reply',
@@ -15,12 +19,25 @@ export enum ActionTypes {
     SaveUserConfigSuccess = '[user-config] Save User Config Success',
     SaveUserConfigInJsonFile = '[user-config] Save User Config in JSON file',
     SaveUserConfigInBinFile = '[user-config] Save User Config in binary file',
+    ToggleColorFromBacklightingColorPalette = '[user-config] toggle color from the backlighting color palette',
     LoadResetUserConfiguration = '[user-config] Load reset user configuration',
     RenameUserConfiguration = '[user-config] Rename user configuration',
+    SetUserConfigurationRgbValue = '[user-config] Set user configuration RGB value',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
     LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
     ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file',
     PreviewUserConfiguration = '[user-config] Preview user configuration'
+}
+
+export class AddColorToBacklightingColorPaletteAction implements Action {
+    type = ActionTypes.AddColorToBacklightingColorPalette;
+
+    constructor(public payload: RgbColor) {
+    }
+}
+
+export class DeleteColorFromBacklightingColorPaletteAction implements Action {
+    type = ActionTypes.DeleteColorFromBacklightingColorPalette;
 }
 
 export class LoadUserConfigAction implements Action {
@@ -67,6 +84,16 @@ export class SaveUserConfigInBinaryFileAction implements Action {
     type = ActionTypes.SaveUserConfigInBinFile;
 }
 
+export class ToggleColorFromBacklightingColorPaletteAction implements Action {
+    type = ActionTypes.ToggleColorFromBacklightingColorPalette;
+
+    /**
+     * @param payload - The index of the color from the palette
+     */
+    constructor(public payload: number) {
+    }
+}
+
 export class LoadResetUserConfigurationAction implements Action {
     type = ActionTypes.LoadResetUserConfiguration;
 
@@ -78,6 +105,13 @@ export class RenameUserConfigurationAction implements Action {
     type = ActionTypes.RenameUserConfiguration;
 
     constructor(public payload: string) {
+    }
+}
+
+export class SetUserConfigurationRgbValueAction implements Action {
+    type = ActionTypes.SetUserConfigurationRgbValue;
+
+    constructor(public payload: UserConfigurationRgbValue) {
     }
 }
 
@@ -103,7 +137,9 @@ export class ApplyUserConfigurationFromFileAction implements Action {
 }
 
 export type Actions
-    = LoadUserConfigAction
+    = AddColorToBacklightingColorPaletteAction
+    | DeleteColorFromBacklightingColorPaletteAction
+    | LoadUserConfigAction
     | LoadUserConfigSuccessAction
     | SaveUserConfigSuccessAction
     | LoadConfigFromDeviceAction
@@ -113,7 +149,9 @@ export type Actions
     | LoadResetUserConfigurationAction
     | PreviewUserConfigurationAction
     | RenameUserConfigurationAction
+    | SetUserConfigurationRgbValueAction
     | SetUserConfigurationValueAction
+    | ToggleColorFromBacklightingColorPaletteAction
     | LoadUserConfigurationFromFileAction
     | ApplyUserConfigurationFromFileAction
     ;
