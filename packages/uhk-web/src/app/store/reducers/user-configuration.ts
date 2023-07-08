@@ -154,6 +154,17 @@ export function reducer(
                 selectedBacklightingColorIndex: index === state.selectedBacklightingColorIndex ? -1 : index,
             };
         }
+
+        case UserConfig.ActionTypes.RecoverLEDSpaces: {
+            const userConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.perKeyRgbPresent = false;
+
+            return {
+                ...state,
+                userConfiguration,
+            };
+        }
+
         case Device.ActionTypes.ConnectionStateChanged: {
             const newState: State = {
                 ...state,
@@ -783,6 +794,9 @@ export function reducer(
             userConfiguration[payload.propertyName] = payload.value;
 
             if (payload.propertyName === 'backlightingMode') {
+                if (payload.value === BacklightingMode.PerKeyBacklighting) {
+                    userConfiguration.perKeyRgbPresent = true;
+                }
                 setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, state.theme);
             }
 
@@ -890,15 +904,13 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
 export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
+export const perKeyRgbPresent = (state: State): boolean => state.userConfiguration.perKeyRgbPresent;
 export const backlightingMode = (state: State): BacklightingMode => state.userConfiguration.backlightingMode;
 export const backlightingOptions = (state: State): Array<BacklightingOption> => {
     return [
         {
             displayText: 'Functional backlighting',
-            mode: state.userConfiguration.backlightingMode === BacklightingMode.PerKeyBacklighting ||
-                    state.userConfiguration.backlightingMode === BacklightingMode.FunctionalBacklightingWithPerKeyValues
-                ? BacklightingMode.FunctionalBacklightingWithPerKeyValues
-                : BacklightingMode.FunctionalBacklighting
+            mode: BacklightingMode.FunctionalBacklighting
         },
         {
             displayText: 'Per-key backlighting',
@@ -906,6 +918,7 @@ export const backlightingOptions = (state: State): Array<BacklightingOption> => 
         }
     ];
 };
+export const hasRecoverableLEDSpace = (state: State): boolean => state.userConfiguration.backlightingMode === BacklightingMode.FunctionalBacklighting && state.userConfiguration.perKeyRgbPresent;
 export const backlightingColorPalette = (state: State): Array<RgbColorInterface> => state.backlightingColorPalette;
 export const isBacklightingColoring = (state: State): boolean => state.selectedBacklightingColorIndex > -1;
 export const selectedBacklightingColor = (state: State): RgbColorInterface => state.backlightingColorPalette[state.selectedBacklightingColorIndex];
