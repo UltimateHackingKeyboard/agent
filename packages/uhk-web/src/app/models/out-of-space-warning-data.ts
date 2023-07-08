@@ -1,7 +1,11 @@
-import { BacklightingMode } from 'uhk-common';
+export enum OutOfSpaceWarningType {
+    OutOfSpace,
+    PerKeyBacklighting,
+    RecoverableLEDSpace
+}
 
 export interface OutOfSpaceWarningData {
-    backlightingMode: BacklightingMode;
+    type: OutOfSpaceWarningType;
     currentValue: number;
     maxValue: number;
     show: boolean;
