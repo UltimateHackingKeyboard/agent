@@ -6,6 +6,15 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [2.1.2] - 2023-04-03
+
+Firmware: 9.2.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.2)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+
+- Make Agent work with macOS 13.3 and above.
+- Make Agent compatible with NixOS.
+- Always update smart macro documentation upon macro command changes.
+- Add `--print-usb-devices` command line argument.
+
 ## [2.1.1] - 2023-01-16
 
 Firmware: 9.2.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.1)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0

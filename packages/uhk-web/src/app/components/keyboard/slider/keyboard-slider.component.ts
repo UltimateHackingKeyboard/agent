@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { HalvesInfo, KeyboardLayout, Layer } from 'uhk-common';
+import { BacklightingMode, HalvesInfo, KeyboardLayout, Layer } from 'uhk-common';
 
 import {
     SvgKeyboardCaptureEvent,
@@ -32,6 +32,7 @@ enum LayerNames {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KeyboardSliderComponent implements OnChanges {
+    @Input() backlightingMode: BacklightingMode;
     @Input() layers: Layer[];
     @Input() currentLayer: LayerOption;
     @Input() capturingEnabled: boolean;

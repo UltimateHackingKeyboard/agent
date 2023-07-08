@@ -1,5 +1,6 @@
 import { LeftSlotModules, RightSlotModules } from '../../models/index.js';
 import { Module } from './module.js';
+import { DEFAULT_SERIALISATION_INFO } from './serialisation-info.js';
 
 export type ModulesDefaultConfigs = { [K in LeftSlotModules | RightSlotModules]?: Module };
 
@@ -35,7 +36,7 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'rightClick'
             } // Right micro button
         ]
-    }, [], 4),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackballRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackballRight,
         keyActions: [
@@ -48,7 +49,7 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'rightClick'
             } // Right micro button
         ]
-    }, [], 4),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackpointRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackpointRight,
         keyActions: [
@@ -61,7 +62,7 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'rightClick'
             } // Right micro button
         ]
-    }, [], 4),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
         id: RightSlotModules.TouchpadRight,
         keyActions: [
@@ -70,7 +71,7 @@ export const MODULES_DEFAULT_CONFIGS: ModulesDefaultConfigs = {
                 mouseAction: 'leftClick'
             }
         ]
-    }, [], 4)
+    }, [], DEFAULT_SERIALISATION_INFO)
 };
 
 export const MODULES_NONE_CONFIGS: ModulesDefaultConfigs = {
@@ -84,25 +85,25 @@ export const MODULES_NONE_CONFIGS: ModulesDefaultConfigs = {
             null, // Ball
             null // Right micro button
         ]
-    }, [], 4),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackballRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackballRight,
         keyActions: [
             null, // Left micro button
             null // Right micro button
         ]
-    }, [], 4),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TrackpointRight]: new Module().fromJsonObject({
         id: RightSlotModules.TrackpointRight,
         keyActions: [
             null, // Left micro button
             null // Right micro button
         ]
-    }, [], 4),
+    }, [], DEFAULT_SERIALISATION_INFO),
     [RightSlotModules.TouchpadRight]: new Module().fromJsonObject({
         id: RightSlotModules.TouchpadRight,
         keyActions: [
             null
         ]
-    }, [], 4)
+    }, [], DEFAULT_SERIALISATION_INFO)
 };

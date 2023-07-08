@@ -1,6 +1,7 @@
 import { UhkBuffer } from '../../uhk-buffer.js';
 
 import { Macro } from '../macro.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { KeystrokeAction } from './keystroke-action.js';
 import { SwitchLayerAction } from './switch-layer-action.js';
@@ -12,36 +13,37 @@ import { isAllowedScancode } from '../scancode-checker.js';
 
 export class Helper {
 
-    static createKeyAction(source: KeyAction | UhkBuffer | any, macros: Macro[], version: number = 4): KeyAction {
+    static createKeyAction(source: KeyAction | UhkBuffer | any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         if (source instanceof KeyAction) {
             return Helper.fromKeyAction(source);
         } else if (source instanceof UhkBuffer) {
-            return Helper.fromUhkBuffer(source, macros, version);
+            return Helper.fromUhkBuffer(source, macros, serialisationInfo);
         } else {
-            return Helper.fromJSONObject(source, macros, version);
+            return Helper.fromJSONObject(source, macros, serialisationInfo);
         }
     }
 
-    private static fromUhkBuffer(buffer: UhkBuffer, macros: Macro[], version: number): KeyAction {
-        switch (version) {
+    private static fromUhkBuffer(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                return this.fromUhkBufferV1(buffer, macros, version);
+            case 6:
+                return this.fromUhkBufferV1(buffer, macros, serialisationInfo);
 
             default:
-                throw new Error(`KeyAction configuration does not support version: ${version}`);
+                throw new Error(`KeyAction configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
     }
 
-    private static fromUhkBufferV1(buffer: UhkBuffer, macros: Macro[], version: number): KeyAction {
+    private static fromUhkBufferV1(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         const keyActionFirstByte = buffer.readUInt8();
         buffer.backtrack();
 
         if (keyActionFirstByte >= KeyActionId.KeystrokeAction && keyActionFirstByte < KeyActionId.LastKeystrokeAction) {
-            const keystrokeAction = new KeystrokeAction().fromBinary(buffer, version);
+            const keystrokeAction = new KeystrokeAction().fromBinary(buffer, serialisationInfo);
             if (isValidKeystrokeAction(keystrokeAction)) {
                 return keystrokeAction;
             }
@@ -51,22 +53,21 @@ export class Helper {
 
         switch (keyActionFirstByte) {
             case KeyActionId.NoneAction:
-                buffer.readUInt8(); // Read type just to skip it
-                return undefined;
+                return new NoneAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.SwitchLayerAction:
-                return new SwitchLayerAction().fromBinary(buffer, version);
+                return new SwitchLayerAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.SwitchKeymapAction:
-                return new UnresolvedSwitchKeymapAction().fromBinary(buffer, version);
+                return new UnresolvedSwitchKeymapAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.MouseAction:
-                return new MouseAction().fromBinary(buffer, version);
+                return new MouseAction().fromBinary(buffer, serialisationInfo);
             case KeyActionId.PlayMacroAction:
-                return new PlayMacroAction().fromBinary(buffer, macros, version);
+                return new PlayMacroAction().fromBinary(buffer, serialisationInfo, macros);
             default:
                 throw `Invalid KeyAction first byte: ${keyActionFirstByte}`;
         }
     }
 
-    private static fromKeyAction(keyAction: KeyAction): KeyAction {
+    static fromKeyAction(keyAction: KeyAction): KeyAction {
         let newKeyAction: KeyAction;
         if (keyAction instanceof KeystrokeAction) {
             newKeyAction = new KeystrokeAction(keyAction);
@@ -78,32 +79,36 @@ export class Helper {
             newKeyAction = new MouseAction(keyAction);
         } else if (keyAction instanceof PlayMacroAction) {
             newKeyAction = new PlayMacroAction(keyAction);
+        } else if (keyAction instanceof NoneAction) {
+            newKeyAction = new NoneAction(keyAction);
         }
+
         return newKeyAction;
     }
 
-    private static fromJSONObject(keyAction: any, macros: Macro[], version: number): KeyAction {
-        switch (version) {
+    static fromJSONObject(keyAction: any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                return this.fromJSONObjectV1(keyAction, macros, version);
+            case 6:
+                return this.fromJSONObjectV1(keyAction, macros, serialisationInfo);
 
             default:
-                throw new Error(`KeyAction configuration does not support version: ${version}`);
+                throw new Error(`KeyAction configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
     }
 
-    private static fromJSONObjectV1(keyAction: any, macros: Macro[], version: number): KeyAction {
+    private static fromJSONObjectV1(keyAction: any, macros: Macro[], serialisationInfo: SerialisationInfo): KeyAction {
         if (!keyAction) {
-            return null;
+            return new NoneAction();
         }
 
         switch (keyAction.keyActionType) {
             case keyActionType.KeystrokeAction: {
-                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, version);
+                const keystrokeAction = new KeystrokeAction().fromJsonObject(keyAction, serialisationInfo);
                 if (isValidKeystrokeAction(keystrokeAction)) {
                     return keystrokeAction;
                 }
@@ -111,15 +116,15 @@ export class Helper {
                 return new NoneAction();
             }
             case keyActionType.SwitchLayerAction:
-                return new SwitchLayerAction().fromJsonObject(keyAction, version);
+                return new SwitchLayerAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.SwitchKeymapAction:
-                return new SwitchKeymapAction().fromJsonObject(keyAction, version);
+                return new SwitchKeymapAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.MouseAction:
-                return new MouseAction().fromJsonObject(keyAction, version);
+                return new MouseAction().fromJsonObject(keyAction, serialisationInfo);
             case keyActionType.PlayMacroAction:
-                return new PlayMacroAction().fromJsonObject(keyAction, macros, version);
+                return new PlayMacroAction().fromJsonObject(keyAction, serialisationInfo, macros);
             case keyActionType.NoneAction:
-                return new NoneAction();
+                return new NoneAction().fromJsonObject(keyAction, serialisationInfo);
             default:
                 throw `Invalid KeyAction.keyActionType: "${keyAction.keyActionType}"`;
         }

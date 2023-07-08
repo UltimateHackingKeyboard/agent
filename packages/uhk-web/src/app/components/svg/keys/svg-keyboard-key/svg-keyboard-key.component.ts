@@ -3,6 +3,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    HostBinding,
     HostListener,
     Input,
     OnChanges,
@@ -13,15 +14,19 @@ import {
     ViewChild
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
+import { extend } from 'colord';
 import { Key } from 'ts-keycode-enum';
 import { Subscription } from 'rxjs';
+import { colord } from 'colord';
+import labPlugin from 'colord/plugins/lab';
 
 import {
+    BacklightingMode,
     KeyAction,
     KeyModifiers,
     KeystrokeAction,
-    LayerName,
     Macro,
     MouseAction,
     PlayMacroAction,
@@ -31,6 +36,7 @@ import {
 } from 'uhk-common';
 
 import { CaptureService } from '../../../../services/capture.service';
+import { KeyActionColoringService } from '../../../../services/key-action-coloring.service';
 import { MapperService } from '../../../../services/mapper.service';
 
 import { AppState } from '../../../../store';
@@ -40,7 +46,12 @@ import { OperatingSystem } from '../../../../models/operating-system';
 import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
+import { getColorsOf } from '../../../../util/get-colors-of';
+import { uhkThemeColors } from '../../../../util/uhk-theme-colors';
+import { keyboardGreyRgbColor } from '../../../../util/rgb-color-contants';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
+
+extend([labPlugin]);
 
 enum LabelTypes {
     KeystrokeKey,
@@ -71,6 +82,7 @@ enum LabelTypes {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
+    @Input() backlightingMode: BacklightingMode;
     @Input() keyAction: KeyAction;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
@@ -83,13 +95,15 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @ViewChild('svgRec', { static: false }) svgRec: ElementRef<HTMLElement>;
 
     enumLabelTypes = LabelTypes;
-
+    fillColor = '#333';
+    strokeColor = '';
     recordAnimation: string;
     recording: boolean;
     labelType: LabelTypes;
 
     labelSource: any;
     secondaryText: string;
+    textColor: string;
     private scanCodePressed = false;
     private pressedShiftLocation = -1;
     private pressedAltLocation = -1;
@@ -97,15 +111,31 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     private shiftPressed = false;
     private subscriptions = new Subscription();
     private layerOptionMap = initLayerOptions();
+    private isMouseMoveDispatched = false;
+    private isMouseHover = false;
 
     constructor(
+        private sanitizer: DomSanitizer,
         private mapper: MapperService,
         private store: Store<AppState>,
         private element: ElementRef,
         private cdRef: ChangeDetectorRef,
         private captureService: CaptureService,
-        private dragAndDropService: KeyActionDragAndDropService
+        private dragAndDropService: KeyActionDragAndDropService,
+        private mouseMoveService: KeyActionColoringService
     ) {
+    }
+
+    @HostBinding('style')
+    get cursorStyle(): SafeStyle {
+        if (this.mouseMoveService.isColoring) {
+            const colors = getColorsOf(this.mouseMoveService.selectedBacklightingColor);
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="24" height="24"><path fill="${colors.svgFillColor}" stroke="${colors.svgStrokeColor}" stroke-width="20" d="M339.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L568.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S517.7-4.4 499.1 9.6L262.4 187.2c-24 18-38.2 46.1-38.4 76.1L339.3 367.1zm-19.6 25.4l-116-104.4C143.9 290.3 96 339.6 96 400c0 3.9 .2 7.8 .6 11.6C98.4 429.1 86.4 448 68.8 448H64c-17.7 0-32 14.3-32 32s14.3 32 32 32H208c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg>`;
+
+            return this.sanitizer.bypassSecurityTrustStyle(`cursor: url('data:image/svg+xml;utf8,${svg}') 0 24, pointer;`);
+        }
+
+        return this.sanitizer.bypassSecurityTrustStyle('');
     }
 
     @HostListener('click', ['$event'])
@@ -124,6 +154,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     onMouseDown(e: MouseEvent) {
 
         if ((e.which === 0 || e.button === 0)) {
+            this.mouseMoveService.leftButtonDown();
             this.dragAndDropService.leftButtonDown({
                 keyId: this.svgKey.id,
                 element: this.element.nativeElement,
@@ -143,6 +174,29 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 this.store.dispatch(new StartKeypressCapturingAction());
             }
         }
+    }
+
+    @HostListener('mouseenter', ['$event'])
+    onMouseEnter(e: MouseEvent) {
+        this.isMouseHover = true;
+        this.setColors();
+    }
+
+    @HostListener('mousemove', ['$event'])
+    onMouseMove(e: MouseEvent) {
+        if (!this.isMouseMoveDispatched && this.mouseMoveService.shouldDispatchKeyColoring()) {
+            this.isMouseMoveDispatched = true;
+            this.keyClick.emit({
+                keyTarget: this.element.nativeElement,
+            });
+        }
+    }
+
+    @HostListener('mouseleave', ['$event'])
+    onMouseLeave(e: MouseEvent) {
+        this.isMouseMoveDispatched = false;
+        this.isMouseHover = false;
+        this.setColors();
     }
 
     @HostListener('document:keyup', ['$event'])
@@ -204,6 +258,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keyAction']) {
             this.setLabels();
+            this.setColors();
         }
 
         if (changes['blink'] && changes['blink'].currentValue) {
@@ -384,5 +439,24 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 }
             }, 10);
         }
+    }
+
+    private setColors(): void {
+        const isPerKeyBacklighting = this.backlightingMode === BacklightingMode.PerKeyBacklighting;
+        const baseRgb = isPerKeyBacklighting
+            ? this.keyAction
+            : keyboardGreyRgbColor();
+
+        const colors = getColorsOf(baseRgb);
+        this.fillColor = this.isMouseHover && !this.mouseMoveService.isColoring
+            ? colors.hoverColorAsHex
+            : colors.backgroundColorAsHex;
+        this.textColor = colors.fontColorAsHex;
+
+        const themeColors = uhkThemeColors();
+
+        this.strokeColor = isPerKeyBacklighting && colord(themeColors.backgroundColor).delta(this.keyAction) < 0.01
+            ? 'lightgray'
+            : '';
     }
 }

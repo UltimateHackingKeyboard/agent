@@ -6,7 +6,15 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 
-import { ApplicationSettings, AppStartInfo, getLogOptions, LogService, Notification, NotificationType } from 'uhk-common';
+import {
+    ApplicationSettings,
+    AppStartInfo,
+    getLogOptions,
+    initBacklightingColorPalette,
+    LogService,
+    Notification,
+    NotificationType
+} from 'uhk-common';
 import {
     ActionTypes,
     ApplyAppStartInfoAction,
@@ -26,6 +34,7 @@ import { AppRendererService } from '../../services/app-renderer.service';
 import { AppUpdateRendererService } from '../../services/app-update-renderer.service';
 import { ActionTypes as DeviceActionTypes, StartConnectionPollerAction } from '../actions/device';
 import { ActionTypes as SmartMacroDocActionTypes } from '../actions/smart-macro-doc.action';
+import { ActionTypes as UserConfigActionTypes } from '../actions/user-config';
 import { AppState, getApplicationSettings, runningInElectron } from '../index';
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 
@@ -46,6 +55,7 @@ export class ApplicationEffects {
                 .pipe(
                     map(appSettings => {
                         const settings: ApplicationSettings = {
+                            backlightingColorPalette: initBacklightingColorPalette(),
                             checkForUpdateOnStartUp: true,
                             everAttemptedSavingToKeyboard: false,
                             animationEnabled: true,
@@ -121,7 +131,9 @@ export class ApplicationEffects {
                 ActionTypes.ToggleAnimationEnabled,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,
-                SmartMacroDocActionTypes.PanelSizeChanged
+                SmartMacroDocActionTypes.PanelSizeChanged,
+                UserConfigActionTypes.AddColorToBacklightingColorPalette,
+                UserConfigActionTypes.DeleteColorFromBacklightingColorPalette
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { BacklightingMode } from 'uhk-common';
 
 import { OutOfSpaceWarningData } from '../../models';
 
@@ -9,4 +10,6 @@ import { OutOfSpaceWarningData } from '../../models';
 })
 export class OutOfSpaceWarningComponent {
     @Input() state: OutOfSpaceWarningData;
+
+    backlightingModeEnum = BacklightingMode;
 }

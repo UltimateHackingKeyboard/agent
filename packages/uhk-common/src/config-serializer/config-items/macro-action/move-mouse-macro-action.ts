@@ -1,5 +1,6 @@
 import { assertInt16 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { MacroAction, MacroActionId, macroActionType } from './macro-action.js';
 
 export class MoveMouseMacroAction extends MacroAction {
@@ -17,35 +18,37 @@ export class MoveMouseMacroAction extends MacroAction {
         this.y = other.y;
     }
 
-    fromJsonObject(jsonObject: any, version: number): MoveMouseMacroAction {
-        switch (version) {
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): MoveMouseMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
             default:
-                throw new Error(`Mouse move macro action does not support version: ${version}`);
+                throw new Error(`Mouse move macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): MoveMouseMacroAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): MoveMouseMacroAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
+            case 6:
                 this.fromBinaryV1(buffer);
                 break;
 
             default:
-                throw new Error(`Mouse move macro action does not support version: ${version}`);
+                throw new Error(`Mouse move macro action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;

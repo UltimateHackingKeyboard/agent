@@ -1,6 +1,7 @@
 import { assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { Keymap } from '../keymap.js';
+import { SerialisationInfo } from '../serialisation-info.js';
 import { KeyAction, KeyActionId, keyActionType } from './key-action.js';
 import { UserConfiguration } from '../user-configuration.js';
 
@@ -9,21 +10,24 @@ export class SwitchKeymapAction extends KeyAction {
     keymapAbbreviation: string;
 
     constructor(parameter?: SwitchKeymapAction | Keymap | string) {
-        super();
         if (!parameter) {
+            super();
             return;
         }
         if (parameter instanceof SwitchKeymapAction) {
+            super(parameter);
             this.keymapAbbreviation = parameter.keymapAbbreviation;
         } else if (parameter instanceof Keymap) {
+            super();
             this.keymapAbbreviation = parameter.abbreviation;
         } else {
+            super();
             this.keymapAbbreviation = parameter;
         }
     }
 
-    fromJsonObject(jsonObject: any, version: number): SwitchKeymapAction {
-        switch (version) {
+    fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): SwitchKeymapAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -32,24 +36,30 @@ export class SwitchKeymapAction extends KeyAction {
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
+            case 6:
+                this.fromJsonObjectV6(jsonObject, serialisationInfo);
+                break;
+
             default:
-                throw new Error(`Switch keymap action does not support version: ${version}`);
+                throw new Error(`Switch keymap action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    toJsonObject(): any {
+    toJsonObject(serialisationInfo: SerialisationInfo): any {
         return {
             keyActionType: keyActionType.SwitchKeymapAction,
-            keymapAbbreviation: this.keymapAbbreviation
+            keymapAbbreviation: this.keymapAbbreviation,
+            ...this.rgbColorToJson(serialisationInfo)
         };
     }
 
-    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration: UserConfiguration): void {
         const keymapIndex = userConfiguration.keymaps.findIndex(keymap => keymap.abbreviation === this.keymapAbbreviation);
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
         buffer.writeUInt8(keymapIndex);
+        this.rgbColorToBinary(buffer, serialisationInfo);
     }
 
     toString(): string {
@@ -71,6 +81,11 @@ export class SwitchKeymapAction extends KeyAction {
         this.assertKeyActionType(jsonObject);
         this.keymapAbbreviation = jsonObject.keymapAbbreviation;
     }
+
+    private fromJsonObjectV6(jsonObject: any, serialisationInfo: SerialisationInfo): void {
+        this.fromJsonObjectV1(jsonObject);
+        this.rgbColorFromJson(jsonObject, serialisationInfo);
+    }
 }
 
 export class UnresolvedSwitchKeymapAction extends KeyAction {
@@ -82,8 +97,8 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
         this.keymapIndex = keymapIndex;
     }
 
-    fromBinary(buffer: UhkBuffer, version: number): UnresolvedSwitchKeymapAction {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): UnresolvedSwitchKeymapAction {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
@@ -92,16 +107,21 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
                 this.fromBinaryV1(buffer);
                 break;
 
+            case 6:
+                this.fromBinaryV6(buffer, serialisationInfo);
+                break;
+
             default:
-                throw new Error(`Unresolved switch keymap action does not support version: ${version}`);
+                throw new Error(`Unresolved switch keymap action does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    toBinary(buffer: UhkBuffer) {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo) {
         buffer.writeUInt8(KeyActionId.SwitchKeymapAction);
         buffer.writeUInt8(this.keymapIndex);
+        this.rgbColorToBinary(buffer, serialisationInfo);
     }
 
     toJsonObject(): any {
@@ -119,5 +139,10 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
     private fromBinaryV1(buffer: UhkBuffer): void {
         buffer.readUInt8(); // Skip key action id
         this.keymapIndex = buffer.readUInt8();
+    }
+
+    private fromBinaryV6(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): void {
+        this.fromBinaryV1(buffer);
+        this.rgbColorFromBinary(buffer, serialisationInfo);
     }
 }

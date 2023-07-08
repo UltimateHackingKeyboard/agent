@@ -1,4 +1,5 @@
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { SwitchLayerAction, SwitchLayerMode } from './switch-layer-action.js';
 import { keyActionType } from './key-action.js';
 
@@ -24,25 +25,25 @@ describe('switch-layer-action', () => {
 
     describe('full serialization', () => {
         it('should json match', () => {
-            jsonDefaultHelper(action);
+            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
 
         it('should binary match', () => {
-            binaryDefaultHelper(action);
+            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
     });
 
     describe('backward compatibility of the "toggle" property ', () => {
         it('should map toggle=false to SwitchLayerMode.holdAndDoubleTapToggle', () => {
             const oldAction = new SwitchLayerAction();
-            oldAction.fromJsonObject({keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: false}, 1);
+            oldAction.fromJsonObject({keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: false}, DEFAULT_SERIALISATION_INFO);
 
             expect(oldAction.switchLayerMode).toEqual(SwitchLayerMode.holdAndDoubleTapToggle);
         });
 
         it('should map toggle=true to SwitchLayerMode.toggle', () => {
             const oldAction = new SwitchLayerAction();
-            oldAction.fromJsonObject({keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: true}, 1);
+            oldAction.fromJsonObject({keyActionType: keyActionType.SwitchLayerAction, layer: 0, toggle: true}, DEFAULT_SERIALISATION_INFO);
 
             expect(oldAction.switchLayerMode).toEqual(SwitchLayerMode.toggle);
         });

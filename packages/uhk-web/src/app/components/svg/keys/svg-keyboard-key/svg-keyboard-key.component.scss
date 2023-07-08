@@ -1,19 +1,6 @@
 :host(:not([dragging='true'])) {
     cursor: pointer;
     outline: none;
-
-    &:hover {
-        fill: var(--color-keyboard-key-hover);
-
-        circle,
-        path {
-            fill: var(--color-keyboard-key-hover);
-        }
-    }
-
-    .svg-rec {
-        transition: 0s;
-    }
 }
 
 .svg-rec {

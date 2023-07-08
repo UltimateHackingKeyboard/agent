@@ -3,6 +3,8 @@ import { assertEnum } from '../assert.js';
 
 import { Macro } from './macro.js';
 import { Module } from './module.js';
+import { SerialisationInfo } from './serialisation-info.js';
+import { SvgKeyboardCoverColors } from './svg-keyboard-cover-colors.js';
 import { UserConfiguration } from './user-configuration.js';
 import { LayerName } from './layer-name.js';
 
@@ -12,65 +14,70 @@ export class Layer {
 
     modules: Module[];
 
+    svgKeyboardCoverColors: SvgKeyboardCoverColors;
+
     constructor(layers?: Layer) {
         if (!layers) {
             return;
         }
         this.id = layers.id;
         this.modules = layers.modules.map(module => new Module(module));
+        this.svgKeyboardCoverColors = layers.svgKeyboardCoverColors;
     }
 
-    fromJsonObject(jsonObject: any, macros: Macro[], version: number): Layer {
-        switch (version) {
+    fromJsonObject(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): Layer {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
-                this.fromJsonObjectV1(jsonObject, macros, version);
+                this.fromJsonObjectV1(jsonObject, macros, serialisationInfo);
                 break;
 
             case 5:
-                this.fromJsonObjectV5(jsonObject, macros, version);
+            case 6:
+                this.fromJsonObjectV5(jsonObject, macros, serialisationInfo);
                 break;
 
             default:
-                throw new Error(`Layer configuration does not support version: ${version}`);
+                throw new Error(`Layer configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    fromBinary(buffer: UhkBuffer, macros: Macro[], version: number): Layer {
-        switch (version) {
+    fromBinary(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): Layer {
+        switch (serialisationInfo.userConfigMajorVersion) {
             case 1:
             case 2:
             case 3:
             case 4:
-                this.fromBinaryV1(buffer, macros, version);
+                this.fromBinaryV1(buffer, macros, serialisationInfo);
                 break;
 
             case 5:
-                this.fromBinaryV5(buffer, macros, version);
+            case 6:
+                this.fromBinaryV5(buffer, macros, serialisationInfo);
                 break;
 
             default:
-                throw new Error(`Layer configuration does not support version: ${version}`);
+                throw new Error(`Layer configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
 
         return this;
     }
 
-    toJsonObject(macros?: Macro[]): any {
+    toJsonObject(serialisationInfo: SerialisationInfo, macros?: Macro[]): any {
         return {
             id: LayerName[this.id],
-            modules: this.modules.map(module => module.toJsonObject(macros))
+            modules: this.modules.map(module => module.toJsonObject(serialisationInfo, macros))
         };
     }
 
-    toBinary(buffer: UhkBuffer, userConfiguration: UserConfiguration): void {
+    toBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo, userConfiguration: UserConfiguration): void {
         buffer.writeUInt8(this.id);
         buffer.writeArray(this.modules, (uhkBuffer: UhkBuffer, module: Module) => {
-            module.toBinary(uhkBuffer, userConfiguration);
+            module.toBinary(uhkBuffer, serialisationInfo, userConfiguration);
         });
     }
 
@@ -99,29 +106,29 @@ export class Layer {
         return this;
     }
 
-    fromJsonObjectV1(jsonObject: any, macros: Macro[], version: number): void {
+    fromJsonObjectV1(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.modules = jsonObject.modules.map((module: any) => {
-            return new Module().fromJsonObject(module, macros, version);
+            return new Module().fromJsonObject(module, macros, serialisationInfo);
         });
     }
 
-    fromBinaryV1(buffer: UhkBuffer, macros: Macro[], version: number): void {
+    fromBinaryV1(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.modules = buffer.readArray<Module>(uhkBuffer => {
-            return new Module().fromBinary(uhkBuffer, macros, version);
+            return new Module().fromBinary(uhkBuffer, macros, serialisationInfo);
         });
     }
 
-    fromJsonObjectV5(jsonObject: any, macros: Macro[], version: number): void {
+    fromJsonObjectV5(jsonObject: any, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = LayerName[<string>jsonObject.id];
         this.modules = jsonObject.modules.map((module: any) => {
-            return new Module().fromJsonObject(module, macros, version);
+            return new Module().fromJsonObject(module, macros, serialisationInfo);
         });
     }
 
-    fromBinaryV5(buffer: UhkBuffer, macros: Macro[], version: number): void {
+    fromBinaryV5(buffer: UhkBuffer, macros: Macro[], serialisationInfo: SerialisationInfo): void {
         this.id = buffer.readUInt8();
         this.modules = buffer.readArray<Module>(uhkBuffer => {
-            return new Module().fromBinary(uhkBuffer, macros, version);
+            return new Module().fromBinary(uhkBuffer, macros, serialisationInfo);
         });
     }
 }

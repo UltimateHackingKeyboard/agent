@@ -4,7 +4,7 @@ import { AdvancedSettingsPageComponent } from './advanced-settings/advanced-sett
 import { DeviceConfigurationComponent } from './configuration/device-configuration.component';
 import { DeviceFirmwareComponent } from './firmware/device-firmware.component';
 import { MouseSpeedComponent } from './mouse-speed/mouse-speed.component';
-import { LEDBrightnessComponent } from './led-brightness/led-brightness.component';
+import { LEDSettingsComponent } from './led-settings/led-settings.component';
 import { RestoreConfigurationComponent } from './restore-configuration/restore-configuration.component';
 
 export const deviceRoutes: Routes = [
@@ -29,8 +29,8 @@ export const deviceRoutes: Routes = [
                 component: MouseSpeedComponent
             },
             {
-                path: 'led-brightness',
-                component: LEDBrightnessComponent
+                path: 'led-settings',
+                component: LEDSettingsComponent
             },
             {
                 path: 'firmware',

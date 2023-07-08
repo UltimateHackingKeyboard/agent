@@ -36,7 +36,7 @@ export class UhkBuffer {
     private buffer: Buffer;
     private bytesToBacktrack: number;
 
-    constructor(private eepromSize = 65536) {
+    constructor(private eepromSize = 131072) {
         this.offset = 0;
         this.bytesToBacktrack = 0;
         this.buffer = Buffer.alloc(eepromSize);

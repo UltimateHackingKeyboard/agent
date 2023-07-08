@@ -11,7 +11,8 @@ import {
     copySmartMacroDocToWebserver,
     copySmartMacroLoadingHtml,
     getDefaultFirmwarePath,
-    getSmartMacroDocRootPath
+    getSmartMacroDocRootPath,
+    makeFolderWriteableToUserOnLinux
 } from '../util';
 
 const LOG_PREFIX = '[SmartMacroService]';
@@ -39,6 +40,7 @@ export class SmartMacroDocService {
             const firmwarePathData = getDefaultFirmwarePath(this.rootDir);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             await copySmartMacroLoadingHtml(this.rootDir, this.logService);
+            await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
             this.logService.misc(serviceLogMessage('get free TCP port'));
             this.port = await getPort();
             this.logService.misc(serviceLogMessage(`acquired TCP port: ${this.port}`));

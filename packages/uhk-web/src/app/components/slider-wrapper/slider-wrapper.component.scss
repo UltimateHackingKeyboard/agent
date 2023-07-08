@@ -26,7 +26,7 @@ $side-value-width: 80px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        width: $side-value-width;
+        width: var(--slider-value-width, $side-value-width);
         margin-left: 1rem;
     }
 

@@ -24,8 +24,9 @@ import {
     AdvancedSettingsPageComponent,
     DeviceConfigurationComponent,
     DeviceFirmwareComponent,
+    FunctionalBacklightColorComponent,
     MouseSpeedComponent,
-    LEDBrightnessComponent,
+    LEDSettingsComponent,
     RestoreConfigurationComponent,
     RecoveryModeComponent
 } from './components/device';
@@ -37,6 +38,7 @@ import {
     KeymapAddSecondaryMenuComponent
 } from './components/keymap';
 import { LayerOptionComponent, LayersComponent } from './components/layers';
+import { ColoredButtonDirective } from './components/layers/colors/colored-button.directive';
 import {
     MacroActionEditorComponent,
     MacroCommandComponent,
@@ -82,6 +84,7 @@ import {
     SvgTwoLineTextKeyComponent
 } from './components/svg/keys';
 import { SvgModuleComponent } from './components/svg/module';
+import { SvgSpriteImage } from './components/svg/svg-sprite-image';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
 
@@ -138,6 +141,7 @@ import { UhkProgressBarComponent } from './components/progressbar/uhk-progress-b
 import { OutOfSpaceWarningComponent } from './components/out-of-space-warning';
 import { UserConfigurationHistoryComponent } from './components/user-configuration-history';
 import { KeyActionDragAndDropService } from './services/key-action-drag-and-drop.service';
+import { KeyActionColoringService } from './services/key-action-coloring.service';
 import { FirmwareFileUploadComponent } from './components/device/firmware-file-upload/firmware-file-upload.component';
 import { FirmwareUpgradePanelComponent } from './components/device/firmware-upgrade-panel';
 import { MacroCommandEditorComponent } from './components/macro/action-editor/tab/command';
@@ -152,12 +156,14 @@ import appInitFactory from './services/app-init-factory';
     declarations: [
         AdvancedSettingsPageComponent,
         MainAppComponent,
+        ColoredButtonDirective,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
         FirmwareFileUploadComponent,
         FirmwareUpgradePanelComponent,
+        FunctionalBacklightColorComponent,
         MouseSpeedComponent,
-        LEDBrightnessComponent,
+        LEDSettingsComponent,
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,
@@ -209,6 +215,7 @@ import appInitFactory from './services/app-init-factory';
         AboutComponent,
         ContributorBadgeComponent,
         SettingsComponent,
+        SvgSpriteImage,
         KeyboardSliderComponent,
         CancelableDirective,
         SafeStylePipe,
@@ -286,6 +293,7 @@ import appInitFactory from './services/app-init-factory';
         },
         SvgModuleProviderService,
         KeyActionDragAndDropService,
+        KeyActionColoringService,
         MapperService,
         appRoutingProviders,
         KeymapEditGuard,

@@ -1,14 +1,18 @@
-import { assertUInt16, assertUInt8 } from '../assert.js';
+import { assertUInt16, assertUInt32, assertUInt8, assertEnum } from '../assert.js';
+import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
+import { isUserConfigContainsRgbColors } from './backlighting-mode.js';
+import { BacklightingMode } from './backlighting-mode.js';
+import { KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
+import { LayerName } from './layer-name.js';
 import { Macro } from './macro.js';
 import { ModuleConfiguration } from './module-configuration.js';
-import { ConfigSerializer } from '../config-serializer.js';
-import { KeystrokeAction, NoneAction } from './key-action/index.js';
-import { SecondaryRoleAction } from './secondary-role-action.js';
-import { isAllowedScancode } from './scancode-checker.js';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration.js';
-import { LayerName } from './layer-name.js';
+import { RgbColor } from './rgb-color.js';
+import { isAllowedScancode } from './scancode-checker.js';
+import { SecondaryRoleAction } from './secondary-role-action.js';
+import { SerialisationInfo } from './serialisation-info.js';
 
 export class UserConfiguration implements MouseSpeedConfiguration {
 
@@ -18,7 +22,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 userConfigPatchVersion: number;
 
-    @assertUInt16 userConfigurationLength: number;
+    @assertUInt32 userConfigurationLength: number;
 
     deviceName: string;
 
@@ -29,6 +33,24 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     @assertUInt8 alphanumericSegmentsBrightness: number;
 
     @assertUInt8 keyBacklightBrightness: number;
+
+    @assertEnum(BacklightingMode) backlightingMode: BacklightingMode;
+
+    backlightingNoneActionColor: RgbColor;
+
+    backlightingScancodeColor: RgbColor;
+
+    backlightingModifierColor: RgbColor;
+
+    backlightingShortcutColor: RgbColor;
+
+    backlightingSwitchLayerColor: RgbColor;
+
+    backlightingSwitchKeymapColor: RgbColor;
+
+    backlightingMouseColor: RgbColor;
+
+    backlightingMacroColor: RgbColor;
 
     @assertUInt8 mouseMoveInitialSpeed: number;
 
@@ -82,12 +104,17 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
+            case 6:
+                this.fromJsonObjectV6(jsonObject);
+                break;
+
             default:
                 throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
         }
 
         this.clean();
         this.migrateToV5();
+        this.migrateToV6();
         this.recalculateConfigurationLength();
 
         return this;
@@ -107,12 +134,20 @@ export class UserConfiguration implements MouseSpeedConfiguration {
                 this.fromBinaryV1(buffer);
                 break;
 
+            case 6:
+                this.fromBinaryV6(buffer);
+                break;
+
             default:
                 throw new Error(`User configuration does not support version: ${this.userConfigMajorVersion}`);
         }
 
         this.clean();
         if (this.migrateToV5()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV6()) {
             this.userConfigurationLength = 0;
         }
 
@@ -133,6 +168,15 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             iconsAndLayerTextsBrightness: this.iconsAndLayerTextsBrightness,
             alphanumericSegmentsBrightness: this.alphanumericSegmentsBrightness,
             keyBacklightBrightness: this.keyBacklightBrightness,
+            backlightingMode: this.backlightingMode,
+            backlightingNoneActionColor: this.backlightingNoneActionColor.toJsonObject(),
+            backlightingScancodeColor: this.backlightingScancodeColor.toJsonObject(),
+            backlightingModifierColor: this.backlightingModifierColor.toJsonObject(),
+            backlightingShortcutColor: this.backlightingShortcutColor.toJsonObject(),
+            backlightingSwitchLayerColor: this.backlightingSwitchLayerColor.toJsonObject(),
+            backlightingSwitchKeymapColor: this.backlightingSwitchKeymapColor.toJsonObject(),
+            backlightingMouseColor: this.backlightingMouseColor.toJsonObject(),
+            backlightingMacroColor: this.backlightingMacroColor.toJsonObject(),
             mouseMoveInitialSpeed: this.mouseMoveInitialSpeed,
             mouseMoveAcceleration: this.mouseMoveAcceleration,
             mouseMoveDeceleratedSpeed: this.mouseMoveDeceleratedSpeed,
@@ -144,7 +188,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             mouseScrollBaseSpeed: this.mouseScrollBaseSpeed,
             mouseScrollAcceleratedSpeed: this.mouseScrollAcceleratedSpeed,
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
-            keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.macros)),
+            keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.getSerialisationInfo(), this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject())
         };
     }
@@ -153,12 +197,21 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.userConfigMajorVersion);
         buffer.writeUInt16(this.userConfigMinorVersion);
         buffer.writeUInt16(this.userConfigPatchVersion);
-        buffer.writeUInt16(this.userConfigurationLength);
+        buffer.writeUInt32(this.userConfigurationLength);
         buffer.writeString(this.deviceName);
         buffer.writeUInt16(this.doubleTapSwitchLayerTimeout);
         buffer.writeUInt8(this.iconsAndLayerTextsBrightness);
         buffer.writeUInt8(this.alphanumericSegmentsBrightness);
         buffer.writeUInt8(this.keyBacklightBrightness);
+        buffer.writeUInt8(this.backlightingMode);
+        this.backlightingNoneActionColor.toBinary(buffer);
+        this.backlightingScancodeColor.toBinary(buffer);
+        this.backlightingModifierColor.toBinary(buffer);
+        this.backlightingShortcutColor.toBinary(buffer);
+        this.backlightingSwitchLayerColor.toBinary(buffer);
+        this.backlightingSwitchKeymapColor.toBinary(buffer);
+        this.backlightingMouseColor.toBinary(buffer);
+        this.backlightingMacroColor.toBinary(buffer);
         buffer.writeUInt8(this.mouseMoveInitialSpeed);
         buffer.writeUInt8(this.mouseMoveAcceleration);
         buffer.writeUInt8(this.mouseMoveDeceleratedSpeed);
@@ -172,7 +225,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
-            keymap.toBinary(uhkBuffer, this);
+            keymap.toBinary(uhkBuffer, this.getSerialisationInfo(), this);
         });
     }
 
@@ -253,15 +306,57 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
         this.mouseScrollBaseSpeed = buffer.readUInt8();
         this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+        const serialisationInfo = this.getSerialisationInfo();
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
-            return new ModuleConfiguration().fromBinary(uhkBuffer, this.userConfigMajorVersion);
+            return new ModuleConfiguration().fromBinary(uhkBuffer, serialisationInfo);
         });
         this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
-            const macro = new Macro().fromBinary(uhkBuffer, this.userConfigMajorVersion);
+            const macro = new Macro().fromBinary(uhkBuffer, serialisationInfo);
             macro.id = index;
             return macro;
         });
-        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, this.userConfigMajorVersion));
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
+        ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
+
+    }
+
+    private fromBinaryV6(buffer: UhkBuffer): void {
+        this.userConfigurationLength = buffer.readUInt32();
+        this.deviceName = buffer.readString();
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = buffer.readUInt16();
+        this.iconsAndLayerTextsBrightness = buffer.readUInt8();
+        this.alphanumericSegmentsBrightness = buffer.readUInt8();
+        this.keyBacklightBrightness = buffer.readUInt8();
+        this.backlightingMode = buffer.readUInt8();
+        this.backlightingNoneActionColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingScancodeColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingModifierColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingShortcutColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingSwitchLayerColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingSwitchKeymapColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingMouseColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.backlightingMacroColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
+        this.mouseMoveInitialSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleration = buffer.readUInt8();
+        this.mouseMoveDeceleratedSpeed = buffer.readUInt8();
+        this.mouseMoveBaseSpeed = buffer.readUInt8();
+        this.mouseMoveAcceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollInitialSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleration = buffer.readUInt8();
+        this.mouseScrollDeceleratedSpeed = buffer.readUInt8();
+        this.mouseScrollBaseSpeed = buffer.readUInt8();
+        this.mouseScrollAcceleratedSpeed = buffer.readUInt8();
+        const serialisationInfo = this.getSerialisationInfo();
+        this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
+            return new ModuleConfiguration().fromBinary(uhkBuffer, serialisationInfo);
+        });
+        this.macros = buffer.readArray<Macro>((uhkBuffer, index) => {
+            const macro = new Macro().fromBinary(uhkBuffer, serialisationInfo);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = buffer.readArray<Keymap>(uhkBuffer => new Keymap().fromBinary(uhkBuffer, this.macros, serialisationInfo));
         ConfigSerializer.resolveSwitchKeymapActions(this.keymaps);
 
     }
@@ -283,18 +378,60 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
         this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
         this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+        const serialisationInfo = this.getSerialisationInfo();
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
-            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, this.userConfigMajorVersion);
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, serialisationInfo);
         });
         this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
-            const macro = new Macro().fromJsonObject(macroJsonObject, this.userConfigMajorVersion);
+            const macro = new Macro().fromJsonObject(macroJsonObject, serialisationInfo);
             macro.id = index;
             return macro;
         });
         this.keymaps = jsonObject.keymaps.map((keymap: any) => {
-            return new Keymap().fromJsonObject(keymap, this.macros, this.userConfigMajorVersion);
+            return new Keymap().fromJsonObject(keymap, this.macros, serialisationInfo);
         });
     }
+
+    private fromJsonObjectV6(jsonObject: any): void {
+        this.deviceName = jsonObject.deviceName;
+        this.setDefaultDeviceName();
+        this.doubleTapSwitchLayerTimeout = jsonObject.doubleTapSwitchLayerTimeout;
+        this.iconsAndLayerTextsBrightness = jsonObject.iconsAndLayerTextsBrightness;
+        this.alphanumericSegmentsBrightness = jsonObject.alphanumericSegmentsBrightness;
+        this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
+        this.backlightingMode = jsonObject.backlightingMode;
+        this.backlightingNoneActionColor = new RgbColor().fromJsonObject(jsonObject.backlightingNoneActionColor, this.userConfigMajorVersion);
+        this.backlightingScancodeColor = new RgbColor().fromJsonObject(jsonObject.backlightingScancodeColor, this.userConfigMajorVersion);
+        this.backlightingModifierColor = new RgbColor().fromJsonObject(jsonObject.backlightingModifierColor, this.userConfigMajorVersion);
+        this.backlightingShortcutColor = new RgbColor().fromJsonObject(jsonObject.backlightingShortcutColor, this.userConfigMajorVersion);
+        this.backlightingSwitchLayerColor = new RgbColor().fromJsonObject(jsonObject.backlightingSwitchLayerColor, this.userConfigMajorVersion);
+        this.backlightingSwitchKeymapColor = new RgbColor().fromJsonObject(jsonObject.backlightingSwitchKeymapColor, this.userConfigMajorVersion);
+        this.backlightingMouseColor = new RgbColor().fromJsonObject(jsonObject.backlightingMouseColor, this.userConfigMajorVersion);
+        this.backlightingMacroColor = new RgbColor().fromJsonObject(jsonObject.backlightingMacroColor, this.userConfigMajorVersion);
+        this.mouseMoveInitialSpeed = jsonObject.mouseMoveInitialSpeed;
+        this.mouseMoveAcceleration = jsonObject.mouseMoveAcceleration;
+        this.mouseMoveDeceleratedSpeed = jsonObject.mouseMoveDeceleratedSpeed;
+        this.mouseMoveBaseSpeed = jsonObject.mouseMoveBaseSpeed;
+        this.mouseMoveAcceleratedSpeed = jsonObject.mouseMoveAcceleratedSpeed;
+        this.mouseScrollInitialSpeed = jsonObject.mouseScrollInitialSpeed;
+        this.mouseScrollAcceleration = jsonObject.mouseScrollAcceleration;
+        this.mouseScrollDeceleratedSpeed = jsonObject.mouseScrollDeceleratedSpeed;
+        this.mouseScrollBaseSpeed = jsonObject.mouseScrollBaseSpeed;
+        this.mouseScrollAcceleratedSpeed = jsonObject.mouseScrollAcceleratedSpeed;
+        const serialisationInfo = this.getSerialisationInfo();
+        this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
+            return new ModuleConfiguration().fromJsonObject(moduleConfiguration, serialisationInfo);
+        });
+        this.macros = jsonObject.macros.map((macroJsonObject: any, index: number) => {
+            const macro = new Macro().fromJsonObject(macroJsonObject, serialisationInfo);
+            macro.id = index;
+            return macro;
+        });
+        this.keymaps = jsonObject.keymaps.map((keymap: any) => {
+            return new Keymap().fromJsonObject(keymap, this.macros, serialisationInfo);
+        });
+    }
+
 
     private migrateToV5(): boolean {
         if (this.userConfigMajorVersion > 4) {
@@ -309,5 +446,31 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         return true;
+    }
+
+    private migrateToV6(): boolean {
+        if (this.userConfigMajorVersion > 5) {
+            return false;
+        }
+
+        this.userConfigMajorVersion = 6;
+        this.backlightingMode = BacklightingMode.FunctionalBacklighting;
+        this.backlightingNoneActionColor = new RgbColor({r:0, g:0, b:0});
+        this.backlightingScancodeColor = new RgbColor({r:255, g:255, b:255});
+        this.backlightingModifierColor = new RgbColor({r:0, g:255, b:255});
+        this.backlightingShortcutColor = new RgbColor({r:0, g:0, b:255});
+        this.backlightingSwitchLayerColor = new RgbColor({r:255, g:255, b:0});
+        this.backlightingSwitchKeymapColor = new RgbColor({r:255, g:0, b:0});
+        this.backlightingMouseColor = new RgbColor({r:0, g:255, b:0});
+        this.backlightingMacroColor = new RgbColor({r:255, g:0, b:255});
+
+        return true;
+    }
+
+    private getSerialisationInfo(): SerialisationInfo {
+        return {
+            isUserConfigContainsRgbColors: isUserConfigContainsRgbColors(this.backlightingMode),
+            userConfigMajorVersion: this.userConfigMajorVersion
+        };
     }
 }

@@ -1,3 +1,4 @@
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { KeyMacroAction } from './key-macro-action.js';
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
 import { MacroKeySubAction } from './macro-action.js';
@@ -15,7 +16,7 @@ describe('key-macro-action', () => {
             action.action = MacroKeySubAction.press;
             action.type = KeystrokeType.basic;
             action.scancode = 100;
-            jsonDefaultHelper(action);
+            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
 
         it('should binary match', () => {
@@ -23,7 +24,7 @@ describe('key-macro-action', () => {
             action.action = MacroKeySubAction.press;
             action.type = KeystrokeType.basic;
             action.scancode = 100;
-            binaryDefaultHelper(action);
+            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
     });
 });

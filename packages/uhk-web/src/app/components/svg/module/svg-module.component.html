@@ -1,11 +1,13 @@
 <svg:path *ngFor="let path of coverages"
           [attr.d]="path.d"
-          [attr.style]="path.style | safeStyle" />
+          [attr.fill]="svgKeyboardCoverColors?.fillColor"
+          [attr.stroke]="svgKeyboardCoverColors?.strokeColor"/>
 <svg:circle *ngFor="let circle of circles"
             [attr.cx]="circle.cx"
             [attr.cy]="circle.cy"
             [attr.r]="circle.r"
-            [attr.style]="circle.style | safeStyle" />
+            [attr.fill]="svgKeyboardCoverColors?.fillColor"
+            [attr.stroke]="svgKeyboardCoverColors?.strokeColor"/>
 
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">
     <svg:g svg-keyboard-key
@@ -13,7 +15,7 @@
             [id]="key.id"
             [svgKey]="key"
             [attr.transform]="calcTransform(key)"
-            [attr.fill]="key.fill"
+            [backlightingMode]="backlightingMode"
             [class.active]="selected && i === selectedKey.keyId"
             tabindex="-1"
             [keyAction]="keyActions && keyActions[i]"

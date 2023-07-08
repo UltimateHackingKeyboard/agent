@@ -1,4 +1,5 @@
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { PlayMacroAction } from './play-macro-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
@@ -30,13 +31,13 @@ describe('play-action', () => {
         it('should json match', () => {
             const action = new PlayMacroAction();
             action.macroId = 1;
-            jsonDefaultHelper(action, macros, macros);
+            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO, macros, macros);
         });
 
         it('should binary match', () => {
             const action = new PlayMacroAction();
             action.macroId = 1;
-            binaryDefaultHelper(action, userConfiguration, macros);
+            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO, userConfiguration, macros);
         });
     });
 });

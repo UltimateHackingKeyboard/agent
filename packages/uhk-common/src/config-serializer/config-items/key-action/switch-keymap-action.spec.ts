@@ -1,4 +1,5 @@
 import { binaryDefaultHelper, jsonDefaultHelper } from '../../../../test/serializer-test-helper.js';
+import { DEFAULT_SERIALISATION_INFO } from '../serialisation-info.js';
 import { SwitchKeymapAction } from './switch-keymap-action.js';
 
 // TODO: Add null, undefined, empty object, empty buffer test cases
@@ -32,12 +33,12 @@ describe('switch-keymap-action', () => {
     describe('full serialization', () => {
         it('should json match', () => {
             const action = new SwitchKeymapAction('AB1');
-            jsonDefaultHelper(action);
+            jsonDefaultHelper(action, DEFAULT_SERIALISATION_INFO);
         });
 
         xit('should binary match', () => {
             const action = new SwitchKeymapAction('AB1');
-            binaryDefaultHelper(action, userConfiguration, userConfiguration);
+            binaryDefaultHelper(action, DEFAULT_SERIALISATION_INFO, userConfiguration, userConfiguration);
         });
     });
 });

@@ -1,0 +1,25 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '../../../../styles/variables';
+
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+    --slider-value-width: 35px;
+
+    label {
+        display: block;
+        font-weight: normal;
+    }
+
+    .backlighting-mode-container {
+        margin-left: 1.6rem;
+    }
+
+    .functional-backlight-color-container {
+        margin-left: 1.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5em;
+    }
+}
