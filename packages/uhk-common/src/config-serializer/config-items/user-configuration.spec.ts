@@ -17,6 +17,7 @@ describe('user-configuration', () => {
             iconsAndLayerTextsBrightness: 255,
             alphanumericSegmentsBrightness: 255,
             keyBacklightBrightness: 255,
+            perKeyRgbPresent: false,
             backlightingMode: BacklightingMode.FunctionalBacklighting,
             backlightingNoneActionColor: {r:0, g:0, b:0},
             backlightingScancodeColor: {r:255, g:255, b:255},
