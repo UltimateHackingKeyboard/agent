@@ -12,6 +12,7 @@ export class SvgTwoLineTextKeyComponent implements OnChanges {
     @Input() width: number;
     @Input() texts: string[];
     @Input() secondaryText: string;
+    @Input() textColor: string;
 
     fontSizes = [START_FONT_SIZE, START_FONT_SIZE];
     textY: number;

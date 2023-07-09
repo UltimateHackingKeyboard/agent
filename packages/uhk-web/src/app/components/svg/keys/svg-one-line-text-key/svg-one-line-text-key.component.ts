@@ -13,6 +13,7 @@ export class SvgOneLineTextKeyComponent implements OnChanges {
     @Input() width: number;
     @Input() text: string;
     @Input() secondaryText: string;
+    @Input() textColor: string;
 
     fontSize = START_FONT_SIZE;
     textX: number;
