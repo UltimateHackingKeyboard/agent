@@ -11,14 +11,15 @@ import {
     getAnimationEnabled,
     getAppTheme,
     getOperatingSystem,
-    getSupportedThemes
+    getSupportedThemes,
+    keyboardHalvesAlwaysJoined
 } from '../../../store';
 import { State as UpdateSettingsState } from '../../../store/reducers/auto-update-settings';
 import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
-import { SetAppThemeAction, ToggleAnimationEnabledAction } from '../../../store/actions/app';
+import { SetAppThemeAction, ToggleAnimationEnabledAction, ToggleKeyboardHalvesAlwaysJoinedAction } from '../../../store/actions/app';
 import { OperatingSystem } from '../../../models/operating-system';
 
 @Component({
@@ -36,6 +37,7 @@ export class SettingsComponent {
     themes$: Observable<AppThemeSelect[]>;
     isLinux$: Observable<boolean>;
     faCog = faCog;
+    keyboardHalvesAlwaysJoined$: Observable<boolean>;
 
     constructor(private store: Store<AppState>) {
         this.updateSettingsState$ = store.select(appUpdateSettingsState);
@@ -43,6 +45,7 @@ export class SettingsComponent {
         this.appTheme$ = store.select(getAppTheme);
         this.themes$ = store.select(getSupportedThemes);
         this.isLinux$ = store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
+        this.keyboardHalvesAlwaysJoined$ = store.select(keyboardHalvesAlwaysJoined);
     }
 
     toggleCheckForUpdateOnStartUp(value: boolean) {
@@ -60,4 +63,9 @@ export class SettingsComponent {
     selectTheme(value: AppTheme) {
         this.store.dispatch(new SetAppThemeAction(value));
     }
+
+    toggleKeyboardHalvesAlwaysJoined(enabled: boolean): void {
+        this.store.dispatch(new ToggleKeyboardHalvesAlwaysJoinedAction(enabled));
+    }
+
 }

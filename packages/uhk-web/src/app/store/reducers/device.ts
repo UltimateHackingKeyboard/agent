@@ -7,6 +7,8 @@ import {
     HalvesInfo,
     HardwareModules,
     isVersionGtMinor,
+    LeftSlotModules,
+    RightSlotModules,
     UhkDeviceProduct
 } from 'uhk-common';
 import { DeviceUiStates } from '../../models';
@@ -14,6 +16,7 @@ import { MissingDeviceState } from '../../models/missing-device-state';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { getVersions } from '../../util';
 
+import * as App from '../actions/app';
 import * as Device from '../actions/device';
 import { ReadConfigSizesReplyAction } from '../actions/device';
 import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonState } from './progress-button-state';
@@ -24,6 +27,7 @@ export interface State {
     hasPermission: boolean;
     bootloaderActive: boolean;
     deviceConnectionStateLoaded: boolean;
+    keyboardHalvesAlwaysJoined: boolean;
     multiDevice: boolean;
     zeroInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
@@ -44,6 +48,7 @@ export const initialState: State = {
     hasPermission: true,
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,
+    keyboardHalvesAlwaysJoined: false,
     multiDevice: false,
     zeroInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
@@ -69,6 +74,22 @@ export const initialState: State = {
 export function reducer(state = initialState, action: Action): State {
 
     switch (action.type) {
+
+        case App.ActionTypes.LoadApplicationSettingsSuccess: {
+            const settings = (action as App.LoadApplicationSettingsSuccessAction).payload;
+
+            return {
+                ...state,
+                keyboardHalvesAlwaysJoined: settings.keyboardHalvesAlwaysJoined,
+            };
+        }
+
+        case App.ActionTypes.ToggleKeyboardHalvesAlwaysJoined: {
+            return {
+                ...state,
+                keyboardHalvesAlwaysJoined: (action as App.ToggleKeyboardHalvesAlwaysJoinedAction).payload,
+            };
+        }
 
         case Device.ActionTypes.ChangeKeyboardLayout: {
             return {
@@ -271,7 +292,16 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
     };
 };
 export const bootloaderActive = (state: State) => state.bootloaderActive;
-export const halvesInfo = (state: State) => state.halvesInfo;
+export const halvesInfo = (state: State): HalvesInfo => {
+    return {
+        ...state.halvesInfo,
+        areHalvesMerged: state.keyboardHalvesAlwaysJoined &&
+            state.halvesInfo.leftModuleSlot === LeftSlotModules.NoModule &&
+            state.halvesInfo.rightModuleSlot === RightSlotModules.NoModule
+            ? true
+            : state.halvesInfo.areHalvesMerged
+    };
+};
 export const isUserConfigSaving = (state: State): boolean => state.saveToKeyboard.showProgress;
 export const deviceUiState = (state: State): DeviceUiStates | undefined => {
     if (state.multiDevice) {
@@ -299,3 +329,4 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
 export const getConnectedDevice = (state: State) => state.connectedDevice;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
+export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
