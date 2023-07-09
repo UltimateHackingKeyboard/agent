@@ -13,6 +13,7 @@ export class SvgSingleIconKeyComponent implements OnChanges {
     @Input() height: number;
     @Input() icon: string;
     @Input() secondaryText: string;
+    @Input() textColor: string;
 
     svgHeight: number;
     svgWidth: number;

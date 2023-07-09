@@ -270,6 +270,7 @@ export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiStat
 export const getConnectedDevice = createSelector(deviceState, fromDevice.getConnectedDevice);
 export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
 export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
+export const keyboardHalvesAlwaysJoined = createSelector(deviceState, fromDevice.keyboardHalvesAlwaysJoined);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -651,10 +652,12 @@ export const getApplicationSettings = createSelector(
     appState,
     getSmartMacroPanelWidth,
     backlightingColorPalette,
+    keyboardHalvesAlwaysJoined,
     (updateSettingsState,
         app,
         smartMacroPanelWidth,
-        backlightingColorPalette
+        backlightingColorPalette,
+        keyboardHalvesAlwaysJoined,
     ): ApplicationSettings => {
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
@@ -662,6 +665,7 @@ export const getApplicationSettings = createSelector(
             animationEnabled: app.animationEnabled,
             appTheme: app.appTheme,
             backlightingColorPalette,
+            keyboardHalvesAlwaysJoined,
             smartMacroPanelWidth
         };
     });
