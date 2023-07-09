@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
 import {
+    BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
     CommandLineArgs,
     ConfigurationReply,
@@ -10,6 +11,7 @@ import {
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
+    getUserConfigFromDeviceResponse,
     HardwareModules,
     IpcEvents,
     IpcResponse,
@@ -205,11 +207,22 @@ export class DeviceService {
                 result.userConfiguration = 'invalid user config';
             }
 
+            let isUserConfigInvalid = false;
+            try {
+                getUserConfigFromDeviceResponse(result.userConfiguration);
+            } catch {
+                isUserConfigInvalid = true;
+            }
+
             response = {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
+                backupConfiguration: isUserConfigInvalid
+                    ? await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
+                    : {
+                        info: BackupUserConfigurationInfo.Unknown
+                    }
             };
         } catch (error) {
             response = {
