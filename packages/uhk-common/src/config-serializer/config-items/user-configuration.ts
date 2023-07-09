@@ -33,6 +33,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt8 keyBacklightBrightness: number;
 
+    @assertUInt16 ledsFadeTimeout: number;
+
     perKeyRgbPresent: boolean;
 
     @assertEnum(BacklightingMode) backlightingMode: BacklightingMode;
@@ -169,6 +171,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             iconsAndLayerTextsBrightness: this.iconsAndLayerTextsBrightness,
             alphanumericSegmentsBrightness: this.alphanumericSegmentsBrightness,
             keyBacklightBrightness: this.keyBacklightBrightness,
+            ledsFadeTimeout: this.ledsFadeTimeout,
             perKeyRgbPresent: this.perKeyRgbPresent,
             backlightingMode: this.backlightingMode,
             backlightingNoneActionColor: this.backlightingNoneActionColor.toJsonObject(),
@@ -205,6 +208,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt8(this.iconsAndLayerTextsBrightness);
         buffer.writeUInt8(this.alphanumericSegmentsBrightness);
         buffer.writeUInt8(this.keyBacklightBrightness);
+        buffer.writeUInt16(this.ledsFadeTimeout);
         buffer.writeBoolean(this.perKeyRgbPresent);
         buffer.writeUInt8(this.backlightingMode);
         this.backlightingNoneActionColor.toBinary(buffer);
@@ -331,6 +335,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.iconsAndLayerTextsBrightness = buffer.readUInt8();
         this.alphanumericSegmentsBrightness = buffer.readUInt8();
         this.keyBacklightBrightness = buffer.readUInt8();
+        this.ledsFadeTimeout = buffer.readUInt16();
         this.perKeyRgbPresent = buffer.readBoolean();
         this.backlightingMode = buffer.readUInt8();
         this.backlightingNoneActionColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
@@ -403,6 +408,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.iconsAndLayerTextsBrightness = jsonObject.iconsAndLayerTextsBrightness;
         this.alphanumericSegmentsBrightness = jsonObject.alphanumericSegmentsBrightness;
         this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
+        this.ledsFadeTimeout = jsonObject.ledsFadeTimeout;
         this.perKeyRgbPresent = jsonObject.perKeyRgbPresent;
         this.backlightingMode = jsonObject.backlightingMode;
         this.backlightingNoneActionColor = new RgbColor().fromJsonObject(jsonObject.backlightingNoneActionColor, this.userConfigMajorVersion);
@@ -459,6 +465,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         this.userConfigMajorVersion = 6;
+        this.ledsFadeTimeout = 0;
         this.perKeyRgbPresent = false;
         this.backlightingMode = BacklightingMode.FunctionalBacklighting;
         this.backlightingNoneActionColor = new RgbColor({r:0, g:0, b:0});
