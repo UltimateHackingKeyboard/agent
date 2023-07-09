@@ -23,4 +23,12 @@
         flex-wrap: wrap;
         gap: 1.5em;
     }
+
+    .fade-timeout-container {
+        margin-left: 2.5rem;
+
+        .col-form-label {
+            margin-left: 0.5em;
+        }
+    }
 }

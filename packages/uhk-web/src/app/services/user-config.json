@@ -8,6 +8,7 @@
   "alphanumericSegmentsBrightness": 255,
   "keyBacklightBrightness": 255,
   "perKeyRgbPresent": false,
+  "ledsFadeTimeout": 0,
   "backlightingMode": 0,
   "backlightingNoneActionColor": {
     "b": 0,
