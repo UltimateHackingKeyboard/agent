@@ -14,7 +14,9 @@
             [height]="height"
             [width]="width"
             [texts]="labelSource"
-            [secondaryText]="subComponentSecondaryRoleText">
+            [secondaryText]="subComponentSecondaryRoleText"
+            [textColor]="textColor"
+            >
     </svg:g>
     <svg:g svg-text-icon-key *ngSwitchCase="'text-icon'"
            [height]="height"
@@ -22,6 +24,7 @@
            [text]="labelSource.text"
            [icon]="labelSource.icon"
            [secondaryText]="subComponentSecondaryRoleText"
+           [textColor]="textColor"
            >
     </svg:g>
     <svg:g svg-icon-text-key *ngSwitchCase="'icon-text'"
@@ -30,6 +33,7 @@
            [text]="labelSource.text"
            [icon]="labelSource.icon"
            [secondaryText]="subComponentSecondaryRoleText"
+           [textColor]="textColor"
     >
     </svg:g>
 </svg>
@@ -59,5 +63,7 @@
        [height]="20"
        [width]="secondaryTextWidth"
        [y]="secondaryTextY"
-       [text]="thisSecondaryRoleText">
+       [text]="thisSecondaryRoleText"
+       [textColor]="textColor"
+>
 </svg:g>

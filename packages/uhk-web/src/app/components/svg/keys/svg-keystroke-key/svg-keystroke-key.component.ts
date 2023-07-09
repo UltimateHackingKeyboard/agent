@@ -32,6 +32,7 @@ export class SvgKeystrokeKeyComponent implements OnChanges {
     @Input() width: number;
     @Input() keystrokeAction: KeystrokeAction;
     @Input() secondaryText: string;
+    @Input() textColor: string;
 
     viewBox: string;
     textContainer: SvgAttributes;

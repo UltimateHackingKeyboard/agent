@@ -14,6 +14,7 @@ export class SvgTextIconKeyComponent implements OnChanges {
     @Input() text: string;
     @Input() icon: string;
     @Input() secondaryText: string;
+    @Input() textColor: string;
 
     fontSize = START_FONT_SIZE;
     useWidth: number;
