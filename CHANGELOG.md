@@ -6,9 +6,18 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.0.0] - 2023-07-11
+
+Firmware: **10.0.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.0.0)] | Device Protocol: 4.9.0 | User Config: **6.0.0** | Hardware Config: 1.0.0
+
+- Rename the "LED brightness" page to "LED settings" and extend it with backlighting mode, functional backlighting colors, and LED fade timeout. Extend the keymap page accordingly. `USERCONFIG:MAJOR`
+- Add "Always display keyboards halves joined together" option on the Settings page.
+- Load backup user config on startup only if the user config is invalid.
+- Windows support is limited to Windows 10+ starting from this release because the most recent Electron only suports new Windows versions.
+
 ## [2.1.2] - 2023-04-03
 
-Firmware: 9.2.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.2)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+Firmware: 9.2.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.2)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
 
 - Make Agent work with macOS 13.3 and above.
 - Make Agent compatible with NixOS.
@@ -17,13 +26,13 @@ Firmware: 9.2.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 
 ## [2.1.1] - 2023-01-16
 
-Firmware: 9.2.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.1)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+Firmware: 9.2.**1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.1)] | Device Protocol: 4.9.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
 
 - Add hidden advanced settings page, enabling I2C debugging and ANSI-ISO layout switching.
 
 ## [2.1.0] - 2023-01-11
 
-Firmware: 9.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.0)] | Device Protocol: 4.**9**.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+Firmware: 9.**2.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.2.0)] | Device Protocol: 4.**9**.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
 
 - Fix scancode dropdown visibility in macros.
 - Decrease the padding of select2 items.
@@ -35,7 +44,7 @@ Firmware: 9.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 
 ## [2.0.2] - 2022-11-15
 
-Firmware: 9.1.4 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.4)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+Firmware: 9.1.**4** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.4)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
 
 - After firmware updates, refresh the new firmware version number of the last updated module.
 - Save macro command upon pressing Ctrl + Enter.
@@ -43,13 +52,13 @@ Firmware: 9.1.4 [[release](https://github.com/UltimateHackingKeyboard/firmware/r
 
 ## [2.0.1] - 2022-10-30
 
-Firmware: 9.1.2 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.2)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
+Firmware: 9.1.**2** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.2)] | Device Protocol: 4.8.0 | User Config: 5.1.0 | Hardware Config: 1.0.0
 
 - Make Agent able to detect the UHK on M1 MacBooks and all Windows installations.
 
 ## [2.0.0] - 2022-10-23
 
-Firmware: 9.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.1)] | Device Protocol: 4.**8.0** | User Config: **5.1.0** | Hardware Config: 1.0.0
+Firmware: 9.1.**1** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v9.1.1)] | Device Protocol: 4.**8.0** | User Config: **5.1.0** | Hardware Config: 1.0.0
 
 - Support smart macros. `USERCONFIG:MINOR`
 - Support 12 layers. `USERCONFIG:MAJOR`
@@ -84,14 +93,14 @@ Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware
 
 ## [1.5.16] - 2021-10-27
 
-Firmware: 8.10.12 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+Firmware: 8.10.**12** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.12)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Allow arbitrary scancodes.
 - Make the preloaded keymaps available for addition.
 
 ## [1.5.15] - 2021-07-17
 
-Firmware: 8.10.10 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.10)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
+Firmware: 8.10.**10** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v8.10.10)] | Device Protocol: 4.7.0 | User Config: 4.1.1 | Hardware Config: 1.0.0
 
 - Make the configuration saveable after deleting a macro that is referenced by a play macro action.
 - Allow module recovery.
