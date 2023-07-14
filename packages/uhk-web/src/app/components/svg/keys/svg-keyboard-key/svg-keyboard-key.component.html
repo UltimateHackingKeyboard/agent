@@ -67,39 +67,51 @@
                [height]="svgKey.height"
                [width]="svgKey.width"
                [keystrokeAction]="labelSource"
-               [secondaryText]="secondaryText">
+               [secondaryText]="secondaryText"
+               [textColor]="textColor"
+        >
         </svg:g>
         <svg:g svg-one-line-text-key *ngSwitchCase="enumLabelTypes.OneLineText"
                [height]="svgKey.height"
                [width]="svgKey.width"
                [text]="labelSource"
-               [secondaryText]="secondaryText">
+               [secondaryText]="secondaryText"
+               [textColor]="textColor"
+        >
         </svg:g>
         <svg:g svg-two-line-text-key *ngSwitchCase="enumLabelTypes.TwoLineText"
                [height]="svgKey.height"
                [width]="svgKey.width"
                [texts]="labelSource"
-               [secondaryText]="secondaryText">
+               [secondaryText]="secondaryText"
+               [textColor]="textColor"
+        >
         </svg:g>
         <svg:g svg-text-icon-key *ngSwitchCase="enumLabelTypes.TextIcon"
                [height]="svgKey.height"
                [width]="svgKey.width"
                [text]="labelSource.text"
                [icon]="labelSource.icon"
-               [secondaryText]="secondaryText">
+               [secondaryText]="secondaryText"
+               [textColor]="textColor"
+        >
         </svg:g>
         <svg:g svg-icon-text-key *ngSwitchCase="enumLabelTypes.IconText"
                [height]="svgKey.height"
                [width]="svgKey.width"
                [icon]="labelSource.icon"
                [text]="labelSource.text"
-               [secondaryText]="secondaryText">
+               [secondaryText]="secondaryText"
+               [textColor]="textColor"
+        >
         </svg:g>
         <svg:g svg-single-icon-key *ngSwitchCase="enumLabelTypes.SingleIcon"
                [height]="svgKey.height"
                [width]="svgKey.width"
                [icon]="labelSource"
-               [secondaryText]="secondaryText">
+               [secondaryText]="secondaryText"
+               [textColor]="textColor"
+        >
         </svg:g>
         <svg:g svg-switch-keymap-key *ngSwitchCase="enumLabelTypes.SwitchKeymap"
                [height]="svgKey.height"

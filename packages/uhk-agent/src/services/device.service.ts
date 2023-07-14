@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
 import {
+    BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
     CommandLineArgs,
     ConfigurationReply,
@@ -10,6 +11,7 @@ import {
     FirmwareUpgradeFailReason,
     FirmwareUpgradeIpcResponse,
     getHardwareConfigFromDeviceResponse,
+    getUserConfigFromDeviceResponse,
     HardwareModules,
     IpcEvents,
     IpcResponse,
@@ -205,11 +207,22 @@ export class DeviceService {
                 result.userConfiguration = 'invalid user config';
             }
 
+            let isUserConfigInvalid = false;
+            try {
+                getUserConfigFromDeviceResponse(result.userConfiguration);
+            } catch {
+                isUserConfigInvalid = true;
+            }
+
             response = {
                 success: true,
                 ...result,
                 modules,
-                backupConfiguration: await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
+                backupConfiguration: isUserConfigInvalid
+                    ? await getBackupUserConfigurationContent(this.logService, uniqueId, versionInformation)
+                    : {
+                        info: BackupUserConfigurationInfo.Unknown
+                    }
             };
         } catch (error) {
             response = {
@@ -312,7 +325,7 @@ export class DeviceService {
             const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
             if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation?.userConfigVersion)) {
                 response.failReason = FirmwareUpgradeFailReason.UserConfigVersionNotSupported;
-                this.logService.error('[DeviceService] Firmware contains newer user config version that Agent supports', packageJson.userConfigVersion);
+                this.logService.error(`[DeviceService] Firmware contains newer ${packageJson.userConfigVersion} user config version than what Agent supports`);
 
                 return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
             }
@@ -333,7 +346,7 @@ export class DeviceService {
                 await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
 
                 if(shouldUpgradeFirmware(packageJson.userConfigVersion, data.versionInformation)) {
-                    this.logService.misc('[DeviceService] Skip user config saving because user config version is newer that firmware supports');
+                    this.logService.misc('[DeviceService] Skip user config saving because user config version is newer than what firmware supports');
                     response.firmwareDowngraded = true;
                 } else {
                     this.logService.misc('[DeviceService] User configuration will be saved after right module firmware upgrade');

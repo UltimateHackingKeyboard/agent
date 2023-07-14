@@ -75,3 +75,19 @@
                                 (colorChanged)="onSetRgbValue('backlightingMacroColor', $event)"></functional-backlight-color>
 </div>
 
+<h3 class="mt-4">LED fade timeout</h3>
+
+<div class="fade-timeout-container">
+    <div class="form-group row">
+        <input
+            #ledsFadeTimeoutInput
+            type="number"
+            class="form-control"
+            [ngModel]="ledsFadeTimeout"
+            (ngModelChange)="onLedsFadeTimeoutChange($event, ledsFadeTimeoutInput)"
+            min="0"
+            max="65535"
+            maxlength="5">
+        <span class="col-form-label">seconds (0 is infinite)</span>
+    </div>
+</div>

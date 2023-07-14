@@ -19,7 +19,6 @@ import {
     getEmptyKeymap,
     getMd5HashFromFilename,
     HardwareModules,
-    isUserConfigContainsRgbColors,
     isVersionGte,
     Keymap,
     LEFT_HALF_MODULE,
@@ -39,6 +38,7 @@ import {
     MacroMenuItem,
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
+    OutOfSpaceWarningType,
     ProgressBar,
     ProgressBarLegend,
     SideMenuPageState,
@@ -141,8 +141,10 @@ export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, ge
 
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
 export const showColorPalette = createSelector(userConfigState, fromUserConfig.showColorPalette);
+export const perKeyRgbPresent = createSelector(userConfigState, fromUserConfig.perKeyRgbPresent);
 export const backlightingMode = createSelector(userConfigState, fromUserConfig.backlightingMode);
 export const getBacklightingOptions = createSelector(userConfigState, fromUserConfig.backlightingOptions);
+export const hasRecoverableLEDSpace = createSelector(userConfigState, fromUserConfig.hasRecoverableLEDSpace);
 export const backlightingColorPalette = createSelector(userConfigState, fromUserConfig.backlightingColorPalette);
 export const isBacklightingColoring = createSelector(userConfigState, fromUserConfig.isBacklightingColoring);
 export const selectedBacklightingColor = createSelector(userConfigState, fromUserConfig.selectedBacklightingColor);
@@ -268,6 +270,7 @@ export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiStat
 export const getConnectedDevice = createSelector(deviceState, fromDevice.getConnectedDevice);
 export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
 export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
+export const keyboardHalvesAlwaysJoined = createSelector(deviceState, fromDevice.keyboardHalvesAlwaysJoined);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -277,7 +280,7 @@ export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userCo
     return uhkBuffer;
 });
 export const getRgbColorSpaceUsage = createSelector(getUserConfiguration, userConfig => {
-    if (userConfig.backlightingMode === BacklightingMode.FunctionalBacklighting) {
+    if (!userConfig.perKeyRgbPresent) {
         return 0;
     }
 
@@ -307,8 +310,8 @@ export const getConfigSizesState = createSelector(deviceState, getUserConfigSize
             rgbColorsUsage: rgbColorSpaceUsage
         };
     });
-export const getConfigSizesProgressBarState = createSelector(getConfigSizesState, backlightingMode,
-    (configSizeState: ConfigSizeState, backlightingMode: BacklightingMode): UhkProgressBarState => {
+export const getConfigSizesProgressBarState = createSelector(getConfigSizesState, perKeyRgbPresent,
+    (configSizeState: ConfigSizeState, perKeyRgbPresent: boolean): UhkProgressBarState => {
         const formatNumber = new Intl.NumberFormat(undefined, {
             useGrouping: true
         }).format;
@@ -332,7 +335,7 @@ export const getConfigSizesProgressBarState = createSelector(getConfigSizesState
             }
         ];
 
-        if (isUserConfigContainsRgbColors(backlightingMode)) {
+        if (perKeyRgbPresent) {
             progressBars.unshift({
                 color: 'var(--color-progress-bar-progress-rgb-colors)',
                 currentValue: configSizeState.rgbColorsUsage,
@@ -353,9 +356,21 @@ export const getConfigSizesProgressBarState = createSelector(getConfigSizesState
         };
     });
 
-export const getOutOfSpaceWaringData = createSelector(getConfigSizesState, backlightingMode,
-    (configSizeState: ConfigSizeState, backlightingMode): OutOfSpaceWarningData => ({
-        backlightingMode,
+export const getOutOfSpaceWarningType = createSelector(backlightingMode, hasRecoverableLEDSpace,
+    (backlightingMode: BacklightingMode, hasRecoverableLEDSpace: boolean): OutOfSpaceWarningType => {
+        if (hasRecoverableLEDSpace) {
+            return OutOfSpaceWarningType.RecoverableLEDSpace;
+        }
+
+        if (backlightingMode === BacklightingMode.PerKeyBacklighting) {
+            return OutOfSpaceWarningType.PerKeyBacklighting;
+        }
+
+        return OutOfSpaceWarningType.OutOfSpace;
+    });
+export const getOutOfSpaceWaringData = createSelector(getConfigSizesState, getOutOfSpaceWarningType,
+    (configSizeState: ConfigSizeState, outOfSpaceWarningType): OutOfSpaceWarningData => ({
+        type: outOfSpaceWarningType,
         currentValue: configSizeState.allUsage,
         maxValue: configSizeState.capacity,
         show: configSizeState.allUsage > configSizeState.capacity
@@ -637,10 +652,12 @@ export const getApplicationSettings = createSelector(
     appState,
     getSmartMacroPanelWidth,
     backlightingColorPalette,
+    keyboardHalvesAlwaysJoined,
     (updateSettingsState,
         app,
         smartMacroPanelWidth,
-        backlightingColorPalette
+        backlightingColorPalette,
+        keyboardHalvesAlwaysJoined,
     ): ApplicationSettings => {
         return {
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
@@ -648,6 +665,7 @@ export const getApplicationSettings = createSelector(
             animationEnabled: app.animationEnabled,
             appTheme: app.appTheme,
             backlightingColorPalette,
+            keyboardHalvesAlwaysJoined,
             smartMacroPanelWidth
         };
     });

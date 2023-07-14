@@ -24,6 +24,7 @@ export class SvgSecondaryRoleComponent implements OnInit, OnChanges {
     @Input() width: number;
     @Input() y: number;
     @Input() text: string;
+    @Input() textColor: string;
 
     viewBox: string;
     textY: number;

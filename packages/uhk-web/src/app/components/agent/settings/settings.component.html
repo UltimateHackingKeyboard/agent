@@ -25,6 +25,17 @@
     </div>
 </div>
 
+<div class="col-12">
+    <div class="checkbox d-inline-block mb-0 mt-0">
+        <label>
+            <input type="checkbox"
+                   [checked]="keyboardHalvesAlwaysJoined$ | async"
+                   (change)="toggleKeyboardHalvesAlwaysJoined($event.target.checked)"
+            > Always display keyboards halves joined together when no module is attached
+        </label>
+    </div>
+</div>
+
 
 <div class="col-12 col-md-6 mb-0 mt-0">
     <div class="d-flex align-items-center mt-2">

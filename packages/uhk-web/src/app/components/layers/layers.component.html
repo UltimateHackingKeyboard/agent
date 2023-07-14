@@ -48,7 +48,7 @@
             <button *ngIf="selectedPaletteColorIndex === -1"
                     type="button"
                     class="btn btn-default add-new-color-button"
-                    ngbTooltip="Add new color to the palette."
+                    ngbTooltip="Add a new color to the palette."
                     >
                 <fa-icon [icon]="faPlus"></fa-icon>
                 <input type="color" (change)="onAddColor($event)">

@@ -59,6 +59,7 @@ export class ApplicationEffects {
                             checkForUpdateOnStartUp: true,
                             everAttemptedSavingToKeyboard: false,
                             animationEnabled: true,
+                            keyboardHalvesAlwaysJoined: false,
                             ...appSettings
                         };
 
@@ -129,6 +130,7 @@ export class ApplicationEffects {
             ofType(
                 ActionTypes.SetAppTheme,
                 ActionTypes.ToggleAnimationEnabled,
+                ActionTypes.ToggleKeyboardHalvesAlwaysJoined,
                 UpdateActionTypes.ToggleCheckForUpdateOnStartup,
                 DeviceActionTypes.SaveConfiguration,
                 SmartMacroDocActionTypes.PanelSizeChanged,

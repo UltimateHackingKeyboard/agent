@@ -1,7 +1,6 @@
 import { assertUInt16, assertUInt32, assertUInt8, assertEnum } from '../assert.js';
 import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
-import { isUserConfigContainsRgbColors } from './backlighting-mode.js';
 import { BacklightingMode } from './backlighting-mode.js';
 import { KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
@@ -33,6 +32,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
     @assertUInt8 alphanumericSegmentsBrightness: number;
 
     @assertUInt8 keyBacklightBrightness: number;
+
+    @assertUInt16 ledsFadeTimeout: number;
+
+    perKeyRgbPresent: boolean;
 
     @assertEnum(BacklightingMode) backlightingMode: BacklightingMode;
 
@@ -168,6 +171,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             iconsAndLayerTextsBrightness: this.iconsAndLayerTextsBrightness,
             alphanumericSegmentsBrightness: this.alphanumericSegmentsBrightness,
             keyBacklightBrightness: this.keyBacklightBrightness,
+            ledsFadeTimeout: this.ledsFadeTimeout,
+            perKeyRgbPresent: this.perKeyRgbPresent,
             backlightingMode: this.backlightingMode,
             backlightingNoneActionColor: this.backlightingNoneActionColor.toJsonObject(),
             backlightingScancodeColor: this.backlightingScancodeColor.toJsonObject(),
@@ -203,6 +208,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt8(this.iconsAndLayerTextsBrightness);
         buffer.writeUInt8(this.alphanumericSegmentsBrightness);
         buffer.writeUInt8(this.keyBacklightBrightness);
+        buffer.writeUInt16(this.ledsFadeTimeout);
+        buffer.writeBoolean(this.perKeyRgbPresent);
         buffer.writeUInt8(this.backlightingMode);
         this.backlightingNoneActionColor.toBinary(buffer);
         this.backlightingScancodeColor.toBinary(buffer);
@@ -328,6 +335,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.iconsAndLayerTextsBrightness = buffer.readUInt8();
         this.alphanumericSegmentsBrightness = buffer.readUInt8();
         this.keyBacklightBrightness = buffer.readUInt8();
+        this.ledsFadeTimeout = buffer.readUInt16();
+        this.perKeyRgbPresent = buffer.readBoolean();
         this.backlightingMode = buffer.readUInt8();
         this.backlightingNoneActionColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
         this.backlightingScancodeColor = new RgbColor().fromBinary(buffer, this.userConfigMajorVersion);
@@ -399,6 +408,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.iconsAndLayerTextsBrightness = jsonObject.iconsAndLayerTextsBrightness;
         this.alphanumericSegmentsBrightness = jsonObject.alphanumericSegmentsBrightness;
         this.keyBacklightBrightness = jsonObject.keyBacklightBrightness;
+        this.ledsFadeTimeout = jsonObject.ledsFadeTimeout;
+        this.perKeyRgbPresent = jsonObject.perKeyRgbPresent;
         this.backlightingMode = jsonObject.backlightingMode;
         this.backlightingNoneActionColor = new RgbColor().fromJsonObject(jsonObject.backlightingNoneActionColor, this.userConfigMajorVersion);
         this.backlightingScancodeColor = new RgbColor().fromJsonObject(jsonObject.backlightingScancodeColor, this.userConfigMajorVersion);
@@ -454,6 +465,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         this.userConfigMajorVersion = 6;
+        this.ledsFadeTimeout = 0;
+        this.perKeyRgbPresent = false;
         this.backlightingMode = BacklightingMode.FunctionalBacklighting;
         this.backlightingNoneActionColor = new RgbColor({r:0, g:0, b:0});
         this.backlightingScancodeColor = new RgbColor({r:255, g:255, b:255});
@@ -469,7 +482,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     private getSerialisationInfo(): SerialisationInfo {
         return {
-            isUserConfigContainsRgbColors: isUserConfigContainsRgbColors(this.backlightingMode),
+            isUserConfigContainsRgbColors: this.perKeyRgbPresent,
             userConfigMajorVersion: this.userConfigMajorVersion
         };
     }

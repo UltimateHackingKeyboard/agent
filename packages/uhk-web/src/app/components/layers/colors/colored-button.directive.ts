@@ -78,8 +78,8 @@ export class ColoredButtonDirective implements OnChanges {
 
     private tooltipText(): string {
         return this.selected
-            ? 'Click on keys to change their color. Click this button again to finish coloring.'
-            : 'Click on the color to start the process.';
+            ? 'Click on the keys to paint them. Click this button again to finish painting.'
+            : 'Click on the desired color to start painting keys with it.';
     }
 
     private updateTooltipText(): void {

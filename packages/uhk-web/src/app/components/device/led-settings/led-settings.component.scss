@@ -3,6 +3,7 @@
 
 :host {
     display: block;
+    overflow-y: auto;
     height: 100%;
     width: 100%;
     --slider-value-width: 35px;
@@ -21,5 +22,17 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1.5em;
+    }
+
+    .fade-timeout-container {
+        margin-left: 2.5rem;
+
+        .col-form-label {
+            margin-left: 0.5em;
+        }
+
+        .form-control {
+            width: 11ch;
+        }
     }
 }

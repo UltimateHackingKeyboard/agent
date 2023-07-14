@@ -23,6 +23,7 @@ export enum ActionTypes {
     PrivilegeWhatWillThisDo = '[app] What will this do clicked',
     SetupPermissionError = '[app] Setup permission error',
     ToggleAnimationEnabled = '[app] Toggle animation enabled',
+    ToggleKeyboardHalvesAlwaysJoined = '[app] Toggle keyboard halves always joined',
     SetAppTheme = '[app] Set application theme',
     LoadAppStartInfo = '[app] Load app start info',
     StartKeypressCapturing = '[app] Start keypress capturing',
@@ -134,6 +135,13 @@ export class ToggleAnimationEnabledAction implements Action {
     }
 }
 
+export class ToggleKeyboardHalvesAlwaysJoinedAction implements Action {
+    type = ActionTypes.ToggleKeyboardHalvesAlwaysJoined;
+
+    constructor(public payload: boolean) {
+    }
+}
+
 export class SetAppThemeAction implements Action {
     type = ActionTypes.SetAppTheme;
 
@@ -190,6 +198,7 @@ export type Actions
     | PrivilegeWhatWillThisDoAction
     | SetupPermissionErrorAction
     | ToggleAnimationEnabledAction
+    | ToggleKeyboardHalvesAlwaysJoinedAction
     | SetAppThemeAction
     | LoadAppStartInfoAction
     | StartKeypressCapturingAction

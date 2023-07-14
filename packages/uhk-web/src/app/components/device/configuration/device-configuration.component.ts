@@ -1,22 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { BacklightingMode, UploadFileData } from 'uhk-common';
+import { UploadFileData } from 'uhk-common';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
 import { AppState,
-    backlightingMode,
     getConfigSizesProgressBarState,
     getRgbColorSpaceUsage,
     getUserConfigHistoryComponentState,
+    hasRecoverableLEDSpace,
     isUserConfigSaving
 } from '../../../store';
 import { ResetUserConfigurationAction } from '../../../store/actions/device';
 import {
     LoadUserConfigurationFromFileAction,
     SaveUserConfigInBinaryFileAction,
+    RecoverLEDSpacesAction,
     SaveUserConfigInJsonFileAction,
-    SetUserConfigurationValueAction
 } from '../../../store/actions/user-config';
 import { UhkProgressBarState, UserConfigHistoryComponentState } from '../../../models';
 import {
@@ -33,8 +33,7 @@ import {
     }
 })
 export class DeviceConfigurationComponent implements OnInit, OnDestroy {
-    backlightingModeEnum = BacklightingMode;
-    backlightingMode$: Observable<BacklightingMode>;
+    hasRecoverableLEDSpace$: Observable<boolean>;
     configSizesProgressBarState$: Observable<UhkProgressBarState>;
     userConfigHistoryState$: Observable<UserConfigHistoryComponentState>;
     rgbColorSpaceUsage$: Observable<number>;
@@ -44,7 +43,7 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     private subscription = new Subscription();
 
     constructor(private store: Store<AppState>) {
-        this.backlightingMode$ = this.store.select(backlightingMode);
+        this.hasRecoverableLEDSpace$ = this.store.select(hasRecoverableLEDSpace);
         this.configSizesProgressBarState$ = this.store.select(getConfigSizesProgressBarState);
         this.userConfigHistoryState$ = this.store.select(getUserConfigHistoryComponentState);
         this.rgbColorSpaceUsage$ = this.store.select(getRgbColorSpaceUsage);
@@ -94,9 +93,6 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
     }
 
     recoverLedSpaces(): void {
-        this.store.dispatch(new SetUserConfigurationValueAction({
-            propertyName: 'backlightingMode',
-            value: BacklightingMode.FunctionalBacklighting
-        }));
+        this.store.dispatch(new RecoverLEDSpacesAction());
     }
 }

@@ -31,6 +31,7 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     backlightingMacroColor: RgbColorInterface;
 
     backlightingOptions: Array<BacklightingOption>;
+    ledsFadeTimeout = 0;
 
     public iconsAndLayerTextsBrightness: number = 0;
     public alphanumericSegmentsBrightness: number = 0;
@@ -56,6 +57,7 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
             this.iconsAndLayerTextsBrightness = config.iconsAndLayerTextsBrightness;
             this.alphanumericSegmentsBrightness = config.alphanumericSegmentsBrightness;
             this.keyBacklightBrightness = config.keyBacklightBrightness;
+            this.ledsFadeTimeout = config.ledsFadeTimeout;
             this.backlightingMode = config.backlightingMode;
             this.backlightingNoneActionColor = config.backlightingNoneActionColor.toJsonObject();
             this.backlightingScancodeColor = config.backlightingScancodeColor.toJsonObject();
@@ -78,6 +80,21 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
         this.userConfigSubscription.unsubscribe();
         if (this.backlightingOptionsSubscription) {
             this.backlightingOptionsSubscription.unsubscribe();
+        }
+    }
+
+    onLedsFadeTimeoutChange(value: number, control: HTMLInputElement): void {
+        if (value < 0) {
+            value = 0;
+        }
+
+        if (value > 65535) {
+            value = 65535;
+        }
+
+        control.value = value.toString(10);
+        if (value !== this.ledsFadeTimeout) {
+            this.onSetPropertyValue('ledsFadeTimeout', value);
         }
     }
 

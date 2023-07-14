@@ -26,7 +26,8 @@ export enum ActionTypes {
     SetUserConfigurationValue = '[user-config] Set user configuration value',
     LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
     ApplyUserConfigurationFromFile = '[user-config] Apply user configuration from file',
-    PreviewUserConfiguration = '[user-config] Preview user configuration'
+    PreviewUserConfiguration = '[user-config] Preview user configuration',
+    RecoverLEDSpaces = '[user-config] recover LED spaces',
 }
 
 export class AddColorToBacklightingColorPaletteAction implements Action {
@@ -136,6 +137,10 @@ export class ApplyUserConfigurationFromFileAction implements Action {
     }
 }
 
+export class RecoverLEDSpacesAction implements Action {
+    type = ActionTypes.RecoverLEDSpaces;
+}
+
 export type Actions
     = AddColorToBacklightingColorPaletteAction
     | DeleteColorFromBacklightingColorPaletteAction
@@ -154,4 +159,5 @@ export type Actions
     | ToggleColorFromBacklightingColorPaletteAction
     | LoadUserConfigurationFromFileAction
     | ApplyUserConfigurationFromFileAction
+    | RecoverLEDSpacesAction
     ;
