@@ -1,4 +1,4 @@
-import { copy } from 'fs-extra';
+import { cp } from 'fs/promises';
 import path from 'path';
 import { LogService } from 'uhk-common';
 import {getFirmwarePackageJson,TmpFirmware} from 'uhk-usb';
@@ -22,7 +22,7 @@ export async function copySmartMacroDocToWebserver(firmwarePath: TmpFirmware, lo
         smartMacroDocFirmwarePath
     });
 
-    await copy(smartMacroDocFirmwarePath, destination);
+    await cp(smartMacroDocFirmwarePath, destination, { force: true, recursive: true });
 
     logger.misc('[SmartMacroCopy] done');
 }
