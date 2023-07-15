@@ -24,6 +24,7 @@ import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../..
 import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 59;
+const MONACO_EDITOR_LF_END_OF_LINE_OPTION = 0;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
@@ -144,6 +145,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
         this.editor = editor;
+        this.setLFEndOfLineOption();
         if (this.autoFocus) {
             this.editor.focus();
             this.isFocused = true;
@@ -323,5 +325,18 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private setMacroCommand(data: string): void {
         this.insertingMacro = true;
         this.writeValue(data?.trim());
+    }
+
+    private setLFEndOfLineOption(): void {
+        if (!this.editor) {
+            return;
+        }
+
+        // setTimeout needed because otherwise the editor not recognize the new EOL option
+        // when the editor first created. So if macro command has CRLF and the user modify the macro command
+        // then the editor keep the CRLF option and not the LF option
+        setTimeout(() => {
+            this.editor.getModel().setEOL(MONACO_EDITOR_LF_END_OF_LINE_OPTION);
+        }, 1);
     }
 }
