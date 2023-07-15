@@ -194,6 +194,7 @@ export class MapperService {
         } else if (this.operatingSystem === OperatingSystem.Windows) {
             this.osSpecificTexts.set('LSuper', 'LWin');
             this.osSpecificTexts.set('RSuper', 'RWin');
+            this.osSpecificTexts.set('RAlt', 'RAlt(Gr)');
         }
     }
 
