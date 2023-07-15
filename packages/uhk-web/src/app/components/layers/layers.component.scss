@@ -14,31 +14,43 @@
         }
     }
 
-    .group-container {
-        display: inline-block;
-        padding-bottom: 0.25em;
-        padding-top: 0.25em;
+    .layer-header-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5em;
 
-        .group-title {
-            display: inline-block;
-            font-size: 18px;
-            padding-left: 0.45em;
-            padding-right: 0.45em;
-            margin: 0;
+        .group-container {
+            display: inline-flex;
+            gap: 0.5em;
+            max-width: 100%;
+
+            .group-title {
+                display: inline-block;
+                align-self: center;
+                font-size: 18px;
+            }
+
+            .btn-group {
+                flex-wrap: wrap;
+                .btn {
+                    flex-grow: 0;
+                }
+            }
         }
-    }
 
-    .add-new-color-button {
-        position: relative;
+        .add-new-color-button {
+            position: relative;
 
-        input[type=color] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+            input[type=color] {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+            }
         }
     }
 }

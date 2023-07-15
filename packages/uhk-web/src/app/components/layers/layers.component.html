@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="layer-header-container">
     <div class="group-container">
         <span class="group-title">Layers: </span>
         <div role="group" class="btn-group btn-group-lg">
@@ -59,6 +59,7 @@
                     ngbTooltip="Delete the current color from the palette."
                     container="body"
                     mwlConfirmationPopover
+                    appendToBody="true"
                     popoverTitle="Are you sure to delete the current color from the palette?"
                     placement="bottom"
                     confirmText="Yes"
@@ -68,5 +69,12 @@
                 <fa-icon [icon]="faTrash"></fa-icon>
             </button>
         </div>
+        <ng-template #colorPaletteTooltip>
+            <p>TODO: @Laci</p>
+        </ng-template>
+        <icon name="question-circle"
+              [ngbTooltip]="colorPaletteTooltip"
+              placement="bottom"></icon>
+
     </div>
 </div>
