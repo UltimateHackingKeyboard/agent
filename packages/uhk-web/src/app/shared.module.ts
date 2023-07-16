@@ -10,6 +10,7 @@ import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from 'ng2-dragula';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
@@ -258,6 +259,7 @@ import appInitFactory from './services/app-init-factory';
     imports: [
         AngularResizeEventModule,
         AngularSplitModule,
+        ColorPickerModule,
         CommonModule,
         BrowserAnimationsModule,
         FontAwesomeModule,

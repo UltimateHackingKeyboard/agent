@@ -29,6 +29,7 @@ export class LayersComponent {
     faCheck = faCheck;
     faPlus = faPlus;
     faTrash = faTrash;
+    newColorPaletteColor = '#000000';
 
     selectLayer(option: LayerOption) {
         if (this.current?.id === option.id) {
@@ -58,8 +59,7 @@ export class LayersComponent {
         this.deleteColorFromPalette.emit();
     }
 
-    onAddColor(event: Event): void {
-        const target = <HTMLInputElement>event.target;
-        this.addColorToPalette.emit(colord(target.value).toRgb());
+    onAddColor(value: string): void {
+        this.addColorToPalette.emit(colord(value).toRgb());
     }
 }
