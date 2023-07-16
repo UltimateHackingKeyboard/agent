@@ -1181,7 +1181,7 @@ function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, lay
     const themeColors = uhkThemeColors(theme);
 
     if (backligtingMode === BacklightingMode.PerKeyBacklighting) {
-        const fillColord = colord('#ffffff');
+        const fillColord = colord('#cccccc');
 
         layer.svgKeyboardCoverColors = {
             fillColor: fillColord.toHex(),
