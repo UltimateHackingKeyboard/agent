@@ -362,15 +362,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                 switch (keyAction.modifierMask) {
                     case KeyModifiers.leftCtrl:
                     case KeyModifiers.rightCtrl:
-                        this.labelSource = ['Ctrl'];
-                        break;
                     case KeyModifiers.leftShift:
                     case KeyModifiers.rightShift:
-                        this.labelSource = ['Shift'];
-                        break;
                     case KeyModifiers.leftAlt:
                     case KeyModifiers.rightAlt:
-                        this.labelSource = [this.mapper.getOsSpecificText('Alt')];
+                        this.labelSource = [this.mapper.getOsSpecificText(keyAction.modifierMask)];
                         break;
                     case KeyModifiers.leftGui:
                     case KeyModifiers.rightGui:
@@ -378,7 +374,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
                             this.labelSource = this.mapper.getIcon('command');
                             this.labelType = LabelTypes.SingleIcon;
                         } else {
-                            this.labelSource = [this.mapper.getOsSpecificText('Super')];
+                            this.labelSource = [this.mapper.getOsSpecificText(keyAction.modifierMask)];
                         }
                         break;
                     default:
