@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { KeyAction, Macro, PlayMacroAction } from 'uhk-common';
+import { copyRgbColor, KeyAction, Macro, PlayMacroAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 
@@ -68,6 +68,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         }
 
         const keymapAction = new PlayMacroAction();
+        copyRgbColor(this.defaultKeyAction, keymapAction);
         keymapAction.macroId = this.macros[this.selectedMacroIndex].id;
         return keymapAction;
     }

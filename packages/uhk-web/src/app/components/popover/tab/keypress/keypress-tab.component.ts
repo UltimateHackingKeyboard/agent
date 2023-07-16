@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
+import { copyRgbColor, KeyAction, KeystrokeAction, KeystrokeType, SCANCODES, SecondaryRoleAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { MapperService } from '../../../../services/mapper.service';
@@ -148,6 +148,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
     toKeyAction(): KeystrokeAction {
         const keystrokeAction: KeystrokeAction = new KeystrokeAction();
+        copyRgbColor(this.defaultKeyAction, keystrokeAction);
         const scTypePair = this.toScancodeTypePair(this.selectedScancodeOption);
         keystrokeAction.scancode = scTypePair[0];
         if (scTypePair[1] === 'media') {

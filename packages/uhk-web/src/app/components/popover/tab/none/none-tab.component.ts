@@ -1,4 +1,6 @@
+import { Input } from '@angular/core';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { copyRgbColor, KeyAction, NoneAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 
@@ -9,6 +11,7 @@ import { Tab } from '../tab';
     styleUrls: ['./none-tab.component.scss']
 })
 export class NoneTabComponent extends Tab implements OnInit {
+    @Input() defaultKeyAction: KeyAction;
 
     ngOnInit() {
         this.validAction.emit(true);
@@ -22,8 +25,11 @@ export class NoneTabComponent extends Tab implements OnInit {
         return false;
     }
 
-    toKeyAction(): undefined {
-        return undefined;
+    toKeyAction(): NoneAction {
+        const keyAction = new NoneAction();
+        copyRgbColor(this.defaultKeyAction, keyAction);
+
+        return keyAction;
     }
 
 }

@@ -52,6 +52,7 @@
                     (validAction)="setKeyActionValidState($event)"
         ></keymap-tab>
         <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"
+                  [defaultKeyAction]="defaultKeyAction"
                   (validAction)="setKeyActionValidState($event)"
         ></none-tab>
     </div>
