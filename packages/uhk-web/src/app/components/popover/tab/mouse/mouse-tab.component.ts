@@ -10,7 +10,7 @@ import {
     faArrowUp,
     faSquare
 } from '@fortawesome/free-solid-svg-icons';
-import { KeyAction, MouseAction, MouseActionParam } from 'uhk-common';
+import { copyRgbColor, KeyAction, MouseAction, MouseActionParam } from 'uhk-common';
 
 import { Tab } from '../tab';
 
@@ -101,6 +101,7 @@ export class MouseTabComponent extends Tab implements OnChanges {
 
     toKeyAction(): MouseAction {
         const mouseAction: MouseAction = new MouseAction();
+        copyRgbColor(this.defaultKeyAction, mouseAction);
         mouseAction.mouseAction = this.mouseActionParam;
         return mouseAction;
     }

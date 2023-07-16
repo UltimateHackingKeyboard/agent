@@ -66,6 +66,15 @@ enum LabelTypes {
 
 @Component({
     animations: [
+        trigger('blink', [
+            state('start', style({
+                fill: '{{startColor}}'
+            }), { params: { startColor: '#ffffff' } }),
+            state('end', style({
+                fill: '{{endColor}}'
+            }), { params: { endColor: '#333333' } }),
+            transition('start => end', animate('1000ms  ease-out'))
+        ]),
         trigger('recording', [
             state('inactive', style({
                 fill: 'rgba(204, 0, 0, 1)'
@@ -94,6 +103,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @ViewChild('svgRec', { static: false }) svgRec: ElementRef<HTMLElement>;
 
+    blinkAnimation: 'start' | 'end' = 'end';
     enumLabelTypes = LabelTypes;
     fillColor = '#333';
     strokeColor = '';
@@ -270,6 +280,10 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    onBlinkAnimationDone() {
+        this.blinkAnimation = 'end';
+    }
+
     onRecordingAnimationDone() {
         if (this.recording && this.recordAnimation === 'inactive') {
             this.recordAnimation = 'active';
@@ -427,14 +441,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     }
 
     private blinkSvgRec(): void {
-        if (this.svgRec) {
-            this.svgRec.nativeElement.classList.remove('blink');
-            setTimeout(() => {
-                if (this.svgRec) {
-                    this.svgRec.nativeElement.classList.add('blink');
-                }
-            }, 10);
-        }
+        this.blinkAnimation = 'start';
     }
 
     private setColors(): void {

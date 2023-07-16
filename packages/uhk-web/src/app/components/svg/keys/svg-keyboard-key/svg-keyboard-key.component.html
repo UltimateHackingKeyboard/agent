@@ -1,6 +1,8 @@
 <svg:rect #svgRec
           *ngIf="svgKey.type === 'rec'"
           class="svg-rec"
+          [@blink]="{ value: blinkAnimation, params: { startColor: textColor, endColor: fillColor } }"
+          (@blink.done)="onBlinkAnimationDone()"
           [id]="svgKey.id"
           [attr.fill]="fillColor"
           [attr.rx]="svgKey.rx"

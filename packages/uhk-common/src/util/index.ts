@@ -1,5 +1,6 @@
 export { IpcEvents } from './ipcEvents.js';
 export * from './constants.js';
+export * from './copy-rgb-color.js';
 export * from './create-md5-hash.js';
 export * from './date-formatter.js';
 export * from './disable-agent-upgrade-protection.js';

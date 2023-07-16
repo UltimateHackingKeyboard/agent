@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Keymap, KeyAction, SwitchKeymapAction } from 'uhk-common';
+import { copyRgbColor, Keymap, KeyAction, SwitchKeymapAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { SelectOptionData } from '../../../../models/select-option-data';
@@ -61,6 +61,7 @@ export class KeymapTabComponent extends Tab implements OnChanges {
         }
 
         const keymapAction = new SwitchKeymapAction();
+        copyRgbColor(this.defaultKeyAction, keymapAction);
         keymapAction.keymapAbbreviation = this.selectedKeymap.abbreviation;
         return keymapAction;
     }

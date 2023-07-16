@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode } from 'uhk-common';
+import { copyRgbColor, KeyAction, LayerName, SwitchLayerAction, SwitchLayerMode } from 'uhk-common';
 
 import { Tab } from '../tab';
 import { LayerOption } from '../../../../models';
@@ -94,6 +94,7 @@ export class LayerTabComponent extends Tab implements OnChanges {
 
     toKeyAction(): SwitchLayerAction {
         const keyAction = new SwitchLayerAction();
+        copyRgbColor(this.defaultKeyAction, keyAction);
         if (this.toggle === 'toggle') {
             keyAction.switchLayerMode = SwitchLayerMode.toggle;
         } else if (!this.allowLayerDoubleTap || this.lockLayerWhenDoubleTapping) {
