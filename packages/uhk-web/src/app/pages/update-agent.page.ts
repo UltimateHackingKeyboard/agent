@@ -11,9 +11,7 @@ import { ForceUpdateAction } from '../store/actions/app-update.action';
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div class="uhk-message-wrapper">
-            <img class="agent-logo"
-                 src="assets/images/agent-icon.svg"
-                 alt="UHK Agent icon"/>
+            <uhk-agent-icon class="agent-logo"></uhk-agent-icon>
             <div>
                 <h1>Update Agent</h1>
                 <p>Your UHK contains a newer configuration version than this Agent version can handle, so you
