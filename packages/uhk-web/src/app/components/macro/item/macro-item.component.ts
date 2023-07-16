@@ -206,7 +206,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
             // Tap/press/release modifiers
             for (let i = KeyModifiers.leftCtrl; i <= KeyModifiers.rightGui; i <<= 1) {
                 if (action.isModifierActive(i)) {
-                    texts.push(this.mapper.getOsSpecificText(this.mapper.getOsSpecificModifierTextByValue(i)));
+                    texts.push(this.mapper.getOsSpecificText(i));
                 }
             }
         }
