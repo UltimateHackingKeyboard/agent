@@ -7,6 +7,12 @@ import { AppState, getOperatingSystem } from '../store';
 import { OperatingSystem } from '../models/operating-system';
 import { KeyModifierModel } from '../models/key-modifier-model';
 
+export enum OsSpecificKeys {
+    Enter = 'Enter',
+}
+
+export type OsSpecificTexts = OsSpecificKeys | KeyModifiers;
+
 @Injectable()
 export class MapperService {
 
@@ -18,7 +24,7 @@ export class MapperService {
     private mediaScancodeIcons: Map<number, string>;
     private systemScancodeIcons: Map<number, string>;
     private nameToFileName: Map<string, string>;
-    private osSpecificTexts: Map<string, string>;
+    private osSpecificTexts: Map<OsSpecificTexts, string>;
     private secondaryRoleTexts: Map<number, string>;
 
     private operatingSystem: OperatingSystem;
@@ -113,10 +119,10 @@ export class MapperService {
         return this.operatingSystem;
     }
 
-    public getOsSpecificText(key: string): string {
+    public getOsSpecificText(key: OsSpecificTexts): string {
         const text = this.osSpecificTexts.get(key);
 
-        return text ? text : key;
+        return text ? text : key.toString();
     }
 
     public getSecondaryRoleText(secondaryRoleAction: SecondaryRoleAction): string {
@@ -126,22 +132,22 @@ export class MapperService {
     public getLeftKeyModifiers(): KeyModifierModel[] {
         return [
             {
-                text: 'LShift',
+                text: this.getOsSpecificText(KeyModifiers.leftShift),
                 value: KeyModifiers.leftShift,
                 checked: false
             },
             {
-                text: 'LCtrl',
+                text: this.getOsSpecificText(KeyModifiers.leftCtrl),
                 value: KeyModifiers.leftCtrl,
                 checked: false
             },
             {
-                text: this.getOsSpecificText('LAlt'),
+                text: this.getOsSpecificText(KeyModifiers.leftAlt),
                 value: KeyModifiers.leftAlt,
                 checked: false
             },
             {
-                text: this.getOsSpecificText('LSuper'),
+                text: this.getOsSpecificText(KeyModifiers.leftGui),
                 value: KeyModifiers.leftGui,
                 checked: false
             }
@@ -151,50 +157,51 @@ export class MapperService {
     public getRightKeyModifiers(): KeyModifierModel[] {
         return [
             {
-                text: 'RShift',
+                text: this.getOsSpecificText(KeyModifiers.rightShift),
                 value: KeyModifiers.rightShift,
                 checked: false
             },
             {
-                text: 'RCtrl',
+                text: this.getOsSpecificText(KeyModifiers.rightCtrl),
                 value: KeyModifiers.rightCtrl,
                 checked: false
             },
             {
-                text: this.getOsSpecificText('RAlt'),
+                text: this.getOsSpecificText(KeyModifiers.rightAlt),
                 value: KeyModifiers.rightAlt,
                 checked: false
             },
             {
-                text: this.getOsSpecificText('RSuper'),
+                text: this.getOsSpecificText(KeyModifiers.rightGui),
                 value: KeyModifiers.rightGui,
                 checked: false
             }
         ];
     }
 
-    public getOsSpecificModifierTextByValue(value: KeyModifiers): string {
-        const keyModifier = [...this.getLeftKeyModifiers(), ...this.getRightKeyModifiers()]
-            .find(modifier => modifier.value === value);
-
-        return (keyModifier || {text: ''}).text;
-    }
-
     private initOsSpecificText(): void {
-        this.osSpecificTexts = new Map<string, string>();
+        this.osSpecificTexts = new Map<KeyModifiers, string>();
+        this.osSpecificTexts.set(KeyModifiers.leftShift, 'LShift');
+        this.osSpecificTexts.set(KeyModifiers.leftCtrl, 'LCtrl');
+        this.osSpecificTexts.set(KeyModifiers.leftAlt, 'LAlt');
+        this.osSpecificTexts.set(KeyModifiers.leftGui, 'LSuper');
+
+        this.osSpecificTexts.set(KeyModifiers.rightShift, 'RShift');
+        this.osSpecificTexts.set(KeyModifiers.rightCtrl, 'RCtrl');
+        this.osSpecificTexts.set(KeyModifiers.rightAlt, 'RAlt(Gr)');
+        this.osSpecificTexts.set(KeyModifiers.rightGui, 'RSuper');
+
+        this.osSpecificTexts.set(OsSpecificKeys.Enter, 'Enter');
 
         if (this.operatingSystem === OperatingSystem.Mac) {
-            this.osSpecificTexts.set('Enter', 'Return');
-            this.osSpecificTexts.set('Alt', 'Option');
-            this.osSpecificTexts.set('Super', 'Cmd');
-            this.osSpecificTexts.set('LSuper', 'LCmd');
-            this.osSpecificTexts.set('RSuper', 'RCmd');
-            this.osSpecificTexts.set('LAlt', 'LOption');
-            this.osSpecificTexts.set('RAlt', 'ROption');
+            this.osSpecificTexts.set(OsSpecificKeys.Enter, 'Return');
+            this.osSpecificTexts.set(KeyModifiers.leftGui, 'LCmd');
+            this.osSpecificTexts.set(KeyModifiers.rightGui, 'RCmd');
+            this.osSpecificTexts.set(KeyModifiers.leftAlt, 'LOption');
+            this.osSpecificTexts.set(KeyModifiers.rightAlt, 'ROption');
         } else if (this.operatingSystem === OperatingSystem.Windows) {
-            this.osSpecificTexts.set('LSuper', 'LWin');
-            this.osSpecificTexts.set('RSuper', 'RWin');
-            this.osSpecificTexts.set('RAlt', 'RAlt(Gr)');
+            this.osSpecificTexts.set(KeyModifiers.leftGui, 'LWin');
+            this.osSpecificTexts.set(KeyModifiers.rightGui, 'RWin');
         }
     }
 
@@ -237,7 +244,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(37, ['8', '*']);
         this.basicScanCodeTextMap.set(38, ['9', '(']);
         this.basicScanCodeTextMap.set(39, ['0', ')']);
-        this.basicScanCodeTextMap.set(40, [this.getOsSpecificText('Enter')]);
+        this.basicScanCodeTextMap.set(40, [this.getOsSpecificText(OsSpecificKeys.Enter)]);
         this.basicScanCodeTextMap.set(41, ['Esc']);
         this.basicScanCodeTextMap.set(42, ['Backspace']);
         this.basicScanCodeTextMap.set(43, ['Tab']);
@@ -285,7 +292,7 @@ export class MapperService {
         this.basicScanCodeTextMap.set(85, ['Np *']);
         this.basicScanCodeTextMap.set(86, ['Np -']);
         this.basicScanCodeTextMap.set(87, ['Np +']);
-        this.basicScanCodeTextMap.set(88, [`Np ${this.getOsSpecificText('Enter')}`]);
+        this.basicScanCodeTextMap.set(88, [`Np ${this.getOsSpecificText(OsSpecificKeys.Enter)}`]);
         this.basicScanCodeTextMap.set(89, ['Np 1', 'End']);
         this.basicScanCodeTextMap.set(90, ['Np 2', 'icon-kbd__mod--arrow-down']);
         this.basicScanCodeTextMap.set(91, ['Np 3', 'PgDn']);
@@ -407,14 +414,14 @@ export class MapperService {
 
     private initSecondaryRoleTexts(): void {
         this.secondaryRoleTexts = new Map<number, string>();
-        this.secondaryRoleTexts.set(SecondaryRoleAction.leftCtrl, this.getOsSpecificText('LCtrl'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.leftShift, this.getOsSpecificText('LShift'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.leftAlt, this.getOsSpecificText('LAlt'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.leftSuper, this.getOsSpecificText('LSuper'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.rightCtrl, this.getOsSpecificText('RCtrl'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.rightShift, this.getOsSpecificText('RShift'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.rightAlt, this.getOsSpecificText('RAlt'));
-        this.secondaryRoleTexts.set(SecondaryRoleAction.rightSuper, this.getOsSpecificText('RSuper'));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftCtrl, this.getOsSpecificText(KeyModifiers.leftCtrl));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftShift, this.getOsSpecificText(KeyModifiers.leftShift));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftAlt, this.getOsSpecificText(KeyModifiers.leftAlt));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.leftSuper, this.getOsSpecificText(KeyModifiers.leftGui));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightCtrl, this.getOsSpecificText(KeyModifiers.rightCtrl));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightShift, this.getOsSpecificText(KeyModifiers.rightShift));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightAlt, this.getOsSpecificText(KeyModifiers.rightAlt));
+        this.secondaryRoleTexts.set(SecondaryRoleAction.rightSuper, this.getOsSpecificText(KeyModifiers.rightGui));
         this.secondaryRoleTexts.set(SecondaryRoleAction.mod, 'Mod');
         this.secondaryRoleTexts.set(SecondaryRoleAction.fn, 'Fn');
         this.secondaryRoleTexts.set(SecondaryRoleAction.mouse, 'Mouse');

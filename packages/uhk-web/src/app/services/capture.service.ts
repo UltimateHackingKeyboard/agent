@@ -45,43 +45,43 @@ export class CaptureService {
 
     public initModifiers() {
         this.leftModifiers.set(Key.Shift, {
-            text: 'LShift',
+            text: this.mapper.getOsSpecificText(KeyModifiers.leftShift),
             value: KeyModifiers.leftShift,
             checked: false
         });
         this.leftModifiers.set(Key.Ctrl, {
-            text: 'LCtrl',
+            text: this.mapper.getOsSpecificText(KeyModifiers.leftCtrl),
             value: KeyModifiers.leftCtrl,
             checked: false
         });
         this.leftModifiers.set(Key.Alt, {
-            text: this.mapper.getOsSpecificText('LAlt'),
+            text: this.mapper.getOsSpecificText(KeyModifiers.leftAlt),
             value: KeyModifiers.leftAlt,
             checked: false
         });
         this.leftModifiers.set(Key.LeftWindowKey, {
-            text: this.mapper.getOsSpecificText('LSuper'),
+            text: this.mapper.getOsSpecificText(KeyModifiers.leftGui),
             value: KeyModifiers.leftGui,
             checked: false
         });
 
         this.rightModifiers.set(Key.Shift, {
-            text: 'RShift',
+            text: this.mapper.getOsSpecificText(KeyModifiers.rightShift),
             value: KeyModifiers.rightShift,
             checked: false
         });
         this.rightModifiers.set(Key.Ctrl, {
-            text: 'RCtrl',
+            text: this.mapper.getOsSpecificText(KeyModifiers.rightCtrl),
             value: KeyModifiers.rightCtrl,
             checked: false
         });
         this.rightModifiers.set(Key.Alt, {
-            text: this.mapper.getOsSpecificText('RAlt'),
+            text: this.mapper.getOsSpecificText(KeyModifiers.rightAlt),
             value: KeyModifiers.rightAlt,
             checked: false
         });
         this.rightModifiers.set(Key.LeftWindowKey, {
-            text: this.mapper.getOsSpecificText('RSuper'),
+            text: this.mapper.getOsSpecificText(KeyModifiers.rightGui),
             value: KeyModifiers.rightGui,
             checked: false
         });
