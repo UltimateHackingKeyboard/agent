@@ -87,6 +87,7 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgSpriteImage } from './components/svg/svg-sprite-image';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
+import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.component';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
 import { SafeStylePipe, SafeUrlPipe, UserConfigHistoryDisplayTextPipe } from './pipes';
@@ -223,6 +224,7 @@ import appInitFactory from './services/app-init-factory';
         AutoUpdateSettings,
         UndoableNotifierComponent,
         UhkHeader,
+        UhkAgentIconComponent,
         UhkProgressBarComponent,
         UpdateAvailableComponent,
         UhkMessageComponent,

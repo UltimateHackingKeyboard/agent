@@ -1,9 +1,8 @@
 <div class="uhk-message-wrapper">
-    <img *ngIf="showLogo"
-         class="agent-logo spin-logo"
-         [ngClass]="{'spin-logo': rotateLogo}"
-         src="assets/images/agent-icon.svg"
-         alt="UHK Agent icon"/>
+    <uhk-agent-icon *ngIf="showLogo"
+         class="agent-logo"
+         [ngClass]="{'spin-logo': rotateLogo}">
+    </uhk-agent-icon>
     <div class="messages">
         <h1> {{ header }} </h1>
         <h2 *ngIf="!smallText"> {{ subtitle }} </h2>
