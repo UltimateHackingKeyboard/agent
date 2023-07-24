@@ -71,6 +71,7 @@ export class MacroTextTabComponent extends MacroBaseComponent implements OnInit,
         const correction = end === 0 ? 0 : 1;
         textarea.selectionStart = textarea.selectionEnd = end + text.length - correction;
         this.macroAction.text = textarea.value;
+        this.valid.emit(this.isMacroValid());
     }
 
     isMacroValid = () => !!this.input.nativeElement.value && !hasNonAsciiCharacters(this.input.nativeElement.value);
