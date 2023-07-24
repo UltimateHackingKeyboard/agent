@@ -792,8 +792,10 @@ export function reducer(
             const payload = (action as UserConfig.SetUserConfigurationValueAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration[payload.propertyName] = payload.value;
+            let selectedBacklightingColorIndex = state.selectedBacklightingColorIndex;
 
             if (payload.propertyName === 'backlightingMode') {
+                selectedBacklightingColorIndex = -1;
                 if (payload.value === BacklightingMode.PerKeyBacklighting) {
                     userConfiguration.perKeyRgbPresent = true;
                 }
@@ -802,6 +804,7 @@ export function reducer(
 
             return {
                 ...state,
+                selectedBacklightingColorIndex,
                 userConfiguration
             };
         }
