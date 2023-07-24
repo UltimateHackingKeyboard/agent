@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { colord, } from 'colord';
 import { RgbColorInterface } from 'uhk-common';
 
-import { getColorsOf } from '../../../util/get-colors-of';
+import { Colors, getColorsOf } from '../../../util/get-colors-of';
 
 @Component({
     selector: 'functional-backlight-color',
@@ -10,24 +10,34 @@ import { getColorsOf } from '../../../util/get-colors-of';
     templateUrl: 'functional-backlight-color.component.html',
     styleUrls: ['./functional-backlight-color.component.scss']
 })
-export class FunctionalBacklightColorComponent {
+export class FunctionalBacklightColorComponent implements OnChanges {
     @Input() color: RgbColorInterface;
     @Input() label: string;
 
     @Output() colorChanged = new EventEmitter<RgbColorInterface>();
 
-    onColorChanged(event: Event) {
-        const element = <HTMLInputElement>event.target;
-        this.colorChanged.emit(colord(element.value).toRgb());
+    colors: Colors;
+
+    tmpHexColor: string;
+
+    onColorChanged(value: string) {
+        this.colorChanged.emit(colord(value).toRgb());
     }
 
     @HostBinding('style.background-color')
     get getHex(): string {
-        return getColorsOf(this.color).backgroundColorAsHex;
+        return this.colors.backgroundColorAsHex;
     }
 
     @HostBinding('style.color')
     get colorHex(): string {
-        return getColorsOf(this.color).fontColorAsHex;
+        return this.colors.fontColorAsHex;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.color) {
+            this.colors = getColorsOf(this.color);
+            this.tmpHexColor = this.colors.fontColorAsHex;
+        }
     }
 }
