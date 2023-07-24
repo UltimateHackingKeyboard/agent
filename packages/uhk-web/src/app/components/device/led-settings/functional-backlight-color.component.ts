@@ -39,7 +39,7 @@ export class FunctionalBacklightColorComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.color) {
             this.colors = getColorsOf(this.color);
-            this.tmpHexColor = this.colors.fontColorAsHex;
+            this.tmpHexColor = this.colors.backgroundColorAsHex;
         }
     }
 }

@@ -2,9 +2,7 @@
 @import '../../../../styles/variables';
 
 :host {
-    display: block;
-    overflow-y: auto;
-    height: 100%;
+    display: inline-block;
     width: 100%;
     --slider-value-width: 35px;
 
