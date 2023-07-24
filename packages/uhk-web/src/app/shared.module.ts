@@ -10,6 +10,7 @@ import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from 'ng2-dragula';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
@@ -87,6 +88,7 @@ import { SvgModuleComponent } from './components/svg/module';
 import { SvgSpriteImage } from './components/svg/svg-sprite-image';
 import { SvgKeyboardWrapComponent } from './components/svg/wrap';
 import { appRoutingProviders, routing } from './app.routes';
+import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.component';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
 import { SafeStylePipe, SafeUrlPipe, UserConfigHistoryDisplayTextPipe } from './pipes';
@@ -223,6 +225,7 @@ import appInitFactory from './services/app-init-factory';
         AutoUpdateSettings,
         UndoableNotifierComponent,
         UhkHeader,
+        UhkAgentIconComponent,
         UhkProgressBarComponent,
         UpdateAvailableComponent,
         UhkMessageComponent,
@@ -258,6 +261,7 @@ import appInitFactory from './services/app-init-factory';
     imports: [
         AngularResizeEventModule,
         AngularSplitModule,
+        ColorPickerModule,
         CommonModule,
         BrowserAnimationsModule,
         FontAwesomeModule,

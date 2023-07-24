@@ -19,14 +19,14 @@
         padding: 0;
         width: 100%;
 
-        input[type=color] {
+        input {
             cursor: pointer;
             opacity: 0;
             position: absolute;
             top: 0;
-            left: 50%;
-            width: 50%;
-            height: 50%;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
     }
 }
