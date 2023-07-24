@@ -18,6 +18,8 @@ export class FunctionalBacklightColorComponent implements OnChanges {
 
     colors: Colors;
 
+    // We need this because of the color picker need a property to apply the 2 way data binding.
+    // Otherwise, the color picker will not work.
     tmpHexColor: string;
 
     onColorChanged(value: string) {
