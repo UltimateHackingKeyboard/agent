@@ -1,4 +1,13 @@
 <label>
     {{label}}
-    <input type="color" [value]="getHex" (change)="onColorChanged($event)">
+    <input [(colorPicker)]="this.tmpHexColor"
+           (colorPickerSelect)="onColorChanged($event)"
+           cpOutputFormat="hex"
+           [cpSaveClickOutside]="false"
+           [cpEyeDropper]="true"
+           [cpOKButton]="true"
+           cpOKButtonClass="btn btn-primary"
+           [cpCancelButton]="true"
+           cpCancelButtonClass="btn btn-default"
+          >
 </label>

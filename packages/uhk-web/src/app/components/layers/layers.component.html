@@ -49,9 +49,17 @@
                     type="button"
                     class="btn btn-default add-new-color-button"
                     ngbTooltip="Add a new color to the palette."
+                    [(colorPicker)]="newColorPaletteColor"
+                    (colorPickerSelect)="onAddColor($event)"
+                    cpOutputFormat="hex"
+                    [cpSaveClickOutside]="false"
+                    [cpEyeDropper]="true"
+                    [cpOKButton]="true"
+                    cpOKButtonClass="btn btn-primary"
+                    [cpCancelButton]="true"
+                    cpCancelButtonClass="btn btn-default"
                     >
                 <fa-icon [icon]="faPlus"></fa-icon>
-                <input type="color" (change)="onAddColor($event)">
             </button>
             <button *ngIf="selectedPaletteColorIndex > -1"
                     type="button"
