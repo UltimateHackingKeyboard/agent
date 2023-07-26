@@ -6,6 +6,20 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.0.1] - 2023-07-26
+
+Firmware: 10.**1.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.1.0)] | Device Protocol: 4.9.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
+
+- Break the color palette into multiple lines if it doesn't fit in a single line.
+- Add Cancel and Ok buttons to the color picker.
+- When remapping a key, keep its color.
+- Use LF consistently as a line separator in macro commands.
+- Prefix modifiers with L or R, and display RAlt as RAlt(Gr).
+- Use light gray case color for the keyboard case when in per-key RGB mode, which is more pleasant to the eyes.
+- Fix the color of the rotating Agent icon on the loading page to be higher contrast in dark mode.
+- Disable painting mode when switching to functional backlighting mode.
+- Make new macro text actions savable after pasting text.
+
 ## [3.0.0] - 2023-07-11
 
 Firmware: **10.0.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.0.0)] | Device Protocol: 4.9.0 | User Config: **6.0.0** | Hardware Config: 1.0.0
