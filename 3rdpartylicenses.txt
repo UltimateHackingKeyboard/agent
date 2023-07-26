@@ -1451,6 +1451,9 @@ SOFTWARE.
 ngx-clipboard
 MIT
 
+ngx-color-picker
+MIT
+
 ngx-select-ex
 MIT
 The MIT License (MIT)
