@@ -135,7 +135,8 @@ export class ApplicationEffects {
                 DeviceActionTypes.SaveConfiguration,
                 SmartMacroDocActionTypes.PanelSizeChanged,
                 UserConfigActionTypes.AddColorToBacklightingColorPalette,
-                UserConfigActionTypes.DeleteColorFromBacklightingColorPalette
+                UserConfigActionTypes.DeleteColorFromBacklightingColorPalette,
+                UserConfigActionTypes.ModifyColorOfBacklightingColorPalette
             ),
             withLatestFrom(this.store.select(getApplicationSettings)),
             map(([, config]) => config),

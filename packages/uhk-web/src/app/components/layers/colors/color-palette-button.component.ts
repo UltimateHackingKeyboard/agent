@@ -1,16 +1,46 @@
-import { Directive, ElementRef, Input, HostBinding, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostBinding,
+    HostListener,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { colord } from 'colord';
+import { ColorPickerDirective } from 'ngx-color-picker';
 import { RgbColorInterface } from 'uhk-common';
 
 import { getColorsOf } from '../../../util/get-colors-of';
 
-@Directive({
-    selector: '[coloredButton]',
+@Component({
+    selector: 'color-palette-button',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: 'color-palette-button.component.html',
+    host: {
+        class: "btn btn-default",
+        tabindex: '0',
+        type: "button",
+    },
 })
-export class ColoredButtonDirective implements OnChanges {
+export class ColorPaletteButtonComponent implements OnChanges {
     @Input() color: RgbColorInterface;
     @Input() selected: boolean;
     @Input() selectedPaletteColorIndex: number;
+
+    @Output() modifyColor = new EventEmitter<RgbColorInterface>();
+
+    @ViewChild(ColorPickerDirective) colorPicker: ColorPickerDirective;
+
+    colorPickerDisabled = true;
+    editColor = '#000000';
+    faCheck = faCheck;
 
     private mouseIn = false;
 
@@ -23,20 +53,19 @@ export class ColoredButtonDirective implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        if (changes.color) {
+            this.editColor = colord(this.color).toHex();
+        }
+
         if (changes.selected) {
             this.updateTooltipText();
         }
 
         if (changes.selectedPaletteColorIndex) {
-            if (this.selected) {
-                this.tooltip.placement = 'top';
-            } else if (this.selectedPaletteColorIndex > -1) {
-                this.tooltip.placement = 'bottom';
-            } else {
-                this.tooltip.placement = 'top';
-            }
+            this.setTooltipPlacement();
         }
     }
+
     @HostBinding('style.backgroundColor')
     get bgColor(): string {
         if (!this.color) {
@@ -76,10 +105,21 @@ export class ColoredButtonDirective implements OnChanges {
         }
     }
 
+    @HostListener('contextmenu', ['$event'])
+    onContextmenu(event: MouseEvent): void {
+        event.preventDefault();
+        this.colorPickerDisabled = false;
+        this.colorPicker.openDialog();
+    }
+
+    onColorSelected(value: string) {
+        this.modifyColor.emit(colord(value).toRgb());
+    }
+
     private tooltipText(): string {
         return this.selected
             ? 'Click on the keys to paint them. Click this button again to finish painting.'
-            : 'Click on the desired color to start painting keys with it.';
+            : 'Click on the desired color to start painting keys with it. Right click to modify the color.';
     }
 
     private updateTooltipText(): void {
@@ -94,6 +134,16 @@ export class ColoredButtonDirective implements OnChanges {
 
         if (!this.mouseIn){
             this.tooltip.close();
+        }
+    }
+
+    private setTooltipPlacement(): void {
+        if (this.selected) {
+            this.tooltip.placement = 'top';
+        } else if (this.selectedPaletteColorIndex > -1) {
+            this.tooltip.placement = 'bottom';
+        } else {
+            this.tooltip.placement = 'top';
         }
     }
 }

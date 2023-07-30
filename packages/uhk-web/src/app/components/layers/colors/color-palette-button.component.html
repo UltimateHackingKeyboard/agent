@@ -1,0 +1,14 @@
+<span
+    [(colorPicker)]="editColor"
+    cpOutputFormat="hex"
+    [cpSaveClickOutside]="false"
+    [cpEyeDropper]="true"
+    [cpOKButton]="true"
+    cpOKButtonClass="btn btn-primary"
+    [cpCancelButton]="true"
+    cpCancelButtonClass="btn btn-default"
+    [cpDisabled]="colorPickerDisabled"
+    (colorPickerSelect)="onColorSelected($event)"
+>
+    <fa-icon [icon]="faCheck"></fa-icon>
+</span>
