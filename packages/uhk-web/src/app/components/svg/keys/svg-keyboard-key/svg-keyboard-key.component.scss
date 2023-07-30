@@ -7,13 +7,3 @@
     transition-timing-function: ease-out;
     transition: 0.2s;
 }
-
-:host(.active) {
-    .svg-circle,
-    .svg-path,
-    .svg-rec {
-        fill: var(--color-keyboard-key-active);
-        transition-timing-function: ease-in;
-        transition: 0s;
-    }
-}
