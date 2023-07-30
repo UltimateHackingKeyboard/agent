@@ -112,6 +112,10 @@ export class ColorPaletteButtonComponent implements OnChanges {
         this.colorPicker.openDialog();
     }
 
+    onColorPickerClosed() {
+        this.colorPickerDisabled = true;
+    }
+
     onColorSelected(value: string) {
         this.modifyColor.emit(colord(value).toRgb());
     }

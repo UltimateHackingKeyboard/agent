@@ -9,6 +9,7 @@
     cpCancelButtonClass="btn btn-default"
     [cpDisabled]="colorPickerDisabled"
     (colorPickerSelect)="onColorSelected($event)"
+    (colorPickerClose)="onColorPickerClosed()"
 >
     <fa-icon [icon]="faCheck"></fa-icon>
 </span>
