@@ -61,6 +61,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         minimap: {
             enabled: false
         },
+        fontFamily: 'JetBrains Mono',
         folding: false,
         glyphMargin: false,
         lineNumbers: 'off',
