@@ -32,18 +32,14 @@
     <div *ngIf="showPaletteColors" class="group-container">
         <span class="group-title">Colors: </span>
         <div role="group" class="btn-group btn-group-lg">
-            <button *ngFor="let color of paletteColors; let index = index"
-                    type="button"
-                    class="btn btn-default"
-                    coloredButton
-                    ngbTooltip=""
-                    [color]="color"
-                    [selected]="selectedPaletteColorIndex === index"
-                    [selectedPaletteColorIndex]="selectedPaletteColorIndex"
-                    (click)="onColorSelected(index)"
-            >
-                <fa-icon [icon]="faCheck"></fa-icon>
-            </button>
+            <color-palette-button *ngFor="let color of paletteColors; let index = index"
+                                  ngbTooltip=""
+                                  [color]="color"
+                                  [selected]="selectedPaletteColorIndex === index"
+                                  [selectedPaletteColorIndex]="selectedPaletteColorIndex"
+                                  (click)="onColorSelected(index)"
+                                  (modifyColor)="onModifyColor(index, $event)"
+            ></color-palette-button>
 
             <button *ngIf="selectedPaletteColorIndex === -1"
                     type="button"

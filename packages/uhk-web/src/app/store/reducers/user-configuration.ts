@@ -146,6 +146,18 @@ export function reducer(
             };
         }
 
+        case UserConfig.ActionTypes.ModifyColorOfBacklightingColorPalette: {
+            const payload = (action as UserConfig.ModifyColorOfBacklightingColorPaletteAction).payload;
+            const newState = {
+                ...state,
+                backlightingColorPalette: [...state.backlightingColorPalette]
+            };
+
+            newState.backlightingColorPalette[payload.index] = payload.color;
+
+            return newState;
+        }
+
         case UserConfig.ActionTypes.ToggleColorFromBacklightingColorPalette: {
             const index = (action as UserConfig.ToggleColorFromBacklightingColorPaletteAction).payload;
 
