@@ -45,11 +45,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
     private halvesInfo: HalvesInfo;
     private scale = 1;
     private rect: DOMRect;
-    private svgDropElement: SVGElement;
-    private svgDropElementOriginalColors: {
-        color: string;
-        fill: string;
-    };
     private offset: Point = {
         x: 0,
         y: 0
@@ -118,7 +113,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
         const elements = this._document.elementsFromPoint(event.clientX, event.clientY);
 
         let foundElement: Element;
-        let foundSvgDropElement: SVGElement;
         let svgClonedSkipped = false;
         for (const element of elements) {
             if (!svgClonedSkipped && element.id === SVG_CLONED_ELEMENT_ID) {
@@ -126,7 +120,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
             } else if (isDropElement(element) &&
                 svgClonedSkipped
             ) {
-                foundSvgDropElement = element as SVGElement;
                 let parent = element.parentElement;
 
                 while (parent) {
@@ -147,11 +140,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
             this.dropElement = foundElement;
 
             if (foundElement) {
-                this.svgDropElement = foundSvgDropElement;
-                this.svgDropElementOriginalColors = {
-                    fill: this.svgDropElement.style.fill,
-                    color: this.svgDropElement.style.color,
-                };
                 this.addActiveCssFromDropElement();
             }
         }
@@ -161,9 +149,10 @@ export class KeyActionDragAndDropService implements OnDestroy {
         let fillColor = 'var(--color-keyboard-key-active)';
 
         if (this.backlightingMode === BacklightingMode.PerKeyBacklighting) {
-            fillColor = getColorsOf(colord(this.svgDropElementOriginalColors.fill).toRgb()).hoverColorAsHex;
+            fillColor = getColorsOf(colord(this.dropElement.getAttribute('original-fill-color')).toRgb()).hoverColorAsHex;
         }
-        this.svgDropElement.style.fill = fillColor;
+
+        this.setDropElementFillColor(fillColor);
     }
 
     private removeActiveCssFromDropElement(): void {
@@ -171,7 +160,11 @@ export class KeyActionDragAndDropService implements OnDestroy {
             return;
         }
 
-        this.svgDropElement.style.fill = this.svgDropElementOriginalColors.fill;
+        this.setDropElementFillColor(this.dropElement.getAttribute('original-fill-color'));
+    }
+
+    private setDropElementFillColor(fillColor: string): void {
+        (this.dropElement as any).style.fill = fillColor;
     }
 
     private dragElement(): void {
