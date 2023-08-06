@@ -8,6 +8,11 @@
     .list-container {
         display: flex;
         flex: 1;
+        justify-content: center;
+
+        .list-wrapper {
+            width: 90%;
+        }
     }
 }
 
