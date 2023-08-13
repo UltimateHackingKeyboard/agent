@@ -1,12 +1,14 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { colord } from 'colord';
 import { Subscription } from 'rxjs';
-import { HalvesInfo, Keymap } from 'uhk-common';
+import { BacklightingMode, HalvesInfo, Keymap } from 'uhk-common';
 
-import { AppState, getHalvesInfo, getSelectedKeymap, isBacklightingColoring } from '../store';
+import { AppState, backlightingMode, getHalvesInfo, getSelectedKeymap, isBacklightingColoring } from '../store';
 import { ExchangeKeysActionModel } from '../models';
 import { ExchangeKeysAction } from '../store/actions/keymap';
+import { getColorsOf } from '../util/get-colors-of';
 
 interface Point {
     x: number;
@@ -29,6 +31,7 @@ const SVG_DISPLAY_ELEMENT_CLASSES = ['svg-circle', 'svg-path', 'svg-rec'];
 @Injectable()
 export class KeyActionDragAndDropService implements OnDestroy {
 
+    private backlightingMode: BacklightingMode;
     private coloring = false;
     private isLeftButtonDown = false;
     private dragging = false;
@@ -56,6 +59,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.subscriptions.add(this._store.select(getSelectedKeymap).subscribe(keymap => this.keymap = keymap));
         this.subscriptions.add(this._store.select(getHalvesInfo).subscribe(info => this.halvesInfo = info));
         this.subscriptions.add(this._store.select(isBacklightingColoring).subscribe(coloring => this.coloring = coloring));
+        this.subscriptions.add(this._store.select(backlightingMode).subscribe(backlightingMode => this.backlightingMode = backlightingMode));
     }
 
     ngOnDestroy(): void {
@@ -131,16 +135,24 @@ export class KeyActionDragAndDropService implements OnDestroy {
             }
         }
 
-        this.removeActiveCssFromDropElement();
-        this.dropElement = foundElement;
+        if (this.dropElement !== foundElement) {
+            this.removeActiveCssFromDropElement();
+            this.dropElement = foundElement;
 
-        if (foundElement) {
-            this.addActiveCssFromDropElement();
+            if (foundElement) {
+                this.addActiveCssFromDropElement();
+            }
         }
     }
 
     private addActiveCssFromDropElement(): void {
-        this.dropElement.classList.add('active');
+        let fillColor = 'var(--color-keyboard-key-active)';
+
+        if (this.backlightingMode === BacklightingMode.PerKeyBacklighting) {
+            fillColor = getColorsOf(colord(this.dropElement.getAttribute('original-fill-color')).toRgb()).hoverColorAsHex;
+        }
+
+        this.setDropElementFillColor(fillColor);
     }
 
     private removeActiveCssFromDropElement(): void {
@@ -148,7 +160,11 @@ export class KeyActionDragAndDropService implements OnDestroy {
             return;
         }
 
-        this.dropElement.classList.remove('active');
+        this.setDropElementFillColor(this.dropElement.getAttribute('original-fill-color'));
+    }
+
+    private setDropElementFillColor(fillColor: string): void {
+        (this.dropElement as any).style.fill = fillColor;
     }
 
     private dragElement(): void {
@@ -162,7 +178,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
         const height = box.height;
 
         const clonedElement = this.lefButtonDownOptions.element.cloneNode(true) as SVGElement;
-        clonedElement.classList.remove('active');
         clonedElement.setAttribute('dragging', 'true');
         if (box.width < 63) {
             const translateX = translateKey + Math.abs(box.x) + 31.5 - box.width / 2;
