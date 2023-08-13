@@ -6,6 +6,19 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.0.2] - 2023-08-13
+
+Firmware: 10.1.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.1.0)] | Device Protocol: 4.9.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
+
+- Allow modifying palette colors via right click.
+- Allow dragging any key to any palette color to repaint it.
+- Use the JetBrains Mono font in Monaco editor.
+- Fix keyboard case color shown in the Macro tab of the key action popover and on the "Add available keymap" page.
+- Make better use of horizontal space on the macro editing page.
+- Fix double vertical scrollbars in the macro section of the key action popver.
+- Flash not only rectangular keys but also non-rectangular keys upon changing them.
+- Improve the hover highlighting of keys in per-key color mode.
+
 ## [3.0.1] - 2023-07-26
 
 Firmware: 10.**1.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.1.0)] | Device Protocol: 4.9.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
