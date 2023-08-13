@@ -1,12 +1,15 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { colord } from 'colord';
 import { Subscription } from 'rxjs';
-import { HalvesInfo, Keymap } from 'uhk-common';
+import { BacklightingMode, HalvesInfo, Keymap } from 'uhk-common';
 
-import { AppState, getHalvesInfo, getSelectedKeymap, isBacklightingColoring } from '../store';
+import { AppState, backlightingMode, getHalvesInfo, getSelectedKeymap, isBacklightingColoring } from '../store';
 import { ExchangeKeysActionModel } from '../models';
 import { ExchangeKeysAction } from '../store/actions/keymap';
+import { AddColorToBacklightingColorPaletteAction, ModifyColorOfBacklightingColorPaletteAction } from '../store/actions/user-config';
+import { getColorsOf } from '../util/get-colors-of';
 
 interface Point {
     x: number;
@@ -25,16 +28,20 @@ export interface LeftButtonDownOptions {
 const MIN_MOVE_TO_START_DRAG = 2;
 const SVG_CLONED_ELEMENT_ID = 'svg-cloned-element';
 const SVG_DISPLAY_ELEMENT_CLASSES = ['svg-circle', 'svg-path', 'svg-rec'];
+const COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE = 'data-color-palette-button-index';
+const ORIGINAL_FILL_COLOR_ATTRIBUTE = 'original-fill-color';
 
 @Injectable()
 export class KeyActionDragAndDropService implements OnDestroy {
 
+    private backlightingMode: BacklightingMode;
     private coloring = false;
     private isLeftButtonDown = false;
     private dragging = false;
     private lefButtonDownOptions: LeftButtonDownOptions;
     private leftButtonUpEvent: MouseEvent;
     private svgWrapper: SVGElement;
+    private svgTextExchange: SVGTextElement;
     private dropElement: Element;
     private keymap: Keymap;
     private subscriptions = new Subscription();
@@ -56,6 +63,7 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.subscriptions.add(this._store.select(getSelectedKeymap).subscribe(keymap => this.keymap = keymap));
         this.subscriptions.add(this._store.select(getHalvesInfo).subscribe(info => this.halvesInfo = info));
         this.subscriptions.add(this._store.select(isBacklightingColoring).subscribe(coloring => this.coloring = coloring));
+        this.subscriptions.add(this._store.select(backlightingMode).subscribe(backlightingMode => this.backlightingMode = backlightingMode));
     }
 
     ngOnDestroy(): void {
@@ -116,6 +124,11 @@ export class KeyActionDragAndDropService implements OnDestroy {
             } else if (isDropElement(element) &&
                 svgClonedSkipped
             ) {
+                if (element.hasAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE)) {
+                    foundElement = element;
+                    break;
+                }
+
                 let parent = element.parentElement;
 
                 while (parent) {
@@ -131,16 +144,30 @@ export class KeyActionDragAndDropService implements OnDestroy {
             }
         }
 
-        this.removeActiveCssFromDropElement();
-        this.dropElement = foundElement;
+        if (this.dropElement !== foundElement) {
+            this.removeActiveCssFromDropElement();
+            this.dropElement = foundElement;
 
-        if (foundElement) {
-            this.addActiveCssFromDropElement();
+            if (foundElement) {
+                this.addActiveCssFromDropElement();
+            }
         }
     }
 
     private addActiveCssFromDropElement(): void {
-        this.dropElement.classList.add('active');
+        let fillColor = 'var(--color-keyboard-key-active)';
+
+        if (this.backlightingMode === BacklightingMode.PerKeyBacklighting) {
+            const color = this.dropElement.getAttribute(ORIGINAL_FILL_COLOR_ATTRIBUTE);
+            fillColor = getColorsOf(colord(color).toRgb()).hoverColorAsHex;
+
+            const colorPaletteIndex = this.dropElement.getAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE);
+            if (colorPaletteIndex === 'new') {
+                fillColor = 'var(--color-keyboard-key-active)';
+            }
+        }
+
+        this.setDropElementFillColor(fillColor);
     }
 
     private removeActiveCssFromDropElement(): void {
@@ -148,7 +175,19 @@ export class KeyActionDragAndDropService implements OnDestroy {
             return;
         }
 
-        this.dropElement.classList.remove('active');
+        this.setDropElementFillColor(this.dropElement.getAttribute(ORIGINAL_FILL_COLOR_ATTRIBUTE));
+    }
+
+    private setDropElementFillColor(fillColor: string): void {
+        const colorPaletteIndex = this.dropElement.getAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE);
+        if (colorPaletteIndex === 'new') {
+            (this.dropElement as any).style.backgroundColor = fillColor;
+        } else if (colorPaletteIndex) {
+            (this.dropElement as any).style.backgroundColor = fillColor;
+            (this.dropElement as any).style.color = fillColor;
+        } else {
+            (this.dropElement as any).style.fill = fillColor;
+        }
     }
 
     private dragElement(): void {
@@ -162,7 +201,6 @@ export class KeyActionDragAndDropService implements OnDestroy {
         const height = box.height;
 
         const clonedElement = this.lefButtonDownOptions.element.cloneNode(true) as SVGElement;
-        clonedElement.classList.remove('active');
         clonedElement.setAttribute('dragging', 'true');
         if (box.width < 63) {
             const translateX = translateKey + Math.abs(box.x) + 31.5 - box.width / 2;
@@ -196,15 +234,15 @@ export class KeyActionDragAndDropService implements OnDestroy {
         svgRectWhite.id = 'tmp-white-rectangle';
         this.svgWrapper.insertBefore(svgRectWhite, clonedElement);
 
-        const svgTextExchange = this._document.createElementNS('http://www.w3.org/2000/svg', 'text') as SVGTextElement;
-        svgTextExchange.setAttribute('x', ((width + translateKey * 2) / 2).toString());
-        svgTextExchange.setAttribute('y', (height + 12).toString());
-        svgTextExchange.setAttribute('fill', 'black');
-        svgTextExchange.setAttribute('font-size', '14');
-        svgTextExchange.innerHTML = 'Exchange';
-        svgTextExchange.setAttribute('text-anchor', 'middle');
-        svgTextExchange.setAttribute('alignment-baseline', 'middle');
-        this.svgWrapper.appendChild(svgTextExchange);
+        this.svgTextExchange = this._document.createElementNS('http://www.w3.org/2000/svg', 'text') as SVGTextElement;
+        this.svgTextExchange.setAttribute('x', ((width + translateKey * 2) / 2).toString());
+        this.svgTextExchange.setAttribute('y', (height + 12).toString());
+        this.svgTextExchange.setAttribute('fill', 'black');
+        this.svgTextExchange.setAttribute('font-size', '14');
+        this.svgTextExchange.innerHTML = 'Exchange';
+        this.svgTextExchange.setAttribute('text-anchor', 'middle');
+        this.svgTextExchange.setAttribute('alignment-baseline', 'middle');
+        this.svgWrapper.appendChild(this.svgTextExchange);
 
         this.setSvgWrapperTransformation(this.lefButtonDownOptions.element);
         this._document.body.appendChild(this.svgWrapper);
@@ -225,32 +263,64 @@ export class KeyActionDragAndDropService implements OnDestroy {
         this.lefButtonDownOptions.element.style.visibility = 'visible';
 
         if (this.dropElement) {
-            const payload: ExchangeKeysActionModel = {
-                remapInfo: {
-                    remapOnAllKeymap: this.leftButtonUpEvent.ctrlKey,
-                    remapOnAllLayer: this.leftButtonUpEvent.altKey
-                },
-                aKey: {
-                    keyId: convertKeyIdToNumber(this.lefButtonDownOptions.keyId),
-                    layerId: getLayerId(this.lefButtonDownOptions.element),
-                    keymapAbbr: this.keymap.abbreviation,
-                    moduleId: getModuleId(this.lefButtonDownOptions.element)
-                },
-                bKey: {
-                    keyId: convertKeyIdToNumber(this.dropElement.id),
-                    layerId: getLayerId(this.dropElement),
-                    keymapAbbr: this.keymap.abbreviation,
-                    moduleId: getModuleId(this.dropElement)
-                }
-            };
+            if (this.dropElement.hasAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE)) {
+                this.dispatchColorPaletteAction();
+            } else {
+                this.dispatchExchangeKeysAction();
+            }
+        }
+    }
 
-            this._store.dispatch(new ExchangeKeysAction(payload));
+    private dispatchExchangeKeysAction(): void {
+        const payload: ExchangeKeysActionModel = {
+            remapInfo: {
+                remapOnAllKeymap: this.leftButtonUpEvent.ctrlKey,
+                remapOnAllLayer: this.leftButtonUpEvent.altKey
+            },
+            aKey: {
+                keyId: convertKeyIdToNumber(this.lefButtonDownOptions.keyId),
+                layerId: getLayerId(this.lefButtonDownOptions.element),
+                keymapAbbr: this.keymap.abbreviation,
+                moduleId: getModuleId(this.lefButtonDownOptions.element)
+            },
+            bKey: {
+                keyId: convertKeyIdToNumber(this.dropElement.id),
+                layerId: getLayerId(this.dropElement),
+                keymapAbbr: this.keymap.abbreviation,
+                moduleId: getModuleId(this.dropElement)
+            }
+        };
+
+        this._store.dispatch(new ExchangeKeysAction(payload));
+    }
+
+    private dispatchColorPaletteAction(): void {
+        const index = this.dropElement.getAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE);
+        const color = this.lefButtonDownOptions.element.getAttribute(ORIGINAL_FILL_COLOR_ATTRIBUTE);
+        if (index === 'new') {
+            this._store.dispatch(new AddColorToBacklightingColorPaletteAction(colord(color).toRgb()));
+        } else {
+            this._store.dispatch(new ModifyColorOfBacklightingColorPaletteAction({
+                index: parseInt(index),
+                color: colord(color).toRgb()
+            }));
         }
     }
 
     private setSvgWrapperTransformation(element: Element): void {
         if (!element) {
             return;
+        }
+
+        if (element.hasAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE)) {
+            const size = 0.80 * this.scale;
+            this.svgWrapper.style.transform = `scale(${size}, ${size})`;
+            this.svgTextExchange.innerHTML = element.getAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE) === 'new'
+                ? 'Add color'
+                : 'Set color';
+            return;
+        } else if (this.svgTextExchange) {
+            this.svgTextExchange.innerHTML = 'Exchange';
         }
 
         const moduleId = getModuleId(element);
@@ -318,5 +388,6 @@ function isDropElement(element: Element): boolean {
         return false;
     }
 
-    return SVG_DISPLAY_ELEMENT_CLASSES.some(elClass => element.classList.contains(elClass));
+    return SVG_DISPLAY_ELEMENT_CLASSES.some(elClass => element.classList.contains(elClass)) ||
+        element.hasAttribute(COLOR_PALETTE_BUTTON_INDEX_ATTRIBUTE);
 }
