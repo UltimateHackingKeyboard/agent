@@ -4,6 +4,10 @@
     max-height: calc(100vh - 100px);
     padding: 2px;
     border: 1px solid transparent;
+
+    &.readonly {
+        max-height: fit-content;
+    }
 }
 
 :host(.active) {
