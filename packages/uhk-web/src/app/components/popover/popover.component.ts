@@ -24,6 +24,7 @@ import {
     MouseAction,
     PlayMacroAction,
     SecondaryRoleAction,
+    SvgKeyboardCoverColors,
     SwitchKeymapAction,
     SwitchLayerAction
 } from 'uhk-common';
@@ -36,6 +37,7 @@ import {
     getKeymapOptions,
     getKeymaps,
     getLayerOptions,
+    getSvgKeyboardCoverColorsOfTheme,
     macroPlaybackSupported
 } from '../../store';
 import { KeyActionRemap } from '../../models/key-action-remap';
@@ -85,6 +87,7 @@ export class PopoverComponent implements OnChanges {
     tabName = TabName;
     keyActionValid: boolean;
     activeTab: TabName;
+    svgKeyboardCoverColors$: Observable<SvgKeyboardCoverColors>;
     keymaps$: Observable<Keymap[]>;
     keymapOptions$: Observable<SelectOptionData[]>;
     shadowKeyAction: KeyAction;
@@ -127,6 +130,7 @@ export class PopoverComponent implements OnChanges {
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
+        this.svgKeyboardCoverColors$ = store.select(getSvgKeyboardCoverColorsOfTheme);
         this.keymaps$ = store.select(getKeymaps);
         this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);

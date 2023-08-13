@@ -41,21 +41,21 @@
     [attr.y]="modifierContainer.y" preserveAspectRatio="none">
     <svg viewBox="0 0 100 100" [attr.width]="shift.width" [attr.height]="shift.height" [attr.x]="shift.x" [attr.y]="shift.y"
         preserveAspectRatio="none" [class.disabled]="shift.disabled">
-        <svg:use [attr.xlink:href]="modifierIconNames.shift" />
+        <svg:use [attr.xlink:href]="modifierIconNames.shift" stroke="none"/>
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="control.width" [attr.height]="control.height" [attr.x]="control.x" [attr.y]="control.y"
         preserveAspectRatio="none" [class.disabled]="control.disabled">
-        <svg:text text-anchor="middle" alignment-baseline="middle" x="50" y="55">C</svg:text>
+        <svg:text text-anchor="middle" alignment-baseline="middle" x="50" y="55" stroke="none">C</svg:text>
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="option.width" [attr.height]="option.height" [attr.x]="option.x" [attr.y]="option.y"
         preserveAspectRatio="none" [class.disabled]="option.disabled">
-        <svg:use *ngIf="modifierIconNames.option" [attr.xlink:href]="modifierIconNames.option" />
-        <svg:text *ngIf="!modifierIconNames.option" text-anchor="middle" alignment-baseline="middle" x="50" y="55">A</svg:text>
+        <svg:use *ngIf="modifierIconNames.option" [attr.xlink:href]="modifierIconNames.option" stroke="none"/>
+        <svg:text *ngIf="!modifierIconNames.option" text-anchor="middle" alignment-baseline="middle" x="50" y="55" stroke="none">A</svg:text>
     </svg>
     <svg viewBox="0 0 100 100" [attr.width]="command.width" [attr.height]="command.height" [attr.x]="command.x" [attr.y]="command.y"
         preserveAspectRatio="none" [class.disabled]="command.disabled">
-        <svg:use *ngIf="modifierIconNames.command" [attr.xlink:href]="modifierIconNames.command" />
-        <svg:text *ngIf="!modifierIconNames.command" text-anchor="middle" alignment-baseline="middle" x="50" y="55">S</svg:text>
+        <svg:use *ngIf="modifierIconNames.command" [attr.xlink:href]="modifierIconNames.command" stroke="none"/>
+        <svg:text *ngIf="!modifierIconNames.command" text-anchor="middle" alignment-baseline="middle" x="50" y="55" stroke="none">S</svg:text>
     </svg>
 </svg>
 <svg:g svg-secondary-role

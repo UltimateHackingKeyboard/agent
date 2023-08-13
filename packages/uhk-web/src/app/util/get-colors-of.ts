@@ -20,6 +20,7 @@ export interface Colors {
 }
 
 const COLOR_MAP = new Map<string, Colors>();
+const HOVER_COLOR_PERCENTAGE = 0.25;
 export function getColorsOf(color: RgbColorInterface): Colors {
     if(!color) {
         return {
@@ -41,11 +42,11 @@ export function getColorsOf(color: RgbColorInterface): Colors {
 
     const colored = colord(color);
     let fontColor = whiteRgbColor();
-    let hoverColor = colored.lighten(0.15);
+    let hoverColor = colored.lighten(HOVER_COLOR_PERCENTAGE);
 
     if (!colored.isReadable(fontColor)) {
         fontColor = blackRgbColor();
-        hoverColor = colored.darken(0.15);
+        hoverColor = colored.darken(HOVER_COLOR_PERCENTAGE);
     }
 
     cachedColor = {

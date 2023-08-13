@@ -136,6 +136,33 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     ) {
     }
 
+
+    @HostBinding('@blink')
+    get blinkAnimationBinding() {
+        return {
+            value: this.blinkAnimation,
+            params: {
+                startColor: this.textColor,
+                endColor: this.fillColor,
+            }
+        };
+    }
+
+    @HostBinding('attr.original-fill-color')
+    get originalFillColor(): SafeStyle {
+        return this.fillColor;
+    }
+
+    @HostBinding('attr.fill')
+    get fill(): SafeStyle {
+        return this.fillColor;
+    }
+
+    @HostBinding('attr.stroke')
+    get stroke(): SafeStyle {
+        return this.strokeColor;
+    }
+
     @HostBinding('style')
     get cursorStyle(): SafeStyle {
         if (this.mouseMoveService.isColoring) {
@@ -145,7 +172,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             return this.sanitizer.bypassSecurityTrustStyle(`cursor: url('data:image/svg+xml;utf8,${svg}') 0 24, pointer;`);
         }
 
-        return this.sanitizer.bypassSecurityTrustStyle('');
+        return undefined;
     }
 
     @HostListener('click', ['$event'])
@@ -280,7 +307,8 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    onBlinkAnimationDone() {
+    @HostListener('@blink.done')
+    onBlinkAnimationDone(): void {
         this.blinkAnimation = 'end';
     }
 
