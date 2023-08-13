@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { faCheck, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { RgbColor } from 'colord';
-import { colord } from 'colord';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { colord, RgbColor } from 'colord';
+import { RgbColorInterface } from 'uhk-common';
 
-import { LayerOption } from '../../models';
+import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../models';
 
 @Component({
     selector: 'layers',
@@ -21,12 +21,12 @@ export class LayersComponent {
 
     @Output() addColorToPalette = new EventEmitter<RgbColor>();
     @Output() deleteColorFromPalette = new EventEmitter();
+    @Output() modifyColorPaletteColor = new EventEmitter<ModifyColorOfBacklightingColorPalettePayload>();
     @Output() select = new EventEmitter<LayerOption>();
     @Output() toggleColorFromPalette = new EventEmitter<number>();
     @Output() addLayer = new EventEmitter<number>();
     @Output() removeLayer = new EventEmitter<number>();
 
-    faCheck = faCheck;
     faPlus = faPlus;
     faTrash = faTrash;
     newColorPaletteColor = '#000000';
@@ -61,5 +61,12 @@ export class LayersComponent {
 
     onAddColor(value: string): void {
         this.addColorToPalette.emit(colord(value).toRgb());
+    }
+
+    onModifyColor(index: number, color: RgbColorInterface): void {
+        this.modifyColorPaletteColor.emit({
+            color,
+            index,
+        });
     }
 }

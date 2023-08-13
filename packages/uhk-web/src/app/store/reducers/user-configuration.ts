@@ -1,5 +1,3 @@
-import { colord, extend } from 'colord';
-import labPlugin from 'colord/plugins/lab';
 import {
     BacklightingMode,
     Constants,
@@ -35,8 +33,12 @@ import {
     SelectedMacroAction
 } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
-import { findModuleById, isValidName } from '../../util';
-import { uhkThemeColors } from '../../util/uhk-theme-colors';
+import {
+    findModuleById,
+    isValidName,
+    setSvgKeyboardCoverColorsOfAllLayer,
+    setSvgKeyboardCoverColorsOfLayer,
+} from '../../util';
 import * as AppActions from '../actions/app';
 import * as DeviceActions from '../actions/device';
 import * as Device from '../actions/device';
@@ -47,8 +49,6 @@ import * as UserConfig from '../actions/user-config';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
 import { calculateLayerOptionsOfKeymap } from './calculate-layer-options-of-keymap';
 import { getBaseLayerOption, initLayerOptions } from './layer-options';
-
-extend([labPlugin]);
 
 export interface State {
     backlightingColorPalette: Array<RgbColorInterface>;
@@ -144,6 +144,18 @@ export function reducer(
                 backlightingColorPalette,
                 selectedBacklightingColorIndex: -1,
             };
+        }
+
+        case UserConfig.ActionTypes.ModifyColorOfBacklightingColorPalette: {
+            const payload = (action as UserConfig.ModifyColorOfBacklightingColorPaletteAction).payload;
+            const newState = {
+                ...state,
+                backlightingColorPalette: [...state.backlightingColorPalette]
+            };
+
+            newState.backlightingColorPalette[payload.index] = payload.color;
+
+            return newState;
         }
 
         case UserConfig.ActionTypes.ToggleColorFromBacklightingColorPalette: {
@@ -1178,32 +1190,4 @@ function calculateLayerOptions(state: State): Map<number, LayerOption> {
     const selectedKeymap = getSelectedKeymap(state);
 
     return calculateLayerOptionsOfKeymap(selectedKeymap);
-}
-
-function setSvgKeyboardCoverColorsOfLayer(backligtingMode: BacklightingMode, layer: Layer, theme: string): void {
-    const themeColors = uhkThemeColors(theme);
-
-    if (backligtingMode === BacklightingMode.PerKeyBacklighting) {
-        const fillColord = colord('#cccccc');
-
-        layer.svgKeyboardCoverColors = {
-            fillColor: fillColord.toHex(),
-            strokeColor: colord(themeColors.backgroundColor).delta(fillColord) < 0.01
-                ? 'lightgray'
-                : ''
-        };
-    } else {
-        layer.svgKeyboardCoverColors = themeColors.svgKeyboardCoverColors;
-    }
-}
-
-function setSvgKeyboardCoverColorsOfAllLayer(userConfig: UserConfiguration, theme: string): void {
-    userConfig.keymaps = userConfig.keymaps.map(keymap => {
-        keymap = new Keymap(keymap);
-        for (const layer of keymap.layers) {
-            setSvgKeyboardCoverColorsOfLayer(userConfig.backlightingMode, layer, theme);
-        }
-
-        return keymap;
-    });
 }

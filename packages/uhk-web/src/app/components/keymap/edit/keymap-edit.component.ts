@@ -26,11 +26,12 @@ import {
 } from '../../../store';
 import { EditDescriptionAction, SelectKeymapAction, SelectLayerAction } from '../../../store/actions/keymap';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
-import { LastEditedKey, LayerOption } from '../../../models';
+import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
 import { SelectOptionData } from '../../../models/select-option-data';
 import {
     AddColorToBacklightingColorPaletteAction,
     DeleteColorFromBacklightingColorPaletteAction,
+    ModifyColorOfBacklightingColorPaletteAction,
     ToggleColorFromBacklightingColorPaletteAction
 } from '../../../store/actions/user-config';
 
@@ -112,6 +113,10 @@ export class KeymapEditComponent implements OnDestroy {
 
     descriptionChanged(event: ChangeKeymapDescription): void {
         this.store.dispatch(new EditDescriptionAction(event));
+    }
+
+    modifyColorPaletteColor(event: ModifyColorOfBacklightingColorPalettePayload): void {
+        this.store.dispatch(new ModifyColorOfBacklightingColorPaletteAction(event));
     }
 
     selectLayer(option: LayerOption): void {

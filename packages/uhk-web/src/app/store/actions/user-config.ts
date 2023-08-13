@@ -4,6 +4,7 @@ import { UserConfiguration, ConfigurationReply } from 'uhk-common';
 
 import {
     ApplyUserConfigurationFromFilePayload,
+    ModifyColorOfBacklightingColorPalettePayload,
     UserConfigurationRgbValue,
     UserConfigurationValue,
     LoadUserConfigurationFromFilePayload
@@ -16,6 +17,7 @@ export enum ActionTypes {
     LoadConfigFromDevice = '[user-config] Load User Config from Device',
     LoadConfigFromDeviceReply = '[user-config] Load User Config from Device reply',
     LoadUserConfigSuccess = '[user-config] Load User Config Success',
+    ModifyColorOfBacklightingColorPalette = '[user-config] Modify color of the backlighting color palette',
     SaveUserConfigSuccess = '[user-config] Save User Config Success',
     SaveUserConfigInJsonFile = '[user-config] Save User Config in JSON file',
     SaveUserConfigInBinFile = '[user-config] Save User Config in binary file',
@@ -60,6 +62,13 @@ export class LoadUserConfigSuccessAction implements Action {
     type = ActionTypes.LoadUserConfigSuccess;
 
     constructor(public payload: UserConfiguration) {
+    }
+}
+
+export class ModifyColorOfBacklightingColorPaletteAction implements Action {
+    type = ActionTypes.ModifyColorOfBacklightingColorPalette;
+
+    constructor(public payload: ModifyColorOfBacklightingColorPalettePayload) {
     }
 }
 

@@ -1,4 +1,7 @@
 import { getEmptyKeymap, Keymap, UserConfiguration } from 'uhk-common';
+
+import { setSvgKeyboardCoverColorsOfAllLayer } from '../../util';
+import * as AppActions from '../actions/app';
 import {
     Actions,
     ActionTypes,
@@ -16,16 +19,31 @@ export interface State {
     userConfiguration?: UserConfiguration;
     selectedKeymapAbbreviation?: string;
     selectedLayerOption: LayerOption;
+    theme: string;
 }
 
 export const initialState: State = {
     layerOptions: initLayerOptions(),
     loading: false,
-    selectedLayerOption: getBaseLayerOption()
+    selectedLayerOption: getBaseLayerOption(),
+    theme: ''
 };
 
-export function reducer(state = initialState, action: Actions) {
+export function reducer(state = initialState, action: Actions | AppActions.Actions) {
     switch (action.type) {
+
+        case AppActions.ActionTypes.SetAppTheme: {
+            const theme = (action as AppActions.SetAppThemeAction).payload;
+            const userConfiguration = state.userConfiguration.clone();
+            setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, theme);
+
+            return {
+                ...state,
+                userConfiguration,
+                theme
+            };
+        }
+
         case ActionTypes.AddKeymapSelected: {
             const newState = {
                 ...state,
@@ -51,9 +69,10 @@ export function reducer(state = initialState, action: Actions) {
             const newState = {
                 ...state,
                 loading: false,
-                userConfiguration: (action as LoadDefaultUserConfigurationSuccessAction).payload
+                userConfiguration: (action as LoadDefaultUserConfigurationSuccessAction).payload.clone()
             };
             newState.layerOptions = calculateLayerOptions(newState);
+            setSvgKeyboardCoverColorsOfAllLayer(newState.userConfiguration, state.theme);
 
             return newState;
         }

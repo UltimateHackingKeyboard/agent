@@ -54,7 +54,7 @@ import {
 import { RemapInfo } from '../../../models/remap-info';
 import { SelectOptionData } from '../../../models/select-option-data';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
-import { LastEditedKey, LayerOption } from '../../../models';
+import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 interface NameValuePair {
@@ -117,6 +117,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Output() addColorToPalette = new EventEmitter<RgbColor>();
     @Output() deleteColorFromPalette = new EventEmitter();
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
+    @Output() modifyColorPaletteColor = new EventEmitter<ModifyColorOfBacklightingColorPalettePayload>();
     @Output() selectedLayerChanged = new EventEmitter<LayerOption>();
     @Output() toggleColorFromPalette = new EventEmitter<number>();
 
