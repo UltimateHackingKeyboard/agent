@@ -15,7 +15,7 @@ Firmware: 10.1.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 - Use the JetBrains Mono font in Monaco editor.
 - Fix keyboard case color shown in the Macro tab of the key action popover and on the "Add available keymap" page.
 - Make better use of horizontal space on the macro editing page.
-- Fix double vertical scrollbars in the macro section of the key action popver.
+- Fix double vertical scrollbars in the macro section of the key action popover.
 - Flash not only rectangular keys but also non-rectangular keys upon changing them.
 - Improve the hover highlighting of keys in per-key color mode.
 
