@@ -34,6 +34,8 @@
         <div role="group" class="btn-group btn-group-lg">
             <color-palette-button *ngFor="let color of paletteColors; let index = index"
                                   ngbTooltip=""
+                                  [attr.data-color-palette-button-index]="index"
+                                  [attr.original-fill-color]="color | asHexColor"
                                   [color]="color"
                                   [selected]="selectedPaletteColorIndex === index"
                                   [selectedPaletteColorIndex]="selectedPaletteColorIndex"
@@ -44,6 +46,7 @@
             <button *ngIf="selectedPaletteColorIndex === -1"
                     type="button"
                     class="btn btn-default add-new-color-button"
+                    data-color-palette-button-index="new"
                     ngbTooltip="Add a new color to the palette."
                     [(colorPicker)]="newColorPaletteColor"
                     (colorPickerSelect)="onAddColor($event)"
