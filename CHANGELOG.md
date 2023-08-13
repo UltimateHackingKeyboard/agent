@@ -11,7 +11,7 @@ Every Agent version includes the most recent firmware version. See the [firmware
 Firmware: 10.1.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.1.0)] | Device Protocol: 4.9.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
 
 - Allow modifying palette colors via right click.
-- Allow dragging any key to any palette color to repaint it.
+- Allow dragging any key to any palette color to repaint it or to the plus button to add it.
 - Use the JetBrains Mono font in Monaco editor.
 - Fix keyboard case color shown in the Macro tab of the key action popover and on the "Add available keymap" page.
 - Make better use of horizontal space on the macro editing page.
