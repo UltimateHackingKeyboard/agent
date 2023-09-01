@@ -3,9 +3,11 @@ import settings from 'electron-settings';
 import * as os from 'os';
 
 import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
+import { getFirmwarePackageJson } from 'uhk-usb';
+
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
-import { getUdevFileContentAsync } from '../util';
+import { getDefaultFirmwarePath, getUdevFileContentAsync } from '../util';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
@@ -38,6 +40,7 @@ export class AppService extends MainServiceBase {
             this.logService.misc('[AppService] getAppStartInfo');
 
             const response: AppStartInfo = {
+                bundledFirmwareJson: await getFirmwarePackageJson(getDefaultFirmwarePath(this.rootDir)),
                 commandLineArgs: {
                     modules: this.options.modules || false,
                     'disable-agent-update-protection': this.options['disable-agent-update-protection'] || false,

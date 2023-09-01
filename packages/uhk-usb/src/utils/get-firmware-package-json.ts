@@ -1,4 +1,6 @@
 import { exists } from 'fs';
+import { readFile } from 'fs/promises';
+import md5 from 'md5';
 import { join } from 'path';
 import { promisify } from 'util';
 import { FirmwareJson } from 'uhk-common';
@@ -16,13 +18,13 @@ export async function getFirmwarePackageJson(firmwarePathData: TmpFirmware): Pro
     const packageJson = await getPackageJsonFromPathAsync(firmwarePathData.packageJsonPath);
     packageJson.path = firmwarePathData.packageJsonPath;
 
-    await checkPackageJsonSection(packageJson, 'devices', firmwarePathData.tmpDirectory);
-    await checkPackageJsonSection(packageJson, 'modules', firmwarePathData.tmpDirectory);
+    await extendWithFirmwareChecksum(packageJson, 'devices', firmwarePathData.tmpDirectory);
+    await extendWithFirmwareChecksum(packageJson, 'modules', firmwarePathData.tmpDirectory);
 
     return packageJson;
 }
 
-async function checkPackageJsonSection(packageJson: any, sectionName: string, firmwareDir: string): Promise<void> {
+async function extendWithFirmwareChecksum(packageJson: any, sectionName: string, firmwareDir: string): Promise<void> {
     const section = packageJson[sectionName];
 
     if (!section) {
@@ -33,4 +35,17 @@ async function checkPackageJsonSection(packageJson: any, sectionName: string, fi
     if (!(await existsAsync(sectionDir))) {
         throw new Error(`Cannot found directory of the firmware "${sectionName}"`);
     }
+
+    for (const item of section) {
+        const filePath = sectionName === 'devices'
+            ? join(sectionDir, item.name, 'firmware.hex')
+            : join(sectionDir, `${item.name}.bin`);
+
+        item.checksum = await getChecksum(filePath);
+    }
+}
+
+async function getChecksum(filePath: string): Promise<string> {
+    const fileContent = await readFile(filePath, { encoding: 'binary'});
+    return md5(fileContent);
 }

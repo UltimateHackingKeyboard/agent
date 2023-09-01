@@ -2,7 +2,7 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
+import { getCurrentUhkDeviceProduct, getDeviceFirmwareInfo, getFirmwarePackageJson } from 'uhk-usb';
 
 import Uhk, { errorHandler, yargs } from './src/index.js';
 
@@ -35,9 +35,9 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             tmpDirectory: firmwarePath
         });
 
-        const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+        const rightFirmwareInfo = getDeviceFirmwareInfo(uhkDeviceProduct, packageJson);
 
-        if (!fs.existsSync(rightFirmwarePath)) {
+        if (!fs.existsSync(rightFirmwareInfo.path)) {
             console.error('Right firmware path not found!');
             process.exit(1);
         }
@@ -49,7 +49,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         }
 
         const { operations } = Uhk(argv);
-        await operations.updateRightFirmwareWithKboot(rightFirmwarePath, uhkDeviceProduct);
+        await operations.updateRightFirmwareWithKboot(rightFirmwareInfo.path, uhkDeviceProduct);
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
 
         if (argv['overwrite-user-config']) {

@@ -1,7 +1,7 @@
 #!/usr/bin/env -S node --loader ts-node/esm --no-warnings=ExperimentalWarning
 
 import * as path from 'path';
-import { getCurrentUhkDeviceProduct, getDeviceFirmwarePath, getFirmwarePackageJson } from 'uhk-usb';
+import { getCurrentUhkDeviceProduct, getDeviceFirmwareInfo, getFirmwarePackageJson } from 'uhk-usb';
 
 import Uhk, { errorHandler, yargs } from './src/index.js';
 
@@ -20,9 +20,9 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             packageJsonPath,
             tmpDirectory: firmwareDir
         });
-        const rightFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+        const rightFirmwareInfo = getDeviceFirmwareInfo(uhkDeviceProduct, packageJson);
 
-        await operations.updateRightFirmwareWithKboot(rightFirmwarePath, uhkDeviceProduct);
+        await operations.updateRightFirmwareWithKboot(rightFirmwareInfo.path, uhkDeviceProduct);
         const leftFirmwarePath = path.join(firmwareDir, 'modules/uhk60-left.bin');
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
     } catch (error) {

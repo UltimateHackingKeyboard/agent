@@ -15,6 +15,7 @@ import {
     HardwareModules,
     IpcEvents,
     IpcResponse,
+    isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
     KeyboardLayout,
     LEFT_HALF_MODULE,
@@ -40,9 +41,9 @@ import {
     convertBufferToIntArray,
     getCurrentUhkDeviceProduct,
     getCurrentUhkDeviceProductByBootloaderId,
-    getDeviceFirmwarePath,
+    getDeviceFirmwareInfo,
     getFirmwarePackageJson,
-    getModuleFirmwarePath,
+    getModuleFirmwareInfo,
     snooze,
     TmpFirmware,
     UhkHidDevice,
@@ -247,6 +248,7 @@ export class DeviceService {
             };
 
             const isGitInfoSupported = isDeviceProtocolSupportGitInfo(hardwareModules.rightModuleInfo.deviceProtocolVersion);
+            const isFirmwareChecksumSupported = isDeviceProtocolSupportFirmwareChecksum(hardwareModules.rightModuleInfo.deviceProtocolVersion);
             const halvesStates = await this.device.getHalvesStates();
 
             const leftModuleInfo: ModuleInfo = {
@@ -258,7 +260,8 @@ export class DeviceService {
             if (halvesStates.isLeftHalfConnected) {
                 leftModuleInfo.info = await this.operations.getModuleVersionInfo(
                     LEFT_HALF_MODULE.slotId,
-                    isGitInfoSupported
+                    isGitInfoSupported,
+                    isFirmwareChecksumSupported
                 );
             }
 
@@ -267,7 +270,7 @@ export class DeviceService {
 
                 hardwareModules.moduleInfos.push({
                     module: module,
-                    info: await this.operations.getModuleVersionInfo(module.slotId, isGitInfoSupported)
+                    info: await this.operations.getModuleVersionInfo(module.slotId, isGitInfoSupported, isFirmwareChecksumSupported)
                 });
             }
 
@@ -276,7 +279,7 @@ export class DeviceService {
 
                 hardwareModules.moduleInfos.push({
                     module: module,
-                    info: await this.operations.getModuleVersionInfo(module.slotId, isGitInfoSupported)
+                    info: await this.operations.getModuleVersionInfo(module.slotId, isGitInfoSupported, isFirmwareChecksumSupported)
                 });
             }
 
@@ -335,13 +338,16 @@ export class DeviceService {
 
             this.logService.misc('[DeviceService] UHK Device firmware upgrade starts:',
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
-            const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+            const deviceFirmwareInfo = getDeviceFirmwareInfo(uhkDeviceProduct, packageJson);
 
             this.logService.misc('[DeviceService] Device right firmware version:',
                 hardwareModules.rightModuleInfo.firmwareVersion);
-            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
+            this.logService.misc('[DeviceService] Current device right firmware checksum:', hardwareModules.rightModuleInfo.firmwareChecksum);
+            this.logService.misc('[DeviceService] New device right firmware checksum:', deviceFirmwareInfo.checksum);
+
+            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareChecksum !== deviceFirmwareInfo.checksum) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
-                await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+                await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
 
@@ -361,12 +367,16 @@ export class DeviceService {
 
             const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
                 .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
+            const leftModuleFirmwareInfo = getModuleFirmwareInfo(leftModuleInfo.module, packageJson);
             this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
-            if (data.forceUpgrade || leftModuleInfo.info.firmwareVersion !== packageJson.firmwareVersion) {
+            this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
+            this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.checksum);
+
+            if (data.forceUpgrade || leftModuleInfo.info.firmwareChecksum !== leftModuleFirmwareInfo.checksum) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
                     .updateModuleWithKboot(
-                        getModuleFirmwarePath(leftModuleInfo.module, packageJson),
+                        leftModuleFirmwareInfo.path,
                         uhkDeviceProduct,
                         leftModuleInfo.module
                     );
@@ -379,12 +389,16 @@ export class DeviceService {
                     // Left half upgrade mandatory, it is running before the other modules upgrade.
                 }
                 else if (moduleInfo.module.firmwareUpgradeSupported) {
+                    const moduleFirmwareInfo = getModuleFirmwareInfo(moduleInfo.module, packageJson);
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
-                    if (data.forceUpgrade ||  moduleInfo.info.firmwareVersion !== packageJson.firmwareVersion) {
+                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
+                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.checksum);
+
+                    if (data.forceUpgrade ||  moduleInfo.info.firmwareChecksum !== moduleFirmwareInfo.checksum) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(
-                                getModuleFirmwarePath(moduleInfo.module, packageJson),
+                                moduleFirmwareInfo.path,
                                 uhkDeviceProduct,
                                 moduleInfo.module
                             );
@@ -435,9 +449,9 @@ export class DeviceService {
             this.logService.misc(
                 '[DeviceService] UHK Device recovery starts:',
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
-            const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
+            const deviceFirmwareInfo = getDeviceFirmwareInfo(uhkDeviceProduct, packageJson);
 
-            await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
+            await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
 
             this.logService.misc('[DeviceService] Waiting for keyboard');
             await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
@@ -491,7 +505,7 @@ export class DeviceService {
 
             await this.operations
                 .updateModuleWithKboot(
-                    getModuleFirmwarePath(uhkModule, packageJson),
+                    getModuleFirmwareInfo(uhkModule, packageJson).path,
                     uhkDeviceProduct,
                     uhkModule
                 );

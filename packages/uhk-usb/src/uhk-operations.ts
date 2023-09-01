@@ -6,6 +6,7 @@ import {
     FirmwareRepoInfo,
     getSlotIdName,
     HardwareConfiguration,
+    isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
     LEFT_HALF_MODULE,
     LogService,
@@ -386,6 +387,13 @@ export class UhkOperations {
         return this.getModuleProperty(arg).then(readUhkResponseAs0EndString);
     }
 
+    public async getModuleFirmwareChecksum(module: ModuleSlotToId): Promise<string> {
+        const moduleSlotName = getSlotIdName(module);
+        this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" firmware checksum`);
+
+        return this.getModulePropertyAsString({ module, property: ModulePropertyId.FirmwareChecksum });
+    }
+
     public async getModuleFirmwareRepoInfo(module: ModuleSlotToId): Promise<FirmwareRepoInfo> {
         const moduleSlotName = getSlotIdName(module);
         this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" repo information`);
@@ -396,7 +404,7 @@ export class UhkOperations {
         };
     }
 
-    public async getModuleVersionInfo(module: ModuleSlotToId, includeGitInfo: boolean = false): Promise<ModuleVersionInfo> {
+    public async getModuleVersionInfo(module: ModuleSlotToId, includeGitInfo: boolean = false, includeFirmwareChecksum = false): Promise<ModuleVersionInfo> {
         const moduleSlotName = getSlotIdName(module);
         try {
             this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" version information`);
@@ -414,7 +422,14 @@ export class UhkOperations {
             if (includeGitInfo) {
                 moduleVersionInfo = {
                     ...moduleVersionInfo,
-                    ...await this.getModuleFirmwareRepoInfo(module)
+                    ...await this.getModuleFirmwareRepoInfo(module),
+                };
+            }
+
+            if (includeFirmwareChecksum) {
+                moduleVersionInfo = {
+                    ...moduleVersionInfo,
+                    firmwareChecksum: await this.getModuleFirmwareChecksum(module),
                 };
             }
 
@@ -464,10 +479,18 @@ export class UhkOperations {
             smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
         };
 
+        this.logService.misc(`[DeviceOperation] right module deviceProtocolVersion: ${rightModuleInfo.deviceProtocolVersion}`);
+
         if (isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion))
             rightModuleInfo = {
                 ...rightModuleInfo,
                 ...await this.getRightModuleFirmwareRepoInfo(),
+            };
+
+        if (isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion))
+            rightModuleInfo = {
+                ...rightModuleInfo,
+                firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum)),
             };
 
         return rightModuleInfo;
