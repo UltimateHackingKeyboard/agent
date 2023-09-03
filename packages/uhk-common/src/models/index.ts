@@ -5,6 +5,7 @@ export * from './command-line-args.js';
 export * from './config-sizes-info.js';
 export * from './firmware-json.js';
 export * from './firmware-repo-info.js';
+export * from './firmware-version-info.js';
 export * from './notification.js';
 export * from './init-backlighting-color-palette.js';
 export * from './ipc-response.js';

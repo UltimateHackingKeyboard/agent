@@ -13,6 +13,7 @@ export * from './is-device-protocol-support-firmware-checksum.js';
 export * from './is-device-protocol-support-git-info.js';
 export * from './is-equal-array.js';
 export * from './is-official-uhk-firmware.js';
+export * from './is-same-firmware.js';
 export * from './is-version-gte.js';
 export * from './is-version-gt-minor.js';
 export * from './map-i2c-address-to-module-name.js';

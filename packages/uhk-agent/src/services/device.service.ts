@@ -17,6 +17,7 @@ import {
     IpcResponse,
     isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
+    isSameFirmware,
     KeyboardLayout,
     LEFT_HALF_MODULE,
     LeftSlotModules,
@@ -345,7 +346,14 @@ export class DeviceService {
             this.logService.misc('[DeviceService] Current device right firmware checksum:', hardwareModules.rightModuleInfo.firmwareChecksum);
             this.logService.misc('[DeviceService] New device right firmware checksum:', deviceFirmwareInfo.md5);
 
-            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareChecksum !== deviceFirmwareInfo.md5) {
+            const isRightDeviceFirmwareSame = isSameFirmware(
+                hardwareModules.rightModuleInfo,
+                {
+                    firmwareChecksum: deviceFirmwareInfo.md5,
+                    firmwareVersion: packageJson.firmwareVersion
+                }
+            );
+            if (data.forceUpgrade || !isRightDeviceFirmwareSame) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
@@ -372,7 +380,14 @@ export class DeviceService {
             this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
             this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
 
-            if (data.forceUpgrade || leftModuleInfo.info.firmwareChecksum !== leftModuleFirmwareInfo.md5) {
+            const isLeftModuleFirmwareSame = isSameFirmware(
+                leftModuleInfo.info,
+                {
+                    firmwareChecksum: leftModuleFirmwareInfo.md5,
+                    firmwareVersion: packageJson.firmwareVersion
+                }
+            );
+            if (data.forceUpgrade || !isLeftModuleFirmwareSame) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
                     .updateModuleWithKboot(
@@ -394,7 +409,15 @@ export class DeviceService {
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
 
-                    if (data.forceUpgrade ||  moduleInfo.info.firmwareChecksum !== moduleFirmwareInfo.md5) {
+                    const isModuleFirmwareSame = isSameFirmware(
+                        moduleInfo.info,
+                        {
+                            firmwareChecksum: moduleFirmwareInfo.md5,
+                            firmwareVersion: packageJson.firmwareVersion
+                        }
+                    );
+
+                    if (data.forceUpgrade || !isModuleFirmwareSame) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(
