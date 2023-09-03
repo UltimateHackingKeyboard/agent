@@ -343,9 +343,9 @@ export class DeviceService {
             this.logService.misc('[DeviceService] Device right firmware version:',
                 hardwareModules.rightModuleInfo.firmwareVersion);
             this.logService.misc('[DeviceService] Current device right firmware checksum:', hardwareModules.rightModuleInfo.firmwareChecksum);
-            this.logService.misc('[DeviceService] New device right firmware checksum:', deviceFirmwareInfo.checksum);
+            this.logService.misc('[DeviceService] New device right firmware checksum:', deviceFirmwareInfo.md5);
 
-            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareChecksum !== deviceFirmwareInfo.checksum) {
+            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareChecksum !== deviceFirmwareInfo.md5) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
@@ -370,9 +370,9 @@ export class DeviceService {
             const leftModuleFirmwareInfo = getModuleFirmwareInfo(leftModuleInfo.module, packageJson);
             this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
             this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
-            this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.checksum);
+            this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
 
-            if (data.forceUpgrade || leftModuleInfo.info.firmwareChecksum !== leftModuleFirmwareInfo.checksum) {
+            if (data.forceUpgrade || leftModuleInfo.info.firmwareChecksum !== leftModuleFirmwareInfo.md5) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
                     .updateModuleWithKboot(
@@ -392,9 +392,9 @@ export class DeviceService {
                     const moduleFirmwareInfo = getModuleFirmwareInfo(moduleInfo.module, packageJson);
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
-                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.checksum);
+                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
 
-                    if (data.forceUpgrade ||  moduleInfo.info.firmwareChecksum !== moduleFirmwareInfo.checksum) {
+                    if (data.forceUpgrade ||  moduleInfo.info.firmwareChecksum !== moduleFirmwareInfo.md5) {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(

@@ -317,7 +317,7 @@ function mapModules(bundledFirmwareJson: FirmwareJson, firmwareJson: FirmwareJso
         for (const moduleInfo of hardwareModules.moduleInfos) {
             const jsonModule = bundledFirmwareJson.modules?.find(module => module.moduleId === moduleInfo.module.id);
             // If module info does not have checksum, it means that the firmware does not support this feature
-            const checksumMismatches = moduleInfo.info.firmwareChecksum && jsonModule.checksum !== moduleInfo.info.firmwareChecksum;
+            const checksumMismatches = moduleInfo.info.firmwareChecksum && jsonModule.md5 !== moduleInfo.info.firmwareChecksum;
 
             if (hardwareModules.rightModuleInfo?.firmwareVersion === moduleInfo.info.firmwareVersion || checksumMismatches) {
                 modules.push({

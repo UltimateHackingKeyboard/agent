@@ -2,14 +2,14 @@ export interface FirmwareJsonDevice {
     deviceId: number;
     name: string;
     source: string;
-    checksum: string;
+    md5: string;
 }
 
 export interface FirmwareJsonModule {
     moduleId: number;
     name: string;
     source: string;
-    checksum: string;
+    md5: string;
 }
 
 export interface FirmwareJson {

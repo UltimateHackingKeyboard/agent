@@ -11,7 +11,7 @@ export function getDeviceFirmwareInfo(device: UhkDeviceProduct, firmwareJson: Fi
     }
 
     return {
-        checksum: deviceConfig.checksum,
+        md5: deviceConfig.md5,
         path: join(dirname(firmwareJson.path), 'devices', deviceConfig.name, 'firmware.hex'),
     };
 }

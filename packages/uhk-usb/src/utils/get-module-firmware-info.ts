@@ -11,7 +11,7 @@ export function getModuleFirmwareInfo(module: UhkModule, firmwareJson: FirmwareJ
     }
 
     return {
-        checksum: moduleConfig.checksum,
+        md5: moduleConfig.md5,
         path: join(dirname(firmwareJson.path), 'modules', `${moduleConfig.name}.bin`)
     };
 }
