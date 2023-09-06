@@ -40,7 +40,6 @@ export class AppService extends MainServiceBase {
             this.logService.misc('[AppService] getAppStartInfo');
 
             const response: AppStartInfo = {
-                bundledFirmwareJson: await getFirmwarePackageJson(getDefaultFirmwarePath(this.rootDir)),
                 commandLineArgs: {
                     modules: this.options.modules || false,
                     'disable-agent-update-protection': this.options['disable-agent-update-protection'] || false,

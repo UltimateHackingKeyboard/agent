@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
 import {
-    defaultFirmwareJson,
     FirmwareJson,
     FirmwareUpgradeFailReason,
     HardwareModules,
@@ -44,7 +43,6 @@ const FIRMWARE_NOT_FORCE_UPGRADING = [
 ];
 
 export interface State {
-    bundledFirmwareJson: FirmwareJson;
     firmwareJson?: FirmwareJson;
     log: Array<XtermLog>;
     modules: Array<ModuleFirmwareUpgradeState>;
@@ -57,7 +55,6 @@ export interface State {
 }
 
 export const initialState: State = {
-    bundledFirmwareJson: defaultFirmwareJson(),
     modules: [],
     recoveryModules: [],
     log: [{ message: '', cssClass: XtermCssClass.standard }],
@@ -96,7 +93,7 @@ export function reducer(state = initialState, action: Action): State {
 
             return {
                 ...state,
-                modules: mapModules(state.bundledFirmwareJson, state.firmwareJson, hardwareModules),
+                modules: mapModules(state.firmwareJson, hardwareModules),
                 recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos)
             };
         }
@@ -225,12 +222,6 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
-        case App.ActionTypes.AppProcessStartInfo:
-            return {
-                ...state,
-                bundledFirmwareJson: (action as App.ProcessAppStartInfoAction).payload.bundledFirmwareJson
-            };
-
         case App.ActionTypes.ElectronMainLogReceived: {
             if (!FIRMWARE_UPGRADING_STATES.includes(state.upgradeState)) {
                 return state;
@@ -277,7 +268,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
-                modules: mapModules(state.bundledFirmwareJson, state.firmwareJson, response.modules),
+                modules: mapModules(state.firmwareJson, response.modules),
                 recoveryModules: calculateRecoveryModules(response.modules.moduleInfos)
             };
         }
@@ -299,7 +290,7 @@ export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
     recoveryModules: state.recoveryModules
 });
 
-function mapModules(bundledFirmwareJson: FirmwareJson, firmwareJson: FirmwareJson, hardwareModules: HardwareModules): Array<ModuleFirmwareUpgradeState> {
+function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules): Array<ModuleFirmwareUpgradeState> {
     const modules: Array<ModuleFirmwareUpgradeState> = [
         {
             moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
@@ -315,35 +306,35 @@ function mapModules(bundledFirmwareJson: FirmwareJson, firmwareJson: FirmwareJso
 
     if (hardwareModules.moduleInfos) {
         for (const moduleInfo of hardwareModules.moduleInfos) {
-            const jsonModule = bundledFirmwareJson.modules?.find(module => module.moduleId === moduleInfo.module.id);
-            // If module info does not have checksum, it means that the firmware does not support this feature
-            const checksumMismatches = moduleInfo.info.firmwareChecksum && jsonModule.md5 !== moduleInfo.info.firmwareChecksum;
-
-            if (hardwareModules.rightModuleInfo?.firmwareVersion === moduleInfo.info.firmwareVersion || checksumMismatches) {
-                modules.push({
-                    moduleName: moduleInfo.module.name,
-                    firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
-                    gitRepo: moduleInfo.info.firmwareGitRepo,
-                    gitTag: moduleInfo.info.firmwareGitTag,
-                    isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
-                    currentFirmwareVersion: moduleInfo.info.firmwareVersion,
-                    newFirmwareVersion: firmwareJson?.firmwareVersion,
-                    state: ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: ''
-                });
-            } else {
-                modules.push({
-                    moduleName: moduleInfo.module.name,
-                    firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
-                    gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
-                    gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
-                    isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
-                    currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
-                    newFirmwareVersion: '',
-                    state: ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: `This module runs firmware ${moduleInfo.info.firmwareVersion}, but based on its checksum, it's the same as firmware ${bundledFirmwareJson.firmwareVersion}, hence it hasn't been updated. Unnecessary firmware updates might brick your UHK and modules in very rare circumstances, and make the firmware update process longer, so Agent only updates firmwares when justified.`
-                });
-            }
+            // const jsonModule = bundledFirmwareJson.modules?.find(module => module.moduleId === moduleInfo.module.id);
+            // // If module info does not have checksum, it means that the firmware does not support this feature
+            // const checksumMismatches = moduleInfo.info.firmwareChecksum && jsonModule.md5 !== moduleInfo.info.firmwareChecksum;
+            //
+            // if (hardwareModules.rightModuleInfo?.firmwareVersion === moduleInfo.info.firmwareVersion || checksumMismatches) {
+            modules.push({
+                moduleName: moduleInfo.module.name,
+                firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+                gitRepo: moduleInfo.info.firmwareGitRepo,
+                gitTag: moduleInfo.info.firmwareGitTag,
+                isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                currentFirmwareVersion: moduleInfo.info.firmwareVersion,
+                newFirmwareVersion: firmwareJson?.firmwareVersion,
+                state: ModuleFirmwareUpgradeStates.Idle,
+                tooltip: ''
+            });
+            // } else {
+            //     modules.push({
+            //         moduleName: moduleInfo.module.name,
+            //         firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+            //         gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
+            //         gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
+            //         isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+            //         currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
+            //         newFirmwareVersion: '',
+            //         state: ModuleFirmwareUpgradeStates.Idle,
+            //         tooltip: `This module runs firmware ${moduleInfo.info.firmwareVersion}, but based on its checksum, it's the same as firmware ${bundledFirmwareJson.firmwareVersion}, hence it hasn't been updated. Unnecessary firmware updates might brick your UHK and modules in very rare circumstances, and make the firmware update process longer, so Agent only updates firmwares when justified.`
+            //     });
+            // }
         }
     }
 
