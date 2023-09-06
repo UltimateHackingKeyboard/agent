@@ -346,14 +346,7 @@ export class DeviceService {
             this.logService.misc('[DeviceService] Current device right firmware checksum:', hardwareModules.rightModuleInfo.firmwareChecksum);
             this.logService.misc('[DeviceService] New device right firmware checksum:', deviceFirmwareInfo.md5);
 
-            const isRightDeviceFirmwareSame = isSameFirmware(
-                hardwareModules.rightModuleInfo,
-                {
-                    firmwareChecksum: deviceFirmwareInfo.md5,
-                    firmwareVersion: packageJson.firmwareVersion
-                }
-            );
-            if (data.forceUpgrade || !isRightDeviceFirmwareSame) {
+            if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
                 await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
