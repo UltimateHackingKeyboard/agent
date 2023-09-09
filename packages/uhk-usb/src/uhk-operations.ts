@@ -422,7 +422,7 @@ export class UhkOperations {
             if (includeGitInfo) {
                 moduleVersionInfo = {
                     ...moduleVersionInfo,
-                    ...await this.getModuleFirmwareRepoInfo(module),
+                    ...await this.getModuleFirmwareRepoInfo(module)
                 };
             }
 
