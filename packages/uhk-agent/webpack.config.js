@@ -7,7 +7,7 @@ const webpackHelper = require('../../scripts/webpack-helper');
 const rootDir = __dirname;
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: [path.resolve(rootDir, 'src/electron-main.ts')],
     output: {
         path: rootDir + "/dist",

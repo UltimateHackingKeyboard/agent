@@ -43,9 +43,9 @@ import {
     DevicePropertyIds,
     getCurrentUhkDeviceProduct,
     getCurrentUhkDeviceProductByBootloaderId,
-    getDeviceFirmwareInfo,
+    getDeviceFirmwarePath,
     getFirmwarePackageJson,
-    getModuleFirmwareInfo,
+    getModuleFirmwarePath,
     readUhkResponseAs0EndString,
     snooze,
     TmpFirmware,
@@ -352,16 +352,13 @@ export class DeviceService {
 
             this.logService.misc('[DeviceService] UHK Device firmware upgrade starts:',
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
-            const deviceFirmwareInfo = getDeviceFirmwareInfo(uhkDeviceProduct, packageJson);
+            const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
             this.logService.misc('[DeviceService] Device right firmware version:',
                 hardwareModules.rightModuleInfo.firmwareVersion);
-            this.logService.misc('[DeviceService] Current device right firmware checksum:', hardwareModules.rightModuleInfo.firmwareChecksum);
-            this.logService.misc('[DeviceService] New device right firmware checksum:', deviceFirmwareInfo.md5);
-
             if (data.forceUpgrade || hardwareModules.rightModuleInfo.firmwareVersion !== packageJson.firmwareVersion) {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME);
-                await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
+                await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
                 this.logService.misc('[DeviceService] Waiting for keyboard');
                 await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
                 hardwareModules = await this.getHardwareModules(false);
@@ -383,15 +380,18 @@ export class DeviceService {
 
             const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
                 .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
-            const leftModuleFirmwareInfo = getModuleFirmwareInfo(leftModuleInfo.module, packageJson);
+            const leftModuleFirmwareInfo =  hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
+
             this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
             this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
-            this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
+            if (leftModuleFirmwareInfo) {
+                this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
+            }
 
             const isLeftModuleFirmwareSame = isSameFirmware(
                 leftModuleInfo.info,
                 {
-                    firmwareChecksum: leftModuleFirmwareInfo.md5,
+                    firmwareChecksum: leftModuleFirmwareInfo?.md5,
                     firmwareVersion: packageJson.firmwareVersion
                 }
             );
@@ -399,7 +399,7 @@ export class DeviceService {
                 event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
                     .updateModuleWithKboot(
-                        leftModuleFirmwareInfo.path,
+                        getModuleFirmwarePath(leftModuleInfo.module, packageJson),
                         uhkDeviceProduct,
                         leftModuleInfo.module
                     );
@@ -412,15 +412,18 @@ export class DeviceService {
                     // Left half upgrade mandatory, it is running before the other modules upgrade.
                 }
                 else if (moduleInfo.module.firmwareUpgradeSupported) {
-                    const moduleFirmwareInfo = getModuleFirmwareInfo(moduleInfo.module, packageJson);
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware version:`, moduleInfo.info.firmwareVersion);
                     this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" current firmware checksum:`, moduleInfo.info.firmwareChecksum);
-                    this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
+
+                    const moduleFirmwareInfo = hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
+                    if (moduleFirmwareInfo) {
+                        this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" new firmware checksum:`, moduleFirmwareInfo.md5);
+                    }
 
                     const isModuleFirmwareSame = isSameFirmware(
                         moduleInfo.info,
                         {
-                            firmwareChecksum: moduleFirmwareInfo.md5,
+                            firmwareChecksum: moduleFirmwareInfo?.md5,
                             firmwareVersion: packageJson.firmwareVersion
                         }
                     );
@@ -429,7 +432,7 @@ export class DeviceService {
                         event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(
-                                moduleFirmwareInfo.path,
+                                getModuleFirmwarePath(moduleInfo.module, packageJson),
                                 uhkDeviceProduct,
                                 moduleInfo.module
                             );
@@ -480,9 +483,9 @@ export class DeviceService {
             this.logService.misc(
                 '[DeviceService] UHK Device recovery starts:',
                 JSON.stringify(uhkDeviceProduct, usbDeviceJsonFormatter));
-            const deviceFirmwareInfo = getDeviceFirmwareInfo(uhkDeviceProduct, packageJson);
+            const deviceFirmwarePath = getDeviceFirmwarePath(uhkDeviceProduct, packageJson);
 
-            await this.operations.updateRightFirmwareWithKboot(deviceFirmwareInfo.path, uhkDeviceProduct);
+            await this.operations.updateRightFirmwareWithKboot(deviceFirmwarePath, uhkDeviceProduct);
 
             this.logService.misc('[DeviceService] Waiting for keyboard');
             await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.keyboardPid);
@@ -538,7 +541,7 @@ export class DeviceService {
 
             await this.operations
                 .updateModuleWithKboot(
-                    getModuleFirmwareInfo(uhkModule, packageJson).path,
+                    getModuleFirmwarePath(uhkModule, packageJson),
                     uhkDeviceProduct,
                     uhkModule
                 );

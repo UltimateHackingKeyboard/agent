@@ -1,17 +1,12 @@
 import { dirname, join } from 'path';
 import { FirmwareJson, UhkDeviceProduct } from 'uhk-common';
 
-import { FirmwareInfo } from '../models/index.js';
-
-export function getDeviceFirmwareInfo(device: UhkDeviceProduct, firmwareJson: FirmwareJson): FirmwareInfo {
+export function getDeviceFirmwarePath(device: UhkDeviceProduct, firmwareJson: FirmwareJson): string {
     const deviceConfig = firmwareJson.devices.find(firmwareDevice => firmwareDevice.deviceId === device.id);
 
     if (!deviceConfig) {
         throw new Error(`The firmware does not support: ${device.name}`);
     }
 
-    return {
-        md5: deviceConfig.md5,
-        path: join(dirname(firmwareJson.path), 'devices', deviceConfig.name, 'firmware.hex'),
-    };
+    return join(dirname(firmwareJson.path), 'devices', deviceConfig.name, 'firmware.hex');
 }
