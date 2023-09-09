@@ -3,11 +3,9 @@ import settings from 'electron-settings';
 import * as os from 'os';
 
 import { AppStartInfo, CommandLineArgs, IpcEvents, LogService } from 'uhk-common';
-import { getFirmwarePackageJson } from 'uhk-usb';
-
 import { MainServiceBase } from './main-service-base';
 import { DeviceService } from './device.service';
-import { getDefaultFirmwarePath, getUdevFileContentAsync } from '../util';
+import { getUdevFileContentAsync } from '../util';
 
 export class AppService extends MainServiceBase {
     constructor(protected logService: LogService,
