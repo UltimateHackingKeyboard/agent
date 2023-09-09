@@ -395,8 +395,10 @@ export class DeviceService {
                     firmwareVersion: packageJson.firmwareVersion
                 }
             );
+
+            event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
+
             if (data.forceUpgrade || !isLeftModuleFirmwareSame) {
-                event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
                     .updateModuleWithKboot(
                         getModuleFirmwarePath(leftModuleInfo.module, packageJson),
@@ -428,8 +430,9 @@ export class DeviceService {
                         }
                     );
 
+                    event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
+
                     if (data.forceUpgrade || !isModuleFirmwareSame) {
-                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(
                                 getModuleFirmwarePath(moduleInfo.module, packageJson),
