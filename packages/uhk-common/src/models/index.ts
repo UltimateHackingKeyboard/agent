@@ -3,6 +3,7 @@ export * from './backup-user-configuration.js';
 export * from './backup-user-configuration-info.js';
 export * from './command-line-args.js';
 export * from './config-sizes-info.js';
+export * from './device-module-record.js';
 export * from './firmware-json.js';
 export * from './firmware-repo-info.js';
 export * from './firmware-version-info.js';

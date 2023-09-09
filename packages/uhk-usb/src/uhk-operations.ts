@@ -444,9 +444,9 @@ export class UhkOperations {
         };
     }
 
-    public async getRightModuleProperty(property: DevicePropertyIds): Promise<UhkBuffer> {
+    public async getRightModuleProperty(property: DevicePropertyIds, args: Array<number> = []): Promise<UhkBuffer> {
         this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${DevicePropertyIds[property]}" property information`);
-        const command = Buffer.from([UsbCommand.GetProperty, property]);
+        const command = Buffer.from([UsbCommand.GetProperty, property, ...args]);
         const buffer = await this.device.write(command);
 
         return UhkBuffer.fromArray(convertBufferToIntArray(buffer));
@@ -474,6 +474,7 @@ export class UhkOperations {
             firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            modules: {},
             userConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
@@ -487,11 +488,12 @@ export class UhkOperations {
                 ...await this.getRightModuleFirmwareRepoInfo(),
             };
 
-        if (isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion))
+        if (isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion)) {
             rightModuleInfo = {
                 ...rightModuleInfo,
-                firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum)),
+                firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum, [0])),
             };
+        }
 
         return rightModuleInfo;
     }

@@ -249,6 +249,7 @@ export const getHardwareModules = createSelector(runningInElectron, getStateHard
                 firmwareGitRepo: UHK_OFFICIAL_FIRMWARE_REPO,
                 firmwareGitTag: 'master',
                 moduleProtocolVersion: agentVersionInfo.moduleProtocolVersion,
+                modules: {},
                 userConfigVersion: agentVersionInfo.userConfigVersion
             }
         };

@@ -6,6 +6,7 @@ import {
     DeviceConnectionState,
     FirmwareJson,
     FirmwareUpgradeIpcResponse,
+    HardwareModules,
     IpcEvents,
     IpcResponse,
     KeyboardLayout,
@@ -23,6 +24,7 @@ import {
     ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
     CurrentlyUpdatingModuleAction,
+    HardwareModulesLoadedAction,
     ReadConfigSizesReplyAction,
     RecoveryDeviceReplyAction,
     RecoveryModuleReplyAction,
@@ -100,6 +102,10 @@ export class DeviceRendererService {
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.hardwareModulesLoaded, (event: string, response: HardwareModules) => {
+            this.dispachStoreAction(new HardwareModulesLoadedAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
