@@ -31,6 +31,7 @@ import {
     RecoveryModuleReplyAction,
     SaveConfigurationReplyAction,
     SetPrivilegeOnLinuxReplyAction,
+    StatusBufferChangedAction,
     UpdateFirmwareJsonAction,
     UpdateFirmwareReplyAction
 } from '../store/actions/device';
@@ -131,6 +132,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.saveUserConfigurationReply, (event: string, response: IpcResponse) => {
             this.dispachStoreAction(new SaveConfigurationReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.statusBufferChanged, (event: string, response: string) => {
+            this.dispachStoreAction(new StatusBufferChangedAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.loadConfigurationReply, (event: string, response: string) => {

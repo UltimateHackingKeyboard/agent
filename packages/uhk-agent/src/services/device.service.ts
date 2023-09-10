@@ -51,6 +51,7 @@ import {
     TmpFirmware,
     UhkHidDevice,
     UhkOperations,
+    UsbVariables,
     usbDeviceJsonFormatter,
     waitForDevice
 } from 'uhk-usb';
@@ -63,8 +64,8 @@ import {
     copySmartMacroDocToWebserver,
     getBackupUserConfigurationContent,
     getDefaultFirmwarePath,
-    getUserConfigFromHistoryAsync,
     getSmartMacroDocRootPath,
+    getUserConfigFromHistoryAsync,
     loadUserConfigHistoryAsync,
     makeFolderWriteableToUserOnLinux,
     saveTmpFirmware,
@@ -80,6 +81,7 @@ import {
 export class DeviceService {
     private _pollerAllowed: boolean;
     private _uhkDevicePolling: boolean;
+    private _checkStatusBuffer: boolean;
     private queueManager = new QueueManager();
     private wasCalledSaveUserConfiguration = false;
     private isI2cDebuggingEnabled = false;
@@ -372,6 +374,7 @@ export class DeviceService {
                     this.logService.config('[DeviceService] User configuration', data.userConfig);
                     const buffer = mapObjectToUserConfigBinaryBuffer(data.userConfig);
                     await this.operations.saveUserConfiguration(buffer);
+                    this._checkStatusBuffer = true;
                     response.userConfigSaved = true;
                 }
             } else {
@@ -498,6 +501,7 @@ export class DeviceService {
                 userConfig);
             const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
             await this.operations.saveUserConfiguration(buffer);
+            this._checkStatusBuffer = true;
 
             response.modules = await this.getHardwareModules(false);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
@@ -632,6 +636,19 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.changeKeyboardLayoutReply, response);
     }
 
+    private async checkStatusBuffer(): Promise<void> {
+        if (!this._checkStatusBuffer) {
+            return;
+        }
+
+        this._checkStatusBuffer = false;
+
+        const message = await this.operations.getVariable(UsbVariables.statusBuffer);
+        if (message) {
+            this.win.webContents.send(IpcEvents.device.statusBufferChanged, message);
+        }
+    }
+
     /**
      * HID API not support device attached and detached event.
      * This method check the keyboard is attached to the computer or not.
@@ -655,6 +672,7 @@ export class DeviceService {
 
                         if (state.hasPermission && state.zeroInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
+                            this._checkStatusBuffer = true;
                         } else {
                             state.hardwareModules = {
                                 moduleInfos: [],
@@ -671,6 +689,7 @@ export class DeviceService {
                     }
 
                     await this.pollDebugInfo(iterationCount);
+                    await this.checkStatusBuffer();
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
@@ -712,6 +731,7 @@ export class DeviceService {
             this.logService.config('[DeviceService] User configuration will be saved', data.configuration);
             const buffer = mapObjectToUserConfigBinaryBuffer(data.configuration);
             await this.operations.saveUserConfiguration(buffer);
+            this._checkStatusBuffer = true;
 
             if (data.saveInHistory) {
                 await saveUserConfigHistoryAsync(buffer);

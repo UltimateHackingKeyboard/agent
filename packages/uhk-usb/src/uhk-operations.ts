@@ -18,9 +18,9 @@ import {
     UhkModule
 } from 'uhk-common';
 import { promisify } from 'util';
-import { DevicePropertyIds } from './constants.js';
 import {
     ConfigBufferId,
+    DevicePropertyIds,
     EepromOperation,
     EnumerationModes,
     KbootCommands,
@@ -604,10 +604,19 @@ export class UhkOperations {
         return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
     }
 
-    public async getVariable(variableId: UsbVariables): Promise<number> {
+    public async getVariable(variableId: UsbVariables, iteration: number = 0): Promise<number | string> {
         this.logService.usb('[DeviceOperation] USB[T]: get variable');
         const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
         const responseBuffer = await this.device.write(buffer);
+
+        if (variableId === UsbVariables.statusBuffer) {
+            let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+            if (message.length > 0 && iteration < 20) {
+                message += await this.getVariable(variableId, iteration + 1);
+            }
+
+            return message;
+        }
 
         return responseBuffer[1];
     }

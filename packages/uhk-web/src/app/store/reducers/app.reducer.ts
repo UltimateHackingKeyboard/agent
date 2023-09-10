@@ -17,9 +17,12 @@ import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } fro
 import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
 import { getVersions } from '../../util';
 
+const DEFAULT_ERROR_PANEL_HEIGHT = 5;
+
 export interface State {
     appTheme: AppTheme;
     animationEnabled: boolean;
+    errorPanelHeight: number;
     started: boolean;
     commandLineArgs: CommandLineArgs;
     undoableNotification?: Notification;
@@ -41,6 +44,7 @@ export interface State {
 export const initialState: State = {
     appTheme: AppTheme.System,
     animationEnabled: true,
+    errorPanelHeight: DEFAULT_ERROR_PANEL_HEIGHT,
     started: false,
     commandLineArgs: {},
     navigationCountAfterNotification: 0,
@@ -85,6 +89,13 @@ export function reducer(
                 ...state,
                 undoableNotification: currentAction.payload,
                 navigationCountAfterNotification: 0
+            };
+        }
+
+        case App.ActionTypes.ErrorPanelSizeChanged: {
+            return {
+                ...state,
+                errorPanelHeight: (action as App.ErrorPanelSizeChangedAction).payload
             };
         }
 
@@ -181,6 +192,7 @@ export function reducer(
 
             return {
                 ...state,
+                errorPanelHeight: settings.errorPanelHeight || DEFAULT_ERROR_PANEL_HEIGHT,
                 everAttemptedSavingToKeyboard: settings.everAttemptedSavingToKeyboard,
                 animationEnabled: settings.animationEnabled,
                 appTheme: settings.appTheme || AppTheme.System
@@ -212,6 +224,7 @@ export function reducer(
 
 export const showAddonMenu = (state: State) => state.commandLineArgs.modules;
 export const disableUpdateAgentProtection = (state: State) => disableAgentUpgradeProtection(state.commandLineArgs);
+export const getErrorPanelHeight = (state: State) => state.errorPanelHeight;
 export const getUndoableNotification = (state: State) => state.undoableNotification;
 export const getPrevUserConfiguration = (state: State) => state.prevUserConfig;
 export const runningInElectron = (state: State) => state.runningInElectron;

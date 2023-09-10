@@ -77,7 +77,8 @@ export enum UsbVariables {
     testUsbStack = 1,
     debounceTimePress = 2,
     debounceTimeRelease = 3,
-    usbReportSemaphore= 4
+    usbReportSemaphore= 4,
+    statusBuffer= 5,
 }
 
 export const LAYER_NUMBER_TO_STRING = [
