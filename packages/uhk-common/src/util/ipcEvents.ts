@@ -34,6 +34,7 @@ export class Device {
     public static readonly updateFirmware = 'device-update-firmware';
     public static readonly updateFirmwareJson = 'device-update-firmware-json';
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
+    public static readonly moduleFirmwareUpgradeSkip = 'device-module-firmware-upgrade-skip';
     public static readonly moduleFirmwareUpgrading = 'device-module-firmware-upgrading';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
     public static readonly recoveryDevice = 'device-recovery';

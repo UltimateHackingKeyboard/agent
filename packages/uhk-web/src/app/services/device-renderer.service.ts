@@ -23,6 +23,7 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
+    CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
     HardwareModulesLoadedAction,
     ReadConfigSizesReplyAction,
@@ -138,6 +139,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareJson, (event: string, data: FirmwareJson) => {
             this.dispachStoreAction(new UpdateFirmwareJsonAction(data));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeSkip, (event: string, response: string) => {
+            this.dispachStoreAction(new CurrentlyUpdateSkipModuleAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgrading, (event: string, response: string) => {

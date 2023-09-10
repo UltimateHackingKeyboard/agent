@@ -102,30 +102,17 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.CurrentlyUpdatingModule: {
-            const currentlyUpdatingModule = (action as Device.CurrentlyUpdatingModuleAction).payload;
-
             return {
                 ...state,
-                modules: state.modules.map(module => {
-                    if (module.moduleName === currentlyUpdatingModule) {
-                        return {
-                            ...module,
-                            state: ModuleFirmwareUpgradeStates.Upgrading
-                        };
-                    } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
-                        return {
-                            ...module,
-                            state: ModuleFirmwareUpgradeStates.Success,
-                            newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                            currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                            gitRepo: state.firmwareJson?.gitInfo?.repo,
-                            gitTag: state.firmwareJson?.gitInfo?.tag,
-                        };
-                    }
-
-                    return module;
-                }),
+                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdatingModuleAction).payload),
                 upgradedModule: true
+            };
+        }
+
+        case Device.ActionTypes.CurrentlyUpdateSkipModule: {
+            return {
+                ...state,
+                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdateSkipModuleAction).payload),
             };
         }
 
@@ -384,4 +371,26 @@ function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModu
 
         return result;
     }, []);
+}
+
+function setUpdatingModuleState(state: State, moduleName: string): Array<ModuleFirmwareUpgradeState> {
+    return state.modules.map(module => {
+        if (module.moduleName === moduleName) {
+            return {
+                ...module,
+                state: ModuleFirmwareUpgradeStates.Upgrading
+            };
+        } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+            return {
+                ...module,
+                state: ModuleFirmwareUpgradeStates.Success,
+                newFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                gitRepo: state.firmwareJson?.gitInfo?.repo,
+                gitTag: state.firmwareJson?.gitInfo?.tag,
+            };
+        }
+
+        return module;
+    });
 }

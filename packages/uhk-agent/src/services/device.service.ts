@@ -396,9 +396,8 @@ export class DeviceService {
                 }
             );
 
-            event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
-
             if (data.forceUpgrade || !isLeftModuleFirmwareSame) {
+                event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
                 await this.operations
                     .updateModuleWithKboot(
                         getModuleFirmwarePath(leftModuleInfo.module, packageJson),
@@ -406,6 +405,7 @@ export class DeviceService {
                         leftModuleInfo.module
                     );
             } else {
+                event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, leftModuleInfo.module.name);
                 this.logService.misc('[DeviceService] Skip left firmware upgrade.');
             }
 
@@ -430,9 +430,8 @@ export class DeviceService {
                         }
                     );
 
-                    event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
-
                     if (data.forceUpgrade || !isModuleFirmwareSame) {
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, moduleInfo.module.name);
                         await this.operations
                             .updateModuleWithKboot(
                                 getModuleFirmwarePath(moduleInfo.module, packageJson),
@@ -441,6 +440,7 @@ export class DeviceService {
                             );
                         this.logService.misc(`[DeviceService] "${moduleInfo.module.name}" firmware update done.`);
                     } else {
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, moduleInfo.module.name);
                         this.logService.misc(`[DeviceService] Skip "${moduleInfo.module.name}" firmware upgrade.`);
                     }
                 } else {

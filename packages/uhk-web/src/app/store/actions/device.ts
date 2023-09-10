@@ -31,6 +31,7 @@ export enum ActionTypes {
     ResetUserConfiguration = '[device] reset user configuration',
     ResetPcMouseSpeedSettings = '[device] reset PC mouse speed settings',
     ResetMacMouseSpeedSettings = '[device] reset Mac mouse speed settings',
+    CurrentlyUpdateSkipModule = '[device] currently update skip module',
     CurrentlyUpdatingModule = '[device] currently updating module',
     UpdateFirmware = '[device] update firmware',
     UpdateFirmwareJson = '[device] update firmware JSON',
@@ -124,6 +125,13 @@ export class ResetUserConfigurationAction implements Action {
 
 export class CurrentlyUpdatingModuleAction implements Action {
     type = ActionTypes.CurrentlyUpdatingModule;
+
+    constructor(public payload: string) {
+    }
+}
+
+export class CurrentlyUpdateSkipModuleAction implements Action {
+    type = ActionTypes.CurrentlyUpdateSkipModule;
 
     constructor(public payload: string) {
     }
@@ -274,6 +282,7 @@ export type Actions
     | ResetPcMouseSpeedSettingsAction
     | ResetMacMouseSpeedSettingsAction
     | ResetUserConfigurationAction
+    | CurrentlyUpdateSkipModuleAction
     | CurrentlyUpdatingModuleAction
     | UpdateFirmwareAction
     | UpdateFirmwareJsonAction
