@@ -23,6 +23,7 @@ export class AutoUpdate {
 export class Device {
     public static readonly changeKeyboardLayout = 'device-change-keyboard-layout';
     public static readonly changeKeyboardLayoutReply = 'device-change-keyboard-layout-reply';
+    public static readonly hardwareModulesLoaded = 'device-hardware-modules-loaded';
     public static readonly setPrivilegeOnLinux = 'set-privilege-on-linux';
     public static readonly setPrivilegeOnLinuxReply = 'set-privilege-on-linux-reply';
     public static readonly deviceConnectionStateChanged = 'device-connection-state-changed';
@@ -33,6 +34,7 @@ export class Device {
     public static readonly updateFirmware = 'device-update-firmware';
     public static readonly updateFirmwareJson = 'device-update-firmware-json';
     public static readonly updateFirmwareReply = 'device-update-firmware-reply';
+    public static readonly moduleFirmwareUpgradeSkip = 'device-module-firmware-upgrade-skip';
     public static readonly moduleFirmwareUpgrading = 'device-module-firmware-upgrading';
     public static readonly startConnectionPoller = 'device-start-connection-poller';
     public static readonly recoveryDevice = 'device-recovery';

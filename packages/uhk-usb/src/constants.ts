@@ -48,7 +48,8 @@ export enum DevicePropertyIds {
     I2cBaudRate= 4,
     Uptime = 5,
     GitTag = 6,
-    GitRepo = 7
+    GitRepo = 7,
+    FirmwareChecksum = 8
 }
 
 export enum EnumerationModes {
@@ -67,7 +68,8 @@ export enum KbootCommands {
 export enum ModulePropertyId {
     protocolVersions = 0,
     GitTag = 1,
-    GitRepo = 2
+    GitRepo = 2,
+    FirmwareChecksum = 3
 }
 
 export enum UsbVariables {

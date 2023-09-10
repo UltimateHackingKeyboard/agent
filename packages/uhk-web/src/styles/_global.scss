@@ -267,6 +267,7 @@ kbd {
     max-width: 620px;
 }
 
+.tooltip-firmware-version .tooltip-inner,
 .tooltip-macro-text .tooltip-inner {
     width: 350px;
     max-width: 350px;
@@ -294,4 +295,9 @@ mwl-confirmation-popover-window {
 
 .text-underline {
     text-decoration: underline;
+}
+
+.text-dotted {
+    text-decoration: underline;
+    text-decoration-style: dotted;
 }

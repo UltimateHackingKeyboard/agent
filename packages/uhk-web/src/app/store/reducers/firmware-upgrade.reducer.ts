@@ -44,6 +44,7 @@ const FIRMWARE_NOT_FORCE_UPGRADING = [
 
 export interface State {
     firmwareJson?: FirmwareJson;
+    hardwareModules: HardwareModules;
     log: Array<XtermLog>;
     modules: Array<ModuleFirmwareUpgradeState>;
     recoveryModules: Array<UhkModule>;
@@ -55,6 +56,7 @@ export interface State {
 }
 
 export const initialState: State = {
+    hardwareModules: {},
     modules: [],
     recoveryModules: [],
     log: [{ message: '', cssClass: XtermCssClass.standard }],
@@ -93,36 +95,34 @@ export function reducer(state = initialState, action: Action): State {
 
             return {
                 ...state,
-                modules: mapModules(state.firmwareJson, hardwareModules),
+                hardwareModules,
+                modules: mapModules(state.firmwareJson, hardwareModules, state.modules),
                 recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos)
             };
         }
 
         case Device.ActionTypes.CurrentlyUpdatingModule: {
-            const currentlyUpdatingModule = (action as Device.CurrentlyUpdatingModuleAction).payload;
+            return {
+                ...state,
+                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdatingModuleAction).payload),
+                upgradedModule: true
+            };
+        }
+
+        case Device.ActionTypes.CurrentlyUpdateSkipModule: {
+            return {
+                ...state,
+                modules: setUpdatingModuleState(state, (action as Device.CurrentlyUpdateSkipModuleAction).payload),
+            };
+        }
+
+        case Device.ActionTypes.ModulesInfoLoaded: {
+            const hardwareModules = (action as Device.HardwareModulesLoadedAction).payload;
 
             return {
                 ...state,
-                modules: state.modules.map(module => {
-                    if (module.moduleName === currentlyUpdatingModule) {
-                        return {
-                            ...module,
-                            state: ModuleFirmwareUpgradeStates.Upgrading
-                        };
-                    } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
-                        return {
-                            ...module,
-                            state: ModuleFirmwareUpgradeStates.Success,
-                            newFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                            currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
-                            gitRepo: state.firmwareJson?.gitInfo?.repo,
-                            gitTag: state.firmwareJson?.gitInfo?.tag,
-                        };
-                    }
-
-                    return module;
-                }),
-                upgradedModule: true
+                hardwareModules,
+                modules: mapModules(state.firmwareJson, hardwareModules, state.modules),
             };
         }
 
@@ -268,7 +268,7 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
-                modules: mapModules(state.firmwareJson, response.modules),
+                modules: mapModules(state.firmwareJson, response.modules, state.modules),
                 recoveryModules: calculateRecoveryModules(response.modules.moduleInfos)
             };
         }
@@ -290,7 +290,7 @@ export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
     recoveryModules: state.recoveryModules
 });
 
-function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules): Array<ModuleFirmwareUpgradeState> {
+function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules, stateModules: Array<ModuleFirmwareUpgradeState> = []): Array<ModuleFirmwareUpgradeState> {
     const modules: Array<ModuleFirmwareUpgradeState> = [
         {
             moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
@@ -300,22 +300,41 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
             isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
             currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
             newFirmwareVersion: firmwareJson?.firmwareVersion,
-            state: ModuleFirmwareUpgradeStates.Idle
+            state: stateModules[0]?.state ?? ModuleFirmwareUpgradeStates.Idle
         }
     ];
 
     if (hardwareModules.moduleInfos) {
-        for (const moduleInfo of hardwareModules.moduleInfos) {
-            modules.push({
-                moduleName: moduleInfo.module.name,
-                firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
-                gitRepo: moduleInfo.info.firmwareGitRepo,
-                gitTag: moduleInfo.info.firmwareGitTag,
-                isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
-                currentFirmwareVersion: moduleInfo.info.firmwareVersion,
-                newFirmwareVersion: firmwareJson?.firmwareVersion,
-                state: ModuleFirmwareUpgradeStates.Idle
-            });
+        for (let i = 0; i < hardwareModules.moduleInfos?.length; i++) {
+            const moduleInfo = hardwareModules.moduleInfos[i];
+            const firmwareModuleInfo =  hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
+            const stateModule = stateModules.find(stateModule => stateModule.moduleName === moduleInfo.module.name);
+
+            if (!firmwareModuleInfo || moduleInfo.info.firmwareVersion === hardwareModules.rightModuleInfo?.firmwareVersion || firmwareModuleInfo.md5 !== moduleInfo.info.firmwareChecksum) {
+                modules.push({
+                    moduleName: moduleInfo.module.name,
+                    firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+                    gitRepo: moduleInfo.info.firmwareGitRepo,
+                    gitTag: moduleInfo.info.firmwareGitTag,
+                    isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                    currentFirmwareVersion: moduleInfo.info.firmwareVersion,
+                    newFirmwareVersion: firmwareJson?.firmwareVersion,
+                    state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
+                    tooltip: ''
+                });
+            } else {
+                modules.push({
+                    moduleName: moduleInfo.module.name,
+                    firmwareUpgradeSupported: moduleInfo.module.firmwareUpgradeSupported,
+                    gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
+                    gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
+                    isOfficialFirmware: isOfficialUhkFirmware(moduleInfo.info.firmwareGitRepo),
+                    currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
+                    newFirmwareVersion: '',
+                    state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
+                    tooltip: `This module runs firmware ${moduleInfo.info.firmwareVersion}, but based on its checksum, it's the same as firmware ${hardwareModules.rightModuleInfo?.firmwareVersion}, hence it hasn't been updated. Unnecessary firmware updates might brick your UHK and modules in very rare circumstances, and make the firmware update process longer, so Agent only updates firmwares when justified.`
+                });
+            }
         }
     }
 
@@ -352,4 +371,26 @@ function calculateRecoveryModules(moduleInfos: Array<ModuleInfo>): Array<UhkModu
 
         return result;
     }, []);
+}
+
+function setUpdatingModuleState(state: State, moduleName: string): Array<ModuleFirmwareUpgradeState> {
+    return state.modules.map(module => {
+        if (module.moduleName === moduleName) {
+            return {
+                ...module,
+                state: ModuleFirmwareUpgradeStates.Upgrading
+            };
+        } else if (module.state === ModuleFirmwareUpgradeStates.Upgrading) {
+            return {
+                ...module,
+                state: ModuleFirmwareUpgradeStates.Success,
+                newFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                currentFirmwareVersion: state.firmwareJson?.firmwareVersion,
+                gitRepo: state.firmwareJson?.gitInfo?.repo,
+                gitTag: state.firmwareJson?.gitInfo?.tag,
+            };
+        }
+
+        return module;
+    });
 }

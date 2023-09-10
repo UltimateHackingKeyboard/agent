@@ -6,6 +6,7 @@ import {
     DeviceConnectionState,
     FirmwareJson,
     FirmwareUpgradeIpcResponse,
+    HardwareModules,
     IpcEvents,
     IpcResponse,
     KeyboardLayout,
@@ -22,7 +23,9 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
+    CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
+    HardwareModulesLoadedAction,
     ReadConfigSizesReplyAction,
     RecoveryDeviceReplyAction,
     RecoveryModuleReplyAction,
@@ -102,6 +105,10 @@ export class DeviceRendererService {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
         });
 
+        this.ipcRenderer.on(IpcEvents.device.hardwareModulesLoaded, (event: string, response: HardwareModules) => {
+            this.dispachStoreAction(new HardwareModulesLoadedAction(response));
+        });
+
         this.ipcRenderer.on(IpcEvents.device.deviceConnectionStateChanged, (event: string, arg: DeviceConnectionState) => {
             this.dispachStoreAction(new ConnectionStateChangedAction(arg));
         });
@@ -132,6 +139,10 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.updateFirmwareJson, (event: string, data: FirmwareJson) => {
             this.dispachStoreAction(new UpdateFirmwareJsonAction(data));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgradeSkip, (event: string, response: string) => {
+            this.dispachStoreAction(new CurrentlyUpdateSkipModuleAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.moduleFirmwareUpgrading, (event: string, response: string) => {

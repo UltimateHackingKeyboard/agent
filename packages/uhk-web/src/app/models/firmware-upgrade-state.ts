@@ -16,6 +16,7 @@ export interface ModuleFirmwareUpgradeState {
     currentFirmwareVersion: string;
     newFirmwareVersion?: string;
     state: ModuleFirmwareUpgradeStates;
+    tooltip?: string;
 }
 
 export interface FirmwareUpgradeState {

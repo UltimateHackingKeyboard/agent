@@ -6,6 +6,7 @@ import {
     FirmwareRepoInfo,
     getSlotIdName,
     HardwareConfiguration,
+    isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
     LEFT_HALF_MODULE,
     LogService,
@@ -386,6 +387,13 @@ export class UhkOperations {
         return this.getModuleProperty(arg).then(readUhkResponseAs0EndString);
     }
 
+    public async getModuleFirmwareChecksum(module: ModuleSlotToId): Promise<string> {
+        const moduleSlotName = getSlotIdName(module);
+        this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" firmware checksum`);
+
+        return this.getModulePropertyAsString({ module, property: ModulePropertyId.FirmwareChecksum });
+    }
+
     public async getModuleFirmwareRepoInfo(module: ModuleSlotToId): Promise<FirmwareRepoInfo> {
         const moduleSlotName = getSlotIdName(module);
         this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" repo information`);
@@ -396,7 +404,7 @@ export class UhkOperations {
         };
     }
 
-    public async getModuleVersionInfo(module: ModuleSlotToId, includeGitInfo: boolean = false): Promise<ModuleVersionInfo> {
+    public async getModuleVersionInfo(module: ModuleSlotToId, includeGitInfo: boolean = false, includeFirmwareChecksum = false): Promise<ModuleVersionInfo> {
         const moduleSlotName = getSlotIdName(module);
         try {
             this.logService.misc(`[DeviceOperation] Read "${moduleSlotName}" version information`);
@@ -418,6 +426,13 @@ export class UhkOperations {
                 };
             }
 
+            if (includeFirmwareChecksum) {
+                moduleVersionInfo = {
+                    ...moduleVersionInfo,
+                    firmwareChecksum: await this.getModuleFirmwareChecksum(module),
+                };
+            }
+
             return moduleVersionInfo;
         } catch (error) {
             this.logService.error(`[DeviceOperation] Could not read "${moduleSlotName}" version information`, error);
@@ -429,9 +444,9 @@ export class UhkOperations {
         };
     }
 
-    public async getRightModuleProperty(property: DevicePropertyIds): Promise<UhkBuffer> {
+    public async getRightModuleProperty(property: DevicePropertyIds, args: Array<number> = []): Promise<UhkBuffer> {
         this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${DevicePropertyIds[property]}" property information`);
-        const command = Buffer.from([UsbCommand.GetProperty, property]);
+        const command = Buffer.from([UsbCommand.GetProperty, property, ...args]);
         const buffer = await this.device.write(command);
 
         return UhkBuffer.fromArray(convertBufferToIntArray(buffer));
@@ -459,16 +474,26 @@ export class UhkOperations {
             firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            modules: {},
             userConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
             smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
         };
+
+        this.logService.misc(`[DeviceOperation] right module deviceProtocolVersion: ${rightModuleInfo.deviceProtocolVersion}`);
 
         if (isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion))
             rightModuleInfo = {
                 ...rightModuleInfo,
                 ...await this.getRightModuleFirmwareRepoInfo(),
             };
+
+        if (isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion)) {
+            rightModuleInfo = {
+                ...rightModuleInfo,
+                firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum, [0])),
+            };
+        }
 
         return rightModuleInfo;
     }

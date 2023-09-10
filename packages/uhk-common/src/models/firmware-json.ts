@@ -2,12 +2,14 @@ export interface FirmwareJsonDevice {
     deviceId: number;
     name: string;
     source: string;
+    md5: string;
 }
 
 export interface FirmwareJsonModule {
     moduleId: number;
     name: string;
     source: string;
+    md5: string;
 }
 
 export interface FirmwareJson {
@@ -23,4 +25,21 @@ export interface FirmwareJson {
         repo: string;
         tag: string;
     }
+}
+
+export function defaultFirmwareJson(): FirmwareJson {
+    return {
+        deviceProtocolVersion: '',
+        devices: [],
+        firmwareVersion: '',
+        gitInfo: {
+            repo: '',
+            tag: ''
+        },
+        hardwareConfigVersion: '',
+        moduleProtocolVersion: '',
+        modules: [],
+        path: '',
+        userConfigVersion: '',
+    };
 }

@@ -57,7 +57,8 @@ export const initialState: State = {
     modules: {
         moduleInfos: [],
         rightModuleInfo: {
-            firmwareVersion: ''
+            firmwareVersion: '',
+            modules: {}
         }
     },
     restoringUserConfiguration: false,
