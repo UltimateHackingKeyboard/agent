@@ -644,9 +644,7 @@ export class DeviceService {
         this._checkStatusBuffer = false;
 
         const message = await this.operations.getVariable(UsbVariables.statusBuffer);
-        if (message) {
-            this.win.webContents.send(IpcEvents.device.statusBufferChanged, message);
-        }
+        this.win.webContents.send(IpcEvents.device.statusBufferChanged, message);
     }
 
     /**
