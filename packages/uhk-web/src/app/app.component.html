@@ -29,7 +29,7 @@
             <as-split-area [size]="splitSizes.top">
                 <router-outlet></router-outlet>
             </as-split-area>
-            <as-split-area *ngIf="statusBuffer" [size]="splitSizes.bottom">
+            <as-split-area *ngIf="statusBuffer" [size]="splitSizes.bottom" class="error-panel">
                 <span [innerHTML]="statusBuffer | newLineToBr | safeHtml"></span>
             </as-split-area>
         </as-split>

@@ -15,6 +15,12 @@
                 }
             }
 
+            .error-panel {
+                background-color: var(--color-out-of-space-warning-bg);
+                color: var(--color-out-of-space-warning-text);
+                font-family: 'JetBrains Mono';
+            }
+
             &.second-menu-visible {
                 margin-left: $side-menu-width + $second-side-menu-width;
             }
