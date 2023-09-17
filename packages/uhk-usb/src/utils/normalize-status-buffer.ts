@@ -7,10 +7,11 @@ export function normalizeStatusBuffer(message: string): string {
         if (line.startsWith('Error at') || line.startsWith('Warning at')) {
             if (error) {
                 errors.add(error);
-                error = '';
-            } else {
-                error += line;
             }
+
+            error = line + '\n';
+        } else {
+            error += line + '\n';
         }
     }
 
