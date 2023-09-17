@@ -69,6 +69,12 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
                 animate('500ms ease-out', style({ opacity: 0 }))
             ])
         ]),
+        trigger('errorPanel', [
+            transition(':leave', [
+                style({ height: '*' }),
+                animate('300ms ease-out', style({ height: 0 }))
+            ])
+        ]),
         trigger('slideInOut', [
             transition(':enter', [
                 style({transform: 'translateX(100%)'}),
