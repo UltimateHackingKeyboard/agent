@@ -605,13 +605,13 @@ export class UhkOperations {
     }
 
     public async getVariable(variableId: UsbVariables, iteration: number = 0): Promise<number | string> {
-        this.logService.usb('[DeviceOperation] USB[T]: get variable');
+        this.logService.usb(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
         const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
         const responseBuffer = await this.device.write(buffer);
 
         if (variableId === UsbVariables.statusBuffer) {
             let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
-            if (message.length > 0 && iteration < 20) {
+            if (message.length === responseBuffer.length - 1 && iteration < 20) {
                 message += await this.getVariable(variableId, iteration + 1);
             }
 
