@@ -9,9 +9,9 @@ export function normalizeStatusBuffer(message: string): string {
                 errors.add(error);
             }
 
-            error = line + '\n';
+            error = line;
         } else {
-            error += line + '\n';
+            error += '\n' + line;
         }
     }
 
