@@ -39,6 +39,7 @@ import {
     waitForDevice
 } from './util.js';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
+import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
 import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
 const existsAsync = promisify(fs.exists);
@@ -613,6 +614,10 @@ export class UhkOperations {
             let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
             if (message.length === responseBuffer.length - 1 && iteration < 20) {
                 message += await this.getVariable(variableId, iteration + 1);
+            }
+
+            if (iteration === 0) {
+                message = normalizeStatusBuffer(message);
             }
 
             return message;
