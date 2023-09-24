@@ -41,6 +41,18 @@
                         </label>
                     </div>
                 </div>
+
+                <div class="form-check">
+                    <div class="checkbox d-inline-block mb-0 mt-0">
+                        <label>
+                            <input type="checkbox"
+                                   [checked]="state.i2cDebuggingRingBellEnabled"
+                                   [disabled]="state.i2cDebuggingRingBellControlDisabled"
+                                   (click)="onToggleI2cDebugRingBell()"
+                            > Ring an audible bell upon I2cRecovery increments
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
 

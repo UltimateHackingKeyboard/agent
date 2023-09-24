@@ -100,6 +100,10 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.toggleI2cDebugging, enabled);
     }
 
+    toggleI2cDebuggingRingBell(enabled: boolean): void {
+        this.ipcRenderer.send(IpcEvents.device.toggleI2cDebuggingRingBell, enabled);
+    }
+
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));

@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { KeyboardLayout } from 'uhk-common';
 
-import { ToggleI2cDebuggingAction } from '../../../store/actions/advance-settings.action';
+import { ToggleI2cDebuggingAction, ToggleI2cDebuggingRingBellAction } from '../../../store/actions/advance-settings.action';
 import { advanceSettingsState, AppState, getKeyboardLayout, isKeyboardLayoutChanging } from '../../../store';
 import { ChangeKeyboardLayoutAction } from '../../../store/actions/device';
 import { initialState, State } from '../../../store/reducers/advanced-settings.reducer';
@@ -73,5 +73,9 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
 
     onToggleI2cDebug(): void {
         this.store.dispatch(new ToggleI2cDebuggingAction());
+    }
+
+    onToggleI2cDebugRingBell(): void {
+        this.store.dispatch(new ToggleI2cDebuggingRingBellAction());
     }
 }

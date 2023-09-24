@@ -5,7 +5,7 @@ import { tap, withLatestFrom } from 'rxjs/operators';
 
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ActionTypes } from '../actions/advance-settings.action';
-import { AppState, getIsI2cDebuggingEnabled } from '../index';
+import { AppState, getIsI2cDebuggingEnabled, isI2cDebuggingRingBellEnabled } from '../index';
 
 @Injectable()
 export class AdvancedSettingsEffects {
@@ -15,6 +15,15 @@ export class AdvancedSettingsEffects {
             withLatestFrom(this.store.select(getIsI2cDebuggingEnabled)),
             tap(([, enabled])=>{
                 this.deviceRendererService.toggleI2cDebugging(enabled);
+            })
+        );
+
+    @Effect({dispatch: false}) toggleI2cDebuggingRingBell$ = this.actions$
+        .pipe(
+            ofType(ActionTypes.toggleI2CDebugging, ActionTypes.toggleI2CDebuggingRingBell),
+            withLatestFrom(this.store.select(isI2cDebuggingRingBellEnabled)),
+            tap(([, enabled])=>{
+                this.deviceRendererService.toggleI2cDebuggingRingBell(enabled);
             })
         );
 
