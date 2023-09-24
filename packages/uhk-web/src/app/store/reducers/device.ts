@@ -340,4 +340,4 @@ export const getConnectedDevice = (state: State) => state.connectedDevice;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
-export const getStatusBuffer = (state: State) => state.statusBuffer;
+export const getStatusBuffer = (state: State) => state.connectedDevice && state.statusBuffer;
