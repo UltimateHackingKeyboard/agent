@@ -661,6 +661,7 @@ export class DeviceService {
      */
     private async uhkDevicePoller(): Promise<void> {
         let savedState: DeviceConnectionState;
+        let deviceProtocolVersion: string;
         let iterationCount = 0;
 
         while (true) {
@@ -675,8 +676,10 @@ export class DeviceService {
 
                         if (state.hasPermission && state.zeroInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
+                            deviceProtocolVersion = state.hardwareModules.rightModuleInfo.deviceProtocolVersion;
                             this._checkStatusBuffer = true;
                         } else {
+                            deviceProtocolVersion = undefined;
                             state.hardwareModules = {
                                 moduleInfos: [],
                                 rightModuleInfo: {
@@ -691,8 +694,12 @@ export class DeviceService {
                         this.logService.misc('[DeviceService] Device connection state changed to:', state);
                     }
 
+                    if (state.isMacroStatusDirty) {
+                        this._checkStatusBuffer = true;
+                    }
+
                     await this.pollDebugInfo(iterationCount);
-                    await this.checkStatusBuffer(state?.hardwareModules?.rightModuleInfo?.deviceProtocolVersion);
+                    await this.checkStatusBuffer(deviceProtocolVersion);
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
