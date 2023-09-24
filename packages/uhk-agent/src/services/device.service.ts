@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
+import * as process from 'process';
 import {
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
@@ -703,7 +704,7 @@ export class DeviceService {
             this.win.webContents.send(IpcEvents.device.i2cWatchdogCounterChanged, this.i2cWatchdogRecoveryCounter);
 
             if (this.isI2cDebuggingRingBellEnabled) {
-                console.log('\u0007');
+                process.stdout.write('\u0007');
             }
         }
     }
