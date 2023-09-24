@@ -15,5 +15,7 @@ export function normalizeStatusBuffer(message: string): string {
         }
     }
 
+    errors.add(error);
+
     return Array.from(errors).join('\n');
 }
