@@ -5,7 +5,7 @@ import { tap, withLatestFrom } from 'rxjs/operators';
 
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ActionTypes } from '../actions/advance-settings.action';
-import { AppState, getIsI2cDebuggingEnabled } from '../index';
+import { AppState, getIsI2cDebuggingEnabled, isI2cDebuggingRingBellEnabled } from '../index';
 
 @Injectable()
 export class AdvancedSettingsEffects {
