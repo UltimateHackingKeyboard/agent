@@ -49,7 +49,6 @@ export class Device {
     public static readonly getUserConfigFromHistory = 'device-get-user-config-from-history';
     public static readonly getUserConfigFromHistoryReply = 'device-get-user-config-from-history-reply';
     public static readonly toggleI2cDebugging = 'device-toggle-i2c-debugging';
-    public static readonly toggleI2cDebuggingRingBell = 'device-toggle-i2c-debugging-ring-bell';
     public static readonly i2cWatchdogCounterChanged = 'device-i2c-watchdog-counter-changed';
 }
 

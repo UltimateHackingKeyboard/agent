@@ -18,15 +18,6 @@ export class AdvancedSettingsEffects {
             })
         );
 
-    @Effect({dispatch: false}) toggleI2cDebuggingRingBell$ = this.actions$
-        .pipe(
-            ofType(ActionTypes.toggleI2CDebugging, ActionTypes.toggleI2CDebuggingRingBell),
-            withLatestFrom(this.store.select(isI2cDebuggingRingBellEnabled)),
-            tap(([, enabled])=>{
-                this.deviceRendererService.toggleI2cDebuggingRingBell(enabled);
-            })
-        );
-
     constructor(private actions$: Actions,
                 private store: Store<AppState>,
                 private deviceRendererService: DeviceRendererService,

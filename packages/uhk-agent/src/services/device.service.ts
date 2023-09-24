@@ -84,7 +84,6 @@ export class DeviceService {
     private queueManager = new QueueManager();
     private wasCalledSaveUserConfiguration = false;
     private isI2cDebuggingEnabled = false;
-    private isI2cDebuggingRingBellEnabled = false;
     private i2cWatchdogRecoveryCounter = -1;
 
     constructor(private logService: LogService,
@@ -117,8 +116,6 @@ export class DeviceService {
         });
 
         ipcMain.on(IpcEvents.device.toggleI2cDebugging, this.toggleI2cDebugging.bind(this));
-
-        ipcMain.on(IpcEvents.device.toggleI2cDebuggingRingBell, this.toggleI2cDebuggingRingBell.bind(this));
 
         ipcMain.on(IpcEvents.device.saveUserConfiguration, (...args: any[]) => {
             this.queueManager.add({
@@ -702,10 +699,6 @@ export class DeviceService {
             this.logService.misc(`[DeviceService] I2C watchdog counter changed from ${this.i2cWatchdogRecoveryCounter} => ${debugInfo.i2cWatchdogRecoveryCounter}`);
             this.i2cWatchdogRecoveryCounter = debugInfo.i2cWatchdogRecoveryCounter;
             this.win.webContents.send(IpcEvents.device.i2cWatchdogCounterChanged, this.i2cWatchdogRecoveryCounter);
-
-            if (this.isI2cDebuggingRingBellEnabled) {
-                process.stdout.write('\u0007');
-            }
         }
     }
 
@@ -755,12 +748,6 @@ export class DeviceService {
         this.logService.error('[DeviceService] Toggle I2C debugging =>', enabled);
 
         this.isI2cDebuggingEnabled = enabled;
-    }
-
-    private async toggleI2cDebuggingRingBell(_: Electron.IpcMainEvent, [enabled]): Promise<void> {
-        this.logService.error('[DeviceService] Toggle I2C debugging ring bell=>', enabled);
-
-        this.isI2cDebuggingRingBellEnabled = enabled;
     }
 
     private async loadUserConfigFromHistory(event: Electron.IpcMainEvent): Promise<void> {

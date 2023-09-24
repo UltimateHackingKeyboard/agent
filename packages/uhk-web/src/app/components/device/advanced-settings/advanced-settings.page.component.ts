@@ -1,8 +1,12 @@
-import { ChangeDetectorRef } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -24,12 +28,15 @@ import { initialState, State } from '../../../store/reducers/advanced-settings.r
 export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
     faCog = faCog;
 
+    @ViewChild('audioPlayer', {static: true,}) audioPlayer: ElementRef<HTMLAudioElement>;
+
     isKeyboardLayoutChanging$: Observable<boolean>;
     keyboardLayout: KeyboardLayout;
     keyboardLayoutEnum = KeyboardLayout;
 
     state: State;
 
+    private i2cErrorsLength = 0;
     private stateSubscription: Subscription;
     private keyboardLayoutSubscription: Subscription;
 
@@ -60,6 +67,10 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
             .subscribe(state => {
                 this.state = state;
                 this.cdRef.detectChanges();
+                if (this.audioPlayer && this.state.i2cDebuggingRingBellEnabled && this.i2cErrorsLength !== this.state.i2cLogs.length) {
+                    this.i2cErrorsLength = this.state.i2cLogs.length;
+                    this.audioPlayer.nativeElement.play();
+                }
             });
     }
 
