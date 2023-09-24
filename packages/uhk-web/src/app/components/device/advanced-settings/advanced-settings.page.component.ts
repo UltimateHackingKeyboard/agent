@@ -69,6 +69,12 @@ export class AdvancedSettingsPageComponent implements OnInit, OnDestroy {
                 this.cdRef.detectChanges();
                 if (this.audioPlayer && this.state.i2cDebuggingRingBellEnabled && this.i2cErrorsLength !== this.state.i2cLogs.length) {
                     this.i2cErrorsLength = this.state.i2cLogs.length;
+                    const audioPlayer =  this.audioPlayer.nativeElement;
+                    if (audioPlayer.duration > 0 && !audioPlayer.paused) {
+                        audioPlayer.pause();
+                        audioPlayer.currentTime = 0;
+                    }
+
                     this.audioPlayer.nativeElement.play();
                 }
             });
