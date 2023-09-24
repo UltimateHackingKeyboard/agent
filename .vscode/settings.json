@@ -4,6 +4,5 @@
     "**/.git/subtree-cache/**": true,
     "**/node_modules/*/**": true,
     "**/dist/**": true
-  },
-  "terminal.integrated.enableBell": true
+  }
 }
