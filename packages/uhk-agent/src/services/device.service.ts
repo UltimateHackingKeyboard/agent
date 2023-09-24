@@ -1,6 +1,5 @@
 import { ipcMain } from 'electron';
 import { cloneDeep, isEqual } from 'lodash';
-import * as process from 'process';
 import {
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
