@@ -1,5 +1,6 @@
 export interface DeviceState {
     isEepromBusy: boolean;
+    isMacroStatusDirty: boolean;
     areHalvesMerged: boolean;
     isLeftHalfConnected: boolean;
     activeLayerNumber: number;

@@ -1,4 +1,5 @@
 export * from './check-firmware-and-device-compatibility.js';
+export * from './calculate-halves-state.js';
 export * from './convert-ms-to-duration.js';
 export * from './convert-slave-i2c-error-buffer.js';
 export * from './get-current-uhk-device-product.js';

@@ -34,7 +34,12 @@ import {
     snooze
 } from './util.js';
 import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models/index.js';
-import { getNumberOfConnectedDevices, getUhkDevices, usbDeviceJsonFormatter } from './utils/index.js';
+import {
+    calculateHalvesState,
+    getNumberOfConnectedDevices,
+    getUhkDevices,
+    usbDeviceJsonFormatter
+} from './utils/index.js';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
 
@@ -126,6 +131,7 @@ export class UhkHidDevice {
                 rightModuleSlot: RightSlotModules.NoModule
             },
             hardwareModules: {},
+            isMacroStatusDirty: false,
             multiDevice: getNumberOfConnectedDevices() > 1
         };
 
@@ -146,7 +152,9 @@ export class UhkHidDevice {
         }
 
         if (result.connectedDevice && result.hasPermission && result.zeroInterfaceAvailable) {
-            result.halvesInfo = await this.getHalvesStates();
+            const deviceState = await this.getDeviceState();
+            result.halvesInfo = calculateHalvesState(deviceState);
+            result.isMacroStatusDirty = deviceState.isMacroStatusDirty;
         } else if (!result.connectedDevice) {
             this._device = undefined;
         }
@@ -279,12 +287,7 @@ export class UhkHidDevice {
     async getHalvesStates(): Promise<HalvesInfo> {
         const deviceState = await this.getDeviceState();
 
-        return {
-            areHalvesMerged: deviceState.areHalvesMerged,
-            isLeftHalfConnected: deviceState.isLeftHalfConnected,
-            leftModuleSlot: LeftSlotModules[deviceState.leftModuleSlot],
-            rightModuleSlot: RightSlotModules[deviceState.rightModuleSlot]
-        };
+        return calculateHalvesState(deviceState);
     }
 
     async getDeviceState(): Promise<DeviceState> {
@@ -293,6 +296,7 @@ export class UhkHidDevice {
 
         return {
             isEepromBusy: buffer[1] !== 0,
+            isMacroStatusDirty: buffer[7] !== 0,
             areHalvesMerged: buffer[2] !== 0,
             isLeftHalfConnected: buffer[3] !== 0,
             activeLayerNumber,

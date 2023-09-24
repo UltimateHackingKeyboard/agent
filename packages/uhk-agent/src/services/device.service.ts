@@ -17,6 +17,7 @@ import {
     IpcResponse,
     isDeviceProtocolSupportFirmwareChecksum,
     isDeviceProtocolSupportGitInfo,
+    isDeviceProtocolSupportStatusError,
     isSameFirmware,
     KeyboardLayout,
     LEFT_HALF_MODULE,
@@ -636,12 +637,16 @@ export class DeviceService {
         event.sender.send(IpcEvents.device.changeKeyboardLayoutReply, response);
     }
 
-    private async checkStatusBuffer(): Promise<void> {
+    private async checkStatusBuffer(deviceProtocolVersion: string): Promise<void> {
         if (!this._checkStatusBuffer) {
             return;
         }
 
         this._checkStatusBuffer = false;
+
+        if (!isDeviceProtocolSupportStatusError(deviceProtocolVersion)) {
+            return;
+        }
 
         const message = await this.operations.getVariable(UsbVariables.statusBuffer);
         this.win.webContents.send(IpcEvents.device.statusBufferChanged, message);
@@ -687,7 +692,7 @@ export class DeviceService {
                     }
 
                     await this.pollDebugInfo(iterationCount);
-                    await this.checkStatusBuffer();
+                    await this.checkStatusBuffer(state?.hardwareModules?.rightModuleInfo?.deviceProtocolVersion);
                 } catch (err) {
                     this.logService.error('[DeviceService] Device connection state query error', err);
                 }
