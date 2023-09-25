@@ -13,6 +13,10 @@ export type AppThemeSelect = {
 
 export interface ApplicationSettings {
     checkForUpdateOnStartUp: boolean;
+    /**
+     * Application main error panel height in percent.
+     */
+    errorPanelHeight?: number;
     everAttemptedSavingToKeyboard: boolean;
     animationEnabled?: boolean;
     appTheme?: AppTheme;

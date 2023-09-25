@@ -1,6 +1,7 @@
-import { Component, HostListener, ViewEncapsulation, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { IOutputData } from 'angular-split';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 
@@ -8,7 +9,9 @@ import { DoNotUpdateAppAction, UpdateAppAction } from './store/actions/app-updat
 import { EnableUsbStackTestAction, UpdateFirmwareAction } from './store/actions/device';
 import {
     AppState,
+    getErrorPanelHeight,
     getShowAppUpdateAvailable,
+    getStatusBuffer,
     deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState,
@@ -20,7 +23,7 @@ import {
 } from './store';
 import { ProgressButtonState } from './store/reducers/progress-button-state';
 import { UpdateInfo } from './models/update-info';
-import { KeyUpAction, KeyDownAction } from './store/actions/app';
+import { ErrorPanelSizeChangedAction, KeyUpAction, KeyDownAction } from './store/actions/app';
 import { OutOfSpaceWarningData } from './models';
 import { filter } from 'rxjs/operators';
 import { SecondSideMenuContainerComponent } from './components/side-menu';
@@ -29,7 +32,6 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
     selector: 'main-app',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    encapsulation: ViewEncapsulation.None,
     animations: [
         trigger('showSaveToKeyboardButton', [
             transition(':enter', [
@@ -67,6 +69,12 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
                 animate('500ms ease-out', style({ opacity: 0 }))
             ])
         ]),
+        trigger('errorPanel', [
+            transition(':leave', [
+                style({ height: '*' }),
+                animate('300ms ease-out', style({ height: 0 }))
+            ])
+        ]),
         trigger('slideInOut', [
             transition(':enter', [
                 style({transform: 'translateX(100%)'}),
@@ -91,7 +99,12 @@ export class MainAppComponent implements OnDestroy {
     firstAttemptOfSaveToKeyboard$: Observable<boolean>;
     outOfSpaceWarning: OutOfSpaceWarningData;
     secondSideMenuVisible = false;
-
+    splitSizes = {
+        top: 100,
+        bottom: 0
+    };
+    statusBuffer: string;
+    private errorPanelHeightSubscription: Subscription;
     private keypressCapturing: boolean;
     private saveToKeyboardStateSubscription: Subscription;
     private keypressCapturingSubscription: Subscription;
@@ -99,12 +112,21 @@ export class MainAppComponent implements OnDestroy {
     private showUpdateAvailableSubscription: Subscription;
     private outOfSpaceWarningSubscription: Subscription;
     private routeDataSubscription: Subscription;
+    private statusBufferSubscription: Subscription;
     private secondSideMenuComponent: any;
 
     constructor(private store: Store<AppState>,
                 private route: ActivatedRoute,
                 private router: Router,
                 private cdRef: ChangeDetectorRef) {
+        this.errorPanelHeightSubscription = store.select(getErrorPanelHeight)
+            .subscribe(height => {
+                this.splitSizes = {
+                    top: 100 - height,
+                    bottom: height
+                };
+                this.cdRef.markForCheck();
+            });
         this.showFirmwareUpgradePanelSubscription = store.select(getShowFirmwareUpgradePanel)
             .subscribe(data => {
                 this.showFirmwareUpgradePanel = data;
@@ -149,15 +171,22 @@ export class MainAppComponent implements OnDestroy {
                 this.cdRef.detectChanges();
             }
         });
+        this.statusBufferSubscription = store.select(getStatusBuffer)
+            .subscribe(data => {
+                this.statusBuffer = data;
+                this.cdRef.markForCheck();
+            });
     }
 
     ngOnDestroy(): void {
+        this.errorPanelHeightSubscription.unsubscribe();
         this.saveToKeyboardStateSubscription.unsubscribe();
         this.keypressCapturingSubscription.unsubscribe();
         this.showFirmwareUpgradePanelSubscription.unsubscribe();
         this.showUpdateAvailableSubscription.unsubscribe();
         this.outOfSpaceWarningSubscription.unsubscribe();
         this.routeDataSubscription.unsubscribe();
+        this.statusBufferSubscription.unsubscribe();
     }
 
     @HostListener('document:keydown', ['$event'])
@@ -181,6 +210,10 @@ export class MainAppComponent implements OnDestroy {
         }
 
         this.store.dispatch(new KeyDownAction(event));
+    }
+
+    errorPanelSizeDragEndHandler($event: IOutputData) {
+        this.store.dispatch(new ErrorPanelSizeChangedAction($event.sizes[1] as number));
     }
 
     @HostListener('document:keyup', ['$event'])

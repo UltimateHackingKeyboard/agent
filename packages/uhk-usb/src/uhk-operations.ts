@@ -18,9 +18,9 @@ import {
     UhkModule
 } from 'uhk-common';
 import { promisify } from 'util';
-import { DevicePropertyIds } from './constants.js';
 import {
     ConfigBufferId,
+    DevicePropertyIds,
     EepromOperation,
     EnumerationModes,
     KbootCommands,
@@ -39,6 +39,7 @@ import {
     waitForDevice
 } from './util.js';
 import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
+import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
 import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
 const existsAsync = promisify(fs.exists);
@@ -604,10 +605,23 @@ export class UhkOperations {
         return convertSlaveI2cErrorBuffer(responseBuffer, slaveId);
     }
 
-    public async getVariable(variableId: UsbVariables): Promise<number> {
-        this.logService.usb('[DeviceOperation] USB[T]: get variable');
+    public async getVariable(variableId: UsbVariables, iteration: number = 0): Promise<number | string> {
+        this.logService.usb(`[DeviceOperation] USB[T]: get variable: ${UsbVariables[variableId]}. Iteration: ${iteration}`);
         const buffer = Buffer.from([UsbCommand.GetVariable, variableId]);
         const responseBuffer = await this.device.write(buffer);
+
+        if (variableId === UsbVariables.statusBuffer) {
+            let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+            if (message.length === responseBuffer.length - 1 && iteration < 20) {
+                message += await this.getVariable(variableId, iteration + 1);
+            }
+
+            if (iteration === 0) {
+                message = normalizeStatusBuffer(message);
+            }
+
+            return message;
+        }
 
         return responseBuffer[1];
     }

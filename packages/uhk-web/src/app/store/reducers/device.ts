@@ -41,6 +41,7 @@ export interface State {
     readingConfigSizes: boolean;
     configSizes: ConfigSizesInfo;
     skipFirmwareUpgrade: boolean;
+    statusBuffer: string;
 }
 
 export const initialState: State = {
@@ -69,7 +70,8 @@ export const initialState: State = {
     halvesInfo: getDefaultHalvesInfo(),
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 },
-    skipFirmwareUpgrade: false
+    skipFirmwareUpgrade: false,
+    statusBuffer: ''
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -169,6 +171,13 @@ export function reducer(state = initialState, action: Action): State {
                 ...state,
                 modifiedConfigWhileSaved: false,
                 saveToKeyboard: getSaveToKeyboardButtonState()
+            };
+        }
+
+        case Device.ActionTypes.StatusBufferChanged: {
+            return {
+                ...state,
+                statusBuffer: (<Device.StatusBufferChangedAction>action).payload
             };
         }
 
@@ -331,3 +340,4 @@ export const getConnectedDevice = (state: State) => state.connectedDevice;
 export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrade;
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
+export const getStatusBuffer = (state: State) => state.connectedDevice && state.statusBuffer;

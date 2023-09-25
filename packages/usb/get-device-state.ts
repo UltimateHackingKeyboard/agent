@@ -13,6 +13,7 @@ setInterval(async function () {
         const state = await device.getDeviceState();
         console.log(
             `isEepromBusy: ${state.isEepromBusy ? 'yes' : 'no'} | \
+isMacroStatusDirty: ${state.isMacroStatusDirty ? 'yes' : 'no'} | \
 areHalvesMerged: ${state.areHalvesMerged ? 'yes' : 'no'} | \
 leftKeyboardHalfSlot:${state.leftKeyboardHalfSlot} | \
 leftModuleSlot:${state.leftModuleSlot} | \

@@ -6,6 +6,7 @@ export interface DeviceConnectionState {
     connectedDevice?: UhkDeviceProduct;
     hasPermission: boolean;
     bootloaderActive: boolean;
+    isMacroStatusDirty: boolean;
     /**
      * True if more then 1 UHK device connected.
      */

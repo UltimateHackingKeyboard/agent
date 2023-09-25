@@ -164,6 +164,7 @@ export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (k
 export const appState = (state: AppState) => state.app;
 export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const disableUpdateAgentProtection = createSelector(appState, fromApp.disableUpdateAgentProtection);
+export const getErrorPanelHeight = createSelector(appState, fromApp.getErrorPanelHeight);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
@@ -278,6 +279,7 @@ export const getConnectedDevice = createSelector(deviceState, fromDevice.getConn
 export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.getSkipFirmwareUpgrade);
 export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
 export const keyboardHalvesAlwaysJoined = createSelector(deviceState, fromDevice.keyboardHalvesAlwaysJoined);
+export const getStatusBuffer = createSelector(deviceState, fromDevice.getStatusBuffer);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
@@ -667,6 +669,7 @@ export const getApplicationSettings = createSelector(
         keyboardHalvesAlwaysJoined,
     ): ApplicationSettings => {
         return {
+            errorPanelHeight: app.errorPanelHeight,
             checkForUpdateOnStartUp: updateSettingsState.checkForUpdateOnStartUp,
             everAttemptedSavingToKeyboard: app.everAttemptedSavingToKeyboard,
             animationEnabled: app.animationEnabled,

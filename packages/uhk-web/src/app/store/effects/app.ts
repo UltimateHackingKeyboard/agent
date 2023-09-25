@@ -128,6 +128,7 @@ export class ApplicationEffects {
     @Effect() saveApplicationSettings$ = this.actions$
         .pipe(
             ofType(
+                ActionTypes.ErrorPanelSizeChanged,
                 ActionTypes.SetAppTheme,
                 ActionTypes.ToggleAnimationEnabled,
                 ActionTypes.ToggleKeyboardHalvesAlwaysJoined,

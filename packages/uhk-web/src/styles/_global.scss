@@ -14,14 +14,9 @@ body {
     --macro-sub-item-max-width: 175px;
 }
 
-main-app {
-    display: block;
-    min-height: 100%;
-}
-
 .full-screen-component {
     display: block;
-    height: 100vh;
+    height: 100%;
 }
 
 .top-notification-panel-visible {
@@ -29,7 +24,7 @@ main-app {
     transition: 0.5s;
 }
 .top-notification-panel-visible .full-screen-component {
-    height: calc(100vh - #{$main-content-top-margin-on-update});
+    height: calc(100% - #{$main-content-top-margin-on-update});
 }
 
 textarea {
