@@ -104,6 +104,7 @@ export const metaReducers: MetaReducer<AppState>[] = environment.production
 export const advanceSettingsState = (state: AppState) => state.advanceSettings;
 export const getIsAdvancedSettingsMenuVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAdvancedSettingsMenuVisible);
 export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingEnabled);
+export const isI2cDebuggingRingBellEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingRingBellEnabled);
 
 export const userConfigState = (state: AppState) => state.userConfiguration;
 
