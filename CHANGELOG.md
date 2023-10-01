@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.1.0] - 2023-10-01
+
+Firmware: 10.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.3.0)] | Device Protocol: 4.**10.0** | User Config: 6.0.0 | Hardware Config: 1.0.0
+
+- Add error panel to display smart macro errors in Agent.
+- Implement MD5 checksum based firmware updates. `DEVICEPROTOCOL:MINOR`
+- Add audible option for I2C debugging.
+
 ## [3.0.2] - 2023-08-13
 
 Firmware: 10.1.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.1.0)] | Device Protocol: 4.9.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
