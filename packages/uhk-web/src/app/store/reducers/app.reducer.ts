@@ -17,7 +17,7 @@ import { ActionTypes as UserConfigActionTypes, SaveUserConfigSuccessAction } fro
 import { ActionTypes as DeviceActionTypes, ConnectionStateChangedAction } from '../actions/device';
 import { getVersions } from '../../util';
 
-const DEFAULT_ERROR_PANEL_HEIGHT = 5;
+const DEFAULT_ERROR_PANEL_HEIGHT = 10;
 
 export interface State {
     appTheme: AppTheme;
