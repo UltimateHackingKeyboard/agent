@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { defer, Observable } from 'rxjs';
+import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { Observable } from 'rxjs';
 import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { Action, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 import { Buffer } from 'uhk-common';
 
@@ -53,14 +53,18 @@ import { LoadUserConfigurationFromFilePayload } from '../../models';
 @Injectable()
 export class UserConfigEffects {
 
-    @Effect() loadUserConfig$: Observable<Action> = defer(() => {
-        return this.getUserConfiguration()
-            .pipe(
-                map(userConfig => new LoadUserConfigSuccessAction(userConfig))
-            );
-    });
+    loadUserConfig$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ROOT_EFFECTS_INIT),
+            switchMap(() => this.getUserConfiguration()
+                .pipe(
+                    map(userConfig => new LoadUserConfigSuccessAction(userConfig))
+                )
+            )
+        )
+    );
 
-    @Effect() saveUserConfig$: Observable<Action> = this.actions$
+    saveUserConfig$ = createEffect(() => this.actions$
         .pipe(
             ofType(
                 Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate, Keymaps.ActionTypes.EditName,
@@ -111,9 +115,10 @@ export class UserConfigEffects {
                         })
                     );
             })
-        );
+        )
+    );
 
-    @Effect() undoUserConfig$: Observable<Action> = this.actions$
+    undoUserConfig$ = createEffect(() => this.actions$
         .pipe(
             ofType<UndoLastAction>(Keymaps.ActionTypes.UndoLastAction),
             map(action => action.payload),
@@ -123,19 +128,22 @@ export class UserConfigEffects {
                     map(() => new LoadUserConfigSuccessAction(payload.config))
                 )
             )
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) loadConfigFromDevice$ = this.actions$
+    loadConfigFromDevice$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.LoadConfigFromDevice),
             tap(() => this.deviceRendererService.loadConfigurationFromKeyboard(getVersions()))
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() loadConfigFromDeviceReply$ = this.actions$
+    loadConfigFromDeviceReply$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadConfigFromDeviceReplyAction>(ActionTypes.LoadConfigFromDeviceReply),
             withLatestFrom(this.store.select(getRouterState)),
-            mergeMap(([action, route]): any => {
+            mergeMap(([action, route]) => {
                 const data: ConfigurationReply = action.payload;
 
                 if (!data.success) {
@@ -191,9 +199,10 @@ export class UserConfigEffects {
 
                 return result;
             })
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) saveUserConfigInJsonFile$ = this.actions$
+    saveUserConfigInJsonFile$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveUserConfigInJsonFile),
             withLatestFrom(this.store.select(getUserConfiguration)),
@@ -202,9 +211,11 @@ export class UserConfigEffects {
                 const asBlob = new Blob([asString], { type: 'text/plain' });
                 saveAs(asBlob, 'UserConfiguration.json');
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) saveUserConfigInBinFile$ = this.actions$
+    saveUserConfigInBinFile$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveUserConfigInBinFile),
             withLatestFrom(this.store.select(getUserConfiguration)),
@@ -214,9 +225,11 @@ export class UserConfigEffects {
                 const blob = new Blob([uhkBuffer.getBufferContent()]);
                 saveAs(blob, 'UserConfiguration.bin');
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() loadUserConfigurationFromFile$ = this.actions$
+    loadUserConfigurationFromFile$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadUserConfigurationFromFileAction>(ActionTypes.LoadUserConfigurationFromFile),
             map(action => action.payload),
@@ -254,13 +267,15 @@ export class UserConfigEffects {
                     });
                 }
             })
-        );
+        )
+    );
 
-    @Effect() previewUserConfiguration$ = this.actions$
+    previewUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType<PreviewUserConfigurationAction>(ActionTypes.PreviewUserConfiguration),
             map(() => new ShowSaveToKeyboardButtonAction())
-        );
+        )
+    );
 
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,

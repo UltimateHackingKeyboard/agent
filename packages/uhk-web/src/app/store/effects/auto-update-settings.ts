@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { ShowNotificationAction } from '../actions/app';
 @Injectable()
 export class AutoUpdateSettingsEffects {
 
-    @Effect() sendNotification$: Observable<Action> = this.actions$
+    sendNotification$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType<CheckForUpdateSuccessAction | CheckForUpdateFailedAction>(
                 ActionTypes.CheckForUpdateFailed, ActionTypes.CheckForUpdateSuccess),
@@ -28,7 +28,8 @@ export class AutoUpdateSettingsEffects {
                     message
                 });
             })
-        );
+        )
+    );
 
     constructor(private actions$: Actions) {
     }

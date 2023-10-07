@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap, withLatestFrom } from 'rxjs/operators';
 import { FirmwareRepoInfo } from 'uhk-common';
 
@@ -13,20 +13,24 @@ import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds } f
 @Injectable()
 export class SmartMacroDocEffect {
 
-    @Effect({ dispatch: false }) smartMacroTogglePanelVisibility$ = this.actions$
+    smartMacroTogglePanelVisibility$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.TogglePanelVisibility),
             withLatestFrom(this.store.select(getRightModuleFirmwareRepoInfo)),
             tap(([, firmwareRepoInfo]) => this.smartMacroDocRendererService.downloadDocumentation(firmwareRepoInfo))
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) smartMacroDocInited$ = this.actions$
+    smartMacroDocInited$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SmdInited, Device.ActionTypes.ModulesInfoLoaded, Device.ActionTypes.ConnectionStateChanged,
                 Device.ActionTypes.UpdateFirmwareSuccess, Device.ActionTypes.UpdateFirmwareFailed),
             withLatestFrom(this.store.select(getSmartMacroDocModuleIds), this.store.select(getRightModuleFirmwareRepoInfo)),
             tap(([, modules, repoInfo]) => this.sendMessageContext(modules, repoInfo))
-        );
+        ),
+    { dispatch: false }
+    );
 
     constructor(private actions$: Actions,
                 private smartMacroDocRendererService: SmartMacroDocRendererService,

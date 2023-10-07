@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { Observable } from 'rxjs';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, mergeMap, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 
@@ -41,7 +40,7 @@ import { DataStorageRepositoryService } from '../../services/datastorage-reposit
 @Injectable()
 export class ApplicationEffects {
 
-    @Effect() appStart$: Observable<Action> = this.actions$
+    appStart$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.AppBootstrapped),
             startWith(new AppStartedAction()),
@@ -67,17 +66,20 @@ export class ApplicationEffects {
                     })
                 )
             )
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) appStartInfo$: Observable<Action> = this.actions$
+    appStartInfo$= createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.LoadAppStartInfo),
             tap(() => {
                 this.appRendererService.getAppStartInfo();
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) showNotification$: Observable<Action> = this.actions$
+    showNotification$ = createEffect(() => this.actions$
         .pipe(
             ofType<ShowNotificationAction>(ActionTypes.AppShowNotification),
             map(action => action.payload),
@@ -87,9 +89,11 @@ export class ApplicationEffects {
                 }
                 this.notifierService.notify(notification.type, notification.message);
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() processStartInfo$: Observable<Action> = this.actions$
+    processStartInfo$ = createEffect(() => this.actions$
         .pipe(
             ofType<ProcessAppStartInfoAction>(ActionTypes.AppProcessStartInfo),
             map(action => action.payload),
@@ -101,21 +105,23 @@ export class ApplicationEffects {
                     new StartConnectionPollerAction()
                 ];
             })
-        );
+        )
+    );
 
-    @Effect() undoLastNotification$: Observable<Action> = this.actions$
+    undoLastNotification$ = createEffect(() => this.actions$
         .pipe(
             ofType<UndoLastAction>(ActionTypes.UndoLast),
             map(action => action.payload),
             mergeMap((action: Action) => [action, new DismissUndoNotificationAction()])
-        );
+        )
+    );
 
     openConfigFolder$ = createEffect(() => this.actions$.pipe(
         ofType(ActionTypes.OpenConfigFolder),
         tap(() => this.appRendererService.openConfigFolder())
     ), { dispatch: false });
 
-    @Effect({ dispatch: false }) openUrlInNewWindow$ = this.actions$
+    openUrlInNewWindow$ = createEffect(() => this.actions$
         .pipe(
             ofType<OpenUrlInNewWindowAction>(ActionTypes.OpenUrlInNewWindow),
             withLatestFrom(this.store.select(runningInElectron)),
@@ -128,9 +134,11 @@ export class ApplicationEffects {
                     window.open(url, '_blank');
                 }
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() saveApplicationSettings$ = this.actions$
+    saveApplicationSettings$ = createEffect(() => this.actions$
         .pipe(
             ofType(
                 ActionTypes.ErrorPanelSizeChanged,
@@ -148,9 +156,10 @@ export class ApplicationEffects {
             map(([, config]) => config),
             switchMap((config: ApplicationSettings) => this.dataStorageRepository.saveApplicationSettings(config)),
             map(() => new SaveApplicationSettingsSuccessAction())
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) setAppTheme$ = this.actions$
+    setAppTheme$ = createEffect(() => this.actions$
         .pipe(
             ofType<SetAppThemeAction>(ActionTypes.SetAppTheme),
             map(action => action.payload),
@@ -159,9 +168,11 @@ export class ApplicationEffects {
                     (window as any).setUhkTheme(theme);
                 }
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) navigateTo$ = this.actions$
+    navigateTo$ = createEffect(() => this.actions$
         .pipe(
             ofType<NavigateTo>(ActionTypes.NavigateTo),
             map(action => action.payload),
@@ -171,7 +182,9 @@ export class ApplicationEffects {
                     this.router.navigate(payload.commands, payload.extras);
                 }, 10);
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
     constructor(private actions$: Actions,
                 private notifierService: NotifierService,

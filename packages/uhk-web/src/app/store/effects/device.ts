@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
 import { Action, Store } from '@ngrx/store';
-import { EMPTY, Observable, of, timer } from 'rxjs';
+import { EMPTY, of, timer } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, pairwise, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
 import {
@@ -75,16 +75,18 @@ import { getVersions } from '../../util';
 export class DeviceEffects {
     private shouldUpgradeAgent = false;
 
-    @Effect({dispatch:false}) changeKeyboardLayout$ = this.actions$
+    changeKeyboardLayout$ = createEffect(() => this.actions$
         .pipe(
             ofType<ChangeKeyboardLayoutAction>(ActionTypes.ChangeKeyboardLayout),
             withLatestFrom(this.store.select(getDeviceId)),
             tap(([action, deviceId]) => {
                 this.deviceRendererService.changeKeyboardLayout(action.layout, deviceId);
             })
-        );
+        ),
+    {dispatch:false}
+    );
 
-    @Effect() changeKeyboardLayoutFailed$ = this.actions$
+    changeKeyboardLayoutFailed$ = createEffect(() => this.actions$
         .pipe(
             ofType<ChangeKeyboardLayoutReplyAction>(ActionTypes.ChangeKeyboardLayoutReply),
             map(action => {
@@ -97,9 +99,10 @@ export class DeviceEffects {
                     type: NotificationType.Error,
                 });
             })
-        );
+        )
+    );
 
-    @Effect() deviceConnectionStateChange$: Observable<Action> = this.actions$
+    deviceConnectionStateChange$ = createEffect(() => this.actions$
         .pipe(
             ofType<ConnectionStateChangedAction>(ActionTypes.ConnectionStateChanged),
             withLatestFrom(
@@ -180,17 +183,20 @@ export class DeviceEffects {
 
                 return EMPTY;
             })
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) setPrivilegeOnLinux$: Observable<Action> = this.actions$
+    setPrivilegeOnLinux$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SetPrivilegeOnLinux),
             tap(() => {
                 this.deviceRendererService.setPrivilegeOnLinux();
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() setPrivilegeOnLinuxReply$: Observable<Action> = this.actions$
+    setPrivilegeOnLinuxReply$ = createEffect(() => this.actions$
         .pipe(
             ofType<SetPrivilegeOnLinuxReplyAction>(ActionTypes.SetPrivilegeOnLinuxReply),
             map(action => action.payload),
@@ -202,9 +208,10 @@ export class DeviceEffects {
 
                 return of(new SetupPermissionErrorAction(response.error));
             })
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) saveConfiguration$: Observable<Action> = this.actions$
+    saveConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType<SaveConfigurationAction>(ActionTypes.SaveConfiguration),
             withLatestFrom(this.store, this.store.select(getShowFirmwareUpgradePanel)),
@@ -219,9 +226,11 @@ export class DeviceEffects {
                 100);
             }),
             switchMap(() => EMPTY)
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() saveConfigurationReply$: Observable<Action> = this.actions$
+    saveConfigurationReply$ = createEffect(() => this.actions$
         .pipe(
             ofType<SaveConfigurationReplyAction>(ActionTypes.SaveConfigurationReply),
             map(action => action.payload),
@@ -240,9 +249,10 @@ export class DeviceEffects {
                     new SaveToKeyboardSuccessFailed()
                 ];
             })
-        );
+        )
+    );
 
-    @Effect() autoHideSaveToKeyboardButton$: Observable<Action> = this.actions$
+    autoHideSaveToKeyboardButton$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SaveToKeyboardSuccess),
             withLatestFrom(this.store),
@@ -260,9 +270,10 @@ export class DeviceEffects {
                     })
                 )
             )
-        );
+        )
+    );
 
-    @Effect() resetMouseSpeedSettings$: Observable<Action> = this.actions$
+    resetMouseSpeedSettings$ = createEffect(() => this.actions$
         .pipe(
             ofType(
                 ActionTypes.ResetPcMouseSpeedSettings,
@@ -270,9 +281,10 @@ export class DeviceEffects {
             ),
             withLatestFrom(this.store.select(getUserConfiguration)),
             map(([action, config]) => new LoadResetUserConfigurationAction(config))
-        );
+        )
+    );
 
-    @Effect() resetUserConfiguration$: Observable<Action> = this.actions$
+    resetUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.ResetUserConfiguration),
             switchMap(() => {
@@ -280,9 +292,10 @@ export class DeviceEffects {
                 config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
                 return of(new LoadResetUserConfigurationAction(config));
             })
-        );
+        )
+    );
 
-    @Effect() saveResetUserConfigurationToDevice$ = this.actions$
+    saveResetUserConfigurationToDevice$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadResetUserConfigurationAction>(UserConfigActions.LoadResetUserConfiguration),
             map(action => action.payload),
@@ -291,9 +304,10 @@ export class DeviceEffects {
                     map(() => new SaveConfigurationAction(true))
                 )
             )
-        );
+        )
+    );
 
-    @Effect() applyUserConfigurationFromFileAction$ = this.actions$
+    applyUserConfigurationFromFileAction$ = createEffect(() => this.actions$
         .pipe(
             ofType<ApplyUserConfigurationFromFileAction>(UserConfigActions.ApplyUserConfigurationFromFile),
             map(action => action.payload),
@@ -302,9 +316,10 @@ export class DeviceEffects {
                     map(() => new SaveConfigurationAction(payload.saveInHistory))
                 )
             )
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) updateFirmware$ = this.actions$
+    updateFirmware$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateFirmwareAction>(ActionTypes.UpdateFirmware),
             withLatestFrom(this.store.select(getUserConfiguration)),
@@ -313,9 +328,11 @@ export class DeviceEffects {
                 forceUpgrade: action.payload,
                 versionInformation: getVersions()
             }))
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) updateFirmwareWith$ = this.actions$
+    updateFirmwareWith$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateFirmwareWithAction>(ActionTypes.UpdateFirmwareWith),
             withLatestFrom(this.store.select(getUserConfiguration)),
@@ -325,14 +342,15 @@ export class DeviceEffects {
                 versionInformation: getVersions(),
                 uploadFile: action.payload.uploadFileData
             }))
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() updateFirmwareReply$ = this.actions$
+    updateFirmwareReply$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateFirmwareReplyAction>(ActionTypes.UpdateFirmwareReply),
             map(action => action.payload),
-            switchMap((response: FirmwareUpgradeIpcResponse)
-                : Observable<UpdateFirmwareSuccessAction | UpdateFirmwareFailedAction | UpdateFirmwareNotSupportedAction> => {
+            switchMap((response: FirmwareUpgradeIpcResponse) => {
 
                 if (response.success) {
                     return of(new UpdateFirmwareSuccessAction({
@@ -351,22 +369,26 @@ export class DeviceEffects {
                     modules: response.modules
                 }));
             })
-        );
+        )
+    );
 
-    @Effect() restoreUserConfiguration$ = this.actions$
+    restoreUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType<ResetUserConfigurationAction>(ActionTypes.RestoreConfigurationFromBackup),
             map(() => new SaveConfigurationAction(true))
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) recoveryDevice$ = this.actions$
+    recoveryDevice$ = createEffect(() => this.actions$
         .pipe(
             ofType<RecoveryDeviceAction>(ActionTypes.RecoveryDevice),
             withLatestFrom(this.store.select(getUserConfiguration)),
             tap(([, userConfig]) => this.deviceRendererService.recoveryDevice(userConfig))
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() recoveryDeviceReply$ = this.actions$
+    recoveryDeviceReply$ = createEffect(() => this.actions$
         .pipe(
             ofType<RecoveryDeviceReplyAction>(ActionTypes.RecoveryDeviceReply),
             map(action => action.payload),
@@ -390,34 +412,43 @@ export class DeviceEffects {
                     })
                 ];
             })
-        );
+        )
+    );
 
-    @Effect({ dispatch: false }) recoveryModule$ = this.actions$
+    recoveryModule$ = createEffect(() => this.actions$
         .pipe(
             ofType<RecoveryModuleAction>(ActionTypes.RecoveryModule),
             map(action => action.payload),
             tap(moduleId => this.deviceRendererService.recoveryModule(moduleId))
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) enableUsbStackTest$ = this.actions$
+    enableUsbStackTest$ = createEffect(() => this.actions$
         .pipe(
             ofType<EnableUsbStackTestAction>(ActionTypes.EnableUsbStackTest),
             tap(() => this.deviceRendererService.enableUsbStackTest())
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) startConnectionPoller$ = this.actions$
+    startConnectionPoller$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.StartConnectionPoller),
             tap(() => this.deviceRendererService.startConnectionPoller())
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) readConfigSizes$ = this.actions$
+    readConfigSizes$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.ReadConfigSizes),
             tap(() => this.deviceRendererService.readConfigSizes())
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() skipFirmwareUpgrade$: Observable<Action> = this.actions$
+    skipFirmwareUpgrade$ = createEffect(() => this.actions$
         .pipe(
             ofType<RouterNavigatedAction>(ROUTER_NAVIGATED),
             map<RouterNavigatedAction, string>(action => action?.payload?.routerState?.url),
@@ -428,7 +459,8 @@ export class DeviceEffects {
 
                 return new EmptyAction();
             })
-        );
+        )
+    );
 
     constructor(private actions$: Actions,
                 private router: Router,
