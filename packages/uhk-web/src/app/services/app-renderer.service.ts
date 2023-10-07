@@ -26,6 +26,11 @@ export class AppRendererService {
         this.ipcRenderer.send(IpcEvents.app.exit);
     }
 
+    openConfigFolder(): void {
+        this.logService.misc('[AppRendererService] open config folder');
+        this.ipcRenderer.send(IpcEvents.app.openConfigFolder);
+    }
+
     openUrl(url: string): void {
         this.logService.misc(`[AppRendererService] open url: ${url}`);
         this.ipcRenderer.send(IpcEvents.app.openUrl, url);

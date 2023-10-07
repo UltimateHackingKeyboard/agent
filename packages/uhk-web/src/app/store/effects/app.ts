@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { map, mergeMap, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
@@ -109,6 +109,11 @@ export class ApplicationEffects {
             map(action => action.payload),
             mergeMap((action: Action) => [action, new DismissUndoNotificationAction()])
         );
+
+    openConfigFolder$ = createEffect(() => this.actions$.pipe(
+        ofType(ActionTypes.OpenConfigFolder),
+        tap(() => this.appRendererService.openConfigFolder())
+    ), { dispatch: false });
 
     @Effect({ dispatch: false }) openUrlInNewWindow$ = this.actions$
         .pipe(

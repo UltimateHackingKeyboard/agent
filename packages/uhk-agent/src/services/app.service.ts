@@ -1,4 +1,4 @@
-import { ipcMain, shell } from 'electron';
+import { app, ipcMain, shell } from 'electron';
 import settings from 'electron-settings';
 import * as os from 'os';
 
@@ -17,6 +17,7 @@ export class AppService extends MainServiceBase {
 
         ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
         ipcMain.on(IpcEvents.app.exit, this.exit.bind(this));
+        ipcMain.on(IpcEvents.app.openConfigFolder, this.openConfigFolder.bind(this));
         ipcMain.on(IpcEvents.app.openUrl, this.openUrl.bind(this));
         ipcMain.handle(IpcEvents.app.getConfig, async (event, key) => {
             logService.misc(`[AppService] get-config: ${key}`);
@@ -57,6 +58,10 @@ export class AppService extends MainServiceBase {
     private exit() {
         this.logService.misc('[AppService] exit');
         this.win.close();
+    }
+
+    private openConfigFolder() {
+        shell.showItemInFolder(app.getPath('userData'));
     }
 
     private openUrl(event: Electron.Event, urls: Array<string>) {

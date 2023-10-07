@@ -19,7 +19,7 @@ import {
     CheckForUpdateNowAction,
     ToggleCheckForUpdateOnStartupAction
 } from '../../../store/actions/auto-update-settings';
-import { SetAppThemeAction, ToggleAnimationEnabledAction, ToggleKeyboardHalvesAlwaysJoinedAction } from '../../../store/actions/app';
+import { OpenConfigFolderAction, SetAppThemeAction, ToggleAnimationEnabledAction, ToggleKeyboardHalvesAlwaysJoinedAction } from '../../../store/actions/app';
 import { OperatingSystem } from '../../../models/operating-system';
 
 @Component({
@@ -46,6 +46,10 @@ export class SettingsComponent {
         this.themes$ = store.select(getSupportedThemes);
         this.isLinux$ = store.select(getOperatingSystem).pipe(map(os => os === OperatingSystem.Linux));
         this.keyboardHalvesAlwaysJoined$ = store.select(keyboardHalvesAlwaysJoined);
+    }
+
+    openConfigFolder(): void {
+        this.store.dispatch(new OpenConfigFolderAction());
     }
 
     toggleCheckForUpdateOnStartUp(value: boolean) {
