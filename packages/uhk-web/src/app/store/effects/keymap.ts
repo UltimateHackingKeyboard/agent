@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, pairwise, tap, withLatestFrom } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ import { AppState, getKeymaps } from '../index';
 @Injectable()
 export class KeymapEffects {
 
-    @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
+    addOrDuplicate$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.Add, Keymaps.ActionTypes.Duplicate),
             withLatestFrom(this.store.select(getKeymaps)
@@ -26,9 +26,11 @@ export class KeymapEffects {
                 const newKeymap = findNewItem(prevKeymaps, newKeymaps);
                 this.router.navigate(['/keymap', newKeymap.abbreviation]);
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) remove$: any = this.actions$
+    remove$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.Remove),
             withLatestFrom(this.store.select(getKeymaps)),
@@ -41,9 +43,11 @@ export class KeymapEffects {
                     this.router.navigate(['/keymap', favourite.abbreviation]);
                 }
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) editAbbr$: any = this.actions$
+    editAbbr$ = createEffect(() => this.actions$
         .pipe(
             ofType(Keymaps.ActionTypes.EditAbbr),
             withLatestFrom(this.store.select(getKeymaps)),
@@ -55,7 +59,9 @@ export class KeymapEffects {
                     }
                 }
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
     constructor(private actions$: Actions, private router: Router, private store: Store<AppState>) {
     }

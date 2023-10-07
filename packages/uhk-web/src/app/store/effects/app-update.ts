@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { EMPTY, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { EMPTY } from 'rxjs';
 import { first, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { LogService, NotificationType } from 'uhk-common';
@@ -20,16 +20,18 @@ import { AppState, isForceUpdate } from '../index';
 
 @Injectable()
 export class AppUpdateEffect {
-    @Effect({ dispatch: false }) appStart$: Observable<Action> = this.actions$
+    appStart$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.UpdateApp),
             first(),
             tap(() => {
                 this.appUpdateRendererService.sendUpdateAndRestartApp();
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) checkForUpdate$ = this.actions$
+    checkForUpdate$ = createEffect(() => this.actions$
         .pipe(
             ofType<CheckForUpdateNowAction>(AutoUpdateActionTypes.CheckForUpdateNow),
             map(action => action.payload),
@@ -37,18 +39,22 @@ export class AppUpdateEffect {
                 this.logService.misc('[AppUpdateEffect] call checkForUpdate');
                 this.appUpdateRendererService.checkForUpdate(allowPrerelease);
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) forceUpdate$ = this.actions$
+    forceUpdate$ = createEffect(() => this.actions$
         .pipe(
             ofType<ForceUpdateAction>(ActionTypes.ForceUpdate),
             tap(() => {
                 this.logService.misc('[AppUpdateEffect] force update agent');
                 this.appUpdateRendererService.checkForUpdate(false);
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() updateAvailable$ = this.actions$
+    updateAvailable$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateAvailableAction>(ActionTypes.UpdateAvailable),
             withLatestFrom(this.store.select(isForceUpdate)),
@@ -59,9 +65,11 @@ export class AppUpdateEffect {
 
                 return EMPTY;
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect() handleError$: Observable<Action> = this.actions$
+    handleError$ = createEffect(() => this.actions$
         .pipe(
             ofType<UpdateErrorAction>(ActionTypes.UpdateError),
             map(action => action.payload),
@@ -71,7 +79,8 @@ export class AppUpdateEffect {
                     message
                 });
             })
-        );
+        )
+    );
 
     constructor(private actions$: Actions,
                 private appUpdateRendererService: AppUpdateRendererService,

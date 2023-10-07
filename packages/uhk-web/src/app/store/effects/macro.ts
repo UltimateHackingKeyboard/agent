@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { routerNavigatedAction } from '@ngrx/router-store';
 import { distinctUntilChanged, map, tap, withLatestFrom } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class MacroEffects {
             map(macroId => new SelectMacroAction(+macroId))
         ));
 
-    @Effect({ dispatch: false }) remove$: any = this.actions$
+    remove$ = createEffect(() => this.actions$
         .pipe(
             ofType<Macros.RemoveMacroAction>(Macros.ActionTypes.Remove),
             tap(action => this.store.dispatch(new Keymaps.CheckMacroAction(action.payload))),
@@ -31,16 +31,20 @@ export class MacroEffects {
             map(([, newMacro]) => newMacro),
             tap(this.navigateToNewMacro.bind(this))
 
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) addOrDuplicate$: any = this.actions$
+    addOrDuplicate$ = createEffect(() => this.actions$
         .pipe(
             ofType<Macros.AddMacroAction | Macros.DuplicateMacroAction>(
                 Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate),
             withLatestFrom(this.store.select(getSelectedMacro)),
             map(([, newMacro]) => newMacro),
             tap(this.navigateToNewMacro.bind(this))
-        );
+        ),
+    { dispatch: false }
+    );
 
     private navigateToNewMacro(newMacro: Macro): Promise<boolean> {
         if (newMacro) {

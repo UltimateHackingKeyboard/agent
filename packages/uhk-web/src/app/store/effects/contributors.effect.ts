@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 
 import { from, Observable, of } from 'rxjs';
@@ -20,7 +20,7 @@ import {
 
 @Injectable()
 export class ContributorsEffect {
-    @Effect() getContributors$: Observable<Action> = this.actions$
+    getContributors$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType<GetAgentContributorsAction>(ActionTypes.GetAgentContributors),
             withLatestFrom(this.store.select(contributors)),
@@ -30,9 +30,10 @@ export class ContributorsEffect {
                 }
                 return new AgentContributorsAvailableAction(state.contributors);
             })
-        );
+        )
+    );
 
-    @Effect() fetchContributors$: Observable<Action> = this.actions$
+    fetchContributors$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType<FetchAgentContributorsAction>(ActionTypes.FetchAgentContributors),
             mergeMap(() => this.http.get<UHKContributor[]>(Constants.AGENT_CONTRIBUTORS_GITHUB_API_URL)),
@@ -59,7 +60,8 @@ export class ContributorsEffect {
                 }
             ),
             catchError(error => of(new AgentContributorsNotAvailableAction(error)))
-        );
+        )
+    );
 
     constructor(private store: Store<AppState>, private actions$: Actions, private http: HttpClient) {
     }

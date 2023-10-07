@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap, map } from 'rxjs/operators';
 
 import { DeviceRendererService } from '../../services/device-renderer.service';
@@ -7,22 +7,26 @@ import { ActionTypes, GetUserConfigurationFromHistoryAction } from '../actions/u
 
 @Injectable()
 export class UserConfigurationHistoryEffects {
-    @Effect({ dispatch: false }) loadUserConfigHistory$ = this.actions$
+    loadUserConfigHistory$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.LoadUserConfigurationHistory),
             tap(() => {
                 this.deviceRendererService.loadUserConfigurationHistory();
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
-    @Effect({ dispatch: false }) getUserConfigFromHistory$ = this.actions$
+    getUserConfigFromHistory$ = createEffect(() => this.actions$
         .pipe(
             ofType<GetUserConfigurationFromHistoryAction>(ActionTypes.GetUserConfigurationFromHistory),
             map(action => action.payload),
             tap((fileName: string) => {
                 this.deviceRendererService.getUserConfigurationFromHistory(fileName);
             })
-        );
+        ),
+    { dispatch: false }
+    );
 
     constructor(private actions$: Actions,
                 private deviceRendererService: DeviceRendererService
