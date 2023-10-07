@@ -3,6 +3,7 @@ export class App {
     public static readonly getAppStartInfo = 'app-get-start-info';
     public static readonly getAppStartInfoReply = 'app-get-start-info-reply';
     public static readonly exit = 'app-exit';
+    public static readonly openConfigFolder = 'open-config-folder';
     public static readonly openUrl = 'open-url';
     public static readonly getConfig = 'app-get-config';
     public static readonly setConfig = 'app-set-config';
