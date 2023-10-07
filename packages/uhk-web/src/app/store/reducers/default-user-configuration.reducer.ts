@@ -34,6 +34,14 @@ export function reducer(state = initialState, action: Actions | AppActions.Actio
 
         case AppActions.ActionTypes.SetAppTheme: {
             const theme = (action as AppActions.SetAppThemeAction).payload;
+
+            if (!state.userConfiguration) {
+                return {
+                    ...state,
+                    theme
+                };
+            }
+
             const userConfiguration = state.userConfiguration.clone();
             setSvgKeyboardCoverColorsOfAllLayer(userConfiguration, theme);
 
