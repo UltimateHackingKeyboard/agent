@@ -23,7 +23,7 @@ import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
-const MONACO_EDITOR_LINE_HEIGHT_OPTION = 65;
+const MONACO_EDITOR_LINE_HEIGHT_OPTION = 66;
 const MONACO_EDITOR_LF_END_OF_LINE_OPTION = 0;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 

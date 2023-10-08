@@ -8,6 +8,10 @@
     &.readonly {
         max-height: fit-content;
     }
+
+    ::ng-deep .editor-container {
+        overflow: visible;
+    }
 }
 
 :host(.active) {
