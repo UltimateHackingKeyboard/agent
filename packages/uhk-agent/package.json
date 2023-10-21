@@ -20,7 +20,7 @@
     "decompress-targz": "4.1.1",
     "delay": "5.0.0",
     "fastify": "4.13.0",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.1.1",
     "get-port": "6.1.2",
     "node-hid": "2.1.2",
     "sudo-prompt": "9.2.1",

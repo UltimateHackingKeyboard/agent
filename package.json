@@ -46,7 +46,7 @@
     "electron-settings": "4.0.2",
     "electron-updater": "6.0.4",
     "eslint": "8.39.0",
-    "fs-extra": "11.1.0",
+    "fs-extra": "11.1.1",
     "jasmine": "4.6.0",
     "lerna": "6.6.2",
     "lodash": "4.17.21",
