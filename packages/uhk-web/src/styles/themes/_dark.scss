@@ -2,12 +2,18 @@
 $dark-theme: true;
 
 $light: #444;
+$dark: #212529;
 $theme-colors: map-merge(
     $theme-colors,
     (
         'primary': #3ec9e8,
         'secondary': #999,
-        'light': $light
+        'success': #5cb85c,
+        'info': #5bc0de,
+        'warning': #f0ad4e,
+        'danger': #d9534f,
+        'light': $light,
+        'dark': $dark
     )
 );
 
@@ -16,8 +22,8 @@ $color-bg-light: #222;
 $color-text: #bbb;
 $color-text-highlight: #ddd;
 $color-copy-icon: #6a737d;
-$color-popover-bg-light: lighten($color-bg-light, 5%);
-$color-popover-border: lighten($color-bg-light, 10%);
+$color-popover-bg-light: tint-color($color-bg-light, 5%);
+$color-popover-border: tint-color($color-bg-light, 10%);
 
 $btn-default-bg: #444;
 $btn-default-border: #666;
@@ -31,14 +37,14 @@ $tooltip-border-color: #ccc;
 $body-bg: $color-bg;
 $body-color: $color-text;
 $link-color: theme-color('primary');
-$link-hover-color: darken($link-color, 15%);
+$link-hover-color: shade-color($link-color, 15%);
 $list-group-bg: $color-bg-light;
 $list-group-border-color: #666;
 $input-bg: #222;
 $input-color: $color-text;
 $input-focus-bg: #111;
 $input-btn-focus-color: rgba(theme-color('primary'), 0.25);
-$color-select-active-bg: darken(theme-color('primary'), 40%);
+$color-select-active-bg: shade-color(theme-color('primary'), 40%);
 $color-select-active-text: $white;
 $color-select-hover-bg: #3ec9e8;
 $color-select-hover-text: #333;
@@ -66,7 +72,7 @@ $popover-arrow-outer-color: $color-popover-border;
 $popover-body-color: $color-popover-bg-light;
 $popover-border-color: $color-popover-border;
 $component-active-bg: theme-color('primary') !default;
-$input-focus-border-color: lighten($component-active-bg, 25%) !default;
+$input-focus-border-color: tint-color($component-active-bg, 25%) !default;
 
 :root,
 .theme-dark {
@@ -107,15 +113,15 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-popover-bg: #{$color-bg-light};
     --color-popover-bg-light: #{$color-popover-bg-light};
     --color-popover-border: #{$color-popover-border};
-    --color-popover-tab-hover: #{darken($color-popover-bg-light, 8%)};
+    --color-popover-tab-hover: #{shade-color($color-popover-bg-light, 8%)};
     --color-popover-label-disabled: #959595;
     --color-keymap-tab-background: #{$color-bg};
     --color-keypress-tab-setting-label-disabled: #999;
     --color-keypress-tab-disabled-info-text: #{theme-color('primary')};
 
-    --color-progress-bar-bg: #{darken(theme-color('primary'), 40%)};
-    --color-progress-bar-progress: #{darken(theme-color('primary'), 20%)};
-    --color-progress-bar-progress-rgb-colors: #{lighten(theme-color('success'), 10%)};
+    --color-progress-bar-bg: #{shade-color(theme-color('primary'), 40%)};
+    --color-progress-bar-progress: #{shade-color(theme-color('primary'), 20%)};
+    --color-progress-bar-progress-rgb-colors: #{tint-color(theme-color('success'), 10%)};
     --color-progress-bar-text: #{$color-text};
 
     --color-macro-bg: #333;
@@ -142,7 +148,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
     --color-highlight-arrow: #{theme-color('primary')};
 
-    --color-layers-button-disabled: #{darken(theme-color('secondary'), 40)};
+    --color-layers-button-disabled: #{shade-color(theme-color('secondary'), 40)};
     --color-layers-button-active-disabled: #7c7c7c;
 
     --color-out-of-space-warning-bg: #{theme-color('warning')};

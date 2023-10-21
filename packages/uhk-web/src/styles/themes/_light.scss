@@ -1,6 +1,6 @@
 // Light aka default theme
 $dark-theme: false;
-
+$dark: #212529;
 $theme-colors: map-merge(
     $theme-colors,
     (
@@ -10,7 +10,8 @@ $theme-colors: map-merge(
         'info': #5bc0de,
         'warning': #f0ad4e,
         'danger': #d9534f,
-        'light': #fff
+        'light': #fff,
+        'dark': $dark
     )
 );
 
@@ -30,7 +31,7 @@ $icon-hover-delete: theme-color('danger');
 $body-bg: $color-bg;
 $body-color: $color-text;
 $link-color: theme-color('primary');
-$link-hover-color: darken($link-color, 15%);
+$link-hover-color: shade-color($link-color, 15%);
 $input-bg: $color-bg;
 $input-color: $color-text;
 $tooltip-color: #111;
@@ -45,7 +46,7 @@ $color-select-hover-text: #16181b;
 $popover-header-bg: $color-bg-light;
 $popover-arrow-color: $color-bg-light;
 $component-active-bg: theme-color('primary') !default;
-$input-focus-border-color: lighten($component-active-bg, 25%) !default;
+$input-focus-border-color: tint-color($component-active-bg, 25%) !default;
 
 :root,
 .theme-light {
@@ -84,15 +85,15 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-popover-bg: #{$color-bg-light};
     --color-popover-bg-light: #{color('white')};
     --color-popover-border: #ebebeb;
-    --color-popover-tab-hover: #{darken($color-bg-light, 5%)};
+    --color-popover-tab-hover: #{shade-color($color-bg-light, 5%)};
     --color-popover-label-disabled: #959595;
     --color-keymap-tab-background: #{color('white')};
     --color-keypress-tab-setting-label-disabled: #999;
     --color-keypress-tab-disabled-info-text: #31708f;
 
     --color-progress-bar-bg: #{#d3e4f2};
-    --color-progress-bar-progress: #{lighten(theme-color('primary'), 20%)};
-    --color-progress-bar-progress-rgb-colors: #{lighten(theme-color('success'), 20%)};
+    --color-progress-bar-progress: #{tint-color(theme-color('primary'), 20%)};
+    --color-progress-bar-progress-rgb-colors: #{tint-color(theme-color('success'), 20%)};
     --color-progress-bar-text: #{$color-text};
 
     --color-macro-bg: #{$color-bg-light};
