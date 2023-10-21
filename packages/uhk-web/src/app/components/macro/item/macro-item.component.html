@@ -16,19 +16,18 @@
     </ng-container>
 
     <div *ngIf="isCommand && !editing" class="macro-command-item">
-        <div>
-            <div>
-                <fa-icon *ngIf="movable"
-                         [icon]="faGripLinesVertical"
-                         class="action--movable"
-                         aria-hidden="true"></fa-icon>
-                <span class="pr-1">Command:</span>
-            </div>
-            <button class="btn btn-primary btn-sm btn-change-macro-action"
-                    *ngIf="editable"
-                    (click)="editAction()"
-            >Change action
-            </button>
+        <div class="macro-command-item-header">
+            <fa-icon *ngIf="movable"
+                     [icon]="faGripLinesVertical"
+                     class="action--movable"
+                     aria-hidden="true"></fa-icon>
+            <fa-icon [icon]="faCode"
+                     aria-hidden="true"></fa-icon>
+
+            <span class="pr-1 mr-auto">Command:</span>
+
+            <icon *ngIf="editable" name="pencil" (click)="editAction()"></icon>
+            <icon *ngIf="deletable" name="trash" (click)="deleteAction()"></icon>
         </div>
         <div class="macro-command-editor-container">
             <macro-command-editor [ngModel]="macroAction.command"
@@ -40,9 +39,9 @@
                                   (gotFocus)="macroEditorGotFocus()"
             ></macro-command-editor>
         </div>
-        <icon *ngIf="deletable" name="trash" (click)="deleteAction()" class="align-items-top"></icon>
     </div>
 </div>
+
 <div class="list-group-item macro-action-editor__container"
      *ngIf="(editable && editing) || newItem"
      [@toggler]
