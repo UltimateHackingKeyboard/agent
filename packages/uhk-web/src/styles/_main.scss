@@ -1,12 +1,12 @@
 // Main imports
 @import './mixins';
 @import './bootstrap';
-@import '~angular-notifier/styles.css';
+@import 'angular-notifier/styles.css';
 @import './tooltip';
 @import './uhk-icons/uhk-icon';
 @import './side-menu';
 @import './ngx-select-ex';
 @import './ng-select';
-@import '~@angular/cdk/overlay-prebuilt.css';
+@import '@angular/cdk/overlay-prebuilt.css';
 
 @import './global';

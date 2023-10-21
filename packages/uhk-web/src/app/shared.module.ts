@@ -284,9 +284,7 @@ import appInitFactory from './services/app-init-factory';
             confirmButtonType: 'danger' // set defaults here
         }),
         ClipboardModule,
-        ContextMenuModule.forRoot({
-            useBootstrap4: true
-        }),
+        ContextMenuModule,
         HttpClientModule,
         NgbTooltipModule,
         NgbDropdownModule

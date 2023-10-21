@@ -40,6 +40,7 @@ $icon-dark-theme-inversion: 70%;
 $side-menu-width: 250px;
 $second-side-menu-width: 250px;
 
+@import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/maps';
