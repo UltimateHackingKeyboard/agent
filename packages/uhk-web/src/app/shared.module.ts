@@ -5,12 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-import { AngularResizeEventModule } from 'angular-resize-event';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from 'ng2-dragula';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { NgxResize } from 'ngx-resize';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
@@ -262,7 +262,6 @@ import appInitFactory from './services/app-init-factory';
         UserConfigHistoryDisplayTextPipe
     ],
     imports: [
-        AngularResizeEventModule,
         AngularSplitModule,
         ColorPickerModule,
         CommonModule,
@@ -287,7 +286,8 @@ import appInitFactory from './services/app-init-factory';
         ContextMenuModule,
         HttpClientModule,
         NgbTooltipModule,
-        NgbDropdownModule
+        NgbDropdownModule,
+        NgxResize
     ],
     providers: [
         {

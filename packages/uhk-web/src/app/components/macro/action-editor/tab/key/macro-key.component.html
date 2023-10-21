@@ -1,6 +1,6 @@
 <div class="macro-key__container"
      [ngClass]="width < 350 ? 'd-block' : 'd-flex'"
-     (resized)="onResized($event)"
+     (ngxResize)="onResized($event)"
 >
     <div class="py-3 macro-key__types">
         <ul class="nav nav-pills">
