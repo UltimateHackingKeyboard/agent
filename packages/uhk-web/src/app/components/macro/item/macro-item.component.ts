@@ -9,7 +9,7 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
 import {
     CommandMacroAction,
     DelayMacroAction,
@@ -83,6 +83,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     titleIcon: string;
     iconName: string;
     newItem: boolean = false;
+    faCode = faCode;
     faGripLinesVertical = faGripLinesVertical;
     isCommand = false;
 
