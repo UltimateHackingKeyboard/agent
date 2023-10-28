@@ -19,7 +19,7 @@
         </ul>
     </div>
     <div [ngSwitch]="activeTab">
-        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content pr-10"
+        <keypress-tab #tab *ngSwitchCase="tabName.Keypress" class="popover-content pe-10"
                       [defaultKeyAction]="shadowKeyAction"
                       [secondaryRoleEnabled]="true"
                       [allowRemapOnAllKeymapWarning]="true"
@@ -58,9 +58,9 @@
         ></none-tab>
     </div>
     <div class="row popover-action">
-        <div class="col-8 pl-2">
+        <div class="col-8 ps-2">
             <form class="form-inline popover-action-form">
-                <div class="form-check mr-2">
+                <div class="form-check me-2">
                     <input type="checkbox" class="form-check-input"
                         id="remapOnAllKeymap"
                         name="remapOnAllKeymap"
@@ -80,7 +80,7 @@
                         [ngClass]="{ disabled: disableRemapOnAllLayer }">Remap on all layers</label>
                 </div>
                 <ng-template #remapTooltip>
-                    <ul class="no-indent text-left">
+                    <ul class="no-indent text-start">
                         <li><strong>Default behavior</strong>: Remap the key on the the current layer of the current keymap.</li>
                         <li><strong>Remap on all keymaps</strong>: Remap key on the current layer of all keymaps.</li>
                         <li><strong>Remap on all layers</strong>: Remap key on all layers of the current keymap.</li>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="col-4 d-flex p-0 justify-content-end">
-            <button class="btn btn-sm btn-default mr-2" type="button" (click)="onCancelClick()"> Cancel</button>
+            <button class="btn btn-sm btn-default me-2" type="button" (click)="onCancelClick()"> Cancel</button>
             <button class="btn btn-sm btn-primary" [class.disabled]="!keyActionValid" type="button"
                     (click)="onRemapKey()"> Remap key
             </button>

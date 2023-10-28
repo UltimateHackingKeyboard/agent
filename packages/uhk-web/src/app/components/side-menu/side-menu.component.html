@@ -11,7 +11,7 @@
                                  [disabled]="state.restoreUserConfiguration || state.updatingFirmware"
                                  (ngModelChange)="editDeviceName($event)"></auto-grow-input>
                 <fa-icon [icon]="this.sideMenuState.device.icon"
-                         class="chevron float-right"
+                         class="chevron float-end"
                          (click)="toggleMenuItem('device')"></fa-icon>
             </ng-container>
 
@@ -69,7 +69,7 @@
                     <fa-icon [icon]="faSlidersH"></fa-icon>
                     Device
                     <fa-icon [icon]="this.sideMenuState.configuration.icon"
-                             class="chevron float-right"
+                             class="chevron float-end"
                              (click)="toggleMenuItem('configuration')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.configuration.animation">
@@ -121,12 +121,12 @@
                     <fa-icon [icon]="faKeyboard"></fa-icon>
                     Keymaps
                     <a routerLink="/add-keymap"
-                       class="btn btn-sm btn-secondary float-right"
+                       class="btn btn-sm btn-secondary float-end"
                        [class.disabled]="state.updatingFirmware">
                         <fa-icon [icon]="faPlus"></fa-icon>
                     </a>
                     <fa-icon [icon]="this.sideMenuState.keymap.icon"
-                             class="chevron float-right mr-1"
+                             class="chevron float-end me-1"
                              (click)="toggleMenuItem('keymap')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.keymap.animation">
@@ -150,7 +150,7 @@
                     <fa-icon [icon]="faPlay"></fa-icon>
                     Macros
                     <button (click)="addMacro()"
-                            class="btn btn-sm btn-secondary float-right"
+                            class="btn btn-sm btn-secondary float-end"
                             [disabled]="state.updatingFirmware || state.maxMacroCountReached">
                         <fa-icon [icon]="faPlus"
                                  [ngbTooltip]="state.maxMacroCountReached ? maxAllowedMacrosTooltip : null"
@@ -159,7 +159,7 @@
                         ></fa-icon>
                     </button>
                     <fa-icon [icon]="this.sideMenuState.macro.icon"
-                             class="chevron float-right mr-1"
+                             class="chevron float-end me-1"
                              (click)="toggleMenuItem('macro')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.macro.animation">
@@ -180,7 +180,7 @@
                     <fa-icon [icon]="faPuzzlePiece"></fa-icon>
                     Modules
                     <fa-icon [icon]="this.sideMenuState.addon.icon"
-                             class="chevron float-right"
+                             class="chevron float-end"
                              (click)="toggleMenuItem('addon')"></fa-icon>
                 </div>
                 <ul [@toggler]="this.sideMenuState.addon.animation">
@@ -216,7 +216,7 @@
         <div class="sidebar__level-0">
             <i class="uhk-icon uhk-icon-pure-agent-icon"></i> Agent
             <fa-icon [icon]="this.sideMenuState.agent.icon"
-                     class="chevron float-right"
+                     class="chevron float-end"
                      (click)="toggleMenuItem('agent')"></fa-icon>
         </div>
         <ul [@toggler]="this.sideMenuState.agent.animation">

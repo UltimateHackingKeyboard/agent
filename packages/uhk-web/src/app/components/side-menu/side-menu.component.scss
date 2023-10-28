@@ -121,24 +121,9 @@ ul {
                 cursor: pointer;
             }
 
-            // General "right side" icon theming.
-            .fa.float-right {
-                position: relative;
-                top: 2px;
-            }
-
-            .fa-star {
-                color: var(--color-sidemenu-star);
-            }
-
             a {
                 display: block;
                 width: 100%;
-
-                &:hover,
-                &:focus {
-                    text-decoration: none;
-                }
 
                 &.disabled {
                     opacity: 0.65;
