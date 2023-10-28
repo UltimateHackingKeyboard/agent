@@ -70,6 +70,9 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-secondary-sidemenu-hover-link-color: black;
     --color-hover-link-color: rgba(0, 0, 0, 0.05);
 
+    --macro-count-badge-bg: #{$secondary};
+    --macro-count-badge-color: #{$dark};
+
     --color-keyboard-bg: #555;
     --color-keyboard-text: #bbb;
     --color-keyboard-text-shadow: #444;

@@ -167,7 +167,7 @@
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
                             <a [routerLink]="['/macro', macro.id]"
                                [class.disabled]="state.updatingFirmware">{{macro.name}}</a>
-                            <span class="sidebar__macro_count badge badge-pill badge-secondary"
+                            <span class="sidebar__macro_count badge rounded-pill"
                                   ngbTooltip="This is the number of times the macro is used across all keymaps."
                                   placement="bottom"
                                   container="body">{{ macro.usageCount }}</span>

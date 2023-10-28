@@ -141,6 +141,8 @@ ul {
 
             .sidebar__macro_count {
                 visibility: visible;
+                background-color: var(--macro-count-badge-bg);
+                color: var(--macro-count-badge-color);
             }
         }
     }

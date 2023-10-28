@@ -47,6 +47,9 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-secondary-sidemenu-hover-link-color: rgba(0, 0, 0, 0.05);
     --color-hover-link-color: rgba(0, 0, 0, 0.05);
 
+    --macro-count-badge-bg: #{$secondary};
+    --macro-count-badge-color: #{$light};
+
     --color-keyboard-bg: #{$color-bg-light};
     --color-keyboard-text: #333;
     --color-keyboard-text-shadow: #fff;
