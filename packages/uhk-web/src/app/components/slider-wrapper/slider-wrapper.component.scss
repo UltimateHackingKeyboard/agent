@@ -10,6 +10,16 @@ $side-value-width: 80px;
         }
     }
 
+    ::ng-deep {
+        .noUi-tooltip {
+            display: none;
+        }
+
+        .noUi-active .noUi-tooltip {
+            display: block;
+        }
+    }
+
     .slider-wrapper {
         display: flex;
         flex-direction: row;
