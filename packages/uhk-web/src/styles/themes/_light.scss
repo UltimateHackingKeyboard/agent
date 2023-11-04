@@ -1,6 +1,7 @@
 // Light aka default theme
 $dark-theme: false;
 
+$white: #fff;
 $color-bg: $white;
 $color-bg-light: #f7f7f7;
 $color-text: #111;
@@ -38,6 +39,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 .theme-light {
     --bs-list-group-bg: #{$input-bg};
 
+    --color-btn-danger-text: #{$white};
     --color-sidemenu-bg: #f5f5f5;
     --color-sidemenu-border: #ccc;
     --color-sidemenu-text: #333;

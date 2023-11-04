@@ -1,6 +1,7 @@
 // Dark theme
 $dark-theme: true;
 
+$white: #fff;
 $color-bg: #111;
 $color-bg-light: #222;
 $color-text: #bbb;
@@ -62,6 +63,7 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
 .theme-dark {
     --bs-list-group-bg: #{$input-bg};
 
+    --color-btn-danger-text: #{$white};
     --color-sidemenu-bg: #{$color-bg-light};
     --color-sidemenu-border: #333;
     --color-sidemenu-text: #{$color-text};

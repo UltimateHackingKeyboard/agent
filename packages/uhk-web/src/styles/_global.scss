@@ -170,6 +170,10 @@ a.disabled {
     }
 }
 
+.btn-danger {
+    --bs-btn-color: var(--color-btn-danger-text);
+}
+
 a.link-inline {
     cursor: pointer;
 }
