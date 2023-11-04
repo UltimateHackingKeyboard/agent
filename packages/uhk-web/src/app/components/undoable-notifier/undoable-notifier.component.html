@@ -5,10 +5,9 @@
          role="alert">
         {{text}}
         <button type="button"
-                class="close"
+                class="btn-close"
                 aria-label="Close"
                 (click)="clickOnClose()">
-            <span aria-hidden="true">&times;</span>
         </button>
         <a *ngIf="undoable" (click)="clickOnUndo()" class="undo-button">Undo</a>
     </div>
