@@ -36,6 +36,8 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 
 :root,
 .theme-light {
+    --bs-list-group-bg: #{$input-bg};
+
     --color-sidemenu-bg: #f5f5f5;
     --color-sidemenu-border: #ccc;
     --color-sidemenu-text: #333;

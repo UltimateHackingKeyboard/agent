@@ -60,6 +60,8 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
 
 :root,
 .theme-dark {
+    --bs-list-group-bg: #{$input-bg};
+
     --color-sidemenu-bg: #{$color-bg-light};
     --color-sidemenu-border: #333;
     --color-sidemenu-text: #{$color-text};
