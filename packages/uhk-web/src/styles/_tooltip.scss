@@ -6,7 +6,7 @@
         border: $tooltip-border-width solid $tooltip-border-color;
     }
 
-    .popover-arrow {
+    .tooltip-arrow {
         &:after {
             content: '';
             position: absolute;
@@ -16,7 +16,7 @@
 }
 
 .bs-tooltip-top {
-    .popover-arrow {
+    .tooltip-arrow {
         margin-left: -1 * $tooltip-arrow-offset * $tooltip-border-width;
 
         &:before {
@@ -32,7 +32,7 @@
 }
 
 .bs-tooltip-right {
-    .popover-arrow {
+    .tooltip-arrow {
         margin-top: -1 * $tooltip-arrow-offset * $tooltip-border-width;
 
         &:before {
@@ -48,7 +48,7 @@
 }
 
 .bs-tooltip-bottom {
-    .popover-arrow {
+    .tooltip-arrow {
         margin-left: -1 * $tooltip-arrow-offset * $tooltip-border-width;
 
         &:before {
@@ -65,7 +65,7 @@
 }
 
 .bs-tooltip-left {
-    .popover-arrow {
+    .tooltip-arrow {
         margin-top: -1 * $tooltip-arrow-offset * $tooltip-border-width;
 
         &:before {
