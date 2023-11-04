@@ -6,21 +6,21 @@
 </div>
 <div>
     <div class="col-12 text-center">
-        <div class="form-group">
+        <div class="mb-3">
             The configurator of the Ultimate Hacking Keyboard
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <div>
                 Agent version: <span class="text-bold">{{ version }}</span>
             </div>
             <a class="link-github" [href]="agentGithubUrl" externalUrl>Agent on GitHub</a>
         </div>
         <ng-container *ngIf="(state$ | async) as state">
-            <div class="form-group">
+            <div class="mb-3">
                 Created by Ultimate Gadget Laboratories and its glorious contributors:
             </div>
             <div *ngIf="!state.isLoading && !state.error; else loading">
-                <div class="form-group row justify-content-center">
+                <div class="mb-3 row justify-content-center">
                     <div class="col-12 col-lg-10 col-xl-8">
                         <div class="row">
                             <contributor-badge *ngFor="let contributor of state.contributors" class="col-2 text-start" [contributor]="contributor"></contributor-badge>
@@ -29,21 +29,21 @@
                 </div>
             </div>
             <ng-template #loading>
-                <div class="form-group">
+                <div class="mb-3">
                     <fa-icon [icon]="faSpinner"
                              spin="true"></fa-icon>
                     Loading contributor list...
                 </div>
             </ng-template>
             <ng-template #loading>
-                <div *ngIf="!state.error" class="form-group">
+                <div *ngIf="!state.error" class="mb-3">
                     Loading...
                 </div>
-                <div *ngIf="state.error" class="form-group">
+                <div *ngIf="state.error" class="mb-3">
                     We experienced a problem while fetching contributor list. <a [href]="agentContributorsUrl" externalUrl>Check Contributors page on GitHub!</a>
                 </div>
             </ng-template>
         </ng-container>
-        <div class="form-group">May the UHK be with you</div>
+        <div class="mb-3">May the UHK be with you</div>
     </div>
 </div>
