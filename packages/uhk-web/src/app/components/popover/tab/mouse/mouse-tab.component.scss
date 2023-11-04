@@ -54,6 +54,12 @@
     }
 }
 
+.mouse__config {
+    .row > * {
+        width: auto;
+    }
+}
+
 .mouse__config--click {
     .additional-keys {
         display: inline-block;
