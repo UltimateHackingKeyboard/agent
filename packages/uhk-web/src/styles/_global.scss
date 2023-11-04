@@ -282,6 +282,17 @@ kbd {
 }
 
 mwl-confirmation-popover-window {
+    .popover {
+        &.bottom {
+            margin-top: 0.5em;
+
+            .popover-arrow:after,
+            .popover-arrow:before {
+                margin-top: -0.6em;
+                margin-left: 50%;
+            }
+        }
+    }
     .popover-header {
         padding-top: 0.5rem;
         padding-bottom: 0.25rem;
@@ -292,6 +303,10 @@ mwl-confirmation-popover-window {
     .popover-body {
         p {
             margin-bottom: 8px;
+        }
+
+        .btn-block {
+            width: 100%;
         }
     }
 }

@@ -61,6 +61,7 @@
                 <fa-icon [icon]="faPlus"></fa-icon>
             </button>
             <button *ngIf="selectedPaletteColorIndex > -1"
+                    #deleteTooltip=ngbTooltip
                     type="button"
                     class="btn btn-default"
                     ngbTooltip="Delete the current color from the palette."
@@ -72,6 +73,7 @@
                     confirmText="Yes"
                     cancelText="No"
                     (confirm)="onDeleteColor()"
+                    (isOpenChange)="onDeleteConfirmationShown($event)"
             >
                 <fa-icon [icon]="faTrash"></fa-icon>
             </button>

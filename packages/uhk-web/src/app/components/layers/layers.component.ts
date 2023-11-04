@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { colord, RgbColor } from 'colord';
 import { RgbColorInterface } from 'uhk-common';
 
@@ -26,6 +27,8 @@ export class LayersComponent {
     @Output() toggleColorFromPalette = new EventEmitter<number>();
     @Output() addLayer = new EventEmitter<number>();
     @Output() removeLayer = new EventEmitter<number>();
+
+    @ViewChild('deleteTooltip') deleteTooltip: NgbTooltip;
 
     faPlus = faPlus;
     faTrash = faTrash;
@@ -61,6 +64,15 @@ export class LayersComponent {
 
     onAddColor(value: string): void {
         this.addColorToPalette.emit(colord(value).toRgb());
+    }
+
+    onDeleteConfirmationShown(isOpen: boolean): void {
+        if (isOpen) {
+            this.deleteTooltip.disableTooltip = true;
+            this.deleteTooltip.close();
+        } else {
+            this.deleteTooltip.disableTooltip = false;
+        }
     }
 
     onModifyColor(index: number, color: RgbColorInterface): void {
