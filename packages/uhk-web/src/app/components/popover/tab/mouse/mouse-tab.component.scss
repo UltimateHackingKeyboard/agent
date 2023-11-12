@@ -15,6 +15,7 @@
                 a {
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
+                    transition: none;
 
                     &.selected {
                         font-style: italic;
