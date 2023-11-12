@@ -7,7 +7,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "run-s -sn build:renderer",
-    "build:web": "ng build --configuration=production",
+    "build:web": "ng build --configuration=production --project=uhk-web",
     "build:renderer": "ng build --configuration=production --project=uhk-renderer",
     "server:renderer": "ng build --project=uhk-renderer --watch",
     "test-skip": "ng test --watch false",
