@@ -28,6 +28,7 @@ body {
 }
 
 textarea {
+    padding: 0.25rem 0.5rem;
     background-color: var(--color-input-bg);
     color: var(--color-input-text);
 }
@@ -170,6 +171,10 @@ a.disabled {
     }
 }
 
+.btn-danger {
+    --bs-btn-color: var(--color-btn-danger-text);
+}
+
 a.link-inline {
     cursor: pointer;
 }
@@ -242,6 +247,14 @@ kbd {
     white-space: nowrap;
 }
 
+.noUi-tooltip {
+    display: none;
+}
+
+.noUi-active .noUi-tooltip {
+    display: block;
+}
+
 .tooltip-nowrap .tooltip-inner {
     white-space: nowrap;
     max-width: 100%;
@@ -274,6 +287,17 @@ kbd {
 }
 
 mwl-confirmation-popover-window {
+    .popover {
+        &.bottom {
+            margin-top: 0.5em;
+
+            .popover-arrow:after,
+            .popover-arrow:before {
+                margin-top: -0.6em;
+                margin-left: 50%;
+            }
+        }
+    }
     .popover-header {
         padding-top: 0.5rem;
         padding-bottom: 0.25rem;
@@ -284,6 +308,10 @@ mwl-confirmation-popover-window {
     .popover-body {
         p {
             margin-bottom: 8px;
+        }
+
+        .btn-block {
+            width: 100%;
         }
     }
 }

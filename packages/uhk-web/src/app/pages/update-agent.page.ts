@@ -31,9 +31,6 @@ import { ForceUpdateAction } from '../store/actions/app-update.action';
         </div>
     `,
     styleUrls: ['../components/uhk-message/uhk-message.component.scss'],
-    host: {
-        'class': 'container-fluid vertical-center-component'
-    }
 })
 export class UpdateAgentPageComponent {
 

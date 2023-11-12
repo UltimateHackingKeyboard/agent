@@ -28,9 +28,6 @@ import { SkipFirmwareUpgradeAction, UpdateFirmwareAction } from '../store/action
         </div>
     `,
     styleUrls: ['../components/uhk-message/uhk-message.component.scss'],
-    host: {
-        'class': 'container-fluid vertical-center-component'
-    }
 })
 export class UpdateFirmwarePageComponent {
 

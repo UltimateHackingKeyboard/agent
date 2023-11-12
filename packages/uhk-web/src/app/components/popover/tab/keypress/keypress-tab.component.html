@@ -17,7 +17,7 @@
             <ng-template ng-option-tmp let-item="item">
                 <span>
                   <span>{{ item.text }}</span>
-                <span class="float-right">
+                <span class="float-end">
                       {{ item.additional?.explanation}}
                   </span>
                 </span>
@@ -45,9 +45,9 @@
     <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0" class="mb-2"></capture-keystroke-button>
 </div>
 <div class="modifier-options">
-    <b class="setting-label mr-2 mb-2">Modifiers:</b>
+    <b class="setting-label me-2 mb-2">Modifiers:</b>
     <div class="btn-toolbar modifiers">
-        <div class="btn-group btn-group-sm mb-2 mr-3 modifiers__left">
+        <div class="btn-group btn-group-sm mb-2 me-3 modifiers__left">
             <button type="button" class="btn"
                     *ngFor="let modifier of leftModifiers; trackBy:modifiersTrackBy"
                     [class.btn-default]="!modifier.checked"
@@ -104,13 +104,13 @@
         </ngx-select>
     </div>
     <ng-template #secondaryRoleTooltip>
-        <p class="text-left">The secondary role activates when another key gets pressed while holding this key.</p>
-        <p class="text-left">Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
-        <ul class="text-left">
+        <p class="text-start">The secondary role activates when another key gets pressed while holding this key.</p>
+        <p class="text-start">Let's say that the scancode is Escape and the secondary role is Mouse. Then:</p>
+        <ul class="text-start">
             <li>Tap this key to trigger Escape. <i>(Primary role)</i></li>
             <li>Hold this key and press another key to activate the relevant key of the Mouse layer. <i>(Secondary role)</i></li>
         </ul>
-        <p class="text-left mb-1">The secondary role can be any layer or modifier.</p>
+        <p class="text-start mb-1">The secondary role can be any layer or modifier.</p>
     </ng-template>
     <span class="mt-1">
         <icon name="question-circle"

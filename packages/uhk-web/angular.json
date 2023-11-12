@@ -33,6 +33,7 @@
             ],
             "styles": [
               "node_modules/nouislider/dist/nouislider.min.css",
+              "node_modules/@perfectmemory/ngx-contextmenu/src/assets/stylesheets/base.scss",
               {
                 "input": "src/styles.scss",
                 "bundleName": "stylesLight",
@@ -163,6 +164,7 @@
             ],
             "styles": [
               "node_modules/nouislider/dist/nouislider.min.css",
+              "node_modules/@perfectmemory/ngx-contextmenu/src/assets/stylesheets/base.scss",
               {
                 "input": "src/styles.scss",
                 "bundleName": "stylesLight",

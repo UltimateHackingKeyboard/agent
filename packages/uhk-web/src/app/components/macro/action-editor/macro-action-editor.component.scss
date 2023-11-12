@@ -1,4 +1,4 @@
-@import '~bootstrap/scss/mixins/breakpoints';
+@import 'bootstrap/scss/mixins/breakpoints';
 @import '../../../../styles/variables';
 
 :host {
@@ -24,6 +24,7 @@
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
             user-select: none;
+            transition: none;
 
             &:hover {
                 cursor: pointer;
@@ -33,6 +34,7 @@
         &.active {
             white-space: nowrap;
             width: 100%;
+            line-height: 18px;
 
             a {
                 position: relative;
@@ -48,10 +50,10 @@
                     width: 0;
                     height: 0;
                     top: 0;
-                    right: -2.3rem;
+                    right: -34px;
                     border-color: transparent transparent transparent var(--color-icon-hover);
                     border-style: solid;
-                    border-width: 1.16rem;
+                    border-width: 17px;
                 }
             }
         }

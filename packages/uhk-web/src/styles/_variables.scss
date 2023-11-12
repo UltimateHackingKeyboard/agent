@@ -10,6 +10,8 @@ $uhk-icon-path: './uhk-css.svg';
 $font-size-base: 0.875rem; // 14 px
 $border-radius: 0.25rem;
 
+$link-decoration: none;
+
 $spacer: 1rem;
 $spacers: (
     0: 0,
@@ -40,5 +42,8 @@ $icon-dark-theme-inversion: 70%;
 $side-menu-width: 250px;
 $second-side-menu-width: 250px;
 
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';

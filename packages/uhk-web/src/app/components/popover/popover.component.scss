@@ -124,11 +124,12 @@
     background-color: var(--color-popover-bg-light);
 }
 
-.pr-10 {
+.pe-10 {
     padding-right: 10px;
 }
 
 .popover-action-form {
+    display: flex;
     margin-top: 4px;
 
     label {

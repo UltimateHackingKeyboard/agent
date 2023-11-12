@@ -9,7 +9,7 @@ $ng-select-selected: $color-select-active-bg;
 $ng-select-selected-text: $color-select-active-text;
 $ng-select-marked: $color-select-hover-bg;
 $ng-select-marked-text: $color-select-hover-text;
-@import '~@ng-select/ng-select/scss/default.theme';
+@import '@ng-select/ng-select/scss/default.theme';
 
 .ng-select {
     &.ng-select-opened {

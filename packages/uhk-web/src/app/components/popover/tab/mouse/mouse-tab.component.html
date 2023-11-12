@@ -2,7 +2,7 @@
     <ul class="nav nav-pills flex-column">
         <li *ngFor="let page of pages; let i = index"
             class="nav-item"
-            [class.active]="selectedPageIndex === i" 
+            [class.active]="selectedPageIndex === i"
             (click)="changePage(i)">
             <a class="nav-link" [class.active]="selectedPageIndex === i"> {{ page }}</a>
         </li>

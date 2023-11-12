@@ -71,7 +71,7 @@ export class KeymapEditComponent implements OnDestroy {
         this.routeSubscription = route
             .params
             .pipe(
-                pluck<{}, string>('abbr')
+                pluck('abbr')
             )
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 

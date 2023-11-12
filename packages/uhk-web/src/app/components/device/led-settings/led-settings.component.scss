@@ -1,4 +1,4 @@
-@import '~bootstrap/scss/mixins/breakpoints';
+@import 'bootstrap/scss/mixins/breakpoints';
 @import '../../../../styles/variables';
 
 :host {
@@ -23,13 +23,12 @@
     }
 
     .fade-timeout-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
         margin-left: 2.5rem;
 
-        .col-form-label {
-            margin-left: 0.5em;
-        }
-
-        .form-control {
+        input {
             width: 11ch;
         }
     }

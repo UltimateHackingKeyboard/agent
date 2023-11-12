@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Input, Output, OnDestroy, ViewChild } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, OnDestroy, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NouisliderComponent } from 'ng2-nouislider';
@@ -28,7 +28,7 @@ export interface SliderProps {
         { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SliderWrapperComponent), multi: true }
     ]
 })
-export class SliderWrapperComponent implements AfterViewInit, ControlValueAccessor, OnDestroy {
+export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent, { static: false }) slider: NouisliderComponent;
     @Input() label: string;
     @Input() tooltip: string;
@@ -44,22 +44,6 @@ export class SliderWrapperComponent implements AfterViewInit, ControlValueAccess
     private changeDebounceTime: number = 300;
 
     constructor(private sanitizer: DomSanitizer) {
-    }
-
-    ngAfterViewInit(): void {
-        // if (this.pips) {
-        //     this.slider.slider.pips(this.pips);
-        // }
-
-        // Hide tooltips and show them when dragging slider handle
-        this.slider.slider.target.querySelector('.noUi-tooltip').style.display = 'none';
-
-        this.slider.slider.on('start', function() {
-            this.target.querySelector('.noUi-tooltip').style.display = 'block';
-        });
-        this.slider.slider.on('end', function() {
-            this.target.querySelector('.noUi-tooltip').style.display = 'none';
-        });
     }
 
     ngOnDestroy() {

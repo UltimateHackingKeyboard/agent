@@ -21,7 +21,7 @@ export class AddOnComponent {
         this.name$ = route
             .params
             .pipe(
-                pluck<{}, string>('name')
+                pluck('name')
             );
     }
 }
