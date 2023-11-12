@@ -16,6 +16,7 @@
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
                     transition: none;
+                    line-height: 18px;
 
                     &.selected {
                         font-style: italic;
@@ -37,10 +38,11 @@
                             width: 0;
                             height: 0;
                             top: 0;
-                            right: -2.2rem;
+                            bottom: 0;
+                            right: -34px;
                             border-color: transparent transparent transparent var(--color-icon-hover);
                             border-style: solid;
-                            border-width: 1.1rem;
+                            border-width: 17px;
                         }
                     }
                 }
