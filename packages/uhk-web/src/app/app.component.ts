@@ -196,7 +196,6 @@ export class MainAppComponent implements OnDestroy {
                 ],
             };
 
-            console.log(newOptions);
             return newOptions;
         };
     }
