@@ -1,19 +1,17 @@
-<div class="row">
-    <div class="col-12">
-        <div class="checkbox d-inline-block mb-0 mt-0">
-            <label>
-                <input type="checkbox"
-                       [checked]="state.checkForUpdateOnStartUp"
-                       (change)="emitCheckForUpdateOnStartUp($event.target.checked)"> Automatically check for update on
-                application start
-            </label>
-        </div>
-
-        <button class="btn btn-link" (click)="emitCheckForUpdate($event)">
-            Check for update
-            <fa-icon *ngIf="state.checkingForUpdate"
-                     [icon]="faSpinner"
-                     spin="true"></fa-icon>
-        </button>
+<div class="d-inline-flex">
+    <div class="checkbox d-inline-block mb-0 mt-0">
+        <label>
+            <input type="checkbox"
+                   [checked]="state.checkForUpdateOnStartUp"
+                   (change)="emitCheckForUpdateOnStartUp($event.target.checked)"> Automatically check for update on
+            application start
+        </label>
     </div>
+
+    <button class="btn btn-link pt-0 pb-0" (click)="emitCheckForUpdate($event)">
+        Check for update
+        <fa-icon *ngIf="state.checkingForUpdate"
+                 [icon]="faSpinner"
+                 spin="true"></fa-icon>
+    </button>
 </div>
