@@ -8,9 +8,6 @@ import { Component } from '@angular/core';
                      [showLogo]="true"
                      [rotateLogo]="true"></uhk-message>
     `,
-    host: {
-        'class': 'container-fluid vertical-center-component'
-    }
 })
 export class LoadingDevicePageComponent {
 

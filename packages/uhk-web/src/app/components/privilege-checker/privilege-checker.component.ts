@@ -12,9 +12,6 @@ import { PrivilagePageSate } from '../../models/privilage-page-sate';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './privilege-checker.component.html',
     styleUrls: ['./privilege-checker.component.scss'],
-    host: {
-        'class': 'container-fluid vertical-center-component'
-    }
 })
 
 export class PrivilegeCheckerComponent implements OnInit, OnDestroy {
