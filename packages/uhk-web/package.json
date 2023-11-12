@@ -80,7 +80,7 @@
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "1.0.0",
     "xml-loader": "1.2.1",
-    "zone.js": "0.14.2"
+    "zone.js": "0.13.3"
   },
   "dependencies": {
     "file-saver": "2.0.5"
