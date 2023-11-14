@@ -5,7 +5,7 @@ MIT
 MIT
 The MIT License
 
-Copyright (c) 2022 Google LLC.
+Copyright (c) 2023 Google LLC.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -96,7 +96,7 @@ as SVG and JS file types.
 In the Font Awesome Free download, the SIL OFL license applies to all icons
 packaged as web and desktop font files.
 
-Copyright (c) 2022 Fonticons, Inc. (https://fontawesome.com)
+Copyright (c) 2023 Fonticons, Inc. (https://fontawesome.com)
 with Reserved Font Name: "Font Awesome".
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -196,7 +196,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 In the Font Awesome Free download, the MIT license applies to all non-font and
 non-icon files.
 
-Copyright 2022 Fonticons, Inc.
+Copyright 2023 Fonticons, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -265,7 +265,7 @@ as SVG and JS file types.
 In the Font Awesome Free download, the SIL OFL license applies to all icons
 packaged as web and desktop font files.
 
-Copyright (c) 2022 Fonticons, Inc. (https://fontawesome.com)
+Copyright (c) 2023 Fonticons, Inc. (https://fontawesome.com)
 with Reserved Font Name: "Font Awesome".
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -365,7 +365,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 In the Font Awesome Free download, the MIT license applies to all non-font and
 non-icon files.
 
-Copyright 2022 Fonticons, Inc.
+Copyright 2023 Fonticons, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -434,7 +434,7 @@ as SVG and JS file types.
 In the Font Awesome Free download, the SIL OFL license applies to all icons
 packaged as web and desktop font files.
 
-Copyright (c) 2022 Fonticons, Inc. (https://fontawesome.com)
+Copyright (c) 2023 Fonticons, Inc. (https://fontawesome.com)
 with Reserved Font Name: "Font Awesome".
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -534,7 +534,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 In the Font Awesome Free download, the MIT license applies to all non-font and
 non-icon files.
 
-Copyright 2022 Fonticons, Inc.
+Copyright 2023 Fonticons, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -631,21 +631,9 @@ MIT
 
 @ngrx/effects
 MIT
-
-@ngrx/router-store
-MIT
-
-@ngrx/store
-MIT
-
-@ngrx/store-devtools
-MIT
-
-@perfectmemory/ngx-contextmenu
-MIT
 The MIT License (MIT)
 
-Copyright (c) 2022
+Copyright (c) 2017-2023 Brandon Roberts, Mike Ryan, Victor Savkin, Rob Wormald
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -664,6 +652,124 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+This repository includes a file "debounceSync.ts" originially copied from
+https://github.com/cartant/rxjs-etc by Nicholas Jamieson, MIT licensed. See the
+file header for details.
+
+
+@ngrx/router-store
+MIT
+The MIT License (MIT)
+
+Copyright (c) 2017-2023 Brandon Roberts, Mike Ryan, Victor Savkin, Rob Wormald
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+This repository includes a file "debounceSync.ts" originially copied from
+https://github.com/cartant/rxjs-etc by Nicholas Jamieson, MIT licensed. See the
+file header for details.
+
+
+@ngrx/store
+MIT
+The MIT License (MIT)
+
+Copyright (c) 2017-2023 Brandon Roberts, Mike Ryan, Victor Savkin, Rob Wormald
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+This repository includes a file "debounceSync.ts" originially copied from
+https://github.com/cartant/rxjs-etc by Nicholas Jamieson, MIT licensed. See the
+file header for details.
+
+
+@ngrx/store-devtools
+MIT
+The MIT License (MIT)
+
+Copyright (c) 2017-2023 Brandon Roberts, Mike Ryan, Victor Savkin, Rob Wormald
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+This repository includes a file "debounceSync.ts" originially copied from
+https://github.com/cartant/rxjs-etc by Nicholas Jamieson, MIT licensed. See the
+file header for details.
+
+
+@perfectmemory/ngx-contextmenu
+MIT
+
+@popperjs/core
+MIT
+The MIT License (MIT)
+
+Copyright (c) 2019 Federico Zivolo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 angular-confirmation-popover
@@ -715,9 +821,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
-angular-resize-event
-MIT
 
 angular-split
 Apache-2.0
@@ -1454,6 +1557,9 @@ MIT
 ngx-color-picker
 MIT
 
+ngx-resize
+MIT
+
 ngx-select-ex
 MIT
 The MIT License (MIT)
@@ -1860,7 +1966,7 @@ zone.js
 MIT
 The MIT License
 
-Copyright (c) 2010-2022 Google LLC. https://angular.io/license
+Copyright (c) 2010-2023 Google LLC. https://angular.io/license
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
