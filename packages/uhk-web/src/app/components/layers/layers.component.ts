@@ -67,6 +67,10 @@ export class LayersComponent {
     }
 
     onDeleteConfirmationShown(isOpen: boolean): void {
+        if (!this.deleteTooltip) {
+            return;
+        }
+
         if (isOpen) {
             this.deleteTooltip.disableTooltip = true;
             this.deleteTooltip.close();
