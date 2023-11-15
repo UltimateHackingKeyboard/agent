@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.2.0] - 2023-11-14
+
+Firmware: 10.**4.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.4.0)] | Device Protocol: 4.10.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
+
+- Optimize in-line editable command macro action for horizontal space.
+- Add "Open configuration folder" link on the settings page.
+- Fix crash when changing theme before the default user config is loaded.
+- Fix suggestion widget visibility in Monaco Editor.
+- Set default error panel height to 10% percent of screen height.
+- Upgrade to Bootstrap 5.
+
 ## [3.1.0] - 2023-10-01
 
 Firmware: 10.3.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.3.0)] | Device Protocol: 4.**10.0** | User Config: 6.0.0 | Hardware Config: 1.0.0
