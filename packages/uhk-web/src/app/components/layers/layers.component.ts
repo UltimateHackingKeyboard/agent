@@ -23,7 +23,7 @@ export class LayersComponent {
     @Output() addColorToPalette = new EventEmitter<RgbColor>();
     @Output() deleteColorFromPalette = new EventEmitter();
     @Output() modifyColorPaletteColor = new EventEmitter<ModifyColorOfBacklightingColorPalettePayload>();
-    @Output() select = new EventEmitter<LayerOption>();
+    @Output() selectLayer = new EventEmitter<LayerOption>();
     @Output() toggleColorFromPalette = new EventEmitter<number>();
     @Output() addLayer = new EventEmitter<number>();
     @Output() removeLayer = new EventEmitter<number>();
@@ -34,12 +34,12 @@ export class LayersComponent {
     faTrash = faTrash;
     newColorPaletteColor = '#000000';
 
-    selectLayer(option: LayerOption) {
+    onSelectLayer(option: LayerOption) {
         if (this.current?.id === option.id) {
             return;
         }
 
-        this.select.emit(option);
+        this.selectLayer.emit(option);
     }
 
     trackLayer(index: number, layer: LayerOption): string {
@@ -50,7 +50,7 @@ export class LayersComponent {
         this.removeLayer.emit(layerOption.id);
     }
 
-    onSelectLayer(layerOption: LayerOption): void {
+    onAddLayer(layerOption: LayerOption): void {
         this.addLayer.emit(layerOption.id);
     }
 
