@@ -6,6 +6,13 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.2.1] - 2023-11-16
+
+Firmware: 10.4.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.4.0)] | Device Protocol: 4.10.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
+
+- Fix bug that caused the Agent window to go black. This fix required an Electron 27.0.4 update, which removes macOS 10.13 and 10.14 support, so Agent only runs on macOS 10.15 (Catalina) or later going forward.
+- Fix bug that made double-clicking on the color code field slide the UHK out of screen.
+
 ## [3.2.0] - 2023-11-14
 
 Firmware: 10.**4.0** [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.4.0)] | Device Protocol: 4.10.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
