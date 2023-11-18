@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -6,6 +7,7 @@ import {
     EventEmitter,
     forwardRef,
     HostListener,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -18,6 +20,7 @@ import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@ma
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Key } from 'ts-keycode-enum';
+import { LogService } from 'uhk-common';
 
 import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
@@ -84,7 +87,22 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private subscriptions = new Subscription();
 
     constructor(private cdRef: ChangeDetectorRef,
+                @Inject(DOCUMENT) private document: Document,
+                private logService: LogService,
                 private smartMacroDocService: SmartMacroDocService) {
+        // https://stackoverflow.com/questions/58271107/offset-between-text-and-cursor-with-the-monaco-editor-angular-under-chrome-m
+        this.document.fonts.ready.then(() => {
+            if (this.editor) {
+                if (monaco.editor) {
+                    this.logService.misc('[MacroCommandEditorComponent] fonts ready re-measure fonts.');
+                    monaco.editor.remeasureFonts();
+                } else {
+                    this.logService.misc('[MacroCommandEditorComponent] fonts ready but monaco editor not initialized.');
+                }
+            } else {
+                this.logService.misc('[MacroCommandEditorComponent] fonts ready but editor not initialized.');
+            }
+        });
     }
 
     ngOnInit(): void {
@@ -145,6 +163,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     }
 
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
+        this.logService.misc('[MacroCommandEditorComponent] editor initialized.');
+
         this.editor = editor;
         this.setLFEndOfLineOption();
         if (this.autoFocus) {
