@@ -95,7 +95,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             if (this.editor) {
                 if (monaco.editor) {
                     this.logService.misc('[MacroCommandEditorComponent] fonts ready re-measure fonts.');
-                    monaco.editor.remeasureFonts();
+                    // Should run in the next tick otherwise the editor not recognize the new font size
+                    setTimeout(() => monaco.editor.remeasureFonts());
                 } else {
                     this.logService.misc('[MacroCommandEditorComponent] fonts ready but monaco editor not initialized.');
                 }
