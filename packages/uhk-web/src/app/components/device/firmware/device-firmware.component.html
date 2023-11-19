@@ -17,8 +17,7 @@
                     {{ state.moduleName }}
                     <span *ngIf="state.firmwareUpgradeSupported">firmware:
                         <span *ngIf="state.gitRepo" [class.text-muted]="state.isOfficialFirmware">{{ state.gitRepo }}:</span>
-                        <span [class.text-muted]="state.tooltip"
-                              [class.text-dotted]="state.tooltip"
+                        <span [class.text-dotted]="state.tooltip"
                               [ngbTooltip]="state.tooltip"
                               tooltipClass="tooltip-firmware-version"
                         >{{ state.currentFirmwareVersion }}</span>
