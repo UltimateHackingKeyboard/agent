@@ -12,5 +12,8 @@
     "node-hid": "2.1.2",
     "uhk-common": "1.0.0",
     "uhk-usb": "1.0.0"
+  },
+  "scripts": {
+    "clean": "rm -rf rimraf ./node_modules"
   }
 }
