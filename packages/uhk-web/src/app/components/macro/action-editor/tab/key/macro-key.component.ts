@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { NgxResizeResult } from 'ngx-resize';
+import { NgxResizeResult } from '@ert78gb/ngx-resize';
 import { KeyMacroAction, KeystrokeAction, MacroKeySubAction } from 'uhk-common';
 import { faHandPaper, faHandPointer, faHandRock } from '@fortawesome/free-solid-svg-icons';
 
