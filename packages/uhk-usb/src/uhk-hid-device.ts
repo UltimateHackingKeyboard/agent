@@ -36,6 +36,7 @@ import {
 import { DeviceState, GetDeviceOptions, ReenumerateOption } from './models/index.js';
 import {
     calculateHalvesState,
+    findDeviceByOptions,
     getNumberOfConnectedDevices,
     getUhkDevices,
     usbDeviceJsonFormatter
@@ -92,10 +93,12 @@ export class UhkHidDevice {
             }
 
             this.logService.misc('[UhkHidDevice] Devices before checking permission:');
-            const devs = getUhkDevices();
+            const devs = getUhkDevices(this.options.vid);
             this.listAvailableDevices(devs);
 
-            const dev = devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
+            const dev = this.options.vid
+                ? devs.find(findDeviceByOptions(this.options))
+                : devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
 
             if (!dev) {
                 return true;
@@ -119,7 +122,7 @@ export class UhkHidDevice {
      * @returns {DeviceConnectionState}
      */
     public async getDeviceConnectionStateAsync(): Promise<DeviceConnectionState> {
-        const devs = getUhkDevices();
+        const devs = getUhkDevices(this.options.vid);
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             zeroInterfaceAvailable: false,
@@ -232,7 +235,7 @@ export class UhkHidDevice {
         let jumped = false;
 
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
-            const devs = getUhkDevices();
+            const devs = getUhkDevices(vendorId);
 
             const inBootloaderMode = devs.some((x: Device) =>
                 x.vendorId === vendorId &&
@@ -414,10 +417,12 @@ export class UhkHidDevice {
      */
     private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): HID {
         try {
-            const devs = getUhkDevices();
+            const devs = getUhkDevices(this.options.vid);
             this.listAvailableDevices(devs);
 
-            const dev = devs.find(isUhkZeroInterface);
+            const dev = this.options.vid
+                ? devs.find(findDeviceByOptions(this.options))
+                : devs.find(isUhkZeroInterface);
 
             if (!dev) {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');

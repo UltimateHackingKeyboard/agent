@@ -1,6 +1,7 @@
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import { CommandLineArgs } from 'uhk-common';
+import { assertCommandLineOptions } from 'uhk-usb';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'devtools', type: Boolean },
@@ -9,14 +10,18 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'log', type: String },
     { name: 'modules', type: Boolean },
     { name: 'help', type: Boolean },
+    { name: 'pid', type: Number },
     { name: 'preserve-udev-rules', type: Boolean },
     { name: 'print-usb-devices', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
-    { name: 'usb-non-blocking', type: Boolean }
+    { name: 'usb-interface', type: Number },
+    { name: 'usb-non-blocking', type: Boolean },
+    { name: 'vid', type: Number },
 ];
 
 export const options: CommandLineArgs = commandLineArgs(optionDefinitions, { partial: true }) as CommandLineArgs;
+assertCommandLineOptions(options);
 
 const sections: commandLineUsage.Section[] = [
     {
@@ -52,6 +57,11 @@ const sections: commandLineUsage.Section[] = [
                 type: Boolean
             },
             {
+                name: 'pid',
+                description: 'Use the specified USB product id. If you set it you have to set the vid and usb-interface too.',
+                type: Number
+            },
+            {
                 name: 'preserve-udev-rules',
                 description: 'Don\'t force udev rule update',
                 type: Boolean
@@ -74,9 +84,19 @@ const sections: commandLineUsage.Section[] = [
                 type: Boolean
             },
             {
+                name: 'usb-interface',
+                description: 'Use the specified USB interface id. If you set it you have to set the vid and pid too.',
+                type: Number
+            },
+            {
                 name: 'usb-non-blocking',
                 description: 'Use USB non-blocking communication',
                 type: Boolean
+            },
+            {
+                name: 'vid',
+                description: 'Use the specified USB vendor id. If you set it you have to set the pid and usb-interface too.',
+                type: Number
             }
         ]
     }

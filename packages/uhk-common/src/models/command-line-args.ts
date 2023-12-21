@@ -27,6 +27,10 @@ export interface CommandLineArgs {
      */
     help?: boolean;
     /**
+     * USB product id
+     */
+    pid?: number;
+    /**
      * Agent not force the udev rule update
      */
     'preserve-udev-rules'?: boolean;
@@ -44,7 +48,15 @@ export interface CommandLineArgs {
      */
     spe?: boolean;
     /**
+     * USB interface id
+     */
+    'usb-interface'?: number;
+    /**
      * Use USB non-blocking communication
      */
     'usb-non-blocking'?: boolean;
+    /**
+     * USB vendor id
+     */
+    vid?: number;
 }
