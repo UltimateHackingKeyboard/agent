@@ -7,7 +7,7 @@
   "license": "See in LICENSE",
   "dependencies": {
     "desm": "1.2.0",
-    "yargs": "17.7.1",
+    "yargs": "17.7.2",
     "kboot": "0.0.0",
     "node-hid": "2.2.0",
     "uhk-common": "1.0.0",
