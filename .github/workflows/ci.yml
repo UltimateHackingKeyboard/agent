@@ -59,3 +59,38 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASS }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List dist folder on Linux and Mac
+        if: runner.os == 'macOS' || runner.os == 'Linux'
+        run: ls -la dist
+
+      - name: Upload Mac installer artifact
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: UHK.Agent-mac-installer
+          path: dist/UHK.Agent-*-mac.dmg
+          compression-level: 0
+          retention-days: 5
+
+      - name: Upload Linux AppImage artifact
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: UHK.Agent-linux-x86_64.AppImage
+          path: dist/UHK.Agent-*-linux-x86_64.AppImage
+          compression-level: 0
+          retention-days: 5
+
+      - name: List dist folder on Windows
+        if: runner.os == 'Windows'
+        run: dir dist
+
+      - name: Upload Windows installer artifacts
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: UHK.Agent-windows-installers
+          path: dist/UHK.Agent-*-win*.exe
+          compression-level: 0
+          retention-days: 5
