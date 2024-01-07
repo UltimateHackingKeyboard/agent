@@ -674,7 +674,7 @@ export class DeviceService {
                     if (!isEqual(state, savedState)) {
                         const newState = cloneDeep(state);
 
-                        if (state.hasPermission && state.zeroInterfaceAvailable) {
+                        if (state.hasPermission && state.communicationInterfaceAvailable) {
                             state.hardwareModules = await this.getHardwareModules(false);
                             deviceProtocolVersion = state.hardwareModules.rightModuleInfo.deviceProtocolVersion;
                             this._checkStatusBuffer = true;
