@@ -1,0 +1,8 @@
+// styles for ngx-color-picker
+color-picker {
+    .color-picker {
+        input {
+            color: var(--bs-body-color);
+        }
+    }
+}
