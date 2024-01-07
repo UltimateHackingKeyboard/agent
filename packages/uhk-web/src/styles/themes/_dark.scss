@@ -61,6 +61,7 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
 
 :root,
 .theme-dark {
+    --bs-secondary-color: #{$secondary} !important;
     --bs-list-group-bg: #{$input-bg};
 
     --color-btn-danger-text: #{$white};
