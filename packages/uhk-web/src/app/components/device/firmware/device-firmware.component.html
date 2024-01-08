@@ -16,12 +16,12 @@
                     </span>
                     {{ state.moduleName }}
                     <span *ngIf="state.firmwareUpgradeSupported">firmware:
-                        <span *ngIf="state.gitRepo" [class.text-muted]="state.isOfficialFirmware">{{ state.gitRepo }}:</span>
+                        <span *ngIf="state.gitRepo" [class.text-body-secondary]="state.isOfficialFirmware">{{ state.gitRepo }}:</span>
                         <span [class.text-dotted]="state.tooltip"
                               [ngbTooltip]="state.tooltip"
                               tooltipClass="tooltip-firmware-version"
                         >{{ state.currentFirmwareVersion }}</span>
-                        <span *ngIf="state.gitTag" [class.text-muted]="state.isOfficialFirmware">{{ gitTagText(state.currentFirmwareVersion, state.gitTag) }}</span>
+                        <span *ngIf="state.gitTag" [class.text-body-secondary]="state.isOfficialFirmware">{{ gitTagText(state.currentFirmwareVersion, state.gitTag) }}</span>
                         <span *ngIf="state.newFirmwareVersion && state.currentFirmwareVersion !== state.newFirmwareVersion">
                             <fa-icon [icon]="faLongArrowAltRight"></fa-icon> {{ state.newFirmwareVersion }}
                         </span>
