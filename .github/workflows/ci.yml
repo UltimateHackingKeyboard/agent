@@ -51,6 +51,10 @@ jobs:
       - name: Run test
         run: npm test
 
+      - name: Install linux build dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libusb-dev libudev-dev
+
       - name: Release
         run: npm run release
         env:
