@@ -53,7 +53,7 @@ jobs:
 
       - name: Install linux build dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libusb-dev libudev-dev
+        run: sudo apt-get install -y libusb-1.0-0-dev libudev-dev
 
       - name: Release
         run: npm run release
