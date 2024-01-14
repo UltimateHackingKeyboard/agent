@@ -204,7 +204,7 @@ export const deviceConnected = createSelector(
         }
 
         if (app.platform === 'linux') {
-            return device.connectedDevice && (device.zeroInterfaceAvailable || upgradingFirmware);
+            return device.connectedDevice && (device.communicationInterfaceAvailable || upgradingFirmware);
         }
 
         return !!device.connectedDevice;

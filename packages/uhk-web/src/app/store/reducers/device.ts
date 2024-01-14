@@ -29,7 +29,7 @@ export interface State {
     deviceConnectionStateLoaded: boolean;
     keyboardHalvesAlwaysJoined: boolean;
     multiDevice: boolean;
-    zeroInterfaceAvailable: boolean;
+    communicationInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
     modifiedConfigWhileSaved: boolean;
     savingToKeyboard: boolean;
@@ -51,7 +51,7 @@ export const initialState: State = {
     deviceConnectionStateLoaded: false,
     keyboardHalvesAlwaysJoined: false,
     multiDevice: false,
-    zeroInterfaceAvailable: true,
+    communicationInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
     modifiedConfigWhileSaved: false,
     savingToKeyboard: false,
@@ -115,7 +115,7 @@ export function reducer(state = initialState, action: Action): State {
                 connectedDevice: data.connectedDevice,
                 deviceConnectionStateLoaded: true,
                 hasPermission: data.hasPermission,
-                zeroInterfaceAvailable: data.zeroInterfaceAvailable,
+                communicationInterfaceAvailable: data.communicationInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
                 halvesInfo: data.halvesInfo,
                 modules: data.hardwareModules,
@@ -275,7 +275,7 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
         };
     }
 
-    if (state.connectedDevice && !state.zeroInterfaceAvailable) {
+    if (state.connectedDevice && !state.communicationInterfaceAvailable) {
         return {
             header: 'Cannot find your UHK',
             subtitle: 'Please reconnect it!'
