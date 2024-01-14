@@ -56,13 +56,22 @@ if (process.platform === 'darwin') {
     process.exit(1);
 }
 
-if (process.platform === 'darwin' && process.env.CI) {
-    const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
-    const decryptedFile = path.join(__dirname, './certs/mac-cert.p12');
-    exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${decryptedFile} -d`);
-} else if (process.platform === 'win32') {
-    // decrypt windows certificate
-    exec('openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in scripts/certs/windows-cert.p12.enc -out scripts/certs/windows-cert.p12 -d')
+let macCertificatePath;
+let winCertificatePath;
+
+if (process.env.CERT_IV && process.env.CERT_KEY) {
+    if (process.platform === 'darwin') {
+        const encryptedFile = path.join(__dirname, './certs/mac-cert.p12.enc');
+        macCertificatePath = path.join(__dirname, './certs/mac-cert.p12');
+        exec(`openssl aes-256-cbc -K $CERT_KEY -iv $CERT_IV -in ${encryptedFile} -out ${macCertificatePath} -d`);
+    } else if (process.platform === 'win32') {
+        const encryptedFile = path.join(__dirname, './certs/windows-cert.p12.enc');
+        winCertificatePath = path.join(__dirname, './certs/windows-cert.p12');
+
+        exec(`openssl aes-256-cbc -K %CERT_KEY% -iv %CERT_IV% -in ${encryptedFile} -out ${winCertificatePath} -d`)
+    }
+} else {
+    console.info('CERT_IV and CERT_KEY env variables are not set. Skipping certificate decryption.');
 }
 
 const rootJson = require('../package.json');
@@ -86,7 +95,7 @@ builder.build({
             category: 'public.app-category.utilities',
             extraResources,
             identity: 'CMXCBCFHDG',
-            cscLink: path.join(__dirname, 'certs/mac-cert.p12'),
+            cscLink: macCertificatePath,
             hardenedRuntime: true,
             gatekeeperAssess: false,
             entitlements: path.join(__dirname, 'entitlements.mac.plist'),
@@ -95,7 +104,7 @@ builder.build({
         win: {
             extraResources,
             publisherName: 'Ultimate Gadget Laboratories Kft.',
-            certificateFile: path.join(__dirname, 'certs/windows-cert.p12')
+            certificateFile: winCertificatePath,
         },
         linux: {
             extraResources
