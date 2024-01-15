@@ -90,6 +90,7 @@ builder.build({
             app: electron_build_folder
         },
         appId: 'com.ultimategadgetlabs.agent',
+        npmRebuild: false,
         productName: 'UHK Agent',
         mac: {
             category: 'public.app-category.utilities',

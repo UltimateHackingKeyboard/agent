@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macOS-11]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
       - name: Dump GitHub context
@@ -50,19 +50,6 @@ jobs:
 
       - name: Run test
         run: npm test
-
-      - name: Install linux build dependencies
-        if: runner.os == 'Linux'
-        run: sudo apt-get install -y libusb-1.0-0-dev libudev-dev
-
-      # Use python 3.11 on macOS, because `distutils` module is removed in Python 3.12.
-      - name: Macos Use Python 3.11
-        if: runner.os == 'macOS'
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-        env:
-          PYTHON_VERSION: 3.11
 
       - name: Release
         run: npm run release
