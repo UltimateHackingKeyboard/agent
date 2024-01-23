@@ -29,7 +29,7 @@ import {
     getTransferData,
     isBootloader,
     getUhkDevice,
-    isUhkZeroInterface,
+    isUhkCommunicationInterface,
     retry,
     snooze
 } from './util.js';
@@ -98,7 +98,7 @@ export class UhkHidDevice {
 
             const dev = this.options.vid
                 ? devs.find(findDeviceByOptions(this.options))
-                : devs.find((x: Device) => isUhkZeroInterface(x) || isBootloader(x));
+                : devs.find((x: Device) => isUhkCommunicationInterface(x) || isBootloader(x));
 
             if (!dev) {
                 return true;
@@ -125,7 +125,7 @@ export class UhkHidDevice {
         const devs = getUhkDevices(this.options.vid);
         const result: DeviceConnectionState = {
             bootloaderActive: false,
-            zeroInterfaceAvailable: false,
+            communicationInterfaceAvailable: false,
             hasPermission: this.hasPermission(),
             halvesInfo: {
                 areHalvesMerged: true,
@@ -147,14 +147,14 @@ export class UhkHidDevice {
                 result.connectedDevice = getUhkDevice(dev);
             }
 
-            if (isUhkZeroInterface(dev)) {
-                result.zeroInterfaceAvailable = true;
+            if (isUhkCommunicationInterface(dev)) {
+                result.communicationInterfaceAvailable = true;
             } else if (isBootloader(dev)) {
                 result.bootloaderActive = true;
             }
         }
 
-        if (result.connectedDevice && result.hasPermission && result.zeroInterfaceAvailable) {
+        if (result.connectedDevice && result.hasPermission && result.communicationInterfaceAvailable) {
             const deviceState = await this.getDeviceState();
             result.halvesInfo = calculateHalvesState(deviceState);
             result.isMacroStatusDirty = deviceState.isMacroStatusDirty;
@@ -422,7 +422,7 @@ export class UhkHidDevice {
 
             const dev = this.options.vid
                 ? devs.find(findDeviceByOptions(this.options))
-                : devs.find(isUhkZeroInterface);
+                : devs.find(isUhkCommunicationInterface);
 
             if (!dev) {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');

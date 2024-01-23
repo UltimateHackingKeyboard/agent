@@ -139,7 +139,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/update-firmware']);
                 }
 
-                if (state.connectedDevice && state.zeroInterfaceAvailable) {
+                if (state.connectedDevice && state.communicationInterfaceAvailable) {
                     const allowDefaultNavigation = [
                         '/detection',
                         '/privilege',
@@ -161,14 +161,14 @@ export class DeviceEffects {
 
                 return prevConnected === currConnected &&
                     prevAction.payload.hasPermission === currAction.payload.hasPermission &&
-                    prevAction.payload.zeroInterfaceAvailable === currAction.payload.zeroInterfaceAvailable;
+                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable;
             }),
             mergeMap(([action, route, connected]) => {
                 const payload = action.payload;
 
                 if (connected
                     && payload.hasPermission
-                    && payload.zeroInterfaceAvailable) {
+                    && payload.communicationInterfaceAvailable) {
 
                     const result: Array<Action> = [
                         new ReadConfigSizesAction(),

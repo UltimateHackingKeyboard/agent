@@ -13,7 +13,7 @@
                     (select)="onChange($event)">
 
             <ng-template ngx-select-option let-option>
-                <div [ngClass]="{'text-muted': option.disabled}">
+                <div [ngClass]="{'text-body-secondary': option.disabled}">
                     <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
                             <span>{{ option.text }}</span>
                             <span class="scancode--searchterm">
