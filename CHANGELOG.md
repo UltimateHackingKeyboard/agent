@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [3.3.0] - 2024-01-23
+
+Firmware: 10.5.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.5.0)] | Device Protocol: 4.10.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
+
+- Make Agent compatible with more Linux distributions that use glibc 2.28+ instead of previously requested glibc 2.33+
+- Refine USB interface filtering, allowing for compatibility with upcoming firmware versions that use altered USB interface order for greater KVM compatibility.
+- Fix the dark mode styles of the color picker and firmware version display.
+
 ## [3.2.2] - 2023-12-14
 
 Firmware: 10.5.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.5.0)] | Device Protocol: 4.10.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
