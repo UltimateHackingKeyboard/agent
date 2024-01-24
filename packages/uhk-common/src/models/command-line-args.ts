@@ -19,10 +19,6 @@ export interface CommandLineArgs {
      */
     log?: string;
     /**
-     * modules menu visible or not
-     */
-    modules?: boolean;
-    /**
      * show help.
      */
     help?: boolean;
