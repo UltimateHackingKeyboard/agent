@@ -42,6 +42,7 @@ export const UHK_DEVICES: Array<UhkDeviceProduct> = [
 export interface UhkModule {
     id: number;
     name: string;
+    configPath?: string;
     slotId: ModuleSlotToId;
     i2cAddress: ModuleSlotToI2cAddress;
     firmwareUpgradeSupported: boolean;
@@ -58,22 +59,25 @@ export const LEFT_HALF_MODULE: UhkModule = {
 export const LEFT_KEY_CLUSTER_MODULE: UhkModule = {
     id: 2,
     name: 'Key cluster',
+    configPath: '/add-on/key-cluster',
     slotId: ModuleSlotToId.leftModule,
     i2cAddress: ModuleSlotToI2cAddress.leftModule,
-    firmwareUpgradeSupported: true
+    firmwareUpgradeSupported: true,
 };
 
 export const RIGHT_TRACKBALL_MODULE: UhkModule = {
     id: 3,
     name: 'Trackball',
+    configPath: '/add-on/trackball',
     slotId: ModuleSlotToId.rightModule,
     i2cAddress: ModuleSlotToI2cAddress.rightModule,
-    firmwareUpgradeSupported: true
+    firmwareUpgradeSupported: true,
 };
 
 export const RIGHT_TRACKPOINT_MODULE: UhkModule = {
     id: 4,
     name: 'Trackpoint',
+    configPath: '/add-on/trackpoint',
     slotId: ModuleSlotToId.rightModule,
     i2cAddress: ModuleSlotToI2cAddress.rightModule,
     firmwareUpgradeSupported: true
@@ -82,6 +86,7 @@ export const RIGHT_TRACKPOINT_MODULE: UhkModule = {
 export const RIGHT_TOUCHPAD_MODULE: UhkModule = {
     id: 5,
     name: 'Touchpad',
+    configPath: '/add-on/touchpad',
     slotId: ModuleSlotToId.rightModule,
     i2cAddress: ModuleSlotToI2cAddress.rightTouchpad,
     firmwareUpgradeSupported: false

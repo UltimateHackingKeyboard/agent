@@ -46,6 +46,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
+    @Output() navigateToModuleSettings = new EventEmitter<number>();
 
     aLayer: Layer;
     bLayer: Layer;

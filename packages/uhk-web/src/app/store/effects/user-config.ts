@@ -5,16 +5,17 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { Buffer } from 'uhk-common';
 
 import {
     BackupUserConfigurationInfo,
+    Buffer,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
     LogService,
     NotificationType,
     UhkBuffer,
+    UHK_MODULES,
     UserConfiguration
 } from 'uhk-common';
 
@@ -24,6 +25,7 @@ import {
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
     LoadUserConfigurationFromFileAction,
+    NavigateToModuleSettings,
     PreviewUserConfigurationAction,
     SaveUserConfigSuccessAction
 } from '../actions/user-config';
@@ -268,6 +270,21 @@ export class UserConfigEffects {
                 }
             })
         )
+    );
+
+    navigateToModuleSettings$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.NavigateToModuleSettings),
+            tap((action: NavigateToModuleSettings) => {
+                for(const module of UHK_MODULES) {
+                    if (module.id === action.payload) {
+                        this.router.navigate([module.configPath]);
+                        return;
+                    }
+                }
+            })
+        ),
+    { dispatch: false }
     );
 
     previewUserConfiguration$ = createEffect(() => this.actions$

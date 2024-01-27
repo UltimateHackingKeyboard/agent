@@ -9,6 +9,16 @@
             [attr.fill]="svgKeyboardCoverColors?.fillColor"
             [attr.stroke]="svgKeyboardCoverColors?.strokeColor"/>
 
+<svg:g class="module-nav" *ngIf="moduleNavPath && moduleNavCircle" (click)="navigateToModuleSettings.emit()">
+    <svg:circle [attr.cx]="moduleNavCircle.cx"
+                [attr.cy]="moduleNavCircle.cy"
+                [attr.r]="moduleNavCircle.r"
+                [attr.fill]="svgKeyboardCoverColors?.fillColor"
+                [attr.stroke]="svgKeyboardCoverColors?.strokeColor"
+                />
+    <svg:path [attr.d]="moduleNavPath.d" />
+</svg:g>
+
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">
     <svg:g svg-keyboard-key
             *ngIf="key"

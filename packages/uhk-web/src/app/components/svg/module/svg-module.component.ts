@@ -37,9 +37,12 @@ export class SvgModuleComponent implements OnDestroy {
     @Input() capturingEnabled: boolean;
     @Input() lastEdited: boolean;
     @Input() lastEditedKeyId: string;
+    @Input() moduleNavCircle: any;
+    @Input() moduleNavPath: any;
     @Output() keyClick = new EventEmitter<SvgModuleKeyClickEvent>();
     @Output() keyHover = new EventEmitter();
     @Output() capture = new EventEmitter<SvgModuleCaptureEvent>();
+    @Output() navigateToModuleSettings = new EventEmitter<void>();
 
     private macroMap: Map<number, Macro>;
     private macroMapSubscription: Subscription;

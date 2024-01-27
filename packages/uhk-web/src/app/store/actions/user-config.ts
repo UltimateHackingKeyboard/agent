@@ -18,6 +18,7 @@ export enum ActionTypes {
     LoadConfigFromDeviceReply = '[user-config] Load User Config from Device reply',
     LoadUserConfigSuccess = '[user-config] Load User Config Success',
     ModifyColorOfBacklightingColorPalette = '[user-config] Modify color of the backlighting color palette',
+    NavigateToModuleSettings = '[user-config] Navigate to module settings',
     SaveUserConfigSuccess = '[user-config] Save User Config Success',
     SaveUserConfigInJsonFile = '[user-config] Save User Config in JSON file',
     SaveUserConfigInBinFile = '[user-config] Save User Config in binary file',
@@ -69,6 +70,13 @@ export class ModifyColorOfBacklightingColorPaletteAction implements Action {
     type = ActionTypes.ModifyColorOfBacklightingColorPalette;
 
     constructor(public payload: ModifyColorOfBacklightingColorPalettePayload) {
+    }
+}
+
+export class NavigateToModuleSettings implements Action {
+    type = ActionTypes.NavigateToModuleSettings;
+
+    constructor(public payload: number) {
     }
 }
 
@@ -158,6 +166,8 @@ export type Actions
     | SaveUserConfigSuccessAction
     | LoadConfigFromDeviceAction
     | LoadConfigFromDeviceReplyAction
+    | ModifyColorOfBacklightingColorPaletteAction
+    | NavigateToModuleSettings
     | SaveUserConfigInJsonFileAction
     | SaveUserConfigInBinaryFileAction
     | LoadResetUserConfigurationAction

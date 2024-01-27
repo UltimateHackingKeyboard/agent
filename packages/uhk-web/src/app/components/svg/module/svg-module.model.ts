@@ -7,6 +7,8 @@ export class SvgModule {
     keyboardKeys: SvgKeyboardKey[];
     attributes: any;
     id: number;
+    moduleNavCircle: any;
+    moduleNavPath: any;
 
     constructor(obj: { rect: any[], path: any[], $: Object, circle?: any[], g?: any[] }) {
         this.keyboardKeys = [];
@@ -28,13 +30,29 @@ export class SvgModule {
         }
 
         if (obj.circle) {
-            this.circles = obj.circle.map(circle => circle.$);
+            for(let i = 0; i < obj.circle.length; ++i) {
+                const circle = obj.circle[i].$;
+
+                if (circle.class === 'module-nav') {
+                    this.moduleNavCircle = circle;
+
+                    continue;
+                }
+
+                this.circles.push(circle);
+            }
         }
 
         if (obj.path) {
             const paths = obj.path.map(path => path.$);
             for (let i = 0; i < paths.length; ++i) {
                 const path = paths[i];
+                if (path.class === 'module-nav') {
+                    this.moduleNavPath = path;
+
+                    continue;
+                }
+
                 if (path.id) {
                     const idSplit = path.id.split('-'); // split the 'key-6{-print}'
 
