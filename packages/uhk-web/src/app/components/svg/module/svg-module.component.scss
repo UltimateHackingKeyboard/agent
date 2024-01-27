@@ -7,7 +7,7 @@
         cursor: pointer;
 
         path {
-            fill: white;
+            fill: var(--color-module-puzzle-path-fill);
         }
 
         &:hover {

@@ -88,6 +88,7 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-keyboard-key-bg: #f7f7f7;
     --color-keyboard-key-hover: #737373;
     --color-keyboard-key-active: #{$primary};
+    --color-module-puzzle-path-fill: #bbb;
 
     --color-input-bg: #{$input-bg};
     --color-input-text: #{$input-color};
