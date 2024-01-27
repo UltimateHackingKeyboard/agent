@@ -1,5 +1,38 @@
 :host {
-    width: 100%;
-    height: 100%;
-    display: block;
+    table {
+        width: 100%;
+
+        tbody {
+            tr {
+                &.separator {
+                    border-bottom: 1px solid var(--color-sidemenu-border);
+                }
+
+                td {
+                    height: 3em;
+
+                    h3.margin-top {
+                        margin-top: 1.5em
+                    }
+
+                    .form-check-input {
+                        margin-left: 1em;
+                    }
+
+                    div.select-cell {
+                        min-height: 3em;
+                        align-items: center;
+
+                        div.select-container {
+                            display: inline-block;
+                            margin-bottom: 0.5em;
+                            margin-top: 0.5em;
+                            margin-left: 1em;
+                            width: 150px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
