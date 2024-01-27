@@ -105,20 +105,24 @@
                 </td>
             </tr>
             <tr class="separator">
-                <td colspan="2">Scroll axis lock
+                <td>Scroll axis lock
                     <fa-icon [icon]="faQuestionCircle"
                              ngbTooltip="Enabling axis scroll locking."
                              placement="bottom"
                     ></fa-icon>
+                </td>
+                <td>
                     <input type="checkbox" [(ngModel)]="scrollAxisLock" class="form-check-input">
                 </td>
             </tr>
             <tr class="separator">
-                <td colspan="2">Caret axis lock
+                <td>Caret axis lock
                     <fa-icon [icon]="faQuestionCircle"
                              ngbTooltip="Enabling caret scroll locking."
                              placement="bottom"
                     ></fa-icon>
+                </td>
+                <td>
                     <input type="checkbox" [(ngModel)]="caretAxisLock" class="form-check-input">
                 </td>
             </tr>
@@ -161,11 +165,13 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">Scroll axis lock
+                <td>Scroll axis lock
                     <fa-icon [icon]="faQuestionCircle"
                              ngbTooltip="Swap axis"
                              placement="bottom"
                     ></fa-icon>
+                </td>
+                <td>
                     <input type="checkbox" [(ngModel)]="invertScrollDirection" class="form-check-input">
                 </td>
             </tr>
@@ -176,20 +182,24 @@
                 </td>
             </tr>
             <tr class="separator">
-                <td colspan="2">Swap axes
+                <td>Swap axes
                     <fa-icon [icon]="faQuestionCircle"
                              ngbTooltip="Swaps the X and Y axes of the key cluster's mini trackball, which can be useful because it's easier to roll the mini trackball along the horizontal axis with the thumb. This setting is available for all modules, but we only recommend using it with the key cluster."
                              placement="bottom"
                     ></fa-icon>
+                </td>
+                <td>
                     <input type="checkbox" [(ngModel)]="keyClusterSwapAxes" class="form-check-input">
                 </td>
             </tr>
             <tr>
-                <td colspan="2">Invert horizontal scrolling
+                <td>Invert horizontal scrolling
                     <fa-icon [icon]="faQuestionCircle"
                              ngbTooltip=""
                              placement="bottom"
                     ></fa-icon>
+                </td>
+                <td>
                     <input type="checkbox" [(ngModel)]="keyClusterInvertHorizontalScrolling" class="form-check-input">
                 </td>
             </tr>
@@ -201,23 +211,21 @@
                 </td>
             </tr>
             <tr class="separator">
-                <td colspan="2">
-                    <div class="d-flex select-cell">
-                        <span>
-                            Pinch-to-zoom mode
-                            <fa-icon [icon]="faQuestionCircle"
-                                     ngbTooltip=""
-                                     placement="bottom"
-                            ></fa-icon>
-                        </span>
-                        <div class="select-container">
-                            <ng-select [items]="pitchToZoomOptions"
-                                       [(ngModel)]="touchpadPinchToZoom"
-                                       [clearable]="false"
-                                       bindLabel="label"
-                                       bindValue="value"
-                            ></ng-select>
-                        </div>
+                <td>
+                    Pinch-to-zoom mode
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="touchpadPinchToZoom"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
                     </div>
                 </td>
             </tr>
