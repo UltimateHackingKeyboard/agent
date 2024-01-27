@@ -25,7 +25,7 @@
                         [max]="10"
                         [step]="0.1"
                         [(ngModel)]="baseSpeed"
-                       ></slider-wrapper>
+                    ></slider-wrapper>
                 </td>
             </tr>
             <tr class="separator">
@@ -261,8 +261,146 @@
                     ></slider-wrapper>
                 </td>
             </tr>
+            </tbody>
+        </table>
+    </div>
 
-
+    <div class="col-12 col-lg-5 offset-lg-1 mt-3 mt-lg-0">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td colspan="2">
+                    <h3>Navigation modes</h3>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>
+                    Layer
+                </td>
+                <td>
+                    Mode
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Base
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeBase"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Mod
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeMod"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Mouse
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeMouse"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeFn"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn2
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeFn2"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn3
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeFn3"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn4
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeFn4"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="fw-bold">
+                    Fn5
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="pitchToZoomOptions"
+                                   [(ngModel)]="navigationModeFn5"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

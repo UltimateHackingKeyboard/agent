@@ -63,9 +63,19 @@ export class AddOnComponent {
             label: 'None'
         }
     ];
-    touchpadPinchToZoom: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'media';
+    touchpadPinchToZoom: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
     touchpadPinchZoomDivisor= 4;
     touchpadHoldContinuationTimeout= 4;
+
+    // navigation modes
+    navigationModeBase: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeMod: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeMouse: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeFn: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeFn2: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeFn3: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeFn4: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
+    navigationModeFn5: 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
 
     constructor(route: ActivatedRoute) {
 
