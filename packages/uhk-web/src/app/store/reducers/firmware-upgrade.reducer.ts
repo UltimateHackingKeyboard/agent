@@ -332,7 +332,7 @@ function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules
                     currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
                     newFirmwareVersion: '',
                     state: stateModule?.state ?? ModuleFirmwareUpgradeStates.Idle,
-                    tooltip: `This module runs firmware ${moduleInfo.info.firmwareVersion}, but based on its checksum, it's the same as firmware ${hardwareModules.rightModuleInfo?.firmwareVersion}, hence it hasn't been updated. Unnecessary firmware updates might brick your UHK and modules in very rare circumstances, and make the firmware update process longer, so Agent only updates firmwares when justified.`
+                    tooltip: `This module runs firmware ${hardwareModules.rightModuleInfo?.firmwareVersion} (binary identical to previously installed firmware ${moduleInfo.info.firmwareVersion}); no update needed.`
                 });
             }
         }
