@@ -4,7 +4,7 @@
     table.settings {
         tbody {
             tr {
-                td:not([colspan="2"]):first-of-type {
+                td:not([colspan='2']):first-of-type {
                     width: 35%;
                 }
             }
