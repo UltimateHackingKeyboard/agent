@@ -4,6 +4,7 @@
 .tooltip {
     .tooltip-inner {
         border: $tooltip-border-width solid $tooltip-border-color;
+        max-width: var(--tooltip-max-width);
     }
 
     .tooltip-arrow {

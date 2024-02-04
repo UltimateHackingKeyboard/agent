@@ -14,10 +14,12 @@
             </tr>
             <tr class="separator">
                 <td>Resolution strategy
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip [tooltip]="resolutionStrategyTooltip"
+                                    width="380"/>
+                    <ng-template #resolutionStrategyTooltip>
+                        <p>Simple resolution strategy activates the secondary role whenever there is another keypress while the dual-role key is pressed. If there is no such press, it briefly activates the primary role on the release of the dual-role key.</p>
+                        Advanced strategy allows for more complex activation conditions, in order to allow using secondary roles on alphanumeric keys, as Simple strategy tends to interfere with writing.
+                    </ng-template>
                 </td>
                 <td>
                     <div class="form-check">
@@ -44,10 +46,8 @@
             </tr>
             <tr class="separator">
                 <td>Timeout
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="If an (advanced strategy) dual-role key is held for at least this amount of time, the Timeout Action is activated even when there is no other activity."
+                                    width="250"/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -57,15 +57,13 @@
                         [step]="5"
                         valueUnit="ms"
                         [(ngModel)]="secondaryRoleTimeout"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr class="separator">
                 <td>Timeout action
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Dual-role-key role to be activated when the timeout is reached."
+                                    width="250"/>
                 </td>
                 <td>
                     <div class="form-check">
@@ -94,10 +92,8 @@
             </tr>
             <tr class="separator">
                 <td>Trigger by release
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="When checked, dual-role key is also activated when another key is released while the dual role-key is pressed. Thus the role is determined by the release order of the two keys."
+                                    width="250"/>
                 </td>
                 <td>
                     <input type="checkbox"
@@ -108,10 +104,12 @@
             </tr>
             <tr class="separator">
                 <td>Trigger safety margin
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip [tooltip]="triggerSafetyMarginTooltip"
+                                    width="380"/>
+                    <ng-template #triggerSafetyMarginTooltip>
+                        <p>This virtually offsets the release time of the dual-role key. Thus positive values fine-tune the dual role resolution sensitivity towards the primary role, while negative values fine-tune the dual role resolution sensitivity towards the secondary role.</p>
+                        Intended to be used with the Trigger by release option.
+                    </ng-template>
                 </td>
                 <td>
                     <slider-wrapper
@@ -121,15 +119,17 @@
                         [step]="1"
                         valueUnit="ms"
                         [(ngModel)]="secondaryRoleTriggerSafetyMargin"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr class="separator">
                 <td>Double trap primary
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip [tooltip]="doubleTapPrimaryTooltip"
+                                    width="250"/>
+                    <ng-template #doubleTapPrimaryTooltip>
+                        <p>If the dual-role key is double-tapped, the primary role is activated.</p>
+                        Useful for keys that need to be held, such as space.
+                    </ng-template>
                 </td>
                 <td>
                     <input type="checkbox"
@@ -140,10 +140,8 @@
             </tr>
             <tr>
                 <td>Double tap timeout
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Double tap timeout configures double tap time behavior for the secondary roles."
+                                    width="250"/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -153,7 +151,7 @@
                         [step]="5"
                         valueUnit="ms"
                         [(ngModel)]="secondaryRoleDoubleTapTimeout"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
 
@@ -162,12 +160,10 @@
                     <h3 class="margin-top">Miscellaneous</h3>
                 </td>
             </tr>
-            <tr>
-                <td>Double tap timeout
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+            <tr class="separator">
+                <td>Double tap to lock layer timeout
+                    <circle-tooltip tooltip="Double tap timeout configures double tap time behavior for the secondary roles."
+                                    width="250"/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -176,15 +172,17 @@
                         [step]="5"
                         valueUnit="ms"
                         [(ngModel)]="miscDoubleTapLockLayerTimeout"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr>
-                <td>Double tap timeout
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                <td>Keystroke delay
+                    <circle-tooltip [tooltip]="keyStrokeDelayTooltip"
+                                    width="380"/>
+                    <ng-template #keyStrokeDelayTooltip>
+                        <p>Keystroke delay defines minimum delay between two consecutive usb reports, thus slowing down keyboard output in case of fast bursts (e.g., from the macro engine).</p>
+                        This improves compatibility as many programs (especially RDP clients) have problems accepting too fast input.
+                    </ng-template>
                 </td>
                 <td>
                     <slider-wrapper
@@ -193,7 +191,7 @@
                         [step]="1"
                         valueUnit="ms"
                         [(ngModel)]="miscKeystrokeDelay"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
 

@@ -14,10 +14,8 @@
             </tr>
             <tr class="separator">
                 <td>Base speed
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Increasing baseSpeed increases module sensitivity evenly in both low speeds and high speeds."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Increases module's sensitivity evenly in both high speeds and low speeds."
+                                    width="220"/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -25,15 +23,13 @@
                         [max]="10"
                         [step]="0.1"
                         [(ngModel)]="baseSpeed"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr class="separator">
                 <td>Speed
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Increasing speed increases module sensitivity unevenly, depending on xceleration value."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Increases module's sensitivity unevenly - more in high speeds than in low speeds. Exact curve shape is governed by the Acceleration exponent."
+                                    width="220"/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -41,23 +37,26 @@
                         [max]="10"
                         [step]="0.1"
                         [(ngModel)]="speed"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr>
                 <td>Acceleration
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Acceleration exponent modulates speed's contribution. Increasing acceleration decreases sensitivity at low speeds while also increasing sensitivity at high speeds."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip [tooltip]="accelerationTooltip"
+                                    width="520"/>
+                    <ng-template #accelerationTooltip>
+                        Increasing this exponent increases Speed's contribution in high speeds and decreases Speed's contribution at low speeds.
+                        <img src="/assets/images/acceleration-graph.svg" alt="acceleration graph">
+                    </ng-template>
+
                 </td>
                 <td>
                     <slider-wrapper
                         [min]="0"
-                        [max]="10"
-                        [step]="0.1"
+                        [max]="2"
+                        [step]="0.05"
                         [(ngModel)]="acceleration"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
 
@@ -68,10 +67,7 @@
             </tr>
             <tr class="separator">
                 <td>Scroll speed divisor
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Distance (in pixels) that needs to be covered to produce one event in scroll mode. The higher the value, the slower the scroll speed. {value} ranges from 1 to 100 and defaults to 8."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Number of pixels needed to produce one scroll event."/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -79,15 +75,13 @@
                         [max]="100"
                         [step]="1"
                         [(ngModel)]="scrollSpeedDivisor"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr class="separator">
                 <td>Caret speed divisor
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Distance (in pixels) that needs to be covered to produce one event in caret mode. The higher the value, the slower the caret speed. {value} ranges from 1 to 100 and defaults to 16."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Number of pixels needed to produce one event in discrete navigation modes (caret, media, zoom)."
+                                    width="220"/>
                 </td>
                 <td>
                     <slider-wrapper
@@ -95,7 +89,7 @@
                         [max]="100"
                         [step]="1"
                         [(ngModel)]="caretSpeedDivisor"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
 
@@ -106,10 +100,8 @@
             </tr>
             <tr class="separator">
                 <td>Scroll axis lock
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Enabling axis scroll locking."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="If checked, scrolling direction is locked in the dominant axis, preventing any events being produced in the other axis."
+                                    width="220"/>
                 </td>
                 <td>
                     <input type="checkbox" [(ngModel)]="scrollAxisLock" class="form-check-input">
@@ -117,10 +109,8 @@
             </tr>
             <tr class="separator">
                 <td>Caret axis lock
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Enabling caret scroll locking."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="If checked, discrete navigation mode (caret, media, zoom) direction is locked in the dominant axis, preventing any events being produced in the other axis."
+                                    width="220"/>
                 </td>
                 <td>
                     <input type="checkbox" [(ngModel)]="caretAxisLock" class="form-check-input">
@@ -128,34 +118,30 @@
             </tr>
             <tr class="separator">
                 <td>Axis lock first tick skew
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="The first event produced when the axis is not yet locked can be adjusted as follows. Set {value} to 0.5 to require a stronger push at the beginning of a movement. Useful for the mini trackball to not produce an unwanted move event when trying just to click it. With this value, it will require two roll events to activate. Set {value} to 2.0 to make the first event more responsive. For example, caret mode will make the first character move with a very gentle push, while consecutive activations will need greater momentum."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Multiplies contribution towards first event in axis locked modes. Values smaller than one make the module require bigger push to start moving. Values bigger than one make modules produce the first event even with a very light push."
+                                    width="320"/>
                 </td>
                 <td>
                     <slider-wrapper
-                        [min]="0.5"
-                        [max]="2"
-                        [step]="0.05"
+                        [min]="0.1"
+                        [max]="10"
+                        [step]="0.1"
                         [(ngModel)]="axisLockFirstTickSkew"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr class="separator">
                 <td>Axis lock skew
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Affects how hard it is to change the locked direction once the axis is locked. With {value} of 0.5, you have to produce a stroke that goes at least twice as fast in the non-locked direction compared to the locked one. A {value} of 2.0 allows changing axes easily."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Controls how big the axes movement disproportion has to be in order to switch the locked axis. Lower value means stronger axis-locking behavior."
+                                    width="220"/>
                 </td>
                 <td>
                     <slider-wrapper
-                        [min]="0.5"
-                        [max]="2"
-                        [step]="0.05"
+                        [min]="0.1"
+                        [max]="1"
+                        [step]="0.1"
                         [(ngModel)]="axisLockSkew"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
 
@@ -165,11 +151,8 @@
                 </td>
             </tr>
             <tr>
-                <td>Scroll axis lock
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Swap axis"
-                             placement="bottom"
-                    ></fa-icon>
+                <td>Invert vertical scrolling
+                    <circle-tooltip tooltip="Inverts Y scroll direction."/>
                 </td>
                 <td>
                     <input type="checkbox" [(ngModel)]="invertScrollDirection" class="form-check-input">
@@ -183,10 +166,7 @@
             </tr>
             <tr class="separator">
                 <td>Swap axes
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Swaps the X and Y axes of the key cluster's mini trackball, which can be useful because it's easier to roll the mini trackball along the horizontal axis with the thumb. This setting is available for all modules, but we only recommend using it with the key cluster."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Swaps axes, making the key cluster trackball scroll vertically when swiped sideways."/>
                 </td>
                 <td>
                     <input type="checkbox" [(ngModel)]="keyClusterSwapAxes" class="form-check-input">
@@ -194,10 +174,7 @@
             </tr>
             <tr>
                 <td>Invert horizontal scrolling
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Inverts X scroll direction."/>
                 </td>
                 <td>
                     <input type="checkbox" [(ngModel)]="keyClusterInvertHorizontalScrolling" class="form-check-input">
@@ -213,10 +190,7 @@
             <tr class="separator">
                 <td>
                     Pinch-to-zoom mode
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Navigation mode to be triggered by the touchpad pinch zoom gesture."/>
                 </td>
                 <td>
                     <div class="select-container align-slider">
@@ -225,40 +199,35 @@
                                    [clearable]="false"
                                    bindLabel="label"
                                    bindValue="value"
-                        ></ng-select>
+                        />
                     </div>
                 </td>
             </tr>
             <tr class="separator">
                 <td>Pinch-to-zoom divisor
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip="Distance (in pixels) that needs to be covered to produce one event while using the touchpad's pinch-to-zoom gesture. The higher the value, the larger gesture is needed for zooming."
-                             placement="bottom"
-                    ></fa-icon>
+                    <circle-tooltip tooltip="Number of zoom events (as reported by the touchpad board) needed to produce one zoom event (as reported by the UHK)."/>
                 </td>
                 <td>
                     <slider-wrapper
                         [min]="1"
-                        [max]="10"
+                        [max]="50"
                         [step]="1"
                         [(ngModel)]="touchpadPinchZoomDivisor"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             <tr class="separator">
-                <td>Pinch-to-zoom divisor
-                    <fa-icon [icon]="faQuestionCircle"
-                             ngbTooltip=""
-                             placement="bottom"
-                    ></fa-icon>
+                <td>Hold continuation timeout
+                    <circle-tooltip tooltip="When non-zero, touchpad allows the finger to be lifted and repositioned during drag-and-drop actions, as long as the finger is lifted for less than this timeout milliseconds."
+                                    width="300"/>
                 </td>
                 <td>
                     <slider-wrapper
-                        [min]="1"
-                        [max]="10"
+                        [min]="0"
+                        [max]="1000"
                         [step]="1"
                         [(ngModel)]="touchpadHoldContinuationTimeout"
-                    ></slider-wrapper>
+                    />
                 </td>
             </tr>
             </tbody>
@@ -270,7 +239,9 @@
             <tbody>
             <tr>
                 <td colspan="2">
-                    <h3>Navigation modes</h3>
+                    <h3>Navigation modes
+                        <circle-tooltip tooltip="Controls module behavior in different layers."/>
+                    </h3>
                 </td>
             </tr>
             <tr class="separator">
