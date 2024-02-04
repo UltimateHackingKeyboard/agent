@@ -7,7 +7,7 @@ import { faPuzzlePiece, faQuestionCircle } from '@fortawesome/free-solid-svg-ico
     templateUrl: './add-on.component.html',
     styleUrls: ['./add-on.component.scss'],
     host: {
-        'class': 'container-fluid full-screen-component'
+        'class': 'container-fluid d-block'
     }
 })
 export class AddOnComponent {

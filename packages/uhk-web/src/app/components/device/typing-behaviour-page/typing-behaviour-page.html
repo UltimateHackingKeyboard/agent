@@ -1,0 +1,203 @@
+<h1>
+    <fa-icon [icon]="faSlidersH"></fa-icon>
+    <span>Typing behaviour</span>
+</h1>
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <table class="table settings">
+            <tbody>
+            <tr>
+                <td colspan="2">
+                    <h3>Secondary roles</h3>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Resolution strategy
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio"
+                               id="secondaryRoleResolutionStrategySimple" name="secondaryRoleResolutionStrategy"
+                               [checked]="secondaryRoleResolutionStrategy === 'simple'"
+                               (click)="onInputRadioChanged('secondaryRoleResolutionStrategy', 'simple')"
+                        >
+                        <label class="form-check-label" for="secondaryRoleResolutionStrategySimple">
+                            Simple
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio"
+                               id="secondaryRoleResolutionStrategyAdvanced" name="secondaryRoleResolutionStrategy"
+                               [checked]="secondaryRoleResolutionStrategy === 'advanced'"
+                               (click)="onInputRadioChanged('secondaryRoleResolutionStrategy', 'advanced')"
+                        >
+                        <label class="form-check-label" for="secondaryRoleResolutionStrategyAdvanced">
+                            Advanced
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Timeout
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                        [min]="50"
+                        [max]="1000"
+                        [step]="5"
+                        valueUnit="ms"
+                        [(ngModel)]="secondaryRoleTimeout"
+                    ></slider-wrapper>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Timeout action
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio"
+                               id="secondaryRoleTimeoutActionPrimary" name="secondaryRoleTimeoutAction"
+                               [checked]="secondaryRoleTimeoutAction === 'primary'"
+                               [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                               (click)="onInputRadioChanged('secondaryRoleTimeoutAction', 'primary')"
+                        >
+                        <label class="form-check-label" for="secondaryRoleTimeoutActionPrimary">
+                            Primary
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio"
+                               id="secondaryRoleTimeoutActionSecondary" name="secondaryRoleTimeoutAction"
+                               [checked]="secondaryRoleTimeoutAction === 'secondary'"
+                               [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                               (click)="onInputRadioChanged('secondaryRoleTimeoutAction', 'secondary')"
+                        >
+                        <label class="form-check-label" for="secondaryRoleTimeoutActionSecondary">
+                            Secondary
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Trigger by release
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                           [(ngModel)]="secondaryRoleTriggerByRelease"
+                           class="form-check-input">
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Trigger safety margin
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                        [min]="-100"
+                        [max]="100"
+                        [step]="1"
+                        valueUnit="ms"
+                        [(ngModel)]="secondaryRoleTriggerSafetyMargin"
+                    ></slider-wrapper>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Double trap primary
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                           [(ngModel)]="secondaryRoleDoubleTapPrimary"
+                           class="form-check-input">
+                </td>
+            </tr>
+            <tr>
+                <td>Double tap timeout
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                        [min]="50"
+                        [max]="1000"
+                        [step]="5"
+                        valueUnit="ms"
+                        [(ngModel)]="secondaryRoleDoubleTapTimeout"
+                    ></slider-wrapper>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <h3 class="margin-top">Miscellaneous</h3>
+                </td>
+            </tr>
+            <tr>
+                <td>Double tap timeout
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="50"
+                        [max]="1000"
+                        [step]="5"
+                        valueUnit="ms"
+                        [(ngModel)]="miscDoubleTapLockLayerTimeout"
+                    ></slider-wrapper>
+                </td>
+            </tr>
+            <tr>
+                <td>Double tap timeout
+                    <fa-icon [icon]="faQuestionCircle"
+                             ngbTooltip=""
+                             placement="bottom"
+                    ></fa-icon>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="50"
+                        [step]="1"
+                        valueUnit="ms"
+                        [(ngModel)]="miscKeystrokeDelay"
+                    ></slider-wrapper>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>

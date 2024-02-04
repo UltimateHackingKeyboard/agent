@@ -29,7 +29,8 @@ import {
     MouseSpeedComponent,
     LEDSettingsComponent,
     RestoreConfigurationComponent,
-    RecoveryModeComponent
+    RecoveryModeComponent,
+    TypingBehaviourPage
 } from './components/device';
 import {
     KeymapAddComponent,
@@ -254,6 +255,7 @@ import appInitFactory from './services/app-init-factory';
         ExternalUrlDirective,
         SecondSideMenuContainerComponent,
         SvgSecondaryRoleComponent,
+        TypingBehaviourPage,
         UdevRulesComponent,
         HighlightArrowComponent,
         OutOfSpaceWarningComponent,
