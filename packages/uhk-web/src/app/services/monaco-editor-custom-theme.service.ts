@@ -22,7 +22,7 @@ export class MonacoEditorCustomThemeService {
                 base: 'vs',
                 inherit: true,
                 rules: [
-                    { token: 'comment', foreground: '#999999'},
+                    { token: 'comment', foreground: '#777777'},
                     { token: 'number', foreground: '#aa0000'},
                     { token: 'string', foreground: '#55aa55'},
                     { token: 'variable', foreground: '#7777ff'},
