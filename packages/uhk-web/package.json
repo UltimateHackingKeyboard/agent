@@ -81,7 +81,7 @@
     "uhk-common": "1.0.0",
     "xml-loader": "1.2.1",
     "zone.js": "0.13.3",
-    "naive-autocompletion-parser": "^0.1.11"
+    "naive-autocompletion-parser": "^0.1.31"
   },
   "dependencies": {
     "file-saver": "2.0.5"
