@@ -66,7 +66,7 @@
     "karma-coverage": "2.1.0",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
-    "monaco-editor": "0.44.0",
+    "monaco-editor": "0.45.0",
     "ng2-dragula": "5.0.1",
     "ng2-nouislider": "2.0.0",
     "ngrx-store-freeze": "0.2.4",
@@ -80,7 +80,8 @@
     "ts-keycode-enum": "1.0.6",
     "uhk-common": "1.0.0",
     "xml-loader": "1.2.1",
-    "zone.js": "0.13.3"
+    "zone.js": "0.13.3",
+    "naive-autocompletion-parser": "^0.1.11"
   },
   "dependencies": {
     "file-saver": "2.0.5"

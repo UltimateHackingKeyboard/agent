@@ -25,6 +25,8 @@ import { LogService } from 'uhk-common';
 import { SelectedMacroActionId } from '../../../../../models';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
+import { CustomCompletionProvider } from './completion-provider';
+import { highlightProvider } from './highlight-provider';
 
 const MONACO_EDITOR_LINE_HEIGHT_OPTION = 66;
 const MONACO_EDITOR_LF_END_OF_LINE_OPTION = 0;
@@ -85,6 +87,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private insertingMacro = false;
     private changeObserver$: Observer<string>;
     private subscriptions = new Subscription();
+    private static completionRegistered: boolean = false;
 
     constructor(private cdRef: ChangeDetectorRef,
                 @Inject(DOCUMENT) private document: Document,
@@ -141,6 +144,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         if (this.editor && this.autoFocus) {
             this.editor.focus();
         }
+
         this.calculateHeight();
     }
 
@@ -163,10 +167,42 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.removeNonAsciiCharachters();
     }
 
+    private setLanguageProperties(editor: MonacoStandaloneCodeEditor) {
+        const languageId = 'uhkScript';
+
+        if (!MacroCommandEditorComponent.completionRegistered) {
+            MacroCommandEditorComponent.completionRegistered = true;
+            monaco.languages.register({ id: languageId });
+
+            // Register the custom completion provider
+            const completionProvider = new CustomCompletionProvider(this.logService);
+            const providerRegistration = monaco.languages.registerCompletionItemProvider(
+                languageId,
+                completionProvider
+            );
+
+            // Register highlighter
+            monaco.languages.setMonarchTokensProvider(
+                languageId,
+                highlightProvider
+            );
+        }
+
+        editor.getModel()?.dispose();
+        const newModel = monaco.editor.createModel(
+            editor.getValue(),
+            languageId
+        );
+        editor.setModel(newModel);
+    }
+
     onEditorInit(editor: MonacoStandaloneCodeEditor) {
         this.logService.misc('[MacroCommandEditorComponent] editor initialized.');
 
         this.editor = editor;
+
+        this.setLanguageProperties(editor);
+
         this.setLFEndOfLineOption();
         if (this.autoFocus) {
             this.editor.focus();
