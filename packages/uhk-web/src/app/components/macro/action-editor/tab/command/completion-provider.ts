@@ -24,27 +24,9 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
         context: monaco.languages.CompletionContext,
         token: monaco.CancellationToken
     ): monaco.languages.ProviderResult<monaco.languages.CompletionList> {
-        // Your logic to provide completion items based on the model, position, and context
-        // This function should return a CompletionList object
-        // Example:
-        const suggestions: monaco.languages.CompletionItem[] = [
-            {
-                label: 'exampleCompletion',
-                kind: monaco.languages.CompletionItemKind.Text,
-                insertText: 'exampleCompletion',
-                range: {
-                    startLineNumber: position.lineNumber,
-                    startColumn: position.column - 1,
-                    endLineNumber: position.lineNumber,
-                    endColumn: position.column
-                }
-            }
-        ];
-
         const lineNumber = position.lineNumber;
         const column = position.column;
 
-        // Get the current line text up until the cursor position
         const lineText = model.getValueInRange({
             startLineNumber: lineNumber,
             startColumn: 1,
@@ -65,10 +47,10 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
                     kind: monaco.languages.CompletionItemKind.Text,
                     insertText: it.suggestion,
                     range: {
-                        startLineNumber: position.lineNumber,
-                        startColumn: position.column - it.overlap,
-                        endLineNumber: position.lineNumber,
-                        endColumn: position.column
+                        startLineNumber: lineNumber,
+                        startColumn: column - it.overlap,
+                        endLineNumber: lineNumber,
+                        endColumn: column
                     }
                 }
             })
