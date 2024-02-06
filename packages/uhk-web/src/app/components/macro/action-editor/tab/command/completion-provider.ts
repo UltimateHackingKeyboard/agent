@@ -1,8 +1,6 @@
-import { retrieveUhkGrammar, buildUhkParser, ParserBuilder, Parser, Suggestion } from 'naive-autocompletion-parser'
+import { retrieveUhkGrammar, buildUhkParser, ParserBuilder, Parser, Suggestion } from 'naive-autocompletion-parser';
 import {} from '@materia-ui/ngx-monaco-editor';
-
 import { LogService, } from 'uhk-common';
-
 
 export class CustomCompletionProvider implements monaco.languages.CompletionItemProvider {
     public readonly triggerCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.\\@( \\$".split("");
@@ -52,15 +50,15 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
                         endLineNumber: lineNumber,
                         endColumn: column
                     }
-                }
-            })
+                };
+            });
             return {
                 suggestions: monacoSuggestions
-            }
+            };
         } else {
             return {
                 suggestions: []
-            }
+            };
         }
     }
 }
