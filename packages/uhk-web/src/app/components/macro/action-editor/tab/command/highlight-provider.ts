@@ -21,12 +21,6 @@ export let highlightProvider: monaco.languages.IMonarchLanguage = {
     // The main tokenizer for our languages
     tokenizer: {
         root: [
-
-            // numbers
-            [/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
-            [/\d+/, 'number'],
-            [/true|false/, 'number'],
-
             // identifiers and keywords
             [/[a-z_][\w$]*/, {
                 cases: {
@@ -36,6 +30,11 @@ export let highlightProvider: monaco.languages.IMonarchLanguage = {
                 }
             }],
             [/\$[A-Za-z_][\w$]*/, 'type.identifier'],    // to show class names nicely
+
+            // numbers
+            [/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
+            [/\d+/, 'number'],
+            [/true|false/, 'number'],
 
             // whitespace
             { include: '@whitespace' },
