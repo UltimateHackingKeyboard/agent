@@ -33,7 +33,7 @@ const MONACO_EDITOR_LF_END_OF_LINE_OPTION = 0;
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
-    return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'vs';
+    return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'uhk-light';
 }
 
 @Component({
