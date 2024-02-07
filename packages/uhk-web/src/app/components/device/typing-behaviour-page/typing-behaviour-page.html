@@ -25,8 +25,8 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio"
                                id="secondaryRoleResolutionStrategySimple" name="secondaryRoleResolutionStrategy"
-                               [checked]="secondaryRoleResolutionStrategy === 'simple'"
-                               (click)="onInputRadioChanged('secondaryRoleResolutionStrategy', 'simple')"
+                               [checked]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
+                               (click)="onSetPropertyValue('secondaryRoleStrategy', SecondaryRoleStrategy.Simple)"
                         >
                         <label class="form-check-label" for="secondaryRoleResolutionStrategySimple">
                             Simple
@@ -35,8 +35,8 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio"
                                id="secondaryRoleResolutionStrategyAdvanced" name="secondaryRoleResolutionStrategy"
-                               [checked]="secondaryRoleResolutionStrategy === 'advanced'"
-                               (click)="onInputRadioChanged('secondaryRoleResolutionStrategy', 'advanced')"
+                               [checked]="secondaryRoleStrategy === SecondaryRoleStrategy.Advanced"
+                               (click)="onSetPropertyValue('secondaryRoleStrategy', SecondaryRoleStrategy.Advanced)"
                         >
                         <label class="form-check-label" for="secondaryRoleResolutionStrategyAdvanced">
                             Advanced
@@ -51,12 +51,13 @@
                 </td>
                 <td>
                     <slider-wrapper
-                        [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                        [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
                         [min]="50"
                         [max]="1000"
                         [step]="5"
                         valueUnit="ms"
-                        [(ngModel)]="secondaryRoleTimeout"
+                        [(ngModel)]="secondaryRoleAdvancedStrategyTimeout"
+                        (ngModelChange)="onSetPropertyValue('secondaryRoleAdvancedStrategyTimeout', $event)"
                     />
                 </td>
             </tr>
@@ -69,9 +70,9 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio"
                                id="secondaryRoleTimeoutActionPrimary" name="secondaryRoleTimeoutAction"
-                               [checked]="secondaryRoleTimeoutAction === 'primary'"
-                               [disabled]="secondaryRoleResolutionStrategy === 'simple'"
-                               (click)="onInputRadioChanged('secondaryRoleTimeoutAction', 'primary')"
+                               [checked]="secondaryRoleAdvancedStrategyTimeoutAction === SecondaryRoleAdvancedStrategyTimeoutAction.Primary"
+                               [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
+                               (click)="onSetPropertyValue('secondaryRoleAdvancedStrategyTimeoutAction', SecondaryRoleAdvancedStrategyTimeoutAction.Primary)"
                         >
                         <label class="form-check-label" for="secondaryRoleTimeoutActionPrimary">
                             Primary
@@ -80,9 +81,9 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio"
                                id="secondaryRoleTimeoutActionSecondary" name="secondaryRoleTimeoutAction"
-                               [checked]="secondaryRoleTimeoutAction === 'secondary'"
-                               [disabled]="secondaryRoleResolutionStrategy === 'simple'"
-                               (click)="onInputRadioChanged('secondaryRoleTimeoutAction', 'secondary')"
+                               [checked]="secondaryRoleAdvancedStrategyTimeoutAction === SecondaryRoleAdvancedStrategyTimeoutAction.Secondary"
+                               [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
+                               (click)="onSetPropertyValue('secondaryRoleAdvancedStrategyTimeoutAction', SecondaryRoleAdvancedStrategyTimeoutAction.Secondary)"
                         >
                         <label class="form-check-label" for="secondaryRoleTimeoutActionSecondary">
                             Secondary
@@ -97,8 +98,9 @@
                 </td>
                 <td>
                     <input type="checkbox"
-                           [disabled]="secondaryRoleResolutionStrategy === 'simple'"
-                           [(ngModel)]="secondaryRoleTriggerByRelease"
+                           [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
+                           [(ngModel)]="secondaryRoleAdvancedStrategyTriggerByRelease"
+                           (ngModelChange)="onSetPropertyValue('secondaryRoleAdvancedStrategyTriggerByRelease', $event)"
                            class="form-check-input">
                 </td>
             </tr>
@@ -113,12 +115,13 @@
                 </td>
                 <td>
                     <slider-wrapper
-                        [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                        [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
                         [min]="-100"
                         [max]="100"
                         [step]="1"
                         valueUnit="ms"
-                        [(ngModel)]="secondaryRoleTriggerSafetyMargin"
+                        [(ngModel)]="secondaryRoleAdvancedStrategySafetyMargin"
+                        (ngModelChange)="onSetPropertyValue('secondaryRoleAdvancedStrategySafetyMargin', $event)"
                     />
                 </td>
             </tr>
@@ -133,8 +136,9 @@
                 </td>
                 <td>
                     <input type="checkbox"
-                           [disabled]="secondaryRoleResolutionStrategy === 'simple'"
-                           [(ngModel)]="secondaryRoleDoubleTapPrimary"
+                           [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
+                           [(ngModel)]="secondaryRoleAdvancedStrategyDoubletapToPrimary"
+                           (ngModelChange)="onSetPropertyValue('secondaryRoleAdvancedStrategyDoubletapToPrimary', $event)"
                            class="form-check-input">
                 </td>
             </tr>
@@ -145,12 +149,13 @@
                 </td>
                 <td>
                     <slider-wrapper
-                        [disabled]="secondaryRoleResolutionStrategy === 'simple'"
+                        [disabled]="secondaryRoleStrategy === SecondaryRoleStrategy.Simple"
                         [min]="50"
                         [max]="1000"
                         [step]="5"
                         valueUnit="ms"
-                        [(ngModel)]="secondaryRoleDoubleTapTimeout"
+                        [(ngModel)]="secondaryRoleAdvancedStrategyDoubletapTimeout"
+                        (ngModelChange)="onSetPropertyValue('secondaryRoleAdvancedStrategyDoubletapTimeout', $event)"
                     />
                 </td>
             </tr>
@@ -171,7 +176,8 @@
                         [max]="1000"
                         [step]="5"
                         valueUnit="ms"
-                        [(ngModel)]="miscDoubleTapLockLayerTimeout"
+                        [(ngModel)]="doubletapTimeout"
+                        (ngModelChange)="onSetPropertyValue('doubletapTimeout', $event)"
                     />
                 </td>
             </tr>
@@ -190,7 +196,8 @@
                         [max]="50"
                         [step]="1"
                         valueUnit="ms"
-                        [(ngModel)]="miscKeystrokeDelay"
+                        [(ngModel)]="keystrokeDelay"
+                        (ngModelChange)="onSetPropertyValue('keystrokeDelay', $event)"
                     />
                 </td>
             </tr>

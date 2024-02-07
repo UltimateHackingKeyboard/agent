@@ -36,6 +36,7 @@ export class Layer {
 
             case 5:
             case 6:
+            case 7:
                 this.fromJsonObjectV5(jsonObject, macros, serialisationInfo);
                 break;
 
@@ -57,6 +58,7 @@ export class Layer {
 
             case 5:
             case 6:
+            case 7:
                 this.fromBinaryV5(buffer, macros, serialisationInfo);
                 break;
 

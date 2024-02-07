@@ -10,6 +10,8 @@ export * from './keymap.js';
 export * from './layer.js';
 export * from './layer-name.js';
 export * from './secondary-role-action.js';
+export * from './secondary-role-advanced-strategy-timeout-action.js';
+export * from './secondary-role-strategy.js';
 export * from './macro.js';
 export * from './module.js';
 export * from './module-configuration.js';

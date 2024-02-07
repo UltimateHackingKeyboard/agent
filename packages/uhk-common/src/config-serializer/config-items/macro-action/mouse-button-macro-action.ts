@@ -37,6 +37,7 @@ export class MouseButtonMacroAction extends MacroAction {
             case 4:
             case 5:
             case 6:
+            case 7:
                 this.fromJsonObjectV1(jsonObject);
                 break;
 
@@ -55,6 +56,7 @@ export class MouseButtonMacroAction extends MacroAction {
             case 4:
             case 5:
             case 6:
+            case 7:
                 this.fromBinaryV1(buffer);
                 break;
 

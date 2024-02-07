@@ -1,5 +1,5 @@
 {
-  "userConfigMajorVersion": 6,
+  "userConfigMajorVersion": 7,
   "userConfigMinorVersion": 0,
   "userConfigPatchVersion": 0,
   "deviceName": "My UHK",
@@ -9,7 +9,7 @@
   "keyBacklightBrightness": 255,
   "perKeyRgbPresent": false,
   "ledsFadeTimeout": 0,
-  "backlightingMode": 0,
+  "backlightingMode": "FunctionalBacklighting",
   "backlightingNoneActionColor": {
     "b": 0,
     "g": 0,
@@ -60,6 +60,18 @@
   "mouseScrollDeceleratedSpeed": 10,
   "mouseScrollBaseSpeed": 20,
   "mouseScrollAcceleratedSpeed": 50,
+  "secondaryRoleStrategy": "Simple",
+  "secondaryRoleAdvancedStrategyDoubletapTimeout": 200,
+  "secondaryRoleAdvancedStrategyTimeoutAction": "Secondary",
+  "secondaryRoleAdvancedStrategyTimeout": 200,
+  "secondaryRoleAdvancedStrategySafetyMargin": 50,
+  "secondaryRoleAdvancedStrategyTriggerByRelease": true,
+  "secondaryRoleAdvancedStrategyDoubletapToPrimary": true,
+  "mouseScrollAxisSkew": 1,
+  "mouseMoveAxisSkew": 1,
+  "diagonalSpeedCompensation": false,
+  "doubletapTimeout": 400,
+  "keystrokeDelay": 0,
   "moduleConfigurations": [],
   "keymaps": [
     {

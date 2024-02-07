@@ -27,6 +27,7 @@ export class Module {
             case 4:
             case 5:
             case 6:
+            case 7:
                 this.fromJsonObjectV1(jsonObject, macros, serialisationInfo);
                 break;
 
@@ -45,6 +46,7 @@ export class Module {
             case 4:
             case 5:
             case 6:
+            case 7:
                 this.fromBinaryV1(buffer, macros, serialisationInfo);
                 break;
 

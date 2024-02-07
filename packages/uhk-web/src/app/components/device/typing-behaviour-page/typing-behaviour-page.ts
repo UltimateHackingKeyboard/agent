@@ -1,5 +1,14 @@
-import { Component } from '@angular/core';
-import { faQuestionCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import {
+    SecondaryRoleStrategy,
+    SecondaryRoleAdvancedStrategyTimeoutAction,
+} from 'uhk-common';
+
+import { AppState, getUserConfiguration } from '../../../store';
+import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
 
 @Component({
     selector: 'typing-behaviour-page',
@@ -9,22 +18,55 @@ import { faQuestionCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons'
         'class': 'container-fluid d-block'
     }
 })
-export class TypingBehaviourPage {
+export class TypingBehaviourPage implements OnInit, OnDestroy {
     faSlidersH = faSlidersH;
-    faQuestionCircle = faQuestionCircle;
+    SecondaryRoleStrategy = SecondaryRoleStrategy;
+    SecondaryRoleAdvancedStrategyTimeoutAction = SecondaryRoleAdvancedStrategyTimeoutAction;
 
-    secondaryRoleResolutionStrategy: 'simple' | 'advanced' = 'simple';
-    secondaryRoleTimeout = 350;
-    secondaryRoleTimeoutAction: 'primary' | 'secondary' = 'secondary';
-    secondaryRoleTriggerByRelease = true;
-    secondaryRoleTriggerSafetyMargin = 50;
-    secondaryRoleDoubleTapPrimary = true;
-    secondaryRoleDoubleTapTimeout = 200;
+    secondaryRoleStrategy = SecondaryRoleStrategy.Simple;
+    secondaryRoleAdvancedStrategyTimeout = 350;
+    secondaryRoleAdvancedStrategyTimeoutAction = SecondaryRoleAdvancedStrategyTimeoutAction.Secondary;
+    secondaryRoleAdvancedStrategyTriggerByRelease = true;
+    secondaryRoleAdvancedStrategySafetyMargin = 50;
+    secondaryRoleAdvancedStrategyDoubletapToPrimary = true;
+    secondaryRoleAdvancedStrategyDoubletapTimeout = 200;
 
-    miscDoubleTapLockLayerTimeout = 400;
-    miscKeystrokeDelay = 0;
+    doubletapTimeout = 400;
+    keystrokeDelay = 0;
 
-    onInputRadioChanged(property: string, value: any) {
-        this[property] = value;
+    private userConfigSubscription: Subscription;
+
+    constructor(private store: Store<AppState>,
+        private cdRef: ChangeDetectorRef) {}
+
+    ngOnInit(): void {
+        this.userConfigSubscription = this.store.select(getUserConfiguration)
+            .subscribe(config => {
+                this.secondaryRoleStrategy = config.secondaryRoleStrategy;
+                this.secondaryRoleAdvancedStrategyTimeout = config.secondaryRoleAdvancedStrategyTimeout;
+                this.secondaryRoleAdvancedStrategyTimeoutAction = config.secondaryRoleAdvancedStrategyTimeoutAction;
+                this.secondaryRoleAdvancedStrategyTriggerByRelease = config.secondaryRoleAdvancedStrategyTriggerByRelease;
+                this.secondaryRoleAdvancedStrategySafetyMargin = config.secondaryRoleAdvancedStrategySafetyMargin;
+                this.secondaryRoleAdvancedStrategyDoubletapToPrimary = config.secondaryRoleAdvancedStrategyDoubletapToPrimary;
+                this.secondaryRoleAdvancedStrategyDoubletapTimeout = config.secondaryRoleAdvancedStrategyDoubletapTimeout;
+
+                this.doubletapTimeout = config.doubletapTimeout;
+                this.keystrokeDelay = config.keystrokeDelay;
+
+                this.cdRef.detectChanges();
+            });
+    }
+
+    ngOnDestroy(): void {
+        if (this.userConfigSubscription) {
+            this.userConfigSubscription.unsubscribe();
+        }
+    }
+
+    onSetPropertyValue(propertyName: string, value: number): void {
+        this.store.dispatch(new SetUserConfigurationValueAction({
+            propertyName,
+            value
+        }));
     }
 }
