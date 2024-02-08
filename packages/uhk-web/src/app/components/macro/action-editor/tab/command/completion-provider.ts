@@ -6,6 +6,7 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
     public readonly triggerCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.\\@( \\$".split("");
 
     private parser: Parser | undefined;
+    private identifierCharPattern = /[a-zA-Z]/;
 
     constructor( private logService: LogService ) {
         this.parser = undefined;
@@ -14,6 +15,17 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
         retrieveUhkGrammar().then ( grammarText => {
             this.parser = buildUhkParser(grammarText);
         });
+    }
+
+    guessKind(t: string): monaco.languages.CompletionItemKind {
+        if (this.identifierCharPattern.test(t[0])) {
+            return monaco.languages.CompletionItemKind.Text;
+        } else if (t[0] == '<' && t[t.length-1] == '>') {
+            return monaco.languages.CompletionItemKind.Property;
+        } else {
+            return monaco.languages.CompletionItemKind.Module;
+
+        }
     }
 
     provideCompletionItems(
@@ -40,9 +52,10 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
                 this.logService.error(e);
             }
             let monacoSuggestions: monaco.languages.CompletionItem[] = nelaSuggestions.map (it => {
+                let kind = this.guessKind(it.suggestion);
                 return {
                     label: it.suggestion,
-                    kind: monaco.languages.CompletionItemKind.Text,
+                    kind: kind,
                     insertText: it.suggestion,
                     range: {
                         startLineNumber: lineNumber,
