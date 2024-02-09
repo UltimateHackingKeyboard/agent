@@ -68,8 +68,7 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
                     }
                 };
                 return item;
-            }
-        );
+            });
     }
 
     provideCompletionItems(
@@ -109,7 +108,7 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
                         endColumn: column
                     },
                 };
-            })
+            });
             return {
                 suggestions: monacoSuggestions
             };
