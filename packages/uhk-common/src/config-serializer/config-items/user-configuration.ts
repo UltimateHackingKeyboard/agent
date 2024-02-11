@@ -149,6 +149,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.clean();
         this.migrateToV5();
         this.migrateToV6();
+        this.migrateToV7();
         this.recalculateConfigurationLength();
 
         return this;
