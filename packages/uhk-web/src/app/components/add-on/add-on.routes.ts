@@ -4,7 +4,7 @@ import { AddOnComponent } from './add-on.component';
 
 export const addOnRoutes: Routes = [
     {
-        path: 'add-on/:name',
+        path: 'add-on/:moduleConfigSlug',
         component: AddOnComponent
     }
 ];

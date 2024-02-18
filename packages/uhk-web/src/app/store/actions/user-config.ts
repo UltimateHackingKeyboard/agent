@@ -7,7 +7,8 @@ import {
     ModifyColorOfBacklightingColorPalettePayload,
     UserConfigurationRgbValue,
     UserConfigurationValue,
-    LoadUserConfigurationFromFilePayload
+    LoadUserConfigurationFromFilePayload,
+    SetModuleConfigurationValuePayload
 } from '../../models';
 
 export enum ActionTypes {
@@ -25,6 +26,8 @@ export enum ActionTypes {
     ToggleColorFromBacklightingColorPalette = '[user-config] toggle color from the backlighting color palette',
     LoadResetUserConfiguration = '[user-config] Load reset user configuration',
     RenameUserConfiguration = '[user-config] Rename user configuration',
+    SelectModuleConfiguration = '[user-config] Select module configuration',
+    SetModuleConfigurationValue = '[user-config] Set module configuration value',
     SetUserConfigurationRgbValue = '[user-config] Set user configuration RGB value',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
     LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
@@ -126,6 +129,20 @@ export class RenameUserConfigurationAction implements Action {
     }
 }
 
+export class SelectModuleConfigurationAction implements Action {
+    type = ActionTypes.SelectModuleConfiguration;
+
+    constructor(public payload: number) {
+    }
+}
+
+export class SetModuleConfigurationValueAction implements Action {
+    type = ActionTypes.SetModuleConfigurationValue;
+
+    constructor(public payload: SetModuleConfigurationValuePayload) {
+    }
+}
+
 export class SetUserConfigurationRgbValueAction implements Action {
     type = ActionTypes.SetUserConfigurationRgbValue;
 
@@ -173,6 +190,8 @@ export type Actions
     | LoadResetUserConfigurationAction
     | PreviewUserConfigurationAction
     | RenameUserConfigurationAction
+    | SelectModuleConfigurationAction
+    | SetModuleConfigurationValueAction
     | SetUserConfigurationRgbValueAction
     | SetUserConfigurationValueAction
     | ToggleColorFromBacklightingColorPaletteAction

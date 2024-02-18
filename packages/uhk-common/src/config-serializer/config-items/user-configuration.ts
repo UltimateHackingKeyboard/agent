@@ -1,3 +1,4 @@
+import { assertFloat } from '../assert.js';
 import { assertInt16 } from '../assert.js';
 import { assertEnum, assertUInt16, assertUInt32, assertUInt8 } from '../assert.js';
 import { ConfigSerializer } from '../config-serializer.js';
@@ -8,6 +9,10 @@ import { Keymap } from './keymap.js';
 import { LayerName } from './layer-name.js';
 import { Macro } from './macro.js';
 import { ModuleConfiguration } from './module-configuration.js';
+import { defaultKeyClusterLeftModuleConfig } from './module-configuration/default-key-cluster-left-module-config.js';
+import { defaultTouchpadRightModuleConfig } from './module-configuration/default-touchpad-right-module-config.js';
+import { defaultTrackballRightModuleConfig } from './module-configuration/default-trackball-right-module-config.js';
+import { defaultTrackpointRightModuleConfig } from './module-configuration/default-trackpoint-right-module-config.js';
 import { MouseSpeedConfiguration } from './mouse-speed-configuration.js';
 import { RgbColor } from './rgb-color.js';
 import { isAllowedScancode } from './scancode-checker.js';
@@ -92,9 +97,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertEnum(SecondaryRoleAdvancedStrategyTimeoutAction) secondaryRoleAdvancedStrategyTimeoutAction: SecondaryRoleAdvancedStrategyTimeoutAction;
 
-    mouseScrollAxisSkew: number;
+    @assertFloat mouseScrollAxisSkew: number;
 
-    mouseMoveAxisSkew: number;
+    @assertFloat mouseMoveAxisSkew: number;
 
     diagonalSpeedCompensation: boolean;
 
@@ -675,6 +680,15 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.diagonalSpeedCompensation = false;
         this.doubletapTimeout = 400;
         this.doubletapTimeout = 0;
+
+        this.moduleConfigurations.push(
+            defaultKeyClusterLeftModuleConfig(),
+            defaultTrackballRightModuleConfig(),
+            defaultTrackpointRightModuleConfig(),
+            defaultTouchpadRightModuleConfig(),
+        );
+
+        return true;
     }
 
     private getSerialisationInfo(): SerialisationInfo {

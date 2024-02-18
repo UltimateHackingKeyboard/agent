@@ -14,6 +14,7 @@ export * from './navigation-payload';
 export * from './out-of-space-warning-data';
 export * from './selected-macro-action';
 export * from './side-menu-page-state';
+export * from './set-module-configuration-value-payload';
 export * from './uhk-progress-bar-state';
 export * from './update-firmware-with-payload';
 export * from './user-config-history-component-state';

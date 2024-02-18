@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { faPuzzlePiece, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { ModuleConfiguration, ModuleId, NavigationMode } from 'uhk-common';
+
+import { AppState, getSelectedModuleConfiguration } from '../../store';
+import { SetModuleConfigurationValueAction } from '../../store/actions/user-config';
 
 @Component({
     selector: 'add-on',
@@ -10,97 +15,83 @@ import { faPuzzlePiece, faQuestionCircle } from '@fortawesome/free-solid-svg-ico
         'class': 'container-fluid d-block'
     }
 })
-export class AddOnComponent {
+export class AddOnComponent implements OnDestroy {
     faPuzzlePiece = faPuzzlePiece;
-    faQuestionCircle = faQuestionCircle;
-
-    // speed
-    baseSpeed = 1;
-    speed = 1;
-    acceleration = 0;
-
-    // divisor
-    scrollSpeedDivisor = 8;
-    caretSpeedDivisor = 16;
-
-    // axis lock
-    scrollAxisLock = true;
-    caretAxisLock = true;
-    axisLockFirstTickSkew = 0.5;
-    axisLockSkew = 0.5;
-
-    // misc
-    invertScrollDirection = false;
-
-    // key cluster
-    keyClusterSwapAxes = false;
-    keyClusterInvertHorizontalScrolling = false;
+    ModuleId = ModuleId;
 
     // Touchpad
     pitchToZoomOptions = [
         {
-            value: 'zoom',
+            value:  NavigationMode.Zoom,
             label: 'Zoom'
         },
         {
-            value: 'zoomPc',
+            value:  NavigationMode.ZoomPc,
             label: 'Zoom PC'
         },
         {
-            value: 'zoomMac',
+            value:  NavigationMode.ZoomMac,
             label: 'Zoom Mac'
         },
         {
-            value: 'none',
+            value:  NavigationMode.None,
             label: 'None'
         }
     ];
-    touchpadPinchToZoom: 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'zoom';
-    touchpadPinchZoomDivisor= 4;
-    touchpadHoldContinuationTimeout= 4;
 
     // navigation modes
     navigationModOptions = [
         {
-            value: 'cursor',
+            value: NavigationMode.Cursor,
             label: 'Cursor'
         },
         {
-            value: 'media',
+            value: NavigationMode.Media,
             label: 'Media'
         },
         {
-            value: 'caret',
+            value: NavigationMode.Caret,
             label: 'Caret'
         },
         {
-            value: 'zoom',
+            value: NavigationMode.Zoom,
             label: 'Zoom'
         },
         {
-            value: 'zoomPc',
+            value: NavigationMode.ZoomPc,
             label: 'Zoom PC'
         },
         {
-            value: 'zoomMac',
+            value: NavigationMode.ZoomMac,
             label: 'Zoom Mac'
         },
         {
-            value: 'none',
+            value: NavigationMode.None,
             label: 'None'
         }
     ];
 
-    navigationModeBase: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeMod: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeMouse: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeFn: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeFn2: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeFn3: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeFn4: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
-    navigationModeFn5: 'cursor' | 'media' | 'caret' | 'zoom' | 'zoomPc' | 'zoomMac' | 'none' = 'cursor';
+    moduleConfiguration = new ModuleConfiguration();
 
-    constructor(route: ActivatedRoute) {
+    private subscription: Subscription;
+    constructor(private store:Store<AppState>,
+                private cdRef: ChangeDetectorRef) {
+        this.subscription = store.select(getSelectedModuleConfiguration)
+            .subscribe((moduleConfiguration) => {
+                this.moduleConfiguration = moduleConfiguration;
+                this.cdRef.markForCheck();
+            });
+    }
 
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    onSetModuleConfigurationValue(propertyName: string, value: any) {
+        this.store.dispatch(new SetModuleConfigurationValueAction({
+            moduleId: this.moduleConfiguration.id,
+            propertyName,
+            value
+        }));
     }
 }

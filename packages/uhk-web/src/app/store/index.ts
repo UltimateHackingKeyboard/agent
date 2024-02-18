@@ -143,6 +143,7 @@ export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, ge
     });
 
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
+export const getSelectedModuleConfiguration = createSelector(userConfigState, fromUserConfig.getSelectedModuleConfiguration);
 export const showColorPalette = createSelector(userConfigState, fromUserConfig.showColorPalette);
 export const perKeyRgbPresent = createSelector(userConfigState, fromUserConfig.perKeyRgbPresent);
 export const backlightingMode = createSelector(userConfigState, fromUserConfig.backlightingMode);

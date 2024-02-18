@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { routerNavigatedAction } from '@ngrx/router-store';
 import { Observable } from 'rxjs';
-import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 
@@ -19,6 +20,7 @@ import {
     UserConfiguration
 } from 'uhk-common';
 
+import { EmptyAction } from '../actions/app';
 import {
     ActionTypes,
     ApplyUserConfigurationFromFileAction,
@@ -27,7 +29,8 @@ import {
     LoadUserConfigurationFromFileAction,
     NavigateToModuleSettings,
     PreviewUserConfigurationAction,
-    SaveUserConfigSuccessAction
+    SaveUserConfigSuccessAction,
+    SelectModuleConfigurationAction
 } from '../actions/user-config';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -77,7 +80,7 @@ export class UserConfigEffects {
                 Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
                 Macros.ActionTypes.ReorderAction,
                 ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue, ActionTypes.SetUserConfigurationRgbValue,
-                ActionTypes.RecoverLEDSpaces
+                ActionTypes.RecoverLEDSpaces, ActionTypes.SetModuleConfigurationValue
             ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {
@@ -293,6 +296,23 @@ export class UserConfigEffects {
             map(() => new ShowSaveToKeyboardButtonAction())
         )
     );
+
+    moduleConfigurationNavigated$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(routerNavigatedAction),
+            map(action => (action.payload.routerState as any).params.moduleConfigSlug),
+            distinctUntilChanged(),
+            map(slug => {
+                const configPath = `/add-on/${slug}`;
+                const uhkModule = UHK_MODULES.find(module => module.configPath === configPath);
+
+                if (uhkModule) {
+                    return new SelectModuleConfigurationAction(uhkModule.id);
+                }
+
+                return new EmptyAction();
+            })
+        ));
 
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,
