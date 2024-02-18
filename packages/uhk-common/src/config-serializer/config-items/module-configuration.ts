@@ -239,7 +239,7 @@ export class ModuleConfiguration {
         this.caretAxisLock = jsonObject.caretAxisLock;
         this.axisLockFirstTickSkew = jsonObject.axisLockFirstTickSkew;
         this.axisLockSkew = jsonObject.axisLockSkew;
-        this.invertScrollDirectionY = jsonObject.invertScrollDirection;
+        this.invertScrollDirectionY = jsonObject.invertScrollDirectionY;
 
         if (this.id === ModuleId.KeyClusterLeft){
             this.keyClusterSwapAxes = jsonObject.keyClusterSwapAxes;

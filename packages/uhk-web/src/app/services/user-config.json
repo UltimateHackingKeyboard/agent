@@ -153,7 +153,7 @@
       "navigationModeFn5Layer": "Cursor",
       "speed": 1,
       "baseSpeed": 0,
-      "xceleration": 1,
+      "xceleration": 0,
       "scrollSpeedDivisor": 8,
       "caretSpeedDivisor": 16,
       "scrollAxisLock": true,

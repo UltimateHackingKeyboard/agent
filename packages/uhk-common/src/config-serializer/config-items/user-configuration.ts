@@ -679,24 +679,24 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.mouseMoveAxisSkew = 1;
         this.diagonalSpeedCompensation = false;
         this.doubletapTimeout = 400;
-        this.doubletapTimeout = 0;
+        this.keystrokeDelay = 0;
 
         this.moduleConfigurations.push(
             defaultKeyClusterLeftModuleConfig(),
+            defaultTouchpadRightModuleConfig(),
             defaultTrackballRightModuleConfig(),
             defaultTrackpointRightModuleConfig(),
-            defaultTouchpadRightModuleConfig(),
         );
 
-        for (const keymap of this.keymaps) {
-            for (let i = 0; i < keymap.layers.length; i++ ) {
-                if (keymap.layers[i].id === LayerName.old_base) {
-                    keymap.layers[i].id = LayerName.base;
-                } else {
-                    keymap.layers[i].id = i + 1;
-                }
-            }
-        }
+        // for (const keymap of this.keymaps) {
+        //     for (let i = 0; i < keymap.layers.length; i++ ) {
+        //         if (keymap.layers[i].id === LayerName.old_base) {
+        //             keymap.layers[i].id = LayerName.base;
+        //         } else {
+        //             keymap.layers[i].id = i + 1;
+        //         }
+        //     }
+        // }
 
         return true;
     }
