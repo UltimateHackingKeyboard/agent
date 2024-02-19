@@ -286,8 +286,9 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt8(this.mouseScrollDeceleratedSpeed);
         buffer.writeUInt8(this.mouseScrollBaseSpeed);
         buffer.writeUInt8(this.mouseScrollAcceleratedSpeed);
+
         buffer.writeUInt8(this.secondaryRoleStrategy);
-        buffer.writeUInt16(this.doubletapTimeout);
+        buffer.writeUInt16(this.secondaryRoleAdvancedStrategyDoubletapTimeout);
         buffer.writeUInt16(this.secondaryRoleAdvancedStrategyTimeout);
         buffer.writeUInt16(this.secondaryRoleAdvancedStrategySafetyMargin);
         buffer.writeBoolean(this.secondaryRoleAdvancedStrategyTriggerByRelease);
@@ -671,7 +672,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.secondaryRoleStrategy = SecondaryRoleStrategy.Simple;
         this.secondaryRoleAdvancedStrategyDoubletapTimeout = 200;
         this.secondaryRoleAdvancedStrategyTimeoutAction = SecondaryRoleAdvancedStrategyTimeoutAction.Secondary;
-        this.secondaryRoleAdvancedStrategyTimeout = 200;
+        this.secondaryRoleAdvancedStrategyTimeout = 350;
         this.secondaryRoleAdvancedStrategySafetyMargin = 50;
         this.secondaryRoleAdvancedStrategyTriggerByRelease = true;
         this.secondaryRoleAdvancedStrategyDoubletapToPrimary = true;

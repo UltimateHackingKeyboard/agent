@@ -39,7 +39,7 @@ describe('user-configuration', () => {
             mouseScrollAcceleratedSpeed: 50,
             secondaryRoleStrategy: 'Simple',
             secondaryRoleAdvancedStrategyDoubletapTimeout: 200,
-            secondaryRoleAdvancedStrategyTimeout: 200,
+            secondaryRoleAdvancedStrategyTimeout: 350,
             secondaryRoleAdvancedStrategySafetyMargin: 50,
             secondaryRoleAdvancedStrategyTriggerByRelease: true,
             secondaryRoleAdvancedStrategyDoubletapToPrimary: true,

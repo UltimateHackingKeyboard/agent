@@ -161,6 +161,7 @@ export class ModuleConfiguration {
 
     toBinary(buffer: UhkBuffer): void {
         buffer.writeUInt8(this.id);
+
         buffer.writeUInt8(this.navigationModeBaseLayer);
         buffer.writeUInt8(this.navigationModeModLayer);
         buffer.writeUInt8(this.navigationModeFnLayer);
@@ -195,6 +196,8 @@ export class ModuleConfiguration {
         buffer.writeBoolean(this.caretAxisLock);
         buffer.writeUInt8(ModuleProperty.AxisLockFirstTickSkew);
         buffer.writeFloat(this.axisLockFirstTickSkew);
+        buffer.writeUInt8(ModuleProperty.AxisLockSkew);
+        buffer.writeFloat(this.axisLockSkew);
         buffer.writeUInt8(ModuleProperty.InvertScrollDirectionY);
         buffer.writeBoolean(this.invertScrollDirectionY);
 
