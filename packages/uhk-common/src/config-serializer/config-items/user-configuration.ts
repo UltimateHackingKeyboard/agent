@@ -689,16 +689,6 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             defaultTrackpointRightModuleConfig(),
         );
 
-        // for (const keymap of this.keymaps) {
-        //     for (let i = 0; i < keymap.layers.length; i++ ) {
-        //         if (keymap.layers[i].id === LayerName.old_base) {
-        //             keymap.layers[i].id = LayerName.base;
-        //         } else {
-        //             keymap.layers[i].id = i + 1;
-        //         }
-        //     }
-        // }
-
         return true;
     }
 
