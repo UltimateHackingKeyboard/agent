@@ -14,7 +14,6 @@ export function defaultTrackpointRightModuleConfig(): ModuleConfiguration {
     config.navigationModeFn3Layer = NavigationMode.Cursor;
     config.navigationModeFn4Layer = NavigationMode.Cursor;
     config.navigationModeFn5Layer = NavigationMode.Cursor;
-    config.navigationModeFn5Layer = NavigationMode.Cursor;
 
     config.speed = 1;
     config.baseSpeed = 0;
