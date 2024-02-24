@@ -45,7 +45,7 @@
     "electron-log": "4.4.8",
     "electron-settings": "4.0.2",
     "electron-updater": "6.0.4",
-    "eslint": "8.54.0",
+    "eslint": "8.57.0",
     "fs-extra": "11.2.0",
     "jasmine": "4.6.0",
     "lerna": "8.1.2",
