@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { UHK_MODULES } from 'uhk-common';
 import { ModuleConfiguration, ModuleId, NavigationMode } from 'uhk-common';
 
 import { AppState, getSelectedModuleConfiguration } from '../../store';
@@ -18,6 +19,7 @@ import { SetModuleConfigurationValueAction } from '../../store/actions/user-conf
 export class AddOnComponent implements OnDestroy {
     faPuzzlePiece = faPuzzlePiece;
     ModuleId = ModuleId;
+    moduleName = '';
 
     // Touchpad
     pitchToZoomOptions = [
@@ -79,6 +81,10 @@ export class AddOnComponent implements OnDestroy {
         this.subscription = store.select(getSelectedModuleConfiguration)
             .subscribe((moduleConfiguration) => {
                 this.moduleConfiguration = moduleConfiguration;
+
+                const module = UHK_MODULES.find(m => m.id === moduleConfiguration.id);
+                this.moduleName = module ? module.name : '';
+
                 this.cdRef.markForCheck();
             });
     }
