@@ -1,5 +1,6 @@
 table.settings {
     width: 100%;
+    $settings-slider-align: 1.8em;
 
     tbody {
         tr {
@@ -28,7 +29,7 @@ table.settings {
                 }
 
                 .form-check-input {
-                    margin-left: 1em;
+                    margin-left: $settings-slider-align;
                 }
 
                 div.select-container {
@@ -38,7 +39,7 @@ table.settings {
                     width: 150px;
 
                     &.align-slider {
-                        margin-left: 1.5em;
+                        margin-left: $settings-slider-align;
                     }
                 }
             }
