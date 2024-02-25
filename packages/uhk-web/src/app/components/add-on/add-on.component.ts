@@ -48,6 +48,10 @@ export class AddOnComponent implements OnDestroy {
             label: 'Cursor'
         },
         {
+            value: NavigationMode.Scroll,
+            label: 'Scroll'
+        },
+        {
             value: NavigationMode.Media,
             label: 'Media'
         },
