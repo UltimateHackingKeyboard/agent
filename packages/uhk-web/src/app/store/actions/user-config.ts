@@ -7,7 +7,8 @@ import {
     ModifyColorOfBacklightingColorPalettePayload,
     UserConfigurationRgbValue,
     UserConfigurationValue,
-    LoadUserConfigurationFromFilePayload
+    LoadUserConfigurationFromFilePayload,
+    SetModuleConfigurationValuePayload
 } from '../../models';
 
 export enum ActionTypes {
@@ -18,12 +19,15 @@ export enum ActionTypes {
     LoadConfigFromDeviceReply = '[user-config] Load User Config from Device reply',
     LoadUserConfigSuccess = '[user-config] Load User Config Success',
     ModifyColorOfBacklightingColorPalette = '[user-config] Modify color of the backlighting color palette',
+    NavigateToModuleSettings = '[user-config] Navigate to module settings',
     SaveUserConfigSuccess = '[user-config] Save User Config Success',
     SaveUserConfigInJsonFile = '[user-config] Save User Config in JSON file',
     SaveUserConfigInBinFile = '[user-config] Save User Config in binary file',
     ToggleColorFromBacklightingColorPalette = '[user-config] toggle color from the backlighting color palette',
     LoadResetUserConfiguration = '[user-config] Load reset user configuration',
     RenameUserConfiguration = '[user-config] Rename user configuration',
+    SelectModuleConfiguration = '[user-config] Select module configuration',
+    SetModuleConfigurationValue = '[user-config] Set module configuration value',
     SetUserConfigurationRgbValue = '[user-config] Set user configuration RGB value',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
     LoadUserConfigurationFromFile = '[user-config] Load user configuration from file',
@@ -69,6 +73,13 @@ export class ModifyColorOfBacklightingColorPaletteAction implements Action {
     type = ActionTypes.ModifyColorOfBacklightingColorPalette;
 
     constructor(public payload: ModifyColorOfBacklightingColorPalettePayload) {
+    }
+}
+
+export class NavigateToModuleSettings implements Action {
+    type = ActionTypes.NavigateToModuleSettings;
+
+    constructor(public payload: number) {
     }
 }
 
@@ -118,6 +129,20 @@ export class RenameUserConfigurationAction implements Action {
     }
 }
 
+export class SelectModuleConfigurationAction implements Action {
+    type = ActionTypes.SelectModuleConfiguration;
+
+    constructor(public payload: number) {
+    }
+}
+
+export class SetModuleConfigurationValueAction implements Action {
+    type = ActionTypes.SetModuleConfigurationValue;
+
+    constructor(public payload: SetModuleConfigurationValuePayload) {
+    }
+}
+
 export class SetUserConfigurationRgbValueAction implements Action {
     type = ActionTypes.SetUserConfigurationRgbValue;
 
@@ -158,11 +183,15 @@ export type Actions
     | SaveUserConfigSuccessAction
     | LoadConfigFromDeviceAction
     | LoadConfigFromDeviceReplyAction
+    | ModifyColorOfBacklightingColorPaletteAction
+    | NavigateToModuleSettings
     | SaveUserConfigInJsonFileAction
     | SaveUserConfigInBinaryFileAction
     | LoadResetUserConfigurationAction
     | PreviewUserConfigurationAction
     | RenameUserConfigurationAction
+    | SelectModuleConfigurationAction
+    | SetModuleConfigurationValueAction
     | SetUserConfigurationRgbValueAction
     | SetUserConfigurationValueAction
     | ToggleColorFromBacklightingColorPaletteAction

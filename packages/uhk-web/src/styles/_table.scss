@@ -1,0 +1,48 @@
+table.settings {
+    width: 100%;
+    $settings-slider-align: 1.8em;
+
+    tbody {
+        tr {
+            &.separator {
+                border-bottom: 1px solid var(--color-sidemenu-border);
+            }
+
+            td {
+                height: 3em;
+                width: 50%;
+
+                h3.margin-top {
+                    margin-top: 1em;
+                }
+
+                .form-check {
+                    display: inline-block;
+
+                    &:first-of-type {
+                        padding-left: 0;
+                    }
+
+                    label {
+                        margin-left: 0.25em;
+                    }
+                }
+
+                .form-check-input {
+                    margin-left: $settings-slider-align;
+                }
+
+                div.select-container {
+                    display: inline-block;
+                    margin-bottom: 0.5em;
+                    margin-top: 0.5em;
+                    width: 150px;
+
+                    &.align-slider {
+                        margin-left: $settings-slider-align;
+                    }
+                }
+            }
+        }
+    }
+}

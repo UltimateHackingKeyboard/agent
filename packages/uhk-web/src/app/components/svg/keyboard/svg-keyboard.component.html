@@ -14,6 +14,8 @@
            [capturingEnabled]="capturingEnabled"
            [attr.transform]="module.attributes.transform"
            [keyActions]="getKeyActions(module.id)"
+           [moduleNavCircle]="module.moduleNavCircle"
+           [moduleNavPath]="module.moduleNavPath"
            [selectedKey]="selectedKey"
            [@fadeKeyboard]="{value:'', params: { animationTime: modulesState[module.id].animationTime } }"
            [selected]="selectedKey?.moduleId === module.id"
@@ -22,7 +24,9 @@
            [lastEditedKeyId]="lastEditedKey?.key"
            (keyClick)="onKeyClick(module.id, $event)"
            (keyHover)="onKeyHover($event.index, $event.event, $event.over, module.id)"
-           (capture)="onCapture(module.id, $event)" />
+           (capture)="onCapture(module.id, $event)"
+           (navigateToModuleSettings)="onNavigateToModuleSettings(module.id)"
+    />
 
     <svg:path [@fadeSeparator]="{value:'', params: { animationTime: fadeSeparatorAnimationTime } }"
               *ngIf="halvesInfo.areHalvesMerged"

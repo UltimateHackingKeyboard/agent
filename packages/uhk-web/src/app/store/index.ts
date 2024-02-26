@@ -143,6 +143,7 @@ export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, ge
     });
 
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
+export const getSelectedModuleConfiguration = createSelector(userConfigState, fromUserConfig.getSelectedModuleConfiguration);
 export const showColorPalette = createSelector(userConfigState, fromUserConfig.showColorPalette);
 export const perKeyRgbPresent = createSelector(userConfigState, fromUserConfig.perKeyRgbPresent);
 export const backlightingMode = createSelector(userConfigState, fromUserConfig.backlightingMode);
@@ -162,7 +163,6 @@ export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (k
     });
 });
 export const appState = (state: AppState) => state.app;
-export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const disableUpdateAgentProtection = createSelector(appState, fromApp.disableUpdateAgentProtection);
 export const getErrorPanelHeight = createSelector(appState, fromApp.getErrorPanelHeight);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
@@ -465,7 +465,6 @@ export const calculateDeviceUiState = createSelector(
 );
 
 export const getSideMenuPageState = createSelector(
-    showAddonMenu,
     runningInElectron,
     updatingFirmware,
     getUserConfiguration,
@@ -473,7 +472,7 @@ export const getSideMenuPageState = createSelector(
     calculateDeviceUiState,
     getConnectedDevice,
     getIsAdvancedSettingsMenuVisible,
-    (showAddonMenuValue: boolean,
+    (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
         userConfiguration: UserConfiguration,
@@ -486,7 +485,6 @@ export const getSideMenuPageState = createSelector(
         return {
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
-            showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,

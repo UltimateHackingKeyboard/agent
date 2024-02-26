@@ -81,6 +81,7 @@ export enum UsbVariables {
     statusBuffer= 5,
 }
 
+// TODO: use the LayerName enum instead of this array
 export const LAYER_NUMBER_TO_STRING = [
     'base',
     'mod',
@@ -88,6 +89,7 @@ export const LAYER_NUMBER_TO_STRING = [
     'mouse'
 ];
 
+// TODO: use the ModuleId enum instead of this array
 export const MODULE_ID_TO_STRING = [
     'NoModule',
     'LeftKeyboardHalf',

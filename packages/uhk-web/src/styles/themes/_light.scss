@@ -39,6 +39,7 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
 .theme-light {
     --bs-list-group-bg: #{$input-bg};
 
+    --color-bg: #{$color-bg};
     --color-btn-danger-text: #{$white};
     --color-sidemenu-bg: #f5f5f5;
     --color-sidemenu-border: #ccc;
@@ -61,8 +62,9 @@ $input-focus-border-color: lighten($component-active-bg, 25%) !default;
     --color-keyboard-shadow2: #{$white};
     --color-keyboard-border: #ccc;
     --color-keyboard-key-bg: #{$color-bg-light};
-    --color-keyboard-key-hover: #{$secondary};
+    --color-keyboard-key-hover: #737373;
     --color-keyboard-key-active: #{$primary};
+    --color-module-puzzle-path-fill: #{$white};
 
     --color-input-border: #ccc;
     --color-btn-secondary-border: #ccc;

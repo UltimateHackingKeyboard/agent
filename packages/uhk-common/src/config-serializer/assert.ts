@@ -22,6 +22,10 @@ export function assertInt32(target: any, key: string) {
     return assertInteger(target, key, -0x80000000, 0x7FFFFFFF);
 }
 
+export function assertFloat(target: any, key: string) {
+    return assertInteger(target, key, -0x80000000, 0x7FFFFFFF);
+}
+
 export function assertCompactLength(target: any, key: string) {
     return assertUInt16(target, key);
 }

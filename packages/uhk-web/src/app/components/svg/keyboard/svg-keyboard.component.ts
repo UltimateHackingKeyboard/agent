@@ -106,6 +106,7 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
+    @Output() navigateToModuleSettings = new EventEmitter<number>();
 
     modules: SvgModule[];
     viewBox: string;
@@ -185,6 +186,10 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
             over,
             keyId
         });
+    }
+
+    onNavigateToModuleSettings(moduleId: number): void {
+        this.navigateToModuleSettings.emit(moduleId);
     }
 
     getKeyActions(id: number): KeyAction[] {

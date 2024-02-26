@@ -1,0 +1,13 @@
+:host {
+    --slider-value-width: 50px;
+
+    table.settings {
+        tbody {
+            tr {
+                td:not([colspan='2']):first-of-type {
+                    width: 35%;
+                }
+            }
+        }
+    }
+}

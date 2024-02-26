@@ -40,6 +40,7 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @Output() onChange = new EventEmitter<number>();
 
     public value: number;
+    disabled = false;
     private changeObserver$: Observer<number>;
     private changeDebounceTime: number = 300;
 
@@ -61,6 +62,10 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     }
 
     registerOnTouched() {}
+
+    setDisabledState?(isDisabled: boolean): void {
+        this.disabled = isDisabled;
+    }
 
     onSliderChange(value: number): void {
         if (!this.changeObserver$) {

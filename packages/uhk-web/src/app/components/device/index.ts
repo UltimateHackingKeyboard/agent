@@ -6,4 +6,5 @@ export * from './led-settings/functional-backlight-color.component';
 export * from './led-settings/led-settings.component';
 export * from './restore-configuration/restore-configuration.component';
 export * from './recovery-mode/recovery-mode.component';
+export * from './typing-behaviour-page/typing-behaviour-page';
 export * from './device.routes';

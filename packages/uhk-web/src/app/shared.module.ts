@@ -20,6 +20,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 
 import { AddOnComponent } from './components/add-on';
+import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
     AdvancedSettingsPageComponent,
@@ -29,7 +30,8 @@ import {
     MouseSpeedComponent,
     LEDSettingsComponent,
     RestoreConfigurationComponent,
-    RecoveryModeComponent
+    RecoveryModeComponent,
+    TypingBehaviourPage
 } from './components/device';
 import {
     KeymapAddComponent,
@@ -162,6 +164,7 @@ import appInitFactory from './services/app-init-factory';
         SafeHtmlPipe,
         MainAppComponent,
         ColorPaletteButtonComponent,
+        CircleTooltipComponent,
         DeviceConfigurationComponent,
         DeviceFirmwareComponent,
         FirmwareFileUploadComponent,
@@ -254,6 +257,7 @@ import appInitFactory from './services/app-init-factory';
         ExternalUrlDirective,
         SecondSideMenuContainerComponent,
         SvgSecondaryRoleComponent,
+        TypingBehaviourPage,
         UdevRulesComponent,
         HighlightArrowComponent,
         OutOfSpaceWarningComponent,

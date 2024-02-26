@@ -1,31 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { routerNavigatedAction, RouterNavigatedAction } from '@ngrx/router-store';
 import { Observable } from 'rxjs';
-import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { Buffer } from 'uhk-common';
 
 import {
     BackupUserConfigurationInfo,
+    Buffer,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
     ConfigurationReply,
     LogService,
     NotificationType,
     UhkBuffer,
+    UHK_MODULES,
     UserConfiguration
 } from 'uhk-common';
 
+import { EmptyAction } from '../actions/app';
 import {
     ActionTypes,
     ApplyUserConfigurationFromFileAction,
     LoadConfigFromDeviceReplyAction,
     LoadUserConfigSuccessAction,
     LoadUserConfigurationFromFileAction,
+    NavigateToModuleSettings,
     PreviewUserConfigurationAction,
-    SaveUserConfigSuccessAction
+    SaveUserConfigSuccessAction,
+    SelectModuleConfigurationAction
 } from '../actions/user-config';
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
@@ -49,6 +54,7 @@ import {
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { LoadUserConfigurationFromFilePayload } from '../../models';
+import { RouterState } from '../router-util.js';
 
 @Injectable()
 export class UserConfigEffects {
@@ -75,7 +81,7 @@ export class UserConfigEffects {
                 Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
                 Macros.ActionTypes.ReorderAction,
                 ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue, ActionTypes.SetUserConfigurationRgbValue,
-                ActionTypes.RecoverLEDSpaces
+                ActionTypes.RecoverLEDSpaces, ActionTypes.SetModuleConfigurationValue
             ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {
@@ -270,12 +276,44 @@ export class UserConfigEffects {
         )
     );
 
+    navigateToModuleSettings$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.NavigateToModuleSettings),
+            tap((action: NavigateToModuleSettings) => {
+                for(const module of UHK_MODULES) {
+                    if (module.id === action.payload) {
+                        this.router.navigate([module.configPath]);
+                        return;
+                    }
+                }
+            })
+        ),
+    { dispatch: false }
+    );
+
     previewUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType<PreviewUserConfigurationAction>(ActionTypes.PreviewUserConfiguration),
             map(() => new ShowSaveToKeyboardButtonAction())
         )
     );
+
+    moduleConfigurationNavigated$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(routerNavigatedAction),
+            map<RouterNavigatedAction, RouterState>(action => action.payload.routerState as any),
+            filter(routerState => routerState.url.startsWith('/add-on')),
+            map(routerState => {
+                const uhkModule = UHK_MODULES.find(module => module.configPath === routerState.pathname);
+
+                if (uhkModule) {
+                    return new SelectModuleConfigurationAction(uhkModule.id);
+                }
+
+                return new EmptyAction();
+            }),
+            distinctUntilChanged(),
+        ));
 
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,
