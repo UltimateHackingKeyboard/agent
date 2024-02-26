@@ -182,7 +182,8 @@
                     </li>
                 </ul>
             </li>
-            <li class="sidebar__level-1--item">
+            <li class="sidebar__level-1--item"
+                *ngIf="!state.restoreUserConfiguration">
                 <div class="sidebar__level-1">
                     <fa-icon [icon]="faPuzzlePiece"></fa-icon>
                     Modules
