@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
-import { routerNavigatedAction } from '@ngrx/router-store';
+import { routerNavigatedAction, RouterNavigatedAction } from '@ngrx/router-store';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom, } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
 
@@ -54,6 +54,7 @@ import {
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
 import { LoadUserConfigurationFromFilePayload } from '../../models';
+import { RouterState } from '../router-util.js';
 
 @Injectable()
 export class UserConfigEffects {
@@ -300,18 +301,18 @@ export class UserConfigEffects {
     moduleConfigurationNavigated$ = createEffect(() => this.actions$
         .pipe(
             ofType(routerNavigatedAction),
-            map(action => (action.payload.routerState as any).params.moduleConfigSlug),
-            distinctUntilChanged(),
-            map(slug => {
-                const configPath = `/add-on/${slug}`;
-                const uhkModule = UHK_MODULES.find(module => module.configPath === configPath);
+            map<RouterNavigatedAction, RouterState>(action => action.payload.routerState as any),
+            filter(routerState => routerState.url.startsWith('/add-on')),
+            map(routerState => {
+                const uhkModule = UHK_MODULES.find(module => module.configPath === routerState.pathname);
 
                 if (uhkModule) {
                     return new SelectModuleConfigurationAction(uhkModule.id);
                 }
 
                 return new EmptyAction();
-            })
+            }),
+            distinctUntilChanged(),
         ));
 
     constructor(private actions$: Actions,

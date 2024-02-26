@@ -13,6 +13,7 @@ import { RouterStateSnapshot, Params } from '@angular/router';
 export interface RouterState {
     url: string;
     params: Params;
+    pathname: string;
     queryParams: Params;
 }
 
@@ -27,7 +28,8 @@ export class CustomRouterStateSerializer implements RouterStateSerializer<Router
         const { params } = route;
         const { url } = routerState;
         const queryParams = routerState.root.queryParams;
+        const parsedUrl = new URL(routerState.url, 'http://localhost');
 
-        return { url, params, queryParams };
+        return { url, pathname: parsedUrl.pathname, params, queryParams };
     }
 }
