@@ -17,7 +17,7 @@ import { GetAgentContributorsAction } from '../../../store/actions/contributors.
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss'],
     host: {
-        'class': 'container-fluid'
+        'class': 'container-fluid d-block'
     }
 })
 export class AboutComponent implements OnInit {

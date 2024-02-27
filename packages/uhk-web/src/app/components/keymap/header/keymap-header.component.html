@@ -1,37 +1,35 @@
 <uhk-header>
-    <div class="row">
-        <h1 class="col-12 pane-title">
-            <fa-icon [icon]="faKeyboard"></fa-icon>
-            <auto-grow-input [ngModel]="keymap.name"
-                             maxParentWidthOffset="530"
-                             (ngModelChange)="editKeymapName($event)"></auto-grow-input>
-            keymap
-            (<input #abbr cancelable
-                    class="keymap__abbrev pane-title__abbrev"
-                    type="text"
-                    (change)="editKeymapAbbr($event.target.value)"
-                    (keyup.enter)="abbr.blur()"
-                    [attr.maxLength]="3"
-        />)
-            <fa-icon [icon]="starIcon"
-                     [ngbTooltip]="starTitle"
-                     [class.keymap__is-default]="!keymap.isDefault"
-                     placement="bottom"
-                     (click)="setDefault()"
-            ></fa-icon>
-            <fa-icon [icon]="faTrash"
-                     [ngbTooltip]="trashTitle"
-                     tooltipClass="tooltip-nowrap"
-                     class="keymap__remove float-end"
-                     placement="bottom-right"
-                     (click)="removeKeymap()"
-            ></fa-icon>
-            <fa-icon [icon]="faCopy"
-                     class="keymap__duplicate float-end"
-                     ngbTooltip="Duplicate keymap"
-                     placement="bottom"
-                     (click)="duplicateKeymap()"
-            ></fa-icon>
-        </h1>
+    <div class="pane-title">
+        <fa-icon [icon]="faKeyboard"></fa-icon>
+        <auto-grow-input [ngModel]="keymap.name"
+                         maxParentWidthOffset="530"
+                         (ngModelChange)="editKeymapName($event)"></auto-grow-input>
+        keymap
+        (<input #abbr cancelable
+                class="keymap__abbrev pane-title__abbrev"
+                type="text"
+                (change)="editKeymapAbbr($event.target.value)"
+                (keyup.enter)="abbr.blur()"
+                [attr.maxLength]="3"
+    />)
+        <fa-icon [icon]="starIcon"
+                 [ngbTooltip]="starTitle"
+                 [class.keymap__is-default]="!keymap.isDefault"
+                 placement="bottom"
+                 (click)="setDefault()"
+        ></fa-icon>
+        <fa-icon [icon]="faTrash"
+                 [ngbTooltip]="trashTitle"
+                 tooltipClass="tooltip-nowrap"
+                 class="keymap__remove float-end"
+                 placement="bottom-right"
+                 (click)="removeKeymap()"
+        ></fa-icon>
+        <fa-icon [icon]="faCopy"
+                 class="keymap__duplicate float-end"
+                 ngbTooltip="Duplicate keymap"
+                 placement="bottom"
+                 (click)="duplicateKeymap()"
+        ></fa-icon>
     </div>
 </uhk-header>
