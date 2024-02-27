@@ -123,9 +123,9 @@ describe('keymap', () => {
             moduleConfigurations: [
                 {
                     id: 'KeyClusterLeft',
-                    navigationModeBaseLayer: 'Cursor',
+                    navigationModeBaseLayer: 'Scroll',
                     navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -147,8 +147,8 @@ describe('keymap', () => {
                 {
                     id: 'TouchpadRight',
                     navigationModeBaseLayer: 'Cursor',
-                    navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeModLayer: 'Scroll',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -171,8 +171,8 @@ describe('keymap', () => {
                 {
                     id: 'TrackballRight',
                     navigationModeBaseLayer: 'Cursor',
-                    navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeModLayer: 'Scroll',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -192,8 +192,8 @@ describe('keymap', () => {
                 {
                     id: 'TrackpointRight',
                     navigationModeBaseLayer: 'Cursor',
-                    navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeModLayer: 'Scroll',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -400,9 +400,9 @@ describe('keymap', () => {
             moduleConfigurations: [
                 {
                     id: 'KeyClusterLeft',
-                    navigationModeBaseLayer: 'Cursor',
+                    navigationModeBaseLayer: 'Scroll',
                     navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -424,8 +424,8 @@ describe('keymap', () => {
                 {
                     id: 'TouchpadRight',
                     navigationModeBaseLayer: 'Cursor',
-                    navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeModLayer: 'Scroll',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -448,8 +448,8 @@ describe('keymap', () => {
                 {
                     id: 'TrackballRight',
                     navigationModeBaseLayer: 'Cursor',
-                    navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeModLayer: 'Scroll',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',
@@ -469,8 +469,8 @@ describe('keymap', () => {
                 {
                     id: 'TrackpointRight',
                     navigationModeBaseLayer: 'Cursor',
-                    navigationModeModLayer: 'Cursor',
-                    navigationModeFnLayer: 'Cursor',
+                    navigationModeModLayer: 'Scroll',
+                    navigationModeFnLayer: 'Caret',
                     navigationModeMouseLayer: 'Cursor',
                     navigationModeFn2Layer: 'Cursor',
                     navigationModeFn3Layer: 'Cursor',

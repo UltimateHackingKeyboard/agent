@@ -7,8 +7,8 @@ export function defaultTrackpointRightModuleConfig(): ModuleConfiguration {
     config.id = ModuleId.TrackpointRight;
 
     config.navigationModeBaseLayer = NavigationMode.Cursor;
-    config.navigationModeModLayer = NavigationMode.Cursor;
-    config.navigationModeFnLayer = NavigationMode.Cursor;
+    config.navigationModeModLayer = NavigationMode.Scroll;
+    config.navigationModeFnLayer = NavigationMode.Caret;
     config.navigationModeMouseLayer = NavigationMode.Cursor;
     config.navigationModeFn2Layer = NavigationMode.Cursor;
     config.navigationModeFn3Layer = NavigationMode.Cursor;
