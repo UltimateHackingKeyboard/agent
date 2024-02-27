@@ -1,6 +1,6 @@
-<div>
+<h1>
     <ng-content></ng-content>
-</div>
+</h1>
 <undoable-notifier [notification]="undoableNotification$ | async"
                    (close)="onDismissLastNotification()"
                    (undo)="onUndoLastNotification($event)">
