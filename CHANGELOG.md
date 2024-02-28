@@ -6,6 +6,17 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [4.0.0] - 2024-02-28
+
+Firmware: 11.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.0.0)] | Device Protocol: 4.10.0 | User Config: **7.0.0** | Hardware Config: 1.0.0
+
+- Add module configuration pages for the key cluster, trackball, trackopint, and touchpad modules.
+- Add "Typing behavior" page.
+- Add "Axis skew" settings and a "Compensate diagonal speed" setting on the "Mouse key speed" page.
+- Make page margins consistent across all pages.
+- Update firmware version tooltip content to cause less confusion.
+- Fix "Recover LED space" tooltip position to not block the related confirmation popover.
+
 ## [3.3.0] - 2024-01-23
 
 Firmware: 10.5.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v10.5.0)] | Device Protocol: 4.10.0 | User Config: 6.0.0 | Hardware Config: 1.0.0
