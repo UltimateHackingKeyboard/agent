@@ -63,7 +63,7 @@
             </tr>
             <tr class="separator">
                 <td>Timeout action
-                    <circle-tooltip tooltip="Dual-role-key role to be activated when the timeout is reached."
+                    <circle-tooltip tooltip="Dual-role key role to be activated when the timeout is reached."
                                     width="250"/>
                 </td>
                 <td>
@@ -144,7 +144,7 @@
             </tr>
             <tr class="separator">
                 <td>Double tap timeout
-                    <circle-tooltip tooltip="Double tap timeout configures double tap time behavior for the secondary roles."
+                    <circle-tooltip tooltip="Configures double tap time behavior for the secondary roles."
                                     width="250"/>
                 </td>
                 <td>
@@ -167,7 +167,7 @@
             </tr>
             <tr class="separator">
                 <td>Double tap to lock layer timeout
-                    <circle-tooltip tooltip="Double tap timeout configures double tap time behavior for the secondary roles."
+                    <circle-tooltip tooltip="Configures double tap time behavior for the secondary roles."
                                     width="250"/>
                 </td>
                 <td>
@@ -186,7 +186,7 @@
                     <circle-tooltip [tooltip]="keyStrokeDelayTooltip"
                                     width="380"/>
                     <ng-template #keyStrokeDelayTooltip>
-                        <p>Keystroke delay defines minimum delay between two consecutive usb reports, thus slowing down keyboard output in case of fast bursts (e.g., from the macro engine).</p>
+                        <p>Minimum delay between two consecutive USB reports. Thus, it's possible to slow down keyboard output in case of fast bursts (for example, from the macro engine).</p>
                         This improves compatibility as many programs (especially RDP clients) have problems accepting too fast input.
                     </ng-template>
                 </td>
