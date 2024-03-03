@@ -80,8 +80,6 @@ export class AddOnComponent implements OnDestroy {
 
     moduleConfiguration = new ModuleConfiguration();
 
-    zoomKeyShortcut = 'CTRL';
-
     private subscription: Subscription;
     private osSubscription: Subscription;
 
@@ -96,19 +94,10 @@ export class AddOnComponent implements OnDestroy {
 
                 this.cdRef.markForCheck();
             });
-
-        this.osSubscription = store
-            .select(getOperatingSystem)
-            .subscribe(os => {
-                this.zoomKeyShortcut = os === OperatingSystem.Mac
-                    ? 'CMD'
-                    : 'CTRL';
-            });
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-        this.osSubscription.unsubscribe();
     }
 
     onSetModuleConfigurationValue(propertyName: string, value: any) {
