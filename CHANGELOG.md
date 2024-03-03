@@ -6,6 +6,14 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [4.0.1] - 2024-03-03
+
+Firmware: 11.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.0.0)] | Device Protocol: 4.10.0 | User Config: 7.0.0 | Hardware Config: 1.0.0
+
+- Move the Modules menu directly under the Device menu.
+- Add navigation mode tooltips on module pages.
+- Fix "Double trap" typo.
+
 ## [4.0.0] - 2024-02-28
 
 Firmware: 11.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.0.0)] | Device Protocol: 4.10.0 | User Config: **7.0.0** | Hardware Config: 1.0.0
