@@ -3,6 +3,18 @@
     <span>{{moduleName}}</span>
 </h1>
 
+<ng-template #navigationModeTooltip>
+    <ul class="no-indent text-start">
+        <li><strong>Cursor</strong>: Module controls mouse movement.</li>
+        <li><strong>Scroll</strong>: Module controls scrolling.</li>
+        <li><strong>Media</strong>: Up/down directions control volume, horizontal directions control play/pause, and switch to the next track.</li>
+        <li><strong>Caret</strong>: Module produces arrow key taps. This can be used to move comfortably in a text editor.</li>
+        <li><strong>Zoom PC</strong>: <kbd>{{zoomKeyShortcut}}</kbd> + <kbd>+</kbd> / <kbd>{{zoomKeyShortcut}}</kbd> + <kbd>-</kbd> - shortcuts are produced.</li>
+        <li><strong>Zoom Mac</strong>: <kbd>{{zoomKeyShortcut}}</kbd> + <kbd>+</kbd> / <kbd>{{zoomKeyShortcut}}</kbd> + <kbd>-</kbd> - shortcuts are produced.</li>
+        <li><strong>Zoom</strong>: This mode emits both the PC and Mac zoom modes. It serves as a general, OS-independent zoom mode, but one of the two zoom modes may interfere with some applications, in which case the desired PC or Mac zoom mode must be selected specifically.</li>
+    </ul>
+</ng-template>
+
 <div class="row">
     <div class="col-12 col-lg-6">
         <table class="table settings">
@@ -229,6 +241,7 @@
                                        bindValue="value"
                             />
                         </div>
+                        <circle-tooltip [tooltip]="navigationModeTooltip" width="400"/>
                     </td>
                 </tr>
                 <tr class="separator">
@@ -282,6 +295,7 @@
                 </td>
                 <td>
                     Mode
+                    <circle-tooltip [tooltip]="navigationModeTooltip" width="400" placement="bottom bottom-end"/>
                 </td>
             </tr>
             <tr class="separator">
