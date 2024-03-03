@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import { UHK_MODULES } from 'uhk-common';
 import { ModuleConfiguration, ModuleId, NavigationMode } from 'uhk-common';
 
-import { AppState, getSelectedModuleConfiguration } from '../../store';
+import { OperatingSystem } from '../../models/operating-system';
+import { AppState, getOperatingSystem, getSelectedModuleConfiguration } from '../../store';
 import { SetModuleConfigurationValueAction } from '../../store/actions/user-config';
 
 @Component({
@@ -80,6 +81,8 @@ export class AddOnComponent implements OnDestroy {
     moduleConfiguration = new ModuleConfiguration();
 
     private subscription: Subscription;
+    private osSubscription: Subscription;
+
     constructor(private store:Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
         this.subscription = store.select(getSelectedModuleConfiguration)

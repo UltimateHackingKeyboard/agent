@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { KeyModifiers, KeystrokeType, SecondaryRoleAction } from 'uhk-common';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ export enum OsSpecificKeys {
 export type OsSpecificTexts = OsSpecificKeys | KeyModifiers;
 
 @Injectable()
-export class MapperService {
+export class MapperService implements OnDestroy {
 
     private basicScanCodeTextMap: Map<number, string[]>;
     private mediaScanCodeTextMap: Map<number, string[]>;
@@ -41,6 +41,10 @@ export class MapperService {
                 this.initNameToFileNames();
                 this.initSecondaryRoleTexts();
             });
+    }
+
+    ngOnDestroy(): void {
+        this.osSubscription.unsubscribe();
     }
 
     public scanCodeToText(scanCode: number, type: KeystrokeType = KeystrokeType.basic): string[] {
