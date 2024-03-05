@@ -25,7 +25,7 @@ import {
     LeftSlotModules,
     PlayMacroAction,
     RightSlotModules,
-    SvgKeyboardCoverColors,
+    UhkThemeColors,
     UHK_60_DEVICE,
     UhkBuffer,
     UserConfiguration,
@@ -48,7 +48,7 @@ import {
 } from '../models';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
-import { uhkThemeColors } from '../util/uhk-theme-colors';
+import { defaultUhkThemeColors } from '../util/default-uhk-theme-colors';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
 import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
@@ -181,8 +181,8 @@ export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
-export const getSvgKeyboardCoverColorsOfTheme = createSelector(getAppTheme, (theme): SvgKeyboardCoverColors => {
-    return  uhkThemeColors(theme).svgKeyboardCoverColors;
+export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
+    return  defaultUhkThemeColors(theme);
 });
 export const getPlatform = createSelector(appState, fromApp.getPlatform);
 

@@ -1,13 +1,9 @@
-import { SvgKeyboardCoverColors } from 'uhk-common';
+import { UhkThemeColors } from 'uhk-common';
 
-export interface UhkThemeColors {
-    backgroundColor: string;
-    svgKeyboardCoverColors: SvgKeyboardCoverColors;
-}
-export function uhkThemeColors(theme = (window as any).getUhkTheme()): UhkThemeColors {
+export function defaultUhkThemeColors(theme = (window as any).getUhkTheme()): UhkThemeColors {
     if (theme === 'dark') {
         return {
-            backgroundColor: '#000',
+            backgroundColor: '#111',
             svgKeyboardCoverColors: {
                 fillColor: '#333',
                 strokeColor: ''

@@ -7,7 +7,7 @@ import {
     ChangeDetectionStrategy
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BacklightingMode, KeyAction, Macro, SvgKeyboardCoverColors } from 'uhk-common';
+import { BacklightingMode, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
 import { Subscription } from 'rxjs';
 
 import { SvgKeyboardKey } from '../keys';
@@ -33,7 +33,7 @@ export class SvgModuleComponent implements OnDestroy {
     @Input() keyActions: KeyAction[];
     @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
     @Input() selected: boolean;
-    @Input() svgKeyboardCoverColors: SvgKeyboardCoverColors;
+    @Input() uhkThemeColors: UhkThemeColors;
     @Input() capturingEnabled: boolean;
     @Input() lastEdited: boolean;
     @Input() lastEditedKeyId: string;
