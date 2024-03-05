@@ -19,7 +19,7 @@
            [selectedKey]="selectedKey"
            [@fadeKeyboard]="{value:'', params: { animationTime: modulesState[module.id].animationTime } }"
            [selected]="selectedKey?.moduleId === module.id"
-           [svgKeyboardCoverColors]="svgKeyboardCoverColors"
+           [uhkThemeColors]="uhkThemeColors"
            [lastEdited]="lastEditedKey?.moduleId === module.id"
            [lastEditedKeyId]="lastEditedKey?.key"
            (keyClick)="onKeyClick(module.id, $event)"

@@ -1,20 +1,21 @@
 <svg:path *ngFor="let path of coverages"
           [attr.d]="path.d"
-          [attr.fill]="svgKeyboardCoverColors?.fillColor"
-          [attr.stroke]="svgKeyboardCoverColors?.strokeColor"/>
+          [attr.fill]="uhkThemeColors?.svgKeyboardCoverColors.fillColor"
+          [attr.stroke]="uhkThemeColors?.svgKeyboardCoverColors.strokeColor"/>
 <svg:circle *ngFor="let circle of circles"
             [attr.cx]="circle.cx"
             [attr.cy]="circle.cy"
             [attr.r]="circle.r"
-            [attr.fill]="svgKeyboardCoverColors?.fillColor"
-            [attr.stroke]="svgKeyboardCoverColors?.strokeColor"/>
+            [attr.fill]="uhkThemeColors?.svgKeyboardCoverColors.fillColor"
+            [attr.stroke]="uhkThemeColors?.svgKeyboardCoverColors.strokeColor"/>
 
 <svg:g class="module-nav" *ngIf="moduleNavPath && moduleNavCircle" (click)="navigateToModuleSettings.emit()">
     <svg:circle [attr.cx]="moduleNavCircle.cx"
                 [attr.cy]="moduleNavCircle.cy"
                 [attr.r]="moduleNavCircle.r"
-                [attr.fill]="svgKeyboardCoverColors?.fillColor"
-                [attr.stroke]="svgKeyboardCoverColors?.strokeColor"
+                [attr.fill]="uhkThemeColors?.svgKeyboardCoverColors.fillColor"
+                [attr.stroke]="uhkThemeColors.backgroundColor"
+                [attr.stroke-width]="moduleNavCircle['stroke-width']"
                 />
     <svg:path [attr.d]="moduleNavPath.d" />
 </svg:g>
