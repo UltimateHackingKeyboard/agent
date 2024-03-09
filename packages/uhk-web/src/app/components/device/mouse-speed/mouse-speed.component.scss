@@ -1,8 +1,5 @@
 :host {
-    overflow-y: auto;
     display: block;
-    height: 100%;
-    width: 100%;
 
     label {
         display: block;
@@ -22,9 +19,5 @@
         + h3 {
             margin-top: 2rem;
         }
-    }
-
-    .placeholder {
-        height: 3rem;
     }
 }

@@ -25,7 +25,7 @@ import {
     LeftSlotModules,
     PlayMacroAction,
     RightSlotModules,
-    SvgKeyboardCoverColors,
+    UhkThemeColors,
     UHK_60_DEVICE,
     UhkBuffer,
     UserConfiguration,
@@ -48,7 +48,7 @@ import {
 } from '../models';
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
-import { uhkThemeColors } from '../util/uhk-theme-colors';
+import { defaultUhkThemeColors } from '../util/default-uhk-theme-colors';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
 import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
@@ -143,6 +143,7 @@ export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, ge
     });
 
 export const getSelectedMacroAction = createSelector(userConfigState, fromUserConfig.getSelectedMacroAction);
+export const getSelectedModuleConfiguration = createSelector(userConfigState, fromUserConfig.getSelectedModuleConfiguration);
 export const showColorPalette = createSelector(userConfigState, fromUserConfig.showColorPalette);
 export const perKeyRgbPresent = createSelector(userConfigState, fromUserConfig.perKeyRgbPresent);
 export const backlightingMode = createSelector(userConfigState, fromUserConfig.backlightingMode);
@@ -162,7 +163,6 @@ export const getKeymapOptions = createSelector(getKeymaps, getSelectedKeymap, (k
     });
 });
 export const appState = (state: AppState) => state.app;
-export const showAddonMenu = createSelector(appState, fromApp.showAddonMenu);
 export const disableUpdateAgentProtection = createSelector(appState, fromApp.disableUpdateAgentProtection);
 export const getErrorPanelHeight = createSelector(appState, fromApp.getErrorPanelHeight);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
@@ -181,8 +181,8 @@ export const getEverAttemptedSavingToKeyboard = createSelector(appState, fromApp
 export const getUdevFileContent = createSelector(appState, fromApp.getUdevFileContent);
 export const getAnimationEnabled = createSelector(appState, fromApp.getAnimationEnabled);
 export const getAppTheme = createSelector(appState, fromApp.getAppTheme);
-export const getSvgKeyboardCoverColorsOfTheme = createSelector(getAppTheme, (theme): SvgKeyboardCoverColors => {
-    return  uhkThemeColors(theme).svgKeyboardCoverColors;
+export const getUhkThemeColors = createSelector(getAppTheme, (theme): UhkThemeColors => {
+    return  defaultUhkThemeColors(theme);
 });
 export const getPlatform = createSelector(appState, fromApp.getPlatform);
 
@@ -465,7 +465,6 @@ export const calculateDeviceUiState = createSelector(
 );
 
 export const getSideMenuPageState = createSelector(
-    showAddonMenu,
     runningInElectron,
     updatingFirmware,
     getUserConfiguration,
@@ -473,7 +472,7 @@ export const getSideMenuPageState = createSelector(
     calculateDeviceUiState,
     getConnectedDevice,
     getIsAdvancedSettingsMenuVisible,
-    (showAddonMenuValue: boolean,
+    (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
         userConfiguration: UserConfiguration,
@@ -486,7 +485,6 @@ export const getSideMenuPageState = createSelector(
         return {
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
-            showAddonMenu: showAddonMenuValue,
             runInElectron: runningInElectronValue,
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,

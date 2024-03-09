@@ -7,7 +7,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
     templateUrl: './help-page.component.html',
     styleUrls: ['./help-page.component.scss'],
     host: {
-        'class': 'container-fluid'
+        'class': 'container-fluid d-block'
     }
 })
 export class HelpPageComponent {

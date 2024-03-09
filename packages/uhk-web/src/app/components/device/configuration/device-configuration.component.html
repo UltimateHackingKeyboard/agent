@@ -26,16 +26,19 @@
         </file-upload>
     </li>
     <li *ngIf="(hasRecoverableLEDSpace$ | async)">
-        <button class="btn btn-warning"
-                mwlConfirmationPopover
-                popoverTitle="Do you want to recover {{ rgbColorSpaceUsage$ | async | number }} bytes on-board storage by deleting per-key backlighting colors?"
-                placement="bottom"
-                confirmText="Yes"
-                cancelText="No"
-                [disabled]="savingUserConfig"
-                [ngbTooltip]="recoverLedTooltip"
-                (confirm)="recoverLedSpaces()">Recover LED space
-        </button>
+        <span class="d-inline-block"
+              [ngbTooltip]="recoverLedTooltip"
+              placement="top">
+            <button class="btn btn-warning"
+                    mwlConfirmationPopover
+                    popoverTitle="Do you want to recover {{ rgbColorSpaceUsage$ | async | number }} bytes on-board storage by deleting per-key backlighting colors?"
+                    placement="bottom"
+                    confirmText="Yes"
+                    cancelText="No"
+                    [disabled]="savingUserConfig"
+                    (confirm)="recoverLedSpaces()">Recover LED space
+            </button>
+        </span>
         <ng-template #recoverLedTooltip>
             Per-key backlighting was previously active, but it's not used anymore, and per-layer LED colors still occupy {{ rgbColorSpaceUsage$ | async | number }} bytes on-board storage which you can recover.
         </ng-template>

@@ -43,6 +43,7 @@ import {
 import { MapperService } from '../../../services/mapper.service';
 import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
 import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
+import { NavigateToModuleSettings } from '../../../store/actions/user-config';
 import { PopoverComponent } from '../../popover';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
@@ -280,6 +281,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
                 }
             })
         );
+    }
+
+    onNavigateToModuleSettings(moduleId: number): void {
+        this.store.dispatch(new NavigateToModuleSettings(moduleId));
     }
 
     onRemap(keyAction: KeyActionRemap): void {

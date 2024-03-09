@@ -43,6 +43,20 @@ export class UhkBuffer {
         this.buffer.fill(0);
     }
 
+    readFloat(): number {
+        const value = this.buffer.readFloatLE(this.offset);
+        this.dump(`f(${value})`);
+        this.bytesToBacktrack = 4;
+        this.offset += this.bytesToBacktrack;
+        return value;
+    }
+
+    writeFloat(value: number): void {
+        this.dump(`f(${value})`);
+        this.buffer.writeFloatLE(value, this.offset);
+        this.offset += 4;
+    }
+
     readInt8(): number {
         const value = this.buffer.readInt8(this.offset);
         this.dump(`i8(${value})`);

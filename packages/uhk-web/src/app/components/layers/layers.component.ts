@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewCh
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { colord, RgbColor } from 'colord';
-import { RgbColorInterface } from 'uhk-common';
+import { LayerName, RgbColorInterface } from 'uhk-common';
 
 import { LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../models';
 
@@ -32,6 +32,7 @@ export class LayersComponent {
 
     faPlus = faPlus;
     faTrash = faTrash;
+    LayerName = LayerName;
     newColorPaletteColor = '#000000';
 
     onSelectLayer(option: LayerOption) {

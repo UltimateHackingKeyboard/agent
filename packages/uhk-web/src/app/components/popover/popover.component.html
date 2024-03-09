@@ -49,7 +49,7 @@
                     [defaultKeyAction]="defaultKeyAction"
                     [keymaps]="keymaps$ | async"
                     [keymapOptions]="keymapOptions$ | async"
-                    [svgKeyboardCoverColors]="svgKeyboardCoverColors$ | async"
+                    [uhkThemeColors]="uhkThemeColors$ | async"
                     (validAction)="setKeyActionValidState($event)"
         ></keymap-tab>
         <none-tab #tab *ngSwitchCase="tabName.None" class="popover-content"

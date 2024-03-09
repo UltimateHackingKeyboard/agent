@@ -47,7 +47,7 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { StartKeypressCapturingAction, StopKeypressCapturingAction } from '../../../../store/actions/app';
 import { KeyActionDragAndDropService } from '../../../../services/key-action-drag-and-drop.service';
 import { getColorsOf } from '../../../../util/get-colors-of';
-import { uhkThemeColors } from '../../../../util/uhk-theme-colors';
+import { defaultUhkThemeColors } from '../../../../util/default-uhk-theme-colors';
 import { keyboardGreyRgbColor } from '../../../../util/rgb-color-contants';
 import { SvgKeyboardKey } from './svg-keyboard-key.model';
 
@@ -484,7 +484,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             : colors.backgroundColorAsHex;
         this.textColor = colors.fontColorAsHex;
 
-        const themeColors = uhkThemeColors();
+        const themeColors = defaultUhkThemeColors();
 
         this.strokeColor = isPerKeyBacklighting && colord(themeColors.backgroundColor).delta(this.keyAction) < 0.01
             ? 'lightgray'

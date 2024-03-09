@@ -40,7 +40,6 @@ export class AppService extends MainServiceBase {
 
             const response: AppStartInfo = {
                 commandLineArgs: {
-                    modules: this.options.modules || false,
                     'disable-agent-update-protection': this.options['disable-agent-update-protection'] || false,
                     log: this.options.log
                 },

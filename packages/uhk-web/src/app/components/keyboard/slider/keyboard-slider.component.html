@@ -10,13 +10,14 @@
               [keyboardLayout]="keyboardLayout"
               [description]="description"
               [showDescription]="true"
-              [svgKeyboardCoverColors]="aLayer.svgKeyboardCoverColors"
+              [uhkThemeColors]="aLayer.uhkThemeColors"
               [lastEditedKey]="lastEditedKey"
               oncontextmenu="return false;"
               (keyClick)="keyClick.emit($event)"
               (keyHover)="keyHover.emit($event)"
               (capture)="capture.emit($event)"
               (descriptionChanged)="descriptionChanged.emit($event)"
+              (navigateToModuleSettings)="navigateToModuleSettings.emit($event)"
 >
 </svg-keyboard>
 
@@ -33,12 +34,13 @@
               [keyboardLayout]="keyboardLayout"
               [description]="description"
               [showDescription]="true"
-              [svgKeyboardCoverColors]="bLayer.svgKeyboardCoverColors"
+              [uhkThemeColors]="bLayer.uhkThemeColors"
               [lastEditedKey]="lastEditedKey"
               oncontextmenu="return false;"
               (keyClick)="keyClick.emit($event)"
               (keyHover)="keyHover.emit($event)"
               (capture)="capture.emit($event)"
               (descriptionChanged)="descriptionChanged.emit($event)"
+              (navigateToModuleSettings)="navigateToModuleSettings.emit($event)"
 >
 </svg-keyboard>

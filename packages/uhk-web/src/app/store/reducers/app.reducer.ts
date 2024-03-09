@@ -222,7 +222,6 @@ export function reducer(
     }
 }
 
-export const showAddonMenu = (state: State) => state.commandLineArgs.modules;
 export const disableUpdateAgentProtection = (state: State) => disableAgentUpgradeProtection(state.commandLineArgs);
 export const getErrorPanelHeight = (state: State) => state.errorPanelHeight;
 export const getUndoableNotification = (state: State) => state.undoableNotification;

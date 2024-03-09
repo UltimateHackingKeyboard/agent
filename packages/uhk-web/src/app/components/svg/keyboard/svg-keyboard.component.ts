@@ -20,7 +20,7 @@ import {
     LeftSlotModules,
     Module,
     RightSlotModules,
-    SvgKeyboardCoverColors
+    UhkThemeColors,
 } from 'uhk-common';
 
 import { SvgModule } from '../module';
@@ -99,13 +99,14 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() showDescription = false;
-    @Input() svgKeyboardCoverColors: SvgKeyboardCoverColors;
+    @Input() uhkThemeColors: UhkThemeColors;
     @Input() lastEditedKey: LastEditedKey;
     @Input() embedded = false;
     @Output() keyClick = new EventEmitter<SvgKeyboardKeyClickEvent>();
     @Output() keyHover = new EventEmitter<SvgKeyHoverEvent>();
     @Output() capture = new EventEmitter<SvgKeyboardCaptureEvent>();
     @Output() descriptionChanged = new EventEmitter<string>();
+    @Output() navigateToModuleSettings = new EventEmitter<number>();
 
     modules: SvgModule[];
     viewBox: string;
@@ -185,6 +186,10 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
             over,
             keyId
         });
+    }
+
+    onNavigateToModuleSettings(moduleId: number): void {
+        this.navigateToModuleSettings.emit(moduleId);
     }
 
     getKeyActions(id: number): KeyAction[] {

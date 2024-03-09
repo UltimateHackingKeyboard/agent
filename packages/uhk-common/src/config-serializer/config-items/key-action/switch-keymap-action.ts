@@ -37,6 +37,7 @@ export class SwitchKeymapAction extends KeyAction {
                 break;
 
             case 6:
+            case 7:
                 this.fromJsonObjectV6(jsonObject, serialisationInfo);
                 break;
 
@@ -108,6 +109,7 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
                 break;
 
             case 6:
+            case 7:
                 this.fromBinaryV6(buffer, serialisationInfo);
                 break;
 

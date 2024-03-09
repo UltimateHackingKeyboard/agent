@@ -64,6 +64,7 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --bs-secondary-color: #{$secondary} !important; /* stylelint-disable-line declaration-no-important */
     --bs-list-group-bg: #{$input-bg};
 
+    --color-bg: #{$color-bg};
     --color-btn-danger-text: #{$white};
     --color-sidemenu-bg: #{$color-bg-light};
     --color-sidemenu-border: #333;
@@ -85,8 +86,9 @@ $input-focus-border-color: tint-color($component-active-bg, 25%) !default;
     --color-keyboard-shadow2: #444;
     --color-keyboard-border: #888;
     --color-keyboard-key-bg: #f7f7f7;
-    --color-keyboard-key-hover: #494949;
+    --color-keyboard-key-hover: #737373;
     --color-keyboard-key-active: #{$primary};
+    --color-module-puzzle-path-fill: white;
 
     --color-input-bg: #{$input-bg};
     --color-input-text: #{$input-color};

@@ -1,7 +1,440 @@
+<h1>
+    <fa-icon [icon]="faPuzzlePiece"></fa-icon>
+    <span>{{moduleName}}</span>
+</h1>
+
 <div class="row">
-    <h1 class="col-12 pane-title">
-        <fa-icon [icon]="faPuzzlePiece"></fa-icon>
-        <span class="macro__name pane-title__name">{{ name$ | async }}</span>
-    </h1>
+    <div class="col-12 col-lg-6">
+        <table class="table settings">
+            <tbody>
+            <tr>
+                <td colspan="2">
+                    <h3>Speed</h3>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Base speed
+                    <circle-tooltip tooltip="Increases module's sensitivity evenly in both high speeds and low speeds."
+                                    width="220"/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="10"
+                        [step]="0.1"
+                        [ngModel]="moduleConfiguration.baseSpeed"
+                        (ngModelChange)="onSetModuleConfigurationValue('baseSpeed', $event)"
+                    />
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Speed
+                    <circle-tooltip tooltip="Increases module's sensitivity unevenly - more in high speeds than in low speeds. Exact curve shape is governed by the Acceleration exponent."
+                                    width="220"/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="10"
+                        [step]="0.1"
+                        [ngModel]="moduleConfiguration.speed"
+                        (ngModelChange)="onSetModuleConfigurationValue('speed', $event)"
+                    />
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Acceleration
+                    <circle-tooltip [tooltip]="accelerationTooltip"
+                                    width="520"/>
+                    <ng-template #accelerationTooltip>
+                        Increasing this exponent increases Speed's contribution in high speeds and decreases Speed's contribution at low speeds.
+                    </ng-template>
+
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="2"
+                        [step]="0.05"
+                        [ngModel]="moduleConfiguration.xceleration"
+                        (ngModelChange)="onSetModuleConfigurationValue('xceleration', $event)"
+                    />
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <h3 class="margin-top">Divisor speed</h3>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Scroll speed divisor
+                    <circle-tooltip tooltip="Number of pixels needed to produce one scroll event."/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="1"
+                        [max]="100"
+                        [step]="1"
+                        [ngModel]="moduleConfiguration.scrollSpeedDivisor"
+                        (ngModelChange)="onSetModuleConfigurationValue('scrollSpeedDivisor', $event)"
+                    />
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Caret speed divisor
+                    <circle-tooltip tooltip="Number of pixels needed to produce one event in discrete navigation modes (caret, media, zoom)."
+                                    width="220"/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="1"
+                        [max]="100"
+                        [step]="1"
+                        [ngModel]="moduleConfiguration.caretSpeedDivisor"
+                        (ngModelChange)="onSetModuleConfigurationValue('caretSpeedDivisor', $event)"
+                    />
+                </td>
+            </tr>
+
+            <tr class="separator">
+                <td colspan="2">
+                    <h3 class="margin-top">Axis locking</h3>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Scroll axis lock
+                    <circle-tooltip tooltip="If checked, scrolling direction is locked in the dominant axis, preventing any events being produced in the other axis."
+                                    width="220"/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           class="form-check-input"
+                           [ngModel]="moduleConfiguration.scrollAxisLock"
+                           (ngModelChange)="onSetModuleConfigurationValue('scrollAxisLock', $event)"
+                    >
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Caret axis lock
+                    <circle-tooltip tooltip="If checked, discrete navigation mode (caret, media, zoom) direction is locked in the dominant axis, preventing any events being produced in the other axis."
+                                    width="220"/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           class="form-check-input"
+                           [ngModel]="moduleConfiguration.caretAxisLock"
+                           (ngModelChange)="onSetModuleConfigurationValue('caretAxisLock', $event)"
+                    >
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Axis lock first tick skew
+                    <circle-tooltip tooltip="Multiplies contribution towards first event in axis locked modes. Values smaller than one make the module require bigger push to start moving. Values bigger than one make modules produce the first event even with a very light push."
+                                    width="320"/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0.1"
+                        [max]="10"
+                        [step]="0.1"
+                        [ngModel]="moduleConfiguration.axisLockFirstTickSkew"
+                        (ngModelChange)="onSetModuleConfigurationValue('axisLockFirstTickSkew', $event)"
+                    />
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Axis lock skew
+                    <circle-tooltip tooltip="Controls how big the axes movement disproportion has to be in order to switch the locked axis. Lower value means stronger axis-locking behavior."
+                                    width="220"/>
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0.1"
+                        [max]="1"
+                        [step]="0.1"
+                        [ngModel]="moduleConfiguration.axisLockSkew"
+                        (ngModelChange)="onSetModuleConfigurationValue('axisLockSkew', $event)"
+                    />
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <h3 class="margin-top">Miscellaneous</h3>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>Invert vertical scrolling
+                    <circle-tooltip tooltip="Inverts Y scroll direction."/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           class="form-check-input"
+                           [ngModel]="moduleConfiguration.invertScrollDirectionY"
+                           (ngModelChange)="onSetModuleConfigurationValue('invertScrollDirectionY', $event)"
+                    >
+                </td>
+            </tr>
+            <ng-container *ngIf="moduleConfiguration.id === ModuleId.KeyClusterLeft">
+                <tr>
+                    <td colspan="2">
+                        <h3 class="margin-top">Key cluster settings</h3>
+                    </td>
+                </tr>
+                <tr class="separator">
+                    <td>Swap axes
+                        <circle-tooltip tooltip="Swaps axes, making the key cluster trackball scroll vertically when swiped sideways."/>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                               class="form-check-input"
+                               [ngModel]="moduleConfiguration.keyClusterSwapAxes"
+                               (ngModelChange)="onSetModuleConfigurationValue('keyClusterSwapAxes', $event)"
+                        >
+                    </td>
+                </tr>
+                <tr class="separator">
+                    <td>Invert horizontal scrolling
+                        <circle-tooltip tooltip="Inverts X scroll direction."/>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                               class="form-check-input"
+                               [ngModel]="moduleConfiguration.keyClusterInvertHorizontalScrolling"
+                               (ngModelChange)="onSetModuleConfigurationValue('keyClusterInvertHorizontalScrolling', $event)"
+                        >
+                    </td>
+                </tr>
+            </ng-container>
+
+            <ng-container *ngIf="moduleConfiguration.id === ModuleId.TouchpadRight">
+                <tr>
+                    <td colspan="2">
+                        <h3 class="margin-top">Touchpad settings</h3>
+                    </td>
+                </tr>
+                <tr class="separator">
+                    <td>
+                        Pinch-to-zoom mode
+                        <circle-tooltip tooltip="Navigation mode to be triggered by the touchpad pinch zoom gesture."/>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-1">
+                            <div class="select-container align-slider">
+                                <ng-select [items]="pitchToZoomOptions"
+                                           [ngModel]="moduleConfiguration.touchpadPinchToZoom"
+                                           (ngModelChange)="onSetModuleConfigurationValue('touchpadPinchToZoom', $event)"
+                                           [clearable]="false"
+                                           bindLabel="label"
+                                           bindValue="value"
+                                />
+                            </div>
+                            <ng-template #pinchToZoomTooltip>
+                                <ul class="no-indent text-start">
+                                    <li><strong>Zoom</strong>: This mode emits both the PC and Mac zoom modes. It serves as a general, OS-independent zoom mode, but one of the two zoom modes may interfere with some applications, in which case the desired PC or Mac zoom mode must be selected specifically.</li>
+                                    <li><strong>Zoom PC</strong>: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>Ctrl</kbd> + <kbd>-</kbd> - shortcuts are produced.</li>
+                                    <li><strong>Zoom Mac</strong>: <kbd>Cmd</kbd> + <kbd>+</kbd> / <kbd>Cmd</kbd> + <kbd>-</kbd> - shortcuts are produced.</li>
+                                </ul>
+                            </ng-template>
+                            <circle-tooltip [tooltip]="pinchToZoomTooltip" width="400" placement="bottom top"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="separator">
+                    <td>Pinch-to-zoom divisor
+                        <circle-tooltip tooltip="Number of zoom events (as reported by the touchpad board) needed to produce one zoom event (as reported by the UHK)."/>
+                    </td>
+                    <td>
+                        <slider-wrapper
+                            [min]="1"
+                            [max]="50"
+                            [step]="1"
+                            [ngModel]="moduleConfiguration.touchpadPinchZoomDivisor"
+                            (ngModelChange)="onSetModuleConfigurationValue('touchpadPinchZoomDivisor', $event)"
+                        />
+                    </td>
+                </tr>
+                <tr class="separator">
+                    <td>Hold continuation timeout
+                        <circle-tooltip tooltip="When non-zero, touchpad allows the finger to be lifted and repositioned during drag-and-drop actions, as long as the finger is lifted for less than this timeout milliseconds."
+                                        width="300"/>
+                    </td>
+                    <td>
+                        <slider-wrapper
+                            [min]="0"
+                            [max]="2000"
+                            [step]="1"
+                            [ngModel]="moduleConfiguration.touchpadHoldContinuationTimeout"
+                            (ngModelChange)="onSetModuleConfigurationValue('touchpadHoldContinuationTimeout', $event)"
+                        />
+                    </td>
+                </tr>
+            </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-12 col-lg-5 offset-lg-1 mt-3 mt-lg-0">
+        <table class="table settings">
+            <tbody>
+            <tr>
+                <td colspan="2">
+                    <div class="d-flex align-items-center">
+                     <h3>Navigation modes</h3>
+                     <circle-tooltip class="mt-2 ms-1" tooltip="Controls module behavior in different layers."/>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td>
+                    Layer
+                </td>
+                <td>
+                    Mode
+                    <ng-template #navigationModeTooltip>
+                        <ul class="no-indent text-start">
+                            <li><strong>Cursor</strong>: Module controls mouse movement.</li>
+                            <li><strong>Scroll</strong>: Module controls scrolling.</li>
+                            <li><strong>Media</strong>: Up/down directions control volume, horizontal directions control play/pause, and switch to the next track.</li>
+                            <li><strong>Caret</strong>: Module produces arrow key taps. This can be used to move comfortably in a text editor.</li>
+                            <li><strong>Zoom PC</strong>: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>Ctrl</kbd> + <kbd>-</kbd> - shortcuts are produced.</li>
+                            <li><strong>Zoom Mac</strong>: <kbd>Cmd</kbd> + <kbd>+</kbd> / <kbd>Cmd</kbd> + <kbd>-</kbd> - shortcuts are produced.</li>
+                            <li><strong>Zoom</strong>: This mode emits both the PC and Mac zoom modes. It serves as a general, OS-independent zoom mode, but one of the two zoom modes may interfere with some applications, in which case the desired PC or Mac zoom mode must be selected specifically.</li>
+                        </ul>
+                    </ng-template>
+                    <circle-tooltip [tooltip]="navigationModeTooltip" width="400" placement="bottom bottom-end"/>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Base
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeBaseLayer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeBaseLayer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Mod
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeModLayer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeModLayer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Mouse
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeMouseLayer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeMouseLayer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeFnLayer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeFnLayer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn2
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeFn2Layer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn2Layer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn3
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeFn3Layer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn3Layer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn4
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeFn4Layer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn4Layer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="fw-bold">
+                    Fn5
+                </td>
+                <td>
+                    <div class="select-container">
+                        <ng-select [items]="navigationModOptions"
+                                   [ngModel]="moduleConfiguration.navigationModeFn5Layer"
+                                   (ngModelChange)="onSetModuleConfigurationValue('navigationModeFn5Layer', $event)"
+                                   [clearable]="false"
+                                   bindLabel="label"
+                                   bindValue="value"
+                        ></ng-select>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-To be done...

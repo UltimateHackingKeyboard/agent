@@ -17,7 +17,7 @@
                 <button class="btn btn-default" ngbDropdownToggle></button>
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <ng-container *ngFor="let layerOption of layerOptions; trackBy:trackLayer">
-                        <layer-option *ngIf="layerOption.id !== 255"
+                        <layer-option *ngIf="layerOption.id !== LayerName.base"
                                       [layerOption]="layerOption"
                                       (remove)="onRemoveLayer($event)"
                                       (select)="onAddLayer($event)"

@@ -12,6 +12,7 @@ body {
     margin: 0;
     height: 100%;
     --macro-sub-item-max-width: 175px;
+    --tooltip-max-width: 200px;
 }
 
 .full-screen-component {
@@ -133,6 +134,9 @@ a.disabled {
     &-value {
         top: 2rem;
     }
+}
+[disabled] .noUi-connect {
+    opacity: 0.5;
 }
 
 .btn {

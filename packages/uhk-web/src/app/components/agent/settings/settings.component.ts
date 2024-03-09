@@ -27,7 +27,7 @@ import { OperatingSystem } from '../../../models/operating-system';
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss'],
     host: {
-        'class': 'container-fluid'
+        'class': 'container-fluid d-block'
     }
 })
 export class SettingsComponent {

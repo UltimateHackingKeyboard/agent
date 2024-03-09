@@ -13,6 +13,7 @@ import {
     LeftSlotModules,
     Macro,
     Module,
+    ModuleConfiguration,
     MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
@@ -58,6 +59,7 @@ export interface State {
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
     selectedMacroAction?: SelectedMacroAction;
+    selectedModuleConfigurationId?: number;
     lastEditedKey: LastEditedKey;
     layerOptions: Map<number, LayerOption>;
     halvesInfo: HalvesInfo;
@@ -789,6 +791,33 @@ export function reducer(
             return state;
         }
 
+        case UserConfig.ActionTypes.SelectModuleConfiguration: {
+            return {
+                ...state,
+                selectedModuleConfigurationId: (action as UserConfig.SelectModuleConfigurationAction).payload
+            };
+        }
+
+        case UserConfig.ActionTypes.SetModuleConfigurationValue: {
+            const payload = (action as UserConfig.SetModuleConfigurationValueAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+
+            userConfiguration.moduleConfigurations = userConfiguration.moduleConfigurations.map(moduleConfiguration => {
+                if(moduleConfiguration.id === payload.moduleId) {
+                    moduleConfiguration = new ModuleConfiguration(moduleConfiguration);
+                    moduleConfiguration[payload.propertyName] = payload.value;
+
+                    return moduleConfiguration;
+                }
+
+                return moduleConfiguration;
+            });
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
         case UserConfig.ActionTypes.SetUserConfigurationRgbValue: {
             const payload = (action as UserConfig.SetUserConfigurationRgbValueAction).payload;
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
@@ -918,6 +947,16 @@ export const getLayerOptions = (state: State): LayerOption[] => Array
     .sort((a, b) => a.order - b.order);
 export const getSelectedLayerOption = (state: State): LayerOption => state.selectedLayerOption;
 export const getSelectedMacroAction = (state: State): SelectedMacroAction => state.selectedMacroAction;
+export const getSelectedModuleConfiguration = (state: State): ModuleConfiguration => {
+    if(!state.selectedModuleConfigurationId) {
+        return new ModuleConfiguration();
+    }
+
+    const moduleConfiguration = state.userConfiguration.moduleConfigurations
+        .find(moduleConfiguration => moduleConfiguration.id === state.selectedModuleConfigurationId);
+
+    return moduleConfiguration || new ModuleConfiguration();
+};
 export const showColorPalette = (state: State): boolean => state.userConfiguration?.backlightingMode === BacklightingMode.PerKeyBacklighting;
 export const perKeyRgbPresent = (state: State): boolean => state.userConfiguration.perKeyRgbPresent;
 export const backlightingMode = (state: State): BacklightingMode => state.userConfiguration.backlightingMode;

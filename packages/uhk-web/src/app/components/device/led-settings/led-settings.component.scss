@@ -2,8 +2,7 @@
 @import '../../../../styles/variables';
 
 :host {
-    display: inline-block;
-    width: 100%;
+    display: block;
     --slider-value-width: 35px;
 
     label {
