@@ -184,7 +184,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             // Register highlighter
             monaco.languages.setMonarchTokensProvider(
                 languageId,
-                highlightProvider
+                highlightProvider()
             );
         }
 

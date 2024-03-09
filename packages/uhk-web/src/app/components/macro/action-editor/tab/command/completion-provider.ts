@@ -1,13 +1,11 @@
 import { retrieveUhkGrammar, buildUhkParser, ParserBuilder, Parser, Suggestion } from 'naive-autocompletion-parser';
-import {} from '@materia-ui/ngx-monaco-editor';
-import { LogService, } from 'uhk-common';
+import { LogService } from 'uhk-common';
 
 export class CustomCompletionProvider implements monaco.languages.CompletionItemProvider {
     public readonly triggerCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.\\@( \\$".split("");
 
     private parser: Parser | undefined;
     private identifierCharPattern = /[a-zA-Z]/;
-    private realignMatcher = /(.*[^ ]) *([^()]*) *$/;
 
     constructor( private logService: LogService ) {
         this.parser = undefined;
@@ -38,37 +36,6 @@ export class CustomCompletionProvider implements monaco.languages.CompletionItem
             // operators
             return [monaco.languages.CompletionItemKind.Module, "2"];
         }
-    }
-
-    generateIconPreview(
-        model: monaco.editor.ITextModel,
-        position: monaco.Position,
-    ): monaco.languages.CompletionItem[] {
-        const lineNumber = position.lineNumber;
-        const column = position.column;
-        const lineText = model.getValueInRange({
-            startLineNumber: lineNumber,
-            startColumn: 1,
-            endLineNumber: lineNumber,
-            endColumn: column
-        });
-
-        return Array
-            .from({ length: 28 }, (_, index) => index)
-            .map(index => {
-                let item: monaco.languages.CompletionItem = {
-                    insertText: index.toString(),
-                    kind: index as monaco.languages.CompletionItemKind,
-                    label: index.toString(),
-                    range: {
-                        startLineNumber: lineNumber,
-                        startColumn: column,
-                        endLineNumber: lineNumber,
-                        endColumn: column
-                    }
-                };
-                return item;
-            });
     }
 
     provideCompletionItems(
