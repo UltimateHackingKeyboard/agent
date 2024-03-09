@@ -78,5 +78,5 @@ export function highlightProvider(): monaco.languages.IMonarchLanguage {
                 [/\/\/.*$/, 'comment'],
             ],
         },
-    }
+    };
 }
