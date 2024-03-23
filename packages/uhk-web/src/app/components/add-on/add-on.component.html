@@ -14,8 +14,12 @@
             </tr>
             <tr class="separator">
                 <td>Base speed
-                    <circle-tooltip tooltip="Increases module's sensitivity evenly in both high speeds and low speeds."
-                                    width="220"/>
+                    <circle-tooltip [tooltip]="baseSpeedTooltip" width="400"/>
+                    <ng-template #baseSpeedTooltip>
+                        Increases module's sensitivity evenly in both high speeds and low speeds.
+                        <hr>
+                        <img src="./assets/images/acceleration-graph.svg" alt="acceleration graph" style="width: 100%">
+                    </ng-template>
                 </td>
                 <td>
                     <slider-wrapper
@@ -29,8 +33,12 @@
             </tr>
             <tr class="separator">
                 <td>Speed
-                    <circle-tooltip tooltip="Increases module's sensitivity unevenly - more in high speeds than in low speeds. Exact curve shape is governed by the Acceleration exponent."
-                                    width="220"/>
+                    <circle-tooltip [tooltip]="speedTooltip" width="400"/>
+                    <ng-template #speedTooltip>
+                        Increases module's sensitivity unevenly - more in high speeds than in low speeds. Exact curve shape is governed by the Acceleration exponent.
+                        <hr>
+                        <img src="./assets/images/acceleration-graph.svg" alt="acceleration graph" style="width: 100%">
+                    </ng-template>
                 </td>
                 <td>
                     <slider-wrapper
@@ -44,10 +52,11 @@
             </tr>
             <tr class="separator">
                 <td>Acceleration
-                    <circle-tooltip [tooltip]="accelerationTooltip"
-                                    width="520"/>
+                    <circle-tooltip [tooltip]="accelerationTooltip" width="400"/>
                     <ng-template #accelerationTooltip>
-                        Increasing this exponent increases Speed's contribution in high speeds and decreases Speed's contribution at low speeds.
+                        Increasing this exponent increases Speed's contribution in high speeds and decreases Speed's contribution in low speeds.
+                        <hr>
+                        <img src="./assets/images/acceleration-graph.svg" alt="acceleration graph" style="width: 100%">
                     </ng-template>
 
                 </td>
