@@ -27,7 +27,7 @@
             [svgKey]="key"
             [attr.transform]="calcTransform(key)"
             [backlightingMode]="backlightingMode"
-            [class.active]="selected && i === selectedKey.keyId"
+            [isActive]="selected && i === selectedKey.keyId"
             tabindex="-1"
             [keyAction]="keyActions && keyActions[i]"
             [capturingEnabled]="capturingEnabled"

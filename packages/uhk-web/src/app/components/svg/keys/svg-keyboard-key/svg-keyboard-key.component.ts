@@ -92,6 +92,7 @@ enum LabelTypes {
 })
 export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     @Input() backlightingMode: BacklightingMode;
+    @Input() isActive = false;
     @Input() keyAction: KeyAction;
     @Input() svgKey: SvgKeyboardKey;
     @Input() capturingEnabled: boolean;
@@ -295,6 +296,9 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['keyAction']) {
             this.setLabels();
+        }
+
+        if (changes.keyAction || changes.isActive) {
             this.setColors();
         }
 
@@ -479,15 +483,31 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
             : keyboardGreyRgbColor();
 
         const colors = getColorsOf(baseRgb);
-        this.fillColor = this.isMouseHover && !this.mouseMoveService.isColoring
-            ? colors.hoverColorAsHex
-            : colors.backgroundColorAsHex;
+        this.fillColor = colors.backgroundColorAsHex;
         this.textColor = colors.fontColorAsHex;
-
+        this.strokeColor = '';
         const themeColors = defaultUhkThemeColors();
 
-        this.strokeColor = isPerKeyBacklighting && colord(themeColors.backgroundColor).delta(this.keyAction) < 0.01
-            ? 'lightgray'
-            : '';
+        if (isPerKeyBacklighting) {
+            this.fillColor = colors.backgroundColorAsHex;
+            this.strokeColor = colord(themeColors.backgroundColor).delta(this.keyAction) < 0.01
+                ? 'lightgray'
+                : '';
+
+            if (this.isActive) {
+                this.fillColor = colors.backgroundColorAsHex;
+                this.strokeColor = this.strokeColor
+                    ? 'var(--color-keyboard-key-active)'
+                    : colors.invertColorAsHex;
+            } else if (this.isMouseHover && !this.mouseMoveService.isColoring) {
+                this.fillColor = colors.hoverColorAsHex;
+            }
+        } else {
+            if (this.isActive) {
+                this.fillColor = 'var(--color-keyboard-key-active)';
+            } else if (this.isMouseHover) {
+                this.fillColor = 'var(--color-keyboard-key-hover)';
+            }
+        }
     }
 }
