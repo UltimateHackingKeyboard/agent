@@ -33,7 +33,7 @@
         icon {
             margin: 0 5px;
 
-            &[name="trash"]{
+            &[name='trash'] {
                 padding-top: 0.25rem;
             }
         }
@@ -87,7 +87,7 @@
     }
 
     &--movable {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         padding-right: 0.5rem;
 
         &:hover {

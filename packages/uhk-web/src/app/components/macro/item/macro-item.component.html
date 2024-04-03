@@ -1,7 +1,7 @@
 <div *ngIf="this.macroAction" class="list-group-item action--item" [class.is-editing]="editing">
     <ng-container *ngIf="!isCommand">
         <fa-icon *ngIf="movable"
-                 [icon]="faGripVertical"
+                 [icon]="faGripLinesVertical"
                  class="action--movable"
                  aria-hidden="true"></fa-icon>
         <div class="action--item--wrap" [class.pointer]="editable" (click)="editAction()">
@@ -18,7 +18,7 @@
     <div *ngIf="isCommand && !editing" class="macro-command-item">
         <div class="macro-command-item-header">
             <fa-icon *ngIf="movable"
-                     [icon]="faGripVertical"
+                     [icon]="faGripLinesVertical"
                      class="action--movable"
                      aria-hidden="true"></fa-icon>
             <fa-icon [icon]="faCode"
