@@ -13,7 +13,6 @@ export interface Colors {
     backgroundColorAsHex: string;
     fontColorAsHex: string;
     hoverColorAsHex: string;
-    invertColorAsHex: string;
     // svg colors are hex colors but # converted to %23
     svgFillColor: string;
     // svg colors are hex colors but # converted to %23
@@ -29,7 +28,6 @@ export function getColorsOf(color: RgbColorInterface): Colors {
             backgroundColorAsHex: '',
             fontColorAsHex: '',
             hoverColorAsHex: '',
-            invertColorAsHex: '',
             svgFillColor: '',
             svgStrokeColor:''
         };
@@ -56,7 +54,6 @@ export function getColorsOf(color: RgbColorInterface): Colors {
         backgroundColorAsHex: colored.toHex(),
         fontColorAsHex: colord(fontColor).toHex(),
         hoverColorAsHex: hoverColor.toHex(),
-        invertColorAsHex: colored.invert().toHex(),
         svgFillColor: colored.toHex().replace('#', '%23'),
         svgStrokeColor: colord(fontColor).toHex().replace('#', '%23')
     };

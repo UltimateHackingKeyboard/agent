@@ -164,6 +164,11 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
         return this.strokeColor;
     }
 
+    @HostBinding('attr.stroke-width')
+    get strokeWidth(): SafeStyle {
+        return this.isActive ? '2' : '1';
+    }
+
     @HostBinding('style')
     get cursorStyle(): SafeStyle {
         if (this.mouseMoveService.isColoring) {
@@ -496,9 +501,9 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
             if (this.isActive) {
                 this.fillColor = colors.backgroundColorAsHex;
-                this.strokeColor = this.strokeColor
-                    ? 'var(--color-keyboard-key-active)'
-                    : colors.invertColorAsHex;
+                this.strokeColor = colord(themeColors.selectedKeyColor).delta(this.keyAction) < 0.01
+                    ? themeColors.selectedKeyColor2
+                    : themeColors.selectedKeyColor;
             } else if (this.isMouseHover && !this.mouseMoveService.isColoring) {
                 this.fillColor = colors.hoverColorAsHex;
             }
