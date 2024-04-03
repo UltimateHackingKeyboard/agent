@@ -166,7 +166,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
     @HostBinding('attr.stroke-width')
     get strokeWidth(): SafeStyle {
-        return this.isActive ? '2' : '1';
+        return this.isActive ? '3' : '1';
     }
 
     @HostBinding('style')
