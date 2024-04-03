@@ -72,6 +72,10 @@
                 display: flex;
                 gap: 0.25em;
                 align-items: center;
+
+                .action--movable {
+                    margin-top: 0;
+                }
             }
         }
 
