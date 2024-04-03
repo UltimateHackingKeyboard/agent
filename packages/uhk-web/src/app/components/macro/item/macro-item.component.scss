@@ -32,6 +32,10 @@
 
         icon {
             margin: 0 5px;
+
+            &[name='trash'] {
+                padding-top: 0.25rem;
+            }
         }
 
         > div {
@@ -50,6 +54,7 @@
 
         &--wrap {
             justify-content: space-between;
+            padding-top: 0.25rem;
 
             &.pointer {
                 &:hover {
@@ -66,6 +71,11 @@
             .macro-command-item-header {
                 display: flex;
                 gap: 0.25em;
+                align-items: center;
+
+                .action--movable {
+                    margin-top: 0;
+                }
             }
         }
 
@@ -81,6 +91,9 @@
     }
 
     &--movable {
+        font-size: 1.25rem;
+        margin-top: 0.25rem;
+
         &:hover {
             cursor: move;
         }
@@ -89,7 +102,7 @@
 
 .list-group-item {
     margin-bottom: 0;
-    padding: 0.75rem 1.25rem;
+    padding: 0.25rem 1.25rem 0.75rem 0.5rem;
 }
 
 .macro-action-editor__container {
