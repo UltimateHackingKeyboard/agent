@@ -501,9 +501,12 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
             if (this.isActive) {
                 this.fillColor = colors.backgroundColorAsHex;
-                this.strokeColor = colord(themeColors.selectedKeyColor).delta(this.keyAction) < 0.01
-                    ? themeColors.selectedKeyColor2
-                    : themeColors.selectedKeyColor;
+                const delta1 = colord(themeColors.selectedKeyColor).delta(this.keyAction);
+                const delta2 = colord(themeColors.selectedKeyColor2).delta(this.keyAction);
+
+                this.strokeColor = delta1 >= delta2
+                    ? themeColors.selectedKeyColor
+                    : themeColors.selectedKeyColor2;
             } else if (this.isMouseHover && !this.mouseMoveService.isColoring) {
                 this.fillColor = colors.hoverColorAsHex;
             }
