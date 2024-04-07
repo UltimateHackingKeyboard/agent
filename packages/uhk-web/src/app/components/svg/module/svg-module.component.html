@@ -17,7 +17,7 @@
                 [attr.stroke]="uhkThemeColors.backgroundColor"
                 [attr.stroke-width]="moduleNavCircle['stroke-width']"
                 />
-    <svg:path [attr.d]="moduleNavPath.d" />
+    <svg:path [attr.d]="moduleNavPath.d" [attr.fill]="puzzleFillColor"/>
 </svg:g>
 
 <ng-container *ngFor="let key of keyboardKeys; let i = index; trackBy:keyboardKeysTrackBy">

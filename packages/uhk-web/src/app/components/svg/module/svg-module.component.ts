@@ -2,9 +2,11 @@ import {
     Component,
     EventEmitter,
     Input,
+    OnChanges,
     OnDestroy,
     Output,
-    ChangeDetectionStrategy
+    ChangeDetectionStrategy,
+    SimpleChanges
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BacklightingMode, KeyAction, Macro, UhkThemeColors } from 'uhk-common';
@@ -25,7 +27,7 @@ import { AppState, getMacroMap } from '../../../store';
     styleUrls: ['./svg-module.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SvgModuleComponent implements OnDestroy {
+export class SvgModuleComponent implements OnChanges, OnDestroy {
     @Input() backlightingMode: BacklightingMode;
     @Input() coverages: any[];
     @Input() circles: any[];
@@ -47,10 +49,20 @@ export class SvgModuleComponent implements OnDestroy {
     private macroMap: Map<number, Macro>;
     private macroMapSubscription: Subscription;
 
+    puzzleFillColor = 'var(--color-module-puzzle-path-fill)';
+
     constructor(private store: Store<AppState>) {
         this.keyboardKeys = [];
         this.macroMapSubscription = store.select(getMacroMap)
             .subscribe(map => this.macroMap = map);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.backlightingMode) {
+            this.puzzleFillColor = this.backlightingMode === BacklightingMode.FunctionalBacklighting
+                ? 'var(--color-module-puzzle-path-fill)'
+                : 'var(--color-module-puzzle-perkey-path-fill)';
+        }
     }
 
     ngOnDestroy(): void {

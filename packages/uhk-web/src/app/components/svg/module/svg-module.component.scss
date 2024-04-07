@@ -6,10 +6,6 @@
         transition: 0.2s;
         cursor: pointer;
 
-        path {
-            fill: var(--color-module-puzzle-path-fill);
-        }
-
         &:hover {
             circle {
                 fill: var(--color-keyboard-key-hover);
