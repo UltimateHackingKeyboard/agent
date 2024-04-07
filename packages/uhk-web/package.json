@@ -66,7 +66,7 @@
     "karma-coverage": "2.1.0",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
-    "monaco-editor": "0.44.0",
+    "monaco-editor": "0.47.0",
     "ng2-dragula": "5.0.1",
     "ng2-nouislider": "2.0.0",
     "ngrx-store-freeze": "0.2.4",
