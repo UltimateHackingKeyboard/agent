@@ -9,7 +9,16 @@
             <tbody>
             <tr>
                 <td colspan="2">
-                    <h3>Secondary roles</h3>
+                    <div class="d-flex align-items-center">
+                        <h3>Secondary roles</h3>
+                        <circle-tooltip class="mt-2 ms-1"
+                                        [tooltip]="secondaryRolesTooltip"
+                                        width="380"/>
+                        <ng-template #secondaryRolesTooltip>
+                            <p>Secondary role keys, also dual-role keys, are keys that act depending on context.</p>
+                            For instance, a key may act as an escape key when tapped alone, but act as a mouse layer switcher when used with another key (which is then executed in the mouse layer).
+                        </ng-template>
+                    </div>
                 </td>
             </tr>
             <tr class="separator">
