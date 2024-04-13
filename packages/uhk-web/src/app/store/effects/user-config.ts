@@ -281,8 +281,16 @@ export class UserConfigEffects {
             ofType(ActionTypes.NavigateToModuleSettings),
             tap((action: NavigateToModuleSettings) => {
                 for(const module of UHK_MODULES) {
-                    if (module.id === action.payload) {
-                        this.router.navigate([module.configPath]);
+                    if (module.id === action.payload.moduleId) {
+                        this.router.navigate(
+                            [module.configPath],
+                            {
+                                queryParams: {
+                                    backText: action.payload.backText,
+                                    backUrl: action.payload.backUrl,
+                                },
+                            },
+                        );
                         return;
                     }
                 }

@@ -10,6 +10,7 @@ import {
     LoadUserConfigurationFromFilePayload,
     SetModuleConfigurationValuePayload
 } from '../../models';
+import { NavigateToModuleSettingsPayload } from '../../models/navigate-to-module-settings-payload';
 
 export enum ActionTypes {
     AddColorToBacklightingColorPalette = '[user-config] Add color to the backlighting color palette',
@@ -79,7 +80,7 @@ export class ModifyColorOfBacklightingColorPaletteAction implements Action {
 export class NavigateToModuleSettings implements Action {
     type = ActionTypes.NavigateToModuleSettings;
 
-    constructor(public payload: number) {
+    constructor(public payload: NavigateToModuleSettingsPayload) {
     }
 }
 

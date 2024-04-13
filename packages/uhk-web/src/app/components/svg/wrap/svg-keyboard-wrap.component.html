@@ -29,7 +29,7 @@
                      (keyHover)="onKeyHover($event)"
                      (capture)="onCapture($event)"
                      (descriptionChanged)="onDescriptionChanged($event)"
-                     (navigateToModuleSettings)="onNavigateToModuleSettings($event)"
+                     (navigateToModuleSettings)="navigateToModuleSettings.emit($event)"
     ></keyboard-slider>
 
     <popover tabindex="0"
