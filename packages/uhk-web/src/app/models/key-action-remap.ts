@@ -3,5 +3,6 @@ import { KeyAction } from 'uhk-common';
 export interface KeyActionRemap {
     remapOnAllKeymap: boolean;
     remapOnAllLayer: boolean;
-    action: KeyAction;
+    action?: KeyAction;
+    assignNewMacro?: boolean;
 }

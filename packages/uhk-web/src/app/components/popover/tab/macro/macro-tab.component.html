@@ -22,6 +22,16 @@
                 </span>
             </ng-template>
         </ngx-select>
+        <a class="btn btn-link" [routerLink]="['/macro', macroOptions[selectedMacroIndex]?.id]"
+           ngbTooltip="Jump to macro">
+            <fa-icon [icon]="faUpRightFromSquare"
+                 aria-hidden="true"></fa-icon>
+        </a>
+        <button class="btn btn-default" (click)="assignNewMacro.emit()">
+        <fa-icon [icon]="faPlus"
+                 ngbTooltip="Create new macro for this key"
+                 aria-hidden="true"></fa-icon>
+        </button>
     </div>
     <div class="macro-action-container">
         <div class="list-group">

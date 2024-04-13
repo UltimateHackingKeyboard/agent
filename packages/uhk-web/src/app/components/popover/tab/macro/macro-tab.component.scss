@@ -8,12 +8,13 @@
 
     .macro-selector {
         display: flex;
+        gap: 0.5rem;
+        align-items: center;
         margin-top: 2px;
 
         b {
             display: flex;
             align-items: center;
-            margin-right: 7px;
         }
 
         ngx-select {

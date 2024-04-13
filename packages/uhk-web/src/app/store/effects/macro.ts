@@ -46,6 +46,19 @@ export class MacroEffects {
     { dispatch: false }
     );
 
+    assignNewMacro$ = createEffect(() => this.actions$
+        .pipe(
+            ofType<Keymaps.SaveKeyAction>(Keymaps.ActionTypes.SaveKey),
+            withLatestFrom(this.store.select(getSelectedMacro)),
+            tap(([action, newMacro]) => {
+                if (action.payload.keyAction.assignNewMacro) {
+                    this.navigateToNewMacro(newMacro);
+                }
+            }),
+        ),
+    { dispatch: false }
+    );
+
     private navigateToNewMacro(newMacro: Macro): Promise<boolean> {
         if (newMacro) {
             return this.router.navigate(['/macro', newMacro.id]);

@@ -173,6 +173,14 @@ export class PopoverComponent implements OnChanges {
         }
     }
 
+    onAssignNewMacro(): void {
+        this.remap.emit({
+            remapOnAllKeymap: this.remapInfo.remapOnAllKeymap,
+            remapOnAllLayer: this.remapInfo.remapOnAllLayer,
+            assignNewMacro: true
+        });
+    }
+
     onCancelClick(): void {
         this.cancel.emit(undefined);
     }
