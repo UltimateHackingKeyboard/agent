@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { copyRgbColor, KeyAction, Macro, PlayMacroAction } from 'uhk-common';
@@ -18,6 +19,10 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     @Input() defaultKeyAction: KeyAction;
     @Input() macroPlaybackSupported: boolean;
 
+    @Output() assignNewMacro = new EventEmitter<void>();
+
+    faPlus = faPlus;
+    faUpRightFromSquare = faUpRightFromSquare;
     macros: Macro[];
     macroOptions: Array<SelectOptionData>;
     selectedMacroIndex: number;

@@ -43,6 +43,7 @@
         <macro-tab #tab *ngSwitchCase="tabName.Macro" class="popover-content"
                    [defaultKeyAction]="defaultKeyAction"
                    [macroPlaybackSupported]="macroPlaybackSupported$ | async"
+                   (assignNewMacro)="onAssignNewMacro()"
                    (validAction)="setKeyActionValidState($event)"
         ></macro-tab>
         <keymap-tab #tab *ngSwitchCase="tabName.Keymap" class="popover-content"

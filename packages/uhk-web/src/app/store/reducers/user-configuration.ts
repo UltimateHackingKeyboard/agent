@@ -562,13 +562,33 @@ export function reducer(
         }
 
         case KeymapActions.ActionTypes.SaveKey: {
-            const payload = (action as KeymapActions.SaveKeyAction).payload;
+            let processedAction = action as KeymapActions.SaveKeyAction;
+            const payload = processedAction.payload;
             const keyIndex: number = payload.key;
             const moduleIndex: number = payload.module;
 
+            let newState = state;
+
+            if (payload.keyAction.assignNewMacro) {
+                newState = addNewMacroToState(state);
+                const newAction = new PlayMacroAction();
+                newAction.macroId = newState.selectedMacroId;
+
+                processedAction = {
+                    ...processedAction,
+                    payload: {
+                        ...payload,
+                        keyAction: {
+                            ...payload.keyAction,
+                            action: newAction
+                        }
+                    }
+                };
+            }
+
             return {
-                ...state,
-                userConfiguration: saveKeyAction(state.userConfiguration, action as KeymapActions.SaveKeyAction),
+                ...newState,
+                userConfiguration: saveKeyAction(newState.userConfiguration, processedAction),
                 lastEditedKey: {
                     key: 'key-' + (keyIndex + 1),
                     moduleId: moduleIndex
@@ -593,22 +613,7 @@ export function reducer(
         }
 
         case MacroActions.ActionTypes.Add: {
-            const newMacro = new Macro();
-            newMacro.id = generateMacroId(state.userConfiguration.macros);
-            newMacro.name = generateName(state.userConfiguration.macros, 'New macro');
-            newMacro.isLooped = false;
-            newMacro.isPrivate = true;
-            newMacro.macroActions = [];
-
-            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
-            userConfiguration.macros = insertItemInNameOrder(state.userConfiguration.macros, newMacro);
-
-            return {
-                ...state,
-                userConfiguration,
-                selectedMacroId: newMacro.id,
-                isSelectedMacroNew: true
-            };
+            return addNewMacroToState(state);
         }
 
         case MacroActions.ActionTypes.Duplicate: {
@@ -1229,4 +1234,23 @@ function calculateLayerOptions(state: State): Map<number, LayerOption> {
     const selectedKeymap = getSelectedKeymap(state);
 
     return calculateLayerOptionsOfKeymap(selectedKeymap);
+}
+
+function addNewMacroToState(state: State): State {
+    const newMacro = new Macro();
+    newMacro.id = generateMacroId(state.userConfiguration.macros);
+    newMacro.name = generateName(state.userConfiguration.macros, 'New macro');
+    newMacro.isLooped = false;
+    newMacro.isPrivate = true;
+    newMacro.macroActions = [];
+
+    const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+    userConfiguration.macros = insertItemInNameOrder(state.userConfiguration.macros, newMacro);
+
+    return {
+        ...state,
+        userConfiguration,
+        selectedMacroId: newMacro.id,
+        isSelectedMacroNew: true
+    };
 }
