@@ -15,6 +15,7 @@ import {
 } from '../../../store';
 import { SelectLayerAction } from '../../../store/actions/default-user-configuration.actions';
 import { AddKeymapAction } from '../../../store/actions/keymap';
+import { NavigateToModuleSettings } from '../../../store/actions/user-config';
 
 @Component({
     selector: 'keymap-add',
@@ -61,5 +62,13 @@ export class KeymapAddComponent implements OnDestroy, OnInit {
 
     selectLayer(option: LayerOption): void {
         this.store.dispatch(new SelectLayerAction(option));
+    }
+
+    navigateToModuleSettings(moduleId: number): void {
+        this.store.dispatch(new NavigateToModuleSettings({
+            backUrl: `/add-keymap/${this.keymap.abbreviation}`,
+            backText: `new "${this.keymap.name}" keymap`,
+            moduleId
+        }));
     }
 }
