@@ -4,20 +4,20 @@
 <ng-template [ngIf]="keymapOptions.length > 0">
     <div>
         <b>Switch to keymap:</b>
-        <ngx-select [items]="keymapOptions"
-                    [ngModel]="selectedKeymap?.abbreviation || -1"
-                    [autoActiveOnMouseEnter]="false"
-                    size="small"
-                    optionValueField="id"
-                    optionTextField="text"
-                    (select)="onChange($event)">
-
-            <ng-template ngx-select-option let-option>
+        <ng-select
+            [items]="keymapOptions"
+            [ngModel]="selectedKeymap?.abbreviation || -1"
+            (ngModelChange)="onChange($event)"
+            [clearable]="false"
+            bindLabel="text"
+            bindValue="id"
+        >
+            <ng-template ng-option-tmp let-option="item">
                 <div [ngClass]="{'text-body-secondary': option.disabled}">
-                    <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
+                    <span [ngClass]="{'indent-dropdown-item': option.id !== '-1'}">
                             <span>{{ option.text }}</span>
                             <span class="scancode--searchterm">
-                                {{ option.data.additional?.explanation}}
+                                {{ option.additional?.explanation}}
                             </span>
                     </span>
                     <small *ngIf="option.disabled">
@@ -25,7 +25,7 @@
                     </small>
                 </div>
             </ng-template>
-        </ngx-select>
+        </ng-select>
     </div>
     <div class="keymap-container">
         <div class="empty" *ngIf="!selectedKeymap?.abbreviation">

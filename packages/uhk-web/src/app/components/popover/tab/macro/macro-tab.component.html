@@ -5,23 +5,23 @@
     <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can bind macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
     <div class="macro-selector">
         <b> Play macro: </b>
-        <ngx-select [items]="macroOptions"
-                    [ngModel]="macroOptions[selectedMacroIndex]?.id"
-                    [autoActiveOnMouseEnter]="false"
-                    size="small"
-                    optionValueField="id"
-                    optionTextField="text"
-                    (select)="onChange($event)">
-
-            <ng-template ngx-select-option let-option>
-                <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
+        <ng-select
+            [items]="macroOptions"
+            [ngModel]="macroOptions[selectedMacroIndex]?.id"
+            (ngModelChange)="onChange($event)"
+            [clearable]="false"
+            bindLabel="text"
+            bindValue="id"
+        >
+            <ng-template ng-option-tmp let-option="item">
+                <span [ngClass]="{'indent-dropdown-item':option.id !== '-1'}">
                     <span>{{ option.text }}</span>
                     <span class="scancode--searchterm">
-                        {{ option.data.additional?.explanation}}
+                        {{ option.additional?.explanation}}
                     </span>
                 </span>
             </ng-template>
-        </ngx-select>
+        </ng-select>
         <a class="btn btn-link" [routerLink]="['/macro', macroOptions[selectedMacroIndex]?.id]"
            ngbTooltip="Jump to macro">
             <fa-icon [icon]="faUpRightFromSquare"

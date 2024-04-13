@@ -20,7 +20,7 @@ import { KeyModifierModel } from '../../../../models/key-modifier-model';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../../util';
 import { RemapInfo } from '../../../../models/remap-info';
 
-interface FlatScancode {
+interface FlatOptions {
     id: string;
     text: string;
     group?: string;
@@ -51,10 +51,10 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     leftModifiers: KeyModifierModel[];
     rightModifiers: KeyModifierModel[];
 
-    scanCodeGroups: Array<FlatScancode>;
-    secondaryRoleGroups: Array<SelectOptionData> = [];
+    scanCodeGroups: Array<FlatOptions>;
+    secondaryRoleGroups: Array<FlatOptions> = [];
 
-    selectedScancodeOption: FlatScancode;
+    selectedScancodeOption: FlatOptions;
     selectedSecondaryRoleIndex: number;
     warningVisible: boolean;
     faInfoCircle = faInfoCircle;
@@ -173,11 +173,8 @@ export class KeypressTabComponent extends Tab implements OnChanges {
     }
 
     onSecondaryRoleChange(id: string) {
-        // setTimeout is a workaround of the ngx-select does not close the dropdown if you don't move the mouse
-        setTimeout(()=> {
-            this.selectedSecondaryRoleIndex = +id;
-            this.keyActionChanged();
-        },1);
+        this.selectedSecondaryRoleIndex = +id;
+        this.keyActionChanged();
     }
 
     onScancodeChange(id: string) {
@@ -186,7 +183,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.keyActionChanged();
     }
 
-    addTagFn (name: string): FlatScancode | boolean {
+    addTagFn (name: string): FlatOptions | boolean {
         const mediaSearchResult = isMediaSearch(name);
         if (mediaSearchResult.isMatch) {
             const option = {
@@ -265,7 +262,7 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         return '';
     }
 
-    searchFn(term: string, item: FlatScancode) {
+    searchFn(term: string, item: FlatOptions) {
         term = term.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
         if (new RegExp(term, 'i').test(item.text)) {
             return true;
@@ -310,12 +307,12 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         this.cdRef.markForCheck();
     }
 
-    private findScancodeOptionById(id: string): FlatScancode {
+    private findScancodeOptionById(id: string): FlatOptions {
         return this.scanCodeGroups.find(scancode => scancode.id === id) ||
-            this.addTagFn(id) as FlatScancode;
+            this.addTagFn(id) as FlatOptions;
     }
 
-    private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): FlatScancode {
+    private findScancodeOptionByScancode(scancode: number, type: KeystrokeType): FlatOptions {
         const typeToFind: string =
             (type === KeystrokeType.shortMedia || type === KeystrokeType.longMedia) ? 'media' : KeystrokeType[type];
         const option = this.scanCodeGroups.find(x => x.additional.scancode === scancode && x.additional.type === typeToFind);
@@ -326,20 +323,20 @@ export class KeypressTabComponent extends Tab implements OnChanges {
 
         switch (typeToFind) {
             case 'media':
-                return this.addTagFn(`M${scancode}`) as FlatScancode;
+                return this.addTagFn(`M${scancode}`) as FlatOptions;
 
             case 'basic':
-                return this.addTagFn(`B${scancode}`) as FlatScancode;
+                return this.addTagFn(`B${scancode}`) as FlatOptions;
 
             case 'system':
-                return this.addTagFn(`S${scancode}`) as FlatScancode;
+                return this.addTagFn(`S${scancode}`) as FlatOptions;
 
             default:
                 break;
         }
     }
 
-    private toScancodeTypePair(option: FlatScancode): [number, string] {
+    private toScancodeTypePair(option: FlatOptions): [number, string] {
         if (!option) {
             return [0, 'basic'];
         }
@@ -375,17 +372,18 @@ export class KeypressTabComponent extends Tab implements OnChanges {
         ];
 
         if (this.secondaryRoleOptions.length > 0) {
-            this.secondaryRoleGroups.push({
-                text: 'Layer switcher',
-                children: [
-                    ...this.secondaryRoleOptions
-                ]
-            });
+            this.secondaryRoleGroups.push(
+                ...this.secondaryRoleOptions.map(option => ({
+                    id: option.id,
+                    text: option.text,
+                    additional: option.additional,
+                    group: 'Layer switcher',
+                }))
+            );
         }
 
-        this.secondaryRoleGroups.push({
-            text: 'Modifier',
-            children: [
+        this.secondaryRoleGroups.push(
+            ...[
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftShift),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftCtrl),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.leftSuper),
@@ -394,8 +392,13 @@ export class KeypressTabComponent extends Tab implements OnChanges {
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightCtrl),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightSuper),
                 this.getSecondaryRoleDropdownItem(SecondaryRoleAction.rightAlt)
-            ]
-        });
+            ].map(option => ({
+                id: option.id,
+                text: option.text,
+                additional: option.additional,
+                group: 'Modifier',
+            }))
+        );
     }
 
     private getSecondaryRoleDropdownItem(action: SecondaryRoleAction): SelectOptionData {
