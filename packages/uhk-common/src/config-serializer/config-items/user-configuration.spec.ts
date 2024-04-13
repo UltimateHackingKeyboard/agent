@@ -9,7 +9,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', () => {
         jsonTester({
             userConfigMajorVersion: 7,
-            userConfigMinorVersion: 0,
+            userConfigMinorVersion: 1,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
@@ -69,6 +69,7 @@ describe('user-configuration', () => {
                     caretAxisLock: true,
                     axisLockFirstTickSkew: 0.5,
                     axisLockSkew: 0.5,
+                    invertScrollDirectionX: false,
                     invertScrollDirectionY: false,
                     keyClusterSwapAxes: false,
                     keyClusterInvertHorizontalScrolling: false
@@ -92,6 +93,7 @@ describe('user-configuration', () => {
                     caretAxisLock: true,
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
+                    invertScrollDirectionX: false,
                     invertScrollDirectionY: false,
                     touchpadPinchZoomDivisor: 4,
                     touchpadHoldContinuationTimeout: 0,
@@ -116,6 +118,7 @@ describe('user-configuration', () => {
                     caretAxisLock: true,
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
+                    invertScrollDirectionX: false,
                     invertScrollDirectionY: false
                 },
                 {
@@ -137,6 +140,7 @@ describe('user-configuration', () => {
                     caretAxisLock: true,
                     axisLockFirstTickSkew: 2,
                     axisLockSkew: 0.5,
+                    invertScrollDirectionX: false,
                     invertScrollDirectionY: false
                 }
             ],

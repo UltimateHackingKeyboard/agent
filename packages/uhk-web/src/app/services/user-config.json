@@ -1,6 +1,6 @@
 {
   "userConfigMajorVersion": 7,
-  "userConfigMinorVersion": 0,
+  "userConfigMinorVersion": 1,
   "userConfigPatchVersion": 0,
   "deviceName": "My UHK",
   "doubleTapSwitchLayerTimeout": 250,
@@ -92,6 +92,7 @@
       "caretAxisLock": true,
       "axisLockFirstTickSkew": 0.5,
       "axisLockSkew": 0.5,
+      "invertScrollDirectionX": false,
       "invertScrollDirectionY": false,
       "keyClusterSwapAxes": false,
       "keyClusterInvertHorizontalScrolling": false
@@ -115,6 +116,7 @@
       "caretAxisLock": true,
       "axisLockFirstTickSkew": 2,
       "axisLockSkew": 0.5,
+      "invertScrollDirectionX": false,
       "invertScrollDirectionY": false,
       "touchpadPinchZoomDivisor": 4,
       "touchpadHoldContinuationTimeout": 0,
@@ -139,6 +141,7 @@
       "caretAxisLock": true,
       "axisLockFirstTickSkew": 2,
       "axisLockSkew": 0.5,
+      "invertScrollDirectionX": false,
       "invertScrollDirectionY": false
     },
     {
@@ -160,6 +163,7 @@
       "caretAxisLock": true,
       "axisLockFirstTickSkew": 2,
       "axisLockSkew": 0.5,
+      "invertScrollDirectionX": false,
       "invertScrollDirectionY": false
     }
   ],

@@ -27,6 +27,7 @@ export function defaultTrackpointRightModuleConfig(): ModuleConfiguration {
     config.axisLockFirstTickSkew = 2;
     config.axisLockSkew = 0.5;
 
+    config.invertScrollDirectionX = false;
     config.invertScrollDirectionY = false;
 
     return config;

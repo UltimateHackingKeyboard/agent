@@ -27,10 +27,10 @@ export function defaultKeyClusterLeftModuleConfig(): ModuleConfiguration {
     config.axisLockFirstTickSkew = 0.5;
     config.axisLockSkew = 0.5;
 
+    config.invertScrollDirectionX = false;
     config.invertScrollDirectionY = false;
 
     config.keyClusterSwapAxes = false;
-    config.keyClusterInvertHorizontalScrolling = false;
 
     return config;
 }
