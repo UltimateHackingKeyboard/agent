@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, mergeMap, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { NotifierService } from 'angular-notifier';
+import { NotifierService } from '@ert78gb/angular-notifier';
 
 import {
     ApplicationSettings,

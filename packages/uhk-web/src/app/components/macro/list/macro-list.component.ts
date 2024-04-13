@@ -13,7 +13,7 @@ import {
     ViewChildren
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
-import { DragulaService } from 'ng2-dragula';
+import { DragulaService } from '@ert78gb/ng2-dragula';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction } from 'uhk-common';

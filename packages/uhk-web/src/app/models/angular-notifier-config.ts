@@ -1,4 +1,4 @@
-import { NotifierOptions } from 'angular-notifier';
+import { NotifierOptions } from '@ert78gb/angular-notifier';
 
 export const angularNotifierConfig: NotifierOptions = {
     behaviour: {
