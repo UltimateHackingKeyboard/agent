@@ -119,6 +119,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     @Output() deleteColorFromPalette = new EventEmitter();
     @Output() descriptionChanged = new EventEmitter<ChangeKeymapDescription>();
     @Output() modifyColorPaletteColor = new EventEmitter<ModifyColorOfBacklightingColorPalettePayload>();
+    @Output() navigateToModuleSettings = new EventEmitter<number>();
     @Output() selectedLayerChanged = new EventEmitter<LayerOption>();
     @Output() toggleColorFromPalette = new EventEmitter<number>();
 
@@ -281,10 +282,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
                 }
             })
         );
-    }
-
-    onNavigateToModuleSettings(moduleId: number): void {
-        this.store.dispatch(new NavigateToModuleSettings(moduleId));
     }
 
     onRemap(keyAction: KeyActionRemap): void {

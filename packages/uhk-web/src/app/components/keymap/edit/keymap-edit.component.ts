@@ -32,6 +32,7 @@ import {
     AddColorToBacklightingColorPaletteAction,
     DeleteColorFromBacklightingColorPaletteAction,
     ModifyColorOfBacklightingColorPaletteAction,
+    NavigateToModuleSettings,
     ToggleColorFromBacklightingColorPaletteAction
 } from '../../../store/actions/user-config';
 
@@ -117,6 +118,14 @@ export class KeymapEditComponent implements OnDestroy {
 
     modifyColorPaletteColor(event: ModifyColorOfBacklightingColorPalettePayload): void {
         this.store.dispatch(new ModifyColorOfBacklightingColorPaletteAction(event));
+    }
+
+    navigateToModuleSettings(moduleId: number): void {
+        this.store.dispatch(new NavigateToModuleSettings({
+            backUrl: `/keymap/${this.keymap.abbreviation}`,
+            backText: `"${this.keymap.name}" keymap`,
+            moduleId,
+        }));
     }
 
     selectLayer(option: LayerOption): void {

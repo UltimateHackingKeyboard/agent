@@ -13,6 +13,7 @@
     [keyboardLayout]="keyboardLayout$ | async"
     [popoverEnabled]="false"
     [tooltipEnabled]="true"
+    (navigateToModuleSettings)="navigateToModuleSettings($event)"
     (selectedLayerChanged)="selectLayer($event)"
 >
 </svg-keyboard-wrap>
