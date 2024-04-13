@@ -155,6 +155,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV5();
         this.migrateToV6();
         this.migrateToV7();
+        this.migrateToV7_1();
         this.recalculateConfigurationLength();
 
         return this;
@@ -196,6 +197,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         if (this.migrateToV7()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV7_1()) {
             this.userConfigurationLength = 0;
         }
 
@@ -691,6 +696,21 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
         return true;
     }
+
+    private migrateToV7_1(): boolean {
+        if (this.userConfigMajorVersion > 7) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion > 1) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 1;
+
+        return true;
+    }
+
 
     private getSerialisationInfo(): SerialisationInfo {
         return {

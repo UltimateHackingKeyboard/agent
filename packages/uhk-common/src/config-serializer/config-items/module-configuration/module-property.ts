@@ -8,11 +8,15 @@ export enum ModuleProperty {
     AxisLockFirstTickSkew = 6,
     ScrollAxisLock = 7,
     CaretAxisLock = 8,
-    InvertScrollDirectionY = 9
+    InvertScrollDirectionY = 9,
+    InvertScrollDirectionX = 10
 }
 
 export enum KeyClusterProperty  {
     SwapAxes = 254,
+    /**
+     * @deprecated use ModuleProperty.InvertScrollDirectionX instead
+     */
     InvertScrollDirectionX = 255,
 }
 

@@ -170,7 +170,7 @@
 
             <tr>
                 <td colspan="2">
-                    <h3 class="margin-top">Miscellaneous</h3>
+                    <h3 class="margin-top">Scrolling direction</h3>
                 </td>
             </tr>
             <tr class="separator">
@@ -185,42 +185,36 @@
                     >
                 </td>
             </tr>
-            <ng-container *ngIf="moduleConfiguration.id === ModuleId.KeyClusterLeft">
-                <tr>
-                    <td colspan="2">
-                        <h3 class="margin-top">Key cluster settings</h3>
-                    </td>
-                </tr>
-                <tr class="separator">
-                    <td>Swap axes
-                        <circle-tooltip tooltip="Swaps axes, making the key cluster trackball scroll vertically when swiped sideways."/>
-                    </td>
-                    <td>
-                        <input type="checkbox"
-                               class="form-check-input"
-                               [ngModel]="moduleConfiguration.keyClusterSwapAxes"
-                               (ngModelChange)="onSetModuleConfigurationValue('keyClusterSwapAxes', $event)"
-                        >
-                    </td>
-                </tr>
-                <tr class="separator">
-                    <td>Invert horizontal scrolling
-                        <circle-tooltip tooltip="Inverts X scroll direction."/>
-                    </td>
-                    <td>
-                        <input type="checkbox"
-                               class="form-check-input"
-                               [ngModel]="moduleConfiguration.keyClusterInvertHorizontalScrolling"
-                               (ngModelChange)="onSetModuleConfigurationValue('keyClusterInvertHorizontalScrolling', $event)"
-                        >
-                    </td>
-                </tr>
-            </ng-container>
+
+            <tr class="separator">
+                <td>Invert horizontal scrolling
+                    <circle-tooltip tooltip="Inverts X scroll direction."/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           class="form-check-input"
+                           [ngModel]="moduleConfiguration.invertScrollDirectionX"
+                           (ngModelChange)="onSetModuleConfigurationValue('invertScrollDirectionX', $event)"
+                    >
+                </td>
+            </tr>
+            <tr *ngIf="moduleConfiguration.id === ModuleId.KeyClusterLeft" class="separator">
+                <td>Swap axes
+                    <circle-tooltip tooltip="Swaps axes, making the key cluster trackball scroll vertically when swiped sideways."/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           class="form-check-input"
+                           [ngModel]="moduleConfiguration.keyClusterSwapAxes"
+                           (ngModelChange)="onSetModuleConfigurationValue('keyClusterSwapAxes', $event)"
+                    >
+                </td>
+            </tr>
 
             <ng-container *ngIf="moduleConfiguration.id === ModuleId.TouchpadRight">
                 <tr>
                     <td colspan="2">
-                        <h3 class="margin-top">Touchpad settings</h3>
+                        <h3 class="margin-top">Extended settings</h3>
                     </td>
                 </tr>
                 <tr class="separator">

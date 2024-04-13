@@ -32,11 +32,11 @@ export class ModuleConfiguration {
     @assertFloat axisLockFirstTickSkew: number;
     @assertFloat axisLockSkew: number;
 
+    invertScrollDirectionX: boolean;
     invertScrollDirectionY: boolean;
 
     // Key cluster
     keyClusterSwapAxes: boolean;
-    keyClusterInvertHorizontalScrolling: boolean;
 
     // Touchpad
     @assertUInt16 touchpadPinchZoomDivisor: number;
@@ -70,10 +70,10 @@ export class ModuleConfiguration {
         this.axisLockFirstTickSkew = other.axisLockFirstTickSkew;
         this.axisLockSkew = other.axisLockSkew;
 
+        this.invertScrollDirectionX = other.invertScrollDirectionX;
         this.invertScrollDirectionY = other.invertScrollDirectionY;
 
         this.keyClusterSwapAxes = other.keyClusterSwapAxes;
-        this.keyClusterInvertHorizontalScrolling = other.keyClusterInvertHorizontalScrolling;
 
         this.touchpadPinchZoomDivisor = other.touchpadPinchZoomDivisor;
         this.touchpadHoldContinuationTimeout = other.touchpadHoldContinuationTimeout;
@@ -144,12 +144,14 @@ export class ModuleConfiguration {
             caretAxisLock: this.caretAxisLock,
             axisLockFirstTickSkew: this.axisLockFirstTickSkew,
             axisLockSkew: this.axisLockSkew,
+            invertScrollDirectionX: this.invertScrollDirectionX,
             invertScrollDirectionY: this.invertScrollDirectionY,
         };
 
         if (this.id === ModuleId.KeyClusterLeft){
             json.keyClusterSwapAxes = this.keyClusterSwapAxes;
-            json.keyClusterInvertHorizontalScrolling = this.keyClusterInvertHorizontalScrolling;
+            // @deprecated TODO: remove in the future
+            json.keyClusterInvertHorizontalScrolling = this.invertScrollDirectionX;
         } else if (this.id === ModuleId.TouchpadRight){
             json.touchpadPinchZoomDivisor = this.touchpadPinchZoomDivisor;
             json.touchpadHoldContinuationTimeout = this.touchpadHoldContinuationTimeout;
@@ -171,9 +173,9 @@ export class ModuleConfiguration {
         buffer.writeUInt8(this.navigationModeFn4Layer);
         buffer.writeUInt8(this.navigationModeFn5Layer);
 
-        let numberOfProperties = 10;
+        let numberOfProperties = 11;
         if (this.id === ModuleId.KeyClusterLeft){
-            numberOfProperties += 2;
+            numberOfProperties += 1;
         }  else if (this.id === ModuleId.TouchpadRight){
             numberOfProperties += 3;
         }
@@ -200,12 +202,12 @@ export class ModuleConfiguration {
         buffer.writeFloat(this.axisLockSkew);
         buffer.writeUInt8(ModuleProperty.InvertScrollDirectionY);
         buffer.writeBoolean(this.invertScrollDirectionY);
+        buffer.writeUInt8(ModuleProperty.InvertScrollDirectionX);
+        buffer.writeBoolean(this.invertScrollDirectionX);
 
         if (this.id === ModuleId.KeyClusterLeft){
             buffer.writeUInt8(KeyClusterProperty.SwapAxes);
             buffer.writeBoolean(this.keyClusterSwapAxes);
-            buffer.writeUInt8(KeyClusterProperty.InvertScrollDirectionX);
-            buffer.writeBoolean(this.keyClusterInvertHorizontalScrolling);
         } else if (this.id === ModuleId.TouchpadRight){
             buffer.writeUInt8(TouchpadProperty.PinchZoomSpeedDivisor);
             buffer.writeUInt16(this.touchpadPinchZoomDivisor);
@@ -242,11 +244,13 @@ export class ModuleConfiguration {
         this.caretAxisLock = jsonObject.caretAxisLock;
         this.axisLockFirstTickSkew = jsonObject.axisLockFirstTickSkew;
         this.axisLockSkew = jsonObject.axisLockSkew;
+        this.invertScrollDirectionX = jsonObject.invertScrollDirectionX;
         this.invertScrollDirectionY = jsonObject.invertScrollDirectionY;
 
         if (this.id === ModuleId.KeyClusterLeft){
             this.keyClusterSwapAxes = jsonObject.keyClusterSwapAxes;
-            this.keyClusterInvertHorizontalScrolling = jsonObject.keyClusterInvertHorizontalScrolling;
+            // @deprecated TODO: remove in the future
+            this.invertScrollDirectionX = jsonObject.keyClusterInvertHorizontalScrolling;
         } else if (this.id === ModuleId.TouchpadRight){
             this.touchpadPinchZoomDivisor = jsonObject.touchpadPinchZoomDivisor;
             this.touchpadHoldContinuationTimeout = jsonObject.touchpadHoldContinuationTimeout;
@@ -301,6 +305,9 @@ export class ModuleConfiguration {
                 case ModuleProperty.InvertScrollDirectionY:
                     this.invertScrollDirectionY = buffer.readBoolean();
                     break;
+                case ModuleProperty.InvertScrollDirectionX:
+                    this.invertScrollDirectionX = buffer.readBoolean();
+                    break;
 
                 default: {
                     if (this.id === ModuleId.KeyClusterLeft){
@@ -309,7 +316,7 @@ export class ModuleConfiguration {
                                 this.keyClusterSwapAxes = buffer.readBoolean();
                                 break;
                             case KeyClusterProperty.InvertScrollDirectionX:
-                                this.keyClusterInvertHorizontalScrolling = buffer.readBoolean();
+                                this.invertScrollDirectionX = buffer.readBoolean();
                                 break;
                             default:
                                 throw new Error(`Unsupported Key Cluster module property: ${property}`);
