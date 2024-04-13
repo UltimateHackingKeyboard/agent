@@ -11,7 +11,6 @@ import { AngularSplitModule } from 'angular-split';
 import { DragulaModule } from '@ert78gb/ng2-dragula';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxResize } from '@ert78gb/ngx-resize';
-import { NgxSelectModule } from 'ngx-select-ex';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NouisliderModule } from 'ng2-nouislider';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -275,11 +274,6 @@ import appInitFactory from './services/app-init-factory';
         DragulaModule.forRoot(),
         routing,
         MonacoEditorModule,
-        NgxSelectModule.forRoot({
-            keepSelectedItems: true,
-            optionValueField: 'id',
-            optionTextField: 'text'
-        }),
         NgSelectModule,
         NouisliderModule,
         NotifierModule.withConfig(angularNotifierConfig),

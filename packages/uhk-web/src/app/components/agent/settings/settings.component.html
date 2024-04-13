@@ -36,14 +36,16 @@
 
 <div class="col-12 col-md-6 mb-0 mt-0">
     <div class="d-flex align-items-center mt-2">
-        <label for="select-theme" class="mb-0 me-2">Theme</label>
-        <ngx-select [items]="themes$ | async"
-                    [defaultValue]="appTheme$ | async"
-                    [autoActiveOnMouseEnter]="false"
-                    [noAutoComplete]="true"
-                    size="small"
-                    class="theme-selector"
-                    (select)="selectTheme($event)"></ngx-select>
+        <label class="mb-0 me-2">Theme</label>
+        <ng-select
+            class="theme-selector"
+            [items]="themes$ | async"
+            [ngModel]="appTheme$ | async"
+            (ngModelChange)="selectTheme($event)"
+            [clearable]="false"
+            bindLabel="text"
+            bindValue="id"
+        />
         <icon *ngIf="isLinux$ | async"
               name="question-circle"
               class="ms-2"

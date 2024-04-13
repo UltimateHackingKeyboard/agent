@@ -51,6 +51,16 @@ $ng-select-marked-text: $color-select-hover-text;
             .ng-option {
                 padding-bottom: 1px;
                 padding-top: 1px;
+
+                .indent-dropdown-item {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .scancode--searchterm {
+                        text-align: right;
+                        color: var(--color-input-text);
+                    }
+                }
             }
         }
     }

@@ -2,27 +2,27 @@
     <div>
         <div class="d-flex align-items-center mb-3">
             <div class="select-toggle-container">
-                <ngx-select [items]="toggleData"
-                            [ngModel]="toggle"
-                            [autoActiveOnMouseEnter]="false"
-                            size="small"
-                            optionValueField="id"
-                            optionTextField="text"
-                            (select)="toggleChanged($event)">
-                </ngx-select>
+                <ng-select
+                    [items]="toggleData"
+                    [ngModel]="toggle"
+                    (ngModelChange)="toggleChanged($event)"
+                    [clearable]="false"
+                    bindLabel="text"
+                    bindValue="id"
+                />
             </div>
 
             <span class="mx-1">the</span>
 
             <div class="select-layer-container">
-                <ngx-select [items]="layerData"
-                            [ngModel]="layer"
-                            [autoActiveOnMouseEnter]="false"
-                            size="small"
-                            optionValueField="id"
-                            optionTextField="name"
-                            (select)="layerChanged($event)">
-                </ngx-select>
+                <ng-select
+                    [items]="layerData"
+                    [ngModel]="layer"
+                    (ngModelChange)="layerChanged($event)"
+                    [clearable]="false"
+                    bindLabel="name"
+                    bindValue="id"
+                />
             </div>
             <span [ngSwitch]="toggle" class="mx-1">
                 <ng-template [ngSwitchCase]="'toggle'">layer by tapping this key.</ng-template>

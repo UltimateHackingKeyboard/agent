@@ -82,26 +82,24 @@
 <div class="long-press-container" *ngIf="secondaryRoleEnabled">
     <b class="setting-label">Secondary role:</b>
     <div class="secondary-role-groups-container">
-        <ngx-select [items]="secondaryRoleGroups"
-                    [ngModel]="selectedSecondaryRoleIndex.toString()"
-                    [autoActiveOnMouseEnter]="false"
-                    size="small"
-                    optionValueField="id"
-                    optionTextField="text"
-                    optGroupLabelField="text"
-                    optGroupOptionsField="children"
-                    (select)="onSecondaryRoleChange($event)">
-
-            <ng-template ngx-select-option let-option>
-                <span [ngClass]="{'indent-dropdown-item':option.data.id !== '-1'}">
+        <ng-select
+                   [clearable]="false"
+                   [items]="secondaryRoleGroups"
+                   [ngModel]="selectedSecondaryRoleIndex.toString()"
+                   bindLabel="text"
+                   bindValue="id"
+                   groupBy="group"
+                   (ngModelChange)="onSecondaryRoleChange($event)"
+        >
+            <ng-template ng-option-tmp let-option="item">
+               <span [ngClass]="{'indent-dropdown-item':option.id !== '-1'}">
                     <span>{{ option.text }}</span>
                     <span class="scancode--searchterm">
-                        {{ option.data.additional?.explanation}}
+                        {{ option.additional?.explanation}}
                     </span>
                 </span>
             </ng-template>
-
-        </ngx-select>
+        </ng-select>
     </div>
     <ng-template #secondaryRoleTooltip>
         <p class="text-start">The secondary role activates when another key gets pressed while holding this key.</p>

@@ -72,7 +72,6 @@
     "ngrx-store-freeze": "0.2.4",
     "ngx-clipboard": "16.0.0",
     "ngx-color-picker": "16.0.0",
-    "ngx-select-ex": "8.0.1",
     "nouislider": "15.7.1",
     "protractor": "7.0.0",
     "rxjs": "7.8.1",
