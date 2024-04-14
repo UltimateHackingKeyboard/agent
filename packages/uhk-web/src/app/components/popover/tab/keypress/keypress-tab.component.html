@@ -12,7 +12,7 @@
                    bindValue="id"
                    groupBy="group"
                    (ngModelChange)="onScancodeChange($event)"
-                   (open)="onScancodeOpen()"
+                   select-max-height
         >
             <ng-template ng-option-tmp let-item="item">
                 <span>
@@ -82,7 +82,7 @@
 <div class="long-press-container" *ngIf="secondaryRoleEnabled">
     <b class="setting-label">Secondary role:</b>
     <div class="secondary-role-groups-container">
-        <ng-select
+        <ng-select select-max-height
                    [clearable]="false"
                    [items]="secondaryRoleGroups"
                    [ngModel]="selectedSecondaryRoleIndex.toString()"
