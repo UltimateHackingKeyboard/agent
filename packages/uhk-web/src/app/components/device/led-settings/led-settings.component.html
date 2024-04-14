@@ -3,7 +3,7 @@
     <span>LED settings</span>
 </h1>
 
-<h3 class="mt-4">LED brightness</h3>
+<h3 class="pt-3">LED brightness</h3>
 
 <div class="row">
     <div class="col-12 col-lg-4">
@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<h3 class="mt-4">Backlighting mode</h3>
+<h3 class="pt-4">Backlighting mode</h3>
 
 <div class="backlighting-mode-container">
     <div *ngFor="let option of backlightingOptions; let index = index" class="form-check">
@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<h3 class="mt-4">Functional backlighting colors</h3>
+<h3 class="pt-4">Functional backlighting colors</h3>
 
 <div class="functional-backlight-color-container">
     <functional-backlight-color [label]="'None'" [color]="backlightingNoneActionColor"
@@ -75,7 +75,7 @@
                                 (colorChanged)="onSetRgbValue('backlightingMacroColor', $event)"></functional-backlight-color>
 </div>
 
-<h3 class="mt-4">LED fade timeout</h3>
+<h3 class="pt-4">LED fade timeout</h3>
 
 <div class="fade-timeout-container">
     <input
