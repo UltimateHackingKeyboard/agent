@@ -495,7 +495,7 @@ export class SvgKeyboardKeyComponent implements OnChanges, OnDestroy {
 
         if (isPerKeyBacklighting) {
             this.fillColor = colors.backgroundColorAsHex;
-            this.strokeColor = colord(themeColors.backgroundColor).delta(this.keyAction) < 0.075
+            this.strokeColor = colord(themeColors.backgroundColor).delta(this.keyAction) < 0.15
                 ? 'lightgray'
                 : '';
 
