@@ -6,6 +6,7 @@
     <div class="macro-selector">
         <b> Play macro: </b>
         <ng-select
+            select-max-height
             [items]="macroOptions"
             [ngModel]="macroOptions[selectedMacroIndex]?.id"
             (ngModelChange)="onChange($event)"

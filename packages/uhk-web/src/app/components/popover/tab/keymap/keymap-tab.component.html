@@ -5,6 +5,7 @@
     <div>
         <b>Switch to keymap:</b>
         <ng-select
+            select-max-height
             [items]="keymapOptions"
             [ngModel]="selectedKeymap?.abbreviation || -1"
             (ngModelChange)="onChange($event)"

@@ -134,6 +134,7 @@ import { XtermComponent } from './components/xterm/xterm.component';
 import { SliderWrapperComponent } from './components/slider-wrapper/slider-wrapper.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { Autofocus } from './directives/autofocus/autofocus.directive';
+import { NgSelectMaxHeight } from './directives/ng-select-max-height';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 import { FileUploadComponent } from './components/file-upload';
 import { AutoGrowInputComponent } from './components/auto-grow-input';
@@ -248,6 +249,7 @@ import appInitFactory from './services/app-init-factory';
         SliderWrapperComponent,
         EditableTextComponent,
         Autofocus,
+        NgSelectMaxHeight,
         RestoreConfigurationComponent,
         RecoveryModeComponent,
         FileUploadComponent,
