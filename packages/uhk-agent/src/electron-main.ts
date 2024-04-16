@@ -152,8 +152,8 @@ async function createWindow() {
     win.webContents.on('did-finish-load', () => {
     });
 
-    win.webContents.on('crashed', (event: any) => {
-        logger.error(event);
+    win.webContents.on('render-process-gone', (event, details) => {
+        logger.misc(`[Electron Main] render-process-gone, reason: ${details.reason} exitCode: ${details.exitCode}`);
     });
 
     win.on('close', () => saveWindowState(win, logger));
