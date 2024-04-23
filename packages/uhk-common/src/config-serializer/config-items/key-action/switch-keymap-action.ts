@@ -1,3 +1,4 @@
+import { copyRgbColor } from '../../../util/index.js';
 import { assertUInt8 } from '../../assert.js';
 import { UhkBuffer } from '../../uhk-buffer.js';
 import { Keymap } from '../keymap.js';
@@ -131,7 +132,10 @@ export class UnresolvedSwitchKeymapAction extends KeyAction {
     }
 
     resolve(keymaps: Keymap[]): SwitchKeymapAction {
-        return new SwitchKeymapAction(keymaps[this.keymapIndex]);
+        const action = new SwitchKeymapAction(keymaps[this.keymapIndex]);
+        copyRgbColor(this, action);
+
+        return action;
     }
 
     public getName(): string {
