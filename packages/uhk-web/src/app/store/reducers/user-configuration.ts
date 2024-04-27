@@ -14,6 +14,7 @@ import {
     Macro,
     Module,
     ModuleConfiguration,
+    MODIFIER_LAYER_NAMES,
     MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
@@ -1180,12 +1181,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
         if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
             keymap = Object.assign(new Keymap, keymap);
             keymap.layers = keymap.layers.map(layer => {
-                // if remapOnAllLayer is true then don't remap key on mod layer except is the modification happening on mod layer
-                if (keyActionRemap.remapOnAllLayer && layerIndex !== LayerName.mod && layer.id === LayerName.mod) {
-                    return layer;
-                }
-
-                if (keyActionRemap.remapOnAllLayer || layer.id === layerIndex || isSwitchLayerAction) {
+                if ((keyActionRemap.remapOnAllLayer && !MODIFIER_LAYER_NAMES.includes(layer.id)) || layer.id === layerIndex || isSwitchLayerAction) {
                     const clonedAction = KeyActionHelper.fromKeyAction(newKeyAction);
                     // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                     // on the target layer and remove SwitchLayerAction from other layers

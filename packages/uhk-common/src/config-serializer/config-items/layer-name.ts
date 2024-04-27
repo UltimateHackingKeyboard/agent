@@ -12,3 +12,10 @@ export enum LayerName {
     super,
     base = 255
 }
+
+export const MODIFIER_LAYER_NAMES = [
+    LayerName.shift,
+    LayerName.control,
+    LayerName.alt,
+    LayerName.super
+];
