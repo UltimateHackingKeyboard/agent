@@ -14,6 +14,7 @@ import {
     Macro,
     Module,
     ModuleConfiguration,
+    MODIFIER_LAYER_NAMES,
     MODULES_NONE_CONFIGS,
     NoneAction,
     PlayMacroAction,
@@ -44,7 +45,6 @@ import * as AppActions from '../actions/app';
 import * as DeviceActions from '../actions/device';
 import * as Device from '../actions/device';
 import * as KeymapActions from '../actions/keymap';
-import { SaveKeyAction } from '../actions/keymap';
 import * as MacroActions from '../actions/macro';
 import * as UserConfig from '../actions/user-config';
 import { addMissingModuleConfigs } from './add-missing-module-configs';
@@ -530,7 +530,7 @@ export function reducer(
                     !bKeyAction.hasSecondaryRoleAction();
             }
 
-            const aSaveKeyAction = new SaveKeyAction({
+            const aSaveKeyAction = new KeymapActions.SaveKeyAction({
                 keymap,
                 key: payload.bKey.keyId,
                 keyAction: {
@@ -541,7 +541,7 @@ export function reducer(
                 layer: payload.bKey.layerId,
                 module: payload.bKey.moduleId
             });
-            const bSaveKeyAction = new SaveKeyAction({
+            const bSaveKeyAction = new KeymapActions.SaveKeyAction({
                 keymap,
                 key: payload.aKey.keyId,
                 keyAction: {
@@ -1181,7 +1181,7 @@ function saveKeyAction(userConfig: UserConfiguration, action: KeymapActions.Save
         if (keyActionRemap.remapOnAllKeymap || keymap.abbreviation === newKeymap.abbreviation) {
             keymap = Object.assign(new Keymap, keymap);
             keymap.layers = keymap.layers.map(layer => {
-                if (keyActionRemap.remapOnAllLayer || layer.id === layerIndex || isSwitchLayerAction) {
+                if ((keyActionRemap.remapOnAllLayer && !MODIFIER_LAYER_NAMES.includes(layer.id)) || layer.id === layerIndex || isSwitchLayerAction) {
                     const clonedAction = KeyActionHelper.fromKeyAction(newKeyAction);
                     // If the key action is a SwitchLayerAction then set the same SwitchLayerAction
                     // on the target layer and remove SwitchLayerAction from other layers
