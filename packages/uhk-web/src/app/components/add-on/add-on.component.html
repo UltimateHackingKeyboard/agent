@@ -3,9 +3,7 @@
     <span>{{moduleName}}</span>
 </h1>
 
-<div *ngIf="backUrl" class="my-2">
-    Back to <a [routerLink]="[backUrl]">{{backText}}</a>
-</div>
+<back-to/>
 
 <div class="row">
     <div class="col-12 col-lg-6">

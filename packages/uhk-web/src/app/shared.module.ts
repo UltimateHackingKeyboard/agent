@@ -19,6 +19,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 
 import { AddOnComponent } from './components/add-on';
+import { BackToComponent } from './components/back-to/back-to.component';
 import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
@@ -160,6 +161,7 @@ import appInitFactory from './services/app-init-factory';
     declarations: [
         AdvancedSettingsPageComponent,
         AsHexColorPipe,
+        BackToComponent,
         NewLineToBrPipe,
         SafeHtmlPipe,
         MainAppComponent,
