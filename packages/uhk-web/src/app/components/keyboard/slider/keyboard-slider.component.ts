@@ -6,7 +6,7 @@ import {
     SvgKeyboardKeyClickEvent,
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
-import { LastEditedKey, LayerOption } from '../../../models';
+import { LastEditedKey, LayerOption, SelectedKeyModel } from '../../../models';
 
 interface LayerAnimationCssClasses {
     center?: boolean;
@@ -37,7 +37,7 @@ export class KeyboardSliderComponent implements OnChanges {
     @Input() currentLayer: LayerOption;
     @Input() capturingEnabled: boolean;
     @Input() halvesInfo: HalvesInfo;
-    @Input() selectedKey: { layerId: number, moduleId: number, keyId: number };
+    @Input() selectedKey: SelectedKeyModel;
     @Input() keyboardLayout = KeyboardLayout.ANSI;
     @Input() description: string;
     @Input() lastEditedKey: LastEditedKey;
@@ -79,10 +79,6 @@ export class KeyboardSliderComponent implements OnChanges {
                 this.onLayerChange(layerChange.previousValue, layerChange.currentValue);
             }
         }
-    }
-
-    trackKeyboard(index: number) {
-        return index;
     }
 
     onLayerChange(oldIndex: LayerOption, index: LayerOption): void {

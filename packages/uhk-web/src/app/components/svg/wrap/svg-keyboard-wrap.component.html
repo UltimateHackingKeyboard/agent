@@ -33,6 +33,7 @@
     ></keyboard-slider>
 
     <popover tabindex="0"
+             autofocus
              [@popover]="{ value:'', params: { animationTime: animationTime } }"
              *ngIf="animationState === 'opened'"
              [visible]="true"
@@ -44,9 +45,10 @@
              [currentKeymap]="keymap"
              [currentLayer]="currentLayer"
              [allowLayerDoubleTap]="allowLayerDoubleTap"
-             [remapInfo]="remapInfo"
+             [remapInfo]="keyEditConfig"
              [secondaryRoleOptions]="secondaryRoleOptions"
-             (cancel)="hidePopover()"
+             [selectedKey]="selectedKey"
+             (cancel)="cancelPopover()"
              (remap)="onRemap($event)"></popover>
 
     <div class="tooltip bottom"
@@ -61,5 +63,5 @@
             </p>
         </div>
     </div>
-    <div class="popover-overlay" [class.display]="animationState === 'opened'" (click)="hidePopover()"></div>
+    <div class="popover-overlay" [class.display]="animationState === 'opened'" (click)="cancelPopover()"></div>
 </ng-template>

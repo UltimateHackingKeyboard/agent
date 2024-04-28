@@ -323,6 +323,22 @@ export class UserConfigEffects {
             distinctUntilChanged(),
         ));
 
+    resetKeymapQueryParams$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(Keymaps.ActionTypes.SaveKey, Keymaps.ActionTypes.ClosePopover),
+            tap(() => this.router.navigate([], {
+                queryParams: {
+                    module: null,
+                    key: null,
+                    remapOnAllKeymap: null,
+                    remapOnAllLayer: null,
+                },
+                queryParamsHandling: 'merge'
+            }))
+        ),
+    { dispatch: false }
+    );
+
     constructor(private actions$: Actions,
                 private dataStorageRepository: DataStorageRepositoryService,
                 private store: Store<AppState>,

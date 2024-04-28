@@ -23,7 +23,8 @@
                 </span>
             </ng-template>
         </ng-select>
-        <a class="btn btn-link" [routerLink]="['/macro', macroOptions[selectedMacroIndex]?.id]"
+        <a class="btn btn-link" [routerLink]="['/macro', macros[selectedMacroIndex]?.id]"
+           [queryParams]="jumpToMacroQueryParams"
            ngbTooltip="Jump to macro">
             <fa-icon [icon]="faUpRightFromSquare"
                  aria-hidden="true"></fa-icon>

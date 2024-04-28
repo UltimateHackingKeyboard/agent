@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
-import { Keymap } from 'uhk-common';
+import { Keymap, LayerName } from 'uhk-common';
 
 import { ChangeKeymapDescription } from '../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../models/key-action-remap';
 import { UndoUserConfigData } from '../../models/undo-user-config-data';
-import { ExchangeKeysActionModel, LayerOption } from '../../models';
+import { ExchangeKeysActionModel, OpenPopoverModel } from '../../models';
 
 export enum ActionTypes {
     Add = '[Keymap] Add keymap',
@@ -20,6 +20,8 @@ export enum ActionTypes {
     RemoveLayer = '[Keymap] Remove keymap layer',
     CheckMacro = '[Keymap] Check deleted macro',
     EditDescription = '[Keymap] Edit description',
+    OpenPopover = '[Keymap] Open popover',
+    ClosePopover = '[Keymap] Close popover',
     UndoLastAction = '[Keymap] Undo last action',
     Select = '[Keymap] Select keymap action',
     SelectLayer = '[Keymap] Select layer action'
@@ -87,6 +89,17 @@ export class ExchangeKeysAction implements Action {
     }
 }
 
+export class OpenPopoverAction implements Action {
+    type = ActionTypes.OpenPopover;
+
+    constructor(public payload: OpenPopoverModel) {
+    }
+}
+
+export class ClosePopoverAction implements Action {
+    type = ActionTypes.ClosePopover;
+}
+
 export class SetDefaultKeymapAction implements Action {
     type = ActionTypes.SetDefault;
 
@@ -150,7 +163,7 @@ export class SelectKeymapAction implements Action {
 export class SelectLayerAction implements Action {
     type = ActionTypes.SelectLayer;
 
-    constructor(public payload: LayerOption) {
+    constructor(public payload: LayerName) {
     }
 }
 
@@ -161,6 +174,8 @@ export type Actions
     | EditKeymapAbbreviationAction
     | EditKeymapNameAction
     | ExchangeKeysAction
+    | OpenPopoverAction
+    | ClosePopoverAction
     | SaveKeyAction
     | SetDefaultKeymapAction
     | SetKeyColorAction
