@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -18,8 +17,6 @@ import { SetModuleConfigurationValueAction } from '../../store/actions/user-conf
     }
 })
 export class AddOnComponent implements OnDestroy {
-    backUrl: string;
-    backText: string;
     faPuzzlePiece = faPuzzlePiece;
     ModuleId = ModuleId;
     moduleName = '';
@@ -83,10 +80,8 @@ export class AddOnComponent implements OnDestroy {
     moduleConfiguration = new ModuleConfiguration();
 
     private subscription: Subscription;
-    private routeSubscription: Subscription;
 
-    constructor(private route: ActivatedRoute,
-                private store:Store<AppState>,
+    constructor(private store:Store<AppState>,
                 private cdRef: ChangeDetectorRef) {
         this.subscription = store.select(getSelectedModuleConfiguration)
             .subscribe((moduleConfiguration) => {
@@ -97,15 +92,10 @@ export class AddOnComponent implements OnDestroy {
 
                 this.cdRef.markForCheck();
             });
-        this.routeSubscription = route.queryParams.subscribe(params => {
-            this.backUrl = params.backUrl;
-            this.backText = params.backText;
-        });
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-        this.routeSubscription.unsubscribe();
     }
 
     onSetModuleConfigurationValue(propertyName: string, value: any) {
