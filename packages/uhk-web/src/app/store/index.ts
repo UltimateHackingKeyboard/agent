@@ -119,6 +119,7 @@ export const isKeymapDeletable = createSelector(userConfigState, fromUserConfig.
 export const hasMacro = createSelector(userConfigState, fromUserConfig.hasMacro);
 export const getMacroMap = createSelector(userConfigState, fromUserConfig.getMacroMap);
 export const lastEditedKey = createSelector(userConfigState, fromUserConfig.lastEditedKey);
+export const getOpenPopover = createSelector(userConfigState, fromUserConfig.getOpenPopover);
 export const getSelectedLayerOption = createSelector(userConfigState, fromUserConfig.getSelectedLayerOption);
 export const getLayerOptions = createSelector(userConfigState, fromUserConfig.getLayerOptions);
 export const getSecondaryRoleOptions = createSelector(getSelectedLayerOption, getLayerOptions,

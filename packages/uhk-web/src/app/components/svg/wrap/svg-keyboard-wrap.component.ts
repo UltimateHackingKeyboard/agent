@@ -1,5 +1,7 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -14,6 +16,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
 import { RgbColor } from 'colord';
 
 import { Observable, of, Subscription } from 'rxjs';
@@ -42,7 +45,8 @@ import {
 } from 'uhk-common';
 
 import { MapperService } from '../../../services/mapper.service';
-import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
+import { AppState, getKeymaps, getMacros, getAnimationEnabled, getOpenPopover } from '../../../store';
+import { ClosePopoverAction } from '../../../store/actions/keymap';
 import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
 import { PopoverComponent } from '../../popover';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
@@ -52,10 +56,9 @@ import {
     SvgKeyboardKeyClickEvent,
     SvgKeyHoverEvent
 } from '../../../models/svg-key-events';
-import { RemapInfo } from '../../../models/remap-info';
 import { SelectOptionData } from '../../../models/select-option-data';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, SelectedKeyModel } from '../../../models';
+import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, OpenPopoverModel, SelectedKeyModel } from '../../../models';
 
 interface NameValuePair {
     name: string;
@@ -96,7 +99,7 @@ interface NameValuePair {
         ])
     ]
 })
-export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
+export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
     @Input() allowNewLayers: boolean;
     @Input() backlightingMode: BacklightingMode;
     @Input() currentLayer: LayerOption;
@@ -126,7 +129,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
 
     animationEnabled = true;
     animationState: 'opened' | 'closed';
-    keyEditConfig: { moduleId: number, keyId: number };
+    keyEditConfig: OpenPopoverModel;
     selectedKey: SelectedKeyModel;
     popoverInitKeyAction: KeyAction;
     tooltipData: {
@@ -138,10 +141,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     layers: Layer[];
     keyPosition: ClientRect;
     wrapPosition: ClientRect;
-    remapInfo: RemapInfo = {
-        remapOnAllKeymap: false,
-        remapOnAllLayer: false
-    };
     leftArrow: boolean = false;
     rightArrow: boolean = false;
     topPosition: number = 0;
@@ -149,18 +148,22 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
 
     private wrapHost: HTMLElement;
     private keyElement: HTMLElement;
-    private subscription = new Subscription();
+    private animationSubscription = new Subscription();
+    private openPopoverSubscription = new Subscription();
 
     constructor(
         private store: Store<AppState>,
         private mapper: MapperService,
         private element: ElementRef,
-        private cdRef: ChangeDetectorRef
+        private cdRef: ChangeDetectorRef,
+        private router: Router
     ) {
         this.animationState = 'closed';
         this.keyEditConfig = {
             moduleId: undefined,
-            keyId: undefined
+            keyId: undefined,
+            remapOnAllKeymap: false,
+            remapOnAllLayer: false
         };
 
         this.tooltipData = {
@@ -170,11 +173,22 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
             show: false
         };
 
-        this.subscription.add(
+        this.animationSubscription =
             this.store
                 .select(getAnimationEnabled)
-                .subscribe(value => this.animationEnabled = value)
-        );
+                .subscribe(value => this.animationEnabled = value);
+
+        this.openPopoverSubscription =
+            this.store
+                .select(getOpenPopover)
+                .subscribe(value => {
+                    this.keyEditConfig = value;
+                    this.managePopover();
+                });
+    }
+
+    ngAfterViewInit(): void {
+        this.managePopover();
     }
 
     @HostBinding('class.space') get space() {
@@ -207,10 +221,15 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
             this.animationState = 'closed';
             this.layers = this.keymap.layers;
         }
+
+        if(changes.currentLayer) {
+            this.managePopover();
+        }
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.animationSubscription.unsubscribe();
+        this.openPopoverSubscription.unsubscribe();
     }
 
     get animationTime(): string {
@@ -226,22 +245,15 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
                 key: event.keyId,
             }));
         } else if (this.animationState === 'closed' && this.popoverEnabled) {
-            this.keyEditConfig = {
-                moduleId: event.moduleId,
-                keyId: event.keyId
-            };
-            this.selectedKey = { layerId: this.currentLayer.id, moduleId: event.moduleId, keyId: event.keyId };
-            const keyActionToEdit: KeyAction = this.layers
-                .find(layer => layer.id === this.currentLayer.id)
-                .modules
-                .find(findModuleById(event.moduleId))
-                .keyActions[event.keyId];
-            this.keyElement = event.keyTarget;
-            this.remapInfo = {
-                remapOnAllKeymap: event.shiftPressed,
-                remapOnAllLayer: event.altPressed
-            };
-            this.showPopover(keyActionToEdit);
+            this.router.navigate([], {
+                queryParams: {
+                    module: event.moduleId,
+                    key: event.keyId,
+                    remapOnAllKeymap: event.shiftPressed,
+                    remapOnAllLayer: event.altPressed
+                },
+                queryParamsHandling: 'merge'
+            });
         }
     }
 
@@ -293,7 +305,6 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
                 keyAction
             })
         );
-        this.hidePopover();
     }
 
     onAddLayer(id: number): void {
@@ -305,14 +316,13 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     showPopover(keyAction: KeyAction): void {
-        this.keyPosition = this.keyElement.getBoundingClientRect();
-        this.calculatePosition();
-        this.popoverInitKeyAction = keyAction;
-        this.animationState = 'opened';
-        this.cdRef.markForCheck();
         setTimeout(() => {
-            this.popover.nativeElement.focus();
-        }, 10);
+            this.keyPosition = this.keyElement.getBoundingClientRect();
+            this.calculatePosition();
+            this.popoverInitKeyAction = keyAction;
+            this.animationState = 'opened';
+            this.cdRef.markForCheck();
+        });
     }
 
     showTooltip(keyAction: KeyAction, event: MouseEvent): void {
@@ -340,6 +350,10 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
 
     hideTooltip() {
         this.tooltipData.show = false;
+    }
+
+    cancelPopover(): void {
+        this.store.dispatch(new ClosePopoverAction());
     }
 
     hidePopover(): void {
@@ -491,5 +505,35 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
         // 7 is a space between a bottom key position and a popover
         this.topPosition = this.keyPosition.top + this.keyPosition.height + 7 + window.scrollY;
         this.leftPosition = newLeft;
+    }
+
+    private managePopover() {
+        if (!this.currentLayer || !this.keyEditConfig) {
+            this.hidePopover();
+            return;
+        }
+
+        if (this.keyEditConfig.moduleId === undefined || this.keyEditConfig.keyId === undefined) {
+            this.hidePopover();
+            return;
+        }
+
+        this.selectedKey = { layerId: this.currentLayer.id, moduleId: this.keyEditConfig.moduleId, keyId: this.keyEditConfig.keyId };
+        const keyActionToEdit: KeyAction = this.layers
+            .find(layer => layer.id === this.currentLayer.id)
+            .modules
+            .find(findModuleById(this.keyEditConfig.moduleId))
+            .keyActions[this.keyEditConfig.keyId];
+
+        this.keyElement = this.findKeyElement();
+        if (this.keyElement) {
+            this.showPopover(keyActionToEdit);
+        }
+    }
+
+    private findKeyElement(): HTMLElement {
+        const selector = `[layerId="${this.currentLayer.id}"] [moduleId="${this.keyEditConfig.moduleId}"] > #key-${this.keyEditConfig.keyId + 1}`;
+
+        return this.wrapHost?.querySelector(selector);
     }
 }

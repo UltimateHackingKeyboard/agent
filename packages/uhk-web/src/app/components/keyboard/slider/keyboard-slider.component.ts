@@ -81,10 +81,6 @@ export class KeyboardSliderComponent implements OnChanges {
         }
     }
 
-    trackKeyboard(index: number) {
-        return index;
-    }
-
     onLayerChange(oldIndex: LayerOption, index: LayerOption): void {
         if (this.visibleLayerName === LayerNames.A) {
             if (oldIndex.order < index.order) {

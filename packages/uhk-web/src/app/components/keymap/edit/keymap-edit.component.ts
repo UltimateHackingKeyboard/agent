@@ -2,32 +2,38 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RgbColor } from 'colord';
-import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap, LayerName } from 'uhk-common';
+
+import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
+import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
+import { SelectOptionData } from '../../../models/select-option-data';
 
 import {
+    AppState,
     backlightingColorPalette,
     backlightingMode,
-    getSelectedKeymap,
-    isKeymapDeletable,
-    layerDoubleTapSupported,
-    AppState,
-    getKeyboardLayout,
-    isBacklightingColoring,
-    lastEditedKey,
     getHalvesInfo,
+    getKeyboardLayout,
     getLayerOptions,
     getSecondaryRoleOptions,
+    getSelectedKeymap,
     getSelectedLayerOption,
+    isBacklightingColoring,
+    isKeymapDeletable,
+    lastEditedKey,
+    layerDoubleTapSupported,
     selectedBacklightingColorIndex,
     showColorPalette
 } from '../../../store';
-import { EditDescriptionAction, SelectKeymapAction, SelectLayerAction } from '../../../store/actions/keymap';
-import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
-import { SelectOptionData } from '../../../models/select-option-data';
+import {
+    EditDescriptionAction,
+    OpenPopoverAction,
+    SelectKeymapAction,
+    SelectLayerAction
+} from '../../../store/actions/keymap';
 import {
     AddColorToBacklightingColorPaletteAction,
     DeleteColorFromBacklightingColorPaletteAction,
@@ -81,6 +87,17 @@ export class KeymapEditComponent implements OnDestroy {
         this.queryParamsSubscription = route.queryParams.subscribe(params => {
             if (params.layer) {
                 this.store.dispatch(new SelectLayerAction(+params.layer));
+            } else {
+                this.store.dispatch(new SelectLayerAction(LayerName.base));
+            }
+
+            if (params.module && params.key) {
+                this.store.dispatch(new OpenPopoverAction({
+                    moduleId: +params.module,
+                    keyId: +params.key,
+                    remapOnAllKeymap: params.remapOnAllKeymap === 'true',
+                    remapOnAllLayer: params.remapOnAllLayer === 'true'
+                }));
             }
         });
 

@@ -32,6 +32,7 @@ import {
     ExchangeKey,
     LastEditedKey,
     LayerOption,
+    OpenPopoverModel,
     SelectedMacroAction
 } from '../../models';
 import { getDefaultMacMouseSpeeds, getDefaultPcMouseSpeeds } from '../../services/default-mouse-speeds';
@@ -55,6 +56,7 @@ export interface State {
     backlightingColorPalette: Array<RgbColorInterface>;
     selectedBacklightingColorIndex: number;
     isSelectedMacroNew: boolean;
+    openedPopover?: OpenPopoverModel;
     userConfiguration: UserConfiguration;
     selectedKeymapAbbr?: string;
     selectedMacroId?: number;
@@ -876,7 +878,8 @@ export function reducer(
             const newState = {
                 ...state,
                 selectedKeymapAbbr: (action as KeymapActions.SelectKeymapAction).payload,
-                lastEditedKey: defaultLastEditKey()
+                lastEditedKey: defaultLastEditKey(),
+                openedPopover: undefined,
             };
             newState.layerOptions = calculateLayerOptions(newState);
             const currentLayerOption = newState.layerOptions.get(newState.selectedLayerOption.id);
@@ -891,7 +894,14 @@ export function reducer(
         case KeymapActions.ActionTypes.SelectLayer:
             return {
                 ...state,
-                selectedLayerOption: state.layerOptions.get((action as KeymapActions.SelectLayerAction).payload)
+                selectedLayerOption: state.layerOptions.get((action as KeymapActions.SelectLayerAction).payload),
+                openedPopover: undefined,
+            };
+
+        case KeymapActions.ActionTypes.OpenPopover:
+            return {
+                ...state,
+                openedPopover: (action as KeymapActions.OpenPopoverAction).payload
             };
 
         case MacroActions.ActionTypes.Select: {
@@ -947,6 +957,7 @@ export const getMacroMap = (state: State): Map<number, Macro> => {
     return state.userConfiguration.macros.reduce(reduceMacroToMap, new Map());
 };
 export const lastEditedKey = (state: State): LastEditedKey => state.lastEditedKey;
+export const getOpenPopover = (state: State): OpenPopoverModel => state.openedPopover;
 export const getLayerOptions = (state: State): LayerOption[] => Array
     .from(state.layerOptions.values())
     .sort((a, b) => a.order - b.order);
