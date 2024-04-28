@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { RgbColor } from 'colord';
 import { BacklightingMode, HalvesInfo, KeyboardLayout, Keymap } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import {
     backlightingColorPalette,
@@ -65,16 +65,24 @@ export class KeymapEditComponent implements OnDestroy {
 
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
+    private queryParamsSubscription: Subscription;
 
     constructor(protected store: Store<AppState>,
                 private route: ActivatedRoute,
+                private router: Router,
                 private cdRef: ChangeDetectorRef) {
         this.routeSubscription = route
             .params
             .pipe(
-                pluck('abbr')
+                map(params => params.abbr)
             )
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
+
+        this.queryParamsSubscription = route.queryParams.subscribe(params => {
+            if (params.layer) {
+                this.store.dispatch(new SelectLayerAction(+params.layer));
+            }
+        });
 
         this.backlightingMode$ = store.select(backlightingMode);
         this.currentLayer$ = store.select(getSelectedLayerOption);
@@ -102,6 +110,7 @@ export class KeymapEditComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.routeSubscription.unsubscribe();
         this.keymapSubscription.unsubscribe();
+        this.queryParamsSubscription.unsubscribe();
     }
 
     addColorToPalette(color: RgbColor): void {
@@ -129,7 +138,12 @@ export class KeymapEditComponent implements OnDestroy {
     }
 
     selectLayer(option: LayerOption): void {
-        this.store.dispatch(new SelectLayerAction(option));
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+                layer: option.id
+            }
+        });
     }
 
     toggleColorFromPalette(index: number): void {

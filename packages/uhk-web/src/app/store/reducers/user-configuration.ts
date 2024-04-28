@@ -891,7 +891,7 @@ export function reducer(
         case KeymapActions.ActionTypes.SelectLayer:
             return {
                 ...state,
-                selectedLayerOption: (action as KeymapActions.SelectLayerAction).payload
+                selectedLayerOption: state.layerOptions.get((action as KeymapActions.SelectLayerAction).payload)
             };
 
         case MacroActions.ActionTypes.Select: {

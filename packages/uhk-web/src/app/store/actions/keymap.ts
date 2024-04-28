@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Keymap } from 'uhk-common';
+import { Keymap, LayerName } from 'uhk-common';
 
 import { ChangeKeymapDescription } from '../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../models/key-action-remap';
@@ -150,7 +150,7 @@ export class SelectKeymapAction implements Action {
 export class SelectLayerAction implements Action {
     type = ActionTypes.SelectLayer;
 
-    constructor(public payload: LayerOption) {
+    constructor(public payload: LayerName) {
     }
 }
 

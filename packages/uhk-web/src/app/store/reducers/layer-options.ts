@@ -1,5 +1,4 @@
-import { SecondaryRoleAction } from 'uhk-common';
-import { LayerName } from 'uhk-common';
+import { LayerName, SecondaryRoleAction } from 'uhk-common';
 
 import { LayerOption } from '../../models';
 
@@ -8,7 +7,7 @@ export function getBaseLayerOption(): LayerOption {
 }
 
 export function initLayerOptions(): Map<number, LayerOption> {
-    const layerOptions: Map<number, LayerOption> = new Map<number, LayerOption>();
+    const layerOptions: Map<LayerName, LayerOption> = new Map<number, LayerOption>();
     layerOptions.set(LayerName.base, getBaseLayerOption());
     layerOptions.set(LayerName.mod, { id: LayerName.mod, name: 'Mod', selected: false, order: 1, allowed: true, secondaryRole: SecondaryRoleAction.mod });
     layerOptions.set(LayerName.fn, { id: LayerName.fn, name: 'Fn', selected: false, order: 3, allowed: true, secondaryRole: SecondaryRoleAction.fn });
