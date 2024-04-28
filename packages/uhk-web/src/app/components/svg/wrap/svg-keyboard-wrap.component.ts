@@ -13,6 +13,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { RgbColor } from 'colord';
 
 import { Observable, of, Subscription } from 'rxjs';
@@ -43,7 +44,6 @@ import {
 import { MapperService } from '../../../services/mapper.service';
 import { AppState, getKeymaps, getMacros, getAnimationEnabled } from '../../../store';
 import { AddLayerAction, RemoveLayerAction, SaveKeyAction, SetKeyColorAction } from '../../../store/actions/keymap';
-import { NavigateToModuleSettings } from '../../../store/actions/user-config';
 import { PopoverComponent } from '../../popover';
 import { ChangeKeymapDescription } from '../../../models/ChangeKeymapDescription';
 import { KeyActionRemap } from '../../../models/key-action-remap';
@@ -55,8 +55,7 @@ import {
 import { RemapInfo } from '../../../models/remap-info';
 import { SelectOptionData } from '../../../models/select-option-data';
 import { findModuleById, mapLeftRightModifierToKeyActionModifier } from '../../../util';
-import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload } from '../../../models';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { LastEditedKey, LayerOption, ModifyColorOfBacklightingColorPalettePayload, SelectedKeyModel } from '../../../models';
 
 interface NameValuePair {
     name: string;
@@ -128,7 +127,7 @@ export class SvgKeyboardWrapComponent implements OnInit, OnChanges, OnDestroy {
     animationEnabled = true;
     animationState: 'opened' | 'closed';
     keyEditConfig: { moduleId: number, keyId: number };
-    selectedKey: { layerId: number, moduleId: number, keyId: number };
+    selectedKey: SelectedKeyModel;
     popoverInitKeyAction: KeyAction;
     tooltipData: {
         posTop: number,

@@ -34,6 +34,11 @@
 
 .macro-container {
     padding-right: math.div($grid-gutter-width, 2);
+
+    macro-header {
+        display: block;
+        margin-bottom: 2em;
+    }
 }
 
 .smart-macro-doc-container {

@@ -13,6 +13,7 @@ export * from './modify-color-of-backlighting-color-palette-payload';
 export * from './navigation-payload';
 export * from './out-of-space-warning-data';
 export * from './selected-macro-action';
+export * from './selected-key.model';
 export * from './side-menu-page-state';
 export * from './set-module-configuration-value-payload';
 export * from './uhk-progress-bar-state';

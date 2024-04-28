@@ -29,6 +29,7 @@ import {
     SwitchLayerAction
 } from 'uhk-common';
 
+import { SelectedKeyModel } from '../../models';
 import { Tab } from './tab';
 
 import {
@@ -78,6 +79,7 @@ export class PopoverComponent implements OnChanges {
     @Input() leftArrow: boolean = false;
     @Input() rightArrow: boolean = false;
     @Input() secondaryRoleOptions: SelectOptionData[];
+    @Input() selectedKey: SelectedKeyModel;
 
     @Output() cancel = new EventEmitter<any>();
     @Output() remap = new EventEmitter<KeyActionRemap>();

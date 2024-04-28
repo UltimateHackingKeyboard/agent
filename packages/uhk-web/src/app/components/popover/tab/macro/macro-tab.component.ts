@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { faPlus, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { copyRgbColor, KeyAction, Macro, PlayMacroAction } from 'uhk-common';
+import { copyRgbColor, KeyAction, Keymap, Macro, PlayMacroAction } from 'uhk-common';
 
 import { Tab } from '../tab';
 
 import { AppState, getMacros } from '../../../../store';
+import { SelectedKeyModel } from '../../../../models';
 import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
@@ -16,13 +17,16 @@ import { SelectOptionData } from '../../../../models/select-option-data';
     styleUrls: ['./macro-tab.component.scss']
 })
 export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestroy {
+    @Input() currentKeymap: Keymap;
     @Input() defaultKeyAction: KeyAction;
     @Input() macroPlaybackSupported: boolean;
+    @Input() selectedKey: SelectedKeyModel;
 
     @Output() assignNewMacro = new EventEmitter<void>();
 
     faPlus = faPlus;
     faUpRightFromSquare = faUpRightFromSquare;
+    jumpToMacroQueryParams = {};
     macros: Macro[];
     macroOptions: Array<SelectOptionData>;
     selectedMacroIndex: number;
@@ -45,9 +49,16 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         });
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
         this.fromKeyAction(this.defaultKeyAction);
         this.validAction.emit(true);
+
+        if (changes.currentKeymap || changes.selectedKey) {
+            this.jumpToMacroQueryParams = {
+                backUrl: `/keymap/${this.currentKeymap.abbreviation}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}`,
+                backText: `"${this.currentKeymap.name}" keymap`,
+            };
+        }
     }
 
     onChange(id: string) {
