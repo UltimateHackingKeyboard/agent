@@ -52,16 +52,25 @@ export class MacroEffects {
             withLatestFrom(this.store.select(getSelectedMacro)),
             tap(([action, newMacro]) => {
                 if (action.payload.keyAction.assignNewMacro) {
-                    this.navigateToNewMacro(newMacro);
+                    this.navigateToNewMacro(newMacro, action);
                 }
             }),
         ),
     { dispatch: false }
     );
 
-    private navigateToNewMacro(newMacro: Macro): Promise<boolean> {
+    private navigateToNewMacro(newMacro: Macro, action?: Keymaps.SaveKeyAction): Promise<boolean> {
         if (newMacro) {
-            return this.router.navigate(['/macro', newMacro.id]);
+            let queryParams = {};
+            if (action) {
+                const payload = action.payload;
+                queryParams = {
+                    backUrl: `/keymap/${payload.keymap.abbreviation}?layer=${payload.layer}&module=${payload.module}&key=${payload.key}`,
+                    backText: `"${payload.keymap.name}" keymap`,
+                };
+            }
+
+            return this.router.navigate(['/macro', newMacro.id], { queryParams });
         }
 
         return this.router.navigate(['/macro']);
