@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
     `,
 })
 export class BackToComponent implements OnDestroy {
-    backUrl: string;
+    backUrl: string | undefined;
     backText: string;
     queryParams = {};
 
@@ -19,12 +19,16 @@ export class BackToComponent implements OnDestroy {
 
     constructor(private route: ActivatedRoute) {
         this.routeSubscription = route.queryParams.subscribe(params => {
-            const backUrl = new URL(params.backUrl, window.location.origin);
-            this.backUrl =backUrl.pathname;
-            this.backText = params.backText;
-            this.queryParams = {};
-            for (const key of backUrl.searchParams.keys()) {
-                this.queryParams[key] = backUrl.searchParams.get(key);
+            if (params.backUrl) {
+                const backUrl = new URL(params.backUrl, window.location.origin);
+                this.backUrl = backUrl.pathname;
+                this.backText = params.backText;
+                this.queryParams = {};
+                for (const key of backUrl.searchParams.keys()) {
+                    this.queryParams[key] = backUrl.searchParams.get(key);
+                }
+            } else {
+                this.backUrl = undefined;
             }
         });
     }
