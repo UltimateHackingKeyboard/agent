@@ -494,7 +494,7 @@ export const getSideMenuPageState = createSelector(
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
-            keymapQueryParamsHandling: routerState.state.url?.startsWith('/keymap') ? 'merge' : '',
+            keymapQueryParamsHandling: routerState?.state?.url?.startsWith('/keymap') ? 'merge' : '',
             macros,
             maxMacroCountReached: macros.length >= Constants.MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
