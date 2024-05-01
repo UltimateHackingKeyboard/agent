@@ -177,7 +177,7 @@
                 <ul [@toggler]="this.sideMenuState.keymap.animation">
                     <li *ngFor="let keymap of state.keymaps" class="sidebar__level-2--item">
                         <div class="sidebar__level-2" [routerLinkActive]="['active']">
-                            <a [routerLink]="['/keymap', keymap.abbreviation]" queryParamsHandling="merge"
+                            <a [routerLink]="['/keymap', keymap.abbreviation]" [queryParamsHandling]="state.keymapQueryParamsHandling"
                                [class.disabled]="state.updatingFirmware">{{keymap.name}}</a>
                             <fa-icon *ngIf="keymap.isDefault"
                                      [icon]="faStar"
