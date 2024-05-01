@@ -107,6 +107,7 @@ export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fro
 export const isI2cDebuggingRingBellEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingRingBellEnabled);
 
 export const userConfigState = (state: AppState) => state.userConfiguration;
+export const getRouterState = (state: AppState) => state.router;
 
 export const getUserConfiguration = createSelector(userConfigState, fromUserConfig.getUserConfiguration);
 export const getKeymaps = createSelector(userConfigState, fromUserConfig.getKeymaps);
@@ -473,6 +474,7 @@ export const getSideMenuPageState = createSelector(
     calculateDeviceUiState,
     getConnectedDevice,
     getIsAdvancedSettingsMenuVisible,
+    getRouterState,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -480,7 +482,9 @@ export const getSideMenuPageState = createSelector(
         restoreUserConfiguration: boolean,
         uiState,
         connectedDevice,
-        isAdvancedSettingsMenuVisible): SideMenuPageState => {
+        isAdvancedSettingsMenuVisible,
+        routerState
+    ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
 
         return {
@@ -490,6 +494,7 @@ export const getSideMenuPageState = createSelector(
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
+            keymapQueryParamsHandling: routerState.state.url?.startsWith('/keymap') ? 'merge' : '',
             macros,
             maxMacroCountReached: macros.length >= Constants.MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
@@ -499,8 +504,6 @@ export const getSideMenuPageState = createSelector(
 );
 
 export const maxMacroCountReached = createSelector(getSideMenuPageState, sideMenuState => sideMenuState.maxMacroCountReached);
-
-export const getRouterState = (state: AppState) => state.router;
 
 export const macroPlaybackSupported = createSelector(getHardwareModules, (hardwareModules: HardwareModules): boolean => {
     return isVersionGte(hardwareModules.rightModuleInfo.firmwareVersion, '8.4.3');
