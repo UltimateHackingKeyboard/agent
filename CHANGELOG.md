@@ -6,6 +6,28 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [4.1.0] - 2024-05-03
+
+Firmware: 11.1.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.1.0)] | Device Protocol: 4.10.0 | User Config: 7.1.0 | Hardware Config: 1.0.0
+
+- Add the "jump to macro" and "add a new macro for this key" buttons in the key action popover macro tab.
+- Add a "Back to keymap" link on module pages when navigating via a module icon of keymap pages.
+- Add a "Back to keymap" link on macro pages when navigating via the key action popover.
+- Make the "Remap on all layers" option of the key action popover not remap modifier layers, except for the current layer.
+- Fix the saving and restoration of SwitchKeymapAction colors.
+- Rework parts of the module pages to make them easier to digest.
+- Display the "Invert horizontal scrolling" option on every module page. `USERCONFIG:MINOR`
+- Add acceleration diagram into module tooltips.
+- Fix current key highlighting.
+- Fix the gap below the upper triangle part of the key action popover.
+- Improve macro action drag and drop icon and its padding.
+- Add a tooltip to the "secondary roles" header of the "typing behavior" page.
+- Maximize select component list height.
+- Make key borders visible when the background color is similar to the key color.
+- Fix icon stroke widths.
+- Remove the unintended gray outline of icon keys.
+- Don't partially hide the smart macro editor autocomplete popup.
+
 ## [4.0.2] - 2024-03-05
 
 Firmware: 11.0.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.0.0)] | Device Protocol: 4.10.0 | User Config: 7.0.0 | Hardware Config: 1.0.0
