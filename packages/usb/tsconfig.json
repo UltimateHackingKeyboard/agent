@@ -5,9 +5,5 @@
     "declaration": false,
     "module": "ES2020",
     "outDir": "./dist"
-  },
-  "ts-node": {
-    "esm": true,
-    "transpileOnly": true
   }
 }

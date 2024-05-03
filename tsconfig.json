@@ -11,5 +11,9 @@
     "target": "ES2020",
     "importHelpers": true,
     "resolveJsonModule": true
+  },
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true
   }
 }
