@@ -1,4 +1,4 @@
-import { QueryParamsHandling } from '@angular/router';
+import { Params } from '@angular/router';
 import { Keymap, UhkDeviceProduct } from 'uhk-common';
 
 import { MacroMenuItem } from './macro-menu-item';
@@ -10,7 +10,7 @@ export interface SideMenuPageState {
     updatingFirmware: boolean;
     deviceName: string;
     keymaps: Keymap[];
-    keymapQueryParamsHandling: QueryParamsHandling;
+    keymapQueryParams: Params;
     macros: MacroMenuItem[];
     maxMacroCountReached: boolean;
     restoreUserConfiguration: boolean;

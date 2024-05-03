@@ -474,7 +474,7 @@ export const getSideMenuPageState = createSelector(
     calculateDeviceUiState,
     getConnectedDevice,
     getIsAdvancedSettingsMenuVisible,
-    getRouterState,
+    getSelectedLayerOption,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -483,7 +483,7 @@ export const getSideMenuPageState = createSelector(
         uiState,
         connectedDevice,
         isAdvancedSettingsMenuVisible,
-        routerState
+        selectedLayerOption
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
 
@@ -494,7 +494,9 @@ export const getSideMenuPageState = createSelector(
             updatingFirmware: updatingFirmwareValue,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
-            keymapQueryParamsHandling: routerState?.state?.url?.startsWith('/keymap') ? 'merge' : '',
+            keymapQueryParams: {
+                layer: selectedLayerOption.id
+            },
             macros,
             maxMacroCountReached: macros.length >= Constants.MAX_ALLOWED_MACROS,
             restoreUserConfiguration,
