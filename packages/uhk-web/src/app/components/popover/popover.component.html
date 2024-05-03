@@ -45,6 +45,7 @@
                    [selectedKey]="selectedKey"
                    [defaultKeyAction]="defaultKeyAction"
                    [macroPlaybackSupported]="macroPlaybackSupported$ | async"
+                   [remapInfo]="remapInfo"
                    (assignNewMacro)="onAssignNewMacro()"
                    (validAction)="setKeyActionValidState($event)"
         ></macro-tab>

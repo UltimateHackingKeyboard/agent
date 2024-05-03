@@ -891,12 +891,25 @@ export function reducer(
             return newState;
         }
 
-        case KeymapActions.ActionTypes.SelectLayer:
+        case KeymapActions.ActionTypes.SelectLayer: {
+            let selectedLayer = (action as KeymapActions.SelectLayerAction).payload;
+
+            if (selectedLayer === state.selectedLayerOption.id) {
+                return state;
+            }
+
+            const currentLayerOption = state.layerOptions.get(selectedLayer);
+
+            if (!currentLayerOption.selected) {
+                selectedLayer = LayerName.base;
+            }
+
             return {
                 ...state,
-                selectedLayerOption: state.layerOptions.get((action as KeymapActions.SelectLayerAction).payload),
+                selectedLayerOption: state.layerOptions.get(selectedLayer),
                 openedPopover: undefined,
             };
+        }
 
         case KeymapActions.ActionTypes.OpenPopover:
             return {

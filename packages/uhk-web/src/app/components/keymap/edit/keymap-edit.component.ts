@@ -91,14 +91,15 @@ export class KeymapEditComponent implements OnDestroy {
                 this.store.dispatch(new SelectLayerAction(LayerName.base));
             }
 
-            if (params.module && params.key) {
-                this.store.dispatch(new OpenPopoverAction({
-                    moduleId: +params.module,
-                    keyId: +params.key,
-                    remapOnAllKeymap: params.remapOnAllKeymap === 'true',
-                    remapOnAllLayer: params.remapOnAllLayer === 'true'
-                }));
-            }
+            const moduleId = +params.module;
+            const keyId = +params.key;
+
+            this.store.dispatch(new OpenPopoverAction({
+                moduleId: Number.isNaN(moduleId) ? undefined : moduleId,
+                keyId: Number.isNaN(keyId) ? undefined : keyId,
+                remapOnAllKeymap: params.remapOnAllKeymap === 'true',
+                remapOnAllLayer: params.remapOnAllLayer === 'true'
+            }));
         });
 
         this.backlightingMode$ = store.select(backlightingMode);

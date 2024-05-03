@@ -8,6 +8,7 @@ import { Tab } from '../tab';
 
 import { AppState, getMacros } from '../../../../store';
 import { SelectedKeyModel } from '../../../../models';
+import { RemapInfo } from '../../../../models/remap-info';
 import { SelectOptionData } from '../../../../models/select-option-data';
 
 @Component({
@@ -20,6 +21,7 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
     @Input() currentKeymap: Keymap;
     @Input() defaultKeyAction: KeyAction;
     @Input() macroPlaybackSupported: boolean;
+    @Input() remapInfo: RemapInfo;
     @Input() selectedKey: SelectedKeyModel;
 
     @Output() assignNewMacro = new EventEmitter<void>();
@@ -54,8 +56,14 @@ export class MacroTabComponent extends Tab implements OnInit, OnChanges, OnDestr
         this.validAction.emit(true);
 
         if (changes.currentKeymap || changes.selectedKey) {
+            let remapQueryParams = '';
+
+            if (this.remapInfo) {
+                remapQueryParams = `&remapOnAllKeymap=${this.remapInfo.remapOnAllKeymap}&remapOnAllLayer=${this.remapInfo.remapOnAllLayer}`;
+            }
+
             this.jumpToMacroQueryParams = {
-                backUrl: `/keymap/${this.currentKeymap.abbreviation}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}`,
+                backUrl: `/keymap/${this.currentKeymap.abbreviation}?layer=${this.selectedKey.layerId}&module=${this.selectedKey.moduleId}&key=${this.selectedKey.keyId}${remapQueryParams}`,
                 backText: `"${this.currentKeymap.name}" keymap`,
             };
         }
