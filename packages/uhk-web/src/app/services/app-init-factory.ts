@@ -1,8 +1,8 @@
-import { MonacoEditorCustomThemeService } from './monaco-editor-custom-theme.service';
+import { MonacoEditorUhkSetupService } from './monaco-editor-uhk-setup.service.js';
 
 export default function appInitFactory(
     // the service is not used in the factory, but need to be initialize
-    monacoEditorCustomThemeService: MonacoEditorCustomThemeService,
+    monacoEditorUhkSetupService: MonacoEditorUhkSetupService,
 ){
     return () => {};
 }

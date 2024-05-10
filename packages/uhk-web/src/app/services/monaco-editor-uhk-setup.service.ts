@@ -7,7 +7,7 @@ import { syntaxHighlightProvider } from './monaco-editor-syntaxt-highlight-provi
 export const MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID = 'uhk-macro';
 
 @Injectable({ providedIn: 'root' })
-export class MonacoEditorCustomThemeService {
+export class MonacoEditorUhkSetupService {
     constructor(private monacoLoaderService: MonacoEditorLoaderService) {
         this.monacoLoaderService.isMonacoLoaded$.pipe(
             filter(isLoaded => isLoaded),

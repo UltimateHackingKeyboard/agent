@@ -23,7 +23,7 @@ import { Key } from 'ts-keycode-enum';
 import { LogService } from 'uhk-common';
 
 import { SelectedMacroActionId } from '../../../../../models';
-import { MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID } from '../../../../../services/monaco-editor-custom-theme.service';
+import { MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID } from '../../../../../services/monaco-editor-uhk-setup.service';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
