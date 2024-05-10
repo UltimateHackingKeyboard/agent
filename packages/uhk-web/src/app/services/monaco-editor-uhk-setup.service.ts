@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { MonacoEditorLoaderService } from '@materia-ui/ngx-monaco-editor';
 import { filter, take } from 'rxjs/operators';
 
+import { MonacoEditorCompletionItemProvider } from './monaco-editor-completion-item-provider';
 import { syntaxHighlightProvider } from './monaco-editor-syntaxt-highlight-provider';
 
 export const MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID = 'uhk-macro';
 
 @Injectable({ providedIn: 'root' })
 export class MonacoEditorUhkSetupService {
-    constructor(private monacoLoaderService: MonacoEditorLoaderService) {
+    constructor(
+        private monacoLoaderService: MonacoEditorLoaderService,
+        private completionItemProvider: MonacoEditorCompletionItemProvider
+    ) {
         this.monacoLoaderService.isMonacoLoaded$.pipe(
             filter(isLoaded => isLoaded),
             take(1),
@@ -38,6 +42,10 @@ export class MonacoEditorUhkSetupService {
             monaco.languages.setMonarchTokensProvider(
                 MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID,
                 syntaxHighlightProvider()
+            );
+            monaco.languages.registerCompletionItemProvider(
+                MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID,
+                this.completionItemProvider,
             );
         });
     }
