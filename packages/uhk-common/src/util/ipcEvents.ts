@@ -57,6 +57,7 @@ export class Device {
 export class SmartMacroDoc {
     public static readonly downloadDocumentation = 'smart-macro-doc-service-download-documentation';
     public static readonly downloadDocumentationReply = 'smart-macro-doc-service-download-documentation-reply';
+    public static readonly referenceManualReply = 'smart-macro-doc-service-reference-manual-reply';
     public static readonly serviceListening = 'smart-macro-doc-service-listening';
 }
 

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap, withLatestFrom } from 'rxjs/operators';
 import { FirmwareRepoInfo } from 'uhk-common';
 
+import { MonacoEditorCompletionItemProvider } from '../../services/monaco-editor-completion-item-provider';
 import { SmartMacroDocRendererService } from '../../services/smart-macro-doc-renderer.service';
 import { SmartMacroDocService } from '../../services/smart-macro-doc-service';
 import * as Device from '../actions/device';
-import { ActionTypes } from '../actions/smart-macro-doc.action';
+import { ActionTypes, ReferenceManualChangedAction } from '../actions/smart-macro-doc.action';
 import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds } from '../index';
 
 @Injectable()
@@ -32,11 +33,23 @@ export class SmartMacroDocEffect {
     { dispatch: false }
     );
 
+    referenceManualUpdated$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.ReferenceManualChanged),
+            map((action: ReferenceManualChangedAction) => action.payload),
+            distinctUntilChanged(),
+            tap((referenceManual) => {
+                this.completionItemProvider.setReferenceManual(referenceManual);
+            })
+        ),
+    { dispatch: false }
+    );
+
     constructor(private actions$: Actions,
+                private completionItemProvider: MonacoEditorCompletionItemProvider,
                 private smartMacroDocRendererService: SmartMacroDocRendererService,
                 private smartMacroDocService: SmartMacroDocService,
                 private store: Store<AppState>) {
-
     }
 
     private sendMessageContext(modulesIds: Array<number>, firmwareRepoInfo: FirmwareRepoInfo): void {

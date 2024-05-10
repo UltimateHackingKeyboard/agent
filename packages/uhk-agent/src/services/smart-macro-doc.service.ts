@@ -5,7 +5,7 @@ import getPort from 'get-port';
 import { join } from 'path';
 import fastify, { FastifyInstance } from 'fastify';
 import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
-import { downloadSmartMacroDoc } from 'uhk-smart-macro';
+import { downloadSmartMacroDoc, downloadSmartMacroReferenceManual, REFERENCE_MANUAL_FILE_NAME } from 'uhk-smart-macro';
 
 import {
     copySmartMacroDocToWebserver,
@@ -78,22 +78,43 @@ export class SmartMacroDocService {
     }
 
     private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
-        const firmwareRepoInfo: FirmwareRepoInfo = args[0];
-        this.logService.misc(serviceLogMessage('start download firmware documentation'), firmwareRepoInfo);
-        const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
-        const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);
+        try {
+            const firmwareRepoInfo: FirmwareRepoInfo = args[0];
+            this.logService.misc(serviceLogMessage('start download firmware documentation'), firmwareRepoInfo);
+            const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
+            const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);
+            const indexHtmlPath = join(downloadDirectory, 'index.html');
 
-        if (!await fse.pathExists(downloadDirectory)) {
-            await downloadSmartMacroDoc({
-                owner,
-                repo,
-                ref: firmwareRepoInfo.firmwareGitTag,
-                directory: downloadDirectory
-            });
+            if (!await fse.pathExists(indexHtmlPath)) {
+                await downloadSmartMacroDoc({
+                    owner,
+                    repo,
+                    ref: firmwareRepoInfo.firmwareGitTag,
+                    directory: downloadDirectory
+                });
+            }
+
+            this.logService.misc(serviceLogMessage('firmware documentation downloaded'));
+            event.sender.send(IpcEvents.smartMacroDoc.downloadDocumentationReply);
+
+            const docDevDirectory = join(downloadDirectory, 'doc-dev');
+            if (!await fse.pathExists(docDevDirectory)) {
+                await downloadSmartMacroReferenceManual({
+                    owner,
+                    repo,
+                    ref: firmwareRepoInfo.firmwareGitTag,
+                    directory: docDevDirectory
+                });
+            }
+
+            this.logService.misc(serviceLogMessage('reference manual downloaded'));
+
+            const referenceManualPath = join(docDevDirectory, REFERENCE_MANUAL_FILE_NAME);
+            const referenceManual = await fse.readFile(referenceManualPath, 'utf8');
+            event.sender.send(IpcEvents.smartMacroDoc.referenceManualReply, referenceManual);
+        } catch (error) {
+            this.logService.error(serviceLogMessage('download documentation failed'), error);
         }
-
-        this.logService.misc(serviceLogMessage('firmware documentation downloaded'));
-        event.sender.send(IpcEvents.smartMacroDoc.downloadDocumentationReply);
     }
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Parser, Suggestion } from 'naive-autocompletion-parser';
+import { buildUhkParser, Parser, Suggestion } from 'naive-autocompletion-parser';
 import { LogService } from 'uhk-common';
 
 @Injectable({ providedIn: 'root' })
@@ -11,6 +11,16 @@ export class MonacoEditorCompletionItemProvider implements monaco.languages.Comp
 
     constructor(private logService: LogService) {
         this.logService.misc('[MonacoEditorCompletionItemProvider] initialized.');
+    }
+
+    setReferenceManual(referenceManual: string): void {
+        if (referenceManual) {
+            this.logService.misc('[MonacoEditorCompletionItemProvider] reference manual updated.');
+            this.parser = buildUhkParser(referenceManual);
+        } else {
+            this.logService.misc('[MonacoEditorCompletionItemProvider] cleared.');
+            this.parser = undefined;
+        }
     }
 
     guessKind(text: string, rule: string): [monaco.languages.CompletionItemKind, string] {
