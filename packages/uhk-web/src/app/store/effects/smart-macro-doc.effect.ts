@@ -1,18 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { distinctUntilChanged, map, tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { FirmwareRepoInfo } from 'uhk-common';
 
 import { MonacoEditorCompletionItemProvider } from '../../services/monaco-editor-completion-item-provider';
 import { SmartMacroDocRendererService } from '../../services/smart-macro-doc-renderer.service';
 import { SmartMacroDocService } from '../../services/smart-macro-doc-service';
 import * as Device from '../actions/device';
+import * as AppActions from '../actions/app';
 import { ActionTypes, ReferenceManualChangedAction } from '../actions/smart-macro-doc.action';
-import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds } from '../index';
+import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds, runningInElectron } from '../index';
 
 @Injectable()
 export class SmartMacroDocEffect {
+    appStart$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(AppActions.ActionTypes.AppBootstrapped),
+            startWith(new AppActions.AppStartedAction()),
+            withLatestFrom(this.store.select(runningInElectron)),
+            tap(async ([, electron]) => {
+                if (!electron) {
+                    const response = await fetch('https://raw.githubusercontent.com/UltimateHackingKeyboard/firmware/master/doc-dev/reference-manual.md');
+                    if (response.ok) {
+                        const text = await response.text();
+                        this.completionItemProvider.setReferenceManual(text);
+                    }
+                }
+            })
+        ),
+    { dispatch: false }
+    );
 
     smartMacroDocInited$ = createEffect(() => this.actions$
         .pipe(
