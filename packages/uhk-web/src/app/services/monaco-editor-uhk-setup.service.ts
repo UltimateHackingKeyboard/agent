@@ -20,7 +20,12 @@ export class MonacoEditorUhkSetupService {
             monaco.editor.defineTheme('uhk-dark', {
                 base: 'vs-dark',
                 inherit: true,
-                rules: [],
+                rules: [
+                    { token: 'comment', foreground: '#777777'},
+                    { token: 'number', foreground: '#aa0000'},
+                    { token: 'string', foreground: '#55aa55'},
+                    { token: 'variable', foreground: '#7777ff'},
+                ],
                 colors: {
                     'editor.background': '#222222',
                     'editor.foreground': '#bbbbbb'
