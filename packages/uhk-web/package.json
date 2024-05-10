@@ -68,6 +68,7 @@
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
     "monaco-editor": "0.48.0",
+    "naive-autocompletion-parser": "1.1.8",
     "ng2-nouislider": "2.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngx-clipboard": "16.0.0",
