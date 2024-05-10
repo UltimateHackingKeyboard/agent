@@ -14,20 +14,36 @@ import {
     getSmartMacroDocRootPath,
     makeFolderWriteableToUserOnLinux
 } from '../util';
+import { QueueManager } from './queue-manager';
 
 const LOG_PREFIX = '[SmartMacroService]';
 
 export class SmartMacroDocService {
     private _isRunning = false;
     private port: number;
+    private queueManager = new QueueManager();
     private staticServer: FastifyInstance;
     private readonly rootPath: string;
 
     constructor(private logService: LogService,
                 private rootDir: string) {
         this.rootPath = getSmartMacroDocRootPath();
-        ipcMain.on(IpcEvents.app.getAppStartInfo, this.handleAppStartInfo.bind(this));
-        ipcMain.on(IpcEvents.smartMacroDoc.downloadDocumentation, this.handleDownloadDocumentation.bind(this));
+        ipcMain.on(IpcEvents.app.getAppStartInfo, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.handleAppStartInfo,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+        ipcMain.on(IpcEvents.smartMacroDoc.downloadDocumentation, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.handleDownloadDocumentation,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
     }
 
     public get isRunning(): boolean {
@@ -86,6 +102,8 @@ export class SmartMacroDocService {
             const indexHtmlPath = join(downloadDirectory, 'index.html');
 
             if (!await fse.pathExists(indexHtmlPath)) {
+                this.logService.misc(serviceLogMessage('firmware documentation downloading'));
+
                 await downloadSmartMacroDoc({
                     owner,
                     repo,
@@ -99,6 +117,8 @@ export class SmartMacroDocService {
 
             const docDevDirectory = join(downloadDirectory, 'doc-dev');
             if (!await fse.pathExists(docDevDirectory)) {
+                this.logService.misc(serviceLogMessage('reference manual downloading'));
+
                 await downloadSmartMacroReferenceManual({
                     owner,
                     repo,
