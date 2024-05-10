@@ -18,6 +18,7 @@
     "test.ts"
   ],
   "include": [
+    "./polyfills.ts",
     "**/*.spec.ts",
     "**/*.d.ts"
   ]
