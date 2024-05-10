@@ -39,7 +39,7 @@
     "@angular/platform-browser": "17.3.4",
     "@angular/platform-browser-dynamic": "17.3.4",
     "@angular/router": "17.3.4",
-    "@fontsource/jetbrains-mono" : "5.0.14",
+    "@fontsource/jetbrains-mono" : "5.0.20",
     "@fortawesome/angular-fontawesome": "0.14.1",
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-regular-svg-icons": "6.5.2",
