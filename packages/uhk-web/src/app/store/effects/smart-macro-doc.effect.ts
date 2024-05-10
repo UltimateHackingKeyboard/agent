@@ -14,21 +14,15 @@ import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds } f
 @Injectable()
 export class SmartMacroDocEffect {
 
-    smartMacroTogglePanelVisibility$ = createEffect(() => this.actions$
-        .pipe(
-            ofType(ActionTypes.TogglePanelVisibility),
-            withLatestFrom(this.store.select(getRightModuleFirmwareRepoInfo)),
-            tap(([, firmwareRepoInfo]) => this.smartMacroDocRendererService.downloadDocumentation(firmwareRepoInfo))
-        ),
-    { dispatch: false }
-    );
-
     smartMacroDocInited$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.SmdInited, Device.ActionTypes.ModulesInfoLoaded, Device.ActionTypes.ConnectionStateChanged,
                 Device.ActionTypes.UpdateFirmwareSuccess, Device.ActionTypes.UpdateFirmwareFailed),
             withLatestFrom(this.store.select(getSmartMacroDocModuleIds), this.store.select(getRightModuleFirmwareRepoInfo)),
-            tap(([, modules, repoInfo]) => this.sendMessageContext(modules, repoInfo))
+            tap(([, modules, repoInfo]) => {
+                this.sendMessageContext(modules, repoInfo);
+                this.smartMacroDocRendererService.downloadDocumentation(repoInfo);
+            })
         ),
     { dispatch: false }
     );
