@@ -24,5 +24,9 @@ export async function copySmartMacroDocToWebserver(firmwarePath: TmpFirmware, lo
 
     await cp(smartMacroDocFirmwarePath, destination, { force: true, recursive: true });
 
+    const referenceManualFirmwarePath = path.join(firmwarePath.tmpDirectory, 'doc-dev');
+    const referenceManualDestination = path.join(destination, 'doc-dev');
+    await cp(referenceManualFirmwarePath, referenceManualDestination, { force: true, recursive: true });
+
     logger.misc('[SmartMacroCopy] done');
 }

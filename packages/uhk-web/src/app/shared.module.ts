@@ -154,7 +154,7 @@ import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.ser
 import { SmartMacroDocRendererService } from './services/smart-macro-doc-renderer.service';
 import { SmartMacroDocDirective } from './components/macro/directives/smart-macro-doc.directive';
 import { SmartMacroDocService } from './services/smart-macro-doc-service';
-import { MonacoEditorCustomThemeService } from './services/monaco-editor-custom-theme.service';
+import { MonacoEditorUhkSetupService } from './services/monaco-editor-uhk-setup.service';
 import appInitFactory from './services/app-init-factory';
 
 @NgModule({
@@ -296,7 +296,7 @@ import appInitFactory from './services/app-init-factory';
             provide: APP_INITIALIZER,
             useFactory: appInitFactory,
             multi: true,
-            deps: [MonacoEditorCustomThemeService]
+            deps: [MonacoEditorUhkSetupService]
         },
         SvgModuleProviderService,
         KeyActionDragAndDropService,

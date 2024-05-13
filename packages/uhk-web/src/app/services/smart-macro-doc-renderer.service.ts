@@ -3,6 +3,7 @@ import { Action, Store } from '@ngrx/store';
 import { FirmwareRepoInfo, IpcEvents, LogService } from 'uhk-common';
 
 import { AppState } from '../store';
+import { ReferenceManualChangedAction } from '../store/actions/smart-macro-doc.action';
 import { DownloadDocumentationSuccessAction, ServiceListeningAction } from '../store/actions/smart-macro-doc.action';
 import { IpcCommonRenderer } from './ipc-common-renderer';
 
@@ -28,6 +29,10 @@ export class SmartMacroDocRendererService {
 
         this.ipcRenderer.on(IpcEvents.smartMacroDoc.downloadDocumentationReply, () => {
             this.dispatchStoreAction(new DownloadDocumentationSuccessAction());
+        });
+
+        this.ipcRenderer.on(IpcEvents.smartMacroDoc.referenceManualReply, (event: string, arg: string) => {
+            this.dispatchStoreAction(new ReferenceManualChangedAction(arg));
         });
     }
 

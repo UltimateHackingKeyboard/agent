@@ -23,13 +23,14 @@ import { Key } from 'ts-keycode-enum';
 import { LogService } from 'uhk-common';
 
 import { SelectedMacroActionId } from '../../../../../models';
+import { MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID } from '../../../../../services/monaco-editor-uhk-setup.service';
 import { SmartMacroDocCommandAction, SmartMacroDocService } from '../../../../../services/smart-macro-doc-service';
 import { hasNonAsciiCharacters, NON_ASCII_REGEXP } from '../../../../../util';
 
 const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
-    return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'vs';
+    return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'uhk-light';
 }
 
 @Component({
@@ -65,6 +66,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         fontFamily: 'JetBrains Mono',
         folding: false,
         glyphMargin: false,
+        language: MONACO_EDITOR_UHK_MACRO_LANGUAGE_ID,
         lineNumbers: 'off',
         lineDecorationsWidth: 0,
         lineNumbersMinChars: 0,

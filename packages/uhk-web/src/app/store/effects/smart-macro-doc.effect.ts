@@ -1,23 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { tap, withLatestFrom } from 'rxjs/operators';
+import { distinctUntilChanged, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 import { FirmwareRepoInfo } from 'uhk-common';
 
+import { MonacoEditorCompletionItemProvider } from '../../services/monaco-editor-completion-item-provider';
 import { SmartMacroDocRendererService } from '../../services/smart-macro-doc-renderer.service';
 import { SmartMacroDocService } from '../../services/smart-macro-doc-service';
 import * as Device from '../actions/device';
-import { ActionTypes } from '../actions/smart-macro-doc.action';
-import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds } from '../index';
+import * as AppActions from '../actions/app';
+import { ActionTypes, ReferenceManualChangedAction } from '../actions/smart-macro-doc.action';
+import { AppState, getRightModuleFirmwareRepoInfo, getSmartMacroDocModuleIds, runningInElectron } from '../index';
 
 @Injectable()
 export class SmartMacroDocEffect {
-
-    smartMacroTogglePanelVisibility$ = createEffect(() => this.actions$
+    appStart$ = createEffect(() => this.actions$
         .pipe(
-            ofType(ActionTypes.TogglePanelVisibility),
-            withLatestFrom(this.store.select(getRightModuleFirmwareRepoInfo)),
-            tap(([, firmwareRepoInfo]) => this.smartMacroDocRendererService.downloadDocumentation(firmwareRepoInfo))
+            ofType(AppActions.ActionTypes.AppBootstrapped),
+            startWith(new AppActions.AppStartedAction()),
+            withLatestFrom(this.store.select(runningInElectron)),
+            tap(async ([, electron]) => {
+                if (!electron) {
+                    const response = await fetch('https://raw.githubusercontent.com/UltimateHackingKeyboard/firmware/master/doc-dev/reference-manual.md');
+                    if (response.ok) {
+                        const text = await response.text();
+                        this.completionItemProvider.setReferenceManual(text);
+                    }
+                }
+            })
         ),
     { dispatch: false }
     );
@@ -27,16 +37,31 @@ export class SmartMacroDocEffect {
             ofType(ActionTypes.SmdInited, Device.ActionTypes.ModulesInfoLoaded, Device.ActionTypes.ConnectionStateChanged,
                 Device.ActionTypes.UpdateFirmwareSuccess, Device.ActionTypes.UpdateFirmwareFailed),
             withLatestFrom(this.store.select(getSmartMacroDocModuleIds), this.store.select(getRightModuleFirmwareRepoInfo)),
-            tap(([, modules, repoInfo]) => this.sendMessageContext(modules, repoInfo))
+            tap(([, modules, repoInfo]) => {
+                this.sendMessageContext(modules, repoInfo);
+                this.smartMacroDocRendererService.downloadDocumentation(repoInfo);
+            })
+        ),
+    { dispatch: false }
+    );
+
+    referenceManualUpdated$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.ReferenceManualChanged),
+            map((action: ReferenceManualChangedAction) => action.payload),
+            distinctUntilChanged(),
+            tap((referenceManual) => {
+                this.completionItemProvider.setReferenceManual(referenceManual);
+            })
         ),
     { dispatch: false }
     );
 
     constructor(private actions$: Actions,
+                private completionItemProvider: MonacoEditorCompletionItemProvider,
                 private smartMacroDocRendererService: SmartMacroDocRendererService,
                 private smartMacroDocService: SmartMacroDocService,
                 private store: Store<AppState>) {
-
     }
 
     private sendMessageContext(modulesIds: Array<number>, firmwareRepoInfo: FirmwareRepoInfo): void {
