@@ -34,7 +34,6 @@ import { Tab } from './tab';
 
 import {
     AppState,
-    extraMouseButtonsSupported,
     getKeymapOptions,
     getKeymaps,
     getLayerOptions,
@@ -127,7 +126,6 @@ export class PopoverComponent implements OnChanges {
         }
     ];
     macroPlaybackSupported$: Observable<boolean>;
-    extraMouseButtonsSupported$: Observable<boolean>;
     layerOptions$: Observable<LayerOption[]>;
 
     constructor(private store: Store<AppState>,
@@ -136,7 +134,6 @@ export class PopoverComponent implements OnChanges {
         this.keymaps$ = store.select(getKeymaps);
         this.keymapOptions$ = store.select(getKeymapOptions);
         this.macroPlaybackSupported$ = store.select(macroPlaybackSupported);
-        this.extraMouseButtonsSupported$ = store.select(extraMouseButtonsSupported);
         this.layerOptions$ = store.select(getLayerOptions);
     }
 

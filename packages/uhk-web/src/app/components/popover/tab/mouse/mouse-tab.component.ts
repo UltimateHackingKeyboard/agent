@@ -22,7 +22,6 @@ import { Tab } from '../tab';
 })
 export class MouseTabComponent extends Tab implements OnChanges {
     @Input() defaultKeyAction: KeyAction;
-    @Input() extraMouseButtonsSupported: boolean;
 
     MouseActionParam = MouseActionParam;
     mouseActionParam: MouseActionParam;
@@ -86,6 +85,18 @@ export class MouseTabComponent extends Tab implements OnChanges {
             case MouseActionParam.button6:
             case MouseActionParam.button7:
             case MouseActionParam.button8:
+            case MouseActionParam.button9:
+            case MouseActionParam.button10:
+            case MouseActionParam.button11:
+            case MouseActionParam.button12:
+            case MouseActionParam.button13:
+            case MouseActionParam.button14:
+            case MouseActionParam.button15:
+            case MouseActionParam.button16:
+            case MouseActionParam.button17:
+            case MouseActionParam.button18:
+            case MouseActionParam.button19:
+            case MouseActionParam.button20:
                 this.selectedPageIndex = 2;
                 break;
             case MouseActionParam.decelerate:
