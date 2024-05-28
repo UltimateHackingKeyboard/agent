@@ -46,12 +46,11 @@
             bindLabel="text"
             bindValue="id"
         />
-        <icon *ngIf="isLinux$ | async"
-              name="question-circle"
-              class="ms-2"
-              [ngbTooltip]="systemThemeTooltip"
-              tooltipClass="tooltip-system-theme"
-              placement="bottom"></icon>
+        <circle-tooltip
+            *ngIf="isLinux$ | async"
+            [tooltip]="systemThemeTooltip"
+            width="300"
+        />
     </div>
 </div>
 
