@@ -2,11 +2,10 @@
     <div class="col-12">
         <h4>
             Macro commands
-            <icon name="question-circle"
-                [ngbTooltip]="macroContentTooltip"
-                tooltipClass="tooltip-macro-text"
-                placement="bottom">
-            </icon>
+            <circle-tooltip
+                [tooltip]="macroContentTooltip"
+                width="350"
+            />
             <ng-template #macroContentTooltip>
                 Open the <strong>Smart macro reference</strong> tab on the right edge to learn more.
             </ng-template>
