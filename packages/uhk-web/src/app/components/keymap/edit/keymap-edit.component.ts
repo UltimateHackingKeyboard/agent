@@ -72,6 +72,7 @@ export class KeymapEditComponent implements OnDestroy {
     private routeSubscription: Subscription;
     private keymapSubscription: Subscription;
     private queryParamsSubscription: Subscription;
+    private selectedLayer: LayerName;
 
     constructor(protected store: Store<AppState>,
                 private route: ActivatedRoute,
@@ -85,11 +86,8 @@ export class KeymapEditComponent implements OnDestroy {
             .subscribe(abbr => store.dispatch(new SelectKeymapAction(abbr)));
 
         this.queryParamsSubscription = route.queryParams.subscribe(params => {
-            if (params.layer) {
-                this.store.dispatch(new SelectLayerAction(+params.layer));
-            } else {
-                this.store.dispatch(new SelectLayerAction(LayerName.base));
-            }
+            this.selectedLayer = params.layer ? +params.layer : LayerName.base;
+            this.store.dispatch(new SelectLayerAction(this.selectedLayer));
 
             const moduleId = +params.module;
             const keyId = +params.key;
@@ -149,7 +147,7 @@ export class KeymapEditComponent implements OnDestroy {
 
     navigateToModuleSettings(moduleId: number): void {
         this.store.dispatch(new NavigateToModuleSettings({
-            backUrl: `/keymap/${this.keymap.abbreviation}`,
+            backUrl: `/keymap/${this.keymap.abbreviation}?layer=${this.selectedLayer}`,
             backText: `"${this.keymap.name}" keymap`,
             moduleId,
         }));
