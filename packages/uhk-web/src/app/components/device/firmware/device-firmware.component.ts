@@ -40,7 +40,7 @@ export class DeviceFirmwareComponent implements OnDestroy {
     firmwareUpgradeFailed: boolean;
     firmwareUpgradeFailReasons = FirmwareUpgradeFailReason;
     firmwareUpgradeSuccess: boolean;
-    upgradeType: string;
+    upgradeType = 'Firmware';
 
     @ViewChild(XtermComponent, { static: false }) xtermRef: XtermComponent;
 
