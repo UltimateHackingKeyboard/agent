@@ -71,15 +71,7 @@ export const initialState: State = {
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 },
     skipFirmwareUpgrade: false,
-    statusBuffer: 'Error at Go to UHK site in browser 4/1/5: Parameter not recognized: a\n' +
-        '> 1 | set a = 1\n' +
-        '>   |     ^\n' +
-        'Error at Go to UHK site in browser 4/2/5: Parameter not recognized: b\n' +
-        '> 2 | set b = 2\n' +
-        '>   |     ^\n' +
-        'Error at New macro 1/2/3: 1/1/5: Parameter not recognized: c=3\n' +
-        '> 1 | set c=3\n' +
-        '>   |     ^'
+    statusBuffer: ''
 };
 
 export function reducer(state = initialState, action: Action): State {
