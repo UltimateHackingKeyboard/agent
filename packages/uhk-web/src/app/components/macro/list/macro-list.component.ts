@@ -71,7 +71,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     @Input() macroPlaybackSupported: boolean;
     @Input() isMacroCommandSupported: boolean;
     @Input() selectedMacroAction: SelectedMacroAction;
-    @Input() selectedMacroActionIndex: SelectedMacroActionId;
+    @Input() selectedMacroActionId: SelectedMacroActionId;
 
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
@@ -80,7 +80,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
     @Output() selectedMacroActionChanged = new EventEmitter<SelectedMacroAction>();
-    @Output() selectedMacroActionIndexChanged = new EventEmitter<SelectedMacroActionId>();
+    @Output() selectedMacroActionIdChanged = new EventEmitter<SelectedMacroActionId>();
 
     newMacro: Macro = undefined;
     MACRO_ACTIONS = 'macroActions';
@@ -140,13 +140,13 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     showNewAction() {
         this.hideActiveEditor();
-        this.selectedMacroActionIndexChanged.emit('new');
+        this.selectedMacroActionIdChanged.emit('new');
         this.newMacro = undefined;
         this.scrollToBottom();
     }
 
     hideNewAction() {
-        this.selectedMacroActionIndexChanged.emit();
+        this.selectedMacroActionIdChanged.emit();
         window.setTimeout(() => window.scrollTo(document.body.scrollLeft, document.body.scrollHeight), CANCEL_ACTION_ANIMATION_TIMEOUT);
     }
 
@@ -162,11 +162,11 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     editAction(index: number) {
         // Hide other editors when clicking edit button of a macro action
         this.hideActiveEditor();
-        this.selectedMacroActionIndexChanged.emit(index);
+        this.selectedMacroActionIdChanged.emit(index);
     }
 
     cancelAction() {
-        this.selectedMacroActionIndexChanged.emit();
+        this.selectedMacroActionIdChanged.emit();
     }
 
     saveAction(macroAction: MacroAction, index: number) {
@@ -230,8 +230,8 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     private hideActiveEditor() {
-        if (this.selectedMacroActionIndex !== undefined && this.selectedMacroActionIndex !== 'new') {
-            this.macroItems.toArray()[this.selectedMacroActionIndex].cancelEdit();
+        if (this.selectedMacroActionId !== undefined && this.selectedMacroActionId !== 'new') {
+            this.macroItems.toArray()[this.selectedMacroActionId].cancelEdit();
         }
     }
 

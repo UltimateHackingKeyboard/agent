@@ -50,7 +50,7 @@ export class MacroEditComponent implements OnDestroy {
     selectedMacroAction$: Observable<SelectedMacroAction>;
     smartMacroDocUrl$: Observable<string>;
     smartMacroPanelVisibility$: Observable<boolean>;
-    selectedMacroActionIndex: SelectedMacroActionId;
+    selectedMacroActionId: SelectedMacroActionId;
     showIframeHider = false;
     smartMacroPanelSizes = {
         left: 100,
@@ -89,12 +89,12 @@ export class MacroEditComponent implements OnDestroy {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             if (params.actionIndex) {
                 if (params.actionIndex === 'new') {
-                    this.selectedMacroActionIndex = params.actionIndex;
+                    this.selectedMacroActionId = params.actionIndex;
                 } else {
-                    this.selectedMacroActionIndex = +params.actionIndex;
+                    this.selectedMacroActionId = +params.actionIndex;
                 }
             } else {
-                this.selectedMacroActionIndex = undefined;
+                this.selectedMacroActionId = undefined;
             }
         }));
     }
@@ -120,12 +120,12 @@ export class MacroEditComponent implements OnDestroy {
     }
 
     onSelectedMacroAction(action: SelectedMacroAction): void {
-        this.onSelectedMacroActionIndexChanged(action.id);
+        this.onSelectedMacroActionIdChanged(action.id);
         this.store.dispatch(new SelectMacroActionAction(action));
     }
 
-    onSelectedMacroActionIndexChanged(index: SelectedMacroActionId): void {
-        if (index === this.selectedMacroActionIndex) {
+    onSelectedMacroActionIdChanged(index: SelectedMacroActionId): void {
+        if (index === this.selectedMacroActionId) {
             return;
         }
 

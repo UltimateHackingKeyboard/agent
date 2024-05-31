@@ -7,7 +7,7 @@
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="macroAction"
                         [editable]="true"
-                        [editing]="macroActionIndex === selectedMacroActionIndex"
+                        [editing]="macroActionIndex === selectedMacroActionId"
                         [deletable]="true"
                         [isActive]="selectedMacroAction?.id === macroActionIndex"
                         [index]="macroActionIndex"
@@ -20,7 +20,7 @@
                         [attr.data-index]="macroActionIndex"
             ></macro-item>
 
-            <macro-item *ngIf="selectedMacroActionIndex === 'new'"
+            <macro-item *ngIf="selectedMacroActionId === 'new'"
                         [@togglerNew]
                         [class.active]="selectedMacroAction?.id === 'new'"
                         [isActive]="selectedMacroAction?.id === 'new'"
@@ -35,7 +35,7 @@
                         (selected)="onSelectedMacroAction('new', $event)"
             ></macro-item>
         </div>
-        <div class="list-group add-new__action-container" [@toggler]="(selectedMacroActionIndex !== 'new') ? 'active' : 'inactive'">
+        <div class="list-group add-new__action-container" [@toggler]="(selectedMacroActionId !== 'new') ? 'active' : 'inactive'">
             <div class="list-group-item action--item add-new__action-item no-reorder clearfix">
                 <span class="add-new__action-item--link" (click)="showNewAction()">
                     <button type="button" class="btn btn-link">
