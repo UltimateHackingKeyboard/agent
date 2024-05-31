@@ -359,7 +359,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         // when the editor first created. So if macro command has CRLF and the user modify the macro command
         // then the editor keep the CRLF option and not the LF option
         setTimeout(() => {
-            this.editor.getModel().setEOL(monaco.editor.EndOfLineSequence.LF);
+            this.editor.getModel()?.setEOL(monaco.editor.EndOfLineSequence.LF);
         }, 1);
     }
 }
