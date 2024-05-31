@@ -264,30 +264,9 @@ kbd {
     max-width: 100%;
 }
 
-.tooltip-scancode .tooltip-inner {
-    width: 330px;
-    max-width: 330px;
-}
-
-.tooltip-modifier .tooltip-inner {
-    width: 370px;
-    max-width: 370px;
-}
-
-.tooltip-secondary-role .tooltip-inner {
-    width: 620px;
-    max-width: 620px;
-}
-
-.tooltip-firmware-version .tooltip-inner,
-.tooltip-macro-text .tooltip-inner {
+.tooltip-firmware-version .tooltip-inner {
     width: 350px;
     max-width: 350px;
-}
-
-.tooltip-system-theme .tooltip-inner {
-    width: 300px;
-    max-width: 300px;
 }
 
 mwl-confirmation-popover-window {

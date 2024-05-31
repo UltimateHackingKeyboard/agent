@@ -36,11 +36,10 @@
     <a class="btn btn-padding-0 mb-2"
        href="https://ultimatehackingkeyboard.com/blog/2018/06/23/how-can-i-type-accented-characters-with-my-uhk"
        externalUrl>
-        <icon name="question-circle"
-              [ngbTooltip]="scanCodeTooltip"
-              tooltipClass="tooltip-scancode"
-              container="body"
-              placement="bottom"></icon>
+        <circle-tooltip
+            [tooltip]="scanCodeTooltip"
+            width="330"
+        />
     </a>
     <capture-keystroke-button (capture)="onKeysCapture($event)" tabindex="0" class="mb-2"></capture-keystroke-button>
 </div>
@@ -70,11 +69,10 @@
         </div>
 
         <span class="mt-1">
-            <icon name="question-circle"
-                  ngbTooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
-                  tooltipClass="tooltip-modifier"
-                  container="body"
-                  placement="bottom"></icon>
+            <circle-tooltip
+                tooltip="The selected modifiers will be added to the scancode emitted by this key, thus mapping it to scancode + modifier key combination. For more complex needs, you can use a macro."
+                width="370"
+            />
         </span>
     </div>
 
@@ -111,11 +109,10 @@
         <p class="text-start mb-1">The secondary role can be any layer or modifier.</p>
     </ng-template>
     <span class="mt-1">
-        <icon name="question-circle"
-              [ngbTooltip]="secondaryRoleTooltip"
-              tooltipClass="tooltip-secondary-role"
-              container="body"
-              placement="bottom"></icon>
+        <circle-tooltip
+            [tooltip]="secondaryRoleTooltip"
+            width="620"
+        />
     </span>
 </div>
 

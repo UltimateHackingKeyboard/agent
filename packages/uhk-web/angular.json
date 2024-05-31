@@ -2,7 +2,6 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": ".",
-  "defaultProject": "uhk-web",
   "projects": {
     "uhk-web": {
       "root": "",
@@ -83,19 +82,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "uhk-web:build",
+            "buildTarget": "uhk-web:build",
             "port": 8080
           },
           "configurations": {
             "production": {
-              "browserTarget": "uhk-web:build:production"
+              "buildTarget": "uhk-web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "uhk-web:build"
+            "buildTarget": "uhk-web:build"
           }
         },
         "test": {

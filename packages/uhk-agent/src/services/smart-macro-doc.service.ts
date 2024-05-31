@@ -96,6 +96,11 @@ export class SmartMacroDocService {
     private async handleDownloadDocumentation(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
         try {
             const firmwareRepoInfo: FirmwareRepoInfo = args[0];
+            if (!firmwareRepoInfo.firmwareGitRepo || !firmwareRepoInfo.firmwareGitTag) {
+                this.logService.misc(serviceLogMessage('skip download firmware documentation because git repo or tag missing'), firmwareRepoInfo);
+                return;
+            }
+
             this.logService.misc(serviceLogMessage('start download firmware documentation'), firmwareRepoInfo);
             const [owner, repo] = firmwareRepoInfo.firmwareGitRepo.split('/');
             const downloadDirectory = join(this.rootPath, owner, repo, firmwareRepoInfo.firmwareGitTag);

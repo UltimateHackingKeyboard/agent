@@ -51,7 +51,7 @@ const CANCEL_ACTION_ANIMATION_TIMEOUT = ANIMATION_TIME + 25;
         trigger('togglerNew', [
             transition(':enter', [
                 style({ height: 0, overflow: 'hidden', offset: 0 }),
-                animate(`${ANIMATION_TIME}ms ease-out`, style({ height: '*', overflow: 'unset', offset: 1 })
+                animate(`${ANIMATION_TIME}ms ease-out`, style({ height: '*', offset: 1 })
                 )
             ]),
             transition(':leave', [

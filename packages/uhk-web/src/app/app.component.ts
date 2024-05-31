@@ -1,8 +1,6 @@
 import { Component, HostListener, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { offset as offsetModifier } from '@popperjs/core';
-import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { IOutputData } from 'angular-split';
 import { Observable, Subscription } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
@@ -88,7 +86,6 @@ import { SecondSideMenuContainerComponent } from './components/side-menu';
             ])
         ])
     ],
-    providers: [NgbTooltipConfig]
 })
 export class MainAppComponent implements OnDestroy {
     @ViewChild(SecondSideMenuContainerComponent) secondarySideMenuContainer: SecondSideMenuContainerComponent;
@@ -121,8 +118,7 @@ export class MainAppComponent implements OnDestroy {
     constructor(private store: Store<AppState>,
                 private route: ActivatedRoute,
                 private router: Router,
-                private cdRef: ChangeDetectorRef,
-                private ngTooltipConfig: NgbTooltipConfig) {
+                private cdRef: ChangeDetectorRef) {
         this.errorPanelHeightSubscription = store.select(getErrorPanelHeight)
             .subscribe(height => {
                 this.splitSizes = {
@@ -180,24 +176,6 @@ export class MainAppComponent implements OnDestroy {
                 this.statusBuffer = data;
                 this.cdRef.markForCheck();
             });
-
-        this.ngTooltipConfig.popperOptions = (options) => {
-            const newOptions = {
-                ...options,
-                modifiers: [
-                    offsetModifier,
-                    ...(options.modifiers || []),
-                    {
-                        name: 'offset',
-                        options: {
-                            offset: () => ([0, 6]),
-                        },
-                    },
-                ],
-            };
-
-            return newOptions;
-        };
     }
 
     ngOnDestroy(): void {
