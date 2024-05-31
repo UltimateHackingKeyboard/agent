@@ -52,7 +52,7 @@ function transformToErrorBlock(macros: Macro[], block: string): any {
     const columnNr = parseInt(line0Result[5], 10);
 
     const line1Result = /^(> \d* \| )(.*)/.exec(lines[1]);
-    const url = `#/macro/${macro.id}?actionIndex=${macroActionIndex}&lineNr=${lineNr}&columnNr=${columnNr}`;
+    const url = `#/macro/${macro.id}?actionIndex=${macroActionIndex}&lineNr=${lineNr}&columnNr=${columnNr}&inlineEdit=true`;
     const newLine2 = `${line1Result[1]}<a href="${url}">${line1Result[2]}</a>`;
 
     return `${lines[0]}\n${newLine2}\n${lines[2]}\n`;

@@ -21,7 +21,7 @@ import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction 
 import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
-import { SelectedMacroAction, SelectedMacroActionId, SelectedMacroItem } from '../../../models';
+import { SelectedMacroAction, SelectedMacroActionId, SelectedMacroActionIdModel, SelectedMacroItem } from '../../../models';
 
 const ANIMATION_TIME = 500;
 const ANIMATION_INTERVAL = 5;
@@ -71,7 +71,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     @Input() macroPlaybackSupported: boolean;
     @Input() isMacroCommandSupported: boolean;
     @Input() selectedMacroAction: SelectedMacroAction;
-    @Input() selectedMacroActionId: SelectedMacroActionId;
+    @Input() selectedMacroActionId: SelectedMacroActionIdModel;
 
     @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
 
@@ -80,7 +80,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
     @Output() selectedMacroActionChanged = new EventEmitter<SelectedMacroAction>();
-    @Output() selectedMacroActionIdChanged = new EventEmitter<SelectedMacroActionId>();
+    @Output() selectedMacroActionIdChanged = new EventEmitter<SelectedMacroActionIdModel>();
 
     newMacro: Macro = undefined;
     MACRO_ACTIONS = 'macroActions';
@@ -140,7 +140,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
 
     showNewAction() {
         this.hideActiveEditor();
-        this.selectedMacroActionIdChanged.emit('new');
+        this.selectedMacroActionIdChanged.emit({ id: 'new' });
         this.newMacro = undefined;
         this.scrollToBottom();
     }
@@ -162,7 +162,7 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     editAction(index: number) {
         // Hide other editors when clicking edit button of a macro action
         this.hideActiveEditor();
-        this.selectedMacroActionIdChanged.emit(index);
+        this.selectedMacroActionIdChanged.emit({ id: index });
     }
 
     cancelAction() {
@@ -230,8 +230,8 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     private hideActiveEditor() {
-        if (this.selectedMacroActionId !== undefined && this.selectedMacroActionId !== 'new') {
-            this.macroItems.toArray()[this.selectedMacroActionId].cancelEdit();
+        if (this.macroItems && this.selectedMacroActionId?.id !== undefined && this.selectedMacroActionId?.id !== 'new') {
+            this.macroItems.toArray()[this.selectedMacroActionId.id]?.cancelEdit();
         }
     }
 

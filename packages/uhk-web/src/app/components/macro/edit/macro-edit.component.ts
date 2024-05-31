@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewC
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { isEqual } from 'lodash';
 import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
@@ -27,7 +28,7 @@ import {
 } from '../../../store';
 import { IOutputData, SplitComponent } from 'angular-split';
 
-import { SelectedMacroAction, SelectedMacroActionId } from '../../../models';
+import { SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
 
 @Component({
@@ -50,7 +51,7 @@ export class MacroEditComponent implements OnDestroy {
     selectedMacroAction$: Observable<SelectedMacroAction>;
     smartMacroDocUrl$: Observable<string>;
     smartMacroPanelVisibility$: Observable<boolean>;
-    selectedMacroActionId: SelectedMacroActionId;
+    selectedMacroActionIdModel: SelectedMacroActionIdModel;
     showIframeHider = false;
     smartMacroPanelSizes = {
         left: 100,
@@ -89,13 +90,19 @@ export class MacroEditComponent implements OnDestroy {
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
             if (params.actionIndex) {
                 if (params.actionIndex === 'new') {
-                    this.selectedMacroActionId = params.actionIndex;
+                    this.selectedMacroActionIdModel = {
+                        id: params.actionIndex
+                    };
                 } else {
-                    this.selectedMacroActionId = +params.actionIndex;
+                    this.selectedMacroActionIdModel = {
+                        id: +params.actionIndex,
+                        inlineEdit: params.inlineEdit === 'true'
+                    };
                 }
             } else {
-                this.selectedMacroActionId = undefined;
+                this.selectedMacroActionIdModel = undefined;
             }
+            this.cdRef.markForCheck();
         }));
     }
 
@@ -120,18 +127,19 @@ export class MacroEditComponent implements OnDestroy {
     }
 
     onSelectedMacroAction(action: SelectedMacroAction): void {
-        this.onSelectedMacroActionIdChanged(action.id);
+        this.onSelectedMacroActionIdChanged(action);
         this.store.dispatch(new SelectMacroActionAction(action));
     }
 
-    onSelectedMacroActionIdChanged(index: SelectedMacroActionId): void {
-        if (index === this.selectedMacroActionId) {
+    onSelectedMacroActionIdChanged(model: SelectedMacroActionIdModel): void {
+        if (isEqual(model, this.selectedMacroActionIdModel)) {
             return;
         }
 
         this.router.navigate([], {
             queryParams: {
-                actionIndex: index,
+                actionIndex: model?.id,
+                inlineEdit: model?.inlineEdit
             }
         });
     }

@@ -126,8 +126,8 @@ export class MacroItemComponent implements OnInit, OnChanges {
     }
 
     macroEditorGotFocus():void {
-        this.cancelEdit();
         this.selected.emit({
+            inlineEdit: true,
             type: TabName.Command,
             macroAction: this.macroAction
         });

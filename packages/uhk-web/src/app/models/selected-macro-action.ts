@@ -9,6 +9,7 @@ export enum TabName {
 }
 
 export interface SelectedMacroItem {
+    inlineEdit?: boolean;
     type: TabName;
     macroAction: MacroAction
 }
@@ -17,6 +18,12 @@ export type SelectedMacroActionId = string | number; // 'new' if the macro curre
 
 export interface SelectedMacroAction {
     id: SelectedMacroActionId;
+    inlineEdit?: boolean;
     type: TabName;
     macroAction: MacroAction
+}
+
+export interface SelectedMacroActionIdModel {
+    id: SelectedMacroActionId;
+    inlineEdit?: boolean;
 }
