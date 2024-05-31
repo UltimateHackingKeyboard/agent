@@ -445,6 +445,10 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                     lineNumber: this.lineNr
                 });
             }
+
+            if (!this.isFocused) {
+                this.editor.focus();
+            }
         });
     }
 }
