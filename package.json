@@ -43,7 +43,7 @@
     "electron-debug": "1.5.0",
     "electron-devtools-installer": "2.2.3",
     "electron-log": "4.4.8",
-    "electron-settings": "4.0.2",
+    "electron-settings": "4.0.4",
     "electron-updater": "6.0.4",
     "eslint": "8.57.0",
     "fs-extra": "11.2.0",
