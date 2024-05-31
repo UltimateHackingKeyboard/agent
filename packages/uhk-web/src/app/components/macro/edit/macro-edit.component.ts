@@ -112,10 +112,12 @@ export class MacroEditComponent implements OnDestroy {
 
     addAction(macroId: number, action: MacroAction) {
         this.store.dispatch(new AddMacroActionAction({ id: macroId, action }));
+        this.hideActiveEditor();
     }
 
     editAction(macroId: number, index: number, action: MacroAction) {
         this.store.dispatch(new SaveMacroActionAction({ id: macroId, index, action }));
+        this.hideActiveEditor();
     }
 
     deleteAction(macroId: number, index: number, action: MacroAction) {
@@ -162,5 +164,11 @@ export class MacroEditComponent implements OnDestroy {
 
     toggleSmartMacroDocPanel(): void {
         this.store.dispatch(new TogglePanelVisibilityAction());
+    }
+
+    private hideActiveEditor(): void {
+        if (!this.selectedMacroActionIdModel?.inlineEdit) {
+            this.router.navigate([]);
+        }
     }
 }
