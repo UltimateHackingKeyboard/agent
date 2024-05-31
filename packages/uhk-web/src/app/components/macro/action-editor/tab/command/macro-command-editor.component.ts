@@ -16,6 +16,7 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -80,16 +81,19 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     editor: MonacoStandaloneCodeEditor;
     containerHeight = '54px';
 
+    private columnNr = 1;
     private lineHeight = 18;
+    private lineNr = 1;
     private isFocused = false;
     private insertingMacro = false;
     private changeObserver$: Observer<string>;
     private subscriptions = new Subscription();
-
     constructor(private cdRef: ChangeDetectorRef,
                 @Inject(DOCUMENT) private document: Document,
                 private logService: LogService,
-                private smartMacroDocService: SmartMacroDocService) {
+                private smartMacroDocService: SmartMacroDocService,
+                private route: ActivatedRoute,
+                private router: Router) {
         // https://stackoverflow.com/questions/58271107/offset-between-text-and-cursor-with-the-monaco-editor-angular-under-chrome-m
         this.document.fonts.ready.then(() => {
             if (this.editor) {
@@ -129,6 +133,19 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
                 })
         );
+        // read column and line numbers directly for performance reason.
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            const columNr = +params.columNr;
+            if (!Number.isNaN(columNr)) {
+                this.columnNr = columNr;
+            }
+
+            const lineNr =+params.lineNr;
+            if (!Number.isNaN(lineNr)) {
+                this.lineNr = lineNr;
+            }
+            this.setCursorPosition();
+        }));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -168,6 +185,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
         this.editor = editor;
         this.setLFEndOfLineOption();
+        this.setCursorPosition();
         if (this.autoFocus) {
             this.editor.focus();
             this.isFocused = true;
@@ -201,6 +219,19 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.gotFocus.emit();
             // To be sure the macro command doc got the latest edited macro command
             this.smartMacroDocService.updateCommand(this.value);
+        });
+
+        editor.onDidChangeCursorPosition(event => {
+            this.columnNr = event.position.column;
+            this.lineNr = event.position.lineNumber;
+
+            this.router.navigate([], {
+                queryParams: {
+                    columNr: this.columnNr,
+                    lineNr: this.lineNr,
+                },
+                queryParamsHandling: 'merge',
+            });
         });
 
         this.lineHeight = this.editor.getOption(monaco.editor.EditorOptions.lineHeight.id);
@@ -361,5 +392,20 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         setTimeout(() => {
             this.editor.getModel()?.setEOL(monaco.editor.EndOfLineSequence.LF);
         }, 1);
+    }
+
+    private setCursorPosition() {
+        if (!this.editor) {
+            return;
+        }
+
+        const currentPosition = this.editor.getPosition();
+
+        if (this.columnNr !== currentPosition.column || this.lineNr !== currentPosition.lineNumber) {
+            this.editor.setPosition({
+                column: this.columnNr,
+                lineNumber: this.lineNr
+            });
+        }
     }
 }
