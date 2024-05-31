@@ -3,13 +3,13 @@
     <p *ngIf="!macroPlaybackSupported"><i>Please note that macro playback is not implemented yet. You can create macros, but they won't have any effect until firmware support is implemented. We're working on this.</i></p>
         <div class="macro-actions-container" [dragula]="MACRO_ACTIONS" [dragulaModel]="macro.macroActions" (dragulaModelChange)="macroActionReordered($event)">
             <macro-item *ngFor="let macroAction of macro.macroActions; let macroActionIndex = index; trackBy:macroActionTrackByFn.bind(this)"
-                        [class.active]="selectedMacroAction?.id === macroActionIndex"
+                        [class.active]="selectedMacroActionId?.id === macroActionIndex"
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="macroAction"
                         [editable]="true"
-                        [editing]="macroActionIndex === activeEdit"
+                        [editing]="macroActionIndex === selectedMacroActionId?.id && !selectedMacroActionId.inlineEdit"
                         [deletable]="true"
-                        [isActive]="selectedMacroAction?.id === macroActionIndex"
+                        [isActive]="selectedMacroActionId?.id === macroActionIndex"
                         [index]="macroActionIndex"
                         [movable]="true"
                         (save)="saveAction($event, macroActionIndex)"
@@ -20,10 +20,10 @@
                         [attr.data-index]="macroActionIndex"
             ></macro-item>
 
-            <macro-item *ngIf="showNew"
+            <macro-item *ngIf="selectedMacroActionId?.id === 'new'"
                         [@togglerNew]
-                        [class.active]="selectedMacroAction?.id === 'new'"
-                        [isActive]="selectedMacroAction?.id === 'new'"
+                        [class.active]="selectedMacroActionId?.id === 'new'"
+                        [isActive]="selectedMacroActionId?.id === 'new'"
                         [isMacroCommandSupported]="isMacroCommandSupported"
                         [macroAction]="newMacro"
                         [editable]="true"
@@ -35,7 +35,7 @@
                         (selected)="onSelectedMacroAction('new', $event)"
             ></macro-item>
         </div>
-        <div class="list-group add-new__action-container" [@toggler]="(!showNew) ? 'active' : 'inactive'">
+        <div class="list-group add-new__action-container" [@toggler]="(selectedMacroActionId?.id !== 'new') ? 'active' : 'inactive'">
             <div class="list-group-item action--item add-new__action-item no-reorder clearfix">
                 <span class="add-new__action-item--link" (click)="showNewAction()">
                     <button type="button" class="btn btn-link">

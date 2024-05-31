@@ -11,7 +11,7 @@ import {
     AppState,
     getErrorPanelHeight,
     getShowAppUpdateAvailable,
-    getStatusBuffer,
+    getParsedStatusBuffer,
     deviceConfigurationLoaded,
     runningInElectron,
     saveToKeyboardState,
@@ -171,7 +171,7 @@ export class MainAppComponent implements OnDestroy {
                 this.cdRef.detectChanges();
             }
         });
-        this.statusBufferSubscription = store.select(getStatusBuffer)
+        this.statusBufferSubscription = store.select(getParsedStatusBuffer)
             .subscribe(data => {
                 this.statusBuffer = data;
                 this.cdRef.markForCheck();

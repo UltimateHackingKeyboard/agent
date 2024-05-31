@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { isEqual } from 'lodash';
 import { Macro, MacroAction } from 'uhk-common';
 
 import { Observable, Subscription } from 'rxjs';
@@ -27,7 +28,7 @@ import {
 } from '../../../store';
 import { IOutputData, SplitComponent } from 'angular-split';
 
-import { SelectedMacroAction } from '../../../models';
+import { SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
 
 @Component({
@@ -50,6 +51,7 @@ export class MacroEditComponent implements OnDestroy {
     selectedMacroAction$: Observable<SelectedMacroAction>;
     smartMacroDocUrl$: Observable<string>;
     smartMacroPanelVisibility$: Observable<boolean>;
+    selectedMacroActionIdModel: SelectedMacroActionIdModel;
     showIframeHider = false;
     smartMacroPanelSizes = {
         left: 100,
@@ -62,7 +64,8 @@ export class MacroEditComponent implements OnDestroy {
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef,
-                public route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                private router: Router) {
         this.subscriptions.add(store.select(getSelectedMacro)
             .subscribe((macro: Macro) => {
                 this.macro = macro;
@@ -84,6 +87,23 @@ export class MacroEditComponent implements OnDestroy {
         this.selectedMacroAction$ = store.select(getSelectedMacroAction);
         this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
         this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            if (params.actionIndex) {
+                if (params.actionIndex === 'new') {
+                    this.selectedMacroActionIdModel = {
+                        id: params.actionIndex
+                    };
+                } else {
+                    this.selectedMacroActionIdModel = {
+                        id: +params.actionIndex,
+                        inlineEdit: params.inlineEdit === 'true'
+                    };
+                }
+            } else {
+                this.selectedMacroActionIdModel = undefined;
+            }
+            this.cdRef.markForCheck();
+        }));
     }
 
     ngOnDestroy() {
@@ -92,10 +112,12 @@ export class MacroEditComponent implements OnDestroy {
 
     addAction(macroId: number, action: MacroAction) {
         this.store.dispatch(new AddMacroActionAction({ id: macroId, action }));
+        this.hideActiveEditor();
     }
 
     editAction(macroId: number, index: number, action: MacroAction) {
         this.store.dispatch(new SaveMacroActionAction({ id: macroId, index, action }));
+        this.hideActiveEditor();
     }
 
     deleteAction(macroId: number, index: number, action: MacroAction) {
@@ -107,7 +129,21 @@ export class MacroEditComponent implements OnDestroy {
     }
 
     onSelectedMacroAction(action: SelectedMacroAction): void {
+        this.onSelectedMacroActionIdChanged(action);
         this.store.dispatch(new SelectMacroActionAction(action));
+    }
+
+    onSelectedMacroActionIdChanged(model: SelectedMacroActionIdModel): void {
+        if (isEqual(model, this.selectedMacroActionIdModel)) {
+            return;
+        }
+
+        this.router.navigate([], {
+            queryParams: {
+                actionIndex: model?.id,
+                inlineEdit: model?.inlineEdit
+            }
+        });
     }
 
     dragStartHandler() {
@@ -128,5 +164,11 @@ export class MacroEditComponent implements OnDestroy {
 
     toggleSmartMacroDocPanel(): void {
         this.store.dispatch(new TogglePanelVisibilityAction());
+    }
+
+    private hideActiveEditor(): void {
+        if (!this.selectedMacroActionIdModel?.inlineEdit) {
+            this.router.navigate([]);
+        }
     }
 }

@@ -16,6 +16,8 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { isEqual } from 'lodash';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -31,6 +33,11 @@ const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
     return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'uhk-light';
+}
+
+interface Position {
+    columnNr: number;
+    lineNr: number;
 }
 
 @Component({
@@ -80,16 +87,21 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     editor: MonacoStandaloneCodeEditor;
     containerHeight = '54px';
 
+    private columnNr = 1;
     private lineHeight = 18;
+    private lineNr = 1;
     private isFocused = false;
     private insertingMacro = false;
     private changeObserver$: Observer<string>;
+    private cursorPositionChange$: Observer<Position>;
     private subscriptions = new Subscription();
 
     constructor(private cdRef: ChangeDetectorRef,
                 @Inject(DOCUMENT) private document: Document,
                 private logService: LogService,
-                private smartMacroDocService: SmartMacroDocService) {
+                private smartMacroDocService: SmartMacroDocService,
+                private route: ActivatedRoute,
+                private router: Router) {
         // https://stackoverflow.com/questions/58271107/offset-between-text-and-cursor-with-the-monaco-editor-angular-under-chrome-m
         this.document.fonts.ready.then(() => {
             if (this.editor) {
@@ -129,6 +141,19 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
                 })
         );
+        // read column and line numbers directly for performance reason.
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            const columnNr = +params.columnNr;
+            if (!Number.isNaN(columnNr)) {
+                this.columnNr = columnNr;
+            }
+
+            const lineNr = +params.lineNr;
+            if (!Number.isNaN(lineNr)) {
+                this.lineNr = lineNr;
+            }
+            this.setCursorPosition();
+        }));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -142,11 +167,15 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.editor.focus();
         }
         this.calculateHeight();
+        this.setCursorPosition();
     }
 
     ngOnDestroy() {
         if (this.changeObserver$) {
             this.changeObserver$.complete();
+        }
+        if (this.cursorPositionChange$) {
+            this.cursorPositionChange$.complete();
         }
         this.subscriptions.unsubscribe();
     }
@@ -203,6 +232,36 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.smartMacroDocService.updateCommand(this.value);
         });
 
+        editor.onDidChangeCursorPosition(event => {
+            if (!this.isFocused) {
+                return;
+            }
+
+            this.columnNr = event.position.column;
+            this.lineNr = event.position.lineNumber;
+
+            if (!this.cursorPositionChange$) {
+                new Observable(observer => {
+                    this.cursorPositionChange$ = observer;
+                }).pipe(
+                    debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
+                    distinctUntilChanged(isEqual)
+                ).subscribe(data => {
+                    this.router.navigate([], {
+                        queryParams: {
+                            columnNr: data.columnNr,
+                            lineNr: data.lineNr,
+                        },
+                        queryParamsHandling: 'merge',
+                    });
+                });
+            }
+            this.cursorPositionChange$.next({
+                columnNr: this.columnNr,
+                lineNr: this.lineNr,
+            });
+        });
+
         this.lineHeight = this.editor.getOption(monaco.editor.EditorOptions.lineHeight.id);
         this.calculateHeight();
     }
@@ -220,6 +279,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.insertingMacro = false;
         this.value = value;
         this.calculateHeight();
+        this.setCursorPosition();
 
         if (!this.changeObserver$) {
             Observable.create(observer => {
@@ -264,6 +324,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
         this.value = obj;
         this.calculateHeight();
+        this.setCursorPosition();
         this.cdRef.detectChanges();
     }
 
@@ -359,7 +420,35 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         // when the editor first created. So if macro command has CRLF and the user modify the macro command
         // then the editor keep the CRLF option and not the LF option
         setTimeout(() => {
-            this.editor.getModel().setEOL(monaco.editor.EndOfLineSequence.LF);
+            this.editor.getModel()?.setEOL(monaco.editor.EndOfLineSequence.LF);
         }, 1);
+    }
+
+    private setCursorPosition() {
+        if (!this.editor) {
+            return;
+        }
+
+        // setTimeout needed because otherwise the editor not recognize the new EOL option
+        // when the editor first created.
+        setTimeout(() => {
+            const currentPosition = this.editor?.getPosition();
+
+            // the editor can be re-drawn between 2 rendering
+            if (!currentPosition) {
+                return;
+            }
+
+            if (this.columnNr !== currentPosition.column || this.lineNr !== currentPosition.lineNumber) {
+                this.editor.setPosition({
+                    column: this.columnNr,
+                    lineNumber: this.lineNr
+                });
+            }
+
+            if (!this.isFocused) {
+                this.editor.focus();
+            }
+        });
     }
 }

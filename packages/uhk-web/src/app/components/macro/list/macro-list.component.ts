@@ -3,14 +3,9 @@ import {
     ChangeDetectionStrategy,
     Component,
     EventEmitter,
-    forwardRef,
     Input,
-    OnChanges,
     OnDestroy,
     Output,
-    QueryList,
-    SimpleChanges,
-    ViewChildren
 } from '@angular/core';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DragulaService } from '@ert78gb/ng2-dragula';
@@ -18,10 +13,9 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction } from 'uhk-common';
 
-import { MacroItemComponent } from '../item';
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
-import { SelectedMacroAction, SelectedMacroActionId, SelectedMacroItem } from '../../../models';
+import { SelectedMacroAction, SelectedMacroActionId, SelectedMacroActionIdModel, SelectedMacroItem } from '../../../models';
 
 const ANIMATION_TIME = 500;
 const ANIMATION_INTERVAL = 5;
@@ -66,24 +60,23 @@ const CANCEL_ACTION_ANIMATION_TIMEOUT = ANIMATION_TIME + 25;
     templateUrl: './macro-list.component.html',
     styleUrls: ['./macro-list.component.scss']
 })
-export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestroy {
+export class MacroListComponent implements AfterViewChecked, OnDestroy {
     @Input() macro: Macro;
     @Input() macroPlaybackSupported: boolean;
     @Input() isMacroCommandSupported: boolean;
     @Input() selectedMacroAction: SelectedMacroAction;
-    @ViewChildren(forwardRef(() => MacroItemComponent)) macroItems: QueryList<MacroItemComponent>;
+    @Input() selectedMacroActionId: SelectedMacroActionIdModel;
 
     @Output() add = new EventEmitter();
     @Output() edit = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
     @Output() selectedMacroActionChanged = new EventEmitter<SelectedMacroAction>();
+    @Output() selectedMacroActionIdChanged = new EventEmitter<SelectedMacroActionIdModel>();
 
     newMacro: Macro = undefined;
-    showNew: boolean = false;
     MACRO_ACTIONS = 'macroActions';
     faPlus = faPlus;
-    activeEdit: number = undefined;
     scrollTopPosition: number;
     isMacroReordering = false;
 
@@ -121,12 +114,6 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         }
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['macro']) {
-            this.hideActiveEditor();
-        }
-    }
-
     ngOnDestroy(): void {
         this.dragulaService.destroy(this.MACRO_ACTIONS);
 
@@ -138,15 +125,13 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
     }
 
     showNewAction() {
-        this.hideActiveEditor();
-
+        this.selectedMacroActionIdChanged.emit({ id: 'new' });
         this.newMacro = undefined;
-        this.showNew = true;
         this.scrollToBottom();
     }
 
     hideNewAction() {
-        this.showNew = false;
+        this.selectedMacroActionIdChanged.emit();
         window.setTimeout(() => window.scrollTo(document.body.scrollLeft, document.body.scrollHeight), CANCEL_ACTION_ANIMATION_TIMEOUT);
     }
 
@@ -157,19 +142,14 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         });
 
         this.newMacro = undefined;
-        this.showNew = false;
     }
 
     editAction(index: number) {
-        // Hide other editors when clicking edit button of a macro action
-        this.hideActiveEditor();
-        this.showNew = false;
-        this.activeEdit = index;
+        this.selectedMacroActionIdChanged.emit({ id: index });
     }
 
     cancelAction() {
-        this.showNew = false;
-        this.activeEdit = undefined;
+        this.selectedMacroActionIdChanged.emit();
     }
 
     saveAction(macroAction: MacroAction, index: number) {
@@ -178,8 +158,6 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
             index: index,
             action: macroAction
         });
-
-        this.hideActiveEditor();
     }
 
     deleteAction(macroAction: MacroAction, index: number) {
@@ -188,8 +166,6 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
             index: index,
             action: macroAction
         });
-
-        this.hideActiveEditor();
     }
 
     onKeysCapture(event: KeyCaptureData) {
@@ -230,15 +206,6 @@ export class MacroListComponent implements AfterViewChecked, OnChanges, OnDestro
         keystrokeAction.modifierMask = mapLeftRightModifierToKeyActionModifier(event.left, event.right);
 
         return keystrokeAction;
-    }
-
-    private hideActiveEditor() {
-        if (this.activeEdit !== undefined) {
-            this.macroItems.toArray()[this.activeEdit].cancelEdit();
-            this.activeEdit = undefined;
-        } else {
-            this.showNew = false;
-        }
     }
 
     private scrollToBottom(): void {

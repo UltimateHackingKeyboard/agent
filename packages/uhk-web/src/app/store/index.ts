@@ -49,6 +49,7 @@ import {
 import { PrivilagePageSate } from '../models/privilage-page-sate';
 import { SelectOptionData } from '../models/select-option-data';
 import { defaultUhkThemeColors } from '../util/default-uhk-theme-colors';
+import { parseStatusBuffer } from '../util/status-buffer-parser';
 import { addMissingModuleConfigs } from './reducers/add-missing-module-configs';
 
 import * as fromAdvancedSettings from './reducers/advanced-settings.reducer';
@@ -282,6 +283,7 @@ export const getSkipFirmwareUpgrade = createSelector(deviceState, fromDevice.get
 export const isKeyboardLayoutChanging = createSelector(deviceState, fromDevice.isKeyboardLayoutChanging);
 export const keyboardHalvesAlwaysJoined = createSelector(deviceState, fromDevice.keyboardHalvesAlwaysJoined);
 export const getStatusBuffer = createSelector(deviceState, fromDevice.getStatusBuffer);
+export const getParsedStatusBuffer = createSelector(getMacros, getStatusBuffer, parseStatusBuffer);
 export const getUserConfigAsBuffer = createSelector(getUserConfiguration, userConfig => {
     const json = userConfig.toJsonObject();
     const config = new UserConfiguration().fromJsonObject(json);
