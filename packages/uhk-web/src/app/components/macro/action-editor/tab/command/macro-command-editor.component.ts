@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { isEqual } from 'lodash';
 import { MonacoEditorConstructionOptions, MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -32,6 +33,11 @@ const MACRO_CHANGE_DEBOUNCE_TIME = 250;
 
 function getVsCodeTheme(): string {
     return (window as any).getUhkTheme() === 'dark' ? 'uhk-dark' : 'uhk-light';
+}
+
+interface Position {
+    columnNr: number;
+    lineNr: number;
 }
 
 @Component({
@@ -87,7 +93,9 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     private isFocused = false;
     private insertingMacro = false;
     private changeObserver$: Observer<string>;
+    private cursorPositionChange$: Observer<Position>;
     private subscriptions = new Subscription();
+
     constructor(private cdRef: ChangeDetectorRef,
                 @Inject(DOCUMENT) private document: Document,
                 private logService: LogService,
@@ -135,12 +143,12 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         );
         // read column and line numbers directly for performance reason.
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
-            const columNr = +params.columNr;
-            if (!Number.isNaN(columNr)) {
-                this.columnNr = columNr;
+            const columnNr = +params.columnNr;
+            if (!Number.isNaN(columnNr)) {
+                this.columnNr = columnNr;
             }
 
-            const lineNr =+params.lineNr;
+            const lineNr = +params.lineNr;
             if (!Number.isNaN(lineNr)) {
                 this.lineNr = lineNr;
             }
@@ -159,11 +167,15 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             this.editor.focus();
         }
         this.calculateHeight();
+        this.setCursorPosition();
     }
 
     ngOnDestroy() {
         if (this.changeObserver$) {
             this.changeObserver$.complete();
+        }
+        if (this.cursorPositionChange$) {
+            this.cursorPositionChange$.complete();
         }
         this.subscriptions.unsubscribe();
     }
@@ -185,7 +197,6 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
         this.editor = editor;
         this.setLFEndOfLineOption();
-        this.setCursorPosition();
         if (this.autoFocus) {
             this.editor.focus();
             this.isFocused = true;
@@ -222,15 +233,32 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         });
 
         editor.onDidChangeCursorPosition(event => {
+            if (!this.isFocused) {
+                return;
+            }
+
             this.columnNr = event.position.column;
             this.lineNr = event.position.lineNumber;
 
-            this.router.navigate([], {
-                queryParams: {
-                    columNr: this.columnNr,
-                    lineNr: this.lineNr,
-                },
-                queryParamsHandling: 'merge',
+            if (!this.cursorPositionChange$) {
+                new Observable(observer => {
+                    this.cursorPositionChange$ = observer;
+                }).pipe(
+                    debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
+                    distinctUntilChanged(isEqual)
+                ).subscribe(data => {
+                    this.router.navigate([], {
+                        queryParams: {
+                            columnNr: data.columnNr,
+                            lineNr: data.lineNr,
+                        },
+                        queryParamsHandling: 'merge',
+                    });
+                });
+            }
+            this.cursorPositionChange$.next({
+                columnNr: this.columnNr,
+                lineNr: this.lineNr,
             });
         });
 
@@ -251,6 +279,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         this.insertingMacro = false;
         this.value = value;
         this.calculateHeight();
+        this.setCursorPosition();
 
         if (!this.changeObserver$) {
             Observable.create(observer => {
@@ -295,6 +324,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
 
         this.value = obj;
         this.calculateHeight();
+        this.setCursorPosition();
         this.cdRef.detectChanges();
     }
 
@@ -399,13 +429,22 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
             return;
         }
 
-        const currentPosition = this.editor.getPosition();
+        // setTimeout needed because otherwise the editor not recognize the new EOL option
+        // when the editor first created.
+        setTimeout(() => {
+            const currentPosition = this.editor?.getPosition();
 
-        if (this.columnNr !== currentPosition.column || this.lineNr !== currentPosition.lineNumber) {
-            this.editor.setPosition({
-                column: this.columnNr,
-                lineNumber: this.lineNr
-            });
-        }
+            // the editor can be re-drawn between 2 rendering
+            if (!currentPosition) {
+                return;
+            }
+
+            if (this.columnNr !== currentPosition.column || this.lineNr !== currentPosition.lineNumber) {
+                this.editor.setPosition({
+                    column: this.columnNr,
+                    lineNumber: this.lineNr
+                });
+            }
+        });
     }
 }
