@@ -17,11 +17,13 @@
                         [macroPlaybackSupported]="macroPlaybackSupported$ | async"
                         [isMacroCommandSupported]="isMacroCommandSupported$ | async"
                         [selectedMacroAction]="selectedMacroAction$ | async"
+                        [selectedMacroActionIndex]="selectedMacroActionIndex"
                         (add)="addAction($event.macroId, $event.action)"
                         (edit)="editAction($event.macroId, $event.index, $event.action)"
                         (delete)="deleteAction($event.macroId, $event.index, $event.action)"
                         (reorder)="reorderAction($event.macroId, $event.macroActions)"
                         (selectedMacroActionChanged)="onSelectedMacroAction($event)"
+                        (selectedMacroActionIndexChanged)="onSelectedMacroActionIndexChanged($event)"
                     ></macro-list>
                 </ng-template>
 

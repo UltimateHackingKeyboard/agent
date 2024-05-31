@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { Macro, MacroAction } from 'uhk-common';
@@ -27,7 +27,7 @@ import {
 } from '../../../store';
 import { IOutputData, SplitComponent } from 'angular-split';
 
-import { SelectedMacroAction } from '../../../models';
+import { SelectedMacroAction, SelectedMacroActionId } from '../../../models';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
 
 @Component({
@@ -50,6 +50,7 @@ export class MacroEditComponent implements OnDestroy {
     selectedMacroAction$: Observable<SelectedMacroAction>;
     smartMacroDocUrl$: Observable<string>;
     smartMacroPanelVisibility$: Observable<boolean>;
+    selectedMacroActionIndex: SelectedMacroActionId;
     showIframeHider = false;
     smartMacroPanelSizes = {
         left: 100,
@@ -62,7 +63,8 @@ export class MacroEditComponent implements OnDestroy {
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef,
-                public route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                private router: Router) {
         this.subscriptions.add(store.select(getSelectedMacro)
             .subscribe((macro: Macro) => {
                 this.macro = macro;
@@ -84,6 +86,17 @@ export class MacroEditComponent implements OnDestroy {
         this.selectedMacroAction$ = store.select(getSelectedMacroAction);
         this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
         this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
+        this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            if (params.actionIndex) {
+                if (params.actionIndex === 'new') {
+                    this.selectedMacroActionIndex = params.actionIndex;
+                } else {
+                    this.selectedMacroActionIndex = +params.actionIndex;
+                }
+            } else {
+                this.selectedMacroActionIndex = undefined;
+            }
+        }));
     }
 
     ngOnDestroy() {
@@ -107,7 +120,20 @@ export class MacroEditComponent implements OnDestroy {
     }
 
     onSelectedMacroAction(action: SelectedMacroAction): void {
+        this.onSelectedMacroActionIndexChanged(action.id);
         this.store.dispatch(new SelectMacroActionAction(action));
+    }
+
+    onSelectedMacroActionIndexChanged(index: SelectedMacroActionId): void {
+        if (index === this.selectedMacroActionIndex) {
+            return;
+        }
+
+        this.router.navigate([], {
+            queryParams: {
+                actionIndex: index,
+            }
+        });
     }
 
     dragStartHandler() {
