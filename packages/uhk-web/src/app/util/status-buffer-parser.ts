@@ -1,6 +1,10 @@
 import { Macro } from 'uhk-common';
 
 export function parseStatusBuffer(macros: Macro[], statusBuffer: string): string {
+    if (!statusBuffer) {
+        return '';
+    }
+
     return splitToErrorBlocks(statusBuffer)
         .map(block => transformToErrorBlock(macros, block))
         .join('');
@@ -36,6 +40,10 @@ function transformToErrorBlock(macros: Macro[], block: string): any {
     }
 
     const line0Result = /^(Error at |Warning at )(.*) (\d+)\/(\d+)\/(\d+):/.exec(lines[0]);
+    if (!line0Result) {
+        return block;
+    }
+
     const macroName = line0Result[2];
 
     if (!macroName) {
@@ -47,7 +55,7 @@ function transformToErrorBlock(macros: Macro[], block: string): any {
     if (!macro)
         return block;
 
-    const macroActionIndex = parseInt(line0Result[3], 10);
+    const macroActionIndex = parseInt(line0Result[3], 10) - 1;
     const lineNr = parseInt(line0Result[4], 10);
     const columnNr = parseInt(line0Result[5], 10);
 
