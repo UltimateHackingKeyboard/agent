@@ -14,6 +14,7 @@
                         [movable]="true"
                         (save)="saveAction($event, macroActionIndex)"
                         (edit)="editAction(macroActionIndex)"
+                        (duplicate)="duplicateAction(macroActionIndex)"
                         (cancel)="cancelAction()"
                         (delete)="deleteAction(macroAction, macroActionIndex)"
                         (selected)="onSelectedMacroAction(macroActionIndex, $event)"

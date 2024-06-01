@@ -20,6 +20,7 @@
                         [selectedMacroActionId]="selectedMacroActionIdModel"
                         (add)="addAction($event.macroId, $event.action)"
                         (edit)="editAction($event.macroId, $event.index, $event.action)"
+                        (duplicate)="duplicateAction($event)"
                         (delete)="deleteAction($event.macroId, $event.index, $event.action)"
                         (reorder)="reorderAction($event.macroId, $event.macroActions)"
                         (selectedMacroActionChanged)="onSelectedMacroAction($event)"

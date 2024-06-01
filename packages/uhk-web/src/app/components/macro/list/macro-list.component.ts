@@ -15,7 +15,7 @@ import { KeyMacroAction, KeystrokeAction, Macro, MacroAction, MacroKeySubAction 
 
 import { mapLeftRightModifierToKeyActionModifier } from '../../../util';
 import { KeyCaptureData } from '../../../models/svg-key-events';
-import { SelectedMacroAction, SelectedMacroActionId, SelectedMacroActionIdModel, SelectedMacroItem } from '../../../models';
+import { DuplicateMacroActionPayload, SelectedMacroAction, SelectedMacroActionId, SelectedMacroActionIdModel, SelectedMacroItem } from '../../../models';
 
 const ANIMATION_TIME = 500;
 const ANIMATION_INTERVAL = 5;
@@ -68,6 +68,7 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
     @Input() selectedMacroActionId: SelectedMacroActionIdModel;
 
     @Output() add = new EventEmitter();
+    @Output() duplicate = new EventEmitter<DuplicateMacroActionPayload>();
     @Output() edit = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() reorder = new EventEmitter();
@@ -142,6 +143,13 @@ export class MacroListComponent implements AfterViewChecked, OnDestroy {
         });
 
         this.newMacro = undefined;
+    }
+
+    duplicateAction(index: number) {
+        this.duplicate.emit({
+            macroId: this.macro.id,
+            actionId: index,
+        });
     }
 
     editAction(index: number) {

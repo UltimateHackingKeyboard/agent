@@ -77,6 +77,7 @@ export class MacroItemComponent implements OnInit, OnChanges {
     @Output() cancel = new EventEmitter<void>();
     @Output() edit = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
+    @Output() duplicate = new EventEmitter<void>();
     @Output() selected = new EventEmitter<SelectedMacroItem>();
 
     title: string;
@@ -123,6 +124,10 @@ export class MacroItemComponent implements OnInit, OnChanges {
 
     deleteAction(): void {
         this.delete.emit();
+    }
+
+    duplicateAction(): void {
+        this.duplicate.emit();
     }
 
     macroEditorGotFocus():void {

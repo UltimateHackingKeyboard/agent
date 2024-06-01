@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Macro, MacroAction as ConfigItemMacroAction } from 'uhk-common';
 
-import { SelectedMacroAction } from '../../models';
+import { DuplicateMacroActionPayload, SelectedMacroAction } from '../../models';
 
 export enum ActionTypes {
     Duplicate = '[Macro] Duplicate macro',
@@ -11,6 +11,7 @@ export enum ActionTypes {
     Select = '[Macro] Select macro',
 
     AddAction = '[Macro] Add macro action',
+    DuplicateAction = '[Macro] Duplicate macro action',
     SaveAction = '[Macro] Save macro action',
     DeleteAction = '[Macro] Delete macro action',
     ReorderAction = '[Macro] Reorder macro action',
@@ -56,6 +57,14 @@ export class AddMacroActionAction implements Action {
     }
 }
 
+export class DuplicateMacroActionAction implements Action {
+    type = ActionTypes.DuplicateAction;
+
+    constructor(public payload: DuplicateMacroActionPayload) {
+    }
+}
+
+
 export class SaveMacroActionAction implements Action {
     type = ActionTypes.SaveAction;
 
@@ -91,6 +100,7 @@ export type Actions
     | EditMacroNameAction
     | SelectMacroAction
     | AddMacroActionAction
+    | DuplicateMacroActionAction
     | SaveMacroActionAction
     | DeleteMacroActionAction
     | SelectMacroActionAction

@@ -9,6 +9,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import {
     AddMacroActionAction,
+    DuplicateMacroActionAction,
     DeleteMacroActionAction,
     ReorderMacroActionAction,
     SaveMacroActionAction,
@@ -28,7 +29,7 @@ import {
 } from '../../../store';
 import { IOutputData, SplitComponent } from 'angular-split';
 
-import { SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
+import { DuplicateMacroActionPayload, SelectedMacroAction, SelectedMacroActionIdModel } from '../../../models';
 import { PanelSizeChangedAction, TogglePanelVisibilityAction } from '../../../store/actions/smart-macro-doc.action';
 
 @Component({
@@ -122,6 +123,10 @@ export class MacroEditComponent implements OnDestroy {
 
     deleteAction(macroId: number, index: number, action: MacroAction) {
         this.store.dispatch(new DeleteMacroActionAction({ id: macroId, index, action }));
+    }
+
+    duplicateAction(payload: DuplicateMacroActionPayload) {
+        this.store.dispatch(new DuplicateMacroActionAction(payload));
     }
 
     reorderAction(macroId: number, macroActions: MacroAction[]) {
