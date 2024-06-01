@@ -87,6 +87,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
     editor: MonacoStandaloneCodeEditor;
     containerHeight = '54px';
 
+    private actionIndexQueryParam: string | undefined;
     private columnNr = 1;
     private lineHeight = 18;
     private lineNr = 1;
@@ -143,6 +144,7 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
         );
         // read column and line numbers directly for performance reason.
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            this.actionIndexQueryParam = params.actionIndex;
             const columnNr = +params.columnNr;
             if (!Number.isNaN(columnNr)) {
                 this.columnNr = columnNr;
@@ -247,6 +249,11 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                     debounceTime(MACRO_CHANGE_DEBOUNCE_TIME),
                     distinctUntilChanged(isEqual)
                 ).subscribe(data => {
+                    // there is a debounce so maybe the editor will list the focus
+                    if (!this.isFocused) {
+                        return;
+                    }
+
                     this.router.navigate([], {
                         queryParams: {
                             columnNr: data.columnNr,
@@ -446,7 +453,8 @@ export class MacroCommandEditorComponent implements AfterViewInit, ControlValueA
                 });
             }
 
-            if (!this.isFocused) {
+            // use coercing because the query parameter is string
+            if (!this.isFocused && this.actionIndexQueryParam && this.actionIndexQueryParam == this.index) {
                 this.editor.focus();
             }
         });
