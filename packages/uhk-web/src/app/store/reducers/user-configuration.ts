@@ -12,6 +12,7 @@ import {
     LayerName,
     LeftSlotModules,
     Macro,
+    MacroActionHelper,
     Module,
     ModuleConfiguration,
     MODIFIER_LAYER_NAMES,
@@ -717,6 +718,31 @@ export function reducer(
                 if (macro.id === payload.id) {
                     macro = new Macro(macro);
                     macro.macroActions.push(payload.action);
+                }
+
+                return macro;
+            });
+
+            return {
+                ...state,
+                userConfiguration
+            };
+        }
+
+        case MacroActions.ActionTypes.DuplicateAction: {
+            const payload = (action as MacroActions.DuplicateMacroActionAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+
+            userConfiguration.macros = state.userConfiguration.macros.map((macro: Macro) => {
+                if (macro.id === payload.macroId) {
+                    macro = new Macro(macro);
+                    const cloned = MacroActionHelper.fromMacroAction(macro.macroActions[payload.actionId]);
+
+                    macro.macroActions = [
+                        ...macro.macroActions.slice(0, payload.actionId),
+                        cloned,
+                        ...macro.macroActions.slice(payload.actionId)
+                    ];
                 }
 
                 return macro;

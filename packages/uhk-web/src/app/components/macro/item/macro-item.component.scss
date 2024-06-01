@@ -33,6 +33,7 @@
         icon {
             margin: 0 5px;
 
+            &[name='copy'],
             &[name='trash'] {
                 padding-top: 0.25rem;
             }

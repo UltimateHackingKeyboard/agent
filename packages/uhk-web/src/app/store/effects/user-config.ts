@@ -79,7 +79,7 @@ export class UserConfigEffects {
                 Keymaps.ActionTypes.AddLayer, Keymaps.ActionTypes.RemoveLayer, Keymaps.ActionTypes.SetKeyColor,
                 Macros.ActionTypes.Add, Macros.ActionTypes.Duplicate, Macros.ActionTypes.EditName, Macros.ActionTypes.Remove,
                 Macros.ActionTypes.AddAction, Macros.ActionTypes.SaveAction, Macros.ActionTypes.DeleteAction,
-                Macros.ActionTypes.ReorderAction,
+                Macros.ActionTypes.ReorderAction, Macros.ActionTypes.DuplicateAction,
                 ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue, ActionTypes.SetUserConfigurationRgbValue,
                 ActionTypes.RecoverLEDSpaces, ActionTypes.SetModuleConfigurationValue
             ),

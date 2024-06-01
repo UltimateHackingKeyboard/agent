@@ -2,6 +2,7 @@ export * from './apply-user-configuration-from-file-payload';
 export * from './backlighting-option';
 export * from './config-size-state';
 export * from './device-ui-states';
+export * from './duplicate-macro-action-payload';
 export * from './exchange-keys-action.model';
 export * from './firmware-upgrade-state';
 export * from './firmware-upgrade-steps';

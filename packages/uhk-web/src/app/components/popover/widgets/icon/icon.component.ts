@@ -3,6 +3,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import {
     faCode,
     faClock,
+    faCopy,
     faFont,
     faGripLinesVertical,
     faHandPaper,
@@ -42,6 +43,11 @@ export class IconComponent implements OnChanges {
         switch (this.name) {
             case 'code':
                 this.icon = faCode;
+                break;
+
+            case 'copy':
+                this.icon = faCopy;
+                this.css = 'action--edit';
                 break;
 
             case 'clock':
