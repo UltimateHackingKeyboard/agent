@@ -30,12 +30,14 @@ export interface SliderProps {
 })
 export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @ViewChild(NouisliderComponent, { static: false }) slider: NouisliderComponent;
+    @Input() config: any = {};
     @Input() label: string;
     @Input() tooltip: string;
     @Input() min: number;
     @Input() max: number;
     @Input() step: number;
     @Input() pips: SliderPips;
+    @Input() range: any;
     @Input() valueUnit: string;
     @Output() onChange = new EventEmitter<number>();
 
