@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
-import { SliderPips, SliderProps } from '../../slider-wrapper/slider-wrapper.component';
+import { SliderProps } from '../../slider-wrapper/slider-wrapper.component';
 import { Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { ResetPcMouseSpeedSettingsAction, ResetMacMouseSpeedSettingsAction } from '../../../store/actions/device';
@@ -33,13 +33,6 @@ export class MouseSpeedComponent implements OnInit, OnDestroy {
     mouseScrollAxisSkew: number;
 
     diagonalSpeedCompensation: boolean;
-
-    public sliderPips: SliderPips = {
-        mode: 'positions',
-        values: [0, 50, 100],
-        density: 6,
-        stepped: true
-    };
 
     public moveSettings: SliderProps = {
         min: MOUSE_MOVE_VALUE_MULTIPLIER,
