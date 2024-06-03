@@ -6,7 +6,6 @@ import {
     SetUserConfigurationRgbValueAction,
     SetUserConfigurationValueAction
 } from '../../../store/actions/user-config';
-import { SliderPips } from '../../slider-wrapper/slider-wrapper.component';
 import { Observable, Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { BacklightingMode, RgbColorInterface, UserConfiguration } from 'uhk-common';
@@ -36,12 +35,6 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     public iconsAndLayerTextsBrightness: number = 0;
     public alphanumericSegmentsBrightness: number = 0;
     public keyBacklightBrightness: number = 0;
-    public sliderPips: SliderPips = {
-        mode: 'positions',
-        values: [0, 50, 100],
-        density: 6,
-        stepped: true
-    };
     faSlidersH = faSlidersH;
 
     private userConfig$: Observable<UserConfiguration>;
