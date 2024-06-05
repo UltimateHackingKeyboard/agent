@@ -8,9 +8,10 @@
     }
 
     .mouse-action {
-        .nav {
-            border-right: 1px solid #ccc;
+        align-self: stretch;
+        border-right: 1px solid #ccc;
 
+        .nav {
             li {
                 a {
                     border-top-right-radius: 0;
@@ -69,24 +70,35 @@
 .mouse__config--click {
     .additional-keys {
         display: inline-block;
-        margin-top: 1rem;
+
+        .btn-group {
+            .btn {
+                border-radius: 0;
+                border-bottom-width: 0;
+            }
+        }
 
         .btn-group:first-child {
-            .btn {
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
+            .btn:first-child {
+                border-top-left-radius: 4px;
+            }
+
+            .btn:last-child {
+                border-top-right-radius: 4px;
             }
         }
 
         .btn-group:last-child {
             .btn {
-                border-top: 0;
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
+                border-bottom-width: 1px;
+            }
 
-                &:last-child {
-                    right: 1px;
-                }
+            .btn:first-child {
+                border-bottom-left-radius: 4px;
+            }
+
+            .btn:last-child {
+                border-bottom-right-radius: 4px;
             }
         }
     }
