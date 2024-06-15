@@ -30,11 +30,11 @@ export class SvgMouseKeyComponent implements OnChanges {
                 break;
             case MouseActionParam.button4:
                 this.type = 'click';
-                this.param = 'Button 4';
+                this.param = 'Backward';
                 break;
             case MouseActionParam.button5:
                 this.type = 'click';
-                this.param = 'Button 5';
+                this.param = 'Forward';
                 break;
             case MouseActionParam.button6:
                 this.type = 'click';
@@ -47,6 +47,54 @@ export class SvgMouseKeyComponent implements OnChanges {
             case MouseActionParam.button8:
                 this.type = 'click';
                 this.param = 'Button 8';
+                break;
+            case MouseActionParam.button9:
+                this.type = 'click';
+                this.param = 'Button 9';
+                break;
+            case MouseActionParam.button10:
+                this.type = 'click';
+                this.param = 'Button 10';
+                break;
+            case MouseActionParam.button11:
+                this.type = 'click';
+                this.param = 'Button 11';
+                break;
+            case MouseActionParam.button12:
+                this.type = 'click';
+                this.param = 'Button 12';
+                break;
+            case MouseActionParam.button13:
+                this.type = 'click';
+                this.param = 'Button 13';
+                break;
+            case MouseActionParam.button14:
+                this.type = 'click';
+                this.param = 'Button 14';
+                break;
+            case MouseActionParam.button15:
+                this.type = 'click';
+                this.param = 'Button 15';
+                break;
+            case MouseActionParam.button16:
+                this.type = 'click';
+                this.param = 'Button 16';
+                break;
+            case MouseActionParam.button17:
+                this.type = 'click';
+                this.param = 'Button 17';
+                break;
+            case MouseActionParam.button18:
+                this.type = 'click';
+                this.param = 'Button 18';
+                break;
+            case MouseActionParam.button19:
+                this.type = 'click';
+                this.param = 'Button 19';
+                break;
+            case MouseActionParam.button20:
+                this.type = 'click';
+                this.param = 'Button 20';
                 break;
             case MouseActionParam.scrollDown:
                 this.type = 'scroll';
