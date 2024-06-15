@@ -76,14 +76,7 @@
 
 <div class="row">
     <div class="col-12 col-lg-4">
-        <slider-wrapper
-            label="Fade timeout in seconds (0 is infinite)."
-            [config]="fadeTimeoutSliderConfig"
-            [min]="0"
-            [max]="3600"
-            [step]="1"
-            [(ngModel)]="ledsFadeTimeout"
-            (ngModelChange)="onSetPropertyValue('ledsFadeTimeout', $event)"
-        />
+        <fade-timeout-slider [ngModel]="ledsFadeTimeout"
+                             (ngModelChange)="onSetPropertyValue('ledsFadeTimeout', $event)" />
     </div>
 </div>

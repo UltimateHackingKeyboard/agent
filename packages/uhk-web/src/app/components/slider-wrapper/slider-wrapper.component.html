@@ -19,11 +19,11 @@
             [step]="step"
             [keyboard]="true"
             [range]="range"
-            [tooltips]="[true]"
+            [tooltips]="tooltips"
             [(ngModel)]="value"
             (ngModelChange)="onSliderChange($event)"></nouislider>
     </div>
     <div class="slider-value">
-        <div class="value-indicator">{{value}} {{valueUnit}}</div>
+        <div class="value-indicator">{{ getFormatedValue(value) }}</div>
     </div>
 </div>

@@ -38,6 +38,8 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
     @Input() step: number;
     @Input() pips: SliderPips;
     @Input() range: any;
+    @Input() tooltips: Array<any> = [true];
+    @Input() valueFormatter: Function;
     @Input() valueUnit: string;
     @Output() onChange = new EventEmitter<number>();
 
@@ -67,6 +69,18 @@ export class SliderWrapperComponent implements ControlValueAccessor, OnDestroy {
 
     setDisabledState?(isDisabled: boolean): void {
         this.disabled = isDisabled;
+    }
+
+    getFormatedValue(value: number): string {
+        if (this.valueFormatter) {
+            return this.valueFormatter(value);
+        }
+
+        if (this.valueUnit) {
+            return value + ' ' + this.valueUnit;
+        }
+
+        return value.toString(10);
     }
 
     onSliderChange(value: number): void {

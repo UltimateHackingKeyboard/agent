@@ -1,0 +1,12 @@
+<slider-wrapper
+    label="Fade timeout in seconds (0 is infinite)."
+    [config]="sliderConfig"
+    [disabled]="isDisabled"
+    [valueFormatter]="formatToValue.bind(this)"
+    [min]="0"
+    [max]="3600"
+    [step]="1"
+    [tooltips]="null"
+    [(ngModel)]="model"
+    (ngModelChange)="onSliderChange($event)"
+/>

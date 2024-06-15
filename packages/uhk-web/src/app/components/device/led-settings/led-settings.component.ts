@@ -37,41 +37,6 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     public keyBacklightBrightness: number = 0;
     faSlidersH = faSlidersH;
 
-    fadeTimeoutSliderConfig = {
-        pips: {
-            density: 3,
-            format: {
-                // format special values
-                to: (value: number) => {
-                    switch (value) {
-                        case 60:
-                            return '1m';
-
-                        case 600:
-                            return '10m';
-
-                        case 1800:
-                            return '30m';
-
-                        case 3600:
-                            return '1h';
-
-                        default:
-                            return value;
-                    }
-                }
-            },
-            mode: 'range',
-        },
-        range: {
-            min: [0], // from 0 to 60 sec the step is 1 sec
-            '25%': [60, 5], // from 60 sec to 10 min the step is 5 sec
-            '50%': [600, 60], // from 10 min to 30 min the step is 1 minute
-            '75%': [1800, 300], // from 30 min to 60 min the step is 5 minute
-            max: [3600], // max value is 1 hour
-        }
-    };
-
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;
     private backlightingOptionsSubscription: Subscription;
