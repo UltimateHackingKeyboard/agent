@@ -76,21 +76,6 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    onLedsFadeTimeoutChange(value: number, control: HTMLInputElement): void {
-        if (value < 0) {
-            value = 0;
-        }
-
-        if (value > 65535) {
-            value = 65535;
-        }
-
-        control.value = value.toString(10);
-        if (value !== this.ledsFadeTimeout) {
-            this.onSetPropertyValue('ledsFadeTimeout', value);
-        }
-    }
-
     onSetPropertyValue(propertyName: string, value: number): void {
         this.store.dispatch(new SetUserConfigurationValueAction({
             propertyName,

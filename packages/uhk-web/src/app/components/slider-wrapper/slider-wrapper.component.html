@@ -11,17 +11,19 @@
 <div class="slider-wrapper">
     <div class="slider-container">
         <nouislider
+            [config]="config"
             [connect]="[true, false]"
             [disabled]="disabled"
             [min]="min"
             [max]="max"
             [step]="step"
             [keyboard]="true"
-            [tooltips]="[true]"
+            [range]="range"
+            [tooltips]="tooltips"
             [(ngModel)]="value"
             (ngModelChange)="onSliderChange($event)"></nouislider>
     </div>
     <div class="slider-value">
-        <div class="value-indicator">{{value}} {{valueUnit}}</div>
+        <div class="value-indicator">{{ getFormatedValue(value) }}</div>
     </div>
 </div>
