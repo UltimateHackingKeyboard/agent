@@ -20,7 +20,7 @@ const repoName = process.env.GITHUB_REPOSITORY;
 
 console.log({ gitTag, isCI, repoName, githubRef, githubEventName });
 
-const isReleaseCommit = TEST_BUILD || isCI && repoName === 'UltimateHackingKeyboard/agent';
+const isReleaseCommit = TEST_BUILD || isCI && ['UltimateHackingKeyboard/agent', 'UltimateHackingKeyboard/agent80'].includes(repoName);
 
 if (!isReleaseCommit) {
     console.log('It is not a release task. Skipping publish.');
