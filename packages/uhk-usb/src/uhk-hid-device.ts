@@ -181,7 +181,7 @@ export class UhkHidDevice {
 
             try {
                 const sendData = getTransferData(buffer);
-                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData).substr(3));
+                this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData));
                 device.write(sendData);
                 await snooze(1);
                 const receivedData = device.readTimeout(1000);
