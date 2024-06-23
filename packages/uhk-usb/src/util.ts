@@ -4,7 +4,7 @@ import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
 import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
-import { Constants, UsbCommand } from './constants.js';
+import { MAX_USB_PAYLOAD_SIZE, UsbCommand } from './constants.js';
 
 export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -28,7 +28,7 @@ export function convertBufferToIntArray(buffer: Buffer): number[] {
  */
 export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer): Buffer[] {
     const fragments: Buffer[] = [];
-    const MAX_SENDING_PAYLOAD_SIZE = Constants.MAX_PAYLOAD_SIZE - 4;
+    const MAX_SENDING_PAYLOAD_SIZE = MAX_USB_PAYLOAD_SIZE - 4;
     for (let offset = 0; offset < configBuffer.length; offset += MAX_SENDING_PAYLOAD_SIZE) {
         const length = offset + MAX_SENDING_PAYLOAD_SIZE < configBuffer.length
             ? MAX_SENDING_PAYLOAD_SIZE
@@ -38,20 +38,6 @@ export function getTransferBuffers(usbCommand: UsbCommand, configBuffer: Buffer)
     }
 
     return fragments;
-}
-
-/**
- * Create the communication package that will send over USB and
- * @param {Buffer} buffer
- * @returns {number[]}
- * @private
- * @static
- */
-export function getTransferData(buffer: Buffer): number[] {
-    const data = convertBufferToIntArray(buffer);
-    data.unshift(0);
-
-    return data;
 }
 
 /**

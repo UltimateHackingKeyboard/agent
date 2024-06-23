@@ -23,6 +23,10 @@ export interface CommandLineArgs {
      */
     help?: boolean;
     /**
+     * Don't use report id for USB communication
+     */
+    'no-report-id'?: boolean;
+    /**
      * USB product id
      */
     pid?: number;
@@ -39,6 +43,10 @@ export interface CommandLineArgs {
      * This may make Windows install the USB drivers needed for firmware update.
      */
     'reenumerate-and-exit'?: string;
+    /**
+     * Report Id that used for USB communication
+     */
+    'report-id'?: number;
     /**
      * simulate privilege escalation error
      */

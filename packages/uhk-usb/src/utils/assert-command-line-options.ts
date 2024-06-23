@@ -17,4 +17,8 @@ export function assertCommandLineOptions (options: CommandLineArgs) {
     if (anyUsbOption && !allUsbOptions) {
         throw new Error('You have to set all of the following options: vid, pid, usb-interface');
     }
+
+    if (options.hasOwnProperty('report-id') && options.hasOwnProperty('no-report-id')) {
+        throw new Error('You can not set --report-id and --no-report-id at the same time.');
+    }
 }

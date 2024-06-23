@@ -24,6 +24,7 @@ import {
     EepromOperation,
     EnumerationModes,
     KbootCommands,
+    MAX_USB_PAYLOAD_SIZE,
     ModulePropertyId,
     UsbCommand,
     UsbVariables
@@ -233,7 +234,7 @@ export class UhkOperations {
             let configSize = await this.getConfigSizeFromKeyboard(configBufferId);
             const originalConfigSize = configSize;
             this.logService.usb(`[DeviceOperation] getConfigSize() configSize: ${configSize}`);
-            const chunkSize = 63;
+            const chunkSize = MAX_USB_PAYLOAD_SIZE - 1;
             let offset = 0;
             let configBuffer = Buffer.alloc(0);
             let firstRead = true;

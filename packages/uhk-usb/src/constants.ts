@@ -1,6 +1,4 @@
-export namespace Constants {
-    export const MAX_PAYLOAD_SIZE = 64;
-}
+export const MAX_USB_PAYLOAD_SIZE = 63;
 
 /**
  * UHK USB Communications command. All communication package should have start with a command code.

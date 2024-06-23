@@ -1,7 +1,7 @@
 import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress.js';
 import { ModuleSlotToId } from './module-slot-id.js';
 
-export const UHK_VENDOR_ID = 0x1D50;
+export const UHK_VENDOR_ID = 0x1D50; // decimal 7504
 
 export interface UhkDeviceProduct {
     id: number;
@@ -20,23 +20,34 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: 1,
     name: 'UHK 60 v1',
     vendorId: UHK_VENDOR_ID,
-    keyboardPid: 0x6122,
-    bootloaderPid: 0x6120,
-    buspalPid: 0x6121
+    keyboardPid: 0x6122, // decimal 24866
+    bootloaderPid: 0x6120, // decimal 24864
+    buspalPid: 0x6121 // decimal 24865
 };
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: 2,
     name: 'UHK 60 v2',
     vendorId: UHK_VENDOR_ID,
-    keyboardPid: 0x6124,
-    bootloaderPid: 0x6123,
-    buspalPid: 0x6121
+    keyboardPid: 0x6124, // decimal 24868
+    bootloaderPid: 0x6123, // decimal 24867
+    buspalPid: 0x6121 // decimal 24865
 };
+
+export const UHK_80_V1_DEVICE: UhkDeviceProduct = {
+    id: 2,
+    name: 'UHK 80',
+    vendorId: UHK_VENDOR_ID,
+    keyboardPid: 0x6125, // decimal 24869
+    bootloaderPid: 0x6123, // decimal 24867
+    buspalPid: 0x6121 // decimal 24865
+};
+
 
 export const UHK_DEVICES: Array<UhkDeviceProduct> = [
     UHK_60_DEVICE,
-    UHK_60_V2_DEVICE
+    UHK_60_V2_DEVICE,
+    UHK_80_V1_DEVICE
 ];
 
 export interface UhkModule {

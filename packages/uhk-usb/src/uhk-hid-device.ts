@@ -13,7 +13,8 @@ import {
     mapI2cAddressToModuleName,
     ModuleSlotToI2cAddress,
     RightSlotModules,
-    UdevRulesInfo
+    UdevRulesInfo,
+    UHK_80_V1_DEVICE,
 } from 'uhk-common';
 
 import {
@@ -25,8 +26,8 @@ import {
 } from './constants.js';
 import {
     bufferToString,
+    convertBufferToIntArray,
     getFileContentAsync,
-    getTransferData,
     isBootloader,
     getUhkDevice,
     isUhkCommunicationInterface,
@@ -67,6 +68,7 @@ export class UhkHidDevice {
      */
     private _prevDevices = new Map<string, UsvDeviceConnectionState>();
     private _device: HID;
+    private _deviceInfo: Device;
     private _hasPermission = false;
     private _udevRulesInfo = UdevRulesInfo.Unknown;
 
@@ -180,13 +182,28 @@ export class UhkHidDevice {
             }
 
             try {
-                const sendData = getTransferData(buffer);
+                let reportId = 0;
+
+                if (this.options['no-report-id']) {
+                    reportId = undefined;
+                } else if (this.options['report-id'] !== undefined) {
+                    reportId = Number(this.options['report-id']);
+                } else if (this._deviceInfo.productId === UHK_80_V1_DEVICE.keyboardPid) {
+                    reportId = 4;
+                }
+
+                this.logService.setUsbReportId(reportId);
+                const sendData = this.getTransferData(buffer, reportId);
                 this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(sendData));
                 device.write(sendData);
                 await snooze(1);
                 const receivedData = device.readTimeout(1000);
                 const logString = bufferToString(receivedData);
                 this.logService.usb('[UhkHidDevice] USB[R]:', logString);
+
+                if (reportId) {
+                    receivedData.shift();
+                }
 
                 if (receivedData[0] !== 0) {
                     return reject(new Error(`Communications error with UHK. Response code: ${receivedData[0]}`));
@@ -251,7 +268,8 @@ export class UhkHidDevice {
             if (!jumped) {
                 const device = this.getDevice({ errorLogLevel: 'misc' });
                 if (device) {
-                    const data = getTransferData(message);
+                    // TODO(UHK-80): double check report id when we know how to upgrade firmware.
+                    const data = this.getTransferData(message, 0);
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     try {
@@ -405,7 +423,7 @@ export class UhkHidDevice {
      */
     private getDevice(options?: GetDeviceOptions) {
         if (!this._device) {
-            this._device = this.connectToDevice(options);
+            this.connectToDevice(options);
         }
 
         return this._device;
@@ -413,32 +431,47 @@ export class UhkHidDevice {
 
     /**
      * Initialize new UHK HID device.
-     * @returns {HID}
      */
-    private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): HID {
+    private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): void {
         try {
             const devs = getUhkDevices(this.options.vid);
             this.listAvailableDevices(devs);
 
-            const dev = this.options.vid
+            this._deviceInfo = this.options.vid
                 ? devs.find(findDeviceByOptions(this.options))
                 : devs.find(isUhkCommunicationInterface);
 
-            if (!dev) {
+            if (!this._deviceInfo) {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');
-                return null;
+                return;
             }
-            const device = new HID(dev.path);
+            this._device = new HID(this._deviceInfo.path);
             if (this.options['usb-non-blocking']) {
                 this.logService.misc('[UhkHidDevice] set non blocking communication mode');
-                device.setNonBlocking(1 as any);
+                this._device.setNonBlocking(1 as any);
             }
-            this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(dev, usbDeviceJsonFormatter));
-            return device;
+            this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(this._deviceInfo, usbDeviceJsonFormatter));
         } catch (err) {
             this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
         }
-
-        return null;
     }
+
+    /**
+     * Create the communication package that will send over USB and
+     * @param {Buffer} buffer
+     * @param {number} reportId
+     * @returns {number[]}
+     * @private
+     * @static
+     */
+    private getTransferData(buffer: Buffer, reportId: number): number[] {
+        const data = convertBufferToIntArray(buffer);
+
+        if (reportId !== undefined) {
+            data.unshift(reportId);
+        }
+
+        return data;
+    }
+
 }

@@ -2,7 +2,8 @@ import { InvalidArgumentError } from '../invalid-argument-error.js';
 
 const DEVICES = new Map<string, number>([
     ['uhk60v1', 1],
-    ['uhk60v2', 2]
+    ['uhk60v2', 2],
+    ['uhk80v1', 3],
 ]);
 
 function getKeys(): string {

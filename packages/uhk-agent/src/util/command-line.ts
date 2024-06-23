@@ -10,9 +10,11 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'log', type: String },
     { name: 'help', type: Boolean },
     { name: 'pid', type: Number },
+    { name: 'no-report-id', type: Boolean },
     { name: 'preserve-udev-rules', type: Boolean },
     { name: 'print-usb-devices', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
+    { name: 'report-id', type: Number },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
     { name: 'usb-interface', type: Number },
     { name: 'usb-non-blocking', type: Boolean },
@@ -51,6 +53,11 @@ const sections: commandLineUsage.Section[] = [
                 typeLabel: 'config | misc | usb | all'
             },
             {
+                name: 'no-report-id',
+                description: "Don't use report id for USB communication. The default value depends on the UHK device. You can not set --report-id and --no-report-id at the same time.",
+                type: Boolean,
+            },
+            {
                 name: 'pid',
                 description: 'Use the specified USB product id. If you set it you have to set the vid and usb-interface too.',
                 type: Number
@@ -71,6 +78,10 @@ const sections: commandLineUsage.Section[] = [
                     'This may make Windows install the USB drivers needed for firmware update. ' +
                     'Please provide the timeout in milliseconds.',
                 typeLabel: '(bootloader|buspal),timeout'
+            },
+            {
+                name: 'report-id',
+                description: 'Report Id that used for USB communication. If the value is -1 then does not use report id. The default value depends from the UHK device. For UHK 60 is 0. For UHK 80 is 4',
             },
             {
                 name: 'spe',
