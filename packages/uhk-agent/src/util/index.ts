@@ -9,6 +9,7 @@ export * from './get-updater-logger';
 export * from './get-user-config-from-history-async';
 export * from './get-user-config-history-dir-async';
 export * from './get-window-background-color';
+export * from './load-user-config-from-binary-file';
 export * from './load-user-config-history-async';
 export * from './make-folder-writeable-to-user-on-linux';
 export * from './print-usb-devices';

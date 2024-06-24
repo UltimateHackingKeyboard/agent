@@ -11,10 +11,19 @@ export interface HistoryFileInfo {
      */
     displayText: string;
     showRestore: boolean;
+    /**
+     * The timestamp of the saved user configuration
+     */
+    timestamp: string;
+}
+
+export interface Tab {
+    displayText: string;
+    files: HistoryFileInfo[];
 }
 
 export interface UserConfigHistoryComponentState {
-    files: Array<HistoryFileInfo>;
+    tabs: Tab[];
     loading: boolean;
     disabled: boolean;
 }

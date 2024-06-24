@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { UserConfigHistory } from 'uhk-common';
 
 export enum ActionTypes {
     LoadUserConfigurationHistory = '[user-config] Load user configuration history',
@@ -13,7 +14,7 @@ export class LoadUserConfigurationHistoryAction implements Action {
 export class LoadUserConfigurationHistorySuccessAction implements Action {
     type = ActionTypes.LoadUserConfigurationHistorySuccess;
 
-    constructor(public payload: Array<string>) {
+    constructor(public payload: UserConfigHistory) {
     }
 }
 

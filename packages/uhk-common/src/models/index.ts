@@ -29,4 +29,5 @@ export * from './udev-rules-info.js';
 export * from './uhk-products.js';
 export * from './update-firmware-data.js';
 export * from './upload-file-data.js';
+export * from './user-config-history.js';
 export * from './halves-info.js';

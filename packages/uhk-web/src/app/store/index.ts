@@ -6,6 +6,7 @@ import {
     BacklightingMode,
     Constants,
     FirmwareRepoInfo,
+    HistoryFileInfo as CommonHistoryFileInfo,
     LayerName,
     LEFT_KEY_CLUSTER_MODULE,
     RIGHT_TRACKPOINT_MODULE,
@@ -36,6 +37,7 @@ import {
     ConfigSizeState,
     DeviceUiStates,
     FirmwareUpgradeState,
+    HistoryFileInfo,
     MacroMenuItem,
     ModuleFirmwareUpgradeStates,
     OutOfSpaceWarningData,
@@ -540,37 +542,56 @@ export const getUserConfigHistoryState = (state: AppState) => state.userConfigur
 export const getUserConfigHistoryComponentState = createSelector(
     runningInElectron,
     getUserConfigHistoryState,
+    getUserConfiguration,
     getMd5HasOfUserConfig,
     isUserConfigSaving,
     (inElectron,
         state: fromUserConfigHistory.State,
+        userConfig: UserConfiguration,
         md5Hash: string,
         saving: boolean): UserConfigHistoryComponentState => {
         let foundFirstCurrent = false;
 
-        return {
+        function fileMapper(file: CommonHistoryFileInfo): HistoryFileInfo {
+            const showRestore = file.md5Hash !== md5Hash;
+            let displayText: string;
+
+            if (showRestore) {
+                displayText = 'Restore';
+            } else if (foundFirstCurrent) {
+                displayText = 'Same as current';
+            } else {
+                displayText = 'Current';
+                foundFirstCurrent = true;
+            }
+
+            return {
+                timestamp: file.timestamp,
+                displayText,
+                showRestore,
+                file: file.filePath
+            };
+        }
+
+        const result = {
             loading: inElectron && state.loading,
-            files: state.files.map(x => {
-                const showRestore = getMd5HashFromFilename(x) !== md5Hash;
-                let displayText: string;
-
-                if (showRestore) {
-                    displayText = 'Restore';
-                } else if (foundFirstCurrent) {
-                    displayText = 'Same as current';
-                } else {
-                    displayText = 'Current';
-                    foundFirstCurrent = true;
-                }
-
+            tabs: state.userConfigHistory.devices.map(device => {
                 return {
-                    displayText,
-                    showRestore,
-                    file: x
+                    displayText: device.deviceName,
+                    files: [...device.files, ...state.userConfigHistory.commonFiles].map(fileMapper),
                 };
             }),
             disabled: saving
         };
+
+        if (result.tabs.length === 0) {
+            result.tabs.push({
+                displayText: userConfig.deviceName,
+                files: state.userConfigHistory.commonFiles.map(fileMapper)
+            });
+        }
+
+        return result;
     });
 
 export const getSupportedThemes = (): AppThemeSelect[] => {
