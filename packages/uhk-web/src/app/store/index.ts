@@ -577,7 +577,7 @@ export const getUserConfigHistoryComponentState = createSelector(
             loading: inElectron && state.loading,
             tabs: state.userConfigHistory.devices.map(device => {
                 return {
-                    displayText: device.deviceName,
+                    displayText: `${device.deviceName} (${device.device.name})`,
                     files: [...device.files, ...state.userConfigHistory.commonFiles].map(fileMapper),
                 };
             }),
