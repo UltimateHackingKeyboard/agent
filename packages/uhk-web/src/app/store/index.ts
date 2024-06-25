@@ -5,7 +5,10 @@ import { gt } from 'semver';
 import {
     BacklightingMode,
     Constants,
+    UHK_DEVICES,
+    UHK_60_V2_DEVICE,
     FirmwareRepoInfo,
+    HardwareConfiguration,
     HistoryFileInfo as CommonHistoryFileInfo,
     LayerName,
     LEFT_KEY_CLUSTER_MODULE,
@@ -171,6 +174,7 @@ export const appState = (state: AppState) => state.app;
 export const disableUpdateAgentProtection = createSelector(appState, fromApp.disableUpdateAgentProtection);
 export const getErrorPanelHeight = createSelector(appState, fromApp.getErrorPanelHeight);
 export const getUndoableNotification = createSelector(appState, fromApp.getUndoableNotification);
+export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
 export const getDeviceId = createSelector(appState, fromApp.getDeviceId);
@@ -541,11 +545,13 @@ export const getShowFirmwareUpgradePanel = createSelector(
 export const getUserConfigHistoryState = (state: AppState) => state.userConfigurationHistory;
 export const getUserConfigHistoryComponentState = createSelector(
     runningInElectron,
+    getHardwareConfiguration,
     getUserConfigHistoryState,
     getUserConfiguration,
     getMd5HasOfUserConfig,
     isUserConfigSaving,
     (inElectron,
+        hardwareConfig: HardwareConfiguration,
         state: fromUserConfigHistory.State,
         userConfig: UserConfiguration,
         md5Hash: string,
@@ -584,12 +590,22 @@ export const getUserConfigHistoryComponentState = createSelector(
             disabled: saving
         };
 
-        if (result.tabs.length === 0) {
+        const currentDeviceHasHistory = state.userConfigHistory.devices.find(device => device.uniqueId === hardwareConfig?.uniqueId);
+
+        if (result.tabs.length === 0 || !currentDeviceHasHistory) {
+            let deviceName = UHK_60_V2_DEVICE.name;
+            if (hardwareConfig) {
+                const uhkDevice = UHK_DEVICES.find(device => device.id === hardwareConfig.deviceId);
+                deviceName = uhkDevice ? uhkDevice.name : deviceName;
+            }
+
             result.tabs.push({
-                displayText: userConfig.deviceName,
+                displayText: `${userConfig.deviceName} (${deviceName})`,
                 files: state.userConfigHistory.commonFiles.map(fileMapper)
             });
         }
+
+        result.tabs.sort((a, b) => a.displayText.localeCompare(b.displayText));
 
         return result;
     });

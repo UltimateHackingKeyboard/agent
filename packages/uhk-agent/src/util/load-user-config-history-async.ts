@@ -63,9 +63,14 @@ export async function loadUserConfigHistoryAsync(): Promise<UserConfigHistory> {
                     }),
             };
 
-            if (deviceHistory.files.length > 0) {
-                const userConfig = await loadUserConfigFromBinaryFile(deviceHistory.files[0].filePath);
-                deviceHistory.deviceName = userConfig.deviceName;
+            for (const file of deviceHistory.files) {
+                try {
+                    const userConfig = await loadUserConfigFromBinaryFile(file.filePath);
+                    deviceHistory.deviceName = userConfig.deviceName;
+                    break;
+                } catch {
+                    // Maybe the user config is newer than Agent supports, or corrupted.
+                }
             }
 
             history.devices.push(deviceHistory);
