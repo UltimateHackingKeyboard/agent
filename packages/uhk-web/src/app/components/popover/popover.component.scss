@@ -29,15 +29,6 @@
     }
 }
 
-.nav-tabs > li {
-    overflow: hidden;
-    cursor: pointer;
-
-    &.disabled {
-        cursor: not-allowed;
-    }
-}
-
 .arrowCustom {
     position: absolute;
     top: -15px;

@@ -17,6 +17,7 @@
         <ul class="nav nav-tabs">
             <li *ngFor="let tab of state.tabs; let index = index"
                 class="nav-item"
+                [class.disabled]="tab.disabled"
                 (click)="onSelectTab(index)">
                 <a class="nav-link"
                     [class.active]="selectedTabIndex === index"
