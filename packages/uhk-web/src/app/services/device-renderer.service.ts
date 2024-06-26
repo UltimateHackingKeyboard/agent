@@ -15,6 +15,7 @@ import {
     UpdateFirmwareData,
     UploadFileData,
     UserConfiguration,
+    UserConfigHistory,
     VersionInformation
 } from 'uhk-common';
 
@@ -162,7 +163,7 @@ export class DeviceRendererService {
             this.dispachStoreAction(new ReadConfigSizesReplyAction(JSON.parse(response)));
         });
 
-        this.ipcRenderer.on(IpcEvents.device.loadUserConfigHistoryReply, (event: string, response: Array<string>) => {
+        this.ipcRenderer.on(IpcEvents.device.loadUserConfigHistoryReply, (event: string, response: UserConfigHistory) => {
             this.dispachStoreAction(new LoadUserConfigurationHistorySuccessAction(response));
         });
 

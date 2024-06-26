@@ -94,7 +94,7 @@ import { appRoutingProviders, routing } from './app.routes';
 import { UhkAgentIconComponent } from './components/uhk-icon/uhk-agent-icon.component';
 
 import { CancelableDirective, ExternalUrlDirective } from './directives';
-import { AsHexColorPipe, NewLineToBrPipe, SafeHtmlPipe, SafeStylePipe, SafeUrlPipe, UserConfigHistoryDisplayTextPipe } from './pipes';
+import { AsHexColorPipe, NewLineToBrPipe, SafeHtmlPipe, SafeStylePipe, SafeUrlPipe } from './pipes';
 
 import { CaptureService } from './services/capture.service';
 import { MapperService } from './services/mapper.service';
@@ -268,7 +268,6 @@ import appInitFactory from './services/app-init-factory';
         OutOfSpaceWarningComponent,
         SmartMacroDocDirective,
         UserConfigurationHistoryComponent,
-        UserConfigHistoryDisplayTextPipe
     ],
     imports: [
         AngularSplitModule,

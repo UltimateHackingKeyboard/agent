@@ -307,3 +307,12 @@ mwl-confirmation-popover-window {
     text-decoration: underline;
     text-decoration-style: dotted;
 }
+
+.nav-tabs > li {
+    overflow: hidden;
+    cursor: pointer;
+
+    &.disabled {
+        cursor: not-allowed;
+    }
+}

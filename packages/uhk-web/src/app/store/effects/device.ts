@@ -477,6 +477,7 @@ export class DeviceEffects {
         saveInHistory: boolean): void {
         this.deviceRendererService.saveUserConfiguration({
             saveInHistory,
+            deviceId: hardwareConfig && hardwareConfig.deviceId,
             uniqueId: hardwareConfig && hardwareConfig.uniqueId,
             configuration: userConfiguration.toJsonObject()
         });
