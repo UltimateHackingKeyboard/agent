@@ -14,8 +14,7 @@ export const yargs = Yargs(hideBin(process.argv))
         choices: ['all', 'config', 'misc', 'none', 'usb']
     })
     .option('no-report-id', {
-        conflicts: ['report-id'],
-        description: 'Set USB product id. If you set it you have to set the vid and usb-interface too.',
+        description: "Don't use report id for USB communication. The default value depends on the UHK device. You can not set --report-id and --no-report-id at the same time.",
         type: 'boolean',
         default: false,
     })
@@ -25,7 +24,6 @@ export const yargs = Yargs(hideBin(process.argv))
     })
     .option('report-id', {
         description: 'Report Id that used for USB communication. If the value is -1 then does not use report id. The default value depends from the UHK device. For UHK 60 is 0. For UHK 80 is 4',
-        conflicts: ['no-report-id'],
         type: 'number',
     })
     .option('usb-non-blocking', {
