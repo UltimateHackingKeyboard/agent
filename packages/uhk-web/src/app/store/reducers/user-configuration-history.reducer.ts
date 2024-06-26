@@ -1,14 +1,23 @@
-import { sortStringDesc } from 'uhk-common';
+import {
+    UserConfigHistory,
+} from 'uhk-common';
 
 import { Actions, ActionTypes, LoadUserConfigurationHistorySuccessAction } from '../actions/user-configuration-history.actions';
 
 export interface State {
-    files: Array<string>;
+    userConfigHistory: UserConfigHistory;
     loading: boolean;
 }
 
+function defaultUserConfigHistory(): UserConfigHistory {
+    return {
+        commonFiles: [],
+        devices: []
+    };
+}
+
 export const initialState: State = {
-    files: [],
+    userConfigHistory: defaultUserConfigHistory(),
     loading: false
 };
 
@@ -19,14 +28,14 @@ export function reducer(state = initialState, action: Actions) {
             return {
                 ...state,
                 loading: true,
-                files: []
+                userConfigHistory: defaultUserConfigHistory()
             };
 
         case ActionTypes.LoadUserConfigurationHistorySuccess:
             return {
                 ...state,
                 loading: false,
-                files: [...(action as LoadUserConfigurationHistorySuccessAction).payload].sort(sortStringDesc)
+                userConfigHistory: (action as LoadUserConfigurationHistorySuccessAction).payload
             };
 
         default:

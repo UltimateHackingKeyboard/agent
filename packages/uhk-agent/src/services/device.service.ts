@@ -744,7 +744,7 @@ export class DeviceService {
             this._checkStatusBuffer = true;
 
             if (data.saveInHistory) {
-                await saveUserConfigHistoryAsync(buffer);
+                await saveUserConfigHistoryAsync(buffer, data.deviceId, data.uniqueId);
                 await this.loadUserConfigFromHistory(event);
             }
 

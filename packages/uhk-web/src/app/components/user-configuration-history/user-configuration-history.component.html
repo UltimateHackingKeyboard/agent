@@ -10,16 +10,29 @@
             Loading...
         </div>
 
-        <div *ngIf="!state.loading && !state.files.length">
+        <div *ngIf="!state.loading && !state.tabs.length">
             No configurations were saved yet.
         </div>
 
-        <ul class="list-unstyled mb-0"
-            *ngIf="!state.loading && state.files.length">
-            <li *ngFor="let fileInfo of state.files; trackBy:trackByFn"
+        <ul class="nav nav-tabs">
+            <li *ngFor="let tab of state.tabs; let index = index"
+                class="nav-item"
+                [class.disabled]="tab.disabled"
+                (click)="onSelectTab(index)">
+                <a class="nav-link"
+                    [class.active]="selectedTabIndex === index"
+                    [class.disabled]="tab.disabled">
+                    <span>{{ tab.displayText }}</span>
+                </a>
+           </li>
+        </ul>
+
+        <ul class="list-unstyled mb-0 mt-2"
+            *ngIf="!state.loading && state.tabs[selectedTabIndex].files.length">
+            <li *ngFor="let fileInfo of state.tabs[selectedTabIndex].files; trackBy:trackByFn"
                 class="history-list-item">
                 <span class="btn btn-link btn-padding-0 current">
-                    {{ fileInfo.file | userConfigHistory }}
+                    {{ fileInfo.timestamp }}
                 </span>
 
                 <span class="btn btn-link btn-padding-0"

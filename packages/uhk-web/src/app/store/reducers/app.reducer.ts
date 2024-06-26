@@ -256,4 +256,5 @@ export const getEverAttemptedSavingToKeyboard = (state: State): boolean => state
 export const getUdevFileContent = (state: State): string => state.udevFileContent;
 export const getAnimationEnabled = (state: State): boolean => state.animationEnabled;
 export const getAppTheme = (state: State): AppTheme => state.appTheme;
+export const getHardwareConfiguration = (state: State): HardwareConfiguration => state.hardwareConfig;
 export const getPlatform = (state: State): string => state.platform;

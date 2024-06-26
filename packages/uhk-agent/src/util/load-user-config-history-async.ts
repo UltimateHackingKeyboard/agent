@@ -1,12 +1,84 @@
-import { readdir } from 'fs';
-import { promisify } from 'util';
+import { readdir, stat } from 'node:fs/promises';
+import path from 'node:path';
+import { convertHistoryFilenameToDisplayText } from 'uhk-common';
+import { getMd5HashFromFilename } from 'uhk-common';
+import {
+    DeviceUserConfigHistory,
+    sortStringDesc,
+    UHK_DEVICES,
+    UserConfigHistory,
+} from 'uhk-common';
 
 import { getUserConfigHistoryDirAsync } from './get-user-config-history-dir-async';
+import { loadUserConfigFromBinaryFile } from './load-user-config-from-binary-file';
 
-const readdirAsync = promisify(readdir);
+export async function loadUserConfigHistoryAsync(): Promise<UserConfigHistory> {
+    const history: UserConfigHistory = {
+        commonFiles: [],
+        devices: []
+    };
 
-export async function loadUserConfigHistoryAsync(): Promise<Array<string>> {
-    const files = await readdirAsync(await getUserConfigHistoryDirAsync());
+    const userConfigHistoryDir = await getUserConfigHistoryDirAsync();
+    const entries = await readdir(userConfigHistoryDir);
 
-    return files;
+    for (const entry of entries) {
+        const filePath = path.join(userConfigHistoryDir, entry);
+        const entryStat = await stat(filePath);
+
+        if (entryStat.isFile()) {
+            if (path.extname(entry) === '.bin') {
+                history.commonFiles.push({
+                    filePath,
+                    md5Hash: getMd5HashFromFilename(entry),
+                    timestamp: convertHistoryFilenameToDisplayText(entry),
+                });
+            }
+        } else if (entryStat.isDirectory()) {
+            const entrySplit = entry.split('-');
+
+            if (entrySplit.length !== 2) {
+                continue;
+            }
+
+            const deviceId = Number.parseInt(entrySplit[1], 10);
+
+            if (isNaN(deviceId)) {
+                continue;
+            }
+
+            const deviceHistoryDir = path.join(userConfigHistoryDir, entry);
+            const deviceHistory: DeviceUserConfigHistory = {
+                uniqueId: Number.parseInt(entrySplit[0], 10),
+                device: UHK_DEVICES.find(device => device.id === deviceId),
+                deviceName: '',
+                files: (await readdir(deviceHistoryDir))
+                    .filter(file => path.extname(file) === '.bin')
+                    .sort(sortStringDesc)
+                    .map(file => {
+                        return {
+                            filePath: path.join(deviceHistoryDir, file),
+                            md5Hash: getMd5HashFromFilename(file),
+                            timestamp: convertHistoryFilenameToDisplayText(file),
+                        };
+                    }),
+            };
+
+            for (const file of deviceHistory.files) {
+                try {
+                    const userConfig = await loadUserConfigFromBinaryFile(file.filePath);
+                    deviceHistory.deviceName = userConfig.deviceName;
+                    break;
+                } catch {
+                    // Maybe the user config is newer than Agent supports, or corrupted.
+                }
+            }
+
+            history.devices.push(deviceHistory);
+        }
+    }
+
+    history.commonFiles
+        .sort((a, b) => sortStringDesc(a.timestamp, b.timestamp));
+
+    return history;
 }
