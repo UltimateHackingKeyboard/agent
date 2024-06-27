@@ -32,7 +32,7 @@ import {
     LEDSettingsComponent,
     RestoreConfigurationComponent,
     RecoveryModeComponent,
-    TypingBehaviourPage
+    TypingBehaviorPage
 } from './components/device';
 import {
     KeymapAddComponent,
@@ -262,7 +262,7 @@ import appInitFactory from './services/app-init-factory';
         ExternalUrlDirective,
         SecondSideMenuContainerComponent,
         SvgSecondaryRoleComponent,
-        TypingBehaviourPage,
+        TypingBehaviorPage,
         UdevRulesComponent,
         HighlightArrowComponent,
         OutOfSpaceWarningComponent,
