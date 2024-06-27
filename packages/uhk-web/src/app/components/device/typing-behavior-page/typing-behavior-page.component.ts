@@ -11,14 +11,14 @@ import { AppState, getUserConfiguration } from '../../../store';
 import { SetUserConfigurationValueAction } from '../../../store/actions/user-config';
 
 @Component({
-    selector: 'typing-behaviour-page',
-    templateUrl: './typing-behaviour-page.html',
-    styleUrls: ['./typing-behaviour-page.scss'],
+    selector: 'typing-behavior-page',
+    templateUrl: './typing-behavior-page.component.html',
+    styleUrls: ['./typing-behavior-page.component.scss'],
     host: {
         'class': 'container-fluid d-block'
     }
 })
-export class TypingBehaviourPage implements OnInit, OnDestroy {
+export class TypingBehaviorPage implements OnInit, OnDestroy {
     faSlidersH = faSlidersH;
     SecondaryRoleStrategy = SecondaryRoleStrategy;
     SecondaryRoleAdvancedStrategyTimeoutAction = SecondaryRoleAdvancedStrategyTimeoutAction;
