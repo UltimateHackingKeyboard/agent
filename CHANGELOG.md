@@ -20,7 +20,7 @@ Firmware: 11.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/
 - Fix "add macro action" animation glitches.
 - Always make Agent display firmware documentation, even if git information is missing.
 - Make tooltips always appear on-screen, even when they're at the bottom of the screen.
-- Fix the "Double tap to lock layer timeout" tooltip on the typing behaviour page.
+- Fix the "Double tap to lock layer timeout" tooltip on the typing behavior page.
 - Fix occasionally incomplete firmware "update succeeded" message.
 
 ## [4.1.0] - 2024-05-03
