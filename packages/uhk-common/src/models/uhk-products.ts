@@ -35,7 +35,7 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
 };
 
 export const UHK_80_V1_DEVICE: UhkDeviceProduct = {
-    id: 2,
+    id: 3,
     name: 'UHK 80',
     vendorId: UHK_VENDOR_ID,
     keyboardPid: 0x6125, // decimal 24869
