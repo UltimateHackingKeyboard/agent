@@ -28,7 +28,7 @@
         </ul>
 
         <ul class="list-unstyled mb-0 mt-2"
-            *ngIf="!state.loading && state.tabs[selectedTabIndex].files.length">
+            *ngIf="!state.loading">
             <li *ngFor="let fileInfo of state.tabs[selectedTabIndex].files; trackBy:trackByFn">
                 <span class="btn btn-link btn-padding-0 current">
                     {{ fileInfo.timestamp }}
@@ -47,7 +47,8 @@
                 </span>
             </li>
 
-            <li class="mt-2">
+            <li class="mt-2"
+                *ngIf="state.commonFiles.length">
                 The following records were created before the grouping feature was introduced, and hence, they're displayed for every device.
                 <hr class="mt-0 mb-1">
             </li>
