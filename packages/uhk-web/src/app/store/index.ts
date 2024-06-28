@@ -579,12 +579,13 @@ export const getUserConfigHistoryComponentState = createSelector(
             };
         }
 
-        const result = {
+        const result: UserConfigHistoryComponentState = {
+            commonFiles: state.userConfigHistory.commonFiles.map(fileMapper),
             loading: inElectron && state.loading,
             tabs: state.userConfigHistory.devices.map(device => {
                 return {
                     displayText: `${device.deviceName} (${device.device.name})`,
-                    files: [...device.files, ...state.userConfigHistory.commonFiles].map(fileMapper),
+                    files: device.files.map(fileMapper),
                 };
             }),
             disabled: saving
@@ -601,7 +602,7 @@ export const getUserConfigHistoryComponentState = createSelector(
 
             result.tabs.push({
                 displayText: `${userConfig.deviceName} (${deviceName})`,
-                files: state.userConfigHistory.commonFiles.map(fileMapper)
+                files: []
             });
         }
 
