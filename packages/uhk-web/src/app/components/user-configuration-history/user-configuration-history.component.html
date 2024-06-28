@@ -29,8 +29,30 @@
 
         <ul class="list-unstyled mb-0 mt-2"
             *ngIf="!state.loading && state.tabs[selectedTabIndex].files.length">
-            <li *ngFor="let fileInfo of state.tabs[selectedTabIndex].files; trackBy:trackByFn"
-                class="history-list-item">
+            <li *ngFor="let fileInfo of state.tabs[selectedTabIndex].files; trackBy:trackByFn">
+                <span class="btn btn-link btn-padding-0 current">
+                    {{ fileInfo.timestamp }}
+                </span>
+
+                <span class="btn btn-link btn-padding-0"
+                      *ngIf="fileInfo.showRestore"
+                      (click)="getUserConfigFromHistory.emit(fileInfo.file)"
+                      [class.disabled]="state.disabled">
+                            {{ fileInfo.displayText }}
+                </span>
+
+                <span class="btn btn-link btn-padding-0 current"
+                      *ngIf="!fileInfo.showRestore">
+                            {{ fileInfo.displayText }}
+                </span>
+            </li>
+
+            <li class="mt-2">
+                The following records were created before the grouping feature was introduced, and hence, they're displayed for every device.
+                <hr class="mt-0 mb-1">
+            </li>
+
+            <li *ngFor="let fileInfo of state.commonFiles; trackBy:trackByFn">
                 <span class="btn btn-link btn-padding-0 current">
                     {{ fileInfo.timestamp }}
                 </span>

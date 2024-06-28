@@ -23,6 +23,7 @@ export interface Tab {
 }
 
 export interface UserConfigHistoryComponentState {
+    commonFiles: HistoryFileInfo[];
     tabs: Tab[];
     loading: boolean;
     disabled: boolean;
