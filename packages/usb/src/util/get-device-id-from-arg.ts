@@ -1,9 +1,15 @@
+import {
+    UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
+    UHK_80_DEVICE,
+} from 'uhk-common';
+
 import { InvalidArgumentError } from '../invalid-argument-error.js';
 
 const DEVICES = new Map<string, number>([
-    ['uhk60v1', 1],
-    ['uhk60v2', 2],
-    ['uhk80v1', 3],
+    ['uhk60v1', UHK_60_DEVICE.id],
+    ['uhk60v2', UHK_60_V2_DEVICE.id],
+    ['uhk80', UHK_80_DEVICE.id],
 ]);
 
 function getKeys(): string {

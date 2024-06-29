@@ -34,7 +34,7 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     buspalPid: 0x6121 // decimal 24865
 };
 
-export const UHK_80_V1_DEVICE: UhkDeviceProduct = {
+export const UHK_80_DEVICE: UhkDeviceProduct = {
     id: 3,
     name: 'UHK 80',
     vendorId: UHK_VENDOR_ID,
@@ -47,7 +47,7 @@ export const UHK_80_V1_DEVICE: UhkDeviceProduct = {
 export const UHK_DEVICES: Array<UhkDeviceProduct> = [
     UHK_60_DEVICE,
     UHK_60_V2_DEVICE,
-    UHK_80_V1_DEVICE
+    UHK_80_DEVICE
 ];
 
 export interface UhkModule {

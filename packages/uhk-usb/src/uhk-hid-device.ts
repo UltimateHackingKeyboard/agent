@@ -14,7 +14,7 @@ import {
     ModuleSlotToI2cAddress,
     RightSlotModules,
     UdevRulesInfo,
-    UHK_80_V1_DEVICE,
+    UHK_80_DEVICE,
 } from 'uhk-common';
 
 import {
@@ -188,7 +188,7 @@ export class UhkHidDevice {
                     reportId = undefined;
                 } else if (this.options['report-id'] !== undefined) {
                     reportId = Number(this.options['report-id']);
-                } else if (this._deviceInfo.productId === UHK_80_V1_DEVICE.keyboardPid) {
+                } else if (this._deviceInfo.productId === UHK_80_DEVICE.keyboardPid) {
                     reportId = 4;
                 }
 
