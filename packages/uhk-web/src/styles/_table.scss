@@ -45,4 +45,43 @@ table.settings {
             }
         }
     }
+
+    &.led-settings {
+        thead,
+        tbody {
+            tr {
+                td:nth-of-type(1) {
+                    width: 20%;
+                }
+
+                td:nth-of-type(2),
+                td:nth-of-type(3) {
+                    width: 40%;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    vertical-align: top;
+
+                    &.label {
+                        padding-top: 0.75em;
+                    }
+
+                    &:has(fade-timeout-slider) {
+                        height: 90px;
+                    }
+
+                    slider-wrapper {
+                        --slider-value-width: 45px;
+                        display: block;
+                        margin-left: -1.25rem;
+                        margin-right: 2rem;
+                    }
+                }
+            }
+        }
+    }
 }

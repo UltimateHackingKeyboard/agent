@@ -6,34 +6,103 @@
 <h3 class="pt-3">LED brightness</h3>
 
 <div class="row">
-    <div class="col-12 col-lg-4">
-        <slider-wrapper
-            label="LED display icon and layer texts brightness"
-            [min]="0"
-            [max]="255"
-            [step]="1"
-            [(ngModel)]="iconsAndLayerTextsBrightness"
-            (ngModelChange)="onSetPropertyValue('iconsAndLayerTextsBrightness', $event)"></slider-wrapper>
-    </div>
-
-    <div class="col-12 col-lg-4">
-        <slider-wrapper
-            label="LED display alphanumeric segments brightness"
-            [min]="0"
-            [max]="255"
-            [step]="1"
-            [(ngModel)]="alphanumericSegmentsBrightness"
-            (ngModelChange)="onSetPropertyValue('alphanumericSegmentsBrightness', $event)"></slider-wrapper>
-    </div>
-
-    <div class="col-12 col-lg-4">
-        <slider-wrapper
-            label="Key backlight brightness"
-            [min]="0"
-            [max]="255"
-            [step]="1"
-            [(ngModel)]="keyBacklightBrightness"
-            (ngModelChange)="onSetPropertyValue('keyBacklightBrightness', $event)"></slider-wrapper>
+    <div class="col-12 col-lg-8">
+        <table class="table settings led-settings">
+            <thead>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    USB-powered
+                </td>
+                <td>
+                    Battery-powered
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="label">
+                    Key backlight brightness
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="255"
+                        [step]="1"
+                        [(ngModel)]="keyBacklightBrightness"
+                        (ngModelChange)="onSetPropertyValue('keyBacklightBrightness', $event)"
+                    />
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="255"
+                        [step]="1"
+                        [(ngModel)]="keyBacklightBrightnessBattery"
+                        (ngModelChange)="onSetPropertyValue('keyBacklightBrightnessBattery', $event)"
+                    />
+                </td>
+            </tr>
+            <tr class="separator">
+                <td class="label">
+                    Key backlight timeout
+                </td>
+                <td>
+                    <fade-timeout-slider
+                        [ngModel]="keyBacklightFadeOutTimeout"
+                        (ngModelChange)="onSetPropertyValue('keyBacklightFadeOutTimeout', $event)"
+                    />
+                </td>
+                <td>
+                    <fade-timeout-slider
+                        [ngModel]="keyBacklightFadeOutBatteryTimeout"
+                        (ngModelChange)="onSetPropertyValue('keyBacklightFadeOutBatteryTimeout', $event)"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">
+                    LED display brightness
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="255"
+                        [step]="1"
+                        [(ngModel)]="displayBrightness"
+                        (ngModelChange)="onSetPropertyValue('displayBrightness', $event)"
+                    />
+                </td>
+                <td>
+                    <slider-wrapper
+                        [min]="0"
+                        [max]="255"
+                        [step]="1"
+                        [(ngModel)]="displayBrightnessBattery"
+                        (ngModelChange)="onSetPropertyValue('displayBrightnessBattery', $event)"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">
+                    LED display timeout
+                </td>
+                <td>
+                    <fade-timeout-slider
+                        [ngModel]="displayFadeOutTimeout"
+                        (ngModelChange)="onSetPropertyValue('displayFadeOutTimeout', $event)"
+                    />
+                </td>
+                <td>
+                    <fade-timeout-slider
+                        [ngModel]="displayFadeOutBatteryTimeout"
+                        (ngModelChange)="onSetPropertyValue('displayFadeOutBatteryTimeout', $event)"
+                    />
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -70,13 +139,4 @@
                                 (colorChanged)="onSetRgbValue('backlightingMouseColor', $event)"></functional-backlight-color>
     <functional-backlight-color [label]="'Macro'" [color]="backlightingMacroColor"
                                 (colorChanged)="onSetRgbValue('backlightingMacroColor', $event)"></functional-backlight-color>
-</div>
-
-<h3 class="pt-4">LED fade timeout</h3>
-
-<div class="row">
-    <div class="col-12 col-lg-4">
-        <fade-timeout-slider [ngModel]="ledsFadeTimeout"
-                             (ngModelChange)="onSetPropertyValue('ledsFadeTimeout', $event)" />
-    </div>
 </div>

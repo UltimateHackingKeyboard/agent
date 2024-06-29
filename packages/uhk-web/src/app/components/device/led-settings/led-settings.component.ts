@@ -30,11 +30,16 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     backlightingMacroColor: RgbColorInterface;
 
     backlightingOptions: Array<BacklightingOption>;
-    ledsFadeTimeout = 0;
 
-    public iconsAndLayerTextsBrightness: number = 0;
-    public alphanumericSegmentsBrightness: number = 0;
-    public keyBacklightBrightness: number = 0;
+    displayBrightness = 255;
+    displayBrightnessBattery = 255;
+    keyBacklightBrightness = 255;
+    keyBacklightBrightnessBattery = 255;
+    displayFadeOutTimeout = 0;
+    displayFadeOutBatteryTimeout = 0;
+    keyBacklightFadeOutTimeout = 0;
+    keyBacklightFadeOutBatteryTimeout = 0;
+
     faSlidersH = faSlidersH;
 
     private userConfig$: Observable<UserConfiguration>;
@@ -47,10 +52,15 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.userConfig$ = this.store.select(getUserConfiguration);
         this.userConfigSubscription = this.userConfig$.subscribe(config => {
-            this.iconsAndLayerTextsBrightness = config.iconsAndLayerTextsBrightness;
-            this.alphanumericSegmentsBrightness = config.alphanumericSegmentsBrightness;
+            this.displayBrightness = config.displayBrightness;
+            this.displayBrightnessBattery = config.displayBrightnessBattery;
             this.keyBacklightBrightness = config.keyBacklightBrightness;
-            this.ledsFadeTimeout = config.ledsFadeTimeout;
+            this.keyBacklightBrightnessBattery = config.keyBacklightBrightnessBattery;
+            this.displayFadeOutTimeout = config.displayFadeOutTimeout;
+            this.displayFadeOutBatteryTimeout = config.displayFadeOutBatteryTimeout;
+            this.keyBacklightFadeOutTimeout = config.keyBacklightFadeOutTimeout;
+            this.keyBacklightFadeOutBatteryTimeout = config.keyBacklightFadeOutBatteryTimeout;
+
             this.backlightingMode = config.backlightingMode;
             this.backlightingNoneActionColor = config.backlightingNoneActionColor.toJsonObject();
             this.backlightingScancodeColor = config.backlightingScancodeColor.toJsonObject();

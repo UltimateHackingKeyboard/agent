@@ -79,15 +79,11 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            userConfigMajorVersion: 7,
-            userConfigMinorVersion: 1,
+            userConfigMajorVersion: 8,
+            userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
-            iconsAndLayerTextsBrightness: 255,
-            alphanumericSegmentsBrightness: 255,
-            keyBacklightBrightness: 255,
-            ledsFadeTimeout: 0,
             perKeyRgbPresent: false,
             backlightingMode: 'FunctionalBacklighting',
             backlightingNoneActionColor: {r:0, g:0, b:0},
@@ -120,6 +116,14 @@ describe('keymap', () => {
             diagonalSpeedCompensation: false,
             doubletapTimeout: 400,
             keystrokeDelay: 0,
+            displayBrightness: 255,
+            displayBrightnessBattery: 255,
+            keyBacklightBrightness: 255,
+            keyBacklightBrightnessBattery: 255,
+            displayFadeOutTimeout: 0,
+            displayFadeOutBatteryTimeout: 0,
+            keyBacklightFadeOutTimeout: 0,
+            keyBacklightFadeOutBatteryTimeout: 0,
             moduleConfigurations: [
                 {
                     id: 'KeyClusterLeft',
@@ -360,15 +364,11 @@ describe('keymap', () => {
             ]
         };
         const expectedJsonConfig = {
-            userConfigMajorVersion: 7,
-            userConfigMinorVersion: 1,
+            userConfigMajorVersion: 8,
+            userConfigMinorVersion: 0,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
-            iconsAndLayerTextsBrightness: 255,
-            alphanumericSegmentsBrightness: 255,
-            keyBacklightBrightness: 255,
-            ledsFadeTimeout: 0,
             perKeyRgbPresent: false,
             backlightingMode: 'FunctionalBacklighting',
             backlightingNoneActionColor: {r:0, g:0, b:0},
@@ -401,6 +401,14 @@ describe('keymap', () => {
             diagonalSpeedCompensation: false,
             doubletapTimeout: 400,
             keystrokeDelay: 0,
+            displayBrightness: 255,
+            displayBrightnessBattery: 255,
+            keyBacklightBrightness: 255,
+            keyBacklightBrightnessBattery: 255,
+            displayFadeOutTimeout: 0,
+            displayFadeOutBatteryTimeout: 0,
+            keyBacklightFadeOutTimeout: 0,
+            keyBacklightFadeOutBatteryTimeout: 0,
             moduleConfigurations: [
                 {
                     id: 'KeyClusterLeft',
