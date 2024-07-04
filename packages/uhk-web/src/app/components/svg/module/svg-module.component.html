@@ -25,7 +25,6 @@
             *ngIf="key"
             [id]="key.id"
             [svgKey]="key"
-            [attr.transform]="calcTransform(key)"
             [backlightingMode]="backlightingMode"
             [isActive]="selected && i === selectedKey.keyId"
             tabindex="-1"

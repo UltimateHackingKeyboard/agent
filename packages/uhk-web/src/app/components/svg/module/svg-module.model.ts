@@ -125,6 +125,8 @@ export class SvgModule {
                     if (g.rect) {
                         const rect = g.rect.find(r => r.$.id.endsWith('print'));
                         if (rect) {
+                            key.x = +rect.$.x;
+                            key.y = +rect.$.y;
                             key.height = +rect.$.height;
                             key.width = +rect.$.width;
                             key.textTransform = rect.$.transform;

@@ -24,7 +24,7 @@ import {
 } from 'uhk-common';
 
 import { SvgModule } from '../module';
-import { SvgModuleProviderService } from '../../../services/svg-module-provider.service';
+import { DescriptionAnimationParams, SvgModuleProviderService } from '../../../services/svg-module-provider.service';
 import { SvgSeparator } from '../separator';
 import {
     SvgKeyHoverEvent,
@@ -63,17 +63,17 @@ import { findModuleById } from '../../../util';
         ]),
         trigger('moveDescription', [
             state('down', style({
-                'margin-top': '0.5em'
-            })),
+                'margin-top': '{{down}}'
+            }), { params: { down: '-5.5em' } } ),
             state('up', style({
-                'margin-top': '-6.5%'
-            })),
+                'margin-top': '{{up}}'
+            }), { params: { up: '-10.5em' } } ),
             state('upLeftKeyCluster', style({
-                'margin-top': '-2.5%'
-            })),
+                'margin-top': '{{upLeftKeyCluster}}'
+            }), { params: { upLeftKeyCluster: '-8.5em' } } ),
             state('upRightModule', style({
-                'margin-top': '-4%'
-            })),
+                'margin-top': '{{upRightModule}}'
+            }), { params: { upRightModule: '-10.5em' } } ),
             transition('down => up', animate(500)),
             transition('down => upLeftKeyCluster', animate(500)),
             transition('down => upRightModule', animate(500)),
@@ -122,6 +122,7 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     separatorStyle: SafeStyle;
     descriptionAnimation = 'down';
     fadeSeparatorAnimationTime = '200ms 500ms';
+    descriptionAnimationParams: DescriptionAnimationParams;
 
     private isAfterViewInit = false;
 
@@ -129,7 +130,7 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
                 private sanitizer: DomSanitizer,
                 private cdRef: ChangeDetectorRef) {
         this.modules = [];
-        this.viewBox = '-520 582 1100 470';
+        this.viewBox = this.svgModuleProvider.getViewBox();
         this.modulesState = {};
         this.halvesInfo = {
             areHalvesMerged: true,
@@ -287,6 +288,8 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     }
 
     private setModules() {
+        this.descriptionAnimationParams = this.svgModuleProvider.getDescriptionAnimationParams();
+        this.viewBox = this.svgModuleProvider.getViewBox();
         this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout, this.halvesInfo);
         this.separator = this.svgModuleProvider.getSvgSeparator();
         this.separatorStyle = this.sanitizer.bypassSecurityTrustStyle(this.separator.style);
