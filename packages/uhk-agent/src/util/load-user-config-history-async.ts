@@ -47,9 +47,17 @@ export async function loadUserConfigHistoryAsync(): Promise<UserConfigHistory> {
             }
 
             const deviceHistoryDir = path.join(userConfigHistoryDir, entry);
+            const device = UHK_DEVICES.find(device => device.id === deviceId);
+
+            if (!device) {
+                // The device is not supported by this version of Agent.
+                // Or someone manually modified the user-config history folder and set invalid device id.
+                continue;
+            }
+
             const deviceHistory: DeviceUserConfigHistory = {
                 uniqueId: Number.parseInt(entrySplit[0], 10),
-                device: UHK_DEVICES.find(device => device.id === deviceId),
+                device,
                 deviceName: '',
                 files: (await readdir(deviceHistoryDir))
                     .filter(file => path.extname(file) === '.bin')
