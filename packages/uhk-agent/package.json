@@ -14,7 +14,7 @@
     "@fastify/static": "7.0.4",
     "command-line-args": "6.0.0",
     "command-line-usage": "7.0.3",
-    "electron-is-dev": "2.0.0",
+    "electron-is-dev": "3.0.1",
     "decompress": "4.2.1",
     "decompress-bzip2": "4.0.0",
     "decompress-targz": "4.1.1",
