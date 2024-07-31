@@ -1262,12 +1262,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
@@ -2485,12 +2483,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
