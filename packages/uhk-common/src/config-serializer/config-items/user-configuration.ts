@@ -295,7 +295,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt8(this.secondaryRoleStrategy);
         buffer.writeUInt16(this.secondaryRoleAdvancedStrategyDoubletapTimeout);
         buffer.writeUInt16(this.secondaryRoleAdvancedStrategyTimeout);
-        buffer.writeUInt16(this.secondaryRoleAdvancedStrategySafetyMargin);
+        buffer.writeInt16(this.secondaryRoleAdvancedStrategySafetyMargin);
         buffer.writeBoolean(this.secondaryRoleAdvancedStrategyTriggerByRelease);
         buffer.writeBoolean(this.secondaryRoleAdvancedStrategyDoubletapToPrimary);
         buffer.writeUInt8(this.secondaryRoleAdvancedStrategyTimeoutAction);
