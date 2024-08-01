@@ -528,10 +528,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         },
@@ -1266,12 +1262,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
@@ -1750,10 +1744,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         },
@@ -2493,12 +2483,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "DVO"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
@@ -2977,10 +2965,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         },
@@ -3620,12 +3604,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COL"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
@@ -4199,10 +4181,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         },
@@ -4847,12 +4825,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COL"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
@@ -5426,10 +5402,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         },
@@ -6646,10 +6618,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         },
@@ -7739,10 +7707,6 @@
                   "keyActionType": "none"
                 }
               ]
-            },
-            {
-              "id": 2,
-              "keyActions": []
             }
           ]
         }
