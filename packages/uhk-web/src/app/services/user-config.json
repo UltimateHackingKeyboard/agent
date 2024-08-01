@@ -3604,12 +3604,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COL"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
@@ -4827,12 +4825,10 @@
                   "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "QWR"
+                  "keyActionType": "none"
                 },
                 {
-                  "keyActionType": "switchKeymap",
-                  "keymapAbbreviation": "COL"
+                  "keyActionType": "none"
                 },
                 {
                   "keyActionType": "none"
