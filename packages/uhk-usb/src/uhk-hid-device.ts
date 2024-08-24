@@ -82,7 +82,7 @@ export class UhkHidDevice {
      * the Agent will ask permission to run at the first time.
      * @returns {boolean}
      */
-    public hasPermission(): boolean {
+    public async hasPermission(): Promise<boolean> {
         if (this.options.spe) {
             return false;
         }
@@ -93,7 +93,7 @@ export class UhkHidDevice {
             }
 
             this.logService.misc('[UhkHidDevice] Devices before checking permission:');
-            const devs = getUhkDevices(this.options.vid);
+            const devs = await getUhkDevices(this.options.vid);
             this.listAvailableDevices(devs);
 
             const dev = this.options.vid
@@ -122,11 +122,11 @@ export class UhkHidDevice {
      * @returns {DeviceConnectionState}
      */
     public async getDeviceConnectionStateAsync(): Promise<DeviceConnectionState> {
-        const devs = getUhkDevices(this.options.vid);
+        const devs = await getUhkDevices(this.options.vid);
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             communicationInterfaceAvailable: false,
-            hasPermission: this.hasPermission(),
+            hasPermission: await this.hasPermission(),
             halvesInfo: {
                 areHalvesMerged: true,
                 leftModuleSlot: LeftSlotModules.NoModule,
@@ -135,7 +135,7 @@ export class UhkHidDevice {
             },
             hardwareModules: {},
             isMacroStatusDirty: false,
-            multiDevice: getNumberOfConnectedDevices() > 1
+            multiDevice: await getNumberOfConnectedDevices() > 1
         };
 
         if (result.multiDevice) {
@@ -173,7 +173,7 @@ export class UhkHidDevice {
      */
     public async write(buffer: Buffer): Promise<Buffer> {
         return new Promise<Buffer>(async (resolve, reject) => {
-            const device = this.getDevice();
+            const device = await this.getDevice();
 
             if (!device) {
                 return reject(new Error('[UhkHidDevice] Device is not connected'));
@@ -235,7 +235,7 @@ export class UhkHidDevice {
         let jumped = false;
 
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
-            const devs = getUhkDevices(vendorId);
+            const devs = await getUhkDevices(vendorId);
 
             const inBootloaderMode = devs.some((x: Device) =>
                 x.vendorId === vendorId &&
@@ -249,7 +249,7 @@ export class UhkHidDevice {
             await snooze(100);
 
             if (!jumped) {
-                const device = this.getDevice({ errorLogLevel: 'misc' });
+                const device = await this.getDevice({ errorLogLevel: 'misc' });
                 if (device) {
                     const data = getTransferData(message);
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
@@ -403,9 +403,9 @@ export class UhkHidDevice {
      * @returns {HID}
      * @private
      */
-    private getDevice(options?: GetDeviceOptions) {
+    private async getDevice(options?: GetDeviceOptions): Promise<HID> {
         if (!this._device) {
-            this._device = this.connectToDevice(options);
+            this._device = await this.connectToDevice(options);
         }
 
         return this._device;
@@ -415,9 +415,9 @@ export class UhkHidDevice {
      * Initialize new UHK HID device.
      * @returns {HID}
      */
-    private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): HID {
+    private async connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): Promise<HID> {
         try {
-            const devs = getUhkDevices(this.options.vid);
+            const devs = await getUhkDevices(this.options.vid);
             this.listAvailableDevices(devs);
 
             const dev = this.options.vid

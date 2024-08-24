@@ -1,5 +1,5 @@
-import {devices} from 'node-hid';
+import {devicesAsync} from 'node-hid';
 
 export async function printUsbDevices(): Promise<void> {
-    console.log(devices());
+    console.log(await devicesAsync());
 }
