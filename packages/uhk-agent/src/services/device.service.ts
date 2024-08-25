@@ -340,7 +340,7 @@ export class DeviceService {
 
             event.sender.send(IpcEvents.device.updateFirmwareJson, packageJson);
 
-            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
             const disableAgentUpgrade = disableAgentUpgradeProtection(this.options);
             if (shouldUpgradeAgent(packageJson.userConfigVersion, disableAgentUpgrade, data.versionInformation?.userConfigVersion)) {
@@ -484,7 +484,7 @@ export class DeviceService {
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
-            const uhkDeviceProduct = getCurrentUhkDeviceProductByBootloaderId();
+            const uhkDeviceProduct = await getCurrentUhkDeviceProductByBootloaderId();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc(
@@ -537,7 +537,7 @@ export class DeviceService {
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
             await this.stopPollUhkDevice();
 
-            const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+            const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc(

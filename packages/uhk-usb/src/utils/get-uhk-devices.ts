@@ -1,6 +1,6 @@
-import { Device, devices } from 'node-hid';
+import { Device, devicesAsync } from 'node-hid';
 import { UHK_VENDOR_ID } from 'uhk-common';
 
-export function getUhkDevices(vendorId: number = UHK_VENDOR_ID): Array<Device> {
-    return devices().filter(x => x.vendorId === vendorId);
+export async function getUhkDevices(vendorId: number = UHK_VENDOR_ID): Promise<Array<Device>> {
+    return (await devicesAsync()).filter(x => x.vendorId === vendorId);
 }

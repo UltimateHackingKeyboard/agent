@@ -17,9 +17,9 @@ export class KBoot {
     constructor(private peripheral: Peripheral) {
     }
 
-    open(): void {
+    async open(): Promise<void> {
         logger('Open peripheral');
-        this.peripheral.open();
+        await this.peripheral.open();
     }
 
     close(): void {

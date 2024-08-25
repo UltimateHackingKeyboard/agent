@@ -31,7 +31,7 @@ import {
             process.exit(1);
         }
         const enumerationMode = EnumerationModes[mode];
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
         const enumerationProductId = getDeviceEnumerateProductId(uhkDeviceProduct, enumerationMode);
 
         const { device } = Uhk(argv);

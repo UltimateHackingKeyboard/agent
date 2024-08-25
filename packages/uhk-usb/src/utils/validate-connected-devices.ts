@@ -1,7 +1,9 @@
 import { getNumberOfConnectedDevices } from './get-number-of-connected-devices.js';
 
-export function validateConnectedDevices(): void {
-    switch (getNumberOfConnectedDevices()) {
+export async function validateConnectedDevices(): Promise<void> {
+    const devices = await getNumberOfConnectedDevices();
+
+    switch (devices) {
         case 0:
             throw new Error('Can not find connected device');
 

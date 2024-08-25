@@ -27,7 +27,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             process.exit(1);
         }
 
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
 
         const packageJsonPath = path.join(firmwarePath, 'package.json');
         const packageJson = await getFirmwarePackageJson({
