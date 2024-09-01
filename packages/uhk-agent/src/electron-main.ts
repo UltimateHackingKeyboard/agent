@@ -157,8 +157,6 @@ async function createWindow() {
     });
 
     win.on('close', () => saveWindowState(win, logger));
-    win.on('resize', () => saveWindowState(win, logger));
-    win.on('move', () => saveWindowState(win, logger));
 }
 
 if (isSecondInstance) {
