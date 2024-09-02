@@ -1,10 +1,11 @@
 import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress.js';
 import { ModuleSlotToId } from './module-slot-id.js';
+import { UHK_DEVICE_IDS, UHK_DEVICE_IDS_TYPE } from './uhk-device-ids.js';
 
 export const UHK_VENDOR_ID = 0x1D50; // decimal 7504
 
 export interface UhkDeviceProduct {
-    id: number;
+    id: UHK_DEVICE_IDS_TYPE;
     // TODO: Maybe it is not necessary
     name: string;
     // USB vendor ID
@@ -17,7 +18,7 @@ export interface UhkDeviceProduct {
 }
 
 export const UHK_60_DEVICE: UhkDeviceProduct = {
-    id: 1,
+    id: UHK_DEVICE_IDS.UHK60V1_RIGHT,
     name: 'UHK 60 v1',
     vendorId: UHK_VENDOR_ID,
     keyboardPid: 0x6122, // decimal 24866
@@ -26,7 +27,7 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 };
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
-    id: 2,
+    id: UHK_DEVICE_IDS.UHK60V2_RIGHT,
     name: 'UHK 60 v2',
     vendorId: UHK_VENDOR_ID,
     keyboardPid: 0x6124, // decimal 24868
@@ -35,7 +36,7 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
 };
 
 export const UHK_80_DEVICE: UhkDeviceProduct = {
-    id: 3,
+    id: UHK_DEVICE_IDS.UHK80_RIGHT,
     name: 'UHK 80',
     vendorId: UHK_VENDOR_ID,
     keyboardPid: 0x6125, // decimal 24869
