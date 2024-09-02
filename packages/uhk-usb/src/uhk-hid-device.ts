@@ -182,15 +182,7 @@ export class UhkHidDevice {
             }
 
             try {
-                let reportId = 0;
-
-                if (this.options['no-report-id']) {
-                    reportId = undefined;
-                } else if (this.options['report-id'] !== undefined) {
-                    reportId = Number(this.options['report-id']);
-                } else if (this._deviceInfo.productId === UHK_80_DEVICE.keyboardPid) {
-                    reportId = 4;
-                }
+                const reportId = this.getReportId();
 
                 this.logService.setUsbReportId(reportId);
                 const sendData = this.getTransferData(buffer, reportId);
@@ -268,8 +260,9 @@ export class UhkHidDevice {
             if (!jumped) {
                 const device = this.getDevice({ errorLogLevel: 'misc' });
                 if (device) {
-                    // TODO(UHK-80): double check report id when we know how to upgrade firmware.
-                    const data = this.getTransferData(message, 0);
+                    const reportId = this.getReportId();
+                    this.logService.setUsbReportId(reportId);
+                    const data = this.getTransferData(message, reportId);
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     try {
@@ -454,6 +447,27 @@ export class UhkHidDevice {
         } catch (err) {
             this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
         }
+    }
+
+    /**
+     * Based on the command line arguments and deviceInfo it calculate the reportId
+     * @private
+     */
+    private getReportId(): number {
+        if (this.options['no-report-id']) {
+            return undefined;
+        }
+
+        if (this.options['report-id'] !== undefined) {
+            return Number(this.options['report-id']);
+        }
+
+        if (this._deviceInfo.productId === UHK_80_DEVICE.keyboardPid) {
+            // TODO: maybe worth it to move to the UhkDeviceProduct structure
+            return 4;
+        }
+
+        return 0;
     }
 
     /**
