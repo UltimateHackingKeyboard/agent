@@ -23,6 +23,6 @@
     "uhk-common": "1.0.0"
   },
   "peerDependencies": {
-    "node-hid": "*"
+    "node-hid": ">= 3.1.0"
   }
 }
