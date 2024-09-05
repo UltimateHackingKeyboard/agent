@@ -1,11 +1,12 @@
 import { readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { convertHistoryFilenameToDisplayText } from 'uhk-common';
-import { getMd5HashFromFilename } from 'uhk-common';
 import {
+    convertHistoryFilenameToDisplayText,
     DeviceUserConfigHistory,
+    getMd5HashFromFilename,
     sortStringDesc,
     UHK_DEVICES,
+    UNKNOWN_DEVICE,
     UserConfigHistory,
 } from 'uhk-common';
 
@@ -49,7 +50,7 @@ export async function loadUserConfigHistoryAsync(): Promise<UserConfigHistory> {
             const deviceHistoryDir = path.join(userConfigHistoryDir, entry);
             const deviceHistory: DeviceUserConfigHistory = {
                 uniqueId: Number.parseInt(entrySplit[0], 10),
-                device: UHK_DEVICES.find(device => device.id === deviceId),
+                device: UHK_DEVICES.find(device => device.id === deviceId) || UNKNOWN_DEVICE,
                 deviceName: '',
                 files: (await readdir(deviceHistoryDir))
                     .filter(file => path.extname(file) === '.bin')

@@ -17,6 +17,15 @@ export interface UhkDeviceProduct {
     buspalPid: number;
 }
 
+export const UNKNOWN_DEVICE: UhkDeviceProduct = {
+    id: 0 as UHK_DEVICE_IDS_TYPE,
+    vendorId: 0,
+    bootloaderPid: 0,
+    buspalPid: 0,
+    keyboardPid: 0,
+    name: 'Unknown'
+};
+
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V1_RIGHT,
     name: 'UHK 60 v1',
