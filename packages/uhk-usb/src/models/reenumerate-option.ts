@@ -1,10 +1,10 @@
+import { VidPidPair } from 'uhk-common';
+
 import { EnumerationModes } from '../constants.js';
 
 export interface ReenumerateOption {
     enumerationMode: EnumerationModes;
-    // The USB product id that should appear after the re-enumeration
-    productId: number;
-    // The USB vendor id that should appear after the re-enumeration
-    vendorId: number;
+    // The USB vendorId and product id that should appear after the re-enumeration
+    vidPidPairs: VidPidPair[];
     timeout?: number;
 }

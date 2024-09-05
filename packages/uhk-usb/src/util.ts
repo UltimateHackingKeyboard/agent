@@ -2,7 +2,7 @@ import { Device, devices } from 'node-hid';
 import fse from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
-import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
+import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct, VidPidPair } from 'uhk-common';
 
 import { MAX_USB_PAYLOAD_SIZE, UsbCommand } from './constants.js';
 
@@ -88,8 +88,7 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
 }
 
 export const isUhkCommunicationInterface = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId &&
-        dev.productId === device.keyboardPid &&
+    return UHK_DEVICES.some(device => device.keyboard.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId) &&
         ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
             (dev.usagePage === 65280 && dev.usage === 1) // New firmware
         )
@@ -97,13 +96,16 @@ export const isUhkCommunicationInterface = (dev: Device): boolean => {
 };
 
 export const getUhkDevice = (dev: Device): UhkDeviceProduct => {
-    return UHK_DEVICES.find(device => dev.vendorId === device.vendorId &&
-        (dev.productId === device.keyboardPid || dev.productId === device.bootloaderPid)
-    );
+    return UHK_DEVICES.find(device => {
+        return device.keyboard.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId) ||
+            device.bootloader.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId);
+    });
 };
 
 export const isBootloader = (dev: Device): boolean => {
-    return UHK_DEVICES.some(device => dev.vendorId === device.vendorId && dev.productId === device.bootloaderPid);
+    return UHK_DEVICES.some(device => {
+        return device.bootloader.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId);
+    });
 };
 
 export const getFileContentAsync = async (filePath: string): Promise<Array<string>> => {
@@ -141,4 +143,25 @@ export const waitForDevice = async (vendorId: number, productId: number): Promis
     }
 
     throw new Error(`Cannot find device with vendorId: ${vendorId}, productId: ${productId}`);
+};
+
+export const waitForDevices = async (vidPidPairs: VidPidPair[]): Promise<void> => {
+    const startTime = new Date().getTime() + 15000;
+
+    while (startTime > new Date().getTime()) {
+
+        const isAvailable = devices()
+            .some(dev => vidPidPairs.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId));
+
+        if (isAvailable) {
+            await snooze(1000);
+
+            return;
+        }
+
+        await snooze(250);
+    }
+
+    const errorMessage = vidPidPairs.map(vidPid => `vendorId: ${vidPid.vid}, productId: ${vidPid.pid}`).join(' or ');
+    throw new Error(`Cannot find device with vendorId: ${errorMessage}`);
 };

@@ -6,4 +6,5 @@ export * from './i2c-baud-rate.js';
 export * from './i2c-error-buffer.js';
 export * from './load-configurations-result.js';
 export * from './reenumerate-option.js';
+export * from './reenumerate-result.js';
 export * from './tmp-firmware.js';

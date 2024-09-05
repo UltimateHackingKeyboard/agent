@@ -2,19 +2,21 @@ import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress.js';
 import { ModuleSlotToId } from './module-slot-id.js';
 import { UHK_DEVICE_IDS, UHK_DEVICE_IDS_TYPE } from './uhk-device-ids.js';
 
-export const UHK_VENDOR_ID = 0x1D50; // decimal 7504
+export const UHK_VENDOR_ID_OLD = 0x1D50; // decimal 7504
+export const UHK_VENDOR_ID = 0x37A8; // decimal 14248
+
+export interface VidPidPair {
+    vid: number;
+    pid: number;
+}
 
 export interface UhkDeviceProduct {
     id: UHK_DEVICE_IDS_TYPE;
-    // TODO: Maybe it is not necessary
     name: string;
-    // USB vendor ID
-    vendorId: number;
-    // USB product ID
-    keyboardPid: number;
-    // USB bootloader product ID
-    bootloaderPid: number;
-    buspalPid: number;
+    keyboard: VidPidPair[];
+    bootloader: VidPidPair[];
+    buspal: VidPidPair[];
+    reportId: number;
 }
 
 export const UNKNOWN_DEVICE: UhkDeviceProduct = {
@@ -29,28 +31,85 @@ export const UNKNOWN_DEVICE: UhkDeviceProduct = {
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V1_RIGHT,
     name: 'UHK 60 v1',
-    vendorId: UHK_VENDOR_ID,
-    keyboardPid: 0x6122, // decimal 24866
-    bootloaderPid: 0x6120, // decimal 24864
-    buspalPid: 0x6121 // decimal 24865
+    keyboard: [
+        {
+            vid: UHK_VENDOR_ID_OLD,
+            pid: 0x6122, // decimal 24866
+        },
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0001 // decimal 1
+        },
+    ],
+    bootloader: [
+        {
+            vid: UHK_VENDOR_ID_OLD,
+            pid: 0x6120, // decimal 24864
+        },
+    ],
+    buspal: [
+        {
+            vid: UHK_VENDOR_ID_OLD,
+            pid: 0x6121 // decimal 24865
+        },
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0000 // decimal 0
+        },
+    ],
+    reportId: 0,
 };
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V2_RIGHT,
     name: 'UHK 60 v2',
-    vendorId: UHK_VENDOR_ID,
-    keyboardPid: 0x6124, // decimal 24868
-    bootloaderPid: 0x6123, // decimal 24867
-    buspalPid: 0x6121 // decimal 24865
+    keyboard: [
+        {
+            vid: UHK_VENDOR_ID_OLD,
+            pid: 0x6124, // decimal 24868
+        },
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0003 // decimal 3
+        },
+    ],
+    bootloader: [
+        {
+            vid: UHK_VENDOR_ID_OLD,
+            pid: 0x6123, // decimal 24867
+        },
+    ],
+    buspal: [
+        {
+            vid: UHK_VENDOR_ID_OLD,
+            pid: 0x6121 // decimal 24865
+        },
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0002 // decimal 2
+        },
+    ],
+    reportId: 0,
 };
 
 export const UHK_80_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK80_RIGHT,
     name: 'UHK 80',
-    vendorId: UHK_VENDOR_ID,
-    keyboardPid: 0x6125, // decimal 24869
-    bootloaderPid: 0x6123, // decimal 24867
-    buspalPid: 0x6121 // decimal 24865
+    keyboard: [
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0009, // decimal 9
+        },
+    ],
+    bootloader: [
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0008, // decimal 8
+        },
+    ],
+    // TODO: Implement when we know
+    buspal: [],
+    reportId: 4,
 };
 
 

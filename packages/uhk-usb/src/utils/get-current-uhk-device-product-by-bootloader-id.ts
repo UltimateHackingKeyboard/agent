@@ -10,7 +10,7 @@ export function getCurrentUhkDeviceProductByBootloaderId(): UhkDeviceProduct | u
 
     for (const hidDevice of hidDevices) {
         for (const uhkDevice of UHK_DEVICES) {
-            if (hidDevice.vendorId === uhkDevice.vendorId && hidDevice.productId === uhkDevice.bootloaderPid) {
+            if (uhkDevice.bootloader.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId)) {
                 return uhkDevice;
             }
         }

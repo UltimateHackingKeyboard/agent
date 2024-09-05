@@ -4,7 +4,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
 import {
     EnumerationModes,
     getCurrentUhkDeviceProduct,
-    getDeviceEnumerateProductId
+    getDeviceEnumerateVidPidPairs
 } from 'uhk-usb';
 
 (async function () {
@@ -32,13 +32,12 @@ import {
         }
         const enumerationMode = EnumerationModes[mode];
         const uhkDeviceProduct = getCurrentUhkDeviceProduct();
-        const enumerationProductId = getDeviceEnumerateProductId(uhkDeviceProduct, enumerationMode);
+        const enumerationVidPidPairs = getDeviceEnumerateVidPidPairs(uhkDeviceProduct, enumerationMode);
 
         const { device } = Uhk(argv);
         await device.reenumerate({
             enumerationMode,
-            vendorId: uhkDeviceProduct.vendorId,
-            productId: enumerationProductId,
+            vidPidPairs: enumerationVidPidPairs,
             timeout: argv.timeout});
     } catch (error) {
         errorHandler(error);

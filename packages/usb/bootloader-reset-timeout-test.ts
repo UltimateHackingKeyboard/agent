@@ -1,7 +1,7 @@
 #!/usr/bin/env -S node --loader ts-node/esm --no-warnings=ExperimentalWarning
 
 import Uhk, { errorHandler, yargs } from './src/index.js';
-import { EnumerationModes, waitForDevice } from 'uhk-usb';
+import { EnumerationModes, waitForDevices } from 'uhk-usb';
 import { KBoot, UsbPeripheral } from '../kboot/src/index.js';
 import { UHK_60_DEVICE } from 'uhk-common';
 
@@ -14,20 +14,19 @@ import { UHK_60_DEVICE } from 'uhk-common';
         const { device } = Uhk(argv);
         console.info('Start Bootloader re-enumeration with 60 sec');
 
-        await device.reenumerate({
+        const reenumerateResult = await device.reenumerate({
             enumerationMode: EnumerationModes.Bootloader,
             timeout: 60000,
-            vendorId: UHK_60_DEVICE.vendorId,
-            productId: UHK_60_DEVICE.bootloaderPid
+            vidPidPairs: UHK_60_DEVICE.bootloader,
         });
 
         console.info('Kboot reset');
-        const kboot = new KBoot(new UsbPeripheral({ vendorId: UHK_60_DEVICE.vendorId, productId: UHK_60_DEVICE.bootloaderPid }));
+        const kboot = new KBoot(new UsbPeripheral({ vendorId: reenumerateResult.vidPidPair.vid, productId: reenumerateResult.vidPidPair.pid }));
         await kboot.reset();
 
         console.info('Wait for Keyboard');
 
-        await waitForDevice(UHK_60_DEVICE.vendorId, UHK_60_DEVICE.keyboardPid);
+        await waitForDevices(UHK_60_DEVICE.keyboard);
 
     } catch (error) {
         errorHandler(error);

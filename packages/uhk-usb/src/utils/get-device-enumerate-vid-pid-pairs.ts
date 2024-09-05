@@ -1,17 +1,17 @@
-import { UhkDeviceProduct } from 'uhk-common';
+import { UhkDeviceProduct, VidPidPair } from 'uhk-common';
 
 import { EnumerationModes } from '../constants.js';
 
-export function getDeviceEnumerateProductId(device: UhkDeviceProduct, enumerationMode: EnumerationModes): number {
+export function getDeviceEnumerateVidPidPairs(device: UhkDeviceProduct, enumerationMode: EnumerationModes): VidPidPair[] {
     switch (enumerationMode) {
         case EnumerationModes.Bootloader:
-            return device.bootloaderPid;
+            return device.bootloader;
 
         case EnumerationModes.Buspal:
-            return device.buspalPid;
+            return device.buspal;
 
         case EnumerationModes.NormalKeyboard:
-            return device.keyboardPid;
+            return device.keyboard;
 
         default:
             throw new Error(`Not implemented enumeration device mapping: ${enumerationMode}`);

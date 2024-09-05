@@ -6,7 +6,7 @@ export * from './convert-slave-i2c-error-buffer.js';
 export * from './find-device-by-options.js';
 export * from './get-current-uhk-device-product.js';
 export * from './get-current-uhk-device-product-by-bootloader-id.js';
-export * from './get-device-enumerate-product-id.js';
+export * from './get-device-enumerate-vid-pid-pairs.js';
 export * from './get-device-firmware-path.js';
 export * from './get-firmware-package-json.js';
 export * from './get-module-firmware-path.js';

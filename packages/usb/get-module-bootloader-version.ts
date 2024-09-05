@@ -22,14 +22,13 @@ import Uhk, {
         const uhkDeviceProduct = getCurrentUhkDeviceProduct();
 
         const { device, logger } = Uhk(argv);
-        await device.reenumerate({
+        const reenumerateResult = await device.reenumerate({
             enumerationMode: EnumerationModes.Buspal,
-            vendorId: uhkDeviceProduct.vendorId,
-            productId: uhkDeviceProduct.buspalPid
+            vidPidPairs: uhkDeviceProduct.buspal
         });
         device.close();
-        await waitForDevice(uhkDeviceProduct.vendorId, uhkDeviceProduct.buspalPid);
-        const usbPeripheral = new UsbPeripheral({ productId: uhkDeviceProduct.buspalPid, vendorId: uhkDeviceProduct.vendorId });
+        await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
+        const usbPeripheral = new UsbPeripheral({ productId: reenumerateResult.vidPidPair.pid, vendorId: reenumerateResult.vidPidPair.vid });
         let kboot: KBoot;
         let bootloaderVersion: BootloaderVersion;
         const startTime = new Date();
@@ -52,8 +51,7 @@ import Uhk, {
         kboot.close();
         await device.reenumerate({
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vendorId: uhkDeviceProduct.vendorId,
-            productId: uhkDeviceProduct.keyboardPid
+            vidPidPairs: uhkDeviceProduct.keyboard,
         });
 
         if (bootloaderVersion) {
