@@ -1,5 +1,6 @@
 export * from './assert-command-line-options.js';
 export * from './check-firmware-and-device-compatibility.js';
+export * from './calculate-bcd-device.js';
 export * from './calculate-halves-state.js';
 export * from './convert-ms-to-duration.js';
 export * from './convert-slave-i2c-error-buffer.js';

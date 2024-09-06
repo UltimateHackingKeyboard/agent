@@ -15,9 +15,9 @@ import { UHK_60_DEVICE } from 'uhk-common';
         console.info('Start Bootloader re-enumeration with 60 sec');
 
         const reenumerateResult = await device.reenumerate({
+            device: UHK_60_DEVICE,
             enumerationMode: EnumerationModes.Bootloader,
             timeout: 60000,
-            vidPidPairs: UHK_60_DEVICE.bootloader,
         });
 
         console.info('Kboot reset');

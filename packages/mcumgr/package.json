@@ -1,0 +1,27 @@
+{
+  "name": "@uhk/mcumgr",
+  "private": true,
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project ./src/tsconfig.json",
+    "clean": "rimraf ./node_modules ./dist",
+    "lint": "eslint --ext .ts .",
+    "test": "cross-env NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json"
+  },
+  "keywords": [
+    "mcu",
+    "mcuboot",
+    "mcumgr"
+  ],
+  "author": "Robert Kiss <ert78gb@gmail.com>",
+  "license": "See in LICENSE",
+  "description": "Micro controller manager utility",
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "peerDependencies": {
+    "serialport": ">= 12.0.0"
+  }
+}

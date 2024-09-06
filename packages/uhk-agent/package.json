@@ -22,6 +22,7 @@
     "fs-extra": "11.2.0",
     "get-port": "6.1.2",
     "node-hid": "3.1.0",
+    "serialport": "12.0.0",
     "sudo-prompt": "9.2.1",
     "tmp": "0.2.1",
     "tslib": "2.6.2",
@@ -32,7 +33,7 @@
   "devDependencies": {
   },
   "scripts": {
-    "start": "cross-env DEBUG=kboot* electron ./dist/electron-main.js",
+    "start": "cross-env DEBUG=kboot*,mcumgr* electron ./dist/electron-main.js",
     "electron:spe": "electron ./dist/electron-main.js --spe",
     "build": "webpack && npm run install:build-deps && npm run download-firmware && npm run copy-to-tmp-folder",
     "clean": "rimraf ./node_modules ./dist",

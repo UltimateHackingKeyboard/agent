@@ -1,3 +1,4 @@
+import { FIRMWARE_UPGRADE_METHODS, FIRMWARE_UPGRADE_METHODS_TYPE } from './firmware-upgrade-method.js';
 import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress.js';
 import { ModuleSlotToId } from './module-slot-id.js';
 import { UHK_DEVICE_IDS, UHK_DEVICE_IDS_TYPE } from './uhk-device-ids.js';
@@ -12,6 +13,7 @@ export interface VidPidPair {
 
 export interface UhkDeviceProduct {
     id: UHK_DEVICE_IDS_TYPE;
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS_TYPE,
     name: string;
     keyboard: VidPidPair[];
     bootloader: VidPidPair[];
@@ -21,6 +23,7 @@ export interface UhkDeviceProduct {
 
 export const UNKNOWN_DEVICE: UhkDeviceProduct = {
     id: 0 as UHK_DEVICE_IDS_TYPE,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
     name: 'Unknown',
     keyboard: [],
     bootloader: [],
@@ -30,6 +33,7 @@ export const UNKNOWN_DEVICE: UhkDeviceProduct = {
 
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V1_RIGHT,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
     name: 'UHK 60 v1',
     keyboard: [
         {
@@ -62,6 +66,7 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V2_RIGHT,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
     name: 'UHK 60 v2',
     keyboard: [
         {
@@ -94,6 +99,7 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
 
 export const UHK_80_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK80_RIGHT,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
     name: 'UHK 80',
     keyboard: [
         {

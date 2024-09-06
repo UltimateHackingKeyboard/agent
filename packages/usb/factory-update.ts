@@ -50,7 +50,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         }
 
         const { operations } = Uhk(argv);
-        await operations.updateRightFirmwareWithKboot(rightFirmwarePath, uhkDeviceProduct);
+        await operations.updateDeviceFirmware(rightFirmwarePath, uhkDeviceProduct);
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);

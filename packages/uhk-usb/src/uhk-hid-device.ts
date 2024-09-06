@@ -1,11 +1,13 @@
-import { Device, HID } from 'node-hid';
 import fse from 'fs-extra';
-import * as path from 'path';
 import isRoot from 'is-root';
+import { Device, HID } from 'node-hid';
+import * as path from 'path';
+import {SerialPort} from 'serialport';
 import {
     Buffer,
     CommandLineArgs,
     DeviceConnectionState,
+    FIRMWARE_UPGRADE_METHODS,
     HalvesInfo,
     isEqualArray,
     LeftSlotModules,
@@ -16,7 +18,6 @@ import {
     UdevRulesInfo,
     UHK_DEVICES,
 } from 'uhk-common';
-
 import {
     EnumerationModes,
     KbootCommands,
@@ -24,20 +25,21 @@ import {
     MODULE_ID_TO_STRING,
     UsbCommand
 } from './constants.js';
+import { DeviceState, GetDeviceOptions, ReenumerateOption, ReenumerateResult } from './models/index.js';
 import {
     bufferToString,
     convertBufferToIntArray,
     getFileContentAsync,
-    isBootloader,
     getUhkDevice,
+    isBootloader,
     isUhkCommunicationInterface,
     retry,
     snooze
 } from './util.js';
-import { DeviceState, GetDeviceOptions, ReenumerateOption, ReenumerateResult } from './models/index.js';
 import {
     calculateHalvesState,
     findDeviceByOptions,
+    getDeviceEnumerateVidPidPairs,
     getNumberOfConnectedDevices,
     getUhkDevices,
     usbDeviceJsonFormatter
@@ -225,10 +227,11 @@ export class UhkHidDevice {
     }
 
     async reenumerate(
-        { enumerationMode, vidPidPairs, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
+        { enumerationMode, device, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
     ): Promise<ReenumerateResult> {
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
+        const vidPidPairs = getDeviceEnumerateVidPidPairs(device, enumerationMode);
 
         const startTime = new Date();
         const waitTimeout = timeout + 20000;
@@ -237,19 +240,37 @@ export class UhkHidDevice {
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
             let allDevice = [];
             for (const vidPid of vidPidPairs) {
-                const devs = getUhkDevices([vidPid.vid]);
-                allDevice.push(...devs);
 
-                const inBootloaderMode = devs.some((x: Device) =>
-                    x.vendorId === vidPid.vid &&
-                    x.productId === vidPid.pid);
+                if (enumerationMode === EnumerationModes.Bootloader && device.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
+                    this.logService.misc('[UhkHidDevice] try to find MCU Bootloader');
+                    const serialDevices = await SerialPort.list();
+                    // TODO: Implement the listAvailableDevices for serial devices too
+                    for (const serialDevice of serialDevices) {
+                        if (Number.parseInt(serialDevice.vendorId, 16) === vidPid.vid && Number.parseInt(serialDevice.productId, 16) === vidPid.pid) {
+                            return {
+                                vidPidPair: vidPid,
+                                serialPath: serialDevice.path,
+                                usbPath: '',
+                            };
+                        }
+                    }
+                } else {
+                    const devs = getUhkDevices([vidPid.vid]);
+                    allDevice.push(...devs);
 
-                if (inBootloaderMode) {
-                    this.logService.misc('[UhkHidDevice] Reenumerating devices');
+                    const reenumeratedDevice = devs.find((x: Device) =>
+                        x.vendorId === vidPid.vid &&
+                        x.productId === vidPid.pid);
 
-                    return {
-                        vidPidPair: vidPid,
-                    };
+                    if (reenumeratedDevice) {
+                        this.logService.misc('[UhkHidDevice] Reenumerating devices');
+
+                        return {
+                            vidPidPair: vidPid,
+                            serialPath: '',
+                            usbPath: reenumeratedDevice.path,
+                        };
+                    }
                 }
             }
 

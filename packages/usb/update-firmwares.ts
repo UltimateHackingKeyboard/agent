@@ -49,7 +49,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         }
 
         const { operations } = Uhk(argv);
-        await operations.updateRightFirmwareWithKboot(rightFirmwarePath, uhkDeviceProduct);
+        await operations.updateDeviceFirmware(rightFirmwarePath, uhkDeviceProduct);
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
 
         if (argv['overwrite-user-config']) {

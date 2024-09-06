@@ -23,8 +23,8 @@ import Uhk, {
 
         const { device, logger } = Uhk(argv);
         const reenumerateResult = await device.reenumerate({
+            device: uhkDeviceProduct,
             enumerationMode: EnumerationModes.Buspal,
-            vidPidPairs: uhkDeviceProduct.buspal
         });
         device.close();
         await waitForDevice(reenumerateResult.vidPidPair.vid, reenumerateResult.vidPidPair.pid);
@@ -50,8 +50,8 @@ import Uhk, {
         kboot.reset();
         kboot.close();
         await device.reenumerate({
+            device: uhkDeviceProduct,
             enumerationMode: EnumerationModes.NormalKeyboard,
-            vidPidPairs: uhkDeviceProduct.keyboard,
         });
 
         if (bootloaderVersion) {
