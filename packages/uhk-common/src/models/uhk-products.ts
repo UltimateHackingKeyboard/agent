@@ -21,11 +21,11 @@ export interface UhkDeviceProduct {
 
 export const UNKNOWN_DEVICE: UhkDeviceProduct = {
     id: 0 as UHK_DEVICE_IDS_TYPE,
-    vendorId: 0,
-    bootloaderPid: 0,
-    buspalPid: 0,
-    keyboardPid: 0,
-    name: 'Unknown'
+    name: 'Unknown',
+    keyboard: [],
+    bootloader: [],
+    buspal: [],
+    reportId: 0
 };
 
 export const UHK_60_DEVICE: UhkDeviceProduct = {
