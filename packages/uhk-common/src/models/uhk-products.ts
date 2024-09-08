@@ -66,7 +66,7 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V2_RIGHT,
-    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
     name: 'UHK 60 v2',
     keyboard: [
         {
