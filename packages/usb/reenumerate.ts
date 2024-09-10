@@ -39,7 +39,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             process.exit(1);
         }
         const enumerationMode = EnumerationModes[mode];
-        const uhkDeviceProduct = await getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
 
         const { device } = Uhk(argv);
         await device.reenumerate({
@@ -51,7 +51,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
     }
 })();
 
-async function getCurrentUhkDeviceProduct(): Promise<UhkDeviceProduct | undefined> {
+async function getCurrentUhkDeviceProduct(argv: any): Promise<UhkDeviceProduct | undefined> {
     let uhkDeviceProduct: UhkDeviceProduct;
 
     function setUhkDeviceProduct(device: UhkDeviceProduct) {
@@ -71,9 +71,13 @@ async function getCurrentUhkDeviceProduct(): Promise<UhkDeviceProduct | undefine
     for (const hidDevice of hidDevices) {
         for (const uhkDevice of allUhkDevice) {
             if (uhkDevice.bootloader.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId) ||
-                (uhkDevice.keyboard.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId) && isUhkCommunicationUsage(hidDevice))
+                uhkDevice.keyboard.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId)
             ) {
-                setUhkDeviceProduct(uhkDevice);
+                if (!argv.vid && isUhkCommunicationUsage(hidDevice)) {
+                    setUhkDeviceProduct(uhkDevice);
+                } else if (argv.vid === hidDevice.vendorId && argv.pid === hidDevice.productId && argv['usb-interface'] === hidDevice.interface) {
+                    setUhkDeviceProduct(uhkDevice);
+                }
             }
         }
     }
