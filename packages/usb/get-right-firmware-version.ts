@@ -5,7 +5,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
 (async function () {
     try {
         const argv = yargs
-            .usage('Get Left firmware version')
+            .usage('Get Right firmware version')
             .argv;
 
         const { operations } = Uhk(argv);
@@ -17,6 +17,9 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log(`userConfigVersion: ${version.userConfigVersion}`);
         console.log(`hardwareConfigVersion: ${version.hardwareConfigVersion}`);
         console.log(`smartMacrosVersion: ${version.smartMacrosVersion}`);
+        console.log(`firmwareGitRepo: ${version.firmwareGitRepo}`);
+        console.log(`firmwareGitTag: ${version.firmwareGitTag}`);
+        console.log(`firmwareChecksum: ${version.firmwareChecksum}`);
     } catch (error) {
         errorHandler(error);
     }

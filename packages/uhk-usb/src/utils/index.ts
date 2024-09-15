@@ -14,6 +14,7 @@ export * from './get-module-firmware-path.js';
 export * from './get-number-of-connected-devices.js';
 export * from './get-package-json-from-path-async.js';
 export * from './get-uhk-devices.js';
+export * from './get-uhk-dongles.js';
 export * from './is-uhk-device-connected.js';
 export * from './validate-connected-devices.js';
 export { default as readUhkResponseAs0EndString } from './read-uhk-response-as-0-end-string.js';

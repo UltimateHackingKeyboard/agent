@@ -148,6 +148,28 @@ export const UHK_80_DEVICE: UhkDeviceProduct = {
     reportId: 4,
 };
 
+export const UHK_DONGLE: UhkDeviceProduct = {
+    id: UHK_DEVICE_IDS.UHK_DONGLE,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
+    logName: 'UHK Dongle',
+    name: 'UHK Dongle',
+    keyboard: [
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0005, // decimal 5
+        },
+    ],
+    bootloader: [
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0004, // decimal 4
+        },
+    ],
+    // TODO: Implement when we know
+    buspal: [],
+    reportId: 4,
+};
+
 export const UHK_DEVICES: Array<UhkDeviceProduct> = [
     UHK_60_DEVICE,
     UHK_60_V2_DEVICE,

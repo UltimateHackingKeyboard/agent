@@ -8,6 +8,7 @@ export interface ModuleInfo {
 }
 
 export interface HardwareModules {
+    dongleInfo?: RightModuleInfo;
     moduleInfos?: ModuleInfo[];
     rightModuleInfo?: RightModuleInfo;
 }

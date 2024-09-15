@@ -6,6 +6,7 @@ import {
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
     UHK_DEVICES,
+    UHK_DONGLE,
     UhkDeviceProduct,
 } from 'uhk-common';
 import {
@@ -66,6 +67,7 @@ async function getCurrentUhkDeviceProduct(argv: any): Promise<UhkDeviceProduct |
     const allUhkDevice = [
         ...UHK_DEVICES,
         UHK_80_DEVICE_LEFT,
+        UHK_DONGLE,
     ];
 
     for (const hidDevice of hidDevices) {
@@ -86,7 +88,8 @@ async function getCurrentUhkDeviceProduct(argv: any): Promise<UhkDeviceProduct |
 
     const uhk80Devices = [
         UHK_80_DEVICE_LEFT,
-        UHK_80_DEVICE
+        UHK_80_DEVICE,
+        UHK_DONGLE,
     ];
 
     for (const serialDevice of serialDevices) {
