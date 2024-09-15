@@ -33,6 +33,7 @@ import {
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
+    UHK_80_DEVICE_LEFT,
     UHK_MODULES,
     UpdateFirmwareData,
     UploadFileData,
@@ -48,6 +49,7 @@ import {
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
     getModuleFirmwarePath,
+    isUhkDeviceConnected,
     readUhkResponseAs0EndString,
     snooze,
     TmpFirmware,
@@ -55,7 +57,8 @@ import {
     UhkOperations,
     UsbVariables,
     usbDeviceJsonFormatter,
-    waitForDevices
+    waitForDevices,
+    waitForUhkDeviceConnected
 } from 'uhk-usb';
 import { emptyDir } from 'fs-extra';
 import os from 'os';
@@ -383,39 +386,58 @@ export class DeviceService {
                 this.logService.misc('Skip right firmware upgrade.');
             }
 
-            // TODO: implement MCUBOOT version
-            if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.KBOOT) {
-                const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
-                    .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
-                const leftModuleFirmwareInfo = hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
+            const leftModuleInfo: ModuleInfo = hardwareModules.moduleInfos
+                .find(moduleInfo => moduleInfo.module.slotId === ModuleSlotToId.leftHalf);
+            const leftModuleFirmwareInfo = hardwareModules.rightModuleInfo.modules[leftModuleInfo.module.id];
 
-                this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
-                this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
-                if (leftModuleFirmwareInfo) {
-                    this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
+            this.logService.misc('[DeviceService] Left module firmware version: ', leftModuleInfo.info.firmwareVersion);
+            this.logService.misc('[DeviceService] Current left module firmware checksum: ', leftModuleInfo.info.firmwareChecksum);
+            if (leftModuleFirmwareInfo) {
+                this.logService.misc('[DeviceService] New left module firmware checksum: ', leftModuleFirmwareInfo.md5);
+            }
+
+            const isLeftModuleFirmwareSame = isSameFirmware(
+                leftModuleInfo.info,
+                {
+                    firmwareChecksum: leftModuleFirmwareInfo?.md5,
+                    firmwareVersion: packageJson.firmwareVersion
                 }
+            );
 
-                const isLeftModuleFirmwareSame = isSameFirmware(
-                    leftModuleInfo.info,
-                    {
-                        firmwareChecksum: leftModuleFirmwareInfo?.md5,
-                        firmwareVersion: packageJson.firmwareVersion
+            if (data.forceUpgrade || !isLeftModuleFirmwareSame) {
+                event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
+
+                if(uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.MCUBOOT) {
+                    if (!(await isUhkDeviceConnected(UHK_80_DEVICE_LEFT))) {
+                        this.logService.misc(`[DeviceService] Please connect your ${UHK_80_DEVICE_LEFT.logName} keyboard with USB cable.`);
                     }
-                );
 
-                if (data.forceUpgrade || !isLeftModuleFirmwareSame) {
-                    event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, leftModuleInfo.module.name);
+                    await waitForUhkDeviceConnected(UHK_80_DEVICE_LEFT);
+
+                    const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
+                    await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT);
+
+                    if (!(await isUhkDeviceConnected(uhkDeviceProduct))) {
+                        this.logService.misc(`[DeviceService] Please connect your ${uhkDeviceProduct.logName} keyboard with USB cable.`);
+                    }
+
+                    await waitForUhkDeviceConnected(uhkDeviceProduct);
+                }
+                else {
                     await this.operations
                         .updateModuleWithKboot(
                             getModuleFirmwarePath(leftModuleInfo.module, packageJson),
                             uhkDeviceProduct,
                             leftModuleInfo.module
                         );
-                } else {
-                    event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, leftModuleInfo.module.name);
-                    this.logService.misc('[DeviceService] Skip left firmware upgrade.');
                 }
+            } else {
+                event.sender.send(IpcEvents.device.moduleFirmwareUpgradeSkip, leftModuleInfo.module.name);
+                this.logService.misc('[DeviceService] Skip left firmware upgrade.');
+            }
 
+            // TODO: implement MCUBOOT version
+            if (uhkDeviceProduct.firmwareUpgradeMethod === FIRMWARE_UPGRADE_METHODS.KBOOT) {
                 for (const moduleInfo of hardwareModules.moduleInfos) {
                     if (moduleInfo.module.slotId === ModuleSlotToId.leftHalf) {
                         // Left half upgrade mandatory, it is running before the other modules upgrade.

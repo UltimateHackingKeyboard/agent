@@ -2,6 +2,7 @@ import { FIRMWARE_UPGRADE_METHODS, FIRMWARE_UPGRADE_METHODS_TYPE } from './firmw
 import { ModuleSlotToI2cAddress } from './module-slot-to-i2c-adress.js';
 import { ModuleSlotToId } from './module-slot-id.js';
 import { UHK_DEVICE_IDS, UHK_DEVICE_IDS_TYPE } from './uhk-device-ids.js';
+import { UHK_MODULE_IDS, UHK_MODULE_IDS_TYPE } from './uhk-module-ids.js';
 
 export const UHK_VENDOR_ID_OLD = 0x1D50; // decimal 7504
 export const UHK_VENDOR_ID = 0x37A8; // decimal 14248
@@ -14,6 +15,9 @@ export interface VidPidPair {
 export interface UhkDeviceProduct {
     id: UHK_DEVICE_IDS_TYPE;
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS_TYPE,
+    // Use it in logs instead of the name because UHK 80 left and right have the same name.
+    // But we have to differentiate them in the logs
+    logName: string;
     name: string;
     keyboard: VidPidPair[];
     bootloader: VidPidPair[];
@@ -24,6 +28,7 @@ export interface UhkDeviceProduct {
 export const UNKNOWN_DEVICE: UhkDeviceProduct = {
     id: 0 as UHK_DEVICE_IDS_TYPE,
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
+    logName: 'Unknown',
     name: 'Unknown',
     keyboard: [],
     bootloader: [],
@@ -34,6 +39,7 @@ export const UNKNOWN_DEVICE: UhkDeviceProduct = {
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V1_RIGHT,
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
+    logName: 'UHK 60 v1',
     name: 'UHK 60 v1',
     keyboard: [
         {
@@ -66,7 +72,8 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V2_RIGHT,
-    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
+    logName: 'UHK 60 v2',
     name: 'UHK 60 v2',
     keyboard: [
         {
@@ -97,9 +104,32 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     reportId: 0,
 };
 
+export const UHK_80_DEVICE_LEFT: UhkDeviceProduct = {
+    id: UHK_DEVICE_IDS.UHK80_LEFT,
+    firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
+    logName: 'UHK 80 left',
+    name: 'UHK 80',
+    keyboard: [
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0007, // decimal 7
+        },
+    ],
+    bootloader: [
+        {
+            vid: UHK_VENDOR_ID,
+            pid: 0x0006, // decimal 6
+        },
+    ],
+    // TODO: Implement when we know
+    buspal: [],
+    reportId: 4,
+};
+
 export const UHK_80_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK80_RIGHT,
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
+    logName: 'UHK 80 right',
     name: 'UHK 80',
     keyboard: [
         {
@@ -118,15 +148,14 @@ export const UHK_80_DEVICE: UhkDeviceProduct = {
     reportId: 4,
 };
 
-
 export const UHK_DEVICES: Array<UhkDeviceProduct> = [
     UHK_60_DEVICE,
     UHK_60_V2_DEVICE,
-    UHK_80_DEVICE
+    UHK_80_DEVICE,
 ];
 
 export interface UhkModule {
-    id: number;
+    id: UHK_MODULE_IDS_TYPE;
     name: string;
     configPath?: string;
     slotId: ModuleSlotToId;
@@ -135,7 +164,7 @@ export interface UhkModule {
 }
 
 export const LEFT_HALF_MODULE: UhkModule = {
-    id: 1,
+    id: UHK_MODULE_IDS.LEFT_HALF,
     name: 'Left keyboard half',
     slotId: ModuleSlotToId.leftHalf,
     i2cAddress: ModuleSlotToI2cAddress.leftHalf,
@@ -143,7 +172,7 @@ export const LEFT_HALF_MODULE: UhkModule = {
 };
 
 export const LEFT_KEY_CLUSTER_MODULE: UhkModule = {
-    id: 2,
+    id: UHK_MODULE_IDS.LEFT_KEY_CLUSTER,
     name: 'Key cluster',
     configPath: '/add-on/key-cluster',
     slotId: ModuleSlotToId.leftModule,
@@ -152,7 +181,7 @@ export const LEFT_KEY_CLUSTER_MODULE: UhkModule = {
 };
 
 export const RIGHT_TRACKBALL_MODULE: UhkModule = {
-    id: 3,
+    id: UHK_MODULE_IDS.RIGHT_TRACKBALL,
     name: 'Trackball',
     configPath: '/add-on/trackball',
     slotId: ModuleSlotToId.rightModule,
@@ -161,7 +190,7 @@ export const RIGHT_TRACKBALL_MODULE: UhkModule = {
 };
 
 export const RIGHT_TRACKPOINT_MODULE: UhkModule = {
-    id: 4,
+    id: UHK_MODULE_IDS.RIGHT_TRACKPOINT,
     name: 'Trackpoint',
     configPath: '/add-on/trackpoint',
     slotId: ModuleSlotToId.rightModule,
@@ -170,7 +199,7 @@ export const RIGHT_TRACKPOINT_MODULE: UhkModule = {
 };
 
 export const RIGHT_TOUCHPAD_MODULE: UhkModule = {
-    id: 5,
+    id: UHK_MODULE_IDS.RIGHT_TOUCHPAD,
     name: 'Touchpad',
     configPath: '/add-on/touchpad',
     slotId: ModuleSlotToId.rightModule,

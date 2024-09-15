@@ -1,0 +1,10 @@
+export const UHK_MODULE_IDS = Object.freeze({
+    LEFT_HALF: 1,
+    LEFT_KEY_CLUSTER: 2,
+    RIGHT_TRACKBALL: 3,
+    RIGHT_TRACKPOINT: 4,
+    RIGHT_TOUCHPAD: 5,
+});
+
+export type UHK_MODULE_IDS_KEY_TYPE = keyof typeof UHK_MODULE_IDS;
+export type UHK_MODULE_IDS_TYPE = typeof UHK_MODULE_IDS[UHK_MODULE_IDS_KEY_TYPE];

@@ -28,6 +28,7 @@ export * from './right-slot-modules.js';
 export * from './save-user-configuration-data.js';
 export * from './udev-rules-info.js';
 export * from './uhk-device-ids.js';
+export * from './uhk-module-ids.js';
 export * from './uhk-products.js';
 export * from './update-firmware-data.js';
 export * from './upload-file-data.js';

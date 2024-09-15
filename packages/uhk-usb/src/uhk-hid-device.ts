@@ -2,7 +2,7 @@ import fse from 'fs-extra';
 import isRoot from 'is-root';
 import { Device, HID } from 'node-hid';
 import * as path from 'path';
-import {SerialPort} from 'serialport';
+import { SerialPort } from 'serialport';
 import {
     Buffer,
     CommandLineArgs,
@@ -33,6 +33,7 @@ import {
     getUhkDevice,
     isBootloader,
     isUhkCommunicationInterface,
+    isUhkCommunicationUsage,
     retry,
     snooze
 } from './util.js';
@@ -229,6 +230,7 @@ export class UhkHidDevice {
     async reenumerate(
         { enumerationMode, device, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
     ): Promise<ReenumerateResult> {
+        this.close();
         const reenumMode = EnumerationModes[enumerationMode].toString();
         this.logService.misc(`[UhkHidDevice] Start reenumeration, mode: ${reenumMode}, timeout: ${timeout}ms`);
         const vidPidPairs = getDeviceEnumerateVidPidPairs(device, enumerationMode);
@@ -277,9 +279,24 @@ export class UhkHidDevice {
             await snooze(100);
 
             if (!jumped) {
-                const device = this.getDevice({ errorLogLevel: 'misc' });
-                if (device) {
-                    const reportId = this.getReportId();
+                let keyboardDevice: HID;
+                for (const vidPid of device.keyboard) {
+                    const devs = getUhkDevices([vidPid.vid]);
+                    const foundDevice = devs.find((dev: Device) => {
+                        return dev.vendorId === vidPid.vid
+                            && dev.productId === vidPid.pid
+                            // TODO: remove duplication of isUhkCommunicationInterface
+                            && isUhkCommunicationUsage(dev);
+                    });
+
+                    if (foundDevice) {
+                        keyboardDevice = new HID(foundDevice.path);
+                        this._deviceInfo = foundDevice;
+                    }
+                }
+
+                if (keyboardDevice) {
+                    const reportId = device.reportId;
                     this.logService.setUsbReportId(reportId);
                     const message = Buffer.from([
                         UsbCommand.Reenumerate,
@@ -293,8 +310,8 @@ export class UhkHidDevice {
                     this.logService.usb(`[UhkHidDevice] USB[T]: Enumerated device, mode: ${reenumMode}`);
                     this.logService.usb('[UhkHidDevice] USB[W]:', bufferToString(data).substr(3));
                     try {
-                        device.write(data);
-                        device.close();
+                        keyboardDevice.write(data);
+                        keyboardDevice.close();
                     } catch (error) {
                         this.logService.misc('[UhkHidDevice] Reenumeration error. We hope it would not break the process', error);
                     }

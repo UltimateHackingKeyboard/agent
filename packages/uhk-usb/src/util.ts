@@ -87,11 +87,14 @@ export async function retry(command: Function, maxTry = 3, logService?: LogServi
     }
 }
 
+export const isUhkCommunicationUsage = (dev: Device): boolean => {
+    return (dev.usagePage === 128 && dev.usage === 129) || // Old firmware
+            (dev.usagePage === 65280 && dev.usage === 1); // New firmware
+};
+
 export const isUhkCommunicationInterface = (dev: Device): boolean => {
     return UHK_DEVICES.some(device => device.keyboard.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId) &&
-        ((dev.usagePage === 128 && dev.usage === 129) || // Old firmware
-            (dev.usagePage === 65280 && dev.usage === 1) // New firmware
-        )
+        isUhkCommunicationUsage(dev)
     );
 };
 
