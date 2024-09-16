@@ -17,6 +17,7 @@ export class UdevRulesComponent implements OnChanges {
             this.command = `cat <<EOF >/etc/udev/rules.d/50-uhk60.rules
 ${changes.udevFileContent.currentValue}
 EOF
+udevadm control --reload-rules
 udevadm trigger
 udevadm settle`;
         }

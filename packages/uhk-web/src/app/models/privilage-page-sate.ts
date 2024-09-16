@@ -3,4 +3,5 @@ export interface PrivilagePageSate {
     showWhatWillThisDoContent: boolean;
     permissionSetupFailed: boolean;
     udevFileContent: string;
+    updateUdevRules: boolean;
 }

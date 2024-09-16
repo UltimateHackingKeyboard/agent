@@ -22,6 +22,7 @@ import { RecoveryModeComponent } from './components/device';
 import { UhkDeviceBootloaderNotActiveGuard } from './services/uhk-device-bootloader-not-active.guard';
 import { AgentUpdateNeededGuard } from './services/agent-update-needed-guard.service';
 import { UpdateFirmwarePageComponent } from './pages/update-firmware.page';
+import { UhkUdevGuard } from './services/uhk-device-udev.guard';
 
 const appRoutes: Routes = [
     {
@@ -59,7 +60,7 @@ const appRoutes: Routes = [
     {
         path: '',
         component: MainPage,
-        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard, AgentUpdateNeededGuard],
+        canActivate: [UhkDeviceDisconnectedGuard, UhkDeviceLoadingGuard, UhkMultiDeviceGuard, AgentUpdateNeededGuard, UhkUdevGuard],
         children: [
             ...deviceRoutes,
             ...keymapRoutes,

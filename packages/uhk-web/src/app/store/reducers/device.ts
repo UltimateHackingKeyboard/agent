@@ -9,6 +9,7 @@ import {
     isVersionGtMinor,
     LeftSlotModules,
     RightSlotModules,
+    UdevRulesInfo,
     UhkDeviceProduct
 } from 'uhk-common';
 import { DeviceUiStates } from '../../models';
@@ -42,6 +43,7 @@ export interface State {
     configSizes: ConfigSizesInfo;
     skipFirmwareUpgrade: boolean;
     statusBuffer: string;
+    udevRuleInfo: UdevRulesInfo;
 }
 
 export const initialState: State = {
@@ -71,7 +73,8 @@ export const initialState: State = {
     readingConfigSizes: false,
     configSizes: { userConfig: 32704, hardwareConfig: 64 },
     skipFirmwareUpgrade: false,
-    statusBuffer: ''
+    statusBuffer: '',
+    udevRuleInfo: UdevRulesInfo.Ok,
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -119,7 +122,8 @@ export function reducer(state = initialState, action: Action): State {
                 bootloaderActive: data.bootloaderActive,
                 halvesInfo: data.halvesInfo,
                 modules: data.hardwareModules,
-                multiDevice: data.multiDevice
+                multiDevice: data.multiDevice,
+                udevRuleInfo: data.udevRulesInfo,
             };
         }
 
@@ -266,7 +270,7 @@ export function reducer(state = initialState, action: Action): State {
     }
 }
 
-export const hasDevicePermission = (state: State) => state.hasPermission;
+export const hasDevicePermission = (state: State) => state.hasPermission && state.udevRuleInfo === UdevRulesInfo.Ok;
 export const getMissingDeviceState = (state: State): MissingDeviceState => {
     if (!state.deviceConnectionStateLoaded) {
         return {
@@ -341,3 +345,4 @@ export const getSkipFirmwareUpgrade = (state: State) => state.skipFirmwareUpgrad
 export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayoutChanging;
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
 export const getStatusBuffer = (state: State) => state.statusBuffer;
+export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;

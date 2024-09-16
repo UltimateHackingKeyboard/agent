@@ -14,6 +14,7 @@ import {
     NotificationType,
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
+    UdevRulesInfo,
     UserConfiguration
 } from 'uhk-common';
 
@@ -121,7 +122,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/multi-device']);
                 }
 
-                if (!state.hasPermission) {
+                if (!state.hasPermission || state.udevRulesInfo === UdevRulesInfo.Different) {
                     return this.router.navigate(['/privilege']);
                 }
 
@@ -161,14 +162,16 @@ export class DeviceEffects {
 
                 return prevConnected === currConnected &&
                     prevAction.payload.hasPermission === currAction.payload.hasPermission &&
-                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable;
+                    prevAction.payload.communicationInterfaceAvailable === currAction.payload.communicationInterfaceAvailable &&
+                    prevAction.payload.udevRulesInfo === currAction.payload.udevRulesInfo;
             }),
             mergeMap(([action, route, connected]) => {
                 const payload = action.payload;
 
                 if (connected
                     && payload.hasPermission
-                    && payload.communicationInterfaceAvailable) {
+                    && payload.communicationInterfaceAvailable
+                    && payload.udevRulesInfo === UdevRulesInfo.Ok) {
 
                     const result: Array<Action> = [
                         new ReadConfigSizesAction(),

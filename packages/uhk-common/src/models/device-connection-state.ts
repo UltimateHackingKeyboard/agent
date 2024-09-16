@@ -1,5 +1,6 @@
 import { HalvesInfo } from './halves-info.js';
 import { HardwareModules } from './hardware-modules.js';
+import { UdevRulesInfo } from './udev-rules-info.js';
 import { UhkDeviceProduct } from './uhk-products.js';
 
 export interface DeviceConnectionState {
@@ -14,4 +15,5 @@ export interface DeviceConnectionState {
     communicationInterfaceAvailable: boolean;
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
+    udevRulesInfo: UdevRulesInfo;
 }
