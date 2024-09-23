@@ -11,7 +11,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             .usage('Upgrade firmwares')
             .argv;
 
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
 
         const { operations } = Uhk(argv);
         const firmwareDir = path.join('../../tmp/packages/firmware');

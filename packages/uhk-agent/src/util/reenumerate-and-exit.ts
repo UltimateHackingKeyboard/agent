@@ -23,7 +23,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
 
     const startTime = new Date();
     const reenumerationOption = parseReenumerateAndExitArg(arg);
-    const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+    const uhkDeviceProduct = getCurrentUhkDeviceProduct(options.commandLineArgs);
     await options.uhkHidDevice.reenumerate({
         device: uhkDeviceProduct,
         enumerationMode: reenumerationOption.mode,

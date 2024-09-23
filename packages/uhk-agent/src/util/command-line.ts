@@ -15,6 +15,7 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
     { name: 'print-usb-devices', type: Boolean },
     { name: 'reenumerate-and-exit', type: String },
     { name: 'report-id', type: Number },
+    { name: 'serial-number', type: String },
     { name: 'spe', type: Boolean }, // simulate privilege escalation error
     { name: 'usb-interface', type: Number },
     { name: 'usb-non-blocking', type: Boolean },
@@ -82,6 +83,11 @@ const sections: commandLineUsage.Section[] = [
             {
                 name: 'report-id',
                 description: 'Report Id that used for USB communication. If the value is -1 then does not use report id. The default value depends from the UHK device. For UHK 60 is 0. For UHK 80 is 4',
+            },
+            {
+                name: 'serial-number',
+                description: 'Use the specified USB device that serial-number is matching.',
+                type: String
             },
             {
                 name: 'spe',

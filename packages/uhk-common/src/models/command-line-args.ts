@@ -1,4 +1,26 @@
-export interface CommandLineArgs {
+export interface DeviceIdentifier {
+    /**
+     * USB product id
+     */
+    pid?: number;
+
+    /**
+     * USB interface id
+     */
+    'usb-interface'?: number;
+
+    /**
+     * Serial number
+     */
+    'serial-number'?: string;
+
+    /**
+     * USB vendor id
+     */
+    vid?: number;
+}
+
+export interface CommandLineArgs extends DeviceIdentifier {
     /**
      * Allow Developer Tools menu
      */
@@ -27,10 +49,6 @@ export interface CommandLineArgs {
      */
     'no-report-id'?: boolean;
     /**
-     * USB product id
-     */
-    pid?: number;
-    /**
      * Agent not force the udev rule update
      */
     'preserve-udev-rules'?: boolean;
@@ -52,15 +70,7 @@ export interface CommandLineArgs {
      */
     spe?: boolean;
     /**
-     * USB interface id
-     */
-    'usb-interface'?: number;
-    /**
      * Use USB non-blocking communication
      */
     'usb-non-blocking'?: boolean;
-    /**
-     * USB vendor id
-     */
-    vid?: number;
 }

@@ -176,6 +176,13 @@ export const UHK_DEVICES: Array<UhkDeviceProduct> = [
     UHK_80_DEVICE,
 ];
 
+export const ALL_UHK_DEVICES = [
+    ...UHK_DEVICES,
+    UHK_80_DEVICE_LEFT,
+    UHK_DONGLE,
+];
+
+
 export interface UhkModule {
     id: UHK_MODULE_IDS_TYPE;
     name: string;

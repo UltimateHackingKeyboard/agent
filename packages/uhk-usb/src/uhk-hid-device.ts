@@ -39,11 +39,12 @@ import {
 } from './util.js';
 import {
     calculateHalvesState,
-    findDeviceByOptions,
+    findDeviceByDeviceIdentifier,
     getDeviceEnumerateVidPidPairs,
     getNumberOfConnectedDevices,
     getUhkDevices,
-    usbDeviceJsonFormatter
+    usbDeviceJsonFormatter,
+    validateConnectedDevices,
 } from './utils/index.js';
 
 export const BOOTLOADER_TIMEOUT_MS = 5000;
@@ -61,6 +62,7 @@ interface UsvDeviceConnectionState {
     state: UsbDeviceConnectionStates;
 }
 
+export const UHK_HID_DEVICE_NOT_CONNECTED = '[UhkHidDevice] Device is not connected';
 /**
  * HID API wrapper to support unified logging and async write
  */
@@ -101,8 +103,8 @@ export class UhkHidDevice {
             const devs = this.getUhkDevices();
             this.listAvailableDevices(devs);
 
-            const dev = this.options.vid
-                ? devs.find(findDeviceByOptions(this.options))
+            const dev = this.options.vid || this.options['serial-number']
+                ? devs.find(findDeviceByDeviceIdentifier(this.options))
                 : devs.find((x: Device) => isUhkCommunicationInterface(x) || isBootloader(x));
 
             if (!dev) {
@@ -182,7 +184,7 @@ export class UhkHidDevice {
             const device = this.getDevice();
 
             if (!device) {
-                return reject(new Error('[UhkHidDevice] Device is not connected'));
+                return reject(new Error(UHK_HID_DEVICE_NOT_CONNECTED));
             }
 
             try {
@@ -483,8 +485,10 @@ export class UhkHidDevice {
             const devs = this.getUhkDevices();
             this.listAvailableDevices(devs);
 
-            this._deviceInfo = this.options.vid
-                ? devs.find(findDeviceByOptions(this.options))
+            validateConnectedDevices(this.options);
+
+            this._deviceInfo = this.options.vid || this.options['serial-number']
+                ? devs.find(findDeviceByDeviceIdentifier(this.options))
                 : devs.find(isUhkCommunicationInterface);
 
             if (!this._deviceInfo) {

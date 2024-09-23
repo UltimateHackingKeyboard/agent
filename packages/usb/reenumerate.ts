@@ -3,14 +3,15 @@
 import { devices as HidDevices} from 'node-hid';
 import { SerialPort} from 'serialport';
 import {
+    ALL_UHK_DEVICES,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
-    UHK_DEVICES,
     UHK_DONGLE,
     UhkDeviceProduct,
 } from 'uhk-common';
 import {
     EnumerationModes,
+    deviceVidPidInterfaceFilter,
     isUhkCommunicationUsage,
 } from 'uhk-usb';
 
@@ -54,6 +55,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
 
 async function getCurrentUhkDeviceProduct(argv: any): Promise<UhkDeviceProduct | undefined> {
     let uhkDeviceProduct: UhkDeviceProduct;
+    const isVidPidInterfaceMatching = deviceVidPidInterfaceFilter(argv);
 
     function setUhkDeviceProduct(device: UhkDeviceProduct) {
         if (uhkDeviceProduct) {
@@ -64,20 +66,28 @@ async function getCurrentUhkDeviceProduct(argv: any): Promise<UhkDeviceProduct |
     }
 
     const hidDevices = HidDevices();
-    const allUhkDevice = [
-        ...UHK_DEVICES,
-        UHK_80_DEVICE_LEFT,
-        UHK_DONGLE,
-    ];
 
     for (const hidDevice of hidDevices) {
-        for (const uhkDevice of allUhkDevice) {
+        for (const uhkDevice of ALL_UHK_DEVICES) {
+            if (argv['serial-number']) {
+                if (argv['serial-number'] === hidDevice.serialNumber) {
+                    if (!argv.vid && isUhkCommunicationUsage(hidDevice)) {
+                        setUhkDeviceProduct(uhkDevice);
+                    } else if (isVidPidInterfaceMatching(hidDevice)) {
+                        setUhkDeviceProduct(uhkDevice);
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+
             if (uhkDevice.bootloader.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId) ||
                 uhkDevice.keyboard.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId)
             ) {
                 if (!argv.vid && isUhkCommunicationUsage(hidDevice)) {
                     setUhkDeviceProduct(uhkDevice);
-                } else if (argv.vid === hidDevice.vendorId && argv.pid === hidDevice.productId && argv['usb-interface'] === hidDevice.interface) {
+                } else if (isVidPidInterfaceMatching(hidDevice)) {
                     setUhkDeviceProduct(uhkDevice);
                 }
             }

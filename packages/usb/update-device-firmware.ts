@@ -20,7 +20,7 @@ import { getCurrentUhkDeviceProduct } from 'uhk-usb';
         }
 
         const { operations } = Uhk(argv);
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
         console.log(`Updating right firmware from ${firmwarePath} ...`);
         await operations.updateDeviceFirmware(firmwarePath, uhkDeviceProduct);
         console.log('Firmware updated.');

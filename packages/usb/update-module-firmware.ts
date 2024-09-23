@@ -32,7 +32,7 @@ import Uhk, { getI2cAddressArgs, getI2cAddressFromArg, errorHandler, yargs } fro
             name: mapI2cAddressToModuleName(i2cAddress),
             firmwareUpgradeSupported: true
         };
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct();
+        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
         const { operations } = Uhk(argv);
         console.log(`Updating ${uhkModule.name} module from ${firmwarePath} ...`);
         await operations.updateModuleWithKboot(

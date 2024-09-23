@@ -26,6 +26,10 @@ export const yargs = Yargs(hideBin(process.argv))
         description: 'Report Id that used for USB communication. If the value is -1 then does not use report id. The default value depends from the UHK device. For UHK 60 is 0. For UHK 80 is 4',
         type: 'number',
     })
+    .option('serial-number', {
+        description: 'Use the specified USB device that serial-number is matching.',
+        type: 'string',
+    })
     .option('usb-non-blocking', {
         description: 'Use USB non blocking communication',
         type: 'boolean',
