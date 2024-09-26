@@ -142,7 +142,7 @@ export class UhkHidDevice {
             },
             hardwareModules: {},
             isMacroStatusDirty: false,
-            multiDevice: getNumberOfConnectedDevices() > 1,
+            multiDevice: getNumberOfConnectedDevices(this.options) > 1,
             udevRulesInfo: await this.getUdevInfoAsync(),
         };
 
@@ -151,14 +151,30 @@ export class UhkHidDevice {
         }
 
         for (const dev of devs) {
-            if (!result.connectedDevice) {
-                result.connectedDevice = getUhkDevice(dev);
-            }
+            if (this.options.vid || this.options['serial-number']) {
+                const isUhkDevice = findDeviceByDeviceIdentifier(this.options);
 
-            if (isUhkCommunicationInterface(dev)) {
-                result.communicationInterfaceAvailable = true;
-            } else if (isBootloader(dev)) {
-                result.bootloaderActive = true;
+                if (isUhkDevice(dev)) {
+                    if (!result.connectedDevice) {
+                        result.connectedDevice = getUhkDevice(dev);
+                    }
+
+                    if (isUhkCommunicationInterface(dev)) {
+                        result.communicationInterfaceAvailable = true;
+                    } else if (isBootloader(dev)) {
+                        result.bootloaderActive = true;
+                    }
+                }
+            } else {
+                if (!result.connectedDevice) {
+                    result.connectedDevice = getUhkDevice(dev);
+                }
+
+                if (isUhkCommunicationInterface(dev)) {
+                    result.communicationInterfaceAvailable = true;
+                } else if (isBootloader(dev)) {
+                    result.bootloaderActive = true;
+                }
             }
         }
 
