@@ -15,6 +15,13 @@ export interface DescriptionAnimationParams {
     upRightModule: string;
 }
 
+export const UHK_60_DESCRIPTION_ANIMATION_PARAMS: DescriptionAnimationParams = Object.freeze({
+    down: '-5.5em',
+    up: '-11.5%',
+    upLeftKeyCluster: '-8%',
+    upRightModule: '-10.5%',
+});
+
 @Injectable()
 export class SvgModuleProviderService implements OnDestroy {
 
@@ -45,12 +52,11 @@ export class SvgModuleProviderService implements OnDestroy {
 
             switch (connectedDeviceId) {
                 case UHK_80_DEVICE.id: {
-                    // TODO(UHK-80): Implement it when we have keyboard with case
                     this.descriptionAnimationParams = {
-                        down: '-5.5em',
-                        up: '-5em',
-                        upLeftKeyCluster: '-8.5em',
-                        upRightModule: '-10.5em',
+                        down: '-0.5em',
+                        up: '-5.5%',
+                        upLeftKeyCluster: '-4.5%',
+                        upRightModule: '-5.5%',
                     };
                     this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk80-right/separator.svg').svg);
                     this.right = new SvgModule(require('!xml-loader!../../devices/uhk80-right/layout.svg').svg);
@@ -159,12 +165,7 @@ export class SvgModuleProviderService implements OnDestroy {
     }
 
     private setUHK60Modules() {
-        this.descriptionAnimationParams = {
-            down: '-5.5em',
-            up: '-10.5em',
-            upLeftKeyCluster: '-8.5em',
-            upRightModule: '-10.5em',
-        };
+        this.descriptionAnimationParams = UHK_60_DESCRIPTION_ANIMATION_PARAMS;
         this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk60-right/separator.svg').svg);
         this.right = new SvgModule(require('!xml-loader!../../devices/uhk60-right/layout.svg').svg);
         this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk60-left/layout-iso.svg').svg);

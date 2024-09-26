@@ -24,7 +24,11 @@ import {
 } from 'uhk-common';
 
 import { SvgModule } from '../module';
-import { DescriptionAnimationParams, SvgModuleProviderService } from '../../../services/svg-module-provider.service';
+import {
+    DescriptionAnimationParams,
+    SvgModuleProviderService,
+    UHK_60_DESCRIPTION_ANIMATION_PARAMS,
+} from '../../../services/svg-module-provider.service';
 import { SvgSeparator } from '../separator';
 import {
     SvgKeyHoverEvent,
@@ -64,16 +68,16 @@ import { findModuleById } from '../../../util';
         trigger('moveDescription', [
             state('down', style({
                 'margin-top': '{{down}}'
-            }), { params: { down: '-5.5em' } } ),
+            }), { params: { down: UHK_60_DESCRIPTION_ANIMATION_PARAMS.down } } ),
             state('up', style({
                 'margin-top': '{{up}}'
-            }), { params: { up: '-10.5em' } } ),
+            }), { params: { up: UHK_60_DESCRIPTION_ANIMATION_PARAMS.up } } ),
             state('upLeftKeyCluster', style({
                 'margin-top': '{{upLeftKeyCluster}}'
-            }), { params: { upLeftKeyCluster: '-8.5em' } } ),
+            }), { params: { upLeftKeyCluster: UHK_60_DESCRIPTION_ANIMATION_PARAMS.upLeftKeyCluster } } ),
             state('upRightModule', style({
                 'margin-top': '{{upRightModule}}'
-            }), { params: { upRightModule: '-10.5em' } } ),
+            }), { params: { upRightModule: UHK_60_DESCRIPTION_ANIMATION_PARAMS.upRightModule } } ),
             transition('down => up', animate(500)),
             transition('down => upLeftKeyCluster', animate(500)),
             transition('down => upRightModule', animate(500)),
