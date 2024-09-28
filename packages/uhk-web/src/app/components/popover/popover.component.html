@@ -23,7 +23,7 @@
                       [defaultKeyAction]="shadowKeyAction"
                       [secondaryRoleEnabled]="true"
                       [allowRemapOnAllKeymapWarning]="true"
-                      [remapInfo]="remapInfo"
+                      [remapInfo]="internalRemapInfo"
                       [secondaryRoleOptions]="secondaryRoleOptions"
                       (validAction)="setKeyActionValidState($event)"
                       (keyActionChange)="keystrokeActionChange($event)"
@@ -44,7 +44,7 @@
                    [selectedKey]="selectedKey"
                    [defaultKeyAction]="defaultKeyAction"
                    [macroPlaybackSupported]="macroPlaybackSupported$ | async"
-                   [remapInfo]="remapInfo"
+                   [remapInfo]="internalRemapInfo"
                    (assignNewMacro)="onAssignNewMacro()"
                    (validAction)="setKeyActionValidState($event)"
         ></macro-tab>
@@ -67,7 +67,7 @@
                     <input type="checkbox" class="form-check-input"
                         id="remapOnAllKeymap"
                         name="remapOnAllKeymap"
-                        [(ngModel)]="remapInfo.remapOnAllKeymap">
+                        [(ngModel)]="internalRemapInfo.remapOnAllKeymap">
                     <label class="form-check-label" for="remapOnAllKeymap">Remap on all keymaps</label>
                 </div>
                 <div class="form-check">
@@ -75,7 +75,7 @@
                         class="form-check-input"
                         id="remapOnAllLayer"
                         name="remapOnAllLayer"
-                        [(ngModel)]="remapInfo.remapOnAllLayer"
+                        [(ngModel)]="internalRemapInfo.remapOnAllLayer"
                         [disabled]="disableRemapOnAllLayer"
                         (ngModelChange)="remapInfoChange()">
                     <label class="form-check-label"
