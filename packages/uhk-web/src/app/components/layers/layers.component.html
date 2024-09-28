@@ -79,4 +79,13 @@
             </button>
         </div>
     </div>
+
+    <circle-tooltip [tooltip]="layerTooltip" width="450" placement="bottom bottom-end"/>
+    <ng-template #layerTooltip>
+        <ul class="text-start">
+            <li>The <strong>Base</strong> layer is active by default (when no other layers are active). This layer can never be deleted.</li>
+            <li><strong>Mod</strong>, <strong>Mouse</strong>, <strong>Fn</strong>, <strong>Fn2</strong>, <strong>Fn3</strong>, <strong>Fn4</strong>, <strong>Fn5</strong> are layers activated by layer switch actions, often bound to keys such as <kbd>Mouse</kbd>, <kbd>Mod</kbd>, or <kbd>Fn</kbd>. When such a layer is active, keys produce what is defined on that layer.</li>
+            <li><strong>Shift</strong>, <strong>Control</strong>, <strong>Alt</strong>, <strong>Super</strong> are modifier layers activated by related modifier keys. These layers override the normal action from the base layer. (e.g. <kbd>Shift</kbd> + <kbd>a</kbd> normally produces an uppercase <kbd>A</kbd>, but can be overridden by defining a different action on the <strong>Shift</strong> layer.) Keys left unconfigured on a modifier layer revert to their regular base layer + modifier action.</li>
+        </ul>
+    </ng-template>
 </div>

@@ -49,7 +49,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             enumerationMode,
             timeout: argv.timeout});
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();
 

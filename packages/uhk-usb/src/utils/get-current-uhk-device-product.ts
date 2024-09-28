@@ -1,15 +1,15 @@
-import { devices } from 'node-hid';
+import { devicesAsync } from 'node-hid';
 import { ALL_UHK_DEVICES, DeviceIdentifier, UHK_DEVICES, UhkDeviceProduct } from 'uhk-common';
 
 import { isUhkCommunicationInterface } from '../util.js';
 import { deviceVidPidInterfaceFilter } from './device-vid-pid-interface-filter.js';
 import { validateConnectedDevices } from './validate-connected-devices.js';
 
-export function getCurrentUhkDeviceProduct(deviceIdentifier: DeviceIdentifier = {}): UhkDeviceProduct | undefined {
-    validateConnectedDevices(deviceIdentifier);
+export async function getCurrentUhkDeviceProduct(deviceIdentifier: DeviceIdentifier = {}): Promise<UhkDeviceProduct | undefined> {
+    await validateConnectedDevices(deviceIdentifier);
     const isVidPidInterfaceMatching = deviceVidPidInterfaceFilter(deviceIdentifier);
 
-    const hidDevices = devices();
+    const hidDevices = await devicesAsync();
 
     for (const hidDevice of hidDevices) {
         if (deviceIdentifier['serial-number']) {

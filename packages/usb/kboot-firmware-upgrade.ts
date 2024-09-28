@@ -11,7 +11,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             .usage('Upgrade firmwares')
             .argv;
 
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
 
         const { operations } = Uhk(argv);
         const firmwareDir = path.join('../../tmp/packages/firmware');
@@ -26,6 +26,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         const leftFirmwarePath = path.join(firmwareDir, 'modules/uhk60-left.bin');
         await operations.updateLeftModuleWithKboot(leftFirmwarePath, uhkDeviceProduct);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

@@ -4,7 +4,7 @@ export class TestPeripheral implements Peripheral {
     close(): void {
     }
 
-    open(): void {
+    async open(): Promise<void> {
     }
 
     sendCommand(options: CommandOption): Promise<CommandResponse> {

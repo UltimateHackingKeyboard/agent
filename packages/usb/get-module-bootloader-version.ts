@@ -19,7 +19,7 @@ import Uhk, {
             .argv;
 
         const i2cAddress = getI2cAddressFromArg(argv._[0] as string);
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
 
         const { device, logger } = Uhk(argv);
         const reenumerateResult = await device.reenumerate({
@@ -60,6 +60,6 @@ import Uhk, {
             console.error('Can not read module bootloader');
         }
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

@@ -1,4 +1,4 @@
-import { Device, devices } from 'node-hid';
+import { Device, devicesAsync } from 'node-hid';
 import fse from 'fs-extra';
 import { EOL } from 'os';
 import MemoryMap from 'nrf-intel-hex';
@@ -133,7 +133,7 @@ export const waitForDevice = async (vendorId: number, productId: number): Promis
 
     while (startTime > new Date().getTime()) {
 
-        const isAvailable = devices()
+        const isAvailable = (await devicesAsync())
             .some(dev => dev.vendorId === vendorId && dev.productId === productId);
 
         if (isAvailable) {
@@ -153,7 +153,7 @@ export const waitForDevices = async (vidPidPairs: VidPidPair[]): Promise<void> =
 
     while (startTime > new Date().getTime()) {
 
-        const isAvailable = devices()
+        const isAvailable = (await devicesAsync())
             .some(dev => vidPidPairs.some(vidPid => vidPid.vid === dev.vendorId && vidPid.pid === dev.productId));
 
         if (isAvailable) {

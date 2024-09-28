@@ -16,6 +16,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log(`moduleProtocolVersion: ${version.moduleProtocolVersion}`);
         console.log(`firmwareVersion: ${version.firmwareVersion}`);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

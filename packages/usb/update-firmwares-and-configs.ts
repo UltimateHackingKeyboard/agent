@@ -36,7 +36,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
             process.exit(1);
         }
 
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
 
         const packageJsonPath = path.join(firmwarePath, 'package.json');
         const packageJson = await getFirmwarePackageJson({
@@ -92,6 +92,6 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

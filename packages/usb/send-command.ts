@@ -32,5 +32,5 @@ try {
     process.stdout.write(response.toString('utf8', 1));
     process.stdout.write('\n');
 } catch (error) {
-    errorHandler(error);
+    await errorHandler(error);
 }

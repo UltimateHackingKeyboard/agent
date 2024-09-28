@@ -134,7 +134,12 @@ async function createWindow() {
         // when you should delete the corresponding element.
         logger.misc('[Electron Main] win closed');
         win = null;
-        await deviceService.close();
+        try {
+            await deviceService.close();
+        } catch (error) {
+            // TODO: Investigate it deeper. It happens on MacOs 15+ sometimes
+            logger.error('[Electron Main] Error while closing DeviceService when electron has been closed', error);
+        }
         deviceService = null;
         appUpdateService = null;
         appService = null;
@@ -157,8 +162,6 @@ async function createWindow() {
     });
 
     win.on('close', () => saveWindowState(win, logger));
-    win.on('resize', () => saveWindowState(win, logger));
-    win.on('move', () => saveWindowState(win, logger));
 }
 
 if (isSecondInstance) {

@@ -8,7 +8,7 @@ import {
 
 import { InvalidArgumentError } from './invalid-argument-error.js';
 
-export function errorHandler(error) {
+export async function errorHandler(error) {
     if (error instanceof InvalidArgumentError) {
         console.error(error.message);
     }
@@ -18,7 +18,7 @@ export function errorHandler(error) {
         console.error(error.message);
 
         console.log('Available UHK devices:');
-        const devices = getUhkDevices();
+        const devices = await getUhkDevices();
         for(const device of devices) {
             if (isUhkCommunicationInterface(device)) {
                 const selector = device.serialNumber

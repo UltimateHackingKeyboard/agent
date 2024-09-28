@@ -34,6 +34,6 @@ import { UsbVariables } from 'uhk-usb';
         await operations.setVariable(UsbVariables[variable], value);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

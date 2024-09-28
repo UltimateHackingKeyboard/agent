@@ -29,6 +29,6 @@ import { UHK_60_DEVICE } from 'uhk-common';
         await waitForDevices(UHK_60_DEVICE.keyboard);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

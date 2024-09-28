@@ -16,6 +16,6 @@ setInterval(async function () {
         const brightnessPercent = areLedsEnabled ? 100 : 0;
         await operations.setLedPwmBrightness(brightnessPercent);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 }, 500);

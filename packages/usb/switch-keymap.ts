@@ -14,6 +14,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         await operations.switchKeymap(argv._[0]);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();
