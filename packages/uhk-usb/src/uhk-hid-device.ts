@@ -89,7 +89,7 @@ export class UhkHidDevice {
      * the Agent will ask permission to run at the first time.
      * @returns {boolean}
      */
-    public hasPermission(): boolean {
+    public async hasPermission(): Promise<boolean> {
         if (this.options.spe) {
             return false;
         }
@@ -100,7 +100,7 @@ export class UhkHidDevice {
             }
 
             this.logService.misc('[UhkHidDevice] Devices before checking permission:');
-            const devs = this.getUhkDevices();
+            const devs = await getUhkDevices();
             this.listAvailableDevices(devs);
 
             const dev = this.options.vid || this.options['serial-number']
@@ -129,11 +129,11 @@ export class UhkHidDevice {
      * @returns {DeviceConnectionState}
      */
     public async getDeviceConnectionStateAsync(): Promise<DeviceConnectionState> {
-        const devs = this.getUhkDevices();
+        const devs = await this.getUhkDevices();
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             communicationInterfaceAvailable: false,
-            hasPermission: this.hasPermission(),
+            hasPermission: await this.hasPermission(),
             halvesInfo: {
                 areHalvesMerged: true,
                 leftModuleSlot: LeftSlotModules.NoModule,
@@ -142,7 +142,7 @@ export class UhkHidDevice {
             },
             hardwareModules: {},
             isMacroStatusDirty: false,
-            multiDevice: getNumberOfConnectedDevices(this.options) > 1,
+            multiDevice: await getNumberOfConnectedDevices(this.options) > 1,
             udevRulesInfo: await this.getUdevInfoAsync(),
         };
 
@@ -197,7 +197,7 @@ export class UhkHidDevice {
      */
     public async write(buffer: Buffer): Promise<Buffer> {
         return new Promise<Buffer>(async (resolve, reject) => {
-            const device = this.getDevice();
+            const device = await this.getDevice();
 
             if (!device) {
                 return reject(new Error(UHK_HID_DEVICE_NOT_CONNECTED));
@@ -276,7 +276,7 @@ export class UhkHidDevice {
                         }
                     }
                 } else {
-                    const devs = getUhkDevices([vidPid.vid]);
+                    const devs = await getUhkDevices([vidPid.vid]);
                     allDevice.push(...devs);
 
                     const reenumeratedDevice = devs.find((x: Device) =>
@@ -300,7 +300,7 @@ export class UhkHidDevice {
             if (!jumped) {
                 let keyboardDevice: HID;
                 for (const vidPid of device.keyboard) {
-                    const devs = getUhkDevices([vidPid.vid]);
+                    const devs = await getUhkDevices([vidPid.vid]);
                     const foundDevice = devs.find((dev: Device) => {
                         return dev.vendorId === vidPid.vid
                             && dev.productId === vidPid.pid
@@ -485,9 +485,9 @@ export class UhkHidDevice {
      * @returns {HID}
      * @private
      */
-    private getDevice(options?: GetDeviceOptions) {
+    private async getDevice(options?: GetDeviceOptions): Promise<HID> {
         if (!this._device) {
-            this.connectToDevice(options);
+            this._device = await this.connectToDevice(options);
         }
 
         return this._device;
@@ -496,12 +496,12 @@ export class UhkHidDevice {
     /**
      * Initialize new UHK HID device.
      */
-    private connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): void {
+    private async connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): Promise<HID> {
         try {
-            const devs = this.getUhkDevices();
+            const devs = await this.getUhkDevices();
             this.listAvailableDevices(devs);
 
-            validateConnectedDevices(this.options);
+            await validateConnectedDevices(this.options);
 
             this._deviceInfo = this.options.vid || this.options['serial-number']
                 ? devs.find(findDeviceByDeviceIdentifier(this.options))
@@ -509,17 +509,20 @@ export class UhkHidDevice {
 
             if (!this._deviceInfo) {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');
-                return;
+                return null;
             }
-            this._device = new HID(this._deviceInfo.path);
+            const device = new HID(this._deviceInfo.path);
             if (this.options['usb-non-blocking']) {
                 this.logService.misc('[UhkHidDevice] set non blocking communication mode');
                 this._device.setNonBlocking(1 as any);
             }
             this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(this._deviceInfo, usbDeviceJsonFormatter));
+            return device;
         } catch (err) {
             this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
         }
+
+        return null;
     }
 
     /**
@@ -562,7 +565,7 @@ export class UhkHidDevice {
         return data;
     }
 
-    private getUhkDevices(): Array<Device> {
+    private async getUhkDevices(): Promise<Array<Device>> {
         return this.options.vid
             ? getUhkDevices([this.options.vid])
             : getUhkDevices();

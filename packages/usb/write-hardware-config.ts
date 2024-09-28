@@ -22,6 +22,6 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

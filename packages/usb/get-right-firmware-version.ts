@@ -21,6 +21,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log(`firmwareGitTag: ${version.firmwareGitTag}`);
         console.log(`firmwareChecksum: ${version.firmwareChecksum}`);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

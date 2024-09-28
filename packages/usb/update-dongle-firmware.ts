@@ -40,6 +40,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         console.log('Reenumerating device...');
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

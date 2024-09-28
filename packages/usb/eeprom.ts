@@ -15,7 +15,7 @@ import { ConfigBufferId, EepromOperation } from 'uhk-usb';
         const operation = mapOperation(argv._[0]);
         await operations.launchEepromTransfer(operation, mapBufferId(argv._[1]));
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();
 

@@ -23,6 +23,6 @@ import * as fs from 'fs';
         await operations.saveUserConfiguration(configBuffer);
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

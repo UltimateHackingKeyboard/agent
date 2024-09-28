@@ -25,6 +25,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         );
         console.log(info);
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

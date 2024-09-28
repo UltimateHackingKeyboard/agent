@@ -21,6 +21,6 @@ rightModuleSlot:${state.rightModuleSlot} | \
 layer:${state.activeLayerName} ${state.activeLayerToggled ? 'toggled' : ''}`
         );
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 }, 500);

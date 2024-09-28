@@ -29,9 +29,8 @@
             <fa-icon [icon]="faUpRightFromSquare"
                  aria-hidden="true"></fa-icon>
         </a>
-        <button class="btn btn-default" (click)="assignNewMacro.emit()">
+        <button class="btn btn-default" (click)="assignNewMacro.emit()" ngbTooltip="Create new macro for this key">
         <fa-icon [icon]="faPlus"
-                 ngbTooltip="Create new macro for this key"
                  aria-hidden="true"></fa-icon>
         </button>
     </div>

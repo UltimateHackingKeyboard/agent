@@ -19,11 +19,11 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     options.logger.misc(`[reenumerateAndExit] Command line argument: ${arg}`);
 
     options.logger.misc('[reenumerateAndExit] list available devices');
-    options.uhkHidDevice.listAvailableDevices(getUhkDevices());
+    options.uhkHidDevice.listAvailableDevices(await getUhkDevices());
 
     const startTime = new Date();
     const reenumerationOption = parseReenumerateAndExitArg(arg);
-    const uhkDeviceProduct = getCurrentUhkDeviceProduct(options.commandLineArgs);
+    const uhkDeviceProduct = await getCurrentUhkDeviceProduct(options.commandLineArgs);
     await options.uhkHidDevice.reenumerate({
         device: uhkDeviceProduct,
         enumerationMode: reenumerationOption.mode,
@@ -36,7 +36,7 @@ export async function reenumerateAndExit(options: ReenumerateAndExitOptions): Pr
     const waitTime = reenumerationOption.timeout + 10000;
 
     while (new Date().getTime() - startTime.getTime() < waitTime) {
-        options.uhkHidDevice.listAvailableDevices(getUhkDevices());
+        options.uhkHidDevice.listAvailableDevices(await getUhkDevices());
     }
 }
 

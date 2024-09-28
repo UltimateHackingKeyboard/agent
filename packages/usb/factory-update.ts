@@ -31,7 +31,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         const deviceId = getDeviceIdFromArg(argv._[1] as string);
         const layout = argv._[2] as string;
 
-        const uhkDeviceProduct = getCurrentUhkDeviceProduct(argv);
+        const uhkDeviceProduct = await getCurrentUhkDeviceProduct(argv);
 
         const packageJsonPath = path.join(firmwarePath, 'package.json');
         const packageJson = await getFirmwarePackageJson({
@@ -90,6 +90,6 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         await operations.switchKeymap('TES');
         console.log('All done!');
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

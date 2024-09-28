@@ -10,6 +10,6 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
         const { operations } = Uhk(argv);
         await operations.eraseHardwareConfig();
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();

@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { devices, HID } from 'node-hid';
+import { devicesAsync, HID } from 'node-hid';
 import { pack } from 'byte-data';
 
 import { Peripheral } from './peripheral.js';
@@ -25,13 +25,13 @@ export class UsbPeripheral implements Peripheral {
         logger('constructor options: %o', options);
     }
 
-    open(): void {
+    async open(): Promise<void> {
         if (this._device) {
             return;
         }
 
         logger('Available devices');
-        const device = devices()
+        const device = (await devicesAsync())
             .map(x => {
                 logger('%o', x);
 
@@ -55,9 +55,9 @@ export class UsbPeripheral implements Peripheral {
     }
 
     async sendCommand(options: CommandOption): Promise<CommandResponse> {
-        return new Promise<CommandResponse>((resolve, reject) => {
+        return new Promise<CommandResponse>(async (resolve, reject) => {
             try {
-                this.open();
+                await this.open();
                 validateCommandParams(options.params);
                 const data = encodeCommandOption(options);
                 logger('send data %o', `<${convertToHexString(data)}>`);

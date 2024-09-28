@@ -42,6 +42,6 @@ import Uhk, { errorHandler, getI2cAddressFromArg, yargs } from './src/index.js';
         }
 
     } catch (error) {
-        errorHandler(error);
+        await errorHandler(error);
     }
 })();
