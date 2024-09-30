@@ -171,7 +171,7 @@ export class DeviceEffects {
                 if (connected
                     && payload.hasPermission
                     && payload.communicationInterfaceAvailable
-                    && payload.udevRulesInfo === UdevRulesInfo.Ok) {
+                    && (payload.udevRulesInfo === UdevRulesInfo.Ok || payload.udevRulesInfo === UdevRulesInfo.UdevDirNotExists)) {
 
                     const result: Array<Action> = [
                         new ReadConfigSizesAction(),
