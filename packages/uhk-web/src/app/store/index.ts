@@ -654,7 +654,16 @@ export const getFirmwareUpgradeState = createSelector(runningInElectron, getStat
             recoveryModules: []
         };
     });
-
+export const upgradeAgentTooltip = createSelector(
+    getHardwareModules, getAgentVersionInfo,
+    (hardwareModules:HardwareModules, agentVersionInfo: VersionInformation) => {
+        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} minor version is larger than agent.userConfigVersion ${agentVersionInfo.userConfigVersion}`;
+    });
+export const upgradeFirmwareTooltip = createSelector(
+    getHardwareModules, getAgentVersionInfo,
+    (hardwareModules:HardwareModules, agentVersionInfo: VersionInformation) => {
+        return `rightModule.userConfigVersion ${hardwareModules.rightModuleInfo.userConfigVersion} patch version is less than agent.userConfigVersion ${agentVersionInfo.userConfigVersion}`;
+    });
 export const defaultUserConfigState = (state: AppState) => state.defaultUserConfiguration;
 export const getDefaultUserConfiguration = createSelector(
     defaultUserConfigState, fromDefaultUserConfig.getDefaultUserConfiguration);
