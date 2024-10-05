@@ -22,7 +22,7 @@
     "@lerna/legacy-package-management": "8.1.8",
     "@types/command-line-args": "5.2.3",
     "@types/command-line-usage": "5.0.4",
-    "@types/decompress": "4.2.4",
+    "@types/decompress": "4.2.7",
     "@types/electron-devtools-installer": "2.0.2",
     "@types/file-saver": "2.0.5",
     "@types/jasmine": "4.3.1",
