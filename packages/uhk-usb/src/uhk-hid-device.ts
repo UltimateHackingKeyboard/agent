@@ -4,6 +4,7 @@ import { Device, HID } from 'node-hid';
 import * as path from 'path';
 import { SerialPort } from 'serialport';
 import {
+    ALL_UHK_DEVICES,
     Buffer,
     CommandLineArgs,
     DeviceConnectionState,
@@ -16,7 +17,6 @@ import {
     ModuleSlotToI2cAddress,
     RightSlotModules,
     UdevRulesInfo,
-    UHK_DEVICES,
 } from 'uhk-common';
 import {
     EnumerationModes,
@@ -538,7 +538,7 @@ export class UhkHidDevice {
             return Number(this.options['report-id']);
         }
 
-        const uhkProduct = UHK_DEVICES.find(device => {
+        const uhkProduct = ALL_UHK_DEVICES.find(device => {
             return device.keyboard.some(x => x.vid === this._deviceInfo.vendorId && x.pid === this._deviceInfo.productId) ||
                 device.bootloader.some(x => x.vid === this._deviceInfo.vendorId && x.pid === this._deviceInfo.productId) ||
                 device.buspal.some(x => x.vid === this._deviceInfo.vendorId && x.pid === this._deviceInfo.productId);

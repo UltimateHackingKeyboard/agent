@@ -28,11 +28,15 @@ export async function getCurrentUhkDeviceProduct(deviceIdentifier: DeviceIdentif
             }
         }
 
-        if (deviceIdentifier.vid && isVidPidInterfaceMatching(hidDevice)) {
-            return ALL_UHK_DEVICES.find(uhkDevice => {
-                return uhkDevice.bootloader.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId) ||
+        if (deviceIdentifier.vid) {
+            if (isVidPidInterfaceMatching(hidDevice)) {
+                return ALL_UHK_DEVICES.find(uhkDevice => {
+                    return uhkDevice.bootloader.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId) ||
                         uhkDevice.keyboard.some(vidPid => vidPid.vid === hidDevice.vendorId && vidPid.pid === hidDevice.productId);
-            });
+                });
+            }
+
+            continue;
         }
 
         for (const uhkDevice of UHK_DEVICES) {
