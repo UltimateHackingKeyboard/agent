@@ -1,0 +1,44 @@
+<h1>
+    <fa-icon [icon]="faCircleNodes"></fa-icon>
+    <span>Connections</span>
+</h1>
+
+<table class="table mt-4">
+    <thead>
+    <tr>
+        <th>
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Address
+        </th>
+        <th>
+            Name
+        </th>
+    </tr>
+    </thead>
+    <tbody [dragula]="dragAndDropGroup" [dragulaModel]="hostConnections" (dragulaModelChange)="hostConnectionsReordered($event)">
+    <ng-container *ngFor="let hostConnection of hostConnections; let index = index">
+    <tr *ngIf="hostConnection.type !== 0">
+        <td>
+            <i
+               class="uhk-icon uhk-icon-vertical-grip-icon movable"
+               aria-hidden="true"></i>
+        </td>
+        <td>
+            {{hostConnection.type | hostConnectionTypeLabelPipe}}
+        </td>
+        <td>
+            {{ hostConnection.address || '—' }}
+        </td>
+        <td>
+            <auto-grow-input [ngModel]="hostConnection.name"
+                             (ngModelChange)="renameHostConnection(index, $event)"
+           />
+        </td>
+    </tr>
+    </ng-container>
+    </tbody>
+</table>

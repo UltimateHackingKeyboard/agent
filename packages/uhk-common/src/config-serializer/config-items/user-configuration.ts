@@ -4,6 +4,11 @@ import { assertEnum, assertUInt16, assertUInt32, assertUInt8 } from '../assert.j
 import { ConfigSerializer } from '../config-serializer.js';
 import { UhkBuffer } from '../uhk-buffer.js';
 import { BacklightingMode } from './backlighting-mode.js';
+import {
+    defaultHostConnections,
+    HOST_CONNECTION_COUNT_MAX,
+    HostConnection,
+} from './host-connection.js';
 import { KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
 import { LayerName } from './layer-name.js';
@@ -138,6 +143,8 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     @assertUInt16 keystrokeDelay: number;
 
+    hostConnections: HostConnection[] = [];
+
     moduleConfigurations: ModuleConfiguration[] = [];
 
     keymaps: Keymap[] = [];
@@ -150,8 +157,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
     clone(): UserConfiguration {
         const userConfig = Object.assign(new UserConfiguration(), this);
+        userConfig.hostConnections = userConfig.hostConnections.map(hostConnection => new HostConnection(hostConnection));
         userConfig.keymaps = userConfig.keymaps.map(keymap => new Keymap(keymap));
         userConfig.macros = userConfig.macros.map(macro => new Macro(macro));
+        userConfig.moduleConfigurations = userConfig.moduleConfigurations.map(module => new ModuleConfiguration(module));
 
         return userConfig;
     }
@@ -192,6 +201,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV7();
         this.migrateToV7_1();
         this.migrateToV8();
+        this.migrateToV8_1();
 
         this.recalculateConfigurationLength();
 
@@ -246,6 +256,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         if (this.migrateToV8()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV8_1()) {
             this.userConfigurationLength = 0;
         }
 
@@ -305,6 +319,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             keyBacklightFadeOutTimeout: this.keyBacklightFadeOutTimeout,
             keyBacklightFadeOutBatteryTimeout: this.keyBacklightFadeOutBatteryTimeout,
 
+            hostConnections: this.hostConnections.map(hostConnection => hostConnection.toJsonObject()),
             moduleConfigurations: this.moduleConfigurations.map(moduleConfiguration => moduleConfiguration.toJsonObject()),
             keymaps: this.keymaps.map(keymap => keymap.toJsonObject(this.getSerialisationInfo(), this.macros)),
             macros: this.macros.map(macro => macro.toJsonObject())
@@ -361,6 +376,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         buffer.writeUInt16(this.keyBacklightFadeOutTimeout);
         buffer.writeUInt16(this.keyBacklightFadeOutBatteryTimeout);
 
+        for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
+            const hostConnection = this.hostConnections[i];
+            hostConnection.toBinary(buffer);
+        }
         buffer.writeArray(this.moduleConfigurations);
         buffer.writeArray(this.macros);
         buffer.writeArray(this.keymaps, (uhkBuffer: UhkBuffer, keymap: Keymap) => {
@@ -608,6 +627,14 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.keyBacklightFadeOutBatteryTimeout = buffer.readUInt16();
 
         const serialisationInfo = this.getSerialisationInfo();
+
+        if (this.userConfigMinorVersion >= 1) {
+            this.hostConnections = [];
+            for(let i = 0; i < HOST_CONNECTION_COUNT_MAX; i++) {
+                this.hostConnections.push(new HostConnection().fromBinary(buffer, serialisationInfo));
+            }
+        }
+
         this.moduleConfigurations = buffer.readArray<ModuleConfiguration>(uhkBuffer => {
             return new ModuleConfiguration().fromBinary(uhkBuffer, serialisationInfo);
         });
@@ -798,6 +825,13 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.keyBacklightFadeOutBatteryTimeout = jsonObject.keyBacklightFadeOutBatteryTimeout;
 
         const serialisationInfo = this.getSerialisationInfo();
+
+        if (this.userConfigMinorVersion >= 1) {
+            this.hostConnections = jsonObject.hostConnections.map((hostConnection: any) => {
+                return new HostConnection().fromJsonObject(hostConnection, serialisationInfo);
+            });
+        }
+
         this.moduleConfigurations = jsonObject.moduleConfigurations.map((moduleConfiguration: any) => {
             return new ModuleConfiguration().fromJsonObject(moduleConfiguration, serialisationInfo);
         });
@@ -881,7 +915,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
             return false;
         }
 
-        if (this.userConfigMinorVersion > 1) {
+        if (this.userConfigMinorVersion >= 1) {
             return false;
         }
 
@@ -905,6 +939,21 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.displayFadeOutBatteryTimeout = this.ledsFadeTimeout;
         this.keyBacklightFadeOutTimeout = this.ledsFadeTimeout;
         this.keyBacklightFadeOutBatteryTimeout = this.ledsFadeTimeout;
+
+        return true;
+    }
+
+    private migrateToV8_1(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 1) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 1;
+        this.hostConnections = defaultHostConnections();
 
         return true;
     }

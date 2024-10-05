@@ -3,6 +3,7 @@ import {
     Constants,
     getDefaultHalvesInfo,
     HalvesInfo,
+    HostConnection,
     initBacklightingColorPalette,
     KeyAction,
     KeyActionHelper,
@@ -828,6 +829,38 @@ export function reducer(
             return state;
         }
 
+        case UserConfig.ActionTypes.RenameHostConnection: {
+            const payload = (action as UserConfig.RenameHostConnectionAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+
+            userConfiguration.hostConnections = userConfiguration.hostConnections.map((hostConnection, index) => {
+                if (index === payload.index) {
+                    const connection = new HostConnection(hostConnection);
+                    connection.name = payload.newName;
+
+                    return connection;
+                }
+
+                return hostConnection;
+            });
+
+            return {
+                ...state,
+                userConfiguration,
+            };
+        }
+
+        case UserConfig.ActionTypes.ReorderHostConnections: {
+            const payload = (action as UserConfig.ReorderHostConnectionsAction).payload;
+            const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
+            userConfiguration.hostConnections = payload;
+
+            return {
+                ...state,
+                userConfiguration,
+            };
+        }
+
         case UserConfig.ActionTypes.SelectModuleConfiguration: {
             return {
                 ...state,
@@ -977,6 +1010,9 @@ export function reducer(
 export const getUserConfiguration = (state: State): UserConfiguration => state.userConfiguration;
 export const getKeymaps = (state: State): Keymap[] => state.userConfiguration.keymaps;
 export const getDefaultKeymap = (state: State): Keymap => state.userConfiguration.keymaps.find(keymap => keymap.isDefault);
+export const getHostConnections = (state: State): HostConnection[] => {
+    return state.userConfiguration.hostConnections;
+};
 export const getSelectedKeymap = (state: State): Keymap => {
     if (state.selectedKeymapAbbr === undefined) {
         return getDefaultKeymap(state);

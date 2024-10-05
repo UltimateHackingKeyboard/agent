@@ -655,6 +655,7 @@ export class UhkOperations {
 
         if (variableId === UsbVariables.statusBuffer) {
             let message = readUhkResponseAs0EndString(UhkBuffer.fromArray(convertBufferToIntArray(responseBuffer)));
+            this.logService.misc(`[DeviceOperation] status buffer segment: ${message}`);
             if (message.length === responseBuffer.length - 1 && iteration < 20) {
                 message += await this.getVariable(variableId, iteration + 1);
             }

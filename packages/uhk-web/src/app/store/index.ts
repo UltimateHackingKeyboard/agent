@@ -117,6 +117,7 @@ export const getRouterState = (state: AppState) => state.router;
 
 export const getUserConfiguration = createSelector(userConfigState, fromUserConfig.getUserConfiguration);
 export const getKeymaps = createSelector(userConfigState, fromUserConfig.getKeymaps);
+export const getHostConnections = createSelector(userConfigState, fromUserConfig.getHostConnections);
 export const getDefaultKeymap = createSelector(userConfigState, fromUserConfig.getDefaultKeymap);
 export const getSelectedKeymap = createSelector(userConfigState, fromUserConfig.getSelectedKeymap);
 export const getMacros = createSelector(userConfigState, fromUserConfig.getMacros);

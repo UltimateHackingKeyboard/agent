@@ -33,7 +33,7 @@ const noop = (_: any) => {
 export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewInit, OnChanges {
     @Input() maxParentWidthPercent;
     @Input() maxParentWidthOffset;
-    @Input() minWidth: number = 100;
+    @Input() minWidth: number = 10;
     @Input() css: string;
     @Input() selectAfterInit = false;
 
@@ -162,6 +162,6 @@ export class AutoGrowInputComponent implements ControlValueAccessor, AfterViewIn
             textWidth += util.getContentWidth(window.getComputedStyle(htmlInput), 'W') * 1.1;
         }
 
-        this._renderer.setStyle(htmlInput, 'width', Math.min(maxWidth, textWidth) + 'px');
+        this._renderer.setStyle(htmlInput, 'width', Math.max(this.minWidth, Math.min(maxWidth, textWidth)) + 'px');
     }
 }

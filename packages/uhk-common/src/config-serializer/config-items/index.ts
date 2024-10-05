@@ -5,6 +5,7 @@ export * from './key-action/index.js';
 export * from './macro-action/index.js';
 export * from './modules-default-configs.js';
 export * from './hardware-configuration.js';
+export * from './host-connection.js';
 export * from './key-modifiers.js';
 export * from './keymap.js';
 export * from './layer.js';
