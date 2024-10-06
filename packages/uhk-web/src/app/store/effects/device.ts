@@ -55,7 +55,7 @@ import {
     AppState,
     deviceConnected,
     disableUpdateAgentProtection,
-    getDeviceId,
+    getHardwareConfiguration,
     getRouterState,
     getShowFirmwareUpgradePanel,
     getUserConfiguration
@@ -79,9 +79,9 @@ export class DeviceEffects {
     changeKeyboardLayout$ = createEffect(() => this.actions$
         .pipe(
             ofType<ChangeKeyboardLayoutAction>(ActionTypes.ChangeKeyboardLayout),
-            withLatestFrom(this.store.select(getDeviceId)),
-            tap(([action, deviceId]) => {
-                this.deviceRendererService.changeKeyboardLayout(action.layout, deviceId);
+            withLatestFrom(this.store.select(getHardwareConfiguration)),
+            tap(([action, hardwareConfiguration]) => {
+                this.deviceRendererService.changeKeyboardLayout(action.layout, hardwareConfiguration);
             })
         ),
     {dispatch:false}

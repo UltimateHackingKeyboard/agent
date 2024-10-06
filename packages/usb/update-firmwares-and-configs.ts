@@ -25,7 +25,11 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
             .scriptName('./update-firmwares-and-configs.ts')
             .usage('Usage: $0 <firmware directory> {uhk60v1|uhk60v2} {iso|ansi}')
             .demandCommand(2, 'Both firmwarePath and layout must be specified.')
-            .argv as any;
+            .option('set-serial-number', {
+                description: 'Use the given serial number instead of randomly generated one.',
+                type: 'number',
+            })
+            .argv;
 
         const firmwarePath = argv._[0];
         const deviceId = getDeviceIdFromArg(argv._[1] as string);
@@ -89,7 +93,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         }
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);
-        await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
+        await operations.saveHardwareConfiguration(layout === 'iso', deviceId, argv.setSerialNumber);
 
     } catch (error) {
         await errorHandler(error);

@@ -6,6 +6,7 @@ import {
     DeviceConnectionState,
     FirmwareJson,
     FirmwareUpgradeIpcResponse,
+    HardwareConfiguration,
     HardwareModules,
     IpcEvents,
     IpcResponse,
@@ -50,8 +51,8 @@ export class DeviceRendererService {
         this.logService.misc('[DeviceRendererService] init success ');
     }
 
-    changeKeyboardLayout(layout: KeyboardLayout, deviceId: number): void {
-        this.ipcRenderer.send(IpcEvents.device.changeKeyboardLayout, layout, deviceId);
+    changeKeyboardLayout(layout: KeyboardLayout, hardwareConfiguration: HardwareConfiguration): void {
+        this.ipcRenderer.send(IpcEvents.device.changeKeyboardLayout, layout, hardwareConfiguration.toJsonObject());
     }
 
     setPrivilegeOnLinux(): void {
@@ -176,7 +177,7 @@ export class DeviceRendererService {
     }
 
     private dispachStoreAction(action: Action): void {
-        this.logService.misc(`[DeviceRendererService] dispatch action ${action.type}`, (action as any).payload);
+        this.logService.misc(`[DeviceRendererService] dispatch action ${action.type}`);
         this.zone.run(() => this.store.dispatch(action));
     }
 }

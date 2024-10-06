@@ -13,6 +13,7 @@ import {
     FIRMWARE_UPGRADE_METHODS,
     getHardwareConfigFromDeviceResponse,
     getUserConfigFromDeviceResponse,
+    HardwareConfiguration,
     HardwareModules,
     IpcEvents,
     IpcResponse,
@@ -634,7 +635,9 @@ export class DeviceService {
         });
     }
 
-    private async changeKeyboardLayout(event: Electron.IpcMainEvent, [layout, deviceId]): Promise<void> {
+    private async changeKeyboardLayout(event: Electron.IpcMainEvent, args): Promise<void> {
+        const layout: KeyboardLayout = args[0];
+        const hardwareConfiguration: HardwareConfiguration = new HardwareConfiguration().fromJsonObject(args[1]);
         const layoutName = layout === KeyboardLayout.ISO ? 'iso': 'ansi';
 
         this.logService.misc(`[DeviceService] Change keyboard layout to ${layoutName}`);
@@ -643,7 +646,7 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
 
-            await this.operations.saveHardwareConfiguration(layout === KeyboardLayout.ISO, deviceId);
+            await this.operations.saveHardwareConfiguration(layout === KeyboardLayout.ISO, hardwareConfiguration.deviceId, hardwareConfiguration.uniqueId);
 
             const hardwareInfo = await this.operations.loadConfiguration(ConfigBufferId.hardwareConfig);
             response.hardwareConfig = JSON.stringify(convertBufferToIntArray(hardwareInfo));

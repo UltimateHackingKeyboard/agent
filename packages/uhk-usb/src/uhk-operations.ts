@@ -2,6 +2,7 @@ import {McuManager, SerialPeripheral} from '@uhk/mcumgr';
 import * as fs from 'fs';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 import {
+    ALL_UHK_DEVICES,
     Buffer,
     ConfigSizesInfo,
     FirmwareRepoInfo,
@@ -18,6 +19,7 @@ import {
     UhkBuffer,
     UhkDeviceProduct,
     UhkModule,
+    UNKNOWN_DEVICE,
 } from 'uhk-common';
 import { promisify } from 'util';
 import {
@@ -348,7 +350,9 @@ export class UhkOperations {
         }
     }
 
-    public async saveHardwareConfiguration(isIso: boolean, deviceId: number): Promise<void> {
+    public async saveHardwareConfiguration(isIso: boolean, deviceId: number, uniqueId: number = Math.floor(2 ** 32 * Math.random())): Promise<void> {
+        const uhkProduct = ALL_UHK_DEVICES.find(product => product.id === deviceId) || UNKNOWN_DEVICE;
+        this.logService.misc(`[DeviceOperation] save hardware configuration: layout: ${isIso ? 'iso' : 'ansi'}, deviceId: ${deviceId} (${uhkProduct.name}), uniqueId: ${uniqueId}`);
         const hardwareConfig = new HardwareConfiguration();
 
         hardwareConfig.signature = 'UHK';
@@ -357,7 +361,7 @@ export class UhkOperations {
         hardwareConfig.patchVersion = 0;
         hardwareConfig.brandId = 0;
         hardwareConfig.deviceId = deviceId;
-        hardwareConfig.uniqueId = Math.floor(2 ** 32 * Math.random());
+        hardwareConfig.uniqueId = uniqueId;
         hardwareConfig.isVendorModeOn = false;
         hardwareConfig.isIso = isIso;
 

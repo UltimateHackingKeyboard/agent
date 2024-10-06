@@ -178,7 +178,6 @@ export const getUndoableNotification = createSelector(appState, fromApp.getUndoa
 export const getHardwareConfiguration = createSelector(appState, fromApp.getHardwareConfiguration);
 export const getPrevUserConfiguration = createSelector(appState, fromApp.getPrevUserConfiguration);
 export const runningInElectron = createSelector(appState, fromApp.runningInElectron);
-export const getDeviceId = createSelector(appState, fromApp.getDeviceId);
 export const getKeyboardLayout = createSelector(appState, fromApp.getKeyboardLayout);
 export const deviceConfigurationLoaded = createSelector(appState, fromApp.deviceConfigurationLoaded);
 export const getAgentVersionInfo = createSelector(appState, fromApp.getAgentVersionInfo);

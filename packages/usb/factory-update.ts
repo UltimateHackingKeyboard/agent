@@ -25,6 +25,10 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
             .scriptName('./factory-update.ts')
             .usage('Usage: $0 <firmwarePath> {uhk60v1|uhk60v2} {iso|ansi}')
             .demandCommand(3)
+            .option('set-serial-number', {
+                description: 'Use the given serial number instead of randomly generated one.',
+                type: 'number',
+            })
             .argv;
 
         const firmwarePath = argv._[0] as string;
@@ -86,7 +90,7 @@ import Uhk, { errorHandler, getDeviceIdFromArg, yargs } from './src/index.js';
         }
         const configBuffer = fs.readFileSync(userConfigPath) as any;
         await operations.saveUserConfiguration(configBuffer);
-        await operations.saveHardwareConfiguration(layout === 'iso', deviceId);
+        await operations.saveHardwareConfiguration(layout === 'iso', deviceId, argv.setSerialNumber);
         await operations.switchKeymap('TES');
         console.log('All done!');
     } catch (error) {
