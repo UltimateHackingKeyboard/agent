@@ -34,7 +34,8 @@
             {{ hostConnection.address || '—' }}
         </td>
         <td>
-            <auto-grow-input [ngModel]="hostConnection.name"
+            <auto-grow-input [alignToParentWidth]="false"
+                             [ngModel]="hostConnection.name"
                              (ngModelChange)="renameHostConnection(index, $event)"
            />
         </td>
