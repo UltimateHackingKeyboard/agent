@@ -29,7 +29,7 @@
     "@types/lodash": "4.17.10",
     "@types/node": "20.16.10",
     "@types/tmp": "0.2.6",
-    "@types/yargs": "17.0.32",
+    "@types/yargs": "17.0.33",
     "@typescript-eslint/eslint-plugin": "7.11.0",
     "@typescript-eslint/parser": "7.11.0",
     "check-node-version": "4.2.1",
