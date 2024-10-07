@@ -7,7 +7,9 @@
     <span *ngIf="showText"
           class="editable">
         <span (click)="editText()"
-        >{{this.text}}</span>
+        >
+            <ng-container *ngFor="let line of displayLines">{{line}}<br></ng-container>
+        </span>
     </span>
 </div>
 
