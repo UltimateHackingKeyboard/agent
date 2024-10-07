@@ -21,8 +21,12 @@ export class EditableTextComponent implements ControlValueAccessor {
         return !this.text || this.text.trim().length === 0;
     }
 
-    get displayText(): string {
-        return this.text && this.text.replace(/\n/g, '<br>');
+    get displayLines(): string[] {
+        if (!this.text) {
+            return [];
+        }
+
+        return this.text.split('\n');
     }
 
     constructor(private cdr: ChangeDetectorRef) {
