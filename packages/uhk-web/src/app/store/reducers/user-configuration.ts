@@ -893,8 +893,12 @@ export function reducer(
             const userConfiguration: UserConfiguration = Object.assign(new UserConfiguration(), state.userConfiguration);
             userConfiguration.keymaps = state.userConfiguration.keymaps.map(keymap => {
                 if (keymap.abbreviation === data.abbr) {
-                    keymap.description = data.description;
+                    const newKeymap = new Keymap(keymap);
+                    newKeymap.description = data.description;
+
+                    return newKeymap;
                 }
+
                 return keymap;
             });
 
