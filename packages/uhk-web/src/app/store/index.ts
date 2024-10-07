@@ -582,12 +582,15 @@ export const getUserConfigHistoryComponentState = createSelector(
         }
 
         const result: UserConfigHistoryComponentState = {
+            selectedTabIndex: state.activeTabIndex || 0,
             commonFiles: state.userConfigHistory.commonFiles.map(fileMapper),
             loading: inElectron && state.loading,
             tabs: state.userConfigHistory.devices.map(device => {
                 return {
                     displayText: `${device.deviceName} (${device.device.name})`,
                     files: device.files.map(fileMapper),
+                    isCurrentDevice: device.uniqueId === hardwareConfig?.uniqueId,
+                    tooltip: `serial number: ${device.uniqueId}`,
                 };
             }),
             disabled: saving
@@ -597,18 +600,31 @@ export const getUserConfigHistoryComponentState = createSelector(
 
         if (result.tabs.length === 0 || !currentDeviceHasHistory) {
             let deviceName = UHK_60_V2_DEVICE.name;
+            let tooltip = '';
             if (hardwareConfig) {
+                tooltip = `serial number: ${hardwareConfig.uniqueId}`;
+
                 const uhkDevice = UHK_DEVICES.find(device => device.id === hardwareConfig.deviceId);
                 deviceName = uhkDevice ? uhkDevice.name : deviceName;
             }
 
             result.tabs.push({
                 displayText: `${userConfig.deviceName} (${deviceName})`,
-                files: []
+                files: [],
+                isCurrentDevice: true,
+                tooltip,
             });
         }
 
         result.tabs.sort((a, b) => a.displayText.localeCompare(b.displayText));
+
+        if (state.activeTabIndex === null) {
+            for (const [index, tab] of result.tabs.entries()) {
+                if (tab.isCurrentDevice) {
+                    result.selectedTabIndex = index;
+                }
+            }
+        }
 
         return result;
     });

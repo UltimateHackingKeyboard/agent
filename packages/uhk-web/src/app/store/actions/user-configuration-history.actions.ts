@@ -2,9 +2,15 @@ import { Action } from '@ngrx/store';
 import { UserConfigHistory } from 'uhk-common';
 
 export enum ActionTypes {
+    ChangeUserConfigurationHistoryTab = '[user-config] Change user configuration history tab',
     LoadUserConfigurationHistory = '[user-config] Load user configuration history',
     LoadUserConfigurationHistorySuccess = '[user-config] Load user configuration history success',
     GetUserConfigurationFromHistory = '[user-config] Get user configuration from history'
+}
+
+export class ChangeUserConfigurationHistoryTabAction implements Action {
+    type = ActionTypes.ChangeUserConfigurationHistoryTab;
+    constructor(public payload: number | null) {}
 }
 
 export class LoadUserConfigurationHistoryAction implements Action {
@@ -26,6 +32,7 @@ export class GetUserConfigurationFromHistoryAction implements Action {
 }
 
 export type Actions =
+    | ChangeUserConfigurationHistoryTabAction
     | LoadUserConfigurationHistoryAction
     | LoadUserConfigurationHistorySuccessAction
     | GetUserConfigurationFromHistoryAction

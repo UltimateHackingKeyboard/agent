@@ -12,14 +12,13 @@ export class UserConfigurationHistoryComponent {
     @Input() state: UserConfigHistoryComponentState;
 
     @Output() getUserConfigFromHistory = new EventEmitter<string>();
-
-    selectedTabIndex = 0;
+    @Output() changeTab = new EventEmitter<number>();
 
     trackByFn(index: number, key: HistoryFileInfo): string {
         return key.file;
     }
 
     onSelectTab(index: number): void {
-        this.selectedTabIndex = index;
+        this.changeTab.emit(index);
     }
 }

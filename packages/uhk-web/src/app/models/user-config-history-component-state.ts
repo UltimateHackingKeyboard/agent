@@ -20,9 +20,12 @@ export interface HistoryFileInfo {
 export interface Tab {
     displayText: string;
     files: HistoryFileInfo[];
+    isCurrentDevice: boolean;
+    tooltip: string;
 }
 
 export interface UserConfigHistoryComponentState {
+    selectedTabIndex: number | null;
     commonFiles: HistoryFileInfo[];
     tabs: Tab[];
     loading: boolean;

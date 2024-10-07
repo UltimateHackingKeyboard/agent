@@ -20,16 +20,19 @@
                 [class.disabled]="tab.disabled"
                 (click)="onSelectTab(index)">
                 <a class="nav-link"
-                    [class.active]="selectedTabIndex === index"
-                    [class.disabled]="tab.disabled">
+                   [class.active]="state.selectedTabIndex === index"
+                   [class.fw-bold]="tab.isCurrentDevice"
+                   [class.disabled]="tab.disabled"
+                   [attr.title]="tab.tooltip"
+                >
                     <span>{{ tab.displayText }}</span>
                 </a>
            </li>
         </ul>
 
         <ul class="list-unstyled mb-0 mt-2"
-            *ngIf="!state.loading && state.tabs[selectedTabIndex].files.length">
-            <li *ngFor="let fileInfo of state.tabs[selectedTabIndex].files; trackBy:trackByFn">
+            *ngIf="!state.loading && state.selectedTabIndex !== null && state.tabs[state.selectedTabIndex].files.length">
+            <li *ngFor="let fileInfo of state.tabs[state.selectedTabIndex].files; trackBy:trackByFn">
                 <span class="btn btn-link btn-padding-0 current">
                     {{ fileInfo.timestamp }}
                 </span>

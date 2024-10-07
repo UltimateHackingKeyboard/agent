@@ -62,7 +62,9 @@
     <div class="row">
         <div class="col-md-6 ps-0">
             <user-configuration-history [state]="userConfigHistoryState$ | async"
-                                        (getUserConfigFromHistory)="getUserConfigFromHistory($event)"></user-configuration-history>
+                                        (getUserConfigFromHistory)="getUserConfigFromHistory($event)"
+                                        (changeTab)="changeConfigHistoryTab($event)"
+            ></user-configuration-history>
         </div>
     </div>
 </div>
