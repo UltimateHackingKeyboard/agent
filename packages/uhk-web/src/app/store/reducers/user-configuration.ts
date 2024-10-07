@@ -401,7 +401,11 @@ export function reducer(
 
                         module = new Module(module);
                         const selectedColor = state.backlightingColorPalette[state.selectedBacklightingColorIndex];
-                        const keyAction = KeyActionHelper.fromKeyAction(module.keyActions[payload.key]);
+                        let keyAction = KeyActionHelper.fromKeyAction(module.keyActions[payload.key]);
+                        if (!keyAction) {
+                            keyAction = new NoneAction();
+                        }
+
                         keyAction.b = selectedColor.b;
                         keyAction.g = selectedColor.g;
                         keyAction.r = selectedColor.r;
