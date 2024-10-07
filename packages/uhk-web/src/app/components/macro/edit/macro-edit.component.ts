@@ -61,6 +61,8 @@ export class MacroEditComponent implements OnDestroy {
 
     @ViewChild(SplitComponent) split: SplitComponent;
 
+    private backUrl: string;
+    private backUrlText: string;
     private subscriptions = new Subscription();
 
     constructor(private store: Store<AppState>,
@@ -89,6 +91,9 @@ export class MacroEditComponent implements OnDestroy {
         this.smartMacroDocUrl$ = store.select(selectSmartMacroDocUrl);
         this.smartMacroPanelVisibility$ = store.select(getSmartMacroPanelVisibility);
         this.subscriptions.add(this.route.queryParams.subscribe(params => {
+            this.backUrl = params.backUrl;
+            this.backUrlText = params.backText;
+
             if (params.actionIndex) {
                 if (params.actionIndex === 'new') {
                     this.selectedMacroActionIdModel = {
@@ -146,6 +151,8 @@ export class MacroEditComponent implements OnDestroy {
         this.router.navigate([], {
             queryParams: {
                 actionIndex: model?.id,
+                backText: this.backUrlText,
+                backUrl: this.backUrl,
                 inlineEdit: model?.inlineEdit
             }
         });
@@ -173,7 +180,12 @@ export class MacroEditComponent implements OnDestroy {
 
     private hideActiveEditor(): void {
         if (!this.selectedMacroActionIdModel?.inlineEdit) {
-            this.router.navigate([]);
+            this.router.navigate([], {
+                queryParams: {
+                    backText: this.backUrlText,
+                    backUrl: this.backUrl,
+                },
+            });
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -17,7 +17,8 @@ export class BackToComponent implements OnDestroy {
 
     private routeSubscription: Subscription;
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute,
+                private cdRef: ChangeDetectorRef) {
         this.routeSubscription = route.queryParams.subscribe(params => {
             if (params.backUrl) {
                 const backUrl = new URL(params.backUrl, window.location.origin);
@@ -30,6 +31,8 @@ export class BackToComponent implements OnDestroy {
             } else {
                 this.backUrl = undefined;
             }
+
+            cdRef.markForCheck();
         });
     }
 
