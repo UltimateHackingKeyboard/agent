@@ -20,6 +20,7 @@ import {
 } from '../../../store/actions/user-config';
 import { UhkProgressBarState, UserConfigHistoryComponentState } from '../../../models';
 import {
+    ChangeUserConfigurationHistoryTabAction,
     GetUserConfigurationFromHistoryAction,
     LoadUserConfigurationHistoryAction
 } from '../../../store/actions/user-configuration-history.actions';
@@ -56,6 +57,7 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+        this.changeConfigHistoryTab(null);
     }
 
     resetUserConfiguration() {
@@ -76,6 +78,10 @@ export class DeviceConfigurationComponent implements OnInit, OnDestroy {
         } else {
             this.saveConfigurationInJSONFormat();
         }
+    }
+
+    changeConfigHistoryTab(index: number | null) {
+        this.store.dispatch(new ChangeUserConfigurationHistoryTabAction(index));
     }
 
     changeFile(data: UploadFileData): void {

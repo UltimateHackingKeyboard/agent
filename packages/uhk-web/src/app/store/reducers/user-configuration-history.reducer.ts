@@ -2,9 +2,15 @@ import {
     UserConfigHistory,
 } from 'uhk-common';
 
-import { Actions, ActionTypes, LoadUserConfigurationHistorySuccessAction } from '../actions/user-configuration-history.actions';
+import {
+    Actions,
+    ActionTypes,
+    ChangeUserConfigurationHistoryTabAction,
+    LoadUserConfigurationHistorySuccessAction,
+} from '../actions/user-configuration-history.actions';
 
 export interface State {
+    activeTabIndex: number | null;
     userConfigHistory: UserConfigHistory;
     loading: boolean;
 }
@@ -17,12 +23,19 @@ function defaultUserConfigHistory(): UserConfigHistory {
 }
 
 export const initialState: State = {
+    activeTabIndex: null,
     userConfigHistory: defaultUserConfigHistory(),
     loading: false
 };
 
 export function reducer(state = initialState, action: Actions) {
     switch (action.type) {
+
+        case ActionTypes.ChangeUserConfigurationHistoryTab:
+            return {
+                ...state,
+                activeTabIndex: (action as ChangeUserConfigurationHistoryTabAction).payload,
+            };
 
         case ActionTypes.LoadUserConfigurationHistory:
             return {
