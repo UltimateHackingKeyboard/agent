@@ -2,7 +2,7 @@ import { UhkBuffer, UserConfiguration } from '../../uhk-common/src/index.js';
 
 import fs from 'fs';
 
-const userConfig = JSON.parse(fs.readFileSync('../uhk-web/src/app/services/user-config.json', { encoding: 'utf8' }));
+const userConfig = JSON.parse(fs.readFileSync('../uhk-web/src/app/services/user-config-80.json', { encoding: 'utf8' }));
 
 describe('Test Serializer', () => {
     it('full config match', () => {

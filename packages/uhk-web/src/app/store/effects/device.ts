@@ -15,6 +15,7 @@ import {
     shouldUpgradeAgent,
     shouldUpgradeFirmware,
     UdevRulesInfo,
+    UHK_80_DEVICE,
     UserConfiguration
 } from 'uhk-common';
 
@@ -55,6 +56,7 @@ import {
     AppState,
     deviceConnected,
     disableUpdateAgentProtection,
+    getConnectedDevice,
     getHardwareConfiguration,
     getRouterState,
     getShowFirmwareUpgradePanel,
@@ -290,8 +292,17 @@ export class DeviceEffects {
     resetUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType(ActionTypes.ResetUserConfiguration),
-            switchMap(() => {
-                const config = this.defaultUserConfigurationService.getDefault().clone();
+            withLatestFrom(this.store.select(getConnectedDevice)),
+            switchMap(([, uhkDeviceProduct]) => {
+                let config: UserConfiguration;
+
+                if (uhkDeviceProduct?.id === UHK_80_DEVICE.id) {
+                    config = this.defaultUserConfigurationService.getDefault80().clone();
+                }
+                else {
+                    config = this.defaultUserConfigurationService.getDefault60().clone();
+                }
+
                 config.keymaps = config.keymaps.filter(keymap => keymap.abbreviation !== 'EMP');
                 return of(new LoadResetUserConfigurationAction(config));
             })

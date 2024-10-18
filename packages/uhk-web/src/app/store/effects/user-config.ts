@@ -35,6 +35,7 @@ import {
 
 import { DataStorageRepositoryService } from '../../services/datastorage-repository.service';
 import { DefaultUserConfigurationService } from '../../services/default-user-configuration.service';
+import { Uhk80MigratorService } from '../../services/uhk80-migrator.service';
 import { getVersions } from '../../util';
 import { AppState, getPrevUserConfiguration, getRouterState, getUserConfiguration } from '../index';
 import * as Keymaps from '../actions/keymap';
@@ -242,7 +243,7 @@ export class UserConfigEffects {
             map(action => action.payload),
             map((payload: LoadUserConfigurationFromFilePayload) => {
                 try {
-                    const userConfig = new UserConfiguration();
+                    let userConfig = new UserConfiguration();
 
                     if (payload.uploadFileData.filename.endsWith('.bin')) {
                         userConfig.fromBinary(UhkBuffer.fromArray(payload.uploadFileData.data));
@@ -253,6 +254,8 @@ export class UserConfigEffects {
                     }
 
                     if (userConfig.userConfigMajorVersion) {
+                        userConfig = this.uhk80MigratorService.migrate(userConfig);
+
                         if (payload.autoSave) {
                             return new ApplyUserConfigurationFromFileAction({
                                 userConfig,
@@ -346,7 +349,9 @@ export class UserConfigEffects {
                 private defaultUserConfigurationService: DefaultUserConfigurationService,
                 private deviceRendererService: DeviceRendererService,
                 private logService: LogService,
-                private router: Router) {
+                private router: Router,
+                private uhk80MigratorService: Uhk80MigratorService,
+    ) {
     }
 
     private getUserConfiguration(): Observable<UserConfiguration> {
@@ -357,13 +362,13 @@ export class UserConfigEffects {
 
                     if (configJsonObject) {
                         if (configJsonObject.userConfigMajorVersion ===
-                            this.defaultUserConfigurationService.getDefault().userConfigMajorVersion) {
+                            this.defaultUserConfigurationService.getDefault60().userConfigMajorVersion) {
                             config = new UserConfiguration().fromJsonObject(configJsonObject);
                         }
                     }
 
                     if (!config) {
-                        config = this.defaultUserConfigurationService.getDefault();
+                        config = this.defaultUserConfigurationService.getDefault60();
                     }
 
                     return config;

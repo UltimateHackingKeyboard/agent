@@ -18,7 +18,7 @@ export class SvgModule {
                 const key = keys[i];
                 const idSplit = key.id.split('-');
                 if (idSplit.length === 2) {
-                    const index = idSplit[1] - 1; // remove 'key-' then switch to index from 0
+                    const index = Number.parseInt(idSplit[1], 10);
                     keys[i].type = 'rec';
                     keys[i].height = +keys[i].height;
                     keys[i].width = +keys[i].width;
@@ -57,7 +57,7 @@ export class SvgModule {
                     const idSplit = path.id.split('-'); // split the 'key-6{-print}'
 
                     if (idSplit.length === 2) {
-                        const index = idSplit[1] - 1;
+                        const index = Number.parseInt(idSplit[1], 10);
                         const style = parseStyle(path.style);
 
                         this.keyboardKeys[index] = {
@@ -82,7 +82,7 @@ export class SvgModule {
             obj.g.forEach(g => {
                 if (g.$.id) {
                     const idSplit = g.$.id.split('-');
-                    const index = idSplit[1] - 1;
+                    const index = Number.parseInt(idSplit[1], 10);
 
                     const key: SvgKeyboardKey = {
                         type: 'g',

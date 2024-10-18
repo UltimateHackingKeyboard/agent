@@ -17,7 +17,7 @@ export class DefaultUserConfigurationEffect {
     loadDefaultUserConfiguration$ = createEffect(() => this.actions$
         .pipe(
             ofType<LoadDefaultUserConfigurationAction>(ActionTypes.LoadDefaultUserConfiguration),
-            map(() => new LoadDefaultUserConfigurationSuccessAction(this.defaultUserConfigurationService.getDefault()))
+            map(() => new LoadDefaultUserConfigurationSuccessAction(this.defaultUserConfigurationService.getDefault60()))
         )
     );
 

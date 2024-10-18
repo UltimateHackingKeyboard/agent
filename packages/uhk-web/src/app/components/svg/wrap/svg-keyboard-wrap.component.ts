@@ -532,7 +532,7 @@ export class SvgKeyboardWrapComponent implements AfterViewInit, OnInit, OnChange
     }
 
     private findKeyElement(): HTMLElement {
-        const selector = `[layerId="${this.currentLayer.id}"] [moduleId="${this.keyEditConfig.moduleId}"] > #key-${this.keyEditConfig.keyId + 1}`;
+        const selector = `[layerId="${this.currentLayer.id}"] [moduleId="${this.keyEditConfig.moduleId}"] > #key-${this.keyEditConfig.keyId}`;
 
         return this.wrapHost?.querySelector(selector);
     }

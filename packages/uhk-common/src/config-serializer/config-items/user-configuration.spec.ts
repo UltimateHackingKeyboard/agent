@@ -9,7 +9,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', () => {
         jsonTester({
             userConfigMajorVersion: 8,
-            userConfigMinorVersion: 1,
+            userConfigMinorVersion: 2,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,

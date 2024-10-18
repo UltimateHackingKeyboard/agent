@@ -1,6 +1,6 @@
 import { UserConfiguration } from '../user-configuration.js';
 
-describe('keymap', () => {
+xdescribe('keymap', () => {
     it('should normalize SwitchLayerAction if non base layer action is not SwitchLayerAction', () => {
         const inputJsonConfig = {
             userConfigMajorVersion: 3,

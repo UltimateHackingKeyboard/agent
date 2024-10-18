@@ -48,7 +48,6 @@ export class SvgModuleProviderService implements OnDestroy {
             }
 
             this.connectedDeviceId = connectedDeviceId;
-            console.log('connectedDeviceId', connectedDeviceId);
 
             switch (connectedDeviceId) {
                 case UHK_80_DEVICE.id: {

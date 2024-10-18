@@ -9,10 +9,11 @@ import {
     HOST_CONNECTION_COUNT_MAX,
     HostConnection,
 } from './host-connection.js';
-import { KeystrokeAction, NoneAction } from './key-action/index.js';
+import { KeyActionHelper, KeystrokeAction, NoneAction } from './key-action/index.js';
 import { Keymap } from './keymap.js';
 import { LayerName } from './layer-name.js';
 import { Macro } from './macro.js';
+import { Module } from './module.js';
 import { ModuleConfiguration } from './module-configuration.js';
 import { defaultKeyClusterLeftModuleConfig } from './module-configuration/default-key-cluster-left-module-config.js';
 import { defaultTouchpadRightModuleConfig } from './module-configuration/default-touchpad-right-module-config.js';
@@ -202,6 +203,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV7_1();
         this.migrateToV8();
         this.migrateToV8_1();
+        this.migrateToV8_2();
 
         this.recalculateConfigurationLength();
 
@@ -260,6 +262,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         if (this.migrateToV8_1()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV8_2()) {
             this.userConfigurationLength = 0;
         }
 
@@ -954,6 +960,111 @@ export class UserConfiguration implements MouseSpeedConfiguration {
 
         this.userConfigMinorVersion = 1;
         this.hostConnections = defaultHostConnections();
+
+        return true;
+    }
+
+    private migrateToV8_2(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 2) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 2;
+
+        for (const keymap of this.keymaps) {
+            for (const layer of keymap.layers) {
+                layer.modules = layer.modules.map(originalModule => {
+                    // right half
+                    if (originalModule.id === 0) {
+                        const module = new Module();
+                        module.id = originalModule.id;
+
+                        module.keyActions[0] = KeyActionHelper.fromKeyAction(originalModule.keyActions[0]);
+                        module.keyActions[1] = KeyActionHelper.fromKeyAction(originalModule.keyActions[1]);
+                        module.keyActions[2] = KeyActionHelper.fromKeyAction(originalModule.keyActions[2]);
+                        module.keyActions[3] = KeyActionHelper.fromKeyAction(originalModule.keyActions[3]);
+                        module.keyActions[4] = KeyActionHelper.fromKeyAction(originalModule.keyActions[4]);
+                        module.keyActions[5] = KeyActionHelper.fromKeyAction(originalModule.keyActions[5]);
+                        module.keyActions[6] = KeyActionHelper.fromKeyAction(originalModule.keyActions[6]);
+                        module.keyActions[7] = KeyActionHelper.fromKeyAction(originalModule.keyActions[14]);
+                        module.keyActions[8] = KeyActionHelper.fromKeyAction(originalModule.keyActions[7]);
+                        module.keyActions[9] = KeyActionHelper.fromKeyAction(originalModule.keyActions[8]);
+                        module.keyActions[10] = KeyActionHelper.fromKeyAction(originalModule.keyActions[9]);
+                        module.keyActions[11] = KeyActionHelper.fromKeyAction(originalModule.keyActions[10]);
+                        module.keyActions[12] = KeyActionHelper.fromKeyAction(originalModule.keyActions[11]);
+                        module.keyActions[13] = KeyActionHelper.fromKeyAction(originalModule.keyActions[12]);
+                        module.keyActions[14] = KeyActionHelper.fromKeyAction(originalModule.keyActions[13]);
+                        module.keyActions[15] = KeyActionHelper.fromKeyAction(originalModule.keyActions[21]);
+                        module.keyActions[16] = KeyActionHelper.fromKeyAction(originalModule.keyActions[15]);
+                        module.keyActions[17] = KeyActionHelper.fromKeyAction(originalModule.keyActions[16]);
+                        module.keyActions[18] = KeyActionHelper.fromKeyAction(originalModule.keyActions[17]);
+                        module.keyActions[19] = KeyActionHelper.fromKeyAction(originalModule.keyActions[18]);
+                        module.keyActions[20] = KeyActionHelper.fromKeyAction(originalModule.keyActions[19]);
+                        module.keyActions[21] = KeyActionHelper.fromKeyAction(originalModule.keyActions[20]);
+                        module.keyActions[22] = KeyActionHelper.fromKeyAction(originalModule.keyActions[22]);
+                        module.keyActions[23] = KeyActionHelper.fromKeyAction(originalModule.keyActions[23]);
+                        module.keyActions[24] = KeyActionHelper.fromKeyAction(originalModule.keyActions[24]);
+                        module.keyActions[25] = KeyActionHelper.fromKeyAction(originalModule.keyActions[25]);
+                        module.keyActions[26] = KeyActionHelper.fromKeyAction(originalModule.keyActions[26]);
+                        module.keyActions[27] = KeyActionHelper.fromKeyAction(originalModule.keyActions[27]);
+                        module.keyActions[28] = KeyActionHelper.fromKeyAction(originalModule.keyActions[29]);
+                        module.keyActions[29] = KeyActionHelper.fromKeyAction(originalModule.keyActions[31]);
+                        module.keyActions[30] = KeyActionHelper.fromKeyAction(originalModule.keyActions[32]);
+                        module.keyActions[31] = KeyActionHelper.fromKeyAction(originalModule.keyActions[33]);
+                        module.keyActions[32] = KeyActionHelper.fromKeyAction(originalModule.keyActions[34]);
+                        module.keyActions[33] = KeyActionHelper.fromKeyAction(originalModule.keyActions[30]);
+
+                        return module;
+                    }
+                    // left half
+                    else if (originalModule.id === 1) {
+                        const module = new Module();
+                        module.id = originalModule.id;
+
+                        module.keyActions[0] = KeyActionHelper.fromKeyAction(originalModule.keyActions[0]);
+                        module.keyActions[1] = KeyActionHelper.fromKeyAction(originalModule.keyActions[1]);
+                        module.keyActions[2] = KeyActionHelper.fromKeyAction(originalModule.keyActions[2]);
+                        module.keyActions[3] = KeyActionHelper.fromKeyAction(originalModule.keyActions[3]);
+                        module.keyActions[4] = KeyActionHelper.fromKeyAction(originalModule.keyActions[4]);
+                        module.keyActions[5] = KeyActionHelper.fromKeyAction(originalModule.keyActions[5]);
+                        module.keyActions[6] = KeyActionHelper.fromKeyAction(originalModule.keyActions[6]);
+                        module.keyActions[7] = KeyActionHelper.fromKeyAction(originalModule.keyActions[7]);
+                        module.keyActions[8] = KeyActionHelper.fromKeyAction(originalModule.keyActions[8]);
+                        module.keyActions[9] = KeyActionHelper.fromKeyAction(originalModule.keyActions[9]);
+                        module.keyActions[10] = KeyActionHelper.fromKeyAction(originalModule.keyActions[10]);
+                        module.keyActions[11] = KeyActionHelper.fromKeyAction(originalModule.keyActions[11]);
+                        module.keyActions[12] = KeyActionHelper.fromKeyAction(originalModule.keyActions[13]);
+                        module.keyActions[13] = KeyActionHelper.fromKeyAction(originalModule.keyActions[14]);
+                        module.keyActions[14] = KeyActionHelper.fromKeyAction(originalModule.keyActions[15]);
+                        module.keyActions[15] = KeyActionHelper.fromKeyAction(originalModule.keyActions[16]);
+                        module.keyActions[16] = KeyActionHelper.fromKeyAction(originalModule.keyActions[17]);
+                        module.keyActions[17] = KeyActionHelper.fromKeyAction(originalModule.keyActions[18]);
+                        module.keyActions[18] = KeyActionHelper.fromKeyAction(originalModule.keyActions[20]);
+                        module.keyActions[19] = KeyActionHelper.fromKeyAction(originalModule.keyActions[21]);
+                        module.keyActions[20] = KeyActionHelper.fromKeyAction(originalModule.keyActions[22]);
+                        module.keyActions[21] = KeyActionHelper.fromKeyAction(originalModule.keyActions[23]);
+                        module.keyActions[22] = KeyActionHelper.fromKeyAction(originalModule.keyActions[24]);
+                        module.keyActions[23] = KeyActionHelper.fromKeyAction(originalModule.keyActions[25]);
+                        module.keyActions[24] = KeyActionHelper.fromKeyAction(originalModule.keyActions[26]);
+                        module.keyActions[25] = KeyActionHelper.fromKeyAction(originalModule.keyActions[27]);
+                        module.keyActions[26] = KeyActionHelper.fromKeyAction(originalModule.keyActions[28]);
+                        module.keyActions[27] = KeyActionHelper.fromKeyAction(originalModule.keyActions[29]);
+                        module.keyActions[28] = KeyActionHelper.fromKeyAction(originalModule.keyActions[30]);
+                        module.keyActions[29] = KeyActionHelper.fromKeyAction(originalModule.keyActions[31]);
+                        module.keyActions[30] = KeyActionHelper.fromKeyAction(originalModule.keyActions[33]);
+                        module.keyActions[31] = KeyActionHelper.fromKeyAction(originalModule.keyActions[32]);
+
+                        return module;
+                    }
+
+                    return originalModule;
+                });
+            }
+        }
 
         return true;
     }

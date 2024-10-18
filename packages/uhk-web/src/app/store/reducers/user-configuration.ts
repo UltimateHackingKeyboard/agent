@@ -598,7 +598,7 @@ export function reducer(
                 ...newState,
                 userConfiguration: saveKeyAction(newState.userConfiguration, processedAction),
                 lastEditedKey: {
-                    key: 'key-' + (keyIndex + 1),
+                    key: 'key-' + keyIndex,
                     moduleId: moduleIndex
                 }
             };

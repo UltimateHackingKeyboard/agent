@@ -5,6 +5,9 @@ import { Macro } from './macro.js';
 import { SerialisationInfo } from './serialisation-info.js';
 import { UserConfiguration } from './user-configuration.js';
 
+export const UHK_60_LEFT_MAX_KEY_ACTION_COUNT = 32;
+export const UHK_60_RIGHT_MAX_KEY_ACTION_COUNT = 34;
+
 export class Module {
 
     @assertUInt8 id: number;
@@ -66,7 +69,8 @@ export class Module {
                 if (keyAction && (macros || !(keyAction instanceof PlayMacroAction || keyAction instanceof SwitchKeymapAction))) {
                     return keyAction.toJsonObject(serialisationInfo, macros);
                 }
-                return new NoneAction();
+
+                return new NoneAction().toJsonObject(serialisationInfo);
             })
         };
     }
