@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BacklightingOption } from '../../../models/index';
-import { AppState, getBacklightingOptions, getUserConfiguration } from '../../../store';
+import { AppState, getBacklightingOptions, getConnectedDevice, getUserConfiguration } from '../../../store';
 import {
     SetUserConfigurationRgbValueAction,
     SetUserConfigurationValueAction
 } from '../../../store/actions/user-config';
 import { Observable, Subscription } from 'rxjs';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { BacklightingMode, RgbColorInterface, UserConfiguration } from 'uhk-common';
+import { BacklightingMode, RgbColorInterface, UHK_80_DEVICE, UserConfiguration } from 'uhk-common';
 
 @Component({
     selector: 'device-led-settings',
@@ -41,10 +41,12 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
     keyBacklightFadeOutBatteryTimeout = 0;
 
     faSlidersH = faSlidersH;
+    showBatteryPoweredColumn = false;
 
     private userConfig$: Observable<UserConfiguration>;
     private userConfigSubscription: Subscription;
     private backlightingOptionsSubscription: Subscription;
+    private connectedDeviceSubscription: Subscription;
 
     constructor(private store: Store<AppState>,
                 private cdRef: ChangeDetectorRef) {}
@@ -77,9 +79,15 @@ export class LEDSettingsComponent implements OnInit, OnDestroy {
                 this.backlightingOptions = options;
                 this.cdRef.detectChanges();
             });
+        this.connectedDeviceSubscription = this.store.select(getConnectedDevice)
+            .subscribe(connectedDevice => {
+                this.showBatteryPoweredColumn = connectedDevice?.id === UHK_80_DEVICE.id;
+                this.cdRef.detectChanges();
+            });
     }
 
     ngOnDestroy() {
+        this.connectedDeviceSubscription?.unsubscribe();
         this.userConfigSubscription.unsubscribe();
         if (this.backlightingOptionsSubscription) {
             this.backlightingOptionsSubscription.unsubscribe();

@@ -15,7 +15,7 @@
                 <td>
                     USB-powered
                 </td>
-                <td>
+                <td *ngIf="showBatteryPoweredColumn">
                     Battery-powered
                 </td>
             </tr>
@@ -34,7 +34,7 @@
                         (ngModelChange)="onSetPropertyValue('keyBacklightBrightness', $event)"
                     />
                 </td>
-                <td>
+                <td *ngIf="showBatteryPoweredColumn">
                     <slider-wrapper
                         [min]="0"
                         [max]="255"
@@ -54,7 +54,7 @@
                         (ngModelChange)="onSetPropertyValue('keyBacklightFadeOutTimeout', $event)"
                     />
                 </td>
-                <td>
+                <td *ngIf="showBatteryPoweredColumn">
                     <fade-timeout-slider
                         [ngModel]="keyBacklightFadeOutBatteryTimeout"
                         (ngModelChange)="onSetPropertyValue('keyBacklightFadeOutBatteryTimeout', $event)"
@@ -74,7 +74,7 @@
                         (ngModelChange)="onSetPropertyValue('displayBrightness', $event)"
                     />
                 </td>
-                <td>
+                <td *ngIf="showBatteryPoweredColumn">
                     <slider-wrapper
                         [min]="0"
                         [max]="255"
@@ -94,7 +94,7 @@
                         (ngModelChange)="onSetPropertyValue('displayFadeOutTimeout', $event)"
                     />
                 </td>
-                <td>
+                <td *ngIf="showBatteryPoweredColumn">
                     <fade-timeout-slider
                         [ngModel]="displayFadeOutBatteryTimeout"
                         (ngModelChange)="onSetPropertyValue('displayFadeOutBatteryTimeout', $event)"
