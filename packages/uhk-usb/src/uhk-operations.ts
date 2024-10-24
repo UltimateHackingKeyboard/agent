@@ -407,7 +407,7 @@ export class UhkOperations {
                 return true;
             }
 
-            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you see this message.`);
+            this.logService.misc(`[DeviceOperation] Cannot ping the bootloader. Please remove the "${moduleName}" module, and keep reconnecting it until you do not see this message anymore.`);
 
             await snooze(1000);
         }
