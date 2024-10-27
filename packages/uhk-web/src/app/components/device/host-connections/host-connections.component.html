@@ -17,6 +17,11 @@
         <th>
             Name
         </th>
+        <th>
+            Switchover
+        </th>
+        <th>
+        </th>
     </tr>
     </thead>
     <tbody [dragula]="dragAndDropGroup" [dragulaModel]="hostConnections" (dragulaModelChange)="hostConnectionsReordered($event)">
@@ -38,6 +43,28 @@
                              [ngModel]="hostConnection.name"
                              (ngModelChange)="renameHostConnection(index, $event)"
            />
+        </td>
+        <td class="text-center">
+            <input type="checkbox"
+                   class="form-check-input"
+                   [ngModel]="hostConnection.switchover"
+                   (ngModelChange)="setHostConnectionSwitchover(index, $event)"
+            >
+        </td>
+        <td>
+            <button *ngIf="hostConnection.hasAddress()"
+                    [disabled]="isDonglePairing"
+                    (confirm)="deleteHostConnection(index, hostConnection)"
+                    type="button"
+                    class="btn"
+                    mwlConfirmationPopover
+                    popoverTitle="Do you really want to delete this connection?"
+                    placement="bottom"
+                    confirmText="Yes"
+                    cancelText="No"
+            >
+                <fa-icon [icon]="faTrash" />
+            </button>
         </td>
     </tr>
     </ng-container>

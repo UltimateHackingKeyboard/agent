@@ -1,6 +1,6 @@
 {
   "userConfigMajorVersion": 8,
-  "userConfigMinorVersion": 2,
+  "userConfigMinorVersion": 3,
   "userConfigPatchVersion": 0,
   "deviceName": "My UHK",
   "doubleTapSwitchLayerTimeout": 250,
@@ -79,7 +79,8 @@
   "hostConnections": [
     {
       "type": "UsbRight",
-      "name": "My PC"
+      "name": "My PC",
+      "switchover": false
     },
     {
       "type": "Empty"

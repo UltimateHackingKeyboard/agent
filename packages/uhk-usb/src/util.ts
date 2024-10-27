@@ -5,8 +5,7 @@ import MemoryMap from 'nrf-intel-hex';
 import { Buffer, LogService, UHK_DEVICES, UhkDeviceProduct, VidPidPair } from 'uhk-common';
 
 import { MAX_USB_PAYLOAD_SIZE, UsbCommand } from './constants.js';
-
-export const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+import { snooze } from './utils/index.js';
 
 /**
  * Convert the Buffer to number[]

@@ -83,7 +83,7 @@ export class UserConfigEffects {
                 Macros.ActionTypes.ReorderAction, Macros.ActionTypes.DuplicateAction,
                 ActionTypes.RenameUserConfiguration, ActionTypes.SetUserConfigurationValue, ActionTypes.SetUserConfigurationRgbValue,
                 ActionTypes.RecoverLEDSpaces, ActionTypes.SetModuleConfigurationValue,
-                ActionTypes.ReorderHostConnections, ActionTypes.RenameHostConnection,
+                ActionTypes.ReorderHostConnections, ActionTypes.RenameHostConnection, ActionTypes.SetHostConnectionSwitchover,
             ),
             withLatestFrom(this.store.select(getUserConfiguration), this.store.select(getPrevUserConfiguration)),
             mergeMap(([action, config, prevUserConfiguration]) => {

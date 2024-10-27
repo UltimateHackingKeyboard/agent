@@ -1,12 +1,14 @@
-import {McuManager, SerialPeripheral} from '@uhk/mcumgr';
+import { McuManager, SerialPeripheral } from '@uhk/mcumgr';
 import * as fs from 'fs';
 import { DataOption, KBoot, Properties, UsbPeripheral } from 'kboot';
 import {
     ALL_UHK_DEVICES,
+    BleAddressPair,
     Buffer,
     ConfigSizesInfo,
-    FirmwareRepoInfo,
+    convertBleAddressArrayToString,
     FIRMWARE_UPGRADE_METHODS,
+    FirmwareRepoInfo,
     getSlotIdName,
     HardwareConfiguration,
     isDeviceProtocolSupportFirmwareChecksum,
@@ -30,20 +32,28 @@ import {
     KbootCommands,
     MAX_USB_PAYLOAD_SIZE,
     ModulePropertyId,
+    PAIRING_STATUS_TEXT,
+    PairIds,
+    PairingStatuses,
     UsbCommand,
     UsbVariables
 } from './constants.js';
-import { DebugInfo, Duration, I2cBaudRate, I2cErrorBuffer, LoadConfigurationsResult } from './models/index.js';
+import {
+    DebugInfo,
+    Duration,
+    I2cBaudRate,
+    I2cErrorBuffer,
+    LoadConfigurationsResult,
+} from './models/index.js';
 
 import { UhkHidDevice } from './uhk-hid-device.js';
 import {
     convertBufferToIntArray,
     getTransferBuffers,
     readBootloaderFirmwareFromHexFileAsync,
-    snooze,
     waitForDevice
 } from './util.js';
-import { convertMsToDuration, convertSlaveI2cErrorBuffer } from './utils/index.js';
+import { convertMsToDuration, convertSlaveI2cErrorBuffer, snooze, waitUntil} from './utils/index.js';
 import { normalizeStatusBuffer } from './utils/normalize-status-buffer.js';
 import readUhkResponseAs0EndString from './utils/read-uhk-response-as-0-end-string.js';
 
@@ -672,6 +682,73 @@ export class UhkOperations {
         }
 
         return responseBuffer[1];
+    }
+
+    public async pairToDongle(dongle: UhkHidDevice) : Promise<BleAddressPair> {
+        const deviceBleAddress = await this.device.getBleAddress();
+        this.logService.misc('[DeviceOperation] Device BLE address: ', convertBleAddressArrayToString(deviceBleAddress));
+        const dongleBleAddress = await dongle.getBleAddress();
+        this.logService.misc('[DeviceOperation] Dongle BLE address: ', convertBleAddressArrayToString(dongleBleAddress));
+
+        this.logService.misc('[DeviceOperation] Device switching to pairing mode');
+        await this.device.switchToPairingMode();
+        this.logService.misc('[DeviceOperation] Dongle switching to pairing mode');
+        await dongle.switchToPairingMode();
+
+        this.logService.misc('[DeviceOperation] Device delete all bonds');
+        await this.device.deleteBond(dongleBleAddress);
+        this.logService.misc('[DeviceOperation] Dongle delete all bonds');
+        await dongle.deleteAllBonds();
+
+        this.logService.misc('[DeviceOperation] Device read pairing info');
+        const devicePairInfo = await this.device.getPairingInfo();
+        this.logService.misc('[DeviceOperation] Dongle read pairing info');
+        const donglePairInfo = await dongle.getPairingInfo();
+
+        this.logService.misc('[DeviceOperation] Device set pairing info');
+        await this.device.setPairingInfo(PairIds.Dongle, donglePairInfo);
+        this.logService.misc('[DeviceOperation] Dongle set pairing info');
+        await dongle.setPairingInfo(PairIds.Right, devicePairInfo);
+
+        this.logService.misc('[DeviceOperation] Device pair peripheral');
+        await this.device.pairPeripheral();
+        this.logService.misc('[DeviceOperation] Dongle pair central');
+        await dongle.pairCentral();
+
+        this.logService.misc('[DeviceOperation] Device waiting for pairing finished');
+        let deviceParingStatus: PairingStatuses;
+        await waitUntil({
+            shouldWait: async () => {
+                deviceParingStatus = await this.device.getPairingStatus();
+
+                return deviceParingStatus === PairingStatuses.InProgress;
+            },
+            timeout: 5000,
+            timeoutErrorMessage: '[DeviceOperation] Device pairing timeout',
+            wait: 100,
+        });
+        this.logService.misc(`[DeviceOperation] Device pairing result: ${PAIRING_STATUS_TEXT[deviceParingStatus]}`);
+
+        this.logService.misc('[DeviceOperation] Dongle waiting for pairing finished');
+        let dongleParingStatus: PairingStatuses;
+        await waitUntil({
+            shouldWait: async () => {
+                dongleParingStatus = await dongle.getPairingStatus();
+
+                return dongleParingStatus === PairingStatuses.InProgress;
+            },
+            timeout: 5000,
+            timeoutErrorMessage: '[DeviceOperation] Dongle pairing timeout',
+            wait: 100,
+        });
+        this.logService.misc(`[DeviceOperation] Dongle pairing result: ${PAIRING_STATUS_TEXT[dongleParingStatus]}`);
+
+        this.logService.misc('[DeviceOperation] Device to Dongle pairing finished');
+
+        return {
+            address: convertBleAddressArrayToString(deviceBleAddress),
+            pairAddress: convertBleAddressArrayToString(dongleBleAddress),
+        };
     }
 
     public async setVariable(variable: UsbVariables, value: number): Promise<void> {

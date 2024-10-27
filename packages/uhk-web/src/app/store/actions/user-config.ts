@@ -30,6 +30,7 @@ export enum ActionTypes {
     RenameUserConfiguration = '[user-config] Rename user configuration',
     ReorderHostConnections = '[user-config] Reorder host connections',
     SelectModuleConfiguration = '[user-config] Select module configuration',
+    SetHostConnectionSwitchover = '[user-config] set host connection switchover',
     SetModuleConfigurationValue = '[user-config] Set module configuration value',
     SetUserConfigurationRgbValue = '[user-config] Set user configuration RGB value',
     SetUserConfigurationValue = '[user-config] Set user configuration value',
@@ -154,6 +155,13 @@ export class SelectModuleConfigurationAction implements Action {
     }
 }
 
+export class SetHostConnectionSwitchoverAction implements Action {
+    type = ActionTypes.SetHostConnectionSwitchover;
+
+    constructor(public payload: {index: number, checked: boolean}) {
+    }
+}
+
 export class SetModuleConfigurationValueAction implements Action {
     type = ActionTypes.SetModuleConfigurationValue;
 
@@ -211,6 +219,7 @@ export type Actions
     | RenameUserConfigurationAction
     | ReorderHostConnectionsAction
     | SelectModuleConfigurationAction
+    | SetHostConnectionSwitchoverAction
     | SetModuleConfigurationValueAction
     | SetUserConfigurationRgbValueAction
     | SetUserConfigurationValueAction

@@ -19,57 +19,61 @@ export const HOST_CONNECTION_LABELS: Readonly<Record<HostConnections, string>> =
 });
 
 export const HOST_CONNECTION_COUNT_MAX = 22;
-const BLE_ADDRESS_LENGTH = 6;
-const ADDRESS_SEPARATOR = ':';
+export const BLE_ADDRESS_LENGTH = 6;
+const BLE_ADDRESS_SEPARATOR = ':';
+
+export function convertBleAddressArrayToString(address: number[]): string {
+    return address.map(x => x.toString(16)).join(BLE_ADDRESS_SEPARATOR);
+}
+
+export function convertBleStringToNumberArray(address: string): number[] {
+    const split = address.split(BLE_ADDRESS_SEPARATOR);
+    const result: number[] = [];
+
+    for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+        const segment = Number.parseInt(split[i], 16) || 0;
+        result.push(segment);
+    }
+
+    return result;
+}
 
 export class HostConnection {
     @assertEnum(HostConnections) type: HostConnections;
 
     address: string;
     name: string;
+    switchover: boolean;
 
     constructor(other?: HostConnection) {
+        this.switchover = false;
+
         if (other) {
             this.type = other.type;
             this.address = other.address;
             this.name = other.name;
+            this.switchover = other.switchover;
         }
     }
 
     fromJsonObject(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
-        this.type = HostConnections[<string>jsonObject.type];
-        if (this.hasAddress()) {
-            this.address = jsonObject.address;
-        }
+        switch (serialisationInfo.userConfigMajorVersion) {
+            case 8:
+                return this.fromJsonObjectV8(jsonObject, serialisationInfo);
 
-        if (this.type === HostConnections.Empty) {
-            this.name = '';
+            default:
+                throw new Error(`HostConnection configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
-        else {
-            this.name = jsonObject.name;
-        }
-
-        return this;
     }
 
     fromBinary(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): HostConnection {
-        this.type = buffer.readUInt8();
+        switch (serialisationInfo.userConfigMajorVersion) {
+            case 8:
+                return this.fromJsonBinaryV8(buffer, serialisationInfo);
 
-        if (this.hasAddress()) {
-            const address = [];
-
-            for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
-                address.push(buffer.readUInt8());
-            }
-
-            this.address = address.map(x => x.toString(16)).join(ADDRESS_SEPARATOR);
+            default:
+                throw new Error(`HostConnection configuration does not support version: ${serialisationInfo.userConfigMajorVersion}`);
         }
-
-        if (this.type !== HostConnections.Empty) {
-            this.name = buffer.readString();
-        }
-
-        return this;
     }
 
     toJsonObject(): any {
@@ -82,6 +86,7 @@ export class HostConnection {
         }
 
         if (this.type !== HostConnections.Empty) {
+            json.switchover = this.switchover;
             json.name = this.name;
         }
 
@@ -92,7 +97,7 @@ export class HostConnection {
         buffer.writeUInt8(this.type);
 
         if (this.hasAddress()) {
-            const address = this.address.split(ADDRESS_SEPARATOR);
+            const address = this.address.split(BLE_ADDRESS_SEPARATOR);
 
             for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
                 const segment = Number.parseInt(address[i], 16) || 0;
@@ -101,12 +106,56 @@ export class HostConnection {
         }
 
         if (this.type !== HostConnections.Empty) {
+            buffer.writeBoolean(this.switchover);
             buffer.writeString(this.name);
         }
     }
 
-    private hasAddress(): boolean {
+    public hasAddress(): boolean {
         return this.type === HostConnections.BLE || this.type === HostConnections.Dongle;
+    }
+
+    private fromJsonBinaryV8(buffer: UhkBuffer, serialisationInfo: SerialisationInfo): HostConnection {
+        this.type = buffer.readUInt8();
+
+        if (this.hasAddress()) {
+            const address = [];
+
+            for(let i = 0; i < BLE_ADDRESS_LENGTH; i++) {
+                address.push(buffer.readUInt8());
+            }
+
+            this.address = convertBleAddressArrayToString(address);
+        }
+
+        if (this.type !== HostConnections.Empty) {
+            this.switchover = false;
+            if (serialisationInfo.userConfigMinorVersion >= 3) {
+                this.switchover = buffer.readBoolean();
+            }
+
+            this.name = buffer.readString();
+        }
+
+        return this;
+    }
+
+    private fromJsonObjectV8(jsonObject: any, serialisationInfo: SerialisationInfo): HostConnection {
+        this.type = HostConnections[<string>jsonObject.type];
+        if (this.hasAddress()) {
+            this.address = jsonObject.address;
+        }
+
+        if (this.type === HostConnections.Empty) {
+            this.name = '';
+            this.switchover = false;
+        }
+        else {
+            this.name = jsonObject.name;
+            this.switchover = jsonObject.switchover ?? false;
+        }
+
+        return this;
     }
 }
 

@@ -22,6 +22,7 @@ import { AddOnComponent } from './components/add-on';
 import { BackToComponent } from './components/back-to/back-to.component';
 import CircleTooltipComponent from './components/circle-tooltip/circle-tooltip.component';
 import { FadeTimeoutSliderComponent } from './components/device/led-settings/fade-timeout-slider.component';
+import { DonglePairingPanelComponent } from './components/device/dongle-pairing-panel/dongle-pairing-panel.component';
 import { KeyboardSliderComponent } from './components/keyboard/slider';
 import {
     AdvancedSettingsPageComponent,
@@ -189,6 +190,7 @@ import appInitFactory from './services/app-init-factory';
         KeymapEditComponent,
         KeymapHeaderComponent,
         NotificationComponent,
+        DonglePairingPanelComponent,
         SvgIconTextKeyComponent,
         SvgKeyboardKeyComponent,
         SvgKeystrokeKeyComponent,

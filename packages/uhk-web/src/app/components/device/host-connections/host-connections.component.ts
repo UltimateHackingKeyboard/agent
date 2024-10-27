@@ -1,13 +1,18 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DragulaService } from '@ert78gb/ng2-dragula';
-import { faCircleNodes } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { HostConnection } from 'uhk-common';
 
-import { RenameHostConnectionAction, ReorderHostConnectionsAction } from '../../../store/actions/user-config';
-import { AppState, getHostConnections } from '../../../store/index';
+import { DeleteHostConnectionAction } from '../../../store/actions/dongle-pairing.action';
+import {
+    RenameHostConnectionAction,
+    ReorderHostConnectionsAction,
+    SetHostConnectionSwitchoverAction,
+} from '../../../store/actions/user-config';
+import { AppState, getHostConnections, isDonglePairing } from '../../../store/index';
 
 @Component({
     selector: 'host-connections',
@@ -19,12 +24,14 @@ import { AppState, getHostConnections } from '../../../store/index';
 })
 export class HostConnectionsComponent implements OnInit, OnDestroy {
     faCircleNodes = faCircleNodes;
+    faTrash = faTrash;
 
     hostConnections: HostConnection[] = [] as HostConnection[];
-
+    isDonglePairing: boolean;
     dragAndDropGroup = 'HOST_CONNECTION';
 
     private hostConnectionsSubscription: Subscription;
+    private isDonglePairingSubscription: Subscription;
 
     constructor(private dragulaService: DragulaService,
                 private cdRef: ChangeDetectorRef,
@@ -55,6 +62,11 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
                 this.hostConnections = hostConnections;
                 this.cdRef.markForCheck();
             });
+        this.isDonglePairingSubscription = this.store.select(isDonglePairing)
+            .subscribe(isDonglePairing => {
+                this.isDonglePairing = isDonglePairing;
+                this.cdRef.markForCheck();
+            });
     }
 
     ngOnDestroy(): void {
@@ -62,6 +74,11 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
         if(this.hostConnectionsSubscription) {
             this.hostConnectionsSubscription.unsubscribe();
         }
+        this.isDonglePairingSubscription?.unsubscribe();
+    }
+
+    deleteHostConnection(index: number, hostConnection: HostConnection): void {
+        this.store.dispatch(new DeleteHostConnectionAction({index, hostConnection}));
     }
 
     renameHostConnection(index: number, newName: string): void {
@@ -73,5 +90,9 @@ export class HostConnectionsComponent implements OnInit, OnDestroy {
 
     hostConnectionsReordered(deviceTargets: HostConnection[]): void {
         this.store.dispatch(new ReorderHostConnectionsAction(deviceTargets));
+    }
+
+    setHostConnectionSwitchover(index: number, checked: boolean): void {
+        this.store.dispatch(new SetHostConnectionSwitchoverAction({index, checked}));
     }
 }

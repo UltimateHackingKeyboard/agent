@@ -5,6 +5,7 @@ import * as path from 'path';
 import { SerialPort } from 'serialport';
 import {
     ALL_UHK_DEVICES,
+    BLE_ADDRESS_LENGTH,
     Buffer,
     CommandLineArgs,
     DeviceConnectionState,
@@ -17,15 +18,25 @@ import {
     ModuleSlotToI2cAddress,
     RightSlotModules,
     UdevRulesInfo,
+    UHK_DONGLE,
+    UHK_80_DEVICE,
 } from 'uhk-common';
 import {
+    DevicePropertyIds,
     EnumerationModes,
     KbootCommands,
     LAYER_NUMBER_TO_STRING,
     MODULE_ID_TO_STRING,
+    PairingStatuses,
+    PairIds,
     UsbCommand
 } from './constants.js';
-import { DeviceState, GetDeviceOptions, ReenumerateOption, ReenumerateResult } from './models/index.js';
+import {
+    DeviceState,
+    PairingInfo,
+    ReenumerateOption,
+    ReenumerateResult,
+} from './models/index.js';
 import {
     bufferToString,
     convertBufferToIntArray,
@@ -35,7 +46,6 @@ import {
     isUhkCommunicationInterface,
     isUhkCommunicationUsage,
     retry,
-    snooze
 } from './util.js';
 import {
     calculateHalvesState,
@@ -43,6 +53,8 @@ import {
     getDeviceEnumerateVidPidPairs,
     getNumberOfConnectedDevices,
     getUhkDevices,
+    isDongleCommunicationDevice,
+    snooze,
     usbDeviceJsonFormatter,
     validateConnectedDevices,
 } from './utils/index.js';
@@ -79,7 +91,8 @@ export class UhkHidDevice {
 
     constructor(private logService: LogService,
                 private options: CommandLineArgs,
-                private rootDir: string) {
+                private rootDir: string,
+                private hidDevice?: Device) {
     }
 
     /**
@@ -124,6 +137,166 @@ export class UhkHidDevice {
         return false;
     }
 
+    public async deleteBond(address: number[]): Promise<void> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: Delete all bonds');
+        const buffer = Buffer.from([UsbCommand.UnpairAll, ...address]);
+        await this.write(buffer);
+    }
+
+    public async deleteAllBonds(): Promise<void> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: Delete all bonds');
+        const buffer = Buffer.from([UsbCommand.UnpairAll, 0, 0, 0, 0, 0, 0]);
+        await this.write(buffer);
+    }
+
+    public async getBleAddress(): Promise<number[]> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: get BLE address');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.BleAddress]);
+        const responseBuffer = await this.write(buffer);
+
+        const address = [];
+        // 1st byte is the status code we skip it
+        for(let i = 1; i < BLE_ADDRESS_LENGTH + 1; i++) {
+            address.push(responseBuffer.readUInt8(i));
+        }
+
+        return address;
+    }
+
+    public async getPairedRightPairBleAddress(): Promise<number[]> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: get paired right pair BLE address');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.PairedRightPeerBleAddress]);
+        const responseBuffer = await this.write(buffer);
+
+        const address = [];
+        // 1st byte is the status code we skip it
+        for(let i = 1; i < BLE_ADDRESS_LENGTH + 1; i++) {
+            address.push(responseBuffer.readUInt8(i));
+        }
+
+        return address;
+    }
+
+    public async getPairingInfo(): Promise<PairingInfo> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: read pairing info');
+        const buffer = Buffer.from([UsbCommand.GetPairingData]);
+        const responseBuffer = await this.write(buffer);
+        const numbers = convertBufferToIntArray(responseBuffer);
+        // firs byte is the status code
+        const address = numbers.slice(1, 7);
+        const r = numbers.slice(7, 23);
+        const c = numbers.slice(23, 39);
+
+
+        return {
+            address,
+            r,
+            c,
+        };
+    }
+
+    public async getPairingStatus(): Promise<PairingStatuses> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: read pairing info');
+        const buffer = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.PairingStatus]);
+        const responseBuffer = await this.write(buffer);
+
+        // 1st byte is the status code we skip it
+        const status = responseBuffer.readUInt8(1);
+
+        switch (status) {
+            case PairingStatuses.InProgress:
+            case PairingStatuses.Success:
+            case PairingStatuses.Failed:
+                return status;
+
+            default:
+                throw new Error(`Unknown pairing status: ${status}`);
+        }
+    }
+
+    public async isPairedWith(address: number[]): Promise<boolean> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: is paired with');
+        const buffer = Buffer.from([
+            UsbCommand.IsPaired,
+            ...address,
+        ]);
+        const responseBuffer = await this.write(buffer);
+        // 1st byte is the status code we skip it
+        const response = responseBuffer.readUInt8(1);
+
+        return response === 1;
+    }
+
+    public async pairCentral(): Promise<void> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: pair central');
+        const buffer = Buffer.from([UsbCommand.PairCentral]);
+        await this.write(buffer);
+    }
+
+    public async pairPeripheral(): Promise<void> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: pair peripheral');
+        const buffer = Buffer.from([UsbCommand.PairPeripheral]);
+        await this.write(buffer);
+    }
+
+    public async setPairingInfo(pairId: PairIds, info: PairingInfo): Promise<void> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: set pairing info');
+        const buffer = Buffer.from([
+            UsbCommand.SetPairingData,
+            pairId,
+            ...info.address,
+            ...info.r,
+            ...info.c,
+        ]);
+
+        await this.write(buffer);
+    }
+
+    public async switchToPairingMode(): Promise<void> {
+        await this.assertDeviceSupportWirelessUSBCommands();
+
+        this.logService.usb('[UhkHidDevice] USB[T]: switch to pairing mode');
+        const buffer = Buffer.from([UsbCommand.EnterPairingMode]);
+        await this.write(buffer);
+    }
+
+    public async isDeviceSupportWirelessUSBCommands(): Promise<boolean> {
+        await this.getDevice();
+        return [UHK_80_DEVICE, UHK_DONGLE].some(product => {
+            return product.keyboard.some(vidPid => {
+                return vidPid.vid === this._deviceInfo.vendorId && vidPid.pid === this._deviceInfo.productId;
+            });
+        });
+    }
+
+    private async assertDeviceSupportWirelessUSBCommands(): Promise<void> {
+        const isSupport = await this.isDeviceSupportWirelessUSBCommands();
+
+        if (!isSupport) {
+            throw new Error('UHK Device does not support Wireless USB commands.');
+        }
+    }
+
     /**
      * Return with the USB device communication sate.
      * @returns {DeviceConnectionState}
@@ -133,6 +306,10 @@ export class UhkHidDevice {
         const result: DeviceConnectionState = {
             bootloaderActive: false,
             communicationInterfaceAvailable: false,
+            dongle: {
+                multiDevice: false,
+                serialNumber: '',
+            },
             hasPermission: await this.hasPermission(),
             halvesInfo: {
                 areHalvesMerged: true,
@@ -176,6 +353,15 @@ export class UhkHidDevice {
                     result.bootloaderActive = true;
                 }
             }
+
+            if (isDongleCommunicationDevice(dev)) {
+                if (result.dongle.serialNumber) {
+                    result.dongle.multiDevice = true;
+                }
+                else {
+                    result.dongle.serialNumber = dev.serialNumber;
+                }
+            }
         }
 
         if (result.connectedDevice && result.hasPermission && result.communicationInterfaceAvailable) {
@@ -197,13 +383,8 @@ export class UhkHidDevice {
      */
     public async write(buffer: Buffer): Promise<Buffer> {
         return new Promise<Buffer>(async (resolve, reject) => {
-            const device = await this.getDevice();
-
-            if (!device) {
-                return reject(new Error(UHK_HID_DEVICE_NOT_CONNECTED));
-            }
-
             try {
+                const device = await this.getDevice();
                 const reportId = this.getReportId();
 
                 this.logService.setUsbReportId(reportId);
@@ -247,7 +428,7 @@ export class UhkHidDevice {
     }
 
     async reenumerate(
-        { enumerationMode, device, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
+        { enumerationMode, force, device, timeout = BOOTLOADER_TIMEOUT_MS }: ReenumerateOption
     ): Promise<ReenumerateResult> {
         this.close();
         const reenumMode = EnumerationModes[enumerationMode].toString();
@@ -257,8 +438,10 @@ export class UhkHidDevice {
         const startTime = new Date();
         const waitTimeout = timeout + 20000;
         let jumped = false;
+        let iteration = 0;
 
         while (new Date().getTime() - startTime.getTime() < waitTimeout) {
+            iteration++;
             let allDevice = [];
             for (const vidPid of vidPidPairs) {
 
@@ -279,9 +462,11 @@ export class UhkHidDevice {
                     const devs = await getUhkDevices([vidPid.vid]);
                     allDevice.push(...devs);
 
-                    const reenumeratedDevice = devs.find((x: Device) =>
-                        x.vendorId === vidPid.vid &&
-                        x.productId === vidPid.pid);
+                    const reenumeratedDevice = force && iteration === 1
+                        ? false
+                        : devs.find((x: Device) =>
+                            x.vendorId === vidPid.vid &&
+                            x.productId === vidPid.pid);
 
                     if (reenumeratedDevice) {
                         this.logService.misc('[UhkHidDevice] Reenumerating devices');
@@ -382,7 +567,7 @@ export class UhkHidDevice {
         return {
             isEepromBusy: buffer[1] !== 0,
             isMacroStatusDirty: buffer[7] !== 0,
-            areHalvesMerged: buffer[2] !== 0,
+            areHalvesMerged: (buffer[2] & 0x1) !== 0,
             isLeftHalfConnected: buffer[3] !== 0,
             activeLayerNumber,
             activeLayerName: LAYER_NUMBER_TO_STRING[activeLayerNumber],
@@ -485,9 +670,13 @@ export class UhkHidDevice {
      * @returns {HID}
      * @private
      */
-    private async getDevice(options?: GetDeviceOptions): Promise<HID> {
+    private async getDevice(): Promise<HID> {
         if (!this._device) {
-            this._device = await this.connectToDevice(options);
+            this._device = await this.connectToDevice();
+
+            if (!this._device) {
+                throw new Error(UHK_HID_DEVICE_NOT_CONNECTED);
+            }
         }
 
         return this._device;
@@ -496,16 +685,28 @@ export class UhkHidDevice {
     /**
      * Initialize new UHK HID device.
      */
-    private async connectToDevice({ errorLogLevel = 'error' }: GetDeviceOptions = {}): Promise<HID> {
+    private async connectToDevice(): Promise<HID> {
         try {
             const devs = await this.getUhkDevices();
             this.listAvailableDevices(devs);
 
             await validateConnectedDevices(this.options);
 
-            this._deviceInfo = this.options.vid || this.options['serial-number']
-                ? devs.find(findDeviceByDeviceIdentifier(this.options))
-                : devs.find(isUhkCommunicationInterface);
+            if (this.hidDevice) {
+                const device = devs.find(dev => dev.path === this.hidDevice.path);
+                if (device) {
+                    this._deviceInfo = this.hidDevice;
+                }
+                else {
+                    this.logService.misc(`[UhkHidDevice] UHK Device not found with path: ${this.hidDevice.path}`);
+                }
+            }
+            else if ( this.options.vid || this.options['serial-number']) {
+                this._deviceInfo = devs.find(findDeviceByDeviceIdentifier(this.options));
+            }
+            else  {
+                this._deviceInfo = devs.find(isUhkCommunicationInterface);
+            }
 
             if (!this._deviceInfo) {
                 this.logService.misc('[UhkHidDevice] UHK Device not found:');
@@ -519,7 +720,7 @@ export class UhkHidDevice {
             this.logService.misc('[UhkHidDevice] Used device:', JSON.stringify(this._deviceInfo, usbDeviceJsonFormatter));
             return device;
         } catch (err) {
-            this.logService[errorLogLevel]('[UhkHidDevice] Can not create device:', err);
+            this.logService.error('[UhkHidDevice] Can not create device:', err);
         }
 
         return null;

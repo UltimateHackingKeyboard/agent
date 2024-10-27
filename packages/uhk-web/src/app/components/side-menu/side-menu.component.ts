@@ -28,7 +28,7 @@ import {
 import { Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs';
-import { Constants } from 'uhk-common';
+import { Constants, UHK_80_DEVICE } from 'uhk-common';
 
 import { AppState, getSideMenuPageState } from '../../store';
 import { AddMacroAction } from '../../store/actions/macro';
@@ -71,6 +71,7 @@ interface SideMenuState {
 export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     @Input() deviceConfigurationLoaded: boolean;
 
+    isConnectionsMenuAllowed: boolean;
     state: SideMenuPageState;
     sideMenuState: SideMenuState = {
         configuration: {
@@ -118,6 +119,7 @@ export class SideMenuComponent implements OnChanges, OnInit, OnDestroy {
     ngOnInit(): void {
         this.stateSubscription = this.store.select(getSideMenuPageState).subscribe(data => {
             this.state = data;
+            this.isConnectionsMenuAllowed = this.state.connectedDevice?.id === UHK_80_DEVICE.id;
             this.calculateDeviceAnimationState();
             this.cdRef.markForCheck();
         });

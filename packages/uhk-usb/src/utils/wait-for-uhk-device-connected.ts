@@ -1,7 +1,7 @@
 import { UhkDeviceProduct } from 'uhk-common';
 
-import { snooze } from '../util.js';
 import { isUhkDeviceConnected } from './is-uhk-device-connected.js';
+import { snooze } from './snooze.js';
 
 export async function waitForUhkDeviceConnected(device: UhkDeviceProduct): Promise<void> {
     while (true) {

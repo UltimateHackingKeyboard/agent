@@ -9,7 +9,7 @@ describe('user-configuration', () => {
     it('should transform an empty config', () => {
         jsonTester({
             userConfigMajorVersion: 8,
-            userConfigMinorVersion: 2,
+            userConfigMinorVersion: 3,
             userConfigPatchVersion: 0,
             deviceName: 'My UHK',
             doubleTapSwitchLayerTimeout: 250,
@@ -57,6 +57,7 @@ describe('user-configuration', () => {
                 {
                     type: 'UsbRight',
                     name: 'My PC',
+                    switchover: false,
                 },
                 {
                     type: 'Empty'

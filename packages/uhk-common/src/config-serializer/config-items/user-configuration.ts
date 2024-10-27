@@ -204,6 +204,7 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         this.migrateToV8();
         this.migrateToV8_1();
         this.migrateToV8_2();
+        this.migrateToV8_3();
 
         this.recalculateConfigurationLength();
 
@@ -266,6 +267,10 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         }
 
         if (this.migrateToV8_2()) {
+            this.userConfigurationLength = 0;
+        }
+
+        if (this.migrateToV8_3()) {
             this.userConfigurationLength = 0;
         }
 
@@ -1069,10 +1074,25 @@ export class UserConfiguration implements MouseSpeedConfiguration {
         return true;
     }
 
+    private migrateToV8_3(): boolean {
+        if (this.userConfigMajorVersion > 8) {
+            return false;
+        }
+
+        if (this.userConfigMinorVersion >= 3) {
+            return false;
+        }
+
+        this.userConfigMinorVersion = 3;
+
+        return true;
+    }
+
     private getSerialisationInfo(): SerialisationInfo {
         return {
             isUserConfigContainsRgbColors: this.perKeyRgbPresent,
-            userConfigMajorVersion: this.userConfigMajorVersion
+            userConfigMajorVersion: this.userConfigMajorVersion,
+            userConfigMinorVersion: this.userConfigMinorVersion,
         };
     }
 }

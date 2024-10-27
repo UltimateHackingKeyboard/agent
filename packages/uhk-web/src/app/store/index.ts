@@ -3,35 +3,34 @@ import { ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { gt } from 'semver';
 import {
-    BacklightingMode,
-    Constants,
-    UHK_DEVICES,
-    UHK_60_V2_DEVICE,
-    FirmwareRepoInfo,
-    HardwareConfiguration,
-    HistoryFileInfo as CommonHistoryFileInfo,
-    LayerName,
-    LEFT_KEY_CLUSTER_MODULE,
-    RIGHT_TRACKPOINT_MODULE,
-    UHK_OFFICIAL_FIRMWARE_REPO
-} from 'uhk-common';
-import {
     ApplicationSettings,
     AppTheme,
     AppThemeSelect,
+    BacklightingMode,
+    Constants,
     createMd5Hash,
+    FirmwareRepoInfo,
     getEmptyKeymap,
-    getMd5HashFromFilename,
+    HardwareConfiguration,
     HardwareModules,
+    HistoryFileInfo as CommonHistoryFileInfo,
+    HostConnections,
     isVersionGte,
     Keymap,
+    LayerName,
     LEFT_HALF_MODULE,
+    LEFT_KEY_CLUSTER_MODULE,
     LeftSlotModules,
     PlayMacroAction,
+    RIGHT_TRACKPOINT_MODULE,
     RightSlotModules,
-    UhkThemeColors,
     UHK_60_DEVICE,
+    UHK_60_V2_DEVICE,
+    UHK_80_DEVICE,
+    UHK_DEVICES,
+    UHK_OFFICIAL_FIRMWARE_REPO,
     UhkBuffer,
+    UhkThemeColors,
     UserConfiguration,
     VersionInformation
 } from 'uhk-common';
@@ -39,6 +38,9 @@ import { environment } from '../../environments/environment';
 import {
     ConfigSizeState,
     DeviceUiStates,
+    DongleOperations,
+    DonglePairingState,
+    DonglePairingStates,
     FirmwareUpgradeState,
     HistoryFileInfo,
     MacroMenuItem,
@@ -64,6 +66,7 @@ import * as autoUpdateSettings from './reducers/auto-update-settings';
 import * as fromContributors from './reducers/contributors.reducer';
 import * as fromDefaultUserConfig from './reducers/default-user-configuration.reducer';
 import * as fromDevice from './reducers/device';
+import * as fromDongle from './reducers/dongle-pairing.reducer';
 import * as fromFirmware from './reducers/firmware-upgrade.reducer';
 import { initProgressButtonState } from './reducers/progress-button-state';
 import * as fromSelectors from './reducers/selectors';
@@ -76,6 +79,7 @@ import { RouterState } from './router-util';
 export interface AppState {
     advanceSettings: fromAdvancedSettings.State;
     defaultUserConfiguration: fromDefaultUserConfig.State;
+    dongle: fromDongle.State;
     userConfiguration: fromUserConfig.State;
     autoUpdateSettings: autoUpdateSettings.State;
     app: fromApp.State;
@@ -91,6 +95,7 @@ export interface AppState {
 export const reducers: ActionReducerMap<AppState> = {
     advanceSettings: fromAdvancedSettings.reducer,
     defaultUserConfiguration: fromDefaultUserConfig.reducer,
+    dongle: fromDongle.reducer,
     userConfiguration: fromUserConfig.reducer,
     autoUpdateSettings: autoUpdateSettings.reducer,
     app: fromApp.reducer,
@@ -219,6 +224,8 @@ export const deviceConnected = createSelector(
         return !!device.connectedDevice;
     });
 export const hasDevicePermission = createSelector(deviceState, fromDevice.hasDevicePermission);
+export const getDeviceBleAddress = createSelector(deviceState, fromDevice.getDeviceBleAddress);
+export const getDevicePairedWithDongle = createSelector(deviceState, fromDevice.getDevicePairedWithDongle);
 export const getMissingDeviceState = createSelector(deviceState, fromDevice.getMissingDeviceState);
 export const xtermLog = createSelector(firmwareState, fromFirmware.xtermLog);
 export const flashFirmwareButtonDisabled = createSelector(runningInElectron, updatingFirmware, (electron, upgradingFirmware) => !electron || upgradingFirmware);
@@ -476,6 +483,50 @@ export const calculateDeviceUiState = createSelector(
     }
 );
 
+export const getDongleState = (state: AppState) => state.dongle;
+export const isDonglePairing = createSelector(getDongleState, fromDongle.isDonglePairing);
+export const getDongle = createSelector(getDongleState, fromDongle.getDongle);
+export const getDonglePairingState = createSelector(
+    runningInElectron,
+    getDongleState,
+    getUserConfiguration,
+    deviceConfigurationLoaded,
+    getDevicePairedWithDongle,
+    getConnectedDevice,
+    (isRunningInElectron,
+        dongleState,
+        userConfig,
+        deviceConfigLoaded,
+        devicePairedWithDongle,
+        connectedDevice,
+    ): DonglePairingState => {
+        if (!isRunningInElectron || !connectedDevice?.id || connectedDevice.id !== UHK_80_DEVICE.id ||
+            dongleState.operation === DongleOperations.Delete
+        ) {
+            return {
+                operation: dongleState.operation,
+                state: DonglePairingStates.Idle,
+                showDonglePairingPanel: false,
+            };
+        }
+
+        const isDongleBleMissingFromHostConnections = dongleState.dongle?.bleAddress
+            && !userConfig.hostConnections.some(hostConnection => {
+                return hostConnection.type === HostConnections.Dongle && hostConnection.address === dongleState.dongle.bleAddress;
+            });
+
+        const isBleAddressMismatches = dongleState.dongle?.bleAddress && (!devicePairedWithDongle || !dongleState.dongle.isPairedWithKeyboard);
+
+        return {
+            operation: dongleState.operation,
+            state: dongleState.state === DonglePairingStates.DeletingSuccess
+                ? DonglePairingStates.Idle
+                : dongleState.state,
+            showDonglePairingPanel: deviceConfigLoaded && (isDongleBleMissingFromHostConnections || isBleAddressMismatches || dongleState.operation === DongleOperations.Pairing),
+        };
+    }
+);
+
 export const getSideMenuPageState = createSelector(
     runningInElectron,
     updatingFirmware,
@@ -485,6 +536,7 @@ export const getSideMenuPageState = createSelector(
     getConnectedDevice,
     getIsAdvancedSettingsMenuVisible,
     getSelectedLayerOption,
+    getDonglePairingState,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -493,7 +545,8 @@ export const getSideMenuPageState = createSelector(
         uiState,
         connectedDevice,
         isAdvancedSettingsMenuVisible,
-        selectedLayerOption
+        selectedLayerOption,
+        donglePairingState,
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
 
@@ -501,7 +554,7 @@ export const getSideMenuPageState = createSelector(
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             runInElectron: runningInElectronValue,
-            updatingFirmware: updatingFirmwareValue,
+            updatingFirmware: updatingFirmwareValue || donglePairingState.operation !== DongleOperations.None,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
             keymapQueryParams: {
