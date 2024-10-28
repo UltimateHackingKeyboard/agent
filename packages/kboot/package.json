@@ -17,7 +17,7 @@
     "tslib": "^2.6.3"
   },
   "peer-dependencies": {
-    "node-hid": ">= 3.1.0"
+    "node-hid": ">= 3.1.2"
   },
   "scripts": {
     "build": "tsc --project ./src/tsconfig.json",
