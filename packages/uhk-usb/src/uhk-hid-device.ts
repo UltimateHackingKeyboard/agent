@@ -20,6 +20,7 @@ import {
     UdevRulesInfo,
     UHK_DONGLE,
     UHK_80_DEVICE,
+    UHK_80_DEVICE_LEFT,
 } from 'uhk-common';
 import {
     DevicePropertyIds,
@@ -282,7 +283,7 @@ export class UhkHidDevice {
 
     public async isDeviceSupportWirelessUSBCommands(): Promise<boolean> {
         await this.getDevice();
-        return [UHK_80_DEVICE, UHK_DONGLE].some(product => {
+        return [UHK_80_DEVICE, UHK_80_DEVICE_LEFT, UHK_DONGLE].some(product => {
             return product.keyboard.some(vidPid => {
                 return vidPid.vid === this._deviceInfo.vendorId && vidPid.pid === this._deviceInfo.productId;
             });

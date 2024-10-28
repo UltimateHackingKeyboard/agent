@@ -57,6 +57,9 @@ export class Device {
     public static readonly startDonglePairing = 'device-start-dongle-pairing';
     public static readonly donglePairingSuccess = 'device-dongle-pairing-success';
     public static readonly donglePairingFailed = 'device-dongle-pairing-failed';
+    public static readonly startLeftHalfPairing = 'device-start-left-half-pairing';
+    public static readonly leftHalfPairingSuccess = 'device-left-half-pairing-success';
+    public static readonly leftHalfPairingFailed = 'device-left-half-pairing-failed';
     public static readonly i2cWatchdogCounterChanged = 'device-i2c-watchdog-counter-changed';
 }
 

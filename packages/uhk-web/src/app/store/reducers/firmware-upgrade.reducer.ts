@@ -16,6 +16,7 @@ import { RecoveryDeviceReplyAction, UpdateFirmwareAction, UpdateFirmwareWithActi
 import * as App from '../actions/app';
 import { FirmwareUpgradeState, ModuleFirmwareUpgradeState, ModuleFirmwareUpgradeStates } from '../../models';
 import { XtermCssClass, XtermLog } from '../../models/xterm-log';
+import { appendXtermLogs } from '../../util/merge-xterm-logs';
 
 export enum FirmwareUpgradeStates {
     Idle = 'Idle',
@@ -233,24 +234,10 @@ export function reducer(state = initialState, action: Action): State {
                 return state;
             }
 
-            const newState = {
+            return {
                 ...state,
-                log: [...state.log]
+                log: appendXtermLogs(state.log, payload),
             };
-            const lastLogEntry = state.log[state.log.length - 1];
-            if (lastLogEntry.message.startsWith(payload.message)) {
-                newState.log[newState.log.length - 1] = {
-                    ...lastLogEntry,
-                    message: lastLogEntry.message + '.'
-                };
-            } else {
-                newState.log.push({
-                    message: payload.message,
-                    cssClass: payload.level === 'error' ? XtermCssClass.error : XtermCssClass.standard
-                });
-            }
-
-            return newState;
         }
 
         case Device.ActionTypes.RecoveryModule:

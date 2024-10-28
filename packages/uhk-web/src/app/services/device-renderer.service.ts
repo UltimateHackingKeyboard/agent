@@ -44,7 +44,11 @@ import {
     UpdateFirmwareJsonAction,
     UpdateFirmwareReplyAction
 } from '../store/actions/device';
-import { I2cWatchdogCounterChangedAction } from '../store/actions/advance-settings.action';
+import {
+    LeftHalfPairingFailedAction,
+    LeftHalfPairingSuccessAction,
+    I2cWatchdogCounterChangedAction,
+} from '../store/actions/advance-settings.action';
 import { LoadConfigFromDeviceReplyAction, LoadUserConfigurationFromFileAction } from '../store/actions/user-config';
 import { LoadUserConfigurationHistorySuccessAction } from '../store/actions/user-configuration-history.actions';
 
@@ -116,6 +120,10 @@ export class DeviceRendererService {
 
     startDonglePairing(): void {
         this.ipcRenderer.send(IpcEvents.device.startDonglePairing);
+    }
+
+    startLeftHalfPairing(): void {
+        this.ipcRenderer.send(IpcEvents.device.startLeftHalfPairing);
     }
 
     toggleI2cDebugging(enabled: boolean): void {
@@ -208,6 +216,14 @@ export class DeviceRendererService {
 
         this.ipcRenderer.on(IpcEvents.device.donglePairingFailed, (event: string, message: string) => {
             this.store.dispatch(new DonglePairingFailedAction(message));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.leftHalfPairingSuccess, (event: string, bleAddress: string) => {
+            this.store.dispatch(new LeftHalfPairingSuccessAction(bleAddress));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.leftHalfPairingFailed, (event: string, message: string) => {
+            this.store.dispatch(new LeftHalfPairingFailedAction(message));
         });
     }
 

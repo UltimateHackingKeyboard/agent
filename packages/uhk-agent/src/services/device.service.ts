@@ -54,10 +54,12 @@ import {
     getCurrentUhkDeviceProduct,
     getCurrentUhkDeviceProductByBootloaderId,
     getCurrentUhkDongleHID,
+    getCurrenUhk80LeftHID,
     getDeviceFirmwarePath,
     getFirmwarePackageJson,
     getModuleFirmwarePath,
     isUhkDeviceConnected,
+    isUkhKeyboardConnected,
     readUhkResponseAs0EndString,
     snooze,
     TmpFirmware,
@@ -66,7 +68,8 @@ import {
     usbDeviceJsonFormatter,
     UsbVariables,
     waitForDevices,
-    waitForUhkDeviceConnected
+    waitForUhkDeviceConnected,
+    waitUntil,
 } from 'uhk-usb';
 import {
     backupUserConfiguration,
@@ -177,6 +180,16 @@ export class DeviceService {
                 asynchronous: true
             });
         });
+
+        ipcMain.on(IpcEvents.device.startLeftHalfPairing, (...args: any[]) => {
+            this.queueManager.add({
+                method: this.startLeftHalfPairing,
+                bind: this,
+                params: args,
+                asynchronous: true
+            });
+        });
+
 
         ipcMain.on(IpcEvents.device.recoveryDevice, (...args: any[]) => {
             this.queueManager.add({
@@ -439,7 +452,7 @@ export class DeviceService {
                     }
 
                     await waitForUhkDeviceConnected(UHK_80_DEVICE_LEFT);
-
+                    await snooze(1000);
                     const firmwarePath = getDeviceFirmwarePath(UHK_80_DEVICE_LEFT, packageJson);
                     await this.operations.updateFirmwareWithMcuManager(firmwarePath, UHK_80_DEVICE_LEFT);
 
@@ -705,6 +718,52 @@ export class DeviceService {
         }
     }
 
+    public async startLeftHalfPairing(event: Electron.IpcMainEvent): Promise<void> {
+        this.logService.misc('[DeviceService] start Left half pairing');
+
+        try {
+            await this.stopPollUhkDevice();
+            if (!(await isUkhKeyboardConnected(UHK_80_DEVICE_LEFT))) {
+                this.logService.misc('[DeviceService] Both keyboard halves must be connected via USB.');
+                this.logService.misc('[DeviceService] Please connect them and retry pairing the halves.');
+                event.sender.send(IpcEvents.device.leftHalfPairingFailed, '');
+
+                return;
+            }
+
+            await waitUntil({
+                shouldWait: async () => !(await isUkhKeyboardConnected(UHK_80_DEVICE_LEFT)),
+                wait: 250,
+            });
+
+            await snooze(1000);
+            const leftHalfHid = await getCurrenUhk80LeftHID();
+            let leftHalfDevice: UhkHidDevice;
+            try {
+                leftHalfDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, leftHalfHid);
+                const result = await this.operations.pairToLeftHalf(leftHalfDevice);
+                this.logService.misc('[DeviceService] Pairing the keyboard halves succeeded.');
+                await snooze(1000);
+                event.sender.send(IpcEvents.device.leftHalfPairingSuccess, result.pairAddress);
+            }
+            finally {
+                if (leftHalfDevice) {
+                    leftHalfDevice.close();
+                }
+            }
+
+        } catch(error) {
+            this.logService.error('[DeviceService] Left half pairing failed', error);
+            await this.forceReenumerateDevice();
+            await this.forceReenumerateLeftHalf();
+            event.sender.send(IpcEvents.device.leftHalfPairingFailed, error.message);
+        }
+        finally {
+            this.savedState = undefined;
+            this.startPollUhkDevice();
+        }
+    }
+
     public startPollUhkDevice(): void {
         this.logService.misc('[DeviceService] start poll UHK Device');
         this._pollerAllowed = true;
@@ -943,10 +1002,36 @@ export class DeviceService {
                 enumerationMode: EnumerationModes.NormalKeyboard,
                 force: true,
             });
-            this.logService.error('[DeviceService] Dongle force reenumerate');
+            this.logService.misc('[DeviceService] Dongle force reenumerate done');
         }
         catch(reenumerationError) {
-            this.logService.misc("[DeviceService] Can't force reenumerate dongle", reenumerationError);
+            this.logService.error("[DeviceService] Can't force reenumerate dongle", reenumerationError);
+        }
+        finally {
+            if (uhkHidDevice) {
+                uhkHidDevice.close();
+            }
+            await snooze(1000);
+        }
+    }
+
+    private async forceReenumerateLeftHalf(): Promise<void> {
+        this.logService.misc('[DeviceService] Left half force reenumerate');
+
+        let uhkHidDevice: UhkHidDevice;
+        try {
+            await snooze(1000);
+            const uhkDeviceProduct = await getCurrenUhk80LeftHID();
+            uhkHidDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, uhkDeviceProduct);
+            await uhkHidDevice.reenumerate({
+                device: UHK_80_DEVICE_LEFT,
+                enumerationMode: EnumerationModes.NormalKeyboard,
+                force: true,
+            });
+            this.logService.misc('[DeviceService] Left half force reenumerate done');
+        }
+        catch(reenumerationError) {
+            this.logService.error("[DeviceService] Can't force reenumerate left half", reenumerationError);
         }
         finally {
             if (uhkHidDevice) {

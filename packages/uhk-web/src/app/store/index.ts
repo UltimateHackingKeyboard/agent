@@ -114,6 +114,7 @@ export const metaReducers: MetaReducer<AppState>[] = environment.production
 
 export const advanceSettingsState = (state: AppState) => state.advanceSettings;
 export const getIsAdvancedSettingsMenuVisible = createSelector(advanceSettingsState, fromAdvancedSettings.isAdvancedSettingsMenuVisible);
+export const isLeftHalfPairing = createSelector(advanceSettingsState, fromAdvancedSettings.isLeftHalfPairing);
 export const getIsI2cDebuggingEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingEnabled);
 export const isI2cDebuggingRingBellEnabled = createSelector(advanceSettingsState, fromAdvancedSettings.isI2cDebuggingRingBellEnabled);
 
@@ -537,6 +538,7 @@ export const getSideMenuPageState = createSelector(
     getIsAdvancedSettingsMenuVisible,
     getSelectedLayerOption,
     getDonglePairingState,
+    isLeftHalfPairing,
     (
         runningInElectronValue: boolean,
         updatingFirmwareValue: boolean,
@@ -547,6 +549,7 @@ export const getSideMenuPageState = createSelector(
         isAdvancedSettingsMenuVisible,
         selectedLayerOption,
         donglePairingState,
+        leftHalfPairing,
     ): SideMenuPageState => {
         const macros = getMacroMenuItems(userConfiguration);
 
@@ -554,7 +557,7 @@ export const getSideMenuPageState = createSelector(
             advancedSettingsMenuVisible: isAdvancedSettingsMenuVisible,
             connectedDevice: runningInElectronValue ? connectedDevice : UHK_60_DEVICE,
             runInElectron: runningInElectronValue,
-            updatingFirmware: updatingFirmwareValue || donglePairingState.operation !== DongleOperations.None,
+            updatingFirmware: updatingFirmwareValue || donglePairingState.operation !== DongleOperations.None || leftHalfPairing,
             deviceName: userConfiguration.deviceName,
             keymaps: userConfiguration.keymaps,
             keymapQueryParams: {

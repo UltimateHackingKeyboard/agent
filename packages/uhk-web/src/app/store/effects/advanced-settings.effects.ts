@@ -5,7 +5,7 @@ import { tap, withLatestFrom } from 'rxjs/operators';
 
 import { DeviceRendererService } from '../../services/device-renderer.service';
 import { ActionTypes } from '../actions/advance-settings.action';
-import { AppState, getIsI2cDebuggingEnabled, isI2cDebuggingRingBellEnabled } from '../index';
+import { AppState, getIsI2cDebuggingEnabled } from '../index';
 
 @Injectable()
 export class AdvancedSettingsEffects {
@@ -18,6 +18,16 @@ export class AdvancedSettingsEffects {
             })
         ),
     {dispatch: false}
+    );
+
+    startLeftHalfPairing$ = createEffect(() => this.actions$
+        .pipe(
+            ofType(ActionTypes.startLeftHalfPairing),
+            tap(()=> {
+                this.deviceRendererService.startLeftHalfPairing();
+            })
+        ),
+    {dispatch: false},
     );
 
     constructor(private actions$: Actions,
