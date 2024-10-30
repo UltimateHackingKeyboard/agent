@@ -6,6 +6,24 @@ The format is loosely based on [Keep a Changelog](http://keepachangelog.com/en/1
 
 Every Agent version includes the most recent firmware version. See the [firmware changelog](https://github.com/UltimateHackingKeyboard/firmware/blob/master/CHANGELOG.md).
 
+## [4.2.1] - 2024-10-10
+
+Firmware: 11.2.0 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.2.0)] | Device Protocol: 4.10.0 | User Config: 7.1.0 | Hardware Config: 1.0.0
+
+- Fix crash when "trigger safety margin" was set to a negative value.
+- Fix crash that occurred when the user config history folder contained an invalid device.
+- Set key colors of uninitialized NoneActions instead of crashing Agent.
+- Only save the application window state on exit, not on every change, which previously led to rare crashes.
+- Add tooltip for layers.
+- Restore persistent visibility of "back to keymap" link, which previously disappeared when adding or removing macro action items of new macros.
+- Implement HTML escaping for keymap descriptions to prevent potential security issues.
+- Remove empty modules from the default user config.
+- Use async device calls for better performance.
+- Enhance configuration history view:
+  - Now showing the history records of the current device by default
+  - Making the tab of the current device bold for easy identification
+  - Displaying device serial number in a tooltip of its tab
+
 ## [4.2.0] - 2024-06-27
 
 Firmware: 11.1.1 [[release](https://github.com/UltimateHackingKeyboard/firmware/releases/tag/v11.1.1)] | Device Protocol: 4.10.0 | User Config: 7.1.0 | Hardware Config: 1.0.0
