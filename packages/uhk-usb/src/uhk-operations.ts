@@ -520,25 +520,14 @@ export class UhkOperations {
     }
 
     public async getRightModuleVersionInfo(): Promise<RightModuleInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: Read right module version information');
+        this.logService.usb('[DeviceOperation] USB[T]: Read right module information');
 
-        const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
-        const buffer = await this.device.write(command);
-        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
-        // skip the first byte
-        uhkBuffer.readUInt8();
+        const protocolVersions = await this.device.getProtocolVersions();
 
         let rightModuleInfo: RightModuleInfo = {
-            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            ...protocolVersions,
             modules: {},
-            userConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
-            smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
         };
-
-        this.logService.misc(`[DeviceOperation] right module deviceProtocolVersion: ${rightModuleInfo.deviceProtocolVersion}`);
 
         if (isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion))
             rightModuleInfo = {

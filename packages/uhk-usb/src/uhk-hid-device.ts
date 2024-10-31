@@ -2,6 +2,7 @@ import fse from 'fs-extra';
 import isRoot from 'is-root';
 import { Device, HID } from 'node-hid';
 import * as path from 'path';
+import semver from 'semver';
 import { SerialPort } from 'serialport';
 import {
     ALL_UHK_DEVICES,
@@ -16,8 +17,10 @@ import {
     LogService,
     mapI2cAddressToModuleName,
     ModuleSlotToI2cAddress,
+    ProtocolVersions,
     RightSlotModules,
     UdevRulesInfo,
+    UhkBuffer,
     UHK_DONGLE,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
@@ -88,6 +91,7 @@ export class UhkHidDevice {
     private _device: HID;
     private _deviceInfo: Device;
     private _hasPermission = false;
+    private _protocolVersions: ProtocolVersions | undefined;
     private _udevRulesInfo = UdevRulesInfo.Unknown;
 
     constructor(private logService: LogService,
@@ -282,7 +286,12 @@ export class UhkHidDevice {
     }
 
     public async isDeviceSupportWirelessUSBCommands(): Promise<boolean> {
-        await this.getDevice();
+        const protocolVersions = await this.getProtocolVersions();
+
+        if (semver.lt(protocolVersions.deviceProtocolVersion, '4.11.0')) {
+            return false;
+        }
+
         return [UHK_80_DEVICE, UHK_80_DEVICE_LEFT, UHK_DONGLE].some(product => {
             return product.keyboard.some(vidPid => {
                 return vidPid.vid === this._deviceInfo.vendorId && vidPid.pid === this._deviceInfo.productId;
@@ -425,6 +434,7 @@ export class UhkHidDevice {
         }
         this._device.close();
         this._device = null;
+        this.setDeviceInfo(undefined);
         this.logService.misc('[UhkHidDevice] Device communication closed.');
     }
 
@@ -496,7 +506,7 @@ export class UhkHidDevice {
 
                     if (foundDevice) {
                         keyboardDevice = new HID(foundDevice.path);
-                        this._deviceInfo = foundDevice;
+                        this.setDeviceInfo(foundDevice);
                     }
                 }
 
@@ -627,6 +637,32 @@ export class UhkHidDevice {
         }
     }
 
+    async getProtocolVersions(): Promise<ProtocolVersions> {
+        if (this._protocolVersions) {
+            return this._protocolVersions;
+        }
+
+        this.logService.usb('[UhkHidDevice] USB[T]: Read right module protocol version information');
+        const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
+        const buffer = await this.write(command);
+        const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
+        // skip the first byte
+        uhkBuffer.readUInt8();
+
+        this._protocolVersions = {
+            firmwareVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            deviceProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            moduleProtocolVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            userConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            hardwareConfigVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`,
+            smartMacrosVersion: `${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}.${uhkBuffer.readUInt16()}`
+        };
+
+        this.logService.misc('[UhkHidDevice] protocol versions: ' + JSON.stringify(this._protocolVersions));
+
+        return this._protocolVersions;
+    }
+
     public async getUdevInfoAsync(): Promise<UdevRulesInfo> {
         if (this._udevRulesInfo === UdevRulesInfo.Ok) {
             return UdevRulesInfo.Ok;
@@ -696,17 +732,17 @@ export class UhkHidDevice {
             if (this.hidDevice) {
                 const device = devs.find(dev => dev.path === this.hidDevice.path);
                 if (device) {
-                    this._deviceInfo = this.hidDevice;
+                    this.setDeviceInfo(this.hidDevice);
                 }
                 else {
                     this.logService.misc(`[UhkHidDevice] UHK Device not found with path: ${this.hidDevice.path}`);
                 }
             }
             else if ( this.options.vid || this.options['serial-number']) {
-                this._deviceInfo = devs.find(findDeviceByDeviceIdentifier(this.options));
+                this.setDeviceInfo(devs.find(findDeviceByDeviceIdentifier(this.options)));
             }
             else  {
-                this._deviceInfo = devs.find(isUhkCommunicationInterface);
+                this.setDeviceInfo(devs.find(isUhkCommunicationInterface));
             }
 
             if (!this._deviceInfo) {
@@ -771,5 +807,10 @@ export class UhkHidDevice {
         return this.options.vid
             ? getUhkDevices([this.options.vid])
             : getUhkDevices();
+    }
+
+    private setDeviceInfo(device:Device | undefined): void {
+        this._deviceInfo = device;
+        this._protocolVersions = undefined;
     }
 }
