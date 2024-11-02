@@ -156,7 +156,7 @@ export class UhkOperations {
         await mcuManager.reset();
         this.logService.misc('[UhkOperations] Close mcu communication channels');
         await mcuManager.close();
-        this.logService.misc('[UhkOperations] Right firmware successfully flashed');
+        this.logService.misc(`[UhkOperations] ${device.logName} firmware successfully flashed`);
     }
 
     public async updateLeftModuleWithKboot(firmwarePath: string, device: UhkDeviceProduct): Promise<void> {
