@@ -11638,6 +11638,317 @@
           ]
         }
       ]
+    },
+    {
+      "isDefault": false,
+      "abbreviation": "EMP",
+      "name": "Empty",
+      "description": "This is an empty keymap. Let's start from scratch!",
+      "layers": [
+        {
+          "id": "base",
+          "modules": [
+            {
+              "id": 0,
+              "keyActions": [
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "keyActions": [
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                },
+                {
+                  "keyActionType": "none"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "macros": [
