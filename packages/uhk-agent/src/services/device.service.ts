@@ -371,6 +371,8 @@ export class DeviceService {
         let firmwarePathData: TmpFirmware;
 
         try {
+            await this.stopPollUhkDevice();
+
             firmwarePathData = data.uploadFile
                 ? await saveTmpFirmware(data.uploadFile)
                 : getDefaultFirmwarePath(this.rootDir);
@@ -392,7 +394,6 @@ export class DeviceService {
 
                 return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
             }
-            await this.stopPollUhkDevice();
 
             let hardwareModules = await this.getHardwareModules(false);
 
@@ -543,10 +544,11 @@ export class DeviceService {
         const response = new FirmwareUpgradeIpcResponse();
 
         try {
+            await this.stopPollUhkDevice();
+
             const userConfig = args[0];
             const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
-            await this.stopPollUhkDevice();
 
             const uhkDeviceProduct = await getCurrentUhkDeviceProductByBootloaderId();
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
@@ -597,9 +599,10 @@ export class DeviceService {
         const moduleId: number = args[0];
 
         try {
+            await this.stopPollUhkDevice();
+
             const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
-            await this.stopPollUhkDevice();
 
             const uhkDeviceProduct = await getCurrentUhkDeviceProduct(this.options);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
