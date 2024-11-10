@@ -1,5 +1,3 @@
-import { HardwareModules } from './hardware-modules.js';
-
 export class IpcResponse {
     success: boolean;
     error?: { message: string };
@@ -14,7 +12,6 @@ export enum FirmwareUpgradeFailReason {
 }
 
 export class FirmwareUpgradeIpcResponse extends IpcResponse {
-    modules?: HardwareModules;
     failReason?: FirmwareUpgradeFailReason;
     userConfigSaved?: boolean;
     firmwareDowngraded?: boolean;

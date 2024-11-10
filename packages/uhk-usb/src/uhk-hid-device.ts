@@ -58,6 +58,7 @@ import {
     getNumberOfConnectedDevices,
     getUhkDevices,
     isDongleCommunicationDevice,
+    isSerialPortInVidPids,
     snooze,
     usbDeviceJsonFormatter,
     validateConnectedDevices,
@@ -317,9 +318,11 @@ export class UhkHidDevice {
             bootloaderActive: false,
             communicationInterfaceAvailable: false,
             dongle: {
+                bootloaderActive: false,
                 multiDevice: false,
                 serialNumber: '',
             },
+            leftHalfBootloaderActive: false,
             hasPermission: await this.hasPermission(),
             halvesInfo: {
                 areHalvesMerged: true,
@@ -335,6 +338,17 @@ export class UhkHidDevice {
 
         if (result.multiDevice) {
             return result;
+        }
+
+        function setDongleSerialNumber(serialNumber: string): void {
+            if (result.dongle.serialNumber) {
+                if (result.dongle.serialNumber !== serialNumber) {
+                    result.dongle.multiDevice = true;
+                }
+            }
+            else {
+                result.dongle.serialNumber = serialNumber;
+            }
         }
 
         for (const dev of devs) {
@@ -365,12 +379,23 @@ export class UhkHidDevice {
             }
 
             if (isDongleCommunicationDevice(dev)) {
-                if (result.dongle.serialNumber) {
-                    result.dongle.multiDevice = true;
-                }
-                else {
-                    result.dongle.serialNumber = dev.serialNumber;
-                }
+                setDongleSerialNumber(dev.serialNumber);
+            }
+        }
+
+        const serialDevices = await SerialPort.list();
+
+        for (const serialDevice of serialDevices) {
+            if (isSerialPortInVidPids(serialDevice, UHK_DONGLE.bootloader)) {
+                result.dongle.bootloaderActive = true;
+                setDongleSerialNumber(serialDevice.serialNumber);
+            }
+            else if (isSerialPortInVidPids(serialDevice, UHK_80_DEVICE.bootloader)) {
+                result.connectedDevice = UHK_80_DEVICE;
+                result.bootloaderActive = true;
+            }
+            else if (isSerialPortInVidPids(serialDevice, UHK_80_DEVICE_LEFT.bootloader)) {
+                result.leftHalfBootloaderActive = true;
             }
         }
 

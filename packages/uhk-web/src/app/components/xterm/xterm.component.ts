@@ -23,6 +23,10 @@ export class XtermComponent implements OnChanges {
     }
 
     getClipboardContent(): string {
+        if (!this.logs) {
+            return '';
+        }
+
         return this.logs.reduce((value, line) => value + line.message + '\n', '');
     }
 

@@ -128,7 +128,7 @@ export class DeviceEffects {
                     return this.router.navigate(['/privilege']);
                 }
 
-                if (state.bootloaderActive) {
+                if (state.bootloaderActive || state.leftHalfBootloaderActive || state.dongle.bootloaderActive) {
                     return this.router.navigate(['/recovery-device']);
                 }
 
@@ -369,7 +369,6 @@ export class DeviceEffects {
                 if (response.success) {
                     return of(new UpdateFirmwareSuccessAction({
                         firmwareDowngraded: response.firmwareDowngraded,
-                        hardwareModules: response.modules,
                         userConfigSaved: response.userConfigSaved
                     }));
                 }
@@ -380,7 +379,6 @@ export class DeviceEffects {
 
                 return of(new UpdateFirmwareFailedAction({
                     error: response.error,
-                    modules: response.modules
                 }));
             })
         )
@@ -397,7 +395,7 @@ export class DeviceEffects {
         .pipe(
             ofType<RecoveryDeviceAction>(ActionTypes.RecoveryDevice),
             withLatestFrom(this.store.select(getUserConfiguration)),
-            tap(([, userConfig]) => this.deviceRendererService.recoveryDevice(userConfig))
+            tap(([action, userConfig]) => this.deviceRendererService.recoveryDevice(userConfig, action.payload))
         ),
     { dispatch: false }
     );
@@ -412,7 +410,6 @@ export class DeviceEffects {
                     return [
                         new UpdateFirmwareSuccessAction({
                             firmwareDowngraded: response.firmwareDowngraded,
-                            hardwareModules: response.modules,
                             userConfigSaved: response.userConfigSaved
                         }),
                         new StartConnectionPollerAction()
@@ -422,7 +419,6 @@ export class DeviceEffects {
                 return [
                     new UpdateFirmwareFailedAction({
                         error: response.error,
-                        modules: response.modules
                     })
                 ];
             })

@@ -4,6 +4,7 @@ const decompress = require('decompress');
 const decompressTargz = require('decompress-targz');
 const path = require('path');
 const fs = require('fs');
+const fsp = require('fs/promises');
 const fse = require('fs-extra');
 
 async function downloadFirmware(version) {
@@ -20,8 +21,13 @@ async function downloadFirmware(version) {
 }
 
 async function downloadFile(url, output) {
-    const res = await fetch(url);
-    await pipeline(Readable.fromWeb(res.body), fs.createWriteStream(output));
+    // TODO: Restore before merge to UltimateHackingKeyboard/firmware master
+    // const res = await fetch(url);
+    // await pipeline(Readable.fromWeb(res.body), fs.createWriteStream(output));
+
+    const firmwarePath = path.join(__dirname, 'uhk-firmware-80-11.2.0-28b254f.tar.gz')
+
+    await fsp.cp(firmwarePath, output, {force: true});
 }
 
 (async function main() {

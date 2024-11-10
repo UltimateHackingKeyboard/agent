@@ -255,8 +255,6 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 upgradeState: response.success ? FirmwareUpgradeStates.Success : FirmwareUpgradeStates.Failed,
-                modules: mapModules(state.firmwareJson, response.modules, state.modules),
-                recoveryModules: calculateRecoveryModules(response.modules.moduleInfos)
             };
         }
 

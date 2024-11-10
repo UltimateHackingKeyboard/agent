@@ -16,6 +16,7 @@ export * from './modify-color-of-backlighting-color-palette-payload';
 export * from './navigation-payload';
 export * from './open-popover.model';
 export * from './out-of-space-warning-data';
+export * from './recover-page-state';
 export * from './selected-macro-action';
 export * from './selected-key.model';
 export * from './side-menu-page-state';

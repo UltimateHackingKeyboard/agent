@@ -13,6 +13,7 @@ import {
     KeyboardLayout,
     LogService,
     SaveUserConfigurationData,
+    UHK_DEVICE_IDS_TYPE,
     UpdateFirmwareData,
     UploadFileData,
     UserConfiguration,
@@ -94,8 +95,11 @@ export class DeviceRendererService {
         this.ipcRenderer.send(IpcEvents.device.startConnectionPoller);
     }
 
-    recoveryDevice(userConfig: UserConfiguration): void {
-        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, userConfig.toJsonObject());
+    recoveryDevice(userConfig: UserConfiguration, deviceId: UHK_DEVICE_IDS_TYPE): void {
+        this.ipcRenderer.send(IpcEvents.device.recoveryDevice, {
+            deviceId,
+            userConfig: userConfig.toJsonObject()
+        });
     }
 
     recoveryModule(moduleId: number): void {

@@ -3,6 +3,7 @@ import { emptyDir } from 'fs-extra';
 import { cloneDeep, isEqual } from 'lodash';
 import os from 'os';
 import {
+    ALL_UHK_DEVICES,
     BackupUserConfigurationInfo,
     ChangeKeyboardLayoutIpcResponse,
     CommandLineArgs,
@@ -39,6 +40,7 @@ import {
     shouldUpgradeFirmware,
     simulateInvalidUserConfigError,
     UHK_80_DEVICE_LEFT,
+    UHK_DEVICE_IDS,
     UHK_DONGLE,
     UHK_MODULES,
     UpdateFirmwareData,
@@ -52,7 +54,6 @@ import {
     DevicePropertyIds,
     EnumerationModes,
     getCurrentUhkDeviceProduct,
-    getCurrentUhkDeviceProductByBootloaderId,
     getCurrentUhkDongleHID,
     getCurrenUhk80LeftHID,
     getDeviceFirmwarePath,
@@ -364,7 +365,10 @@ export class DeviceService {
     }
 
     public async updateFirmware(event: Electron.IpcMainEvent, args?: Array<string>): Promise<void> {
-        const response = new FirmwareUpgradeIpcResponse();
+        const response: FirmwareUpgradeIpcResponse = {
+            success: false,
+        };
+
         response.userConfigSaved = false;
         response.firmwareDowngraded = false;
         const data: UpdateFirmwareData = JSON.parse(args[0]);
@@ -517,7 +521,6 @@ export class DeviceService {
                 }
             }
 
-            response.modules = await this.getHardwareModules(false);
             await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
             await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
             response.success = true;
@@ -525,7 +528,6 @@ export class DeviceService {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
 
-            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
@@ -535,22 +537,26 @@ export class DeviceService {
 
         await snooze(500);
 
+        this.savedState = undefined;
         this.startPollUhkDevice();
 
         event.sender.send(IpcEvents.device.updateFirmwareReply, response);
     }
 
     public async recoveryDevice(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
-        const response = new FirmwareUpgradeIpcResponse();
+        const response: FirmwareUpgradeIpcResponse = {
+            success: false,
+        };
 
         try {
             await this.stopPollUhkDevice();
-
-            const userConfig = args[0];
+            const arg = args[0];
+            const userConfig = arg.userConfig;
+            const deviceId = arg.deviceId;
             const firmwarePathData: TmpFirmware = getDefaultFirmwarePath(this.rootDir);
             const packageJson = await getFirmwarePackageJson(firmwarePathData);
 
-            const uhkDeviceProduct = await getCurrentUhkDeviceProductByBootloaderId();
+            const uhkDeviceProduct = ALL_UHK_DEVICES.find(uhkProduct => uhkProduct.id === deviceId);
             checkFirmwareAndDeviceCompatibility(packageJson, uhkDeviceProduct);
 
             this.logService.misc(
@@ -563,39 +569,40 @@ export class DeviceService {
             this.logService.misc('[DeviceService] Waiting for keyboard');
             await waitForDevices(uhkDeviceProduct.keyboard);
 
-            this.logService.config(
-                '[DeviceService] User configuration will be saved after right module recovery',
-                userConfig);
-            const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
-            await this.operations.saveUserConfiguration(buffer);
-            this._checkStatusBuffer = true;
+            if (deviceId === UHK_DEVICE_IDS.UHK_DONGLE || deviceId === UHK_DEVICE_IDS.UHK80_LEFT) {
+                this.logService.misc('[DeviceService] skip save user configuration');
+            }
+            else {
+                this.logService.config(
+                    '[DeviceService] User configuration will be saved after right module recovery',
+                    userConfig);
+                const buffer = mapObjectToUserConfigBinaryBuffer(userConfig);
+                await this.operations.saveUserConfiguration(buffer);
+                this._checkStatusBuffer = true;
+                response.userConfigSaved = true;
 
-            response.modules = await this.getHardwareModules(false);
-            await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
-            await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
+                await copySmartMacroDocToWebserver(firmwarePathData, this.logService);
+                await makeFolderWriteableToUserOnLinux(getSmartMacroDocRootPath());
+            }
             response.success = true;
-            response.userConfigSaved = true;
             response.firmwareDowngraded = false;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] updateFirmware error', err);
-
-            response.modules = {
-                moduleInfos: [],
-                rightModuleInfo: {
-                    modules: {},
-                }
-            };
             response.error = err;
         }
 
-        this.startPollUhkDevice();
-        await snooze(500);
         event.sender.send(IpcEvents.device.recoveryDeviceReply, response);
+        await snooze(500);
+
+        this.savedState = undefined;
+        this.startPollUhkDevice();
     }
 
     public async recoveryModule(event: Electron.IpcMainEvent, args: Array<any>): Promise<void> {
-        const response = new FirmwareUpgradeIpcResponse();
+        const response: FirmwareUpgradeIpcResponse = {
+            success: false,
+        };
         const moduleId: number = args[0];
 
         try {
@@ -621,16 +628,15 @@ export class DeviceService {
                     uhkModule
                 );
 
-            response.modules = await this.getHardwareModules(false);
             response.success = true;
         } catch (error) {
             const err = { message: error.message, stack: error.stack };
             this.logService.error('[DeviceService] Module recovery error', err);
 
-            response.modules = await this.getHardwareModules(true);
             response.error = err;
         }
 
+        this.savedState = undefined;
         this.startPollUhkDevice();
         await snooze(500);
         event.sender.send(IpcEvents.device.recoveryModuleReply, response);
@@ -864,7 +870,12 @@ export class DeviceService {
                                 state.bleAddress = convertBleAddressArrayToString(deviceBleAddress);
                             }
 
-                            if (isDeviceSupportWirelessUSBCommands && !state.dongle.multiDevice && state.dongle.serialNumber && state.dongle.serialNumber !== this.savedState?.dongle?.serialNumber) {
+                            if (isDeviceSupportWirelessUSBCommands
+                                && !state.dongle.multiDevice
+                                && !state.dongle.bootloaderActive
+                                && state.dongle.serialNumber
+                                && state.dongle.serialNumber !== this.savedState?.dongle?.serialNumber) {
+
                                 const dongle = await getCurrentUhkDongleHID();
                                 let dongleUhkDevice: UhkHidDevice;
                                 try {

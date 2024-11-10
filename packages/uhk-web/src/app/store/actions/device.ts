@@ -9,7 +9,8 @@ import {
     FirmwareUpgradeIpcResponse,
     HardwareModules,
     IpcResponse,
-    KeyboardLayout
+    KeyboardLayout,
+    UHK_DEVICE_IDS_TYPE,
 } from 'uhk-common';
 import { FirmwareUpgradeError } from '../../models/firmware-upgrade-error';
 import { UpdateFirmwareWithPayload } from '../../models';
@@ -219,6 +220,8 @@ export class RestoreUserConfigurationFromBackupSuccessAction implements Action {
 
 export class RecoveryDeviceAction implements Action {
     type = ActionTypes.RecoveryDevice;
+
+    constructor(public payload: UHK_DEVICE_IDS_TYPE) {}
 }
 
 export class RecoveryDeviceReplyAction implements Action {

@@ -9,6 +9,7 @@ export interface DeviceConnectionState {
     isPairedWithDongle?: boolean;
     connectedDevice?: UhkDeviceProduct;
     dongle: Dongle;
+    leftHalfBootloaderActive: boolean;
     hasPermission: boolean;
     bootloaderActive: boolean;
     isMacroStatusDirty: boolean;

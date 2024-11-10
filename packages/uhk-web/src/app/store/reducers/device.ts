@@ -3,6 +3,7 @@ import {
     BackupUserConfiguration,
     BackupUserConfigurationInfo,
     ConfigSizesInfo,
+    Dongle,
     getDefaultHalvesInfo,
     HalvesInfo,
     HardwareModules,
@@ -10,9 +11,11 @@ import {
     LeftSlotModules,
     RightSlotModules,
     UdevRulesInfo,
+    UHK_DEVICE_IDS,
+    UHK_DEVICE_IDS_TYPE,
     UhkDeviceProduct
 } from 'uhk-common';
-import { DeviceUiStates } from '../../models';
+import { DeviceUiStates, RecoverPageState } from '../../models';
 import { MissingDeviceState } from '../../models/missing-device-state';
 import { RestoreConfigurationState } from '../../models/restore-configuration-state';
 import { getVersions } from '../../util';
@@ -24,6 +27,7 @@ import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonSt
 
 export interface State {
     bleAddress?: string;
+    dongle?: Dongle;
     isKeyboardLayoutChanging: boolean;
     isPairedWithDongle?: boolean;
     connectedDevice?: UhkDeviceProduct;
@@ -31,6 +35,7 @@ export interface State {
     bootloaderActive: boolean;
     deviceConnectionStateLoaded: boolean;
     keyboardHalvesAlwaysJoined: boolean;
+    leftHalfBootloaderActive: boolean;
     multiDevice: boolean;
     communicationInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
@@ -54,6 +59,7 @@ export const initialState: State = {
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,
     keyboardHalvesAlwaysJoined: false,
+    leftHalfBootloaderActive: false,
     multiDevice: false,
     communicationInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
@@ -118,9 +124,11 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 bleAddress: data.bleAddress,
+                dongle: data.dongle,
                 isPairedWithDongle: data.isPairedWithDongle,
                 connectedDevice: data.connectedDevice,
                 deviceConnectionStateLoaded: true,
+                leftHalfBootloaderActive: data.leftHalfBootloaderActive,
                 hasPermission: data.hasPermission,
                 communicationInterfaceAvailable: data.communicationInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
@@ -204,7 +212,6 @@ export function reducer(state = initialState, action: Action): State {
 
             const newState = {
                 ...state,
-                modules: payload.hardwareModules,
                 saveToKeyboard: state.modifiedConfigWhileSaved && !payload.userConfigSaved
                     ? getSaveToKeyboardButtonState()
                     : initProgressButtonState,
@@ -311,7 +318,7 @@ export const getBackupUserConfigurationState = (state: State): RestoreConfigurat
         backupUserConfiguration: state.backupUserConfiguration
     };
 };
-export const bootloaderActive = (state: State) => state.bootloaderActive;
+export const bootloaderActive = (state: State) => state.bootloaderActive  || state.leftHalfBootloaderActive || state.dongle?.bootloaderActive;
 export const halvesInfo = (state: State): HalvesInfo => {
     return {
         ...state.halvesInfo,
@@ -332,7 +339,7 @@ export const deviceUiState = (state: State): DeviceUiStates | undefined => {
         return DeviceUiStates.PermissionRequired;
     }
 
-    if (state.bootloaderActive) {
+    if (bootloaderActive(state)) {
         return DeviceUiStates.Recovery;
     }
 
@@ -352,3 +359,38 @@ export const isKeyboardLayoutChanging = (state: State) => state.isKeyboardLayout
 export const keyboardHalvesAlwaysJoined = (state: State) => state.keyboardHalvesAlwaysJoined;
 export const getStatusBuffer = (state: State) => state.statusBuffer;
 export const updateUdevRules = (state: State) => state.udevRuleInfo === UdevRulesInfo.Different;
+export const getRecoveryPageState = (state: State): RecoverPageState => {
+    let deviceText = 'UHK Device';
+    let deviceId: UHK_DEVICE_IDS_TYPE;
+
+    if (state.dongle?.bootloaderActive) {
+        deviceText = 'UHK Dongle';
+        deviceId = UHK_DEVICE_IDS.UHK_DONGLE;
+    }
+    else if (state.bootloaderActive) {
+        deviceId = state.connectedDevice.id;
+
+        switch (deviceId) {
+            case UHK_DEVICE_IDS.UHK60V1_RIGHT:
+            case UHK_DEVICE_IDS.UHK60V2_RIGHT: {
+                deviceText = 'UHK 60';
+                break;
+            }
+
+            case UHK_DEVICE_IDS.UHK80_RIGHT: {
+                deviceText = 'UHK 80 right half';
+                break;
+            }
+        }
+    }
+    else if (state.leftHalfBootloaderActive) {
+        deviceText = 'UHK 80 left half';
+        deviceId = UHK_DEVICE_IDS.UHK80_LEFT;
+    }
+
+    return {
+        deviceId,
+        description: `Your  ${deviceText} seems to be broken. No worries, Agent can fix it.`,
+        title: `Fix ${deviceText}`,
+    };
+};

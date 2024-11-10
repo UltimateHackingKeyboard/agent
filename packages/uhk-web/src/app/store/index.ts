@@ -290,6 +290,7 @@ export const bootloaderActive = createSelector(deviceState, fromDevice.bootloade
 export const firmwareUpgradeFailed = createSelector(firmwareState, fromFirmware.firmwareUpgradeFailed);
 export const firmwareUpgradeSuccess = createSelector(firmwareState, fromFirmware.firmwareUpgradeSuccess);
 export const getUpdateUdevRules = createSelector(deviceState, fromDevice.updateUdevRules);
+export const getRecoveryPageState = createSelector(deviceState, fromDevice.getRecoveryPageState);
 export const getHalvesInfo = createSelector(deviceState, fromDevice.halvesInfo);
 export const isUserConfigSaving = createSelector(deviceState, fromDevice.isUserConfigSaving);
 export const deviceUiState = createSelector(deviceState, fromDevice.deviceUiState);
