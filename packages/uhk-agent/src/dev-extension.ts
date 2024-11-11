@@ -1,5 +1,3 @@
-/// <reference path="./custom_types/electron-is-dev.d.ts"/>
-
 /*
  * Install DevTool extensions when Electron is in development mode
  */
