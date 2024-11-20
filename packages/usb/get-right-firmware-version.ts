@@ -9,7 +9,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             .argv;
 
         const { operations } = Uhk(argv);
-        const version = await operations.getRightModuleVersionInfo();
+        const version = await operations.getDeviceVersionInfo();
 
         console.log(`firmwareVersion: ${version.firmwareVersion}`);
         console.log(`deviceProtocolVersion: ${version.deviceProtocolVersion}`);

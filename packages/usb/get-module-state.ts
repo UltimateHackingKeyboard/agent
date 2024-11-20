@@ -15,7 +15,7 @@ import Uhk, { errorHandler, yargs } from './src/index.js';
             .argv;
 
         const { operations } = Uhk(argv);
-        const rightModuleInfo = await operations.getRightModuleVersionInfo();
+        const rightModuleInfo = await operations.getDeviceVersionInfo();
         const isGitInfoSupported = isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion);
         const isFirmwareChecksum = isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion);
         const info = await operations.getModuleVersionInfo(

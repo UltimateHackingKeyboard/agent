@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import {
+    Dongle,
     FirmwareJson,
     FirmwareUpgradeFailReason,
     HardwareModules,
@@ -7,6 +8,7 @@ import {
     ModuleInfo,
     ModuleSlotToId,
     RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+    UHK_DONGLE,
     UHK_MODULES,
     UhkModule
 } from 'uhk-common';
@@ -44,6 +46,7 @@ const FIRMWARE_NOT_FORCE_UPGRADING = [
 ];
 
 export interface State {
+    dongle?: Dongle;
     firmwareJson?: FirmwareJson;
     hardwareModules: HardwareModules;
     log: Array<XtermLog>;
@@ -92,12 +95,14 @@ export function reducer(state = initialState, action: Action): State {
         }
 
         case Device.ActionTypes.ConnectionStateChanged: {
-            const hardwareModules = (action as Device.ConnectionStateChangedAction).payload.hardwareModules;
+            const payload = (action as Device.ConnectionStateChangedAction).payload;
+            const hardwareModules = payload.hardwareModules;
 
             return {
                 ...state,
+                dongle: payload.dongle,
                 hardwareModules,
-                modules: mapModules(state.firmwareJson, hardwareModules, state.modules),
+                modules: mapModules(state.firmwareJson, hardwareModules, state.modules, payload.dongle),
                 recoveryModules: calculateRecoveryModules(hardwareModules.moduleInfos)
             };
         }
@@ -117,13 +122,28 @@ export function reducer(state = initialState, action: Action): State {
             };
         }
 
+        case Device.ActionTypes.DongleVersionInfoLoaded: {
+            const versionInfo = (action as Device.DongleVersionInfoLoadedAction).payload;
+
+            const dongle = {
+                ...state.dongle,
+                versionInfo
+            };
+
+            return {
+                ...state,
+                dongle,
+                modules: mapModules(state.firmwareJson, state.hardwareModules, state.modules, state.dongle),
+            };
+        }
+
         case Device.ActionTypes.ModulesInfoLoaded: {
             const hardwareModules = (action as Device.HardwareModulesLoadedAction).payload;
 
             return {
                 ...state,
                 hardwareModules,
-                modules: mapModules(state.firmwareJson, hardwareModules, state.modules),
+                modules: mapModules(state.firmwareJson, hardwareModules, state.modules, state.dongle),
             };
         }
 
@@ -275,25 +295,42 @@ export const firmwareUpgradeState = (state: State): FirmwareUpgradeState => ({
     recoveryModules: state.recoveryModules
 });
 
-function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules, stateModules: Array<ModuleFirmwareUpgradeState> = []): Array<ModuleFirmwareUpgradeState> {
-    const modules: Array<ModuleFirmwareUpgradeState> = [
-        {
-            moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+function mapModules(firmwareJson: FirmwareJson, hardwareModules: HardwareModules, stateModules: Array<ModuleFirmwareUpgradeState> = [], dongle: Dongle): Array<ModuleFirmwareUpgradeState> {
+    const modules: Array<ModuleFirmwareUpgradeState> = [];
+
+    function findStateModule(name: string): ModuleFirmwareUpgradeState {
+        return stateModules.find(module => module.moduleName === name);
+    }
+
+    if (dongle?.versionInfo) {
+        modules.push({
+            moduleName: UHK_DONGLE.name,
             firmwareUpgradeSupported: true,
-            gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
-            gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
-            isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
-            currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
-            newFirmwareVersion: firmwareJson?.firmwareVersion,
-            state: stateModules[0]?.state ?? ModuleFirmwareUpgradeStates.Idle
-        }
-    ];
+            gitRepo: dongle.versionInfo.firmwareGitRepo,
+            gitTag: dongle.versionInfo.firmwareGitTag,
+            isOfficialFirmware: isOfficialUhkFirmware(dongle.versionInfo.firmwareGitRepo),
+            currentFirmwareVersion: dongle.versionInfo?.firmwareVersion,
+            newFirmwareVersion: dongle.versionInfo?.firmwareVersion,
+            state: findStateModule(UHK_DONGLE.name)?.state ?? ModuleFirmwareUpgradeStates.Idle
+        });
+    }
+
+    modules.push({
+        moduleName: RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME,
+        firmwareUpgradeSupported: true,
+        gitRepo: hardwareModules.rightModuleInfo.firmwareGitRepo,
+        gitTag: hardwareModules.rightModuleInfo.firmwareGitTag,
+        isOfficialFirmware: isOfficialUhkFirmware(hardwareModules.rightModuleInfo.firmwareGitRepo),
+        currentFirmwareVersion: hardwareModules.rightModuleInfo?.firmwareVersion,
+        newFirmwareVersion: firmwareJson?.firmwareVersion,
+        state: findStateModule(RIGHT_HALF_FIRMWARE_UPGRADE_MODULE_NAME)?.state ?? ModuleFirmwareUpgradeStates.Idle
+    });
 
     if (hardwareModules.moduleInfos) {
         for (let i = 0; i < hardwareModules.moduleInfos?.length; i++) {
             const moduleInfo = hardwareModules.moduleInfos[i];
             const firmwareModuleInfo =  hardwareModules.rightModuleInfo.modules[moduleInfo.module.id];
-            const stateModule = stateModules.find(stateModule => stateModule.moduleName === moduleInfo.module.name);
+            const stateModule = findStateModule(moduleInfo.module.name);
 
             if (!firmwareModuleInfo || moduleInfo.info.firmwareVersion === hardwareModules.rightModuleInfo?.firmwareVersion || firmwareModuleInfo.md5 !== moduleInfo.info.firmwareChecksum) {
                 modules.push({

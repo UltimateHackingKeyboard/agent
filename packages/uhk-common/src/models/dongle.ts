@@ -1,3 +1,5 @@
+import { DeviceVersionInformation } from './device-version-information.js';
+
 export interface Dongle {
     bleAddress?: string;
 
@@ -10,4 +12,6 @@ export interface Dongle {
     multiDevice: boolean;
 
     serialNumber: string;
+
+    versionInfo?: DeviceVersionInformation;
 }

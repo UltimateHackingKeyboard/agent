@@ -292,9 +292,14 @@ export class DeviceService {
         try {
             await this.operations.waitUntilKeyboardBusy();
 
+            const deviceVersionInformation = await this.operations.getDeviceVersionInfo();
+
             const hardwareModules: HardwareModules = {
                 moduleInfos: [],
-                rightModuleInfo: await this.operations.getRightModuleVersionInfo()
+                rightModuleInfo: {
+                    ...deviceVersionInformation,
+                    modules: {},
+                }
             };
 
             const isGitInfoSupported = isDeviceProtocolSupportGitInfo(hardwareModules.rightModuleInfo.deviceProtocolVersion);
@@ -397,6 +402,47 @@ export class DeviceService {
                 this.logService.error(`[DeviceService] Firmware contains newer ${packageJson.userConfigVersion} user config version than what Agent supports`);
 
                 return event.sender.send(IpcEvents.device.updateFirmwareReply, response);
+            }
+
+            let dongleHid = await getCurrentUhkDongleHID();
+            if (dongleHid) {
+                this.logService.misc('[DeviceService] UHK Dongle firmware upgrade starts:',
+                    JSON.stringify(UHK_DONGLE, usbDeviceJsonFormatter));
+                const dongleFirmwarePath = getDeviceFirmwarePath(UHK_DONGLE, packageJson);
+                let dongleUhkDevice: UhkHidDevice;
+
+                try {
+                    dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                    let dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
+                    let versionInfo = await dongleOperations.getDeviceVersionInfo();
+                    this.logService.misc('[DeviceService] Dongle firmware version:',
+                        versionInfo.firmwareVersion);
+
+                    if (data.forceUpgrade || versionInfo.firmwareVersion !== packageJson.firmwareVersion) {
+                        event.sender.send(IpcEvents.device.moduleFirmwareUpgrading, UHK_DONGLE.name);
+                        await dongleOperations.updateDeviceFirmware(dongleFirmwarePath, UHK_DONGLE);
+                        this.logService.misc('[DeviceService] Waiting for keyboard');
+                        await waitForDevices(UHK_DONGLE.keyboard);
+                        dongleUhkDevice.close();
+
+                        dongleHid = await getCurrentUhkDongleHID();
+                        if (dongleHid) {
+                            dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                            dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
+                            versionInfo = await dongleOperations.getDeviceVersionInfo();
+                            event.sender.send(IpcEvents.device.dongleVersionInfoLoaded, versionInfo);
+                        }
+                    }
+                    else {
+                        this.logService.misc('Skip dongle firmware upgrade.');
+                    }
+                }
+                finally {
+                    dongleUhkDevice?.close();
+                    this.device.close();
+                }
+
+                await snooze(1000);
             }
 
             let hardwareModules = await this.getHardwareModules(false);
@@ -884,6 +930,8 @@ export class DeviceService {
                                     state.dongle.bleAddress = convertBleAddressArrayToString(dongleBleAddress);
                                     state.dongle.isPairedWithKeyboard = await dongleUhkDevice.isPairedWith(deviceBleAddress);
                                     state.isPairedWithDongle = await this.device.isPairedWith(dongleBleAddress);
+                                    const dongleOperations = new UhkOperations(this.logService, dongleUhkDevice);
+                                    state.dongle.versionInfo = await dongleOperations.getDeviceVersionInfo();
                                 }
                                 catch (err) {
                                     this.logService.error("Can't query Dongle BLE Addresses", err);

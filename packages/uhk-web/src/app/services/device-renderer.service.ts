@@ -4,6 +4,7 @@ import { Action, Store } from '@ngrx/store';
 import {
     ChangeKeyboardLayoutIpcResponse,
     DeviceConnectionState,
+    DeviceVersionInformation,
     FirmwareJson,
     FirmwareUpgradeIpcResponse,
     HardwareConfiguration,
@@ -33,6 +34,7 @@ import { IpcCommonRenderer } from './ipc-common-renderer';
 import {
     ChangeKeyboardLayoutReplyAction,
     ConnectionStateChangedAction,
+    DongleVersionInfoLoadedAction,
     CurrentlyUpdateSkipModuleAction,
     CurrentlyUpdatingModuleAction,
     HardwareModulesLoadedAction,
@@ -137,6 +139,10 @@ export class DeviceRendererService {
     private registerEvents(): void {
         this.ipcRenderer.on(IpcEvents.device.changeKeyboardLayoutReply, (event: string, response: ChangeKeyboardLayoutIpcResponse) => {
             this.dispachStoreAction(new ChangeKeyboardLayoutReplyAction(response));
+        });
+
+        this.ipcRenderer.on(IpcEvents.device.dongleVersionInfoLoaded, (event: string, response: DeviceVersionInformation) => {
+            this.dispachStoreAction(new DongleVersionInfoLoadedAction(response));
         });
 
         this.ipcRenderer.on(IpcEvents.device.deleteHostConnectionSuccess, (event: string, data: any) => {

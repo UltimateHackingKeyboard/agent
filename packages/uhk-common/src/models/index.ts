@@ -5,6 +5,7 @@ export * from './ble-address-pair.js';
 export * from './command-line-args.js';
 export * from './config-sizes-info.js';
 export * from './device-module-record.js';
+export * from './device-version-information.js';
 export * from './dongle.js';
 export * from './firmware-json.js';
 export * from './firmware-repo-info.js';

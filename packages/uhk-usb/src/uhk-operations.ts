@@ -7,6 +7,7 @@ import {
     Buffer,
     ConfigSizesInfo,
     convertBleAddressArrayToString,
+    DeviceVersionInformation,
     FIRMWARE_UPGRADE_METHODS,
     FirmwareRepoInfo,
     getSlotIdName,
@@ -17,7 +18,6 @@ import {
     LogService,
     ModuleSlotToId,
     ModuleVersionInfo,
-    RightModuleInfo,
     UhkBuffer,
     UhkDeviceProduct,
     UhkModule,
@@ -503,7 +503,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleProperty(property: DevicePropertyIds, args: Array<number> = []): Promise<UhkBuffer> {
-        this.logService.usb(`[DeviceOperation] USB[T]: Read right module "${DevicePropertyIds[property]}" property information`);
+        this.logService.usb(`[DeviceOperation] USB[T]: Device module "${DevicePropertyIds[property]}" property information`);
         const command = Buffer.from([UsbCommand.GetProperty, property, ...args]);
         const buffer = await this.device.write(command);
 
@@ -511,7 +511,7 @@ export class UhkOperations {
     }
 
     public async getRightModuleFirmwareRepoInfo(): Promise<FirmwareRepoInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: Read right module firmware repo information');
+        this.logService.usb('[DeviceOperation] USB[T]: Read device firmware repo information');
 
         return {
             firmwareGitRepo: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.GitRepo)),
@@ -519,30 +519,30 @@ export class UhkOperations {
         };
     }
 
-    public async getRightModuleVersionInfo(): Promise<RightModuleInfo> {
-        this.logService.usb('[DeviceOperation] USB[T]: Read right module information');
+    public async getDeviceVersionInfo(): Promise<DeviceVersionInformation> {
+        // TODO: read device name from UHK Device
+        this.logService.usb('[DeviceOperation] USB[T]: Device information');
 
         const protocolVersions = await this.device.getProtocolVersions();
 
-        let rightModuleInfo: RightModuleInfo = {
+        let deviceVersionInformation: DeviceVersionInformation = {
             ...protocolVersions,
-            modules: {},
         };
 
-        if (isDeviceProtocolSupportGitInfo(rightModuleInfo.deviceProtocolVersion))
-            rightModuleInfo = {
-                ...rightModuleInfo,
+        if (isDeviceProtocolSupportGitInfo(deviceVersionInformation.deviceProtocolVersion))
+            deviceVersionInformation = {
+                ...deviceVersionInformation,
                 ...await this.getRightModuleFirmwareRepoInfo(),
             };
 
-        if (isDeviceProtocolSupportFirmwareChecksum(rightModuleInfo.deviceProtocolVersion)) {
-            rightModuleInfo = {
-                ...rightModuleInfo,
+        if (isDeviceProtocolSupportFirmwareChecksum(deviceVersionInformation.deviceProtocolVersion)) {
+            deviceVersionInformation = {
+                ...deviceVersionInformation,
                 firmwareChecksum: readUhkResponseAs0EndString(await this.getRightModuleProperty(DevicePropertyIds.FirmwareChecksum, [0])),
             };
         }
 
-        return rightModuleInfo;
+        return deviceVersionInformation;
     }
 
     public async setLedPwmBrightness(percent: number): Promise<void> {

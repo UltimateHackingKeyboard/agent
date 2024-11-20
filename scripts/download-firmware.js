@@ -25,7 +25,7 @@ async function downloadFile(url, output) {
     // const res = await fetch(url);
     // await pipeline(Readable.fromWeb(res.body), fs.createWriteStream(output));
 
-    const firmwarePath = path.join(__dirname, 'uhk-firmware-80-11.2.0-28b254f.tar.gz')
+    const firmwarePath = path.join(__dirname, 'uhk-firmware-80-11.2.0-d20ce60.tar.gz')
 
     await fsp.cp(firmwarePath, output, {force: true});
 }

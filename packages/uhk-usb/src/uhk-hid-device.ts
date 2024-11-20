@@ -667,7 +667,7 @@ export class UhkHidDevice {
             return this._protocolVersions;
         }
 
-        this.logService.usb('[UhkHidDevice] USB[T]: Read right module protocol version information');
+        this.logService.usb('[UhkHidDevice] USB[T]: Read device protocol version information');
         const command = Buffer.from([UsbCommand.GetProperty, DevicePropertyIds.ProtocolVersions]);
         const buffer = await this.write(command);
         const uhkBuffer = UhkBuffer.fromArray(convertBufferToIntArray(buffer));
