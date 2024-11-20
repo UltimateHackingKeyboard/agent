@@ -21,9 +21,11 @@ import {
     RightSlotModules,
     UdevRulesInfo,
     UhkBuffer,
+    UHK_BLE_MIN_PRODUCT_iD,
     UHK_DONGLE,
     UHK_80_DEVICE,
     UHK_80_DEVICE_LEFT,
+    UHK_VENDOR_ID,
 } from 'uhk-common';
 import {
     DevicePropertyIds,
@@ -316,6 +318,7 @@ export class UhkHidDevice {
         const devs = await this.getUhkDevices();
         const result: DeviceConnectionState = {
             bootloaderActive: false,
+            bleDeviceConnected: false,
             communicationInterfaceAvailable: false,
             dongle: {
                 bootloaderActive: false,
@@ -332,6 +335,7 @@ export class UhkHidDevice {
             },
             hardwareModules: {},
             isMacroStatusDirty: false,
+            leftHalfDetected: false,
             multiDevice: await getNumberOfConnectedDevices(this.options) > 1,
             udevRulesInfo: await this.getUdevInfoAsync(),
         };
@@ -373,8 +377,15 @@ export class UhkHidDevice {
 
                 if (isUhkCommunicationInterface(dev)) {
                     result.communicationInterfaceAvailable = true;
-                } else if (isBootloader(dev)) {
+                }
+                else if (isBootloader(dev)) {
                     result.bootloaderActive = true;
+                }
+                else if (dev.vendorId === UHK_VENDOR_ID && dev.productId >= UHK_BLE_MIN_PRODUCT_iD) {
+                    result.bleDeviceConnected = true;
+                }
+                else if (UHK_80_DEVICE_LEFT.keyboard.some(vidPid => dev.vendorId === vidPid.vid && dev.productId === vidPid.pid)) {
+                    result.leftHalfDetected = true;
                 }
             }
 

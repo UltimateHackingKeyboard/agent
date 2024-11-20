@@ -6,6 +6,7 @@ import { UHK_MODULE_IDS, UHK_MODULE_IDS_TYPE } from './uhk-module-ids.js';
 
 export const UHK_VENDOR_ID_OLD = 0x1D50; // decimal 7504
 export const UHK_VENDOR_ID = 0x37A8; // decimal 14248
+export const UHK_BLE_MIN_PRODUCT_iD = 0x8000; // decimal 32768
 
 export interface VidPidPair {
     vid: number;

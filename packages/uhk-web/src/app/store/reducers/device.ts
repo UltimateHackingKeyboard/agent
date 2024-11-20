@@ -27,6 +27,7 @@ import { getSaveToKeyboardButtonState, initProgressButtonState, ProgressButtonSt
 
 export interface State {
     bleAddress?: string;
+    bleDeviceConnected: boolean;
     dongle?: Dongle;
     isKeyboardLayoutChanging: boolean;
     isPairedWithDongle?: boolean;
@@ -36,6 +37,7 @@ export interface State {
     deviceConnectionStateLoaded: boolean;
     keyboardHalvesAlwaysJoined: boolean;
     leftHalfBootloaderActive: boolean;
+    leftHalfDetected: boolean;
     multiDevice: boolean;
     communicationInterfaceAvailable: boolean;
     saveToKeyboard: ProgressButtonState;
@@ -54,12 +56,14 @@ export interface State {
 }
 
 export const initialState: State = {
+    bleDeviceConnected: false,
     isKeyboardLayoutChanging: false,
     hasPermission: true,
     bootloaderActive: false,
     deviceConnectionStateLoaded: false,
     keyboardHalvesAlwaysJoined: false,
     leftHalfBootloaderActive: false,
+    leftHalfDetected: false,
     multiDevice: false,
     communicationInterfaceAvailable: true,
     saveToKeyboard: initProgressButtonState,
@@ -124,15 +128,17 @@ export function reducer(state = initialState, action: Action): State {
             return {
                 ...state,
                 bleAddress: data.bleAddress,
+                bleDeviceConnected: data.bleDeviceConnected,
                 dongle: data.dongle,
                 isPairedWithDongle: data.isPairedWithDongle,
                 connectedDevice: data.connectedDevice,
                 deviceConnectionStateLoaded: true,
-                leftHalfBootloaderActive: data.leftHalfBootloaderActive,
                 hasPermission: data.hasPermission,
                 communicationInterfaceAvailable: data.communicationInterfaceAvailable,
                 bootloaderActive: data.bootloaderActive,
                 halvesInfo: data.halvesInfo,
+                leftHalfBootloaderActive: data.leftHalfBootloaderActive,
+                leftHalfDetected: data.leftHalfDetected,
                 modules: data.hardwareModules,
                 multiDevice: data.multiDevice,
                 udevRuleInfo: data.udevRulesInfo,
@@ -292,6 +298,29 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
         };
     }
 
+    if (!state.connectedDevice) {
+        if (state.bleDeviceConnected) {
+            return {
+                header: 'UHK 80 connected via BLE',
+                subtitle: 'Disconnect BLE and connect your UHK via its right USB port!'
+            };
+        }
+
+        if (state.dongle?.serialNumber) {
+            return {
+                header: 'Dongle connected',
+                subtitle: 'Please connect the UHK right half via USB cable!'
+            };
+        }
+
+        if (state.leftHalfDetected) {
+            return {
+                header: 'UHK 80 left half connected',
+                subtitle: 'Please connect the right half instead!'
+            };
+        }
+    }
+
     if (state.connectedDevice && !state.communicationInterfaceAvailable) {
         return {
             header: 'Cannot find your UHK',
@@ -300,6 +329,7 @@ export const getMissingDeviceState = (state: State): MissingDeviceState => {
     }
 
     return {
+        description: 'If you have a UHK 80, connect its right half via USB, and ensure it\'s not connected to a dongle or BLE host!',
         header: 'Cannot find your UHK',
         subtitle: 'Please plug it in!'
     };

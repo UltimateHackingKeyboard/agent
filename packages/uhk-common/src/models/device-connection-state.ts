@@ -6,6 +6,8 @@ import { UhkDeviceProduct } from './uhk-products.js';
 
 export interface DeviceConnectionState {
     bleAddress?: string;
+    // UHK80 connected via bluetooth
+    bleDeviceConnected: boolean;
     isPairedWithDongle?: boolean;
     connectedDevice?: UhkDeviceProduct;
     dongle: Dongle;
@@ -13,6 +15,7 @@ export interface DeviceConnectionState {
     hasPermission: boolean;
     bootloaderActive: boolean;
     isMacroStatusDirty: boolean;
+    leftHalfDetected: boolean;
     /**
      * True if more than 1 UHK device connected.
      */
