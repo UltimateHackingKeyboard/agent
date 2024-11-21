@@ -198,7 +198,6 @@ export class MapperService implements OnDestroy {
         this.osSpecificTexts.set(OsSpecificKeys.Enter, 'Enter');
 
         if (this.operatingSystem === OperatingSystem.Mac) {
-            this.osSpecificTexts.set(OsSpecificKeys.Enter, 'Return');
             this.osSpecificTexts.set(KeyModifiers.leftGui, 'LCmd');
             this.osSpecificTexts.set(KeyModifiers.rightGui, 'RCmd');
             this.osSpecificTexts.set(KeyModifiers.leftAlt, 'LOption');
