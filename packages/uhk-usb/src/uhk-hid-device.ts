@@ -763,8 +763,6 @@ export class UhkHidDevice {
             const devs = await this.getUhkDevices();
             this.listAvailableDevices(devs);
 
-            await validateConnectedDevices(this.options);
-
             if (this.hidDevice) {
                 const device = devs.find(dev => dev.path === this.hidDevice.path);
                 if (device) {
@@ -775,9 +773,11 @@ export class UhkHidDevice {
                 }
             }
             else if ( this.options.vid || this.options['serial-number']) {
+                await validateConnectedDevices(this.options);
                 this.setDeviceInfo(devs.find(findDeviceByDeviceIdentifier(this.options)));
             }
             else  {
+                await validateConnectedDevices(this.options);
                 this.setDeviceInfo(devs.find(isUhkCommunicationInterface));
             }
 
