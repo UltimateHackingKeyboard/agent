@@ -1,12 +1,20 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { isEqual } from 'lodash';
 import { Subscription } from 'rxjs';
-import { HalvesInfo, KeyboardLayout, LeftSlotModules, RightSlotModules, UHK_60_V2_DEVICE, UHK_80_DEVICE } from 'uhk-common';
+import {
+    getDefaultHalvesInfo,
+    HalvesInfo,
+    KeyboardLayout,
+    LeftSlotModules,
+    RightSlotModules,
+    UHK_60_V2_DEVICE,
+    UHK_80_DEVICE,
+} from 'uhk-common';
 
 import { SvgModule } from '../components/svg/module';
 import { convertXmlToSvgSeparator, SvgSeparator } from '../components/svg/separator';
-import { getConnectedDevice } from '../store/index';
-import { AppState } from '../store/index';
+import { AppState, getConnectedDevice, getHalvesInfo } from '../store/index';
 
 export interface DescriptionAnimationParams {
     down: string;
@@ -26,6 +34,7 @@ export const UHK_60_DESCRIPTION_ANIMATION_PARAMS: DescriptionAnimationParams = O
 export class SvgModuleProviderService implements OnDestroy {
 
     private ansiLeft: SvgModule;
+    private halvesInfo: HalvesInfo = getDefaultHalvesInfo();
     private isoLeft: SvgModule;
     private keyClusterLeft: SvgModule;
     private right: SvgModule;
@@ -48,28 +57,16 @@ export class SvgModuleProviderService implements OnDestroy {
             }
 
             this.connectedDeviceId = connectedDeviceId;
+            this.setModules();
+        }));
 
-            switch (connectedDeviceId) {
-                case UHK_80_DEVICE.id: {
-                    this.descriptionAnimationParams = {
-                        down: '-0.5em',
-                        up: '-5.5%',
-                        upLeftKeyCluster: '-4.5%',
-                        upRightModule: '-5.5%',
-                    };
-                    this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk80-right/separator.svg').svg);
-                    this.right = new SvgModule(require('!xml-loader!../../devices/uhk80-right/layout.svg').svg);
-                    this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-iso.svg').svg);
-                    this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-ansi.svg').svg);
-                    this.viewBox = '-550 610 1250 600';
-                    break;
-                }
-
-                default: {
-                    this.setUHK60Modules();
-                    break;
-                }
+        this.subscriptions.add(this._store.select(getHalvesInfo).subscribe(halvesInfo => {
+            if (isEqual(this.halvesInfo, halvesInfo)) {
+                return;
             }
+
+            this.halvesInfo = halvesInfo;
+            this.setModules();
         }));
     }
 
@@ -81,20 +78,20 @@ export class SvgModuleProviderService implements OnDestroy {
         return this.descriptionAnimationParams;
     }
 
-    getSvgModules(layout = KeyboardLayout.ANSI, halvesInfo: HalvesInfo): SvgModule[] {
+    getSvgModules(layout = KeyboardLayout.ANSI): SvgModule[] {
         const modules = [this.getRightModule()];
 
-        if (halvesInfo.isLeftHalfConnected) {
+        if (this.halvesInfo.isLeftHalfConnected) {
             modules.push(this.getLeftModule(layout));
         }
 
-        switch (halvesInfo.leftModuleSlot) {
+        switch (this.halvesInfo.leftModuleSlot) {
             case LeftSlotModules.KeyClusterLeft:
                 modules.push(this.getKeyClusterLeft());
                 break;
         }
 
-        switch (halvesInfo.rightModuleSlot) {
+        switch (this.halvesInfo.rightModuleSlot) {
             case RightSlotModules.TouchpadRight:
                 modules.push(this.getTouchPadRight());
                 break;
@@ -137,6 +134,42 @@ export class SvgModuleProviderService implements OnDestroy {
 
     private getRightModule(): SvgModule {
         return this.right;
+    }
+
+    private setModules() {
+        switch (this.connectedDeviceId) {
+            case UHK_80_DEVICE.id: {
+                this.separator = convertXmlToSvgSeparator(require('!xml-loader!../../devices/uhk80-right/separator.svg').svg);
+                this.right = new SvgModule(require('!xml-loader!../../devices/uhk80-right/layout.svg').svg);
+                this.isoLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-iso.svg').svg);
+                this.ansiLeft = new SvgModule(require('!xml-loader!../../modules/uhk80-left/layout-ansi.svg').svg);
+
+                if (this.halvesInfo?.areHalvesMerged) {
+                    this.descriptionAnimationParams = {
+                        down: '-4em',
+                        up: '-5.5%',
+                        upLeftKeyCluster: '-4.5%',
+                        upRightModule: '-5.5%',
+                    };
+                    this.viewBox = '-520 660 1250 600';
+                }
+                else {
+                    this.descriptionAnimationParams = {
+                        down: '-0.5em',
+                        up: '-5.5%',
+                        upLeftKeyCluster: '-4.5%',
+                        upRightModule: '-5.5%',
+                    };
+                    this.viewBox = '-550 610 1250 600';
+                }
+                break;
+            }
+
+            default: {
+                this.setUHK60Modules();
+                break;
+            }
+        }
     }
 
     private getTouchPadRight(): SvgModule {

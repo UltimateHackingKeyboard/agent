@@ -294,7 +294,7 @@ export class SvgKeyboardComponent implements AfterViewInit, OnInit, OnChanges {
     private setModules() {
         this.descriptionAnimationParams = this.svgModuleProvider.getDescriptionAnimationParams();
         this.viewBox = this.svgModuleProvider.getViewBox();
-        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout, this.halvesInfo);
+        this.modules = this.svgModuleProvider.getSvgModules(this.keyboardLayout);
         this.separator = this.svgModuleProvider.getSvgSeparator();
         this.separatorStyle = this.sanitizer.bypassSecurityTrustStyle(this.separator.style);
     }
