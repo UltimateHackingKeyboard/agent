@@ -713,11 +713,16 @@ export class DeviceService {
 
         try {
             await this.stopPollUhkDevice();
-            const dongleHid = await getCurrentUhkDongleHID();
             let dongleUhkDevice: UhkHidDevice;
             try {
-                dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
-                await dongleUhkDevice.deleteAllBonds();
+                if (isConnectedDongleAddress) {
+                    const dongleHid = await getCurrentUhkDongleHID();
+                    if (dongleHid) {
+                        dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
+                        await dongleUhkDevice.deleteAllBonds();
+                    }
+                }
+
                 await this.device.deleteBond(convertBleStringToNumberArray(address));
                 this.logService.misc('[DeviceService] delete host connection success', { address });
                 await snooze(1000);
@@ -747,6 +752,10 @@ export class DeviceService {
         try {
             await this.stopPollUhkDevice();
             const dongleHid = await getCurrentUhkDongleHID();
+            if (!dongleHid) {
+                throw new Error('Cannot find dongle!');
+            }
+
             let dongleUhkDevice: UhkHidDevice;
             try {
                 dongleUhkDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, dongleHid);
@@ -1058,6 +1067,12 @@ export class DeviceService {
         try {
             await snooze(1000);
             const uhkDeviceProduct = await getCurrentUhkDongleHID();
+
+            if (uhkDeviceProduct) {
+                this.logService.misc('[DeviceService] Dongle not found, skip reenumeration');
+                return;
+            }
+
             uhkHidDevice = new UhkHidDevice(this.logService, this.options, this.rootDir, uhkDeviceProduct);
             await uhkHidDevice.reenumerate({
                 device: UHK_DONGLE,
