@@ -23,5 +23,10 @@ export interface DeviceConnectionState {
     communicationInterfaceAvailable: boolean;
     halvesInfo: HalvesInfo;
     hardwareModules?: HardwareModules;
+    /**
+     * Each element describe the hostConnection is the user-config are paired to the keyboard or not.
+     * If the value is 1 then paired.
+     */
+    pairedDevices: number[];
     udevRulesInfo: UdevRulesInfo;
 }

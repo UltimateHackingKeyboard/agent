@@ -15,6 +15,7 @@ setInterval(async function () {
             `isEepromBusy: ${state.isEepromBusy ? 'yes' : 'no'} | \
 isMacroStatusDirty: ${state.isMacroStatusDirty ? 'yes' : 'no'} | \
 areHalvesMerged: ${state.areHalvesMerged ? 'yes' : 'no'} | \
+newPairedDevice: ${state.newPairedDevice ? 'yes' : 'no'} | \
 leftKeyboardHalfSlot:${state.leftKeyboardHalfSlot} | \
 leftModuleSlot:${state.leftModuleSlot} | \
 rightModuleSlot:${state.rightModuleSlot} | \
