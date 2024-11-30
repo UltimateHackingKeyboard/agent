@@ -1,11 +1,11 @@
-import { devices as HidDevices } from 'node-hid';
+import { devicesAsync } from 'node-hid';
 import {SerialPort} from 'serialport';
 import { UhkDeviceProduct } from 'uhk-common';
 
 import { isUhkCommunicationUsage } from '../util.js';
 
 export async function isUhkDeviceConnected(uhkDevice: UhkDeviceProduct): Promise<boolean> {
-    const hidDevices = HidDevices();
+    const hidDevices = await devicesAsync();
 
     for (const device of hidDevices) {
         if ((uhkDevice.keyboard.some(vidPid => vidPid.vid === device.vendorId && vidPid.pid === device.productId)

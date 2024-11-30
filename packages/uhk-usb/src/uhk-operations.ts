@@ -352,6 +352,7 @@ export class UhkOperations {
             await this.applyConfiguration();
             this.logService.usb('[DeviceOperation] USB[T]: Write user configuration to EEPROM');
             await this.writeConfigToEeprom(ConfigBufferId.validatedUserConfig);
+            await this.waitUntilKeyboardBusy();
         } catch (error) {
             this.logService.error('[DeviceOperation] Transferring error', error);
             throw error;
@@ -381,6 +382,7 @@ export class UhkOperations {
 
         await this.sendConfigToKeyboard(buffer, false);
         await this.writeConfigToEeprom(ConfigBufferId.hardwareConfig);
+        await this.waitUntilKeyboardBusy();
     }
 
     public async writeConfigToEeprom(configBufferId: ConfigBufferId): Promise<void> {
