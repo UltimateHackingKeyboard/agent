@@ -15,6 +15,8 @@ export interface VidPidPair {
 
 export interface UhkDeviceProduct {
     id: UHK_DEVICE_IDS_TYPE;
+    // The reference of the device when provided as CLI argument
+    asCliArg: string;
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS_TYPE,
     // Use it in logs instead of the name because UHK 80 left and right have the same name.
     // But we have to differentiate them in the logs
@@ -28,6 +30,7 @@ export interface UhkDeviceProduct {
 
 export const UNKNOWN_DEVICE: UhkDeviceProduct = {
     id: 0 as UHK_DEVICE_IDS_TYPE,
+    asCliArg: '',
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
     logName: 'Unknown',
     name: 'Unknown',
@@ -39,6 +42,7 @@ export const UNKNOWN_DEVICE: UhkDeviceProduct = {
 
 export const UHK_60_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V1_RIGHT,
+    asCliArg: 'uhk60v1',
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
     logName: 'UHK 60 v1',
     name: 'UHK 60 v1',
@@ -73,6 +77,7 @@ export const UHK_60_DEVICE: UhkDeviceProduct = {
 
 export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK60V2_RIGHT,
+    asCliArg: 'uhk60v2',
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.KBOOT,
     logName: 'UHK 60 v2',
     name: 'UHK 60 v2',
@@ -107,6 +112,7 @@ export const UHK_60_V2_DEVICE: UhkDeviceProduct = {
 
 export const UHK_80_DEVICE_LEFT: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK80_LEFT,
+    asCliArg: 'uhk80left',
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
     logName: 'UHK 80 left',
     name: 'UHK 80',
@@ -122,13 +128,13 @@ export const UHK_80_DEVICE_LEFT: UhkDeviceProduct = {
             pid: 0x0006, // decimal 6
         },
     ],
-    // TODO: Implement when we know
     buspal: [],
     reportId: 4,
 };
 
 export const UHK_80_DEVICE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK80_RIGHT,
+    asCliArg: 'uhk80',
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
     logName: 'UHK 80 right',
     name: 'UHK 80',
@@ -144,13 +150,13 @@ export const UHK_80_DEVICE: UhkDeviceProduct = {
             pid: 0x0008, // decimal 8
         },
     ],
-    // TODO: Implement when we know
     buspal: [],
     reportId: 4,
 };
 
 export const UHK_DONGLE: UhkDeviceProduct = {
     id: UHK_DEVICE_IDS.UHK_DONGLE,
+    asCliArg: 'dongle',
     firmwareUpgradeMethod: FIRMWARE_UPGRADE_METHODS.MCUBOOT,
     logName: 'UHK Dongle',
     name: 'UHK Dongle',
@@ -166,7 +172,6 @@ export const UHK_DONGLE: UhkDeviceProduct = {
             pid: 0x0004, // decimal 4
         },
     ],
-    // TODO: Implement when we know
     buspal: [],
     reportId: 4,
 };
